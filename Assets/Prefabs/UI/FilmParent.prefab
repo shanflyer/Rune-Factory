@@ -1,0 +1,198 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1345667483802014}
+  m_IsPrefabParent: 1
+--- !u!1 &1345667483802014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4386147449917498}
+  - component: {fileID: 114984561056571036}
+  m_Layer: 0
+  m_Name: FilmParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1483122401032036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4249778828214120}
+  m_Layer: 0
+  m_Name: FilmMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1618543097004308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4023920450708680}
+  m_Layer: 0
+  m_Name: FilmCamrea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4023920450708680
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1618543097004308}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4386147449917498}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4249778828214120
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1483122401032036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4386147449917498}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4386147449917498
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1345667483802014}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -380, y: 503, z: -0.011230469}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4023920450708680}
+  - {fileID: 4249778828214120}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114984561056571036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1345667483802014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5386b6e7fc6d43478a143c59e650e93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filmMapParent: {fileID: 4249778828214120}
+  filmCamera: {fileID: 1618543097004308}
+  films:
+  - Name: "\u5F00\u59CB0"
+    id: 8000
+    filmObjName: 2000
+    filmDatas:
+    - filmDisplayType: 5
+      value: film0
+    - filmDisplayType: 1
+      value: 2001
+    index: 0
+    useFilmCamera: 1
+    filmMap: 
+    filmType: 1
+  - Name: "\u5F00\u59CB1"
+    id: 8001
+    filmObjName: 2000
+    filmDatas:
+    - filmDisplayType: 5
+      value: film1
+    - filmDisplayType: 1
+      value: 2006
+    - filmDisplayType: 5
+      value: film2
+    - filmDisplayType: 2
+      value: '......'
+    - filmDisplayType: 3
+      value: 8002
+    index: 0
+    useFilmCamera: 1
+    filmMap: 
+    filmType: 0
+  - Name: "\u5F00\u59CB2"
+    id: 8002
+    filmObjName: 2001
+    filmDatas:
+    - filmDisplayType: 5
+      value: film0
+    - filmDisplayType: 1
+      value: 2008
+    - filmDisplayType: 5
+      value: film1
+    index: 0
+    useFilmCamera: 1
+    filmMap: Gate
+    filmType: 4
+  - Name: "\u7ED3\u5A5A"
+    id: 8003
+    filmObjName: MarryObj
+    filmDatas:
+    - filmDisplayType: 5
+      value: film0
+    - filmDisplayType: 2
+      value: "\u5A5A\u793C\u5373\u5C06\u4E3E\u884C\u7684\u6D88\u606F\u4F20\u904D\u4E86\u5C0F\u9547.."
+    - filmDisplayType: 5
+      value: film1
+    - filmDisplayType: 2
+      value: "\u5927\u5BB6\u6C89\u6D78\u5728\u6B22\u4E50\u7684\u6C14\u6C1B\u4E2D\uFF0C\u76F4\u5230\u5A5A\u793C\u7ED3\u675F..."
+    index: 0
+    useFilmCamera: 1
+    filmMap: square
+    filmType: 3
+  - Name: "\u6000\u5B55"
+    id: 8004
+    filmObjName: 2002
+    filmDatas:
+    - filmDisplayType: 5
+      value: film0
+    - filmDisplayType: 1
+      value: 1509
+    - filmDisplayType: 5
+      value: film1
+    - filmDisplayType: 2
+      value: '......'
+    - filmDisplayType: 5
+      value: film2
+    - filmDisplayType: 1
+      value: 1511
+    - filmDisplayType: 2
+      value: '......'
+    index: 0
+    useFilmCamera: 1
+    filmMap: Room
+    filmType: 3
+  filmUI: {fileID: 0}
+  startFilmOpen: 1

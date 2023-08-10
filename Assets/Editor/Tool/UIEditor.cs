@@ -1,0 +1,42 @@
+﻿using UnityEditor;
+using UnityEngine;
+using System.IO;
+using System.Collections.Generic;
+
+public class UIToolEditor  
+{
+
+    [MenuItem("Assets/UI填充")]
+    public static void SetPanelUISerializeObj()
+    {
+        Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
+        string[] resources = new string[selection.Length];
+
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            for (int i = 0; i < selection.Length; i++)
+            {
+                resources[i] = AssetDatabase.GetAssetPath(selection[i]);
+
+                if (selection[i].GetType() == typeof(GameObject))
+                {
+                    GamePanel gamePanel;
+                    if (((GameObject)selection[i]).TryGetComponent(out gamePanel))
+                    {
+                        gamePanel.SetPanelUISerializeObj();
+
+                        EditorUtility.SetDirty(gamePanel);
+                        AssetDatabase.SaveAssets();
+                    }
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+       
+    }
+}

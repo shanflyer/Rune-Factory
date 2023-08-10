@@ -1,0 +1,114 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PastureItemPanelAction : MonoBehaviour
+{
+    public List<Text> Texts;
+    public Text pastureName,ProduceCaseText,AddCostText;
+
+    public GameObject itemBox, NullBox;
+
+    public Transform BoxParent;
+    private Pasture pasture;
+    private int costValue;
+    public void InitPastureItemPanelData(Pasture _pasture)
+    {
+        foreach (Transform box in BoxParent)
+        {
+            Destroy(box.gameObject);
+        }
+        pasture = _pasture;
+        pastureName.text = _pasture.name;
+        ProduceCaseText.text = "(" + pasture.itemPackage.items.Count + "/" + pasture.itemPackage.CaseCount + ")";
+        foreach (var itemPackageItem in pasture.itemPackage.items)
+        {
+            GameObject itemObj = Instantiate(itemBox);
+            
+            itemObj.transform.SetParent(BoxParent);
+            itemObj.transform.localScale = Vector3.one;
+            itemObj.GetComponent<ItemBoxAction>().InitItemData(itemPackageItem);
+            Destroy(itemObj.GetComponentInChildren<Toggle>().gameObject);
+        }
+        int count = pasture.itemPackage.CaseCount - pasture.itemPackage.items.Count;
+        for (int i = 0; i < count; i++)
+        {
+            GameObject itemObj = Instantiate(NullBox);
+            
+            itemObj.transform.SetParent(BoxParent);
+            itemObj.transform.localScale = Vector3.one;
+            NullBox.GetComponent<ItemBoxAction>().icon.enabled = false;
+            NullBox.GetComponent<ItemBoxAction>().count.enabled = false;
+        }
+        costValue = GameComponentData.gameData.pastureAction.zeroAddCase + (pasture.itemPackage.CaseCount - 2) *
+                        GameComponentData.gameData.pastureAction.addcasePlus;
+        AddCostText.text = costValue.ToString();
+    }
+
+    public void AddCost()
+    {
+        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("增加格位"),costValue, LanguageManage.SwitchStr("为牧场:")+pasture.name+
+            LanguageManage.SwitchStr(" 新增一个产出箱格位？"),CostType.增加牧场产出格子
+            ,ShopMoneyType.金币);
+    }
+    public void AddCase()
+    {
+        pasture.itemPackage.CaseCount++;
+        GameObject itemObj = Instantiate(NullBox);
+        itemObj.transform.localScale = Vector3.one;
+        itemObj.transform.SetParent(BoxParent);
+        costValue = GameComponentData.gameData.pastureAction.zeroAddCase + (pasture.itemPackage.CaseCount - 2) *
+                        GameComponentData.gameData.pastureAction.addcasePlus;
+        AddCostText.text = costValue.ToString();
+        ProduceCaseText.text = "(" + pasture.itemPackage.items.Count + "/" + pasture.itemPackage.CaseCount + ")";
+        GameComponentData.gameData.informationManager.AddInformation(pasture.name+LanguageManage.SwitchStr("增加一个产出格,消耗金币")+costValue);
+       
+    }
+
+    public void GetItemToPlayer()
+    {
+        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        List<Item> outItems=new List<Item>();
+        foreach (var itemPackageItem in pasture.itemPackage.items)
+        {
+            Package playerPackage = GameComponentData.gameData.gameManager.gamePlayer.package;
+            int laveCount=playerPackage.SetItemInPackage(itemPackageItem);
+            
+            if (laveCount > 0)
+            {
+                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包已满！"));
+                break;
+            }
+            else
+            {
+                /*
+                Item outItem = new Item
+                {
+                    ItemId = itemPackageItem.ItemId,
+                    groupNum = itemPackageItem.groupNum,
+                    count = itemPackageItem.count - laveCount
+                };*/
+                outItems.Add(itemPackageItem);
+            }
+        }
+        foreach (var outItem in outItems)
+        {
+            pasture.itemPackage.GetItemOutPackage(outItem.ItemId,outItem.count);
+        }
+        InitPastureItemPanelData(pasture);
+    }
+	// Use this for initialization
+	void Start () {
+	    foreach (var text in Texts)
+	    {
+	        LanguageManage.TextFanyi(text);
+	    }
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+}

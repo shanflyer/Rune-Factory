@@ -1,0 +1,426 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using Unity.Mathematics;
+
+public interface GameAction 
+{
+    public void Init(List<Parameter> parameters);
+}
+
+public delegate void SetValue(int value);
+
+public struct StopFilm : GameAction
+{
+    public string filmName;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 0)
+        {
+            filmName = parameters[0].value;
+        }
+    }
+}
+public struct PlayFilm : GameAction
+{
+    public string filmName;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 0)
+        {
+            filmName = parameters[0].value;
+        }
+    }
+}
+public struct PauseFilm : GameAction
+{
+    public string filmName;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 0)
+        {
+            filmName = parameters[0].value;
+        }
+    }
+}
+public struct SetItemAnimation : GameAction
+{
+    public int id;
+    public int keyX;
+    public int keyY;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 3)
+        {
+            id = int.Parse(parameters[0].value);
+            keyX = int.Parse(parameters[1].value);
+            keyY = int.Parse(parameters[2].value); 
+        }
+
+    }
+}
+
+public struct RemovePackageItem : GameAction
+{
+    public int packageId;
+    public int itemDataId;
+    public int itemCount;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 3)
+        {
+            packageId = int.Parse(parameters[0].value);
+            itemDataId = int.Parse(parameters[1].value);
+            itemCount = int.Parse(parameters[2].value);
+        }
+
+    }
+}
+public struct AddPackageItem : GameAction
+{
+    public int packageId;
+    public int itemDataId;
+    public int itemCount;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 3)
+        {
+            packageId = int.Parse(parameters[0].value);
+            itemDataId = int.Parse(parameters[1].value);
+            itemCount = int.Parse(parameters[2].value);
+        }
+
+    }
+}
+public struct TriggerEnter : GameAction
+{
+    public int eventId;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 1)
+        {
+            eventId = int.Parse(parameters[0].value); 
+        }
+
+    }
+}
+public struct TriggerExit : GameAction
+{
+    public int eventId;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 1)
+        {
+            eventId = int.Parse(parameters[0].value);
+        }
+
+    }
+}
+public struct DeleteMapItem : GameAction
+{
+    //public int mapId;
+    public int mapItemInstanceId;
+    public bool triggerClear;
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 2)
+        { 
+            mapItemInstanceId = int.Parse(parameters[0].value);
+            triggerClear = bool.Parse(parameters[1].value);
+        }
+        
+    }
+}
+
+public struct ChangeMapItem : GameAction
+{
+    public int itemId;
+    public int newDataId;
+    public int2 animationKey;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 4)
+        {
+            itemId = int.Parse(parameters[0].value);
+            newDataId = int.Parse(parameters[1].value);
+
+            var parameter = parameters[2];
+            if (parameter.parameters.Count >= 2)
+            {
+                animationKey.x = int.Parse(parameter.parameters[0].value);
+                animationKey.y = int.Parse(parameter.parameters[1].value);
+            }
+        }
+
+    }
+}
+
+public struct AddMapItem : GameAction
+{
+    public int mapId;
+    public int dataId;
+    public int2 coordinate;
+
+    public SetValue setValue;
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 3)
+        {
+            mapId = int.Parse(parameters[0].value);
+            dataId = int.Parse(parameters[1].value);
+
+            var parameter = parameters[2];
+            if (parameter.parameters.Count >= 2)
+            {
+                coordinate.x= int.Parse(parameter.parameters[0].value);
+                coordinate.y = int.Parse(parameter.parameters[1].value);
+            }
+        }
+    }
+}
+public struct AttachMapItemData : GameAction
+{
+    public int mapItemIntanceId;
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 1)
+        {
+            mapItemIntanceId = int.Parse(parameters[0].value); 
+        }
+    }
+}
+public struct CreatRuntimePackage: GameAction
+{
+    public string name;
+    public Vector2Int key;
+    public int instanceId;
+    public int caseCount;
+    public List<Item> Items;
+    public bool itemPackage;
+    public void Init(List<Parameter> parameters)
+    {
+        /*
+        if (parameters.Count >= 6)
+        {
+            name = parameters[0].value;
+            var parameter = parameters[1];
+            if (parameter.parameters.Count >= 2)
+            {
+                key.x = int.Parse(parameter.parameters[0].value);
+                key.y = int.Parse(parameter.parameters[1].value);
+            }
+
+            instanceId = int.Parse(parameters[2].value);
+            caseCount = int.Parse(parameters[3].value);
+
+            Items = new List<Item>();
+            var itemParameter = parameters[4];
+            if (itemParameter.parameters.Count > 0)
+            {
+                for(int i=0;i< itemParameter.parameters.Count; i++)
+                {
+                    var _Parameter = itemParameter.parameters[i];
+                    if (_Parameter.parameters.Count >= 3)
+                    {
+                        Item item = new Item
+                        {
+                            instanceId = int.Parse(_Parameter.parameters[0].value),
+                            dataId = int.Parse(_Parameter.parameters[1].value),
+                            count= int.Parse(_Parameter.parameters[2].value)
+                        };
+                        Items.Add(item);
+                    }
+                }
+            }
+
+            itemPackage = bool.Parse(parameters[5].value);
+           
+        }
+
+        */
+    }
+}
+public struct RemoveRuntimePackage : GameAction
+{
+    public Vector2Int key;
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 1)
+        {  
+            var parameter = parameters[0];
+            if (parameter.parameters.Count >= 2)
+            {
+                key.x = int.Parse(parameter.parameters[0].value);
+                key.y = int.Parse(parameter.parameters[1].value);
+            }
+        }
+    }
+}
+
+public struct ItemUseAction : GameAction
+{
+    public int packageId;
+    public int itemId;
+    public int itemCount;
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 3)
+        {
+            packageId = int.Parse(parameters[0].value);
+            itemId = int.Parse(parameters[1].value);
+            itemCount = int.Parse(parameters[2].value);
+        }
+    }
+
+    public ItemUseAction(int packageId,int itemId,int itemCount)
+    {
+        this.packageId = packageId;
+        this.itemId = itemId;
+        this.itemCount = itemCount;
+    }
+   
+}
+public struct ClosePanelAction : GameAction
+{
+    public Type type;
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 1)
+        {
+            type = Type.GetType(parameters[0].value);
+        }
+    }
+
+    public ClosePanelAction(Type type)
+    {
+        this.type = type;
+    } 
+}
+public struct OpenPanelAction : GameAction
+{
+    public Type type;
+    public int dataId;
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 2)
+        {
+            type = Type.GetType(parameters[0].value);
+            dataId = int.Parse(parameters[1].value);
+        }
+        else
+        {
+            if (parameters.Count >= 1)
+            {
+                type = Type.GetType(parameters[0].value);
+                dataId = -1;
+            }
+        }
+    }
+    public OpenPanelAction(Type type, int dataId = -1)
+    {
+        this.type = type;
+        this.dataId = dataId;
+    } 
+}
+
+public struct SetCharacterProperty : GameAction
+{
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+          //  propertyType = (CharacterPropertyType) Enum.Parse(typeof(CharacterPropertyType),parameters[1].value);
+            setValue= int.Parse(parameters[2].value);
+        }
+    }
+    public int characterId;
+    //public CharacterPropertyType propertyType;
+    public int setValue;
+ 
+}
+public struct ChangeCharacterProperty : GameAction
+{
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+            //propertyType = (CharacterPropertyType)Enum.Parse(typeof(CharacterPropertyType), parameters[1].value);
+            changeValue = int.Parse(parameters[2].value);
+        }
+    }
+    public int characterId;
+   // public CharacterPropertyType propertyType;
+    public int changeValue; 
+}
+
+public struct CharacterPropertyTrigger:GameAction
+{
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+
+            var parameter = parameters[1];
+
+            /*
+            if (parameter.parameters.Count >= 3)
+            {
+                characterProperty = new CharacterProperty
+                {
+                    energy = int.Parse(parameter.parameters[0].value),
+                    health = int.Parse(parameter.parameters[1].value),
+                    satiety = int.Parse(parameter.parameters[2].value)
+                };
+            } */
+        }
+    }
+    public int characterId;
+   // public CharacterProperty characterProperty;
+ 
+}
+public struct SetCharacterCoordinate : GameAction
+{
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 3)
+        {
+            characterId = int.Parse(parameters[0].value);
+            mapId= int.Parse(parameters[1].value);
+            var parameter = parameters[2];
+            if (parameter.parameters.Count >= 2)
+            {
+                coordinate.x = int.Parse(parameter.parameters[0].value);
+                coordinate.y = int.Parse(parameter.parameters[1].value);
+            }
+        }
+    }
+    public int characterId;
+    public int mapId;
+    public int2 coordinate;
+    
+}
+public struct CharacterCoordinateTrigger : GameAction
+{
+    public void Init(List<Parameter> parameters) 
+    {
+        if (parameters.Count >= 3)
+        {
+            characterId = int.Parse(parameters[0].value);
+            mapId = int.Parse(parameters[1].value);
+            var parameter = parameters[2];
+            if (parameter.parameters.Count >= 2)
+            {
+                coordinate.x = int.Parse(parameter.parameters[0].value);
+                coordinate.y = int.Parse(parameter.parameters[1].value);
+            }
+        }
+    }
+    public int characterId;
+    public int mapId;
+    public int2 coordinate;
+ 
+}

@@ -1,0 +1,289 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
+using UnityEngine;
+
+public class CommonTool : MonoBehaviour
+{
+    [MenuItem("Assets/图片资源工具/检测并重新保存图片")]
+    public static void CheckAndResaveTexture()
+    {
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+            {
+                var path = AssetDatabase.GetAssetPath(obj);
+                if (obj)
+                {
+                    var strs = path.Split('.');
+                    if (strs[strs.Length - 1] == "png")
+                    {
+                        try
+                        {
+                            Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                            SaveTexture(texture2D);
+                        }
+                        catch
+                        {
+
+                        }
+                        //OutPSBFile(path);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(path))
+                    continue;
+
+                if (System.IO.Directory.Exists(path))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(path);
+                    OpenDirectoryInfo(dir, path);
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+    }
+
+    static void OpenDirectoryInfo(DirectoryInfo directoryInfo, string parentPath)
+    {
+        var _dirs = directoryInfo.GetDirectories();
+        var files = directoryInfo.GetFiles("*.png");
+
+        foreach (var f in files)
+        {
+            try
+            {
+                Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(parentPath + "/" + f.Name);
+                SaveTexture(texture2D);
+            }
+            catch
+            {
+
+            }
+
+        }
+        foreach (var d in _dirs)
+        {
+            string path = parentPath + "/" + d.Name;
+            OpenDirectoryInfo(d, path);
+        }
+    }
+    async static void SaveTexture(Texture2D texture2D)
+    {
+        int width = texture2D.width;
+        int height = texture2D.height;
+        int wd = width % 4;
+        int hd = height % 4;
+
+        if (wd != 0 || hd != 0)
+        {
+            width += 4 - wd;
+            height += 4 - hd;
+            string strSaveFile = AssetDatabase.GetAssetPath(texture2D);
+
+
+            Texture2D texture = new Texture2D(width, height, texture2D.format, false);
+            int startW = (4 - wd) / 2;
+            int startH = (4 - hd) / 2;
+            Color color = new Color(0, 0, 0, 0);
+            Color[] colors = new Color[width * height];
+            texture.SetPixels(0, 0, width, height, colors);
+            var colorData = texture2D.GetPixels();
+            texture.SetPixels(startW, startH, texture2D.width, texture2D.height, colorData);
+
+            byte[] dataBytes = texture.EncodeToPNG();
+
+
+
+            using (FileStream fs = File.Open(strSaveFile, FileMode.Create))
+            {
+                fs.Seek(0, SeekOrigin.End);
+                await fs.WriteAsync(dataBytes, 0, dataBytes.Length);
+
+
+            }
+
+        }
+    }
+
+    [MenuItem("Assets/图片资源工具/设置可读写")]
+    public static void CheckAndSetReadTexture()
+    {
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+            {
+                var path = AssetDatabase.GetAssetPath(obj);
+                if (obj)
+                {
+                    var strs = path.Split('.');
+                    if (strs[strs.Length - 1] == "png")
+                    {
+                        try
+                        {
+                            Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                            SaveReable(texture2D);
+                        }
+                        catch
+                        {
+
+                        }
+                        //OutPSBFile(path);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(path))
+                    continue;
+
+                if (System.IO.Directory.Exists(path))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(path);
+                    OpenDirectoryInfo1(dir, path);
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+    }
+
+    static void OpenDirectoryInfo1(DirectoryInfo directoryInfo, string parentPath)
+    {
+        var _dirs = directoryInfo.GetDirectories();
+        var files = directoryInfo.GetFiles("*.png");
+
+        foreach (var f in files)
+        {
+            try
+            {
+                Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(parentPath + "/" + f.Name);
+                SaveReable(texture2D);
+            }
+            catch
+            {
+
+            }
+
+        }
+        foreach (var d in _dirs)
+        {
+            string path = parentPath + "/" + d.Name;
+            OpenDirectoryInfo1(d, path);
+        }
+    }
+
+    async static void SaveReable(Texture2D texture2D)
+    {
+        int width = texture2D.width;
+        int height = texture2D.height;
+        int wd = width % 4;
+        int hd = height % 4;
+
+        if (wd != 0 || hd != 0)
+        {
+            width += 4 - wd;
+            height += 4 - hd;
+            string strSaveFile = AssetDatabase.GetAssetPath(texture2D);
+            if (!texture2D.isReadable)
+            {
+                TextureImporter textureImporter = TextureImporter.GetAtPath(strSaveFile) as TextureImporter;
+                textureImporter.isReadable = true;
+                textureImporter.SaveAndReimport();
+                AssetDatabase.SaveAssets();
+            }
+
+
+
+        }
+    }
+
+
+    [MenuItem("Assets/图片资源工具/设置不可读写")]
+    public static void CheckAndSetUnReadTexture()
+    {
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+            {
+                var path = AssetDatabase.GetAssetPath(obj);
+                if (obj)
+                {
+                    var strs = path.Split('.');
+                    if (strs[strs.Length - 1] == "png")
+                    {
+                        try
+                        {
+                            Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                            SaveUnReable(texture2D);
+                        }
+                        catch
+                        {
+
+                        }
+                        //OutPSBFile(path);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(path))
+                    continue;
+
+                if (System.IO.Directory.Exists(path))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(path);
+                    OpenDirectoryInfo2(dir, path);
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+    }
+
+    static void OpenDirectoryInfo2(DirectoryInfo directoryInfo, string parentPath)
+    {
+        var _dirs = directoryInfo.GetDirectories();
+        var files = directoryInfo.GetFiles("*.png");
+
+        foreach (var f in files)
+        {
+            try
+            {
+                Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(parentPath + "/" + f.Name);
+                SaveUnReable(texture2D);
+            }
+            catch
+            {
+
+            }
+
+        }
+        foreach (var d in _dirs)
+        {
+            string path = parentPath + "/" + d.Name;
+            OpenDirectoryInfo2(d, path);
+        }
+    }
+    async static void SaveUnReable(Texture2D texture2D)
+    {
+        string strSaveFile = AssetDatabase.GetAssetPath(texture2D);
+        TextureImporter textureImporter = TextureImporter.GetAtPath(strSaveFile) as TextureImporter;
+        textureImporter.isReadable = false;
+        textureImporter.crunchedCompression = true;
+        textureImporter.compressionQuality = 50;
+        textureImporter.SaveAndReimport();
+        AssetDatabase.SaveAssets();
+    }
+
+}
