@@ -34,7 +34,7 @@ public class payAction : MonoBehaviour,IStoreListener
             
             
             print("手机设置了禁止APP内购");
-            GameComponentData.gameData.DisplayTips("错误", "手机设置了禁止APP内购");
+            GameNotificationManager.instance.DisplayTips("错误", "手机设置了禁止APP内购");
         }
     }
     public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)
@@ -112,7 +112,7 @@ public class payAction : MonoBehaviour,IStoreListener
                 break;
 
         }
-       GameComponentData.gameData.DisplayTips(erroTitle,notice);
+       GameNotificationManager.instance.DisplayTips(erroTitle,notice);
     }
     public void OnPurchaseClicked()
     {
@@ -127,11 +127,11 @@ public class payAction : MonoBehaviour,IStoreListener
                 Application.systemLanguage == SystemLanguage.ChineseTraditional ||
                 Application.systemLanguage == SystemLanguage.Chinese)
             {
-                GameComponentData.gameData.DisplayTips("购买失败", "网络未连接!");
+                GameNotificationManager.instance.DisplayTips("购买失败", "网络未连接!");
             }
             else
             {
-                GameComponentData.gameData.DisplayTips("Failed Purchase!", "Network is not connected!");
+                GameNotificationManager.instance.DisplayTips("Failed Purchase!", "Network is not connected!");
             }
         }
         else

@@ -472,14 +472,14 @@ public class WarehouseAction : MonoBehaviour
                     if (selectItemData.IsFresh)
                     {
                         AudioManager.PlaySE(PlayType.ONCE, "Return");
-                        GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("生鲜物品可放入冰箱，无法放入杂物箱!"));
+                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("生鲜物品可放入冰箱，无法放入杂物箱!"));
                     }
                     else
                     {
                         AudioManager.PlaySE(PlayType.ONCE, "Click");
                         if (!outPackage.IsPackageFill(selectedItem))
                         {
-                            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),
+                            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
                                 LanguageManage.SwitchStr("杂物箱") + LanguageManage.SwitchStr("空间不足！"));
                         }
                         else
@@ -499,7 +499,7 @@ public class WarehouseAction : MonoBehaviour
                     if (!selectItemData.IsFresh)
                     {
                         AudioManager.PlaySE(PlayType.ONCE, "Return");
-                        GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("非生鲜物品不能放入冰箱!"));
+                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("非生鲜物品不能放入冰箱!"));
                     }
                     else
                     {
@@ -507,7 +507,7 @@ public class WarehouseAction : MonoBehaviour
 
                         if (!outPackage.IsPackageFill(selectedItem))
                         {
-                            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),
+                            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
                                 LanguageManage.SwitchStr("冰箱") + LanguageManage.SwitchStr("空间不足！"));
                         }
                         else
@@ -533,7 +533,7 @@ public class WarehouseAction : MonoBehaviour
                 AudioManager.PlaySE(PlayType.ONCE, "Click");
                 if (!outPackage.IsPackageFill(selectedItem))
                 {
-                    GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),
+                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
                         LanguageManage.SwitchStr("背包") + LanguageManage.SwitchStr("空间不足！"));
                 }
                 else
@@ -669,7 +669,7 @@ public class WarehouseAction : MonoBehaviour
             GameComponentData.gameData.gameManager.UpDataPlayer();
             playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().InitDataPlayerEquaipData();
             GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("道具使用"), noticeStr + propertyStr);
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("道具使用"), noticeStr + propertyStr);
             gamePlayer.package.GetItemOutPackage(selectedItem.ItemId, 1);
             InitWareHouseData();
         }

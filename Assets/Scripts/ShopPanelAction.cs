@@ -90,7 +90,7 @@ public class ShopPanelAction : MonoBehaviour
             else
             {
                 SelectCount--;
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("选择的牧场空间已达到上限。"));
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("选择的牧场空间已达到上限。"));
             }
         }
         else
@@ -116,7 +116,7 @@ public class ShopPanelAction : MonoBehaviour
             else
             {
                 SelectCount--;
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("选择的道具数量已达到背包容量上限。"));
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("选择的道具数量已达到背包容量上限。"));
             }
         }
        
@@ -178,7 +178,7 @@ public class ShopPanelAction : MonoBehaviour
             }
 
             euqipment.isBuy = true;
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("购买设施"),
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("购买设施"),
                 LanguageManage.SwitchStr("成功购买了")+euqipment.name+LanguageManage.SwitchStr(",已经送货到您家。"));
             
         }

@@ -734,7 +734,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            GameData.DisplayTips(LanguageManage.SwitchStr("体力不足"),LanguageManage.SwitchStr("体力不足，不能进行此项工作，请到 内宅 床上 休息以恢复体力。"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不足"),LanguageManage.SwitchStr("体力不足，不能进行此项工作，请到 内宅 床上 休息以恢复体力。"));
             return false;
         }
     }
@@ -941,7 +941,7 @@ public class GameManager : MonoBehaviour
             int clickCount = groundItem.item.count - xcount;
             if (clickCount > 0)
             {
-                GameData.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了")
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了")
                     + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name +","+ LanguageManage.SwitchStr("地上还有")
                     + xcount + LanguageManage.SwitchStr("个"));
                 GameData.informationManager.AddInformation("*"+LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") +":" + itemData.Name);
@@ -949,14 +949,14 @@ public class GameManager : MonoBehaviour
             else
             {
                 GameData.informationManager.AddInformation("*"+ LanguageManage.SwitchStr("背包已满，无法捡起物品"));
-                GameData.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("背包已满，无法捡起物品"));
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("背包已满，无法捡起物品"));
             }
            
         }
         else
         {
             GameData.informationManager.AddInformation("*" + LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
-            GameData.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
             Destroy(groundItem.Obj);
             GroundItems.Remove(groundItem);
         }

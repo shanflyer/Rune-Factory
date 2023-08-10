@@ -8,7 +8,7 @@ public class SaveReference : UIObjReference
     [SerializeField]
     Toggle SelectToggle;
     [SerializeField]
-    Image Character;
+    Image Meal,Femeal;
     [SerializeField]
     Text Name;
     [SerializeField]
@@ -27,7 +27,8 @@ public class SaveReference : UIObjReference
         base.SetPanelUISerializeObj();
 
         SelectToggle = GetComponent<Toggle>();
-        Character = FindChildGameObject<Image>("Character");
+        Meal = FindChildGameObject<Image>("Meal");
+        Femeal = FindChildGameObject<Image>("Femeal");
         Name = FindChildGameObject<Text>("Name");
         Level = FindChildGameObject<Text>("Level");
         Money = FindChildGameObject<Text>("Money");
@@ -40,7 +41,10 @@ public class SaveReference : UIObjReference
         this.gameSaveData = gameSaveData;
         if (gameSaveData != null)
         {
-            Character.enabled = true;
+            Meal.enabled = gameSaveData.playerSaveData.gender==Gender.male;
+            Femeal.enabled = gameSaveData.playerSaveData.gender == Gender.female;
+
+
             Level.text =GameCommon.AddString("Lv." ,gameSaveData.playerSaveData.level.ToString());
             Name.text = gameSaveData.playerSaveData.name;
             Money.text = gameSaveData.playerMoneyData.money0.ToString();
@@ -49,7 +53,8 @@ public class SaveReference : UIObjReference
         }
         else
         {
-            Character.enabled = false;
+            Meal.enabled = false;
+            Femeal.enabled = false;
             Level.text = "-";
             Name.text = "-";
             Money.text = "-";

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class AudioController : MonoBehaviour
+public class AudioController : Singleton<AudioController> 
 {
-    public AudioMixer audioMixer;
-	// Use this for initialization
-	void Start () {
-		
-	}
+    public override async void Init()
+    {
+        base.Init();
+        audioMixer =await ExtensionsResources.LoadResourceAsync<AudioMixer>("AudioMixer");
+    }
+    AudioMixer audioMixer;
+	 
     public void SetMasterVolume(float volume)    // 控制主音量的函数
     {
         

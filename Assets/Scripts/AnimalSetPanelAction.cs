@@ -80,7 +80,7 @@ public class AnimalSetPanelAction : MonoBehaviour
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包空间不足，不能宰杀！"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包空间不足，不能宰杀！"));
         }
         animal = null;
 

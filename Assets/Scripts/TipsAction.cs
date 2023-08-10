@@ -3,26 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine .UI;
 
-public class TipsAction : MonoBehaviour
+public class TipsPanel : GamePanel
 {
-    public Text TitleText, NotceText;
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-    public void ClickYes()
+    [SerializeField]
+    Text TitleText, NotceText;
+    [SerializeField]
+    Button CloseButton;
+    // Use this for initialization
+    public override void SetPanelUISerializeObj()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
-        gameObject.SetActive(false);
+        base.SetPanelUISerializeObj();
+        CloseButton = FindChildGameObject<Button>("YesButton");
+        TitleText=FindChildGameObject<Text>("Title");
+        NotceText = FindChildGameObject<Text>("Notce");
     }
+    protected override void Awake()
+    {
+        base.Awake();
+        CloseButton.onClick.AddListener(Close);
+    }
+  
     public void InitTipsData(string title, string Notice)
     {
         TitleText.text = title;
         NotceText.text = Notice;
     }
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	 
 }

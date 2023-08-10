@@ -35,9 +35,9 @@ public class UIManager:Singleton<UIManager>
         var type = typeof(T);
         await ShowGamePanel(type, dataId,layer); 
     }
-    private void OpenPanel(OpenPanelAction openPanelEvent)
+    private async void OpenPanel(OpenPanelAction openPanelEvent)
     {
-         ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
+        await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
     }
     async Task ShowGamePanel(Type type, int dataId = -1, int layer = -1)
     {

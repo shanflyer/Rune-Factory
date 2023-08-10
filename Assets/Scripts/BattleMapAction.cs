@@ -1029,7 +1029,7 @@ public class BattleMapAction : MonoBehaviour
         AudioManager.PlaySE(PlayType.ONCE,"Click");
         if (gamePlayer.property.Power <= 0)
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("体力不支"), LanguageManage.SwitchStr("体力已降为0，无法继续前进！"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不支"), LanguageManage.SwitchStr("体力已降为0，无法继续前进！"));
         }
         else
         {
@@ -1057,7 +1057,7 @@ public class BattleMapAction : MonoBehaviour
     {
         if (gamePlayer.property.Power <= 0)
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("体力不支"),LanguageManage.SwitchStr("体力已降为0，无法继续前进！"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不支"),LanguageManage.SwitchStr("体力已降为0，无法继续前进！"));
         }
         else
         {
@@ -1141,7 +1141,7 @@ public class BattleMapAction : MonoBehaviour
                         isAuto = false;
                         gamePlayer.property.Power = 0;
                         isMoving = false;
-                        GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("体力不支"), LanguageManage.SwitchStr("体力已降为0，无法继续前进！"));
+                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不支"), LanguageManage.SwitchStr("体力已降为0，无法继续前进！"));
                     }
                    
                 }
@@ -2705,7 +2705,7 @@ public class BattleMapAction : MonoBehaviour
                 GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得金币x") + moneyValue);
                 if (!isAuto)
                 {
-                    GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("战斗胜利"), rewardStr);
+                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("战斗胜利"), rewardStr);
                 }
             }
             GameComponentData.gameData.gameManager.PlayerMoneyText.text = gamePlayer.money.ToString();
@@ -3636,7 +3636,6 @@ public class BattleMapAction : MonoBehaviour
     public void UseItem(ItemData selectItem, DisplayType _displayType)
     {
         GameComponentData.gameData.warehouseObj.SetActive(false);
-        GameComponentData.gameData.TipsObj.SetActive(false);
         if (_displayType == DisplayType.Battling)
         {
             //GameComponentData.gameData.fightPanelAction.Fightfunction1.SetActive(false);
@@ -3688,7 +3687,6 @@ public class BattleMapAction : MonoBehaviour
             else
             {
                 GameComponentData.gameData.warehouseObj.SetActive(false);
-                GameComponentData.gameData.TipsObj.SetActive(false);
                 if (selectItem.GetProperty().HP == -1)
                 {
                     hp = 100000;

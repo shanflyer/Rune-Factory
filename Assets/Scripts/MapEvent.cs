@@ -13,7 +13,7 @@ public class MapEvent : MonoBehaviour {
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("未许可"), LanguageManage.SwitchStr("垂钓许可未获得，不能垂钓，详情见许可清单"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("未许可"), LanguageManage.SwitchStr("垂钓许可未获得，不能垂钓，详情见许可清单"));
         }
         
     }

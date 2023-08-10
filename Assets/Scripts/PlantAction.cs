@@ -399,7 +399,7 @@ public class PlantAction : MonoBehaviour
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包空间不足，无法收获！"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包空间不足，无法收获！"));
         }
         
         

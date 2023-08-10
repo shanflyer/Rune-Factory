@@ -213,7 +213,7 @@ public class NPCFunctionPanel : MonoBehaviour
                         {
                             equipName += " " + euqipment.name;
                         }
-                        GameComponentData.gameData.DisplayTips("提示", LanguageManage.SwitchStr("不能结婚！下列婚姻必需品未购买:") + equipName);
+                        GameNotificationManager.instance.DisplayTips("提示", LanguageManage.SwitchStr("不能结婚！下列婚姻必需品未购买:") + equipName);
                     }
                     else
                     {
@@ -337,7 +337,7 @@ public class NPCFunctionPanel : MonoBehaviour
         if (GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id != 0 &&
             GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id != 0)
         {
-            GameComponentData.gameData.DisplayTips("组队失败","队伍中没有空位");
+            GameNotificationManager.instance.DisplayTips("组队失败","队伍中没有空位");
         }
         else
         {

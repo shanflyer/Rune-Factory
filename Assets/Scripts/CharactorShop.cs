@@ -53,7 +53,7 @@ public class CharactorShop : MonoBehaviour
                 NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == selectedEmployer.id);
                 if (npcx.npcData.friendlyLevel < 4)
                 {
-                    GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), npcx.Name+LanguageManage.SwitchStr("友好度不足，无法雇佣"));
+                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), npcx.Name+LanguageManage.SwitchStr("友好度不足，无法雇佣"));
                 }
                 else
                 {
@@ -76,11 +76,11 @@ public class CharactorShop : MonoBehaviour
                         }
                         SwitchEmployType((int)employType);
 
-                        GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("雇佣成功"), LanguageManage.SwitchStr("成功雇佣到队友:") + teamPlayer.name);
+                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("雇佣成功"), LanguageManage.SwitchStr("成功雇佣到队友:") + teamPlayer.name);
                     }
                     else
                     {
-                        GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("金币不足，无法雇佣"));
+                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("金币不足，无法雇佣"));
                     }
                 }
             }
@@ -103,17 +103,17 @@ public class CharactorShop : MonoBehaviour
                 }
                 SwitchEmployType((int)employType);
 
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("雇佣成功"),LanguageManage.SwitchStr("成功雇佣到队友:")+teamPlayer.name);
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("雇佣成功"),LanguageManage.SwitchStr("成功雇佣到队友:")+teamPlayer.name);
             }
             else
             {
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), 
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), 
                     LanguageManage.SwitchStr("金币不足，无法雇佣"));
             }
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
                 LanguageManage.SwitchStr("队伍已满，无法雇佣"));
         }
       

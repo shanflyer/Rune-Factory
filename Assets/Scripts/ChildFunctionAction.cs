@@ -119,7 +119,7 @@ public class ChildFunctionAction : MonoBehaviour
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
                 LanguageManage.SwitchStr("缺少牛奶，牛奶可在动物店购买"));
         }
     }
@@ -142,7 +142,7 @@ public class ChildFunctionAction : MonoBehaviour
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
                 LanguageManage.SwitchStr("缺少尿布，尿布可在动物店购买"));
         }
     }
@@ -165,7 +165,7 @@ public class ChildFunctionAction : MonoBehaviour
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
                 LanguageManage.SwitchStr("缺少保险绳，保险绳可在动物店购买"));
         }
     }
@@ -176,7 +176,7 @@ public class ChildFunctionAction : MonoBehaviour
         DisplayChildData();
         AudioManager.PlaySE(PlayType.ONCE,"Item");
 
-        GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr(displayText));
+        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr(displayText));
     }
 	// Use this for initialization
 	void Start () {

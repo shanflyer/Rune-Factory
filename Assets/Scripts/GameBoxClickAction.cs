@@ -121,7 +121,7 @@ public class GameBoxClickAction : MonoBehaviour
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("未许可"),LanguageManage.SwitchStr("制作许可未获得，不能制作，详情见许可清单"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("未许可"),LanguageManage.SwitchStr("制作许可未获得，不能制作，详情见许可清单"));
         }
        
         
@@ -137,7 +137,7 @@ public class GameBoxClickAction : MonoBehaviour
             }
             else
             {
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("一个小小的床，还没有使用者！"));
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("一个小小的床，还没有使用者！"));
             }
         }
         else
@@ -150,7 +150,7 @@ public class GameBoxClickAction : MonoBehaviour
             }
             else
             {
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("一个小小的床，还没有使用者！"));
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("一个小小的床，还没有使用者！"));
             }
         }
         

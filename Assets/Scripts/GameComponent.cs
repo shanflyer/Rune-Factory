@@ -69,7 +69,7 @@ public class GameComponent : MonoBehaviour
     public PasturePanelAction pasturePanelAction;
     public AnimalSetPanelAction animalSetPanelAction;
     public ShopPanelAction shopPanelAction;
-    public GameObject TipsObj, PromptObj;
+    public GameObject  PromptObj;
     public TalkTextsManager talkTextsManager;
     public EquipmentManager equipmentManager;
     public static List<Sprite> charactorIcon;
@@ -94,11 +94,7 @@ public class GameComponent : MonoBehaviour
         PromptObj.SetActive(true);
         PromptObj.GetComponent<PromptAction>().AddInformation(content);
     }
-    public void DisplayTips(string title,string notice)
-    {
-        TipsObj.SetActive(true);
-        TipsObj.GetComponent<TipsAction>().InitTipsData(title,notice);
-    }
+  
     public void InitData()
     {
         ItemSprites= Resources.LoadAll<Sprite>("Item/").ToList();

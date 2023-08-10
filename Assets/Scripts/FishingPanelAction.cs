@@ -54,7 +54,7 @@ public class FishingPanelAction : MonoBehaviour
             }
             else
             {
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("体力不足"),
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不足"),
                     LanguageManage.SwitchStr("体力不足，无法垂钓，在床上休息可恢复体力！"));
             }
         }
@@ -72,14 +72,14 @@ public class FishingPanelAction : MonoBehaviour
             }
             else
             {
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("体力不足"),
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不足"),
                     LanguageManage.SwitchStr("体力不足，无法垂钓，在床上休息可恢复体力！"));
             }
 
         }
         else
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("鱼饵不足"),
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("鱼饵不足"),
                 LanguageManage.SwitchStr("鱼饵不足，无法垂钓，商店街的动物店有鱼饵出售！"));
         }
 
@@ -100,7 +100,7 @@ public class FishingPanelAction : MonoBehaviour
             functionObj.SetActive(false);
             nextObj.SetActive(true);
 
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("很遗憾"),
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("很遗憾"),
                 LanguageManage.SwitchStr("鱼跑了！"));
         }
         else
@@ -155,7 +155,7 @@ public class FishingPanelAction : MonoBehaviour
         {
             Vector2Int coordinate = GameComponentData.gameData.gameManager.playerCharactor.coordinate;
             GameComponentData.gameData.gameManager.GreatGroundItem(fishItem,new Vector2Int(coordinate.x,coordinate.y-1));
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("背包已满"),LanguageManage.SwitchStr("一条")
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("背包已满"),LanguageManage.SwitchStr("一条")
                 +selectFish.name+ LanguageManage.SwitchStr("落在地上，落在地上的道具随时会丢失，请及时回收！"));
 
         }

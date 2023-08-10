@@ -78,7 +78,7 @@ public class PastureItemPanelAction : MonoBehaviour
             
             if (laveCount > 0)
             {
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包已满！"));
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包已满！"));
                 break;
             }
             else

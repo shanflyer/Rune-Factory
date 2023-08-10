@@ -189,8 +189,8 @@ public class AdventurePanelAction : MonoBehaviour
 
         }
         else
-        {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("体力不足"),
+        { 
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不足"),
                 LanguageManage.SwitchStr("体力不足，不能探险，在床上休息后可恢复体力！"));
         }
     }

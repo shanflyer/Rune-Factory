@@ -171,7 +171,7 @@ public class FormulaAction : MonoBehaviour
         {
             notice+="  " + formula.name + LanguageManage.SwitchStr("开始在工具店出售");
         }
-        GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("获得配方"), notice);
+        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("获得配方"), notice);
     }
     public void DisplayManufacturePanel(int i)
     {

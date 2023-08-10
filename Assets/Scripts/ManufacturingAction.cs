@@ -582,7 +582,7 @@ public class ManufacturingAction : MonoBehaviour
         if ((formulaType == FormulaType.酒水 || formulaType == FormulaType.热食 || formulaType == FormulaType.冷食) && (
             !itemData.IsFresh))
         {
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("非生鲜物品不能添加！"));
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("非生鲜物品不能添加！"));
         }
         else
         {
@@ -669,7 +669,7 @@ public class ManufacturingAction : MonoBehaviour
             {
                 ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(formulaStuff);
                 GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*缺少素材:")+itemData.Name);
-                GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("提示"),TitleText.text+LanguageManage.SwitchStr("*缺少素材:") + itemData.Name+" ...");
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),TitleText.text+LanguageManage.SwitchStr("*缺少素材:") + itemData.Name+" ...");
             }
         }
         SetProductDisplay();
@@ -839,7 +839,7 @@ public class ManufacturingAction : MonoBehaviour
         if (RpCostValue >= gamePlayer.property.Power)
         {
             AudioManager.PlaySE(PlayType.ONCE, "Return");
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("RP消耗过大"), LanguageManage.SwitchStr("需消耗RP:")
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("RP消耗过大"), LanguageManage.SwitchStr("需消耗RP:")
                 +RpCostValue+LanguageManage.SwitchStr(",超过拥有RP;")+gamePlayer.property.Power
                 +LanguageManage.SwitchStr("无法制作！"));
         }
@@ -1036,7 +1036,7 @@ public class ManufacturingAction : MonoBehaviour
             GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个:") + produceItemData.Name+LanguageManage.SwitchStr("，其中")+groundItemCount+LanguageManage.SwitchStr("个落在地上"));
             GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*在地上的道具随时会被地底哥布林偷走，请及时回收。"));
 
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个:") +
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个:") +
                 produceItemData.Name+LanguageManage.SwitchStr(",因为背包已满，其中")+groundItemCount+ LanguageManage.SwitchStr("个落在地上，在地上的道具随时会被地底哥布林偷走，请及时回收。"));
         }
         else
@@ -1044,7 +1044,7 @@ public class ManufacturingAction : MonoBehaviour
            
             ItemData produceItemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(produceItem.ItemId);
             GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
-            GameComponentData.gameData.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
         }
         if (player.property.Power > RpCostValue)
         {
