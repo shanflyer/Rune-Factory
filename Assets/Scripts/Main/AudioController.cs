@@ -11,7 +11,14 @@ public class AudioController : Singleton<AudioController>
         base.Init();
         audioMixer =await ExtensionsResources.LoadResourceAsync<AudioMixer>("AudioMixer");
     }
-
+    protected override void Clear()
+    {
+        base.Clear();
+        StopBgm();
+        StopBGS();
+        StopME();
+        StopSE();
+    }
     public void SetAudioSource(GameObject audioObj)
     {
         var BGM = audioObj.transform.Find("BGM");

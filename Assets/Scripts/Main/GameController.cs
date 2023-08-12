@@ -16,8 +16,6 @@ public class GameController : MonoBehaviour
     public bool SetLanguage;
     public SystemLanguage SetSystemLanguage;
 
-    public AudioClip audioClip;
-    public AudioSource audioSource;
     
     private void OnEnable()
     { 
@@ -36,7 +34,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
-        AudioController.instance.PlayAudio(BGM.bgm002);
+        AudioController.instance.PlayAudio(BGM.Town1);
         UIManager.instance.ShowGamePanel<ZeroPanel>();
     }
     private void Update()
