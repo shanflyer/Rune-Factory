@@ -442,6 +442,11 @@ public static class DataPath
         return null;
     }
 
+    public const string BGMPath = "Audio/BGM/";
+    public const string BGSPath = "Audio/BGS/";
+    public const string MEPath = "Audio/ME/";
+    public const string SEPath = "Audio/SE/";
+
     public const string titlePath = "ScriptableObject/Sprites/Title";
     public const string filmDataPath = "FilmObj/";
 

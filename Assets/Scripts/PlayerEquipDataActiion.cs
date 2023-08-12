@@ -33,7 +33,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
     }
     public void ChangeDrop(Dropdown dropdown)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Select");
+        AudioController.instance.PlayAudio(SE.select);
         string playerName = dropdown.options[dropdown.value].text;
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         if (gamePlayer.name == playerName)

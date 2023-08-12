@@ -156,7 +156,7 @@ public class IntelligencePanelAction : MonoBehaviour
 
     public void ClickReturn()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         if (GameComponentData.gameData.passDataManager.NowPassData.id == 1001&&
             !GameComponentData.gameData.adventurePanelAction.gameObject.activeSelf)
         {
@@ -166,19 +166,19 @@ public class IntelligencePanelAction : MonoBehaviour
     }
     public void ClickCharactorTitle()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         CharactortitleObj.SetActive(true);
         GameComponentData.gameData.charactorTitleAction.InitData();
     }
     public void ClickNPCButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         NpcListPanel.SetActive(true);
         NpcListPanel.GetComponent<NPCListDataPanelAction>().InitNpcListData();
     }
     public void ClickWeapon(int index)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (index == 0)
         {
             GameComponentData.gameData.warehouseObj.SetActive(true);
@@ -222,7 +222,7 @@ public class IntelligencePanelAction : MonoBehaviour
     }
     public void ClickClothes(int index)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (index == 0)
         {
             GameComponentData.gameData.warehouseObj.SetActive(true);
@@ -253,7 +253,7 @@ public class IntelligencePanelAction : MonoBehaviour
     }
     public void ClickPackage()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.warehouseObj.SetActive(true);
         List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
         wareDisplayTypes.Add(WareDisplayType.ALL);
@@ -261,7 +261,7 @@ public class IntelligencePanelAction : MonoBehaviour
     }
     public void ClickAddEmplor()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         employObj.SetActive(true);
         employObj.GetComponent<CharactorShop>().NpcToggle.isOn = true;
        employObj.GetComponent<CharactorShop>().SwitchEmployType(1);

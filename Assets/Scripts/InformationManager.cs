@@ -28,7 +28,7 @@ public class InformationManager : MonoBehaviour
     }
     public void DisplayInformationPanel()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         informationPanel.SetActive(true);
         foreach (var information in informations)
         {

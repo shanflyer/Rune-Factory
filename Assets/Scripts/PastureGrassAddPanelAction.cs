@@ -96,7 +96,7 @@ public class PastureGrassAddPanelAction : MonoBehaviour
     public void GrassChange(int value)
     {
         
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (value > 0)
         {
             addgrass += value;
@@ -147,7 +147,7 @@ public class PastureGrassAddPanelAction : MonoBehaviour
     public void EnterGrass()
     {
         
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (grass != null)
         {
             GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(grass.ItemId,addgrass);

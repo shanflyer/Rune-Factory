@@ -305,7 +305,7 @@ public class ManufacturingAction : MonoBehaviour
     }
     public int CheckItemCount()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Select");
+        AudioController.instance.PlayAudio(SE.select);
         
         List<int> playerItemCounts=new List<int>();
         List<Item> stuffItems=new List<Item>();
@@ -368,7 +368,7 @@ public class ManufacturingAction : MonoBehaviour
 
     public void DisplayFormula(Dropdown dropdown)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         int index = dropdown.value;
         dropdown.captionText.text = dropdown.options[index].text;
         foreach (var stuff in stuffs)
@@ -754,7 +754,7 @@ public class ManufacturingAction : MonoBehaviour
     }
     public void AddCount()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         produceCount++;
         DownButton.gameObject.SetActive(true);
         int x = CheckItemCount();
@@ -778,7 +778,7 @@ public class ManufacturingAction : MonoBehaviour
     }
     public void ReduceCount()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         produceCount--;
         UpButton.gameObject.SetActive(true);
         if (produceCount <= 1)
@@ -793,12 +793,12 @@ public class ManufacturingAction : MonoBehaviour
     }
     public void Return()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
         gameObject.SetActive(false);
     }
     public void GetOutButtonAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         int index = stuffs.FindIndex(s => s.GetComponent<ItemBoxAction>() == SelectItem);
         SelectItem.isFull = false;
         SelectItem.gameObject.GetComponentInChildren<Toggle>().isOn = false;
@@ -838,7 +838,7 @@ public class ManufacturingAction : MonoBehaviour
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         if (RpCostValue >= gamePlayer.property.Power)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Return");
+            AudioController.instance.PlayAudio(SE.Return);
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("RP消耗过大"), LanguageManage.SwitchStr("需消耗RP:")
                 +RpCostValue+LanguageManage.SwitchStr(",超过拥有RP;")+gamePlayer.property.Power
                 +LanguageManage.SwitchStr("无法制作！"));
@@ -846,7 +846,7 @@ public class ManufacturingAction : MonoBehaviour
         else
         {
             string noticeStr = "";
-            AudioManager.PlaySE(PlayType.ONCE, "Return");
+            AudioController.instance.PlayAudio(SE.Return);
            
             if (isMatch)
             {

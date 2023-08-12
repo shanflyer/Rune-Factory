@@ -376,8 +376,8 @@ public class CharactorTitleAction : MonoBehaviour
 
                 TitleNameText.text = charactorTitle.name;
                 string notice = LanguageManage.SwitchStr("获得")+ LanguageManage.SwitchStr("称号") + ":" + charactorTitle.name + " " + charactorTitle.notice;
-                NoticeText.text = notice;
-                AudioManager.PlaySE(PlayType.ONCE, "Get");
+                NoticeText.text = notice; 
+                AudioController.instance.PlayAudio(SE.Get);
                 Obj.GetComponent<Animator>().SetBool("Isplay", true);
             }
         }
@@ -422,7 +422,7 @@ public class CharactorTitleAction : MonoBehaviour
     }
     public void ClickNextButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         Obj.GetComponent<Animator>().SetBool("Isplay", false);
         Obj.SetActive(false);
         GetCharactorTitles.RemoveAt(0);
@@ -434,7 +434,7 @@ public class CharactorTitleAction : MonoBehaviour
 
     public void ClicnReturenButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         GameComponentData.gameData.intelligencePanelAction.CharactortitleObj.SetActive(false);
     }
     public void AddSleepDays()
@@ -529,7 +529,7 @@ public class CharactorTitleAction : MonoBehaviour
     }
     public void SwitchType(int i)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Select");
+        AudioController.instance.PlayAudio(SE.select);
         TitleType titleType = (TitleType) i;
         foreach (Transform child in TitleParent)
         {

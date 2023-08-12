@@ -39,13 +39,13 @@ public class AnimalSetPanelAction : MonoBehaviour
 
     public void ClickReturn()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
         animal = null;
         gameObject.SetActive(false);
     }
     public void GetOutToNorture()
-    {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+    { 
+        AudioController.instance.PlayAudio(SE.click);
         Destroy(animal.Obj);
         animal.pasture.Animals.Remove(animal);
         animal.pasture.animalCaseCount -= animal.animalData.caseCount;
@@ -60,8 +60,8 @@ public class AnimalSetPanelAction : MonoBehaviour
         gameObject.SetActive(false);
     }
     public void KillAnimal()
-    {
-        AudioManager.PlaySE(PlayType.ONCE, "Item");
+    { 
+        AudioController.instance.PlayAudio(SE.Item);
         ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(animal.animalData.produceItem);
 
         Item item=new Item(itemData,1);
@@ -88,7 +88,7 @@ public class AnimalSetPanelAction : MonoBehaviour
     
     public void SelectOtherPasture()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         MovePastureSelectObj.SetActive(true);
         foreach (Transform child in selectButtonParent)
         {
@@ -129,7 +129,7 @@ public class AnimalSetPanelAction : MonoBehaviour
 
     public void MoveAnimalPasture(Pasture _pasture)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (_pasture != null&&_pasture.id!=0)
         {
             int animalCase = 0;

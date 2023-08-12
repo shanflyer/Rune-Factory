@@ -406,7 +406,7 @@ public class TalkTextsManager : MonoBehaviour
     }
     public void NextTalk()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
         if (nowTalk.nexTalkId != 0)
         {
             
@@ -438,7 +438,7 @@ public class TalkTextsManager : MonoBehaviour
 
             if (!isPlayertalk&&talkNpc!=null)
             {
-                AudioManager.PlaySE(PlayType.ONCE, "Click");
+                AudioController.instance.PlayAudio(SE.click);
                 NPCFunctionPanel.SetActive(true);
                 NPCFunctionPanel.GetComponent<NPCFunctionPanel>().InitNpcData(talkNpc);
             }

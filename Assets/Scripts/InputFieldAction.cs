@@ -25,7 +25,7 @@ public class InputFieldAction : MonoBehaviour
 
     public void InputEnd()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         NameText.text = inputStr;
         if (NameText.name == "0")
         {

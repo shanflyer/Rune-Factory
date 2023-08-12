@@ -47,7 +47,7 @@ public class FishingPanelAction : MonoBehaviour
             {
                 gamePlayer.property.Power -= 10;
                 GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(1168100, 1);
-                AudioManager.StopBGM();
+                AudioController.instance.StopBgm();
                 StopCoroutine("FishMoving");
                 animator.SetBool("IsFish", true);
                 GameComponentData.gameData.gameManager.UpDataPlayer();
@@ -65,7 +65,7 @@ public class FishingPanelAction : MonoBehaviour
             {
                 gamePlayer.property.Power -= 10;
                 GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(1125100, 1);
-                AudioManager.StopBGM();
+                AudioController.instance.StopBgm();
                 StopCoroutine("FishMoving");
                 animator.SetBool("IsFish", true);
                 GameComponentData.gameData.gameManager.UpDataPlayer();
@@ -93,8 +93,8 @@ public class FishingPanelAction : MonoBehaviour
 
     public void GetFish()
     {
-       
-        AudioManager.PlayBGM(PlayType.ONCE, "Fish");
+
+        AudioController.instance.PlayAudio(SE.Fish);
         if (Mathf.Abs(FishSlider.value - HookSlider.value) > 0.15f)
         {
             functionObj.SetActive(false);
@@ -149,7 +149,7 @@ public class FishingPanelAction : MonoBehaviour
     }
     public void PutInPackage()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         int x = GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(fishItem);
         if (x > 0)
         {
@@ -165,7 +165,7 @@ public class FishingPanelAction : MonoBehaviour
 
     public void ContineuButtonAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         functionObj.SetActive(true);
         nextObj.SetActive(false);
         StartFishing();
@@ -173,13 +173,13 @@ public class FishingPanelAction : MonoBehaviour
     public void StartFishing()
     {
         animator.SetBool("IsFish", false);
-        AudioManager.PlayBGM(PlayType.CYCLE,"water");
+        AudioController.instance.PlayAudio(BGM.water); 
         StartCoroutine("FishMoving");
     }
 
     public void EndFishing()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         GameComponentData.gameData.passDataManager.PlayerMapBGM();
         gameObject.SetActive(false);
     }
@@ -196,14 +196,14 @@ public class FishingPanelAction : MonoBehaviour
             HookSlider.value = value1;
             if (value0 >= 1)
             {
-                AudioManager.PlaySE(PlayType.ONCE,"water2");
+                AudioController.instance.PlayAudio(SE.water2);
                 speed0 = -Random.Range(speedRange.x, speedRange.y);
                 value0 = 1;
                 FishImage.sprite = fish1;
             }
             if (value0 <= 0)
             {
-                AudioManager.PlaySE(PlayType.ONCE, "water2");
+                AudioController.instance.PlayAudio(SE.water2);
                 speed0 = Random.Range(speedRange.x, speedRange.y);
                 value0 = 0;
                 FishImage.sprite = fish0;

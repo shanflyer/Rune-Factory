@@ -28,7 +28,7 @@ public class DeskAction : MonoBehaviour
     public void Click()
     {
       
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (item == null||item.ItemId==0)
         {
             WarehouseObj.SetActive(true);
@@ -55,7 +55,7 @@ public class DeskAction : MonoBehaviour
         {
             ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
            // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
-            AudioManager.PlaySE(PlayType.ONCE,"Shop");
+            AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
                 (int) (itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f);
             string infomation = "*1 " + itemData.Name+LanguageManage.SwitchStr("出售");
@@ -113,7 +113,7 @@ public class DeskAction : MonoBehaviour
         {
             ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
             // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
-            AudioManager.PlaySE(PlayType.ONCE, "Shop");
+            AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
                 (int)(itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f) * count;
             string infomation = "*"+count+ itemData.Name + LanguageManage.SwitchStr("出售");

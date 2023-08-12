@@ -41,7 +41,7 @@ public class SalesetPanelAction : MonoBehaviour
 
     public void AddSale()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         int x = GameComponentData.gameData.shopGoldDeskAction.saleValue;
         
         x += 5;
@@ -61,7 +61,7 @@ public class SalesetPanelAction : MonoBehaviour
     }
     public void ReduceSale()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         int x = GameComponentData.gameData.shopGoldDeskAction.saleValue;
         x -= 5;
         AddButton.interactable = true;

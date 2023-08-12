@@ -745,7 +745,7 @@ public class PastureAction : MonoBehaviour
     }
     public void ClickBuild(GameObject obj)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click2");
+        AudioController.instance.PlayAudio(SE.Click2);
         pastureIndex = int.Parse(obj.name);
         PastureBuildPanel.SetActive(true);
         pastureNameInput.text = LanguageManage.SwitchStr("新牧场");
@@ -764,7 +764,7 @@ public class PastureAction : MonoBehaviour
  
     public void Builded()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         
         GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("新建牧场"),goldCost,LanguageManage.SwitchStr("新建一座牧场"),CostType.增加牧场, ShopMoneyType.金币);      
 
@@ -785,7 +785,7 @@ public class PastureAction : MonoBehaviour
     }
     public void ClickPastureHouse(GameObject Obj)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         int index = Houses.FindIndex(h => h == Obj);
         Pasture pasture = Pastures[index];
         PasturePanel.SetActive(true);

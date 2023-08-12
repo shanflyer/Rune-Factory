@@ -37,7 +37,8 @@ public class AdventurePanelAction : MonoBehaviour
 
 
         GameComponentData.gameData.pastureAction.MoveCameraButtonObj.SetActive(false);
-        AudioManager.PlayBGM(PlayType.CYCLE,"002");
+        AudioController.instance.PlayAudio(BGM.bgm002);
+         
         if (PlaceObjs == null)
         {
             PlaceObjs = new List<GameObject>();
@@ -91,7 +92,7 @@ public class AdventurePanelAction : MonoBehaviour
     {
         gameObject.SetActive(false);
         GameComponentData.gameData.SaveButtonObj.SetActive(true);
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         if (GameComponentData.gameData.passDataManager.NowPassData.id == 1001)
         {
             GameComponentData.gameData.gameManager.fieldTool.SetActive(true);
@@ -111,7 +112,7 @@ public class AdventurePanelAction : MonoBehaviour
         gamePlayer.TeamPlayer1.ObjName = "man1";
         BatteleMap batteleMap = GameComponentData.gameData.BattleMapAction.BatteleMaps.Find(b => b.id == 4100);
   
-        AudioManager.PlayBGM(PlayType.CYCLE, "Move");
+        AudioController.instance.PlayAudio(BGM.Move);
         GameComponentData.gameData.mapParent.gameObject.SetActive(false);
         FightPanelObj.SetActive(true);
         FightPanelObj.GetComponent<FightPanelAction>().InitFightData(batteleMap);
@@ -137,7 +138,7 @@ public class AdventurePanelAction : MonoBehaviour
 
     public void ClickExplorButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Select");
+        AudioController.instance.PlayAudio(SE.select);
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         if (gamePlayer.property.Power >= 5)
         {
@@ -243,7 +244,7 @@ public class AdventurePanelAction : MonoBehaviour
     }
    public void Exploring()
     {
-        AudioManager.PlayBGM(PlayType.CYCLE,"Move");
+        AudioController.instance.PlayAudio(BGM.Move); 
         GameComponentData.gameData.gameManager.gamePlayer.property.Power -= 5;
         GameComponentData.gameData.gameManager.UpDataPlayer();
         GameComponentData.gameData.mapParent.gameObject.SetActive(false);

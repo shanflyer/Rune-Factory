@@ -24,7 +24,7 @@ public class AdventureResultAction : MonoBehaviour
     public void ClickOkButton()
     {
         GameComponentData.gameData.SaveButtonObj.SetActive(true);
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (isSuccessful)
         {
             GameComponentData.gameData.BattleMapAction.InformationEnd(InformationType.战斗胜利);
@@ -48,7 +48,7 @@ public class AdventureResultAction : MonoBehaviour
             GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0 = null;
             GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1 = null;
         }
-        AudioManager.PlayBGM(PlayType.CYCLE,"002");
+        AudioController.instance.PlayAudio(BGM.bgm002); 
         Camera.main.transform.position = new Vector3(0, 0, -20);
         GameComponentData.gameData.gameManager.gamePlayer.attributeType = AttributeType.无;
         GameComponentData.gameData.gameManager.InitGate();
@@ -63,14 +63,8 @@ public class AdventureResultAction : MonoBehaviour
         {
             LanguageManage.TextFanyi(text);
         }
-        if (_isSuccessful)
-        {
-            AudioManager.PlayBGM(PlayType.ONCE, "Victory");
-        }
-        else
-        {
-            AudioManager.PlayBGM(PlayType.ONCE, "Defeat");
-        }
+        AudioController.instance.PlayAudio(_isSuccessful?BGM.Victory:BGM.Defeat);
+        
         skillup0.SetActive(false);
         skillup1.SetActive(false);
         skillup2.SetActive(false);

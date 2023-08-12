@@ -22,12 +22,12 @@ public class CalendarAction : MonoBehaviour
 
     public void ClickRetrun()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
        transform.parent.gameObject.SetActive(false);
     }
     public void ZeroDateDisplay()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         year = GameTimeManager.nowGameTime.gameDate.year;
         season = GameTimeManager.nowGameTime.gameDate.season;
         GameComponentData.gameData.gameTimeManager.StopTimeRun();
@@ -46,7 +46,8 @@ public class CalendarAction : MonoBehaviour
     }
     public void ForwardMonth()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Book");
+        AudioController.instance.PlayAudio(SE.Book);
+         
         int seasonId = (int)season;
         if (seasonId > 1)
         {
@@ -64,7 +65,7 @@ public class CalendarAction : MonoBehaviour
     }
     public void NextMonth()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Book");
+        AudioController.instance.PlayAudio(SE.Book);
         int seasonId = (int)season;
         if (seasonId < 4)
         {

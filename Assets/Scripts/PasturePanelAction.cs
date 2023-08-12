@@ -24,7 +24,7 @@ public class PasturePanelAction : MonoBehaviour
 
     public void ClickReturn()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
         gameObject.SetActive(false);
     }
     public void InitPasturePanelData(Pasture _pasture)
@@ -69,7 +69,7 @@ public class PasturePanelAction : MonoBehaviour
 
     public void AnimalDeadCheck(Animal _animal)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (pasture == _animal.pasture)
         {
             UpdataPasturePanelData();
@@ -124,13 +124,13 @@ public class PasturePanelAction : MonoBehaviour
     }
     public void AddButtonClick()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("牧场空间"), CostValue,  pasture.name + LanguageManage.SwitchStr("增加1个空间"),
             CostType.增加牧场容量,ShopMoneyType.金币);
     }
     public void AddPastureCaseCount()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*消耗金币") + CostValue + ","+pasture.name+LanguageManage.SwitchStr(" 空间+1"));
         CostValue = GameComponentData.gameData.pastureAction.zeroAnimalCost + (pasture.caseCount - 2) *
                     GameComponentData.gameData.pastureAction.addAnimalCostPlus;
@@ -149,13 +149,13 @@ public class PasturePanelAction : MonoBehaviour
     }
     public void PastureItemButtonClick()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.pastureAction.ClickItemPackage(pasture);
         //gameObject.SetActive(false);
     }
     public void PastureGrassButtonClick()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.pastureAction.ClickGrassObj(pasture);
         //gameObject.SetActive(false);
     }

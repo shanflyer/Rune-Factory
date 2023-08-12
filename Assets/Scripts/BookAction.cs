@@ -12,7 +12,7 @@ public class BookAction : MonoBehaviour
 
     public void CloseButtonClick()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return); 
         obj0.SetActive(false);
         obj1.SetActive(false);
         obj2.SetActive(false);

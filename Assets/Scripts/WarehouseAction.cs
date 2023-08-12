@@ -400,11 +400,11 @@ public class WarehouseAction : MonoBehaviour
         }
         playerPackage.CaseCount += 5;
         CaseCounText.text = "(" + playerPackage.items.Count + "/" + playerPackage.CaseCount + ")";
-        AudioManager.PlaySE(PlayType.ONCE,"Click2");
+        AudioController.instance.PlayAudio(SE.Click2);
     }
     public void ClickItem(Item item)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Select");
+        AudioController.instance.PlayAudio(SE.select);
         if (item.ItemId != 0)
         {
             ItemInfomationObj.SetActive(true);
@@ -459,7 +459,7 @@ public class WarehouseAction : MonoBehaviour
         switch (displayType)
         {
             case DisplayType.Sell:
-                AudioManager.PlaySE(PlayType.ONCE, "Click");
+                AudioController.instance.PlayAudio(SE.click);
                 SellSelectObj.SetActive(true);
                 SellSelectObj.GetComponent<SellSellectAction>().InitSellSelectData(selectedItem);
 
@@ -471,12 +471,12 @@ public class WarehouseAction : MonoBehaviour
 
                     if (selectItemData.IsFresh)
                     {
-                        AudioManager.PlaySE(PlayType.ONCE, "Return");
+                        AudioController.instance.PlayAudio(SE.Return);
                         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("生鲜物品可放入冰箱，无法放入杂物箱!"));
                     }
                     else
                     {
-                        AudioManager.PlaySE(PlayType.ONCE, "Click");
+                        AudioController.instance.PlayAudio(SE.click);
                         if (!outPackage.IsPackageFill(selectedItem))
                         {
                             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
@@ -498,12 +498,12 @@ public class WarehouseAction : MonoBehaviour
                 {
                     if (!selectItemData.IsFresh)
                     {
-                        AudioManager.PlaySE(PlayType.ONCE, "Return");
+                        AudioController.instance.PlayAudio(SE.Return);
                         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("非生鲜物品不能放入冰箱!"));
                     }
                     else
                     {
-                        AudioManager.PlaySE(PlayType.ONCE, "Click");
+                        AudioController.instance.PlayAudio(SE.click);
 
                         if (!outPackage.IsPackageFill(selectedItem))
                         {
@@ -522,7 +522,7 @@ public class WarehouseAction : MonoBehaviour
                 }
                 else
                 {
-                    AudioManager.PlaySE(PlayType.ONCE, "Click");
+                    AudioController.instance.PlayAudio(SE.click);
                     outPackage.SetItemInPackage(selectedItem);
                     playerPackage.GetItemOutPackage(selectedItem.ItemId, selectedItem.count);
                     DisplayWarehouseItems(PackageType, wareDisplayTypes);
@@ -530,7 +530,7 @@ public class WarehouseAction : MonoBehaviour
                 }
                 break;
             case DisplayType.Out:
-                AudioManager.PlaySE(PlayType.ONCE, "Click");
+                AudioController.instance.PlayAudio(SE.click);
                 if (!outPackage.IsPackageFill(selectedItem))
                 {
                     GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
@@ -545,7 +545,7 @@ public class WarehouseAction : MonoBehaviour
                 }
                 break;
             case DisplayType.Equip:
-                AudioManager.PlaySE(PlayType.ONCE, "Click");
+                AudioController.instance.PlayAudio(SE.click);
                 Item farmTool = GameComponentData.gameData.farmAction.farmTool;
                 if (farmTool != null && farmTool.ItemId != 0)
                 {
@@ -558,7 +558,7 @@ public class WarehouseAction : MonoBehaviour
                 GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(selectedItem.ItemId, selectedItem.count);
                 break;
             case DisplayType.Normal:
-                AudioManager.PlaySE(PlayType.ONCE, "Click");
+                AudioController.instance.PlayAudio(SE.click);
                 if (selectItemData.Type == ItemType.武器 || selectItemData.Type == ItemType.防具)
                 {
                     playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().EuqipMentAction();
@@ -576,21 +576,21 @@ public class WarehouseAction : MonoBehaviour
                 }
                 break;
             case DisplayType.AfterBattle:
-                AudioManager.PlaySE(PlayType.ONCE, "Click2");
+                AudioController.instance.PlayAudio(SE.Click2);
                 UseItem();
                 ItemData selectItemData0 =
                     GameComponentData.gameData.itemsManager.GetItemDataFromId(selectedItem.ItemId);
                 GameComponentData.gameData.BattleMapAction.UseItem(selectItemData0,DisplayType.AfterBattle);
                 break;
             case DisplayType.Battling:
-                AudioManager.PlaySE(PlayType.ONCE, "Click2");
+                AudioController.instance.PlayAudio(SE.Click2);
                 UseItem();
                 ItemData selectItemData1 =
                     GameComponentData.gameData.itemsManager.GetItemDataFromId(selectedItem.ItemId);
                 GameComponentData.gameData.BattleMapAction.UseItem(selectItemData1,DisplayType.Battling);
                 break;
             case DisplayType.Gift:
-                AudioManager.PlaySE(PlayType.ONCE, "Click2");
+                AudioController.instance.PlayAudio(SE.Click2);
                 //GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(selectedItem.ItemId,1);
                 GameComponentData.gameData.NpcManager.selectNpcx.AddGiftFriendllyExp(selectedItem.ItemId);
 
@@ -603,7 +603,7 @@ public class WarehouseAction : MonoBehaviour
     public void ClickReturnButton()
     {
        
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         if (GameComponentData.gameData.passDataManager.NowPassData.id == 1001)
         {
             GameComponentData.gameData.gameManager.fieldTool.SetActive(true);
@@ -665,7 +665,7 @@ public class WarehouseAction : MonoBehaviour
                 gamePlayer.TeamPlayer1.property += selectItemData1.GetProperty();
                 gamePlayer.TeamPlayer1.AddHpValue(0);
             }
-            AudioManager.PlaySE(PlayType.ONCE,"Heal");
+            AudioController.instance.PlayAudio(SE.Heal);
             GameComponentData.gameData.gameManager.UpDataPlayer();
             playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().InitDataPlayerEquaipData();
             GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
@@ -675,7 +675,7 @@ public class WarehouseAction : MonoBehaviour
         }
         else if (selectItemData1.Type == ItemType.药剂)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Heal");
+            AudioController.instance.PlayAudio(SE.Heal);
             GameComponentData.gameData.gameManager.gamePlayer.attributeType = (AttributeType) selectItemData1.typeValue;
             playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().ChangePlayerDrop();
             gamePlayer.package.GetItemOutPackage(selectedItem.ItemId, 1);

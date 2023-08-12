@@ -40,12 +40,12 @@ public class CharactorShop : MonoBehaviour
 
     public void ClickReturn()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         gameObject.SetActive(false);
     }
     public void BuyEmployAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (gamePlayer.TeamPlayer0 == null ||gamePlayer.TeamPlayer0.id== 0 || gamePlayer.TeamPlayer1 == null || gamePlayer.TeamPlayer1.id==0)
         {
             if (employType == EmployType.NPC)
@@ -124,8 +124,7 @@ public class CharactorShop : MonoBehaviour
         {
             gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         }
-
-        AudioManager.PlaySE(PlayType.ONCE,"Select");
+        AudioController.instance.PlayAudio(SE.select); 
         selectedEmployer = _employer;
         totalMoneyText.text =LanguageManage.SwitchStr("佣金:")+ _employer.cost.ToString();
         if (_employer.isHired)
@@ -163,7 +162,7 @@ public class CharactorShop : MonoBehaviour
     {
         employButton.interactable = false;
         MoneyText.text = GameComponentData.gameData.gameManager.gamePlayer.money.ToString();
-        AudioManager.PlaySE(PlayType.ONCE,"Select");
+        AudioController.instance.PlayAudio(SE.select);
         if (emplorObjs == null)
         {
             emplorObjs=new List<GameObject>();
@@ -254,7 +253,7 @@ public class CharactorShop : MonoBehaviour
        
         employButton.interactable = false;
         MoneyText.text = GameComponentData.gameData.gameManager.gamePlayer.money.ToString();
-        AudioManager.PlaySE(PlayType.ONCE, "Select");
+        AudioController.instance.PlayAudio(SE.select);
         employType = (EmployType)index;
         if (emplorObjs == null)
         {

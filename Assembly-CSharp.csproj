@@ -122,7 +122,6 @@
     <Compile Include="Assets\Scripts\IApBUGClear.cs" />
     <Compile Include="Assets\Scripts\Film\FilmManager.cs" />
     <Compile Include="Assets\Scripts\FightPanelAction.cs" />
-    <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\MapVillage.cs" />
     <Compile Include="Assets\Scripts\Action\GameAction.cs" />
     <Compile Include="Assets\Scripts\AnimalInformationAction.cs" />
@@ -243,6 +242,7 @@
     <Compile Include="Assets\Scripts\x\GuideController.cs" />
     <Compile Include="Assets\Scripts\AdventureResultAction.cs" />
     <Compile Include="Assets\Scripts\PastureAction.cs" />
+    <Compile Include="Assets\Scripts\Audio\AudioSource.cs" />
     <Compile Include="Assets\Scripts\Main\CameraManager.cs" />
     <Compile Include="Assets\Scripts\FightInformationAction.cs" />
     <Compile Include="Assets\Scripts\Film\MyReciver.cs" />
@@ -950,14 +950,8 @@
     <Reference Include="Unity.Analytics.DataPrivacy">
       <HintPath>Library\ScriptAssemblies\Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Purchasing.Common">
       <HintPath>Library\ScriptAssemblies\Purchasing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ShaderGraph.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
@@ -1063,6 +1057,14 @@
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{D44ED5FE-0976-A4A3-5ABB-C37621CE5EBC}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Timeline.Editor.csproj">
+      <Project>{7579CFE9-2484-A90A-0515-54B24E97C033}</Project>
+      <Name>Unity.Timeline.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Timeline.csproj">
+      <Project>{56F4CF0B-27B7-8AF3-9FB3-F8183913F6C9}</Project>
+      <Name>Unity.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Editor.csproj">
       <Project>{8E92951B-77C7-628E-ED27-23C891B9CADD}</Project>

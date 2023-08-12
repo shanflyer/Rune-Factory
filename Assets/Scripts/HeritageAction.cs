@@ -269,14 +269,14 @@ public class HeritageAction : MonoBehaviour
     {
         heritageObj.SetActive(true);
         CheckZeroHeritagesData();
-        AudioManager.PlaySE(PlayType.ONCE,"Book");
+        AudioController.instance.PlayAudio(SE.Book);
     }
 
     public void ClickReturnbutton()
     {
         GameComponent.ActionObjCode = heritageObj.GetComponentInChildren<ObjCode>().code;
         GameComponentData.gameData.eventManager.CheckEvents();
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         heritageObj.SetActive(false);
 
     }

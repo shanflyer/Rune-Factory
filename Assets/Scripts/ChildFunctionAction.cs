@@ -174,7 +174,7 @@ public class ChildFunctionAction : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         displayObj.SetActive(false);
         DisplayChildData();
-        AudioManager.PlaySE(PlayType.ONCE,"Item");
+        AudioController.instance.PlayAudio(SE.Item);
 
         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr(displayText));
     }

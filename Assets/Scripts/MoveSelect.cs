@@ -15,13 +15,13 @@ public class MoveSelect : MonoBehaviour
     {
         if (animator.GetBool("IsUp"))
         {
-            AudioManager.PlaySE(PlayType.ONCE,"Return");
+            AudioController.instance.PlayAudio(SE.Return);
             animator.SetBool("IsUp", false);
             OtherAnimator.SetBool("IsUp", false);
         }
         else
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             animator.SetBool("IsUp", true);
             OtherAnimator.SetBool("IsUp", false);
         }

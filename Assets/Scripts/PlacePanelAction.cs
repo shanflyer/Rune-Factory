@@ -47,7 +47,7 @@ public class PlacePanelAction : MonoBehaviour
    
     public void ClickToggleButton()
     {
-        AudioManager.PlaySelect();
+        AudioController.instance.PlayAudio(SE.select);
         GetComponentInChildren<Toggle>().isOn = !GetComponentInChildren<Toggle>().isOn;
         if (GetComponentInChildren<Toggle>().isOn)
         {

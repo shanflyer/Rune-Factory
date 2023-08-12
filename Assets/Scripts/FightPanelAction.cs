@@ -62,7 +62,7 @@ public class FightPanelAction : MonoBehaviour
 
     public void SelectSkill(int index)
     {
-        AudioManager.PlaySelect();
+        AudioController.instance.PlayAudio(SE.select);
         skillPanel.SetActive(false);
         if (index!= -1)
         {
@@ -168,7 +168,7 @@ public class FightPanelAction : MonoBehaviour
     }
     public void AutoFightButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         isAuto = !isAuto;
         AutoObj.SetActive(isAuto);
         if (isAuto)
@@ -257,7 +257,7 @@ public class FightPanelAction : MonoBehaviour
     }
     public void ClickStartButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         AutoObj.SetActive(false);
         isAuto = false;
         autoButton.GetComponentInChildren<Text>().text = LanguageManage.SwitchStr("自动");
@@ -265,7 +265,7 @@ public class FightPanelAction : MonoBehaviour
     }
     public void ClickAutoButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         isAuto = !isAuto;
         //GameComponentData.gameData.BattleMapAction.SetMoving(isAuto);
         if (isAuto)
@@ -383,7 +383,7 @@ public class FightPanelAction : MonoBehaviour
    
     public void GetOutButtonClick()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
 
         startButton.GetComponentInChildren<Text>().text = LanguageManage.SwitchStr("前进");
         GameComponentData.gameData.BattleMapAction.SetMoving(false);
@@ -392,7 +392,7 @@ public class FightPanelAction : MonoBehaviour
 
     public void MovingFunctionButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
 
         FightFunction0.SetActive(true);
         Fightfunction1.SetActive(false);
@@ -400,7 +400,7 @@ public class FightPanelAction : MonoBehaviour
     }
     public void BattleFunctionButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         FightFunction0.SetActive(false);
         Fightfunction1.SetActive(true);
     }

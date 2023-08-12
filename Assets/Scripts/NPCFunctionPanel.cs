@@ -32,7 +32,7 @@ public class NPCFunctionPanel : MonoBehaviour
             if (GameComponentData.gameData.gameManager.gamePlayer.package.CaseCount <=
                 GameComponentData.gameData.gameManager.gamePlayer.package.items.Count)
             {
-                AudioManager.PlaySE(PlayType.ONCE, "Click");
+                AudioController.instance.PlayAudio(SE.click);
                 GameComponentData.gameData.talkTextsManager.TalkAction("1506", npcx.npcData.headName,npcx.Name,npcx,TalkActionType.普通);
                 gameObject.SetActive(false);
             }
@@ -49,7 +49,7 @@ public class NPCFunctionPanel : MonoBehaviour
         }
         else
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1507", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
             gameObject.SetActive(false);
         }
@@ -64,21 +64,21 @@ public class NPCFunctionPanel : MonoBehaviour
                 .gameManager.playerCharactor.property.MaxPower;
             GameComponentData.gameData.gameManager.gamePlayer.property.Power =
                 GameComponentData.gameData.gameManager.gamePlayer.property.MaxPower;
-            AudioManager.PlaySE(PlayType.ONCE, "Heal");
+            AudioController.instance.PlayAudio(SE.Heal);
             GameComponentData.gameData.talkTextsManager.TalkAction("1504",null);
             GameComponentData.gameData.gameManager.UpDataPlayer();
            
         }
         else
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1505", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通) ;
         }
         gameObject.SetActive(false);
     }
     public void ClickOKButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (giftData != null)
         {
             Item item = new Item(giftData, 1);
@@ -249,7 +249,7 @@ public class NPCFunctionPanel : MonoBehaviour
    
     public void ClickTalkButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (npcx.npcData.normalTalks != null&& npcx.npcData.normalTalks.Count>0)
         {
             int index = Random.Range(0, npcx.npcData.normalTalks.Count);
@@ -270,7 +270,7 @@ public class NPCFunctionPanel : MonoBehaviour
 
     public void ClickGiftButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.warehouseObj.SetActive(true);
         List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
         wareDisplayTypes.Add(WareDisplayType.ALL);
@@ -299,7 +299,7 @@ public class NPCFunctionPanel : MonoBehaviour
     }
     public void ClickConfessionButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (npcx.isLove)
         {
             GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("分手"),LanguageManage.SwitchStr("确定要解除情侣关系吗？所有人的友好度都会下降。"),CareType.leaveLove);
@@ -333,7 +333,7 @@ public class NPCFunctionPanel : MonoBehaviour
     }
     public void ClickTeamButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id != 0 &&
             GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id != 0)
         {
@@ -361,7 +361,7 @@ public class NPCFunctionPanel : MonoBehaviour
     }
     public void ClickStoreButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.shopManager.InitShopData(npcShop.id);
         gameObject.SetActive(false);
     }

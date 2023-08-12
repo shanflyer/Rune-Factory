@@ -134,7 +134,7 @@ public class ShopGoldDeskAction : MonoBehaviour
     public void ClickAddDesk()
     {
         int costValue = zeroCost + openCount * plusCost;
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.gameManager.InitCostData("新柜台",costValue,"增加一个新柜台？",CostType.增加柜台,
             ShopMoneyType.金币);
     }

@@ -1,26 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Playables;
+using UnityEngine.UIElements.Experimental;
+using UnityEngine.Timeline;
+using UnityEngine.Rendering;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
     public bool SetLanguage;
     public SystemLanguage SetSystemLanguage;
+
+    public AudioClip audioClip;
+    public AudioSource audioSource;
+    
     private void OnEnable()
-    {
+    { 
         instance = this;
         var UIParent = transform.Find("UIController");
-        var filmParent = transform.Find("FilmController");
+        var filmParent = transform.Find("FilmController"); 
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);
+
+        var audio = transform.Find("Audio");
+        AudioController.instance.SetAudioSource(audio.gameObject);
     }
+
+  
     // Start is called before the first frame update
     void Start()
     {
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
-        AudioManager.InitAudioList();
-
+        AudioController.instance.PlayAudio(BGM.bgm002);
         UIManager.instance.ShowGamePanel<ZeroPanel>();
     }
     private void Update()
@@ -28,3 +44,24 @@ public class GameController : MonoBehaviour
         GameActionManager.instance.UpData();
     }
 }
+#if UNITY_EDITOR
+[CustomEditor(typeof(GameController))]
+public class GameControllerEditor : Editor
+{
+    public GameController gameController
+    {
+        get
+        {
+            return target as GameController;
+        }
+    }
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        if (GUILayout.Button("test"))
+        {
+            //gameController.Test();
+        }
+    }
+}
+#endif

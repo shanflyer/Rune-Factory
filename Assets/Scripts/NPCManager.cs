@@ -564,7 +564,7 @@ public class NPCManager : MonoBehaviour
 
         if (selectNpcx != null)
         {
-            AudioManager.PlaySE(PlayType.ONCE,"Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.NPCZeroTalkAction(selectNpcx);
         }
         

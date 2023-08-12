@@ -26,7 +26,7 @@ public class DateDisplayAction : MonoBehaviour
 
     public void ClickAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Select");
+        AudioController.instance.PlayAudio(SE.select);
         calendarAction.DisplayClickDate(gameDate);
     }
 	// Use this for initialization

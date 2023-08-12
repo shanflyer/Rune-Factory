@@ -42,7 +42,7 @@ public class FarmToolAction : MonoBehaviour
     {
         if (toggle.isOn)
         {
-            AudioManager.PlaySE(PlayType.ONCE,"Select");
+            AudioController.instance.PlayAudio(SE.select);
             if (toggle == ChuToggle)
             {
                 GameComponentData.gameData.farmAction.SelectFarmToolType(1);

@@ -252,7 +252,7 @@ public class NPCAnimationAction : MonoBehaviour
                     }
                     else
                     {
-                        AudioManager.PlaySE(PlayType.ONCE, "Run");
+                        AudioController.instance.PlayAudio(SE.Run);
                     }
                     GameComponentData.gameData.gameManager.MoveEndAction();
                     GameComponentData.gameData.gameManager.CheakPlayerMoveEnd();

@@ -93,6 +93,7 @@
     <Compile Include="Assets\Editor\Old\InfluenceActionEditor.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\Editor\Custom Editor\A2_Custom_Editor.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\Editor\Windows\Single_tile_windows\A4_Single_Ceiling_Impoter.cs" />
+    <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\Editor\Windows\Single_tile_windows\A2_Single_Terrain_Importer.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\Editor\Windows\Single_tile_windows\A4_Single_Wall_Impoter.cs" />
     <Compile Include="Assets\Editor\Old\PlantDataEditor.cs" />
@@ -875,14 +876,8 @@
     <Reference Include="Unity.Analytics.DataPrivacy">
       <HintPath>Library\ScriptAssemblies\Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Purchasing.Common">
       <HintPath>Library\ScriptAssemblies\Purchasing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ShaderGraph.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
@@ -996,6 +991,14 @@
     <ProjectReference Include="Assembly-CSharp-Editor-firstpass.csproj">
       <Project>{80A43991-9602-BAB8-0CF8-66C5B6380DC4}</Project>
       <Name>Assembly-CSharp-Editor-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Timeline.Editor.csproj">
+      <Project>{7579CFE9-2484-A90A-0515-54B24E97C033}</Project>
+      <Name>Unity.Timeline.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Timeline.csproj">
+      <Project>{56F4CF0B-27B7-8AF3-9FB3-F8183913F6C9}</Project>
+      <Name>Unity.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Editor.csproj">
       <Project>{8E92951B-77C7-628E-ED27-23C891B9CADD}</Project>

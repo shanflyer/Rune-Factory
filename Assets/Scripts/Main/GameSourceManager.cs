@@ -9,7 +9,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
     private Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
     private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
     private Dictionary<string, ScriptableObject> scriptableObjects = new Dictionary<string, ScriptableObject>();
-
+    private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
     public async Task<Sprite> GetSprite(string path)
     {
         if(sprites.TryGetValue(path,out Sprite sprite))
@@ -28,7 +28,16 @@ public class GameSourceManager:Singleton<GameSourceManager>
         sprites.Add(path, sprite);
         return sprite;
     }
-
+    public async Task<AudioClip> GetAudioClip(string path)
+    {
+        if(audioClips.TryGetValue(path,out AudioClip audioClip))
+        {
+            return audioClip;
+        }
+        audioClip= await ExtensionsResources.LoadResourceAsync<AudioClip>(path);
+        audioClips.Add(path, audioClip);
+        return audioClip;
+    }
     public async Task<Texture2D> GetTexture(string path)
     {
         if(textures.TryGetValue(path,out Texture2D texture))

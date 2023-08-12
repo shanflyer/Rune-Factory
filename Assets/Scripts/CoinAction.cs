@@ -206,7 +206,7 @@ public class CoinAction : MonoBehaviour
 
     public void ClickCoin(GameObject obj)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Coin");
+        AudioController.instance.PlayAudio(SE.Coin);
         Vector3 screenPos = Camera.main.WorldToScreenPoint(obj.transform.position);
         float x = Screen.width;
         float y = Screen.height;

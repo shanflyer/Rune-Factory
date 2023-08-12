@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.UI;
 
 public class StartEventPanel : GamePanel
@@ -30,13 +31,14 @@ public class StartEventPanel : GamePanel
 
     void ClickXinStart()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Book");
-        AudioManager.PlayBGM(PlayType.CYCLE,"tt2");
+        AudioController.instance.PlayAudio(SE.Book);
+        AudioController.instance.PlayAudio(BGM.tt2);
+         
         contentButton.gameObject.SetActive(true);
     }
     void ClickXinEnd()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Book");
+        AudioController.instance.PlayAudio(SE.Book);
         Close();
         GameActionManager.instance.QueueAction(new PlayFilm
         {

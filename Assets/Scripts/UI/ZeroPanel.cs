@@ -34,7 +34,7 @@ public class ZeroPanel : GamePanel
     }
     void StartGame()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click); 
         Close();
         UIManager.instance.ShowGamePanel<SelectCharacterPanel>(layer:2);
     }

@@ -30,11 +30,9 @@ public class WaitPanelAction : MonoBehaviour
         {
             case WaitType.SLEEP:
 
-                GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-                
-                AudioManager.PlayClick();
+                GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer; 
+                AudioController.instance.PlayAudio(SE.click); 
 
-                
                 NextDate();
 
                 //GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("距离开始营业还有一段时间，可以出去逛逛哦！"));

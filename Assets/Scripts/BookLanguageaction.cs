@@ -16,7 +16,7 @@ public class BookLanguageaction : MonoBehaviour
 
     public void ClickReturn()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         gameObject.SetActive(false);
     }
 	// Update is called once per frame

@@ -332,7 +332,7 @@ public class GameManager : MonoBehaviour
     }
     public void ClickIntelligenceButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         fieldTool.SetActive(false);
         IntelligencePanelObj.SetActive(true);
         IntelligencePanelObj.GetComponent<IntelligencePanelAction>().InitIntelligenceData();
@@ -366,7 +366,6 @@ public class GameManager : MonoBehaviour
 	    pastureName2 = "";
 	    pastureName3 = "";
         IsAttackDisplay = true;
-        AudioManager.InitAudioList();
         GetComponent<GameComponent>().InitData();
 
 
@@ -694,10 +693,7 @@ public class GameManager : MonoBehaviour
         GameData.adventurePanelAction.gameObject.SetActive(true);
          GameData.adventurePanelAction.ZeroEploring();
     }
-    public void PlayerSe(string se)
-    {
-        AudioManager.PlaySE(PlayType.ONCE,se);
-    }
+  
     public void BuyGold()
     {
         LianJinPanel.SetActive(true);
@@ -707,7 +703,7 @@ public class GameManager : MonoBehaviour
     {
         if (Application.platform != RuntimePlatform.Android)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             RedMoneyBuyPanel.SetActive(true);
         }
        
@@ -788,7 +784,7 @@ public class GameManager : MonoBehaviour
     {
         if (CostAction())
         {
-            AudioManager.PlaySE(PlayType.ONCE,"Click2");
+            AudioController.instance.PlayAudio(SE.Click2);
             switch (costType)
             {
                 case CostType.增加柜台:
@@ -835,7 +831,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Return");
+            AudioController.instance.PlayAudio(SE.Return);
             if (shopMoneyType == ShopMoneyType.金币)
             {
                 InitCareSelectData(LanguageManage.SwitchStr("金币不足"), LanguageManage.SwitchStr("需消耗金币:") + goldCostValue
@@ -894,7 +890,7 @@ public class GameManager : MonoBehaviour
     public void FightAction()
     {
         fieldTool.SetActive(false);
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         adventure.SetActive(true);
         adventure.GetComponent<AdventurePanelAction>().InitData();
     }
@@ -1037,19 +1033,19 @@ public class GameManager : MonoBehaviour
                 GameData.adventurePanelAction.Exploring();
                 break;
                 case CareType.SLEEP:
-                    AudioManager.PlaySE(PlayType.ONCE, "Click");
+                    AudioController.instance.PlayAudio(SE.click);
                 GameComponentData.gameData.DisplayWaitPanelData(WaitType.SLEEP, LanguageManage.SwitchStr("夜深了，风声伴人入眠..."));
                 break;
                 case CareType.Prodece:
-                    AudioManager.PlaySE(PlayType.ONCE, "Click2");
+                AudioController.instance.PlayAudio(SE.Click2);
                 GameComponentData.gameData.manufacturingAction.ProduceItem();
                 break;
                 case  CareType.OutBattle:
-                    AudioManager.PlaySE(PlayType.ONCE, "Click");
+                    AudioController.instance.PlayAudio(SE.click);
                 GameData.fightPanelAction.GetOutAction();
                 break;
                 case CareType.ClearPlant:
-                AudioManager.PlaySE(PlayType.ONCE,"Return");
+                AudioController.instance.PlayAudio(SE.Return);
                 GameData.farmAction.ClearSelectPlant();
                 break;
                 case CareType.GoldExchange:
@@ -1057,7 +1053,7 @@ public class GameManager : MonoBehaviour
                 LianJinPanel.GetComponent<LianjinAction>().InitData();
                 break;
                 case CareType.leaveLove:
-                    AudioManager.PlaySE(PlayType.ONCE, "Return");
+                    AudioController.instance.PlayAudio(SE.Return);
                 GameData.npcFunctionPanel.LeaveLover();
                 break;
                
@@ -1066,13 +1062,13 @@ public class GameManager : MonoBehaviour
 
     public void LianjinAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         LianJinPanel.SetActive(true);
         LianJinPanel.GetComponent<LianjinAction>().InitData();
     }
     public void NoButtonAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         TwoSelectPanel.SetActive(false);
         TwoSelectPanel1.SetActive(false);
         switch (careType)
@@ -1087,11 +1083,11 @@ public class GameManager : MonoBehaviour
     }
     public void PlayReturnAudio()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
     }
     public void PlayClickAudio()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
     }
     public static void SetIconSize(Image icon, float sizeY)
     {
@@ -1424,7 +1420,7 @@ public class GameManager : MonoBehaviour
     }
     public void MoveToShopMap(int _shop)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         //selecteShop = _shop;
         Shop shop = GameComponentData.gameData.shopManager.Shops.Find(s => s.id == _shop);
         //selecteShop = _shop;
@@ -1440,7 +1436,7 @@ public class GameManager : MonoBehaviour
     public void MoveToMap(int _nextMapid)
     {
         GameData.pastureAction.MoveCameraButtonObj.SetActive(false);
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         ReturnFromAdventure();
 
         oldPassid = passDataManager.NowPassData.id;
@@ -1674,7 +1670,7 @@ public class GameManager : MonoBehaviour
     }
     public void CameraSelect(GameObject selectButton)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"select");
+        AudioController.instance.PlayAudio(SE.select);
         cameraSelectNum++;
         if (cameraSelectNum > 3)
         {

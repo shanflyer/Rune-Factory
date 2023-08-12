@@ -1026,7 +1026,7 @@ public class BattleMapAction : MonoBehaviour
     
     public void ClickAutoButton(bool _isAuto)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (gamePlayer.property.Power <= 0)
         {
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("体力不支"), LanguageManage.SwitchStr("体力已降为0，无法继续前进！"));
@@ -1251,7 +1251,7 @@ public class BattleMapAction : MonoBehaviour
         isMosterHurtEnd2 = true;
         GameComponentData.gameData.fightPanelAction.SetPlayerSkillValue(SkillValue/100.0f);
         timeScaleValue = 1;
-        AudioManager.PlayBGM(PlayType.CYCLE,"Battle");
+        AudioController.instance.PlayAudio(BGM.Battle); 
         isMoving = false;
         isFightContineu = false;
         isPlayerBattle = false;
@@ -1559,7 +1559,7 @@ public class BattleMapAction : MonoBehaviour
         gamePlayer.attributeType=AttributeType.无;
         gamePlayer.SkillId = 0;
         GameComponentData.gameData.gameManager.InitGate();
-        AudioManager.PlayBGM(PlayType.CYCLE,GameComponentData.gameData.passDataManager.NowPassData.FriendBGM);
+        //AudioManager.PlayBGM(PlayType.CYCLE,GameComponentData.gameData.passDataManager.NowPassData.FriendBGM);
     }
 
     public void FightEnd(GameObject obj)
@@ -2583,7 +2583,7 @@ public class BattleMapAction : MonoBehaviour
 
 
                 GameComponentData.gameData.fightPanelAction.gameObject.SetActive(false);
-                AudioManager.StopBGM();
+                AudioController.instance.StopBgm();
                 Debug.Log("film");
                 //GameComponentData.gameData.zeroFilmController.FightEndAction();
             }
@@ -2727,7 +2727,7 @@ public class BattleMapAction : MonoBehaviour
     public void ClickItemInBattling()
     {
         isFightContineu = true;
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.warehouseObj.SetActive(true);
         List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
         wareDisplayTypes.Add(WareDisplayType.food);
@@ -2740,7 +2740,8 @@ public class BattleMapAction : MonoBehaviour
     {
        
         GameObject HpObj = Instantiate(hurtHpPro, obj.transform.position, Quaternion.identity);
-        AudioManager.PlaySE(PlayType.ONCE,hitSe);
+         
+        //AudioManager.PlaySE(PlayType.ONCE,hitSe);
         
         HpObj.GetComponentInChildren<Text>().text = value.ToString();
         if (value > 0)
@@ -3037,8 +3038,8 @@ public class BattleMapAction : MonoBehaviour
         isAuto = _isAuto;
     }
     public void PlayerBattle()
-    {
-        AudioManager.PlaySE(PlayType.ONCE,"Click2");
+    { 
+        AudioController.instance.PlayAudio(SE.Click2);
         isPlayerBattle = true;
         GameComponentData.gameData.fightPanelAction.FightHideFunctions();
 
@@ -3160,7 +3161,7 @@ public class BattleMapAction : MonoBehaviour
         {
             EscapeSucessfull();
             Camera.main.transform.position=new Vector3(0,0,-20);
-            AudioManager.PlayBGM(PlayType.CYCLE,GameComponentData.gameData.passDataManager.NowPassData.FriendBGM);
+            //AudioManager.PlayBGM(PlayType.CYCLE,GameComponentData.gameData.passDataManager.NowPassData.FriendBGM);
         }
         else
         {
@@ -3631,7 +3632,7 @@ public class BattleMapAction : MonoBehaviour
         }
        
         CreatRebronEffect();
-       AudioManager.PlaySE(PlayType.ONCE,"Magic");
+        AudioController.instance.PlayAudio(SE.Magic); 
     }
     public void UseItem(ItemData selectItem, DisplayType _displayType)
     {
@@ -3768,7 +3769,7 @@ public class BattleMapAction : MonoBehaviour
             Instantiate(Obj, teamPlayerObj1.transform.position, Quaternion.identity);
         }
         hp = 0;
-       AudioManager.PlaySE(PlayType.ONCE,"Heal");
+        AudioController.instance.PlayAudio(SE.Heal); 
     }
 
     private void MonsterFight()
@@ -3818,7 +3819,7 @@ public class BattleMapAction : MonoBehaviour
 
     void Startinitflyitem()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Get");
+        AudioController.instance.PlayAudio(SE.Get); 
         ItemPoses=new List<Vector2>();
         foreach (var flyItem in flyItems)
         {
@@ -3875,7 +3876,7 @@ public class BattleMapAction : MonoBehaviour
 
                     
                     GameComponentData.gameData.fightPanelAction.gameObject.SetActive(false);
-                    AudioManager.StopBGM();
+                    AudioController.instance.StopBgm(); 
                     GameComponentData.gameData.eventManager.CheckEvents();
                     // GameComponentData.gameData.zeroFilmController.FightEndAction();
                 }
@@ -3893,7 +3894,7 @@ public class BattleMapAction : MonoBehaviour
             else
             {
                 isDisplayResult = false;
-                AudioManager.PlayBGM(PlayType.CYCLE, "Move");
+                AudioController.instance.PlayAudio(BGM.Move); 
                 GameComponentData.gameData.fightPanelAction.MovingFunctionButton();
                 if (isAuto)
                 {

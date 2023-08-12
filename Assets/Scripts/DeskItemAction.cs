@@ -31,12 +31,12 @@ public class DeskItemAction : MonoBehaviour
 
     public void ClickReturnButton()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
         gameObject.SetActive(false);
     }
     public void ChangeItemCount(int count)
     {
-       // AudioManager.PlaySE(PlayType.ONCE, "Select");
+       // AudioController.instance.PlayAudio(SE.select);
         ItemCountText.text = count.ToString();
         if (count <= 1)
         {
@@ -80,7 +80,7 @@ public class DeskItemAction : MonoBehaviour
 
     public void AddItemCount()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         playerPackage.GetItemOutPackage(item.ItemId,1);
         packageItem = playerPackage.items.FindAll(i => i.ItemId / 1000 == item.ItemId / 1000);
         if (packageItem.Count > 0)
@@ -96,7 +96,7 @@ public class DeskItemAction : MonoBehaviour
 
     public void MaxAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         packageItem = playerPackage.items.FindAll(i => i.ItemId / 1000 == item.ItemId / 1000);
         int count = 0;
         foreach (var item1 in packageItem)
@@ -114,7 +114,7 @@ public class DeskItemAction : MonoBehaviour
 
     public void ReduceItem()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         item.count--;
 
         Item _Item = new Item(item) {count = 1};
@@ -137,7 +137,7 @@ public class DeskItemAction : MonoBehaviour
 
     public void GetItmeDown()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Return");
+        AudioController.instance.PlayAudio(SE.Return);
         playerPackage.SetItemInPackage(item);
         item = null;
         deskAction.InitDeskData(null,null);
@@ -147,7 +147,7 @@ public class DeskItemAction : MonoBehaviour
 
     public void ChangeItem()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         WarehouseObj.SetActive(true);
         List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
         wareDisplayTypes.Add(WareDisplayType.Good);

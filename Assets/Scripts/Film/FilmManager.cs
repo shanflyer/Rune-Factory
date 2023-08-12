@@ -168,7 +168,7 @@ public class FilmManager : MonoBehaviour
 
     public void CreatFilm(int filmId)
     {
-        AudioManager.StopBGM();
+        AudioController.instance.StopBgm();
         camera0.SetActive(false);
         TopGameObject.SetActive(false);
         Film selectFilm = films.Find(f => f.id == filmId);
@@ -308,7 +308,7 @@ public class FilmManager : MonoBehaviour
                 GameComponentData.gameData.talkTextsManager.TalkAction(_filmData.value,TalkActionType.剧情);
                 break;
                 case FilmDisplayType.过渡:
-                    AudioManager.StopBGM();
+                    AudioController.instance.StopBgm();
                     GameComponentData.gameData.sleepObj.SetActive(true);
                     GameComponentData.gameData.sleepObj.GetComponent<WaitPanelAction>().InitData(WaitType.Transition,
                         _filmData.value);
@@ -330,10 +330,10 @@ public class FilmManager : MonoBehaviour
                 SetNamePanel.SetActive(true);
                 break;
             case FilmDisplayType.播放BGM:
-                AudioManager.PlayBGM(PlayType.CYCLE,_filmData.value);
+               // AudioManager.PlayBGM(PlayType.CYCLE,_filmData.value);
                 break;
             case FilmDisplayType.停止BGM:
-                AudioManager.StopBGM();
+                AudioController.instance.StopBgm();
                 break;
         }
     }

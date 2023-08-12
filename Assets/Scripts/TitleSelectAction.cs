@@ -16,12 +16,12 @@ public class TitleSelectAction : MonoBehaviour
     {
         if (animator.GetBool("IsDown"))
         {
-            AudioManager.PlaySE(PlayType.ONCE,"Return");
+            AudioController.instance.PlayAudio(SE.Return);
             animator.SetBool("IsDown", false);
         }
         else
         {
-            AudioManager.PlaySE(PlayType.ONCE,"Click");
+            AudioController.instance.PlayAudio(SE.click);
             animator.SetBool("IsDown", true);
         }
         
@@ -35,7 +35,7 @@ public class TitleSelectAction : MonoBehaviour
     }
     public void SelectButton(int index)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         animator.SetBool("IsDown", false);
         List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
         wareDisplayTypes.Add(WareDisplayType.ALL);

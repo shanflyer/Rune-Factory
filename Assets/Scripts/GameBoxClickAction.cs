@@ -48,7 +48,7 @@ public class GameBoxClickAction : MonoBehaviour
     {
         if (DataSaveAndLoadTest.isJsonData)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.boxSelectFunctionObj.SetActive(true);
             GameComponentData.gameData.boxSelectFunctionObj.GetComponent<BoxSelectAction>().InitBoxSelectData((PackageType)(index));
         }
@@ -56,7 +56,7 @@ public class GameBoxClickAction : MonoBehaviour
         if (GameComponentData.gameData.guideController.nowGuide == null &&
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.boxSelectFunctionObj.SetActive(true);
             GameComponentData.gameData.boxSelectFunctionObj.GetComponent<BoxSelectAction>().InitBoxSelectData((PackageType)(index));
         }
@@ -67,7 +67,7 @@ public class GameBoxClickAction : MonoBehaviour
     {
         if (DataSaveAndLoadTest.isJsonData)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1000", TalkActionType.普通);
         }
         else
@@ -75,7 +75,7 @@ public class GameBoxClickAction : MonoBehaviour
         if (GameComponentData.gameData.guideController.nowGuide == null &&
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1000", TalkActionType.普通);
         }
         
@@ -84,14 +84,14 @@ public class GameBoxClickAction : MonoBehaviour
     {
         if (DataSaveAndLoadTest.isJsonData)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1001", TalkActionType.普通);
         }
         else
         if (GameComponentData.gameData.guideController.nowGuide == null &&
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1001",TalkActionType.普通);
         }
        
@@ -100,21 +100,21 @@ public class GameBoxClickAction : MonoBehaviour
     {
         if (DataSaveAndLoadTest.isJsonData)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1002", TalkActionType.普通);
         }
         else
         if (GameComponentData.gameData.guideController.nowGuide == null &&
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.talkTextsManager.TalkAction("1002", TalkActionType.普通);
         }
         
     }
     public void ProduceClickAction(int i)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (GameComponentData.gameData.heritageAction.Heritages.Find(o => o.id == 1004).isGet)
         {
             GameComponentData.gameData.formulaAction.DisplayManufacturePanel(i);
@@ -160,14 +160,14 @@ public class GameBoxClickAction : MonoBehaviour
     {
         if (DataSaveAndLoadTest.isJsonData)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.BookPanelObj.SetActive(true);
         }
         else
         if (GameComponentData.gameData.guideController.nowGuide == null &&
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Click");
+            AudioController.instance.PlayAudio(SE.click);
             GameComponentData.gameData.BookPanelObj.SetActive(true);
         }
         

@@ -48,7 +48,7 @@ public class PastureItemPanelAction : MonoBehaviour
 
     public void AddCost()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("增加格位"),costValue, LanguageManage.SwitchStr("为牧场:")+pasture.name+
             LanguageManage.SwitchStr(" 新增一个产出箱格位？"),CostType.增加牧场产出格子
             ,ShopMoneyType.金币);
@@ -69,7 +69,7 @@ public class PastureItemPanelAction : MonoBehaviour
 
     public void GetItemToPlayer()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         List<Item> outItems=new List<Item>();
         foreach (var itemPackageItem in pasture.itemPackage.items)
         {

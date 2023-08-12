@@ -119,7 +119,7 @@ public class FarmAction : MonoBehaviour
     }
     public void SelectFarmToolType(int i)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         farmToolType = (FarmToolType) i;
         if (farmToolType == FarmToolType.种子)
         {
@@ -143,7 +143,7 @@ public class FarmAction : MonoBehaviour
     {
         if (GameComponentData.gameData.gameManager.CostRp(GrassRp))
         {
-            AudioManager.PlaySE(PlayType.ONCE,"waterFull");
+            AudioController.instance.PlayAudio(SE.waterFull); 
             waterValue = 1;
             WaterValueImage.fillAmount = 1;
         }
@@ -296,7 +296,7 @@ public class FarmAction : MonoBehaviour
             {
                 if (GameComponentData.gameData.gameManager.CostRp(workRp))
                 {
-                    AudioManager.PlaySE(PlayType.ONCE, "Click");
+                    AudioController.instance.PlayAudio(SE.click);
                     GameComponentData.gameData.plantAction.PlantReward(plant);
                     Field field =
                         Fields.Find(f => f.mapId == nowPass &&
@@ -335,7 +335,7 @@ public class FarmAction : MonoBehaviour
                             kettleObj = Instantiate(kettlePro);
                             kettleObj.GetComponent<kettleAction>().InitKettle();
                             kettleObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
-                            AudioManager.PlaySE(PlayType.ONCE, "watering");
+                            AudioController.instance.PlayAudio(SE.watering);
                             waterValue -= 0.05f;
                             WaterValueImage.fillAmount = waterValue;
                             WaterAction(cell);
@@ -356,7 +356,7 @@ public class FarmAction : MonoBehaviour
                     }
                     else
                     {
-                        AudioManager.PlaySE(PlayType.ONCE, "Return");
+                        AudioController.instance.PlayAudio(SE.Return);
                         GameComponentData.gameData.informationManager.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，请到池塘装水！"));
                     }
@@ -366,7 +366,7 @@ public class FarmAction : MonoBehaviour
                 }
                 else
                 {
-                    AudioManager.PlaySE(PlayType.ONCE, "Fail");
+                    AudioController.instance.PlayAudio(SE.Fail);
                     GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*此地块不需要浇水了"));
                 }
 
@@ -391,8 +391,7 @@ public class FarmAction : MonoBehaviour
                         }
                         hoeObj = Instantiate(hoePro);
                         hoeObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
-
-                        AudioManager.PlaySE(PlayType.ONCE, "waJue");
+                        AudioController.instance.PlayAudio(SE.waJue); 
                         ChangeTileFieldStatus(cell, FieldStatus.Dry);
                         Field field =
                             Fields.Find(f => f.mapId == nowPass &&
@@ -412,7 +411,7 @@ public class FarmAction : MonoBehaviour
                 }
                 else 
                 {
-                    AudioManager.PlaySE(PlayType.ONCE, "Fail");
+                    AudioController.instance.PlayAudio(SE.Fail);
                     GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*此地块不需要使用锄头"));
                 }
 
@@ -435,7 +434,7 @@ public class FarmAction : MonoBehaviour
                             kettleObj.GetComponent<kettleAction>().InitKettle();
                             kettleObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
 
-                            AudioManager.PlaySE(PlayType.ONCE, "watering");
+                            AudioController.instance.PlayAudio(SE.watering);
                             waterValue -= 0.05f;
                             WaterValueImage.fillAmount = waterValue;
                             WaterAction(cell);
@@ -456,7 +455,7 @@ public class FarmAction : MonoBehaviour
                     }
                     else
                     {
-                        AudioManager.PlaySE(PlayType.ONCE, "Return");
+                        AudioController.instance.PlayAudio(SE.Return);
                         GameComponentData.gameData.informationManager.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                     }
@@ -466,7 +465,7 @@ public class FarmAction : MonoBehaviour
                 }
                 else
                 {
-                    AudioManager.PlaySE(PlayType.ONCE, "Fail");
+                    AudioController.instance.PlayAudio(SE.Fail);
                     GameComponentData.gameData.informationManager.AddInformation("*" + LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                 }
 
@@ -489,7 +488,7 @@ public class FarmAction : MonoBehaviour
                             seedobj.GetComponent<Seedaction>().InitSeed();
                             seedobj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
 
-                            AudioManager.PlaySE(PlayType.ONCE, "bo");
+                            AudioController.instance.PlayAudio(SE.bo);
                             Field field = Fields.Find(f => f.coordinate == cell.coordinate);
                             GameComponentData.gameData.plantAction.Planting(cell, farmTool.ItemId, field);
                             farmTool.count--;
@@ -547,7 +546,7 @@ public class FarmAction : MonoBehaviour
         var fs = Grasses.FindAll(g => g.isClear);
         int costValue = clearZeroCost + clearAddCost * (fs.Count);
         clearGrass = grass;
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("开发荒地"),costValue,LanguageManage.SwitchStr("开发一块荒地作为新农田？"),CostType.增加田地,ShopMoneyType.金币);
     }
 

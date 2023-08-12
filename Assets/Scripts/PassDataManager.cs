@@ -55,6 +55,7 @@ public class PassDataManager : MonoBehaviour
 
     public void PlayerMapBGM()
     {
+        /*
         if (NowPassData.FriendBGM != "")
         {
             AudioManager.PlayBGM(PlayType.CYCLE,NowPassData.FriendBGM);
@@ -76,7 +77,7 @@ public class PassDataManager : MonoBehaviour
                         AudioManager.PlayBGM(PlayType.CYCLE, winterBGGM);
                     break;
             }
-        }
+        }*/
     }
     public void InitData()
     {

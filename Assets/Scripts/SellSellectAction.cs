@@ -132,7 +132,7 @@ public class SellSellectAction : MonoBehaviour
 
     public void SellItemAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click2");
+        AudioController.instance.PlayAudio(SE.Click2);
         GameComponentData.gameData.warehouseAction.SellItem(sellCount);
      
     }

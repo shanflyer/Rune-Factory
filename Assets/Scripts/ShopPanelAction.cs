@@ -74,7 +74,7 @@ public class ShopPanelAction : MonoBehaviour
     }
     public void Add()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         SelectCount++;
         if (selectItemData.typeValue == 8)
         {
@@ -126,7 +126,7 @@ public class ShopPanelAction : MonoBehaviour
 
     public void BuyAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         if (selectItemData.typeValue == 8)
         {
             GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("购买动物"), totalPrice, LanguageManage.SwitchStr("购买")
@@ -196,7 +196,7 @@ public class ShopPanelAction : MonoBehaviour
     }
     public void Reduce()
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Click");
+        AudioController.instance.PlayAudio(SE.click);
         SelectCount--;
         if (SelectCount <= 0)
         {
@@ -214,7 +214,7 @@ public class ShopPanelAction : MonoBehaviour
     }
     public void ReturnAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
         foreach (Transform child in PackageParent)
         {
             Destroy(child.gameObject);
@@ -247,7 +247,7 @@ public class ShopPanelAction : MonoBehaviour
 
     public void DropValueChange(Dropdown dropdown)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Select");
+        AudioController.instance.PlayAudio(SE.select);
         string pastureName = dropdown.options[dropdown.value].text.Split('(')[0];
         pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.id == pastureIds[dropdown.value]);
         
@@ -273,7 +273,7 @@ public class ShopPanelAction : MonoBehaviour
     }
     public void SelectItem(ItemData _itemData)
     {
-        AudioManager.PlaySE(PlayType.ONCE,"Select");
+        AudioController.instance.PlayAudio(SE.select);
         selectItemData = _itemData;
         
         if (selectItemData.Type==ItemType.消耗物品&&selectItemData.typeValue == 8)

@@ -46,12 +46,12 @@ public class SelectCharacterPanel : GamePanel
         base.Awake();
         MealSelcet.onValueChanged.AddListener((bool value) =>
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Select");
+            AudioController.instance.PlayAudio(SE.select); 
             gender = Gender.male;
         });
         FemealSelect.onValueChanged.AddListener((bool value) =>
         {
-            AudioManager.PlaySE(PlayType.ONCE, "Select");
+            AudioController.instance.PlayAudio(SE.select);
             gender = Gender.female;
         });
 
@@ -74,6 +74,7 @@ public class SelectCharacterPanel : GamePanel
 
         Ok.onClick.AddListener(OkButtonAction);
         Return.onClick.AddListener(()=> {
+            AudioController.instance.PlayAudio(SE.Return);
             Close();
             UIManager.instance.ShowGamePanel<ZeroPanel>();
         });
@@ -88,12 +89,12 @@ public class SelectCharacterPanel : GamePanel
 
     void SelectDate(int index)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Select");
+        AudioController.instance.PlayAudio(SE.select);
         brothDate = index+1;
     }
     void SelectSeason(int index)
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Select");
+        AudioController.instance.PlayAudio(SE.select);
         index++;
          brothSeason = (Season)index; 
     }
@@ -109,7 +110,7 @@ public class SelectCharacterPanel : GamePanel
 
     void InitData()
     {
-        AudioManager.StopBGM();
+        AudioController.instance.StopBgm();
         
         
         NameInputField.text = LanguageManage.SwitchStr(NameInputField.text);
@@ -119,7 +120,7 @@ public class SelectCharacterPanel : GamePanel
         }
 
         DataSaveAndLoadTest.isJsonData = false;
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         gender = Gender.male;
         playerName = LanguageManage.SwitchStr("亚历克斯");
         brothSeason = Season.春;
@@ -131,7 +132,7 @@ public class SelectCharacterPanel : GamePanel
     }
     void OkButtonAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         PlayerDate.InitPlayerData(playerName,1,gender,brothSeason,brothDate,false,false,false);
         DataSaveAndLoadTest.IniteZerodata();
         UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel>(layer: 3);

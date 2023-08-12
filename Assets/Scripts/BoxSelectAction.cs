@@ -30,7 +30,7 @@ public class BoxSelectAction : MonoBehaviour
     }
     public void ClickOutAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         gameObject.SetActive(false);
         GameComponentData.gameData.warehouseObj.SetActive(true);
         List<WareDisplayType> wareDisplayTypes=new List<WareDisplayType>();
@@ -39,7 +39,7 @@ public class BoxSelectAction : MonoBehaviour
     }
     public void ClickInAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Click");
+        AudioController.instance.PlayAudio(SE.click);
         gameObject.SetActive(false);
         GameComponentData.gameData.warehouseObj.SetActive(true);
         List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
@@ -48,7 +48,7 @@ public class BoxSelectAction : MonoBehaviour
     }
     public void ClickNullAction()
     {
-        AudioManager.PlaySE(PlayType.ONCE, "Return");
+        AudioController.instance.PlayAudio(SE.Return);
         gameObject.SetActive(false);
     }
     // Update is called once per frame
