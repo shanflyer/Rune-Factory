@@ -5,13 +5,10 @@ using System.Reflection;
 using UnityEngine;
 using Object = System.Object;
 
-[CreateAssetMenu(menuName = "Data/GameActionDataList")]
-public class GameActionDataList : ScriptableObject
-{
-    public List<GameActionData> gameActionDatas = new List<GameActionData>();
-}
+[CreateAssetMenu(menuName = "Data/GameActionData")]
+ 
 [System.Serializable]
-public struct GameActionData
+public class GameActionData : ScriptableObject,IGameData
 { 
     public string dataName;
     public int id;
@@ -154,6 +151,10 @@ public struct GameActionData
         }         
     }
 
+    public string GetKey()
+    {
+        return id.ToString();
+    }
 }
 [System.Serializable]
 public struct Parameter

@@ -192,7 +192,7 @@ public class Plant : MyGameObject
         Sprite ObjPro;
         if (plantStatus == PlantStatus.Mature)
         {
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*一株")+ LanguageManage.SwitchStr(plantBaseData.name)+ LanguageManage.SwitchStr("已经成熟。"));
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一株")+ LanguageManage.SwitchStr(plantBaseData.name)+ LanguageManage.SwitchStr("已经成熟。"));
             ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.MatureGameObjectName);
         }
         else
@@ -223,7 +223,7 @@ public class Plant : MyGameObject
         Obj.transform.position = pos;
         if (plantStatus == PlantStatus.Withered)
         {
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*一株") + LanguageManage.SwitchStr(plantBaseData.name) + LanguageManage.SwitchStr("处于干旱状态。"));
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一株") + LanguageManage.SwitchStr(plantBaseData.name) + LanguageManage.SwitchStr("处于干旱状态。"));
             WitheredAction();
         }
     }
@@ -339,7 +339,7 @@ public class PlantAction : MonoBehaviour
         int plantId = SeedId/1000 *10000+ cell.coordinate.x*100+cell.coordinate.y;
         Plant plant=new Plant(plantId,passDataManager.nowPass,cell.coordinate,_field);
        
-        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*一株")+plant.Name+LanguageManage.SwitchStr("被种下！"));
+        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一株")+plant.Name+LanguageManage.SwitchStr("被种下！"));
         plant.SetPlantStatus();
         Plants.Add(plant);
         cell.myGameObjects.Add(plant);
@@ -395,7 +395,7 @@ public class PlantAction : MonoBehaviour
             {
                 plant.InitNewTurn();
             }
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*收获了") + plant.plantBaseData.fruitIdNum + LanguageManage.SwitchStr("个") + itemData.Name);
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*收获了") + plant.plantBaseData.fruitIdNum + LanguageManage.SwitchStr("个") + itemData.Name);
         }
         else
         {
@@ -429,7 +429,7 @@ public class PlantAction : MonoBehaviour
         }
         foreach (var dryDeadPlant in dryDeadPlants)
         {
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*一株")+ LanguageManage.SwitchStr(dryDeadPlant.plantBaseData.name) +LanguageManage.SwitchStr("枯死。"));
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一株")+ LanguageManage.SwitchStr(dryDeadPlant.plantBaseData.name) +LanguageManage.SwitchStr("枯死。"));
             CleraPlant(dryDeadPlant);
         }
         foreach (var farmActionField in GameComponentData.gameData.farmAction.Fields)

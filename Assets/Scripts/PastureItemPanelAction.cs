@@ -63,7 +63,7 @@ public class PastureItemPanelAction : MonoBehaviour
                         GameComponentData.gameData.pastureAction.addcasePlus;
         AddCostText.text = costValue.ToString();
         ProduceCaseText.text = "(" + pasture.itemPackage.items.Count + "/" + pasture.itemPackage.CaseCount + ")";
-        GameComponentData.gameData.informationManager.AddInformation(pasture.name+LanguageManage.SwitchStr("增加一个产出格,消耗金币")+costValue);
+        InformationController.instance.AddInformation(pasture.name+LanguageManage.SwitchStr("增加一个产出格,消耗金币")+costValue);
        
     }
 

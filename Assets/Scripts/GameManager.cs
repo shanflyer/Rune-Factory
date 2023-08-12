@@ -381,8 +381,6 @@ public class GameManager : MonoBehaviour
         //GameData.gameTimeManager.InitData();
 	    
 	    
-        GameData.informationManager.InitData();
-	    
         mapParent = GameData.mapParent;
 	    PlantParent = GameData.PlantParent;
 	    NpcParent = GameData.NpcParent;
@@ -788,7 +786,7 @@ public class GameManager : MonoBehaviour
             switch (costType)
             {
                 case CostType.增加柜台:
-                    GameComponentData.gameData.informationManager.AddInformation("*消耗金币" + goldCostValue + ",新增加一个柜台。");
+                    InformationController.instance.AddInformation("*消耗金币" + goldCostValue + ",新增加一个柜台。");
                     GameComponentData.gameData.shopGoldDeskAction.AddNewDesk();
                     break;
                 case CostType.增加牧场:
@@ -801,7 +799,7 @@ public class GameManager : MonoBehaviour
                     GameComponentData.gameData.pasturePanelAction.AddPastureCaseCount();
                     break;
                 case CostType.增加田地:
-                    GameComponentData.gameData.informationManager.AddInformation("*消耗金币" + goldCostValue + ",新开发一块田地。");
+                    InformationController.instance.AddInformation("*消耗金币" + goldCostValue + ",新开发一块田地。");
                     GameComponentData.gameData.farmAction.GrassClearAction();
                     break;
                 case CostType.购买道具:
@@ -940,18 +938,19 @@ public class GameManager : MonoBehaviour
                 GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了")
                     + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name +","+ LanguageManage.SwitchStr("地上还有")
                     + xcount + LanguageManage.SwitchStr("个"));
-                GameData.informationManager.AddInformation("*"+LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") +":" + itemData.Name);
+                
+                InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") +":" + itemData.Name);
             }
             else
             {
-                GameData.informationManager.AddInformation("*"+ LanguageManage.SwitchStr("背包已满，无法捡起物品"));
+                InformationController.instance.AddInformation("*"+ LanguageManage.SwitchStr("背包已满，无法捡起物品"));
                 GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("背包已满，无法捡起物品"));
             }
            
         }
         else
         {
-            GameData.informationManager.AddInformation("*" + LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
+            InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
             Destroy(groundItem.Obj);
             GroundItems.Remove(groundItem);
@@ -971,7 +970,7 @@ public class GameManager : MonoBehaviour
                 ItemData itemData = GameData.itemsManager.GetItemDataFromId(groundItem.item.ItemId);
                 int lostcount = UnityEngine.Random.Range(1, groundItem.item.count);
                 int count = groundItem.item.count - lostcount;
-                GameData.informationManager.AddInformation(LanguageManage.SwitchStr("*地底哥布林偷走了掉在地上的") + lostcount + LanguageManage.SwitchStr("个") + itemData.Name);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*地底哥布林偷走了掉在地上的") + lostcount + LanguageManage.SwitchStr("个") + itemData.Name);
                 if (count > 0)
                 {
                     groundItem.ChangeCount(count);

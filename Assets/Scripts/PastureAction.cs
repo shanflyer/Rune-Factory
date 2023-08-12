@@ -82,7 +82,7 @@ public class Animal :Charactor
             MonoBehaviour.Destroy(Obj);
             animalStatus = AnimalStatus.死亡;
 
-            GameComponentData.gameData.informationManager.AddInformation(
+            InformationController.instance.AddInformation(
                 LanguageManage.SwitchStr("*一只动物") + Name + LanguageManage.SwitchStr("死亡"));
             pasture.animalCaseCount -= animalData.caseCount;
 
@@ -124,7 +124,7 @@ public class Animal :Charactor
                 MonoBehaviour.Destroy(Obj);
                 animalStatus = AnimalStatus.死亡;
 
-                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*一只动物") + Name + LanguageManage.SwitchStr("饿死。"));
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一只动物") + Name + LanguageManage.SwitchStr("饿死。"));
                 pasture.animalCaseCount -= animalData.caseCount;
 
                // CreatItem();
@@ -165,11 +165,11 @@ public class Animal :Charactor
 
             if (animalStatus == AnimalStatus.死亡)
             {
-                //GameComponentData.gameData.informationManager.AddInformation("*动物 " + Name + " 死后剩下" + itemCount + "个" + itemData.Name);
+                //InformationController.instance.AddInformation("*动物 " + Name + " 死后剩下" + itemCount + "个" + itemData.Name);
             }
             else
             {
-                GameComponentData.gameData.informationManager.AddInformation("*"+LanguageManage.SwitchStr("动物") + Name + LanguageManage.SwitchStr("产出")
+                InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("动物") + Name + LanguageManage.SwitchStr("产出")
                     + itemCount + LanguageManage.SwitchStr("个") + itemData.Name);
             }
         }
@@ -279,13 +279,13 @@ public class Pasture
                 }
                 else
                 {
-                    GameComponentData.gameData.informationManager.AddInformation("*" + name + LanguageManage.SwitchStr(" 的 ")
+                    InformationController.instance.AddInformation("*" + name + LanguageManage.SwitchStr(" 的 ")
                         + animal.Name + LanguageManage.SwitchStr(" 处于饥饿状态。"));
                 }
             }
             if (costGrass > 0)
             {
-                GameComponentData.gameData.informationManager.AddInformation("*" + name + LanguageManage.SwitchStr(" 消耗牧草:")
+                InformationController.instance.AddInformation("*" + name + LanguageManage.SwitchStr(" 消耗牧草:")
                     + costGrass + LanguageManage.SwitchStr(",剩余牧草:") + grassCount);
             }
            
@@ -557,7 +557,7 @@ public class PastureAction : MonoBehaviour
         _pasture.Animals.Add(_animal);
         _pasture.animalCaseCount += _animal.animalData.caseCount;
         _animal.Obj.GetComponent<NPCAnimationAction>().MoveRandom();
-        GameComponentData.gameData.informationManager.AddInformation("* "+_animal.Name+" 已经移动到 "+_pasture.name);
+        InformationController.instance.AddInformation("* "+_animal.Name+" 已经移动到 "+_pasture.name);
         
     }
     
@@ -781,7 +781,7 @@ public class PastureAction : MonoBehaviour
         Pastures[pastureIndex].name = pastureNameInput.text;
         Pastures[pastureIndex].caseCount = zeroAnimalCount;
         pastureNum++;
-        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*新建牧场:") + Pastures[pastureIndex].name + LanguageManage.SwitchStr(",消耗:金币") + goldCost);
+        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*新建牧场:") + Pastures[pastureIndex].name + LanguageManage.SwitchStr(",消耗:金币") + goldCost);
     }
     public void ClickPastureHouse(GameObject Obj)
     {

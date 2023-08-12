@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
@@ -77,4 +78,18 @@ public class LanguageManage : Singleton<LanguageManage>
         }
         return s;
     }  
+    public string GameTimeToString(GameTime nowGameTime)
+    {
+        string result = "";
+        if(nowLanguage == SystemLanguage.English)
+        {
+
+        }
+        else
+        {
+            result = $"{nowGameTime.gameDate.year}年 {nowGameTime.gameDate.season} {nowGameTime.gameDate.date}日 【{nowGameTime.week}】";
+        }
+
+        return result;
+    }
 }

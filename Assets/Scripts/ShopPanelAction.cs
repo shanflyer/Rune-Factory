@@ -152,12 +152,12 @@ public class ShopPanelAction : MonoBehaviour
         MyMoneyText.text = GameComponentData.gameData.gameManager.gamePlayer.money.ToString();
         if (selectItemData.shopMoneyType == ShopMoneyType.金币)
         {
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*消耗金币")
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*消耗金币")
                 + totalPrice + LanguageManage.SwitchStr(",购买了") + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.Name);
         }
         else
         {
-            GameComponentData.gameData.informationManager.AddInformation(
+            InformationController.instance.AddInformation(
                 LanguageManage.SwitchStr("*消耗红晶") + totalPrice + LanguageManage.SwitchStr(",购买了") 
                 + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.Name);
         }

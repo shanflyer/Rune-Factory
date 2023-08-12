@@ -82,7 +82,7 @@ public class LianjinAction : MonoBehaviour
         AudioController.instance.PlayAudio(SE.Shop);
         GameComponentData.gameData.gameManager.ChangePlayerMoney(value);
         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("炼金"), LanguageManage.SwitchStr("消耗红晶:") + spar + LanguageManage.SwitchStr(",获得金币:") + value);
-        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*炼金成功") + LanguageManage.SwitchStr("消耗红晶:") + spar + LanguageManage.SwitchStr(",获得金币:") + value);
+        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*炼金成功") + LanguageManage.SwitchStr("消耗红晶:") + spar + LanguageManage.SwitchStr(",获得金币:") + value);
         gameObject.SetActive(false);
         
     }

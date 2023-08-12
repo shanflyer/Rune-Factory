@@ -645,7 +645,7 @@ public class WarehouseAction : MonoBehaviour
                 propertyStr += LanguageManage.SwitchStr("HP全满") + selectItemData1.GetProperty().Power;
             }
 
-            GameComponentData.gameData.informationManager.AddInformation("*" + noticeStr + propertyStr);
+            InformationController.instance.AddInformation("*" + noticeStr + propertyStr);
           
             if (gamePlayer.property.HP > 0)
             {

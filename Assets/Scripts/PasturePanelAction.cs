@@ -131,7 +131,7 @@ public class PasturePanelAction : MonoBehaviour
     public void AddPastureCaseCount()
     {
         AudioController.instance.PlayAudio(SE.click);
-        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*消耗金币") + CostValue + ","+pasture.name+LanguageManage.SwitchStr(" 空间+1"));
+        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*消耗金币") + CostValue + ","+pasture.name+LanguageManage.SwitchStr(" 空间+1"));
         CostValue = GameComponentData.gameData.pastureAction.zeroAnimalCost + (pasture.caseCount - 2) *
                     GameComponentData.gameData.pastureAction.addAnimalCostPlus;
         CaseCostText.text = CostValue.ToString();

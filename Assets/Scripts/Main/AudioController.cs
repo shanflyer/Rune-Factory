@@ -59,6 +59,8 @@ public class AudioController : Singleton<AudioController>
     PlayableGraph bgmGraph, bgsGraph, meGraph, seGraph;
     AudioPlayableOutput bgmOut, bgsOut, meOut, seOut;
 
+    
+
     public async void PlayAudio(SE se, bool loop = false)
     {
         AudioClip audioClip =await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));

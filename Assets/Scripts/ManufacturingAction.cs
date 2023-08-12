@@ -668,7 +668,7 @@ public class ManufacturingAction : MonoBehaviour
             else
             {
                 ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(formulaStuff);
-                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*缺少素材:")+itemData.Name);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*缺少素材:")+itemData.Name);
                 GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),TitleText.text+LanguageManage.SwitchStr("*缺少素材:") + itemData.Name+" ...");
             }
         }
@@ -1033,8 +1033,8 @@ public class ManufacturingAction : MonoBehaviour
             GameComponentData.gameData.gameManager.GreatGroundItem(_item);
 
             ItemData produceItemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(produceItem.ItemId);
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个:") + produceItemData.Name+LanguageManage.SwitchStr("，其中")+groundItemCount+LanguageManage.SwitchStr("个落在地上"));
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*在地上的道具随时会被地底哥布林偷走，请及时回收。"));
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个:") + produceItemData.Name+LanguageManage.SwitchStr("，其中")+groundItemCount+LanguageManage.SwitchStr("个落在地上"));
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*在地上的道具随时会被地底哥布林偷走，请及时回收。"));
 
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个:") +
                 produceItemData.Name+LanguageManage.SwitchStr(",因为背包已满，其中")+groundItemCount+ LanguageManage.SwitchStr("个落在地上，在地上的道具随时会被地底哥布林偷走，请及时回收。"));
@@ -1043,7 +1043,7 @@ public class ManufacturingAction : MonoBehaviour
         {
            
             ItemData produceItemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(produceItem.ItemId);
-            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
         }
         if (player.property.Power > RpCostValue)

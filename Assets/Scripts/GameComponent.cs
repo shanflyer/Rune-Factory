@@ -64,7 +64,6 @@ public class GameComponent : MonoBehaviour
     public FarmAction farmAction;
     public PlantAction plantAction;
     public PastureAction pastureAction;
-    public InformationManager informationManager;
     public PastureItemPanelAction pastureItemPanelAction;
     public PasturePanelAction pasturePanelAction;
     public AnimalSetPanelAction animalSetPanelAction;

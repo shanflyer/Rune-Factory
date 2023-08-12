@@ -357,7 +357,7 @@ public class FarmAction : MonoBehaviour
                     else
                     {
                         AudioController.instance.PlayAudio(SE.Return);
-                        GameComponentData.gameData.informationManager.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
+                        InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，请到池塘装水！"));
                     }
 
@@ -367,7 +367,7 @@ public class FarmAction : MonoBehaviour
                 else
                 {
                     AudioController.instance.PlayAudio(SE.Fail);
-                    GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*此地块不需要浇水了"));
+                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("*此地块不需要浇水了"));
                 }
 
             }
@@ -412,7 +412,7 @@ public class FarmAction : MonoBehaviour
                 else 
                 {
                     AudioController.instance.PlayAudio(SE.Fail);
-                    GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*此地块不需要使用锄头"));
+                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("*此地块不需要使用锄头"));
                 }
 
             }
@@ -456,7 +456,7 @@ public class FarmAction : MonoBehaviour
                     else
                     {
                         AudioController.instance.PlayAudio(SE.Return);
-                        GameComponentData.gameData.informationManager.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
+                        InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                         GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                     }
                     
@@ -466,7 +466,7 @@ public class FarmAction : MonoBehaviour
                 else
                 {
                     AudioController.instance.PlayAudio(SE.Fail);
-                    GameComponentData.gameData.informationManager.AddInformation("*" + LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
+                    InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
                 }
 
             }

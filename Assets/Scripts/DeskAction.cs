@@ -59,7 +59,7 @@ public class DeskAction : MonoBehaviour
             int sellPrice =
                 (int) (itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f);
             string infomation = "*1 " + itemData.Name+LanguageManage.SwitchStr("出售");
-            GameComponentData.gameData.informationManager.AddInformation(infomation);
+            InformationController.instance.AddInformation(infomation);
             if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
             {
                 GameComponentData.gameData.coinAction.CreatCoin(sellPrice, transform.position);
@@ -89,7 +89,7 @@ public class DeskAction : MonoBehaviour
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 2);
             }
 
-           // GameComponentData.gameData.informationManager.AddInformation(infomation);
+           // InformationController.instance.AddInformation(infomation);
             item.count--;
 
             ItemCountText.text = item.count.ToString();
@@ -117,7 +117,7 @@ public class DeskAction : MonoBehaviour
             int sellPrice =
                 (int)(itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f) * count;
             string infomation = "*"+count+ itemData.Name + LanguageManage.SwitchStr("出售");
-            GameComponentData.gameData.informationManager.AddInformation(infomation);
+            InformationController.instance.AddInformation(infomation);
             if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
             {
                 GameComponentData.gameData.coinAction.CreatCoin(sellPrice, transform.position);
@@ -149,7 +149,7 @@ public class DeskAction : MonoBehaviour
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 2);
             }
 
-            // GameComponentData.gameData.informationManager.AddInformation(infomation);
+            // InformationController.instance.AddInformation(infomation);
             item.count-=count;
          
             ItemCountText.text = item.count.ToString();

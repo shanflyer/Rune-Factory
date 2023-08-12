@@ -1471,7 +1471,7 @@ public class BattleMapAction : MonoBehaviour
                     GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                     npcx.npcData.npcStatus = NpcStatus.修养中;
                     npcx.WaitDays = 2;
-                    GameComponentData.gameData.informationManager.AddInformation("*NPC" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                    InformationController.instance.AddInformation("*NPC" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
                     gamePlayer.TeamPlayer0 = null;
                     GameComponentData.gameData.gameManager.hurtNpc = npcx.npcData;
                 }
@@ -1499,7 +1499,7 @@ public class BattleMapAction : MonoBehaviour
                         Destroy(animal.Obj);
                         GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                         _pasture.RemoveAnimal(animal.id);
-                        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
+                        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
                     }
                     gamePlayer.TeamPlayer0 = null;
                 }
@@ -1515,7 +1515,7 @@ public class BattleMapAction : MonoBehaviour
                     GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                     npcx.npcData.npcStatus = NpcStatus.修养中;
                     npcx.WaitDays = 2;
-                    GameComponentData.gameData.informationManager.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                    InformationController.instance.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
                     gamePlayer.TeamPlayer1 = null;
                 }
             }
@@ -1541,7 +1541,7 @@ public class BattleMapAction : MonoBehaviour
                         Destroy(animal.Obj);
                         GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                         _pasture.RemoveAnimal(animal.id);
-                        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
+                        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
                     }
                     gamePlayer.TeamPlayer1 = null;
                 }
@@ -2678,7 +2678,7 @@ public class BattleMapAction : MonoBehaviour
                     }
                 }
                 string rewardStr = LanguageManage.SwitchStr("*获得经验x") + rewardEXP;
-                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得经验x")
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得经验x")
                                                                              + rewardEXP + LanguageManage.SwitchStr("*获得金币x") + moneyValue);
                 rewardStr += LanguageManage.SwitchStr(",获得金币x") + moneyValue;
                 foreach (var rewardItem in rewardItems)
@@ -2686,13 +2686,13 @@ public class BattleMapAction : MonoBehaviour
                     ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(rewardItem.ItemId);
                     rewardStr += "," + itemData.Name + "x" + rewardItem.count;
 
-                    GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得")
+                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得")
                                                                                  + itemData.Name + "x" + rewardItem.count);
                 }
                 if (isFull)
                 {
                     rewardStr += LanguageManage.SwitchStr(",由于背包已满，部分道具未获得！");
-                    GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*由于背包已满，部分道具未获得！"));
+                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("*由于背包已满，部分道具未获得！"));
                 }
 
             }
@@ -2700,9 +2700,9 @@ public class BattleMapAction : MonoBehaviour
             {
                 gamePlayer.money += moneyValue;
                 string rewardStr = LanguageManage.SwitchStr("*获得经验x") + rewardEXP;
-                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得经验x") + rewardEXP);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得经验x") + rewardEXP);
                 rewardStr += LanguageManage.SwitchStr(",获得金币x") + moneyValue;
-                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*获得金币x") + moneyValue);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得金币x") + moneyValue);
                 if (!isAuto)
                 {
                     GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("战斗胜利"), rewardStr);
@@ -3055,21 +3055,21 @@ public class BattleMapAction : MonoBehaviour
             
             gamePlayer.property.HP = gamePlayer.property.MaxHP;
             charactorObj.GetComponent<Animator>().SetBool("IsDead",false);
-            GameComponentData.gameData.informationManager.AddInformation("*"+gamePlayer.name+LanguageManage.SwitchStr("复活"));
+            InformationController.instance.AddInformation("*"+gamePlayer.name+LanguageManage.SwitchStr("复活"));
         }
         if (gamePlayer.TeamPlayer0 != null&&gamePlayer.TeamPlayer0.id != 0 && isDead1)
         {
             isDead1 = false;
             gamePlayer.TeamPlayer0.property.HP = gamePlayer.TeamPlayer0.property.MaxHP;
             teamPlayerObj0.GetComponent<Animator>().SetBool("IsDead", false);
-            GameComponentData.gameData.informationManager.AddInformation("*" + gamePlayer.TeamPlayer0.name + LanguageManage.SwitchStr("复活"));
+            InformationController.instance.AddInformation("*" + gamePlayer.TeamPlayer0.name + LanguageManage.SwitchStr("复活"));
         }
         if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 && isDead2)
         {
             isDead2 = false;
             gamePlayer.TeamPlayer1.property.HP =gamePlayer.TeamPlayer1.property.MaxHP;
             teamPlayerObj1.GetComponent<Animator>().SetBool("IsDead", false);
-            GameComponentData.gameData.informationManager.AddInformation("*" + gamePlayer.TeamPlayer1.name + LanguageManage.SwitchStr("复活"));
+            InformationController.instance.AddInformation("*" + gamePlayer.TeamPlayer1.name + LanguageManage.SwitchStr("复活"));
         }
         if (isFightContineu)
         {
@@ -3239,7 +3239,7 @@ public class BattleMapAction : MonoBehaviour
                             GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                             npcx.npcData.npcStatus = NpcStatus.修养中;
                             npcx.WaitDays = 2;
-                            GameComponentData.gameData.informationManager.AddInformation("*NPC" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                            InformationController.instance.AddInformation("*NPC" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
                         }
 
                     }
@@ -3266,7 +3266,7 @@ public class BattleMapAction : MonoBehaviour
                                 GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                                 _pasture.RemoveAnimal(animal.id);
 
-                                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
+                                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
                             }
                             
                         }
@@ -3284,7 +3284,7 @@ public class BattleMapAction : MonoBehaviour
                             GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                             npcx.npcData.npcStatus = NpcStatus.修养中;
                             npcx.WaitDays = 2;
-                            GameComponentData.gameData.informationManager.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                            InformationController.instance.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
                         }
 
                     }
@@ -3310,7 +3310,7 @@ public class BattleMapAction : MonoBehaviour
                                 Destroy(animal.Obj);
                                 GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                                 _pasture.RemoveAnimal(animal.id);
-                                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物")
+                                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物")
                                                                                              + animal.Name + LanguageManage.SwitchStr("战死"));
                             }
                             
@@ -3374,7 +3374,7 @@ public class BattleMapAction : MonoBehaviour
                             GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                             npcx.npcData.npcStatus = NpcStatus.修养中;
                             npcx.WaitDays = 2;
-                            GameComponentData.gameData.informationManager.AddInformation("*NPC" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                            InformationController.instance.AddInformation("*NPC" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
                             gamePlayer.TeamPlayer0 = null;
 
                             GameComponentData.gameData.gameManager.hurtNpc = npcx.npcData;
@@ -3403,7 +3403,7 @@ public class BattleMapAction : MonoBehaviour
                                 Destroy(animal.Obj);
                                 GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                                 _pasture.RemoveAnimal(animal.id);
-                                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
+                                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
                             }
                             gamePlayer.TeamPlayer0 = null;
                         }
@@ -3422,7 +3422,7 @@ public class BattleMapAction : MonoBehaviour
                             GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                             npcx.npcData.npcStatus = NpcStatus.修养中;
                             npcx.WaitDays = 2;
-                            GameComponentData.gameData.informationManager.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                            InformationController.instance.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
                             gamePlayer.TeamPlayer1 = null;
                         }
                        
@@ -3449,7 +3449,7 @@ public class BattleMapAction : MonoBehaviour
                                 Destroy(animal.Obj);
                                 GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                                 _pasture.RemoveAnimal(animal.id);
-                                GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
+                                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
                             }
                             gamePlayer.TeamPlayer1 = null;
                         }
@@ -3498,7 +3498,7 @@ public class BattleMapAction : MonoBehaviour
                         GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                         npcx.npcData.npcStatus = NpcStatus.修养中;
                         npcx.WaitDays = 2;
-                        GameComponentData.gameData.informationManager.AddInformation("*NPC"+npcx.Name+LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                        InformationController.instance.AddInformation("*NPC"+npcx.Name+LanguageManage.SwitchStr("受到重伤，进入修养中"));
                     }
                     else if(gamePlayer.TeamPlayer0.id/1000000==2)
                     {
@@ -3523,14 +3523,14 @@ public class BattleMapAction : MonoBehaviour
                             Destroy(animal.Obj);
                             GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                             _pasture.RemoveAnimal(animal.id);
-                            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
+                            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
 
                         }
 
                     }
                     else
                     {
-                        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*佣兵") + gamePlayer.TeamPlayer0.name + "伤残，已离开");
+                        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*佣兵") + gamePlayer.TeamPlayer0.name + "伤残，已离开");
                     }
                     
                 }
@@ -3542,7 +3542,7 @@ public class BattleMapAction : MonoBehaviour
                         GameComponentData.gameData.employerManger.Employers.Find(e => e.id == npcx.id).isHired = false;
                         npcx.npcData.npcStatus = NpcStatus.修养中;
                         npcx.WaitDays = 2;
-                        GameComponentData.gameData.informationManager.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
+                        InformationController.instance.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("受到重伤，进入修养中"));
                     }
                     else if (gamePlayer.TeamPlayer1.id / 1000000 == 2)
                     {
@@ -3565,14 +3565,14 @@ public class BattleMapAction : MonoBehaviour
                             Destroy(animal.Obj);
                             GameComponentData.gameData.employerManger.AnimalDead(animal.id);
                             _pasture.RemoveAnimal(animal.id);
-                            GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
+                            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*动物") + animal.Name + LanguageManage.SwitchStr("战死"));
 
                         }
 
                     }
                     else
                     {
-                        GameComponentData.gameData.informationManager.AddInformation("*佣兵" + gamePlayer.TeamPlayer0.name + " 伤残，已离开");
+                        InformationController.instance.AddInformation("*佣兵" + gamePlayer.TeamPlayer0.name + " 伤残，已离开");
                     }
                     
                 }
@@ -3600,14 +3600,14 @@ public class BattleMapAction : MonoBehaviour
     void EscapeSucessfull()
     {
 
-        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*逃跑成功"));
+        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*逃跑成功"));
         FightInformationObj.SetActive(true);
         FightInformationObj.GetComponent<FightInformationAction>().InitData(LanguageManage.SwitchStr("逃跑成功！"),InformationType.逃跑成功);
     }
 
     void EscapeDefate()
     {
-        GameComponentData.gameData.informationManager.AddInformation(LanguageManage.SwitchStr("*逃跑失败"));
+        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*逃跑失败"));
         FightInformationObj.SetActive(true);
         FightInformationObj.GetComponent<FightInformationAction>().InitData(LanguageManage.SwitchStr("逃跑失败！"), InformationType.逃跑失败);
     }

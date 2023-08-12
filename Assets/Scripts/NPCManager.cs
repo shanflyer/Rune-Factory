@@ -344,8 +344,8 @@ public class NPCX : Charactor
                      npcData.friendlyLevel * GameComponentData.gameData.NpcManager.AddUpExp;
         }
         GameComponentData.gameData.charactorTitleAction.CheckFriendly();
-        GameComponentData.gameData.informationManager.AddInformation("*" + Name + LanguageManage.SwitchStr(" 友好度等级为") + npcData.friendlyLevel);
-        GameComponentData.gameData.informationManager.AddInformation("*"+Name+ LanguageManage.SwitchStr(" 友好度增加") +Friendlyexp);
+        InformationController.instance.AddInformation("*" + Name + LanguageManage.SwitchStr(" 友好度等级为") + npcData.friendlyLevel);
+        InformationController.instance.AddInformation("*"+Name+ LanguageManage.SwitchStr(" 友好度增加") +Friendlyexp);
        
     }
 

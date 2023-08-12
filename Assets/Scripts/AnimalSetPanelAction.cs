@@ -55,8 +55,8 @@ public class AnimalSetPanelAction : MonoBehaviour
             npcx.AddFriendlyexp(1);
         }
         
-        GameComponentData.gameData.pasturePanelAction.UpdataPasturePanelData();
-        GameComponentData.gameData.informationManager.AddInformation("*" + animal.Name +LanguageManage.SwitchStr(" 被放归野外，全体居民好感度加1"));
+        GameComponentData.gameData.pasturePanelAction.UpdataPasturePanelData(); 
+        InformationController.instance.AddInformation("*" + animal.Name +LanguageManage.SwitchStr(" 被放归野外，全体居民好感度加1"));
         gameObject.SetActive(false);
     }
     public void KillAnimal()
@@ -68,7 +68,7 @@ public class AnimalSetPanelAction : MonoBehaviour
         if (GameComponentData.gameData.gameManager.gamePlayer.package.IsPackageFill(item))
         {
             GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(item);
-            GameComponentData.gameData.informationManager.AddInformation("*" + animal.Name + LanguageManage.SwitchStr("被宰杀，获得") + 1 + LanguageManage.SwitchStr("个 ") + itemData.Name);
+            InformationController.instance.AddInformation("*" + animal.Name + LanguageManage.SwitchStr("被宰杀，获得") + 1 + LanguageManage.SwitchStr("个 ") + itemData.Name);
             animal.pasture.animalCaseCount -= animal.animalData.caseCount;
             Destroy(animal.Obj);
             GameComponentData.gameData.employerManger.AnimalDead(animal.id);

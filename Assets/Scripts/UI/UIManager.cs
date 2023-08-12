@@ -22,6 +22,14 @@ public class UIManager:Singleton<UIManager>
         GameActionManager.instance.AddListener<OpenPanelAction>(OpenPanel);
          
     }
+    public bool GamePanelIsShow<T>() where T : GamePanel
+    {
+        if (gamePanels.TryGetValue(typeof(T), out var gamePanel))
+        {
+            return gamePanel.enabled;
+        }
+        return false;
+    }
     public T GetGamePanel<T>() where T:GamePanel
     { 
         if(gamePanels.TryGetValue(typeof(T),out var gamePanel))

@@ -85,11 +85,11 @@ public class NPCFunctionPanel : MonoBehaviour
             int count = GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(item.ItemId, 1);
             if (count > 0)
             {
-                GameComponentData.gameData.informationManager.AddInformation("*背包已满，无法获得物品！");
+                InformationController.instance.AddInformation("*背包已满，无法获得物品！");
             }
             else
             {
-                GameComponentData.gameData.informationManager.AddInformation("*获得1个" + giftData.Name);
+                InformationController.instance.AddInformation("*获得1个" + giftData.Name);
             }
         }
        
@@ -292,9 +292,9 @@ public class NPCFunctionPanel : MonoBehaviour
             }
             npcx1.npcData.frienflyExp = 0;
         }
-        GameComponentData.gameData.informationManager.AddInformation("*" + LanguageManage.SwitchStr("解除情侣关系！"));
-        GameComponentData.gameData.informationManager.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("友好度大幅下降！"));
-        GameComponentData.gameData.informationManager.AddInformation("*" + LanguageManage.SwitchStr("全体NPC友好度下降！"));
+        InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("解除情侣关系！"));
+        InformationController.instance.AddInformation("*" + npcx.Name + LanguageManage.SwitchStr("友好度大幅下降！"));
+        InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("全体NPC友好度下降！"));
     
     }
     public void ClickConfessionButton()

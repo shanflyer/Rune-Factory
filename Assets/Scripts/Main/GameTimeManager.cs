@@ -183,11 +183,11 @@ public class GameTime
 
         if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
         {
-            GameComponentData.gameData.informationManager.AddInformation("*" + gameDate.year + "年" + gameDate.season + "之月" + gameDate.date + "日");
+            InformationController.instance.AddInformation("*" + gameDate.year + "年" + gameDate.season + "之月" + gameDate.date + "日");
         }
         else
         {
-            GameComponentData.gameData.informationManager.AddInformation("*" + gameDate.date + "," + LanguageManage.SwitchStr(gameDate.season.ToString()) + "," + gameDate.year + LanguageManage.SwitchStr("年"));
+            InformationController.instance.AddInformation("*" + gameDate.date + "," + LanguageManage.SwitchStr(gameDate.season.ToString()) + "," + gameDate.year + LanguageManage.SwitchStr("年"));
         }
     }
     public void Sleep()
