@@ -67,13 +67,13 @@ public class Employer
         {
             ItemData oldItemData =
                 GameComponentData.gameData.itemsManager.GetItemDataFromId(weapon);
-            property += oldItemData.GetProperty();
+            property += oldItemData.property;
         }
         if (clothes != 0)
         {
             ItemData oldItemData =
                 GameComponentData.gameData.itemsManager.GetItemDataFromId(clothes);
-            property += oldItemData.GetProperty();
+            property += oldItemData.property;
         }
         AttachTeamPlayer();
         //InitProperty();

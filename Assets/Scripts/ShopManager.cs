@@ -97,7 +97,7 @@ public class Shop
     public int Npcid;
     public List<ShopPackage> ShopPackages;
     [HideInInspector]
-    public List<Package> packages;
+    public List<int> packages;
     public ShopType shopType;
     public Shop() { }
 
@@ -191,22 +191,18 @@ public class Shop
             }
         }
     }
-    public void InitPackageData()
+    public async void InitPackageData()
     {
-        packages=new List<Package>();
+        packages=new List<int>();
         foreach (var shopPackage in ShopPackages)
         {
-            Package package = new Package
-            {
-                name = shopPackage.PackageName,
-                items = new List<Item>()
-            };
+            int package = PackageManager.instance.CreatGamePackage(shopPackage.ShopItems.Count, shopPackage.PackageName);
             foreach (var shopPackageShopItem in shopPackage.ShopItems)
             {
                 if (shopPackageShopItem.IsOpen)
                 {
-                    Item item=new Item(shopPackageShopItem.ItemId,1);
-                    package.items.Add(item);
+                    Item item=ItemManager.instance.CreatItem(shopPackageShopItem.ItemId,1);
+                    await PackageManager.instance.SetItemInPackage(item,package); 
                 }
             }
             packages.Add(package);
@@ -264,10 +260,7 @@ public class ShopManager : MonoBehaviour
                 if (GameComponentData.gameData != null)
                 {
                     shop.Name = LanguageManage.SwitchStr(shop.Name);
-                    foreach (var shopPackage in shop.packages)
-                    {
-                        shopPackage.name = LanguageManage.SwitchStr(shopPackage.name);
-                    }
+                   
                     foreach (var shopShopPackage in shop.ShopPackages)
                     {
                         shopShopPackage.PackageName = LanguageManage.SwitchStr(shopShopPackage.PackageName);

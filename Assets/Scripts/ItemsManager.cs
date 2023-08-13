@@ -6,236 +6,10 @@ using System;
 using System.Linq;
 using System.Text;
 using LitJson;
-[System.Serializable]
-public enum ItemType
-{
-    种子 = 0,
-    武器 = 1,
-    防具 = 2,
-    消耗物品 = 3,
-    其他物品 = 4,
-    食材 = 5,
-    收集物 = 6,
-    植物 = 7,
-    食物 = 8,
-    花=9,
-    药剂=10,
-    卷轴=11
-}
-[System.Serializable]
-public struct Property
-{
-    public int MaxHP,HP,AT, DF,EXP, rewardEXP, NeedEXP,Power,MaxPower, Crit, Dodge;
-    public Property(int zero)
-    {
-        MaxHP = 0;
-        HP = 0;
-        AT = 0;
-        DF = 0;
-        EXP = 0;
-        rewardEXP = 0;
-        NeedEXP = 0;
-        Power = 0;
-        MaxPower = 0;
-        Crit = 0;
-        Dodge = 0;
-    }
 
-    public Property(Property _property)
-    {
-        MaxHP = _property.MaxHP;
-        HP = _property.HP;
-        AT = _property.AT;
-        DF = _property.DF;
-        EXP = _property.EXP;
-        NeedEXP = _property.NeedEXP;
-        rewardEXP = _property.rewardEXP;
-        Power = _property.Power;
-        MaxPower = _property.MaxPower;
-        Crit = _property.Crit;
-        Dodge = _property.Dodge;
-    }
-    public  static Property operator+(Property property0,Property property1)
-    {
-        Property result = new Property
-        {
-            MaxHP =property0.MaxHP+property1.MaxHP,
-            HP = property0.HP + property1.HP,
-            AT = property0.AT + property1.AT,
-            DF = property0.DF + property1.DF,
-            EXP = property0.EXP+property1.EXP,
-            NeedEXP = property0.NeedEXP+property1.NeedEXP,
-            rewardEXP = property0.rewardEXP+property1.rewardEXP,
-            Power = property0.Power+property1.Power,
-            MaxPower = property0.MaxPower+property1.MaxPower,
-            Crit=property0.Crit+property1.Crit,
-            Dodge=property0.Dodge+property1.Dodge
 
-            
-        };
-        if (result.HP > result.MaxHP)
-        {
-            result.HP = result.MaxHP;
-        }
-        if (result.Power > result.MaxPower)
-        {
-            result.Power = result.MaxPower;
-        }
-        return result;
-    }
-    public static Property operator-(Property property0, Property property1)
-    {
-        Property result = new Property
-        {
-            MaxHP = property0.MaxHP - property1.MaxHP,
-            HP = property0.HP - property1.HP,
-            AT = property0.AT - property1.AT,
-            DF = property0.DF -property1.DF,
-            EXP = property0.EXP-property1.EXP,
-            NeedEXP = property0.NeedEXP-property1.NeedEXP,
-            rewardEXP = property0.rewardEXP - property1.rewardEXP,
-            Power = property0.Power-property1.Power,
-            MaxPower = property0.MaxPower-property1.MaxPower,
-            Crit = property0.Crit - property1.Crit,
-            Dodge = property0.Dodge - property1.Dodge
-        };
-        return result;
-    }
-    public int AddExp(int value,int professionId,int _level)
-    {
-        int Level = _level;
-        EXP += value;
-        ProfessionData professionData =
-            GameComponentData.gameData.charactorDataAction.professionDatas0.Find(p => p.id == professionId);
-        while (EXP >= NeedEXP)
-        {
-            EXP -= NeedEXP;
-            Level++;
-            Property levelProperty = professionData.GetPropertyFromLevelup(Level);
-            this += levelProperty;
-        }
 
-        return Level;
-    }
-}
-
-[System.Serializable]
-public enum ValueType{
-    AT = 1,
-    DF = 2,
-    MaxHp = 3,
-    Hp = 4,
-    Exp = 5,
-    Power = 6,
-    MaxPower = 7,
-    Crit=8,
-    Dodge=9,
-}
-
-public enum ShopMoneyType
-{
-    金币=1,
-    红晶=2
-}
-[System.Serializable]
-public class ItemData
-{
-    public string Name;
-    public int Id;
-    public string Icon;
-    public ItemType Type;
-    public bool IsFresh;
-    public int typeValue;
-    public int equipLevel;
-    public int groupNum;
-    public string Text1,Text2;
-    public string PropertyValue;
-    public ShopMoneyType shopMoneyType;
-    public int ShopPrice, SellPrice;
-    private Property property;
-    public ItemData()
-    {
-        
-    }
-
-    public ItemData(ItemData _itemData)
-    {
-        Name = _itemData.Name;
-        Id = _itemData.Id;
-        Icon = _itemData.Icon;
-        Type = _itemData.Type;
-        IsFresh = _itemData.IsFresh;
-        typeValue = _itemData.typeValue;
-        equipLevel = _itemData.equipLevel;
-        groupNum = _itemData.groupNum;
-        Text1 = _itemData.Text1;
-        Text2 = _itemData.Text2;
-        PropertyValue = _itemData.PropertyValue;
-        ShopPrice = _itemData.ShopPrice;
-        SellPrice = _itemData.SellPrice;
-        property = _itemData.property;
-        shopMoneyType = _itemData.shopMoneyType;
-    }
-    public Property GetProperty()
-    {
-        return property;
-    }
-    public void InitProperty()
-    {
-        property=new Property(0);
-        if (PropertyValue != "")
-        {
-            var x = PropertyValue.Split(';');
-            List<List<string>> valueList = new List<List<string>>();
-            for (int i = 0; i < x.Length; i++)
-            {
-                if (x[i] != "")
-                {
-                    List<string> y = x[i].Split(',').ToList();
-                    valueList.Add(y);
-                }
-                
-            }
-            foreach (var value in valueList)
-            {
-                ValueType valueType = (ValueType)(int.Parse(value[0]));
-                switch (valueType)
-                {
-                    case ValueType.AT:
-                        property.AT += int.Parse(value[1]);
-                        break;
-                    case ValueType.DF:
-                        property.DF += int.Parse(value[1]);
-                        break;
-                    case ValueType.Power:
-                        property.Power += int.Parse(value[1]);
-                        break;
-                    case ValueType.MaxPower:
-                        property.MaxPower *= int.Parse(value[1]);
-                        break;
-                    case ValueType.Exp:
-                        property.EXP += int.Parse(value[1]);
-                        break;
-                    case ValueType.Hp:
-                        property.HP += int.Parse(value[1]);
-                        break;
-                    case ValueType.MaxHp:
-                        property.MaxHP += int.Parse(value[1]);
-                        break;
-                    case ValueType.Crit:
-                        property.Crit += int.Parse(value[1]);
-                        break;
-                    case ValueType.Dodge:
-                        property.Dodge += int.Parse(value[1]);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-       
-    }
-}
+ /*
 [System.Serializable]
 public class Item : IComparable<Item>
 {
@@ -248,10 +22,10 @@ public class Item : IComparable<Item>
     public Item(int itemId, int _count)
     {
         ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(itemId);
-        name = itemData.Name;
+        name = itemData.name;
         ItemId = itemId;
         count = _count;
-        groupNum = itemData.groupNum;
+        groupNum = itemData.groupCount;
 
     }
     public Item(Item _item)
@@ -263,10 +37,10 @@ public class Item : IComparable<Item>
     }
     public Item(ItemData _itemDataJ,int _count)
     {
-        name = _itemDataJ.Name;
-        ItemId = _itemDataJ.Id*1000;
+        name = _itemDataJ.name;
+        ItemId = _itemDataJ.id*1000;
         count = _count;
-        groupNum = _itemDataJ.groupNum;
+        groupNum = _itemDataJ.groupCount;
     }
     public int CompareTo(Item other)
     {
@@ -303,64 +77,6 @@ public class Package
             }
         }
         
-    }
-    public void SetItemInShopPackage(int _itemId, int itemCount, bool isDispersed)
-    {
-
-        if (!isDispersed)
-        {
-            
-            Item item = items.Find(i => i.ItemId / 1000 == _itemId / 1000);
-            if (item!=null&&item.ItemId != 0)
-            {
-                item.count += itemCount;
-            }
-            else if (items.Count < CaseCount)
-            {
-                Item addItem = new Item
-                {
-                    ItemId = _itemId,
-                    count = itemCount,
-                };
-                items.Add(addItem);
-
-                if (this == GameComponentData.gameData.gameManager.gamePlayer.package)
-                {
-                    GameComponentData.gameData.charactorTitleAction.AddGetItems(addItem.ItemId/1000);
-                }
-            }
-            else
-            {
-                Debug.Log("背包空间不足");
-            }
-        }
-        else
-        {
-            Item item = items.Find(i => i.ItemId / 1000 == _itemId / 1000);
-           // int newItemId = _itemId;
-            if (items.Count < CaseCount)
-            {
-                if (item != null && item.ItemId != 0)
-                {
-                  //  newItemId=item.ItemId++;
-                }
- 
-                Item addItem = new Item
-                {
-                    ItemId = _itemId,
-                    count = itemCount,
-                };
-
-                items.Add(addItem);
-            }
-            else
-            {
-                Debug.Log("背包空间不足");
-            }
-
-
-        }
-
     }
     //道具进背包
     public bool IsHaveItem(int itemID)
@@ -723,6 +439,7 @@ public class Package
     }
 }
 
+
 public class ItemsManager : MonoBehaviour {
     
     public List<ItemData> ItemDataList;
@@ -737,11 +454,11 @@ public class ItemsManager : MonoBehaviour {
     {
         if (itemId / 100000 == 0)
         {
-            return ItemDataList.Find(i => i.Id == itemId);
+            return ItemDataList.Find(i => i.id == itemId);
         }
         else
         {
-            return ItemDataList.Find(i => i.Id == itemId / 1000);
+            return ItemDataList.Find(i => i.id == itemId / 1000);
         }
         
     }
@@ -750,7 +467,7 @@ public class ItemsManager : MonoBehaviour {
         ItemData itemData = GetItemDataFromId(itemId);
         if (itemData != null)
         {
-            return GetItemIcon(itemData.Icon);
+            return GetItemIcon(itemData.icon);
         }
         return null;
     }
@@ -760,10 +477,10 @@ public class ItemsManager : MonoBehaviour {
     }
     public Sprite GetItemIcon(Item item)
     {
-        ItemData itemData = GetItemDataFromId(item.ItemId);
+        ItemData itemData = GetItemDataFromId(item.dataId);
         if (itemData != null)
         {
-            return GetItemIcon(itemData.Icon);
+            return GetItemIcon(itemData.icon);
         }
         return null;
     }
@@ -775,7 +492,7 @@ public class ItemsManager : MonoBehaviour {
         JsonToData();
         foreach (var itemData in ItemDataList)
         {
-            itemData.Name = LanguageManage.SwitchStr(itemData.Name);
+            itemData.name = LanguageManage.SwitchStr(itemData.name);
             itemData.Text1 = LanguageManage.SwitchStr(itemData.Text1);
             itemData.Text2 = LanguageManage.SwitchStr(itemData.Text2);
         }
@@ -801,10 +518,7 @@ public class ItemsManager : MonoBehaviour {
         {
             ItemDataList = JsonMapper.ToObject<List<ItemData>>(file.text);
             
-            foreach (var ItemData in ItemDataList)
-            {
-                ItemData.InitProperty();
-            }
+            
         }
         else
         {
@@ -815,7 +529,7 @@ public class ItemsManager : MonoBehaviour {
     }
     public ItemData GetItemDataJFromId(int id)
     {
-        ItemData ItemData = ItemDataList.Find(i => i.Id == id);
+        ItemData ItemData = ItemDataList.Find(i => i.id == id);
     
         return ItemData;
     }
@@ -825,3 +539,4 @@ public class ItemsManager : MonoBehaviour {
 		
 	}
 }
+ */

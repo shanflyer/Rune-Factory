@@ -1,310 +1,426 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
-namespace NewGame
+public class PackageManager : Singleton<PackageManager>
 {
-    public class PackageManager : Singleton<PackageManager>
+    public override void Init()
     {
-        public override void Init()
+        base.Init();
+        GameActionManager.instance.AddListener<ItemUseAction>(UsetItem);
+        GameActionManager.instance.AddListener<CreatRuntimePackage>(CreatRuntimePackage);
+        GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
+        GameActionManager.instance.AddListener<AddPackageItem>(AddPackageItemAction);
+    }
+
+    private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();
+    private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
+    private int nowPackageId;
+
+    
+    public async Task<bool> CheckPackageTryItemIn(int packageId,int itemDataId, int count)
+    {
+        if(gamePackages.TryGetValue(packageId,out GamePackage gamePackage))
         {
-            base.Init();
-            GameActionManager.instance.AddListener<ItemUseAction>(UsetItem);
-            GameActionManager.instance.AddListener<CreatRuntimePackage>(CreatRuntimePackage);
-            GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
-            GameActionManager.instance.AddListener<AddPackageItem>(AddPackageItemAction);
+            return await gamePackage.CheckPackageTryItemIn(itemDataId, count);
+        }
+        return false;
+    }
+    public int GetPackageItemCount(int packageId, int itemDataId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return gamePackage.GetItemCount(itemDataId);
+        }
+        return -1;
+    }
+    public void ClearPackageItem(int packageId, int itemDataId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+             
+        }
+    }
+    public void AddPackageCaseCount(int packageId,int count)
+    {
+        if(gamePackages.TryGetValue(packageId,out GamePackage gamePackage))
+        {
+            gamePackage.caseCount += count;
+        }
+    }
+    public void SetPackageCaseCount(int packageId, int count)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            gamePackage.caseCount = count;
+        }
+    }
+    private void RemovePackageItemAction(RemovePackageItem removePackageItem)
+    {
+        if (gamePackages.TryGetValue(removePackageItem.packageId, out GamePackage gamePackage))
+        {
+            gamePackage.GetItemOutPackage(removePackageItem.itemDataId, removePackageItem.itemCount);
+        }
+        if (nowPackageId == removePackageItem.packageId)
+        {
+
+        }
+    }
+    private async void AddPackageItemAction(AddPackageItem addPackageItem)
+    {
+        if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
+        {
+            int intanceId = ItemManager.instance.CreatItemIntance();
+            await gamePackage.SetItemInPackage(new Item
+            {
+                instanceId = intanceId,
+                dataId = addPackageItem.itemDataId,
+                count = addPackageItem.itemCount
+            });
+
+            gamePackages[addPackageItem.packageId] = gamePackage;
+        }
+    }
+
+    private void RemoveRuntimePackage(RemoveRuntimePackage removeRuntimePackage)
+    {
+        if (runtimePackageRuntimes.TryGetValue(removeRuntimePackage.key, out int instanceId))
+        {
+            if (gamePackages.ContainsKey(instanceId))
+            {
+                gamePackages.Remove(instanceId);
+            }
+            runtimePackageRuntimes.Remove(removeRuntimePackage.key);
+        }
+    }
+    private async void CreatRuntimePackage(CreatRuntimePackage creatRuntimePackage)
+    {
+        GamePackage gamePackage = new GamePackage
+        {
+            instanceId = creatRuntimePackage.instanceId,
+            name = creatRuntimePackage.name,
+            caseCount = creatRuntimePackage.caseCount,
+            itemPackage = creatRuntimePackage.itemPackage
+        };
+        for (int i = 0; i < creatRuntimePackage.Items.Count; i++)
+        {
+            await gamePackage.SetItemInPackage(creatRuntimePackage.Items[i]);
+        }
+        gamePackages.Add(creatRuntimePackage.instanceId, gamePackage);
+        runtimePackageRuntimes.Add(creatRuntimePackage.key, creatRuntimePackage.instanceId);
+    }
+
+    public int CreatGamePackage(int caseCount, string name = null, int packageInstaceId = 0)
+    {
+        nowPackageId++;
+        packageInstaceId = nowPackageId;
+        GamePackage gamePackage = new GamePackage(caseCount, name, packageInstaceId);
+        gamePackages.Add(packageInstaceId, gamePackage);
+
+        return packageInstaceId;
+    }
+    public int GetPackageCaseCount(int packageId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return gamePackage.caseCount;
+        }
+        return 0;
+    }
+    public List<Item> GetPackageItems(int packageId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return gamePackage.GetItems();
+        }
+        return null;
+    }
+
+    public async Task<int> SetItemInPackage(Item item, int packageId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return await gamePackage.SetItemInPackage(item);
         }
 
-        private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();
-        private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
-
-
-
-        private int nowPackageId;
-        public int GetPackageItemCount(int packageId, int itemDataId)
+        return -1;
+    }
+    public bool IsHaveItem(int packageId,int itemDataId)
+    {
+        if(gamePackages.TryGetValue(packageId,out GamePackage gamePackage))
         {
-            if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
-            {
-                return gamePackage.GetItemCount(itemDataId);
-            }
-            return -1;
+            return gamePackage.IsHaveItem(itemDataId);
         }
-        private void RemovePackageItemAction(RemovePackageItem removePackageItem)
+        return false;
+    }
+    private void UsetItem(ItemUseAction itemUseEvent)
+    {
+        if (gamePackages.TryGetValue(itemUseEvent.packageId, out GamePackage gamePackage))
         {
-            if (gamePackages.TryGetValue(removePackageItem.packageId, out GamePackage gamePackage))
-            {
-                gamePackage.GetItemOutPackage(removePackageItem.itemDataId, removePackageItem.itemCount);
-            }
-            if (nowPackageId == removePackageItem.packageId)
-            {
-
-            }
+            UsetItemAction(itemUseEvent.itemId);
+            gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
         }
-        private void AddPackageItemAction(AddPackageItem addPackageItem)
+    }
+    async void UsetItemAction(int itemId)
+    {
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemId.ToString());
+
+        for (int i = 0; i < itemData.useEventId.Count; i++)
         {
-            if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
+            GameActionData gameActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(itemData.useEventId[i].ToString());
+            gameActionData.Action();
+        }
+
+    }
+
+    struct GamePackage
+    {
+        public string name;
+        public int instanceId;
+        public int caseCount;
+        public bool itemPackage;
+        private List<Item> items; 
+        public int itemCount;
+
+        private Queue<int> nullItems;
+        private Dictionary<int, int> packageItemCounts;
+        private Dictionary<int, List<int>> packageItemIndexDatas;
+
+        public GamePackage(int caseCount, string name, int id)
+        {
+            instanceId = id;
+            itemCount = 0;
+            this.name = name;
+            this.caseCount = caseCount;
+            items = new List<Item>();
+            packageItemCounts = new Dictionary<int, int>();
+            packageItemIndexDatas = new Dictionary<int, List<int>>();
+            itemPackage = false;
+            nullItems = new Queue<int>();
+        }
+
+        public List<Item> GetItems()
+        {
+            List<Item> results=new List<Item>();
+            for(int i=0;i<items.Count;i++)
             {
-                int intanceId = ItemManager.instance.CreatItemIntance();
-                gamePackage.SetItemInPackage(new Item
+                if (!nullItems.Contains(i))
                 {
-                    instanceId = intanceId,
-                    dataId = addPackageItem.itemDataId,
-                    count = addPackageItem.itemCount
-                });
-
-                gamePackages[addPackageItem.packageId] = gamePackage;
-            }
-        }
-
-        private void RemoveRuntimePackage(RemoveRuntimePackage removeRuntimePackage)
-        {
-            if (runtimePackageRuntimes.TryGetValue(removeRuntimePackage.key, out int instanceId))
-            {
-                if (gamePackages.ContainsKey(instanceId))
-                {
-                    gamePackages.Remove(instanceId);
+                    results.Add(items[i]);
                 }
-                runtimePackageRuntimes.Remove(removeRuntimePackage.key);
             }
+            return results;
         }
-        private void CreatRuntimePackage(CreatRuntimePackage creatRuntimePackage)
+        public void ClearItem(int itemDataId)
         {
-            GamePackage gamePackage = new GamePackage
+            if(packageItemIndexDatas.TryGetValue(itemDataId,out var indexs))
             {
-                instanceId = creatRuntimePackage.instanceId,
-                name = creatRuntimePackage.name,
-                caseCount = creatRuntimePackage.caseCount,
-                itemPackage = creatRuntimePackage.itemPackage
-            };
-            for (int i = 0; i < creatRuntimePackage.Items.Count; i++)
-            {
-                gamePackage.SetItemInPackage(creatRuntimePackage.Items[i]);
-            }
-            gamePackages.Add(creatRuntimePackage.instanceId, gamePackage);
-            runtimePackageRuntimes.Add(creatRuntimePackage.key, creatRuntimePackage.instanceId);
-        }
-
-        public int CreatGamePackage(int caseCount, string name = null, int packageInstaceId = 0)
-        {
-            nowPackageId++;
-            packageInstaceId = nowPackageId;
-            GamePackage gamePackage = new GamePackage(caseCount, name, packageInstaceId);
-            gamePackages.Add(packageInstaceId, gamePackage);
-
-            return packageInstaceId;
-        }
-        public int GetPackageCaseCount(int packageId)
-        {
-            if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
-            {
-                return gamePackage.caseCount;
-            }
-            return 0;
-        }
-        public List<Item> GetPackageItems(int packageId)
-        {
-            if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
-            {
-                return gamePackage.Items;
-            }
-            return null;
-        }
-
-        public async Task<int> SetItemInPackage(Item item, int packageId)
-        {
-            if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
-            {
-                return await gamePackage.SetItemInPackage(item);
-            }
-
-            return -1;
-        }
-
-        private void UsetItem(ItemUseAction itemUseEvent)
-        {
-            if (gamePackages.TryGetValue(itemUseEvent.packageId, out GamePackage gamePackage))
-            {
-                UsetItemAction(itemUseEvent.itemId);
-                gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
-            }
-        }
-        async void UsetItemAction(int itemId)
-        {
-            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemId.ToString());
-
-            for (int i = 0; i < itemData.useEventId.Count; i++)
-            {
-                GameActionData gameActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(itemData.useEventId[i].ToString());
-                gameActionData.Action();
-            }
-
-        }
-
-        struct GamePackage
-        {
-            public string name;
-            public int instanceId;
-            public int caseCount;
-            public bool itemPackage;
-            private List<Item> items;
-            public List<Item> Items => items;
-
-            private Dictionary<int, int> packageItemCounts;
-            private Dictionary<int, List<int>> packageItemIndexDatas;
-
-            public GamePackage(int caseCount, string name, int id)
-            {
-                instanceId = id;
-                this.name = name;
-                this.caseCount = caseCount;
-                items = new List<Item>();
-                packageItemCounts = new Dictionary<int, int>();
-                packageItemIndexDatas = new Dictionary<int, List<int>>();
-                itemPackage = false;
-            }
-
-            public async Task<int> SetItemInPackage(Item item)
-            {
-                if (caseCount < items.Count)
+                for(int i = 0; i < indexs.Count; i++)
                 {
-                    return item.count;
+                    nullItems.Enqueue(indexs[i]);
                 }
+                packageItemIndexDatas.Remove(itemDataId);
+                packageItemCounts.Remove(itemDataId);
+            }
+        }
+        public async Task<int> SetItemInPackage(Item item)
+        {
+            if (caseCount < itemCount)
+            {
+                return item.count;
+            }
 
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-                if (!string.IsNullOrEmpty(itemData.name))
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
+            if (!string.IsNullOrEmpty(itemData.name))
+            {
+                if (itemData.groupCount > 1)
                 {
-                    if (itemData.groupCount > 1)
+                    List<int> indexDatas = new List<int>();
+                    if (!packageItemIndexDatas.TryGetValue(item.dataId, out indexDatas))
                     {
-                        List<int> indexDatas = new List<int>();
-                        if (!packageItemIndexDatas.TryGetValue(item.dataId, out indexDatas))
-                        {
-                            indexDatas = new List<int>();
-                            packageItemIndexDatas.Add(item.dataId, indexDatas);
-                        }
+                        indexDatas = new List<int>();
+                        packageItemIndexDatas.Add(item.dataId, indexDatas);
+                    }
 
 
-                        int index = items.Count;
-                        if (indexDatas.Count > 0)
+                    int index =nullItems.Count!=0?nullItems.Dequeue(): items.Count;
+                    if (indexDatas.Count > 0)
+                    {
+                        index = indexDatas[indexDatas.Count - 1];
+                    }
+                    else
+                    {
+                        Item newItem = new Item
                         {
-                            index = indexDatas[indexDatas.Count - 1];
+                            instanceId = ItemManager.instance.CreatItemIntance(),
+                            dataId = itemData.id,
+                            count = 0
+                        };
+                        if (items.Count <= index)
+                        {
+                            items.Add(newItem);
                         }
                         else
                         {
-                            Item newItem = new Item
-                            {
-                                instanceId = ItemManager.instance.CreatItemIntance(),
-                                dataId = itemData.id,
-                                count = 0
-                            };
-                            items.Add(newItem);
-                            indexDatas.Add(index);
-                            packageItemCounts.Add(itemData.id, 0);
+                            items[index] = newItem;
                         }
+                        itemCount++;
+                        indexDatas.Add(index);
+                        packageItemCounts.Add(itemData.id, 0);
+                    }
 
 
-                        int inCount = item.count;
-                        int oldCount = 0;
-                        while (inCount > 0)
+                    int inCount = item.count;
+                    int oldCount = 0;
+                    while (inCount > 0)
+                    {
+                        Item setItem = items[index];
+                        int setCount = itemData.groupCount - setItem.count;
+
+                        if (inCount - setCount > 0)
                         {
-                            Item setItem = items[index];
-                            int setCount = itemData.groupCount - setItem.count;
+                            setItem.count = itemData.groupCount;
+                            items[index] = setItem;
 
-                            if (inCount - setCount > 0)
-                            {
-                                setItem.count = itemData.groupCount;
-                                items[index] = setItem;
-
-                                oldCount += setCount;
-                                packageItemCounts[itemData.id] = oldCount;
-                            }
-                            else
-                            {
-                                setItem.count = inCount;
-                                items[index] = setItem;
-
-                                oldCount += inCount;
-                                packageItemCounts[itemData.id] = oldCount;
-                                break;
-                            }
-
-                            inCount -= setCount;
-                            if (caseCount <= items.Count)
-                            {
-                                oldCount += setCount - inCount;
-                                packageItemCounts[itemData.id] = oldCount;
-                                return inCount;
-                            }
-
-                            index = items.Count;
-                            Item item1 = new Item
-                            {
-                                instanceId = ItemManager.instance.CreatItemIntance(),
-                                dataId = itemData.id,
-                                count = 0
-                            };
-                            items.Add(item1);
-                            indexDatas.Add(index);
+                            oldCount += setCount;
+                            packageItemCounts[itemData.id] = oldCount;
                         }
-                        packageItemIndexDatas[itemData.id] = indexDatas;
+                        else
+                        {
+                            setItem.count = inCount;
+                            items[index] = setItem;
+
+                            oldCount += inCount;
+                            packageItemCounts[itemData.id] = oldCount;
+                            break;
+                        }
+
+                        inCount -= setCount;
+                        if (caseCount <= items.Count)
+                        {
+                            oldCount += setCount - inCount;
+                            packageItemCounts[itemData.id] = oldCount;
+                            return inCount;
+                        }
+
+                        index = itemData.groupCount - setItem.count;
+                        Item item1 = new Item
+                        {
+                            instanceId = ItemManager.instance.CreatItemIntance(),
+                            dataId = itemData.id,
+                            count = 0
+                        };
+
+                        if (items.Count <= index)
+                        {
+                            items.Add(item1);
+                        }
+                        else
+                        {
+                            items[index] = item1;
+                        }
+                        itemCount++; 
+                        indexDatas.Add(index);
+                    }
+                    packageItemIndexDatas[itemData.id] = indexDatas;
+                }
+                else
+                {
+                    if (nullItems.Count > 0)
+                    {
+                        items[nullItems.Dequeue()] = item;
                     }
                     else
                     {
                         items.Add(item);
                     }
+                    itemCount++;
                 }
-
-                return 0;
             }
-            public bool GetItemOutPackage(int itemDataId, int count)
+
+            return 0;
+        }
+        public bool GetItemOutPackage(int itemDataId, int count)
+        {
+            if (packageItemCounts.TryGetValue(itemDataId, out int itemCount))
             {
-                if (packageItemCounts.TryGetValue(itemDataId, out int itemCount))
+                if (itemCount >= count)
                 {
-                    if (itemCount >= count)
+                    packageItemCounts[itemDataId] = itemCount - count;
+                    List<int> indexDatas = packageItemIndexDatas[itemDataId];
+                    int index = indexDatas.Count - 1;
+
+                    while (count > 0)
                     {
-                        packageItemCounts[itemDataId] = itemCount - count;
-                        List<int> indexDatas = packageItemIndexDatas[itemDataId];
-                        int index = indexDatas.Count - 1;
-
-                        while (count > 0)
+                        Item nowItem = items[indexDatas[index]];
+                        if (nowItem.count > count)
                         {
-                            Item nowItem = items[indexDatas[index]];
-                            if (nowItem.count > count)
-                            {
-                                nowItem.count -= count;
-                                items[indexDatas[index]] = nowItem;
-                                count = 0;
-                            }
-                            else
-                            {
-                                count -= nowItem.count;
-                                ItemManager.instance.DeleteItem(nowItem.instanceId);
-                                items.RemoveAt(indexDatas[index]);
-
-                                indexDatas.RemoveAt(index);
-                                index--;
-                            }
+                            nowItem.count -= count;
+                            items[indexDatas[index]] = nowItem;
+                            count = 0;
                         }
-
-                        return true;
+                        else
+                        {
+                            count -= nowItem.count;
+                            ItemManager.instance.DeleteItem(nowItem.instanceId);
+                            nullItems.Enqueue(indexDatas[index]);
+                            itemCount--;
+                            indexDatas.RemoveAt(index);
+                            index--;
+                        }
                     }
-                }
 
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsHaveItem(int itemDataId)
+        {
+            return packageItemCounts.ContainsKey(itemDataId);
+        }
+
+        public async Task<bool> CheckPackageTryItemIn(int itemDataId, int count)
+        {
+            if (caseCount < itemCount)
+            {
                 return false;
             }
 
-            public bool IsHaveItem(int itemDataId)
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemDataId.ToString());
+            if (!string.IsNullOrEmpty(itemData.name))
             {
-                return packageItemCounts.ContainsKey(itemDataId);
-            }
-
-            public int GetItemCount(int itemDataId)
-            {
-                if (packageItemCounts.TryGetValue(itemDataId, out int itemCount))
+                if (itemData.groupCount > 1)
                 {
-                    return itemCount;
+                    int totalNull = 0;
+                    if (packageItemIndexDatas.TryGetValue(itemDataId, out List<int> indexDatas))
+                    {
+                        for(int i = 0; i < indexDatas.Count; i++)
+                        {
+                            int index = indexDatas[i];
+                            totalNull += itemData.groupCount-items[index].count;
+                        }
+                    }
+                    int nullCase = caseCount - itemCount;
+                    return totalNull + nullCase * itemData.groupCount >= count;
                 }
-                return 0;
+                else
+                {
+                    return caseCount-itemCount>= count;
+                }
             }
+            return false;
+        }
+        public int GetItemCount(int itemDataId)
+        {
+            if (packageItemCounts.TryGetValue(itemDataId, out int itemCount))
+            {
+                return itemCount;
+            }
+            return 0;
         }
     }
 }

@@ -9,7 +9,7 @@ public class DeskAction : MonoBehaviour
     public Item item;
     public SpriteRenderer ItemSpriteRenderer;
     public Text ItemCountText;
-    public Package GoldPackage;
+    public int GoldPackage;
     public GameObject WarehouseObj;
 
     public GameObject DeskItemInformationObj;
@@ -29,7 +29,7 @@ public class DeskAction : MonoBehaviour
     {
       
         AudioController.instance.PlayAudio(SE.click);
-        if (item == null||item.ItemId==0)
+        if (item.instanceId==0)
         {
             WarehouseObj.SetActive(true);
             WarehouseObj.GetComponentInChildren<WarehouseAction>().deskAction = this;
@@ -49,16 +49,16 @@ public class DeskAction : MonoBehaviour
     {
         GameComponentData.gameData.shopGoldDeskAction.ClickAddDesk();
     }
-    public void SellItem()
+    public async void SellItem()
     {
-        if (item != null&&item.ItemId!=0)
+        if (item.instanceId!=0)
         {
-            ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
            // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
             AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
                 (int) (itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f);
-            string infomation = "*1 " + itemData.Name+LanguageManage.SwitchStr("出售");
+            string infomation = "*1 " + itemData.name+LanguageManage.SwitchStr("出售");
             InformationController.instance.AddInformation(infomation);
             if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
             {
@@ -100,23 +100,23 @@ public class DeskAction : MonoBehaviour
             }
             if (item.count <= 0)
             {
-                InitDeskData(null,null);
+                InitDeskData(default(Item), int.MinValue);
             }
 
         }
         
         
     }
-    public void SellItem(int count)
+    public async void SellItem(int count)
     {
-        if (item != null && item.ItemId != 0)
+        if (item.instanceId != 0)
         {
-            ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
             // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
             AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
                 (int)(itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f) * count;
-            string infomation = "*"+count+ itemData.Name + LanguageManage.SwitchStr("出售");
+            string infomation = "*"+count+ itemData.name + LanguageManage.SwitchStr("出售");
             InformationController.instance.AddInformation(infomation);
             if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
             {
@@ -160,7 +160,7 @@ public class DeskAction : MonoBehaviour
             }
             if (item.count <= 0)
             {
-                InitDeskData(null, null);
+                InitDeskData(default(Item), int.MinValue);
             }
 
            
@@ -169,15 +169,12 @@ public class DeskAction : MonoBehaviour
 
     }
 
-    public void InitDeskData(Item _item,Package _package)
+    public void InitDeskData(Item _item,int _package)
     {
-        if (_package != null)
-        {
-            GoldPackage = _package;
-        }
-        
+        GoldPackage = _package;
+
         item = _item;
-        if (item != null)
+        if (item.instanceId != 0)
         {
             ItemSpriteRenderer.enabled = true;
             ItemCountText.enabled = true;
@@ -196,7 +193,7 @@ public class DeskAction : MonoBehaviour
     {
      
         item = _item;
-        if (item != null)
+        if (item.instanceId != 0)
         {
             ItemSpriteRenderer.enabled = true;
             ItemCountText.enabled = true;
@@ -210,8 +207,5 @@ public class DeskAction : MonoBehaviour
         }
 
     }
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    
 }

@@ -196,7 +196,7 @@ public struct CreatRuntimePackage: GameAction
     public Vector2Int key;
     public int instanceId;
     public int caseCount;
-    public List<NewGame.Item> Items;
+    public List<Item> Items;
     public bool itemPackage;
     public void Init(List<Parameter> parameters)
     {

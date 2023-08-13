@@ -255,7 +255,9 @@ public class Monster : MyGameObject
             int value = Random.Range(0, 10000);
             if (value <= monsterDataRewardItem.Weights)
             {
-                Item item = new Item(monsterDataRewardItem.itemID, Random.Range(monsterDataRewardItem.count0, monsterDataRewardItem.count1));
+                int count = Random.Range(monsterDataRewardItem.count0, monsterDataRewardItem.count1);
+
+                Item item =ItemManager.instance.CreatItem( monsterDataRewardItem.itemID, count);
                 items.Add(item);
             }
         }
@@ -2098,7 +2100,7 @@ public class BattleMapAction : MonoBehaviour
                 {
                     for (int i = 0; i < rewardItem.count; i++)
                     {
-                        Item item = new Item(rewardItem.ItemId, 1);
+                        Item item =ItemManager.instance.CreatItem(rewardItem.dataId, 1);
                         flyItems.Add(item);
                     }
                 }
@@ -2458,7 +2460,7 @@ public class BattleMapAction : MonoBehaviour
                     {
                         for (int i = 0; i < rewardItem.count; i++)
                         {
-                            Item item = new Item(rewardItem.ItemId, 1);
+                            Item item = ItemManager.instance.CreatItem(rewardItem.dataId, 1);
                             flyItems.Add(item);
                         }
                     }
@@ -2627,7 +2629,7 @@ public class BattleMapAction : MonoBehaviour
 
     }
     //怪物死亡
-    public void MonsterDeadAction()
+    public async void MonsterDeadAction()
     {
 
         GameComponentData.gameData.charactorTitleAction.AddKillCount();
@@ -2654,11 +2656,9 @@ public class BattleMapAction : MonoBehaviour
                 List<Item> rewardItem1 = new List<Item>();
                 foreach (var rewardItem in rewardItems)
                 {
-                    int spare = gamePlayer.package.SetItemInPackage(rewardItem);
-                    Item itemX = new Item(rewardItem)
-                    {
-                        count = rewardItem.count - spare
-                    };
+                    int spare =await PackageManager.instance.SetItemInPackage(rewardItem, 0); 
+                    Item itemX = ItemManager.instance.CreatItem(rewardItem.dataId, rewardItem.count - spare);
+                     
                     rewardItem1.Add(itemX);
                     if (spare > 0)
                     {
@@ -2668,9 +2668,13 @@ public class BattleMapAction : MonoBehaviour
                 }
                 foreach (var rewardItem in rewardItem1)
                 {
-                    if (Resultitems.Exists(i => i.ItemId == rewardItem.ItemId))
+                    int index = Resultitems.FindIndex(i => i.dataId == rewardItem.dataId);
+
+                    if (index>=0)
                     {
-                        Resultitems.Find(i => i.ItemId == rewardItem.ItemId).count += rewardItem.count;
+                        var item= Resultitems[index];
+                        item.count += rewardItem.count;
+                        Resultitems[index] = item;
                     }
                     else
                     {
@@ -2683,11 +2687,11 @@ public class BattleMapAction : MonoBehaviour
                 rewardStr += LanguageManage.SwitchStr(",获得金币x") + moneyValue;
                 foreach (var rewardItem in rewardItems)
                 {
-                    ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(rewardItem.ItemId);
-                    rewardStr += "," + itemData.Name + "x" + rewardItem.count;
+                    ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(rewardItem.dataId);
+                    rewardStr += "," + itemData.name + "x" + rewardItem.count;
 
                     InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得")
-                                                                                 + itemData.Name + "x" + rewardItem.count);
+                                                                                 + itemData.name + "x" + rewardItem.count);
                 }
                 if (isFull)
                 {
@@ -3640,7 +3644,7 @@ public class BattleMapAction : MonoBehaviour
         if (_displayType == DisplayType.Battling)
         {
             //GameComponentData.gameData.fightPanelAction.Fightfunction1.SetActive(false);
-            if (selectItem.Id == 1501)
+            if (selectItem.id == 1501)
             {
                 
                 ReBron();
@@ -3688,13 +3692,13 @@ public class BattleMapAction : MonoBehaviour
             else
             {
                 GameComponentData.gameData.warehouseObj.SetActive(false);
-                if (selectItem.GetProperty().HP == -1)
+                if (selectItem.property.HP == -1)
                 {
                     hp = 100000;
                 }
                 else
                 {
-                    hp = selectItem.GetProperty().HP;
+                    hp = selectItem.property.HP;
                 }
                 AddHp();
             }
@@ -3703,7 +3707,7 @@ public class BattleMapAction : MonoBehaviour
         }
         else if (_displayType == DisplayType.AfterBattle)
         {
-            if (selectItem.Id == 1501)
+            if (selectItem.id == 1501)
             {
                 
                 ReBron();
@@ -3737,13 +3741,13 @@ public class BattleMapAction : MonoBehaviour
             }
             else 
             {
-                if (selectItem.GetProperty().HP == -1)
+                if (selectItem.property.HP == -1)
                 {
                     hp = 100000;
                 }
                 else
                 {
-                    hp = selectItem.GetProperty().HP;
+                    hp = selectItem.property.HP;
                 }
                 AddHp();
             }

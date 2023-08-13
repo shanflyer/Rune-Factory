@@ -10,7 +10,7 @@ public static class PlayerDate
     public static Gender gender;
     public static Season season;
     public static int date;
-    public static Package package,BoxPackage,IcePackage;
+    public static GamePackage package,BoxPackage,IcePackage;
     public static int weapon, clothes;
     public static bool isMarried;
     public static bool isMarriedFood, isAnMo;
@@ -170,7 +170,7 @@ public  class GamePlayer
     public string name;
     public int level;
     public int packageZeroCout, boxZeroCount, iceboxZeroCount;
-    public Package package,box,icebox;
+    public int package=0,box=1,icebox=2;
     public int money,money1;
     [HideInInspector]
     public string ObjName;
@@ -208,7 +208,7 @@ public  class GamePlayer
             oldLevel2 = TeamPlayer1.level;
         }
     }
-    public void InitGamePlayer()
+    public async void InitGamePlayer()
     {
         id = 8 * 1000;
         if (PlayerDate.level != 0)
@@ -232,22 +232,24 @@ public  class GamePlayer
         attributeType=AttributeType.无;
         if (PlayerDate.weapon == 0)
         {
-            weapon = null;
+            weapon = default(Item);
 
         }
         else
         {
-            weapon=new Item(PlayerDate.weapon,1);
-            property += GameComponentData.gameData.itemsManager.GetItemDataFromId(weapon.ItemId).GetProperty();
+            weapon=ItemManager.instance.CreatItem(PlayerDate.weapon,1);
+            var data = await GameDataManager.instance.GetAsyncObjectData<ItemData>(weapon.dataId.ToString()); 
+            property += data.property;
         }
         if (PlayerDate.clothes == 0)
         {
-            clothes = null;
+            clothes = default(Item);
         }
         else
         {
-            clothes=new Item(PlayerDate.clothes,1);
-            property += GameComponentData.gameData.itemsManager.GetItemDataFromId(clothes.ItemId).GetProperty();
+            clothes=ItemManager.instance.CreatItem(PlayerDate.clothes,1);
+            var data = await GameDataManager.instance.GetAsyncObjectData<ItemData>(clothes.dataId.ToString());
+            property += data.property;
         }
         if (gender == Gender.female)
         {
@@ -282,14 +284,12 @@ public  class GamePlayer
         }
 
         if (PlayerDate.weapon != 0)
-        {
-            ItemData weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(PlayerDate.weapon);
-            weapon=new Item(weaponData,1);
+        { 
+            weapon= ItemManager.instance.CreatItem(PlayerDate.weapon, 1);
         }
         if (PlayerDate.clothes != 0)
-        {
-            ItemData clothesData = GameComponentData.gameData.itemsManager.GetItemDataFromId(PlayerDate.clothes);
-            clothes = new Item(clothesData, 1);
+        { 
+            clothes = ItemManager.instance.CreatItem(PlayerDate.clothes, 1);
         }
 
         

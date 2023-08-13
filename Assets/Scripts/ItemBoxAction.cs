@@ -13,7 +13,7 @@ public class ItemBoxAction : MonoBehaviour
     [HideInInspector]
     public Item item;
     [HideInInspector]
-    public Package package;
+    public int package;
 
     public bool isEnough;
     [HideInInspector] public bool isFull,isMatch;
@@ -60,9 +60,9 @@ public class ItemBoxAction : MonoBehaviour
     }
     public void DisPlayFormulaItem()
     {
-        if (item!=null&&item.ItemId != 0)
+        if (item.instanceId != 0)
         {
-            InitItemData(item.ItemId);
+            InitItemData(item.dataId);
             count.enabled = false;
             GetComponentInChildren<Toggle>().enabled = true;
             mask.enabled = true;
@@ -79,12 +79,12 @@ public class ItemBoxAction : MonoBehaviour
         icon.color=Color.white;
        
     }
-    public void InitItemData(Item _item,DeskAction _deskAction)
+    public async void InitItemData(Item _item,DeskAction _deskAction)
     {
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_item.ItemId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_item.dataId.ToString());
         mask.gameObject.SetActive(false);
         item = _item;
-        icon.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(itemData.Icon);
+        icon.sprite =itemData.iconSprite;
         icon.color=Color.white;
         icon.enabled = true;
         //icon.SetNativeSize();
@@ -92,26 +92,26 @@ public class ItemBoxAction : MonoBehaviour
         count.enabled = true;
         deskAction = _deskAction;
     }
-    public void InitItemData(Item _item)
+    public async void InitItemData(Item _item)
     {
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_item.ItemId);
-        item =new Item(_item);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_item.dataId.ToString());
+        item = _item;
        
         
         GetComponentInChildren<Toggle>().enabled = true;
-        icon.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(itemData.Icon);
+        icon.sprite = itemData.iconSprite;
         //icon.SetNativeSize();
         count.text = item.count.ToString();
         icon.enabled = true;
         count.enabled = true;
         icon.color = new Color(1, 1, 1, 1);
     }
-    public void InitItemData(int  _itemid)
+    public async void InitItemData(int  _itemid)
     {
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_itemid);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_itemid.ToString()); ;
         GetComponentInChildren<Toggle>().enabled = true;
-        item = new Item(itemData,1);
-        icon.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(itemData.Icon);
+        item = ItemManager.instance.CreatItem(_itemid, 1);
+        icon.sprite = itemData.iconSprite;
         //icon.SetNativeSize();
         count.enabled=false;
         icon.enabled = true;

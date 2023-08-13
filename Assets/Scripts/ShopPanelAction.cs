@@ -24,10 +24,10 @@ public class ShopPanelAction : MonoBehaviour
     public Dropdown PastureDropdown;
     public Image NpcImage;
     private Shop shop;
-    private Package package;
+    private int package;
     private ItemData selectItemData;
     private int SelectCount,totalPrice;
-    private Package playerPackage;
+    private int playerPackage;
     private Pasture pasture;
     private AnimalData animalData;
     private List<int> pastureIds;
@@ -47,7 +47,7 @@ public class ShopPanelAction : MonoBehaviour
                 {
                     shopItem.IsOpen = true;
                     
-                    shop.packages[1].SetItemXInPackage(shopItem.ItemId);
+                   // shop.packages[1].SetItemXInPackage(shopItem.ItemId);
                 }
                
             }
@@ -72,7 +72,7 @@ public class ShopPanelAction : MonoBehaviour
         ZeroSelectItem();
 
     }
-    public void Add()
+    public async void Add()
     {
         AudioController.instance.PlayAudio(SE.click);
         SelectCount++;
@@ -95,16 +95,7 @@ public class ShopPanelAction : MonoBehaviour
         }
         else
         {
-            List<Item> items =
-                playerPackage.items.FindAll(i => i.ItemId / 1000 == selectItemData.Id);
-            int needCount = 0;
-            foreach (var item in items)
-            {
-                needCount += item.groupNum - item.count;
-            }
-            int count0 = SelectCount - needCount;
-            int caseCount = Mathf.CeilToInt(count0 / (float)(selectItemData.groupNum));
-            if (playerPackage.CaseCount >= (playerPackage.items.Count + caseCount))
+            if (await PackageManager.instance.CheckPackageTryItemIn(package,selectItemData.id,SelectCount))
             {
 
                 ReduceButton.interactable = true;
@@ -130,19 +121,19 @@ public class ShopPanelAction : MonoBehaviour
         if (selectItemData.typeValue == 8)
         {
             GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("购买动物"), totalPrice, LanguageManage.SwitchStr("购买")
-                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.Name + " ?", CostType.购买道具
+                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.name + " ?", CostType.购买道具
                 ,selectItemData.shopMoneyType);
         }
         if (selectItemData.typeValue == 9)
         {
             GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("购买设施"), totalPrice, LanguageManage.SwitchStr("购买") 
-                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.Name + " ?", CostType.购买设施
+                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.name + " ?", CostType.购买设施
                 , selectItemData.shopMoneyType);
         }
         else
         {
             GameComponentData.gameData.gameManager.InitCostData(LanguageManage.SwitchStr("购买道具"), totalPrice,LanguageManage.SwitchStr("购买")
-                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.Name + " ?", CostType.购买道具
+                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.name + " ?", CostType.购买道具
                 , selectItemData.shopMoneyType);
         }
        
@@ -153,13 +144,13 @@ public class ShopPanelAction : MonoBehaviour
         if (selectItemData.shopMoneyType == ShopMoneyType.金币)
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("*消耗金币")
-                + totalPrice + LanguageManage.SwitchStr(",购买了") + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.Name);
+                + totalPrice + LanguageManage.SwitchStr(",购买了") + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.name);
         }
         else
         {
             InformationController.instance.AddInformation(
                 LanguageManage.SwitchStr("*消耗红晶") + totalPrice + LanguageManage.SwitchStr(",购买了") 
-                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.Name);
+                + SelectCount + LanguageManage.SwitchStr("个 ") + selectItemData.name);
         }
         
         if (selectItemData.typeValue == 8)
@@ -171,7 +162,7 @@ public class ShopPanelAction : MonoBehaviour
         {
            
             Euqipment euqipment =
-                GameComponentData.gameData.equipmentManager.Euqipments.Find(e => e.shopItem== selectItemData.Id);
+                GameComponentData.gameData.equipmentManager.Euqipments.Find(e => e.shopItem== selectItemData.id);
             if (euqipment.id == 1265)
             {
                 DataSaveAndLoadTest.gameSaveData.marryData.SaveBabyBedTime();
@@ -184,8 +175,13 @@ public class ShopPanelAction : MonoBehaviour
         }
         else
         {
-            Item item = new Item(selectItemData, SelectCount);
-            playerPackage.SetItemInPackageFormShop(item);
+            AddPackageItem addPackageItem = new AddPackageItem
+            {
+                packageId = package,
+                itemDataId = selectItemData.id,
+                itemCount = SelectCount
+            };
+            GameActionManager.instance.QueueAction(addPackageItem,true); 
         }
         
         foreach (Transform child in ItemParent)
@@ -226,23 +222,26 @@ public class ShopPanelAction : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SelectPackage(string packageName)
+    public async void SelectPackage(int packageId)
     {
         foreach (Transform child in ItemParent)
         {
             Destroy(child.gameObject);
         }
-        package = shop.packages.Find(p => p.name == packageName);
-        foreach (var packageItem in package.items)
+        package = packageId;
+
+        var items = PackageManager.instance.GetPackageItems(packageId);
+        for(int i = 0; i < items.Count; i++)
         {
-            ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(packageItem.ItemId);
+            var item = items[i];
+            ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
             GameObject shopItemObj = Instantiate(ShopItemPro);
             shopItemObj.transform.SetParent(ItemParent);
-            shopItemObj.GetComponent<ShopItemAction>().InitData(itemData,this);
+            shopItemObj.GetComponent<ShopItemAction>().InitData(itemData, this);
             shopItemObj.GetComponentInChildren<Toggle>().group = ItemParent.GetComponent<ToggleGroup>();
-            shopItemObj.transform.localScale=Vector3.one;
+            shopItemObj.transform.localScale = Vector3.one;
         }
-       
+         
     }
 
     public void DropValueChange(Dropdown dropdown)
@@ -279,10 +278,10 @@ public class ShopPanelAction : MonoBehaviour
         if (selectItemData.Type==ItemType.消耗物品&&selectItemData.typeValue == 8)
         {
             pastureSelectObj.SetActive(true);
-            animalData = GameComponentData.gameData.pastureAction.AnimalDatas.Find(a => a.shopItem == _itemData.Id);
+            animalData = GameComponentData.gameData.pastureAction.AnimalDatas.Find(a => a.shopItem == _itemData.id);
             ItemData fruit = GameComponentData.gameData.itemsManager.GetItemDataFromId(animalData.produceItem);
             ItemSeasonText.text = LanguageManage.SwitchStr("占用空间:")+animalData.caseCount;
-            ItemInformationGrowText.text = LanguageManage.SwitchStr("产出物:") + fruit.Name + LanguageManage.SwitchStr("天")+ LanguageManage.SwitchStr("产出间隔:")
+            ItemInformationGrowText.text = LanguageManage.SwitchStr("产出物:") + fruit.name + LanguageManage.SwitchStr("天")+ LanguageManage.SwitchStr("产出间隔:")
                 +animalData.produceCD;
             ItemInformationPriceText.text = LanguageManage.SwitchStr("动物单价:") + selectItemData.ShopPrice + "G,"+ LanguageManage.SwitchStr("作物单价:") + fruit.SellPrice + "G";
 
@@ -302,9 +301,10 @@ public class ShopPanelAction : MonoBehaviour
         else
         {
             pastureSelectObj.SetActive(false);
+            int haveCount = PackageManager.instance.GetPackageItemCount(0, selectItemData.id);
             if (_itemData.Type==ItemType.种子)
             {
-                PlantBaseData plant = GameComponentData.gameData.plantAction.PlantBaseDatas.Find(p => p.SeedId == _itemData.Id);
+                PlantBaseData plant = GameComponentData.gameData.plantAction.PlantBaseDatas.Find(p => p.SeedId == _itemData.id);
                 ItemData fruit = GameComponentData.gameData.itemsManager.GetItemDataFromId(plant.fruitId);
                 ItemInformationGrowText.text = LanguageManage.SwitchStr("生长天数:") + plant.GrowthDays + LanguageManage.SwitchStr("天") + LanguageManage.SwitchStr("收获数:") + plant.fruitIdNum + LanguageManage.SwitchStr("个");
                 ItemInformationPriceText.text = LanguageManage.SwitchStr("种子单价:") + selectItemData.ShopPrice + "G"+ LanguageManage.SwitchStr("作物单价:") + fruit.SellPrice + "G";
@@ -315,17 +315,7 @@ public class ShopPanelAction : MonoBehaviour
                 }
                 ItemSeasonText.text = seasonStr;
 
-                Item item =
-                    GameComponentData.gameData.gameManager.gamePlayer.package.items.Find(i => i.ItemId / 1000 ==
-                                                                                              selectItemData.Id);
-                if (item != null && item.ItemId != 0)
-                {
-                    MyItemText.text ="("+ LanguageManage.SwitchStr("持有") + item.count + "个"+")";
-                }
-                else
-                {
-                    MyItemText.text = LanguageManage.SwitchStr("(持有0个)");
-                }
+                MyItemText.text = LanguageManage.SwitchStr($"(持有{haveCount}个)");
                 BuyItemCountText.text = "0";
                 TotalMoneyText.text = LanguageManage.SwitchStr("总计:")+"0G";
                 ReduceButton.interactable = true;
@@ -336,7 +326,7 @@ public class ShopPanelAction : MonoBehaviour
             {
                 Euqipment euqipment =
                     GameComponentData.gameData.equipmentManager.Euqipments.Find(
-                        e => e.shopItem  == selectItemData.Id);
+                        e => e.shopItem  == selectItemData.id);
                 AddButton.interactable = false;
                 ReduceButton.interactable = false;
                 BuyItemCountText.text = "1";
@@ -361,17 +351,9 @@ public class ShopPanelAction : MonoBehaviour
             }
             else
             {
-                Item item =
-                    GameComponentData.gameData.gameManager.gamePlayer.package.items.Find(i => i.ItemId / 1000 ==
-                                                                                              selectItemData.Id);
-                if (item != null && item.ItemId != 0)
-                {
-                    MyItemText.text = "("+LanguageManage.SwitchStr("持有") + item.count + LanguageManage.SwitchStr("个")+")";
-                }
-                else
-                {
-                    MyItemText.text = LanguageManage.SwitchStr("(持有0个)");
-                }
+                
+
+                MyItemText.text = LanguageManage.SwitchStr($"(持有{haveCount}个)");
                 BuyItemCountText.text = "0";
                 TotalMoneyText.text = LanguageManage.SwitchStr("总计:0G");
                 ReduceButton.interactable = true;
@@ -388,11 +370,11 @@ public class ShopPanelAction : MonoBehaviour
             
             
         }
-        ItemInformationNameText.text = selectItemData.Name;
+        ItemInformationNameText.text = selectItemData.name;
         ItemInformationText.text = selectItemData.Text2;
         
         ItemInformationImage.enabled = true;
-        ItemInformationImage.sprite = GameComponent.ItemSprites.Find(i => i.name == selectItemData.Icon);
+        ItemInformationImage.sprite = GameComponent.ItemSprites.Find(i => i.name == selectItemData.icon);
 
 
         if (selectItemData.shopMoneyType==ShopMoneyType.金币)

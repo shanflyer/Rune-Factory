@@ -23,7 +23,7 @@ public class SellSellectAction : MonoBehaviour
         item = _item;
         ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
 
-        itemImage.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(itemData.Icon);
+        itemImage.sprite = itemData.iconSprite;
         itemName.text = itemData.Name;
         inputField.text = "1";
         sellCount = 1;

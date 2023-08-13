@@ -40,7 +40,7 @@ public class Boundary
 public class ShopData
 {
     public int passId;
-    public Package shopPackage;
+    public int shopPackage;
 }
 
 public enum CareType
@@ -87,11 +87,11 @@ public class GroundItem
         Obj.transform.position=new Vector3(objPos.x,objPos.y,-1);
     }
 
-    public void SetData()
+    public async void SetData()
     {
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
         Obj.GetComponentInChildren<SpriteRenderer>().sprite =
-            GameComponent.ItemSprites.Find(i => i.name == itemData.Icon);
+            GameComponent.ItemSprites.Find(i => i.name == itemData.icon);
         Obj.GetComponentInChildren<Text>().text = item.count.ToString();
     }
 
@@ -449,9 +449,9 @@ public class GameManager : MonoBehaviour
 	            
 	            //DataSaveAndLoadTest.LoadUserData();
                 DataSaveAndLoadTest.gameSaveData.InitPlayerLoadData(gamePlayer);
-	            packageLevel = (gamePlayer.package.CaseCount - 5) / 5;
-                boxLevel= (gamePlayer.box.CaseCount - 10) / 5;
-                iceBoxLevel= (gamePlayer.icebox.CaseCount - 10) / 5;
+	            packageLevel = (PackageManager.instance.GetPackageCaseCount(0) - 5) / 5;
+                boxLevel= (PackageManager.instance.GetPackageCaseCount(1) - 10) / 5;
+                iceBoxLevel= (PackageManager.instance.GetPackageCaseCount(2) - 10) / 5;
                 
                 GameData.gameTimeManager.CreatData();
                 
@@ -474,11 +474,10 @@ public class GameManager : MonoBehaviour
                 InitZeroSceneData();
 	            gamePlayer.TeamPlayer0 = null;
 	            gamePlayer.TeamPlayer1 = null;
-                
-	          
-	            gamePlayer.package.CaseCount = gamePlayer.packageZeroCout;
-	            gamePlayer.box.CaseCount = gamePlayer.boxZeroCount;
-	            gamePlayer.icebox.CaseCount = gamePlayer.iceboxZeroCount;
+
+                PackageManager.instance.SetPackageCaseCount(0,gamePlayer.packageZeroCout);
+                PackageManager.instance.SetPackageCaseCount(1, gamePlayer.boxZeroCount);
+                PackageManager.instance.SetPackageCaseCount(2, gamePlayer.iceboxZeroCount); 
 	           
 	            GameData.gameTimeManager.InitData();
 
@@ -530,8 +529,9 @@ public class GameManager : MonoBehaviour
         headIcon.sprite = GameComponent.headIcons.Find(h => h.name == gamePlayer.IconName);
         //GameData.heritageAction.ClickheritageObjbutton();
         // GameData.NpcManager.InitData();
-        StartCoroutine("Losting");
-	}
+        float waitTime = UnityEngine.Random.Range(LostCd.x, LostCd.y);
+        GameTimerController.instance.DelayAction((int)(waitTime * 1000), Losting);
+    }
     public static void OutputRt(Texture2D rt)
     {
         string str = Application.persistentDataPath + "/001.png";
@@ -747,20 +747,14 @@ public class GameManager : MonoBehaviour
         Vector3 pos = AStarTest.CoordinateToPos(_coordinate);
         GameObject obj = Instantiate(GameData.GroundItemPro,pos,Quaternion.identity);
         GroundItem groundItem=new GroundItem(item,obj,GameData.passDataManager.nowPass,_coordinate);
-        GroundItems.Add(groundItem);
-        StopCoroutine("Losting");
-        StartCoroutine("Losting");
+        GroundItems.Add(groundItem); 
     }
     public void GreatGroundItem(Item item,Vector2Int _coordinate)
-    {
-
-        
+    { 
         Vector3 pos = AStarTest.CoordinateToPos(_coordinate);
         GameObject obj = Instantiate(GameData.GroundItemPro, pos, Quaternion.identity);
         GroundItem groundItem = new GroundItem(item, obj, GameData.passDataManager.nowPass, _coordinate);
-        GroundItems.Add(groundItem);
-        StopCoroutine("Losting");
-        StartCoroutine("Losting");
+        GroundItems.Add(groundItem); 
     }
     public void InitCostData(string Title, int _costValue, string notice,CostType _costType,ShopMoneyType _shopMoneyType)
     {
@@ -920,11 +914,11 @@ public class GameManager : MonoBehaviour
         GameData.mapEditAction.isCamreaMove = false;
         Camera.main.transform.position = new Vector3(0, 0, -10);
     }
-    public void ClickGroundItem(GameObject Obj)
+    public async void ClickGroundItem(GameObject Obj)
     {
         GroundItem groundItem = GroundItems.Find(g => g.Obj == Obj);
-        ItemData itemData = GameData.itemsManager.GetItemDataFromId(groundItem.item.ItemId);
-        int xcount = gamePlayer.package.SetItemInPackage(groundItem.item);
+        ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(groundItem.item.dataId.ToString()); 
+        int xcount =await PackageManager.instance.SetItemInPackage(groundItem.item,0);
        
         if (xcount > 0)
         {
@@ -935,10 +929,10 @@ public class GameManager : MonoBehaviour
             if (clickCount > 0)
             {
                 GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了")
-                    + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name +","+ LanguageManage.SwitchStr("地上还有")
+                    + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.name +","+ LanguageManage.SwitchStr("地上还有")
                     + xcount + LanguageManage.SwitchStr("个"));
                 
-                InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") +":" + itemData.Name);
+                InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") +":" + itemData.name);
             }
             else
             {
@@ -949,45 +943,39 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
-            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.Name);
+            InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.name);
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.name);
             Destroy(groundItem.Obj);
             GroundItems.Remove(groundItem);
         }
     }
-    
-    IEnumerator Losting()
+    async void Losting()
     {
-        while (true)
+        
+        if (GroundItems.Count > 0)
         {
-            float waitTime = UnityEngine.Random.Range(LostCd.x, LostCd.y);
-            yield return new WaitForSeconds(waitTime);
-            if (GroundItems.Count > 0)
+            int index = UnityEngine.Random.Range(0, groundItems.Count - 1);
+            GroundItem groundItem = GroundItems[index];
+            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(groundItem.item.dataId.ToString());  
+            int lostcount = UnityEngine.Random.Range(1, groundItem.item.count);
+            int count = groundItem.item.count - lostcount;
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*地底哥布林偷走了掉在地上的") + lostcount + LanguageManage.SwitchStr("个") + itemData.name);
+            if (count > 0)
             {
-                int index = UnityEngine.Random.Range(0, groundItems.Count - 1);
-                GroundItem groundItem = GroundItems[index];
-                ItemData itemData = GameData.itemsManager.GetItemDataFromId(groundItem.item.ItemId);
-                int lostcount = UnityEngine.Random.Range(1, groundItem.item.count);
-                int count = groundItem.item.count - lostcount;
-                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*地底哥布林偷走了掉在地上的") + lostcount + LanguageManage.SwitchStr("个") + itemData.Name);
-                if (count > 0)
-                {
-                    groundItem.ChangeCount(count);
+                groundItem.ChangeCount(count);
 
-                }
-                else
-                {
-                    Destroy(groundItem.Obj);
-                    GroundItems.Remove(groundItem);
+            }
+            else
+            {
+                Destroy(groundItem.Obj);
+                GroundItems.Remove(groundItem);
 
-                }
             }
         }
-        
-        
-
+        float waitTime = UnityEngine.Random.Range(LostCd.x, LostCd.y);
+        GameTimerController.instance.DelayAction((int)(waitTime * 1000), Losting);
     }
-
+     
     public void ClickSaveButton()
     {
         SaveDataPanel.SetActive(true);
@@ -1775,23 +1763,24 @@ public class GameManager : MonoBehaviour
     {
         switch (packageType)
         {
-                case PackageType.背包:
-                    packageCount = gamePlayer.packageZeroCout + packageLevel * pakageAddData.caseAdd;
-                    gamePlayer.package.CaseCount = packageCount;
-                    packageLevel++;
-                    GameComponentData.gameData.warehouseAction.AddNullCase(packageType);
+            case PackageType.背包:
+                packageCount = gamePlayer.packageZeroCout + packageLevel * pakageAddData.caseAdd;
+                PackageManager.instance.SetPackageCaseCount(0, packageCount);
+
+                packageLevel++;
+                GameComponentData.gameData.warehouseAction.AddNullCase(packageType);
                 break;
-                case PackageType.杂物箱:
-                    boxCount = gamePlayer.boxZeroCount + boxLevel * boxAddData.caseAdd;
-                    gamePlayer.box.CaseCount = boxCount;
-                    boxLevel++;
-                    GameComponentData.gameData.warehouseAction.AddNullCase(packageType);
+            case PackageType.杂物箱:
+                boxCount = gamePlayer.boxZeroCount + boxLevel * boxAddData.caseAdd;
+                PackageManager.instance.SetPackageCaseCount(1, boxCount);
+                boxLevel++;
+                GameComponentData.gameData.warehouseAction.AddNullCase(packageType);
                 break;
-                case PackageType.冰箱:
-                    iceBoxCount = gamePlayer.iceboxZeroCount + iceBoxLevel * iceBoxAddData.caseAdd;
-                    gamePlayer.icebox.CaseCount = iceBoxCount;
-                    iceBoxLevel++;
-                    GameComponentData.gameData.warehouseAction.AddNullCase(packageType);
+            case PackageType.冰箱:
+                iceBoxCount = gamePlayer.iceboxZeroCount + iceBoxLevel * iceBoxAddData.caseAdd;
+                PackageManager.instance.SetPackageCaseCount(2, iceBoxCount);
+                iceBoxLevel++;
+                GameComponentData.gameData.warehouseAction.AddNullCase(packageType);
                 break;
         }
     }

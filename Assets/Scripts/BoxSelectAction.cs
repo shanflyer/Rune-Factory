@@ -6,7 +6,7 @@ public class BoxSelectAction : MonoBehaviour
 {
     private PackageType PackageType;
 
-    private Package selectedPackage;
+    private int selectedPackage;
 	// Use this for initialization
 	void Start () {
 		

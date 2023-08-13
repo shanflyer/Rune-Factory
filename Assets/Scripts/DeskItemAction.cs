@@ -17,16 +17,14 @@ public class DeskItemAction : MonoBehaviour
     public GameObject WarehouseObj;
     [HideInInspector]
     public Item item;
-    [HideInInspector] public DeskAction deskAction;
-    private Package playerPackage;
+    [HideInInspector] public DeskAction deskAction; 
     private List<Item> packageItem;
     private string PriceTitle,CountTitle;
 	// Use this for initialization
 	void Start ()
 	{
 	    XiajiaText.text = LanguageManage.SwitchStr(XiajiaText.text);
-	    GenghuanText.text = LanguageManage.SwitchStr(GenghuanText.text);
-	    playerPackage = GameComponentData.gameData.gameManager.gamePlayer.package;
+	    GenghuanText.text = LanguageManage.SwitchStr(GenghuanText.text); 
     }
 
     public void ClickReturnButton()
@@ -45,27 +43,24 @@ public class DeskItemAction : MonoBehaviour
         }
         if (count <= 0)
         {
-            item = null;
+            item = default(Item);
             gameObject.SetActive(false);
         }
     }
-    public void InitDeskItemData(Item _item,DeskAction _deskAction)
+    public async void InitDeskItemData(Item _item,DeskAction _deskAction)
     {
         PriceTitle = LanguageManage.SwitchStr("单价:");
         CountTitle = LanguageManage.SwitchStr("上架数量:");
         item = _item;
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_item.ItemId);
-        ItemImage.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(itemData.Icon);
-        ItemName.text = itemData.Name;
+        ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(_item.dataId.ToString());
+        ItemImage.sprite = itemData.iconSprite;
+        ItemName.text = itemData.name;
         ItemPrice.text = PriceTitle+itemData.SellPrice+"G";
         CountTitleText.text = CountTitle;
         ItemCountText.text =_item.count.ToString();
-        deskAction = _deskAction;
-        playerPackage = GameComponentData.gameData.gameManager.gamePlayer.package;
-
-
-        packageItem = playerPackage.items.FindAll(i => i.ItemId/1000 == item.ItemId/1000);
-        if (packageItem.Count>0)
+        deskAction = _deskAction; 
+         
+        if (PackageManager.instance.IsHaveItem(0, item.dataId))
         {
             AddButton.interactable = true;
             MaxButton.interactable = true;
@@ -81,9 +76,14 @@ public class DeskItemAction : MonoBehaviour
     public void AddItemCount()
     {
         AudioController.instance.PlayAudio(SE.click);
-        playerPackage.GetItemOutPackage(item.ItemId,1);
-        packageItem = playerPackage.items.FindAll(i => i.ItemId / 1000 == item.ItemId / 1000);
-        if (packageItem.Count > 0)
+        RemovePackageItem removePackageItem = new RemovePackageItem
+        {
+            itemCount = 1,
+            itemDataId = item.dataId,
+            packageId = 0
+        };
+        GameActionManager.instance.QueueAction(removePackageItem,true); 
+        if (PackageManager.instance.IsHaveItem(0, item.dataId))
         {
             AddButton.interactable = false;
             MaxButton.interactable = false;
@@ -97,12 +97,8 @@ public class DeskItemAction : MonoBehaviour
     public void MaxAction()
     {
         AudioController.instance.PlayAudio(SE.click);
-        packageItem = playerPackage.items.FindAll(i => i.ItemId / 1000 == item.ItemId / 1000);
-        int count = 0;
-        foreach (var item1 in packageItem)
-        {
-            count += item1.count;
-        }
+        int count = PackageManager.instance.GetPackageItemCount(0, item.dataId);
+         
         item.count += count;
         ItemCountText.text = item.count.ToString();
         deskAction.ItemCountText.text= item.count.ToString();

@@ -43,8 +43,7 @@ public class GameComponent : MonoBehaviour
     public GameManager gameManager;
     public FilmManager filmManager;
     public GameTimeManager gameTimeManager;
-    public FestivalManager festivalManager;
-    public ItemsManager itemsManager;
+    public FestivalManager festivalManager; 
     public WarehouseAction warehouseAction;
     public GameObject warehouseObj;
     public GameObject boxSelectFunctionObj;

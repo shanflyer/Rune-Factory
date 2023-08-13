@@ -55,8 +55,7 @@ public class WarehouseAction : MonoBehaviour
     public GameObject UpText, DownText;
     public Button sellButton;
     public Text BoxNameText, BoxCountText;
-    private Package playerPackage;
-    private Package outPackage;
+    private int outPackage, playerPackage;
     private DisplayType displayType;
     [HideInInspector] public List<WareDisplayType> wareDisplayTypes;
 
@@ -96,7 +95,7 @@ public class WarehouseAction : MonoBehaviour
                 break;
             case PackageType.背包:
                 playerPackage = GameComponentData.gameData.gameManager.gamePlayer.package;
-                outPackage = null;
+                outPackage = int.MinValue;
                 BoxNameText.text = "";
                 BoxCountText.text = "";
                 break;
@@ -136,7 +135,7 @@ public class WarehouseAction : MonoBehaviour
                 break;
             case PackageType.背包:
                 playerPackage = GameComponentData.gameData.gameManager.gamePlayer.package;
-                outPackage = null;
+                outPackage = int.MinValue;
                 BoxNameText.text = "";
                 BoxCountText.text = "";
                 break;
@@ -155,10 +154,17 @@ public class WarehouseAction : MonoBehaviour
         }
         DisplayWarehouseItems(PackageType, wareDisplayTypes);
     }
-    void DisplayWarehouseItems(PackageType _PackageType, List<WareDisplayType> _wareDisplayTypes)
-    {
-        
+    async void DisplayWarehouseItems(PackageType _PackageType, List<WareDisplayType> _wareDisplayTypes)
+    { 
         wareDisplayTypes = _wareDisplayTypes;
+
+        int outCaseCount = PackageManager.instance.GetPackageCaseCount(outPackage);
+        List<Item> outItems = PackageManager.instance.GetPackageItems(outPackage);
+        int outItemCount = outItems.Count;
+
+        int playerCaseCount = PackageManager.instance.GetPackageCaseCount(playerPackage);
+        List<Item> playerItems = PackageManager.instance.GetPackageItems(playerPackage);
+       int playerItemCount = playerItems.Count;
 
         List<Item> dispayItems = new List<Item>();
         switch (displayType)
@@ -169,7 +175,7 @@ public class WarehouseAction : MonoBehaviour
                 DownText.SetActive(false);
                 TitleText.text = LanguageManage.SwitchStr("背包");
                 BoxNameText.text = LanguageManage.SwitchStr(PackageType.ToString());
-                BoxCountText.text = "(" + outPackage.items.Count + "/" + outPackage.CaseCount + ")";
+                BoxCountText.text = $"({outItemCount}/{outCaseCount})";
                 SellText.text = LanguageManage.SwitchStr("放入");
                 break;
             case DisplayType.Sell:
@@ -187,7 +193,7 @@ public class WarehouseAction : MonoBehaviour
                 DownText.SetActive(false);
                 TitleText.text = LanguageManage.SwitchStr(PackageType.ToString());
                 BoxNameText.text = LanguageManage.SwitchStr("背包");
-                BoxCountText.text = "(" + playerPackage.items.Count + "/" + playerPackage.CaseCount + ")";
+                BoxCountText.text = $"({playerItemCount}/{playerCaseCount})";
                 SellText.text =  LanguageManage.SwitchStr("取出");
                 break;
             case DisplayType.Equip:
@@ -246,9 +252,9 @@ public class WarehouseAction : MonoBehaviour
                     switch (wareDisplayType)
                     {
                         case WareDisplayType.FarmTool:
-                            foreach (var item in playerPackage.items)
+                            foreach (var item in playerItems)
                             {
-                                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+                                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
                                 if (itemData.Type == ItemType.种子)
                                 {
                                     dispayItems.Add(item);
@@ -256,15 +262,15 @@ public class WarehouseAction : MonoBehaviour
                             }
                             break;
                         case WareDisplayType.ALL:
-                            dispayItems = playerPackage.items;
+                            dispayItems = playerItems;
                             break;
                         case WareDisplayType.Good:
-                            dispayItems = playerPackage.items;
+                            dispayItems = playerItems;
                             break;
                         case WareDisplayType.Weapon:
-                            foreach (var item in playerPackage.items)
+                            foreach (var item in playerItems)
                             {
-                                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+                                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
                                 if (itemData.Type == ItemType.武器)
                                 {
                                     dispayItems.Add(item);
@@ -272,9 +278,9 @@ public class WarehouseAction : MonoBehaviour
                             }
                             break;
                         case WareDisplayType.Clothes:
-                            foreach (var item in playerPackage.items)
+                            foreach (var item in playerItems)
                             {
-                                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+                                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
                                 if (itemData.Type == ItemType.防具)
                                 {
                                     dispayItems.Add(item);
@@ -282,9 +288,9 @@ public class WarehouseAction : MonoBehaviour
                             }
                             break;
                         case WareDisplayType.food:
-                            foreach (var item in playerPackage.items)
+                            foreach (var item in playerItems)
                             {
-                                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+                                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
                                 if (itemData.Type == ItemType.食物)
                                 {
                                     dispayItems.Add(item);
@@ -292,9 +298,9 @@ public class WarehouseAction : MonoBehaviour
                             }
                             break;
                         case WareDisplayType.药剂:
-                            foreach (var item in playerPackage.items)
+                            foreach (var item in playerItems)
                             {
-                                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+                                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
                                 if (itemData.Type == ItemType.药剂)
                                 {
                                     dispayItems.Add(item);
@@ -302,9 +308,9 @@ public class WarehouseAction : MonoBehaviour
                             }
                             break;
                         case WareDisplayType.卷轴:
-                            foreach (var item in playerPackage.items)
+                            foreach (var item in playerItems)
                             {
-                                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+                                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
                                 if (itemData.Type == ItemType.卷轴)
                                 {
                                     dispayItems.Add(item);
@@ -316,10 +322,10 @@ public class WarehouseAction : MonoBehaviour
                
                 break;
             case PackageType.杂物箱:
-                dispayItems = playerPackage.items;
+                dispayItems = playerItems;
                 break;
             case PackageType.冰箱:
-                dispayItems = playerPackage.items;
+                dispayItems = playerItems;
                 break;
         }
         if (ItemBoxObjs == null)
@@ -355,7 +361,7 @@ public class WarehouseAction : MonoBehaviour
 
         ItemInfomationObj.SetActive(false);
 
-        for (int i = 0; i < playerPackage.CaseCount - playerPackage.items.Count; i++)
+        for (int i = 0; i < playerCaseCount - playerItemCount; i++)
         {
             GameObject NullBoxObj = Instantiate(NULLBoxPro) as GameObject;
             NullBoxObj.transform.SetParent(ItemBoxParent, false);
@@ -373,12 +379,15 @@ public class WarehouseAction : MonoBehaviour
 
         }
 
-        CaseCounText.text = "(" + playerPackage.items.Count + "/" + playerPackage.CaseCount + ")";
+        CaseCounText.text = $"({playerItemCount}/{playerCaseCount})";
         
     }
 
     public void AddNullCase(PackageType packageType)
     {
+        int playerCaseCount = PackageManager.instance.GetPackageCaseCount(playerPackage);
+        List<Item> playerItems = PackageManager.instance.GetPackageItems(playerPackage);
+        int playerItemCount = playerItems.Count;
         foreach (var addCaseObj in addCaseObjs)
         {
             Destroy(addCaseObj);
@@ -398,20 +407,22 @@ public class WarehouseAction : MonoBehaviour
             addCaseObjs.Add(addCaseObj);
             addCaseObj.GetComponent<AddCaseObjAction>().packageType = PackageType;
         }
-        playerPackage.CaseCount += 5;
-        CaseCounText.text = "(" + playerPackage.items.Count + "/" + playerPackage.CaseCount + ")";
+        PackageManager.instance.AddPackageCaseCount(playerPackage, 5); 
+        CaseCounText.text = $"({playerItemCount}/{playerCaseCount+5})";
         AudioController.instance.PlayAudio(SE.Click2);
     }
-    public void ClickItem(Item item)
+    public async void ClickItem(Item item)
     {
         AudioController.instance.PlayAudio(SE.select);
-        if (item.ItemId != 0)
+
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
+
+        if (itemData!=null)
         {
             ItemInfomationObj.SetActive(true);
             selectedItem = item;
-            ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
-            ItemIconImage.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(itemData.Icon);
-            ItemNameText.text = itemData.Name;
+            ItemIconImage.sprite = itemData.iconSprite;
+            ItemNameText.text = itemData.name;
             ItemTypeText.text = LanguageManage.SwitchStr(itemData.Type.ToString());
             ItemPriceText.text = itemData.SellPrice + "G";
             ItemPropertyText.text = itemData.Text1;
@@ -425,7 +436,7 @@ public class WarehouseAction : MonoBehaviour
                 {
                     sellButton.gameObject.SetActive(true);
                     SellText.text = LanguageManage.SwitchStr("选择");
-                    playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().SelectItem(selectedItem.ItemId);
+                    playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().SelectItem(selectedItem.dataId);
                 }
                 else if (itemData.Type == ItemType.食物||itemData.Type==ItemType.其他物品)
                 {
@@ -452,10 +463,12 @@ public class WarehouseAction : MonoBehaviour
 
     }
 
-    public void ClickSellButton()
+    public async void ClickSellButton()
     {
-        ItemData selectItemData =
-            GameComponentData.gameData.itemsManager.GetItemDataFromId(selectedItem.ItemId);
+        int outCaseCount = PackageManager.instance.GetPackageCaseCount(outPackage);
+        List<Item> outItems = PackageManager.instance.GetPackageItems(outPackage);
+        int outItemCount = outItems.Count;
+        ItemData selectItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(selectedItem.dataId.ToString()); 
         switch (displayType)
         {
             case DisplayType.Sell:
@@ -466,96 +479,84 @@ public class WarehouseAction : MonoBehaviour
                 break;
             case DisplayType.In:
 
-                if (outPackage == GameComponentData.gameData.gameManager.gamePlayer.box)
+                if (selectItemData.IsFresh && outPackage != GameComponentData.gameData.gameManager.gamePlayer.icebox)
                 {
-
-                    if (selectItemData.IsFresh)
-                    {
-                        AudioController.instance.PlayAudio(SE.Return);
-                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("生鲜物品可放入冰箱，无法放入杂物箱!"));
-                    }
-                    else
-                    {
-                        AudioController.instance.PlayAudio(SE.click);
-                        if (!outPackage.IsPackageFill(selectedItem))
-                        {
-                            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
-                                LanguageManage.SwitchStr("杂物箱") + LanguageManage.SwitchStr("空间不足！"));
-                        }
-                        else
-                        {
-                            outPackage.SetItemInPackage(selectedItem);
-                            playerPackage.GetItemOutPackage(selectedItem.ItemId, selectedItem.count);
-                            DisplayWarehouseItems(PackageType, wareDisplayTypes);
-                            BoxCountText.text = "(" + outPackage.items.Count + "/" + outPackage.CaseCount + ")";
-                        }
-                        
-                    }
-
-
+                    AudioController.instance.PlayAudio(SE.Return);
+                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("生鲜物品可放入冰箱，无法放入杂物箱!"));
                 }
-                else if (outPackage == GameComponentData.gameData.gameManager.gamePlayer.icebox)
+                else if (!selectItemData.IsFresh && outPackage == GameComponentData.gameData.gameManager.gamePlayer.icebox)
                 {
-                    if (!selectItemData.IsFresh)
-                    {
-                        AudioController.instance.PlayAudio(SE.Return);
-                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("非生鲜物品不能放入冰箱!"));
-                    }
-                    else
-                    {
-                        AudioController.instance.PlayAudio(SE.click);
-
-                        if (!outPackage.IsPackageFill(selectedItem))
-                        {
-                            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
-                                LanguageManage.SwitchStr("冰箱") + LanguageManage.SwitchStr("空间不足！"));
-                        }
-                        else
-                        {
-                            outPackage.SetItemInPackage(selectedItem);
-                            playerPackage.GetItemOutPackage(selectedItem.ItemId, selectedItem.count);
-                            DisplayWarehouseItems(PackageType, wareDisplayTypes);
-                            BoxCountText.text = "(" + outPackage.items.Count + "/" + outPackage.CaseCount + ")";
-                        }
-                        
-                    }
+                    AudioController.instance.PlayAudio(SE.Return);
+                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("非生鲜物品不能放入冰箱!"));
                 }
                 else
                 {
                     AudioController.instance.PlayAudio(SE.click);
-                    outPackage.SetItemInPackage(selectedItem);
-                    playerPackage.GetItemOutPackage(selectedItem.ItemId, selectedItem.count);
+
+                    int outCount = await PackageManager.instance.SetItemInPackage(selectedItem, outPackage);
+                    RemovePackageItem removePackageItem = new RemovePackageItem
+                    {
+                        packageId = playerPackage,
+                        itemDataId = selectedItem.dataId,
+                        itemCount = selectedItem.count - outCount
+                    };
+                    GameActionManager.instance.QueueAction(removePackageItem, true);
                     DisplayWarehouseItems(PackageType, wareDisplayTypes);
-                    BoxCountText.text = "(" + outPackage.items.Count + "/" + outPackage.CaseCount + ")";
+                    outItemCount = PackageManager.instance.GetPackageItems(outPackage).Count;
+                    BoxCountText.text = $"({outItemCount}/{outCaseCount})";
+                    if (outCount > 0)
+                    {
+                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
+                             LanguageManage.SwitchStr("空间不足！"));
+                    }
+                     
                 }
+
                 break;
             case DisplayType.Out:
-                AudioController.instance.PlayAudio(SE.click);
-                if (!outPackage.IsPackageFill(selectedItem))
                 {
-                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
-                        LanguageManage.SwitchStr("背包") + LanguageManage.SwitchStr("空间不足！"));
-                }
-                else
-                {
-                    outPackage.SetItemInPackage(selectedItem);
-                    playerPackage.GetItemOutPackage(selectedItem.ItemId, selectedItem.count);
+                    AudioController.instance.PlayAudio(SE.click);
+                    int outCount = await PackageManager.instance.SetItemInPackage(selectedItem, outPackage);
+                    if (outCount > 0)
+                    {
+                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),
+                            LanguageManage.SwitchStr("背包") + LanguageManage.SwitchStr("空间不足！"));
+                    }
+                    RemovePackageItem removePackageItem = new RemovePackageItem
+                    {
+                        packageId = playerPackage,
+                        itemDataId = selectedItem.dataId,
+                        itemCount = selectedItem.count - outCount
+                    };
+
+                    GameActionManager.instance.QueueAction(removePackageItem,true);
                     DisplayWarehouseItems(PackageType, wareDisplayTypes);
-                    BoxCountText.text = "(" + outPackage.items.Count + "/" + outPackage.CaseCount + ")";
+                    outItemCount = PackageManager.instance.GetPackageItems(outPackage).Count;
+                    BoxCountText.text = $"({outItemCount}/{outCaseCount})";
                 }
+               
                 break;
             case DisplayType.Equip:
-                AudioController.instance.PlayAudio(SE.click);
-                Item farmTool = GameComponentData.gameData.farmAction.farmTool;
-                if (farmTool != null && farmTool.ItemId != 0)
                 {
-                    GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(farmTool);
-                }
-                functionButtons.SetActive(true);
-                GameComponentData.gameData.farmAction.InitFarmTool(selectedItem);
-                transform.parent.gameObject.SetActive(false);
+                    AudioController.instance.PlayAudio(SE.click);
+                    Item farmTool = GameComponentData.gameData.farmAction.farmTool;
+                    if (farmTool.instanceId != 0)
+                    {
+                        PackageManager.instance.SetItemInPackage(farmTool, 0);
+                    }
+                    functionButtons.SetActive(true);
+                    GameComponentData.gameData.farmAction.InitFarmTool(selectedItem);
+                    transform.parent.gameObject.SetActive(false);
 
-                GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(selectedItem.ItemId, selectedItem.count);
+                    RemovePackageItem removePackageItem = new RemovePackageItem
+                    {
+                        packageId = playerPackage,
+                        itemDataId = selectedItem.dataId,
+                        itemCount = selectedItem.count
+                    };
+                    GameActionManager.instance.QueueAction(removePackageItem, true);
+                }
+                
                 break;
             case DisplayType.Normal:
                 AudioController.instance.PlayAudio(SE.click);
@@ -570,29 +571,31 @@ public class WarehouseAction : MonoBehaviour
                 }
                 else if (selectItemData.Type == ItemType.其他物品)
                 {
-                    GameComponentData.gameData.formulaAction.OpenFormula(selectItemData.typeValue,selectItemData.Id);
-                    GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(selectedItem.ItemId,1);
+                    GameComponentData.gameData.formulaAction.OpenFormula(selectItemData.typeValue,selectItemData.id);
+                    RemovePackageItem removePackageItem = new RemovePackageItem
+                    {
+                        packageId = playerPackage,
+                        itemDataId = selectedItem.dataId,
+                        itemCount = 1
+                    };
+                    GameActionManager.instance.QueueAction(removePackageItem, true); 
                     InitWareHouseData();
                 }
                 break;
             case DisplayType.AfterBattle:
                 AudioController.instance.PlayAudio(SE.Click2);
-                UseItem();
-                ItemData selectItemData0 =
-                    GameComponentData.gameData.itemsManager.GetItemDataFromId(selectedItem.ItemId);
-                GameComponentData.gameData.BattleMapAction.UseItem(selectItemData0,DisplayType.AfterBattle);
+                UseItem(); 
+                GameComponentData.gameData.BattleMapAction.UseItem(selectItemData,DisplayType.AfterBattle);
                 break;
             case DisplayType.Battling:
                 AudioController.instance.PlayAudio(SE.Click2);
-                UseItem();
-                ItemData selectItemData1 =
-                    GameComponentData.gameData.itemsManager.GetItemDataFromId(selectedItem.ItemId);
-                GameComponentData.gameData.BattleMapAction.UseItem(selectItemData1,DisplayType.Battling);
+                UseItem(); 
+                GameComponentData.gameData.BattleMapAction.UseItem(selectItemData,DisplayType.Battling);
                 break;
             case DisplayType.Gift:
                 AudioController.instance.PlayAudio(SE.Click2);
                 //GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(selectedItem.ItemId,1);
-                GameComponentData.gameData.NpcManager.selectNpcx.AddGiftFriendllyExp(selectedItem.ItemId);
+                GameComponentData.gameData.NpcManager.selectNpcx.AddGiftFriendllyExp(selectedItem.dataId);
 
                 GameComponentData.gameData.warehouseObj.SetActive(false);
                 break;
@@ -611,58 +614,57 @@ public class WarehouseAction : MonoBehaviour
         transform.parent.gameObject.SetActive(false);
        
     }
-    void UseItem()
+    async void UseItem()
     {
-        ItemData selectItemData1 =
-            GameComponentData.gameData.itemsManager.GetItemDataFromId(selectedItem.ItemId);
+        ItemData selectItemData1 = await GameDataManager.instance.GetAsyncObjectData<ItemData>(selectedItem.dataId.ToString()); 
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         if (selectItemData1.Type == ItemType.食物 )
         {
-            string noticeStr = LanguageManage.SwitchStr("使用了1个:") + selectItemData1.Name;
+            string noticeStr = LanguageManage.SwitchStr("使用了1个:") + selectItemData1.name;
             string propertyStr = "";
-            if (selectItemData1.GetProperty().AT > 0)
+            if (selectItemData1.property.AT > 0)
             {
-                propertyStr += LanguageManage.SwitchStr(",AT增加了") + selectItemData1.GetProperty().AT;
+                propertyStr += LanguageManage.SwitchStr(",AT增加了") + selectItemData1.property.AT;
             }
-            if (selectItemData1.GetProperty().DF > 0)
+            if (selectItemData1.property.DF > 0)
             {
-                propertyStr += LanguageManage.SwitchStr(",DF增加了")+ selectItemData1.GetProperty().DF;
+                propertyStr += LanguageManage.SwitchStr(",DF增加了")+ selectItemData1.property.DF;
             }
-            if (selectItemData1.GetProperty().HP > 0)
+            if (selectItemData1.property.HP > 0)
             {
-                propertyStr += LanguageManage.SwitchStr(",HP增加了")+ selectItemData1.GetProperty().HP;
+                propertyStr += LanguageManage.SwitchStr(",HP增加了")+ selectItemData1.property.HP;
             }
-            if (selectItemData1.GetProperty().MaxHP > 0)
+            if (selectItemData1.property.MaxHP > 0)
             {
-                propertyStr += LanguageManage.SwitchStr(",HP最大值增加了") + selectItemData1.GetProperty().MaxHP;
+                propertyStr += LanguageManage.SwitchStr(",HP最大值增加了") + selectItemData1.property.MaxHP;
             }
-            if (selectItemData1.GetProperty().Power > 0)
+            if (selectItemData1.property.Power > 0)
             {
-                propertyStr += LanguageManage.SwitchStr(",体力值增加了") + selectItemData1.GetProperty().Power;
+                propertyStr += LanguageManage.SwitchStr(",体力值增加了") + selectItemData1.property.Power;
             }
-            if (selectItemData1.GetProperty().HP < 0)
+            if (selectItemData1.property.HP < 0)
             {
-                propertyStr += LanguageManage.SwitchStr("HP全满") + selectItemData1.GetProperty().Power;
+                propertyStr += LanguageManage.SwitchStr("HP全满") + selectItemData1.property.Power;
             }
 
             InformationController.instance.AddInformation("*" + noticeStr + propertyStr);
           
             if (gamePlayer.property.HP > 0)
             {
-                gamePlayer.property += selectItemData1.GetProperty();
+                gamePlayer.property += selectItemData1.property;
             }
-            if (selectItemData1.GetProperty().HP < 0)
+            if (selectItemData1.property.HP < 0)
             {
                 gamePlayer.property.HP = gamePlayer.property.MaxHP;
             }
             if (gamePlayer.TeamPlayer0 != null&&gamePlayer.TeamPlayer0.id != 0&&gamePlayer.TeamPlayer0.property.HP>0)
             {
-                gamePlayer.TeamPlayer0.property += selectItemData1.GetProperty();
+                gamePlayer.TeamPlayer0.property += selectItemData1.property;
                 gamePlayer.TeamPlayer0.AddHpValue(0);
             }
             if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 && gamePlayer.TeamPlayer1.property.HP > 0)
             {
-                gamePlayer.TeamPlayer1.property += selectItemData1.GetProperty();
+                gamePlayer.TeamPlayer1.property += selectItemData1.property;
                 gamePlayer.TeamPlayer1.AddHpValue(0);
             }
             AudioController.instance.PlayAudio(SE.Heal);
@@ -670,7 +672,15 @@ public class WarehouseAction : MonoBehaviour
             playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().InitDataPlayerEquaipData();
             GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("道具使用"), noticeStr + propertyStr);
-            gamePlayer.package.GetItemOutPackage(selectedItem.ItemId, 1);
+
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                packageId = gamePlayer.package,
+                itemCount = 1,
+                itemDataId = selectedItem.dataId
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
+             
             InitWareHouseData();
         }
         else if (selectItemData1.Type == ItemType.药剂)
@@ -678,27 +688,47 @@ public class WarehouseAction : MonoBehaviour
             AudioController.instance.PlayAudio(SE.Heal);
             GameComponentData.gameData.gameManager.gamePlayer.attributeType = (AttributeType) selectItemData1.typeValue;
             playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().ChangePlayerDrop();
-            gamePlayer.package.GetItemOutPackage(selectedItem.ItemId, 1);
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                packageId = gamePlayer.package,
+                itemCount = 1,
+                itemDataId = selectedItem.dataId
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
             InitWareHouseData();
         }
         else if(selectItemData1.Type==ItemType.卷轴)
         {
-            gamePlayer.package.GetItemOutPackage(selectedItem.ItemId, 1);
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                packageId = gamePlayer.package,
+                itemCount = 1,
+                itemDataId = selectedItem.dataId
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
             InitWareHouseData();
         }
     }
     public void SellItem(int sellCount)
     {
-       
-        Item sellItem = new Item(selectedItem) {count = sellCount};
+
+        Item sellItem = ItemManager.instance.CreatItem(selectedItem.dataId, sellCount);
         Item deskItem = deskAction.item;
-        if (deskItem!=null&&deskItem.ItemId!= 0)
+        if (deskItem.dataId!= 0)
         {
-            deskAction.GoldPackage.SetItemInPackage(deskAction.item);
+            PackageManager.instance.SetItemInPackage(deskAction.item, deskAction.GoldPackage);
         }
 
         deskAction.InitDeskData(sellItem,playerPackage);
-        playerPackage.GetItemOutPackage(selectedItem.ItemId, sellCount);
+
+        RemovePackageItem removePackageItem = new RemovePackageItem
+        {
+            itemCount = sellCount,
+            itemDataId = selectedItem.dataId,
+            packageId = playerPackage
+        };
+        GameActionManager.instance.QueueAction(removePackageItem, true);
+         
         functionButtons.SetActive(true);
         SellSelectObj.SetActive(false);
         gameObject.transform.parent.gameObject.SetActive(false);

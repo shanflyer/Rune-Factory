@@ -56,7 +56,7 @@ public class ManufacturingAction : MonoBehaviour
     private FormulaType formulaType;
     private List<Formula> formulas;
     private Formula formula;
-    private Package package;
+    private int package;
     private ItemBoxAction SelectItem;
     private bool isMatch;
     private List<PackageItem> PackageItemCounts;
@@ -85,7 +85,7 @@ public class ManufacturingAction : MonoBehaviour
         foreach (var stuff in stuffs)
         {
             stuff.GetComponent<ItemBoxAction>().Hide();
-            stuff.GetComponent<ItemBoxAction>().item = null;
+            stuff.GetComponent<ItemBoxAction>().item = default(Item);
             stuff.GetComponent<ItemBoxAction>().isFull = false;
         }
         product.GetComponent<ItemBoxAction>().Hide();
@@ -149,12 +149,12 @@ public class ManufacturingAction : MonoBehaviour
             else if (!WeaponToggle.isOn)
             {
                 formulas = GameComponentData.gameData.formulaAction.Formulas.FindAll(f => f.formulaType == formulaType && f.isOpen&&
-                GameComponentData.gameData.itemsManager.ItemDataList.Find(i=>i.Id==f.Product).Type==ItemType.防具);
+                GameComponentData.gameData.itemsManager.ItemDataList.Find(i=>i.id==f.Product).Type==ItemType.防具);
             }
             else if(!EuqipToggle.isOn)
             {
                 formulas = GameComponentData.gameData.formulaAction.Formulas.FindAll(f => f.formulaType == formulaType && f.isOpen &&
-                                                                                          GameComponentData.gameData.itemsManager.ItemDataList.Find(i => i.Id == f.Product).Type == ItemType.武器);
+                                                                                          GameComponentData.gameData.itemsManager.ItemDataList.Find(i => i.id == f.Product).Type == ItemType.武器);
             }else
             {
                 formulas = GameComponentData.gameData.formulaAction.Formulas.FindAll(f => f.formulaType == formulaType && f.isOpen);
@@ -207,14 +207,16 @@ public class ManufacturingAction : MonoBehaviour
         FormulaDropdown.value = index;
         FormulaDropdown.captionText.text = FormulaDropdown.options[index].text;
     }
-    public void DisplayBoxItem(Package _package)
+    public async void DisplayBoxItem(int _package)
     {
         foreach (Transform child in ItemParent)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (var packageItem in package.items)
+        var items = PackageManager.instance.GetPackageItems(package);
+
+        foreach (var packageItem in items)
         {
             GameObject ItemObj = Instantiate(ItemPro);
             
@@ -227,8 +229,7 @@ public class ManufacturingAction : MonoBehaviour
             itemBoxAction.isBox = true;
             if (formulaType == FormulaType.冷食|| formulaType == FormulaType.热食 || formulaType == FormulaType.酒水)
             {
-                ItemData itemData =
-                    GameComponentData.gameData.itemsManager.GetItemDataFromId(packageItem.ItemId);
+                ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(packageItem.dataId.ToString()); 
                 if (!itemData.IsFresh)
                 {
                     itemBoxAction.mask.enabled = true;
@@ -236,7 +237,7 @@ public class ManufacturingAction : MonoBehaviour
             }
         }
     }
-    public void DisplayMyBox(PackageType packageType)
+    public async void DisplayMyBox(PackageType packageType)
     {
         foreach (Transform child in ItemParent)
         {
@@ -254,7 +255,8 @@ public class ManufacturingAction : MonoBehaviour
                 package = GameComponentData.gameData.gameManager.gamePlayer.icebox;
                 break;
         }
-        foreach (var packageItem in package.items)
+        var items = PackageManager.instance.GetPackageItems(package);
+        foreach (var packageItem in items)
         {
             GameObject ItemObj = Instantiate(ItemPro);
             
@@ -268,8 +270,7 @@ public class ManufacturingAction : MonoBehaviour
             itemBoxAction.package = package;
             if (formulaType == FormulaType.热食||formulaType==FormulaType.冷食 || formulaType == FormulaType.酒水)
             {
-                ItemData itemData =
-                    GameComponentData.gameData.itemsManager.GetItemDataFromId(packageItem.ItemId);
+                ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(packageItem.dataId.ToString());
                 if (!itemData.IsFresh)
                 {
                     itemBoxAction.mask.enabled = true;
@@ -287,7 +288,7 @@ public class ManufacturingAction : MonoBehaviour
             foreach (var obj in x)
             {
                 Item item = obj.GetComponent<ItemBoxAction>().item;
-                if (item != null && formula.Stuffs.Exists(s => s  == item.ItemId / 1000))
+                if (formula.Stuffs.Exists(s => s  == item.dataId))
                 {
                     
                 }
@@ -315,34 +316,44 @@ public class ManufacturingAction : MonoBehaviour
             ItemBoxAction itemBoxAction = stuff.GetComponent<ItemBoxAction>();
             if (itemBoxAction.isFull)
             {
-                if (stuffItems.Exists(i => i.ItemId / 1000 == itemBoxAction.item.ItemId / 1000))
+                int index = stuffItems.FindIndex(i => i.dataId == itemBoxAction.item.dataId);
+
+                if (index>=0)
                 {
-                    stuffItems.Find(i => i.ItemId / 1000 == itemBoxAction.item.ItemId / 1000).count++;
+                    var item = stuffItems[index];
+                    item.count++;
+                    stuffItems[index] = item;
                 }
                 else
                 {
-                    Item _item=new Item(itemBoxAction.item){count = 1};
+                    Item _item=ItemManager.instance.CreatItem(itemBoxAction.item.dataId,1);
                     stuffItems.Add(_item);
                 }
             }
         }
+
+        var packageItem = PackageManager.instance.GetPackageItems(0);
+        var boxItem = PackageManager.instance.GetPackageItems(1);
+        var iceBoxItem = PackageManager.instance.GetPackageItems(2);
         foreach (var stuffItem in stuffItems)
         {
-            var px = GameComponentData.gameData.gameManager.gamePlayer.package.items.FindAll(
-                i => i.ItemId / 1000 == stuffItem.ItemId / 1000);
+ 
+
+            var px = packageItem.FindAll(
+                i => i.dataId == stuffItem.dataId);
             int pxCount = 0;
             foreach (var item in px)
             {
                 pxCount += item.count;
             }
-            var bx = GameComponentData.gameData.gameManager.gamePlayer.box.items.FindAll(
-                i => i.ItemId / 1000 == stuffItem.ItemId / 1000);
+            var bx = boxItem.FindAll(
+                i => i.dataId == stuffItem.dataId);
             foreach (var item in bx)
             {
                 pxCount += item.count;
             }
-            var ix = GameComponentData.gameData.gameManager.gamePlayer.box.items.FindAll(
-                i => i.ItemId / 1000 == stuffItem.ItemId / 1000);
+            var ix = iceBoxItem.FindAll(
+                i => i.dataId == stuffItem.dataId);
             foreach (var item in ix)
             {
                 pxCount += item.count;
@@ -496,10 +507,10 @@ public class ManufacturingAction : MonoBehaviour
         }
         
     }
-    public void DisplaySelectItemInformation(ItemBoxAction itemBoxAction)
+    public async void DisplaySelectItemInformation(ItemBoxAction itemBoxAction)
     {
         Item _item = itemBoxAction.item;
-        if (_item==null||_item.ItemId == 0)
+        if (_item.instanceId == 0)
         {
             ItemNameText.text = "";
             ItemPriceText.text = "";
@@ -510,8 +521,8 @@ public class ManufacturingAction : MonoBehaviour
         else
         {
             SelectItem = itemBoxAction;
-            ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_item.ItemId);
-            ItemNameText.text = itemData.Name;
+            ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(_item.dataId.ToString());
+            ItemNameText.text = itemData.name;
             ItemPriceText.text = itemData.SellPrice + "G";
             ItemTypeText.text = LanguageManage.SwitchStr(itemData.Type.ToString());
             ItemNoticeText.text = itemData.Text2;
@@ -531,10 +542,10 @@ public class ManufacturingAction : MonoBehaviour
                 {
                     int _count = _item.count;
                     List<ItemBoxAction> itemBoxActions =
-                        stuffs.FindAll(s => s.item != null);
+                        stuffs.FindAll(s => s.item.instanceId != 0);
                     if (itemBoxActions.Count>0)
                     {
-                        var x = itemBoxActions.FindAll(s => s.item.ItemId / 1000 == _item.ItemId / 1000);
+                        var x = itemBoxActions.FindAll(s => s.item.dataId == _item.dataId);
                         _count = _item.count / (x.Count + 1);
                     }
                    
@@ -573,12 +584,9 @@ public class ManufacturingAction : MonoBehaviour
         GetInButton.gameObject.SetActive(false);
         GetOutButton.gameObject.SetActive(false);
     }
-    public void GetInButtonAction()
-    {
-
-
-        ItemData itemData =
-            GameComponentData.gameData.itemsManager.GetItemDataFromId(SelectItem.item.ItemId);
+    public async void GetInButtonAction()
+    { 
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(SelectItem.item.dataId.ToString()); 
         if ((formulaType == FormulaType.酒水 || formulaType == FormulaType.热食 || formulaType == FormulaType.冷食) && (
             !itemData.IsFresh))
         {
@@ -589,9 +597,9 @@ public class ManufacturingAction : MonoBehaviour
             ItemBoxAction stuff = null;
             if (formula != null)
             {
-                if (formula.Stuffs.Exists(s => s == SelectItem.item.ItemId / 1000))
+                if (formula.Stuffs.Exists(s => s == SelectItem.item.dataId))
                 {
-                    List<int> items = formula.Stuffs.FindAll(s => s == SelectItem.item.ItemId / 1000);
+                    List<int> items = formula.Stuffs.FindAll(s => s == SelectItem.item.dataId);
                     foreach (var item in items)
                     {
                         int index = formula.Stuffs.FindIndex(s => s == item);
@@ -657,10 +665,9 @@ public class ManufacturingAction : MonoBehaviour
     {
        
         foreach (var formulaStuff in formula.Stuffs)
-        {
-            GamePlayer player= GameComponentData.gameData.gameManager.gamePlayer;
-            if (player.package.IsHaveItem(formulaStuff) || player.box.IsHaveItem(formulaStuff) ||
-                player.icebox.IsHaveItem(formulaStuff))
+        { 
+            if (PackageManager.instance.IsHaveItem(0, formulaStuff) || PackageManager.instance.IsHaveItem(1, formulaStuff) ||
+                PackageManager.instance.IsHaveItem(2, formulaStuff))
             {
                 int index = formula.Stuffs.FindIndex(f=>f==formulaStuff);
                 stuffs[index].GetComponent<ItemBoxAction>().SetAbleColor();
@@ -668,8 +675,8 @@ public class ManufacturingAction : MonoBehaviour
             else
             {
                 ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(formulaStuff);
-                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*缺少素材:")+itemData.Name);
-                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),TitleText.text+LanguageManage.SwitchStr("*缺少素材:") + itemData.Name+" ...");
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*缺少素材:")+itemData.name);
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),TitleText.text+LanguageManage.SwitchStr("*缺少素材:") + itemData.name+" ...");
             }
         }
         SetProductDisplay();
@@ -873,19 +880,19 @@ public class ManufacturingAction : MonoBehaviour
                 PackageItem packageItem=new PackageItem();
                 
                 Item sitem = stuff.GetComponent<ItemBoxAction>().item;
-                if (sitem != null)
+                if (sitem.instanceId != 0)
                 {
                     sitem.count = produceCount;
 
-                    packageItem.itemId = sitem.ItemId;
+                    packageItem.itemId = sitem.dataId;
                     packageItem.packageCount = new List<int>();
 
-                    int packageCount = GameComponentData.gameData.gameManager.gamePlayer.package.IsHaveItem(sitem);
+                    int packageCount =PackageManager.instance.GetPackageItemCount(0, sitem.dataId);
                     packageItem.packageCount.Add(packageCount);
                     sitem.count -= packageCount;
                     if (sitem.count > 0)
                     {
-                        int boxCount = GameComponentData.gameData.gameManager.gamePlayer.box.IsHaveItem(sitem);
+                        int boxCount = PackageManager.instance.GetPackageItemCount(1, sitem.dataId);
                         packageItem.packageCount.Add(boxCount);
                         sitem.count -= boxCount;
                     }
@@ -895,7 +902,7 @@ public class ManufacturingAction : MonoBehaviour
                     }
                     if (sitem.count > 0)
                     {
-                        int iceCount = GameComponentData.gameData.gameManager.gamePlayer.icebox.IsHaveItem(sitem);
+                        int iceCount = PackageManager.instance.GetPackageItemCount(2, sitem.dataId);
                         packageItem.packageCount.Add(iceCount);
                         sitem.count -= iceCount;
                     }
@@ -916,7 +923,7 @@ public class ManufacturingAction : MonoBehaviour
             if (isMatch)
             {
                 ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(formula.Product);
-                produceItem = new Item(itemData, produceCount);
+                produceItem = ItemManager.instance.CreatItem(itemData.id, produceCount);
             }
             else
             {
@@ -926,7 +933,7 @@ public class ManufacturingAction : MonoBehaviour
                     ItemBoxAction stuffBoxAction = stuff.GetComponent<ItemBoxAction>();
                     if (stuffBoxAction.isFull)
                     {
-                        itemIds.Add(stuffBoxAction.item.ItemId);
+                        itemIds.Add(stuffBoxAction.item.dataId);
                     }
                     stuff.GetComponent<ItemBoxAction>().isFull=false;
 
@@ -974,7 +981,7 @@ public class ManufacturingAction : MonoBehaviour
 
                     _formula.isOpen = true;
                     ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_formula.Product);
-                    produceItem = new Item(itemData, produceCount);
+                    produceItem =ItemManager.instance.CreatItem(itemData.id, produceCount);
                     if (itemData.Type == ItemType.武器)
                     {
                         GameComponentData.gameData.charactorTitleAction.AddManufatureCount(produceCount,1);
@@ -1004,7 +1011,7 @@ public class ManufacturingAction : MonoBehaviour
                     }
 
                     ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(defaultId);
-                    produceItem = new Item(itemData, produceCount);
+                    produceItem = ItemManager.instance.CreatItem(itemData.id, produceCount); 
                 }
             }
             CreatProduct();
@@ -1016,35 +1023,51 @@ public class ManufacturingAction : MonoBehaviour
         
     }
 
-    public void CreatProduct()
+    public async void CreatProduct()
     {
         GamePlayer player = GameComponentData.gameData.gameManager.gamePlayer;
         foreach (var packageItemCount in PackageItemCounts)
         {
-            
-          player.package.GetItemOutPackage(packageItemCount.itemId,packageItemCount.packageCount[0]);
-            player.box.GetItemOutPackage(packageItemCount.itemId, packageItemCount.packageCount[1]);
-            player.icebox.GetItemOutPackage(packageItemCount.itemId, packageItemCount.packageCount[2]);
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                packageId = 0,
+                itemDataId = packageItemCount.itemId,
+                itemCount = packageItemCount.packageCount[0]
+            };
+            RemovePackageItem removePackageItem1= new RemovePackageItem
+            {
+                packageId = 1,
+                itemDataId = packageItemCount.itemId,
+                itemCount = packageItemCount.packageCount[1]
+            };
+            RemovePackageItem removePackageItem2 = new RemovePackageItem
+            {
+                packageId = 2,
+                itemDataId = packageItemCount.itemId,
+                itemCount = packageItemCount.packageCount[2]
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
+            GameActionManager.instance.QueueAction(removePackageItem1, true);
+            GameActionManager.instance.QueueAction(removePackageItem2, true);
+             
         }
-       int groundItemCount=player.package.SetItemInPackage(produceItem);
+        int groundItemCount =await PackageManager.instance.SetItemInPackage(produceItem, 0);
+        ItemData produceItemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(produceItem.dataId.ToString());
         if (groundItemCount > 0)
         {
-            Item _item = new Item(produceItem) {count = groundItemCount};
-            GameComponentData.gameData.gameManager.GreatGroundItem(_item);
+            Item _item = ItemManager.instance.CreatItem(produceItem.dataId, groundItemCount);
+            GameComponentData.gameData.gameManager.GreatGroundItem(_item); 
 
-            ItemData produceItemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(produceItem.ItemId);
-            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个:") + produceItemData.Name+LanguageManage.SwitchStr("，其中")+groundItemCount+LanguageManage.SwitchStr("个落在地上"));
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个:") + produceItemData.name+LanguageManage.SwitchStr("，其中")+groundItemCount+LanguageManage.SwitchStr("个落在地上"));
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("*在地上的道具随时会被地底哥布林偷走，请及时回收。"));
 
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个:") +
-                produceItemData.Name+LanguageManage.SwitchStr(",因为背包已满，其中")+groundItemCount+ LanguageManage.SwitchStr("个落在地上，在地上的道具随时会被地底哥布林偷走，请及时回收。"));
+                produceItemData.name+LanguageManage.SwitchStr(",因为背包已满，其中")+groundItemCount+ LanguageManage.SwitchStr("个落在地上，在地上的道具随时会被地底哥布林偷走，请及时回收。"));
         }
         else
-        {
-           
-            ItemData produceItemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(produceItem.ItemId);
-            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
-            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.Name);
+        { 
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.name);
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("制作完成"), LanguageManage.SwitchStr("获得") + produceItem.count + LanguageManage.SwitchStr("个 ") + produceItemData.name);
         }
         if (player.property.Power > RpCostValue)
         {

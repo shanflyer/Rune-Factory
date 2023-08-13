@@ -5,7 +5,116 @@ using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.Awaitable;
+[System.Serializable]
+public struct Property
+{
+    public int MaxHP, HP, AT, DF, EXP, rewardEXP, NeedEXP, Power, MaxPower, Crit, Dodge;
+    public Property(int zero)
+    {
+        MaxHP = 0;
+        HP = 0;
+        AT = 0;
+        DF = 0;
+        EXP = 0;
+        rewardEXP = 0;
+        NeedEXP = 0;
+        Power = 0;
+        MaxPower = 0;
+        Crit = 0;
+        Dodge = 0;
+    }
 
+    public Property(Property _property)
+    {
+        MaxHP = _property.MaxHP;
+        HP = _property.HP;
+        AT = _property.AT;
+        DF = _property.DF;
+        EXP = _property.EXP;
+        NeedEXP = _property.NeedEXP;
+        rewardEXP = _property.rewardEXP;
+        Power = _property.Power;
+        MaxPower = _property.MaxPower;
+        Crit = _property.Crit;
+        Dodge = _property.Dodge;
+    }
+    public static Property operator +(Property property0, Property property1)
+    {
+        Property result = new Property
+        {
+            MaxHP = property0.MaxHP + property1.MaxHP,
+            HP = property0.HP + property1.HP,
+            AT = property0.AT + property1.AT,
+            DF = property0.DF + property1.DF,
+            EXP = property0.EXP + property1.EXP,
+            NeedEXP = property0.NeedEXP + property1.NeedEXP,
+            rewardEXP = property0.rewardEXP + property1.rewardEXP,
+            Power = property0.Power + property1.Power,
+            MaxPower = property0.MaxPower + property1.MaxPower,
+            Crit = property0.Crit + property1.Crit,
+            Dodge = property0.Dodge + property1.Dodge
+
+
+        };
+        if (result.HP > result.MaxHP)
+        {
+            result.HP = result.MaxHP;
+        }
+        if (result.Power > result.MaxPower)
+        {
+            result.Power = result.MaxPower;
+        }
+        return result;
+    }
+    public static Property operator -(Property property0, Property property1)
+    {
+        Property result = new Property
+        {
+            MaxHP = property0.MaxHP - property1.MaxHP,
+            HP = property0.HP - property1.HP,
+            AT = property0.AT - property1.AT,
+            DF = property0.DF - property1.DF,
+            EXP = property0.EXP - property1.EXP,
+            NeedEXP = property0.NeedEXP - property1.NeedEXP,
+            rewardEXP = property0.rewardEXP - property1.rewardEXP,
+            Power = property0.Power - property1.Power,
+            MaxPower = property0.MaxPower - property1.MaxPower,
+            Crit = property0.Crit - property1.Crit,
+            Dodge = property0.Dodge - property1.Dodge
+        };
+        return result;
+    }
+    public int AddExp(int value, int professionId, int _level)
+    {
+        int Level = _level;
+        EXP += value;
+        ProfessionData professionData =
+            GameComponentData.gameData.charactorDataAction.professionDatas0.Find(p => p.id == professionId);
+        while (EXP >= NeedEXP)
+        {
+            EXP -= NeedEXP;
+            Level++;
+            Property levelProperty = professionData.GetPropertyFromLevelup(Level);
+            this += levelProperty;
+        }
+
+        return Level;
+    }
+}
+
+[System.Serializable]
+public enum ValueType
+{
+    AT = 1,
+    DF = 2,
+    MaxHp = 3,
+    Hp = 4,
+    Exp = 5,
+    Power = 6,
+    MaxPower = 7,
+    Crit = 8,
+    Dodge = 9,
+}
 [System.Serializable]
 public enum CompareType
 {
@@ -408,6 +517,9 @@ public static class DefaultGameData
 }
 public static class EditorDataPath
 {
+    public const string itemIconPath = "Item/";
+
+
     public const string outDataPath = "Assets/Resources/Data/";
     public const string groundSourcePath = "Assets/Texture/Map/Ground/";
     public const string sourceChangeNameDataPath = "Assets/Editor/Data/SourceChangeName.json";

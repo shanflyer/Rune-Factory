@@ -7,12 +7,12 @@ public class PackageSelectAction : MonoBehaviour
 {
     [HideInInspector]
     public ShopPanelAction shopPanelAction;
-
+    public int packageId;
     public void CickAction(Toggle toggle)
     {
         if (toggle.isOn)
         {
-            shopPanelAction.SelectPackage(GetComponentInChildren<Text>().text);
+            shopPanelAction.SelectPackage(packageId);
         }
     }
 	// Use this for initialization

@@ -54,48 +54,49 @@ public class PlayerEquipDataActiion : MonoBehaviour
         }
     }
 
-    public void EuqipMentAction()
+    public async void EuqipMentAction()
     {
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         ItemData selectItemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(selectItem);
-        Item oldItem = null;
+        Item oldItem = default(Item);
         if (gamePlayer.id==playerId)
         {
             
             if (selectItemData.Type == ItemType.武器)
             {
                 
-                if (gamePlayer.weapon != null && gamePlayer.weapon.ItemId != 0)
+                if (gamePlayer.weapon.dataId != 0)
                 {
-                    ItemData oldItemData =
-                        GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.weapon.ItemId);
-                    oldItem=new Item(oldItemData,1);
-                    Property oldProperty= oldItemData.GetProperty();
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.weapon.dataId.ToString());
+
+                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);  
+                    Property oldProperty= oldItemData.property;
                     gamePlayer.property -= oldProperty;
-                    gamePlayer.property += selectItemData.GetProperty();
+                    gamePlayer.property += selectItemData.property;
                 }
                 else
                 {
-                    gamePlayer.property += selectItemData.GetProperty();
+                    gamePlayer.property += selectItemData.property;
                 }
-                gamePlayer.weapon=new Item(selectItemData,1);
+                gamePlayer.weapon= ItemManager.instance.CreatItem(selectItemData.id, 1); 
             }
             else if (selectItemData.Type == ItemType.防具)
             {
-                if (gamePlayer.clothes != null && gamePlayer.clothes.ItemId != 0)
+                if (gamePlayer.clothes.dataId != 0)
                 {
-                    ItemData oldItemData =
-                        GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.clothes.ItemId);
-                    oldItem = new Item(oldItemData, 1);
-                    Property oldProperty = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.clothes.ItemId).GetProperty();
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.clothes.dataId.ToString());
+                     
+                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
+                    Property oldProperty = oldItemData.property;
                     gamePlayer.property -= oldProperty;
-                    gamePlayer.property += selectItemData.GetProperty();
+                    gamePlayer.property += selectItemData.property;
                 }
                 else
                 {
-                    gamePlayer.property += selectItemData.GetProperty();
+                    gamePlayer.property += selectItemData.property;
                 }
-                gamePlayer.clothes = new Item(selectItemData, 1);
+                gamePlayer.clothes =ItemManager.instance.CreatItem(selectItemData.id, 1);
+                ItemManager.instance.CreatItem(selectItemData.id, 1);
             }
         }
         else if (gamePlayer.TeamPlayer0 != null&&gamePlayer.TeamPlayer0.id != 0&&gamePlayer.TeamPlayer0.id==playerId)
@@ -104,39 +105,39 @@ public class PlayerEquipDataActiion : MonoBehaviour
             {
                 if (gamePlayer.TeamPlayer0.Weapon != 0)
                 {
-                    ItemData oldItemData =
-                        GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.Weapon);
-                    oldItem = new Item(oldItemData, 1);
-                    Property oldProperty = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.Weapon).GetProperty();
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.Weapon.ToString());
+                     
+                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
+                    Property oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer0.property -= oldProperty;
-                    gamePlayer.TeamPlayer0.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer0.property += selectItemData.property;
                 }
                 else
                 {
-                    gamePlayer.TeamPlayer0.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer0.property += selectItemData.property;
                 }
-                gamePlayer.TeamPlayer0.Weapon = selectItemData.Id;
+                gamePlayer.TeamPlayer0.Weapon = selectItemData.id;
                 GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == gamePlayer.TeamPlayer0.id).weapon =
-                    selectItemData.Id;
+                    selectItemData.id;
             }
             else if (selectItemData.Type == ItemType.防具)
             {
                 if (gamePlayer.TeamPlayer0.clothes != 0)
                 {
-                    ItemData oldItemData =
-                        GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.clothes);
-                    oldItem = new Item(oldItemData, 1);
-                    Property oldProperty = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.clothes).GetProperty();
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.clothes.ToString());
+                     
+                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
+                    Property oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer0.property -= oldProperty;
-                    gamePlayer.TeamPlayer0.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer0.property += selectItemData.property;
                 }
                 else
                 {
-                    gamePlayer.TeamPlayer0.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer0.property += selectItemData.property;
                 }
-                gamePlayer.TeamPlayer0.clothes = selectItemData.Id;
+                gamePlayer.TeamPlayer0.clothes = selectItemData.id;
                 GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == gamePlayer.TeamPlayer0.id).clothes =
-                    selectItemData.Id;
+                    selectItemData.id;
             }
         }
         else if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 && gamePlayer.TeamPlayer1.id == playerId)
@@ -145,51 +146,54 @@ public class PlayerEquipDataActiion : MonoBehaviour
             {
                 if (gamePlayer.TeamPlayer1.Weapon != 0)
                 {
-                    ItemData oldItemData =
-                        GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.Weapon);
-                    oldItem = new Item(oldItemData, 1);
-                    Property oldProperty = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.Weapon).GetProperty();
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.Weapon.ToString());
+                   
+                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
+                    Property oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer1.property -= oldProperty;
-                    gamePlayer.TeamPlayer1.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer1.property += selectItemData.property;
                 }
                 else
                 {
-                    gamePlayer.TeamPlayer1.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer1.property += selectItemData.property;
                 }
-                gamePlayer.TeamPlayer1.Weapon = selectItemData.Id;
+                gamePlayer.TeamPlayer1.Weapon = selectItemData.id;
                 GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == gamePlayer.TeamPlayer1.id).weapon =
-                    selectItemData.Id;
+                    selectItemData.id;
             }
             else if (selectItemData.Type == ItemType.防具)
             {
                 if (gamePlayer.TeamPlayer1.clothes != 0)
                 {
-                    ItemData oldItemData =
-                        GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.clothes);
-                    oldItem = new Item(oldItemData, 1);
-                    Property oldProperty = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.clothes).GetProperty();
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.clothes.ToString()); 
+                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
+                    Property oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer1.property -= oldProperty;
-                    gamePlayer.TeamPlayer1.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer1.property += selectItemData.property;
                 }
                 else
                 {
-                    gamePlayer.TeamPlayer1.property += selectItemData.GetProperty();
+                    gamePlayer.TeamPlayer1.property += selectItemData.property;
                 }
-                gamePlayer.TeamPlayer1.clothes = selectItemData.Id;
+                gamePlayer.TeamPlayer1.clothes = selectItemData.id;
                 GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == gamePlayer.TeamPlayer1.id).clothes =
-                    selectItemData.Id;
+                    selectItemData.id;
             }
         }
-
-        
-        gamePlayer.package.GetItemOutPackage(selectItem,1);
-        gamePlayer.package.SetItemInPackage(oldItem);
+        RemovePackageItem removePackageItem = new RemovePackageItem
+        {
+            packageId = 0,
+            itemCount = 1,
+            itemDataId = selectItem
+        };
+        GameActionManager.instance.QueueAction(removePackageItem, true);
+       await PackageManager.instance.SetItemInPackage(oldItem, 0); 
         
         GameComponentData.gameData.warehouseAction.InitWareHouseData();
         InitDataPlayerEquaipData(playerId);
         GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
     }
-    public void InitDataPlayerEquaipData(int _playerId)
+    public async void InitDataPlayerEquaipData(int _playerId)
     {
         selectItem = 0;
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
@@ -248,26 +252,26 @@ public class PlayerEquipDataActiion : MonoBehaviour
                 GameComponent.charactorIcon.Find(c => c.name == gamePlayer.playerImage);
             attributeText.text = LanguageManage.SwitchStr("属性:") +
                                  LanguageManage.SwitchStr(gamePlayer.attributeType.ToString());
-            if (gamePlayer.weapon == null || gamePlayer.weapon.ItemId == 0)
+            if (gamePlayer.weapon.dataId == 0)
             {
                 WeapomText.text = LanguageManage.SwitchStr("武器:无");
                 weaponData = null;
             }
             else
             {
-                weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.weapon.ItemId);
-                WeapomText.text = weaponData.Name;
+                weaponData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.weapon.dataId.ToString());
+                WeapomText.text = weaponData.name;
             }
 
-            if (gamePlayer.clothes == null || gamePlayer.clothes.ItemId == 0)
+            if (gamePlayer.clothes.dataId == 0)
             {
                 ClothesText.text = LanguageManage.SwitchStr("防具:无");
                 clotherData = null;
             }
             else
             {
-                clotherData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.clothes.ItemId);
-                ClothesText.text = clotherData.Name;
+                clotherData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.clothes.dataId.ToString());
+                ClothesText.text = clotherData.name;
             }
         }
         if (gamePlayer.TeamPlayer0!=null&&gamePlayer.TeamPlayer0.id==playerId)
@@ -292,7 +296,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.Weapon);
-                WeapomText.text = weaponData.Name;
+                WeapomText.text = weaponData.name;
             }
 
             if (gamePlayer.TeamPlayer0.clothes == 0)
@@ -303,7 +307,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 clotherData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.clothes);
-                ClothesText.text = clotherData.Name;
+                ClothesText.text = clotherData.name;
             }
         }
         if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 && gamePlayer.TeamPlayer1.id == playerId)
@@ -327,7 +331,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.Weapon);
-                WeapomText.text = weaponData.Name;
+                WeapomText.text = weaponData.name;
             }
 
             if (gamePlayer.TeamPlayer1.clothes == 0)
@@ -338,7 +342,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 clotherData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.clothes);
-                ClothesText.text = clotherData.Name;
+                ClothesText.text = clotherData.name;
             }
         }
 
@@ -401,26 +405,26 @@ public class PlayerEquipDataActiion : MonoBehaviour
             TypeText.text = LanguageManage.SwitchStr("我");
             charactorImage.sprite =
                 GameComponent.charactorIcon.Find(c => c.name == gamePlayer.playerImage);
-            if (gamePlayer.weapon == null || gamePlayer.weapon.ItemId == 0)
+            if (gamePlayer.weapon.dataId == 0)
             {
                 WeapomText.text = LanguageManage.SwitchStr("武器:无");
                 weaponData = null;
             }
             else
             {
-                weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.weapon.ItemId);
-                WeapomText.text = weaponData.Name;
+                weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.weapon.dataId);
+                WeapomText.text = weaponData.name;
             }
 
-            if (gamePlayer.clothes == null || gamePlayer.clothes.ItemId == 0)
+            if (gamePlayer.clothes.dataId== 0)
             {
                 ClothesText.text = LanguageManage.SwitchStr("防具:无");
                 clotherData = null;
             }
             else
             {
-                clotherData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.clothes.ItemId);
-                ClothesText.text = clotherData.Name;
+                clotherData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.clothes.dataId);
+                ClothesText.text = clotherData.name;
             }
         }
         if (gamePlayer.TeamPlayer0 != null&&gamePlayer.TeamPlayer0.id != 0 && gamePlayer.TeamPlayer0.id == playerId)
@@ -441,7 +445,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.Weapon);
-                WeapomText.text = weaponData.Name;
+                WeapomText.text = weaponData.name;
             }
 
             if (gamePlayer.TeamPlayer0.clothes == 0)
@@ -452,7 +456,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 clotherData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer0.clothes);
-                ClothesText.text = clotherData.Name;
+                ClothesText.text = clotherData.name;
             }
         }
         if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 && gamePlayer.TeamPlayer1.id == playerId)
@@ -473,7 +477,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 weaponData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.Weapon);
-                WeapomText.text = weaponData.Name;
+                WeapomText.text = weaponData.name;
             }
 
             if (gamePlayer.TeamPlayer1.clothes == 0)
@@ -484,7 +488,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             else
             {
                 clotherData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gamePlayer.TeamPlayer1.clothes);
-                ClothesText.text = clotherData.Name;
+                ClothesText.text = clotherData.name;
             }
         }
 
@@ -502,11 +506,11 @@ public class PlayerEquipDataActiion : MonoBehaviour
             if (weaponData == null)
             {
                 Property zeroProperty=new Property(0);
-                CompareProperty(zeroProperty,itemData.GetProperty());
+                CompareProperty(zeroProperty,itemData.property);
             }
             else
             {
-                CompareProperty(weaponData.GetProperty(), itemData.GetProperty());
+                CompareProperty(weaponData.property, itemData.property);
             }
            
         }
@@ -515,11 +519,11 @@ public class PlayerEquipDataActiion : MonoBehaviour
             if (clotherData == null)
             {
                 Property zeroProperty = new Property(0);
-                CompareProperty(zeroProperty, itemData.GetProperty());
+                CompareProperty(zeroProperty, itemData.property);
             }
             else
             {
-                CompareProperty(clotherData.GetProperty(), itemData.GetProperty());
+                CompareProperty(clotherData.property, itemData.property);
             }
            
         }

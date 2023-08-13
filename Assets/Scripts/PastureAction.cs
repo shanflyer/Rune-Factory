@@ -150,16 +150,10 @@ public class Animal :Charactor
         {
             itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(animalData.produceItem);
         }
-        if (itemData.Id != 0)
+        if (itemData.id != 0)
         {
-            Item item =
-                new Item
-                {
-                    ItemId = itemData.Id * 1000,
-                    count = itemCount,
-                    groupNum = itemData.groupNum
-                };
-            pasture.itemPackage.SetItemInParturePackage(item);
+            Item item = ItemManager.instance.CreatItem(itemData.id,itemCount);
+            PackageManager.instance.SetItemInPackage(item, pasture.itemPackage); 
             totalProduceCount += itemCount;
             GameComponentData.gameData.charactorTitleAction.AddAnimaltExp(1);
 
@@ -170,7 +164,7 @@ public class Animal :Charactor
             else
             {
                 InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("动物") + Name + LanguageManage.SwitchStr("产出")
-                    + itemCount + LanguageManage.SwitchStr("个") + itemData.Name);
+                    + itemCount + LanguageManage.SwitchStr("个") + itemData.name);
             }
         }
        
@@ -210,7 +204,7 @@ public class Pasture
     public Vector2Int restCoordinate;
     public Vector2Int startCoordinate, endCoordinate;
     public List<Animal> Animals;
-    public Package itemPackage;
+    public int itemPackage;
     public int grassCount;
     public int caseCount;
     public int animalCaseCount;
@@ -231,11 +225,11 @@ public class Pasture
         grassCount = pastureSaveData.grassCount;
         caseCount = pastureSaveData.caseCount;
         animalCaseCount = 0;
-        itemPackage = new Package(pastureSaveData.ItemCaseCount) {items = new List<Item>()};
+        itemPackage = PackageManager.instance.CreatGamePackage(caseCount);
         foreach (var itemId in pastureSaveData.items)
         {
-            Item item=new Item(itemId,1);
-            itemPackage.items.Add(item);
+            Item item=ItemManager.instance.CreatItem(itemId,1);
+            PackageManager.instance.SetItemInPackage(item, itemPackage); 
         }
         
         name = pastureSaveData.name;
