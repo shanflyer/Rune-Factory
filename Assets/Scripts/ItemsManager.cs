@@ -21,7 +21,7 @@ public class Item : IComparable<Item>
 
     public Item(int itemId, int _count)
     {
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(itemId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemId);
         name = itemData.name;
         ItemId = itemId;
         count = _count;
@@ -187,7 +187,7 @@ public class Package
         {
             if (CaseCount > items.Count)
             {
-                Item item = new Item(_item) {count = 1};
+                Item item = ItemManager.instance.CreatItem(_item) {count = 1};
                 items.Add(item);
             }
             else
@@ -230,14 +230,14 @@ public class Package
                     {
                         if (spare <= _item.groupNum)
                         {
-                            Item newItem = new Item(_item) { count = spare };
+                            Item newItem = ItemManager.instance.CreatItem(_item) { count = spare };
                             spare = 0;
                             items.Add(newItem);
                             break;
                         }
                         else
                         {
-                            Item newItem = new Item(_item) { count = _item.groupNum };
+                            Item newItem = ItemManager.instance.CreatItem(_item) { count = _item.groupNum };
                             spare -= _item.groupNum;
                             items.Add(newItem);
                         }
@@ -290,14 +290,14 @@ public class Package
                     {
                         if (spare <= _item.groupNum)
                         {
-                            Item newItem = new Item(_item) { count = spare };
+                            Item newItem = ItemManager.instance.CreatItem(_item) { count = spare };
                             spare = 0;
                             items.Insert(0,newItem);
                             break;
                         }
                         else
                         {
-                            Item newItem = new Item(_item) { count = _item.groupNum };
+                            Item newItem = ItemManager.instance.CreatItem(_item) { count = _item.groupNum };
                             spare -= _item.groupNum;
                             items.Insert(0, newItem);
                         }
@@ -322,9 +322,9 @@ public class Package
     }
     public void  SetItemXInPackage(int _itemid)
     {
-        ItemData _itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_itemid);
+        ItemData _itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_itemid);
 
-        Item _item = new Item(_itemData, 1);
+        Item _item = ItemManager.instance.CreatItem(_itemData, 1);
 
         if (_item != null)
         {
@@ -339,9 +339,9 @@ public class Package
 
     public int SetItemInPackage(int _itemid,int count)
     {
-        ItemData _itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_itemid);
+        ItemData _itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_itemid);
         
-        Item _item=new Item(_itemData,count);
+        Item _item=ItemManager.instance.CreatItem(_itemData,count);
 
         if (_item != null)
         {
@@ -369,14 +369,14 @@ public class Package
                 {
                     if (spare <= _item.groupNum)
                     {
-                        Item newItem = new Item(_item) {count = spare};
+                        Item newItem = ItemManager.instance.CreatItem(_item) {count = spare};
                         spare = 0;
                         items.Add(newItem);
                         break;
                     }
                     else
                     {
-                        Item newItem = new Item(_item) {count = _item.groupNum};
+                        Item newItem = ItemManager.instance.CreatItem(_item) {count = _item.groupNum};
                         spare -= _item.groupNum;
                         items.Add(newItem);
                     }

@@ -119,12 +119,11 @@ public class PastureSaveData
 {
     public int id;
     public string name;
-    public List<AnimalSaveData> animalSaveDatas;
-    public List<int> items;
+    public List<AnimalSaveData> animalSaveDatas; 
     public int grassCount;
     public int caseCount;
     public bool isOpen;
-    public int ItemCaseCount;
+    public int packageId;
     public PastureSaveData() { }
 
     public PastureSaveData(Pasture pasture,bool _isOpen)
@@ -134,16 +133,8 @@ public class PastureSaveData
         name = pasture.name;
         grassCount = pasture.grassCount;
         caseCount = pasture.caseCount;
-        ItemCaseCount = pasture.itemPackage.CaseCount;
-        items=new List<int>();
-        
-        if (pasture.itemPackage.items != null)
-        {
-            foreach (var itemPackageItem in pasture.itemPackage.items)
-            {
-                items.Add(itemPackageItem.ItemId);
-            }
-        }
+        packageId = pasture.itemPackage;
+       
         animalSaveDatas=new List<AnimalSaveData>();
         if (pasture.Animals != null)
         {
@@ -273,22 +264,9 @@ public class PlayerSaveData
         attributeType = gamePlayer.attributeType;
         level = gamePlayer.level;
         exp = gamePlayer.property.EXP;
-        if (gamePlayer.weapon != null)
-        {
-            weapon = gamePlayer.weapon.ItemId;
-        }
-        else
-        {
-            weapon = 0;
-        }
-        if (gamePlayer.clothes != null)
-        {
-            clothes = gamePlayer.clothes.ItemId;
-        }
-        else
-        {
-            clothes = 0;
-        }
+        weapon = gamePlayer.weapon.dataId;
+        clothes = gamePlayer.clothes.dataId;
+        
         isMarried = gamePlayer.isMarried;
         isMarriedFood = gamePlayer.isMarriedFood;
         isAnMo = gamePlayer.isAnMo;
@@ -363,9 +341,9 @@ public class DeskData
         {
             foreach (var desk in GameComponentData.gameData.shopGoldDeskAction.GoodDeskes)
             {
-                if (desk.item != null)
+                if (desk.item.instanceId != 0)
                 {
-                    deskItemIds.Add(desk.item.ItemId);
+                    deskItemIds.Add(desk.item.dataId);
                     deskItenCounts.Add(desk.item.count);
                 }
                 else
@@ -466,15 +444,8 @@ public class PlayerMoneyData
 {
     public int team1Hp, team2Hp,team1Level,team2Level,team1Exp,team2Exp;
     public int money0, money1, power, Hp;
-    public int packageCount,boxCaseCount, iceboxaseCount;
-    public List<int> itemIds;
-    public List<int> itemCounts;
-
-    public List<int> itemIds1;
-    public List<int> itemCounts1;
-
-    public List<int> itemIds2;
-    public List<int> itemCounts2;
+    public int packageId, boxId, iceboxId;
+    
     public List<int> battleAllValues;
 
     public int seedId, seedCount;
@@ -488,46 +459,20 @@ public class PlayerMoneyData
         money0 = gamePlayer.money;
         power = gamePlayer.property.Power;
         Hp = gamePlayer.property.HP;
-        packageCount = gamePlayer.package.CaseCount;
-        itemIds = new List<int>();
-        itemCounts = new List<int>();
-        foreach (var packageItem in gamePlayer.package.items)
-        {
-            itemIds.Add(packageItem.ItemId);
-            itemCounts.Add(packageItem.count);
-        }
+        packageId = gamePlayer.package;
+        boxId = gamePlayer.box;
+        iceboxId = gamePlayer.icebox;
 
-        itemIds1 = new List<int>();
-        itemCounts1 = new List<int>();
-        foreach (var packageItem in gamePlayer.box.items)
-        {
-            itemIds1.Add(packageItem.ItemId);
-            itemCounts1.Add(packageItem.count);
-        }
-
-        itemIds2 = new List<int>();
-        itemCounts2 = new List<int>();
-        if (gamePlayer.icebox != null)
-        {
-            foreach (var packageItem in gamePlayer.icebox.items)
-            {
-                itemIds2.Add(packageItem.ItemId);
-                itemCounts2.Add(packageItem.count);
-            }
-        }
-        boxCaseCount = gamePlayer.box.CaseCount;
-        iceboxaseCount = gamePlayer.icebox.CaseCount;
-
-        battleAllValues=new List<int>();
+        battleAllValues =new List<int>();
         foreach (var batteleMap in GameComponentData.gameData.BattleMapAction.BatteleMaps)
         {
             battleAllValues.Add(batteleMap.allValue);
         }
 
         Item seedItem = GameComponentData.gameData.farmAction.farmTool;
-        if (seedItem!=null&&seedItem.ItemId!=0)
+        if (seedItem.dataId!=0)
         {
-            seedId = seedItem.ItemId;
+            seedId = seedItem.dataId;
             seedCount = seedItem.count;
         }
         else
@@ -737,17 +682,7 @@ public class GameSaveDataOld
             GroundMoney = 0,
             Hp = property.HP,
             power = property.Power,
-            money0 = 0,
-
-            packageCount = GameComponentData.gameData.gameManager.gamePlayer.packageZeroCout,
-            boxCaseCount = GameComponentData.gameData.gameManager.gamePlayer.boxZeroCount,
-            iceboxaseCount = GameComponentData.gameData.gameManager.gamePlayer.iceboxZeroCount,
-            itemCounts = new List<int>(),
-            itemIds = new List<int>(),
-            itemCounts1 = new List<int>(),
-            itemIds1 = new List<int>(),
-            itemCounts2 = new List<int>(),
-            itemIds2 = new List<int>(),
+            money0 = 0, 
             seedId = 0,
             seedCount = 0,
             waterValue = 0
@@ -936,7 +871,7 @@ public class GameSaveDataOld
         FarmAction farmAction = GameComponentData.gameData.farmAction;
         if (playerMoneyData.seedId != 0)
         {
-            farmAction.farmTool = new Item(playerMoneyData.seedId, playerMoneyData.seedCount);
+            farmAction.farmTool = ItemManager.instance.CreatItem(playerMoneyData.seedId, playerMoneyData.seedCount);
         }
 
         farmAction.waterValue = playerMoneyData.waterValue / 1000.0f;
@@ -1037,31 +972,12 @@ public class GameSaveDataOld
         PlayerDate.date = playerSaveData.date;
         PlayerDate.gender = playerSaveData.gender;
         PlayerDate.isMarried = playerSaveData.isMarried;
-        PlayerDate.BoxPackage = new Package(playerMoneyData.boxCaseCount);
-        PlayerDate.IcePackage = new Package(playerMoneyData.iceboxaseCount);
-        PlayerDate.package = new Package(playerMoneyData.packageCount) { items = new List<Item>() };
+        PlayerDate.BoxPackage = 1;
+        PlayerDate.IcePackage = 2;
+        PlayerDate.package = 0;
         PlayerDate.isAnMo = playerSaveData.isAnMo;
-        PlayerDate.isMarriedFood = playerSaveData.isMarriedFood;
-        for (int i = 0; i < playerMoneyData.itemIds.Count; i++)
-        {
-            Item item = new Item(playerMoneyData.itemIds[i], playerMoneyData.itemCounts[i]);
-            PlayerDate.package.items.Add(item);
-        }
-
-        PlayerDate.BoxPackage.items = new List<Item>();
-        for (int i = 0; i < playerMoneyData.itemIds1.Count; i++)
-        {
-            Item item = new Item(playerMoneyData.itemIds1[i], playerMoneyData.itemCounts1[i]);
-            PlayerDate.BoxPackage.items.Add(item);
-        }
-
-        PlayerDate.IcePackage.items = new List<Item>();
-        for (int i = 0; i < playerMoneyData.itemIds2.Count; i++)
-        {
-            Item item = new Item(playerMoneyData.itemIds2[i], playerMoneyData.itemCounts2[i]);
-            PlayerDate.IcePackage.items.Add(item);
-        }
-
+        PlayerDate.isMarriedFood = playerSaveData.isMarriedFood; 
+         
         PlayerDate.weapon = playerSaveData.weapon;
         PlayerDate.clothes = playerSaveData.clothes;
         if (playerSaveData.titles != null)
@@ -1269,16 +1185,7 @@ public class GameSaveData
             Hp = property.HP,
             power = property.Power,
             money0 = 0,
-           
-            packageCount = GameComponentData.gameData.gameManager.gamePlayer.packageZeroCout,
-            boxCaseCount = GameComponentData.gameData.gameManager.gamePlayer.boxZeroCount,
-            iceboxaseCount = GameComponentData.gameData.gameManager.gamePlayer.iceboxZeroCount,
-            itemCounts = new List<int>(),
-            itemIds = new List<int>(),
-            itemCounts1 = new List<int>(),
-            itemIds1 = new List<int>(),
-            itemCounts2 = new List<int>(),
-            itemIds2 = new List<int>(),
+            
             seedId = 0,
             seedCount = 0,
             waterValue = 0
@@ -1467,7 +1374,7 @@ public class GameSaveData
         FarmAction farmAction = GameComponentData.gameData.farmAction;
         if (playerMoneyData.seedId != 0)
         {
-            farmAction.farmTool = new Item(playerMoneyData.seedId, playerMoneyData.seedCount);
+            farmAction.farmTool = ItemManager.instance.CreatItem(playerMoneyData.seedId, playerMoneyData.seedCount);
         }
        
         farmAction.waterValue = playerMoneyData.waterValue / 1000.0f;
@@ -1568,30 +1475,11 @@ public class GameSaveData
         PlayerDate.date = playerSaveData.date;
         PlayerDate.gender = playerSaveData.gender;
         PlayerDate.isMarried = playerSaveData.isMarried;
-        PlayerDate.BoxPackage=new Package(playerMoneyData.boxCaseCount);
-        PlayerDate.IcePackage=new Package(playerMoneyData.iceboxaseCount);
-        PlayerDate.package = new Package(playerMoneyData.packageCount) {items = new List<Item>()};
+        PlayerDate.BoxPackage=1;
+        PlayerDate.IcePackage=2;
+        PlayerDate.package = 0;
         PlayerDate.isAnMo = playerSaveData.isAnMo;
-        PlayerDate.isMarriedFood=playerSaveData.isMarriedFood;
-        for (int i = 0; i < playerMoneyData.itemIds.Count; i++)
-        {
-            Item item=new Item(playerMoneyData.itemIds[i], playerMoneyData.itemCounts[i]);
-            PlayerDate.package.items.Add(item);
-        }
-
-        PlayerDate.BoxPackage.items = new List<Item>();
-        for (int i = 0; i < playerMoneyData.itemIds1.Count; i++)
-        {
-            Item item = new Item(playerMoneyData.itemIds1[i], playerMoneyData.itemCounts1[i]);
-            PlayerDate.BoxPackage.items.Add(item);
-        }
-
-        PlayerDate.IcePackage.items = new List<Item>();
-        for (int i = 0; i < playerMoneyData.itemIds2.Count; i++)
-        {
-            Item item = new Item(playerMoneyData.itemIds2[i], playerMoneyData.itemCounts2[i]);
-            PlayerDate.IcePackage.items.Add(item);
-        }
+        PlayerDate.isMarriedFood=playerSaveData.isMarriedFood; 
 
         PlayerDate.weapon = playerSaveData.weapon;
         PlayerDate.clothes = playerSaveData.clothes;

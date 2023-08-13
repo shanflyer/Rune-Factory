@@ -63,20 +63,24 @@ public class Employer
         profession = npcx.professionData.id;
         attributeType = npcx.npcData.attributeType;
         skillId = npcx.npcData.skill;
+        InitEquip();
+        AttachTeamPlayer();
+        //InitProperty();
+    }
+    async void InitEquip()
+    {
         if (weapon != 0)
         {
             ItemData oldItemData =
-                GameComponentData.gameData.itemsManager.GetItemDataFromId(weapon);
+                await GameDataManager.instance.GetAsyncObjectData<ItemData>(weapon);
             property += oldItemData.property;
         }
         if (clothes != 0)
         {
             ItemData oldItemData =
-                GameComponentData.gameData.itemsManager.GetItemDataFromId(clothes);
+                await GameDataManager.instance.GetAsyncObjectData<ItemData>(clothes);
             property += oldItemData.property;
         }
-        AttachTeamPlayer();
-        //InitProperty();
     }
     public Employer(Animal animal)
     {

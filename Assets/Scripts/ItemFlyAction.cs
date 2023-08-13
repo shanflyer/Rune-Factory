@@ -17,15 +17,15 @@ public class ItemFlyAction : MonoBehaviour
 		
 	}
 
-    public void InitItemFlyData(Vector2 _pos2,float _speed,Item _item)
+    public async void InitItemFlyData(Vector2 _pos2,float _speed,Item _item)
     {
         IsFlyEnd = false;
         IsReward = false;
         Pos2= _pos2;
         flySpeed = _speed;
         item = _item;
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
-        GetComponentInChildren<SpriteRenderer>().sprite = GameComponent.ItemSprites.Find(i => i.name == itemData.Icon);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
+        GetComponentInChildren<SpriteRenderer>().sprite = itemData.iconSprite;
         StartCoroutine("Flying");
     }
     IEnumerator Flying()

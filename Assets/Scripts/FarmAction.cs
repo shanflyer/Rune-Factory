@@ -115,7 +115,7 @@ public class FarmAction : MonoBehaviour
     public void ZeroInit()
     {
         Fields = new List<Field>();
-        farmTool = null;
+        farmTool =default(Item);
     }
     public void SelectFarmToolType(int i)
     {
@@ -133,7 +133,7 @@ public class FarmAction : MonoBehaviour
     public void SelectSeed()
     {
         farmToolType=FarmToolType.种子;
-        if (farmTool == null || farmTool.ItemId == 0 || farmTool.count <= 0)
+        if (farmTool.instanceId == 0 || farmTool.count <= 0)
         {
             TitleText.text="空";
         }
@@ -160,24 +160,23 @@ public class FarmAction : MonoBehaviour
                 ChangeTileFieldStatus(cell,field.fieldStatus);
             }
         }
-        if (farmTool!=null&&farmTool.ItemId != 0)
+        if (farmTool.instanceId!=0)
         {
             InitFarmTool(farmTool);
         }
 
         GameComponentData.gameData.plantAction.InitPlantDisplay();
     }
-    public void InitFarmTool(Item item)
+    public async void InitFarmTool(Item item)
     {
-        farmTool = new Item(item);
-        if (item != null)
-        {
-            
-            ItemData toolData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+        farmTool = item;
+        if (item.instanceId != 0)
+        { 
+            ItemData toolData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
             //farmToolData = toolData;
-            farmToolSprite.sprite =GameComponentData.gameData.itemsManager.GetItemIcon(toolData.Icon);
+            farmToolSprite.sprite = toolData.iconSprite;
             farmToolSprite.enabled = true;
-            TitleText.text = toolData.Name;
+            TitleText.text = toolData.name;
             if (toolData.typeValue == 3)
             {
                 SeedCounText.enabled = true;
@@ -473,7 +472,7 @@ public class FarmAction : MonoBehaviour
             else if (farmToolType == FarmToolType.种子)
             {
                 
-                if (farmTool != null && farmTool.ItemId != 0)
+                if (farmTool.dataId != 0)
                 {
                     if (cell.fieldStatus != FieldStatus.Barren && cell.myGameObjects.Count == 0)
                     {
@@ -490,12 +489,12 @@ public class FarmAction : MonoBehaviour
 
                             AudioController.instance.PlayAudio(SE.bo);
                             Field field = Fields.Find(f => f.coordinate == cell.coordinate);
-                            GameComponentData.gameData.plantAction.Planting(cell, farmTool.ItemId, field);
+                            GameComponentData.gameData.plantAction.Planting(cell, farmTool.dataId, field);
                             farmTool.count--;
                             SeedCounText.text = farmTool.count.ToString();
                             if (farmTool.count == 0)
                             {
-                                farmTool = null;
+                                farmTool = default(Item);
                                 SeedCounText.enabled = false;
                                 GameComponentData.gameData.gameManager.fieldTool.GetComponent<FarmToolAction>().DefaultSeedAction();
                             }

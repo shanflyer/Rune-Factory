@@ -249,10 +249,10 @@ public class NPCX : Charactor
         npcData = _npcData;
        
     }
-    public void AddGiftFriendllyExp(int itemid)
+    public async void AddGiftFriendllyExp(int itemid)
     {
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(itemid);
-        if (itemData.Id == 1502&&WaitDays > 0)
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemid);
+        if (itemData.id == 1502&&WaitDays > 0)
         {
             WaitDays = 0;
             GameComponentData.gameData.talkTextsManager.TalkAction("1600", npcData.headName, Name, this, TalkActionType.普通);
@@ -268,7 +268,12 @@ public class NPCX : Charactor
                 else
                 {
                     isFlower = true;
-                    GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(itemid, 1);
+                    RemovePackageItem removePackageItem = new RemovePackageItem
+                    {
+                        itemDataId = itemid,
+                        itemCount = 1, 
+                    };
+                    GameActionManager.instance.QueueAction(removePackageItem, true); 
                     int expValue = itemData.typeValue;
                     AddFriendlyexp(expValue);
                     GameComponentData.gameData.talkTextsManager.TalkAction(npcData.flowerTalk.ToString(), npcData.headName, Name, this, TalkActionType.普通);
@@ -276,7 +281,12 @@ public class NPCX : Charactor
             }
             else
             {
-                GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(itemid, 1);
+                RemovePackageItem removePackageItem = new RemovePackageItem
+                {
+                    itemDataId = itemid,
+                    itemCount = 1,
+                };
+                GameActionManager.instance.QueueAction(removePackageItem, true); 
                 int expValue = 2;
                 FestivalData festivalData = GameComponentData.gameData.festivalManager.FestivalDatas.Find(f => f.id == npcData.id);
                 if (festivalData.season == GameTimeManager.nowGameTime.gameDate.season &&
@@ -284,7 +294,7 @@ public class NPCX : Charactor
                 {
                     expValue = 4;
                 }
-                if (npcData.LoveHobby.Contains(itemData.Id))
+                if (npcData.LoveHobby.Contains(itemData.id))
                 {
                     if (!isGiftExpAdd0)
                     {
@@ -297,7 +307,7 @@ public class NPCX : Charactor
                     }
                     GameComponentData.gameData.talkTextsManager.TalkAction(npcData.loveGiftTalk.ToString(), npcData.headName, Name);
                 }
-                else if (npcData.LikeHobby.Contains(itemData.Id))
+                else if (npcData.LikeHobby.Contains(itemData.id))
                 {
                     if (!isGiftExpAdd1)
                     {

@@ -59,16 +59,17 @@ public class AnimalSetPanelAction : MonoBehaviour
         InformationController.instance.AddInformation("*" + animal.Name +LanguageManage.SwitchStr(" 被放归野外，全体居民好感度加1"));
         gameObject.SetActive(false);
     }
-    public void KillAnimal()
+    public async void KillAnimal()
     { 
         AudioController.instance.PlayAudio(SE.Item);
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(animal.animalData.produceItem);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(animal.animalData.produceItem);
 
-        Item item=new Item(itemData,1);
-        if (GameComponentData.gameData.gameManager.gamePlayer.package.IsPackageFill(item))
+        Item item=ItemManager.instance.CreatItem(itemData.id,1);
+         
+        if (await PackageManager.instance.CheckPackageTryItemIn(0,itemData.id, 1))
         {
-            GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(item);
-            InformationController.instance.AddInformation("*" + animal.Name + LanguageManage.SwitchStr("被宰杀，获得") + 1 + LanguageManage.SwitchStr("个 ") + itemData.Name);
+            PackageManager.instance.SetItemInPackage(item, 0); 
+            InformationController.instance.AddInformation("*" + animal.Name + LanguageManage.SwitchStr("被宰杀，获得") + 1 + LanguageManage.SwitchStr("个 ") + itemData.name);
             animal.pasture.animalCaseCount -= animal.animalData.caseCount;
             Destroy(animal.Obj);
             GameComponentData.gameData.employerManger.AnimalDead(animal.id);

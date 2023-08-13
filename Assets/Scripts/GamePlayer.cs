@@ -10,7 +10,7 @@ public static class PlayerDate
     public static Gender gender;
     public static Season season;
     public static int date;
-    public static GamePackage package,BoxPackage,IcePackage;
+   public static int package,BoxPackage,IcePackage;
     public static int weapon, clothes;
     public static bool isMarried;
     public static bool isMarriedFood, isAnMo;
@@ -265,23 +265,10 @@ public  class GamePlayer
             IconName = "0";
             playerImage = "1_1";
         }
-        if (PlayerDate.package != null)
-        {
-            package = PlayerDate.package;
-        }
-        else
-        {
-            //package=new Package();
-        }
+        package = PlayerDate.package;
 
-        if (PlayerDate.BoxPackage != null)
-        {
-            box = PlayerDate.BoxPackage;
-        }
-        if (PlayerDate.IcePackage != null)
-        {
-            icebox = PlayerDate.IcePackage;
-        }
+        box = PlayerDate.BoxPackage;
+        icebox = PlayerDate.IcePackage;
 
         if (PlayerDate.weapon != 0)
         { 

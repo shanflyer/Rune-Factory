@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NUnit.Framework.Interfaces;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,23 +19,16 @@ public class SellSellectAction : MonoBehaviour
 
     }
 
-    public void InitSellSelectData(Item _item)
+    public async void InitSellSelectData(Item _item)
     {
         item = _item;
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(item.ItemId);
+        ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
 
         itemImage.sprite = itemData.iconSprite;
-        itemName.text = itemData.Name;
+        itemName.text = itemData.name;
         inputField.text = "1";
-        sellCount = 1;
-        List<Item> items =
-            GameComponentData.gameData.gameManager.gamePlayer.package.items
-                .FindAll(i => i.ItemId / 1000 == itemData.Id);
-        int totalCount = 0;
-        foreach (var item1 in items)
-        {
-            totalCount += item1.count;
-        }
+        sellCount = 1; 
+        int totalCount = PackageManager.instance.GetPackageItemCount(0,itemData.id); 
 
         if (totalCount == 1)
         {
@@ -54,14 +48,7 @@ public class SellSellectAction : MonoBehaviour
     {
         sellCount++;
 
-        List<Item> items =
-            GameComponentData.gameData.gameManager.gamePlayer.package.items
-                .FindAll(i => i.ItemId / 1000 == item.ItemId/1000);
-        int totalCount = 0;
-        foreach (var item1 in items)
-        {
-            totalCount += item1.count;
-        }
+        int totalCount = PackageManager.instance.GetPackageItemCount(0, item.dataId); 
 
         if (sellCount >= totalCount)
         {
@@ -75,15 +62,7 @@ public class SellSellectAction : MonoBehaviour
 
     public void AddMaxAction()
     {
-        List<Item> items =
-            GameComponentData.gameData.gameManager.gamePlayer.package.items
-                .FindAll(i => i.ItemId / 1000 == item.ItemId / 1000);
-        int totalCount = 0;
-        foreach (var item1 in items)
-        {
-            totalCount += item1.count;
-        }
-
+        int totalCount = PackageManager.instance.GetPackageItemCount(0, item.dataId); 
         sellCount = totalCount;
         AddButton.interactable = false;
         AddToMaxButton.interactable = false;

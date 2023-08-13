@@ -25,12 +25,15 @@ public class NPCFunctionPanel : MonoBehaviour
 
 	}
 
-    public void ClickMarriedFood()
+    public async void ClickMarriedFood()
     {
         if (!GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood)
         {
-            if (GameComponentData.gameData.gameManager.gamePlayer.package.CaseCount <=
-                GameComponentData.gameData.gameManager.gamePlayer.package.items.Count)
+            Item item = ItemManager.instance.CreatItem(1400, 1);
+            ItemData loveItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(1400);
+            int count = await PackageManager.instance.SetItemInPackage(item, 0);
+
+            if (count>0)
             {
                 AudioController.instance.PlayAudio(SE.click);
                 GameComponentData.gameData.talkTextsManager.TalkAction("1506", npcx.npcData.headName,npcx.Name,npcx,TalkActionType.普通);
@@ -38,12 +41,11 @@ public class NPCFunctionPanel : MonoBehaviour
             }
             else
             {
-                GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood = true;
-                GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(1400, 1);
-                ItemData loveItemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(1400);
+                GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood = true; 
+                
                 NPCGift.SetActive(true);
-                itemImage.sprite = GameComponent.ItemSprites.Find(icon => icon.name == loveItemData.Icon);
-                itemText.text = LanguageManage.SwitchStr("获得1个") + loveItemData.Name;
+                itemImage.sprite = loveItemData.iconSprite;
+                itemText.text = LanguageManage.SwitchStr("获得1个") + loveItemData.name;
                 marriedFunction.SetActive(false);
             }
         }
@@ -76,26 +78,26 @@ public class NPCFunctionPanel : MonoBehaviour
         }
         gameObject.SetActive(false);
     }
-    public void ClickOKButton()
+    public async void ClickOKButton()
     {
         AudioController.instance.PlayAudio(SE.click);
         if (giftData != null)
         {
-            Item item = new Item(giftData, 1);
-            int count = GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(item.ItemId, 1);
+            Item item = ItemManager.instance.CreatItem(giftData, 1);
+            int count =await PackageManager.instance.SetItemInPackage(item,0);
             if (count > 0)
             {
-                InformationController.instance.AddInformation("*背包已满，无法获得物品！");
+                InformationController.instance.AddInformation($"*背包已满，无法获得物品！");
             }
             else
             {
-                InformationController.instance.AddInformation("*获得1个" + giftData.Name);
+                InformationController.instance.AddInformation("*获得1个" + giftData.name);
             }
         }
        
         giftData = null;
     }
-    public void InitNpcData(NPCX _npcx)
+    public async void InitNpcData(NPCX _npcx)
     {
         if (!_npcx.isMarried && GameComponentData.gameData.gameDebugAction.MarryTest)
         {
@@ -129,12 +131,12 @@ public class NPCFunctionPanel : MonoBehaviour
                 {
                     if (friendlyLevels[i] <= _npcx.npcData.friendlyLevel)
                     {
-                        giftData = GameComponentData.gameData.itemsManager.GetItemDataFromId(gifts[i]);
+                        giftData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gifts[i]);
                         break;
                     }
                 }
-                itemImage.sprite = GameComponent.ItemSprites.Find(icon => icon.name == giftData.Name);
-                itemText.text = LanguageManage.SwitchStr("获得1个") + giftData.Name;
+                itemImage.sprite = giftData.iconSprite;
+                itemText.text = LanguageManage.SwitchStr("获得1个") + giftData.name;
 
                 _npcx.isPlayerBrothDay = false;
             }

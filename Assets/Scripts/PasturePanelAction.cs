@@ -41,12 +41,12 @@ public class PasturePanelAction : MonoBehaviour
         }
         CaseCounText.text = animalsCount + "/" + _pasture.caseCount;
         GrassCounText.text = _pasture.grassCount.ToString();
-        int itemsCount = 0;
-        if (_pasture.itemPackage.items != null)
-        {
-            itemsCount = _pasture.itemPackage.items.Count;
-        }
-        ItemCounttext.text = itemsCount + "/" + _pasture.itemPackage.CaseCount;
+
+        var items = PackageManager.instance.GetPackageItems(_pasture.itemPackage);
+        int caseCount = PackageManager.instance.GetPackageCaseCount(_pasture.itemPackage);
+
+        int itemsCount = items.Count; 
+        ItemCounttext.text = itemsCount + "/" + caseCount;
         CostValue = GameComponentData.gameData.pastureAction.zeroAnimalCost + (_pasture.caseCount - 2) *
                     GameComponentData.gameData.pastureAction.addAnimalCostPlus;
         CaseCostText.text = CostValue.ToString();
@@ -96,12 +96,9 @@ public class PasturePanelAction : MonoBehaviour
             }
             CaseCounText.text = animalsCount + "/" + pasture.caseCount;
             GrassCounText.text = pasture.grassCount.ToString();
-            int itemsCount = 0;
-            if (pasture.itemPackage.items != null)
-            {
-                itemsCount = pasture.itemPackage.items.Count;
-            }
-            ItemCounttext.text = itemsCount + "/" + pasture.itemPackage.CaseCount;
+            var items = PackageManager.instance.GetPackageItems(pasture.itemPackage);
+            int caseCount = PackageManager.instance.GetPackageCaseCount(pasture.itemPackage);
+            ItemCounttext.text = items.Count + "/" + caseCount;
             CostValue = GameComponentData.gameData.pastureAction.zeroAnimalCost + (pasture.caseCount - 2) *
                         GameComponentData.gameData.pastureAction.addAnimalCostPlus;
             CaseCostText.text = CostValue.ToString();

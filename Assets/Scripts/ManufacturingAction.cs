@@ -138,27 +138,30 @@ public class ManufacturingAction : MonoBehaviour
         }
     }
 
-    void CreatDropDown()
+    async void CreatDropDown()
     {
         if (formulaType == FormulaType.装备)
         {
-            if (!WeaponToggle.isOn&&!EuqipToggle)
+            var _formulas = GameComponentData.gameData.formulaAction.Formulas.FindAll(f => f.formulaType == formulaType && f.isOpen);
+            if (!WeaponToggle.isOn && !EuqipToggle)
             {
-                formulas=new List<Formula>();
-            }
-            else if (!WeaponToggle.isOn)
-            {
-                formulas = GameComponentData.gameData.formulaAction.Formulas.FindAll(f => f.formulaType == formulaType && f.isOpen&&
-                GameComponentData.gameData.itemsManager.ItemDataList.Find(i=>i.id==f.Product).Type==ItemType.防具);
-            }
-            else if(!EuqipToggle.isOn)
-            {
-                formulas = GameComponentData.gameData.formulaAction.Formulas.FindAll(f => f.formulaType == formulaType && f.isOpen &&
-                                                                                          GameComponentData.gameData.itemsManager.ItemDataList.Find(i => i.id == f.Product).Type == ItemType.武器);
+                formulas = new List<Formula>();
             }else
             {
-                formulas = GameComponentData.gameData.formulaAction.Formulas.FindAll(f => f.formulaType == formulaType && f.isOpen);
-            }
+                for (int i = 0; i < _formulas.Count; i++)
+                {
+                    var formula = _formulas[i];
+                    var itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(formula.Product.ToString());
+                     if(itemData.Type==ItemType.武器&& !WeaponToggle.isOn)
+                    {
+                        formulas.Add(formula);
+                    } 
+                    if(itemData.Type == ItemType.防具 && !EuqipToggle.isOn)
+                    {
+                        formulas.Add(formula);
+                    }
+                }
+            } 
         }
         else
         {
@@ -661,7 +664,7 @@ public class ManufacturingAction : MonoBehaviour
         
     }
 
-    public void AutoSelect()
+    public async void AutoSelect()
     {
        
         foreach (var formulaStuff in formula.Stuffs)
@@ -674,7 +677,7 @@ public class ManufacturingAction : MonoBehaviour
             }
             else
             {
-                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(formulaStuff);
+                ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(formulaStuff.ToString()); 
                 InformationController.instance.AddInformation(LanguageManage.SwitchStr("*缺少素材:")+itemData.name);
                 GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),TitleText.text+LanguageManage.SwitchStr("*缺少素材:") + itemData.name+" ...");
             }
@@ -870,7 +873,7 @@ public class ManufacturingAction : MonoBehaviour
        
     }
 
-    public void ProduceItem()
+    public async void ProduceItem()
     {
         if (GameComponentData.gameData.gameManager.CostRp(RpCostValue))
         {
@@ -922,7 +925,7 @@ public class ManufacturingAction : MonoBehaviour
 
             if (isMatch)
             {
-                ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(formula.Product);
+                ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(formula.Product.ToString());
                 produceItem = ItemManager.instance.CreatItem(itemData.id, produceCount);
             }
             else
@@ -980,7 +983,7 @@ public class ManufacturingAction : MonoBehaviour
 
 
                     _formula.isOpen = true;
-                    ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(_formula.Product);
+                    ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_formula.Product.ToString());
                     produceItem =ItemManager.instance.CreatItem(itemData.id, produceCount);
                     if (itemData.Type == ItemType.武器)
                     {
@@ -1010,7 +1013,7 @@ public class ManufacturingAction : MonoBehaviour
                             break;
                     }
 
-                    ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(defaultId);
+                    ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(defaultId.ToString());
                     produceItem = ItemManager.instance.CreatItem(itemData.id, produceCount); 
                 }
             }

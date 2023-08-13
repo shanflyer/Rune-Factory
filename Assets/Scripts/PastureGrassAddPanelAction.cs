@@ -41,17 +41,10 @@ public class PastureGrassAddPanelAction : MonoBehaviour
         {
             dailyCost.text = pasture.Animals.Count.ToString();
         }
-        
-        grass =
-            GameComponentData.gameData.gameManager.gamePlayer.package.items.Find(i => i.ItemId / 1000 == 1018);
-        if (grass != null)
-        {
-            grassCount = grass.count;
-        }
-        else
-        {
-            grassCount = 0;
-        }
+
+        grassCount = PackageManager.instance.GetPackageItemCount(0, 1018);
+        grass = ItemManager.instance.CreatItem(1018, grassCount);
+          
         totalCount.text = grassCount.ToString();
         reduceButton0.interactable = false;
         reduceButton1.interactable = false;
@@ -144,14 +137,13 @@ public class PastureGrassAddPanelAction : MonoBehaviour
         }
     }
 
-    public void EnterGrass()
+    public async void EnterGrass()
     {
         
         AudioController.instance.PlayAudio(SE.click);
-        if (grass != null)
+        if (grass.instanceId!=0)
         {
-            GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(grass.ItemId,addgrass);
-            
+          await  PackageManager.instance.SetItemInPackage(grass, 0);  
         }
         
         pasture.grassCount += addgrass;

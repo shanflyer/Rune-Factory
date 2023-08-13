@@ -101,7 +101,12 @@ public struct Property
         return Level;
     }
 }
-
+[System.Serializable]
+public enum Gender
+{
+    male = 0,
+    female = 1
+}
 [System.Serializable]
 public enum ValueType
 {

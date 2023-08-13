@@ -92,6 +92,8 @@ public class CharactorTitleAction : MonoBehaviour
         canCount = 0;
         fishTotals = new List<Vector2Int>();
         GetCharactorTitles=new List<CharactorTitle>();
+        //临时注释
+        /*
         foreach (var itemData in GameComponentData.gameData.itemsManager.ItemDataList)
         {
             if (itemData.Type == ItemType.食材 && itemData.typeValue == 6)
@@ -99,7 +101,7 @@ public class CharactorTitleAction : MonoBehaviour
                 Vector2Int fishData = new Vector2Int(itemData.Id, 0);
                 fishTotals.Add(fishData);
             }
-        }
+        }*/
         
     }
     public void AddPlantExp(int value)

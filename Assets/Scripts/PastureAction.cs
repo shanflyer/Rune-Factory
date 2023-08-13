@@ -133,7 +133,7 @@ public class Animal :Charactor
         
         
     }
-    public void CreatItem()
+    public async void CreatItem()
     {
         int itemCount = 1;
         if (animalStatus == AnimalStatus.高兴)
@@ -144,11 +144,11 @@ public class Animal :Charactor
         ItemData itemData=new ItemData();
         if (animalStatus ==AnimalStatus.死亡)
         {
-            //itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(animalData.deadItem);
+            //itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(animalData.deadItem);
         }
         else
         {
-            itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(animalData.produceItem);
+            itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(animalData.produceItem.ToString()); 
         }
         if (itemData.id != 0)
         {
@@ -225,13 +225,8 @@ public class Pasture
         grassCount = pastureSaveData.grassCount;
         caseCount = pastureSaveData.caseCount;
         animalCaseCount = 0;
-        itemPackage = PackageManager.instance.CreatGamePackage(caseCount);
-        foreach (var itemId in pastureSaveData.items)
-        {
-            Item item=ItemManager.instance.CreatItem(itemId,1);
-            PackageManager.instance.SetItemInPackage(item, itemPackage); 
-        }
-        
+        itemPackage = pastureSaveData.packageId;
+         
         name = pastureSaveData.name;
         if (Animals != null)
         {

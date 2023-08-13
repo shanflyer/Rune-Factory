@@ -2687,7 +2687,7 @@ public class BattleMapAction : MonoBehaviour
                 rewardStr += LanguageManage.SwitchStr(",获得金币x") + moneyValue;
                 foreach (var rewardItem in rewardItems)
                 {
-                    ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(rewardItem.dataId);
+                    ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(rewardItem.dataId.ToString());
                     rewardStr += "," + itemData.name + "x" + rewardItem.count;
 
                     InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得")

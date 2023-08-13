@@ -34,7 +34,7 @@ public class ShopItemAction : MonoBehaviour
         }
         shopPanelAction = _shopPanelAction;
         itemData = _itemData;
-        icon.sprite = GameComponent.ItemSprites.Find(i => i.name == itemData.Icon);
+        icon.sprite = itemData.iconSprite;
         price.text = itemData.ShopPrice.ToString();
     }
 

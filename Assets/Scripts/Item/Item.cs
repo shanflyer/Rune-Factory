@@ -1,4 +1,5 @@
 using NUnit.Framework.Interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic; 
 using UnityEngine;
@@ -25,34 +26,45 @@ public class ItemManager
     }
     private static ItemManager _instance;
 
-    private List<int> itemIntanceIds = new List<int>();
-     
+    private HashSet<int> IntanceIds = new HashSet<int>();
+    public Item CreatItem(ItemData data, int count)
+    {
+        Item item = new Item
+        {
+            dataId = data.id,
+            count = count,
+            instanceId = CreatIntance()
+        };
+        return item;
+    }
     public Item CreatItem(int dataId,int count)
     {
         Item item = new Item
         {
             dataId = dataId,
             count = count,
-            instanceId = CreatItemIntance()
+            instanceId = CreatIntance()
         };
         return item;
     }
-    public int CreatItemIntance()
+    public int CreatIntance()
     {
-        int intanceId = UnityEngine.Random.Range(10000000, 99999999);
-        while (itemIntanceIds.Contains(intanceId))
+        var guid = Guid.NewGuid(); 
+        int intanceId = guid.GetHashCode();
+        while (IntanceIds.Contains(intanceId))
         {
-            intanceId = UnityEngine.Random.Range(10000000, 99999999);
+            guid = Guid.NewGuid();
+            intanceId = guid.GetHashCode();
         }
-        itemIntanceIds.Add(intanceId);
+        IntanceIds.Add(intanceId);
         return intanceId;
     }
 
     public void DeleteItem(int intanceId)
     {
-        if (itemIntanceIds.Contains(intanceId))
+        if (IntanceIds.Contains(intanceId))
         {
-            itemIntanceIds.Remove(intanceId);
+            IntanceIds.Remove(intanceId);
         }
     }
 

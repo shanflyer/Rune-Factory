@@ -437,8 +437,7 @@ public class GameManager : MonoBehaviour
 
         }
 	    else
-	    {
-	        GameComponentData.gameData.itemsManager.InitData();
+	    { 
 	        GameData.charactorDataAction.InitData();
 	        GameData.influenceAction.InitInfluenceAction();
 	        GameComponentData.gameData.NpcManager.InitData();
@@ -1090,8 +1089,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine("LoadScene");
     }
     public void InitImmediateSceneData(int passId)
-    {
-        GameComponentData.gameData.itemsManager.InitData();
+    { 
         /*
         if (SceneData.startZeroData.zeroPlayers!=null)
         {

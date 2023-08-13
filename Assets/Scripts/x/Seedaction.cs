@@ -7,10 +7,12 @@ public class Seedaction : MonoBehaviour
 {
     public SpriteRenderer seedRenderer;
 
-    public void InitSeed()
+    public async void InitSeed()
     {
         Item seed = GameComponentData.gameData.farmAction.farmTool;
-        seedRenderer.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(seed);
+        ItemData itemData =
+               await GameDataManager.instance.GetAsyncObjectData<ItemData>(seed.dataId);
+        seedRenderer.sprite = itemData.iconSprite;
     }
 	// Use this for initialization
 	void Start () {

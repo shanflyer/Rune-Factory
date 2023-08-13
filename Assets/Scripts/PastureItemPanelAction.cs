@@ -21,8 +21,12 @@ public class PastureItemPanelAction : MonoBehaviour
         }
         pasture = _pasture;
         pastureName.text = _pasture.name;
-        ProduceCaseText.text = "(" + pasture.itemPackage.items.Count + "/" + pasture.itemPackage.CaseCount + ")";
-        foreach (var itemPackageItem in pasture.itemPackage.items)
+
+        int caseCount = PackageManager.instance.GetPackageCaseCount(pasture.itemPackage);
+        var items = PackageManager.instance.GetPackageItems(pasture.itemPackage);
+
+        ProduceCaseText.text = "(" + items.Count + "/" + caseCount + ")";
+        foreach (var itemPackageItem in items)
         {
             GameObject itemObj = Instantiate(itemBox);
             
@@ -31,7 +35,7 @@ public class PastureItemPanelAction : MonoBehaviour
             itemObj.GetComponent<ItemBoxAction>().InitItemData(itemPackageItem);
             Destroy(itemObj.GetComponentInChildren<Toggle>().gameObject);
         }
-        int count = pasture.itemPackage.CaseCount - pasture.itemPackage.items.Count;
+        int count = caseCount - items.Count;
         for (int i = 0; i < count; i++)
         {
             GameObject itemObj = Instantiate(NullBox);
@@ -41,7 +45,7 @@ public class PastureItemPanelAction : MonoBehaviour
             NullBox.GetComponent<ItemBoxAction>().icon.enabled = false;
             NullBox.GetComponent<ItemBoxAction>().count.enabled = false;
         }
-        costValue = GameComponentData.gameData.pastureAction.zeroAddCase + (pasture.itemPackage.CaseCount - 2) *
+        costValue = GameComponentData.gameData.pastureAction.zeroAddCase + (caseCount - 2) *
                         GameComponentData.gameData.pastureAction.addcasePlus;
         AddCostText.text = costValue.ToString();
     }
@@ -54,29 +58,29 @@ public class PastureItemPanelAction : MonoBehaviour
             ,ShopMoneyType.金币);
     }
     public void AddCase()
-    {
-        pasture.itemPackage.CaseCount++;
+    { 
+        var items = PackageManager.instance.GetPackageItems(pasture.itemPackage);
+        int caseCount= PackageManager.instance.AddPackageCaseCount(pasture.itemPackage, 1);
+         
         GameObject itemObj = Instantiate(NullBox);
         itemObj.transform.localScale = Vector3.one;
         itemObj.transform.SetParent(BoxParent);
-        costValue = GameComponentData.gameData.pastureAction.zeroAddCase + (pasture.itemPackage.CaseCount - 2) *
+        costValue = GameComponentData.gameData.pastureAction.zeroAddCase + (caseCount- 2) *
                         GameComponentData.gameData.pastureAction.addcasePlus;
         AddCostText.text = costValue.ToString();
-        ProduceCaseText.text = "(" + pasture.itemPackage.items.Count + "/" + pasture.itemPackage.CaseCount + ")";
+        ProduceCaseText.text = "(" + items.Count + "/" + caseCount + ")";
         InformationController.instance.AddInformation(pasture.name+LanguageManage.SwitchStr("增加一个产出格,消耗金币")+costValue);
        
     }
 
-    public void GetItemToPlayer()
+    public async void GetItemToPlayer()
     {
         AudioController.instance.PlayAudio(SE.click);
         List<Item> outItems=new List<Item>();
-        foreach (var itemPackageItem in pasture.itemPackage.items)
-        {
-            Package playerPackage = GameComponentData.gameData.gameManager.gamePlayer.package;
-            int laveCount=playerPackage.SetItemInPackage(itemPackageItem);
-            
-            if (laveCount > 0)
+        var items = PackageManager.instance.GetPackageItems(pasture.itemPackage);
+        foreach (var itemPackageItem in items)
+        {   
+            if (await PackageManager.instance.CheckPackageTryItemIn(0, itemPackageItem.dataId, itemPackageItem.count))
             {
                 GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("背包已满！"));
                 break;
@@ -95,7 +99,14 @@ public class PastureItemPanelAction : MonoBehaviour
         }
         foreach (var outItem in outItems)
         {
-            pasture.itemPackage.GetItemOutPackage(outItem.ItemId,outItem.count);
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                itemDataId = outItem.dataId,
+                itemCount = outItem.count,
+                packageId = pasture.itemPackage
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
+             
         }
         InitPastureItemPanelData(pasture);
     }

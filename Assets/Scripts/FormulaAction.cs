@@ -158,7 +158,8 @@ public class FormulaAction : MonoBehaviour
 
     public void OpenFormula(int typeValue,int fId)
     {
-       
+        //临时注释
+       /*
         var x = GameComponentData.gameData.itemsManager.ItemDataList.FindAll(i =>i.Type==ItemType.其他物品&&i.typeValue == typeValue
         &&i.Id!=fId);
         int index = Random.Range(0, x.Count-1);
@@ -171,7 +172,7 @@ public class FormulaAction : MonoBehaviour
         {
             notice+="  " + formula.name + LanguageManage.SwitchStr("开始在工具店出售");
         }
-        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("获得配方"), notice);
+        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("获得配方"), notice);*/
     }
     public void DisplayManufacturePanel(int i)
     {

@@ -196,7 +196,7 @@ public class AdventurePanelAction : MonoBehaviour
         }
     }
 
-    private void DisplayBattleMapItem()
+    private async void DisplayBattleMapItem()
     {
         foreach (Transform child in itemParent)
         {
@@ -237,7 +237,8 @@ public class AdventurePanelAction : MonoBehaviour
         foreach (var item in items)
         {
             GameObject itemIconObj = Instantiate(itemIconPro);
-            itemIconObj.GetComponent<Image>().sprite = GameComponentData.gameData.itemsManager.GetItemIcon(item);
+            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item);
+            itemIconObj.GetComponent<Image>().sprite = itemData.iconSprite;
             itemIconObj.transform.SetParent(itemParent,false);
         }
 

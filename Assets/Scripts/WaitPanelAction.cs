@@ -126,8 +126,8 @@ public class WaitPanelAction : MonoBehaviour
 
         if (GameTimeManager.nowGameTime.gameDate.year == 1300 && GameTimeManager.nowGameTime.gameDate.season == Season.夏
             && GameTimeManager.nowGameTime.gameDate.date == 21)
-        {
-            if (GameComponentData.gameData.gameManager.gamePlayer.package.items.Count > 0)
+        { 
+            if (PackageManager.instance.GetPackageItems(0).Count > 0)
             {
                 //GameComponentData.gameData.filmAction.SecondDayEvent();
                 GameComponentData.gameData.informationObj.SetActive(false);

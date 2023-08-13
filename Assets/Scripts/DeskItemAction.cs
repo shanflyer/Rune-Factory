@@ -102,25 +102,32 @@ public class DeskItemAction : MonoBehaviour
         item.count += count;
         ItemCountText.text = item.count.ToString();
         deskAction.ItemCountText.text= item.count.ToString();
-        playerPackage.GetItemOutPackage(item.ItemId,count);
+
+        RemovePackageItem removePackageItem = new RemovePackageItem
+        {
+            itemDataId = item.dataId,
+            itemCount = count,
+            packageId = 0
+        };
+        GameActionManager.instance.QueueAction(removePackageItem, true); 
         AddButton.interactable = false;
         MaxButton.interactable = false;
      
     }
 
-    public void ReduceItem()
+    public async void ReduceItem()
     {
         AudioController.instance.PlayAudio(SE.click);
         item.count--;
 
-        Item _Item = new Item(item) {count = 1};
-        playerPackage.SetItemInPackage(_Item);
+        Item _Item = ItemManager.instance.CreatItem(item.dataId,1);
+        await  PackageManager.instance.SetItemInPackage(_Item, 0); 
         ItemCountText.text = item.count.ToString();
         deskAction.ItemCountText.text = item.count.ToString();
         if (item.count == 0)
         {
-            item = null;
-            deskAction.InitDeskData(null,null);
+            item = default(Item);
+            deskAction.InitDeskData(item, int.MinValue);
             gameObject.SetActive(false);
         }
         else
@@ -131,12 +138,12 @@ public class DeskItemAction : MonoBehaviour
         }    
     }
 
-    public void GetItmeDown()
+    public async void GetItmeDown()
     {
         AudioController.instance.PlayAudio(SE.Return);
-        playerPackage.SetItemInPackage(item);
-        item = null;
-        deskAction.InitDeskData(null,null);
+        await PackageManager.instance.SetItemInPackage(item, 0);
+        item = default(Item);
+        deskAction.InitDeskData(item, int.MinValue);
         gameObject.SetActive(false);
 
     }

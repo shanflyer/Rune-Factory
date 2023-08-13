@@ -46,12 +46,12 @@ public class ShopGoldDeskAction : MonoBehaviour
         {
             if (deskData.deskItemIds.Count==0||deskData.deskItemIds[i] == 0)
             {
-                GoodDeskes[i].item = null;
-                GoodDeskes[i].deskAction.InitDeskData(null);
+                GoodDeskes[i].item = default(Item);
+                GoodDeskes[i].deskAction.InitDeskData(default(Item));
             }
             else
             {
-                Item item = new Item(deskData.deskItemIds[i], deskData.deskItenCounts[i]);
+                Item item = ItemManager.instance.CreatItem(deskData.deskItemIds[i], deskData.deskItenCounts[i]);
                 GoodDeskes[i].item = item;
                 GoodDeskes[i].deskAction.InitDeskData(item);
             }
@@ -103,7 +103,7 @@ public class ShopGoldDeskAction : MonoBehaviour
                 {
                     spriteRenderer.enabled = true;
                 }
-                if (goodDeske.deskAction.item==null)
+                if (goodDeske.deskAction.item.instanceId==0)
                 {
                     goodDeske.deskAction.ItemSpriteRenderer.enabled = false;
                     goodDeske.deskAction.ItemCountText.enabled = false;
@@ -173,24 +173,14 @@ public class ShopGoldDeskAction : MonoBehaviour
     {
         if (GoodDeskes != null)
         {
-            var desks = GoodDeskes.FindAll(g => g.deskAction.item != null&& g.deskAction.item.count>0);
+            var desks = GoodDeskes.FindAll(g => g.deskAction.item.count>0);
           
             List<float> RandomValue=new List<float>();
          
             foreach (var desk in desks)
             {
-                Item item = desk.deskAction.item;
-                int itemId = item.ItemId;
-                if (item.ItemId / 1000000 == 0)
-                {
-                }
-                else
-                {
-                    itemId = item.ItemId / 1000;
-                }
-                int ramdomValue = 8000;
-              
-               
+                Item item = desk.deskAction.item; 
+                int ramdomValue = 8000; 
                 RandomValue.Add((10000-ramdomValue)/10000.0f);
             }
 
@@ -302,7 +292,7 @@ public class ShopGoldDeskAction : MonoBehaviour
                 Vector2Int goldCoordinate = endCoordinate;
                 float waitValue = (1.0f - saleValue / 100.0f) / 0.1f;
                 trueWaitTime = waitTime * Mathf.Pow(0.8f, waitValue)/((openCount-1)*0.2f+1);
-                var goldDesks = GoodDeskes.FindAll(d => d.deskAction.item != null&&d.deskAction.item.ItemId!=0);
+                var goldDesks = GoodDeskes.FindAll(d => d.deskAction.item.dataId!=0);
                 int goldIndex = 0;
                 if (goldDesks.Count > 0)
                 {
@@ -312,7 +302,7 @@ public class ShopGoldDeskAction : MonoBehaviour
                 }
                 if (goldDesks.Count > 0)
                 {
-                    if (goldDesks[goldIndex].item != null && Random.Range(0,100)>50)
+                    if (goldDesks[goldIndex].item.dataId != 0 && Random.Range(0,100)>50)
                     {
                         GameComponentData.gameData.peopleAction.CreatNPC(startCoordinate, endCoordinate, goldCoordinate, shopingTime, goldDesks[goldIndex].deskAction);
                     }
@@ -348,7 +338,7 @@ public class ShopGoldDeskAction : MonoBehaviour
                 float waitTime = Random.Range(waitTimeRange.x, waitTimeRange.y) * 1.2f;
                 float waitValue = (1.0f - saleValue) / 0.1f;
                 trueWaitTime = waitTime * Mathf.Pow(0.8f, waitValue) / ((openCount - 1) * 0.3f + 1);
-                var goldDesks = GoodDeskes.FindAll(d => d.deskAction.item != null);
+                var goldDesks = GoodDeskes.FindAll(d => d.deskAction.item.dataId != 0);
                 int goldIndex = 0;
                 if (goldDesks.Count > 0)
                 {
@@ -357,7 +347,7 @@ public class ShopGoldDeskAction : MonoBehaviour
                 }
                 if (goldDesks.Count > 0)
                 {
-                    if (goldDesks[goldIndex].item != null && Random.Range(0,100)>60)
+                    if (goldDesks[goldIndex].item.dataId != 0 && Random.Range(0,100)>60)
                     {
                         Desk desk = goldDesks[goldIndex];
                         desk.deskAction.SellItem();

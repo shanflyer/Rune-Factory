@@ -103,9 +103,14 @@ public class ChildFunctionAction : MonoBehaviour
 
     public void MilkAction()
     {
-        if (GameComponentData.gameData.gameManager.gamePlayer.package.IsHaveItem(1131))
+        if (PackageManager.instance.IsHaveItem(0,1131))
         {
-            GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(1131,1);
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                itemDataId = 1131,
+                itemCount = 1
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
             displayObj = milkObj;
             displayObj.SetActive(true);
             GameComponentData.gameData.gameManager.childData.foodValue += 2;
@@ -126,9 +131,14 @@ public class ChildFunctionAction : MonoBehaviour
 
     public void NiaoBuAction()
     {
-        if (GameComponentData.gameData.gameManager.gamePlayer.package.IsHaveItem(1266))
+        if (PackageManager.instance.IsHaveItem(0,1266))
         {
-            GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(1266, 1);
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                itemDataId = 1266,
+                itemCount = 1
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
             displayObj = niaobuObj;
             displayObj.SetActive(true);
             GameComponentData.gameData.gameManager.childData.cleanValue += 2;
@@ -149,9 +159,14 @@ public class ChildFunctionAction : MonoBehaviour
 
     public void ChildFly()
     {
-        if (GameComponentData.gameData.gameManager.gamePlayer.package.IsHaveItem(1267))
+        if (PackageManager.instance.IsHaveItem(0,1267))
         {
-            GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(1267, 1);
+            RemovePackageItem removePackageItem = new RemovePackageItem
+            {
+                itemDataId = 1267,
+                itemCount = 1
+            };
+            GameActionManager.instance.QueueAction(removePackageItem, true);
             displayObj = flyObj;
             displayObj.SetActive(true);
             GameComponentData.gameData.gameManager.childData.moodValue += 2;

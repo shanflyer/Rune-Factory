@@ -270,7 +270,7 @@ public class ShopPanelAction : MonoBehaviour
         }
         
     }
-    public void SelectItem(ItemData _itemData)
+    public async void SelectItem(ItemData _itemData)
     {
         AudioController.instance.PlayAudio(SE.select);
         selectItemData = _itemData;
@@ -279,7 +279,7 @@ public class ShopPanelAction : MonoBehaviour
         {
             pastureSelectObj.SetActive(true);
             animalData = GameComponentData.gameData.pastureAction.AnimalDatas.Find(a => a.shopItem == _itemData.id);
-            ItemData fruit = GameComponentData.gameData.itemsManager.GetItemDataFromId(animalData.produceItem);
+            ItemData fruit = await GameDataManager.instance.GetAsyncObjectData<ItemData>(animalData.produceItem.ToString());
             ItemSeasonText.text = LanguageManage.SwitchStr("占用空间:")+animalData.caseCount;
             ItemInformationGrowText.text = LanguageManage.SwitchStr("产出物:") + fruit.name + LanguageManage.SwitchStr("天")+ LanguageManage.SwitchStr("产出间隔:")
                 +animalData.produceCD;
@@ -305,7 +305,7 @@ public class ShopPanelAction : MonoBehaviour
             if (_itemData.Type==ItemType.种子)
             {
                 PlantBaseData plant = GameComponentData.gameData.plantAction.PlantBaseDatas.Find(p => p.SeedId == _itemData.id);
-                ItemData fruit = GameComponentData.gameData.itemsManager.GetItemDataFromId(plant.fruitId);
+                ItemData fruit = await GameDataManager.instance.GetAsyncObjectData<ItemData>(plant.fruitId.ToString());
                 ItemInformationGrowText.text = LanguageManage.SwitchStr("生长天数:") + plant.GrowthDays + LanguageManage.SwitchStr("天") + LanguageManage.SwitchStr("收获数:") + plant.fruitIdNum + LanguageManage.SwitchStr("个");
                 ItemInformationPriceText.text = LanguageManage.SwitchStr("种子单价:") + selectItemData.ShopPrice + "G"+ LanguageManage.SwitchStr("作物单价:") + fruit.SellPrice + "G";
                 string seasonStr = LanguageManage.SwitchStr("适应季节:");

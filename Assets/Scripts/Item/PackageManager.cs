@@ -18,7 +18,40 @@ public class PackageManager : Singleton<PackageManager>
     private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
     private int nowPackageId;
 
-    
+    public void InitFromSaveData(List<PackageSaveData> packageSaveDatas)
+    {
+        for(int i = 0; i < packageSaveDatas.Count; i++)
+        {
+            var saveData = packageSaveDatas[i];
+            GamePackage gamePackage = new GamePackage(saveData.caseCount, saveData.packageName, saveData.id) 
+            { 
+                itemPackage = saveData.itemPackage
+            };
+            gamePackages.Add(saveData.id, gamePackage);
+        }
+    }
+    public List<PackageSaveData> GetPackageSaveData()
+    {
+        List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
+        using (var e = gamePackages.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                GamePackage gamePackage = e.Current.Value;
+                PackageSaveData packageSaveData = new PackageSaveData
+                {
+                    id = gamePackage.instanceId,
+                    caseCount = gamePackage.caseCount,
+                    packageName = gamePackage.name,
+                    itemPackage=gamePackage.itemPackage,
+                    items = gamePackage.GetItems()
+                };
+                packageSaveDatas.Add(packageSaveData);
+            }
+        }
+        return packageSaveDatas;
+    }
+
     public async Task<bool> CheckPackageTryItemIn(int packageId,int itemDataId, int count)
     {
         if(gamePackages.TryGetValue(packageId,out GamePackage gamePackage))
@@ -42,12 +75,14 @@ public class PackageManager : Singleton<PackageManager>
              
         }
     }
-    public void AddPackageCaseCount(int packageId,int count)
+    public int AddPackageCaseCount(int packageId,int count)
     {
         if(gamePackages.TryGetValue(packageId,out GamePackage gamePackage))
         {
             gamePackage.caseCount += count;
+            return gamePackage.caseCount;
         }
+        return 0;
     }
     public void SetPackageCaseCount(int packageId, int count)
     {
@@ -71,7 +106,7 @@ public class PackageManager : Singleton<PackageManager>
     {
         if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
         {
-            int intanceId = ItemManager.instance.CreatItemIntance();
+            int intanceId = ItemManager.instance.CreatIntance();
             await gamePackage.SetItemInPackage(new Item
             {
                 instanceId = intanceId,
@@ -96,9 +131,14 @@ public class PackageManager : Singleton<PackageManager>
     }
     private async void CreatRuntimePackage(CreatRuntimePackage creatRuntimePackage)
     {
+        int instanceId= creatRuntimePackage.instanceId;
+        if (instanceId < 0)
+        {
+            instanceId = ItemManager.instance.CreatIntance();
+        }
         GamePackage gamePackage = new GamePackage
         {
-            instanceId = creatRuntimePackage.instanceId,
+            instanceId = instanceId,
             name = creatRuntimePackage.name,
             caseCount = creatRuntimePackage.caseCount,
             itemPackage = creatRuntimePackage.itemPackage
@@ -189,7 +229,15 @@ public class PackageManager : Singleton<PackageManager>
 
         public GamePackage(int caseCount, string name, int id)
         {
-            instanceId = id;
+            if (id < 0)
+            {
+                instanceId = ItemManager.instance.CreatIntance();
+            }
+            else
+            {
+                instanceId = id;
+            }
+            
             itemCount = 0;
             this.name = name;
             this.caseCount = caseCount;
@@ -253,7 +301,7 @@ public class PackageManager : Singleton<PackageManager>
                     {
                         Item newItem = new Item
                         {
-                            instanceId = ItemManager.instance.CreatItemIntance(),
+                            instanceId = ItemManager.instance.CreatIntance(),
                             dataId = itemData.id,
                             count = 0
                         };
@@ -307,7 +355,7 @@ public class PackageManager : Singleton<PackageManager>
                         index = itemData.groupCount - setItem.count;
                         Item item1 = new Item
                         {
-                            instanceId = ItemManager.instance.CreatItemIntance(),
+                            instanceId = ItemManager.instance.CreatIntance(),
                             dataId = itemData.id,
                             count = 0
                         };

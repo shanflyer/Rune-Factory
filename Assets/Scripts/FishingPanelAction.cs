@@ -38,15 +38,20 @@ public class FishingPanelAction : MonoBehaviour
         StartFishing();
     }
     
-    public void OKButtonAction()
+    public async void OKButtonAction()
     {
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-        if (gamePlayer.package.IsHaveItem(1168100))
+        if (PackageManager.instance.IsHaveItem(0,1168100))
         {
             if (gamePlayer.property.Power >= 10)
             {
                 gamePlayer.property.Power -= 10;
-                GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(1168100, 1);
+                RemovePackageItem removePackageItem = new RemovePackageItem
+                {
+                    itemDataId = 1168100,
+                    itemCount = 1
+                };
+                GameActionManager.instance.QueueAction(removePackageItem, true);
                 AudioController.instance.StopBgm();
                 StopCoroutine("FishMoving");
                 animator.SetBool("IsFish", true);
@@ -58,13 +63,20 @@ public class FishingPanelAction : MonoBehaviour
                     LanguageManage.SwitchStr("体力不足，无法垂钓，在床上休息可恢复体力！"));
             }
         }
-        else if (gamePlayer.package.IsHaveItem(1125100))
+        else if (PackageManager.instance.IsHaveItem(0, 1125100))
         {
 
             if (gamePlayer.property.Power >= 10)
             {
                 gamePlayer.property.Power -= 10;
-                GameComponentData.gameData.gameManager.gamePlayer.package.GetItemOutPackage(1125100, 1);
+
+                RemovePackageItem removePackageItem = new RemovePackageItem
+                {
+                    itemDataId = 1125100,
+                    itemCount = 1
+                };
+                GameActionManager.instance.QueueAction(removePackageItem, true);
+                 
                 AudioController.instance.StopBgm();
                 StopCoroutine("FishMoving");
                 animator.SetBool("IsFish", true);
@@ -91,7 +103,7 @@ public class FishingPanelAction : MonoBehaviour
 
     }
 
-    public void GetFish()
+    public async void GetFish()
     {
 
         AudioController.instance.PlayAudio(SE.Fish);
@@ -138,19 +150,19 @@ public class FishingPanelAction : MonoBehaviour
             }
             fishItemObj.SetActive(true);
             functionObj.SetActive(false);
-            ItemData itemData = GameComponentData.gameData.itemsManager.ItemDataList.Find(i => i.Id == selectFish.item);
+            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(selectFish.item);
             GameComponentData.gameData.charactorTitleAction.AddFishCount(selectFish.item);
-            fishItem = new Item(itemData, 1);
-            itemIcon.sprite = GameComponent.ItemSprites.Find(s => s.name == itemData.Icon);
+            fishItem = ItemManager.instance.CreatItem(itemData, 1);
+            itemIcon.sprite = itemData.iconSprite;
             ItemNoticeText.text = LanguageManage.SwitchStr("收获了1条") + selectFish.name;
  
         }
         
     }
-    public void PutInPackage()
+    public async void PutInPackage()
     {
         AudioController.instance.PlayAudio(SE.click);
-        int x = GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(fishItem);
+        int x =await PackageManager.instance.SetItemInPackage(fishItem,0);
         if (x > 0)
         {
             Vector2Int coordinate = GameComponentData.gameData.gameManager.playerCharactor.coordinate;

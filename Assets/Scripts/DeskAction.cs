@@ -169,16 +169,17 @@ public class DeskAction : MonoBehaviour
 
     }
 
-    public void InitDeskData(Item _item,int _package)
+    public async void InitDeskData(Item _item,int _package)
     {
         GoldPackage = _package;
 
         item = _item;
+        var data=await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
         if (item.instanceId != 0)
         {
             ItemSpriteRenderer.enabled = true;
             ItemCountText.enabled = true;
-            ItemSpriteRenderer.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(item);
+            ItemSpriteRenderer.sprite = data.iconSprite;
             ItemCountText.text = _item.count.ToString();
         }
         else
@@ -189,15 +190,15 @@ public class DeskAction : MonoBehaviour
         GameComponentData.gameData.shopGoldDeskAction.GoodDeskes.Find(d => d.deskAction == this).item = item;
 
     }
-    public void InitDeskData(Item _item)
-    {
-     
+    public async void InitDeskData(Item _item)
+    { 
         item = _item;
+        var data = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
         if (item.instanceId != 0)
         {
             ItemSpriteRenderer.enabled = true;
             ItemCountText.enabled = true;
-            ItemSpriteRenderer.sprite = GameComponentData.gameData.itemsManager.GetItemIcon(item);
+            ItemSpriteRenderer.sprite = data.iconSprite;
             ItemCountText.text = _item.count.ToString();
         }
         else

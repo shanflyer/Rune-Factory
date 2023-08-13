@@ -358,12 +358,12 @@ public class PlantAction : MonoBehaviour
         
         
     }
-    public void PlantReward(Cell cell)
+    public async void PlantReward(Cell cell)
     {
         Plant plant = Plants.Find(p => p.id == cell.myGameObjects[0].id);
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(plant.plantBaseData.fruitId);
-        Item item=new Item(itemData,plant.plantBaseData.fruitIdNum);
-        GameComponentData.gameData.gameManager.gamePlayer.package.SetItemInPackage(item);
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(plant.plantBaseData.fruitId);
+        Item item= ItemManager.instance.CreatItem(itemData.id,plant.plantBaseData.fruitIdNum);
+        PackageManager.instance.SetItemInPackage(item,0);
         plant.turnCount--;
         if (plant.turnCount <= 0)
         {
@@ -375,15 +375,15 @@ public class PlantAction : MonoBehaviour
         }
         
     }
-    public void PlantReward(Plant plant)
+    public async void PlantReward(Plant plant)
     {
-        ItemData itemData = GameComponentData.gameData.itemsManager.GetItemDataFromId(plant.plantBaseData.fruitId);
-        Item item = new Item(itemData, plant.plantBaseData.fruitIdNum);
-        Package package = GameComponentData.gameData.gameManager.gamePlayer.package;
+        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(plant.plantBaseData.fruitId);
+        Item item = ItemManager.instance.CreatItem(itemData.id, plant.plantBaseData.fruitIdNum);
+        
         GameComponentData.gameData.charactorTitleAction.AddPlantExp(1);
-        if (package.IsPackageFill(item))
+        if (await PackageManager.instance.CheckPackageTryItemIn(0,itemData.id, plant.plantBaseData.fruitIdNum))
         {
-            package.SetItemInPackage(item);
+            PackageManager.instance.SetItemInPackage(item, 0); 
             plant.turnCount--;
             if (plant.turnCount <= 0)
             {
@@ -395,7 +395,7 @@ public class PlantAction : MonoBehaviour
             {
                 plant.InitNewTurn();
             }
-            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*收获了") + plant.plantBaseData.fruitIdNum + LanguageManage.SwitchStr("个") + itemData.Name);
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("*收获了") + plant.plantBaseData.fruitIdNum + LanguageManage.SwitchStr("个") + itemData.name);
         }
         else
         {

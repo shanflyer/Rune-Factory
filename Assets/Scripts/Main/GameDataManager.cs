@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using LitJson;
 using UnityEngine;
@@ -9,10 +10,42 @@ using Object = UnityEngine.Object;
 
 public class GameDataManager : Singleton<GameDataManager> 
 {
+    private string userName = "User";
+    private UserGameSaveData userGameSaveData;
+    public UserGameSaveData UserGameSaveData
+    {
+        get => userGameSaveData;
+    }
+    private async void InitUserSaveData()
+    {
+        userGameSaveData = await LoadUserGameSaveData(userName);
+    }
+    public async Task<UserGameSaveData> LoadUserGameSaveData(string userName)
+    {
+        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+        if (File.Exists(saveDataPath))
+        {
+            string dataStr = await File.ReadAllTextAsync(saveDataPath);
+            UserGameSaveData userGameSaveData = JsonMapper.ToObject<UserGameSaveData>(dataStr);
+            return userGameSaveData;
+        }
+        else
+        {
+            return new UserGameSaveData();
+        }
+    }
+    void SaveUserGameSaveData()
+    {
+        string strs = JsonMapper.ToJson(userGameSaveData);
+        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+
+        File.WriteAllText(saveDataPath, strs);
+    }
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
     public override void Init()
     {
         base.Init();
+        InitUserSaveData();
     }
     public T GetData<T>(string key) where T : IGameData
     {
@@ -92,6 +125,11 @@ public class GameDataManager : Singleton<GameDataManager>
 
         }
         return results ;
+    }
+
+    public async Task<T> GetAsyncObjectData<T>(int key) where T : Object, IGameData
+    {
+        return await GetAsyncObjectData<T>(key.ToString());
     }
     public async Task<T> GetAsyncObjectData<T>(string key) where T : Object,IGameData
     {
