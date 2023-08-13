@@ -80,7 +80,6 @@
     <Compile Include="Assets\Scripts\InputFieldAction.cs" />
     <Compile Include="Assets\Scripts\x\AttributeMaskAction.cs" />
     <Compile Include="Assets\Scripts\GameBoxClickAction.cs" />
-    <Compile Include="Assets\Scripts\RoomAction.cs" />
     <Compile Include="Assets\Scripts\InfluenceAction.cs" />
     <Compile Include="Assets\Scripts\UI\GamePanel.cs" />
     <Compile Include="Assets\Scripts\PastureClickAction.cs" />
@@ -97,6 +96,7 @@
     <Compile Include="Assets\Scripts\MuZeroLoadSelect.cs" />
     <Compile Include="Assets\Scripts\UI\SelectLoadPanel.cs" />
     <Compile Include="Assets\Scripts\ShopManager.cs" />
+    <Compile Include="Assets\Scripts\Main\FestivalManager.cs" />
     <Compile Include="Assets\Scripts\ShopGoldDeskAction.cs" />
     <Compile Include="Assets\Scripts\UI\SaveReference.cs" />
     <Compile Include="Assets\Scripts\x\Seedaction.cs" />
@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\ManufacturingAction.cs" />
     <Compile Include="Assets\Scripts\Main\GameTimerController.cs" />
     <Compile Include="Assets\Scripts\FightAnimationAction.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerPanel.cs" />
     <Compile Include="Assets\Scripts\LoadingAction.cs" />
     <Compile Include="Assets\Scripts\ManufacBuildClickAction.cs" />
     <Compile Include="Assets\Scripts\IApBUGClear.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Assets\Scripts\AnimalInformationAction.cs" />
     <Compile Include="Assets\Scripts\SeasonSelect.cs" />
     <Compile Include="Assets\Scripts\MarryNpcAction.cs" />
+    <Compile Include="Assets\Scripts\UI\DateReference.cs" />
     <Compile Include="Assets\Scripts\YanhuaAction.cs" />
     <Compile Include="Assets\Scripts\DeskItemAction.cs" />
     <Compile Include="Assets\Scripts\VillageManager.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Assets\Scripts\FishManager.cs" />
     <Compile Include="Assets\Scripts\Main\ExtensionsResources.cs" />
     <Compile Include="Assets\Scripts\DeskAction.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.cs" />
     <Compile Include="Assets\Scripts\EffectLine.cs" />
     <Compile Include="Assets\Scripts\Main\GameController.cs" />
     <Compile Include="Assets\Scripts\EmplorPanelAction.cs" />
@@ -167,7 +170,6 @@
     <Compile Include="Assets\Scripts\ItemBoxAction.cs" />
     <Compile Include="Assets\Scripts\UI\MainPanel.cs" />
     <Compile Include="Assets\Scripts\ItemsManager.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.cs" />
     <Compile Include="Assets\Scripts\test\MapMoveTest.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerData.cs" />
     <Compile Include="Assets\Scripts\TwoSelectAction.cs" />
@@ -177,10 +179,10 @@
     <Compile Include="Assets\Scripts\TipsAction.cs" />
     <Compile Include="Assets\Scripts\TitleSelectAction.cs" />
     <Compile Include="Assets\Scripts\CameraselectMove.cs" />
+    <Compile Include="Assets\Scripts\UI\CalendarPanel.cs" />
     <Compile Include="Assets\Scripts\Main\GameTimeManager.cs" />
     <Compile Include="Assets\Scripts\x\FormulaButtonAction.cs" />
     <Compile Include="Assets\Scripts\Item\ItemData.cs" />
-    <Compile Include="Assets\Scripts\MapRiliAction.cs" />
     <Compile Include="Assets\Scripts\MapDataAction.cs" />
     <Compile Include="Assets\Scripts\NPCAnimationAction.cs" />
     <Compile Include="Assets\Scripts\MyGameObject.cs" />
@@ -216,7 +218,6 @@
     <Compile Include="Assets\Scripts\CharactorDataAction.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\A1_Water_Tile.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\LanguageSpriteObj.cs" />
-    <Compile Include="Assets\Scripts\CalendarAction.cs" />
     <Compile Include="Assets\Scripts\WaitPanelAction.cs" />
     <Compile Include="Assets\Scripts\UI\SelectCharactorPanel.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\A2_Tile.cs" />
@@ -234,7 +235,6 @@
     <Compile Include="Assets\Scripts\BattleMapAction.cs" />
     <Compile Include="Assets\Scripts\AdventurePanelAction.cs" />
     <Compile Include="Assets\Scripts\FarmToolAction.cs" />
-    <Compile Include="Assets\Scripts\FestivalManager.cs" />
     <Compile Include="Assets\Scripts\Action\GameActionDataList.cs" />
     <Compile Include="Assets\Scripts\x\ObjCode.cs" />
     <Compile Include="Assets\Scripts\x\kettleAction.cs" />
@@ -242,7 +242,6 @@
     <Compile Include="Assets\Scripts\ItemCase.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\RPGM_XP_Water_Tile.cs" />
     <Compile Include="Assets\Scripts\Film\FilmController.cs" />
-    <Compile Include="Assets\Scripts\DateDisplayAction.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\EquipmentManager.cs" />
     <Compile Include="Assets\Scripts\Cell.cs" />

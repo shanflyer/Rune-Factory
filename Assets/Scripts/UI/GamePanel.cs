@@ -92,7 +92,7 @@ public class GamePanel : MonoBehaviour
         enabled = true;
     }
     public virtual void Close()
-    {
+    { 
         gameObject.layer = HideLayer;
         if (graphicRaycaster)
         {

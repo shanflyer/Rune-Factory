@@ -13,7 +13,7 @@ public enum FestivalType
     狂欢=4
 }
 [System.Serializable]
-public class FestivalData
+public struct FestivalData : IGameData
 {
     public string name;
     public string englishName;
@@ -25,26 +25,26 @@ public class FestivalData
     public string text;
     public string englishText;
 
-}
-public class FestivalManager : MonoBehaviour
-{
-    public List<FestivalData> FestivalDatas;
-
-    [HideInInspector]
-    public List<FestivalData> customFestivalDatas;
-    
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-    public void InitData()
+    public string GetKey()
     {
-        FestivalDatas = new List<FestivalData>();
-        CreatNPCBrothDay();
+        return id.ToString();
     }
+}
+public class FestivalManager : Singleton<FestivalManager>
+{
+    public override async void Init()
+    {
+        base.Init();
 
-    public void LoadBrothDay()
+        customFestivalDatas = await GameDataManager.instance.GetAllAsyncData<FestivalData>();
+        CreatNPCBrothDay();
+        LoadBrothDay();
+    }
+    public List<FestivalData> FestivalDatas;
+     
+    public List<FestivalData> customFestivalDatas;
+   
+    void LoadBrothDay()
     {
         FestivalDatas = new List<FestivalData>();
         FestivalData festivalData0 =
@@ -71,7 +71,7 @@ public class FestivalManager : MonoBehaviour
         }
 
     }
-    public void CreatNPCBrothDay()
+    void CreatNPCBrothDay()
     {
         List<GameTime> gameTimes=new List<GameTime>();
         FestivalData festivalData0 =
@@ -112,36 +112,6 @@ public class FestivalManager : MonoBehaviour
             };
             FestivalDatas.Add(festivalData);
         }
-        
-
-
     }
-    public void DataToJson()
-    {
-        string path = Application.dataPath + "/Resources/Datas/FestivalDatas.json";
-        if (File.Exists(path))
-        {
-            File.Delete(path);
-        }
-        string jsonStr = JsonMapper.ToJson(FestivalDatas);
-        FileStream fileStream=new FileStream(path,FileMode.OpenOrCreate);
-        StreamWriter stream=new StreamWriter(fileStream);
-        stream.Write(jsonStr);
-        stream.Close();
-    }
-
-    public void JsonToData()
-    {
-        string path = "Datas/FestivalDatas";
-        TextAsset textAsset = Resources.Load<TextAsset>(path);
-        if (textAsset != null)
-        {
-            string jsonStr = textAsset.text;
-            FestivalDatas = JsonMapper.ToObject<List<FestivalData>>(jsonStr);
-        }
-    }
-	// Update is called once per frame
-	void Update () {
-		
-	}
+   
 }

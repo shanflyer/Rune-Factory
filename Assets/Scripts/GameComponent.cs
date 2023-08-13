@@ -39,8 +39,7 @@ public class GameComponent : MonoBehaviour
     public ManufacturingAction manufacturingAction;
     public FormulaAction formulaAction;
     public ShopManager shopManager;
-    public GameObject calenderPanel;
-    public CalendarAction calendarAction;
+    public GameObject calenderPanel; 
     public GameManager gameManager;
     public FilmManager filmManager;
     public GameTimeManager gameTimeManager;

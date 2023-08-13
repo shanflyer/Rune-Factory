@@ -452,7 +452,7 @@ public class GameManager : MonoBehaviour
 	            packageLevel = (gamePlayer.package.CaseCount - 5) / 5;
                 boxLevel= (gamePlayer.box.CaseCount - 10) / 5;
                 iceBoxLevel= (gamePlayer.icebox.CaseCount - 10) / 5;
-                GameData.festivalManager.LoadBrothDay();
+                
                 GameData.gameTimeManager.CreatData();
                 
 	            foreach (Transform child in GameData.BattleMapAction.mapParent)
@@ -468,8 +468,7 @@ public class GameManager : MonoBehaviour
 
             }
 	        else
-	        {
-	            GameData.festivalManager.InitData();
+	        { 
                 gamePlayer.InitGamePlayer();
                 GameData.plantAction.ZeroInitData();
                 InitZeroSceneData();

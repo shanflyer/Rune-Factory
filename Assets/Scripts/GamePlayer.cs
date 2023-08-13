@@ -2,12 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public enum Gender
-{
-    male=0,
-    female=1
-}
+
 public static class PlayerDate
 {
     public static string playerName;

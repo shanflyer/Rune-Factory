@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-
+ 
 public class UIManager:Singleton<UIManager>
 { 
     private Dictionary<Type, GamePanel> gamePanels = new Dictionary<Type, GamePanel>();

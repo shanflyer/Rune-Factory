@@ -31,7 +31,7 @@ public class PlayerTopPanel : GamePanel
         base.Awake();
         calendar.onClick.AddListener(() =>
         {
-
+            UIManager.instance.ShowGamePanel<CalendarPanel>(layer: 3);
         });
         goldAdd.onClick.AddListener(GameController.instance.AddGold);
         crystalAdd.onClick.AddListener(GameController.instance.AddGold);
