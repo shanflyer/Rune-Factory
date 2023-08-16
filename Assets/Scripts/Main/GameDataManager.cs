@@ -3,8 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using LitJson;
+using Mono.Cecil;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -34,8 +36,23 @@ public class GameDataManager : Singleton<GameDataManager>
             return new UserGameSaveData();
         }
     }
+
+    public void InitPlayerData(string playerName,Gender gender, Season season,int day,int year=1300)
+    { 
+        userGameSaveData.playerData.name = playerName;
+        userGameSaveData.playerData.gender = gender;
+        userGameSaveData.playerData.brithDay = new BrithDay
+        {
+            year = year,
+            season = season,
+            day = day
+        };
+
+    }
+
     void SaveUserGameSaveData()
     {
+        userGameSaveData.packageSaveDatas = PackageManager.instance.GetPackageSaveData();
         string strs = JsonMapper.ToJson(userGameSaveData);
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
 
@@ -126,12 +143,60 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         return results ;
     }
+    public async Task<List<T>> GetAllAsyncObjectData<T>() where T : Object, IGameData
+    {
+        List<T> results = new List<T>();
+        Type type = typeof(T);
+        if (allGameStaticDatas.TryGetValue(type, out var dataDic))
+        {
+            using (var e = dataDic.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    var data = e.Current.Value;
+                    results.Add((T)data);
+                }
+            }
+        }
+        else
+        {
+            var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
 
+            if (dataAsset != null&& dataAsset is List<T> dataList)
+            {
+                dataDic = new Dictionary<string, IGameData>(); 
+                try
+                {
+                    results = dataList;
+                    for (int i = 0; i < results.Count; i++)
+                    {
+                        var data = results[i];
+                        dataDic.Add(data.GetKey(), data);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning(e);
+                }
+                allGameStaticDatas[type] = dataDic;
+            }
+            else
+            {
+               var  _results = ExtensionsResources.LoadAllResource<T>(DataPath.GetDataPath(type));
+                if (_results != null)
+                {
+                    results = _results.ToList();
+                }
+            }
+
+        }
+        return results;
+    }
     public async Task<T> GetAsyncObjectData<T>(int key) where T : Object, IGameData
     {
         return await GetAsyncObjectData<T>(key.ToString());
     }
-    public async Task<T> GetAsyncObjectData<T>(string key) where T : Object,IGameData
+    public async Task<T> GetAsyncObjectData<T>(string key="") where T : Object,IGameData
     {
         Type type = typeof(T);
         if (allGameStaticDatas.TryGetValue(type, out var dataDic))
@@ -140,18 +205,43 @@ public class GameDataManager : Singleton<GameDataManager>
             {
                 return (T)data;
             }
+            else
+            {
+                string dataPath = $"{DataPath.GetDataPath(type)}{key}";
+                data = await ExtensionsResources.LoadResourceAsync<T>(dataPath);
+                if (data != null)
+                {
+                    dataDic[data.GetKey()] = data;
+                    allGameStaticDatas[type] = dataDic;
+                    return (T)data;
+                }
+            }
         }
         else
         {
-            var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
-
-            if(dataAsset is T)
+            string dataPath = $"{DataPath.GetDataPath(type)}{key}";
+            var data = await ExtensionsResources.LoadResourceAsync<T>(dataPath);
+            if (data!= null)
             {
                 dataDic = new Dictionary<string, IGameData>();
-                var data=(T)dataAsset;
                 dataDic[data.GetKey()] = data;
                 allGameStaticDatas[type] = dataDic;
-            } 
+                return data;
+            }
+            else
+            {
+                var dataAsset = await ExtensionsResources.LoadResourceAsync(dataPath);
+                if (dataAsset != null&& dataAsset is List<T> dataList)
+                {
+                    dataDic = new Dictionary<string, IGameData>(); 
+                    for (int i = 0; i < dataList.Count; i++)
+                    {
+                        dataDic[dataList[i].GetKey()] = dataList[i];
+                    }
+                    allGameStaticDatas[type] = dataDic;
+                }
+            }
+           
         }
         return default(T); ;
     }

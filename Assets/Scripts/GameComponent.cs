@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using OldName;
 public static class GameComponentData
 {
     public static GameComponent gameData;

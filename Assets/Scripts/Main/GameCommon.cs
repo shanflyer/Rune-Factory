@@ -5,6 +5,9 @@ using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.Awaitable;
+
+public delegate Vector2 GetMoveVector();
+public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
 [System.Serializable]
 public struct Property
 {

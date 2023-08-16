@@ -18,9 +18,21 @@ public  static class ExtensionsResources
         await gres;
         return gres.asset as T;
     }
+
+    public static T[] LoadAllResource<T>(string path) where T : UnityEngine.Object
+    {
+        var gres = Resources.LoadAll<T>(path); 
+        return gres;
+    }
     public static async Task<Object> LoadResourceAsync(string path)
     {
         var gres = Resources.LoadAsync(path);
+        await gres;
+        return gres.asset;
+    }
+    public static async Task<Object> LoadResourceAsync(Type type,string path)
+    {
+        var gres = Resources.LoadAsync(path,type);
         await gres;
         return gres.asset;
     }

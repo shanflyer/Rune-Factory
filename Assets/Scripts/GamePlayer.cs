@@ -10,22 +10,11 @@ public static class PlayerDate
     public static Gender gender;
     public static Season season;
     public static int date;
-   public static int package,BoxPackage,IcePackage;
+    public static int package,BoxPackage,IcePackage;
     public static int weapon, clothes;
     public static bool isMarried;
     public static bool isMarriedFood, isAnMo;
-    public static void InitPlayerData(string _playerName, int _level, Gender _gender, Season _season
-        , int _date,bool _isMarried,bool _isMarriedFood,bool _isAnMo)
-    {
-        playerName = _playerName;
-        level = _level;
-        gender = _gender;
-        season = _season;
-        date = _date;
-        isMarried = _isMarried;
-        isMarriedFood = _isMarriedFood;
-        isAnMo = _isAnMo;
-    }
+    
 }
 
 [System.Serializable]

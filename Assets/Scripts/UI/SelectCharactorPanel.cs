@@ -133,7 +133,8 @@ public class SelectCharacterPanel : GamePanel
     void OkButtonAction()
     {
         AudioController.instance.PlayAudio(SE.click);
-        PlayerDate.InitPlayerData(playerName,1,gender,brothSeason,brothDate,false,false,false);
+
+        GameDataManager.instance.InitPlayerData(playerName, gender, brothSeason, brothDate); 
         DataSaveAndLoadTest.IniteZerodata();
         UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel>(layer: 3);
 

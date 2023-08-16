@@ -39,14 +39,16 @@ public class CharacterSelectInformationPanel : GamePanel
     }
     public override Task InitData(int dataId)
     {
-        Meal.enabled = PlayerDate.gender == Gender.male;
-        Female.enabled = PlayerDate.gender == Gender.female;
-        MealIcon.enabled = PlayerDate.gender == Gender.male;
-        FemaleIcon.enabled = PlayerDate.gender == Gender.female;
+        CharacterSaveData characterSaveData = GameDataManager.instance.UserGameSaveData.playerData;
 
-        PlayerText.text = PlayerDate.playerName;
-        string month = PlayerDate.season.ToString() + "之月"; 
-        BrothText.text = LanguageManage.SwitchStr(month) + PlayerDate.date + LanguageManage.SwitchStr("日");
+        Meal.enabled = characterSaveData.gender == Gender.male;
+        Female.enabled = characterSaveData.gender == Gender.female;
+        MealIcon.enabled = characterSaveData.gender == Gender.male;
+        FemaleIcon.enabled = characterSaveData.gender == Gender.female;
+
+        PlayerText.text = characterSaveData.name;
+        string month = characterSaveData.brithDay.season.ToString() + "之月"; 
+        BrothText.text = LanguageManage.SwitchStr(month) + characterSaveData.brithDay.day + LanguageManage.SwitchStr("日");
 
         return base.InitData(dataId);
     }

@@ -7,16 +7,16 @@ using LitJson;
 using System.IO;
 using System.Text;
 [System.Serializable]
-public class MapCellData
+public class OldMapCellData
 {
     public string mapName;
     public List<MapTile> mapTiles;
-    public MapCellData()
+    public OldMapCellData()
     {
         mapName = "";
         mapTiles = new List<MapTile>();
     }
-    public MapCellData(string _mapName, List<MapTile> _mapTiles)
+    public OldMapCellData(string _mapName, List<MapTile> _mapTiles)
     {
         mapName = _mapName;
         mapTiles = _mapTiles;
@@ -47,7 +47,7 @@ public class MapEditAction : MonoBehaviour
     public bool isCamreaMove;
     public bool isDisplayCoordinate;
     private bool isCharactor;
-    private MapCellData mapCellData;
+    private OldMapCellData mapCellData;
     public GameObject mapObj;
     private MapDataAction mapData;
     private Cell[] cellList;
@@ -177,7 +177,7 @@ public class MapEditAction : MonoBehaviour
             MapTile mapTile = new MapTile(cell.coordinate,cell.tile.name);
             mapTiles.Add(mapTile);
         }
-        mapCellData = new MapCellData(SceneData.PassId.ToString(), mapTiles);
+        mapCellData = new OldMapCellData(SceneData.PassId.ToString(), mapTiles);
         string fileName = filePath + SceneData.PassId.ToString()+ ".json";
         string jsonStr = JsonMapper.ToJson(mapCellData);
         if (File.Exists(fileName))
@@ -201,8 +201,8 @@ public class MapEditAction : MonoBehaviour
         else
         {
             string jsonStr = fileText.text;
-            mapCellData = new MapCellData();
-            mapCellData = JsonMapper.ToObject<MapCellData>(jsonStr);
+            mapCellData = new OldMapCellData();
+            mapCellData = JsonMapper.ToObject<OldMapCellData>(jsonStr);
             if (tiles.Count >0)
             {
                 SetMapCell();

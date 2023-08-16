@@ -74,12 +74,14 @@ public class FestivalManager : Singleton<FestivalManager>
     void CreatNPCBrothDay()
     {
         List<GameTime> gameTimes=new List<GameTime>();
+        CharacterSaveData characterSaveData = GameDataManager.instance.UserGameSaveData.playerData;
+
         FestivalData festivalData0 =
             new FestivalData
             {
-                name = PlayerDate.playerName + LanguageManage.SwitchStr(" 的生日"),
-                season = PlayerDate.season,
-                date = PlayerDate.date,
+                name = characterSaveData.name + LanguageManage.SwitchStr(" 的生日"),
+                season = characterSaveData.brithDay.season,
+                date = characterSaveData.brithDay.day,
                 id = 8
             };
         FestivalDatas.Add(festivalData0);

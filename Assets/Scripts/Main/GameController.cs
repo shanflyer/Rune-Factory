@@ -6,6 +6,7 @@ using UnityEngine.Playables;
 using UnityEngine.UIElements.Experimental;
 using UnityEngine.Timeline;
 using UnityEngine.Rendering;
+using Unity.Mathematics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -16,7 +17,8 @@ public class GameController : MonoBehaviour
     public bool SetLanguage;
     public SystemLanguage SetSystemLanguage;
 
-    
+    public Item[] testPlayerItems;
+
     private void OnEnable()
     { 
         instance = this;

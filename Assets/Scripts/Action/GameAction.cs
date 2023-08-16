@@ -331,12 +331,12 @@ public struct SetCharacterProperty : GameAction
         if (parameters.Count >= 2)
         {
             characterId = int.Parse(parameters[0].value);
-          //  propertyType = (CharacterPropertyType) Enum.Parse(typeof(CharacterPropertyType),parameters[1].value);
+            propertyType = (CharacterPropertyType) Enum.Parse(typeof(CharacterPropertyType),parameters[1].value);
             setValue= int.Parse(parameters[2].value);
         }
     }
     public int characterId;
-    //public CharacterPropertyType propertyType;
+    public CharacterPropertyType propertyType;
     public int setValue;
  
 }
@@ -347,12 +347,12 @@ public struct ChangeCharacterProperty : GameAction
         if (parameters.Count >= 2)
         {
             characterId = int.Parse(parameters[0].value);
-            //propertyType = (CharacterPropertyType)Enum.Parse(typeof(CharacterPropertyType), parameters[1].value);
+            propertyType = (CharacterPropertyType)Enum.Parse(typeof(CharacterPropertyType), parameters[1].value);
             changeValue = int.Parse(parameters[2].value);
         }
     }
     public int characterId;
-   // public CharacterPropertyType propertyType;
+    public CharacterPropertyType propertyType;
     public int changeValue; 
 }
 
@@ -366,7 +366,7 @@ public struct CharacterPropertyTrigger:GameAction
 
             var parameter = parameters[1];
 
-            /*
+            
             if (parameter.parameters.Count >= 3)
             {
                 characterProperty = new CharacterProperty
@@ -375,11 +375,11 @@ public struct CharacterPropertyTrigger:GameAction
                     health = int.Parse(parameter.parameters[1].value),
                     satiety = int.Parse(parameter.parameters[2].value)
                 };
-            } */
+            } 
         }
     }
     public int characterId;
-   // public CharacterProperty characterProperty;
+     public CharacterProperty characterProperty;
  
 }
 public struct SetCharacterCoordinate : GameAction

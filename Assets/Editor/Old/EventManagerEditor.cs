@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using OldName;
 [CustomEditor(typeof(EventManager))]
 [ExecuteInEditMode]
 public class EVentManagerEditor : Editor {

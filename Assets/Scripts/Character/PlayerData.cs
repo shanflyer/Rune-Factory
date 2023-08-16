@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public struct UserGameSaveData
-{
-    public CharacterSaveData playerData; 
+{ 
+    public CharacterSaveData playerData;
+    public OtherSaveData otherSaveData;
     public List<CharacterSaveData> characterSaveDatas;
     public List<PackageSaveData> packageSaveDatas;
+}
+public struct OtherSaveData
+{
+    public int boxPackageId, icePackageId;
+    public bool isMarriedFood, isAnMo;
 }
 public struct CharacterSaveData
 {
@@ -14,6 +20,8 @@ public struct CharacterSaveData
     public Gender gender;
     public BrithDay brithDay;
     public int packageId;
+    public int weapon, clothes;
+    public bool isMarried;
 }
 
 public struct PackageSaveData
