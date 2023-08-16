@@ -49,20 +49,34 @@ public struct ObjCoordinate
 }
 public struct CharacterProperty
 {
-    public int energy;
-    public int health;
-    public int satiety;
-
+    public int HP, MP, Power, MaxHP,MaxMP,MaxPower, AT, DF, Crit, Dodge;
+    public int Other;
     public int GetValue(CharacterPropertyType characterPropertyType)
     {
         switch (characterPropertyType)
         {
             case CharacterPropertyType.体力:
-                return  energy; 
+                return Power; 
             case CharacterPropertyType.生命:
-                return health;
-            case CharacterPropertyType.饱食:
-                return satiety;
+                return HP;
+            case CharacterPropertyType.法力:
+                return MP;
+            case CharacterPropertyType.攻击:
+                return AT;
+            case CharacterPropertyType.防御:
+                return DF;
+            case CharacterPropertyType.暴击:
+                return Crit;
+            case CharacterPropertyType.闪避:
+                return Dodge;
+            case CharacterPropertyType.最大体力:
+                return MaxPower;
+            case CharacterPropertyType.最大生命:
+                return MaxHP;
+            case CharacterPropertyType.最大法力:
+                return MaxMP;
+            default:
+                return Other;
         }
         return -1;
     }
@@ -82,11 +96,31 @@ public class Character
     {
         GameController.instance.StopCoroutine(moveEnumerator);
     }
-    public void SetProperty(int energy, int health, int satiety)
+    public void SetProperty(int HP=-1, int MP = -1, int Power = -1, int MaxHP = -1, int MaxMP = -1, int MaxPower = -1, int AT = -1, int DF = -1, int Crit = -1, int Dodge = -1
+        ,int Other=-1)
     {
-        characterProperty.energy = energy;
-        characterProperty.health = health;
-        characterProperty.satiety = satiety;
+        if(HP>=0)
+            characterProperty.HP = HP;
+        if (MP >= 0)
+            characterProperty.MP = MP;
+        if (Power >= 0)
+            characterProperty.Power = Power;
+        if (MaxHP >= 0)
+            characterProperty.MaxHP = MaxHP;
+        if (MaxMP >= 0)
+            characterProperty.MaxMP = MaxMP;
+        if (MaxPower >= 0)
+            characterProperty.MaxPower = MaxPower;
+        if (AT >= 0)
+            characterProperty.AT = AT;
+        if (DF >= 0)
+            characterProperty.DF = DF;
+        if (Crit >= 0)
+            characterProperty.Crit = Crit;
+        if (Dodge >= 0)
+            characterProperty.Dodge = Dodge;
+        if (Other >= 0)
+            characterProperty.Other = Other;
 
         CharacterPropertyTrigger characterPropertyTrigger = new CharacterPropertyTrigger
         {
@@ -100,15 +134,38 @@ public class Character
         switch (setCharacterProperty.propertyType)
         {
             case CharacterPropertyType.体力:
-                characterProperty.energy = setCharacterProperty.setValue;
+                characterProperty.Power = setCharacterProperty.setValue;
                 break;
             case CharacterPropertyType.生命:
-                characterProperty.health = setCharacterProperty.setValue;
+                characterProperty.HP = setCharacterProperty.setValue;
                 break;
-            case CharacterPropertyType.饱食:
-                characterProperty.satiety = setCharacterProperty.setValue;
+            case CharacterPropertyType.法力:
+                characterProperty.MP = setCharacterProperty.setValue;
                 break;
-
+            case CharacterPropertyType.最大体力:
+                characterProperty.MaxPower = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.最大法力:
+                characterProperty.MaxMP = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.最大生命:
+                characterProperty.MaxHP = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.攻击:
+                characterProperty.AT = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.防御:
+                characterProperty.DF = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.闪避:
+                characterProperty.Crit = setCharacterProperty.setValue;
+                break; 
+            case CharacterPropertyType.暴击:
+                characterProperty.Dodge = setCharacterProperty.setValue;
+                break; 
+            case CharacterPropertyType.自定义值:
+                characterProperty.Other = setCharacterProperty.setValue;
+                break; 
         }
         CharacterPropertyTrigger characterPropertyTrigger = new CharacterPropertyTrigger
         {
@@ -122,15 +179,38 @@ public class Character
         switch (changeCharacterProperty.propertyType)
         {
             case CharacterPropertyType.体力:
-                characterProperty.energy += changeCharacterProperty.changeValue;
+                characterProperty.Power = changeCharacterProperty.changeValue;
                 break;
             case CharacterPropertyType.生命:
-                characterProperty.health += changeCharacterProperty.changeValue;
+                characterProperty.HP = changeCharacterProperty.changeValue;
                 break;
-            case CharacterPropertyType.饱食:
-                characterProperty.satiety += changeCharacterProperty.changeValue;
+            case CharacterPropertyType.法力:
+                characterProperty.MP = changeCharacterProperty.changeValue;
                 break;
-
+            case CharacterPropertyType.最大体力:
+                characterProperty.MaxPower = changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.最大法力:
+                characterProperty.MaxMP = changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.最大生命:
+                characterProperty.MaxHP = changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.攻击:
+                characterProperty.AT = changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.防御:
+                characterProperty.DF = changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.闪避:
+                characterProperty.Crit = changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.暴击:
+                characterProperty.Dodge = changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.自定义值:
+                characterProperty.Other = changeCharacterProperty.changeValue;
+                break;
         }
     }
 
@@ -245,12 +325,7 @@ public class Player : Character
     {
         this.name = name;
         bag = PackageManager.instance.CreatGamePackage(10, "PlayerBag",instanceId);
-        characterProperty = new CharacterProperty
-        {
-            energy = 100,
-            health = 100,
-            satiety = 100
-        };
+        //临时
     } 
     public Player(CharacterSaveData characterSaveData)
     {

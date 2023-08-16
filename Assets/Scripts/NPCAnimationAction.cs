@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using OldName;
 
- 
 public class NPCAnimationAction : MonoBehaviour
 {
     public Animator animator;

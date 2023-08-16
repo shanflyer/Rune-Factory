@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using LitJson;
 using UnityEngine;
+using OldName;
 [System.Serializable]
 public class TileAddition
 {

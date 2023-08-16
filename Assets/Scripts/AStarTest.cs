@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using OldName;
 [System.Serializable]
 public struct MyVector2
 {

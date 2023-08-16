@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using LitJson;
 using System.IO;
+using OldName;
 [System.Serializable]
 public struct RewardItem
 {

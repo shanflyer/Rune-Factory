@@ -10,8 +10,10 @@ public class CharacterData : ScriptableObject, IGameData
 { 
     public string characterName;
     public int id;
-    public Sex sex;
+    public Gender gender;
     public string icon;
+    public int profession;
+    public AttributeType attributeType;
 
     public string GetKey()
     {

@@ -18,7 +18,11 @@ public class GameController : MonoBehaviour
     public SystemLanguage SetSystemLanguage;
 
     public Item[] testPlayerItems;
-
+    private void OnApplicationQuit()
+    {
+        SigletonType.instance.ClearAll();
+        instance = null;
+    }
     private void OnEnable()
     { 
         instance = this;

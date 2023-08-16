@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using LitJson;
-
+using OldName;
 public class SceneData
 {
     public static int PassId;

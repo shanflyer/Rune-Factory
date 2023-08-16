@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEngine.Awaitable;
+using OldName;
 
 public delegate Vector2 GetMoveVector();
 public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
@@ -131,7 +131,8 @@ public enum CompareType
 [System.Serializable]
 public enum CharacterPropertyType
 {
-    自定义值, 体力,生命,饱食,
+    自定义值=-1, 体力,生命,法力,攻击,防御,暴击,闪避,饱食,
+    最大体力,最大生命,最大法力
 }
 public enum Direction
 {

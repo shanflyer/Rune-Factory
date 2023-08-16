@@ -107,17 +107,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characters.TryGetValue(characterId, out Character character))
         {
-            switch (propertyType)
-            {
-                case CharacterPropertyType.体力:
-                    return character.characterProperty.energy;
-
-                case CharacterPropertyType.生命:
-                    return character.characterProperty.health;
-
-                case CharacterPropertyType.饱食:
-                    return character.characterProperty.satiety;
-            }
+            return character.characterProperty.GetValue(propertyType);
         }
         return -1;
     }

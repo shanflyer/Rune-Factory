@@ -86,8 +86,8 @@ public class FilmController : Singleton<FilmController>
     protected override void Clear()
     {
         base.Clear();
-        GameActionManager.instance.RemoveListener<PlayFilm>(PlayFilm);
-        GameActionManager.instance.RemoveListener<StopFilm>(StopFilm);
-        GameActionManager.instance.RemoveListener<PauseFilm>(PauseFilm);
+        //GameActionManager.instance.RemoveListener<PlayFilm>(PlayFilm);
+        //GameActionManager.instance.RemoveListener<StopFilm>(StopFilm);
+        //GameActionManager.instance.RemoveListener<PauseFilm>(PauseFilm);
     }
 }

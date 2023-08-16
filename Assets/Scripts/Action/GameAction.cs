@@ -366,16 +366,25 @@ public struct CharacterPropertyTrigger:GameAction
 
             var parameter = parameters[1];
 
-            
-            if (parameter.parameters.Count >= 3)
+            try
             {
                 characterProperty = new CharacterProperty
                 {
-                    energy = int.Parse(parameter.parameters[0].value),
-                    health = int.Parse(parameter.parameters[1].value),
-                    satiety = int.Parse(parameter.parameters[2].value)
+                    HP = int.Parse(parameter.parameters[0].value),
+                    MP = int.Parse(parameter.parameters[1].value),
+                    Power = int.Parse(parameter.parameters[2].value),
+                    MaxHP = int.Parse(parameter.parameters[3].value),
+                    MaxMP = int.Parse(parameter.parameters[4].value),
+                    MaxPower = int.Parse(parameter.parameters[5].value),
+                    AT = int.Parse(parameter.parameters[6].value),
+                    DF = int.Parse(parameter.parameters[7].value),
+                    Crit = int.Parse(parameter.parameters[8].value),
+                    Dodge = int.Parse(parameter.parameters[9].value),
+                    Other = int.Parse(parameter.parameters[10].value),
                 };
-            } 
+            }
+            finally { }
+           
         }
     }
     public int characterId;

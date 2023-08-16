@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+using OldName;
 public static class PlayerDate
 {
     public static string playerName;

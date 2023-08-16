@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using OldName;
 public class EmplorPanelAction : MonoBehaviour
 {
     public List<Text> Texts;

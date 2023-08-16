@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
 using System.IO;
+using OldName;
 
 [System.Serializable]
 public enum AnimalStatus
