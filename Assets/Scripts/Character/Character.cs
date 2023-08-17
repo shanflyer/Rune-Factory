@@ -51,6 +51,61 @@ public struct CharacterProperty
 {
     public int HP, MP, Power, MaxHP,MaxMP,MaxPower, AT, DF, Crit, Dodge;
     public int Other;
+
+    public static CharacterProperty operator -(CharacterProperty property0, CharacterProperty property1)
+    {
+        CharacterProperty characterProperty = new CharacterProperty
+        {
+            HP = property0.HP - property1.HP,
+            MP = property0.MP - property1.MP,
+            AT = property0.AT - property1.AT,
+            DF = property0.DF - property1.DF,
+            Power = property0.Power - property1.Power,
+            MaxHP = property0.MaxHP - property1.MaxHP,
+            MaxMP = property0.MaxMP - property1.MaxMP,
+            MaxPower = property0.MaxPower - property1.MaxPower,
+            Crit = property0.Crit - property1.Crit,
+            Dodge = property0.Dodge - property1.Dodge,
+            Other = property0.Other - property1.Other
+        };
+        return characterProperty;
+    }
+    public static CharacterProperty operator +(CharacterProperty property0, CharacterProperty property1)
+    {
+        CharacterProperty characterProperty = new CharacterProperty
+        {
+            HP = property0.HP + property1.HP,
+            MP = property0.MP + property1.MP,
+            AT = property0.AT + property1.AT,
+            DF = property0.DF + property1.DF,
+            Power = property0.Power + property1.Power,
+            MaxHP = property0.MaxHP + property1.MaxHP,
+            MaxMP = property0.MaxMP + property1.MaxMP,
+            MaxPower = property0.MaxPower + property1.MaxPower,
+            Crit = property0.Crit + property1.Crit,
+            Dodge = property0.Dodge + property1.Dodge,
+            Other = property0.Other + property1.Other
+        };
+        return characterProperty;
+    }
+    public static CharacterProperty operator *(CharacterProperty property0, float value)
+    {
+        CharacterProperty characterProperty = new CharacterProperty
+        {
+            HP =(int)(property0.HP *value),
+            MP = (int)(property0.MP * value),
+            AT = (int)(property0.AT * value),
+            DF = (int)(property0.DF * value),
+            Power = (int)(property0.Power * value),
+            MaxHP = (int)(property0.MaxHP * value),
+            MaxMP = (int)(property0.MaxMP * value),
+            MaxPower = (int)(property0.MaxPower * value),
+            Crit = (int)(property0.Crit * value),
+            Dodge = (int)(property0.Dodge * value),
+            Other = (int)(property0.Other * value)
+        };
+        return characterProperty;
+    }
     public int GetValue(CharacterPropertyType characterPropertyType)
     {
         switch (characterPropertyType)
@@ -80,11 +135,23 @@ public struct CharacterProperty
         }
         return -1;
     }
+    public static CharacterProperty Lerp(CharacterProperty start, CharacterProperty end,float LerpValue)
+    {
+        return start + (end - start) * LerpValue;
+    }
+
 }
 public class Character
 {
     public CharacterProperty characterProperty;
+    public int professionId;
+    public int Level
+    {
+        get => level;
+    }
+    private int level;
 
+    public int exp;
     public string name;
     public ObjCoordinate objCoordinate;
     public int instanceId;
@@ -96,6 +163,12 @@ public class Character
     {
         GameController.instance.StopCoroutine(moveEnumerator);
     }
+
+    public  void SetLevel(int level)
+    {
+
+    }
+
     public void SetProperty(int HP=-1, int MP = -1, int Power = -1, int MaxHP = -1, int MaxMP = -1, int MaxPower = -1, int AT = -1, int DF = -1, int Crit = -1, int Dodge = -1
         ,int Other=-1)
     {

@@ -463,6 +463,7 @@ public static class EditorDataPath
 }
 public static class DataPath
 {
+    
     public static Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
         { typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" }

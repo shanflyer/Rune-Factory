@@ -59,11 +59,65 @@ public class GameDataManager : Singleton<GameDataManager>
         File.WriteAllText(saveDataPath, strs);
     }
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
         InitUserSaveData();
+        //初始加载
+        await LoadAllAsyncData<GrowModelData>();
+        LoadAllAsyncObjectData<ProfessionData>();
     }
+    void LoadAllAsyncObjectData<T>() where T :Object,IGameData
+    {
+        Type type = typeof(T);
+        if (!allGameStaticDatas.TryGetValue(type, out var dataDic))
+        {
+            var _results = ExtensionsResources.LoadAllResource<T>(DataPath.GetDataPath(type));
+            if (_results != null)
+            {
+                dataDic = new Dictionary<string, IGameData>();
+                var results = _results.ToList();
+                for (int i = 0; i < results.Count; i++)
+                {
+                    var data = results[i];
+                    data.Init();
+                    dataDic.Add(data.GetKey(), data);
+                }
+                allGameStaticDatas[type] = dataDic;
+            }
+
+        }
+    }
+    async Task LoadAllAsyncData<T>() where T:IGameData
+    {
+        Type type = typeof(T);
+        if (!allGameStaticDatas.TryGetValue(type, out var dataDic))
+        { 
+            var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
+
+            if (dataAsset != null && dataAsset is IDataArray<T> dataArray)
+            {
+                dataDic = new Dictionary<string, IGameData>();
+                try
+                {
+                   var  results = dataArray.DataList;
+                    for (int i = 0; i < results.Count; i++)
+                    {
+                        var data = results[i];
+                        data.Init();
+                        dataDic.Add(data.GetKey(), data);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning(e);
+                }
+                allGameStaticDatas[type] = dataDic;
+            }  
+        }
+    }
+
+
     public T GetData<T>(string key) where T : IGameData
     {
         Type type = typeof(T);
@@ -87,6 +141,7 @@ public class GameDataManager : Singleton<GameDataManager>
                     for (int i = 0; i < datas.Count; i++)
                     {
                         var data = datas[i];
+                        data.Init();
                         dataDic.Add(data.GetKey(), data);
                     }
                 }
@@ -130,6 +185,7 @@ public class GameDataManager : Singleton<GameDataManager>
                     for (int i = 0; i < results.Count; i++)
                     {
                         var data = results[i];
+                        data.Init();
                         dataDic.Add(data.GetKey(), data);
                     }
                 }
@@ -143,6 +199,8 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         return results ;
     }
+
+
     public async Task<List<T>> GetAllAsyncObjectData<T>() where T : Object, IGameData
     {
         List<T> results = new List<T>();
@@ -171,6 +229,7 @@ public class GameDataManager : Singleton<GameDataManager>
                     for (int i = 0; i < results.Count; i++)
                     {
                         var data = results[i];
+                        data.Init();
                         dataDic.Add(data.GetKey(), data);
                     }
                 }
@@ -185,13 +244,21 @@ public class GameDataManager : Singleton<GameDataManager>
                var  _results = ExtensionsResources.LoadAllResource<T>(DataPath.GetDataPath(type));
                 if (_results != null)
                 {
+                    dataDic = new Dictionary<string, IGameData>();
                     results = _results.ToList();
+                    for (int i = 0; i < results.Count; i++)
+                    {
+                        var data = results[i];
+                        data.Init();
+                        dataDic.Add(data.GetKey(), data);
+                    }
+                    allGameStaticDatas[type] = dataDic;
                 }
             }
 
         }
         return results;
-    }
+    } 
     public async Task<T> GetAsyncObjectData<T>(int key) where T : Object, IGameData
     {
         return await GetAsyncObjectData<T>(key.ToString());
@@ -211,6 +278,7 @@ public class GameDataManager : Singleton<GameDataManager>
                 data = await ExtensionsResources.LoadResourceAsync<T>(dataPath);
                 if (data != null)
                 {
+                    data.Init();
                     dataDic[data.GetKey()] = data;
                     allGameStaticDatas[type] = dataDic;
                     return (T)data;
@@ -223,25 +291,35 @@ public class GameDataManager : Singleton<GameDataManager>
             var data = await ExtensionsResources.LoadResourceAsync<T>(dataPath);
             if (data!= null)
             {
+                data.Init();
                 dataDic = new Dictionary<string, IGameData>();
                 dataDic[data.GetKey()] = data;
                 allGameStaticDatas[type] = dataDic;
                 return data;
             }
-            else
+        }
+        return default(T); ;
+    }
+
+    public async Task<T> GetAsyncObjectDataArray<T>(string key = "") where T : IGameData
+    {
+        Type type = typeof(T);
+        var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
+        if (dataAsset != null && dataAsset is IDataArray<T> dataArray)
+        {
+           var dataDic = new Dictionary<string, IGameData>();
+            for (int i = 0; i < dataArray.DataList.Count; i++)
             {
-                var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
-                if (dataAsset != null&& dataAsset is IDataArray<T> dataArray)
-                {
-                    dataDic = new Dictionary<string, IGameData>(); 
-                    for (int i = 0; i < dataArray.DataList.Count; i++)
-                    {
-                        dataDic[dataArray.DataList[i].GetKey()] = dataArray.DataList[i];
-                    }
-                    allGameStaticDatas[type] = dataDic;
-                }
+                var item = dataArray.DataList[i];
+                item.Init();
+                dataDic[dataArray.DataList[i].GetKey()] = item;
             }
-           
+            allGameStaticDatas[type] = dataDic;
+            if (dataDic.TryGetValue(key, out var data1))
+            {
+                return (T)data1;
+            }
+
         }
         return default(T); ;
     }
@@ -269,6 +347,7 @@ public class GameDataManager : Singleton<GameDataManager>
                     for(int i = 0;i<datas.Count;i++)
                     {
                         var data = datas[i];
+                        data.Init();
                         dataDic.Add(data.GetKey(), data);
                     }
                 }
@@ -287,7 +366,7 @@ public class GameDataManager : Singleton<GameDataManager>
 public interface IGameData 
 { 
     public string GetKey();
-     
+    public async void Init() { }
 }
 
 public struct ShowData : IGameData
@@ -299,6 +378,7 @@ public struct ShowData : IGameData
     {
         return id.ToString();
     }
+
 }
 
 [System.Serializable]

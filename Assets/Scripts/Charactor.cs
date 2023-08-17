@@ -123,21 +123,7 @@ namespace OldName
         远程 = 17,
         骑兵 = 18
     }
-    [System.Serializable]
-    public class ProfessionLevelData
-    {
-        public int level;
-        public int AT;
-        public int DF;
-        public int MaxHp, MaxPower, NeedEXP;
-        public int Crit, Dodge;
-    }
-    [System.Serializable]
-    public class SoliderProfesson
-    {
-        public string name;
-        public int id;
-    }
+    
     [System.Serializable]
     public class ProfessionData
     {

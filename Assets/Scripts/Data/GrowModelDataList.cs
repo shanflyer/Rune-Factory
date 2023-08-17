@@ -14,6 +14,7 @@ public class GrowModelDataList: ScriptableObject, IDataArray<GrowModelData>
 public struct GrowModelData : IGameData
 {
     public int id;
+    public string name;
     public AnimationCurve curve;
     public string GetKey()
     {
