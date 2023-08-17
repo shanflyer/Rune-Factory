@@ -3,107 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
-using UnityEngine;
-using OldName;
-
+using UnityEngine; 
+ 
 public delegate Vector2 GetMoveVector();
 public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
 [System.Serializable]
-public struct Property
+public enum AttributeType
 {
-    public int MaxHP, HP, AT, DF, EXP, rewardEXP, NeedEXP, Power, MaxPower, Crit, Dodge;
-    public Property(int zero)
-    {
-        MaxHP = 0;
-        HP = 0;
-        AT = 0;
-        DF = 0;
-        EXP = 0;
-        rewardEXP = 0;
-        NeedEXP = 0;
-        Power = 0;
-        MaxPower = 0;
-        Crit = 0;
-        Dodge = 0;
-    }
-
-    public Property(Property _property)
-    {
-        MaxHP = _property.MaxHP;
-        HP = _property.HP;
-        AT = _property.AT;
-        DF = _property.DF;
-        EXP = _property.EXP;
-        NeedEXP = _property.NeedEXP;
-        rewardEXP = _property.rewardEXP;
-        Power = _property.Power;
-        MaxPower = _property.MaxPower;
-        Crit = _property.Crit;
-        Dodge = _property.Dodge;
-    }
-    public static Property operator +(Property property0, Property property1)
-    {
-        Property result = new Property
-        {
-            MaxHP = property0.MaxHP + property1.MaxHP,
-            HP = property0.HP + property1.HP,
-            AT = property0.AT + property1.AT,
-            DF = property0.DF + property1.DF,
-            EXP = property0.EXP + property1.EXP,
-            NeedEXP = property0.NeedEXP + property1.NeedEXP,
-            rewardEXP = property0.rewardEXP + property1.rewardEXP,
-            Power = property0.Power + property1.Power,
-            MaxPower = property0.MaxPower + property1.MaxPower,
-            Crit = property0.Crit + property1.Crit,
-            Dodge = property0.Dodge + property1.Dodge
-
-
-        };
-        if (result.HP > result.MaxHP)
-        {
-            result.HP = result.MaxHP;
-        }
-        if (result.Power > result.MaxPower)
-        {
-            result.Power = result.MaxPower;
-        }
-        return result;
-    }
-    public static Property operator -(Property property0, Property property1)
-    {
-        Property result = new Property
-        {
-            MaxHP = property0.MaxHP - property1.MaxHP,
-            HP = property0.HP - property1.HP,
-            AT = property0.AT - property1.AT,
-            DF = property0.DF - property1.DF,
-            EXP = property0.EXP - property1.EXP,
-            NeedEXP = property0.NeedEXP - property1.NeedEXP,
-            rewardEXP = property0.rewardEXP - property1.rewardEXP,
-            Power = property0.Power - property1.Power,
-            MaxPower = property0.MaxPower - property1.MaxPower,
-            Crit = property0.Crit - property1.Crit,
-            Dodge = property0.Dodge - property1.Dodge
-        };
-        return result;
-    }
-    public int AddExp(int value, int professionId, int _level)
-    {
-        int Level = _level;
-        EXP += value;
-        ProfessionData professionData =
-            GameComponentData.gameData.charactorDataAction.professionDatas0.Find(p => p.id == professionId);
-        while (EXP >= NeedEXP)
-        {
-            EXP -= NeedEXP;
-            Level++;
-            Property levelProperty = professionData.GetPropertyFromLevelup(Level);
-            this += levelProperty;
-        }
-
-        return Level;
-    }
+    ÎÞ = 0,
+    »ð = 1,
+    ¹â = 2,
+    °µ = 3,
+    ·ç = 4,
+    ±ù = 5
 }
+
 [System.Serializable]
 public enum Gender
 {

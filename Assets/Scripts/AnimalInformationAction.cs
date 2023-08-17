@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using OldName;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +23,7 @@ public class AnimalInformationAction : MonoBehaviour
         animal.Name = _inputField.text;
     
     }
-    public void InitAnimal(Animal _animal)
+    public void InitAnimal(OldName.Animal _animal)
     {
         animal = _animal;
         AnimalNameInputField.text = animal.Name;

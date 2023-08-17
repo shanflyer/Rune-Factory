@@ -6,6 +6,8 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
+using OldName;
+
 public enum TalkActionType
 {
     普通 = 0,

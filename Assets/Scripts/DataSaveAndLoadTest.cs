@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using LitJson;
 using System.IO;
+using OldName;
 
 public static class DataSaveAndLoadTest
 {

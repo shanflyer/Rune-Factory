@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-[CustomEditor(typeof(BattleMapAction))]
+using OldName;
+
+[CustomEditor(typeof(OldName.BattleMapAction))]
 [ExecuteInEditMode]
 public class BattleMapEditor : Editor {
     public override void OnInspectorGUI()

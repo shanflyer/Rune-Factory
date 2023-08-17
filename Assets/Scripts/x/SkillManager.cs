@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using LitJson;
+using OldName;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

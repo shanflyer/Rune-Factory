@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using LitJson;
+using OldName;
 using UnityEngine;
 [System.Serializable]
 public class MonsterGroup

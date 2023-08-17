@@ -78,7 +78,7 @@ public class EmplorPanelAction : MonoBehaviour
         {
             friendObj.SetActive(false);
         }
-        ProfessionData professionData = CharactorDataAction.professionDatas.Find(p => p.id == employer.id / 1000);
+        OldName. ProfessionData professionData = CharactorDataAction.professionDatas.Find(p => p.id == employer.id / 1000);
         emplorImage.sprite = GameComponent.charactorIcon.Find(c => c.name == employer.charactorImage);
         emplorNameText.text = employer.name;
         LevelText.text = "Lv." + employer.level;

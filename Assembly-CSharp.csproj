@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{7E39F9DD-4A47-3EEF-E4E7-5D7B8579DEA5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -71,7 +70,6 @@
     <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities@1.0.14\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Character\ProfessionData.cs" />
     <Compile Include="Assets\Scripts\PlacePanelAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetRandomString.cs" />
     <Compile Include="Assets\Scripts\eyeMove.cs" />
@@ -345,6 +343,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetMass.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\SetActive.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtPosition.cs" />
+    <Compile Include="Assets\Scripts\Character\ProfessionData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerVolume.cs" />
     <Compile Include="Assets\Scripts\ShopClickEventAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetVelocity.cs" />

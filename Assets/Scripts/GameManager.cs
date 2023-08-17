@@ -1260,7 +1260,7 @@ public class GameManager : MonoBehaviour
         GameObject playerPro = Resources.Load<GameObject>("charactor/"+gamePlayer.ObjName);
         GameObject playerObj = Instantiate(playerPro);
         playerObj.transform.position = AStarTest.CoordinateToPos(zeroCoordinate);
-        ProfessionData playerProfessionData = GameData.charactorDataAction.professionDatas0.Find(p => p.id == 8);
+        OldName.ProfessionData playerProfessionData = GameData.charactorDataAction.professionDatas0.Find(p => p.id == 8);
 
         playerCharactor =new Charactor(80,gamePlayer.name,playerObj,nowPassData.id, zeroCoordinate, playerProfessionData,1);
         

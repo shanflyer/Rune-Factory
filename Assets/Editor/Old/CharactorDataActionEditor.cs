@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using OldName;
+
 [CustomEditor(typeof(CharactorDataAction))]
 [ExecuteInEditMode]
 public class CharactorDataActionEditor : Editor {
