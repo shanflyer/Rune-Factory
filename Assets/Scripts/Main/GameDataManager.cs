@@ -161,13 +161,13 @@ public class GameDataManager : Singleton<GameDataManager>
         else
         {
             var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
-
-            if (dataAsset != null&& dataAsset is List<T> dataList)
+           
+            if (dataAsset != null&& dataAsset is IDataArray<T> dataArray)
             {
                 dataDic = new Dictionary<string, IGameData>(); 
                 try
                 {
-                    results = dataList;
+                    results = dataArray.DataList;
                     for (int i = 0; i < results.Count; i++)
                     {
                         var data = results[i];
@@ -230,13 +230,13 @@ public class GameDataManager : Singleton<GameDataManager>
             }
             else
             {
-                var dataAsset = await ExtensionsResources.LoadResourceAsync(dataPath);
-                if (dataAsset != null&& dataAsset is List<T> dataList)
+                var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
+                if (dataAsset != null&& dataAsset is IDataArray<T> dataArray)
                 {
                     dataDic = new Dictionary<string, IGameData>(); 
-                    for (int i = 0; i < dataList.Count; i++)
+                    for (int i = 0; i < dataArray.DataList.Count; i++)
                     {
-                        dataDic[dataList[i].GetKey()] = dataList[i];
+                        dataDic[dataArray.DataList[i].GetKey()] = dataArray.DataList[i];
                     }
                     allGameStaticDatas[type] = dataDic;
                 }
