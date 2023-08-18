@@ -116,7 +116,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             //test 
         }
         runtimeObj.obj.transform.position = pos;
-        Sprite characterIcon = await CharacterManager.instance.GetCharacterIcon(character.name);
+        Sprite characterIcon = await CharacterManager.instance.GetCharacterIcon(character.dataId);
         SpriteRenderer modelRenderer = runtimeObj.obj.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
         if (modelRenderer)
         {

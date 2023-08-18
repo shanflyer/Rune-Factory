@@ -64,8 +64,11 @@ public class GameDataManager : Singleton<GameDataManager>
         base.Init();
         InitUserSaveData();
         //初始加载
+        LoadAllAsyncObjectData<GameActionData>();
         await LoadAllAsyncData<GrowModelData>();
         LoadAllAsyncObjectData<ProfessionData>();
+
+        await LoadAllAsyncData<FunctionData>();
     }
     void LoadAllAsyncObjectData<T>() where T :Object,IGameData
     {
