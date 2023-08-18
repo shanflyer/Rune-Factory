@@ -141,6 +141,25 @@ public struct CharacterProperty
     }
 
 }
+public struct Exp
+{
+    public int totalExp;
+    public int nowExp; 
+    public int nowLevelExp;
+
+    public bool AddExp(int exp)
+    {
+        totalExp += exp;
+        nowExp += exp;
+
+        if (nowExp >= nowLevelExp)
+        {
+            nowExp -= nowLevelExp;
+            return true;
+        }
+        return false;
+    }
+}
 public class Character
 {
     public CharacterProperty characterProperty;
@@ -151,7 +170,9 @@ public class Character
     }
     private int level;
 
-    public int exp;
+    public Exp exp;
+    public int bag;
+
     public string name;
     public ObjCoordinate objCoordinate;
     public int instanceId;
@@ -164,9 +185,30 @@ public class Character
         GameController.instance.StopCoroutine(moveEnumerator);
     }
 
-    public  void SetLevel(int level)
-    {
+    private CharacterProperty nowProperty;
 
+    public async void AddExp(int value)
+    {
+        var profressionData = await GameDataManager.instance.GetAsyncObjectData<ProfessionData>(professionId);
+        while (exp.AddExp(value))
+        {
+            int nextLevel = level + 1;
+            exp.nowLevelExp = profressionData.GetLevelExp(nextLevel) - profressionData.GetLevelExp(level);
+            value = 0;
+            SetLevel(nextLevel); 
+        }
+    }
+    public async void SetLevel(int level)
+    {
+        if (level != this.level)
+        {
+            var profressionData =await GameDataManager.instance.GetAsyncObjectData<ProfessionData>(professionId);
+            if (profressionData.id == professionId)
+            {
+                characterProperty = characterProperty - nowProperty;
+                characterProperty = characterProperty + profressionData.GetLevelProperty(level);
+            }       
+        }
     }
 
     public void SetProperty(int HP=-1, int MP = -1, int Power = -1, int MaxHP = -1, int MaxMP = -1, int MaxPower = -1, int AT = -1, int DF = -1, int Crit = -1, int Dodge = -1
@@ -387,12 +429,12 @@ public class Character
 
 public class NPC : Character
 {
-
+    
 }
 public class Player : Character
 {
     
-    public int bag;
+    
 
     public Player(string name)
     {
