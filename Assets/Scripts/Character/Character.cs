@@ -54,7 +54,7 @@ public struct CharacterProperty
 
     public static CharacterProperty operator -(CharacterProperty property0, CharacterProperty property1)
     {
-        CharacterProperty characterProperty = new CharacterProperty
+        CharacterProperty CharacterProperty = new CharacterProperty
         {
             HP = property0.HP - property1.HP,
             MP = property0.MP - property1.MP,
@@ -68,11 +68,11 @@ public struct CharacterProperty
             Dodge = property0.Dodge - property1.Dodge,
             Other = property0.Other - property1.Other
         };
-        return characterProperty;
+        return CharacterProperty;
     }
     public static CharacterProperty operator +(CharacterProperty property0, CharacterProperty property1)
     {
-        CharacterProperty characterProperty = new CharacterProperty
+        CharacterProperty CharacterProperty = new CharacterProperty
         {
             HP = property0.HP + property1.HP,
             MP = property0.MP + property1.MP,
@@ -86,11 +86,11 @@ public struct CharacterProperty
             Dodge = property0.Dodge + property1.Dodge,
             Other = property0.Other + property1.Other
         };
-        return characterProperty;
+        return CharacterProperty;
     }
     public static CharacterProperty operator *(CharacterProperty property0, float value)
     {
-        CharacterProperty characterProperty = new CharacterProperty
+        CharacterProperty CharacterProperty = new CharacterProperty
         {
             HP =(int)(property0.HP *value),
             MP = (int)(property0.MP * value),
@@ -104,11 +104,11 @@ public struct CharacterProperty
             Dodge = (int)(property0.Dodge * value),
             Other = (int)(property0.Other * value)
         };
-        return characterProperty;
+        return CharacterProperty;
     }
-    public int GetValue(CharacterPropertyType characterPropertyType)
+    public int GetValue(CharacterPropertyType CharacterPropertyType)
     {
-        switch (characterPropertyType)
+        switch (CharacterPropertyType)
         {
             case CharacterPropertyType.体力:
                 return Power; 
@@ -160,10 +160,25 @@ public struct Exp
         return false;
     }
 }
+
+public struct Equip
+{
+    public int weapon;
+    public int clothes;
+}
 public class Character
 {
-    public CharacterProperty characterProperty;
+    public CharacterProperty CharacterProperty
+    {
+        get => characterProperty;
+        set
+        {
+            characterProperty=value;
+        }
+    }
+    private CharacterProperty characterProperty;
     public int professionId;
+    public int dataId;
     public int Level
     {
         get => level;
@@ -205,8 +220,8 @@ public class Character
             var profressionData =await GameDataManager.instance.GetAsyncObjectData<ProfessionData>(professionId);
             if (profressionData.id == professionId)
             {
-                characterProperty = characterProperty - nowProperty;
-                characterProperty = characterProperty + profressionData.GetLevelProperty(level);
+                CharacterProperty = CharacterProperty - nowProperty;
+                CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
             }       
         }
     }
@@ -237,12 +252,12 @@ public class Character
         if (Other >= 0)
             characterProperty.Other = Other;
 
-        CharacterPropertyTrigger characterPropertyTrigger = new CharacterPropertyTrigger
+        CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
         {
             characterId = instanceId,
-            characterProperty = characterProperty
+            characterProperty = CharacterProperty
         };
-        GameActionManager.instance.QueueAction(characterPropertyTrigger);
+        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
     }
     public void SetProperty(SetCharacterProperty setCharacterProperty)
     {
@@ -258,7 +273,7 @@ public class Character
                 characterProperty.MP = setCharacterProperty.setValue;
                 break;
             case CharacterPropertyType.最大体力:
-                characterProperty.MaxPower = setCharacterProperty.setValue;
+               characterProperty.MaxPower = setCharacterProperty.setValue;
                 break;
             case CharacterPropertyType.最大法力:
                 characterProperty.MaxMP = setCharacterProperty.setValue;
@@ -282,12 +297,12 @@ public class Character
                 characterProperty.Other = setCharacterProperty.setValue;
                 break; 
         }
-        CharacterPropertyTrigger characterPropertyTrigger = new CharacterPropertyTrigger
+        CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
         {
             characterId = instanceId,
-            characterProperty = characterProperty
+            characterProperty = CharacterProperty
         };
-        GameActionManager.instance.QueueAction(characterPropertyTrigger);
+        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
     }
     public void AddProperty(ChangeCharacterProperty changeCharacterProperty)
     {
@@ -429,13 +444,10 @@ public class Character
 
 public class NPC : Character
 {
-    
+    public int behavior;
 }
 public class Player : Character
 {
-    
-    
-
     public Player(string name)
     {
         this.name = name;

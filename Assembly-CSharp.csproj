@@ -209,6 +209,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\GetFieldValue.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\SetString.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\CrossFade.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterGroup.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetRightVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedCollider.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedQuaternion.cs" />
@@ -251,11 +252,13 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetSpeed.cs" />
     <Compile Include="Assets\Scripts\Charactor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Dot.cs" />
+    <Compile Include="Assets\Scripts\Main\GameRandom.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedBool.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\Sequence.cs" />
     <Compile Include="Assets\Scripts\x\SkillManager.cs" />
     <Compile Include="Assets\Scripts\CoinObjAction.cs" />
     <Compile Include="Assets\Scripts\UI\InformationPanel.cs" />
+    <Compile Include="Assets\Scripts\Data\GameRandomDataList.cs" />
     <Compile Include="Assets\Scripts\UI\ZeroPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\CompareTo.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\PrioritySelector.cs" />
@@ -761,6 +764,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetLoop.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\ParallelSelector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetHeight.cs" />
+    <Compile Include="Assets\Scripts\Fight\FightController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\DestroyImmediate.cs" />
     <Compile Include="Assets\Scripts\SelectPastureButtonAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedObject.cs" />

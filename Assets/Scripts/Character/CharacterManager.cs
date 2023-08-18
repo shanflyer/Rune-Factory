@@ -107,7 +107,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characters.TryGetValue(characterId, out Character character))
         {
-            return character.characterProperty.GetValue(propertyType);
+            return character.CharacterProperty.GetValue(propertyType);
         }
         return -1;
     }
@@ -283,10 +283,13 @@ public class CharacterManager : Singleton<CharacterManager>
         CreatPlayer(characterSaveData);
         // CretaDefaultNpc();
     }
-
-    public async Task<Sprite> GetCharacterIcon(string name)
+    public async Task<Sprite> GetPlayerIcon()
     {
-        var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(name);
+        return await GetCharacterIcon(player.dataId);
+    }
+    public async Task<Sprite> GetCharacterIcon(int id)
+    {
+        var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(id);
         return await GameSourceManager.instance.GetSprite(characterData.icon);
     }
 

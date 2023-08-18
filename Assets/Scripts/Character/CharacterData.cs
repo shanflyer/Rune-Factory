@@ -18,7 +18,7 @@ public class CharacterData : ScriptableObject, IGameData
 
     public string GetKey()
     {
-        return characterName;
+        return id.ToString();
     }
 
     public override string ToString()

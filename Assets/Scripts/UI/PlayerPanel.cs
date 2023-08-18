@@ -20,13 +20,35 @@ public class PlayerPanel : GamePanel
     protected override void Awake()
     {
         base.Awake();
+       
     }
-    public override Task InitData(int dataId)
+    public override void OnEnable()
     {
-        return base.InitData(dataId);
+        base.OnEnable();
+        GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshPlayerProperty);
     }
-    public void RefreshPlayerHPAndRP()
+    public override void OnDisable()
     {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshPlayerProperty);
+    }
+    public override async Task InitData(int dataId)
+    {
+       var characterProperty= CharacterManager.instance.player.CharacterProperty;
+        hpSlider.value = characterProperty.HP / (float)characterProperty.MaxHP;
+        rpSlider.value = characterProperty.MP / (float)characterProperty.MaxMP;
 
+        icon.sprite = await CharacterManager.instance.GetPlayerIcon();
+        base.InitData(dataId);
     }
+    void RefreshPlayerProperty(CharacterPropertyTrigger characterPropertyTrigger)
+    {
+        if (characterPropertyTrigger.characterId == 0)
+        {
+            var characterProperty = characterPropertyTrigger.characterProperty;
+
+            hpSlider.value = characterProperty.HP / (float)characterProperty.MaxHP;
+            rpSlider.value = characterProperty.MP / (float)characterProperty.MaxMP;
+        }
+    } 
 }

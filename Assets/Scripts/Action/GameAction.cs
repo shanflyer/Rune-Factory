@@ -11,6 +11,16 @@ public interface GameAction
 
 public delegate void SetValue(int value);
 
+public struct RefreshCharacterProperty : GameAction
+{
+    public int id;
+    public CharacterProperty characterProperty;
+
+    public void Init(List<Parameter> parameters)
+    {
+    }
+}
+
 public struct StopFilm : GameAction
 {
     public string filmName;
