@@ -1,18 +1,21 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterGroup : MonoBehaviour
-{
+public struct CharacterGroup 
+{ 
+    public List<int> characters; 
 
-    // Use this for initialization
-    void Start()
+    public List<int> GetFriends(int id)
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        List<int> friends = new List<int>();
+        for(int i=0;i<characters.Count;i++)
+        {
+            if (characters[i] != id)
+            {
+                friends.Add(i);
+            } 
+        }
+        return friends;
     }
 }

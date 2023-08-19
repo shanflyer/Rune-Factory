@@ -177,6 +177,8 @@ public class Character
         }
     }
     private CharacterProperty characterProperty;
+
+    public int groupId=-1;
     public int professionId;
     public int dataId;
     public int Level

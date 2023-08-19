@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using static UnityEngine.InputSystem.InputAction;
+using UnityEngine.TextCore.Text;
 
 public delegate void MoveEndAction();
 
@@ -35,14 +34,15 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordiante);
 
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
-        InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction,true);
+        InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
 
     private void MapClickAction(object obj)
     {
         Vector2 mouseScreenPos = (Vector2)obj;
-       PlayerMove(mouseScreenPos);
+        PlayerMove(mouseScreenPos);
     }
+
     private void MoveAction(object obj)
     {
         if (MapController.instance.MapRunning)
@@ -51,7 +51,6 @@ public class CharacterManager : Singleton<CharacterManager>
             SetPlayerMoveDirection(moveValue);
         }
     }
-
 
     public bool GetRuntimeCharacterObj(int instanceId, out RuntimeObj runtimeObj)
     {
@@ -155,7 +154,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
 
         Vector2Int offsetCoordinate = Vector2Int.zero;
-        character.moveEnumerator=
+        character.moveEnumerator =
         GameObjectCurveController.instance.Line(slant ? moveSpeed * GameCommon.slantValue : moveSpeed, startPos, targetPos, (Vector2 pos) =>
              {
                  SetCharacterAnimationSpeed(1, runtimeObj);
@@ -199,8 +198,8 @@ public class CharacterManager : Singleton<CharacterManager>
             if (character.GetType() == typeof(Player))
             {
                 //≤‚ ‘
-               MapController.instance.nowMap = targetMap;
-               WorldMapContorller.instance.RecycleMap();
+                MapController.instance.nowMap = targetMap;
+                WorldMapContorller.instance.RecycleMap();
                 WorldMapContorller.instance.DisplayMap(targetMap);
             }
         }
@@ -266,7 +265,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public void StopCharacterMove(int id)
     {
-       if(characters.TryGetValue(id,out Character character))
+        if (characters.TryGetValue(id, out Character character))
         {
             character.StopMove();
         }
@@ -283,14 +282,30 @@ public class CharacterManager : Singleton<CharacterManager>
         CreatPlayer(characterSaveData);
         // CretaDefaultNpc();
     }
+
     public async Task<Sprite> GetPlayerIcon()
     {
         return await GetCharacterIcon(player.dataId);
     }
+
     public async Task<Sprite> GetCharacterIcon(int id)
     {
         var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(id);
         return await GameSourceManager.instance.GetSprite(characterData.icon);
+    }
+
+    async Task<RuntimeObj> CreatCharacterRuntimeObj(int characterDataId,int instacneId,int2 coordiante)
+    {
+        Vector3 pos = GameCommon.GetMapPos(coordiante);
+        pos.z = -100;
+
+        var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(characterDataId);
+        if (characterData != null)
+        {
+            var playerObj = await ExtensionsResources.LoadResourceAsync<GameObject>($"{DataPath.characterPrefabPath}/{characterData.obj}");
+           return  GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj, playerObj, instacneId);
+        }
+        return default(RuntimeObj);
     }
 
     public async System.Threading.Tasks.Task RefreshNpcRuntimeObj(Character character)
@@ -315,7 +330,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.objCoordinate.mapInstance == MapController.instance.nowMap)
             {
-                RuntimeObj runtimeObj = await GameRuntimeObjManager.instance.CreatCharacterRuntimeObj(character);
+                RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
                 characterRuntimeObj = new CharacterRuntimeObj
                 {
                     runtimeObj = runtimeObj,
@@ -339,7 +354,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.objCoordinate.mapInstance == MapController.instance.nowMap)
             {
-                RuntimeObj runtimeObj = await GameRuntimeObjManager.instance.CreatCharacterRuntimeObj(character);
+                RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
                 CharacterRuntimeObj characterRuntimeObj = new CharacterRuntimeObj
                 {
                     runtimeObj = runtimeObj,

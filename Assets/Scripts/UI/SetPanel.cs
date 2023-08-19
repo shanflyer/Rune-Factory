@@ -39,6 +39,6 @@ public class SetPanel : GamePanel
     }
     void SaveSet()
     {
-
+        UIManager.instance.ShowGamePanel<SavePanel>(layer: 2);
     }
 }

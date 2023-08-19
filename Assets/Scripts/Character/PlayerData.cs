@@ -8,6 +8,7 @@ public struct UserGameSaveData
     public OtherSaveData otherSaveData;
     public List<CharacterSaveData> characterSaveDatas;
     public List<PackageSaveData> packageSaveDatas;
+    public List<FightChapter> fightChapters;
 }
 public struct OtherSaveData
 {

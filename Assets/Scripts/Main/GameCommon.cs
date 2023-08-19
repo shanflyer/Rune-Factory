@@ -56,6 +56,11 @@ public enum RuntimeObjType
 {
     MAPGROUND, MAPITEM, CHARACTER
 }
+public enum FightRuntimeObjType
+{
+    PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT
+}
+
 public static class CharacterAnimatorParameter
 {
     public static int Speed=Animator.StringToHash("Speed");
@@ -68,7 +73,7 @@ public enum EntityType
 public class GameCommon 
 {
     public const int SeasonDays = 30;
-
+    public const float fightMapMovingSpeed = 0.2f;
 
 
     public const float cellWidth = 0.48f, cellHigh = 0.48f;

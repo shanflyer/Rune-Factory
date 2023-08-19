@@ -1,66 +1,63 @@
-﻿using System.Collections;
-using Unity.Mathematics;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public enum HurtResultType
+public class FightController : MonoBehaviour
 {
-    Default=0,暴击=1,Miss=2
-}
-public class FightController :Singleton<FightController>
-{
-    public override void Init()
+    RuntimeObj fightMapRuntime0, fightMapRuntime1;
+    private void OnEnable()
     {
-        base.Init();
+        GameRuntimeObjManager.instance.CreatParent<FightRuntimeObjType>(transform);
     }
-    protected override void Clear()
+    private void OnDestroy()
     {
-        base.Clear();
+        GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
+    }
+    float cycleSize;
+    Vector3 cyclePos;
+    public async void CreatFightMap(int id)
+    {
+        var fightMapData =await GameDataManager.instance.GetAsyncObjectDataArray<FightMapData>(id.ToString());
+        fightMapRuntime0 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(), id.ToString(), fightMapData.fightMapObj, 0);
+        fightMapRuntime1 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(), id.ToString(), fightMapData.fightMapObj, 1);
+
+        Vector3 zeroPos = new Vector3(0, fightMapData.offsetY, 0);
+        cyclePos = new Vector3(fightMapData.cycleSize, fightMapData.offsetY, 0);
+
+        cycleSize = fightMapData.cycleSize;
+        fightMapRuntime0.obj.transform.localPosition = zeroPos;
+        fightMapRuntime1.obj.transform.localPosition = cyclePos;
+    }
+    public async void CreatFightPlayer()
+    {
+
     }
 
-    public int HurtValue(int AT,int DF,int Crit, int Dodge0, int Dodge1,out HurtResultType hurtResultType)
+    public void StartWalk()
     {
-        int hurt = AT - DF;
-        hurt = math.clamp(hurt, 1, hurt);
-
-        int dodgeValue = Dodge0 - Dodge1;
-        hurtResultType = HurtResultType.Default;
-        if (dodgeValue < 0)
+        StartCoroutine(MapMoving());
+    }
+    public void StopWalk()
+    {
+        StopAllCoroutines();
+    }
+    IEnumerator MapMoving()
+    {
+        var wait = new WaitForFixedUpdate();
+        Vector3 late = new Vector3(-GameCommon.fightMapMovingSpeed, 0, 0);
+        while (true)
         {
-            int trueDodge =math.clamp( dodgeValue * 2,0,Dodge1);
-            if (GameRandom.RandomInt(0, 100) < trueDodge)
+            fightMapRuntime0.obj.transform.Translate(late);
+            fightMapRuntime1.obj.transform.Translate(late);
+            if (fightMapRuntime0.obj.transform.localPosition.x <= -cycleSize)
             {
-                hurtResultType = HurtResultType.Miss;
-                return 0;
+                fightMapRuntime0.obj.transform.localPosition = cyclePos;
             }
-            else
+            if (fightMapRuntime1.obj.transform.localPosition.x <= -cycleSize)
             {
-                int trueCrit =  Crit- dodgeValue*2;
-                if (GameRandom.RandomInt(0, 100) < trueCrit)
-                {
-                    hurtResultType = HurtResultType.暴击;
-                    return (int)(hurt * GameRandom.RandomFloat(1.5f, 2.0f));
-                }
+                fightMapRuntime1.obj.transform.localPosition = cyclePos;
             }
+            yield return wait;
         }
-        else
-        {
-            int trueDodge = math.clamp(math.abs(dodgeValue /2), 0, Dodge1);
-            if (GameRandom.RandomInt(0, 100) < trueDodge)
-            {
-                hurtResultType = HurtResultType.Miss;
-                return 0;
-            }
-            else
-            {
-                int trueCrit = math.abs(dodgeValue / 2)+Crit;
-                if (GameRandom.RandomInt(0, 100) < trueCrit)
-                {
-                    hurtResultType = HurtResultType.暴击;
-                    return (int)(hurt * GameRandom.RandomFloat(1.5f, 2.0f));
-                }
-
-            }
-        }
-        return hurt;
     }
 }

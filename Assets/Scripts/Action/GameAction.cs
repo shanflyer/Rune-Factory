@@ -10,7 +10,28 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
-
+public struct RefreshFightChapter : GameAction
+{
+    public int id;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 0)
+        {
+            id = int.Parse(parameters[0].value);
+        }
+    }
+}
+public struct RefreshCharacter : GameAction
+{
+    public int id;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 0)
+        {
+            id = int.Parse(parameters[0].value);
+        }
+    }
+}
 public struct RefreshCharacterProperty : GameAction
 {
     public int id;
@@ -18,6 +39,10 @@ public struct RefreshCharacterProperty : GameAction
 
     public void Init(List<Parameter> parameters)
     {
+        if (parameters.Count >= 0)
+        {
+            id =int.Parse(parameters[0].value);
+        }
     }
 }
 

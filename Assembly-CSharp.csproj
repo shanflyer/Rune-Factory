@@ -148,6 +148,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\CrossFade.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetLocalRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\WakeUp.cs" />
+    <Compile Include="Assets\Scripts\Explore\ExploreManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetVector2.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\Inverter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\LookAt.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Assets\Scripts\MarryNpcAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\RotateTowards.cs" />
     <Compile Include="Assets\Scripts\YanhuaAction.cs" />
+    <Compile Include="Assets\Scripts\Film\TimeLineManger.cs" />
     <Compile Include="Assets\Scripts\UI\DateReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredCollision2D.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddExplosionForce.cs" />
@@ -267,6 +269,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\PrioritySelector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Play.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetUseGravity.cs" />
+    <Compile Include="Assets\Scripts\Fight\FightManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetEnableEmission.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetIsStopped.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics\Spherecast.cs" />
@@ -442,6 +445,7 @@
     <Compile Include="Assets\Scripts\Event\GameEvent.cs" />
     <Compile Include="Assets\Scripts\Map\MapCell.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\Rotate.cs" />
+    <Compile Include="Assets\Scripts\UI\SavePanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatComparison.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtWeight.cs" />
     <Compile Include="Assets\Scripts\FightInformationAction.cs" />
@@ -558,6 +562,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetSubstring.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetTime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetFloat.cs" />
+    <Compile Include="Assets\Scripts\Film\MyTimeLineData.cs" />
     <Compile Include="Assets\Scripts\PeopleAcion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\PlantAction.cs" />
@@ -582,14 +587,15 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetSpotAngle.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\LerpAngle.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetIntensity.cs" />
+    <Compile Include="Assets\Scripts\UI\FightCharacterReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Clear.cs" />
+    <Compile Include="Assets\Scripts\Fight\FightCharacter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetFloatParameter.cs" />
     <Compile Include="Assets\Scripts\ManufacBuildClickAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChildCount.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\MatchTarget.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPitch.cs" />
-    <Compile Include="Assets\Scripts\Film\FilmManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MovePosition.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedQuaternion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\ParallelComplete.cs" />
@@ -603,6 +609,7 @@
     <Compile Include="Assets\Scripts\Data\DataArray.cs" />
     <Compile Include="Assets\Scripts\SeasonSelect.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
+    <Compile Include="Assets\Scripts\UI\FightPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector4.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\GetCenter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLayerWeight.cs" />
@@ -658,6 +665,7 @@
     <Compile Include="Assets\Scripts\FishManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Log.cs" />
     <Compile Include="Assets\Scripts\Main\ExtensionsResources.cs" />
+    <Compile Include="Assets\Scripts\FilmManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\StackedConditional.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\MoveTowards.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Inverse.cs" />
@@ -782,7 +790,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\GetRadius.cs" />
     <Compile Include="Assets\Scripts\Main\GameCommon.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPriority.cs" />
-    <Compile Include="Assets\Scripts\Film\MealORFemeal.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MoveRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonUp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetLoop.cs" />
@@ -818,6 +825,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetMouseButton.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\Interrupt.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedRect.cs" />
+    <Compile Include="Assets\Scripts\Fight\FightMapData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\IsParameterControlledByCurve.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />
