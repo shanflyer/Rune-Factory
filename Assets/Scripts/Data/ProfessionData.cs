@@ -31,6 +31,11 @@ public class ProfessionData : ScriptableObject,IGameData
         float levelValue = (float)level / maxLevel;
         return CharacterProperty.Lerp(ZeroProperty, FinalProperty, propertyGrowModelData.curve.Evaluate(levelValue));
     }
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
        return id.ToString();

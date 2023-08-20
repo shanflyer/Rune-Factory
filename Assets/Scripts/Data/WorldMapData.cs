@@ -7,7 +7,11 @@ public class WorldMapData : ScriptableObject,IGameData
 {
     public List<WorldMap> worldMaps = new List<WorldMap>();
     public List<MapLine> mapLines = new List<MapLine>();
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return name;

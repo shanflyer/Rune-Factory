@@ -7,7 +7,11 @@ public class MyTimeLineData : ScriptableObject,IGameData
 {
     public PlayableAsset asset;
     public List<BindData> bindDatas;
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return name;

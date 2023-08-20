@@ -295,7 +295,7 @@ public class GameDataManager : Singleton<GameDataManager>
             }
             else
             {
-                string dataPath = $"{DataPath.GetDataPath(type)}{key}";
+                string dataPath = $"{DataPath.GetDataPath(type)}/{key}";
                 data = await ExtensionsResources.LoadResourceAsync<T>(dataPath);
                 if (data != null)
                 {
@@ -308,7 +308,7 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         else
         {
-            string dataPath = $"{DataPath.GetDataPath(type)}{key}";
+            string dataPath = $"{DataPath.GetDataPath(type)}/{key}";
             var data = await ExtensionsResources.LoadResourceAsync<T>(dataPath);
             if (data!= null)
             {
@@ -387,6 +387,7 @@ public class GameDataManager : Singleton<GameDataManager>
 public interface IGameData 
 { 
     public string GetKey();
+    public void SetReferenceData();
     public async void Init() { }
 }
 
@@ -399,6 +400,11 @@ public struct ShowData : IGameData
     {
         return id.ToString();
     }
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
 
 }
 
@@ -406,9 +412,13 @@ public struct ShowData : IGameData
 public struct LangLanguageSwitch : IGameData
 { 
     public string cn, jp, en, ko;
-     
 
-    public  string GetKey()
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
+    public string GetKey()
     {
         return cn;
     }

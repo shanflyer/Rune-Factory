@@ -10,6 +10,11 @@ public class CharacterGroupData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
 }
 public struct CharacterGroup
 {

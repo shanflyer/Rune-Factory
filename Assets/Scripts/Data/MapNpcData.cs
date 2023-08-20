@@ -11,7 +11,11 @@ public class MapNpcData : ScriptableObject,IGameData
     public int beingMap;
     public int2 beingCoordinate;
     public string behaviorName;
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return id.ToString();

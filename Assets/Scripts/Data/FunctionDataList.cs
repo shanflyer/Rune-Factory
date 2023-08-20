@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(menuName ="Data/选择事件数据")]
 public class FunctionDataList : ScriptableObject, IGameData,IDataArray<FunctionData>
 {
     [SerializeField]
     List<FunctionData> functionDatas;
 
     public List<FunctionData> DataList => functionDatas;
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return name;
@@ -25,4 +29,9 @@ public struct FunctionData : IGameData
     {
         return id.ToString();
     }
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
 }

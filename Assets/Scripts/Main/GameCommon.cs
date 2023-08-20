@@ -21,8 +21,9 @@ public enum AttributeType
 [System.Serializable]
 public enum Gender
 {
-    male = 0,
-    female = 1
+    animal=0,
+    male = 1,
+    female = 2
 }
 [System.Serializable]
 public enum ValueType
@@ -453,26 +454,39 @@ public static class EditorDataPath
     public const string sourceChangeNameDataPath = "Assets/Editor/Data/SourceChangeName.json";
 
     public const string mapItemDataPath = "Assets/Resources/Data/MapItemData/";
+    public const string mapRoomDataPath = "Assets/Resources/Data/MapRoomData/";
+    public const string worldMapDataPath = "Assets/Resources/Data/WorldMapData.asset";
+
     public const string mapItemSourcePath = "Assets/Texture/Map/Item/";
-    public const string mapItemPrefabPath = "Assets/Resources/Prefab/MapItem/";
-    public const string mapRoomDataPath = "Assets/Resources/Data/Room/";
+    public const string mapItemPrefabPath = "Assets/Resources/Prefab/MapItem/"; 
     public const string mapGroundPath = "Assets/Resources/Prefab/Ground/";
 
     public const string mapItemStructDataPath = "Assets/Editor/Data/MapItemStruct.json";
-    public const string mapItemAnimationPath = "Assets/Animation/MapItem/";
-    public const string worldMapDataPath = "Assets/Resources/Data/WorldMapData.asset";
-
+    public const string mapItemAnimationPath = "Assets/Animation/MapItem/"; 
     public const string gameEventDataPath = "Assets/Resources/Behavior/"; 
 
 
 }
 public static class DataPath
 {
-    
+
     public static Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
-        { typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" }
-    }; 
+        {typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" },
+        {typeof(FunctionData),"Data/FunctionDataList" },
+        {typeof(GameEventData),"Data/GameEventData" },
+        {typeof(GameRandomDataList),"Data/GameRandomDataList" },
+        {typeof(GrowModelData),"Data/GrowModelDataList" },
+        {typeof(ItemAnimationData),"Data/ItemAnimationData" },
+        {typeof(MapNpcData),"Data/MapNpcData" },
+        {typeof(MapRoomData),"Data/MapRoomData" },
+        {typeof(MonsterData),"Data/MonsterData" },
+        {typeof(ProfessionData),"Data/ProfessionData" },
+        {typeof(WorldMapData),"Data/WorldMapData" },
+        {typeof(CharacterData),"Data/CharacterData" },
+        {typeof(CharacterGroupData),"Data/CharacterGroupData" },
+        {typeof(FightMapData),"/Data/FightMapDataList" }
+    };
 
     public static string GetDataPath(Type type)
     {
@@ -489,25 +503,10 @@ public static class DataPath
     public const string SEPath = "Audio/SE/";
 
     public const string titlePath = "ScriptableObject/Sprites/Title";
-    public const string filmDataPath = "FilmObj/";
+    public const string filmDataPath = "Prefabs/FilmObj/";
 
     public static string gameSaveDataPath = Application.persistentDataPath; 
 
-    public const string gameRandomDataPath = "Data/GameRandomDataEditor/GameRandomDataList";
-    public const string mapNpcDataPath = "Data/Character/MapNpcDataList";
-    public const string worldDataPath = "Data/WorldMapData";
-    public const string roomDataPath = "Data/Room/";
-    public const string mapItemDataPath = "Data/MapItemData/";
-    public const string itemDataPath = "Data/ItemData/";
-    public const string gameActionDataPath = "Data/GameActionData/GameActionDataList";
-    public const string gameEventDataPath = "Data/GameEventData/";
-    public const string gameRadomDataPath= "Data/GameRandomData/GameRandomDataList";
-
-    public const string itemAnimationDataPath = "Data/ItemAnimationData/";
-
     public const string characterPrefabPath = "Prefab/Character";
-    public const string characterDataPath = "Data/CharacterData";
-    public const string characterDataPathPath = "DataPath/CharacterData";
-
     public const string UIPath = "Prefabs/UI/";
 }

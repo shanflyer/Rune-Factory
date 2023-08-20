@@ -215,7 +215,8 @@ public class GameRandom:Singleton<GameRandom>
   
     public async Task LoadRandomDataList()
     {
-        GameRandomDataList gameRandomDataList = await ExtensionsResources.LoadResourceAsync<GameRandomDataList>(DataPath.gameRandomDataPath);
+        GameRandomDataList gameRandomDataList = await ExtensionsResources.LoadResourceAsync<GameRandomDataList>(
+          $"{DataPath.GetDataPath(typeof(GameRandomDataList))}");
         gameRandomDatas.Clear();
         randomItemValues.Clear();
 

@@ -15,7 +15,7 @@ public class ExcelDataEditor : MyEditor
     public static void WindowShow()
     {
         ExcelDataEditor excelDataEditor = CreateWindow<ExcelDataEditor>("Excel数据管理");
-        excelDataEditor.minSize = excelDataEditor.maxSize = new Vector2(240, 480);
+        excelDataEditor.minSize = excelDataEditor.maxSize = new Vector2(320, 480);
         excelDataEditor.Show();
 
         Instance = excelDataEditor;

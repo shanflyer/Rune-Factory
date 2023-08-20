@@ -13,6 +13,11 @@ public class MonsterData : ScriptableObject, IGameData
     public GameObject obj;
     public int dropId;
     public int behaviorId;
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return id.ToString() ;

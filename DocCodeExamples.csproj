@@ -380,8 +380,14 @@
     <Reference Include="UDPEditor">
       <HintPath>Assets\Plugins\UDP\UdpSupport\Editor\UDPEditor.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="BehaviorDesigner.Runtime">
       <HintPath>Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Excel">
+      <HintPath>Assets\DLL\Excel\Excel.dll</HintPath>
     </Reference>
     <Reference Include="ChannelPurchase">
       <HintPath>Assets\Plugins\UnityChannel\ChannelPurchase.dll</HintPath>
@@ -407,20 +413,14 @@
     <Reference Include="TexturePackerImporter">
       <HintPath>Assets\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>Library\PackageCache\com.unity.analytics@3.8.1\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="BehaviorDesigner.Editor">
       <HintPath>Assets\Behavior Designer\Editor\BehaviorDesigner.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Excel">
-      <HintPath>Assets\DLL\Excel\Excel.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlus">
-      <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Program Files\Unity 2023.1.5f1c1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\mscorlib.dll</HintPath>

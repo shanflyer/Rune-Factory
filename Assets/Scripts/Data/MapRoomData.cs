@@ -34,7 +34,11 @@ public class MapRoomData : ScriptableObject,IGameData
         }
         return false;
     }
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return roomName;

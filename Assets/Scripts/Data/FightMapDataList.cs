@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName ="Data/战斗地图")]
 public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapData>
 {
     [SerializeField]
     List<FightMapData> FightMapDatas;
 
     public List<FightMapData> DataList => FightMapDatas;
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return name;
@@ -25,14 +30,13 @@ public struct MonsterDeploy
 }
 
 [System.Serializable]
-public struct FightMapData:IGameData
+public struct FightMapData : IGameData
 {
     public int id;
     public string mapName;
-    public string IconName;
-    public string fightMapName;
+
     public float offsetY;
-    public float cycleSize;
+    public float cycleSize; 
     public Sprite Icon;
     public Sprite Background;
     public GameObject fightMapObj;
@@ -40,6 +44,11 @@ public struct FightMapData:IGameData
     public bool isOpen;
     public int actionId;
     public string battleNotice;
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return id.ToString();

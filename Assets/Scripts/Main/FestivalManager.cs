@@ -24,7 +24,11 @@ public struct FestivalData : IGameData
     public string value;
     public string text;
     public string englishText;
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return id.ToString();

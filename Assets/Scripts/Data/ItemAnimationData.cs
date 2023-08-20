@@ -40,7 +40,11 @@ public class ItemAnimationData : ScriptableObject,IGameData
         }
         return null;
     }
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
        return name;

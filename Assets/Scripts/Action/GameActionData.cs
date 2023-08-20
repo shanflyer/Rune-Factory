@@ -150,7 +150,11 @@ public class GameActionData : ScriptableObject,IGameData
                 break;
         }         
     }
-
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+    }
+#endif
     public string GetKey()
     {
         return id.ToString();

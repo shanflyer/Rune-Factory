@@ -7,7 +7,7 @@ using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-[CreateAssetMenu(menuName ="Datas/RandomData")]
+[CreateAssetMenu(menuName ="Data/Ëæ»úÊý¾Ý")]
 public class GameRandomDataList : ScriptableObject
 {
 #if UNITY_EDITOR

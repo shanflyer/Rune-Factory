@@ -26,11 +26,11 @@ public class GameEventData : ScriptableObject,IGameData
         string path = $"{EditorDataPath.gameEventDataPath}{behaviorTreeName}{".asset"}";
         behaviorTree = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>(path);
     }
-
+#endif
     public string GetKey()
     {
         return id.ToString();
     }
-#endif
+
 
 }
