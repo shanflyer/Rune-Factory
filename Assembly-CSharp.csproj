@@ -123,6 +123,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\UseGravity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartLifetime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedFloat.cs" />
+    <Compile Include="Assets\Scripts\EditorTool\MapItemInstanceEditor.cs" />
     <Compile Include="Assets\Scripts\UI\InformationShowPanel.cs" />
     <Compile Include="Assets\Scripts\Desk.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Object Drawers\IntSliderAttribute.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Assets\Scripts\Map\MapItemData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\SelectorEvaluator.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetPosition.cs" />
+    <Compile Include="Assets\Scripts\EditorTool\WorldInstanceEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\Save.cs" />
     <Compile Include="Assets\Scripts\Main\GameTimerController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedQuaternion.cs" />
@@ -552,6 +554,7 @@
     <Compile Include="Assets\Scripts\Data\GameEventData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\SetAnimatePhysics.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
+    <Compile Include="Assets\Scripts\EditorTool\MapLinkEditor.cs" />
     <Compile Include="Assets\Scripts\MuSaveAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetIsKinematic.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetDirection.cs" />
@@ -589,6 +592,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\LerpAngle.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetIntensity.cs" />
     <Compile Include="Assets\Scripts\UI\FightCharacterReference.cs" />
+    <Compile Include="Assets\Scripts\EditorTool\MapInstanceEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Clear.cs" />
     <Compile Include="Assets\Scripts\Fight\FightCharacter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetFloatParameter.cs" />
@@ -845,9 +849,13 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Reflection\CompareFieldValue.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\DLL\Excel\EPPlus.dll" />
+    <None Include="Assets\DLL\Excel\System.Data.dll" />
     <None Include="Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
+    <None Include="Assets\DLL\Excel\Excel.dll" />
     <None Include="Assets\codeandweb.com\Readme.txt" />
     <None Include="Assets\DLL\LitJson.dll" />
+    <None Include="Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -1155,6 +1163,15 @@
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>Library\PackageCache\com.unity.analytics@3.8.1\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="Excel">
+      <HintPath>Assets\DLL\Excel\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity 2023.1.5f1c1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
