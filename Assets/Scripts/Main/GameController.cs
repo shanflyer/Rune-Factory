@@ -18,13 +18,15 @@ public class GameController : MonoBehaviour
     public SystemLanguage SetSystemLanguage;
 
     public Item[] testPlayerItems;
+
     private void OnApplicationQuit()
     {
-        SigletonType.instance.ClearAll();
+        SingletonType.instance.ClearAll();
         instance = null;
     }
     private void OnEnable()
     { 
+        
         instance = this;
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController"); 
@@ -56,7 +58,7 @@ public class GameController : MonoBehaviour
     }
     private void Update()
     {
-        GameActionManager.instance.UpData();
+        SingletonType.instance.UpData(); 
     }
 }
 #if UNITY_EDITOR

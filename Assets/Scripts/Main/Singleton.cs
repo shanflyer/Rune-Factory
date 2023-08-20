@@ -15,9 +15,14 @@ public class Singleton<T> where T : Singleton<T>
             {
                 _instance = Activator.CreateInstance<T>();
                 _instance.Init();
-                if (typeof(T) != typeof(SigletonType))
+                if (typeof(T) != typeof(SingletonType))
                 {
-                    SigletonType.instance.AddType(_instance.Clear);
+                    SingletonType.instance.AddType(_instance.Clear);
+
+                    if (_instance.NeedUpdata)
+                    {
+                        SingletonType.instance.AddUpDataAction(_instance.UpData);
+                    }
                 }
             }
             return _instance;
@@ -25,8 +30,14 @@ public class Singleton<T> where T : Singleton<T>
     }
     private static T _instance;
 
-  
+    public virtual bool NeedUpdata
+    {
+        get;
+    }
+    protected virtual void UpData()
+    {
 
+    }
     public virtual void Init()
     {
 
@@ -34,20 +45,40 @@ public class Singleton<T> where T : Singleton<T>
      
     protected virtual void Clear()
     {
+        if (NeedUpdata)
+        {
+            SingletonType.instance.RemoveUpDataAction(_instance.UpData);
+        } 
         _instance = null;
-    }
+    } 
 }
 public delegate void SingletonClear();
-public class SigletonType : Singleton<SigletonType>
+public class SingletonType : Singleton<SingletonType>
 {
     public HashSet<SingletonClear> TypeClears = new HashSet<SingletonClear>();
+    public List<Action> singleUpdatas = new List<Action>();
 
+    public void AddUpDataAction(Action action)
+    {
+        if (!singleUpdatas.Contains(action))
+        {
+            singleUpdatas.Add(action);
+        }
+    }
+    public void RemoveUpDataAction(Action action)
+    {
+        if (singleUpdatas.Contains(action))
+        {
+            singleUpdatas.Remove(action);
+        }
+    }
     public void AddType(SingletonClear typeClear)
     { 
         TypeClears.Add(typeClear);
     }
     public void ClearAll()
     {
+        singleUpdatas.Clear();
         foreach(var typeClear in TypeClears)
         {
              
@@ -57,5 +88,13 @@ public class SigletonType : Singleton<SigletonType>
             }
         }
         Clear();
+    }
+
+    public void UpData()
+    {
+        for(int i = 0; i < singleUpdatas.Count; i++)
+        {
+            singleUpdatas[i].Invoke();
+        }
     }
 }

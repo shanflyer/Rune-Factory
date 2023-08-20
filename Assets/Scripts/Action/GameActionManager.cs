@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 public class GameActionManager:Singleton<GameActionManager>
 {
+    public override bool NeedUpdata { get =>true; }
     public delegate void ActionDelegate<T>(T e) where T : GameAction; 
 
     public delegate void ActionBus();
@@ -101,9 +102,9 @@ public class GameActionManager:Singleton<GameActionManager>
         }
        
     }
-   
 
-    public void UpData()
+
+    protected override void UpData()
     {
         if (ActionQueue.Count > 0)
         {
