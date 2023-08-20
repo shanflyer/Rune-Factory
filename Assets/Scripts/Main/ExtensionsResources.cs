@@ -36,10 +36,7 @@ public  static class ExtensionsResources
         await gres;
         return gres.asset;
     }
-    public static AsyncOperation LoadSceneAsync(string sceneName, LoadSceneMode loadSceneMode) 
-    {
-        return SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
-    }
+   
     public static async Task<UnityEngine.Object[]> LoadAsyncBundle(string url)
     {
 

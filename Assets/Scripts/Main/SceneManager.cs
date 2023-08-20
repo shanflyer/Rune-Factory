@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections; 
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class SceneManager : Singleton<SceneManager>
+{
+    public override bool NeedUpdata => true;
+    string nowSceen;
+    public override void Init()
+    {
+        base.Init();
+    }
+    public async void SwitchScene(string sceneName,Action unLoadSceneAction=null,Action loadSceneAction=null)
+    {
+        nowSceen = sceneName;
+        this.loadSceneAction = loadSceneAction;
+        if (unLoadSceneAction!=null)
+        {
+            unLoadSceneAction.Invoke();
+        }
+        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+        this.AsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
+        
+    }
+    LoadingPanel loadingPanel;
+    AsyncOperation AsyncOperation;
+    Action loadSceneAction;
+
+
+    protected override void UpData()
+    {
+        base.UpData();
+        if (AsyncOperation == null)
+        {
+            return;
+        }
+        loadingPanel.RefreshLoadValue(AsyncOperation.progress);
+        if (AsyncOperation.progress >= 1)
+        {
+            if (loadSceneAction != null)
+            {
+                loadSceneAction.Invoke();
+            }
+            loadSceneAction = null;
+            loadingPanel.Close();
+        }
+    }
+     
+}

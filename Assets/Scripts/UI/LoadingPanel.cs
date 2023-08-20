@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,34 +9,23 @@ using static UnityEngine.Rendering.DebugUI;
 public class LoadingPanel : GamePanel
 {
     [SerializeField]
-    Slider slider;
+    Slider slider; 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         slider = FindChildGameObject<Slider>("Slider");
     }
-    public override Task InitData(int dataId)
+    public override Task InitData(string dataKey)
     {
-        this.AsyncOperation = ExtensionsResources.LoadSceneAsync("001",UnityEngine.SceneManagement.LoadSceneMode.Additive);
-        return base.InitData(dataId); 
+        return base.InitData(dataKey); 
     }
-    void SetYieldInstruction(AsyncOperation AsyncOperation)
+
+    public void RefreshLoadValue(float value)
     {
-        this.AsyncOperation = AsyncOperation;
+        slider.value = value;
     }
+
     AsyncOperation AsyncOperation;
-    private void Update()
-    {
-        if (AsyncOperation == null)
-        {
-            return;
-        }
-        slider.value = AsyncOperation.progress;
-        if (AsyncOperation.progress >= 1)
-        {
-            Close();
-        }
-        
-    }
+ 
  
 }
