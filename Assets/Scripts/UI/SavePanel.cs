@@ -61,8 +61,7 @@ public class SavePanel : GamePanel
         if (DataSaveAndLoadTest.CheckSaveData(SelectedIndex))
         {
             DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
-            DataSaveAndLoadTest.isJsonData = true;
-            UIManager.instance.ShowGamePanel<LoadingPanel>();
+            DataSaveAndLoadTest.isJsonData = true; 
 
             Close();
         } 

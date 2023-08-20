@@ -66,7 +66,9 @@ public class SelectLoadPanel : GamePanel
         {
             DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
             DataSaveAndLoadTest.isJsonData = true;
-            UIManager.instance.ShowGamePanel<LoadingPanel>();
+            ExploreManager.instance.EnterChapter(-1);
+           // SceneManager.instance.SwitchScene("001");
+            //UIManager.instance.ShowGamePanel<LoadingPanel>();
 
             Close();
         } 

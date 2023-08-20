@@ -14,16 +14,21 @@ public class SceneManager : Singleton<SceneManager>
     }
     public async void SwitchScene(string sceneName,Action unLoadSceneAction=null,Action loadSceneAction=null)
     {
-        nowSceen = sceneName;
         this.loadSceneAction = loadSceneAction;
-        if (unLoadSceneAction!=null)
+
+        if (!string.IsNullOrEmpty(nowSceen))
         {
-            unLoadSceneAction.Invoke();
+            if (unLoadSceneAction != null)
+            {
+                unLoadSceneAction.Invoke();
+            }
+            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
         }
-        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+       
         this.AsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
-        
+        nowSceen = sceneName;
+
     }
     LoadingPanel loadingPanel;
     AsyncOperation AsyncOperation;
