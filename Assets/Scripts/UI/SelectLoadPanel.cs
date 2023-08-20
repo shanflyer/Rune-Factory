@@ -39,7 +39,7 @@ public class SelectLoadPanel : GamePanel
         //Delete.interactable = false;
     }
 
-    public override Task InitData(int dataId)
+    public override Task InitData(string dataKay)
     {
         if (DataSaveAndLoadTest.LoadSaveData(0))
         {
@@ -57,7 +57,7 @@ public class SelectLoadPanel : GamePanel
             }
            
         } 
-        return base.InitData(dataId);
+        return base.InitData(dataKay);
     }
 
     void StartAction()

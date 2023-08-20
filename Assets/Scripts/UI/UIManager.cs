@@ -38,16 +38,17 @@ public class UIManager:Singleton<UIManager>
         }
         return null;
     }
-    public async Task ShowGamePanel<T>(int dataId = -1,int layer=-1) where T : GamePanel
+    public async Task<T> ShowGamePanel<T>(string dataKey = null,int layer=-1) where T : GamePanel
     {
         var type = typeof(T);
-        await ShowGamePanel(type, dataId,layer); 
+        var gamePanel=  await ShowGamePanel(type, dataKey, layer);
+        return (T)gamePanel;
     }
     private async void OpenPanel(OpenPanelAction openPanelEvent)
     {
-        await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
+        await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId.ToString());
     }
-    async Task ShowGamePanel(Type type, int dataId = -1, int layer = -1)
+    async Task<GamePanel> ShowGamePanel(Type type, string dataKey = null, int layer = -1)
     {
         if (!gamePanels.TryGetValue(type, out GamePanel gamePanel))
         {
@@ -70,7 +71,8 @@ public class UIManager:Singleton<UIManager>
             gamePanels[type] = gamePanel;
         }
         gamePanel.Show(layer); 
-        await gamePanel.InitData(dataId);
+        await gamePanel.InitData(dataKey);
+        return gamePanel;
     }
 
     public void CloseGamePanel<T>()

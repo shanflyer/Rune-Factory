@@ -39,7 +39,7 @@ public class SavePanel : GamePanel
         //Delete.interactable = false;
     }
 
-    public override Task InitData(int dataId)
+    public override Task InitData(string dataKay)
     {
         
         for(int i = 1; i <= 3; i++)
@@ -53,7 +53,7 @@ public class SavePanel : GamePanel
             }
            
         } 
-        return base.InitData(dataId);
+        return base.InitData(dataKay);
     }
 
     void SaveAction()

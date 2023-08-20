@@ -114,8 +114,9 @@ public class FightPanel : GamePanel
     {
         base.Awake();
     }
-    public override async Task InitData(int dataId)
+    public override async Task InitData(string dataKey)
     {
+        int dataId = int.Parse(dataKey);
         FightChapter fightChapter = ExploreManager.instance.GetFigehtChapter(dataId);
         if (fightChapter.mapId == dataId)
         {

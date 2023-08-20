@@ -37,7 +37,7 @@ public class CharacterSelectInformationPanel : GamePanel
         yes.onClick.AddListener(YesButtonAction);
         Return.onClick.AddListener(NoButtonAction);
     }
-    public override Task InitData(int dataId)
+    public override Task InitData(string dataKay)
     {
         CharacterSaveData characterSaveData = GameDataManager.instance.UserGameSaveData.playerData;
 
@@ -50,7 +50,7 @@ public class CharacterSelectInformationPanel : GamePanel
         string month = characterSaveData.brithDay.season.ToString() + "之月"; 
         BrothText.text = LanguageManage.SwitchStr(month) + characterSaveData.brithDay.day + LanguageManage.SwitchStr("日");
 
-        return base.InitData(dataId);
+        return base.InitData(dataKay);
     }
      
 

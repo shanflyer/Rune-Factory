@@ -47,7 +47,7 @@ public class CalendarPanel : GamePanel
         nextMonthButton.onClick.AddListener(NextMonth);
         forwardMonthButton.onClick.AddListener(ForwardMonth);
     }
-    public override Task InitData(int dataId)
+    public override Task InitData(string dataKay)
     {
 
         year = GameTimeManager.nowGameTime.gameDate.year;
@@ -63,7 +63,7 @@ public class CalendarPanel : GamePanel
             forwardMonthButton.interactable = true;
         } 
         AfterDisplay(); 
-        return base.InitData(dataId);
+        return base.InitData(dataKay);
     }
     
     void AfterDisplay()

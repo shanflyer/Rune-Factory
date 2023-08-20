@@ -27,7 +27,7 @@ public class FunctionsPanel :GamePanel
         secondSelectButton = FindChildGameObject<Button>("SecondSelectButton");
     }
 
-    public override async Task InitData(int dataId)
+    public override async Task InitData(string dataKay)
     {
         var funcDatas =await GameDataManager.instance.GetAllAsyncData<FunctionData>();
         

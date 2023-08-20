@@ -38,10 +38,10 @@ public class PlayerTopPanel : GamePanel
     }
 
    
-    public override Task InitData(int dataId)
+    public override Task InitData(string dataKay)
     {
         UpdateGameTime();
-        return base.InitData(dataId);
+        return base.InitData(dataKay);
 
     }
     public void UpdateMoney()

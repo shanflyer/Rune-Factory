@@ -80,7 +80,7 @@ public class GamePanel : MonoBehaviour
         
     }
     
-    public virtual async Task InitData(int dataId) { }
+    public virtual async Task InitData(string dataKey) { }
     public virtual void Show(int layer = -1)
     {
         canvas.sortingOrder = layer;

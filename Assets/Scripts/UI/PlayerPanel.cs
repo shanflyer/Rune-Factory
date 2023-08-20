@@ -32,14 +32,14 @@ public class PlayerPanel : GamePanel
         base.OnDisable();
         GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshPlayerProperty);
     }
-    public override async Task InitData(int dataId)
+    public override async Task InitData(string dataKey)
     {
        var characterProperty= CharacterManager.instance.player.CharacterProperty;
         hpSlider.value = characterProperty.HP / (float)characterProperty.MaxHP;
         rpSlider.value = characterProperty.MP / (float)characterProperty.MaxMP;
 
         icon.sprite = await CharacterManager.instance.GetPlayerIcon();
-        base.InitData(dataId);
+        base.InitData(dataKey);
     }
     void RefreshPlayerProperty(CharacterPropertyTrigger characterPropertyTrigger)
     {

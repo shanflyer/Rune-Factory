@@ -38,9 +38,9 @@ public class ZeroPanel : GamePanel
         Close();
         UIManager.instance.ShowGamePanel<SelectCharacterPanel>(layer:2);
     }
-    public override Task InitData(int dataId)
+    public override Task InitData(string dataKay)
     {
-        return base.InitData(dataId);
+        return base.InitData(dataKay);
     }
      
 }

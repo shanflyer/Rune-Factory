@@ -18,7 +18,7 @@ public class MainPanel : GamePanel
         setButton.onClick.AddListener(() =>
         {
             AudioController.instance.PlayAudio(SE.click);
-            UIManager.instance.ShowGamePanel<SetPanel>(3);
+            UIManager.instance.ShowGamePanel<SetPanel>(layer:3);
         });
     }
 }
