@@ -335,24 +335,24 @@ public struct ClosePanelAction : GameAction
 public struct OpenPanelAction : GameAction
 {
     public Type type;
-    public int dataId;
+    public string dataId;
     public void Init(List<Parameter> parameters) 
     {
         if (parameters.Count >= 2)
         {
             type = Type.GetType(parameters[0].value);
-            dataId = int.Parse(parameters[1].value);
+            dataId = parameters[1].value;
         }
         else
         {
             if (parameters.Count >= 1)
             {
                 type = Type.GetType(parameters[0].value);
-                dataId = -1;
+                dataId = null;
             }
         }
     }
-    public OpenPanelAction(Type type, int dataId = -1)
+    public OpenPanelAction(Type type, string dataId = null)
     {
         this.type = type;
         this.dataId = dataId;

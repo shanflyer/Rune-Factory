@@ -46,7 +46,7 @@ public class UIManager:Singleton<UIManager>
     }
     private async void OpenPanel(OpenPanelAction openPanelEvent)
     {
-        await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId.ToString());
+        await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
     }
     async Task<GamePanel> ShowGamePanel(Type type, string dataKey = null, int layer = -1)
     {
