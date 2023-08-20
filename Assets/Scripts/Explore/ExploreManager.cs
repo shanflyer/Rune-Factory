@@ -1,11 +1,15 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public struct FightChapter
 {
     public int mapId;
     public int completeValue;
-    public int allStep;
+    public NativeList<int> findItems;
     public int nowStep;
     public bool open;
 
@@ -17,7 +21,8 @@ public struct FightChapter
 public class ExploreManager : Singleton<ExploreManager>
 {
     MyNativeData<FightChapter> fightChapters = new MyNativeData<FightChapter>();
-
+    int nowChapter;
+    FightMapData nowFightMapData;
     public FightChapter GetFigehtChapter(int id)
     {
         FightChapter fightChapter=default(FightChapter);
@@ -29,32 +34,59 @@ public class ExploreManager : Singleton<ExploreManager>
     {
         base.Init();
 
-        if (GameDataManager.instance.UserGameSaveData.fightChapters.Count > 0)
+        var allChapterDatas = await GameDataManager.instance.GetAllAsyncObjectDataArray<FightMapData>();
+        for (int i = 0; i < allChapterDatas.Count; i++)
         {
-            var fightChapters = GameDataManager.instance.UserGameSaveData.fightChapters;
-            for(int i = 0; i < fightChapters.Count; i++)
+            var chapterData = allChapterDatas[i];
+            FightChapter fightChapter = new FightChapter
             {
-                FightChapter fightChapter = fightChapters[i];
-                this.fightChapters.AddData(fightChapter);
-            }
-        }
-        else
-        {
-            var allChapterDatas = await GameDataManager.instance.GetAllAsyncObjectDataArray<FightMapData>();
-            for (int i = 0; i < allChapterDatas.Count; i++)
-            {
-                var chapterData = allChapterDatas[i];
-                FightChapter fightChapter = new FightChapter
-                {
-                    mapId = chapterData.id,
-                    open = chapterData.isOpen,
-                };
-                fightChapters.AddData(fightChapter);
-            }
+                mapId = chapterData.id,
+                open = chapterData.isOpen, 
+            };
+
+            fightChapter.findItems = new NativeList<int>(Allocator.Persistent);
+
+            fightChapters.AddData(fightChapter);
         } 
-        
+        if (GameDataManager.instance.UserGameSaveData.chapters.Count > 0)
+        {
+            var chapters = GameDataManager.instance.UserGameSaveData.chapters;
+            for(int i = 0; i < chapters.Count; i++)
+            {
+                FightChapter fightChapter;
+                if (fightChapters.GetData(chapters[i].mapId,out fightChapter))
+                {
+                    fightChapter.completeValue = chapters[i].completeValue;
+                    fightChapter.open = chapters[i].open;
+
+                    for (int j = 0; j < chapters[i].findItems.Count; j++)
+                    {
+                        fightChapter.findItems.Add(chapters[i].findItems[j]);
+                    }
+                } 
+                this.fightChapters.SetData(fightChapter);
+            }
+        }  
     }
 
+    public async void EnterChapter(int id)
+    {
+        nowChapter = id;
+        nowFightMapData = await GameDataManager.instance.GetAsyncObjectDataArray<FightMapData>(id.ToString());
+        var actionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(nowFightMapData.actionId);
+        SceneManager.instance.SwitchScene("Fight", () => {
+            LoadFightMap();
+            if (actionData != null)
+            {
+                actionData.Action();
+            }
+            FightManager.instance.CreatFightPlayer();
+        } );
+    }
+    void LoadFightMap()
+    {
+        FightController.instance.CreatFightMap(nowFightMapData);
+    }
   
     protected override void Clear()
     {

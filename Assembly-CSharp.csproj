@@ -137,7 +137,6 @@
     <Compile Include="Assets\Scripts\Map\MapCellController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IntComparison.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetRightVector.cs" />
-    <Compile Include="Assets\Scripts\MonsterManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForceAtPosition.cs" />
     <Compile Include="Assets\Scripts\MuZeroLoadSelect.cs" />
     <Compile Include="Assets\Scripts\UI\FunctionsPanel.cs" />
@@ -227,10 +226,10 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\CompareLayer.cs" />
     <Compile Include="Assets\Scripts\AnimalInformationAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\HasKey.cs" />
-    <Compile Include="Assets\Scripts\MarryNpcAction.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\RotateTowards.cs" />
-    <Compile Include="Assets\Scripts\YanhuaAction.cs" />
     <Compile Include="Assets\Scripts\Film\TimeLineManger.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\RotateTowards.cs" />
+    <Compile Include="Assets\Scripts\MarryNpcAction.cs" />
+    <Compile Include="Assets\Scripts\YanhuaAction.cs" />
     <Compile Include="Assets\Scripts\UI\DateReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredCollision2D.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddExplosionForce.cs" />
@@ -446,6 +445,7 @@
     <Compile Include="Assets\Scripts\Map\MapCell.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\Rotate.cs" />
     <Compile Include="Assets\Scripts\UI\SavePanel.cs" />
+    <Compile Include="Assets\Scripts\Main\SceneManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatComparison.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtWeight.cs" />
     <Compile Include="Assets\Scripts\FightInformationAction.cs" />
@@ -473,6 +473,7 @@
     <Compile Include="Assets\Scripts\PassDataManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMute.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Blend.cs" />
+    <Compile Include="Assets\Scripts\Data\MonsterData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\DeleteKey.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\TaskGuard.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Pause.cs" />

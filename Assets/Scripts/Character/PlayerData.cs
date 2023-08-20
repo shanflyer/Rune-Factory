@@ -8,7 +8,15 @@ public struct UserGameSaveData
     public OtherSaveData otherSaveData;
     public List<CharacterSaveData> characterSaveDatas;
     public List<PackageSaveData> packageSaveDatas;
-    public List<FightChapter> fightChapters;
+    public List<ChapterSave> chapters;
+}
+
+public struct ChapterSave
+{
+    public int mapId;
+    public int completeValue;
+    public List<int> findItems;
+    public bool open;
 }
 public struct OtherSaveData
 {

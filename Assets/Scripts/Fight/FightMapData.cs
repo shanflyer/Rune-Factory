@@ -15,6 +15,16 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
     }
 }
 [System.Serializable]
+public struct MonsterDeploy
+{
+    public int refreshId;
+    public int beforActionId;
+    public int afterActionId;
+    public int victoryId;
+    public int failedId;
+}
+
+[System.Serializable]
 public struct FightMapData:IGameData
 {
     public int id;
@@ -26,7 +36,9 @@ public struct FightMapData:IGameData
     public Sprite Icon;
     public Sprite Background;
     public GameObject fightMapObj;
+    public List<MonsterDeploy> monsterDeploys;
     public bool isOpen;
+    public int actionId;
     public string battleNotice;
     public string GetKey()
     {

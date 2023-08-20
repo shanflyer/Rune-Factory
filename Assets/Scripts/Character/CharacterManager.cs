@@ -21,6 +21,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
 
     public Player player;
+    public List<Character> teamPlayers;
     private Vector2 playerMoveDirction;
 
     //角色运行显示实体
@@ -301,9 +302,9 @@ public class CharacterManager : Singleton<CharacterManager>
 
         var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(characterDataId);
         if (characterData != null)
-        {
-            var playerObj = await ExtensionsResources.LoadResourceAsync<GameObject>($"{DataPath.characterPrefabPath}/{characterData.obj}");
-           return  GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj, playerObj, instacneId);
+        { 
+           return  GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.objName,
+               characterData.obj, instacneId);
         }
         return default(RuntimeObj);
     }

@@ -1,6 +1,31 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.TextCore.Text;
+
+interface IFightCharacter
+{
+    public int instanceId { get; set; } 
+    public int behaviorId { get; set; }
+}
+
+public struct FightPlayer : IFightCharacter
+{
+    public int instanceId { get ; set ; }
+    public int behaviorId { get; set; }
+    public int dataId;
+}
+public struct FightMonster : IFightCharacter
+{
+    public int instanceId { get; set; }
+    public int behaviorId { get; set; }
+    public int dataId;
+
+    public int HP, AT, DF, Crit, Dodge;
+}
 
 public enum HurtResultType
 {
@@ -8,15 +33,109 @@ public enum HurtResultType
 }
 public class FightManager :Singleton<FightManager>
 {
+    HashSet<int> instanceIds = new HashSet<int>();
+    List<FightPlayer> fightPlayers = new List<FightPlayer>();
+    List<FightMonster> fightMonsters = new List<FightMonster>();
+
+
+    public FightController fightController;
+    public int CreatFightCharacter()
+    {
+        Guid guid = Guid.NewGuid();
+        int instanceId = guid.GetHashCode();
+        while (instanceIds.Contains(instanceId))
+        {
+            guid = Guid.NewGuid();
+            instanceId = guid.GetHashCode();
+        }
+        instanceIds.Add(instanceId);
+        return instanceId;
+    }
     public override void Init()
     {
         base.Init();
     }
     protected override void Clear()
     {
+        instanceIds.Clear();
         base.Clear();
     }
+    
+    public void CreatFightPlayer()
+    {
+        var player = CharacterManager.instance.player;
+        FightPlayer fightPlayer = new FightPlayer
+        {
+            instanceId = player.instanceId,
+            dataId = player.dataId,
+        };
+        fightPlayers.Add(fightPlayer);
+        FightController.instance.CreatFightPlayer(player.dataId, player.instanceId, 0);
 
+        var teamPlayers = CharacterManager.instance.teamPlayers;
+        if (teamPlayers != null && teamPlayers.Count > 0)
+        {
+            for(int i = 0; i < teamPlayers.Count; i++)
+            {
+                FightPlayer fightTeamPlayer = new FightPlayer
+                {
+                    instanceId = teamPlayers[i].instanceId,
+                    dataId = teamPlayers[i].dataId,
+                };
+                fightPlayers.Add(fightTeamPlayer);
+                FightController.instance.CreatFightPlayer(teamPlayers[i].dataId, teamPlayers[i].instanceId, i+1);
+            }
+        }
+
+    }
+    public async void CreatFightMonster(MonsterDeploy monsterDeploy)
+    {
+        var beforAction =await GameDataManager.instance.GetAsyncObjectData<GameActionData>(monsterDeploy.beforActionId);
+        if (beforAction != null)
+        {
+            beforAction.Action();
+        }
+
+        List<int> monsterIds = new List<int>();
+        var randomResults = GameRandom.instance.GetRandomValue(monsterDeploy.refreshId);
+        for(int i = 0; i < randomResults.Count; i++)
+        {
+            var result = randomResults[i];
+            var characterGroupData = await GameDataManager.instance.GetAsyncObjectData<CharacterGroupData>(result.result);
+            if(characterGroupData != null)
+            {
+                monsterIds.AddRange(characterGroupData.characters);
+            }
+        }
+        for(int i = 0; i < 6; i++)
+        {
+            if (monsterIds.Count <= i)
+            {
+                break;
+            }
+            MonsterData monsterData = await GameDataManager.instance.GetAsyncObjectData<MonsterData>(monsterIds[i]);
+            FightMonster fightMonster = new FightMonster
+            {
+                instanceId = CreatFightCharacter(),
+                dataId = monsterData.id,
+                behaviorId = monsterData.behaviorId,
+                HP = monsterData.HP,
+                AT = monsterData.AT,
+                DF = monsterData.DF,
+                Crit = monsterData.Crit,
+                Dodge = monsterData.Dodge
+            };
+            fightMonsters.Add(fightMonster);
+
+            FightController.instance.CreatFightMonster(monsterData, fightMonster.instanceId, i);
+        }
+
+        var afterAction = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(monsterDeploy.afterActionId);
+        if (afterAction != null)
+        {
+            afterAction.Action();
+        }
+    }
     public int HurtValue(int AT,int DF,int Crit, int Dodge0, int Dodge1,out HurtResultType hurtResultType)
     {
         int hurt = AT - DF;

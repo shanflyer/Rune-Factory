@@ -195,6 +195,8 @@ public class Character
     public int instanceId;
     public Direction direction;
 
+
+    public int behaviorId;
     public IEnumerator moveEnumerator;
 
     public void StopMove()

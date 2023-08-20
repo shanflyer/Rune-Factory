@@ -10,6 +10,7 @@ public class ProfessionData : ScriptableObject,IGameData
     public CharacterProperty FinalProperty;
     public int propertyGrowModel;
     public int expGrowModel;
+    public int behaviorId;
 
     private GrowModelData propertyGrowModelData, expGrowModelData;
 

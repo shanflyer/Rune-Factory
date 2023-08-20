@@ -224,7 +224,8 @@ public class AdventurePanelAction : MonoBehaviour
         }
         List<int> items=new List<int>();
         foreach (var monsterId in monsterIds)
-        {
+        {//临时
+            /*
             MonsterData monsterData =
                 GameComponentData.gameData.monsterManager.MonsterDatas.Find(m => m.id == monsterId);
             foreach (var monsterDataRewardItem in monsterData.RewardItems)
@@ -233,7 +234,7 @@ public class AdventurePanelAction : MonoBehaviour
                 {
                     items.Add(monsterDataRewardItem.itemID);
                 }
-            }
+            }*/
         }
         foreach (var item in items)
         {

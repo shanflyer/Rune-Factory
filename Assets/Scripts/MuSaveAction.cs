@@ -25,7 +25,7 @@ public class MuSaveAction : MonoBehaviour
     public void Initdata()
     {
         SelectedIndex = -1;
-        if (SceneManager.GetActiveScene().name=="001")
+        if (SceneManager.instance.Now=="001")
         {
             SaveData();
         }

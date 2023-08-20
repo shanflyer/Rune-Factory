@@ -29,7 +29,6 @@ public class GameComponent : MonoBehaviour
     public FishManager fishManager;
     public NPCListDataPanelAction NpcListDataPanelAction;
     public NPCManager NpcManager;
-    public MonsterManager monsterManager;
     public IntelligencePanelAction intelligencePanelAction;
     public CharactorShop charactorShop;
     public EmployerManger employerManger;

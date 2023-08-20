@@ -109,19 +109,8 @@ namespace OldName
         public int probability0, probability1, probability2;
         public BattleMnonster() { }
 
-        public BattleMnonster(MonsterGroup monsterGroup)
-        {
-            weight = monsterGroup.weight;
-            monsterId0 = monsterGroup.monsterId0;
-            monsterId1 = monsterGroup.monsterId1;
-            monsterId2 = monsterGroup.monsterId2;
-            attributeType0 = (AttributeType)monsterGroup.attributeType0;
-            attributeType1 = (AttributeType)monsterGroup.attributeType1;
-            attributeType2 = (AttributeType)monsterGroup.attributeType2;
-            probability0 = monsterGroup.probability0;
-            probability1 = monsterGroup.probability1;
-            probability2 = monsterGroup.probability2;
-        }
+        
+        
     }
     [System.Serializable]
     public class MapMonster
@@ -307,10 +296,11 @@ namespace OldName
 
             mapMonsters = new List<MapMonster>();
             GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
-            var _monsterGroup = gameController.GetComponent<BattleMapAction>().MonsterGroups.FindAll(m => m.id == batteleMapStr.monsterGrop);
+           // var _monsterGroup = gameController.GetComponent<BattleMapAction>().MonsterGroups.FindAll(m => m.id == batteleMapStr.monsterGrop);
             MapMonster mapMonster = new MapMonster();
 
             mapMonsters.Add(mapMonster);
+            /*
             foreach (var monsterGroup in _monsterGroup)
             {
                 if (monsterGroup.time == mapMonster.timeValue)
@@ -326,6 +316,7 @@ namespace OldName
                     mapMonster.BattleMnonsters.Add(new BattleMnonster(monsterGroup));
                 }
             }
+            */
             nextOpen = new List<int>();
             var y = batteleMapStr.nextOpen.Split(',');
             foreach (var s in y)
@@ -375,7 +366,7 @@ namespace OldName
         public Transform ItemArea0, ItemArea1;
         public float itemflySpeed, itemCd;
         public List<BatteleMap> BatteleMaps;
-        public List<MonsterGroup> MonsterGroups;
+       // public List<MonsterGroup> MonsterGroups;
         public int firstBattleMap;
         [HideInInspector]
         public List<BatteleMapStr> BatteleMapStrs;
@@ -781,7 +772,7 @@ namespace OldName
             TextAsset file = Resources.Load<TextAsset>("Datas/MonsterGrop");
             if (file != null)
             {
-                MonsterGroups = JsonMapper.ToObject<List<MonsterGroup>>(file.text);
+              //  MonsterGroups = JsonMapper.ToObject<List<MonsterGroup>>(file.text);
             }
             else
             {
@@ -1295,87 +1286,91 @@ namespace OldName
                 }
 
                 BattleMnonster _battleMnonster = mapMonster.BattleMnonsters[index];
-                if (_battleMnonster.monsterId0 != 0)
-                {
-                    MonsterData selectMonsterData = GameComponentData.gameData.monsterManager.MonsterDatas.Find(m => m.id == _battleMnonster.monsterId0);
-                    int value = Random.Range(0, 10000);
-                    if (value < _battleMnonster.probability0)
-                    {
-                        monster0 = new Monster(selectMonsterData, MonsterPos0.position, _battleMnonster.attributeType0);
-                    }
-                    else
-                    {
-                        monster0 = new Monster(selectMonsterData, MonsterPos0.position, AttributeType.无);
-                    }
+                /*
+               if (_battleMnonster.monsterId0 != 0)
+               {
 
-                    monsterProfessionData0 =
-                        CharactorDataAction.professionDatas.Find(p => p.id == selectMonsterData.profession);
-                    isMosterHurtEnd0 = false;
-                    monster0.SetSpriteLayerOrder(0);
-                    GameObject monsterCanvas = Instantiate(charactorCanvas, monster0.Obj.transform.GetChild(1));
-                    monsterCanvas.transform.SetParent(monster0.Obj.transform.GetChild(1), false);
-                    monsterCanvas.GetComponent<BattelcharactorCavasAction>().Inite(monster0.skill != null);
-                    if (monster0.attributeMask != null)
-                    {
-                        Transform slider = monster0.Obj.GetComponentInChildren<Slider>().transform;
-                        Vector3 pos0 = monster0.attributeMask.transform.position;
-                        monster0.attributeMask.transform.position = new Vector3(pos0.x, slider.position.y - 0.63f, pos0.z);
-                    }
+                   MonsterData selectMonsterData = GameComponentData.gameData.monsterManager.MonsterDatas.Find(m => m.id == _battleMnonster.monsterId0);
+                   int value = Random.Range(0, 10000);
+                   if (value < _battleMnonster.probability0)
+                   {
+                       monster0 = new Monster(selectMonsterData, MonsterPos0.position, _battleMnonster.attributeType0);
+                   }
+                   else
+                   {
+                       monster0 = new Monster(selectMonsterData, MonsterPos0.position, AttributeType.无);
+                   }
 
-                }
-                if (_battleMnonster.monsterId1 != 0)
-                {
-                    MonsterData selectMonsterData = GameComponentData.gameData.monsterManager.MonsterDatas.Find(m => m.id == _battleMnonster.monsterId1);
-                    int value = Random.Range(0, 10000);
-                    if (value < _battleMnonster.probability1)
-                    {
-                        monster1 = new Monster(selectMonsterData, MonsterPos1.position, _battleMnonster.attributeType1);
-                    }
-                    else
-                    {
-                        monster1 = new Monster(selectMonsterData, MonsterPos1.position, AttributeType.无);
-                    }
-                    monsterProfessionData1 =
-                        CharactorDataAction.professionDatas.Find(p => p.id == selectMonsterData.profession);
-                    isMosterHurtEnd1 = false;
-                    monster1.SetSpriteLayerOrder(4);
-                    GameObject monsterCanvas = Instantiate(charactorCanvas, monster1.Obj.transform.GetChild(1));
-                    monsterCanvas.transform.SetParent(monster1.Obj.transform.GetChild(1), false);
-                    monsterCanvas.GetComponent<BattelcharactorCavasAction>().Inite(monster1.skill != null);
+                   monsterProfessionData0 =
+                       CharactorDataAction.professionDatas.Find(p => p.id == selectMonsterData.profession);
+                   isMosterHurtEnd0 = false;
+                   monster0.SetSpriteLayerOrder(0);
+                   GameObject monsterCanvas = Instantiate(charactorCanvas, monster0.Obj.transform.GetChild(1));
+                   monsterCanvas.transform.SetParent(monster0.Obj.transform.GetChild(1), false);
+                   monsterCanvas.GetComponent<BattelcharactorCavasAction>().Inite(monster0.skill != null);
+                   if (monster0.attributeMask != null)
+                   {
+                       Transform slider = monster0.Obj.GetComponentInChildren<Slider>().transform;
+                       Vector3 pos0 = monster0.attributeMask.transform.position;
+                       monster0.attributeMask.transform.position = new Vector3(pos0.x, slider.position.y - 0.63f, pos0.z);
+                   }
 
-                    if (monster1.attributeMask != null)
-                    {
-                        Transform slider = monster1.Obj.GetComponentInChildren<Slider>().transform;
-                        Vector3 pos0 = monster1.attributeMask.transform.position;
-                        monster1.attributeMask.transform.position = new Vector3(pos0.x, slider.position.y - 0.63f, pos0.z);
-                    }
-                }
-                if (_battleMnonster.monsterId2 != 0)
-                {
-                    MonsterData selectMonsterData = GameComponentData.gameData.monsterManager.MonsterDatas.Find(m => m.id == _battleMnonster.monsterId2);
-                    int value = Random.Range(0, 10000);
-                    if (value < _battleMnonster.probability2)
-                    {
-                        monster2 = new Monster(selectMonsterData, MonsterPos2.position, _battleMnonster.attributeType2);
-                    }
-                    else
-                    {
-                        monster2 = new Monster(selectMonsterData, MonsterPos2.position, AttributeType.无);
-                    }
-                    monsterProfessionData2 =
-                        CharactorDataAction.professionDatas.Find(p => p.id == selectMonsterData.profession);
-                    isMosterHurtEnd2 = false;
-                    monster2.SetSpriteLayerOrder(2);
-                    GameObject monsterCanvas = Instantiate(charactorCanvas, monster2.Obj.transform.GetChild(1));
-                    monsterCanvas.transform.SetParent(monster2.Obj.transform.GetChild(1), false);
-                    monsterCanvas.GetComponent<BattelcharactorCavasAction>().Inite(monster2.skill != null);
-                    if (monster2.attributeMask != null)
-                    {
-                        Transform slider = monster2.Obj.GetComponentInChildren<Slider>().transform;
-                        Vector3 pos0 = monster2.attributeMask.transform.position;
-                        monster2.attributeMask.transform.position = new Vector3(pos0.x, slider.position.y - 0.63f, pos0.z);
-                    }
-                }
+               }
+               if (_battleMnonster.monsterId1 != 0)
+               {
+                   MonsterData selectMonsterData = GameComponentData.gameData.monsterManager.MonsterDatas.Find(m => m.id == _battleMnonster.monsterId1);
+                   int value = Random.Range(0, 10000);
+                   if (value < _battleMnonster.probability1)
+                   {
+                       monster1 = new Monster(selectMonsterData, MonsterPos1.position, _battleMnonster.attributeType1);
+                   }
+                   else
+                   {
+                       monster1 = new Monster(selectMonsterData, MonsterPos1.position, AttributeType.无);
+                   }
+                   monsterProfessionData1 =
+                       CharactorDataAction.professionDatas.Find(p => p.id == selectMonsterData.profession);
+                   isMosterHurtEnd1 = false;
+                   monster1.SetSpriteLayerOrder(4);
+                   GameObject monsterCanvas = Instantiate(charactorCanvas, monster1.Obj.transform.GetChild(1));
+                   monsterCanvas.transform.SetParent(monster1.Obj.transform.GetChild(1), false);
+                   monsterCanvas.GetComponent<BattelcharactorCavasAction>().Inite(monster1.skill != null);
+
+                   if (monster1.attributeMask != null)
+                   {
+                       Transform slider = monster1.Obj.GetComponentInChildren<Slider>().transform;
+                       Vector3 pos0 = monster1.attributeMask.transform.position;
+                       monster1.attributeMask.transform.position = new Vector3(pos0.x, slider.position.y - 0.63f, pos0.z);
+                   }
+               }
+               if (_battleMnonster.monsterId2 != 0)
+               {
+                   MonsterData selectMonsterData = GameComponentData.gameData.monsterManager.MonsterDatas.Find(m => m.id == _battleMnonster.monsterId2);
+                   int value = Random.Range(0, 10000);
+                   if (value < _battleMnonster.probability2)
+                   {
+                       monster2 = new Monster(selectMonsterData, MonsterPos2.position, _battleMnonster.attributeType2);
+                   }
+                   else
+                   {
+                       monster2 = new Monster(selectMonsterData, MonsterPos2.position, AttributeType.无);
+                   }
+                   monsterProfessionData2 =
+                       CharactorDataAction.professionDatas.Find(p => p.id == selectMonsterData.profession);
+                   isMosterHurtEnd2 = false;
+                   monster2.SetSpriteLayerOrder(2);
+                   GameObject monsterCanvas = Instantiate(charactorCanvas, monster2.Obj.transform.GetChild(1));
+                   monsterCanvas.transform.SetParent(monster2.Obj.transform.GetChild(1), false);
+                   monsterCanvas.GetComponent<BattelcharactorCavasAction>().Inite(monster2.skill != null);
+                   if (monster2.attributeMask != null)
+                   {
+                       Transform slider = monster2.Obj.GetComponentInChildren<Slider>().transform;
+                       Vector3 pos0 = monster2.attributeMask.transform.position;
+                       monster2.attributeMask.transform.position = new Vector3(pos0.x, slider.position.y - 0.63f, pos0.z);
+                   }
+               }
+
+               */
                 GameComponentData.gameData.fightPanelAction.BattleFunctionButton();
                 monsterTime += 17;
                 if (isAuto)

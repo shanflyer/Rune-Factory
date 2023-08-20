@@ -2,8 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct CharacterGroup 
-{ 
+public class CharacterGroupData : ScriptableObject, IGameData
+{
+    public int id;
+    public List<int> characters = new List<int>();
+    public string GetKey()
+    {
+        return id.ToString();
+    }
+}
+public struct CharacterGroup
+{
+    public int id;
     public List<int> characters; 
 
     public List<int> GetFriends(int id)

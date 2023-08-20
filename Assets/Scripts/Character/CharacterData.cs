@@ -13,7 +13,8 @@ public class CharacterData : ScriptableObject, IGameData
     public int id;
     public Gender gender;
     public string icon;
-    public string obj;
+    public string objName;
+    public GameObject obj;
     public int profession;
     public AttributeType attributeType;
 

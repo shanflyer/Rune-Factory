@@ -1,12 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Playables;
 
+public struct FightPlayerRuntime
+{ 
+    public RuntimeObj playerObj;
+    public PlayableDirector playableDirector;
+    public Animator animator;
+}
 public class FightController : MonoBehaviour
 {
+    public static FightController instance;
     RuntimeObj fightMapRuntime0, fightMapRuntime1;
+    [SerializeField]
+    List<Transform> playerPos=new List<Transform>();
+    [SerializeField]
+    List<Transform> monsterPos=new List<Transform>();
+
+    Dictionary<int,FightPlayerRuntime> fightPlayerRuntimes=new Dictionary<int, FightPlayerRuntime>();
+    Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
     private void OnEnable()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
         GameRuntimeObjManager.instance.CreatParent<FightRuntimeObjType>(transform);
     }
     private void OnDestroy()
@@ -15,11 +35,12 @@ public class FightController : MonoBehaviour
     }
     float cycleSize;
     Vector3 cyclePos;
-    public async void CreatFightMap(int id)
-    {
-        var fightMapData =await GameDataManager.instance.GetAsyncObjectDataArray<FightMapData>(id.ToString());
-        fightMapRuntime0 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(), id.ToString(), fightMapData.fightMapObj, 0);
-        fightMapRuntime1 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(), id.ToString(), fightMapData.fightMapObj, 1);
+    public void CreatFightMap(FightMapData fightMapData)
+    { 
+        fightMapRuntime0 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
+            fightMapData.id.ToString(), fightMapData.fightMapObj, 0);
+        fightMapRuntime1 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
+            fightMapData.id.ToString(), fightMapData.fightMapObj, 1);
 
         Vector3 zeroPos = new Vector3(0, fightMapData.offsetY, 0);
         cyclePos = new Vector3(fightMapData.cycleSize, fightMapData.offsetY, 0);
@@ -28,10 +49,55 @@ public class FightController : MonoBehaviour
         fightMapRuntime0.obj.transform.localPosition = zeroPos;
         fightMapRuntime1.obj.transform.localPosition = cyclePos;
     }
-    public async void CreatFightPlayer()
+    public async void CreatFightPlayer(int dataId,int instanceId,int index)
     {
-
+        index = math.clamp(index, 0, 2);
+        CharacterData characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(dataId);
+        if (characterData != null)
+        {
+            var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
+                characterData.objName, characterData.obj, instanceId);
+            characterRuntime.obj.transform.position = playerPos[index].position;
+            FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime
+            {
+                playerObj = characterRuntime,
+                animator = characterRuntime.obj.GetComponentInChildren<Animator>(),
+                playableDirector = characterRuntime.obj.GetComponentInChildren<PlayableDirector>()
+            };
+            fightPlayerRuntimes[instanceId] = fightPlayerRuntime;
+        }
     }
+    public async void CreatFightMonster(int dataId, int instanceId, int index)
+    {
+        MonsterData monsterData = await GameDataManager.instance.GetAsyncObjectData<MonsterData>(dataId);
+        CreatFightMonster(monsterData, instanceId, index);
+    }
+    public void CreatFightMonster(MonsterData characterData, int instanceId, int index)
+    {
+        index = math.clamp(index, 0, 5); 
+        if (characterData != null)
+        {
+            var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.MONSTRT.ToString(),
+                characterData.monsterName, characterData.obj, instanceId);
+            characterRuntime.obj.transform.position = monsterPos[index].position;
+            FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime
+            {
+                playerObj = characterRuntime,
+                animator = characterRuntime.obj.GetComponentInChildren<Animator>(),
+                playableDirector = characterRuntime.obj.GetComponentInChildren<PlayableDirector>()
+            };
+            fightMonsterRuntimes[instanceId] = fightPlayerRuntime;
+        }
+    }
+    public GameObject FindFightPlayer(string name)
+    {
+        return null;
+    }
+    public GameObject FindFingMoster(string name)
+    {
+        return null;
+    }
+
 
     public void StartWalk()
     {
