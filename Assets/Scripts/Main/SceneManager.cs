@@ -15,10 +15,10 @@ public class SceneManager : Singleton<SceneManager>
     }
     async void SwitchScene(SwitchScene switchScene)
     {
-        GameActionData beforActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(switchScene.beforLoadActionId);
+        GameActionData beforeActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(switchScene.beforeLoadActionId);
         GameActionData afterActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(switchScene.afterLoadActionId);
 
-        SwitchScene(switchScene.sceneName, beforActionData != null ? beforActionData.Action : null, 
+        SwitchScene(switchScene.sceneName, beforeActionData != null ? beforeActionData.Action : null, 
             afterActionData != null ? afterActionData.Action : null);
     }
     public async void SwitchScene(string sceneName,Action unLoadSceneAction=null,Action loadSceneAction=null)
@@ -47,7 +47,7 @@ public class SceneManager : Singleton<SceneManager>
     protected override void UpData()
     {
         base.UpData();
-        if (AsyncOperation == null)
+        if (AsyncOperation == null||loadingPanel==null)
         {
             return;
         }
@@ -60,6 +60,8 @@ public class SceneManager : Singleton<SceneManager>
             }
             loadSceneAction = null;
             loadingPanel.Close();
+            loadingPanel = null;
+            AsyncOperation = null;
         }
     }
      

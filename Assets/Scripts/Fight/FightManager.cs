@@ -90,10 +90,10 @@ public class FightManager :Singleton<FightManager>
     }
     public async void CreatFightMonster(MonsterDeploy monsterDeploy)
     {
-        var beforAction =await GameDataManager.instance.GetAsyncObjectData<GameActionData>(monsterDeploy.beforActionId);
-        if (beforAction != null)
+        var beforeAction =await GameDataManager.instance.GetAsyncObjectData<GameActionData>(monsterDeploy.beforeActionId);
+        if (beforeAction != null)
         {
-            beforAction.Action();
+            beforeAction.Action();
         }
 
         List<int> monsterIds = new List<int>();

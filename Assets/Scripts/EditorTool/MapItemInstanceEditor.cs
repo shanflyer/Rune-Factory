@@ -35,7 +35,7 @@ public class MapItemInstanceEditor : MonoBehaviour
         oldPos = pos;
     }
 
-    // Start is called before the first frame update
+    // Start is called beforee the first frame update
     private void Start()
     {
     }

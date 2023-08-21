@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController");
 
-        var ExploreManger = ExploreManager.instance;
+        var exploreManger = ExploreManager.instance;
         var sceneManager = SceneManager.instance;
 
         FilmController.instance.SetParent(filmParent);
@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
         }
 
     }
-    // Start is called before the first frame update
+    // Start is called beforee the first frame update
     void Start()
     {
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);

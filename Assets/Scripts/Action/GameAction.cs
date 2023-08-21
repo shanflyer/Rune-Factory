@@ -14,14 +14,14 @@ public delegate void SetValue(int value);
 public struct SwitchScene : GameAction
 {
     public string sceneName;
-    public int beforLoadActionId, afterLoadActionId;
+    public int beforeLoadActionId, afterLoadActionId;
 
     public void Init(List<Parameter> parameters)
     {
         if (parameters.Count >= 1)
             sceneName = parameters[0].value;
         if (parameters.Count >= 2)
-            beforLoadActionId = int.Parse(parameters[1].value);
+            beforeLoadActionId = int.Parse(parameters[1].value);
         if (parameters.Count >= 3)
             afterLoadActionId = int.Parse(parameters[2].value);
     }

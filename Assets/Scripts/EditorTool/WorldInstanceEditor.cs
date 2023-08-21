@@ -201,7 +201,7 @@ public class WorldInstanceEditor : MonoBehaviour
         mapObj.transform.position = new Vector3(pos.x, pos.y, coordinate.z);
     }
 
-    // Start is called before the first frame update
+    // Start is called beforee the first frame update
     private void Start()
     {
     }

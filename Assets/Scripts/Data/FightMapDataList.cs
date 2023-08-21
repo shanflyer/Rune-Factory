@@ -23,7 +23,7 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
 public struct MonsterDeploy
 {
     public int refreshId;
-    public int beforActionId;
+    public int beforeActionId;
     public int afterActionId;
     public int victoryId;
     public int failedId;
@@ -42,7 +42,7 @@ public struct FightMapData : IGameData
     public GameObject fightMapObj;
     public List<MonsterDeploy> monsterDeploys;
     public bool isOpen;
-    public int actionId;
+    public int beforeActionId,afterActionId;
     public string battleNotice;
 #if UNITY_EDITOR
     public void SetReferenceData()

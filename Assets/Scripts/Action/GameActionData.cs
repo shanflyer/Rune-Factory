@@ -20,6 +20,31 @@ public class GameActionData : ScriptableObject,IGameData
     { 
         switch (typeName)
         {
+            case "SwitchScene":
+                SwitchScene switchScene = new SwitchScene();
+                switchScene.Init(_parameters);
+                GameActionManager.instance.QueueAction(switchScene);
+                break;
+            case "EnterChapter":
+                EnterChapter enterChapter = new EnterChapter();
+                enterChapter.Init(_parameters);
+                GameActionManager.instance.QueueAction(enterChapter);
+                break;
+            case "RefreshFightChapter":
+                RefreshFightChapter refreshFightChapter = new RefreshFightChapter();
+                refreshFightChapter.Init(_parameters);
+                GameActionManager.instance.QueueAction(refreshFightChapter);
+                break;
+            case "RefreshCharacter":
+                RefreshCharacter refreshCharacter = new RefreshCharacter();
+                refreshCharacter.Init(_parameters);
+                GameActionManager.instance.QueueAction(refreshCharacter);
+                break;
+            case "RefreshCharacterProperty":
+                RefreshCharacterProperty refreshCharacterProperty = new RefreshCharacterProperty();
+                refreshCharacterProperty.Init(_parameters);
+                GameActionManager.instance.QueueAction(refreshCharacterProperty);
+                break;
             case "StopFilm":
                 StopFilm stopFilm = new StopFilm();
                 stopFilm.Init(_parameters);
