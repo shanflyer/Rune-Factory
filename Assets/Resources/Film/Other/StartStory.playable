@@ -971,18 +971,8 @@ MonoBehaviour:
   m_Retroactive: 0
   m_EmitOnce: 0
   gameActionDatas:
-  - dataName: "\u64AD\u653ELoadFilm"
-    id: 2
-    typeName: PlayFilm
-    _parameters:
-    - value: StartLoad
-      parameters: []
-  - dataName: "\u7ED3\u675F\u653E\u6620"
-    id: 1
-    typeName: StopFilm
-    _parameters:
-    - value: StartStory
-      parameters: []
+  - {fileID: 11400000, guid: 11f40284947438d4496096007010fba1, type: 2}
+  - {fileID: 11400000, guid: 5eaf20361870c8e45a1de5d09c35ef8b, type: 2}
 --- !u!114 &3287529716607731403
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1024,18 +1014,8 @@ MonoBehaviour:
   m_Retroactive: 0
   m_EmitOnce: 0
   gameActionDatas:
-  - dataName: "\u6682\u505C\u64AD\u653E"
-    id: 1
-    typeName: PauseFilm
-    _parameters:
-    - value: StartStory
-      parameters: []
-  - dataName: "\u6253\u5F00\u754C\u9762"
-    id: 1
-    typeName: OpenPanelAction
-    _parameters:
-    - value: StartEventPanel
-      parameters: []
+  - {fileID: 11400000, guid: 342bc8e0f13b5c548bdfe98845be89a8, type: 2}
+  - {fileID: 11400000, guid: cea7fa76de740784495118e3706398c3, type: 2}
 --- !u!114 &6369160369829742841
 MonoBehaviour:
   m_ObjectHideFlags: 1

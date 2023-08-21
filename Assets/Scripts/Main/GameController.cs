@@ -29,7 +29,9 @@ public class GameController : MonoBehaviour
         
         instance = this;
         var UIParent = transform.Find("UIController");
-        var filmParent = transform.Find("FilmController"); 
+        var filmParent = transform.Find("FilmController");
+
+        var sceneManager = SceneManager.instance;
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);
 

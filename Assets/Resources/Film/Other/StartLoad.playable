@@ -838,7 +838,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
-  m_Name: StartLoadTimeline
+  m_Name: StartLoad
   m_EditorClassIdentifier: 
   m_Version: 0
   m_Tracks:
@@ -977,12 +977,7 @@ MonoBehaviour:
   m_Retroactive: 0
   m_EmitOnce: 0
   gameActionDatas:
-  - dataName: "\u52A0\u8F7DLoadingUI"
-    id: 0
-    typeName: OpenPanelAction
-    _parameters:
-    - value: LoadingPanel
-      parameters: []
+  - {fileID: 11400000, guid: 39bfe7c04ca524f4abd22c08b14915b2, type: 2}
 --- !u!74 &8634112949939929892
 AnimationClip:
   m_ObjectHideFlags: 0

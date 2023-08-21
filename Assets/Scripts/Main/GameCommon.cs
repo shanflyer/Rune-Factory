@@ -485,7 +485,8 @@ public static class DataPath
         {typeof(WorldMapData),"Data/WorldMapData" },
         {typeof(CharacterData),"Data/CharacterData" },
         {typeof(CharacterGroupData),"Data/CharacterGroupData" },
-        {typeof(FightMapData),"/Data/FightMapDataList" }
+        {typeof(FightMapData),"Data/FightMapDataList" },
+        {typeof(GameActionData),"Data/GameActionData" }
     };
 
     public static string GetDataPath(Type type)

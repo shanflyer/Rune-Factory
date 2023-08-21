@@ -66,9 +66,14 @@ public class ExploreManager : Singleton<ExploreManager>
                 } 
                 this.fightChapters.SetData(fightChapter);
             }
-        }  
-    }
+        }
 
+        GameActionManager.instance.AddListener<EnterChapter>(EnterChapter);
+    }
+    void EnterChapter(EnterChapter enterChapter)
+    {
+        EnterChapter(enterChapter.id);
+    }
     public async void EnterChapter(int id)
     {
         nowChapter = id;

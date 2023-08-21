@@ -11,6 +11,15 @@ public class SceneManager : Singleton<SceneManager>
     public override void Init()
     {
         base.Init();
+        GameActionManager.instance.AddListener<SwitchScene>(SwitchScene);
+    }
+    async void SwitchScene(SwitchScene switchScene)
+    {
+        GameActionData beforActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(switchScene.beforLoadActionId);
+        GameActionData afterActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(switchScene.afterLoadActionId);
+
+        SwitchScene(switchScene.sceneName, beforActionData != null ? beforActionData.Action : null, 
+            afterActionData != null ? afterActionData.Action : null);
     }
     public async void SwitchScene(string sceneName,Action unLoadSceneAction=null,Action loadSceneAction=null)
     {
