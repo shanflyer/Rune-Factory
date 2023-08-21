@@ -33,7 +33,7 @@ public class ExploreManager : Singleton<ExploreManager>
     public override async void Init()
     {
         base.Init();
-
+        fightChapters.Init(10);
         var allChapterDatas = await GameDataManager.instance.GetAllAsyncObjectDataArray<FightMapData>();
         for (int i = 0; i < allChapterDatas.Count; i++)
         {
@@ -47,8 +47,9 @@ public class ExploreManager : Singleton<ExploreManager>
             fightChapter.findItems = new NativeList<int>(Allocator.Persistent);
 
             fightChapters.AddData(fightChapter);
-        } 
-        if (GameDataManager.instance.UserGameSaveData.chapters.Count > 0)
+        }
+        if (GameDataManager.instance.UserGameSaveData.chapters != null&&
+            GameDataManager.instance.UserGameSaveData.chapters.Count > 0)
         {
             var chapters = GameDataManager.instance.UserGameSaveData.chapters;
             for(int i = 0; i < chapters.Count; i++)
