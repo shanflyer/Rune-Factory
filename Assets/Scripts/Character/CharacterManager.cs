@@ -36,6 +36,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
         GameActionManager.instance.AddListener<ChangeCharacterProperty>(ChangeCharacterValue);
         GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordiante);
+        GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
 
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
@@ -53,14 +54,29 @@ public class CharacterManager : Singleton<CharacterManager>
         instanceIds.Add(instanceId);
         return instanceId;
     }
-    public async void CreatZeroNPC()
+
+    void CreatTeam(CreatTeamPlayer creatTeamPlayer)
     {
         teamPlayers.Clear();
-        for(int i = 0; i < GameCommon.zeroNPC.Count; i++)
+        for(int i = 0; i < creatTeamPlayer.players.Count; i++)
         {
-            int id = GameCommon.zeroNPC[i];
-           var character=await CreatCharacter(id, -1);
-            teamPlayers.Add(character);
+            int id = creatTeamPlayer.players[i];
+            if(characters.TryGetValue(id,out var character))
+            {
+                teamPlayers.Add(character);
+            } 
+        }
+    }
+    public void CreatZeroNPC()
+    {
+        var characterDatas = GameDataManager.instance.GetAllAsyncObjectData<CharacterData>();
+        for(int i = 0; i < characterDatas.Count; i++)
+        {
+            var characterData = characterDatas[i];
+            if (characterData.zeroCreate)
+            {
+                CreatCharacter(characterData);
+            }
         }
     }
     public async void CreatPlayer(int id,int bag)
@@ -70,15 +86,21 @@ public class CharacterManager : Singleton<CharacterManager>
         player=new Player(characterData, instanceId);
         characters.Add(instanceId, player);
     }
+    Character CreatCharacter(CharacterData characterData,int bag=-1)
+    {
+        int instanceId = CreatCaracterInstanceId();
+        Character character = new Character(characterData, instanceId);
+        character.SetLevel(characterData.level); 
+        characters.Add(character.instanceId, character);
 
+        return character;
+    }
     async Task<Character> CreatCharacter(int characterId,int bag)
     {
         var characterData=await GameDataManager.instance.GetAsyncObjectData<CharacterData>(characterId);
         int instanceId = CreatCaracterInstanceId();
-        Character character = new Character(characterData, instanceId);
-       
-        character.SetLevel(characterData.level);
-
+        Character character = new Character(characterData, instanceId); 
+        character.SetLevel(characterData.level); 
         characters.Add(character.instanceId,character);
 
         return character;

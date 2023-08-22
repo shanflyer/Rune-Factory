@@ -23,6 +23,7 @@ public class CharacterData : ScriptableObject, IGameData
     public int profession;
     public int level;
     public int behavior;
+    public bool zeroCreate;
     public AttributeType attributeType;
 
     public string GetKey()

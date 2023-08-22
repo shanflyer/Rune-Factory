@@ -54,13 +54,29 @@ public class FightManager :Singleton<FightManager>
     public override void Init()
     {
         base.Init();
+        GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
     }
     protected override void Clear()
     {
         instanceIds.Clear();
         base.Clear();
     }
-    
+    public void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
+    { 
+        for (int i = 0; i < creatFightPlayer.players.Count; i++)
+        {
+            Character character = CharacterManager.instance.GetCharacter(creatFightPlayer.players[i]);
+             
+            FightPlayer fightTeamPlayer = new FightPlayer
+            {
+                instanceId = character.instanceId,
+                dataId = character.dataId,
+            };
+            fightPlayers.Add(fightTeamPlayer);
+            FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i);
+        }
+
+    }
     public void CreatFightPlayer()
     {
         var player = CharacterManager.instance.player;

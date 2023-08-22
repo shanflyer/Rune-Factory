@@ -10,6 +10,32 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+ 
+public struct CreatTeamPlayer : GameAction
+{
+    public List<int> players;
+    public void Init(List<Parameter> parameters)
+    {
+        players = new List<int>();
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            players.Add(int.Parse(parameters[i].value));
+        }
+    }
+}
+public struct CreatFightPlayer : GameAction
+{
+    public List<int> players;
+
+    public void Init(List<Parameter> parameters)
+    {
+        players = new List<int>();
+        for(int i = 0; i < parameters.Count; i++)
+        {
+            players.Add(int.Parse(parameters[i].value));
+        }
+    }
+}
 
 public struct SwitchScene : GameAction
 {

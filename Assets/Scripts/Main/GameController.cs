@@ -25,14 +25,14 @@ public class GameController : MonoBehaviour
         instance = null;
     }
     private void OnEnable()
-    { 
-        
+    {  
         instance = this;
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController");
 
         var exploreManger = ExploreManager.instance;
         var sceneManager = SceneManager.instance;
+        var fightManager = FightManager.instance;
 
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);

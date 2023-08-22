@@ -90,7 +90,10 @@ public class ExploreManager : Singleton<ExploreManager>
         } ,
         () =>
         {
-            FightManager.instance.CreatFightPlayer();
+            if(nowFightMapData.isZeroTeam)
+            {
+                FightManager.instance.CreatFightPlayer();
+            } 
             if (afterActionData != null)
             {
                 afterActionData.Action();

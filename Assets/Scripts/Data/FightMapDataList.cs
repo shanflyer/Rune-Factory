@@ -42,6 +42,7 @@ public struct FightMapData : IGameData
     public GameObject fightMapObj;
     public List<MonsterDeploy> monsterDeploys;
     public bool isOpen;
+    public bool isZeroTeam;
     public int beforeActionId,afterActionId;
     public string battleNotice;
 #if UNITY_EDITOR

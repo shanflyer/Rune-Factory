@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Object = System.Object;
 
 [CreateAssetMenu(menuName = "Data/GameActionData")]
@@ -16,10 +17,25 @@ public class GameActionData : ScriptableObject,IGameData
     public string typeName;
     public List<Parameter> _parameters;
 
+    public void Test()
+    {
+       // Type type = 
+    }
+
     public void Action()
     { 
         switch (typeName)
         {
+            case "CreatTeamPlayer":
+                CreatTeamPlayer creatTeamPlayer = new CreatTeamPlayer();
+                creatTeamPlayer.Init(_parameters);
+                GameActionManager.instance.QueueAction(creatTeamPlayer);
+                break;
+            case "CreatFightPlayer":
+                CreatFightPlayer creatFightPlayer = new CreatFightPlayer();
+                creatFightPlayer.Init(_parameters);
+                GameActionManager.instance.QueueAction(creatFightPlayer);
+                break;
             case "SwitchScene":
                 SwitchScene switchScene = new SwitchScene();
                 switchScene.Init(_parameters);
