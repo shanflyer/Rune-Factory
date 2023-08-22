@@ -21,6 +21,8 @@ public class CharacterData : ScriptableObject, IGameData
     public Sprite icon;
     public GameObject obj;
     public int profession;
+    public int level;
+    public int behavior;
     public AttributeType attributeType;
 
     public string GetKey()

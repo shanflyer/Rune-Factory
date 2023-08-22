@@ -168,6 +168,16 @@ public struct Equip
 }
 public class Character
 {
+   public Character() { }
+    public Character(CharacterData characterData,int instanceId)
+    {
+        this.instanceId = instanceId;
+        dataId = characterData.id;
+        professionId = characterData.profession;
+        name = characterData.name;
+        behavior = characterData.behavior;
+    }
+
     public CharacterProperty CharacterProperty
     {
         get => characterProperty;
@@ -196,7 +206,7 @@ public class Character
     public Direction direction;
 
 
-    public int behaviorId;
+    public int behavior;
     public IEnumerator moveEnumerator;
 
     public void StopMove()
@@ -449,9 +459,16 @@ public class Character
 public class NPC : Character
 {
     public int behavior;
+
+    public NPC(CharacterData characterData, int instanceId) : base(characterData, instanceId)
+    {
+    }
 }
 public class Player : Character
-{
+{ 
+    public Player(CharacterData characterData, int instanceId) : base(characterData, instanceId)
+    {
+    }
     public Player(string name)
     {
         this.name = name;

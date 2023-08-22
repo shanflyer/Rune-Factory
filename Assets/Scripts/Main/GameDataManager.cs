@@ -46,7 +46,9 @@ public class GameDataManager : Singleton<GameDataManager>
             year = year,
             season = season,
             day = day
-        };
+        }; 
+        CharacterManager.instance.CreatPlayer((int)gender, 0);
+        CharacterManager.instance.CreatZeroNPC();
 
     }
 
@@ -69,6 +71,7 @@ public class GameDataManager : Singleton<GameDataManager>
         LoadAllAsyncObjectData<ProfessionData>();
 
         await LoadAllAsyncData<FunctionData>();
+
     }
     void LoadAllAsyncObjectData<T>() where T :Object,IGameData
     {

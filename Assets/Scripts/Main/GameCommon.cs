@@ -73,6 +73,12 @@ public enum EntityType
 }
 public class GameCommon 
 {
+
+    public static List<int> zeroNPC = new List<int>
+    {
+        1001,2001
+    };
+
     public const int SeasonDays = 30;
     public const float fightMapMovingSpeed = 0.2f;
 

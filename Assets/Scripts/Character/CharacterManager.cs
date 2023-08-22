@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -21,8 +22,10 @@ public class CharacterManager : Singleton<CharacterManager>
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
 
     public Player player;
-    public List<Character> teamPlayers;
+    public List<Character> teamPlayers = new List<Character>();
     private Vector2 playerMoveDirction;
+
+    private HashSet<int> instanceIds = new HashSet<int>();
 
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
@@ -38,6 +41,48 @@ public class CharacterManager : Singleton<CharacterManager>
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
 
+    public int CreatCaracterInstanceId()
+    {
+        var guid= Guid.NewGuid();
+        int instanceId=guid.GetHashCode();
+        while (instanceIds.Contains(instanceId))
+        {
+            guid = Guid.NewGuid();
+            instanceId = guid.GetHashCode();
+        }
+        instanceIds.Add(instanceId);
+        return instanceId;
+    }
+    public async void CreatZeroNPC()
+    {
+        teamPlayers.Clear();
+        for(int i = 0; i < GameCommon.zeroNPC.Count; i++)
+        {
+            int id = GameCommon.zeroNPC[i];
+           var character=await CreatCharacter(id, -1);
+            teamPlayers.Add(character);
+        }
+    }
+    public async void CreatPlayer(int id,int bag)
+    { 
+        var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(id);
+        int instanceId = CreatCaracterInstanceId();
+        player=new Player(characterData, instanceId);
+        characters.Add(instanceId, player);
+    }
+
+    async Task<Character> CreatCharacter(int characterId,int bag)
+    {
+        var characterData=await GameDataManager.instance.GetAsyncObjectData<CharacterData>(characterId);
+        int instanceId = CreatCaracterInstanceId();
+        Character character = new Character(characterData, instanceId);
+       
+        character.SetLevel(characterData.level);
+
+        characters.Add(character.instanceId,character);
+
+        return character;
+    }
     private void MapClickAction(object obj)
     {
         Vector2 mouseScreenPos = (Vector2)obj;
@@ -252,13 +297,14 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void CreatNpc(MapNpcData mapNpcData)
     {
+        /*
         NPC npc = new NPC
         {
             name = mapNpcData.name,
             instanceId = mapNpcData.id
         };
         npc.SetObjCoordinate(mapNpcData.beingMap, mapNpcData.beingCoordinate);
-        characters.Add(npc.instanceId, npc);
+        characters.Add(npc.instanceId, npc);*/
 
         // LogTask logTask = new LogTask("logTask", behaviorTree, npc.name);
         //  behaviorTree.startTask.AddChildTask(logTask);
