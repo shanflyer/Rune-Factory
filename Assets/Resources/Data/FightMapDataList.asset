@@ -21,8 +21,14 @@ MonoBehaviour:
     Background: {fileID: 0}
     fightMapObj: {fileID: 1214927745692642, guid: 25184cfadb92949418012a02422f7771,
       type: 3}
-    monsterDeploys: []
+    monsterDeploys:
+    - refreshId: 0
+      beforeActionId: 0
+      afterActionId: 0
+      victoryId: 0
+      failedId: 0
     isOpen: 1
+    isZeroTeam: 0
     beforeActionId: 0
     afterActionId: 12
     battleNotice: 
