@@ -22,6 +22,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
 
     public Player player;
+    private CharacterData playerData;
     public List<Character> teamPlayers = new List<Character>();
     private Vector2 playerMoveDirction;
 
@@ -41,6 +42,8 @@ public class CharacterManager : Singleton<CharacterManager>
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
+    public string PlayerName => player.name;
+    public Sprite PlayerIcon => playerData.icon;
 
     public int CreatCaracterInstanceId()
     {
@@ -81,9 +84,9 @@ public class CharacterManager : Singleton<CharacterManager>
     }
     public async void CreatPlayer(int id,int bag)
     { 
-        var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(id);
+        playerData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(id);
         int instanceId = CreatCaracterInstanceId();
-        player=new Player(characterData, instanceId);
+        player=new Player(playerData, instanceId);
         characters.Add(instanceId, player);
     }
     Character CreatCharacter(CharacterData characterData,int bag=-1)
