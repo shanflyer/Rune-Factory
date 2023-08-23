@@ -252,7 +252,7 @@ public class NPCX : Charactor
     }
     public async void AddGiftFriendllyExp(int itemid)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemid);
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemid);
         if (itemData.id == 1502&&WaitDays > 0)
         {
             WaitDays = 0;

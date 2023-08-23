@@ -16,8 +16,8 @@ public class ProfessionData : ScriptableObject,IGameData
 
     public async void Init()
     {
-        expGrowModelData = await GameDataManager.instance.GetAsyncObjectDataArray<GrowModelData>(expGrowModel.ToString());
-        propertyGrowModelData = await GameDataManager.instance.GetAsyncObjectDataArray<GrowModelData>(propertyGrowModel.ToString());
+        expGrowModelData = await GameDataManager.instance.GetAsyncData<GrowModelData>(expGrowModel.ToString());
+        propertyGrowModelData = await GameDataManager.instance.GetAsyncData<GrowModelData>(propertyGrowModel.ToString());
     }
     public int GetLevelExp(int level)
     {

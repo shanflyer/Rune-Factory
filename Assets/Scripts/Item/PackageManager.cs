@@ -204,11 +204,11 @@ public class PackageManager : Singleton<PackageManager>
     }
     async void UsetItemAction(int itemId)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemId.ToString());
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.ToString());
 
         for (int i = 0; i < itemData.useEventId.Count; i++)
         {
-            GameActionData gameActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(itemData.useEventId[i].ToString());
+            GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(itemData.useEventId[i].ToString());
             gameActionData.Action();
         }
 

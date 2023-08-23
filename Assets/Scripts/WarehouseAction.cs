@@ -469,7 +469,7 @@ public class WarehouseAction : MonoBehaviour
         int outCaseCount = PackageManager.instance.GetPackageCaseCount(outPackage);
         List<Item> outItems = PackageManager.instance.GetPackageItems(outPackage);
         int outItemCount = outItems.Count;
-        ItemData selectItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(selectedItem.dataId.ToString()); 
+        ItemData selectItemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectedItem.dataId.ToString()); 
         switch (displayType)
         {
             case DisplayType.Sell:
@@ -617,7 +617,7 @@ public class WarehouseAction : MonoBehaviour
     }
     async void UseItem()
     {
-        ItemData selectItemData1 = await GameDataManager.instance.GetAsyncObjectData<ItemData>(selectedItem.dataId.ToString()); 
+        ItemData selectItemData1 = await GameDataManager.instance.GetAsyncData<ItemData>(selectedItem.dataId.ToString()); 
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         if (selectItemData1.Type == ItemType.食物 )
         {

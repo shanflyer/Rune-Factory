@@ -30,7 +30,7 @@ public class NPCFunctionPanel : MonoBehaviour
         if (!GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood)
         {
             Item item = ItemManager.instance.CreatItem(1400, 1);
-            ItemData loveItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(1400);
+            ItemData loveItemData = await GameDataManager.instance.GetAsyncData<ItemData>(1400);
             int count = await PackageManager.instance.SetItemInPackage(item, 0);
 
             if (count>0)
@@ -131,7 +131,7 @@ public class NPCFunctionPanel : MonoBehaviour
                 {
                     if (friendlyLevels[i] <= _npcx.npcData.friendlyLevel)
                     {
-                        giftData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gifts[i]);
+                        giftData = await GameDataManager.instance.GetAsyncData<ItemData>(gifts[i]);
                         break;
                     }
                 }

@@ -63,7 +63,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
 
     private async Task SetItemAimation(int2 key, int dataId, int instaceId)
     {
-        var animationData = await GameDataManager.instance.GetAsyncObjectData<ItemAnimationData>(dataId);
+        var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
         AnimationClip animationClip = animationData.GetAnimationClip(key, out int count);
         MyAnimationController.instance.PlayAnimation(instaceId, animationClip);
     }
@@ -170,7 +170,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         }
         items.Add(instanceId);
 
-        var mapItemData = await GameDataManager.instance.GetAsyncObjectData<MapItemData>(mapItem.id);
+        var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
         if (mapItemData.triggerCells.Length > 0)
         {
             MapCellController.instance.AddTriggerCell(mapItemData.triggerCells, mapId, mapItemData.defaultEnter,
@@ -257,7 +257,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
 
     private async Task<RuntimeObj> CreatMapRunTime(string roomName, int instanceId)
     {
-        MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncObjectData<MapRoomData>(roomName);
+        MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(roomName);
         if (mapRoomData != null)
         {
             return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), roomName, mapRoomData.mapObj, instanceId);
@@ -270,7 +270,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         Vector3 pos = GameCommon.GetMapPos(coordinate);
         pos.z = -100;
 
-        MapItemData mapItemData = await GameDataManager.instance.GetAsyncObjectData<MapItemData>(dataId);
+        MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(dataId);
         if (mapItemData != null)
         {
             return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), dataId.ToString(), mapItemData.itemObj, instanceId);
@@ -281,7 +281,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
     //初始化世界数据
     public async Task InitWorldData()
     {
-        var worldMapData = await GameDataManager.instance.GetAsyncObjectData<WorldMapData>();
+        var worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>();
         MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
 
         roomMapDatas.Clear();
@@ -289,7 +289,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         foreach (var room in worldMapData.worldMaps)
         {
             //获取房间数据
-            var MapRoomData = await GameDataManager.instance.GetAsyncObjectData<MapRoomData>(room.map);
+            var MapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(room.map);
 
             roomMapDatas.Add(room.id, room.map);
 

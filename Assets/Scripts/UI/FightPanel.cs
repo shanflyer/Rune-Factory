@@ -120,7 +120,7 @@ public class FightPanel : GamePanel
         FightChapter fightChapter = ExploreManager.instance.GetFigehtChapter(dataId);
         if (fightChapter.mapId == dataId)
         {
-            FightMapData fightMapData=await GameDataManager.instance.GetAsyncObjectDataArray<FightMapData>(dataId.ToString());
+            FightMapData fightMapData=await GameDataManager.instance.GetAsyncData<FightMapData>(dataId.ToString());
             MapName.text = fightMapData.mapName;
             ExploreValue.text = $"Ì½Ë÷¶È:{fightChapter.completeValue}%";
         }

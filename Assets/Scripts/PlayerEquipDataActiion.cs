@@ -58,7 +58,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
     public async void EuqipMentAction()
     {
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-        ItemData selectItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(selectItem);
+        ItemData selectItemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectItem);
         Item oldItem = default(Item);
         if (gamePlayer.id==playerId)
         {
@@ -68,7 +68,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                 
                 if (gamePlayer.weapon.dataId != 0)
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.weapon.dataId.ToString());
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.weapon.dataId.ToString());
 
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);  
                     Property oldProperty= oldItemData.property;
@@ -85,7 +85,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             {
                 if (gamePlayer.clothes.dataId != 0)
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.clothes.dataId.ToString());
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.clothes.dataId.ToString());
                      
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
                     Property oldProperty = oldItemData.property;
@@ -106,7 +106,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             {
                 if (gamePlayer.TeamPlayer0.Weapon != 0)
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.Weapon.ToString());
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.Weapon.ToString());
                      
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
                     Property oldProperty = oldItemData.property;
@@ -125,7 +125,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             {
                 if (gamePlayer.TeamPlayer0.clothes != 0)
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.clothes.ToString());
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.clothes.ToString());
                      
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
                     Property oldProperty = oldItemData.property;
@@ -147,7 +147,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             {
                 if (gamePlayer.TeamPlayer1.Weapon != 0)
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.Weapon.ToString());
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.Weapon.ToString());
                    
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
                     Property oldProperty = oldItemData.property;
@@ -166,7 +166,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             {
                 if (gamePlayer.TeamPlayer1.clothes != 0)
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.clothes.ToString()); 
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.clothes.ToString()); 
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
                     Property oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer1.property -= oldProperty;
@@ -260,7 +260,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                weaponData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.weapon.dataId.ToString());
+                weaponData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.weapon.dataId.ToString());
                 WeapomText.text = weaponData.name;
             }
 
@@ -271,7 +271,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                clotherData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.clothes.dataId.ToString());
+                clotherData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.clothes.dataId.ToString());
                 ClothesText.text = clotherData.name;
             }
         }
@@ -296,7 +296,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                weaponData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.Weapon);
+                weaponData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.Weapon);
                 WeapomText.text = weaponData.name;
             }
 
@@ -307,7 +307,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                clotherData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.clothes);
+                clotherData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.clothes);
                 ClothesText.text = clotherData.name;
             }
         }
@@ -331,7 +331,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                weaponData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.Weapon);
+                weaponData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.Weapon);
                 WeapomText.text = weaponData.name;
             }
 
@@ -342,7 +342,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                clotherData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.clothes);
+                clotherData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.clothes);
                 ClothesText.text = clotherData.name;
             }
         }
@@ -413,7 +413,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                weaponData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.weapon.dataId);
+                weaponData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.weapon.dataId);
                 WeapomText.text = weaponData.name;
             }
 
@@ -424,7 +424,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                clotherData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.clothes.dataId);
+                clotherData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.clothes.dataId);
                 ClothesText.text = clotherData.name;
             }
         }
@@ -445,7 +445,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                weaponData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.Weapon);
+                weaponData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.Weapon);
                 WeapomText.text = weaponData.name;
             }
 
@@ -456,7 +456,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                clotherData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.clothes);
+                clotherData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.clothes);
                 ClothesText.text = clotherData.name;
             }
         }
@@ -477,7 +477,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                weaponData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.Weapon);
+                weaponData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.Weapon);
                 WeapomText.text = weaponData.name;
             }
 
@@ -488,7 +488,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
             else
             {
-                clotherData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.clothes);
+                clotherData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.clothes);
                 ClothesText.text = clotherData.name;
             }
         }
@@ -501,7 +501,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
     {
         selectItem = itemId;
        // GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId);
         if (itemData.Type == ItemType.武器)
         {
             if (weaponData == null)

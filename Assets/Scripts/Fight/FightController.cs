@@ -52,7 +52,7 @@ public class FightController : MonoBehaviour
     public async void CreatFightPlayer(int dataId,int instanceId,int index)
     {
         index = math.clamp(index, 0, 2);
-        CharacterData characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(dataId);
+        CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(dataId);
         if (characterData != null)
         {
             var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
@@ -69,7 +69,7 @@ public class FightController : MonoBehaviour
     }
     public async void CreatFightMonster(int dataId, int instanceId, int index)
     {
-        MonsterData monsterData = await GameDataManager.instance.GetAsyncObjectData<MonsterData>(dataId);
+        MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(dataId);
         CreatFightMonster(monsterData, instanceId, index);
     }
     public void CreatFightMonster(MonsterData characterData, int instanceId, int index)

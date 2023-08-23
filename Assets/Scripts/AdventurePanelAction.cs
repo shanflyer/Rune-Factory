@@ -239,7 +239,7 @@ public class AdventurePanelAction : MonoBehaviour
         foreach (var item in items)
         {
             GameObject itemIconObj = Instantiate(itemIconPro);
-            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item);
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item);
             itemIconObj.GetComponent<Image>().sprite = itemData.iconSprite;
             itemIconObj.transform.SetParent(itemParent,false);
         }

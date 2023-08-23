@@ -22,7 +22,7 @@ public class SellSellectAction : MonoBehaviour
     public async void InitSellSelectData(Item _item)
     {
         item = _item;
-        ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
+        ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
 
         itemImage.sprite = itemData.iconSprite;
         itemName.text = itemData.name;

@@ -21,7 +21,7 @@ public class Item : IComparable<Item>
 
     public Item(int itemId, int _count)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(itemId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId);
         name = itemData.name;
         ItemId = itemId;
         count = _count;
@@ -322,7 +322,7 @@ public class Package
     }
     public void  SetItemXInPackage(int _itemid)
     {
-        ItemData _itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_itemid);
+        ItemData _itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_itemid);
 
         Item _item = ItemManager.instance.CreatItem(_itemData, 1);
 
@@ -339,7 +339,7 @@ public class Package
 
     public int SetItemInPackage(int _itemid,int count)
     {
-        ItemData _itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_itemid);
+        ItemData _itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_itemid);
         
         Item _item=ItemManager.instance.CreatItem(_itemData,count);
 

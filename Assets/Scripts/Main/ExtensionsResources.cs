@@ -18,7 +18,23 @@ public  static class ExtensionsResources
         await gres;
         return gres.asset as T;
     }
-
+    public static async Task<T> LoadResourceIGameData<T>(string path) where T : IGameData
+    {
+        var gres = Resources.LoadAsync(path);
+        await gres;
+        return (T)(IGameData)gres.asset;
+    }
+    public static T[] LoadAllIGameData<T>(string path) where T: IGameData
+    {
+        var gres = Resources.LoadAll(path);
+        T[] ts = new T[gres.Length];
+        for(int i = 0; i < gres.Length; i++)
+        {
+            ts[i] = (T)((IGameData) gres[i]);
+        }
+        return ts;
+    }
+    
     public static T[] LoadAllResource<T>(string path) where T : UnityEngine.Object
     {
         var gres = Resources.LoadAll<T>(path); 

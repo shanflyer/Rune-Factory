@@ -89,7 +89,7 @@ public class GroundItem
 
     public async void SetData()
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
         Obj.GetComponentInChildren<SpriteRenderer>().sprite =
             GameComponent.ItemSprites.Find(i => i.name == itemData.icon);
         Obj.GetComponentInChildren<Text>().text = item.count.ToString();
@@ -916,7 +916,7 @@ public class GameManager : MonoBehaviour
     public async void ClickGroundItem(GameObject Obj)
     {
         GroundItem groundItem = GroundItems.Find(g => g.Obj == Obj);
-        ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(groundItem.item.dataId.ToString()); 
+        ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(groundItem.item.dataId.ToString()); 
         int xcount =await PackageManager.instance.SetItemInPackage(groundItem.item,0);
        
         if (xcount > 0)
@@ -955,7 +955,7 @@ public class GameManager : MonoBehaviour
         {
             int index = UnityEngine.Random.Range(0, groundItems.Count - 1);
             GroundItem groundItem = GroundItems[index];
-            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(groundItem.item.dataId.ToString());  
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(groundItem.item.dataId.ToString());  
             int lostcount = UnityEngine.Random.Range(1, groundItem.item.count);
             int count = groundItem.item.count - lostcount;
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("*地底哥布林偷走了掉在地上的") + lostcount + LanguageManage.SwitchStr("个") + itemData.name);

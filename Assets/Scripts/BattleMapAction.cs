@@ -2677,7 +2677,7 @@ namespace OldName
                     rewardStr += LanguageManage.SwitchStr(",获得金币x") + moneyValue;
                     foreach (var rewardItem in rewardItems)
                     {
-                        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(rewardItem.dataId.ToString());
+                        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(rewardItem.dataId.ToString());
                         rewardStr += "," + itemData.name + "x" + rewardItem.count;
 
                         InformationController.instance.AddInformation(LanguageManage.SwitchStr("*获得")

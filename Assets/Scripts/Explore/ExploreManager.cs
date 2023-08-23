@@ -34,7 +34,7 @@ public class ExploreManager : Singleton<ExploreManager>
     {
         base.Init();
         fightChapters.Init(10);
-        var allChapterDatas = await GameDataManager.instance.GetAllAsyncObjectDataArray<FightMapData>();
+        var allChapterDatas = await GameDataManager.instance.GetAllAsyncData<FightMapData>();
         for (int i = 0; i < allChapterDatas.Count; i++)
         {
             var chapterData = allChapterDatas[i];
@@ -78,9 +78,9 @@ public class ExploreManager : Singleton<ExploreManager>
     public async void EnterChapter(int id)
     {
         nowChapter = id;
-        nowFightMapData = await GameDataManager.instance.GetAsyncObjectDataArray<FightMapData>(id.ToString());
-        var beforeActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(nowFightMapData.beforeActionId); 
-        var afterActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(nowFightMapData.afterActionId);
+        nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(id.ToString());
+        var beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(nowFightMapData.beforeActionId); 
+        var afterActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(nowFightMapData.afterActionId);
         SceneManager.instance.SwitchScene("Fight", () => {
             LoadFightMap();
             if (beforeActionData != null)

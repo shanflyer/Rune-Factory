@@ -23,7 +23,7 @@ public class GameEventManager:Singleton<GameEventManager>
 
     public async Task AddGameEvent(int eventId,List<EventReferenceData> eventReferenceDatas=null)
     {
-        GameEventData gameEventData =await GameDataManager.instance.GetAsyncObjectData<GameEventData>(eventId);
+        GameEventData gameEventData =await GameDataManager.instance.GetAsyncData<GameEventData>(eventId);
         AddGameEvent(gameEventData, eventReferenceDatas);
     }
     private void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas=null)

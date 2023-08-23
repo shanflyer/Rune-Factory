@@ -173,7 +173,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
             runtimePlayables.Remove(playableDirector);
         }
 
-        MyTimeLineData myTimeLineData = await GameDataManager.instance.GetAsyncObjectData<MyTimeLineData>(name);
+        MyTimeLineData myTimeLineData = await GameDataManager.instance.GetAsyncData<MyTimeLineData>(name);
         playableDirector.playableAsset = myTimeLineData.asset;
         RuntimePlayable runtimePlayable = new RuntimePlayable(playableDirector, myTimeLineData, () => 
         {

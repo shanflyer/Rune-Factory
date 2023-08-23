@@ -52,7 +52,7 @@ public class DeskItemAction : MonoBehaviour
         PriceTitle = LanguageManage.SwitchStr("单价:");
         CountTitle = LanguageManage.SwitchStr("上架数量:");
         item = _item;
-        ItemData itemData =await GameDataManager.instance.GetAsyncObjectData<ItemData>(_item.dataId.ToString());
+        ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(_item.dataId.ToString());
         ItemImage.sprite = itemData.iconSprite;
         ItemName.text = itemData.name;
         ItemPrice.text = PriceTitle+itemData.SellPrice+"G";

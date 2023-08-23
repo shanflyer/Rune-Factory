@@ -11,7 +11,7 @@ public class Seedaction : MonoBehaviour
     {
         Item seed = GameComponentData.gameData.farmAction.farmTool;
         ItemData itemData =
-               await GameDataManager.instance.GetAsyncObjectData<ItemData>(seed.dataId);
+               await GameDataManager.instance.GetAsyncData<ItemData>(seed.dataId);
         seedRenderer.sprite = itemData.iconSprite;
     }
 	// Use this for initialization

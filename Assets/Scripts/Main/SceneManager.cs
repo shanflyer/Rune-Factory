@@ -15,8 +15,8 @@ public class SceneManager : Singleton<SceneManager>
     }
     async void SwitchScene(SwitchScene switchScene)
     {
-        GameActionData beforeActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(switchScene.beforeLoadActionId);
-        GameActionData afterActionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(switchScene.afterLoadActionId);
+        GameActionData beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(switchScene.beforeLoadActionId);
+        GameActionData afterActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(switchScene.afterLoadActionId);
 
         SwitchScene(switchScene.sceneName, beforeActionData != null ? beforeActionData.Action : null, 
             afterActionData != null ? afterActionData.Action : null);

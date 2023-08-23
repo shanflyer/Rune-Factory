@@ -70,9 +70,9 @@ public class CharacterManager : Singleton<CharacterManager>
             } 
         }
     }
-    public void CreatZeroNPC()
+    public async void CreatZeroNPC()
     {
-        var characterDatas = GameDataManager.instance.GetAllAsyncObjectData<CharacterData>();
+        var characterDatas =await GameDataManager.instance.GetAllAsyncData<CharacterData>();
         for(int i = 0; i < characterDatas.Count; i++)
         {
             var characterData = characterDatas[i];
@@ -84,7 +84,7 @@ public class CharacterManager : Singleton<CharacterManager>
     }
     public async void CreatPlayer(int id,int bag)
     { 
-        playerData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(id);
+        playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         int instanceId = CreatCaracterInstanceId();
         player=new Player(playerData, instanceId);
         characters.Add(instanceId, player);
@@ -100,7 +100,7 @@ public class CharacterManager : Singleton<CharacterManager>
     }
     async Task<Character> CreatCharacter(int characterId,int bag)
     {
-        var characterData=await GameDataManager.instance.GetAsyncObjectData<CharacterData>(characterId);
+        var characterData=await GameDataManager.instance.GetAsyncData<CharacterData>(characterId);
         int instanceId = CreatCaracterInstanceId();
         Character character = new Character(characterData, instanceId); 
         character.SetLevel(characterData.level); 
@@ -362,7 +362,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public async Task<Sprite> GetCharacterIcon(int id)
     {
-        var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(id);
+        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         return characterData.icon;
     }
 
@@ -371,7 +371,7 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector3 pos = GameCommon.GetMapPos(coordiante);
         pos.z = -100;
 
-        var characterData = await GameDataManager.instance.GetAsyncObjectData<CharacterData>(characterDataId);
+        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterDataId);
         if (characterData != null)
         { 
            return  GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.objName,

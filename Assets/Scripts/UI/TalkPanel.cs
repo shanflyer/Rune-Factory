@@ -34,7 +34,7 @@ public class TalkPanel : GamePanel
     }
     async void NextAction()
     {
-        var actionData = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(talkData.id.ToString());
+        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(talkData.id.ToString());
         if (actionData != null)
         {
             actionData.Action();
@@ -44,7 +44,7 @@ public class TalkPanel : GamePanel
 
     public override async Task InitData(string dataKey)
     {
-        talkData=await GameDataManager.instance.GetAsyncObjectData<TalkData>(dataKey);
+        talkData=await GameDataManager.instance.GetAsyncData<TalkData>(dataKey);
         if (talkData == null)
         {
             Close();

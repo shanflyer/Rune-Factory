@@ -151,7 +151,7 @@ public class FishingPanelAction : MonoBehaviour
             }
             fishItemObj.SetActive(true);
             functionObj.SetActive(false);
-            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(selectFish.item);
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectFish.item);
             GameComponentData.gameData.charactorTitleAction.AddFishCount(selectFish.item);
             fishItem = ItemManager.instance.CreatItem(itemData, 1);
             itemIcon.sprite = itemData.iconSprite;

@@ -218,7 +218,7 @@ public class Character
 
     public async void AddExp(int value)
     {
-        var profressionData = await GameDataManager.instance.GetAsyncObjectData<ProfessionData>(professionId);
+        var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
         while (exp.AddExp(value))
         {
             int nextLevel = level + 1;
@@ -231,7 +231,7 @@ public class Character
     {
         if (level != this.level)
         {
-            var profressionData =await GameDataManager.instance.GetAsyncObjectData<ProfessionData>(professionId);
+            var profressionData =await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
             if (profressionData.id == professionId)
             {
                 CharacterProperty = CharacterProperty - nowProperty;

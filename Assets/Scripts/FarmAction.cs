@@ -172,7 +172,7 @@ public class FarmAction : MonoBehaviour
         farmTool = item;
         if (item.instanceId != 0)
         { 
-            ItemData toolData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
+            ItemData toolData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
             //farmToolData = toolData;
             farmToolSprite.sprite = toolData.iconSprite;
             farmToolSprite.enabled = true;

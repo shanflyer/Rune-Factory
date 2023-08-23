@@ -63,7 +63,7 @@ public class AnimalSetPanelAction : MonoBehaviour
     public async void KillAnimal()
     { 
         AudioController.instance.PlayAudio(SE.Item);
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(animal.animalData.produceItem);
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(animal.animalData.produceItem);
 
         Item item=ItemManager.instance.CreatItem(itemData.id,1);
          

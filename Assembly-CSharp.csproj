@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{7E39F9DD-4A47-3EEF-E4E7-5D7B8579DEA5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -71,7 +70,6 @@
     <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities@1.0.14\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Data\TalkData.cs" />
     <Compile Include="Assets\Scripts\PlacePanelAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetRandomString.cs" />
     <Compile Include="Assets\Scripts\eyeMove.cs" />
@@ -96,7 +94,6 @@
     <Compile Include="Assets\Scripts\Main\GameNotificationManager.cs" />
     <Compile Include="Assets\Scripts\SleepEnd.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\A5_Tile.cs" />
-    <Compile Include="Assets\Scripts\UI\TalkPanel.cs" />
     <Compile Include="Assets\Scripts\x\PromptAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayDelayed.cs" />
     <Compile Include="Assets\Scripts\TimeDisplayAction.cs" />
@@ -177,6 +174,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\AngleAxis.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Lerp.cs" />
     <Compile Include="Assets\Scripts\PastureNameClick.cs" />
+    <Compile Include="Assets\Scripts\UI\TalkPanel.cs" />
     <Compile Include="Assets\Scripts\UI\SetPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetSqrMagnitude.cs" />
     <Compile Include="Assets\Scripts\PastureGrassAddPanelAction.cs" />
@@ -521,6 +519,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedBool.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\StartRecording.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedGameObject.cs" />
+    <Compile Include="Assets\Scripts\Data\TalkData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\FromToRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Debug\DrawRay.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetLoop.cs" />
@@ -616,6 +615,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\GetEnabled.cs" />
     <Compile Include="Assets\Scripts\Data\DataArray.cs" />
     <Compile Include="Assets\Scripts\SeasonSelect.cs" />
+    <Compile Include="Assets\Scripts\Main\TalkManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
     <Compile Include="Assets\Scripts\UI\FightPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector4.cs" />

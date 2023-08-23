@@ -25,7 +25,7 @@ public class ItemFlyAction : MonoBehaviour
         Pos2= _pos2;
         flySpeed = _speed;
         item = _item;
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
         GetComponentInChildren<SpriteRenderer>().sprite = itemData.iconSprite;
         StartCoroutine("Flying");
     }

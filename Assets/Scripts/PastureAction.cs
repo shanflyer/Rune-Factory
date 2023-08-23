@@ -145,11 +145,11 @@ namespace OldName
             ItemData itemData = new ItemData();
             if (animalStatus == AnimalStatus.死亡)
             {
-                //itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(animalData.deadItem);
+                //itemData = await GameDataManager.instance.GetAsyncData<ItemData>(animalData.deadItem);
             }
             else
             {
-                itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(animalData.produceItem.ToString());
+                itemData = await GameDataManager.instance.GetAsyncData<ItemData>(animalData.produceItem.ToString());
             }
             if (itemData.id != 0)
             {

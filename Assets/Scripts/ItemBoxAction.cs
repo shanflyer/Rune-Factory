@@ -81,7 +81,7 @@ public class ItemBoxAction : MonoBehaviour
     }
     public async void InitItemData(Item _item,DeskAction _deskAction)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_item.dataId.ToString());
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_item.dataId.ToString());
         mask.gameObject.SetActive(false);
         item = _item;
         icon.sprite =itemData.iconSprite;
@@ -94,7 +94,7 @@ public class ItemBoxAction : MonoBehaviour
     }
     public async void InitItemData(Item _item)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_item.dataId.ToString());
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_item.dataId.ToString());
         item = _item;
        
         
@@ -108,7 +108,7 @@ public class ItemBoxAction : MonoBehaviour
     }
     public async void InitItemData(int  _itemid)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(_itemid.ToString()); ;
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_itemid.ToString()); ;
         GetComponentInChildren<Toggle>().enabled = true;
         item = ItemManager.instance.CreatItem(_itemid, 1);
         icon.sprite = itemData.iconSprite;

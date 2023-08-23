@@ -38,7 +38,7 @@ public class IntelligencePanelAction : MonoBehaviour
         if (gamePlayer.weapon.dataId != 0)
         {
             ItemData data =
-                    await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.weapon.dataId);
+                    await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.weapon.dataId);
             playerWeaponButton.GetComponentInChildren<Text>().text = data.name;
         }
         else
@@ -48,7 +48,7 @@ public class IntelligencePanelAction : MonoBehaviour
         if (gamePlayer.clothes.dataId != 0)
         {
             ItemData data =
-                    await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.clothes.dataId);
+                    await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.clothes.dataId);
             playerClothesButton.GetComponentInChildren<Text>().text = data.name;
         }
         else
@@ -75,7 +75,7 @@ public class IntelligencePanelAction : MonoBehaviour
             if (gamePlayer.TeamPlayer0.Weapon!= 0)
             {
                 ItemData weponData =
-                    await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.Weapon);
+                    await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.Weapon);
 
                 playerWeaponButton0.GetComponentInChildren<Text>().text = weponData.name;
             }
@@ -86,7 +86,7 @@ public class IntelligencePanelAction : MonoBehaviour
             if (gamePlayer.TeamPlayer0.clothes != 0)
             {
                 ItemData clothesData =
-                    await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer0.clothes);
+                    await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.clothes);
                 playerClothesButton0.GetComponentInChildren<Text>().text = clothesData.name;
             }
             else
@@ -124,7 +124,7 @@ public class IntelligencePanelAction : MonoBehaviour
             if (gamePlayer.TeamPlayer1.Weapon != 0)
             {
                 ItemData weponData =
-                    await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.Weapon);
+                    await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.Weapon);
 
                 playerWeaponButton1.GetComponentInChildren<Text>().text = weponData.name;
             }
@@ -135,7 +135,7 @@ public class IntelligencePanelAction : MonoBehaviour
             if (gamePlayer.TeamPlayer1.clothes != 0)
             {
                 ItemData clothesData =
-                    await GameDataManager.instance.GetAsyncObjectData<ItemData>(gamePlayer.TeamPlayer1.clothes);
+                    await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.clothes);
                 playerClothesButton1.GetComponentInChildren<Text>().text = clothesData.name;
             }
             else

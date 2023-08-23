@@ -53,7 +53,7 @@ public class DeskAction : MonoBehaviour
     {
         if (item.instanceId!=0)
         {
-            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
            // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
             AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
@@ -111,7 +111,7 @@ public class DeskAction : MonoBehaviour
     {
         if (item.instanceId != 0)
         {
-            ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId.ToString());
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
             // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
             AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
@@ -174,7 +174,7 @@ public class DeskAction : MonoBehaviour
         GoldPackage = _package;
 
         item = _item;
-        var data=await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
+        var data=await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
         if (item.instanceId != 0)
         {
             ItemSpriteRenderer.enabled = true;
@@ -193,7 +193,7 @@ public class DeskAction : MonoBehaviour
     public async void InitDeskData(Item _item)
     { 
         item = _item;
-        var data = await GameDataManager.instance.GetAsyncObjectData<ItemData>(item.dataId);
+        var data = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
         if (item.instanceId != 0)
         {
             ItemSpriteRenderer.enabled = true;

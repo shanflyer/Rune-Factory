@@ -229,7 +229,7 @@ namespace OldName
             else
             {
                 weapon = ItemManager.instance.CreatItem(PlayerDate.weapon, 1);
-                var data = await GameDataManager.instance.GetAsyncObjectData<ItemData>(weapon.dataId.ToString());
+                var data = await GameDataManager.instance.GetAsyncData<ItemData>(weapon.dataId.ToString());
                 property += data.property;
             }
             if (PlayerDate.clothes == 0)
@@ -239,7 +239,7 @@ namespace OldName
             else
             {
                 clothes = ItemManager.instance.CreatItem(PlayerDate.clothes, 1);
-                var data = await GameDataManager.instance.GetAsyncObjectData<ItemData>(clothes.dataId.ToString());
+                var data = await GameDataManager.instance.GetAsyncData<ItemData>(clothes.dataId.ToString());
                 property += data.property;
             }
             if (gender == Gender.female)

@@ -74,13 +74,13 @@ public class Employer
         if (weapon != 0)
         {
             ItemData oldItemData =
-                await GameDataManager.instance.GetAsyncObjectData<ItemData>(weapon);
+                await GameDataManager.instance.GetAsyncData<ItemData>(weapon);
             property += oldItemData.property;
         }
         if (clothes != 0)
         {
             ItemData oldItemData =
-                await GameDataManager.instance.GetAsyncObjectData<ItemData>(clothes);
+                await GameDataManager.instance.GetAsyncData<ItemData>(clothes);
             property += oldItemData.property;
         }
     }

@@ -361,7 +361,7 @@ public class PlantAction : MonoBehaviour
     public async void PlantReward(Cell cell)
     {
         Plant plant = Plants.Find(p => p.id == cell.myGameObjects[0].id);
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(plant.plantBaseData.fruitId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(plant.plantBaseData.fruitId);
         Item item= ItemManager.instance.CreatItem(itemData.id,plant.plantBaseData.fruitIdNum);
         PackageManager.instance.SetItemInPackage(item,0);
         plant.turnCount--;
@@ -377,7 +377,7 @@ public class PlantAction : MonoBehaviour
     }
     public async void PlantReward(Plant plant)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncObjectData<ItemData>(plant.plantBaseData.fruitId);
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(plant.plantBaseData.fruitId);
         Item item = ItemManager.instance.CreatItem(itemData.id, plant.plantBaseData.fruitIdNum);
         
         GameComponentData.gameData.charactorTitleAction.AddPlantExp(1);

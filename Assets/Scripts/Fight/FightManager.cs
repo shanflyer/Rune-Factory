@@ -106,7 +106,7 @@ public class FightManager :Singleton<FightManager>
     }
     public async void CreatFightMonster(MonsterDeploy monsterDeploy)
     {
-        var beforeAction =await GameDataManager.instance.GetAsyncObjectData<GameActionData>(monsterDeploy.beforeActionId);
+        var beforeAction =await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.beforeActionId);
         if (beforeAction != null)
         {
             beforeAction.Action();
@@ -117,7 +117,7 @@ public class FightManager :Singleton<FightManager>
         for(int i = 0; i < randomResults.Count; i++)
         {
             var result = randomResults[i];
-            var characterGroupData = await GameDataManager.instance.GetAsyncObjectData<CharacterGroupData>(result.result);
+            var characterGroupData = await GameDataManager.instance.GetAsyncData<CharacterGroupData>(result.result);
             if(characterGroupData != null)
             {
                 monsterIds.AddRange(characterGroupData.characters);
@@ -129,7 +129,7 @@ public class FightManager :Singleton<FightManager>
             {
                 break;
             }
-            MonsterData monsterData = await GameDataManager.instance.GetAsyncObjectData<MonsterData>(monsterIds[i]);
+            MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(monsterIds[i]);
             FightMonster fightMonster = new FightMonster
             {
                 instanceId = CreatFightCharacter(),
@@ -146,7 +146,7 @@ public class FightManager :Singleton<FightManager>
             FightController.instance.CreatFightMonster(monsterData, fightMonster.instanceId, i);
         }
 
-        var afterAction = await GameDataManager.instance.GetAsyncObjectData<GameActionData>(monsterDeploy.afterActionId);
+        var afterAction = await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.afterActionId);
         if (afterAction != null)
         {
             afterAction.Action();
