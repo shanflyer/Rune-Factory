@@ -341,6 +341,8 @@ public interface IGameData
     public string GetKey();
     public void SetReferenceData();
     public async void Init() { }
+
+    public void Clear() { }
 }
 
 public struct ShowData : IGameData

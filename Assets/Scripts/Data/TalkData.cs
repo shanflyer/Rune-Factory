@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public enum TalkerDir
@@ -26,9 +28,26 @@ public class TalkData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
-
+#if UNITY_EDITOR
+    static Dictionary<string, Sprite> sources = new Dictionary<string, Sprite>();
+    public static void Clear()
+    {
+        sources.Clear();
+    }
     public void SetReferenceData()
     {
-        talkerIcon = Resources.Load<Sprite>(talkerIconPath);
+        if(!sources.TryGetValue(talkerIconPath,out talkerIcon))
+        {
+            var strs = talkerIconPath.Split("/");
+            var sourcePath = talkerIconPath.Substring(0, talkerIconPath.Length - strs[strs.Length - 1].Length);
+            var allSources = Resources.LoadAll<Sprite>(sourcePath);
+            for (int i = 0; i < allSources.Length; i++)
+            {
+                sources[$"{sourcePath}{allSources[i].name}"]= allSources[i];
+            }
+            sources.TryGetValue(talkerIconPath, out talkerIcon);
+        } 
     }
+#endif
+
 }

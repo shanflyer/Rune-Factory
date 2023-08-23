@@ -234,6 +234,13 @@ public class ExcelDataEditor : MyEditor
                         AssetDatabase.Refresh();
                     }
                 }
+
+
+                MethodInfo meth1 = type.GetMethod("Clear");
+                if (meth1 != null)
+                {
+                    meth1.Invoke(null, null);
+                }
             }
         }
         finally
