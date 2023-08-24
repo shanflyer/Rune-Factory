@@ -1,3 +1,4 @@
+using OldName;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public const float updataMoveSpeed = 2f;
 
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
+    private Dictionary<int,List<int>> characterInstances=new Dictionary<int, List<int>>();
 
     public Player player;
     private CharacterData playerData;
@@ -87,14 +89,15 @@ public class CharacterManager : Singleton<CharacterManager>
         playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         int instanceId = CreatCaracterInstanceId();
         player=new Player(playerData, instanceId);
-        characters.Add(instanceId, player);
+        AddCharacter(player); 
     }
+
     Character CreatCharacter(CharacterData characterData,int bag=-1)
     {
         int instanceId = CreatCaracterInstanceId();
         Character character = new Character(characterData, instanceId);
-        character.SetLevel(characterData.level); 
-        characters.Add(character.instanceId, character);
+        character.SetLevel(characterData.level);
+        AddCharacter(character);
 
         return character;
     }
@@ -103,11 +106,35 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData=await GameDataManager.instance.GetAsyncData<CharacterData>(characterId);
         int instanceId = CreatCaracterInstanceId();
         Character character = new Character(characterData, instanceId); 
-        character.SetLevel(characterData.level); 
-        characters.Add(character.instanceId,character);
+        character.SetLevel(characterData.level);
+        AddCharacter(character);
 
         return character;
     }
+
+    void AddCharacter(Character character) 
+    {
+        if(!characterInstances.TryGetValue(character.dataId,out List<int> instances))
+        {
+            instances = new List<int>();
+            characterInstances.Add(character.dataId, instances); 
+        }
+        if (!instances.Contains(character.instanceId))
+        {
+            instances.Add(character.instanceId);
+        }
+        characters[character.instanceId] = character;
+    }
+    void RemoveCharacter(Character character) 
+    {
+        if(characterInstances.TryGetValue(character.dataId,out List<int> instances))
+        {
+            instances.Remove(character.instanceId);
+            characters.Remove(character.instanceId);
+        }
+    }
+
+
     private void MapClickAction(object obj)
     {
         Vector2 mouseScreenPos = (Vector2)obj;
@@ -137,7 +164,21 @@ public class CharacterManager : Singleton<CharacterManager>
 
         return false;
     }
-
+    public Character GetCharacterForDataId(int dataId)
+    {
+        if (dataId == 0)
+        {
+            return characters[0];
+        }
+        if(characterInstances.TryGetValue(dataId,out var instances))
+        {
+            if (instances.Count > 0)
+            {
+                return characters[instances[0]];
+            }
+        }
+        return null;
+    }
     public Character GetCharacter(int characterId)
     {
         Character character = null;
@@ -290,7 +331,7 @@ public class CharacterManager : Singleton<CharacterManager>
             PackageManager.instance.SetItemInPackage(item, player.bag);
         }
 
-        characters.Add(player.instanceId, player);
+        AddCharacter(player); 
 
         //BehaviorTree behaviorTree = BehaviorManager.Instance.CreatBehaviorTree(GameManager.instance.testTreeData);
         /*
@@ -303,7 +344,7 @@ public class CharacterManager : Singleton<CharacterManager>
         player = new Player(characterSaveData);
         player.SetObjCoordinate(MapController.instance.nowMap, int2.zero);
 
-        characters.Add(player.instanceId, player);
+        AddCharacter(player);
 
         //BehaviorTree behaviorTree = BehaviorManager.Instance.CreatBehaviorTree(GameManager.instance.testTreeData);
         /*

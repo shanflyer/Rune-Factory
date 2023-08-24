@@ -65,7 +65,7 @@ public class FightManager :Singleton<FightManager>
     { 
         for (int i = 0; i < creatFightPlayer.players.Count; i++)
         {
-            Character character = CharacterManager.instance.GetCharacter(creatFightPlayer.players[i]);
+            Character character = CharacterManager.instance.GetCharacterForDataId(creatFightPlayer.players[i]);
              
             FightPlayer fightTeamPlayer = new FightPlayer
             {

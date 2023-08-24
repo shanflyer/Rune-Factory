@@ -10,11 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3b29101836c4fa4997fdc833cb68ebc, type: 3}
-  m_Name: "\u521D\u59CB\u5BF9\u8BDD"
+  m_Name: "\u6682\u505C\u65B0\u624B\u7535\u5F71\u5E76\u5BF9\u8BDD"
   m_EditorClassIdentifier: 
-  dataName: "\u505C\u6B62\u7535\u5F71StartStory"
   id: 0
-  typeName: Talk
+  typeName: ActionList
   _parameters:
-  - value: 2001
-    parameters: []
+  - value: PauseFilm
+    parameters:
+    - value: StartFight
+      parameters: []
+  - value: Talk
+    parameters:
+    - value: 2001
+      parameters: []

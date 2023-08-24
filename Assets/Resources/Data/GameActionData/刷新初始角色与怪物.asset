@@ -10,11 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3b29101836c4fa4997fdc833cb68ebc, type: 3}
-  m_Name: "\u5237\u65B0\u89D2\u8272"
+  m_Name: "\u5237\u65B0\u521D\u59CB\u89D2\u8272\u4E0E\u602A\u7269"
   m_EditorClassIdentifier: 
-  dataName: "\u505C\u6B62\u64AD\u653E\u7535\u5F71StartLoad"
+  dataName: "\u5237\u65B0\u89D2\u8272\u4E0E\u602A\u7269"
   id: 14
-  typeName: StopFilm
+  typeName: ActionList
   _parameters:
-  - value: StartFight
-    parameters: []
+  - value: StopFilm
+    parameters:
+    - value: StartFight
+      parameters: []
+  - value: CreatFightPlayer
+    parameters:
+    - value: 0
+      parameters: []
+    - value: 1001
+      parameters: []
+    - value: 2001
+      parameters: []

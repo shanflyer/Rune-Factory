@@ -6,12 +6,19 @@ using Unity.Mathematics;
 using UnityEngine.Analytics;
 
 public interface GameAction 
-{
+{ 
     public void Init(List<Parameter> parameters);
 }
 
 public delegate void SetValue(int value);
 
+public struct ActionList : GameAction
+{
+    void GameAction.Init(List<Parameter> parameters)
+    {
+        
+    }
+}
 public struct Talk : GameAction
 {
     public int talkId, characterId;
@@ -27,7 +34,7 @@ public struct Talk : GameAction
         {
             characterId = -1;
         }
-            
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CreatTeamPlayer : GameAction

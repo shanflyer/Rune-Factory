@@ -10,8 +10,7 @@ using Object = System.Object;
  
 [System.Serializable]
 public class GameActionData : ScriptableObject,IGameData
-{ 
-    public string dataName;
+{  
     public int id;
    
     public string typeName;
@@ -21,11 +20,22 @@ public class GameActionData : ScriptableObject,IGameData
     {
        // Type type = 
     }
-
     public void Action()
+    {
+        Action(typeName, _parameters);
+    }
+    public void Action(string typeName, List<Parameter> _parameters)
     { 
         switch (typeName)
         {
+            case "ActionList":
+                for(int i = 0; i < _parameters.Count; i++)
+                {
+                    var Parameter = _parameters[i];
+                    Action(Parameter.value, Parameter.parameters);
+                }
+
+                break;
             case "Talk":
                 Talk talk = new Talk();
                 talk.Init(_parameters);
