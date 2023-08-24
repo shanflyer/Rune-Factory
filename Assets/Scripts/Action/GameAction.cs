@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
+using UnityEngine.Analytics;
 
 public interface GameAction 
 {
@@ -10,7 +11,25 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
- 
+
+public struct Talk : GameAction
+{
+    public int talkId, characterId;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 1)
+            talkId =int.Parse(parameters[0].value);
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[1].value);
+        }
+        else
+        {
+            characterId = -1;
+        }
+            
+    }
+}
 public struct CreatTeamPlayer : GameAction
 {
     public List<int> players;

@@ -76,10 +76,10 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         Type type = typeof(T);
         var _results = ExtensionsResources.LoadAllIGameData<T>(DataPath.GetDataPath(type));
-        if (_results != null && _results.Length != 0)
+        if (_results != null && _results.Count != 0)
         {
            var  dataDic = new Dictionary<string, IGameData>(); 
-            for (int i = 0; i < _results.Length; i++)
+            for (int i = 0; i < _results.Count; i++)
             {
                 var data = _results[i];
                 data.Init();
@@ -153,7 +153,7 @@ public class GameDataManager : Singleton<GameDataManager>
         else
         {
             var _results = ExtensionsResources.LoadAllIGameData<T>(DataPath.GetDataPath(type));
-            if (_results != null&& _results.Length != 0)
+            if (_results != null&& _results.Count != 0)
             {
                 dataDic = new Dictionary<string, IGameData>();
                 results = _results.ToList();

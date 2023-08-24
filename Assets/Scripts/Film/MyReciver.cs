@@ -7,9 +7,9 @@ public class MyReciver : MonoBehaviour,INotificationReceiver
 {
     public void OnNotify(Playable origin, INotification notification, object context)
     {
-        if(notification != null&&  notification is MyMarker)
+        if(notification != null&&  notification is MyGameMarker)
         {
-            MyMarker myMarker = notification as MyMarker;
+            MyGameMarker myMarker = notification as MyGameMarker;
             for(int i = 0; i < myMarker.gameActionDatas.Count; i++)
             {
                 var data = myMarker.gameActionDatas[i];

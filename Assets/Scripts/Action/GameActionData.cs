@@ -26,6 +26,11 @@ public class GameActionData : ScriptableObject,IGameData
     { 
         switch (typeName)
         {
+            case "Talk":
+                Talk talk = new Talk();
+                talk.Init(_parameters);
+                GameActionManager.instance.QueueAction(talk);
+                break;
             case "CreatTeamPlayer":
                 CreatTeamPlayer creatTeamPlayer = new CreatTeamPlayer();
                 creatTeamPlayer.Init(_parameters);

@@ -106,7 +106,7 @@ public class AudioController : Singleton<AudioController>
         meGraph.Stop();
     }
 
-    void PlayBGM(AudioClip audioClip, bool loop = true)
+    public void PlayBGM(AudioClip audioClip, bool loop = true)
     {
         AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(bgmGraph, audioClip, loop);
         bgmOut.SetSourcePlayable(audioClipPlayable);

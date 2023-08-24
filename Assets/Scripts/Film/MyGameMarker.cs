@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-public class MyMarker : Marker, INotification, INotificationOptionProvider
+public class MyGameMarker : Marker, INotification, INotificationOptionProvider
 {
     [SerializeField] bool m_Retroactive;
     [SerializeField] bool m_EmitOnce;

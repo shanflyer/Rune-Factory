@@ -90,6 +90,7 @@ public class ExploreManager : Singleton<ExploreManager>
         } ,
         () =>
         {
+            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM,true);
             if(nowFightMapData.isZeroTeam)
             {
                 FightManager.instance.CreatFightPlayer();

@@ -24,14 +24,26 @@ public  static class ExtensionsResources
         await gres;
         return (T)(IGameData)gres.asset;
     }
-    public static T[] LoadAllIGameData<T>(string path) where T: IGameData
+    public static List<T> LoadAllIGameData<T>(string path) where T: IGameData
     {
         var gres = Resources.LoadAll(path);
-        T[] ts = new T[gres.Length];
-        for(int i = 0; i < gres.Length; i++)
+        List<T> ts = new List<T>();
+        try
         {
-            ts[i] = (T)((IGameData) gres[i]);
+            for (int i = 0; i < gres.Length; i++)
+            {
+                var t= (T)((IGameData)gres[i]);
+                if (t != null)
+                {
+                    ts.Add(t);
+                }
+            }
         }
+        catch
+        {
+
+        }
+       
         return ts;
     }
     
