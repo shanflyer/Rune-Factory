@@ -168,7 +168,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (dataId == 0)
         {
-            return characters[0];
+            return player;
         }
         if(characterInstances.TryGetValue(dataId,out var instances))
         {

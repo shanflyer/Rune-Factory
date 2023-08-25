@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour
         var exploreManger = ExploreManager.instance;
         var sceneManager = SceneManager.instance;
         var fightManager = FightManager.instance;
+        var talkManager= TalkManager.instance;
 
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);

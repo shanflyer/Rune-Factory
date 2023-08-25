@@ -34,7 +34,7 @@ public class TalkPanel : GamePanel
     }
     async void NextAction()
     {
-        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(talkData.id.ToString());
+        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(talkData.actionId.ToString());
         if (actionData != null)
         {
             actionData.Action();
@@ -51,7 +51,7 @@ public class TalkPanel : GamePanel
             return;
         }
         talkValue.text = talkData.text;
-        var talkerName = talkData.myTalk ? CharacterManager.instance.PlayerName: talkData.talkerName;
+        var talkerName = talkData.myTalk ? CharacterManager.instance.player.name: talkData.talkerName;
         Sprite talkerIcon = talkData.myTalk ? CharacterManager.instance.PlayerIcon : talkData.talkerIcon;
         
         switch (talkData.talkerDir)
@@ -61,7 +61,7 @@ public class TalkPanel : GamePanel
                 leftNameBg.transform.localScale=Vector3.one;
                 rightNameBg.transform.localScale = Vector3.zero;
                 leftHead.color = Color.white;
-                leftHead.sprite = talkData.talkerIcon;
+                leftHead.sprite = talkerIcon;
                 rightHead.color = new Color(0.5f, 0.5f, 0.5f);
                 rightHead.enabled = !talkData.clearTalkIcon;
                 break;
@@ -70,7 +70,7 @@ public class TalkPanel : GamePanel
                 leftNameBg.transform.localScale = Vector3.zero;
                 rightNameBg.transform.localScale = Vector3.one;
                 rightHead.color = Color.white;
-                rightHead.sprite = talkData.talkerIcon;
+                rightHead.sprite = talkerIcon;
                 leftHead.color = new Color(0.5f, 0.5f, 0.5f);
                 leftHead.enabled=!talkData.clearTalkIcon;
                 break;

@@ -174,7 +174,7 @@ public class Character
         this.instanceId = instanceId;
         dataId = characterData.id;
         professionId = characterData.profession;
-        name = characterData.name;
+        name = characterData.characterName;
         behavior = characterData.behavior;
     }
 
