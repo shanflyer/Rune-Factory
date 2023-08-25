@@ -792,25 +792,7 @@ namespace UnityEngine.UI
             vh.AddTriangle(0, 1, 2);
             vh.AddTriangle(2, 3, 0);
         }
-        protected virtual void OnPopulateMesh(VertexHelper vh, bool nullClear = false)
-        {
-            if (nullClear)
-            {
-                vh.Clear();
-            }
-            var r = GetPixelAdjustedRect();
-            var v = new Vector4(r.x, r.y, r.x + r.width, r.y + r.height);
-
-            Color32 color32 = color;
-            vh.Clear();
-            vh.AddVert(new Vector3(v.x, v.y), color32, new Vector2(0f, 0f));
-            vh.AddVert(new Vector3(v.x, v.w), color32, new Vector2(0f, 1f));
-            vh.AddVert(new Vector3(v.z, v.w), color32, new Vector2(1f, 1f));
-            vh.AddVert(new Vector3(v.z, v.y), color32, new Vector2(1f, 0f));
-
-            vh.AddTriangle(0, 1, 2);
-            vh.AddTriangle(2, 3, 0);
-        }
+         
 #if UNITY_EDITOR
         /// <summary>
         /// Editor-only callback that is issued by Unity if a rebuild of the Graphic is required.

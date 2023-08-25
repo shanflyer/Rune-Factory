@@ -711,7 +711,7 @@ namespace UnityEngine.UI
                 return false;
             }
         }
-
+         
 
         [SerializeField]
         private float m_PixelsPerUnitMultiplier = 1.0f;
@@ -725,6 +725,17 @@ namespace UnityEngine.UI
             set
             {
                 m_PixelsPerUnitMultiplier = Mathf.Max(0.01f, value);
+                SetVerticesDirty();
+            }
+        }
+        [SerializeField]
+        private bool m_NullClear;
+        public bool  NullClear
+        {
+            get { return m_NullClear; }
+            set
+            {
+                m_NullClear = NullClear;
                 SetVerticesDirty();
             }
         }
@@ -878,7 +889,12 @@ namespace UnityEngine.UI
         {
             if (activeSprite == null)
             {
-                base.OnPopulateMesh(toFill,NullClear);
+                if (NullClear)
+                {
+                    toFill.Clear();
+                    return;
+                }
+                base.OnPopulateMesh(toFill);
                 return;
             }
 
@@ -973,7 +989,7 @@ namespace UnityEngine.UI
         /// </summary>
         void GenerateSimpleSprite(VertexHelper vh, bool lPreserveAspect)
         {
-            if (NullClear && activeSprite == null)
+            if (activeSprite == null)
             {
                 return;
             }
@@ -1054,10 +1070,7 @@ namespace UnityEngine.UI
             }
             else
             {
-                if (NullClear)
-                {
-                    return;
-                }
+               
                 outer = Vector4.zero;
                 inner = Vector4.zero;
                 padding = Vector4.zero;
@@ -1131,11 +1144,6 @@ namespace UnityEngine.UI
             }
             else
             {
-                if (NullClear)
-                {
-                    return;
-                }
-
                 outer = Vector4.zero;
                 inner = Vector4.zero;
                 border = Vector4.zero;
