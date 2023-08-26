@@ -4,31 +4,40 @@ using UnityEngine;
 using System;
 using Unity.Mathematics;
 using UnityEngine.Analytics;
+using System.Security.Cryptography;
 
 public interface GameAction 
 { 
-    public void Init(List<Parameter> parameters);
+    public  void Init(List<Parameter> parameters); 
 }
 
 public delegate void SetValue(int value);
 
 public struct ActionList : GameAction
 {
-    void GameAction.Init(List<Parameter> parameters)
+    
+    public void Init(List<Parameter> parameters)
     {
-        
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            var Parameter = parameters[i];
+            GameActionDataManager.instance.GameAction(Parameter.value, Parameter.parameters);
+        } 
     }
 }
 public struct HideFightScene : GameAction
 {
-    void GameAction.Init(List<Parameter> parameters)
-    { 
+    public void Init(List<Parameter> parameters)
+    {
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct DisplayFightScene : GameAction
 {
-    void GameAction.Init(List<Parameter> parameters)
+    
+    public void Init(List<Parameter> parameters)
     {
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct JumpFilm : GameAction
@@ -36,6 +45,7 @@ public struct JumpFilm : GameAction
     public string filmName;
     public float jumpTime;
 
+   
     public void Init(List<Parameter> parameters)
     {
         if (parameters.Count >= 2)
@@ -43,6 +53,7 @@ public struct JumpFilm : GameAction
             filmName = parameters[0].value;
             jumpTime = float.Parse(parameters[1].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct Talk : GameAction
@@ -73,6 +84,7 @@ public struct CreatTeamPlayer : GameAction
         {
             players.Add(int.Parse(parameters[i].value));
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CreatFightPlayer : GameAction
@@ -86,6 +98,7 @@ public struct CreatFightPlayer : GameAction
         {
             players.Add(int.Parse(parameters[i].value));
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 
@@ -102,12 +115,15 @@ public struct SwitchScene : GameAction
             beforeLoadActionId = int.Parse(parameters[1].value);
         if (parameters.Count >= 3)
             afterLoadActionId = int.Parse(parameters[2].value);
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct ChapterStepAction : GameAction
 {
-    void GameAction.Init(List<Parameter> parameters)
-    { 
+    public void Init(List<Parameter> parameters)
+    {
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct EnterChapter : GameAction
@@ -119,6 +135,8 @@ public struct EnterChapter : GameAction
         {
             id = int.Parse(parameters[0].value);
         }
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct RefreshFightCharactersInfo : GameAction
@@ -130,7 +148,9 @@ public struct RefreshFightCharactersInfo : GameAction
         for(int i=0;i<parameters.Count; i++)
         {
             characters.Add(int.Parse(parameters[i].value));
-        } 
+        }
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct RefreshFightChapter : GameAction
@@ -142,6 +162,7 @@ public struct RefreshFightChapter : GameAction
         {
             id = int.Parse(parameters[0].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct RefreshCharacter : GameAction
@@ -153,6 +174,7 @@ public struct RefreshCharacter : GameAction
         {
             id = int.Parse(parameters[0].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct RefreshCharacterProperty : GameAction
@@ -166,6 +188,8 @@ public struct RefreshCharacterProperty : GameAction
         {
             id =int.Parse(parameters[0].value);
         }
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 
@@ -178,6 +202,7 @@ public struct StopFilm : GameAction
         {
             filmName = parameters[0].value;
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct PlayFilm : GameAction
@@ -189,6 +214,7 @@ public struct PlayFilm : GameAction
         {
             filmName = parameters[0].value;
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct PauseFilm : GameAction
@@ -200,6 +226,8 @@ public struct PauseFilm : GameAction
         {
             filmName = parameters[0].value;
         }
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct SetItemAnimation : GameAction
@@ -215,7 +243,7 @@ public struct SetItemAnimation : GameAction
             keyX = int.Parse(parameters[1].value);
             keyY = int.Parse(parameters[2].value); 
         }
-
+        GameActionManager.instance.QueueAction(this);
     }
 }
 
@@ -232,7 +260,7 @@ public struct RemovePackageItem : GameAction
             itemDataId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
-
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct AddPackageItem : GameAction
@@ -248,7 +276,7 @@ public struct AddPackageItem : GameAction
             itemDataId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
-
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct TriggerEnter : GameAction
@@ -260,7 +288,7 @@ public struct TriggerEnter : GameAction
         {
             eventId = int.Parse(parameters[0].value); 
         }
-
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct TriggerExit : GameAction
@@ -272,7 +300,7 @@ public struct TriggerExit : GameAction
         {
             eventId = int.Parse(parameters[0].value);
         }
-
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct DeleteMapItem : GameAction
@@ -287,7 +315,7 @@ public struct DeleteMapItem : GameAction
             mapItemInstanceId = int.Parse(parameters[0].value);
             triggerClear = bool.Parse(parameters[1].value);
         }
-        
+        GameActionManager.instance.QueueAction(this);
     }
 }
 
@@ -310,7 +338,7 @@ public struct ChangeMapItem : GameAction
                 animationKey.y = int.Parse(parameter.parameters[1].value);
             }
         }
-
+        GameActionManager.instance.QueueAction(this);
     }
 }
 
@@ -335,6 +363,7 @@ public struct AddMapItem : GameAction
                 coordinate.y = int.Parse(parameter.parameters[1].value);
             }
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct AttachMapItemData : GameAction
@@ -346,6 +375,7 @@ public struct AttachMapItemData : GameAction
         {
             mapItemIntanceId = int.Parse(parameters[0].value); 
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CreatRuntimePackage: GameAction
@@ -397,6 +427,8 @@ public struct CreatRuntimePackage: GameAction
         }
 
         */
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct RemoveRuntimePackage : GameAction
@@ -413,6 +445,7 @@ public struct RemoveRuntimePackage : GameAction
                 key.y = int.Parse(parameter.parameters[1].value);
             }
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 
@@ -429,6 +462,7 @@ public struct ItemUseAction : GameAction
             itemId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
 
     public ItemUseAction(int packageId,int itemId,int itemCount)
@@ -448,6 +482,8 @@ public struct SwitchFunctionButton : GameAction
         {
             fight = bool.Parse(parameters[0].value);
         }
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct ClosePanelAction : GameAction
@@ -459,6 +495,7 @@ public struct ClosePanelAction : GameAction
         {
             type = Type.GetType(parameters[0].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
 
     public ClosePanelAction(Type type)
@@ -485,6 +522,7 @@ public struct OpenPanelAction : GameAction
                 dataId = null;
             }
         }
+        GameActionManager.instance.QueueAction(this);
     }
     public OpenPanelAction(Type type, string dataId = null)
     {
@@ -503,6 +541,7 @@ public struct SetCharacterProperty : GameAction
             propertyType = (CharacterPropertyType) Enum.Parse(typeof(CharacterPropertyType),parameters[1].value);
             setValue= int.Parse(parameters[2].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
     public int characterId;
     public CharacterPropertyType propertyType;
@@ -519,6 +558,7 @@ public struct ChangeCharacterProperty : GameAction
             propertyType = (CharacterPropertyType)Enum.Parse(typeof(CharacterPropertyType), parameters[1].value);
             changeValue = int.Parse(parameters[2].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
     public int characterId;
     public CharacterPropertyType propertyType;
@@ -555,6 +595,8 @@ public struct CharacterPropertyTrigger:GameAction
             finally { }
            
         }
+
+        GameActionManager.instance.QueueAction(this);
     }
     public int characterId;
      public CharacterProperty characterProperty;
@@ -575,6 +617,7 @@ public struct SetCharacterCoordinate : GameAction
                 coordinate.y = int.Parse(parameter.parameters[1].value);
             }
         }
+        GameActionManager.instance.QueueAction(this);
     }
     public int characterId;
     public int mapId;
@@ -596,6 +639,7 @@ public struct CharacterCoordinateTrigger : GameAction
                 coordinate.y = int.Parse(parameter.parameters[1].value);
             }
         }
+        GameActionManager.instance.QueueAction(this);
     }
     public int characterId;
     public int mapId;

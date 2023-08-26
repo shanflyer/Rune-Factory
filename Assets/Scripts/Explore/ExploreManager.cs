@@ -120,6 +120,7 @@ public class ExploreManager : Singleton<ExploreManager>
         if (nowFightMapData.id != nowChapter)
         {
             nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
+            AudioController.instance.PlayBGM(nowFightMapData.fightBGM, true);
         }
         if (nowFightMapData.monsterDeploys.Count > fightChapter.nowStep)
         {

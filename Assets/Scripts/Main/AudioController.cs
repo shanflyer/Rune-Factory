@@ -77,6 +77,12 @@ public class AudioController : Singleton<AudioController>
             GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, bgm.ToString()));
         PlayBGM(audioClip, loop);
     }
+    public async void PlayAudio(string bgm, bool loop = true)
+    {
+        AudioClip audioClip = await
+            GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, bgm));
+        PlayBGM(audioClip, loop);
+    }
     public async void PlayAudio(BGS bgs, bool loop = true)
     {
         AudioClip audioClip = await
