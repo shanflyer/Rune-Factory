@@ -21,6 +21,9 @@ public struct FightChapter
 public class ExploreManager : Singleton<ExploreManager>
 {
     MyNativeData<FightChapter> fightChapters = new MyNativeData<FightChapter>();
+
+    public int NowCharpter => nowChapter;
+
     int nowChapter;
     FightMapData nowFightMapData;
     FightChapter fightChapter;

@@ -47,6 +47,7 @@ public struct ObjCoordinate
             || obj0.y != obj1.y;
     }
 }
+[System.Serializable]
 public struct CharacterProperty
 {
     public int HP, MP, Power, MaxHP,MaxMP,MaxPower, AT, DF, Crit, Dodge;

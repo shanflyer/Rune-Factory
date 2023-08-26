@@ -28,6 +28,16 @@ public class GameActionData : ScriptableObject,IGameData
     { 
         switch (typeName)
         {
+            case "SwitchFunctionButton":
+                SwitchFunctionButton switchFunctionButton=new SwitchFunctionButton();
+                switchFunctionButton.Init(_parameters);
+                GameActionManager.instance.QueueAction(switchFunctionButton);
+                break;
+            case "RefreshFightCharactersInfo":
+                RefreshFightCharactersInfo refreshFightCharactersInfo = new RefreshFightCharactersInfo();
+                refreshFightCharactersInfo.Init(_parameters);
+                GameActionManager.instance.QueueAction(refreshFightCharactersInfo);
+                break;
             case "ChapterStepAction":
                 ChapterStepAction chapterStepAction = new ChapterStepAction();
                 GameActionManager.instance.QueueAction(chapterStepAction);

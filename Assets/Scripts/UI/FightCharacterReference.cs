@@ -44,8 +44,8 @@ public class FightCharacterReference : UIObjReference
         DFText = FindChildGameObject<Text>("DF");
         NameText = FindChildGameObject<Text>("Name");
 
-        ExpSlider = FindChildGameObject<Slider>("Exp");
-        HPSlider = FindChildGameObject<Slider>("HP");
+        ExpSlider = FindChildGameObject<Slider>("ExpSlider");
+        HPSlider = FindChildGameObject<Slider>("HPSlider");
 
         LevelText = FindChildGameObject<Text>("Level");
         TypeText = FindChildGameObject<Text>("Type");

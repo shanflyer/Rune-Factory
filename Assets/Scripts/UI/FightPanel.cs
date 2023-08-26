@@ -29,6 +29,7 @@ public class FightPanel : GamePanel
     {
         base.SetPanelUISerializeObj();
         FightCharacterReference = FindChildGameObject<FightCharacterReference>("FightCharacterReference");
+        FightCharacterReference.transform.localScale = Vector3.zero;
         FightCharacterParent = FindChildGameObject("FightCharacterParent");
 
         AutoTips = FindChildGameObject("AutoTips");
@@ -52,33 +53,35 @@ public class FightPanel : GamePanel
         SwitchButton = FindChildGameObject<Button>("SwitchButton");
     }
 
-    public void SwitchFunctionButton(bool fight)
+    void SwitchFunctionButton(SwitchFunctionButton switchFunctionButton)
     {
+        bool fight = switchFunctionButton.fight;
         FightButtons.localScale = fight ? Vector3.one : Vector3.zero;
         ExploreButtons.localScale = fight ? Vector3.zero:Vector3.one;
     }
 
     List<FightCharacterReference> fightCharacterReferences = new List<FightCharacterReference>();
-    public void InitCharacterGroup(CharacterGroupData characterGroup)
+    void RefreshFightCharacters(RefreshFightCharactersInfo refreshFightCharactersInfo)
     {
-        if (fightCharacterReferences.Count> characterGroup.characters.Count)
+        if (fightCharacterReferences.Count> refreshFightCharactersInfo.characters.Count)
         {
-            for (int i = characterGroup.characters.Count; i < fightCharacterReferences.Count; i++)
+            for (int i = refreshFightCharactersInfo.characters.Count; i < fightCharacterReferences.Count; i++)
             {
                 fightCharacterReferences[i].transform.localScale = Vector3.zero;
             }
         }
-        for(int i=0;i<characterGroup.characters.Count;i++)
+        for(int i=0;i< refreshFightCharactersInfo.characters.Count;i++)
         {
             if (fightCharacterReferences.Count > i)
             {
-                fightCharacterReferences[i].InitCharacter(characterGroup.characters[i]);
+                fightCharacterReferences[i].InitCharacter(refreshFightCharactersInfo.characters[i]);
             }
             else
             {
                 var fightCharacterReference = Instantiate(this.FightCharacterReference, FightCharacterParent);
+                fightCharacterReference.transform.localScale = Vector3.one;
                 fightCharacterReferences.Add(fightCharacterReference);
-                fightCharacterReference.InitCharacter(characterGroup.characters[i]);
+                fightCharacterReference.InitCharacter(refreshFightCharactersInfo.characters[i]);
             }
         }
         
@@ -100,14 +103,19 @@ public class FightPanel : GamePanel
         AutoTips.localScale = auto ? Vector3.one : Vector3.zero;
     }
 
+
     public override void OnDisable()
     {
         GameActionManager.instance.RemoveListener<RefreshFightChapter>(RefreshFightChapter);
+        GameActionManager.instance.RemoveListener<RefreshFightCharactersInfo>(RefreshFightCharacters);
+        GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton);
         base.OnDisable();
     }
     public override void OnEnable()
     {
         GameActionManager.instance.AddListener<RefreshFightChapter>(RefreshFightChapter);
+        GameActionManager.instance.AddListener<RefreshFightCharactersInfo>(RefreshFightCharacters);
+        GameActionManager.instance.AddListener<SwitchFunctionButton>(SwitchFunctionButton);
         base.OnEnable();
     }
     protected override void Awake()
@@ -124,6 +132,6 @@ public class FightPanel : GamePanel
             MapName.text = fightMapData.mapName;
             ExploreValue.text = $"Ì½Ë÷¶È:{fightChapter.completeValue}%";
         }
-         
+        FightManager.instance.RefreshFightPlayerInfo();
     }
 }

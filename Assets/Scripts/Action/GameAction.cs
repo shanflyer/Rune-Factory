@@ -121,6 +121,18 @@ public struct EnterChapter : GameAction
         }
     }
 }
+public struct RefreshFightCharactersInfo : GameAction
+{
+    public List<int> characters;
+    public void Init(List<Parameter> parameters)
+    {
+        characters = new List<int>();
+        for(int i=0;i<parameters.Count; i++)
+        {
+            characters.Add(int.Parse(parameters[i].value));
+        } 
+    }
+}
 public struct RefreshFightChapter : GameAction
 {
     public int id;
@@ -426,6 +438,17 @@ public struct ItemUseAction : GameAction
         this.itemCount = itemCount;
     }
    
+}
+public struct SwitchFunctionButton : GameAction
+{
+    public bool fight;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 1)
+        {
+            fight = bool.Parse(parameters[0].value);
+        }
+    }
 }
 public struct ClosePanelAction : GameAction
 {

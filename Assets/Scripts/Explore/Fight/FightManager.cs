@@ -78,7 +78,19 @@ public class FightManager :Singleton<FightManager>
         }
 
     }
-    public void CreatFightPlayer()
+    public void RefreshFightPlayerInfo()
+    {
+        RefreshFightCharactersInfo refreshFightCharactersInfo = new RefreshFightCharactersInfo
+        {
+            characters = new List<int>()
+        };
+        for (int i = 0; i < fightPlayers.Count; i++)
+        {
+            refreshFightCharactersInfo.characters.Add(fightPlayers[i].instanceId);
+        }
+        GameActionManager.instance.QueueAction(refreshFightCharactersInfo);
+    }
+    public async void CreatFightPlayer()
     {
         var player = CharacterManager.instance.player;
         FightPlayer fightPlayer = new FightPlayer
@@ -102,8 +114,9 @@ public class FightManager :Singleton<FightManager>
                 fightPlayers.Add(fightTeamPlayer);
                 FightController.instance.CreatFightPlayer(teamPlayers[i].dataId, teamPlayers[i].instanceId, i+1);
             }
-        }
-
+        } 
+        await  UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(),layer:2);
+        RefreshFightPlayerInfo();
     }
     public async void CreatFightMonster(MonsterDeploy monsterDeploy)
     {

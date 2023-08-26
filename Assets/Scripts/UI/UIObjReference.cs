@@ -36,17 +36,19 @@ public class UIObjReference : MonoBehaviour
     {
         objectDatas.Clear();
         var children = gameObject.GetComponentsInChildren<Transform>(true);
-        try
+        for (int i = 0; i < children.Length; i++)
         {
-            for (int i = 0; i < children.Length; i++)
+            try
             {
                 objectDatas.Add(children[i].name, children[i]);
             }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"{gameObject.name}:{e}");
+            }
+            
         }
-        catch (Exception e)
-        {
-            Debug.LogError($"{gameObject.name}:{e}");
-        }
+        
 
     }
     public virtual void SetPanelUISerializeObj()

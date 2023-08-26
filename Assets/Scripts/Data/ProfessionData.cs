@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+[CreateAssetMenu(menuName ="Data/职业数据")]
 public class ProfessionData : ScriptableObject,IGameData
 { 
     public int id;
+    public string professionName;
     public int maxLevel;
     public int ZeroExp, FinalExp;
     public CharacterProperty ZeroProperty; 
