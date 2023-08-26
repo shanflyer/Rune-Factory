@@ -89,6 +89,14 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         runtimeObjs.Push(runtimeObj);
     }
 
+    public void SetObjParent(string runtimeObjType, bool hide)
+    {
+        if(objParents.TryGetValue(runtimeObjType,out var parent))
+        {
+            parent.localPosition = hide ? new Vector3(0, 0, -10000) : Vector3.zero;
+        }
+    }
+
 }
 public struct RuntimeObj
 {

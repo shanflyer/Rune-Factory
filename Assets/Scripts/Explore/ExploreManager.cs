@@ -82,7 +82,7 @@ public class ExploreManager : Singleton<ExploreManager>
         var beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(nowFightMapData.beforeActionId); 
         var afterActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(nowFightMapData.afterActionId);
         SceneManager.instance.SwitchScene("Fight", () => {
-            LoadFightMap();
+           
             if (beforeActionData != null)
             {
                 beforeActionData.Action();
@@ -90,6 +90,7 @@ public class ExploreManager : Singleton<ExploreManager>
         } ,
         () =>
         {
+            FightController.instance.CreatFightMap(nowFightMapData);
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM,true);
             if(nowFightMapData.isZeroTeam)
             {
@@ -101,10 +102,7 @@ public class ExploreManager : Singleton<ExploreManager>
             }
         });
     }
-    void LoadFightMap()
-    {
-        FightController.instance.CreatFightMap(nowFightMapData);
-    }
+     
   
     protected override void Clear()
     {

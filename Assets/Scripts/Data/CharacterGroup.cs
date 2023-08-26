@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(menuName ="Data/角色群")]
 public class CharacterGroupData : ScriptableObject, IGameData
 {
     public int id;

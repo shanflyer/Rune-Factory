@@ -21,16 +21,16 @@ public class SceneManager : Singleton<SceneManager>
         SwitchScene(switchScene.sceneName, beforeActionData != null ? beforeActionData.Action : null, 
             afterActionData != null ? afterActionData.Action : null);
     }
-    public async void SwitchScene(string sceneName,Action unLoadSceneAction=null,Action loadSceneAction=null)
+    public async void SwitchScene(string sceneName,Action beforeLoadSceneAction=null,Action afterSceneAction=null)
     {
-        this.loadSceneAction = loadSceneAction;
+        this.loadSceneAction = afterSceneAction;
 
-        if (!string.IsNullOrEmpty(nowSceen))
+        if (beforeLoadSceneAction != null)
         {
-            if (unLoadSceneAction != null)
-            {
-                unLoadSceneAction.Invoke();
-            }
+            beforeLoadSceneAction.Invoke();
+        }
+        if (!string.IsNullOrEmpty(nowSceen))
+        { 
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
         }
        

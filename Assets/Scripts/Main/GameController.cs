@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour
 #if UNITY_EDITOR
 [CustomEditor(typeof(GameController))]
 public class GameControllerEditor : Editor
-{
+{ 
     public GameController gameController
     {
         get

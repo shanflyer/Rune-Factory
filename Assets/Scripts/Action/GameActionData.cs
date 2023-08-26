@@ -28,6 +28,14 @@ public class GameActionData : ScriptableObject,IGameData
     { 
         switch (typeName)
         {
+            case "HideFightScene":
+                HideFightScene hideFightScene = new HideFightScene();
+                GameActionManager.instance.QueueAction(hideFightScene);
+                break;
+            case "DisplayFightScene":
+                DisplayFightScene displayFightScene = new DisplayFightScene();
+                GameActionManager.instance.QueueAction(displayFightScene);
+                break;
             case "ActionList":
                 for(int i = 0; i < _parameters.Count; i++)
                 {
@@ -35,6 +43,11 @@ public class GameActionData : ScriptableObject,IGameData
                     Action(Parameter.value, Parameter.parameters);
                 }
 
+                break;
+            case "JumpFilm":
+                JumpFilm jumpFilm = new JumpFilm();
+                jumpFilm.Init(_parameters);
+                GameActionManager.instance.QueueAction(jumpFilm);
                 break;
             case "Talk":
                 Talk talk = new Talk();

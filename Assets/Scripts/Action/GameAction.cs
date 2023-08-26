@@ -19,6 +19,32 @@ public struct ActionList : GameAction
         
     }
 }
+public struct HideFightScene : GameAction
+{
+    void GameAction.Init(List<Parameter> parameters)
+    { 
+    }
+}
+public struct DisplayFightScene : GameAction
+{
+    void GameAction.Init(List<Parameter> parameters)
+    {
+    }
+}
+public struct JumpFilm : GameAction
+{
+    public string filmName;
+    public float jumpTime;
+
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 2)
+        {
+            filmName = parameters[0].value;
+            jumpTime = float.Parse(parameters[1].value);
+        }
+    }
+}
 public struct Talk : GameAction
 {
     public int talkId, characterId;

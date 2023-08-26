@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[CreateAssetMenu(menuName ="Data/怪物数据")]
 public class MonsterData : ScriptableObject, IGameData
 {
     public int id;
@@ -16,6 +17,7 @@ public class MonsterData : ScriptableObject, IGameData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
+       // obj=Resources.Load<GameObject>($"")
     }
 #endif
     public string GetKey()

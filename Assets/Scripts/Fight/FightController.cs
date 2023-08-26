@@ -28,6 +28,14 @@ public class FightController : MonoBehaviour
             instance = this;
         }
         GameRuntimeObjManager.instance.CreatParent<FightRuntimeObjType>(transform);
+        GameActionManager.instance.AddListener((HideFightScene hideFightScene) =>
+        {
+            GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), true);
+        });
+        GameActionManager.instance.AddListener((DisplayFightScene displayFightScene) =>
+        {
+            GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), false);
+        });
     }
     private void OnDestroy()
     {

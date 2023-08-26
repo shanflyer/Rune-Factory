@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 public class FilmController : Singleton<FilmController>
 {
@@ -27,6 +28,18 @@ public class FilmController : Singleton<FilmController>
             film.playableDirector.Play();
         }
        ;
+    }
+    void JumpFilm(JumpFilm jumpFilm)
+    {
+        if(nowFilms.TryGetValue(jumpFilm.filmName,out var film))
+        {
+            var filmAsset =(TimelineAsset) film.playableDirector.playableAsset;
+
+            var Track = filmAsset.GetOutputTrack(0);
+            Track.muted = true;
+            film.playableDirector.time = jumpFilm.jumpTime;
+            Track.muted = false;
+        }
     }
     void StopFilm(StopFilm stopFilm) 
     {
@@ -82,6 +95,7 @@ public class FilmController : Singleton<FilmController>
         GameActionManager.instance.AddListener<PlayFilm>(PlayFilm);
         GameActionManager.instance.AddListener<StopFilm>(StopFilm);
         GameActionManager.instance.AddListener<PauseFilm>(PauseFilm);
+        GameActionManager.instance.AddListener<JumpFilm>(JumpFilm);
     }
     protected override void Clear()
     {

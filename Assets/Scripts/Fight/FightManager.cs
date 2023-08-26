@@ -54,13 +54,14 @@ public class FightManager :Singleton<FightManager>
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
+        GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer); 
     }
     protected override void Clear()
     {
         instanceIds.Clear();
         base.Clear();
     }
+     
     public void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
     { 
         for (int i = 0; i < creatFightPlayer.players.Count; i++)
