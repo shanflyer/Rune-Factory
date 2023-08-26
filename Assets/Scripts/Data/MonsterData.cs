@@ -17,7 +17,7 @@ public class MonsterData : ScriptableObject, IGameData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
-       // obj=Resources.Load<GameObject>($"")
+        obj = Resources.Load<GameObject>($"{DataPath.monsterPrefabPath}{objName}");
     }
 #endif
     public string GetKey()

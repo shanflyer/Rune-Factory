@@ -481,7 +481,7 @@ public static class DataPath
         {typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" },
         {typeof(FunctionData),"Data/FunctionDataList" },
         {typeof(GameEventData),"Data/GameEventData" },
-        {typeof(GameRandomDataList),"Data/GameRandomDataList" },
+        {typeof(GameRandomDataList),"Data/GameRandomDataEditor/GameRandomDataList" },
         {typeof(GrowModelData),"Data/GrowModelDataList" },
         {typeof(ItemAnimationData),"Data/ItemAnimationData" },
         {typeof(MapNpcData),"Data/MapNpcData" },
@@ -492,6 +492,7 @@ public static class DataPath
         {typeof(CharacterData),"Data/CharacterData" },
         {typeof(CharacterGroupData),"Data/CharacterGroupData" },
         {typeof(FightMapData),"Data/FightMapDataList" },
+        {typeof(MonsterDeploy),"Data/MonsterDeloyList" },
         {typeof(GameActionData),"Data/GameActionData" },
         {typeof(TalkData),"Data/TalkData" }
     };
@@ -516,5 +517,6 @@ public static class DataPath
     public static string gameSaveDataPath = Application.persistentDataPath; 
 
     public const string characterPrefabPath = "Prefab/Character";
+    public const string monsterPrefabPath= "Prefab/Monster/";
     public const string UIPath = "Prefabs/UI/";
 }

@@ -104,6 +104,12 @@ public struct SwitchScene : GameAction
             afterLoadActionId = int.Parse(parameters[2].value);
     }
 }
+public struct ChapterStepAction : GameAction
+{
+    void GameAction.Init(List<Parameter> parameters)
+    { 
+    }
+}
 public struct EnterChapter : GameAction
 {
     public int id;

@@ -23,6 +23,7 @@ public class ExploreManager : Singleton<ExploreManager>
     MyNativeData<FightChapter> fightChapters = new MyNativeData<FightChapter>();
     int nowChapter;
     FightMapData nowFightMapData;
+    FightChapter fightChapter;
     public FightChapter GetFigehtChapter(int id)
     {
         FightChapter fightChapter=default(FightChapter);
@@ -70,6 +71,7 @@ public class ExploreManager : Singleton<ExploreManager>
         }
 
         GameActionManager.instance.AddListener<EnterChapter>(EnterChapter);
+        GameActionManager.instance.AddListener<ChapterStepAction>(ChapterStepAction);
     }
     void EnterChapter(EnterChapter enterChapter)
     {
@@ -100,9 +102,47 @@ public class ExploreManager : Singleton<ExploreManager>
             {
                 afterActionData.Action();
             }
-        });
+        }); 
     }
-     
+    
+    async void ChapterStepAction(ChapterStepAction chapterStepAction)
+    {
+        if (fightChapter.mapId != nowChapter)
+        {
+            if (!fightChapters.GetData(nowChapter, out fightChapter))
+            {
+                return;
+            }
+        }
+        if (nowFightMapData.id != nowChapter)
+        {
+            nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
+        }
+        if (nowFightMapData.monsterDeploys.Count > fightChapter.nowStep)
+        {
+            //当前阶段
+            int deployId = nowFightMapData.monsterDeploys[fightChapter.nowStep];
+            //怪物分布
+            var mosterDeploy = await GameDataManager.instance.GetAsyncData<MonsterDeploy>(deployId);
+            if(mosterDeploy.id== deployId)
+            {
+                //创建怪物
+                FightManager.instance.CreatFightMonster(mosterDeploy); 
+            }
+        }
+    }
+    public void StepFightSuccessful()
+    {
+        fightChapter.nowStep++;
+        if (fightChapter.nowStep >= nowFightMapData.monsterDeploys.Count)
+        {
+            ExploreSuccessful();
+        }
+    }
+    void ExploreSuccessful()
+    {
+        Debug.Log("章节探索成功");
+    }
   
     protected override void Clear()
     {

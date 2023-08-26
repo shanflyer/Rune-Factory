@@ -28,6 +28,10 @@ public class GameActionData : ScriptableObject,IGameData
     { 
         switch (typeName)
         {
+            case "ChapterStepAction":
+                ChapterStepAction chapterStepAction = new ChapterStepAction();
+                GameActionManager.instance.QueueAction(chapterStepAction);
+                break;
             case "HideFightScene":
                 HideFightScene hideFightScene = new HideFightScene();
                 GameActionManager.instance.QueueAction(hideFightScene);

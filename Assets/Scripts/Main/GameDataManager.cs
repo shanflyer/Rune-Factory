@@ -256,7 +256,7 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         return default(T);
     } 
-    public async Task<T> GetAsyncData<T>(int key) where T : Object, IGameData
+    public async Task<T> GetAsyncData<T>(int key) where T :  IGameData
     {
         return await GetAsyncData<T>(key.ToString());
     } 
@@ -285,7 +285,7 @@ public class GameDataManager : Singleton<GameDataManager>
         }
          
         var _data = await ExtensionsResources.LoadResourceIGameData<T>(dataPath);
-        if (_data != null)
+        if (_data!=null&&_data.GetKey() ==key)
         {
             _data.Init();
             dataDic = new Dictionary<string, IGameData>();

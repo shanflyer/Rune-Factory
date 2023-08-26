@@ -59,7 +59,7 @@ public class FightPanel : GamePanel
     }
 
     List<FightCharacterReference> fightCharacterReferences = new List<FightCharacterReference>();
-    public void InitCharacterGroup(CharacterGroup characterGroup)
+    public void InitCharacterGroup(CharacterGroupData characterGroup)
     {
         if (fightCharacterReferences.Count> characterGroup.characters.Count)
         {

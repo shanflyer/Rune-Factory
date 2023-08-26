@@ -22,7 +22,11 @@ public  static class ExtensionsResources
     {
         var gres = Resources.LoadAsync(path);
         await gres;
-        return (T)(IGameData)gres.asset;
+        if(gres.asset != null)
+        {
+            return (T)(IGameData)gres.asset;
+        }
+        return default(T);
     }
     public static List<T> LoadAllIGameData<T>(string path) where T: IGameData
     {

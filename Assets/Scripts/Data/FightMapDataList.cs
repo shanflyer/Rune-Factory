@@ -19,28 +19,25 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
         return name;
     }
 }
-[System.Serializable]
-public struct MonsterDeploy
-{
-    public int refreshId;
-    public int beforeActionId;
-    public int afterActionId;
-    public int victoryId;
-    public int failedId;
-}
 
 [System.Serializable]
 public struct FightMapData : IGameData
 {
     public int id;
     public string mapName;
+     
+    public string iconName;
+    public string backGroundName;
+    public string fightMapObjName;
+    public string exploreBGMName, fightBGMName;
+
 
     public float offsetY;
     public float cycleSize; 
-    public Sprite Icon;
-    public Sprite Background;
+    public Sprite Icon; 
+    public Sprite Background; 
     public GameObject fightMapObj;
-    public List<MonsterDeploy> monsterDeploys;
+    public List<int> monsterDeploys;
     public AudioClip exploreBGM,fightBGM;
     public bool isOpen;
     public bool isZeroTeam;
