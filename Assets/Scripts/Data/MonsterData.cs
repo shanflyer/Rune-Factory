@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Data/怪物数据")]
@@ -12,6 +13,7 @@ public class MonsterData : ScriptableObject, IGameData
     public Sprite monsterSprite;
     public string objName;
     public GameObject obj;
+    public List<int> skills = new List<int>();
     public int dropId;
     public int behaviorId;
 #if UNITY_EDITOR

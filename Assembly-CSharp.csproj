@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{7E39F9DD-4A47-3EEF-E4E7-5D7B8579DEA5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -70,6 +71,9 @@
     <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities@1.0.14\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Explore\Fight\FightAIController.cs" />
+    <Compile Include="Assets\Scripts\Explore\Fight\SkillManager.cs" />
+    <Compile Include="Assets\Scripts\Main\MyInstance.cs" />
     <Compile Include="Assets\Scripts\PlacePanelAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetRandomString.cs" />
     <Compile Include="Assets\Scripts\eyeMove.cs" />
@@ -206,6 +210,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddRelativeTorque.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalEulerAngles.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetAudioClip.cs" />
+    <Compile Include="Assets\Scripts\Data\MyTimeLineData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetRolloffMode.cs" />
     <Compile Include="Assets\Scripts\LoadingAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Normalize.cs" />
@@ -565,7 +570,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetSubstring.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetTime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetFloat.cs" />
-    <Compile Include="Assets\Scripts\Film\MyTimeLineData.cs" />
     <Compile Include="Assets\Scripts\PeopleAcion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\PlantAction.cs" />
@@ -817,6 +821,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetVolume.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalScale.cs" />
     <Compile Include="Assets\Scripts\EquipmentManager.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Fight\FightTypeSelect.cs" />
     <Compile Include="Assets\Scripts\BedClickAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\Sleep.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForce.cs" />

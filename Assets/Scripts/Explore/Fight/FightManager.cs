@@ -1,23 +1,32 @@
-﻿using System;
+﻿using OldName;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.TextCore.Text;
 
-interface IFightCharacter
+public interface IFightCharacter
 {
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
-
+    public List<SkillRuntime> skillRuntimes { get; set; }
     public bool CheckAction();
+    public void CreatSkillRuntime(IGameData gameData=null);
 }
 
 public struct FightPlayer : IFightCharacter
 {
     public int instanceId { get ; set ; }
     public int behaviorId { get; set; }
+     
+
+    public List<SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes=value; }
+
+    private List<SkillRuntime> _skillRuntimes;
+
     public int dataId;
 
     public bool CheckAction()
@@ -30,11 +39,27 @@ public struct FightPlayer : IFightCharacter
 
         return false;
     }
+
+    public async void CreatSkillRuntime(IGameData gameData= null)
+    {
+        Character character = CharacterManager.instance.GetCharacter(instanceId);
+        skillRuntimes=new List<SkillRuntime>();
+        for (int i = 0; i < character.skills.Count; i++)
+        {
+            int skillId = character.skills[i];
+            SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+            skillRuntimes.Add(skillRuntime);
+        }
+    }
 }
 public struct FightMonster : IFightCharacter
 {
     public int instanceId { get; set; }
     public int behaviorId { get; set; }
+
+    public List<SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes = value; }
+
+    private List<SkillRuntime> _skillRuntimes;
     public int dataId;
 
     public int HP, AT, DF, Crit, Dodge;
@@ -49,6 +74,20 @@ public struct FightMonster : IFightCharacter
 
         return false;
     }
+    public async void CreatSkillRuntime(IGameData gameData)
+    {
+        MonsterData monsterData=gameData as MonsterData;
+        if(monsterData!=null)
+        {
+            skillRuntimes = new List<SkillRuntime>();
+            for (int i = 0; i < monsterData.skills.Count; i++)
+            {
+                int skillId = monsterData.skills[i];
+                SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+                skillRuntimes.Add(skillRuntime);
+            }
+        }
+    }
 }
 
 public enum HurtResultType
@@ -57,24 +96,13 @@ public enum HurtResultType
 }
 public class FightManager :Singleton<FightManager>
 {
-    HashSet<int> instanceIds = new HashSet<int>();
+    MyInstance myInstance = new MyInstance();
     List<FightPlayer> fightPlayers = new List<FightPlayer>();
     List<FightMonster> fightMonsters = new List<FightMonster>();
 
 
     public FightController fightController;
-    public int CreatFightCharacter()
-    {
-        Guid guid = Guid.NewGuid();
-        int instanceId = guid.GetHashCode();
-        while (instanceIds.Contains(instanceId))
-        {
-            guid = Guid.NewGuid();
-            instanceId = guid.GetHashCode();
-        }
-        instanceIds.Add(instanceId);
-        return instanceId;
-    }
+    
     public override void Init()
     {
         base.Init();
@@ -85,7 +113,7 @@ public class FightManager :Singleton<FightManager>
     }
     protected override void Clear()
     {
-        instanceIds.Clear();
+        myInstance.Clear();
         base.Clear();
     }
      
@@ -95,16 +123,19 @@ public class FightManager :Singleton<FightManager>
         {
             Character character = CharacterManager.instance.GetCharacterForDataId(creatFightPlayer.players[i]);
              
-            FightPlayer fightTeamPlayer = new FightPlayer
+            FightPlayer fightPlayer = new FightPlayer
             {
                 instanceId = character.instanceId,
                 dataId = character.dataId,
             };
-            fightPlayers.Add(fightTeamPlayer);
+            fightPlayer.CreatSkillRuntime();
+            fightPlayers.Add(fightPlayer);
             FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i);
         }
 
     }
+
+    
     public void RefreshFightPlayerInfo()
     {
         RefreshFightCharactersInfo refreshFightCharactersInfo = new RefreshFightCharactersInfo
@@ -173,7 +204,7 @@ public class FightManager :Singleton<FightManager>
             MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(monsterIds[i]);
             FightMonster fightMonster = new FightMonster
             {
-                instanceId = CreatFightCharacter(),
+                instanceId = myInstance.CreatInstanceId(),
                 dataId = monsterData.id,
                 behaviorId = monsterData.behaviorId,
                 HP = monsterData.HP,
@@ -182,6 +213,7 @@ public class FightManager :Singleton<FightManager>
                 Crit = monsterData.Crit,
                 Dodge = monsterData.Dodge
             };
+            fightMonster.CreatSkillRuntime(monsterData);
             fightMonsters.Add(fightMonster);
 
             FightController.instance.CreatFightMonster(monsterData, fightMonster.instanceId, i);
@@ -293,10 +325,7 @@ public class FightManager :Singleton<FightManager>
         }
     }
 }
-public enum TargetType
-{
-    敌方,我方,自身
-}
+
 public enum FightRundType
 {
     Player,Monster

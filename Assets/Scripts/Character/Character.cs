@@ -170,6 +170,8 @@ public struct Equip
 public class Character
 {
    public Character() { }
+
+    public List<int> skills = new List<int>();
     public Character(CharacterData characterData,int instanceId)
     {
         this.instanceId = instanceId;
@@ -236,6 +238,11 @@ public class Character
             var profressionData =await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
             if (profressionData.id == professionId)
             {
+                int skillId = profressionData.GetLevelSkill(level);
+                if(skillId != -1)
+                {
+                    skills.Add(skillId);
+                }
                 CharacterProperty = CharacterProperty - nowProperty;
                 CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
             }
