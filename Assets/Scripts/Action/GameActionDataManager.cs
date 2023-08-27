@@ -23,9 +23,10 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
             Type type = Type.GetType(typeName);
             var data = Activator.CreateInstance(type);
             MethodInfo meth = type.GetMethod("Init");
-            var _Delegate=(ActionInit)Delegate.CreateDelegate(type, data, meth);
-            _Delegate.Invoke(parameters);
-            gameActionDataDelegates.Add(typeName, _Delegate);
+            var _Delegate =(ActionInit) meth.CreateDelegate(typeof(ActionInit), data);
+           
+             _Delegate.Invoke(parameters);
+             gameActionDataDelegates.Add(typeName, _Delegate);
         }        
 
     }

@@ -29,7 +29,7 @@ public class FightPanel : GamePanel
     {
         base.SetPanelUISerializeObj();
         FightCharacterReference = FindChildGameObject<FightCharacterReference>("FightCharacterReference");
-        FightCharacterReference.transform.localScale = Vector3.zero;
+       
         FightCharacterParent = FindChildGameObject("FightCharacterParent");
 
         AutoTips = FindChildGameObject("AutoTips");
@@ -70,7 +70,9 @@ public class FightPanel : GamePanel
                 fightCharacterReferences[i].transform.localScale = Vector3.zero;
             }
         }
-        for(int i=0;i< refreshFightCharactersInfo.characters.Count;i++)
+
+        FightCharacterReference.transform.localScale = Vector3.zero;
+        for (int i=0;i< refreshFightCharactersInfo.characters.Count;i++)
         {
             if (fightCharacterReferences.Count > i)
             {
@@ -121,6 +123,9 @@ public class FightPanel : GamePanel
     protected override void Awake()
     {
         base.Awake();
+        FightCharacterReference.transform.localScale = Vector3.zero;
+        ExploreButtons.transform.localScale = Vector3.one;
+        FightButtons.transform.localScale = Vector3.zero;
     }
     public override async Task InitData(string dataKey)
     {

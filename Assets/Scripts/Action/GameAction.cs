@@ -12,10 +12,30 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+public struct WaitAction 
+{ 
+    public void Init(List<Parameter> parameters)
+    {
+        if(parameters.Count> 0)
+        {
+            int WaitValue =int.Parse(parameters[0].value);
+            var _parameters = parameters[0].parameters;
+            for (int i = 0; i < _parameters.Count; i++)
+            {
+                var Parameter = _parameters[i];
+                GameTimerController.instance.DelayAction(WaitValue, () =>
+                {
+                    GameActionDataManager.instance.GameAction(Parameter.value, Parameter.parameters);
+                });
+                
+            }
+        }
 
+       
+    }
+}
 public struct ActionList : GameAction
-{
-    
+{ 
     public void Init(List<Parameter> parameters)
     {
         for (int i = 0; i < parameters.Count; i++)

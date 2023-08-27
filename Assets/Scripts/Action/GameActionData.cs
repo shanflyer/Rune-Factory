@@ -11,11 +11,10 @@ using Object = System.Object;
 [System.Serializable]
 public class GameActionData : ScriptableObject,IGameData
 {  
-    public int id;
-   
-    public string typeName;
+    public int id; 
+    public string typeName; 
     public List<Parameter> _parameters;
- 
+   
     public void Action()
     {
         GameActionDataManager.instance.GameAction(typeName, _parameters);

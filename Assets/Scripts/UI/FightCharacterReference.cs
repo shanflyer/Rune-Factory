@@ -86,8 +86,8 @@ public class FightCharacterReference : UIObjReference
             CharacterProperty characterProperty = character.CharacterProperty;
             HPSlider.value = (float)characterProperty.HP / characterProperty.MaxHP;
             ExpSlider.value = (float)character.exp.nowExp / character.exp.nowLevelExp;
-
-           
+            ATText.text = $"AT {characterProperty.AT}";
+            DFText.text = $"DF {characterProperty.DF}";
         }
     }
 }

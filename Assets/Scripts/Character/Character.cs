@@ -177,6 +177,8 @@ public class Character
         professionId = characterData.profession;
         name = characterData.characterName;
         behavior = characterData.behavior;
+
+        SetLevel(1);
     }
 
     public CharacterProperty CharacterProperty
@@ -221,11 +223,10 @@ public class Character
     {
         var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
         while (exp.AddExp(value))
-        {
-            int nextLevel = level + 1;
-            exp.nowLevelExp = profressionData.GetLevelExp(nextLevel) - profressionData.GetLevelExp(level);
+        { 
+            exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level-1);
             value = 0;
-            SetLevel(nextLevel); 
+            SetLevel(level+1); 
         }
     }
     public async void SetLevel(int level)
@@ -237,7 +238,9 @@ public class Character
             {
                 CharacterProperty = CharacterProperty - nowProperty;
                 CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
-            }       
+            }
+            exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level - 1);
+            this.level = level;
         }
     }
 
@@ -469,6 +472,7 @@ public class Player : Character
 { 
     public Player(CharacterData characterData, int instanceId) : base(characterData, instanceId)
     {
+       
     }
     public Player(string name)
     {
