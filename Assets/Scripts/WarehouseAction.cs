@@ -586,12 +586,12 @@ public class WarehouseAction : MonoBehaviour
             case DisplayType.AfterBattle:
                 AudioController.instance.PlayAudio(SE.Click2);
                 UseItem(); 
-                GameComponentData.gameData.BattleMapAction.UseItem(selectItemData,DisplayType.AfterBattle);
+                //GameComponentData.gameData.BattleMapAction.UseItem(selectItemData,DisplayType.AfterBattle);
                 break;
             case DisplayType.Battling:
                 AudioController.instance.PlayAudio(SE.Click2);
                 UseItem(); 
-                GameComponentData.gameData.BattleMapAction.UseItem(selectItemData,DisplayType.Battling);
+                //GameComponentData.gameData.BattleMapAction.UseItem(selectItemData,DisplayType.Battling);
                 break;
             case DisplayType.Gift:
                 AudioController.instance.PlayAudio(SE.Click2);

@@ -9,8 +9,6 @@ public static class GameComponentData
 }
 public class GameComponent : MonoBehaviour
 {
-    public BattleDisplayAction battleDisplayAction;
-    public SkillManager skillManager;
     public GuideController guideController;
     public GameDebugAction gameDebugAction;
     public EventManager eventManager;
@@ -32,9 +30,7 @@ public class GameComponent : MonoBehaviour
     public IntelligencePanelAction intelligencePanelAction;
     public CharactorShop charactorShop;
     public EmployerManger employerManger;
-    public FightPanelAction fightPanelAction;
-    public AdventurePanelAction adventurePanelAction;
-    public BattleMapAction BattleMapAction;
+    public AdventurePanelAction adventurePanelAction; 
     public GameObject GroundItemPro;
     public ManufacturingAction manufacturingAction;
     public FormulaAction formulaAction;

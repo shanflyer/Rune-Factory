@@ -15,6 +15,16 @@ namespace UnityEngine.Timeline
         private bool m_IsActiveCached;
 #endif
 
+        public Vector3 initOffset;
+        public AnimationCurve offsetXCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
+        public AnimationCurve offsetYCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
+        public AnimationCurve angleZCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
+        public float playableDuration;
+
+
+        public bool rot;
+        public float rotAngle;
+
         /// <summary>
         /// Creates a Playable with a PrefabControlPlayable behaviour attached
         /// </summary>
@@ -109,6 +119,33 @@ namespace UnityEngine.Timeline
 #if UNITY_EDITOR
             m_IsActiveCached = true;
 #endif
+        }
+        
+        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
+        {
+            float value = (float)playable.GetTime();
+             
+            float timeValue = value / playableDuration;
+
+            timeValue = Mathf.Clamp(timeValue, 0, 1);
+            
+
+            float offestX = offsetXCurve.Evaluate((float)timeValue);
+            float offestY = offsetYCurve.Evaluate((float)timeValue);
+
+            float angle = angleZCurve.Evaluate((float)timeValue);
+            m_Instance.transform.localPosition = new Vector3(offestX, offestY) + initOffset;
+             
+
+            if (rot)
+            {
+                angle = rotAngle;
+            }
+
+            m_Instance.transform.localEulerAngles = new Vector3(0, 0, angle);
+
+
+            base.ProcessFrame(playable, info, playerData);
         }
 
         /// <summary>

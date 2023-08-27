@@ -10,6 +10,8 @@ interface IFightCharacter
 {
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
+
+    public bool CheckAction();
 }
 
 public struct FightPlayer : IFightCharacter
@@ -17,6 +19,17 @@ public struct FightPlayer : IFightCharacter
     public int instanceId { get ; set ; }
     public int behaviorId { get; set; }
     public int dataId;
+
+    public bool CheckAction()
+    {
+        Character character = CharacterManager.instance.GetCharacter(instanceId);
+        if (character.CharacterProperty.HP > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 public struct FightMonster : IFightCharacter
 {
@@ -25,6 +38,17 @@ public struct FightMonster : IFightCharacter
     public int dataId;
 
     public int HP, AT, DF, Crit, Dodge;
+
+    public bool CheckAction()
+    {
+        Character character = CharacterManager.instance.GetCharacter(instanceId);
+        if (character.CharacterProperty.HP > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 public enum HurtResultType
@@ -54,6 +78,9 @@ public class FightManager :Singleton<FightManager>
     public override void Init()
     {
         base.Init();
+
+        maxRundCount = Enum.GetValues(typeof(FightRundType)).Length;
+
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer); 
     }
     protected override void Clear()
@@ -212,4 +239,65 @@ public class FightManager :Singleton<FightManager>
         }
         return hurt;
     }
+
+
+    FightRundType nowFightRund;
+    int maxRundCount;
+    void InitFightCharacter()
+    {
+        int rundType = (int)nowFightRund;
+        rundType++;
+        if (rundType > maxRundCount)
+        {
+            rundType = 0;
+        }
+        nowFightRund = (FightRundType)rundType;
+
+        List<IFightCharacter> nowFighrCharacters = new List<IFightCharacter>();
+        switch (nowFightRund)
+        {
+            case FightRundType.Player:
+                for(int i = 0; i < fightPlayers.Count; i++)
+                {
+                    if (fightPlayers[i].CheckAction())
+                    {
+                        nowFighrCharacters.Add(fightPlayers[i]);
+                    }
+                }
+                break;
+            case FightRundType.Monster:
+                for (int i = 0; i < fightMonsters.Count; i++)
+                {
+                    if (fightMonsters[i].CheckAction())
+                    {
+                        nowFighrCharacters.Add(fightMonsters[i]);
+                    }
+                }
+                break;
+        }
+    }
+    IFightCharacter fightSource;
+    List<IFightCharacter> fightTargets = new List<IFightCharacter>();
+
+    void SelectFightTarget(IFightCharacter fightCharacter, TargetType targetType,int count,bool repeatedSelect=false)
+    {
+        fightTargets.Clear();
+        switch(targetType)
+        {
+            case TargetType.自身:
+                fightTargets.Add(fightCharacter);
+                break;
+            case TargetType.敌方:
+
+                break;
+        }
+    }
+}
+public enum TargetType
+{
+    敌方,我方,自身
+}
+public enum FightRundType
+{
+    Player,Monster
 }

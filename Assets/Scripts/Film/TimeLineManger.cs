@@ -38,6 +38,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     GameObject bindObj=null;
                     if (streamName == bindData.outName)
                     {
+                        /*
                         switch (bindData.bindType)
                         {
                             case BindType.FightPlayer:
@@ -47,7 +48,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                 bindObj = FightController.instance.FindFingMoster(bindData.bindPath);
                                 break;
                             
-                        }
+                        }*/
                         if(bindObj!=null&&bindObj.TryGetComponent(out animator))
                         {
                             animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);

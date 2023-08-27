@@ -83,6 +83,16 @@ namespace UnityEngine.Timeline
         internal bool controllingDirectors { get; private set; }
         internal bool controllingParticles { get; private set; }
 
+
+        [SerializeField] public bool rot;
+        [SerializeField] public float rotAngle;
+
+        [SerializeField] public Vector3 initOffset;
+
+        [SerializeField] public AnimationCurve offsetXCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
+        [SerializeField] public AnimationCurve offsetYCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
+        [SerializeField] public AnimationCurve angleZCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
+
         /// <summary>
         /// This function is called when the object is loaded.
         /// </summary>
@@ -133,6 +143,15 @@ namespace UnityEngine.Timeline
             {
                 Transform parenTransform = sourceObject != null ? sourceObject.transform : null;
                 var controlPlayable = PrefabControlPlayable.Create(graph, prefabGameObject, parenTransform);
+
+                var controlBehaviour = controlPlayable.GetBehaviour();
+                controlBehaviour.initOffset = initOffset;
+                controlBehaviour.offsetXCurve = offsetXCurve;
+                controlBehaviour.offsetYCurve = offsetYCurve;
+                controlBehaviour.angleZCurve = angleZCurve;
+                controlBehaviour.playableDuration = (float)duration;
+                controlBehaviour.rot = rot;
+                controlBehaviour.rotAngle = rotAngle;
 
                 sourceObject = controlPlayable.GetBehaviour().prefabInstance;
                 playables.Add(controlPlayable);

@@ -45,6 +45,12 @@ public struct ActionList : GameAction
         } 
     }
 }
+public struct DisplayHurt : GameAction
+{
+    public void Init(List<Parameter> parameters)
+    { 
+    }
+}
 public struct HideFightScene : GameAction
 {
     public void Init(List<Parameter> parameters)

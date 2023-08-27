@@ -36,6 +36,13 @@ namespace UnityEditor.Timeline
         SerializedProperty m_PostPlayback;
         SerializedProperty m_RandomSeed;
         SerializedProperty m_DirectorActionOnClipEnd;
+         
+        SerializedProperty initOffset;
+        SerializedProperty offsetXCurve;
+        SerializedProperty offsetYCurve;
+        SerializedProperty angleZCurve;
+
+
         bool m_CycleReference;
 
 
@@ -69,6 +76,12 @@ namespace UnityEditor.Timeline
             m_PostPlayback = serializedObject.FindProperty("postPlayback");
             m_DirectorActionOnClipEnd = serializedObject.FindProperty("directorOnClipEnd");
             m_RandomSeed = serializedObject.FindProperty("particleRandomSeed");
+
+            initOffset = serializedObject.FindProperty("initOffset");
+            offsetXCurve = serializedObject.FindProperty("offsetXCurve");
+            offsetYCurve = serializedObject.FindProperty("offsetYCurve");
+            angleZCurve = serializedObject.FindProperty("angleZCurve"); 
+
             CheckForCyclicReference();
         }
 
@@ -162,6 +175,11 @@ namespace UnityEditor.Timeline
 
                 EditorGUI.indentLevel--;
             }
+
+            initOffset.vector3Value = EditorGUILayout.Vector3Field("³õÊ¼Æ«ÒÆ:", initOffset.vector3Value);
+            offsetXCurve.animationCurveValue = EditorGUILayout.CurveField("XÆ«ÒÆ¹ì¼£", offsetXCurve.animationCurveValue);
+            offsetYCurve.animationCurveValue = EditorGUILayout.CurveField("YÆ«ÒÆ¹ì¼£", offsetYCurve.animationCurveValue);
+            angleZCurve.animationCurveValue = EditorGUILayout.CurveField("Ðý×ª¹ì¼£", angleZCurve.animationCurveValue);
 
             serializedObject.ApplyModifiedProperties();
         }

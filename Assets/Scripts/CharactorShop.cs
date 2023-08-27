@@ -180,9 +180,10 @@ public class CharactorShop : MonoBehaviour
         {
             case EmployType.佣兵:
                 List<Employer> employers = GameComponentData.gameData.employerManger.Employers;
-                List<BatteleMap> batteleMaps = GameComponentData.gameData.BattleMapAction.BatteleMaps;
+              // List<BatteleMap> batteleMaps = GameComponentData.gameData.BattleMapAction.BatteleMaps;
                 foreach (var employer in employers)
                 {
+                    /*
                     if (batteleMaps.Exists(b => b.id == employer.openBattleId && b.isOpen))
                     {
                         GameObject emplorobj = Instantiate(employPro);
@@ -193,6 +194,7 @@ public class CharactorShop : MonoBehaviour
                         emplorobj.transform.localScale=Vector3.one;
                         emplorObjs.Add(emplorobj);
                     }
+                    */
                     
                 }
                 notice.text = LanguageManage.SwitchStr("佣兵等级固定，无法进行成长");
@@ -272,7 +274,7 @@ public class CharactorShop : MonoBehaviour
         {
             case EmployType.佣兵:
                 List<Employer> employers = GameComponentData.gameData.employerManger.Employers;
-                List<BatteleMap> batteleMaps = GameComponentData.gameData.BattleMapAction.BatteleMaps;
+                /*List<BatteleMap> batteleMaps = GameComponentData.gameData.BattleMapAction.BatteleMaps;
                 foreach (var employer in employers)
                 {
                     if (batteleMaps.Exists(b => b.id == employer.openBattleId && b.isOpen))
@@ -286,7 +288,7 @@ public class CharactorShop : MonoBehaviour
                         emplorObjs.Add(emplorobj);
                     }
 
-                }
+                }*/
                 notice.text = "佣兵等级固定，无法进行成长";
                 break;
             case EmployType.动物:

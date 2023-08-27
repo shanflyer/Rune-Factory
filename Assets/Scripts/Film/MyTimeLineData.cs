@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
+[CreateAssetMenu(menuName ="Data/演绎绑定")]
 public class MyTimeLineData : ScriptableObject,IGameData
 {
     public PlayableAsset asset;
@@ -20,7 +21,7 @@ public class MyTimeLineData : ScriptableObject,IGameData
 [System.Serializable]
 public enum BindType
 {
-   Default,FightPlayer,FightMonster,Camera
+   Default,FightSource,FightTarget,Camera
 }
 [System.Serializable]
 public struct BindData

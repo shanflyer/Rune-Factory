@@ -440,8 +440,7 @@ public class GameManager : MonoBehaviour
 	    { 
 	        GameData.charactorDataAction.InitData();
 	        GameData.influenceAction.InitInfluenceAction();
-	        GameComponentData.gameData.NpcManager.InitData();
-	        GameData.BattleMapAction.InitData();
+	        GameComponentData.gameData.NpcManager.InitData(); 
 	        GameData.charactorTitleAction.Initdata0();
             if (DataSaveAndLoadTest.isJsonData)
 	        {
@@ -454,10 +453,7 @@ public class GameManager : MonoBehaviour
                 
                 GameData.gameTimeManager.CreatData();
                 
-	            foreach (Transform child in GameData.BattleMapAction.mapParent)
-	            {
-	                Destroy(child.gameObject);
-	            }
+	            
 	            if (DataSaveAndLoadTest.gameSaveData.marryData == null)
 	            {
 	                DataSaveAndLoadTest.gameSaveData.marryData=new MarryData();
@@ -800,10 +796,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case CostType.购买设施:
                     GameComponentData.gameData.shopPanelAction.BuySucecssful();
-                    break;
-                case CostType.复活:
-                    GameComponentData.gameData.BattleMapAction.ReBron();
-                    break;
+                    break; 
                 case CostType.增加背包格子:
                     AddPackageAction(PackageType.背包);
                     break;
@@ -861,13 +854,7 @@ public class GameManager : MonoBehaviour
        
     }
 
-    public void GoldCostNo()
-    {
-        if (costType == CostType.复活)
-        {
-            GameComponentData.gameData.BattleMapAction.PlayerDeadAction();
-        }
-    }
+  
     public static int HurtValue(Property goldProperty,Property attackProperty)
     {
         int hurtValue = 1;
@@ -1014,8 +1001,7 @@ public class GameManager : MonoBehaviour
         TwoSelectPanel.SetActive(false);
         switch (careType)
         {
-            case CareType.属性提醒:
-                GameData.adventurePanelAction.Exploring();
+            case CareType.属性提醒: 
                 break;
                 case CareType.SLEEP:
                     AudioController.instance.PlayAudio(SE.click);
@@ -1026,8 +1012,7 @@ public class GameManager : MonoBehaviour
                 GameComponentData.gameData.manufacturingAction.ProduceItem();
                 break;
                 case  CareType.OutBattle:
-                    AudioController.instance.PlayAudio(SE.click);
-                GameData.fightPanelAction.GetOutAction();
+                    AudioController.instance.PlayAudio(SE.click); 
                 break;
                 case CareType.ClearPlant:
                 AudioController.instance.PlayAudio(SE.Return);

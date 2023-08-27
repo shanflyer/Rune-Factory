@@ -466,10 +466,7 @@ namespace OldName
             iceboxId = gamePlayer.icebox;
 
             battleAllValues = new List<int>();
-            foreach (var batteleMap in GameComponentData.gameData.BattleMapAction.BatteleMaps)
-            {
-                battleAllValues.Add(batteleMap.allValue);
-            }
+          
 
             Item seedItem = GameComponentData.gameData.farmAction.farmTool;
             if (seedItem.dataId != 0)
@@ -774,24 +771,15 @@ namespace OldName
             if (playerMoneyData.battleAllValues.Count > 0)
             {
                 if (playerMoneyData.battleAllValues.Count <= 10)
-                {
-                    var battleMaps =
-                        GameComponentData.gameData.BattleMapAction.BatteleMaps.FindAll(b => b.id < 4010);
-                    for (int i = 0; i < battleMaps.Count; i++)
-                    {
-                        battleMaps[i].allValue = playerMoneyData.battleAllValues[i];
-                    }
+                { 
+                     
                 }
                 else
                 {
-                    for (int i = 0; i < GameComponentData.gameData.BattleMapAction.BatteleMaps.Count; i++)
-                    {
-                        GameComponentData.gameData.BattleMapAction.BatteleMaps[i].allValue = playerMoneyData.battleAllValues[i];
-                    }
+                     
                 }
 
-            }
-            GameComponentData.gameData.BattleMapAction.InitBattleMaps();
+            } 
 
             gamePlayer.InitGamePlayer();
             gamePlayer.property.EXP = playerSaveData.exp;
@@ -1278,23 +1266,14 @@ namespace OldName
             {
                 if (playerMoneyData.battleAllValues.Count <= 10)
                 {
-                    var battleMaps =
-                        GameComponentData.gameData.BattleMapAction.BatteleMaps.FindAll(b => b.id < 4010);
-                    for (int i = 0; i < battleMaps.Count; i++)
-                    {
-                        battleMaps[i].allValue = playerMoneyData.battleAllValues[i];
-                    }
+                     
                 }
                 else
                 {
-                    for (int i = 0; i < GameComponentData.gameData.BattleMapAction.BatteleMaps.Count; i++)
-                    {
-                        GameComponentData.gameData.BattleMapAction.BatteleMaps[i].allValue = playerMoneyData.battleAllValues[i];
-                    }
+                     
                 }
 
-            }
-            GameComponentData.gameData.BattleMapAction.InitBattleMaps();
+            } 
 
             gamePlayer.InitGamePlayer();
             gamePlayer.property.EXP = playerSaveData.exp;
