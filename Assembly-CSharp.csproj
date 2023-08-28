@@ -71,10 +71,9 @@
     <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities@1.0.14\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Explore\Fight\FightAIController.cs" />
-    <Compile Include="Assets\Scripts\Explore\Fight\SkillManager.cs" />
-    <Compile Include="Assets\Scripts\Main\MyInstance.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Fight\Variables\SharedSkillList.cs" />
     <Compile Include="Assets\Scripts\PlacePanelAction.cs" />
+    <Compile Include="Assets\Scripts\Explore\Fight\SkillManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetRandomString.cs" />
     <Compile Include="Assets\Scripts\eyeMove.cs" />
     <Compile Include="Assets\Scripts\ChildFunctionAction.cs" />
@@ -310,6 +309,7 @@
     <Compile Include="Assets\Scripts\EmplorPanelAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Collider\GetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IsFloatPositive.cs" />
+    <Compile Include="Assets\Scripts\Main\MyInstance.cs" />
     <Compile Include="Assets\Scripts\ItemsManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetKey.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredCollision.cs" />
@@ -619,6 +619,7 @@
     <Compile Include="Assets\Scripts\SeasonSelect.cs" />
     <Compile Include="Assets\Scripts\Main\TalkManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
+    <Compile Include="Assets\Scripts\Explore\Fight\FightAIController.cs" />
     <Compile Include="Assets\Scripts\UI\FightPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector4.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\GetCenter.cs" />
@@ -821,7 +822,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetVolume.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalScale.cs" />
     <Compile Include="Assets\Scripts\EquipmentManager.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Fight\FightTypeSelect.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Fight\Action\FightTypeSelect.cs" />
     <Compile Include="Assets\Scripts\BedClickAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\Sleep.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForce.cs" />
@@ -834,6 +835,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetMouseButton.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\Interrupt.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedRect.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Fight\Action\GetAllReadySkill.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\IsParameterControlledByCurve.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />
@@ -1798,6 +1800,7 @@
       <Name>Unity.InputSystem</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

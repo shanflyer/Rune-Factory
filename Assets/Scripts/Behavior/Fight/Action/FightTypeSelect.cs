@@ -1,7 +1,8 @@
 using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-[TaskName("NewGame/战斗行为选择")]
+[TaskCategory("NewGame")]
+[TaskName("战斗行为选择")]
 public class FightTypeSelect : Action
 {
     public override float GetUtility()
