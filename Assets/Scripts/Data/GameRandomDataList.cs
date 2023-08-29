@@ -162,7 +162,72 @@ public struct GameRandomData
     public List<RandomItem> randomItems;
 
     public List<WeightBarrel> barrels;
-     
+
+    public void Pretreatment()
+    {
+        int totalValue = 0;
+        for (int i = 0; i < randomItems.Count; i++)
+        {
+            totalValue += randomItems[i].randomValue;
+        }
+        int averageValue = (int)(math.ceil((float)totalValue /randomItems.Count));
+        List<Vector2Int> baseRamdomItems = new List<Vector2Int>();
+        List<Vector2Int> fillRamdomItems = new List<Vector2Int>();
+        for (int i = 0; i < randomItems.Count; i++)
+        {
+            if (randomItems[i].randomValue <= averageValue)
+            {
+                baseRamdomItems.Add(new Vector2Int(i, randomItems[i].randomValue));
+            }
+            else
+            {
+                fillRamdomItems.Add(new Vector2Int(i, randomItems[i].randomValue));
+            }
+        }
+
+        int fillIndex = 0;
+        WeightBarrel[] barrels = new WeightBarrel[randomItems.Count];
+        for (int i = 0; i < barrels.Length; i++)
+        {
+            if (fillIndex >= fillRamdomItems.Count)
+            {
+                WeightBarrel endBarrel = new WeightBarrel
+                {
+                    itemIndex = baseRamdomItems[i].x,
+                    baseWeight = 10000,
+                    fillItemIndex = -1
+                };
+                barrels[i] = endBarrel;
+                break;
+            }
+
+            int value = averageValue - baseRamdomItems[i].y;
+            int fillValue = fillRamdomItems[fillIndex].y - value;
+
+            int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
+            WeightBarrel weightBarrel = new WeightBarrel
+            {
+                itemIndex = baseRamdomItems[i].x,
+                baseWeight = baseWeight,
+                fillItemIndex = fillRamdomItems[fillIndex].x
+            };
+            barrels[i] = weightBarrel;
+
+            if (fillValue > averageValue)
+            {
+                Vector2Int nowFill = new Vector2Int(fillRamdomItems[fillIndex].x, fillValue);
+                fillRamdomItems[fillIndex] = nowFill;
+            }
+            else
+            {
+                baseRamdomItems.Add(new Vector2Int(fillRamdomItems[fillIndex].x, fillValue));
+                fillIndex++;
+            }
+        }
+
+        this.barrels = barrels.ToList();
+
+    }
 }
 
 

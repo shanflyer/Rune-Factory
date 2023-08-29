@@ -336,7 +336,7 @@ public class FightManager :Singleton<FightManager>
         SkillEstimateData SkillEstimateData = new SkillEstimateData
         {
             skillId = skillId,
-            target = new List<int>(),
+            target = new List<List<int>>(),
             utlilityValue = 1
         };
         if(fightCharacters.TryGetValue(characterId,out var fightCharacter))
@@ -347,7 +347,9 @@ public class FightManager :Singleton<FightManager>
                 {
                     var skillData = fightCharacter.skillRuntimes[i].skillData;
                     for(int j = 0; j < skillData.actionCount; j++)
-                    {  
+                    {
+                        var targets = GetTarget(skillData.targetType, fightCharacter, skillData.targetCount);
+                        SkillEstimateData.target.Add(targets);
                     }
                     switch (skillData.skillActionType)
                     {
@@ -362,38 +364,68 @@ public class FightManager :Singleton<FightManager>
         return SkillEstimateData;
     }
 
-    public List<int> GetTarget(TargetType targetType,IFightCharacter fightCharacter,int targetCount)
-    {
-        List<int> result = new List<int>();
+    List<int> GetTarget(TargetType targetType,IFightCharacter fightCharacter,int targetCount)
+    { 
         switch (targetType)
         {
-            case TargetType.敌方:
+            case TargetType.敌方: 
                 if (fightPlayers.Contains(fightCharacter.instanceId))
                 {
-                    int nowValue = 0;
-                    List<int2> randomDatas = new List<int2>();
-                    for(int i = 0; i < fightMonsters.Count; i++)
-                    {
-                        nowValue += 20 * i;
-                        int2 randomData = new int2(nowValue, fightMonsters[fightMonsters.Count - 1]);
-                        randomDatas.Add(randomData);
-                    } 
-                    int randomValue = GameRandom.RandomInt(0, nowValue);
-                    for(int i = 0; i < randomDatas.Count; i++)
-                    {
-                        if (randomDatas[i].x < randomValue)
-                        {
-                            result.Add(randomDatas[i].y);
-                            break;
-                        }
-                    }
+                    return GetRandomValue(fightMonsters, targetCount); 
                 }
-                break;
+                else
+                {
+                    return GetRandomValue(fightPlayers, targetCount); 
+                }
+                 
             case TargetType.我方:
-                break;
+                if (fightPlayers.Contains(fightCharacter.instanceId))
+                {
+                    return GetRandomValue(fightPlayers, targetCount);
+                }
+                else
+                {
+                    return GetRandomValue(fightMonsters, targetCount);
+                } 
             case TargetType.自身:
+                List<int> result = new List<int>();
                 result.Add(fightCharacter.instanceId);
-                break;
+                return result;
+        }
+        return null;
+    }
+
+    List<int> GetRandomValue(List<int> characters,int targetCount)
+    {
+        List<int> result = new List<int>();
+        GameRandomData gameRandomData = new GameRandomData
+        {
+            id = -1,
+            weightRandom = true,
+            barrels = new List<WeightBarrel>(),
+            randomItems = new List<RandomItem>(),
+            text = "选择目标"
+        };
+
+        for (int i = 0; i < fightMonsters.Count; i++)
+        {
+            RandomItem randomItem = new RandomItem
+            {
+                itemId = fightMonsters.Count - i,
+                itemValue = fightMonsters[fightMonsters.Count - i].ToString(),
+                randomValue = 20 * i,
+                maxCount = 1,
+                minCount = 1
+            };
+            gameRandomData.randomItems.Add(randomItem);
+
+        }
+        gameRandomData.Pretreatment();
+
+        var results = GameRandom.instance.GetRandomValue(gameRandomData, targetCount);
+        for (int i = 0; i < results.Count; i++)
+        {
+            result.Add(int.Parse(results[i].result));
         }
         return result;
     }
