@@ -9,9 +9,11 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Purchasing;
+using static UnityEngine.GraphicsBuffer;
 
 public interface IFightCharacter
 {
+    public CharacterProperty characterProperty { get;}
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
     public List<SkillRuntime> skillRuntimes { get; set; }
@@ -27,6 +29,27 @@ public struct FightPlayer : IFightCharacter
      
 
     public List<SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes=value; }
+    public CharacterProperty characterProperty 
+    {
+        get
+        {
+            return character.CharacterProperty;
+        } 
+    }
+
+    private Character character
+    {
+        get
+        {
+            if (_character == null)
+            {
+                _character = CharacterManager.instance.GetCharacter(instanceId);
+            }
+            return _character;
+        }
+    }
+    private Character _character;
+
 
     private List<SkillRuntime> _skillRuntimes;
 
@@ -83,11 +106,13 @@ public struct FightMonster : IFightCharacter
     public int behaviorId { get; set; }
 
     public List<SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes = value; }
+    CharacterProperty IFightCharacter.characterProperty { get => characterProperty;}
 
     private List<SkillRuntime> _skillRuntimes;
     public int dataId;
 
-    public int HP, AT, DF, Crit, Dodge;
+
+    public CharacterProperty characterProperty;
     public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     { 
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
@@ -264,12 +289,13 @@ public class FightManager :Singleton<FightManager>
                 instanceId = myInstance.CreatInstanceId(),
                 dataId = monsterData.id,
                 behaviorId = monsterData.behaviorId,
-                HP = monsterData.HP,
-                AT = monsterData.AT,
-                DF = monsterData.DF,
-                Crit = monsterData.Crit,
-                Dodge = monsterData.Dodge
+               
             };
+            fightMonster.characterProperty.HP = monsterData.HP;
+            fightMonster.characterProperty.AT = monsterData.AT;
+            fightMonster.characterProperty.DF = monsterData.DF;
+            fightMonster.characterProperty.Crit = monsterData.Crit;
+            fightMonster.characterProperty.Dodge = monsterData.Dodge;
             fightMonster.CreatSkillRuntime(monsterData);
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
@@ -351,9 +377,28 @@ public class FightManager :Singleton<FightManager>
                         var targets = GetTarget(skillData.targetType, fightCharacter, skillData.targetCount);
                         SkillEstimateData.target.Add(targets);
                     }
+
+
                     switch (skillData.skillActionType)
                     {
                         case SkillActionType.伤害:
+                            float hurtValue = 0;
+                            for (int x = 0; x < SkillEstimateData.target.Count;x++)
+                            {
+                                for (int y = 0; y < SkillEstimateData.target[x].Count; y++)
+                                {
+                                    int t = SkillEstimateData.target[x][y];
+                                    IFightCharacter tagetFighter = fightCharacters[t];
+                                    int hurt = HurtValue(fightCharacter.characterProperty.AT, tagetFighter.characterProperty.DF,
+                                        fightCharacter.characterProperty.Crit, fightCharacter.characterProperty.Dodge,
+                                        tagetFighter.characterProperty.DF, out var hurtResultType);
+                                    hurt = math.clamp(hurt, 0, 1);
+                                    hurtValue += (1 - tagetFighter.characterProperty.HP / hurt) *(1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
+
+                                }
+                                hurtValue = math.clamp(hurtValue, 0, 1);
+                            }
+                            SkillEstimateData.utlilityValue = hurtValue;
                             break;
                     }
 

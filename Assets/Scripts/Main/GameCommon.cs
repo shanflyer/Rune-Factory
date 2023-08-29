@@ -73,7 +73,7 @@ public enum EntityType
 }
 public class GameCommon 
 {
-
+    public const float HurtUtlility = 0.6f;
     public static List<int> zeroNPC = new List<int>
     {
         1001,2001
