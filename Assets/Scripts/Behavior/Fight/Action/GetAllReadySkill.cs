@@ -8,6 +8,7 @@ using Action = BehaviorDesigner.Runtime.Tasks.Action;
 [TaskName("获取可用技能")]
 public class GetAllReadySkill : Action
 {
+    public FightType fightType;
     SharedSkillList sharedSkillList;
     SharedInt agentId;
     BehaviorTree behaviorTree;
@@ -39,7 +40,7 @@ public class GetAllReadySkill : Action
         {
             return TaskStatus.Failure;
         }
-       var skills=  FightManager.instance.GetReadySkills(agentId.Value);
+       var skills=  FightManager.instance.GetReadySkills(agentId.Value,fightType);
         sharedSkillList.SetValue(skills);
 
         return TaskStatus.Success;

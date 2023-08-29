@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+﻿using NUnit.Framework.Interfaces;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using OldName;
 using System;
 using System.Collections;
@@ -7,6 +8,7 @@ using System.Xml.Schema;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Purchasing;
 
 public interface IFightCharacter
 {
@@ -15,7 +17,7 @@ public interface IFightCharacter
     public List<SkillRuntime> skillRuntimes { get; set; }
     public bool CheckAction();
     public void CreatSkillRuntime(IGameData gameData=null);
-    public Dictionary<FightType, List<int>> GetReadySkills();
+    public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType=FightType.All);
 }
 
 public struct FightPlayer : IFightCharacter
@@ -40,14 +42,19 @@ public struct FightPlayer : IFightCharacter
 
         return false;
     }
-    public Dictionary<FightType, List<int>> GetReadySkills()
+    public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     {
         var character = CharacterManager.instance.GetCharacter(instanceId); 
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>(); 
         for(int i=0;i<skillRuntimes.Count;i++)
         {
+            if (fightType != FightType.All && skillRuntimes[i].fightType != fightType)
+            {
+                continue;
+            }
             if (skillRuntimes[i].skillCd == 0 && character.CharacterProperty.MP > skillRuntimes[i].cost)
             {
+                
                 if (!results.TryGetValue(skillRuntimes[i].fightType,out var skills))
                 {
                     skills = new List<int>();
@@ -81,11 +88,15 @@ public struct FightMonster : IFightCharacter
     public int dataId;
 
     public int HP, AT, DF, Crit, Dodge;
-    public Dictionary<FightType, List<int>> GetReadySkills()
+    public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     { 
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
         for (int i = 0; i < skillRuntimes.Count; i++)
         {
+            if (fightType != FightType.All&&skillRuntimes[i].fightType != fightType)
+            {
+                continue;
+            }
             if (skillRuntimes[i].skillCd == 0)
             {
                 if (!results.TryGetValue(skillRuntimes[i].fightType, out var skills))
@@ -151,7 +162,7 @@ public class FightManager :Singleton<FightManager>
         myInstance.Clear();
         base.Clear();
     }
-    public Dictionary<FightType, List<int>> GetReadySkills(int id)
+    public Dictionary<FightType, List<int>> GetReadySkills(int id,FightType fightType=FightType.All)
     {
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
         if(fightCharacters.TryGetValue(id,out var fightCharacter))
@@ -317,6 +328,74 @@ public class FightManager :Singleton<FightManager>
             }
         }
         return hurt;
+    }
+
+
+    public SkillEstimateData EstimateSkill(int skillId, int characterId)
+    {
+        SkillEstimateData SkillEstimateData = new SkillEstimateData
+        {
+            skillId = skillId,
+            target = new List<int>(),
+            utlilityValue = 1
+        };
+        if(fightCharacters.TryGetValue(characterId,out var fightCharacter))
+        {
+            for(int i = 0; i < fightCharacter.skillRuntimes.Count; i++)
+            {
+                if (fightCharacter.skillRuntimes[i].instanceId == skillId)
+                {
+                    var skillData = fightCharacter.skillRuntimes[i].skillData;
+                    for(int j = 0; j < skillData.actionCount; j++)
+                    {  
+                    }
+                    switch (skillData.skillActionType)
+                    {
+                        case SkillActionType.伤害:
+                            break;
+                    }
+
+                    break;
+                }
+            }
+        }
+        return SkillEstimateData;
+    }
+
+    public List<int> GetTarget(TargetType targetType,IFightCharacter fightCharacter,int targetCount)
+    {
+        List<int> result = new List<int>();
+        switch (targetType)
+        {
+            case TargetType.敌方:
+                if (fightPlayers.Contains(fightCharacter.instanceId))
+                {
+                    int nowValue = 0;
+                    List<int2> randomDatas = new List<int2>();
+                    for(int i = 0; i < fightMonsters.Count; i++)
+                    {
+                        nowValue += 20 * i;
+                        int2 randomData = new int2(nowValue, fightMonsters[fightMonsters.Count - 1]);
+                        randomDatas.Add(randomData);
+                    } 
+                    int randomValue = GameRandom.RandomInt(0, nowValue);
+                    for(int i = 0; i < randomDatas.Count; i++)
+                    {
+                        if (randomDatas[i].x < randomValue)
+                        {
+                            result.Add(randomDatas[i].y);
+                            break;
+                        }
+                    }
+                }
+                break;
+            case TargetType.我方:
+                break;
+            case TargetType.自身:
+                result.Add(fightCharacter.instanceId);
+                break;
+        }
+        return result;
     }
 
 
