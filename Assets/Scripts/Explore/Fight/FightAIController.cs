@@ -31,21 +31,5 @@ public struct SkillEstimateData
     public List<List<int>> target;
     public float utlilityValue;
 
-    public void SetUtlility(SkillData skillData)
-    {
-        switch (skillData.skillActionType)
-        {
-            case SkillActionType.伤害:
-                for (int i = 0; i < target.Count; i++)
-                {
-                    for(int j=0; j < target[i].Count; j++)
-                    {
-                        int t = target[i][j];
-
-
-                    }
-                } 
-                break;
-        }
-    }
+    
 }

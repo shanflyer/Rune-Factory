@@ -23,9 +23,14 @@ public class EstimateSkillBehavior : Action
             {
                 var skill = skills[i];
                 SkillEstimateData skillEstimateData = FightManager.instance.EstimateSkill(skill, fightCharacter.Value);
-                if (UtilityValue < skillEstimateData.utlilityValue)
+                float nowValue = skillEstimateData.utlilityValue;
+                nowValue= skillEstimateData.utlilityValue * (1 + GameRandom.RandomFloat(-randomValue, randomValue));
+                nowValue *= estimateValue;
+
+
+                if (UtilityValue < nowValue)
                 {
-                    UtilityValue = skillEstimateData.utlilityValue;
+                    UtilityValue = nowValue;
                     selectSkill = skillEstimateData;
                 }
             }

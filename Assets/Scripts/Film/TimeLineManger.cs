@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -166,7 +167,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
         }
     } 
     Dictionary<PlayableDirector, RuntimePlayable> runtimePlayables = new Dictionary<PlayableDirector, RuntimePlayable>();
-    public async void PlayTimeLine(string name,PlayableDirector playableDirector,Action endAction)
+    public async Task<bool> PlayTimeLine(string name,PlayableDirector playableDirector,Action endAction)
     {
         if (runtimePlayables.TryGetValue(playableDirector,out RuntimePlayable RuntimePlayable))
         {
@@ -186,6 +187,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
         });
         runtimePlayables[playableDirector]=runtimePlayable;
 
+        return true;
     }
      
     public void Stop(PlayableDirector playableDirector)
@@ -204,14 +206,14 @@ public class TimeLineManger : Singleton<TimeLineManger>
         base.Clear();
     }
 
-    public void UpData()
+    protected override void UpData()
     {
-        using(var e = runtimePlayables.GetEnumerator())
+        using (var e = runtimePlayables.GetEnumerator())
         {
             while (e.MoveNext())
             {
                 e.Current.Value.Evaluate();
             }
-        } 
-    }
+        }
+    } 
 }

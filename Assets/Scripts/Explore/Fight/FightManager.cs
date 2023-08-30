@@ -16,7 +16,7 @@ public interface IFightCharacter
     public CharacterProperty characterProperty { get;}
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
-    public List<SkillRuntime> skillRuntimes { get; set; }
+    public Dictionary<int,SkillRuntime> skillRuntimes { get; set; }
     public bool CheckAction();
     public void CreatSkillRuntime(IGameData gameData=null);
     public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType=FightType.All);
@@ -28,7 +28,7 @@ public struct FightPlayer : IFightCharacter
     public int behaviorId { get; set; }
      
 
-    public List<SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes=value; }
+    public Dictionary<int, SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes=value; }
     public CharacterProperty characterProperty 
     {
         get
@@ -51,7 +51,7 @@ public struct FightPlayer : IFightCharacter
     private Character _character;
 
 
-    private List<SkillRuntime> _skillRuntimes;
+    private Dictionary<int, SkillRuntime> _skillRuntimes;
 
     public int dataId;
 
@@ -91,12 +91,12 @@ public struct FightPlayer : IFightCharacter
     public async void CreatSkillRuntime(IGameData gameData= null)
     {
         Character character = CharacterManager.instance.GetCharacter(instanceId);
-        skillRuntimes=new List<SkillRuntime>();
+        skillRuntimes=new Dictionary<int, SkillRuntime>();
         for (int i = 0; i < character.skills.Count; i++)
         {
             int skillId = character.skills[i];
             SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
-            skillRuntimes.Add(skillRuntime);
+            skillRuntimes.Add(skillRuntime.instanceId,skillRuntime);
         }
     }
 }
@@ -105,10 +105,10 @@ public struct FightMonster : IFightCharacter
     public int instanceId { get; set; }
     public int behaviorId { get; set; }
 
-    public List<SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes = value; }
+    public Dictionary<int, SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes = value; }
     CharacterProperty IFightCharacter.characterProperty { get => characterProperty;}
 
-    private List<SkillRuntime> _skillRuntimes;
+    private Dictionary<int, SkillRuntime> _skillRuntimes;
     public int dataId;
 
 
@@ -149,12 +149,12 @@ public struct FightMonster : IFightCharacter
         MonsterData monsterData=gameData as MonsterData;
         if(monsterData!=null)
         {
-            skillRuntimes = new List<SkillRuntime>();
+            skillRuntimes = new Dictionary<int, SkillRuntime>();
             for (int i = 0; i < monsterData.skills.Count; i++)
             {
                 int skillId = monsterData.skills[i];
                 SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
-                skillRuntimes.Add(skillRuntime);
+                skillRuntimes.Add(skillRuntime.instanceId,skillRuntime);
             }
         }
     }
@@ -476,6 +476,14 @@ public class FightManager :Singleton<FightManager>
     }
 
 
+    void ActionSkillEstimate(SkillEstimateData skillEstimateData,int characterId)
+    {
+        IFightCharacter source = fightCharacters[characterId];
+        var skillRuntime = source.skillRuntimes[skillEstimateData.skillId];
+        
+    }
+
+
     FightRundType nowFightRund;
     int maxRundCount;
     void InitFightCharacter()
@@ -516,19 +524,7 @@ public class FightManager :Singleton<FightManager>
     IFightCharacter fightSource;
     List<IFightCharacter> fightTargets = new List<IFightCharacter>();
 
-    void SelectFightTarget(IFightCharacter fightCharacter, TargetType targetType,int count,bool repeatedSelect=false)
-    {
-        fightTargets.Clear();
-        switch(targetType)
-        {
-            case TargetType.自身:
-                fightTargets.Add(fightCharacter);
-                break;
-            case TargetType.敌方:
-
-                break;
-        }
-    }
+     
 }
 
 public enum FightRundType
