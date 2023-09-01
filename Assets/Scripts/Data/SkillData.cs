@@ -2,7 +2,7 @@
 using UnityEngine;
 public enum SkillActionType
 {
-    伤害,
+    伤害,待机
 }
 [CreateAssetMenu(menuName ="Data/技能数据")]
 public class SkillData : ScriptableObject, IGameData

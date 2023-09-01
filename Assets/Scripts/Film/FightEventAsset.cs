@@ -6,7 +6,7 @@ public class FightEventAsset : PlayableAsset
 {
     public int index;
     public bool hurtDisplay;
-    public GameActionData gameActionData;
+   // public GameActionData gameActionData;
 
     private SkillEstimateData skillActionData;
 
@@ -19,7 +19,7 @@ public class FightEventAsset : PlayableAsset
         var playble = ScriptPlayable<FightEventBehavior>.Create(graph);
         var fightEventBehavior = playble.GetBehaviour();
         fightEventBehavior.index = index;
-        fightEventBehavior.gameActionData = gameActionData;
+        //fightEventBehavior.gameActionData = gameActionData;
         fightEventBehavior.skillActionData = skillActionData;
         fightEventBehavior.hurtDisplay = hurtDisplay;
 

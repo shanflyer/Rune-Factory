@@ -507,6 +507,7 @@ public static class DataPath
         }
         return null;
     }
+    public const string BehaviorPath = "Behavior/";
 
     public const string BGMPath = "Audio/BGM/";
     public const string BGSPath = "Audio/BGS/";

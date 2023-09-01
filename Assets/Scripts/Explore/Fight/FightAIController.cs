@@ -7,7 +7,7 @@ public enum FightType
 }
 public enum TargetType
 {
-    敌方, 我方, 自身
+   无, 敌方, 我方, 自身
 }
 public class FightAIController :Singleton<FightAIController>
 {

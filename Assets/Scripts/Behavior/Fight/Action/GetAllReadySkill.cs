@@ -14,24 +14,16 @@ public class GetAllReadySkill : Action
     BehaviorTree behaviorTree;
     public override void OnStart()
     {
-        if (behaviorTree == null)
+        try
         {
-            behaviorTree = GetComponent<BehaviorTree>();
+            sharedSkillList = (SharedSkillList)Owner.GetVariable("ReadySkill");
+            agentId = (SharedInt)Owner.GetVariable("AgentId");
         }
-        if (behaviorTree != null)
+        catch (Exception e)
         {
-            try
-            {
-                sharedSkillList = (SharedSkillList)behaviorTree.GetVariable("ReadySkill");
-                agentId = (SharedInt)behaviorTree.GetVariable("AgentId");
-            }
-            catch(Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
-            
+            Debug.LogError(e.Message);
         }
-        
+
     }
 
     public override TaskStatus OnUpdate()

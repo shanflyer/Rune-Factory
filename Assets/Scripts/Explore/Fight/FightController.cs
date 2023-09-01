@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -9,6 +10,7 @@ public struct FightPlayerRuntime
     public RuntimeObj playerObj;
     public PlayableDirector playableDirector;
     public Animator animator;
+    public BehaviorTree behaviorTree;
 }
 public class FightController : MonoBehaviour
 {
@@ -80,7 +82,7 @@ public class FightController : MonoBehaviour
         MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(dataId);
         CreatFightMonster(monsterData, instanceId, index);
     }
-    public void CreatFightMonster(MonsterData characterData, int instanceId, int index)
+    public async void CreatFightMonster(MonsterData characterData, int instanceId, int index)
     {
         index = math.clamp(index, 0, 5); 
         if (characterData != null)
@@ -92,8 +94,12 @@ public class FightController : MonoBehaviour
             {
                 playerObj = characterRuntime,
                 animator = characterRuntime.obj.GetComponentInChildren<Animator>(),
-                playableDirector = characterRuntime.obj.GetComponentInChildren<PlayableDirector>()
+                playableDirector = characterRuntime.obj.GetComponentInChildren<PlayableDirector>(),
+                behaviorTree=characterRuntime.obj.GetComponent<BehaviorTree>()
             };
+
+            var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.behaviorId}");
+            fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
             fightMonsterRuntimes[instanceId] = fightPlayerRuntime;
         }
     }

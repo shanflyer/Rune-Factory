@@ -207,7 +207,7 @@ public class FightManager :Singleton<FightManager>
     {
         base.Init();
 
-        maxRundCount = Enum.GetValues(typeof(FightRundType)).Length;
+        maxRoundCount = Enum.GetValues(typeof(FightRoundType)).Length;
 
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
         GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
@@ -436,6 +436,8 @@ public class FightManager :Singleton<FightManager>
                             }
                             SkillEstimateData.utlilityValue = hurtValue;
                             break;
+                        case SkillActionType.待机:
+                            break;
                     }
 
                     break;
@@ -555,22 +557,22 @@ public class FightManager :Singleton<FightManager>
     }
 
 
-    FightRundType nowFightRund;
-    int maxRundCount;
+    FightRoundType nowFightRound;
+    int maxRoundCount;
     void InitFightCharacter()
     {
-        int rundType = (int)nowFightRund;
-        rundType++;
-        if (rundType > maxRundCount)
+        int roundType = (int)nowFightRound;
+        roundType++;
+        if (roundType > maxRoundCount)
         {
-            rundType = 0;
+            roundType = 0;
         }
-        nowFightRund = (FightRundType)rundType;
+        nowFightRound = (FightRoundType)roundType;
 
         List<FightCharacter> nowFighrCharacters = new List<FightCharacter>();
-        switch (nowFightRund)
+        switch (nowFightRound)
         {
-            case FightRundType.Player:
+            case FightRoundType.Player:
                 for(int i = 0; i < fightPlayers.Count; i++)
                 {
                     int id = fightPlayers[i];
@@ -580,7 +582,7 @@ public class FightManager :Singleton<FightManager>
                     }
                 }
                 break;
-            case FightRundType.Monster:
+            case FightRoundType.Monster:
                 for (int i = 0; i < fightMonsters.Count; i++)
                 {
                     int id = fightMonsters[i];
@@ -595,10 +597,39 @@ public class FightManager :Singleton<FightManager>
     FightCharacter fightSource;
     List<FightCharacter> fightTargets = new List<FightCharacter>();
 
-     
+    public bool2 IsFightEnd()
+    { 
+        bool2 result=true;
+        for (int i = 0; i < fightMonsters.Count; i++)
+        {
+            if (fightCharacters.TryGetValue(fightMonsters[i],out FightCharacter fightCharacter))
+            {
+                if (fightCharacter.characterProperty.HP > 0)
+                {
+                    result.y = false;
+                    break;
+                }
+            }
+        }
+        if (!result.y)
+        {
+            for (int i = 0; i < fightPlayers.Count; i++)
+            {
+                if (fightCharacters.TryGetValue(fightPlayers[i], out FightCharacter fightCharacter))
+                {
+                    if (fightCharacter.characterProperty.HP > 0)
+                    {
+                        result.x = false;
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
 }
 
-public enum FightRundType
+public enum FightRoundType
 {
     Player,Monster
 }

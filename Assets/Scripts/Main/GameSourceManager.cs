@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using BehaviorDesigner;
+using BehaviorDesigner.Runtime;
 
 public class GameSourceManager:Singleton<GameSourceManager>
 {
@@ -10,6 +12,20 @@ public class GameSourceManager:Singleton<GameSourceManager>
     private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
     private Dictionary<string, ScriptableObject> scriptableObjects = new Dictionary<string, ScriptableObject>();
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
+
+    private Dictionary<string, ExternalBehavior> behaviors = new Dictionary<string, ExternalBehavior>();
+
+    public async Task<ExternalBehavior> GetBehavior(string path)
+    {
+        if (behaviors.TryGetValue(path, out ExternalBehavior behavior))
+        {
+            return behavior;
+        }
+        behavior = await ExtensionsResources.LoadResourceAsync<ExternalBehavior>(path);
+        
+        behaviors.Add(path, behavior);
+        return behavior;
+    }
     public async Task<Sprite> GetSprite(string path)
     {
         if(sprites.TryGetValue(path,out Sprite sprite))

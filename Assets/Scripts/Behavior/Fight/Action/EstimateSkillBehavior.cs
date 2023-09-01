@@ -8,6 +8,7 @@ public class EstimateSkillBehavior : Action
     public FightType fightType;
     public float estimateValue=1;
     public float randomValue = 0;
+    public float addValue = 0;
     SharedSkillList sharedSkillList;
     SharedInt fightCharacter;
     SkillEstimateData selectSkill;
@@ -24,7 +25,7 @@ public class EstimateSkillBehavior : Action
                 var skill = skills[i];
                 SkillEstimateData skillEstimateData = FightManager.instance.EstimateSkill(skill, fightCharacter.Value);
                 float nowValue = skillEstimateData.utlilityValue;
-                nowValue= skillEstimateData.utlilityValue * (1 + GameRandom.RandomFloat(-randomValue, randomValue));
+                nowValue= skillEstimateData.utlilityValue * (1 + GameRandom.RandomFloat(-randomValue, randomValue))+addValue;
                 nowValue *= estimateValue;
 
 
