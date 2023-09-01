@@ -141,6 +141,47 @@ public struct CharacterProperty
         return start + (end - start) * LerpValue;
     }
 
+    public void SetProperty(SetCharacterProperty setCharacterProperty)
+    {
+        switch (setCharacterProperty.propertyType)
+        {
+            case CharacterPropertyType.体力:
+                Power = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.生命:
+                HP = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.法力:
+                MP = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.最大体力:
+                MaxPower = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.最大法力:
+                MaxMP = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.最大生命:
+                MaxHP = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.攻击:
+                AT = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.防御:
+                DF = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.闪避:
+                Crit = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.暴击:
+                Dodge = setCharacterProperty.setValue;
+                break;
+            case CharacterPropertyType.自定义值:
+                Other = setCharacterProperty.setValue;
+                break;
+        }
+        
+    }
+
 }
 public struct Exp
 {
@@ -286,42 +327,7 @@ public class Character
     }
     public void SetProperty(SetCharacterProperty setCharacterProperty)
     {
-        switch (setCharacterProperty.propertyType)
-        {
-            case CharacterPropertyType.体力:
-                characterProperty.Power = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.生命:
-                characterProperty.HP = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.法力:
-                characterProperty.MP = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.最大体力:
-               characterProperty.MaxPower = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.最大法力:
-                characterProperty.MaxMP = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.最大生命:
-                characterProperty.MaxHP = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.攻击:
-                characterProperty.AT = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.防御:
-                characterProperty.DF = setCharacterProperty.setValue;
-                break;
-            case CharacterPropertyType.闪避:
-                characterProperty.Crit = setCharacterProperty.setValue;
-                break; 
-            case CharacterPropertyType.暴击:
-                characterProperty.Dodge = setCharacterProperty.setValue;
-                break; 
-            case CharacterPropertyType.自定义值:
-                characterProperty.Other = setCharacterProperty.setValue;
-                break; 
-        }
+        characterProperty.SetProperty(setCharacterProperty); 
         CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
         {
             characterId = instanceId,

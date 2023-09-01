@@ -28,8 +28,7 @@ public class FightAIController :Singleton<FightAIController>
 public struct SkillEstimateData
 {
     public int skillId;
+    public int source;
     public List<List<int>> target;
     public float utlilityValue;
-
-    
 }

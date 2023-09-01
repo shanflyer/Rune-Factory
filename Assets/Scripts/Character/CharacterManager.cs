@@ -186,7 +186,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return character;
     }
 
-    public void SetCharacterCoordiante(SetCharacterCoordinate setCharacterCoordinate)
+    void SetCharacterCoordiante(SetCharacterCoordinate setCharacterCoordinate)
     {
         Character character = GetCharacter(setCharacterCoordinate.characterId);
         character.StopMove();
@@ -198,15 +198,19 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public void SetCharacterValue(SetCharacterProperty setCharacterProperty)
+    void SetCharacterValue(SetCharacterProperty setCharacterProperty)
     {
         if (characters.TryGetValue(setCharacterProperty.characterId, out Character character))
         {
             character.SetProperty(setCharacterProperty);
         }
+        else if(FightManager.instance.GetFightCharacter(setCharacterProperty.characterId,out FightCharacter fightCharacter))
+        {
+            fightCharacter.SetCharacterValue(setCharacterProperty);
+        }
     }
 
-    public void ChangeCharacterValue(ChangeCharacterProperty changeCharacterProperty)
+    void ChangeCharacterValue(ChangeCharacterProperty changeCharacterProperty)
     {
         if (characters.TryGetValue(changeCharacterProperty.characterId, out Character character))
         {

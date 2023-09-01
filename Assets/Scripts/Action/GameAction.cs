@@ -5,6 +5,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine.Analytics;
 using System.Security.Cryptography;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
 
 public interface GameAction 
 { 
@@ -47,8 +48,38 @@ public struct ActionList : GameAction
 }
 public struct DisplayHurt : GameAction
 {
+    public int targetId;
+    public int hurtValue;
+    public HurtResultType hurtResultType;
     public void Init(List<Parameter> parameters)
-    { 
+    {
+        if (parameters.Count >= 3)
+        {
+            targetId = int.Parse(parameters[0].value);
+            hurtValue = int.Parse(parameters[1].value);
+            hurtResultType =(HurtResultType) int.Parse(parameters[2].value); 
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct ActionSkillEstimate : GameAction
+{
+    public int skillId;
+    public int sourceId;
+    public int targetId;
+    public int index;
+    public bool displayHurt;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count >= 5)
+        {
+            skillId = int.Parse(parameters[0].value);
+            sourceId = int.Parse(parameters[1].value);
+            targetId = int.Parse(parameters[2].value);
+            index = int.Parse(parameters[3].value);
+            displayHurt = bool.Parse(parameters[4].value);
+        }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct HideFightScene : GameAction

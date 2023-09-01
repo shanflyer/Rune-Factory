@@ -9,32 +9,40 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Purchasing;
+using UnityEngine.TextCore.Text;
 using static UnityEngine.GraphicsBuffer;
 
-public interface IFightCharacter
+public class FightCharacter
 {
-    public CharacterProperty characterProperty { get;}
+    public virtual CharacterProperty characterProperty { get; }
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
     public Dictionary<int,SkillRuntime> skillRuntimes { get; set; }
-    public bool CheckAction();
-    public void CreatSkillRuntime(IGameData gameData=null);
-    public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType=FightType.All);
+    public virtual bool CheckAction() { return false; }
+    public virtual void CreatSkillRuntime(IGameData gameData = null)
+    {
+
+    }
+
+    public virtual void SetCharacterValue(SetCharacterProperty setCharacterProperty)
+    { 
+    }
+    public virtual  Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All) 
+    {
+        Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
+        return results;
+    }
 }
 
-public struct FightPlayer : IFightCharacter
-{
-    public int instanceId { get ; set ; }
-    public int behaviorId { get; set; }
+public class FightPlayer : FightCharacter
+{ 
      
-
-    public Dictionary<int, SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes=value; }
-    public CharacterProperty characterProperty 
+    public override CharacterProperty characterProperty 
     {
         get
         {
             return character.CharacterProperty;
-        } 
+        }
     }
 
     private Character character
@@ -49,13 +57,11 @@ public struct FightPlayer : IFightCharacter
         }
     }
     private Character _character;
-
-
-    private Dictionary<int, SkillRuntime> _skillRuntimes;
+     
 
     public int dataId;
 
-    public bool CheckAction()
+    public override bool CheckAction()
     {
         Character character = CharacterManager.instance.GetCharacter(instanceId);
         if (character.CharacterProperty.HP > 0)
@@ -65,7 +71,7 @@ public struct FightPlayer : IFightCharacter
 
         return false;
     }
-    public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
+    public override Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     {
         var character = CharacterManager.instance.GetCharacter(instanceId); 
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>(); 
@@ -88,7 +94,7 @@ public struct FightPlayer : IFightCharacter
         }
         return results;
     }
-    public async void CreatSkillRuntime(IGameData gameData= null)
+    public async override void CreatSkillRuntime(IGameData gameData= null)
     {
         Character character = CharacterManager.instance.GetCharacter(instanceId);
         skillRuntimes=new Dictionary<int, SkillRuntime>();
@@ -99,21 +105,15 @@ public struct FightPlayer : IFightCharacter
             skillRuntimes.Add(skillRuntime.instanceId,skillRuntime);
         }
     }
+    public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
+    {
+        character.SetProperty(setCharacterProperty);
+    }
 }
-public struct FightMonster : IFightCharacter
-{
-    public int instanceId { get; set; }
-    public int behaviorId { get; set; }
-
-    public Dictionary<int, SkillRuntime> skillRuntimes { get => _skillRuntimes; set => _skillRuntimes = value; }
-    CharacterProperty IFightCharacter.characterProperty { get => characterProperty;}
-
-    private Dictionary<int, SkillRuntime> _skillRuntimes;
-    public int dataId;
-
-
-    public CharacterProperty characterProperty;
-    public Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
+public class FightMonster : FightCharacter
+{  
+    public int dataId;  
+    public override Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     { 
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
         for (int i = 0; i < skillRuntimes.Count; i++)
@@ -134,7 +134,7 @@ public struct FightMonster : IFightCharacter
         }
         return results;
     }
-    public bool CheckAction()
+    public override bool CheckAction()
     {
         Character character = CharacterManager.instance.GetCharacter(instanceId);
         if (character.CharacterProperty.HP > 0)
@@ -144,7 +144,7 @@ public struct FightMonster : IFightCharacter
 
         return false;
     }
-    public async void CreatSkillRuntime(IGameData gameData)
+    public async override void CreatSkillRuntime(IGameData gameData)
     {
         MonsterData monsterData=gameData as MonsterData;
         if(monsterData!=null)
@@ -158,6 +158,35 @@ public struct FightMonster : IFightCharacter
             }
         }
     }
+
+    public override CharacterProperty characterProperty
+    {
+        get
+        {
+            return _characterProperty;
+        }
+    }
+    private CharacterProperty _characterProperty;
+
+    public void InitCharacterProperty(MonsterData monsterData)
+    {
+        _characterProperty.HP = monsterData.HP;
+        _characterProperty.AT = monsterData.AT;
+        _characterProperty.DF = monsterData.DF;
+        _characterProperty.Crit = monsterData.Crit;
+        _characterProperty.Dodge = monsterData.Dodge;
+    }
+
+    public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
+    {
+        _characterProperty.SetProperty(setCharacterProperty);
+        CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
+        {
+            characterId = instanceId,
+            characterProperty = _characterProperty
+        };
+        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
+    }
 }
 
 public enum HurtResultType
@@ -168,7 +197,7 @@ public class FightManager :Singleton<FightManager>
 {
     MyInstance myInstance = new MyInstance(); 
 
-    Dictionary<int, IFightCharacter> fightCharacters = new Dictionary<int, IFightCharacter>();
+    Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     List<int> fightPlayers = new List<int>();
     List<int> fightMonsters = new List<int>();
 
@@ -180,7 +209,8 @@ public class FightManager :Singleton<FightManager>
 
         maxRundCount = Enum.GetValues(typeof(FightRundType)).Length;
 
-        GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer); 
+        GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
+        GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
     }
     protected override void Clear()
     {
@@ -216,7 +246,14 @@ public class FightManager :Singleton<FightManager>
 
     }
 
-    
+    public bool GetFightCharacter(int id,out FightCharacter fightCharacter)
+    {
+        if(fightCharacters.TryGetValue(id,out fightCharacter))
+        {
+            return true;
+        }
+        return false;
+    }
     public void RefreshFightPlayerInfo()
     {
         RefreshFightCharactersInfo refreshFightCharactersInfo = new RefreshFightCharactersInfo
@@ -258,6 +295,8 @@ public class FightManager :Singleton<FightManager>
         await  UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(),layer:2);
         RefreshFightPlayerInfo();
     }
+
+    
     public async void CreatFightMonster(MonsterDeploy monsterDeploy)
     {
         var beforeAction =await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.beforeActionId);
@@ -291,11 +330,7 @@ public class FightManager :Singleton<FightManager>
                 behaviorId = monsterData.behaviorId,
                
             };
-            fightMonster.characterProperty.HP = monsterData.HP;
-            fightMonster.characterProperty.AT = monsterData.AT;
-            fightMonster.characterProperty.DF = monsterData.DF;
-            fightMonster.characterProperty.Crit = monsterData.Crit;
-            fightMonster.characterProperty.Dodge = monsterData.Dodge;
+            fightMonster.InitCharacterProperty(monsterData); 
             fightMonster.CreatSkillRuntime(monsterData);
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
@@ -361,6 +396,7 @@ public class FightManager :Singleton<FightManager>
     {
         SkillEstimateData SkillEstimateData = new SkillEstimateData
         {
+            source=characterId,
             skillId = skillId,
             target = new List<List<int>>(),
             utlilityValue = 1
@@ -388,13 +424,13 @@ public class FightManager :Singleton<FightManager>
                                 for (int y = 0; y < SkillEstimateData.target[x].Count; y++)
                                 {
                                     int t = SkillEstimateData.target[x][y];
-                                    IFightCharacter tagetFighter = fightCharacters[t];
+                                    FightCharacter tagetFighter = fightCharacters[t];
                                     int hurt = HurtValue(fightCharacter.characterProperty.AT, tagetFighter.characterProperty.DF,
                                         fightCharacter.characterProperty.Crit, fightCharacter.characterProperty.Dodge,
                                         tagetFighter.characterProperty.DF, out var hurtResultType);
-                                    hurt = math.clamp(hurt, 0, 1);
-                                    hurtValue += (1 - tagetFighter.characterProperty.HP / hurt) *(1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
-
+                                    float _hurtValue = (1 - tagetFighter.characterProperty.HP / hurt) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
+                                    _hurtValue = math.clamp(_hurtValue, 0, 1);
+                                    hurtValue += _hurtValue;
                                 }
                                 hurtValue = math.clamp(hurtValue, 0, 1);
                             }
@@ -409,7 +445,7 @@ public class FightManager :Singleton<FightManager>
         return SkillEstimateData;
     }
 
-    List<int> GetTarget(TargetType targetType,IFightCharacter fightCharacter,int targetCount)
+    List<int> GetTarget(TargetType targetType,FightCharacter fightCharacter,int targetCount)
     { 
         switch (targetType)
         {
@@ -476,11 +512,46 @@ public class FightManager :Singleton<FightManager>
     }
 
 
-    void ActionSkillEstimate(SkillEstimateData skillEstimateData,int characterId)
+    void ActionSkillEstimate(ActionSkillEstimate actionSkillEstimate)
     {
-        IFightCharacter source = fightCharacters[characterId];
-        var skillRuntime = source.skillRuntimes[skillEstimateData.skillId];
-        
+        int skillId = actionSkillEstimate.skillId;
+        int sourceId = actionSkillEstimate.sourceId;
+        int targetId = actionSkillEstimate.targetId;
+        int index = actionSkillEstimate.index;
+
+        FightCharacter source = fightCharacters[sourceId]; 
+        FightCharacter target= fightCharacters[targetId];
+        var skillRuntime = source.skillRuntimes[skillId];
+        var skillData = skillRuntime.skillData;
+
+        switch (skillData.skillActionType)
+        {
+            case SkillActionType.伤害:
+
+                int hurt = HurtValue(source.characterProperty.AT, target.characterProperty.DF,
+                    source.characterProperty.Crit, source.characterProperty.Dodge,
+                    target.characterProperty.DF, out var hurtResultType);
+                int hp = target.characterProperty.HP - hurt;
+                hp = math.clamp(hp, 0, hp);
+                SetCharacterProperty setCharacterProperty = new SetCharacterProperty
+                {
+                    characterId = target.instanceId,
+                    propertyType = CharacterPropertyType.生命,
+                    setValue = hp
+                };
+                GameActionManager.instance.QueueAction(setCharacterProperty, true);
+                if (actionSkillEstimate.displayHurt)
+                {
+                    DisplayHurt displayHurt = new DisplayHurt
+                    {
+                        targetId = targetId,
+                        hurtValue = hurt,
+                        hurtResultType = hurtResultType
+                    };
+                    GameActionManager.instance.QueueAction(displayHurt, true);
+                }
+                break;
+        }
     }
 
 
@@ -496,7 +567,7 @@ public class FightManager :Singleton<FightManager>
         }
         nowFightRund = (FightRundType)rundType;
 
-        List<IFightCharacter> nowFighrCharacters = new List<IFightCharacter>();
+        List<FightCharacter> nowFighrCharacters = new List<FightCharacter>();
         switch (nowFightRund)
         {
             case FightRundType.Player:
@@ -521,8 +592,8 @@ public class FightManager :Singleton<FightManager>
                 break;
         }
     }
-    IFightCharacter fightSource;
-    List<IFightCharacter> fightTargets = new List<IFightCharacter>();
+    FightCharacter fightSource;
+    List<FightCharacter> fightTargets = new List<FightCharacter>();
 
      
 }
