@@ -1,19 +1,14 @@
-﻿using NUnit.Framework.Interfaces;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using OldName;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Xml.Schema;
 using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.Purchasing;
-using UnityEngine.TextCore.Text;
-using static UnityEngine.GraphicsBuffer;
 
+public enum FightStatus
+{
+    准备,攻击中,攻击结束,
+}
 public class FightCharacter
 {
+    public FightStatus fightStatus = FightStatus.攻击结束;
     public virtual CharacterProperty characterProperty { get; }
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
@@ -559,7 +554,7 @@ public class FightManager :Singleton<FightManager>
 
     FightRoundType nowFightRound;
     int maxRoundCount;
-    void InitFightCharacter()
+    public Queue<int> InitFightCharacter()
     {
         int roundType = (int)nowFightRound;
         roundType++;
@@ -569,7 +564,7 @@ public class FightManager :Singleton<FightManager>
         }
         nowFightRound = (FightRoundType)roundType;
 
-        List<FightCharacter> nowFighrCharacters = new List<FightCharacter>();
+        Queue<int> nowFightCharacters = new Queue<int>();
         switch (nowFightRound)
         {
             case FightRoundType.Player:
@@ -578,7 +573,8 @@ public class FightManager :Singleton<FightManager>
                     int id = fightPlayers[i];
                     if (fightCharacters[id].CheckAction())
                     {
-                        nowFighrCharacters.Add(fightCharacters[id]);
+                        fightCharacters[id].fightStatus = FightStatus.准备;
+                        nowFightCharacters.Enqueue(id);
                     }
                 }
                 break;
@@ -588,14 +584,15 @@ public class FightManager :Singleton<FightManager>
                     int id = fightMonsters[i];
                     if (fightCharacters[id].CheckAction())
                     {
-                        nowFighrCharacters.Add(fightCharacters[id]);
+                        fightCharacters[id].fightStatus = FightStatus.准备;
+                        nowFightCharacters.Enqueue(id);
                     }
                 }
                 break;
         }
+
+        return nowFightCharacters;
     }
-    FightCharacter fightSource;
-    List<FightCharacter> fightTargets = new List<FightCharacter>();
 
     public bool2 IsFightEnd()
     { 

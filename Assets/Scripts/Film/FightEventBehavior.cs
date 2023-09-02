@@ -7,17 +7,17 @@ public class FightEventBehavior : PlayableBehaviour
     public int index;
     public bool hurtDisplay;
     //public GameActionData gameActionData;
-    public SkillEstimateData skillActionData;
+    public SkillEstimateData skillEstimateData;
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {
-        for(int i = 0; i < skillActionData.target[index].Count; i++)
+        for(int i = 0; i < skillEstimateData.target[index].Count; i++)
         {
             ActionSkillEstimate actionSkillEstimate = new ActionSkillEstimate
             {
-                skillId = skillActionData.skillId,
-                sourceId = skillActionData.source,
+                skillId = skillEstimateData.skillId,
+                sourceId = skillEstimateData.source,
                 index = index,
-                targetId = skillActionData.target[index][i],
+                targetId = skillEstimateData.target[index][i],
                 displayHurt = hurtDisplay
             };
             GameActionManager.instance.QueueAction(actionSkillEstimate, true);

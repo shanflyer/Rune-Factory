@@ -41,6 +41,7 @@ public class EstimateSkillBehavior : Action
 
     public override TaskStatus OnUpdate()
 	{
+        FightController.instance.StartSkillAction(selectSkill, fightCharacter.Value);
 		return TaskStatus.Success;
 	}
 }

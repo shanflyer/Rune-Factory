@@ -21,13 +21,17 @@ public class SkillData : ScriptableObject, IGameData
 
     public string myTimeLineDataName;
     public MyTimeLineData myTimeLineData;
-    string IGameData.GetKey()
+    public override string ToString()
+    {
+        return id.ToString();
+    }
+    public string GetKey()
     {
         return id.ToString();
     }
 
-    void IGameData.SetReferenceData()
+    public void SetReferenceData()
     {
-        myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineData}");
+        myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
     }
 }

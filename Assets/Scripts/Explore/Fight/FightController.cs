@@ -103,6 +103,20 @@ public class FightController : MonoBehaviour
             fightMonsterRuntimes[instanceId] = fightPlayerRuntime;
         }
     }
+
+
+    public Animator FindFightCharacter(int id)
+    {
+        if(fightPlayerRuntimes.TryGetValue(id,out var fightPlayer))
+        {
+            return fightPlayer.animator;
+        }
+        if (fightMonsterRuntimes.TryGetValue(id, out var fightMonster))
+        {
+            return fightMonster.animator;
+        }
+        return null;
+    }
     public GameObject FindFightPlayer(string name)
     {
         return null;
@@ -111,8 +125,36 @@ public class FightController : MonoBehaviour
     {
         return null;
     }
+    public void RunFightCharacter(int characterId)
+    {
+        if(!fightPlayerRuntimes.TryGetValue(characterId,out var fightPlayer))
+        {
+            fightPlayer.behaviorTree.Start();
+        }else if (fightMonsterRuntimes.TryGetValue(characterId, out var fightMonster))
+        {
+            fightMonster.behaviorTree.Start();
+        }
+    }
+    public void StartSkillAction(SkillEstimateData skillEstimateData,int characterId)
+    {
+        FightPlayerRuntime fightPlayerRuntime;
+        if (!fightPlayerRuntimes.TryGetValue(characterId, out fightPlayerRuntime))
+        {
+            fightMonsterRuntimes.TryGetValue(characterId, out fightPlayerRuntime);
+        }
+        FightCharacter fightCharacter;
+        if(FightManager.instance.GetFightCharacter(characterId,out fightCharacter))
+        {
+            fightCharacter.fightStatus = FightStatus.¹¥»÷ÖÐ;
+            if(fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId,out var skillRuntime))
+            {
+                var skillData = skillRuntime.skillData;
+                TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData, fightPlayerRuntime.playableDirector
+                   , () => { fightCharacter.fightStatus = FightStatus.¹¥»÷½áÊø; });
+            }
+        }
 
-
+    }
     public void StartWalk()
     {
         StartCoroutine(MapMoving());

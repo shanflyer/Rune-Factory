@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -15,14 +16,15 @@ public class TimeLineManger : Singleton<TimeLineManger>
         public List<Animator> animators;
         public PlayableDirector playableDirector;
         public Action StopEvent;
-        public RuntimePlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, Action StopAction)
+        public RuntimePlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData, Action StopAction,int source= -1)
         {
             animators = new List<Animator>();
             this.playableDirector = playableDirector;
             this.StopEvent = StopAction;
-            BindPlayable(playableDirector, myTimeLineData); 
+            BindPlayable(playableDirector, myTimeLineData,skillEstimateData,source); 
         }
-        void BindPlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData)
+        void BindPlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData,
+            int source = -1)
         {
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
 
@@ -35,49 +37,42 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     Object sourceObject = playBindings.Current.sourceObject;
                     var bindData = bindDatas[i];
                     string streamName = playBindings.Current.streamName;
-                    Animator animator;
-                    GameObject bindObj=null;
+                    Animator animator=null; 
                     if (streamName == bindData.outName)
                     {
-                        /*
                         switch (bindData.bindType)
                         {
-                            case BindType.FightPlayer:
-                                bindObj = FightController.instance.FindFightPlayer(bindData.bindPath);
+                            case BindType.FightSource:
+                                animator = FightController.instance.FindFightCharacter(source);
                                 break;
-                            case BindType.FightMonster:
-                                bindObj = FightController.instance.FindFingMoster(bindData.bindPath);
+                            case BindType.FightTarget:
+                                animator = FightController.instance.FindFightCharacter(skillEstimateData.target[0][0]);
                                 break;
                             
-                        }*/
-                        if(bindObj!=null&&bindObj.TryGetComponent(out animator))
+                        }
+                        if(animator!=null)
                         {
                             animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
                             animators.Add(animator);
                         }
-                        playableDirector.SetGenericBinding(sourceObject, bindObj);
+                        playableDirector.SetGenericBinding(sourceObject, animator.gameObject);
                     }
                      
                         i++;
                 }
             }
-            
-            /*
+             
             using(var tracks = timelineAsset.GetOutputTracks().GetEnumerator())
             {
                 while (tracks.MoveNext())
                 {
                     var current = tracks.Current;
-                    if (current.GetType() == typeof(ControlTrack))
+                    Type type = current.GetType();
+                    if (type == typeof(ControlTrack))
                     {
-
-                        ControlTrack controlTrack = (ControlTrack)current;
-                        controlTrack.SetRotAngle(angle);
-                        controlTrack.SetParentObj(model ? model.gameObject : sourceObj);
-
-
-                        var bindData = data.pathBindDatas.Find(g => g.clipName == current.name);
-                        if (bindData.myTrackAssetBinds != null && bindData.myTrackAssetBinds.Count > 0)
+                        ControlTrack controlTrack = (ControlTrack)current; 
+                        var bindData = bindDatas.Find(g => g.bindPath == current.name);
+                        if (bindData.bindChildren != null && bindData.bindChildren.Count > 0)
                         {
                             var clips = current.GetClips().GetEnumerator();
 
@@ -85,41 +80,40 @@ public class TimeLineManger : Singleton<TimeLineManger>
                             while (clips.MoveNext())
                             {
                                 var clipCurrent = clips.Current;
-                                if (i < bindData.myTrackAssetBinds.Count)
+                                if (i < bindData.bindChildren.Count)
                                 {
-                                    MyTrackAssetBind myTrackAssetBind = bindData.myTrackAssetBinds[i];
-                                    if (!string.IsNullOrEmpty(myTrackAssetBind.path))
+                                    Animator childAnimator=null;
+                                    var myTrackAssetBind = bindData.bindChildren[i];
+                                    switch (myTrackAssetBind.bindType)
                                     {
-                                        Transform child = controller.transform.Find(myTrackAssetBind.path);
-
-                                        if (child != null)
-                                        {
-                                            var asset = (ControlPlayableAsset)clipCurrent.asset;
-                                            var parentObj = new ExposedReference<GameObject>();
-                                            parentObj.defaultValue = child.gameObject;
-                                            asset.sourceGameObject = parentObj;
-
-                                        }
+                                        case BindType.FightSource:
+                                            childAnimator = FightController.instance.FindFightCharacter(source);
+                                            break;
+                                        case BindType.FightTarget:
+                                            childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.target[0][0]);
+                                            break;
                                     }
-                                    else
+                                    if (childAnimator != null)
                                     {
                                         var asset = (ControlPlayableAsset)clipCurrent.asset;
                                         var parentObj = new ExposedReference<GameObject>();
-                                        parentObj.defaultValue = model.gameObject;
+                                        parentObj.defaultValue = childAnimator.gameObject;
                                         asset.sourceGameObject = parentObj;
-                                    }
-
+                                    }  
                                 }
                                 i++;
                             }
 
                         }
-
-
+                    }
+                    else if(type==typeof(FightEventTrack))
+                    {
+                        FightEventTrack fightEventTrack = (FightEventTrack)current;
+                        fightEventTrack.skillEstimateData = skillEstimateData;
                     }
                 }
             }
-            */
+       
         }
         public void Evaluate()
         {
@@ -167,29 +161,25 @@ public class TimeLineManger : Singleton<TimeLineManger>
         }
     } 
     Dictionary<PlayableDirector, RuntimePlayable> runtimePlayables = new Dictionary<PlayableDirector, RuntimePlayable>();
-    public async Task<bool> PlayTimeLine(string name,PlayableDirector playableDirector,Action endAction)
+   public void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
+       PlayableDirector playableDirector, Action endAction)
     {
-        if (runtimePlayables.TryGetValue(playableDirector,out RuntimePlayable RuntimePlayable))
+        if (runtimePlayables.TryGetValue(playableDirector, out RuntimePlayable RuntimePlayable))
         {
             RuntimePlayable.StopAction();
             runtimePlayables.Remove(playableDirector);
-        }
-
-        MyTimeLineData myTimeLineData = await GameDataManager.instance.GetAsyncData<MyTimeLineData>(name);
+        } 
         playableDirector.playableAsset = myTimeLineData.asset;
-        RuntimePlayable runtimePlayable = new RuntimePlayable(playableDirector, myTimeLineData, () => 
+        RuntimePlayable runtimePlayable = new RuntimePlayable(playableDirector, myTimeLineData, skillEstimateData, () =>
         {
-            if (endAction!=null)
+            if (endAction != null)
             {
                 endAction();
             }
             runtimePlayables.Remove(playableDirector);
         });
-        runtimePlayables[playableDirector]=runtimePlayable;
-
-        return true;
-    }
-     
+        runtimePlayables[playableDirector] = runtimePlayable; 
+    } 
     public void Stop(PlayableDirector playableDirector)
     {
         if(runtimePlayables.TryGetValue(playableDirector,out RuntimePlayable runtimePlayable))

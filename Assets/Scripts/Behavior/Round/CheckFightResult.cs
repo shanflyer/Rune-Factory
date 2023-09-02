@@ -11,7 +11,8 @@ public class CheckFightResult : Action
 	SharedBool FightResult;
 	public override void OnStart()
 	{
-        FightResult= Owner.GetVariable("FightResult") as SharedBool;
+        if (FightResult == null)
+            FightResult = Owner.GetVariable("FightResult") as SharedBool;
     }
 
 	public override TaskStatus OnUpdate()

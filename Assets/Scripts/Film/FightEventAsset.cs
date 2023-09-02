@@ -8,11 +8,11 @@ public class FightEventAsset : PlayableAsset
     public bool hurtDisplay;
    // public GameActionData gameActionData;
 
-    private SkillEstimateData skillActionData;
+    private SkillEstimateData skillEstimateData;
 
-    public void SetSkillActionData(SkillEstimateData skillActionData)
+    public void SetSkillEstimateData(SkillEstimateData skillEstimateData)
     {
-        this.skillActionData = skillActionData;
+        this.skillEstimateData = skillEstimateData;
     }
     public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
     {
@@ -20,7 +20,7 @@ public class FightEventAsset : PlayableAsset
         var fightEventBehavior = playble.GetBehaviour();
         fightEventBehavior.index = index;
         //fightEventBehavior.gameActionData = gameActionData;
-        fightEventBehavior.skillActionData = skillActionData;
+        fightEventBehavior.skillEstimateData = skillEstimateData;
         fightEventBehavior.hurtDisplay = hurtDisplay;
 
         return playble;

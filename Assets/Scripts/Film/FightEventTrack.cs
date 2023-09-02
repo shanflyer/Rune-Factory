@@ -9,7 +9,7 @@ public class FightEventTrack : TrackAsset
 {
     public int skill;
     [SerializeField]
-    public SkillEstimateData skillActionData;
+    public SkillEstimateData skillEstimateData;
     public override void GatherProperties(PlayableDirector director, IPropertyCollector driver)
     {
         
@@ -17,11 +17,11 @@ public class FightEventTrack : TrackAsset
     }
     protected override Playable CreatePlayable(PlayableGraph graph, GameObject gameObject, TimelineClip clip)
     {
-        SetSkillActionData();
+        SetSkillEstimateData();
         return base.CreatePlayable(graph, gameObject, clip);
     }
 
-    void SetSkillActionData()
+    void SetSkillEstimateData()
     { 
         foreach (var clip in GetClips())
         {
@@ -30,7 +30,7 @@ public class FightEventTrack : TrackAsset
             if (fightEventAsset == null)
                 continue;
 
-            fightEventAsset.SetSkillActionData(skillActionData);
+            fightEventAsset.SetSkillEstimateData(skillEstimateData);
 
         }
     }
