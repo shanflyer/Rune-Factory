@@ -5,7 +5,7 @@ using UnityEngine.Playables;
 
 public class MyReciver : MonoBehaviour,INotificationReceiver
 {
-    public int showId;
+   // public int showId;
     public void OnNotify(Playable origin, INotification notification, object context)
     {
         if(notification != null&&  notification is MyGameMarker)

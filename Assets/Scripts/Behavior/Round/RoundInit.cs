@@ -5,12 +5,14 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskName("本回合战斗角色初始化")]
 public class RoundInit : Action
 {
-	ShardQueneInt fightCharacters;
+    [SerializeField]
+    SharedQueneInt fightCharacters;
 	public override void OnStart()
 	{
+		Debug.Log("角色初始化");
 		if (fightCharacters == null)
 		{
-			fightCharacters = (ShardQueneInt)Owner.GetVariable("fightCharacters");
+			fightCharacters = (SharedQueneInt)Owner.GetVariable("fightCharacters");
 		}
         fightCharacters.Value=FightManager.instance.InitFightCharacter();
 	}

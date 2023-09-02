@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a90dce199c3f4f4d909a15e3f515de8, type: 3}
   m_Name: "\u89D2\u8272\u653B\u51FB"
   m_EditorClassIdentifier: 
-  asset: {fileID: 11400000, guid: ee73889ec7f940e4a8d15f6b55c7b5e2, type: 2}
+  asset: {fileID: 11400000, guid: 54c40e297bb691646a04947f1b5b38b0, type: 2}
   bindDatas:
   - outName: "\u653B\u51FB\u52A8\u4F5C"
     bindType: 1
@@ -21,8 +21,6 @@ MonoBehaviour:
   - outName: "\u653B\u51FB\u7279\u6548"
     bindType: 2
     bindPath: 
-    bindChildren: []
-  - outName: "\u653B\u51FB\u97F3\u6548"
-    bindType: 0
-    bindPath: Audio/SE
-    bindChildren: []
+    bindChildren:
+    - bindType: 2
+      bindPath: 

@@ -33,6 +33,6 @@ public struct SkillRuntime
     public SkillData skillData;
     public int skillCd;
     public int cost;
-    public FightType fightType;
+    public FightType fightType=>skillData.fightType;
    
 }

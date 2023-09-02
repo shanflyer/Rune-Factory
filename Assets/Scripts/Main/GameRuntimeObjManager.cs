@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>  
 {  
@@ -55,7 +56,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         return false;
     }
 
-    public RuntimeObj CreatRuntimeObj(string runtimeObjType,string key,GameObject objPre,int linkId)
+    public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId)where T:Component
     {
         RuntimeObj runtimeObj;
         if (!GetRuntimeObj(runtimeObjType,key, out runtimeObj))
@@ -65,14 +66,16 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             runtimeObj.key = key;
         }
         runtimeObj.linkId = linkId;
-        runtimeObj.obj.SetActive(true);
+        var obj = runtimeObj.obj as Component;
+        obj.gameObject.SetActive(true);
         runtimeObj.use = true;
         return runtimeObj;
     }
     public void RecycleRuntimeObj(RuntimeObj runtimeObj)
     {
         runtimeObj.use = false;
-        runtimeObj.obj.SetActive(false);
+        var component = runtimeObj.obj as Component;
+        component.gameObject.SetActive(false);
         Dictionary<string, Stack<RuntimeObj>> objs;
         if(!unusedRuntimeObjs.TryGetValue(runtimeObj.runtimeObjType,out objs))
         {
@@ -100,7 +103,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
 }
 public struct RuntimeObj
 {
-    public GameObject obj;
+    public Object obj;
     public int linkId;
     public string runtimeObjType;
     public string key;

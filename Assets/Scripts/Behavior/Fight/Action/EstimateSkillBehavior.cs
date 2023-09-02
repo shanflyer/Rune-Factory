@@ -9,14 +9,27 @@ public class EstimateSkillBehavior : Action
     public float estimateValue=1;
     public float randomValue = 0;
     public float addValue = 0;
+    [SerializeField]
     SharedSkillList sharedSkillList;
+    [SerializeField]
     SharedInt fightCharacter;
     SkillEstimateData selectSkill;
     public override void OnStart()
-	{ 
-	}
-    public override float GetUtility()
+	{
+       
+    }
+
+    public override void OnAwake()
     {
+        base.OnAwake();
+        if (sharedSkillList == null)
+            sharedSkillList = (SharedSkillList)Owner.GetVariable("ReadySkill");
+        if (fightCharacter == null)
+            fightCharacter = (SharedInt)Owner.GetVariable("fightCharacter");
+    }
+
+    public override float GetUtility()
+    {  
         float UtilityValue = 0;
         if (sharedSkillList.Value.TryGetValue(fightType, out var skills))
         {

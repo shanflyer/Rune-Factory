@@ -11,6 +11,7 @@ using Object = UnityEngine.Object;
  
 public class TimeLineManger : Singleton<TimeLineManger>
 {
+    public override bool NeedUpdata => true;
     struct RuntimePlayable
     {
         public List<Animator> animators;
@@ -52,7 +53,11 @@ public class TimeLineManger : Singleton<TimeLineManger>
                         }
                         if(animator!=null)
                         {
-                            animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
+                            if (animator.runtimeAnimatorController!=null)
+                            {
+                                animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
+                            }
+                            
                             animators.Add(animator);
                         }
                         playableDirector.SetGenericBinding(sourceObject, animator.gameObject);
@@ -71,7 +76,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     if (type == typeof(ControlTrack))
                     {
                         ControlTrack controlTrack = (ControlTrack)current; 
-                        var bindData = bindDatas.Find(g => g.bindPath == current.name);
+                        var bindData = bindDatas.Find(g => g.outName == current.name);
                         if (bindData.bindChildren != null && bindData.bindChildren.Count > 0)
                         {
                             var clips = current.GetClips().GetEnumerator();
@@ -109,11 +114,13 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     else if(type==typeof(FightEventTrack))
                     {
                         FightEventTrack fightEventTrack = (FightEventTrack)current;
-                        fightEventTrack.skillEstimateData = skillEstimateData;
+                        //fightEventTrack.skillEstimateData = skillEstimateData;
+                        fightEventTrack.SetSkillEstimateData(skillEstimateData);
                     }
                 }
             }
-       
+
+            playableDirector.stopped += StopAction;
         }
         public void Evaluate()
         {
@@ -127,21 +134,21 @@ public class TimeLineManger : Singleton<TimeLineManger>
                 }
                 else
                 {
-                    StopAction();
+                    StopAction(this.playableDirector);
                 }
             }
             
         }
-        public void StopAction()
+        public void StopAction(PlayableDirector playableDirector)
         {
-            playableDirector.time = 0;
-            playableDirector.Evaluate();
-            playableDirector.Stop();
+           // playableDirector.time = 0;
+            //playableDirector.Evaluate();
+           // playableDirector.Stop();
 
             for(int i = 0; i < animators.Count; i++)
             {
                 var animator= animators[i];
-                if (animator)
+                if (animator&&animator.runtimeAnimatorController!=null)
                 {
                     animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
                     animator.Rebind();
@@ -156,39 +163,55 @@ public class TimeLineManger : Singleton<TimeLineManger>
                 StopEvent = null;
             }
 
-
+            playableDirector.stopped -= StopAction;
 
         }
     } 
     Dictionary<PlayableDirector, RuntimePlayable> runtimePlayables = new Dictionary<PlayableDirector, RuntimePlayable>();
+
+    private PlayableDirector defaultPlayableDirector;
+
    public void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
-       PlayableDirector playableDirector, Action endAction)
+        Action endAction)
     {
+        var runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYABLEDIRECTOR.ToString(), "default", defaultPlayableDirector, 0);
+        var playableDirector = runtimeObj.obj as PlayableDirector;
+
+        if(!playableDirector.gameObject.TryGetComponent(out MyReciver myReciver))
+        {
+            myReciver = playableDirector.gameObject.AddComponent<MyReciver>();
+        }
+
         if (runtimePlayables.TryGetValue(playableDirector, out RuntimePlayable RuntimePlayable))
         {
-            RuntimePlayable.StopAction();
+            RuntimePlayable.StopAction(playableDirector);
             runtimePlayables.Remove(playableDirector);
         } 
         playableDirector.playableAsset = myTimeLineData.asset;
         RuntimePlayable runtimePlayable = new RuntimePlayable(playableDirector, myTimeLineData, skillEstimateData, () =>
         {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
             if (endAction != null)
             {
                 endAction();
             }
             runtimePlayables.Remove(playableDirector);
-        });
-        runtimePlayables[playableDirector] = runtimePlayable; 
+        },source);
+        runtimePlayables[playableDirector] = runtimePlayable;
+        playableDirector.Play();
     } 
     public void Stop(PlayableDirector playableDirector)
     {
         if(runtimePlayables.TryGetValue(playableDirector,out RuntimePlayable runtimePlayable))
         {
-            runtimePlayable.StopAction();
+            runtimePlayable.StopAction(playableDirector);
         }
     }
     public override void Init()
     {
+        defaultPlayableDirector = new GameObject("defaultPlayableDirector").AddComponent<PlayableDirector>();
+        defaultPlayableDirector.playOnAwake = false;
+        defaultPlayableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
         base.Init();
     }
     protected override void Clear()
@@ -198,12 +221,13 @@ public class TimeLineManger : Singleton<TimeLineManger>
 
     protected override void UpData()
     {
+        /*
         using (var e = runtimePlayables.GetEnumerator())
         {
             while (e.MoveNext())
             {
                 e.Current.Value.Evaluate();
             }
-        }
+        }*/
     } 
 }

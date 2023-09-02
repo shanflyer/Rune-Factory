@@ -323,6 +323,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1132308293}
   - component: {fileID: 1132308294}
+  - component: {fileID: 1132308295}
   m_Layer: 0
   m_Name: FightController
   m_TagString: Untagged
@@ -370,6 +371,46 @@ MonoBehaviour:
   - {fileID: 2127616690}
   - {fileID: 1369560833}
   - {fileID: 445604120}
+--- !u!114 &1132308295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132308292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 0
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 1
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 1
+  externalBehavior: {fileID: 11400000, guid: 27ecea0a8cf9afa4d8595adff3b26921, type: 2}
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"FightResult","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"nowFightCharacter","IsShared":true,"Int32mValue":0},{"Type":"SharedQueneInt","Name":"fightCharacters","IsShared":true}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.7
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1 &1258247883
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,7 +564,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1850834433}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 54c40e297bb691646a04947f1b5b38b0, type: 2}
+  m_PlayableAsset: {fileID: 0}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1

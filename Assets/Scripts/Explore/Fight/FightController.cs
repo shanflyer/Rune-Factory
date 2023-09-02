@@ -15,6 +15,9 @@ public struct FightPlayerRuntime
 public class FightController : MonoBehaviour
 {
     public static FightController instance;
+
+    private BehaviorTree controllerBehavior;
+
     RuntimeObj fightMapRuntime0, fightMapRuntime1;
     [SerializeField]
     List<Transform> playerPos=new List<Transform>();
@@ -23,7 +26,7 @@ public class FightController : MonoBehaviour
 
     Dictionary<int,FightPlayerRuntime> fightPlayerRuntimes=new Dictionary<int, FightPlayerRuntime>();
     Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
-    private void OnEnable()
+    private void Awake()
     {
         if (instance == null)
         {
@@ -38,7 +41,29 @@ public class FightController : MonoBehaviour
         {
             GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), false);
         });
+        GameActionManager.instance.AddListener<StartRoundFight>(EndFightRound);
+        controllerBehavior = GetComponent<BehaviorTree>();
     }
+
+    private void OnApplicationQuit()
+    {
+        instance = null;
+    }
+    void EndFightRound(StartRoundFight startRoundFight)
+    {
+        if (controllerBehavior.ExecutionStatus == BehaviorDesigner.Runtime.Tasks.TaskStatus.Inactive)
+        {
+            controllerBehavior.EnableBehavior();
+        }
+        else
+        {
+           // BehaviorManager.instance.RestartBehavior(controllerBehavior);
+        }
+
+        Debug.Log("回合结束...."); 
+    }
+   
+
     private void OnDestroy()
     {
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
@@ -48,16 +73,18 @@ public class FightController : MonoBehaviour
     public void CreatFightMap(FightMapData fightMapData)
     { 
         fightMapRuntime0 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
-            fightMapData.id.ToString(), fightMapData.fightMapObj, 0);
+            fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 0);
         fightMapRuntime1 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
-            fightMapData.id.ToString(), fightMapData.fightMapObj, 1);
+            fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 1);
 
         Vector3 zeroPos = new Vector3(0, fightMapData.offsetY, 0);
         cyclePos = new Vector3(fightMapData.cycleSize, fightMapData.offsetY, 0);
 
         cycleSize = fightMapData.cycleSize;
-        fightMapRuntime0.obj.transform.localPosition = zeroPos;
-        fightMapRuntime1.obj.transform.localPosition = cyclePos;
+        var transform = fightMapRuntime0.obj as Transform;
+        var transform1 = fightMapRuntime1.obj as Transform;
+        transform.localPosition = zeroPos;
+        transform1.localPosition = cyclePos; 
     }
     public async void CreatFightPlayer(int dataId,int instanceId,int index)
     {
@@ -66,15 +93,21 @@ public class FightController : MonoBehaviour
         if (characterData != null)
         {
             var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
-                characterData.objName, characterData.obj, instanceId);
-            characterRuntime.obj.transform.position = playerPos[index].position;
+                characterData.objName, characterData.obj.transform, instanceId);
+            var transform = characterRuntime.obj as Transform;
+            transform.position = playerPos[index].position;
             FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime
             {
                 playerObj = characterRuntime,
-                animator = characterRuntime.obj.GetComponentInChildren<Animator>(),
-                playableDirector = characterRuntime.obj.GetComponentInChildren<PlayableDirector>()
+                animator = transform.GetComponentInChildren<Animator>(),
+                playableDirector = transform.GetComponentInChildren<PlayableDirector>(),
+                behaviorTree = transform.GetComponent<BehaviorTree>()
             };
+           
+            var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.behavior}");
+            fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
             fightPlayerRuntimes[instanceId] = fightPlayerRuntime;
+            fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", instanceId);
         }
     }
     public async void CreatFightMonster(int dataId, int instanceId, int index)
@@ -88,19 +121,21 @@ public class FightController : MonoBehaviour
         if (characterData != null)
         {
             var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.MONSTRT.ToString(),
-                characterData.monsterName, characterData.obj, instanceId);
-            characterRuntime.obj.transform.position = monsterPos[index].position;
+                characterData.monsterName, characterData.obj.transform, instanceId);
+            var transform = characterRuntime.obj as Transform;
+            transform.position = monsterPos[index].position;
             FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime
             {
                 playerObj = characterRuntime,
-                animator = characterRuntime.obj.GetComponentInChildren<Animator>(),
-                playableDirector = characterRuntime.obj.GetComponentInChildren<PlayableDirector>(),
-                behaviorTree=characterRuntime.obj.GetComponent<BehaviorTree>()
+                animator = transform.GetComponentInChildren<Animator>(),
+                playableDirector = transform.GetComponentInChildren<PlayableDirector>(),
+                behaviorTree= transform.GetComponent<BehaviorTree>()
             };
-
+           
             var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.behaviorId}");
             fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
             fightMonsterRuntimes[instanceId] = fightPlayerRuntime;
+            fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", instanceId);
         }
     }
 
@@ -127,12 +162,12 @@ public class FightController : MonoBehaviour
     }
     public void RunFightCharacter(int characterId)
     {
-        if(!fightPlayerRuntimes.TryGetValue(characterId,out var fightPlayer))
+        if(fightPlayerRuntimes.TryGetValue(characterId,out var fightPlayer))
         {
-            fightPlayer.behaviorTree.Start();
+            fightPlayer.behaviorTree.EnableBehavior();
         }else if (fightMonsterRuntimes.TryGetValue(characterId, out var fightMonster))
         {
-            fightMonster.behaviorTree.Start();
+            fightMonster.behaviorTree.EnableBehavior();
         }
     }
     public void StartSkillAction(SkillEstimateData skillEstimateData,int characterId)
@@ -145,12 +180,12 @@ public class FightController : MonoBehaviour
         FightCharacter fightCharacter;
         if(FightManager.instance.GetFightCharacter(characterId,out fightCharacter))
         {
-            fightCharacter.fightStatus = FightStatus.攻击中;
+            fightCharacter.fightStatus = FightStatus.攻击;
             if(fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId,out var skillRuntime))
             {
                 var skillData = skillRuntime.skillData;
-                TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData, fightPlayerRuntime.playableDirector
-                   , () => { fightCharacter.fightStatus = FightStatus.攻击结束; });
+                TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData
+                   , () => { fightCharacter.fightStatus = FightStatus.准备; });
             }
         }
 
@@ -167,17 +202,19 @@ public class FightController : MonoBehaviour
     {
         var wait = new WaitForFixedUpdate();
         Vector3 late = new Vector3(-GameCommon.fightMapMovingSpeed, 0, 0);
+        var transform0 = fightMapRuntime0.obj as Transform;
+        var transform1 = fightMapRuntime1.obj as Transform;
         while (true)
         {
-            fightMapRuntime0.obj.transform.Translate(late);
-            fightMapRuntime1.obj.transform.Translate(late);
-            if (fightMapRuntime0.obj.transform.localPosition.x <= -cycleSize)
+            transform0.Translate(late);
+            transform1.Translate(late);
+            if (transform0.localPosition.x <= -cycleSize)
             {
-                fightMapRuntime0.obj.transform.localPosition = cyclePos;
+                transform0.localPosition = cyclePos;
             }
-            if (fightMapRuntime1.obj.transform.localPosition.x <= -cycleSize)
+            if (transform1.localPosition.x <= -cycleSize)
             {
-                fightMapRuntime1.obj.transform.localPosition = cyclePos;
+                transform1.localPosition = cyclePos;
             }
             yield return wait;
         }

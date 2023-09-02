@@ -13,7 +13,14 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
-public struct WaitAction 
+public struct StartRoundFight : GameAction
+{
+    public void Init(List<Parameter> parameters)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct WaitAction : GameAction
 { 
     public void Init(List<Parameter> parameters)
     {

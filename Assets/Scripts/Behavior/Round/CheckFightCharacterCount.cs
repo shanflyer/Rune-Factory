@@ -9,13 +9,15 @@ public class CheckFightCharacterCount : Action
 {
     public int checkCount;
     public CompareType compareType;
-    ShardQueneInt fightCharacters; 
+    [SerializeField]
+    SharedQueneInt fightCharacters; 
     public override void OnStart()
     {
         if (fightCharacters == null)
         {
-            fightCharacters = (ShardQueneInt)Owner.GetVariable("fightCharacters");
-        } 
+            fightCharacters = (SharedQueneInt)Owner.GetVariable("fightCharacters");
+        }
+        Debug.Log($"fightCharacterCount:{fightCharacters.Value.Count}");
     }
 
     public override TaskStatus OnUpdate()

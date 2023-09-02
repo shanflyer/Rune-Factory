@@ -59,7 +59,7 @@ public enum RuntimeObjType
 }
 public enum FightRuntimeObjType
 {
-    PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT
+    PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT, PLAYABLEDIRECTOR
 }
 
 public static class CharacterAnimatorParameter

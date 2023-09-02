@@ -232,7 +232,7 @@ public class GameRandom:Singleton<GameRandom>
         }
 
     }
-    public List<RandomResult> GetRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1)
+    public List<RandomResult> GetRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1,bool temp=false)
     {
         List<RandomResult> randomResults = new List<RandomResult>();
         var jobResults = GetRandomJobValue(id, innerGroupCount, randomResultCount);
@@ -295,11 +295,19 @@ public class GameRandom:Singleton<GameRandom>
     public List<RandomResult> GetRandomValue(GameRandomData gameRandomData,int innerGroupCount = 0, int randomResultCount = 1)
     {
         List<RandomResult> randomResults = new List<RandomResult>();
+
+        Dictionary<int, string> temps = new Dictionary<int, string>();
+        for(int i = 0; i < gameRandomData.randomItems.Count; i++)
+        {
+            temps.Add(gameRandomData.randomItems[i].itemId, gameRandomData.randomItems[i].itemValue);
+        }
+
+
         var jobResults = GetRandomJobValue(gameRandomData, innerGroupCount, randomResultCount);
         for(int i = 0; i < jobResults.Length; i++)
         {
             var jobResult = jobResults[i];
-            if(randomItemValues.TryGetValue(jobResult.result,out string itemValue))
+            if(temps.TryGetValue(jobResult.result,out string itemValue))
             {
                 randomResults.Add(new RandomResult
                 {

@@ -1,10 +1,9 @@
-using OldName;
+ 
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.TextCore.Text;
+using UnityEngine;  
 
 public delegate void MoveEndAction();
 
@@ -96,7 +95,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         int instanceId = CreatCaracterInstanceId();
         Character character = new Character(characterData, instanceId);
-        character.SetLevel(characterData.level);
+        character.SetLevel(characterData.level,true);
         AddCharacter(character);
 
         return character;
@@ -244,8 +243,9 @@ public class CharacterManager : Singleton<CharacterManager>
         if (runtimeObj.runtimeObj.obj)
         {
             Vector2 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
-            runtimeObj.runtimeObj.obj.transform.position = pos;
-            runtimeObj.runtimeObj.obj.transform.Translate(new Vector3(0, 0, -100));
+            var transform = runtimeObj.runtimeObj.obj as Transform;
+            transform.position = pos;
+            transform.Translate(new Vector3(0, 0, -100));
         }
     }
 
@@ -256,7 +256,10 @@ public class CharacterManager : Singleton<CharacterManager>
         characterRuntionObjs.TryGetValue(character, out runtimeObj);
 
         Vector2 targetPos = GameCommon.GetMapPos(targetCoordinate);
-        Vector2 startPos = runtimeObj.runtimeObj.obj ? runtimeObj.runtimeObj.obj.transform.position :
+
+        var transform = runtimeObj.runtimeObj.obj as Transform;
+
+        Vector2 startPos = transform ? transform.position :
             GameCommon.GetMapPos(character.objCoordinate.coordinate);
         bool slant = targetCoordinate.x != character.objCoordinate.coordinate.x && targetCoordinate.y != character.objCoordinate.coordinate.y;
 
@@ -275,10 +278,11 @@ public class CharacterManager : Singleton<CharacterManager>
              {
                  SetCharacterAnimationSpeed(1, runtimeObj);
 
-                 if (runtimeObj.runtimeObj.obj)
+                 var transform = runtimeObj.runtimeObj.obj as Transform;
+                 if (transform)
                  {
-                     runtimeObj.runtimeObj.obj.transform.position = pos;
-                     runtimeObj.runtimeObj.obj.transform.Translate(new Vector3(0, 0, -100));
+                     transform.transform.position = pos;
+                     transform.Translate(new Vector3(0, 0, -100));
                  }
              },
             () =>
@@ -420,7 +424,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (characterData != null)
         { 
            return  GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.objName,
-               characterData.obj, instacneId);
+               characterData.obj.transform, instacneId);
         }
         return default(RuntimeObj);
     }
@@ -438,9 +442,10 @@ public class CharacterManager : Singleton<CharacterManager>
             else
             {
                 Vector3 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
-                Vector3 oldPos = characterRuntimeObj.runtimeObj.obj.transform.position;
+                var transform = characterRuntimeObj.runtimeObj.obj as Transform;
+                Vector3 oldPos = transform.position;
                 pos.z = oldPos.z;
-                characterRuntimeObj.runtimeObj.obj.transform.position = pos;
+                transform.position = pos;
             }
         }
         else
@@ -448,11 +453,12 @@ public class CharacterManager : Singleton<CharacterManager>
             if (character.objCoordinate.mapInstance == MapController.instance.nowMap)
             {
                 RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
+                Transform transform = runtimeObj.obj as Transform;
                 characterRuntimeObj = new CharacterRuntimeObj
                 {
                     runtimeObj = runtimeObj,
-                    animator = runtimeObj.obj.GetComponentInChildren<Animator>(),
-                    model = runtimeObj.obj.transform.Find("Model")
+                    animator = transform.GetComponentInChildren<Animator>(),
+                    model = transform.Find("Model")
                 };
                 SetCharacterAnimationDirection((float)character.direction, characterRuntimeObj);
                 characterRuntionObjs.Add(character, characterRuntimeObj);
@@ -472,11 +478,12 @@ public class CharacterManager : Singleton<CharacterManager>
             if (character.objCoordinate.mapInstance == MapController.instance.nowMap)
             {
                 RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
+                Transform transform = runtimeObj.obj as Transform;
                 CharacterRuntimeObj characterRuntimeObj = new CharacterRuntimeObj
                 {
                     runtimeObj = runtimeObj,
-                    animator = runtimeObj.obj.GetComponentInChildren<Animator>(),
-                    model = runtimeObj.obj.transform.Find("Model")
+                    animator = transform.GetComponentInChildren<Animator>(),
+                    model = transform.Find("Model")
                 };
                 SetCharacterAnimationDirection((float)character.direction, characterRuntimeObj);
                 characterRuntionObjs.Add(character, characterRuntimeObj);
@@ -551,7 +558,7 @@ public class CharacterManager : Singleton<CharacterManager>
         playerMoveDirction = moveDirection;
         var playerRuntimeObj = characterRuntionObjs[player].runtimeObj;
 
-        Transform characterTransform = playerRuntimeObj.obj.transform;
+        Transform characterTransform = playerRuntimeObj.obj as Transform;
 
         Vector2 _playerMoveDirction = playerMoveDirction;
         if (!WorldMapContorller.instance.InitSmoothMove(ref _playerMoveDirction, characterTransform.position,

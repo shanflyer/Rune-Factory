@@ -23,7 +23,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
         }
         behavior = await ExtensionsResources.LoadResourceAsync<ExternalBehavior>(path);
         
-        behaviors.Add(path, behavior);
+        behaviors[path]= behavior;
         return behavior;
     }
     public async Task<Sprite> GetSprite(string path)

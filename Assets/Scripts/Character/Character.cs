@@ -221,7 +221,7 @@ public class Character
         name = characterData.characterName;
         behavior = characterData.behavior;
 
-        SetLevel(1);
+        SetLevel(1,true);
     }
 
     public CharacterProperty CharacterProperty
@@ -272,20 +272,37 @@ public class Character
             SetLevel(level+1); 
         }
     }
-    public async void SetLevel(int level)
+    public async void SetLevel(int level,bool zero=false)
     {
         if (level != this.level)
         {
             var profressionData =await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
             if (profressionData.id == professionId)
             {
-                int skillId = profressionData.GetLevelSkill(level);
-                if(skillId != -1)
+                if (zero)
                 {
-                    skills.Add(skillId);
+                    skills.Clear();
+                    for(int i = 0; i <= level; i++)
+                    {
+                        int skillId = profressionData.GetLevelSkill(i);
+                        if (skillId != -1)
+                        {
+                            skills.Add(skillId);
+                        }
+                        CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
+                    }
                 }
-                CharacterProperty = CharacterProperty - nowProperty;
-                CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
+                else
+                {
+                    int skillId = profressionData.GetLevelSkill(level);
+                    if (skillId != -1)
+                    {
+                        skills.Add(skillId);
+                    }
+                    CharacterProperty = CharacterProperty - nowProperty;
+                    CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
+                }
+               
             }
             exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level - 1);
             this.level = level;

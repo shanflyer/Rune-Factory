@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public enum FightStatus
 {
-    准备,攻击中,攻击结束,
+    准备,攻击,
 }
 public class FightCharacter
 {
-    public FightStatus fightStatus = FightStatus.攻击结束;
+    public FightStatus fightStatus = FightStatus.准备;
     public virtual CharacterProperty characterProperty { get; }
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
@@ -70,23 +73,29 @@ public class FightPlayer : FightCharacter
     {
         var character = CharacterManager.instance.GetCharacter(instanceId); 
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>(); 
-        for(int i=0;i<skillRuntimes.Count;i++)
+        using(var e = skillRuntimes.GetEnumerator())
         {
-            if (fightType != FightType.All && skillRuntimes[i].fightType != fightType)
+            while (e.MoveNext())
             {
-                continue;
-            }
-            if (skillRuntimes[i].skillCd == 0 && character.CharacterProperty.MP > skillRuntimes[i].cost)
-            {
-                
-                if (!results.TryGetValue(skillRuntimes[i].fightType,out var skills))
+                var skillRuntime = e.Current.Value;
+                if (fightType != FightType.All && skillRuntime.fightType != fightType)
                 {
-                    skills = new List<int>();
-                    results.Add(skillRuntimes[i].fightType, skills);
+                    continue;
                 }
-                skills.Add(skillRuntimes[i].instanceId);
-            }             
+                if (skillRuntime.skillCd == 0 && character.CharacterProperty.MP > skillRuntime.cost)
+                {
+
+                    if (!results.TryGetValue(skillRuntime.fightType, out var skills))
+                    {
+                        skills = new List<int>();
+                        results.Add(skillRuntime.fightType, skills);
+                    }
+                    skills.Add(skillRuntime.instanceId);
+                }
+            }
         }
+        
+        
         return results;
     }
     public async override void CreatSkillRuntime(IGameData gameData= null)
@@ -111,28 +120,33 @@ public class FightMonster : FightCharacter
     public override Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     { 
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
-        for (int i = 0; i < skillRuntimes.Count; i++)
+
+        using(var e = skillRuntimes.GetEnumerator())
         {
-            if (fightType != FightType.All&&skillRuntimes[i].fightType != fightType)
+            while (e.MoveNext())
             {
-                continue;
-            }
-            if (skillRuntimes[i].skillCd == 0)
-            {
-                if (!results.TryGetValue(skillRuntimes[i].fightType, out var skills))
+                var skillRuntime = e.Current.Value;
+                if (fightType != FightType.All && skillRuntime.fightType != fightType)
                 {
-                    skills = new List<int>();
-                    results.Add(skillRuntimes[i].fightType, skills);
+                    continue;
                 }
-                skills.Add(skillRuntimes[i].instanceId);
+                if (skillRuntime.skillCd == 0)
+                {
+                    if (!results.TryGetValue(skillRuntime.fightType, out var skills))
+                    {
+                        skills = new List<int>();
+                        results.Add(skillRuntime.fightType, skills);
+                    }
+                    skills.Add(skillRuntime.instanceId);
+                }
             }
         }
+       
         return results;
     }
     public override bool CheckAction()
-    {
-        Character character = CharacterManager.instance.GetCharacter(instanceId);
-        if (character.CharacterProperty.HP > 0)
+    { 
+        if (characterProperty.HP > 0)
         {
             return true;
         }
@@ -210,6 +224,9 @@ public class FightManager :Singleton<FightManager>
     protected override void Clear()
     {
         myInstance.Clear();
+        fightCharacters.Clear();
+        fightPlayers.Clear();
+        fightMonsters.Clear();
         base.Clear();
     }
     public Dictionary<FightType, List<int>> GetReadySkills(int id,FightType fightType=FightType.All)
@@ -217,7 +234,7 @@ public class FightManager :Singleton<FightManager>
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
         if(fightCharacters.TryGetValue(id,out var fightCharacter))
         {
-            return fightCharacter.GetReadySkills();
+            return fightCharacter.GetReadySkills(fightType);
         }
 
         return results;
@@ -398,46 +415,42 @@ public class FightManager :Singleton<FightManager>
         };
         if(fightCharacters.TryGetValue(characterId,out var fightCharacter))
         {
-            for(int i = 0; i < fightCharacter.skillRuntimes.Count; i++)
+            if(fightCharacter.skillRuntimes.TryGetValue(skillId,out var skillRuntime))
             {
-                if (fightCharacter.skillRuntimes[i].instanceId == skillId)
+                var skillData = skillRuntime.skillData;
+                for (int j = 0; j < skillData.actionCount; j++)
                 {
-                    var skillData = fightCharacter.skillRuntimes[i].skillData;
-                    for(int j = 0; j < skillData.actionCount; j++)
-                    {
-                        var targets = GetTarget(skillData.targetType, fightCharacter, skillData.targetCount);
-                        SkillEstimateData.target.Add(targets);
-                    }
-
-
-                    switch (skillData.skillActionType)
-                    {
-                        case SkillActionType.伤害:
-                            float hurtValue = 0;
-                            for (int x = 0; x < SkillEstimateData.target.Count;x++)
-                            {
-                                for (int y = 0; y < SkillEstimateData.target[x].Count; y++)
-                                {
-                                    int t = SkillEstimateData.target[x][y];
-                                    FightCharacter tagetFighter = fightCharacters[t];
-                                    int hurt = HurtValue(fightCharacter.characterProperty.AT, tagetFighter.characterProperty.DF,
-                                        fightCharacter.characterProperty.Crit, fightCharacter.characterProperty.Dodge,
-                                        tagetFighter.characterProperty.DF, out var hurtResultType);
-                                    float _hurtValue = (1 - tagetFighter.characterProperty.HP / hurt) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
-                                    _hurtValue = math.clamp(_hurtValue, 0, 1);
-                                    hurtValue += _hurtValue;
-                                }
-                                hurtValue = math.clamp(hurtValue, 0, 1);
-                            }
-                            SkillEstimateData.utlilityValue = hurtValue;
-                            break;
-                        case SkillActionType.待机:
-                            break;
-                    }
-
-                    break;
+                    var targets = GetTarget(skillData.targetType, fightCharacter, skillData.targetCount);
+                    SkillEstimateData.target.Add(targets);
                 }
+
+
+                switch (skillData.skillActionType)
+                {
+                    case SkillActionType.伤害:
+                        float hurtValue = 0;
+                        for (int x = 0; x < SkillEstimateData.target.Count; x++)
+                        {
+                            for (int y = 0; y < SkillEstimateData.target[x].Count; y++)
+                            {
+                                int t = SkillEstimateData.target[x][y];
+                                FightCharacter tagetFighter = fightCharacters[t];
+                                int hurt = HurtValue(fightCharacter.characterProperty.AT, tagetFighter.characterProperty.DF,
+                                    fightCharacter.characterProperty.Crit, fightCharacter.characterProperty.Dodge,
+                                    tagetFighter.characterProperty.DF, out var hurtResultType);
+                                float _hurtValue = (1 - hurt / tagetFighter.characterProperty.HP) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
+                                _hurtValue = math.clamp(_hurtValue, 0, 1);
+                                hurtValue += _hurtValue;
+                            }
+                            hurtValue = math.clamp(hurtValue, 0, 1);
+                        }
+                        SkillEstimateData.utlilityValue = hurtValue;
+                        break;
+                    case SkillActionType.待机:
+                        break;
+                } 
             }
+             
         }
         return SkillEstimateData;
     }
@@ -485,12 +498,12 @@ public class FightManager :Singleton<FightManager>
             text = "选择目标"
         };
 
-        for (int i = 0; i < fightMonsters.Count; i++)
+        for (int i = 0; i < characters.Count; i++)
         {
             RandomItem randomItem = new RandomItem
             {
-                itemId = fightMonsters.Count - i,
-                itemValue = fightMonsters[fightMonsters.Count - i].ToString(),
+                itemId = characters.Count - i,
+                itemValue = characters[characters.Count-1 - i].ToString(),
                 randomValue = 20 * i,
                 maxCount = 1,
                 minCount = 1
@@ -554,15 +567,18 @@ public class FightManager :Singleton<FightManager>
 
     FightRoundType nowFightRound;
     int maxRoundCount;
+  
     public Queue<int> InitFightCharacter()
     {
         int roundType = (int)nowFightRound;
         roundType++;
-        if (roundType > maxRoundCount)
+        if (roundType >= maxRoundCount)
         {
             roundType = 0;
         }
         nowFightRound = (FightRoundType)roundType;
+
+        Debug.Log($"回合轮转{nowFightRound}");
 
         Queue<int> nowFightCharacters = new Queue<int>();
         switch (nowFightRound)
@@ -617,6 +633,7 @@ public class FightManager :Singleton<FightManager>
                     if (fightCharacter.characterProperty.HP > 0)
                     {
                         result.x = false;
+                        break;
                     }
                 }
             }

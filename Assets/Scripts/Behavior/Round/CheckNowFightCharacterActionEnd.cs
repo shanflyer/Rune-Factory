@@ -7,6 +7,7 @@ using BehaviorDesigner.Runtime;
 [TaskName("检查当前战斗角色是否完成战斗")]
 public class CheckNowFightCharacterActionEnd : Action
 {
+    [SerializeField]
     SharedInt nowFightCharacter;
     public override void OnStart()
     {
@@ -21,12 +22,16 @@ public class CheckNowFightCharacterActionEnd : Action
         FightCharacter fightCharacter;
         if(FightManager.instance.GetFightCharacter(nowFightCharacter.Value, out fightCharacter))
         {
-            if (fightCharacter.fightStatus == FightStatus.攻击结束)
+            Debug.Log($"{fightCharacter.instanceId}--{fightCharacter.fightStatus}");
+            if (fightCharacter.fightStatus == FightStatus.准备)
             {
                 return TaskStatus.Success;
             }
+            return TaskStatus.Failure;
         }
-        
-        return TaskStatus.Failure;
+        else
+        {
+            return TaskStatus.Success;
+        } 
     }
 }

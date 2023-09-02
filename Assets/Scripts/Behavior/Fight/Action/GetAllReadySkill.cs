@@ -9,31 +9,23 @@ using Action = BehaviorDesigner.Runtime.Tasks.Action;
 public class GetAllReadySkill : Action
 {
     public FightType fightType;
+    [SerializeField]
     SharedSkillList sharedSkillList;
-    SharedInt agentId;
-    BehaviorTree behaviorTree;
+    [SerializeField]
+    SharedInt fightCharacter;
     public override void OnStart()
     {
-        try
-        {
+        if (sharedSkillList == null)
             sharedSkillList = (SharedSkillList)Owner.GetVariable("ReadySkill");
-            agentId = (SharedInt)Owner.GetVariable("AgentId");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-        }
+        if (fightCharacter == null)
+            fightCharacter = (SharedInt)Owner.GetVariable("fightCharacter");
 
+        var skills = FightManager.instance.GetReadySkills(fightCharacter.Value, fightType);
+        sharedSkillList.SetValue(skills);
     }
 
     public override TaskStatus OnUpdate()
-    {
-        if (sharedSkillList == null || agentId == null)
-        {
-            return TaskStatus.Failure;
-        }
-       var skills=  FightManager.instance.GetReadySkills(agentId.Value,fightType);
-        sharedSkillList.SetValue(skills);
+    { 
 
         return TaskStatus.Success;
     }

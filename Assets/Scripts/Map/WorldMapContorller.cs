@@ -53,7 +53,8 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
 
     private async Task RuntimeMapItemPlay(RuntimeMapItem mapItem, RuntimeObj runtimeObj)
     {
-        Animator animator = runtimeObj.obj.GetComponentInChildren<Animator>(true);
+        
+        Animator animator = (runtimeObj.obj as Transform).GetComponentInChildren<Animator>(true);
         if (animator)
         {
             MyAnimationController.instance.AddItemAnimation(mapItem.instanceId, animator, mapItem.dataId.ToString());
@@ -260,7 +261,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(roomName);
         if (mapRoomData != null)
         {
-            return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), roomName, mapRoomData.mapObj, instanceId);
+            return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), roomName, mapRoomData.mapObj.transform, instanceId);
         }
         return default(RuntimeObj);
     }
@@ -273,7 +274,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(dataId);
         if (mapItemData != null)
         {
-            return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), dataId.ToString(), mapItemData.itemObj, instanceId);
+            return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), dataId.ToString(), mapItemData.itemObj.transform, instanceId);
         }
         return default(RuntimeObj);
     }
@@ -373,7 +374,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
 
                     MyAnimationController.instance.RemoveItemAnimation(changeMapItem.itemId);
 
-                    Animator animator = runtimeObj.obj.GetComponentInChildren<Animator>(true);
+                    Animator animator = (runtimeObj.obj as Transform).GetComponentInChildren<Animator>(true);
                     if (animator)
                     {
                         MyAnimationController.instance.AddItemAnimation(changeMapItem.itemId, animator, changeMapItem.newDataId.ToString());

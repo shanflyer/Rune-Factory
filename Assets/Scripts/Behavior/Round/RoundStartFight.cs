@@ -7,13 +7,15 @@ using BehaviorDesigner.Runtime;
 [TaskName("选择角色进行战斗")]
 public class RoundStartFight : Action
 {
-    ShardQueneInt fightCharacters;
+    [SerializeField]
+    SharedQueneInt fightCharacters;
+    [SerializeField]
     SharedInt nowFightCharacter;
     public override void OnStart()
     {
         if (fightCharacters == null)
         {
-            fightCharacters = (ShardQueneInt)Owner.GetVariable("fightCharacters");
+            fightCharacters = (SharedQueneInt)Owner.GetVariable("fightCharacters");
         }
         if (nowFightCharacter == null)
         {
@@ -23,6 +25,7 @@ public class RoundStartFight : Action
 
     public override TaskStatus OnUpdate()
     {
+        Debug.Log("RoundStartFight");
         if(fightCharacters.Value.Count>0)
         {
             int characterId = fightCharacters.Value.Dequeue();
