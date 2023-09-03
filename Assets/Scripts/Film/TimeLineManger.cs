@@ -170,8 +170,8 @@ public class TimeLineManger : Singleton<TimeLineManger>
     Dictionary<PlayableDirector, RuntimePlayable> runtimePlayables = new Dictionary<PlayableDirector, RuntimePlayable>();
 
     private PlayableDirector defaultPlayableDirector;
-
-   public void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
+     
+    public void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
         Action endAction)
     {
         var runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYABLEDIRECTOR.ToString(), "default", defaultPlayableDirector, 0);
@@ -207,11 +207,13 @@ public class TimeLineManger : Singleton<TimeLineManger>
             runtimePlayable.StopAction(playableDirector);
         }
     }
-    public override void Init()
+    public override async void Init()
     {
         defaultPlayableDirector = new GameObject("defaultPlayableDirector").AddComponent<PlayableDirector>();
         defaultPlayableDirector.playOnAwake = false;
         defaultPlayableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
+
+       
         base.Init();
     }
     protected override void Clear()

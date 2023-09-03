@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.TextCore.Text;
 
 public struct FightPlayerRuntime
 { 
@@ -17,6 +18,7 @@ public class FightController : MonoBehaviour
     public static FightController instance;
 
     private BehaviorTree controllerBehavior;
+    
 
     RuntimeObj fightMapRuntime0, fightMapRuntime1;
     [SerializeField]
@@ -26,6 +28,7 @@ public class FightController : MonoBehaviour
 
     Dictionary<int,FightPlayerRuntime> fightPlayerRuntimes=new Dictionary<int, FightPlayerRuntime>();
     Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
+     
     private void Awake()
     {
         if (instance == null)
@@ -42,7 +45,47 @@ public class FightController : MonoBehaviour
             GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), false);
         });
         GameActionManager.instance.AddListener<StartRoundFight>(EndFightRound);
-        controllerBehavior = GetComponent<BehaviorTree>();
+        GameActionManager.instance.AddListener<DisplayHurt>(DisplayHurt);
+        controllerBehavior = GetComponent<BehaviorTree>(); 
+
+        var sceneInfoManager = SceneInfoManager.instance;
+    }
+
+    public void RemoveFightPlayerRuntime(int characterId)
+    {
+        if (!fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayerRuntime))
+        {
+            if (fightMonsterRuntimes.TryGetValue(characterId, out fightPlayerRuntime))
+            {
+                GameRuntimeObjManager.instance.RecycleRuntimeObj(fightPlayerRuntime.playerObj);
+                fightMonsterRuntimes.Remove(characterId);
+            }
+        }
+        else
+        {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(fightPlayerRuntime.playerObj);
+            fightPlayerRuntimes.Remove(characterId);
+        }
+    }
+
+
+
+    void DisplayHurt(DisplayHurt displayHurt)
+    {
+        FightPlayerRuntime fightPlayerRuntime;
+        if (!fightPlayerRuntimes.TryGetValue(displayHurt.targetId, out fightPlayerRuntime))
+        {
+            if(fightMonsterRuntimes.TryGetValue(displayHurt.targetId,out fightPlayerRuntime))
+            {
+                Vector3 pos = fightPlayerRuntime.animator.transform.position;
+                SceneInfoManager.instance.DisplaySceneInfo(displayHurt.hurtValue.ToString(), pos);
+            }
+        }else
+        {
+
+            Vector3 pos = fightPlayerRuntime.animator.transform.position;
+            SceneInfoManager.instance.DisplaySceneInfo(displayHurt.hurtValue.ToString(), pos);
+        }
     }
 
     private void OnApplicationQuit()
@@ -185,11 +228,14 @@ public class FightController : MonoBehaviour
             {
                 var skillData = skillRuntime.skillData;
                 TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData
-                   , () => { fightCharacter.fightStatus = FightStatus.准备; });
+                   , () => {
+                       fightCharacter.fightStatus = FightStatus.准备; 
+
+                   });
             }
         }
 
-    }
+    } 
     public void StartWalk()
     {
         StartCoroutine(MapMoving());

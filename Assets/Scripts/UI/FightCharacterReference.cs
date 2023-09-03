@@ -54,6 +54,7 @@ public class FightCharacterReference : UIObjReference
     }
 
     int characterId;
+    public int CharacterId => characterId;
 
     void SelectPlayer(bool value)
     {

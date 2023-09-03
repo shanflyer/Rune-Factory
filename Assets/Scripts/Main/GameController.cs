@@ -59,6 +59,7 @@ public class GameController : MonoBehaviour
     // Start is called beforee the first frame update
     void Start()
     {
+        GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         AudioController.instance.PlayAudio(BGM.Town1);
         UIManager.instance.ShowGamePanel<ZeroPanel>();

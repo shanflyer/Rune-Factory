@@ -42,7 +42,7 @@ public class EstimateSkillBehavior : Action
                 nowValue *= estimateValue;
 
 
-                if (UtilityValue < nowValue)
+                if (UtilityValue <= nowValue)
                 {
                     UtilityValue = nowValue;
                     selectSkill = skillEstimateData;
@@ -54,6 +54,11 @@ public class EstimateSkillBehavior : Action
 
     public override TaskStatus OnUpdate()
 	{
+        if (selectSkill.target==null||selectSkill.target.Count == 0|| selectSkill.target[0].Count==0)
+        {
+            return TaskStatus.Failure;
+        }
+
         FightController.instance.StartSkillAction(selectSkill, fightCharacter.Value);
 		return TaskStatus.Success;
 	}

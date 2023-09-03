@@ -212,7 +212,7 @@ public class FightManager :Singleton<FightManager>
 
     public FightController fightController;
     
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
 
@@ -220,6 +220,9 @@ public class FightManager :Singleton<FightManager>
 
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
         GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
+
+        deathTimeLineData = await GameSourceManager.instance.GetScriptableObject<MyTimeLineData>(DataPath.MonsterDeathPath);
+        GameActionManager.instance.AddListener<CharacterDeath>(CharacterDeath);
     }
     protected override void Clear()
     {
@@ -228,6 +231,23 @@ public class FightManager :Singleton<FightManager>
         fightPlayers.Clear();
         fightMonsters.Clear();
         base.Clear();
+    }
+    MyTimeLineData deathTimeLineData;
+    void CharacterDeath(CharacterDeath characterDeath)
+    {
+        TimeLineManger.instance.PlaySkillTimeline(characterDeath.characterId, default(SkillEstimateData),
+              deathTimeLineData, () =>
+              {
+                  if (fightMonsters.Contains(characterDeath.characterId))
+                  {
+                      fightMonsters.Remove(characterDeath.characterId); 
+                  }else if (fightPlayers.Contains(characterDeath.characterId))
+                  {
+                      fightPlayers.Remove(characterDeath.characterId);
+                  }
+                  fightCharacters.Remove(characterDeath.characterId);
+                  FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
+              });
     }
     public Dictionary<FightType, List<int>> GetReadySkills(int id,FightType fightType=FightType.All)
     {
@@ -438,7 +458,7 @@ public class FightManager :Singleton<FightManager>
                                 int hurt = HurtValue(fightCharacter.characterProperty.AT, tagetFighter.characterProperty.DF,
                                     fightCharacter.characterProperty.Crit, fightCharacter.characterProperty.Dodge,
                                     tagetFighter.characterProperty.DF, out var hurtResultType);
-                                float _hurtValue = (1 - hurt / tagetFighter.characterProperty.HP) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
+                                float _hurtValue = (hurt / tagetFighter.characterProperty.HP) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
                                 _hurtValue = math.clamp(_hurtValue, 0, 1);
                                 hurtValue += _hurtValue;
                             }
@@ -459,16 +479,31 @@ public class FightManager :Singleton<FightManager>
     { 
         switch (targetType)
         {
-            case TargetType.敌方: 
+            case TargetType.敌方:
+                List<int> targets = new List<int>();
                 if (fightPlayers.Contains(fightCharacter.instanceId))
-                {
-                    return GetRandomValue(fightMonsters, targetCount); 
+                { 
+                    for(int i = 0; i < fightMonsters.Count; i++)
+                    {
+                        var targetCharacter = fightCharacters[fightMonsters[i]];
+                        if (targetCharacter.characterProperty.HP > 0)
+                        {
+                            targets.Add(targetCharacter.instanceId);
+                        }
+                    }  
                 }
                 else
                 {
-                    return GetRandomValue(fightPlayers, targetCount); 
+                    for (int i = 0; i < fightPlayers.Count; i++)
+                    {
+                        var targetCharacter = fightCharacters[fightPlayers[i]];
+                        if (targetCharacter.characterProperty.HP > 0)
+                        {
+                            targets.Add(targetCharacter.instanceId);
+                        }
+                    } 
                 }
-                 
+                return GetRandomValue(targets, targetCount);
             case TargetType.我方:
                 if (fightPlayers.Contains(fightCharacter.instanceId))
                 {
@@ -534,6 +569,14 @@ public class FightManager :Singleton<FightManager>
         var skillRuntime = source.skillRuntimes[skillId];
         var skillData = skillRuntime.skillData;
 
+        ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
+        {
+            characterId = source.instanceId,
+            propertyType = CharacterPropertyType.法力,
+            changeValue = -skillData.cost
+        };
+        GameActionManager.instance.QueueAction(changeCharacterProperty, true);
+
         switch (skillData.skillActionType)
         {
             case SkillActionType.伤害:
@@ -560,8 +603,27 @@ public class FightManager :Singleton<FightManager>
                     };
                     GameActionManager.instance.QueueAction(displayHurt, true);
                 }
+                if (hp <= 0)
+                {
+                    CharacterDeath characterDeath = new CharacterDeath
+                    {
+                        characterId = targetId
+                    };
+                    GameActionManager.instance.QueueAction(characterDeath);
+                }
+
                 break;
         }
+        RefreshFightCharacterInfo refreshFightCharacterInfo = new RefreshFightCharacterInfo
+        {
+            characterId = target.instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshFightCharacterInfo, true);
+        RefreshFightCharacterInfo refreshFightCharacterInfo1 = new RefreshFightCharacterInfo
+        {
+            characterId = source.instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshFightCharacterInfo1, true);
     }
 
 

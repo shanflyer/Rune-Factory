@@ -20,6 +20,18 @@ public struct StartRoundFight : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+public struct CharacterDeath : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct WaitAction : GameAction
 { 
     public void Init(List<Parameter> parameters)
@@ -199,6 +211,19 @@ public struct EnterChapter : GameAction
         {
             id = int.Parse(parameters[0].value);
         }
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct RefreshFightCharacterInfo : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        } 
 
         GameActionManager.instance.QueueAction(this);
     }

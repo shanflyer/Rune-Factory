@@ -11,6 +11,15 @@ public class GameTimerController : Singleton<GameTimerController>
     {
         base.Init();
     }
+    public void DeleyActionMain(int delay, Action action)
+    {
+        GameController.instance.StartCoroutine(Wait());
+        IEnumerator Wait()
+        {
+            yield return new WaitForSeconds(delay*0.001f);
+            action.Invoke();
+        }
+    }
     public void DelayAction(int delay,Action action)
     {
         Task task = Task.Factory.StartNew(async () =>

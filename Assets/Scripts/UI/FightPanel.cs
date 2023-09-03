@@ -89,6 +89,20 @@ public class FightPanel : GamePanel
         
        
     }
+    
+    void RefreshFightCharacter(RefreshFightCharacterInfo refreshFightCharacterInfo)
+    {
+        for(int i = 0; i < fightCharacterReferences.Count; i++)
+        {
+            var fightCharacterReference = fightCharacterReferences[i];
+            if (fightCharacterReference.CharacterId == refreshFightCharacterInfo.characterId)
+            {
+                fightCharacterReference.InitCharacter(refreshFightCharacterInfo.characterId);
+                break;
+            }
+        }
+    }
+
     void RefreshFightChapter(RefreshFightChapter refreshFightChapter)
     {
         if (refreshFightChapter.id == dataId)
@@ -111,6 +125,7 @@ public class FightPanel : GamePanel
         GameActionManager.instance.RemoveListener<RefreshFightChapter>(RefreshFightChapter);
         GameActionManager.instance.RemoveListener<RefreshFightCharactersInfo>(RefreshFightCharacters);
         GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton);
+        GameActionManager.instance.RemoveListener<RefreshFightCharacterInfo>(RefreshFightCharacter);
         base.OnDisable();
     }
     public override void OnEnable()
@@ -118,6 +133,7 @@ public class FightPanel : GamePanel
         GameActionManager.instance.AddListener<RefreshFightChapter>(RefreshFightChapter);
         GameActionManager.instance.AddListener<RefreshFightCharactersInfo>(RefreshFightCharacters);
         GameActionManager.instance.AddListener<SwitchFunctionButton>(SwitchFunctionButton);
+        GameActionManager.instance.AddListener<RefreshFightCharacterInfo>(RefreshFightCharacter);
         base.OnEnable();
     }
     protected override void Awake()

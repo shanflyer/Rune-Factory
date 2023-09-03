@@ -55,7 +55,7 @@ public enum Direction
 }
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER
+    MAPGROUND, MAPITEM, CHARACTER,OTHER
 }
 public enum FightRuntimeObjType
 {
@@ -507,7 +507,9 @@ public static class DataPath
         }
         return null;
     }
+    public const string MonsterDeathPath = "Data/TimeLineData/π÷ŒÔÀ¿Õˆ";
     public const string BehaviorPath = "Behavior/";
+    public const string sceneInfoPath= "Prefabs/Other/SceneInfo";
 
     public const string BGMPath = "Audio/BGM/";
     public const string BGSPath = "Audio/BGS/";
