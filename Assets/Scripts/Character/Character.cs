@@ -215,6 +215,7 @@ public class Character
     public List<int> skills = new List<int>();
     public Character(CharacterData characterData,int instanceId)
     {
+        this.characterData = characterData;
         this.instanceId = instanceId;
         dataId = characterData.id;
         professionId = characterData.profession;
@@ -223,6 +224,7 @@ public class Character
 
         SetLevel(1,true);
     }
+    public CharacterData characterData;
 
     public CharacterProperty CharacterProperty
     {

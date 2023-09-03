@@ -743,3 +743,14 @@ public enum FightRoundType
 {
     Player,Monster
 }
+public struct FighterResult
+{
+    public Character Character;
+    public bool levelUp, skillUp;
+}
+public struct FightResult
+{
+    public bool victory;
+    public List<int2> getItems;
+    public List<FighterResult> fighterResults;
+}

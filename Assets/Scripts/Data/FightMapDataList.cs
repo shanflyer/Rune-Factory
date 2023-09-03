@@ -38,6 +38,7 @@ public struct FightMapData : IGameData
     public Sprite Background; 
     public GameObject fightMapObj;
     public List<int> monsterDeploys;
+    public List<GameAction> endMonsterAction;
     public AudioClip exploreBGM,fightBGM;
     public bool isOpen;
     public bool isZeroTeam;
