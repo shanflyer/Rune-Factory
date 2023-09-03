@@ -36,7 +36,7 @@ public class NPCFunctionPanel : MonoBehaviour
             if (count>0)
             {
                 AudioController.instance.PlayAudio(SE.click);
-                GameComponentData.gameData.talkTextsManager.TalkAction("1506", npcx.npcData.headName,npcx.Name,npcx,TalkActionType.普通);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1506", npcx.npcData.headName,npcx.Name,npcx,TalkActionType.普通);
                 gameObject.SetActive(false);
             }
             else
@@ -44,7 +44,7 @@ public class NPCFunctionPanel : MonoBehaviour
                 GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood = true; 
                 
                 NPCGift.SetActive(true);
-                itemImage.sprite = loveItemData.iconSprite;
+                itemImage.sprite = loveItemData.icon;
                 itemText.text = LanguageManage.SwitchStr("获得1个") + loveItemData.name;
                 marriedFunction.SetActive(false);
             }
@@ -52,7 +52,7 @@ public class NPCFunctionPanel : MonoBehaviour
         else
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1507", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1507", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
             gameObject.SetActive(false);
         }
         
@@ -67,14 +67,14 @@ public class NPCFunctionPanel : MonoBehaviour
             GameComponentData.gameData.gameManager.gamePlayer.property.Power =
                 GameComponentData.gameData.gameManager.gamePlayer.property.MaxPower;
             AudioController.instance.PlayAudio(SE.Heal);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1504",null);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1504",null);
             GameComponentData.gameData.gameManager.UpDataPlayer();
            
         }
         else
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1505", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通) ;
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1505", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通) ;
         }
         gameObject.SetActive(false);
     }
@@ -135,7 +135,7 @@ public class NPCFunctionPanel : MonoBehaviour
                         break;
                     }
                 }
-                itemImage.sprite = giftData.iconSprite;
+                itemImage.sprite = giftData.icon;
                 itemText.text = LanguageManage.SwitchStr("获得1个") + giftData.name;
 
                 _npcx.isPlayerBrothDay = false;
@@ -202,7 +202,7 @@ public class NPCFunctionPanel : MonoBehaviour
             {
                 if (GameComponentData.gameData.gameDebugAction.MarryTest)
                 {
-                    GameComponentData.gameData.talkTextsManager.PleaseMarried(npcx);
+                    //GameComponentData.gameData.talkTextsManager.PleaseMarried(npcx);
                     gameObject.SetActive(false);
                 }
                 else
@@ -220,7 +220,7 @@ public class NPCFunctionPanel : MonoBehaviour
                     else
                     {
 
-                        GameComponentData.gameData.talkTextsManager.PleaseMarried(npcx);
+                        //GameComponentData.gameData.talkTextsManager.PleaseMarried(npcx);
                         gameObject.SetActive(false);
                     }
                 }
@@ -232,14 +232,14 @@ public class NPCFunctionPanel : MonoBehaviour
         {
             if (npcx.isYuehui)
             {
-                GameComponentData.gameData.talkTextsManager.TalkAction("1503", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1503", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
             }
             else
             {
                 GameComponentData.gameData.gameManager.lover = npcx;
                 GameComponentData.gameData.gameManager.IsYueHui = true;
                 GameComponentData.gameData.loveAction.lover = npcx;
-                GameComponentData.gameData.talkTextsManager.TalkAction("1502", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.约会);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1502", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.约会);
                 npcx.isYuehui = true;
             }
             gameObject.SetActive(false);
@@ -256,7 +256,7 @@ public class NPCFunctionPanel : MonoBehaviour
         {
             int index = Random.Range(0, npcx.npcData.normalTalks.Count);
             int talkId = npcx.npcData.normalTalks[index];
-            GameComponentData.gameData.talkTextsManager.TalkAction(talkId.ToString(),npcx.npcData.headName,npcx.Name,npcx,TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction(talkId.ToString(),npcx.npcData.headName,npcx.Name,npcx,TalkActionType.普通);
 
             if (!npcx.isFriendlyExpAdd)
             {
@@ -283,7 +283,7 @@ public class NPCFunctionPanel : MonoBehaviour
     {
         npcx.isLove = false;
         npcx.isYuehui = false;
-        GameComponentData.gameData.talkTextsManager.TalkAction(npcx.npcData.leaveTalk.ToString(), npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
+        //GameComponentData.gameData.talkTextsManager.TalkAction(npcx.npcData.leaveTalk.ToString(), npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
         npcx.npcData.friendlyLevel /= 2;
         foreach (var npcx1 in GameComponentData.gameData.NpcManager.Npcxs)
         {
@@ -313,18 +313,18 @@ public class NPCFunctionPanel : MonoBehaviour
 
                 if (GameComponentData.gameData.NpcManager.Npcxs.Exists(n => n.isLove))
                 {
-                    GameComponentData.gameData.talkTextsManager.TalkAction("1500", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
+                    //GameComponentData.gameData.talkTextsManager.TalkAction("1500", npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
                 }
                 else
                 {
                     npcx.isLove = true;
-                    GameComponentData.gameData.talkTextsManager.TalkAction(npcx.npcData.successfulTalk.ToString(), npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
+                    //GameComponentData.gameData.talkTextsManager.TalkAction(npcx.npcData.successfulTalk.ToString(), npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
                 }
                 
             }
             else
             {
-                GameComponentData.gameData.talkTextsManager.TalkAction(npcx.npcData.failureTalk.ToString(), npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
+                //GameComponentData.gameData.talkTextsManager.TalkAction(npcx.npcData.failureTalk.ToString(), npcx.npcData.headName, npcx.Name, npcx,TalkActionType.普通);
             }
         }
         
@@ -356,7 +356,7 @@ public class NPCFunctionPanel : MonoBehaviour
             {
                 talkId = npcx.npcData.teamfailureTalk1;
             }
-            GameComponentData.gameData.talkTextsManager.TalkAction(talkId.ToString(), npcx.npcData.headName, npcx.Name);
+            //GameComponentData.gameData.talkTextsManager.TalkAction(talkId.ToString(), npcx.npcData.headName, npcx.Name);
             gameObject.SetActive(false);
         }
         

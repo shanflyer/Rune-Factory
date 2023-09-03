@@ -256,15 +256,15 @@ public class NPCX : Charactor
         if (itemData.id == 1502&&WaitDays > 0)
         {
             WaitDays = 0;
-            GameComponentData.gameData.talkTextsManager.TalkAction("1600", npcData.headName, Name, this, TalkActionType.普通);
+           // //GameComponentData.gameData.talkTextsManager.TalkAction("1600", npcData.headName, Name, this, TalkActionType.普通);
         }
         else
         {
-            if (itemData.Type == ItemType.花)
+            if (itemData.type == ItemType.花)
             {
                 if (isFlower)
                 {
-                    GameComponentData.gameData.talkTextsManager.TalkAction(npcData.noFlowerTalk.ToString(), npcData.headName, Name, this, TalkActionType.普通);
+                  //  //GameComponentData.gameData.talkTextsManager.TalkAction(npcData.noFlowerTalk.ToString(), npcData.headName, Name, this, TalkActionType.普通);
                 }
                 else
                 {
@@ -277,7 +277,7 @@ public class NPCX : Charactor
                     GameActionManager.instance.QueueAction(removePackageItem, true); 
                     int expValue = itemData.typeValue;
                     AddFriendlyexp(expValue);
-                    GameComponentData.gameData.talkTextsManager.TalkAction(npcData.flowerTalk.ToString(), npcData.headName, Name, this, TalkActionType.普通);
+                    ////GameComponentData.gameData.talkTextsManager.TalkAction(npcData.flowerTalk.ToString(), npcData.headName, Name, this, TalkActionType.普通);
                 }
             }
             else
@@ -306,7 +306,7 @@ public class NPCX : Charactor
                     {
                         AddFriendlyexp(2 * expValue);
                     }
-                    GameComponentData.gameData.talkTextsManager.TalkAction(npcData.loveGiftTalk.ToString(), npcData.headName, Name);
+                  //  //GameComponentData.gameData.talkTextsManager.TalkAction(npcData.loveGiftTalk.ToString(), npcData.headName, Name);
                 }
                 else if (npcData.LikeHobby.Contains(itemData.id))
                 {
@@ -319,7 +319,7 @@ public class NPCX : Charactor
                     {
                         AddFriendlyexp(1 * expValue);
                     }
-                    GameComponentData.gameData.talkTextsManager.TalkAction(npcData.likeGiftTalk.ToString(), npcData.headName, Name);
+                   // //GameComponentData.gameData.talkTextsManager.TalkAction(npcData.likeGiftTalk.ToString(), npcData.headName, Name);
                 }
                 else
                 {
@@ -331,7 +331,7 @@ public class NPCX : Charactor
                     else
                     {
                     }
-                    GameComponentData.gameData.talkTextsManager.TalkAction(npcData.normalGiftTalk.ToString(), npcData.headName, Name);
+                   // //GameComponentData.gameData.talkTextsManager.TalkAction(npcData.normalGiftTalk.ToString(), npcData.headName, Name);
                 }
 
             }
@@ -576,7 +576,7 @@ public class NPCManager : MonoBehaviour
         if (selectNpcx != null)
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.NPCZeroTalkAction(selectNpcx);
+           // //GameComponentData.gameData.talkTextsManager.NPCZeroTalkAction(selectNpcx);
         }
         
     }
@@ -584,7 +584,7 @@ public class NPCManager : MonoBehaviour
     {
         if (selectNpcx != null)
         {
-            GameComponentData.gameData.talkTextsManager.NPCZeroTalkAction(selectNpcx);
+           // //GameComponentData.gameData.talkTextsManager.NPCZeroTalkAction(selectNpcx);
         }
 
     }

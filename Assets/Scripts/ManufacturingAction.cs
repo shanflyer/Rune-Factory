@@ -153,11 +153,11 @@ public class ManufacturingAction : MonoBehaviour
                 {
                     var formula = _formulas[i];
                     var itemData = await GameDataManager.instance.GetAsyncData<ItemData>(formula.Product.ToString());
-                     if(itemData.Type==ItemType.武器&& !WeaponToggle.isOn)
+                     if(itemData.type==ItemType.武器&& !WeaponToggle.isOn)
                     {
                         formulas.Add(formula);
                     } 
-                    if(itemData.Type == ItemType.防具 && !EuqipToggle.isOn)
+                    if(itemData.type == ItemType.防具 && !EuqipToggle.isOn)
                     {
                         formulas.Add(formula);
                     }
@@ -234,7 +234,7 @@ public class ManufacturingAction : MonoBehaviour
             if (formulaType == FormulaType.冷食|| formulaType == FormulaType.热食 || formulaType == FormulaType.酒水)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(packageItem.dataId.ToString()); 
-                if (!itemData.IsFresh)
+                if (!itemData.isFresh)
                 {
                     itemBoxAction.mask.enabled = true;
                 }
@@ -275,7 +275,7 @@ public class ManufacturingAction : MonoBehaviour
             if (formulaType == FormulaType.热食||formulaType==FormulaType.冷食 || formulaType == FormulaType.酒水)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(packageItem.dataId.ToString());
-                if (!itemData.IsFresh)
+                if (!itemData.isFresh)
                 {
                     itemBoxAction.mask.enabled = true;
                 }
@@ -527,10 +527,10 @@ public class ManufacturingAction : MonoBehaviour
             SelectItem = itemBoxAction;
             ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(_item.dataId.ToString());
             ItemNameText.text = itemData.name;
-            ItemPriceText.text = itemData.SellPrice + "G";
-            ItemTypeText.text = LanguageManage.SwitchStr(itemData.Type.ToString());
-            ItemNoticeText.text = itemData.Text2;
-            ItemNoticeText1.text = itemData.Text1;
+            ItemPriceText.text = itemData.sellPrice + "G";
+            ItemTypeText.text = LanguageManage.SwitchStr(itemData.type.ToString());
+            ItemNoticeText.text = itemData.text2;
+            ItemNoticeText1.text = itemData.text1;
             if (itemBoxAction.mask.enabled)
             {
                 GetOutButton.gameObject.SetActive(false);
@@ -592,7 +592,7 @@ public class ManufacturingAction : MonoBehaviour
     { 
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(SelectItem.item.dataId.ToString()); 
         if ((formulaType == FormulaType.酒水 || formulaType == FormulaType.热食 || formulaType == FormulaType.冷食) && (
-            !itemData.IsFresh))
+            !itemData.isFresh))
         {
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("非生鲜物品不能添加！"));
         }
@@ -986,11 +986,11 @@ public class ManufacturingAction : MonoBehaviour
                     _formula.isOpen = true;
                     ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_formula.Product.ToString());
                     produceItem =ItemManager.instance.CreatItem(itemData.id, produceCount);
-                    if (itemData.Type == ItemType.武器)
+                    if (itemData.type == ItemType.武器)
                     {
                         GameComponentData.gameData.charactorTitleAction.AddManufatureCount(produceCount,1);
                     }
-                    if (itemData.Type == ItemType.防具)
+                    if (itemData.type == ItemType.防具)
                     {
                         GameComponentData.gameData.charactorTitleAction.AddManufatureCount(produceCount, 2);
                     }

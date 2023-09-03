@@ -96,7 +96,7 @@ public class CharactorTitleAction : MonoBehaviour
         /*
         foreach (var itemData in GameComponentData.gameData.itemsManager.ItemDataList)
         {
-            if (itemData.Type == ItemType.食材 && itemData.typeValue == 6)
+            if (itemData.type == ItemType.食材 && itemData.typeValue == 6)
             {
                 Vector2Int fishData = new Vector2Int(itemData.Id, 0);
                 fishTotals.Add(fishData);

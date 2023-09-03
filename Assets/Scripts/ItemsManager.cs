@@ -493,8 +493,8 @@ public class ItemsManager : MonoBehaviour {
         foreach (var itemData in ItemDataList)
         {
             itemData.name = LanguageManage.SwitchStr(itemData.name);
-            itemData.Text1 = LanguageManage.SwitchStr(itemData.Text1);
-            itemData.Text2 = LanguageManage.SwitchStr(itemData.Text2);
+            itemData.text1 = LanguageManage.SwitchStr(itemData.text1);
+            itemData.text2 = LanguageManage.SwitchStr(itemData.text2);
         }
 
     }

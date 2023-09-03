@@ -173,19 +173,16 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">Icon1 (2).png</key>
-            <key type="filename">Icon1.png</key>
-            <key type="filename">Icon11.png</key>
-            <key type="filename">Icon18.png</key>
-            <key type="filename">Icon21.png</key>
-            <key type="filename">Icon24.png</key>
-            <key type="filename">Icon26.png</key>
-            <key type="filename">Icon27.png</key>
-            <key type="filename">Icon33.png</key>
+            <key type="filename">apple.png</key>
+            <key type="filename">blueberry.png</key>
             <key type="filename">cabbage.png</key>
             <key type="filename">carrot.png</key>
+            <key type="filename">cherry.png</key>
+            <key type="filename">cherryRadish.png</key>
+            <key type="filename">chilli.png</key>
             <key type="filename">corn.png</key>
             <key type="filename">cucumber.png</key>
+            <key type="filename">daikon.png</key>
             <key type="filename">eggplant.png</key>
             <key type="filename">fish/fish1.png</key>
             <key type="filename">fish/fish10.png</key>
@@ -217,12 +214,15 @@
             <key type="filename">fish/鱿鱼.png</key>
             <key type="filename">fish/鹦鹉螺.png</key>
             <key type="filename">fish/龙虾.png</key>
+            <key type="filename">garlic.png</key>
             <key type="filename">grape.png</key>
+            <key type="filename">leek.png</key>
             <key type="filename">potato.png</key>
             <key type="filename">pumpkin.png</key>
-            <key type="filename">radish.png</key>
+            <key type="filename">redCabbage.png</key>
             <key type="filename">strawberry.png</key>
             <key type="filename">tomato.png</key>
+            <key type="filename">turnip.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

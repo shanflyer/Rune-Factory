@@ -27,13 +27,13 @@ public enum ShopMoneyType
 public class ItemData : ScriptableObject, IGameData
 {
     public int id;
-    public string itemName;
-    public string icon;
-    public Sprite iconSprite;
+    public string itemName; 
+    public string iconName;
+    public Sprite icon;
     public string info;
-    public ItemType Type;
+    public ItemType type;
     public int typeValue;
-    public bool IsFresh;
+    public bool isFresh;
     public int equipLevel;
     public List<int> dropEventId = new List<int>();
     public List<int> checkEventId = new List<int>();
@@ -41,8 +41,8 @@ public class ItemData : ScriptableObject, IGameData
     public List<int> equipEventId = new List<int>();
     public int groupCount;
     public ShopMoneyType shopMoneyType;
-    public int ShopPrice, SellPrice;
-    public string Text1, Text2;
+    public int shopPrice, sellPrice;
+    public string text1, text2;
     public Property property;
 
     public override string ToString()
@@ -50,10 +50,18 @@ public class ItemData : ScriptableObject, IGameData
         return id.ToString();
     }
 #if UNITY_EDITOR 
+    static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>();
     public void SetReferenceData()
     {
-        string path = $"{EditorDataPath.itemIconPath}{icon}";
-        iconSprite = Resources.Load<Sprite>(path);
+        if (allSprites.Count == 0)
+        {
+            var sprites = Resources.LoadAll<Sprite>(EditorDataPath.itemIconPath);
+            for(int i = 0; i < sprites.Length; i++)
+            {
+                allSprites.Add(sprites[i].name, sprites[i]);
+            }
+        }
+        allSprites.TryGetValue(iconName, out icon);
     }
 #endif
     public string GetKey()

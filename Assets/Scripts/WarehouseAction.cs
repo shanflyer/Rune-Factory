@@ -256,7 +256,7 @@ public class WarehouseAction : MonoBehaviour
                             foreach (var item in playerItems)
                             {
                                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-                                if (itemData.Type == ItemType.种子)
+                                if (itemData.type == ItemType.种子)
                                 {
                                     dispayItems.Add(item);
                                 }
@@ -272,7 +272,7 @@ public class WarehouseAction : MonoBehaviour
                             foreach (var item in playerItems)
                             {
                                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-                                if (itemData.Type == ItemType.武器)
+                                if (itemData.type == ItemType.武器)
                                 {
                                     dispayItems.Add(item);
                                 }
@@ -282,7 +282,7 @@ public class WarehouseAction : MonoBehaviour
                             foreach (var item in playerItems)
                             {
                                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-                                if (itemData.Type == ItemType.防具)
+                                if (itemData.type == ItemType.防具)
                                 {
                                     dispayItems.Add(item);
                                 }
@@ -292,7 +292,7 @@ public class WarehouseAction : MonoBehaviour
                             foreach (var item in playerItems)
                             {
                                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-                                if (itemData.Type == ItemType.食物)
+                                if (itemData.type == ItemType.食物)
                                 {
                                     dispayItems.Add(item);
                                 }
@@ -302,7 +302,7 @@ public class WarehouseAction : MonoBehaviour
                             foreach (var item in playerItems)
                             {
                                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-                                if (itemData.Type == ItemType.药剂)
+                                if (itemData.type == ItemType.药剂)
                                 {
                                     dispayItems.Add(item);
                                 }
@@ -312,7 +312,7 @@ public class WarehouseAction : MonoBehaviour
                             foreach (var item in playerItems)
                             {
                                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-                                if (itemData.Type == ItemType.卷轴)
+                                if (itemData.type == ItemType.卷轴)
                                 {
                                     dispayItems.Add(item);
                                 }
@@ -422,29 +422,29 @@ public class WarehouseAction : MonoBehaviour
         {
             ItemInfomationObj.SetActive(true);
             selectedItem = item;
-            ItemIconImage.sprite = itemData.iconSprite;
+            ItemIconImage.sprite = itemData.icon;
             ItemNameText.text = itemData.name;
-            ItemTypeText.text = LanguageManage.SwitchStr(itemData.Type.ToString());
-            ItemPriceText.text = itemData.SellPrice + "G";
-            ItemPropertyText.text = itemData.Text1;
-            ItemNoticeText.text = itemData.Text2;
+            ItemTypeText.text = LanguageManage.SwitchStr(itemData.type.ToString());
+            ItemPriceText.text = itemData.sellPrice + "G";
+            ItemPropertyText.text = itemData.text1;
+            ItemNoticeText.text = itemData.text2;
             sellButton.interactable = true;
             sellButton.gameObject.SetActive(true);
             
             if (displayType == DisplayType.Normal)
             {
-                if (itemData.Type == ItemType.武器 ||itemData.Type == ItemType.防具)
+                if (itemData.type == ItemType.武器 ||itemData.type == ItemType.防具)
                 {
                     sellButton.gameObject.SetActive(true);
                     SellText.text = LanguageManage.SwitchStr("选择");
                     playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().SelectItem(selectedItem.dataId);
                 }
-                else if (itemData.Type == ItemType.食物||itemData.Type==ItemType.其他物品)
+                else if (itemData.type == ItemType.食物||itemData.type==ItemType.其他物品)
                 {
                     sellButton.gameObject.SetActive(true);
                     SellText.text = LanguageManage.SwitchStr("使用");
                 }
-                else if(itemData.Type==ItemType.药剂&&itemData.typeValue!=-1)
+                else if(itemData.type==ItemType.药剂&&itemData.typeValue!=-1)
                 {
                     sellButton.gameObject.SetActive(true);
                     SellText.text = LanguageManage.SwitchStr("使用");
@@ -480,12 +480,12 @@ public class WarehouseAction : MonoBehaviour
                 break;
             case DisplayType.In:
 
-                if (selectItemData.IsFresh && outPackage != GameComponentData.gameData.gameManager.gamePlayer.icebox)
+                if (selectItemData.isFresh && outPackage != GameComponentData.gameData.gameManager.gamePlayer.icebox)
                 {
                     AudioController.instance.PlayAudio(SE.Return);
                     GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("生鲜物品可放入冰箱，无法放入杂物箱!"));
                 }
-                else if (!selectItemData.IsFresh && outPackage == GameComponentData.gameData.gameManager.gamePlayer.icebox)
+                else if (!selectItemData.isFresh && outPackage == GameComponentData.gameData.gameManager.gamePlayer.icebox)
                 {
                     AudioController.instance.PlayAudio(SE.Return);
                     GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("非生鲜物品不能放入冰箱!"));
@@ -561,16 +561,16 @@ public class WarehouseAction : MonoBehaviour
                 break;
             case DisplayType.Normal:
                 AudioController.instance.PlayAudio(SE.click);
-                if (selectItemData.Type == ItemType.武器 || selectItemData.Type == ItemType.防具)
+                if (selectItemData.type == ItemType.武器 || selectItemData.type == ItemType.防具)
                 {
                     playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().EuqipMentAction();
                     ItemInfomationObj.SetActive(false);
                 }
-                else if(selectItemData.Type==ItemType.食物|| (selectItemData.Type == ItemType.药剂&&selectItemData.typeValue!=-1))
+                else if(selectItemData.type==ItemType.食物|| (selectItemData.type == ItemType.药剂&&selectItemData.typeValue!=-1))
                 {
                     UseItem();
                 }
-                else if (selectItemData.Type == ItemType.其他物品)
+                else if (selectItemData.type == ItemType.其他物品)
                 {
                     GameComponentData.gameData.formulaAction.OpenFormula(selectItemData.typeValue,selectItemData.id);
                     RemovePackageItem removePackageItem = new RemovePackageItem
@@ -619,7 +619,7 @@ public class WarehouseAction : MonoBehaviour
     {
         ItemData selectItemData1 = await GameDataManager.instance.GetAsyncData<ItemData>(selectedItem.dataId.ToString()); 
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-        if (selectItemData1.Type == ItemType.食物 )
+        if (selectItemData1.type == ItemType.食物 )
         {
             string noticeStr = LanguageManage.SwitchStr("使用了1个:") + selectItemData1.name;
             string propertyStr = "";
@@ -684,7 +684,7 @@ public class WarehouseAction : MonoBehaviour
              
             InitWareHouseData();
         }
-        else if (selectItemData1.Type == ItemType.药剂)
+        else if (selectItemData1.type == ItemType.药剂)
         {
             AudioController.instance.PlayAudio(SE.Heal);
             GameComponentData.gameData.gameManager.gamePlayer.attributeType = (AttributeType) selectItemData1.typeValue;
@@ -698,7 +698,7 @@ public class WarehouseAction : MonoBehaviour
             GameActionManager.instance.QueueAction(removePackageItem, true);
             InitWareHouseData();
         }
-        else if(selectItemData1.Type==ItemType.卷轴)
+        else if(selectItemData1.type==ItemType.卷轴)
         {
             RemovePackageItem removePackageItem = new RemovePackageItem
             {

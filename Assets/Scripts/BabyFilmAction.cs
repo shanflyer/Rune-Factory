@@ -123,7 +123,7 @@ public class BabyFilmAction : MonoBehaviour
         oldWoman.SetActive(true);
         childObj0.SetActive(true);
 
-        GameComponentData.gameData.talkTextsManager.TalkAction("1515", null);
+        //GameComponentData.gameData.talkTextsManager.TalkAction("1515", null);
     }
 
     public void SetChildName()
@@ -142,7 +142,7 @@ public class BabyFilmAction : MonoBehaviour
         yield return new WaitForSeconds(waitTime/2);
         childObj1.SetActive(true);
         yield return new WaitForSeconds(waitTime/2);
-        GameComponentData.gameData.talkTextsManager.TalkAction("1516", null);
+        //GameComponentData.gameData.talkTextsManager.TalkAction("1516", null);
     }
     public void PlayPregnancy()
     {
@@ -244,7 +244,7 @@ public class BabyFilmAction : MonoBehaviour
         femeal.GetComponentInChildren<Animator>().SetBool("IsWalk",false);
         filmObj.SetActive(true);
 
-        GameComponentData.gameData.talkTextsManager.TalkAction("1509",null);
+        //GameComponentData.gameData.talkTextsManager.TalkAction("1509",null);
     }
 
     public void HaveChildEnd()
@@ -381,7 +381,7 @@ public class BabyFilmAction : MonoBehaviour
                 yield return new WaitForSeconds(waitTime/3);
                 StopAllCoroutines();
                 GuoduObj.SetActive(false);
-                GameComponentData.gameData.talkTextsManager.TalkAction("1511",null);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1511",null);
                 
             }
             yield return new WaitForSeconds(0.01f);

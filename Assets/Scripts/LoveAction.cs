@@ -26,15 +26,15 @@ public class LoveAction : MonoBehaviour {
         int index = Random.Range(0, 3);
         if (index == 0)
         {
-            GameComponentData.gameData.talkTextsManager.TalkAction("1470",lover.npcData.headName,lover.Name,lover,TalkActionType.约会中0);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1470",lover.npcData.headName,lover.Name,lover,TalkActionType.约会中0);
         }
         else if(index==1)
         {
-            GameComponentData.gameData.talkTextsManager.TalkAction("1471", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中0);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1471", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中0);
         }
         else if(index==2)
         {
-            GameComponentData.gameData.talkTextsManager.TalkAction("1472", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中0);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1472", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中0);
         }
         selectIndex0 = index;
     }
@@ -78,11 +78,11 @@ public class LoveAction : MonoBehaviour {
         if (x == selectIndex1)
         {
             lover.AddFriendlyexp(50);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1481", lover.npcData.headName, lover.Name, lover,TalkActionType.约会中2);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1481", lover.npcData.headName, lover.Name, lover,TalkActionType.约会中2);
         }
         else
         {
-            GameComponentData.gameData.talkTextsManager.TalkAction("1480", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1480", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
         }
         selectIndex1 = -1;
     }
@@ -121,29 +121,29 @@ public class LoveAction : MonoBehaviour {
             selectIndex1 = Random.Range(0, 5);
             if (selectIndex1 == 0)
             {
-                GameComponentData.gameData.talkTextsManager.TalkAction("1474", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1474", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
             }
             else if (selectIndex1 == 1)
             {
-                GameComponentData.gameData.talkTextsManager.TalkAction("1475", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1475", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
             }
             else if (selectIndex1 == 2)
             {
-                GameComponentData.gameData.talkTextsManager.TalkAction("1476", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1476", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
             }
             else if (selectIndex1 == 3)
             {
-                GameComponentData.gameData.talkTextsManager.TalkAction("1477", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1477", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
             }
             else if (selectIndex1 == 4)
             {
-                GameComponentData.gameData.talkTextsManager.TalkAction("1478", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
+                //GameComponentData.gameData.talkTextsManager.TalkAction("1478", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
             }
         }
         else
         {
             selectIndex1 = -1;
-            GameComponentData.gameData.talkTextsManager.TalkAction("1473", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1473", lover.npcData.headName, lover.Name, lover, TalkActionType.约会中2);
         }
         
        

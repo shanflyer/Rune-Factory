@@ -69,7 +69,7 @@ public class GameBoxClickAction : MonoBehaviour
         if (DataSaveAndLoadTest.isJsonData)
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1000", TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1000", TalkActionType.普通);
         }
         else
       
@@ -77,7 +77,7 @@ public class GameBoxClickAction : MonoBehaviour
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1000", TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1000", TalkActionType.普通);
         }
         
     }
@@ -86,14 +86,14 @@ public class GameBoxClickAction : MonoBehaviour
         if (DataSaveAndLoadTest.isJsonData)
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1001", TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1001", TalkActionType.普通);
         }
         else
         if (GameComponentData.gameData.guideController.nowGuide == null &&
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1001",TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1001",TalkActionType.普通);
         }
        
     }
@@ -102,14 +102,14 @@ public class GameBoxClickAction : MonoBehaviour
         if (DataSaveAndLoadTest.isJsonData)
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1002", TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1002", TalkActionType.普通);
         }
         else
         if (GameComponentData.gameData.guideController.nowGuide == null &&
             GameComponentData.gameData.filmManager.nowFilm == null)
         {
             AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.talkTextsManager.TalkAction("1002", TalkActionType.普通);
+            //GameComponentData.gameData.talkTextsManager.TalkAction("1002", TalkActionType.普通);
         }
         
     }

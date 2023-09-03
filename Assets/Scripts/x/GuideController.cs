@@ -95,8 +95,8 @@ public class Guide
                     return false;
                case GuideTriggerType.电影结束:
                    return GameComponentData.gameData.guideController.filmId == int.Parse(guideTriggerValue) ;
-                case GuideTriggerType.对话完成:
-                    return GameComponentData.gameData.talkTextsManager.nowTalk.talkId== int.Parse(guideTriggerValue);
+              //  case GuideTriggerType.对话完成:
+               //     return GameComponentData.gameData.talkTextsManager.nowTalk.talkId== int.Parse(guideTriggerValue);
 
             }
             
@@ -197,7 +197,7 @@ public class GuideController : MonoBehaviour
         {
                 case StepType.对话:
                 maskObj.SetActive(false);
-                GameComponentData.gameData.talkTextsManager.TalkAction(guideStep.stepValue,TalkActionType.指引);
+                //GameComponentData.gameData.talkTextsManager.TalkAction(guideStep.stepValue,TalkActionType.指引);
                 break;
                 case StepType.箭头指引:
                 var x = guideStep.stepValue.Split(';');

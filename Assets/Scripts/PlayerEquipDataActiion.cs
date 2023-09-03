@@ -63,7 +63,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
         if (gamePlayer.id==playerId)
         {
             
-            if (selectItemData.Type == ItemType.武器)
+            if (selectItemData.type == ItemType.武器)
             {
                 
                 if (gamePlayer.weapon.dataId != 0)
@@ -81,7 +81,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                 }
                 gamePlayer.weapon= ItemManager.instance.CreatItem(selectItemData.id, 1); 
             }
-            else if (selectItemData.Type == ItemType.防具)
+            else if (selectItemData.type == ItemType.防具)
             {
                 if (gamePlayer.clothes.dataId != 0)
                 {
@@ -102,7 +102,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
         }
         else if (gamePlayer.TeamPlayer0 != null&&gamePlayer.TeamPlayer0.id != 0&&gamePlayer.TeamPlayer0.id==playerId)
         {
-            if (selectItemData.Type == ItemType.武器)
+            if (selectItemData.type == ItemType.武器)
             {
                 if (gamePlayer.TeamPlayer0.Weapon != 0)
                 {
@@ -121,7 +121,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                 GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == gamePlayer.TeamPlayer0.id).weapon =
                     selectItemData.id;
             }
-            else if (selectItemData.Type == ItemType.防具)
+            else if (selectItemData.type == ItemType.防具)
             {
                 if (gamePlayer.TeamPlayer0.clothes != 0)
                 {
@@ -143,7 +143,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
         }
         else if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 && gamePlayer.TeamPlayer1.id == playerId)
         {
-            if (selectItemData.Type == ItemType.武器)
+            if (selectItemData.type == ItemType.武器)
             {
                 if (gamePlayer.TeamPlayer1.Weapon != 0)
                 {
@@ -162,7 +162,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                 GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == gamePlayer.TeamPlayer1.id).weapon =
                     selectItemData.id;
             }
-            else if (selectItemData.Type == ItemType.防具)
+            else if (selectItemData.type == ItemType.防具)
             {
                 if (gamePlayer.TeamPlayer1.clothes != 0)
                 {
@@ -502,7 +502,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
         selectItem = itemId;
        // GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId);
-        if (itemData.Type == ItemType.武器)
+        if (itemData.type == ItemType.武器)
         {
             if (weaponData == null)
             {
@@ -515,7 +515,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
             }
            
         }
-        else if (itemData.Type == ItemType.防具)
+        else if (itemData.type == ItemType.防具)
         {
             if (clotherData == null)
             {

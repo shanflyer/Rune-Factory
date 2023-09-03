@@ -84,7 +84,7 @@ public class ItemBoxAction : MonoBehaviour
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_item.dataId.ToString());
         mask.gameObject.SetActive(false);
         item = _item;
-        icon.sprite =itemData.iconSprite;
+        icon.sprite =itemData.icon;
         icon.color=Color.white;
         icon.enabled = true;
         //icon.SetNativeSize();
@@ -99,7 +99,7 @@ public class ItemBoxAction : MonoBehaviour
        
         
         GetComponentInChildren<Toggle>().enabled = true;
-        icon.sprite = itemData.iconSprite;
+        icon.sprite = itemData.icon;
         //icon.SetNativeSize();
         count.text = item.count.ToString();
         icon.enabled = true;
@@ -111,7 +111,7 @@ public class ItemBoxAction : MonoBehaviour
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(_itemid.ToString()); ;
         GetComponentInChildren<Toggle>().enabled = true;
         item = ItemManager.instance.CreatItem(_itemid, 1);
-        icon.sprite = itemData.iconSprite;
+        icon.sprite = itemData.icon;
         //icon.SetNativeSize();
         count.enabled=false;
         icon.enabled = true;

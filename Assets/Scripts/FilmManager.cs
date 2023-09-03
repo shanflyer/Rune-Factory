@@ -308,7 +308,7 @@ namespace OldName
                     }
                     break;
                 case FilmDisplayType.对话:
-                    GameComponentData.gameData.talkTextsManager.TalkAction(_filmData.value, TalkActionType.剧情);
+                    //GameComponentData.gameData.talkTextsManager.TalkAction(_filmData.value, TalkActionType.剧情);
                     break;
                 case FilmDisplayType.过渡:
                     AudioController.instance.StopBgm();

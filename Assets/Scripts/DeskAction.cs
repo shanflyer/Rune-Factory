@@ -54,10 +54,10 @@ public class DeskAction : MonoBehaviour
         if (item.instanceId!=0)
         {
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-           // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
+           // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.sellPrice);
             AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
-                (int) (itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f);
+                (int) (itemData.sellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f);
             string infomation = "*1 " + itemData.name+LanguageManage.SwitchStr("出售");
             InformationController.instance.AddInformation(infomation);
             if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
@@ -71,20 +71,20 @@ public class DeskAction : MonoBehaviour
             
 
             GameComponentData.gameData.charactorTitleAction.AddBusinessExp(sellPrice);
-            if (itemData.Type == ItemType.食材 && itemData.typeValue != 0 && itemData.typeValue != 6 &&
+            if (itemData.type == ItemType.食材 && itemData.typeValue != 0 && itemData.typeValue != 6 &&
                 itemData.typeValue != 7 && itemData.typeValue != 8)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 3);
             }
-            else if(itemData.Type == ItemType.食材 &&itemData.typeValue== 6)
+            else if(itemData.type == ItemType.食材 &&itemData.typeValue== 6)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 0);
             }
-            else if (itemData.Type == ItemType.武器||itemData.Type==ItemType.防具)
+            else if (itemData.type == ItemType.武器||itemData.type==ItemType.防具)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 1);
             }
-            else if (itemData.Type == ItemType.食物)
+            else if (itemData.type == ItemType.食物)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 2);
             }
@@ -112,10 +112,10 @@ public class DeskAction : MonoBehaviour
         if (item.instanceId != 0)
         {
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-            // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.SellPrice);
+            // GameComponentData.gameData.gameManager.ChangePlayerMoney(itemData.sellPrice);
             AudioController.instance.PlayAudio(SE.Shop);
             int sellPrice =
-                (int)(itemData.SellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f) * count;
+                (int)(itemData.sellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f) * count;
             string infomation = "*"+count+ itemData.name + LanguageManage.SwitchStr("出售");
             InformationController.instance.AddInformation(infomation);
             if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
@@ -131,20 +131,20 @@ public class DeskAction : MonoBehaviour
             
 
             GameComponentData.gameData.charactorTitleAction.AddBusinessExp(sellPrice);
-            if (itemData.Type == ItemType.食材 && itemData.typeValue != 0 && itemData.typeValue != 6 &&
+            if (itemData.type == ItemType.食材 && itemData.typeValue != 0 && itemData.typeValue != 6 &&
                 itemData.typeValue != 7 && itemData.typeValue != 8)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 3);
             }
-            else if (itemData.Type == ItemType.食材 && itemData.typeValue == 6)
+            else if (itemData.type == ItemType.食材 && itemData.typeValue == 6)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 0);
             }
-            else if (itemData.Type == ItemType.武器 || itemData.Type == ItemType.防具)
+            else if (itemData.type == ItemType.武器 || itemData.type == ItemType.防具)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 1);
             }
-            else if (itemData.Type == ItemType.食物)
+            else if (itemData.type == ItemType.食物)
             {
                 GameComponentData.gameData.charactorTitleAction.AddBusinessMoney(sellPrice, 2);
             }
@@ -179,7 +179,7 @@ public class DeskAction : MonoBehaviour
         {
             ItemSpriteRenderer.enabled = true;
             ItemCountText.enabled = true;
-            ItemSpriteRenderer.sprite = data.iconSprite;
+            ItemSpriteRenderer.sprite = data.icon;
             ItemCountText.text = _item.count.ToString();
         }
         else
@@ -198,7 +198,7 @@ public class DeskAction : MonoBehaviour
         {
             ItemSpriteRenderer.enabled = true;
             ItemCountText.enabled = true;
-            ItemSpriteRenderer.sprite = data.iconSprite;
+            ItemSpriteRenderer.sprite = data.icon;
             ItemCountText.text = _item.count.ToString();
         }
         else

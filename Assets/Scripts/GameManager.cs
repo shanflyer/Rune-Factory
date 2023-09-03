@@ -90,8 +90,7 @@ public class GroundItem
     public async void SetData()
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-        Obj.GetComponentInChildren<SpriteRenderer>().sprite =
-            GameComponent.ItemSprites.Find(i => i.name == itemData.icon);
+        Obj.GetComponentInChildren<SpriteRenderer>().sprite = itemData.icon;
         Obj.GetComponentInChildren<Text>().text = item.count.ToString();
     }
 
@@ -1542,19 +1541,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    IEnumerator InitGating()
-    {
-        yield return new WaitForSeconds(0.1f);
-        GameData.mapEditAction.isCamreaMove = false;
-        Camera.main.transform.position = new Vector3(0, 0, -10);
-        if (hurtNpc != null&&hurtNpc.id!=0)
-        {
-            GameData.talkTextsManager.TalkAction("2034",hurtNpc.headName,hurtNpc.name);
-            hurtNpc = null;
-        }
-
-        MoveMapZero();
-    }
+    
     IEnumerator InitMyShoping()
     {
         yield return new WaitForSeconds(0.1f);

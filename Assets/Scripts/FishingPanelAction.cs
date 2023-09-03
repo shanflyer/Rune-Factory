@@ -154,7 +154,7 @@ public class FishingPanelAction : MonoBehaviour
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectFish.item);
             GameComponentData.gameData.charactorTitleAction.AddFishCount(selectFish.item);
             fishItem = ItemManager.instance.CreatItem(itemData, 1);
-            itemIcon.sprite = itemData.iconSprite;
+            itemIcon.sprite = itemData.icon;
             ItemNoticeText.text = LanguageManage.SwitchStr("收获了1条") + selectFish.name;
  
         }

@@ -34,8 +34,8 @@ public class ShopItemAction : MonoBehaviour
         }
         shopPanelAction = _shopPanelAction;
         itemData = _itemData;
-        icon.sprite = itemData.iconSprite;
-        price.text = itemData.ShopPrice.ToString();
+        icon.sprite = itemData.icon;
+        price.text = itemData.shopPrice.ToString();
     }
 
     public void Click(Toggle toggle)

@@ -53,9 +53,9 @@ public class DeskItemAction : MonoBehaviour
         CountTitle = LanguageManage.SwitchStr("上架数量:");
         item = _item;
         ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(_item.dataId.ToString());
-        ItemImage.sprite = itemData.iconSprite;
+        ItemImage.sprite = itemData.icon;
         ItemName.text = itemData.name;
-        ItemPrice.text = PriceTitle+itemData.SellPrice+"G";
+        ItemPrice.text = PriceTitle + itemData.sellPrice + "G";
         CountTitleText.text = CountTitle;
         ItemCountText.text =_item.count.ToString();
         deskAction = _deskAction; 

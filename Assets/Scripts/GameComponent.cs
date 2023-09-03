@@ -42,8 +42,7 @@ public class GameComponent : MonoBehaviour
     public FestivalManager festivalManager; 
     public WarehouseAction warehouseAction;
     public GameObject warehouseObj;
-    public GameObject boxSelectFunctionObj;
-    public static List<Sprite> ItemSprites;
+    public GameObject boxSelectFunctionObj; 
     public GameObject huiFuEffectPro;
     public Transform mapParent;
     public Transform PlantParent;
@@ -62,8 +61,7 @@ public class GameComponent : MonoBehaviour
     public PasturePanelAction pasturePanelAction;
     public AnimalSetPanelAction animalSetPanelAction;
     public ShopPanelAction shopPanelAction;
-    public GameObject  PromptObj;
-    public TalkTextsManager talkTextsManager;
+    public GameObject  PromptObj; 
     public EquipmentManager equipmentManager;
     public static List<Sprite> charactorIcon;
     public static List<Sprite> headIcons;
@@ -89,8 +87,7 @@ public class GameComponent : MonoBehaviour
     }
   
     public void InitData()
-    {
-        ItemSprites= Resources.LoadAll<Sprite>("Item/").ToList();
+    { 
         charactorIcon = Resources.LoadAll<Sprite>("Charactor/Image/").ToList();
         models = Resources.LoadAll<GameObject>("Charactor/").ToList();
         headIcons = Resources.LoadAll<Sprite>("Charactor/Head").ToList();

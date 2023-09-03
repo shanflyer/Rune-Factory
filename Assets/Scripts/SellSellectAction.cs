@@ -24,7 +24,7 @@ public class SellSellectAction : MonoBehaviour
         item = _item;
         ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
 
-        itemImage.sprite = itemData.iconSprite;
+        itemImage.sprite = itemData.icon;
         itemName.text = itemData.name;
         inputField.text = "1";
         sellCount = 1; 
