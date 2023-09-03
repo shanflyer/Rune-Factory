@@ -21,9 +21,13 @@ public class GameRandomDataList : ScriptableObject
         {
             if (editorData.id != gameRandomData.id)
             {
-                if (gameRandomData.id != 0&&gameRandomData.weightRandom)
+                if (gameRandomData.id != 0)
                 {
-                    Pretreatment(ref gameRandomData);
+                    if (gameRandomData.weightRandom)
+                    {
+                        Pretreatment(ref gameRandomData);
+                    }
+                   
                     gameRandomDatas.Add(gameRandomData);
                 }
                 gameRandomData = new GameRandomData 
@@ -48,9 +52,10 @@ public class GameRandomDataList : ScriptableObject
             gameRandomData.randomItems.Add(randomItem);
 
         }
-        if (gameRandomData.id != 0 && gameRandomData.weightRandom)
+        if (gameRandomData.id != 0)
         {
-            Pretreatment(ref gameRandomData);
+            if (gameRandomData.weightRandom)
+                Pretreatment(ref gameRandomData);
             gameRandomDatas.Add(gameRandomData);
         }
     }

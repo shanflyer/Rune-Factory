@@ -1,6 +1,7 @@
 using BehaviorDesigner.Runtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -28,6 +29,7 @@ public class FightController : MonoBehaviour
 
     Dictionary<int,FightPlayerRuntime> fightPlayerRuntimes=new Dictionary<int, FightPlayerRuntime>();
     Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
+
      
     private void Awake()
     {
@@ -46,11 +48,13 @@ public class FightController : MonoBehaviour
         });
         GameActionManager.instance.AddListener<StartRoundFight>(EndFightRound);
         GameActionManager.instance.AddListener<DisplayHurt>(DisplayHurt);
-        controllerBehavior = GetComponent<BehaviorTree>(); 
+        controllerBehavior = GetComponent<BehaviorTree>();
+
+        
 
         var sceneInfoManager = SceneInfoManager.instance;
     }
-
+     
     public void RemoveFightPlayerRuntime(int characterId)
     {
         if (!fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayerRuntime))
@@ -68,7 +72,72 @@ public class FightController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Õ¹Ê¾µôÂä
+    /// </summary>
+    public async void DisplayDropItem(List<int2> items,int characterId)
+    { 
+        if(fightMonsterRuntimes.TryGetValue(characterId,out var fightMonsterRuntime))
+        {
+            Vector2 startPos = fightMonsterRuntime.animator.transform.position;
+            float4 dropArea = GameCommon.dropArea;
+            Vector2 finalPos = playerPos[0].position;
+            using (var e = fightPlayerRuntimes.GetEnumerator())
+            {
+                if (e.MoveNext())
+                {
+                    finalPos = e.Current.Value.animator.transform.position;
+                }
+            }
 
+            List<CurveMoveData> CurveMoveDatas = new List<CurveMoveData>();
+            List<CurveMoveData> CurveMoveDatasLine = new List<CurveMoveData>();
+            for (int i = 0; i < items.Count; i++)
+            {
+                int itemId = items[i].x;
+                int itemCount = items[i].y;
+
+                var itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId);
+                for(int j = 0; j < itemCount; j++)
+                {
+                    var itemRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
+                      "dropItem", GameSourceManager.instance.dropItem, itemData.id);
+                    (itemRuntime.obj as SpriteRenderer).sprite = itemData.icon;
+                    var targetPos = new Vector2(GameRandom.RandomFloat(dropArea.x, dropArea.z),GameRandom.RandomFloat(dropArea.y, dropArea.w));
+
+                    float waitTime = GameRandom.RandomFloat(GameCommon.dropWaitTime.x, GameCommon.dropWaitTime.y);
+                    float moveTime = Vector2.Distance(startPos, targetPos)/GameCommon.dropItemFlyerSpeed;
+
+                    CurveMoveData curveMoveData = new CurveMoveData
+                    {
+                        waitTime = waitTime,
+                        moveTime = moveTime,
+                        startPos = startPos,
+                        targetPos = targetPos,
+                        middlePos = startPos + (targetPos - startPos) * 0.5f
+                    };
+                    CurveMoveDatas.Add(curveMoveData);
+
+
+                    CurveMoveData curveMoveDataLine = new CurveMoveData
+                    {
+                        waitTime = 0,
+                        moveTime = Vector2.Distance(targetPos, finalPos) / GameCommon.dropItemFlyerSpeed,
+                        startPos = targetPos,
+                        targetPos = finalPos,
+                        middlePos = targetPos + (finalPos - targetPos) * 0.5f,
+                        CurveEndAction = () => { GameRuntimeObjManager.instance.RecycleRuntimeObj(itemRuntime); }
+                    };
+                    CurveMoveDatasLine.Add(curveMoveDataLine);
+                }
+            }
+
+            GameObjectCurveController.instance.CurveList(CurveMoveDatas, () =>
+            {
+                GameObjectCurveController.instance.LineList(CurveMoveDatasLine,null);
+            });
+        } 
+    }
 
     void DisplayHurt(DisplayHurt displayHurt)
     {
@@ -195,14 +264,7 @@ public class FightController : MonoBehaviour
         }
         return null;
     }
-    public GameObject FindFightPlayer(string name)
-    {
-        return null;
-    }
-    public GameObject FindFingMoster(string name)
-    {
-        return null;
-    }
+ 
     public void RunFightCharacter(int characterId)
     {
         if(fightPlayerRuntimes.TryGetValue(characterId,out var fightPlayer))
@@ -265,4 +327,6 @@ public class FightController : MonoBehaviour
             yield return wait;
         }
     }
+
+
 }

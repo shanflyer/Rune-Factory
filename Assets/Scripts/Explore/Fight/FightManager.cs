@@ -210,8 +210,7 @@ public class FightManager :Singleton<FightManager>
     List<int> fightPlayers = new List<int>();
     List<int> fightMonsters = new List<int>();
 
-    public FightController fightController;
-    
+    public FightController fightController; 
     public override async void Init()
     {
         base.Init();
@@ -223,6 +222,8 @@ public class FightManager :Singleton<FightManager>
 
         deathTimeLineData = await GameSourceManager.instance.GetScriptableObject<MyTimeLineData>(DataPath.MonsterDeathPath);
         GameActionManager.instance.AddListener<CharacterDeath>(CharacterDeath);
+
+        
     }
     protected override void Clear()
     {
@@ -235,6 +236,7 @@ public class FightManager :Singleton<FightManager>
     MyTimeLineData deathTimeLineData;
     void CharacterDeath(CharacterDeath characterDeath)
     {
+        //播放死亡效果
         TimeLineManger.instance.PlaySkillTimeline(characterDeath.characterId, default(SkillEstimateData),
               deathTimeLineData, () =>
               {
@@ -248,7 +250,39 @@ public class FightManager :Singleton<FightManager>
                   fightCharacters.Remove(characterDeath.characterId);
                   FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
               });
+
+        MonsterDeathDrop(characterDeath.characterId); 
     }
+    //死亡掉落
+    async void MonsterDeathDrop(int characterId)
+    {
+        if (fightMonsters.Contains(characterId))
+        {
+            var fightMonster = (FightMonster)fightCharacters[characterId];
+
+            var monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(fightMonster.dataId); 
+            var dropResult = GameRandom.instance.GetRandomValue(monsterData.dropId);
+
+            List<int2> items = new List<int2>();
+            for (int i = 0; i < dropResult.Count; i++)
+            {
+                int itemId =int.Parse(dropResult[i].result);
+                int count = dropResult[i].count;
+                items.Add(new int2(itemId, count));
+
+                AddPackageItem addPackageItem = new AddPackageItem
+                {
+                    packageId = 0,
+                    itemDataId = itemId,
+                    itemCount = count
+                };
+                GameActionManager.instance.QueueAction(addPackageItem);
+            } 
+            FightController.instance.DisplayDropItem(items, characterId);
+        } 
+    }
+    
+
     public Dictionary<FightType, List<int>> GetReadySkills(int id,FightType fightType=FightType.All)
     {
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();

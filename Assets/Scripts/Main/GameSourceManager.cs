@@ -15,6 +15,15 @@ public class GameSourceManager:Singleton<GameSourceManager>
 
     private Dictionary<string, ExternalBehavior> behaviors = new Dictionary<string, ExternalBehavior>();
 
+    public SpriteRenderer dropItem;
+    public async override void Init()
+    {
+        //º”‘ÿµÙ¬‰‘§÷∆ÃÂ
+        var dropItemObj = await GameSourceManager.instance.GetPrefab(DataPath.DropItemPrefabPath);
+        dropItem = dropItemObj.GetComponent<SpriteRenderer>();
+        base.Init();
+    }
+
     public async Task<ExternalBehavior> GetBehavior(string path)
     {
         if (behaviors.TryGetValue(path, out ExternalBehavior behavior))

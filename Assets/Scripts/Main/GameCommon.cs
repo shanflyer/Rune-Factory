@@ -55,11 +55,11 @@ public enum Direction
 }
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER,OTHER
+    MAPGROUND, MAPITEM, CHARACTER
 }
 public enum FightRuntimeObjType
 {
-    PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT, PLAYABLEDIRECTOR
+    PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT, PLAYABLEDIRECTOR,OTHER
 }
 
 public static class CharacterAnimatorParameter
@@ -71,7 +71,7 @@ public enum EntityType
 {
    All=1, 地图道具=2, 角色=15,玩家=3,NPC=5
 }
-public class GameCommon 
+public class GameCommon
 {
     public const float HurtUtlility = 0.6f;
     public static List<int> zeroNPC = new List<int>
@@ -79,6 +79,9 @@ public class GameCommon
         1001,2001
     };
 
+    public static float2 dropWaitTime = new float2(0.2f, 0.6f);
+    public static float4 dropArea = new float4(1,2,3,4);
+    public const float dropItemFlyerSpeed = 1.0f;
     public const int SeasonDays = 30;
     public const float fightMapMovingSpeed = 0.2f;
 
@@ -507,6 +510,7 @@ public static class DataPath
         }
         return null;
     }
+    public const string DropItemPrefabPath = "Prefabs/DropItem";
     public const string MonsterDeathPath = "Data/TimeLineData/怪物死亡";
     public const string BehaviorPath = "Behavior/";
     public const string sceneInfoPath= "Prefabs/Other/SceneInfo";
