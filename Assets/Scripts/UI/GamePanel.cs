@@ -64,7 +64,7 @@ public class GamePanel : MonoBehaviour
     public virtual void SetPanelUISerializeObj()
     {
         InitChildObjData();
-        var uiObjReferences = gameObject.GetComponentsInChildren<UIObjReference>(true);
+        var uiObjReferences = gameObject.GetComponentsInChildren<UIObjReference<IReferenceData>>(true);
         foreach(var uiObj in uiObjReferences)
         {
             uiObj.SetPanelUISerializeObj();

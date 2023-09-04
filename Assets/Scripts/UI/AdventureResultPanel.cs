@@ -18,9 +18,14 @@ public class AdventureResultPanel : GamePanel
     [SerializeField]
     Button OkButton;
 
+    DisplayList<ItemReference, Item> itemList;
+    DisplayList<TeamerRenference, FighterResult> teamerList;
+
     protected override void Awake()
     {
         OkButton.onClick.AddListener(OKAction);
+        itemList = new DisplayList<ItemReference, Item>(itemReference, ItemsContent);
+        teamerList=new DisplayList<TeamerRenference, FighterResult>(teamerRenference,Team);
         base.Awake();
     }
     void OKAction()
@@ -32,8 +37,9 @@ public class AdventureResultPanel : GamePanel
     {
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
-        
 
+        itemList.InitListData(fightResult.getItems);
+        teamerList.InitListData(fightResult.fighterResults);
     }
     public override void SetPanelUISerializeObj()
     {

@@ -5,7 +5,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public struct FightChapter
+public struct FightChapter:IReferenceData
 {
     public int mapId;
     public int completeValue;

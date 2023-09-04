@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SaveReference : UIObjReference
+public class SaveReference : UIObjReference<GameSaveData>
 {
     [SerializeField]
     Toggle SelectToggle;

@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public interface IReferenceData
+{
 
-public class UIObjReference : MonoBehaviour
+}
+public class UIObjReference<T> : MonoBehaviour where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
 
@@ -15,13 +18,13 @@ public class UIObjReference : MonoBehaviour
     {
         transform.localScale = Vector3.zero;
     }
-    public T FindChildGameObject<T>(string childName)
+    public V FindChildGameObject<V>(string childName)
     {
         if (objectDatas.ContainsKey(childName))
         {
-            return objectDatas[childName].GetComponent<T>();
+            return objectDatas[childName].GetComponent<V>();
         }
-        return default(T);
+        return default(V);
     }
     public Transform FindChildGameObject(string childName)
     {
@@ -31,7 +34,10 @@ public class UIObjReference : MonoBehaviour
         }
         return null;
     }
+    public virtual void InitData(T t, Action SelectAction = null)
+    {
 
+    }
     public virtual void InitChildObjData()
     {
         objectDatas.Clear();

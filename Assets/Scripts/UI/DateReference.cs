@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class DateReference : UIObjReference
+public class DateReference : UIObjReference<GameDate>
 {
     [SerializeField]
     private Text ValueText;
@@ -29,7 +30,7 @@ public class DateReference : UIObjReference
         selectToggle.group = toggleGroup;
         selectToggle.onValueChanged.AddListener(toggleAction);
     }
-    public void InitData(GameDate _gameDate)
+    public void InitData(GameDate _gameDate, Action action = null)
     {
         gameDate = _gameDate;
         ValueText.text = _gameDate.date.ToString();

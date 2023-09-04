@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
-public class TeamerRenference : UIObjReference
+public class TeamerRenference: UIObjReference<FighterResult>
 {
     [SerializeField]
     Image Icon;
@@ -26,13 +28,14 @@ public class TeamerRenference : UIObjReference
 
         base.SetPanelUISerializeObj();
     }
-    void InitData(Character character, bool LevelUp = false,bool SkillUp=false)
+    public  void InitData(FighterResult fighterResult, Action action = null)
     {
-        this.LevelUp.localScale = LevelUp ? Vector3.one : Vector3.zero;
-        this.SkillUp.localScale = SkillUp ? Vector3.one : Vector3.zero;
+        this.LevelUp.localScale = fighterResult.levelUp ? Vector3.one : Vector3.zero;
+        this.SkillUp.localScale = fighterResult.skillUp ? Vector3.one : Vector3.zero;
 
-        Icon.sprite = character.characterData.icon;
-        Name.text = character.name;
-        Level.text = $"Lv.{character.Level}";
-    } 
+        Icon.sprite = fighterResult.Character.characterData.icon;
+        Name.text = fighterResult.Character.name;
+        Level.text = $"Lv.{fighterResult.Character.Level}";
+       
+    }
 }

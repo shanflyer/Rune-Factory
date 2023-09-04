@@ -1002,7 +1002,7 @@ namespace OldName
     }
 
     [System.Serializable]
-    public class GameSaveData
+    public class GameSaveData:IReferenceData
     {
         public PauseTime pauseTime;
         public CharactorTitleValue charactorTitleValue;

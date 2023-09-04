@@ -4,7 +4,7 @@ using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FuncReference : UIObjReference
+public class FuncReference : UIObjReference<FunctionData>
 {
     [SerializeField]
     Text nameText;

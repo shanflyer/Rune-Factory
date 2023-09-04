@@ -76,14 +76,14 @@ public class FightPanel : GamePanel
         {
             if (fightCharacterReferences.Count > i)
             {
-                fightCharacterReferences[i].InitCharacter(refreshFightCharactersInfo.characters[i]);
+                fightCharacterReferences[i].InitData(refreshFightCharactersInfo.characters[i]);
             }
             else
             {
                 var fightCharacterReference = Instantiate(this.FightCharacterReference, FightCharacterParent);
                 fightCharacterReference.transform.localScale = Vector3.one;
                 fightCharacterReferences.Add(fightCharacterReference);
-                fightCharacterReference.InitCharacter(refreshFightCharactersInfo.characters[i]);
+                fightCharacterReference.InitData(refreshFightCharactersInfo.characters[i]);
             }
         }
         
@@ -97,7 +97,7 @@ public class FightPanel : GamePanel
             var fightCharacterReference = fightCharacterReferences[i];
             if (fightCharacterReference.CharacterId == refreshFightCharacterInfo.characterId)
             {
-                fightCharacterReference.InitCharacter(refreshFightCharacterInfo.characterId);
+                fightCharacterReference.InitData(refreshFightCharacterInfo.characterId);
                 break;
             }
         }

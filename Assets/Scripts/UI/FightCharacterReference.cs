@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
 
-public class FightCharacterReference : UIObjReference
+public class FightCharacterReference : UIObjReference<FightChapter>
 {
     [SerializeField]
     Text ATText, DFText, NameText;
@@ -68,20 +69,19 @@ public class FightCharacterReference : UIObjReference
     {
         if (this.characterId == refreshCharacter.id)
         {
-            InitCharacter(characterId);             
+            InitData(characterId);             
         }
     }
 
-     
-    public void InitCharacter(int characterId)
+    public void InitData(int characterId, Action action = null)
     {
-        this.characterId = characterId;
         Attritube.enabled = false;
         TypeText.enabled = false;
 
         Character character = CharacterManager.instance.GetCharacter(characterId);
         if (character != null)
         {
+            this.characterId = character.instanceId;
             NameText.text = character.name;
             LevelText.text = $"Lv.{character.Level}";
             CharacterProperty characterProperty = character.CharacterProperty;
@@ -90,5 +90,7 @@ public class FightCharacterReference : UIObjReference
             ATText.text = $"AT {characterProperty.AT}";
             DFText.text = $"DF {characterProperty.DF}";
         }
+
     }
+   
 }

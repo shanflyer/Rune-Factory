@@ -20,7 +20,7 @@ public enum Season
 }
 
 [System.Serializable]
-public class GameDate
+public class GameDate:IReferenceData
 {
     public int year;
     public Season season;

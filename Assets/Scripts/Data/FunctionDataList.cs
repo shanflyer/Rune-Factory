@@ -19,7 +19,7 @@ public class FunctionDataList : ScriptableObject, IGameData,IDataArray<FunctionD
     }
 }
 [System.Serializable]
-public struct FunctionData : IGameData
+public struct FunctionData : IGameData,IReferenceData
 {
     public int id;
     public string buttonName;
