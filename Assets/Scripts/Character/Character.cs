@@ -266,12 +266,18 @@ public class Character
 
     public async void AddExp(int value)
     {
+        bool levelUp = false;
         var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
         while (exp.AddExp(value))
         { 
             exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level-1);
             value = 0;
-            SetLevel(level+1); 
+            SetLevel(level+1);
+            levelUp = true;
+        }
+        if (levelUp)
+        {
+
         }
     }
     public async void SetLevel(int level,bool zero=false)

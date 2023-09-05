@@ -43,7 +43,7 @@ public class FightPlayer : FightCharacter
         }
     }
 
-    private Character character
+    public Character character
     {
         get
         {
@@ -222,18 +222,40 @@ public class FightManager :Singleton<FightManager>
 
         deathTimeLineData = await GameSourceManager.instance.GetScriptableObject<MyTimeLineData>(DataPath.MonsterDeathPath);
         GameActionManager.instance.AddListener<CharacterDeath>(CharacterDeath);
+        GameActionManager.instance.AddListener<CharacterLevelUp>(CharacterLevelUp);
 
-        
+        fightResult = new FightResult
+        {
+            fighterResults=new List<FighterResult>(),
+            getItems=new Dictionary<int, Item>()
+        }; 
     }
+    public FightResult FightResult { get { return fightResult; } }
+    FightResult fightResult;
+
     protected override void Clear()
     {
         myInstance.Clear();
         fightCharacters.Clear();
         fightPlayers.Clear();
         fightMonsters.Clear();
+        
         base.Clear();
     }
     MyTimeLineData deathTimeLineData;
+    void CharacterLevelUp(CharacterLevelUp characterLevelUp)
+    {
+        if (fightPlayers.Contains(characterLevelUp.characterId))
+        {
+            for(int i = 0; i < fightResult.fighterResults.Count; i++)
+            {
+                var fighterResult = fightResult.fighterResults[i];
+                fighterResult.levelUp = true;
+                fightResult.fighterResults[i] = fighterResult;
+                break;
+            }
+        }
+    }
     void CharacterDeath(CharacterDeath characterDeath)
     {
         //播放死亡效果
@@ -251,15 +273,15 @@ public class FightManager :Singleton<FightManager>
                   FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
               });
 
-        MonsterDeathDrop(characterDeath.characterId); 
+        MonsterDeathDrop(characterDeath.characterId);
+     
     }
     //死亡掉落
     async void MonsterDeathDrop(int characterId)
     {
         if (fightMonsters.Contains(characterId))
         {
-            var fightMonster = (FightMonster)fightCharacters[characterId];
-
+            var fightMonster = (FightMonster)fightCharacters[characterId]; 
             var monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(fightMonster.dataId); 
             var dropResult = GameRandom.instance.GetRandomValue(monsterData.dropId);
 
@@ -270,6 +292,18 @@ public class FightManager :Singleton<FightManager>
                 int count = dropResult[i].count;
                 items.Add(new int2(itemId, count));
 
+                if(!fightResult.getItems.TryGetValue(itemId,out Item item))
+                {
+                    item = new Item
+                    {
+                        instanceId = -1,
+                        dataId = itemId,
+                        count = 0
+                    }; 
+                }
+                item.count += count;
+                fightResult.getItems[itemId] = item;
+
                 AddPackageItem addPackageItem = new AddPackageItem
                 {
                     packageId = 0,
@@ -279,9 +313,18 @@ public class FightManager :Singleton<FightManager>
                 GameActionManager.instance.QueueAction(addPackageItem);
             } 
             FightController.instance.DisplayDropItem(items, characterId);
-        } 
+
+            //获得经验
+            int exp = monsterData.exp;
+            for(int i = 0; i < fightPlayers.Count; i++)
+            {
+                int fightPlayerId = fightPlayers[i];
+                var fightPlayer = (FightPlayer)fightCharacters[fightPlayerId];
+                fightPlayer.character.AddExp(exp);
+            }
+        }
     }
-    
+     
 
     public Dictionary<FightType, List<int>> GetReadySkills(int id,FightType fightType=FightType.All)
     {
@@ -308,6 +351,12 @@ public class FightManager :Singleton<FightManager>
             fightCharacters.Add(fightPlayer.instanceId, fightPlayer);
             fightPlayers.Add(fightPlayer.instanceId);
             FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i);
+
+            FighterResult fighterResult = new FighterResult
+            {
+                Character = character,
+            };
+            fightResult.fighterResults.Add(fighterResult);
         }
 
     }
@@ -748,9 +797,9 @@ public struct FighterResult:IReferenceData
     public Character Character;
     public bool levelUp, skillUp;
 }
-public struct FightResult
+public struct FightResult : IReferenceData
 {
     public bool victory;
-    public List<Item> getItems;
+    public Dictionary<int,Item> getItems;
     public List<FighterResult> fighterResults;
 }

@@ -30,6 +30,7 @@ public class AdventureResultPanel : GamePanel
     }
     void OKAction()
     {
+        Close();
 
     }
 

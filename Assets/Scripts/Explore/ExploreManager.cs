@@ -10,6 +10,8 @@ public struct FightChapter:IReferenceData
     public int mapId;
     public int completeValue;
     public NativeList<int> findItems;
+    public int failureEventId;
+    public int successEventId;
     public int nowStep;
     public bool open;
 
@@ -135,17 +137,53 @@ public class ExploreManager : Singleton<ExploreManager>
             }
         }
     }
-    public void StepFightSuccessful()
+    public void FightFail()
+    {
+        ExploreFailed();
+    }
+    public void StepFightSucceed()
     {
         fightChapter.nowStep++;
         if (fightChapter.nowStep >= nowFightMapData.monsterDeploys.Count)
         {
             ExploreSuccessful();
         }
+        else
+        {
+           
+        }
     }
-    void ExploreSuccessful()
+    async void ExploreFailed()
     {
-        Debug.Log("章节探索成功");
+        var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);
+
+        if (gameEventData == null)
+        {
+            var FightResult = FightManager.instance.FightResult;
+            FightResult.victory = false;
+            UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+            Debug.Log("章节探索失败");
+        }
+        else
+        {
+            GameEventManager.instance.AddGameEvent(gameEventData, null);
+        }
+    }
+    async void ExploreSuccessful()
+    {
+        var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.successEventId);
+
+        if (gameEventData==null)
+        {
+            var FightResult = FightManager.instance.FightResult;
+            FightResult.victory = true;
+            UIManager.instance.ShowGamePanel<AdventureResultPanel,FightResult>(FightResult, layer: 2);
+            Debug.Log("章节探索成功");
+        }
+        else
+        {
+            GameEventManager.instance.AddGameEvent(gameEventData, null);
+        }
     }
   
     protected override void Clear()

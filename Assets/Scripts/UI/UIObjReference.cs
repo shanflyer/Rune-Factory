@@ -6,7 +6,7 @@ public interface IReferenceData
 {
 
 }
-public class UIObjReference<T> : MonoBehaviour where T : IReferenceData
+public class UIObjReference<T> : BaseReference where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
 
@@ -57,7 +57,7 @@ public class UIObjReference<T> : MonoBehaviour where T : IReferenceData
         
 
     }
-    public virtual void SetPanelUISerializeObj()
+    public override void SetPanelUISerializeObj()
     {
         InitChildObjData();
     }

@@ -15,6 +15,7 @@ public class MonsterData : ScriptableObject, IGameData
     public GameObject obj;
     public List<int> skills = new List<int>();
     public int dropId;
+    public int exp;
     public int behaviorId;
 #if UNITY_EDITOR
     public void SetReferenceData()

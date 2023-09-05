@@ -44,6 +44,40 @@ public class UIManager:Singleton<UIManager>
         var gamePanel=  await ShowGamePanel(type, dataKey, layer);
         return (T)gamePanel;
     }
+    public async Task<T> ShowGamePanel<T,V>(V data, int layer = -1) where T : GamePanel where V:IReferenceData
+    {
+        var type = typeof(T);
+        var gamePanel = await ShowGamePanel(type, data, layer);
+        return (T)gamePanel;
+    }
+    async Task<GamePanel> ShowGamePanel<V>(Type type, V data, int layer = -1)where V:IReferenceData
+    {
+        if (!gamePanels.TryGetValue(type, out GamePanel gamePanel))
+        {
+            string path = $"{DataPath.UIPath}{type}";
+            var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
+            var _Panel = GameObject.Instantiate(gamePanelObj, canvasParent);
+
+            var gamePanelComponent = _Panel.GetComponent(type);
+
+            if (gamePanelComponent == null)
+            {
+                gamePanel = (GamePanel)_Panel.AddComponent(type);
+            }
+            else
+            {
+                gamePanel = (GamePanel)gamePanelComponent;
+            }
+
+
+            gamePanels[type] = gamePanel;
+        }
+        gamePanel.Show(layer);
+        await gamePanel.InitData(data);
+        return gamePanel;
+    }
+
+
     private async void OpenPanel(OpenPanelAction openPanelEvent)
     {
         await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);

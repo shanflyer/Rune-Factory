@@ -64,7 +64,7 @@ public class GamePanel : MonoBehaviour
     public virtual void SetPanelUISerializeObj()
     {
         InitChildObjData();
-        var uiObjReferences = gameObject.GetComponentsInChildren<UIObjReference<IReferenceData>>(true);
+        var uiObjReferences = gameObject.GetComponentsInChildren<BaseReference>(true);
         foreach(var uiObj in uiObjReferences)
         {
             uiObj.SetPanelUISerializeObj();
@@ -79,7 +79,7 @@ public class GamePanel : MonoBehaviour
         canvas.worldCamera = CameraController.instance.uiCamera;
         
     }
-    
+    public virtual async Task InitData<V>(V v)where V:IReferenceData { }
     public virtual async Task InitData(string dataKey) { }
     public virtual void Show(int layer = -1)
     {

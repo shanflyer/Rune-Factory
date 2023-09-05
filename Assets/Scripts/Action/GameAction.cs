@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine.Analytics;
 using System.Security.Cryptography;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
+using UnityEngine.TextCore.Text;
 
 public interface GameAction 
 { 
@@ -13,6 +14,23 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+public struct CharacterLevelUp : GameAction
+{
+    public int characterId;
+    public int level;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            level = int.Parse(parameters[1].value);
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct StartRoundFight : GameAction
 {
     public void Init(List<Parameter> parameters)

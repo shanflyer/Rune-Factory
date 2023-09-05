@@ -26,7 +26,7 @@ public class GameEventManager:Singleton<GameEventManager>
         GameEventData gameEventData =await GameDataManager.instance.GetAsyncData<GameEventData>(eventId);
         AddGameEvent(gameEventData, eventReferenceDatas);
     }
-    private void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas=null)
+    public void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas=null)
     {
         BehaviorTree behaviorTree = obj.AddComponent<BehaviorTree>();
         SharedInt idShared = new SharedInt();
