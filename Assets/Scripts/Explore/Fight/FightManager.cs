@@ -227,8 +227,9 @@ public class FightManager :Singleton<FightManager>
         fightResult = new FightResult
         {
             fighterResults=new List<FighterResult>(),
-            getItems=new Dictionary<int, Item>()
-        }; 
+            getItems=new List<Item>()
+        };
+        GetItemIndexs = new Dictionary<int, int>();
     }
     public FightResult FightResult { get { return fightResult; } }
     FightResult fightResult;
@@ -239,7 +240,7 @@ public class FightManager :Singleton<FightManager>
         fightCharacters.Clear();
         fightPlayers.Clear();
         fightMonsters.Clear();
-        
+        GetItemIndexs.Clear();
         base.Clear();
     }
     MyTimeLineData deathTimeLineData;
@@ -276,6 +277,8 @@ public class FightManager :Singleton<FightManager>
         MonsterDeathDrop(characterDeath.characterId);
      
     }
+
+    Dictionary<int, int> GetItemIndexs = new Dictionary<int, int>();
     //死亡掉落
     async void MonsterDeathDrop(int characterId)
     {
@@ -292,18 +295,24 @@ public class FightManager :Singleton<FightManager>
                 int count = dropResult[i].count;
                 items.Add(new int2(itemId, count));
 
-                if(!fightResult.getItems.TryGetValue(itemId,out Item item))
+                if(GetItemIndexs.TryGetValue(itemId,out int index))
                 {
-                    item = new Item
+                    var item = fightResult.getItems[index];
+                    item.count += count;
+                    fightResult.getItems[index] = item;
+                }
+                else
+                {
+                    var item = new Item
                     {
                         instanceId = -1,
                         dataId = itemId,
                         count = 0
-                    }; 
+                    };
+                    fightResult.getItems.Add(item);
+                    GetItemIndexs.Add(itemId, fightResult.getItems.Count - 1);
                 }
-                item.count += count;
-                fightResult.getItems[itemId] = item;
-
+  
                 AddPackageItem addPackageItem = new AddPackageItem
                 {
                     packageId = 0,
@@ -800,6 +809,6 @@ public struct FighterResult:IReferenceData
 public struct FightResult : IReferenceData
 {
     public bool victory;
-    public Dictionary<int,Item> getItems;
+    public List<Item> getItems;
     public List<FighterResult> fighterResults;
 }

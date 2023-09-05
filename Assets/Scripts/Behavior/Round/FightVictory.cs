@@ -22,7 +22,7 @@ public class CheckFightVictory : Action
     {
         if (FightResult.Value==isVictory)
         {
-            ExploreManager.instance.StepFightSuccessful();
+            ExploreManager.instance.StepFightSucceed();
             return TaskStatus.Success;
         }
         else
