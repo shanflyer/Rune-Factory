@@ -984,12 +984,12 @@ public class GameManager : MonoBehaviour
         if (GameData.formulaAction.MamufacturePanel.activeSelf)
         {
             TwoSelectPanel1.SetActive(true);
-            TwoSelectPanel1.GetComponent<TwoSelectAction>().InitTwoSelectData(Title, Notice);
+            //TwoSelectPanel1.GetComponent<TwoSelectAction>().InitTwoSelectData(Title, Notice);
         }
         else
         {
             TwoSelectPanel.SetActive(true);
-            TwoSelectPanel.GetComponent<TwoSelectAction>().InitTwoSelectData(Title, Notice);
+           // TwoSelectPanel.GetComponent<TwoSelectAction>().InitTwoSelectData(Title, Notice);
         }
        
     }

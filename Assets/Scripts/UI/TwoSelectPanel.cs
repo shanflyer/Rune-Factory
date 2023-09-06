@@ -13,7 +13,9 @@ public struct TwoSelectData:IReferenceData
 }
 public class TwoSelectPanel : GamePanel<TwoSelectData>
 {
+    [SerializeField]
     Text TitleText, NoticeText;
+    [SerializeField]
     Button YesButton, NoButton;
 
     Action yesAction, noAction;
@@ -49,5 +51,8 @@ public class TwoSelectPanel : GamePanel<TwoSelectData>
     public override void InitReferenceData(TwoSelectData v)
     {
         base.InitReferenceData(v);
+        yesAction=v.yesAction; noAction=v.noAction;
+        TitleText.text = v.title;
+        NoticeText.text = v.notice;
     } 
 }

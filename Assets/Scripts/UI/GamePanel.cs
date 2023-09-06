@@ -52,7 +52,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"{gameObject.name}:{e}");
+                Debug.Log($"{gameObject.name}:{e}");
             } 
         }
        
@@ -64,6 +64,10 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         var uiObjReferences = gameObject.GetComponentsInChildren<BaseReference>(true);
         foreach(var uiObj in uiObjReferences)
         {
+            if (uiObj == this)
+            {
+                continue;
+            }
             uiObj.SetPanelUISerializeObj();
         }
 
