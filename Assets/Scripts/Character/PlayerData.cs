@@ -23,7 +23,7 @@ public struct OtherSaveData
     public int boxPackageId, icePackageId;
     public bool isMarriedFood, isAnMo;
 }
-public struct CharacterSaveData
+public struct CharacterSaveData:IReferenceData
 {
     public string name;
     public Gender gender;

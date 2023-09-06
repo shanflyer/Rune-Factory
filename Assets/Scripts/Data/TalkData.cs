@@ -8,7 +8,7 @@ public enum TalkerDir
     左,右,无
 }
 [CreateAssetMenu(menuName ="Data/对话数据")]
-public class TalkData : ScriptableObject, IGameData
+public class TalkData : ScriptableObject, IGameData,IReferenceData
 {
     public int id;
     public bool myTalk;

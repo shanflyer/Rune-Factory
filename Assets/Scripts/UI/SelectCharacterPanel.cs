@@ -7,7 +7,7 @@ using System.IO;
 using System;
 using System.Threading.Tasks;
 
-public class SelectCharacterPanel : GamePanel
+public class SelectCharacterPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Dropdown SeasonDropdown, DateDropdown;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainPanel : GamePanel
+public class MainPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Button setButton;

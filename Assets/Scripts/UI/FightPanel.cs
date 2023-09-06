@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FightPanel : GamePanel
+public class FightPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Transform FightCharacterParent;

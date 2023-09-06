@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerPanel : GamePanel
+public class PlayerPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Slider hpSlider, rpSlider;

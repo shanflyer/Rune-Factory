@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdventureResultPanel : GamePanel
+public class AdventureResultPanel: GamePanel<FightResult>
 {
     [SerializeField]
     Transform SuccessTitle, FailureTitle;
@@ -30,11 +30,11 @@ public class AdventureResultPanel : GamePanel
     }
     void OKAction()
     {
+        GameActionManager.instance.QueueAction(new ExploreEnd());
         Close();
-
     }
-
-    public void InitData(FightResult fightResult)
+ 
+    public override void InitReferenceData(FightResult fightResult)
     {
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
@@ -42,6 +42,7 @@ public class AdventureResultPanel : GamePanel
         itemList.InitListData(fightResult.getItems);
         teamerList.InitListData(fightResult.fighterResults);
     }
+    
     public override void SetPanelUISerializeObj()
     {
         SuccessTitle = FindChildGameObject("SuccessTitle");

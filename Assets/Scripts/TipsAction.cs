@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine .UI;
 
-public class TipsPanel : GamePanel
+public class TipsPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Text TitleText, NotceText;

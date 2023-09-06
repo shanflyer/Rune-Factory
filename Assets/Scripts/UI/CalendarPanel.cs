@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CalendarPanel : GamePanel
+public class CalendarPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     private Button nextMonthButton, forwardMonthButton;

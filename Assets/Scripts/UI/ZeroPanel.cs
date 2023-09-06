@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 
-public class ZeroPanel : GamePanel
+public class ZeroPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Image titleIcon;

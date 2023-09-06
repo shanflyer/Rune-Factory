@@ -14,6 +14,12 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+public struct ExploreEnd : GameAction
+{
+    public void Init(List<Parameter> parameters)
+    { 
+    }
+}
 public struct CharacterLevelUp : GameAction
 {
     public int characterId;

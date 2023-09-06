@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TalkPanel : GamePanel
+public class TalkPanel : GamePanel<TalkData>
 {
     [SerializeField]
     Image rightHead, leftHead, leftNameBg, rightNameBg;

@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GamePanel : MonoBehaviour
+public class GamePanel<V> : BaseReference where V:IReferenceData
 {
-    public static LayerMask UILayer;
-    public static LayerMask HideLayer;
-
     Canvas canvas;
     GraphicRaycaster graphicRaycaster;
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
@@ -61,7 +58,7 @@ public class GamePanel : MonoBehaviour
        
        
     }
-    public virtual void SetPanelUISerializeObj()
+    public override void SetPanelUISerializeObj()
     {
         InitChildObjData();
         var uiObjReferences = gameObject.GetComponentsInChildren<BaseReference>(true);
@@ -79,9 +76,9 @@ public class GamePanel : MonoBehaviour
         canvas.worldCamera = CameraController.instance.uiCamera;
         
     }
-    public virtual async Task InitData<V>(V v)where V:IReferenceData { }
-    public virtual async Task InitData(string dataKey) { }
-    public virtual void Show(int layer = -1)
+   
+    public virtual void InitReferenceData(V v) { } 
+    public override void Show(int layer = -1)
     {
         canvas.sortingOrder = layer;
         gameObject.layer = UILayer;
@@ -91,7 +88,7 @@ public class GamePanel : MonoBehaviour
         }
         enabled = true;
     }
-    public virtual void Close()
+    public override void Close()
     { 
         gameObject.layer = HideLayer;
         if (graphicRaycaster)

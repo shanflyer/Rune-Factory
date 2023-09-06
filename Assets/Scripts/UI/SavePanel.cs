@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SavePanel : GamePanel
+public class SavePanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     ToggleGroup toggleGroup;

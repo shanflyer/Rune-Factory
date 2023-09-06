@@ -27,6 +27,7 @@ public class CheckFightVictory : Action
         }
         else
         {
+            ExploreManager.instance.FightFail();
             return TaskStatus.Failure;
         } 
     }

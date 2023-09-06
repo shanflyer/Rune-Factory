@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UI;
 
-public class StartEventPanel : GamePanel
+public class StartEventPanel : GamePanel<IReferenceData>
 { 
     [SerializeField]
     Button LetterButton;

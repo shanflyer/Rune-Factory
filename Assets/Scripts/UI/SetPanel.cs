@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SetPanel : GamePanel
+public class SetPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Slider bgmSlider, seSlider;

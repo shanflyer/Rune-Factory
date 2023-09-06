@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InformationShowPanel : GamePanel
+public class InformationShowPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Text info;

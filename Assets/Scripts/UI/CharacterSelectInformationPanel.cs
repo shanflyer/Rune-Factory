@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System.IO;
 using System.Threading.Tasks;
 
-public class CharacterSelectInformationPanel : GamePanel
+public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Text PlayerText, BrothText;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectStartPanel : GamePanel
+public class SelectStartPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Button NewButton, LoadButton;

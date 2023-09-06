@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FunctionsPanel :GamePanel
+public class FunctionsPanel :GamePanel<IReferenceData>
 {
     [SerializeField]
     Transform funcParent;

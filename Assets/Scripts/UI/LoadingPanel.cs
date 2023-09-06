@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
-public class LoadingPanel : GamePanel
+public class LoadingPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Slider slider; 

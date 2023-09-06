@@ -21,7 +21,7 @@ public class UIToolEditor
 
                 if (selection[i].GetType() == typeof(GameObject))
                 {
-                    GamePanel gamePanel;
+                    BaseReference gamePanel;
                     if (((GameObject)selection[i]).TryGetComponent(out gamePanel))
                     {
                         gamePanel.SetPanelUISerializeObj();

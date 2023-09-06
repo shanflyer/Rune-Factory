@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerTopPanel : GamePanel
+public class PlayerTopPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Text goldValue, crystalValue;
