@@ -29,7 +29,7 @@ public class MapItemData:ScriptableObject,IGameData
 
     public string GetKey()
     {
-        return id.ToString();
+       return id.ToString();
     }
 #endif
 }

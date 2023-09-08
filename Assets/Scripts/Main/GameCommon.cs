@@ -86,9 +86,9 @@ public class GameCommon
     public const float fightMapMovingSpeed = 0.2f;
 
 
-    public const float cellWidth = 0.48f, cellHigh = 0.48f;
-    public const float cellSize = 0.24f;
-    public const float oneDividCellWidth = 2.0833f, oneDividCellHigh = 2.0833f;
+    public const float cellWidth = 0.32f, cellHigh = 0.32f;
+    public const float cellSize = 0.16f;
+    public const float oneDividCellWidth = 3.125f, oneDividCellHigh =3.125f;
     public const float slantValue = 0.707f;
 
 

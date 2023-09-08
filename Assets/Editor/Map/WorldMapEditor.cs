@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+锘縰sing System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -13,10 +13,10 @@ public class WorldMapEditor : MyEditor
     private List<CommonObj> mapRoomObjs = new List<CommonObj>();
     private Dictionary<string, MapRoomData> mapRoomDatas = new Dictionary<string, MapRoomData>();
 
-    [MenuItem("工具/世界地图")]
+    [MenuItem("宸ュ叿/涓栫晫鍦板浘")]
     public static void WindowShow()
     {
-        WorldMapEditor worldMapEditor = CreateWindow<WorldMapEditor>("世界编辑");
+        WorldMapEditor worldMapEditor = CreateWindow<WorldMapEditor>("涓栫晫缂栬緫");
         Instance = worldMapEditor;
         worldMapEditor.minSize = worldMapEditor.maxSize = new Vector2(240, 480);
         Instance.ShowAuxWindow();
@@ -78,9 +78,9 @@ public class WorldMapEditor : MyEditor
         roomMapPanel.DisplayCommonObjList<MapRoomDataObj>(220, 400, mapRoomObjs, 2);
 
         EditorGUILayout.BeginHorizontal();
-        DrawButton("添加地图", CreatNewMapInstance, 80);
-        DrawButton("添加链接", CreatMapLink, 80);
-        DrawButton("保存", SaveWorldData, 80);
+        DrawButton("娣诲姞鍦板浘", CreatNewMapInstance, 80);
+        DrawButton("娣诲姞閾炬帴", CreatMapLink, 80);
+        DrawButton("淇濆瓨", SaveWorldData, 80);
         EditorGUILayout.EndHorizontal();
        
     }
