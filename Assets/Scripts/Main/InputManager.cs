@@ -63,12 +63,18 @@ public class InputManager :Singleton<InputManager>
     }
 
     Dictionary<string, InputAction> InputActions = new Dictionary<string, InputAction>();
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
         
-        playerInput = MonoBehaviour.FindObjectOfType<PlayerInput>();
+        playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
 
+        if (playerInput == null)
+        {
+            GameObject inputController = new GameObject("InputController");
+            playerInput = inputController.AddComponent<PlayerInput>();
+            playerInput.actions = await GameSourceManager.instance.GetScriptableObject<InputActionAsset>(DataPath.InputDataPath);
+        }
         var actionMaps= playerInput.actions.actionMaps;
         foreach(var actionMap in actionMaps)
         {

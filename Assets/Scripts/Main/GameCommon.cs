@@ -502,7 +502,8 @@ public static class DataPath
         {typeof(GameActionData),"Data/GameActionData" },
         {typeof(TalkData),"Data/TalkData" },
         {typeof(MyTimeLineData),"Data/TimeLineData" },
-        {typeof(SkillData),"Data/SkillData" }
+        {typeof(SkillData),"Data/SkillData" },
+        {typeof(MapItemData),"Data/MapItemData" },
     };
 
     public static string GetDataPath(Type type)
@@ -513,7 +514,11 @@ public static class DataPath
         }
         return null;
     }
-    public const string DropItemPrefabPath = "Prefabs/DropItem";
+
+    public const string cameraPrefabPath = "Prefabs/Other/CameraObj";
+    public const string InputDataPath = "InputData/MyInput";
+
+    public const string DropItemPrefabPath = "Prefabs/Other/DropItem";
     public const string MonsterDeathPath = "Data/TimeLineData/π÷ŒÔÀ¿Õˆ";
     public const string BehaviorPath = "Behavior/";
     public const string sceneInfoPath= "Prefabs/Other/SceneInfo";

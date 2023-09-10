@@ -135,26 +135,47 @@ public class MapCellController :Singleton<MapCellController>
     public struct RoomCellData
     {
         public NativeArray<int> cellValue;
-        public int2 startCoornate, endCoordinate;
+        public int2 startCoordinate, endCoordinate;
+
+#if UNITY_EDITOR
+        public List<Vector3Int> GetAllCellData()
+        {
+            List<Vector3Int> cellData = new List<Vector3Int>();
+            int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
+            if (cellValue != null&&cellValue.Length>0)
+            {
+                for (int i = 0; i < cellValue.Length; i++)
+                {
+                    int x = i / perRowGridCount+startCoordinate.x;
+                    int y = i % perRowGridCount+startCoordinate.y;
+                    int z = cellValue[i];
+                    cellData.Add(new Vector3Int(x, y, z));
+                }
+            }
+          
+
+            return cellData;
+        }
+#endif
 
         public bool CheckWalkable(int2 coordinate)
         {
-            if (coordinate.x >= startCoornate.x && coordinate.x <= endCoordinate.x &&
-            coordinate.y >= startCoornate.y && coordinate.y <= endCoordinate.y)
+            if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&
+            coordinate.y >= startCoordinate.y && coordinate.y <= endCoordinate.y)
             {
-                int perRowGridCount = endCoordinate.y - startCoornate.y + 1;
-                int index = (coordinate.y - startCoornate.y) + (coordinate.x - startCoornate.x) * perRowGridCount;
+                int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
+                int index = (coordinate.y - startCoordinate.y) + (coordinate.x - startCoordinate.x) * perRowGridCount;
                 return cellValue[index]==1;
             }
             return false;
         }
         public bool CheckWalkable(Vector2Int coordinate)
         {
-            if (coordinate.x >= startCoornate.x && coordinate.x <= endCoordinate.x &&
-            coordinate.y >= startCoornate.y && coordinate.y <= endCoordinate.y)
+            if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&
+            coordinate.y >= startCoordinate.y && coordinate.y <= endCoordinate.y)
             {
-                int perRowGridCount = endCoordinate.y - startCoornate.y + 1;
-                int index = (coordinate.y - startCoornate.y) + (coordinate.x - startCoornate.x) * perRowGridCount;
+                int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
+                int index = (coordinate.y - startCoordinate.y) + (coordinate.x - startCoordinate.x) * perRowGridCount;
                 return cellValue[index] == 1;
             }
             return false;
@@ -255,14 +276,21 @@ public class MapCellController :Singleton<MapCellController>
     {
         return runtimeMapRooms.Contains(roomId);
     }
-
+    public int3 GetRoomCoordinate(int roomId)
+    {
+        if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
+        {
+            return runtimeMapRoom.coordinate;
+        }
+        return int3.zero;
+    }
     public RoomCellData GetRoomCellData(int roomId)
     {
         if(runtimeMapRooms.GetData(roomId,out var runtimeMapRoom))
         {
             return runtimeMapRoom.roomCellData;
         }
-        return new RoomCellData();
+        return default(RoomCellData);
     }
 
     public void InitWorldRoomDatas(int roomCount)
@@ -270,14 +298,14 @@ public class MapCellController :Singleton<MapCellController>
         runtimeMapRooms.Init(roomCount);
     }
     public void InitMapData(int roomId, MapCellData[] mapCellDatas, 
-        int2 startCoornate, int2 endCoordinate,int3 coordinate)
+        int2 startCoordinate, int2 endCoordinate,int3 coordinate)
     {
        
 
         RoomCellData roomCellData = new RoomCellData
         {
             cellValue = new NativeArray<int>(mapCellDatas.Length, Allocator.Persistent),
-            startCoornate = startCoornate,
+            startCoordinate = startCoordinate,
             endCoordinate = endCoordinate, 
         }; 
         for(int i = 0; i < mapCellDatas.Length; i++)

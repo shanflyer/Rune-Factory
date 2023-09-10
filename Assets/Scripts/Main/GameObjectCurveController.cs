@@ -189,7 +189,7 @@ public class GameObjectCurveController
 
             if (checkWalk)
             {
-                if (WorldMapContorller.instance.InitSmoothMove(ref direction, nowPos, mapId))
+                if (WorldMapManager.instance.InitSmoothMove(ref direction, nowPos, mapId))
                 {
                     Vector2 targetPos = nowPos + direction * CharacterManager.moveSpeed * Time.fixedDeltaTime;
                     int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);

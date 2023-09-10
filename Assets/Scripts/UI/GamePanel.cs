@@ -77,7 +77,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     {
         canvas = gameObject.GetComponent<Canvas>();
         graphicRaycaster=gameObject.GetComponent<GraphicRaycaster>();
-        canvas.worldCamera = CameraController.instance.uiCamera;
+        canvas.worldCamera = CameraManager.instance.uiCamera;
         
     }
    

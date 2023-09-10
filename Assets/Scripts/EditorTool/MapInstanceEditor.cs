@@ -41,7 +41,7 @@ public class MapInstanceEditor : MonoBehaviour
         {
             if (_walkTile == null)
             {
-                _walkTile = AssetDatabase.LoadAssetAtPath<TileBase>("Assets/TileMap/Tiles/1.asset");
+                _walkTile = AssetDatabase.LoadAssetAtPath<TileBase>("Assets/TileMap/Tiles/Event/1.asset");
             }
             return _walkTile;
         }
@@ -53,7 +53,7 @@ public class MapInstanceEditor : MonoBehaviour
         {
             if (_barrierTile == null)
             {
-                _barrierTile = AssetDatabase.LoadAssetAtPath<TileBase>("Assets/TileMap/Tiles/0.asset");
+                _barrierTile = AssetDatabase.LoadAssetAtPath<TileBase>("Assets/TileMap/Tiles/Event/0.asset");
             }
             return _barrierTile;
         }
@@ -85,8 +85,9 @@ public class MapInstanceEditor : MonoBehaviour
             if (groundParentObj == null)
             {
                 groundParentObj = new GameObject("GroundParent").transform;
-                groundParentObj.transform.SetParent(transform, false);
+                groundParentObj.transform.SetParent(transform, false); 
                 groundParent = groundParentObj.transform;
+                groundParent.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
                 GameObject itemParentObj = new GameObject("ItemParent");
                 itemParentObj.transform.SetParent(transform, false);
@@ -187,7 +188,7 @@ public class MapInstanceEditor : MonoBehaviour
                 }
             }
         }
-        mapRoomData.startCoornate = minCoordinate;
+        mapRoomData.startCoordinate = minCoordinate;
         mapRoomData.endCoordinate = maxCoordinate;
 
         if (groundParent.childCount > 0)

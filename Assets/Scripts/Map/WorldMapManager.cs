@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class WorldMapContorller : Singleton<WorldMapContorller>
+public class WorldMapManager : Singleton<WorldMapManager>
 {
     private Dictionary<int, RuntimeObj> nowRuntimeMapItemObjs = new Dictionary<int, RuntimeObj>();
 
@@ -20,6 +20,8 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
 
     public RuntimeObj nowMapRoomObj;
 
+    public int displayMap { get;private set; }
+
     public override void Init()
     {
         base.Init();
@@ -29,6 +31,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
         GameActionManager.instance.AddListener<ChangeMapItem>(ChangeMapItem);
         GameActionManager.instance.AddListener<SetItemAnimation>(SetItemAnimation);
+        GameActionManager.instance.AddListener<ChangeWorld>(ChangeWorld);
     }
 
     protected override void Clear()
@@ -38,6 +41,10 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         runtimeMapItems.Dispose();
     }
 
+    async void ChangeWorld(ChangeWorld changeWorld)
+    {
+       await InitWorldData(changeWorld.worldName,changeWorld.displayMap); 
+    }
     private async void SetItemAnimation(SetItemAnimation setItemAnimation)
     {
         if (runtimeMapItems.GetData(setItemAnimation.id, out RuntimeMapItem runtimeMapItem))
@@ -261,7 +268,8 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
         MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(roomName);
         if (mapRoomData != null)
         {
-            return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), roomName, mapRoomData.mapObj.transform, instanceId);
+            var mapRuntimeObj=  GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), roomName, mapRoomData.mapObj.transform, instanceId);
+            return mapRuntimeObj;
         }
         return default(RuntimeObj);
     }
@@ -269,18 +277,21 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
     private async Task<RuntimeObj> CreatMapItemRuntime(int dataId, int instanceId, int2 coordinate)
     {
         Vector3 pos = GameCommon.GetMapPos(coordinate);
-        pos.z = -100;
+        //pos.z = -100;
 
         MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(dataId);
         if (mapItemData != null)
         {
-            return GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), dataId.ToString(), mapItemData.itemObj.transform, instanceId);
+            var mapItemRuntime= GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), dataId.ToString(), mapItemData.itemObj.transform, instanceId);
+            (mapItemRuntime.obj as Transform).localPosition = pos;
+
+            return mapItemRuntime;
         }
         return default(RuntimeObj);
     }
 
     //初始化世界数据
-    public async Task InitWorldData(string worldName)
+    async Task InitWorldData(string worldName,int displayMap=0)
     {
         var worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>(worldName);
         MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
@@ -296,16 +307,22 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
 
             //创建地图房间
             MapCellController.instance.InitMapData(room.id, MapRoomData.mapCells.ToArray(),
-                MapRoomData.startCoornate, MapRoomData.endCoordinate, room.coordinate);
+                MapRoomData.startCoordinate, MapRoomData.endCoordinate, room.coordinate);
 
             foreach (var data in MapRoomData.mapItems)
             {
-                AddMapItem(data, room.id);
+                await AddMapItem(data, room.id);
             }
         }
         //生成地图链接
         MapCellController.instance.InitLinkMap(worldMapData.mapLines);
         // return true;
+
+        if (displayMap == 0)
+        {
+            displayMap = worldMapData.defaultMap;
+        }
+        await DisplayMap(displayMap);
     }
 
     private async Task DisplayMapItem(RuntimeMapItem runtimeMapItem)
@@ -315,17 +332,21 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
             var runtimeObj = await CreatMapItemRuntime(runtimeMapItem.dataId,runtimeMapItem.instanceId,runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = runtimeObj;
 
-            RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
+            await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
         }
     }
 
     public async Task DisplayMap(int mapId)
     {
+        displayMap = mapId;
         await CharacterManager.instance.RefreshNpcRuntimeObj();
 
         if (roomMapDatas.TryGetValue(mapId, out string dataId))
         {
+            var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
+            Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
             nowMapRoomObj = await CreatMapRunTime(dataId, mapId);
+            (nowMapRoomObj.obj as Transform).localPosition = pos;
 
             if (itemInMapDatas.TryGetValue(mapId, out List<int> mapItems))
             {
@@ -335,7 +356,7 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
                     {
                         var itemObj =await CreatMapItemRuntime(mapItem.dataId, mapItem.instanceId, mapItem.coordinate);
                         nowRuntimeMapItemObjs.Add(mapItems[i], itemObj);
-                        RuntimeMapItemPlay(mapItem, itemObj);
+                        await RuntimeMapItemPlay(mapItem, itemObj);
                     }
                 }
             }

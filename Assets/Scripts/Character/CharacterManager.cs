@@ -319,8 +319,8 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 //≤‚ ‘
                 MapController.instance.nowMap = targetMap;
-                WorldMapContorller.instance.RecycleMap();
-                WorldMapContorller.instance.DisplayMap(targetMap);
+                WorldMapManager.instance.RecycleMap();
+                WorldMapManager.instance.DisplayMap(targetMap);
             }
         }
 
@@ -561,7 +561,7 @@ public class CharacterManager : Singleton<CharacterManager>
         Transform characterTransform = playerRuntimeObj.obj as Transform;
 
         Vector2 _playerMoveDirction = playerMoveDirction;
-        if (!WorldMapContorller.instance.InitSmoothMove(ref _playerMoveDirction, characterTransform.position,
+        if (!WorldMapManager.instance.InitSmoothMove(ref _playerMoveDirction, characterTransform.position,
             player.objCoordinate.mapInstance))
         {
             GameObjectCurveController.instance.StopObjectMove(playerRuntimeObj.linkId);

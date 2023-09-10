@@ -14,6 +14,24 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+
+
+public struct ChangeWorld : GameAction
+{
+    public string worldName;
+    public int displayMap;
+    public void Init(List<Parameter> parameters)
+    { 
+        if (parameters.Count > 0)
+        {
+            worldName = parameters[0].value;
+        }
+        if (parameters.Count > 1)
+        {
+            displayMap =int.Parse(parameters[1].value);
+        }
+    }
+}
 public struct ExploreEnd : GameAction
 {
     public void Init(List<Parameter> parameters)

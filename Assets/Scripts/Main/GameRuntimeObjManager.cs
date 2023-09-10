@@ -58,10 +58,16 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
 
     public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId)where T:Component
     {
+        if(!objParents.TryGetValue(runtimeObjType,out Transform parent))
+        {
+            parent = new GameObject(runtimeObjType).transform;
+            objParents[runtimeObjType] = parent;
+        }
+
         RuntimeObj runtimeObj;
         if (!GetRuntimeObj(runtimeObjType,key, out runtimeObj))
         { 
-            runtimeObj.obj = GameObject.Instantiate(objPre, objParents[runtimeObjType]);
+            runtimeObj.obj = GameObject.Instantiate(objPre, parent);
             runtimeObj.runtimeObjType = runtimeObjType;
             runtimeObj.key = key;
         }

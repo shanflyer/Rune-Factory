@@ -4,7 +4,8 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/世界数据")]
 public class WorldMapData : ScriptableObject,IGameData
-{ 
+{
+    public int defaultMap;
     public List<WorldMap> worldMaps = new List<WorldMap>();
     public List<MapLine> mapLines = new List<MapLine>();
 #if UNITY_EDITOR

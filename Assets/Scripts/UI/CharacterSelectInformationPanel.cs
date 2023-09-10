@@ -63,11 +63,11 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
     {
         AudioController.instance.PlayAudio(SE.click);
         Close();
-        UIManager.instance.CloseGamePanel<SelectCharacterPanel>();
+        UIManager.instance.CloseGamePanel<SelectCharacterPanel>(); 
         GameActionManager.instance.QueueAction(new PlayFilm
         {
-            filmName = "StartStory"
-        });
+            filmName = "StartStory" 
+        }); 
     }
   
 }

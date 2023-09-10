@@ -22,13 +22,13 @@ public class MapRoomData : ScriptableObject,IGameData
     public string roomName;
     public List<MapCellData> mapCells = new List<MapCellData>();
     public List<MapItem> mapItems = new List<MapItem>();
-    public int2 startCoornate, endCoordinate;
+    public int2 startCoordinate, endCoordinate;
     public GameObject mapObj;
 
     public bool CheckBoundary(int2 coordinate)
     {
-        if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoornate.x
-            &&coordinate.y<= endCoordinate.y && coordinate.y >= startCoornate.y)
+        if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoordinate.x
+            &&coordinate.y<= endCoordinate.y && coordinate.y >= startCoordinate.y)
         {
             return true;
         }
