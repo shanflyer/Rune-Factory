@@ -142,7 +142,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void MoveAction(object obj)
     {
-        if (MapController.instance.MapRunning)
+       // if (MapController.instance.MapRunning)
         {
             var moveValue = (Vector2)obj;
             SetPlayerMoveDirection(moveValue);
@@ -318,7 +318,7 @@ public class CharacterManager : Singleton<CharacterManager>
             if (character.GetType() == typeof(Player))
             {
                 //≤‚ ‘
-                MapController.instance.nowMap = targetMap;
+              //  WorldMapManager.instance.displayMap = targetMap;
                 WorldMapManager.instance.RecycleMap();
                 WorldMapManager.instance.DisplayMap(targetMap);
             }
@@ -331,7 +331,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(string characterName)
     {
         player = new Player(characterName);
-        player.SetObjCoordinate(MapController.instance.nowMap, int2.zero);
+        player.SetObjCoordinate(WorldMapManager.instance.displayMap, int2.zero);
         //player.mapInstance = GameManager.instance.nowMap;
 
         foreach (var item in GameController.instance.testPlayerItems)
@@ -350,7 +350,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(CharacterSaveData characterSaveData)
     {
         player = new Player(characterSaveData);
-        player.SetObjCoordinate(MapController.instance.nowMap, int2.zero);
+        player.SetObjCoordinate(WorldMapManager.instance.displayMap, int2.zero);
 
         AddCharacter(player);
 
@@ -391,18 +391,8 @@ public class CharacterManager : Singleton<CharacterManager>
             character.StopMove();
         }
     }
-
-    public void Init(string characterName)
-    {
-        CreatPlayer(characterName);
-        //  CretaDefaultNpc();
-    }
-
-    public void Init(CharacterSaveData characterSaveData)
-    {
-        CreatPlayer(characterSaveData);
-        // CretaDefaultNpc();
-    }
+     
+  
 
     public async Task<Sprite> GetPlayerIcon()
     {
@@ -434,7 +424,7 @@ public class CharacterManager : Singleton<CharacterManager>
         CharacterRuntimeObj characterRuntimeObj;
         if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
         {
-            if (character.objCoordinate.mapInstance != MapController.instance.nowMap)
+            if (character.objCoordinate.mapInstance != WorldMapManager.instance.displayMap)
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                 characterRuntionObjs.Remove(character);
@@ -450,7 +440,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
-            if (character.objCoordinate.mapInstance == MapController.instance.nowMap)
+            if (character.objCoordinate.mapInstance == WorldMapManager.instance.displayMap)
             {
                 RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
                 Transform transform = runtimeObj.obj as Transform;
@@ -475,7 +465,7 @@ public class CharacterManager : Singleton<CharacterManager>
         characterRuntionObjs.Clear();
         foreach (var character in characters.Values)
         {
-            if (character.objCoordinate.mapInstance == MapController.instance.nowMap)
+            if (character.objCoordinate.mapInstance == WorldMapManager.instance.displayMap)
             {
                 RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
                 Transform transform = runtimeObj.obj as Transform;
@@ -580,7 +570,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         CrossMap(targetCoordinate, player, out int3 newMap);
                     }
                 },
-                MapController.instance.nowMap, playerRuntimeObj.linkId, true);
+                WorldMapManager.instance.displayMap, playerRuntimeObj.linkId, true);
         }
     }
 }

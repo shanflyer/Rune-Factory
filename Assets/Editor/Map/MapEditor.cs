@@ -64,6 +64,8 @@ public class MapEditor : MyEditor
         roomDataPanel = CreateInstance<CommonEditor>();
         roomDataPanel.InitData(Instance, null);
 
+        MapItemEditor.LoadItemData();
+
         mapRoomDataObjs = new List<CommonObj>();
         mapRoomDatas = new List<MapRoomData>();
         var dir = new DirectoryInfo(EditorDataPath.mapRoomDataPath);

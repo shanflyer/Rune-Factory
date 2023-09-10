@@ -54,6 +54,16 @@ public class MapItemEditor : MyEditor
     private void OnDestroy()
     {
         base.OnDestroy();
+        ground.ClearAllTiles();
+        collider.ClearAllTiles();
+        trigger.ClearAllTiles();
+        ground.RefreshAllTiles();
+        collider.RefreshAllTiles();
+        ground.RefreshAllTiles();
+        foreach (Transform child in singleItemParent)
+        {
+            DestroyImmediate(child.gameObject);
+        }
         myInstance = null;
         _Instance = null;
     }
@@ -68,19 +78,27 @@ public class MapItemEditor : MyEditor
         Init();
     }
 
-    void Init()
+    public static void LoadItemData()
     {
-        mapItemDataObjs.Clear();
         DirectoryInfo mapItemDir = new DirectoryInfo(EditorDataPath.mapItemDataPath);
         var files = mapItemDir.GetFiles("*.asset");
         MapInstanceEditor.mapItemDatas = new Dictionary<int, MapItemData>();
         foreach (var file in files)
         {
             var mapItemData = AssetDatabase.LoadAssetAtPath<MapItemData>($"{EditorDataPath.mapItemDataPath}{file.Name}");
-            mapItemDataObjs.Add(new MapItemDataObj(mapItemData));
+            
             MapInstanceEditor.mapItemDatas.Add(mapItemData.id, mapItemData);
         }
-
+    }
+    void Init()
+    {
+        mapItemDataObjs.Clear();
+        LoadItemData();
+        foreach(var data in MapInstanceEditor.mapItemDatas)
+        {
+            mapItemDataObjs.Add(new MapItemDataObj(data.Value));
+        }
+        
         mapItemsPanel = CreateInstance<CommonEditor>();
         mapItemsPanel.InitData(Instance, null);
         myInstance = new MyInstance();
@@ -243,7 +261,7 @@ public class MapItemEditor : MyEditor
         {
             mapItemDataObjs.Add(selectMapItemDataObj); 
         }
-
+        EditorUtility.SetDirty(selectMapItemDataObj.itemData);
         if (AssetDatabase.Contains(selectMapItemDataObj.itemData))
         {
             AssetDatabase.SaveAssets();

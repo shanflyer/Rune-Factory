@@ -145,7 +145,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
             RemoveRuntimePackage removeRuntimePackage = new RemoveRuntimePackage
             {
-                key = new Vector2Int(MapController.instance.nowMap, deleteMapItem.mapItemInstanceId)
+                key = new Vector2Int(WorldMapManager.instance.displayMap, deleteMapItem.mapItemInstanceId)
             };
             GameActionManager.instance.QueueAction(removeRuntimePackage);
 
@@ -218,7 +218,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         items.Add(instanceId);
 
-        if (addMapItem.mapId == MapController.instance.nowMap)
+        if (addMapItem.mapId == WorldMapManager.instance.displayMap)
         {
             DisplayMapItem(runtimeMapItem);
         }

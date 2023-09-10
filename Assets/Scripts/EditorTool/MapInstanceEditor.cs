@@ -14,10 +14,12 @@ public class MapInstanceEditor : MonoBehaviour
     private Transform itemParent;
 
     private Tilemap tilemap;
+    [SerializeField]
+    private bool hideTilemap;
 
     public static Dictionary<int, MapItemData> mapItemDatas;
 
-    private static string defaultGroundPath = "Assets/Resources/Prefabs/DefaultGround.prefab";
+    private static string defaultGroundPath = "Assets/Resources/Prefabs/Other/DefaultGround.prefab";
 
     private static string prefabPath = "Assets/Resources/Prefabs/Ground/";
 
@@ -63,6 +65,8 @@ public class MapInstanceEditor : MonoBehaviour
     private static TileBase _barrierTile;
     public int id;
 
+    List<TilemapRenderer> tilemapRenderers = new List<TilemapRenderer>();
+
     public WorldMap GetWorldMap()
     {
         WorldMap worldMap = new WorldMap
@@ -79,6 +83,8 @@ public class MapInstanceEditor : MonoBehaviour
         this.id = id;
         gameObject.name = mapRoomData.roomName;
 
+        tilemapRenderers.Clear();
+
         if (groundParent == null)
         {
             var groundParentObj = transform.Find("GroundParent");
@@ -91,7 +97,7 @@ public class MapInstanceEditor : MonoBehaviour
 
                 GameObject itemParentObj = new GameObject("ItemParent");
                 itemParentObj.transform.SetParent(transform, false);
-                itemParentObj.transform.localPosition = new Vector3(0, 0, -100);
+                itemParentObj.transform.localPosition = new Vector3(0, 0, 0);
                 itemParent = itemParentObj.transform;
 
                 GameObject Grid = new GameObject("Grid");
@@ -102,9 +108,10 @@ public class MapInstanceEditor : MonoBehaviour
 
                 var grid = Grid.AddComponent<Grid>();
                 tilemap = MapTile.AddComponent<Tilemap>();
-                var tilemapRenderer = MapTile.AddComponent<TilemapRenderer>();
-
+                var tilemapRenderer = MapTile.AddComponent<TilemapRenderer>(); 
                 tilemapRenderer.sortingOrder = 1;
+                tilemapRenderers.Add(tilemapRenderer);
+
                 grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
                 tilemapRenderer.enabled = !hideTilemap;
             }
@@ -133,12 +140,12 @@ public class MapInstanceEditor : MonoBehaviour
         Vector3 pos = GameCommon.GetMapPos(coordinate);
         return pos + transform.localPosition;
     }
-    private void InitMapObj()
+    private void InitMapObj(bool hideTilemap = false)
     {
         if (mapRoomData != null)
-        {
+        { 
             GameObject mapObj = mapRoomData.mapObj ? (GameObject)PrefabUtility.InstantiatePrefab(mapRoomData.mapObj) :
-                Instantiate(defaultGround);
+                Instantiate(defaultGround);  
             mapObj.transform.SetParent(groundParent, false);
             mapObj.name = mapRoomData.mapObj ? mapRoomData.mapObj.name : mapRoomData.roomName;
 
@@ -150,8 +157,35 @@ public class MapInstanceEditor : MonoBehaviour
                     if (itemData.itemObj)
                     {
                         GameObject itemObj = (GameObject)PrefabUtility.InstantiatePrefab(itemData.itemObj);
-                        itemObj.transform.SetParent(itemParent, false);
-                        var mapItemInstanceEditor = itemObj.AddComponent<MapItemInstanceEditor>();
+                        Transform itemInstance = new GameObject(itemData.itemName).transform;
+                        itemObj.transform.SetParent(itemInstance, false);
+
+
+                        GameObject Grid = new GameObject("Grid");
+                        Grid.transform.SetParent(transform, false);  
+
+                        GameObject ItemTile = new GameObject("ItemTile");
+                        ItemTile.transform.SetParent(Grid.transform, false);
+
+                        var grid = Grid.AddComponent<Grid>();
+                        var tilemap = ItemTile.AddComponent<Tilemap>();
+                        var tilemapRenderer = ItemTile.AddComponent<TilemapRenderer>(); 
+                        grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
+
+                        Grid.transform.SetParent(itemInstance, false);
+                        Grid.transform.localPosition = new Vector3(-GameCommon.cellSize, -GameCommon.cellSize,0);
+                        tilemapRenderer.enabled = !hideTilemap;
+                        tilemapRenderer.sortingOrder = 2; 
+                        tilemapRenderers.Add(tilemapRenderer);
+
+                        for (int i=0;i<itemData.colliderCells.Length;i++)
+                        {
+                            var cell = itemData.colliderCells[i];
+                            tilemap.SetTile(new Vector3Int(cell.x, cell.y, 0), barrierTile);
+                        }
+                         
+                        itemInstance.transform.SetParent(itemParent, false);
+                        var mapItemInstanceEditor = itemInstance.gameObject.AddComponent<MapItemInstanceEditor>();
                         mapItemInstanceEditor.InitData(itemData, item.instanceId, item.coordinate);
                     }
                 }
@@ -237,8 +271,18 @@ public class MapInstanceEditor : MonoBehaviour
 
     }
     int2 coordinate;
+    bool oldhideTilemap;
     private void Update()
     {
+        if (oldhideTilemap != hideTilemap)
+        {
+            oldhideTilemap = hideTilemap; 
+            foreach(var renderer in tilemapRenderers)
+            {
+                renderer.enabled = !hideTilemap;
+            }
+        }
+
         if (UpDataPos)
         {
             if (oldPos != transform.position)

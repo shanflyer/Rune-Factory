@@ -15,7 +15,29 @@ MonoBehaviour:
   id: 800000
   itemName: "\u679C\u6811"
   itemObj: {fileID: 7435737147892488648, guid: 09564b4a7e0de4f47b304c89b96f9fab, type: 3}
-  colliderCells: []
-  triggerCells: []
+  colliderCells:
+  - x: -1
+    y: 0
+  - x: 0
+    y: 0
+  - x: 1
+    y: 0
+  triggerCells:
+  - x: -2
+    y: 0
+  - x: -1
+    y: -1
+  - x: -1
+    y: 1
+  - x: 0
+    y: -1
+  - x: 0
+    y: 1
+  - x: 1
+    y: -1
+  - x: 1
+    y: 1
+  - x: 2
+    y: 0
   defaultExit: 0
   defaultEnter: 0
