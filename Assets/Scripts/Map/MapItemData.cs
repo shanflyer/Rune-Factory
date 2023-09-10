@@ -4,7 +4,7 @@ using Unity.Mathematics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+[CreateAssetMenu(menuName ="Data/µØÍ¼ÎïÌå")]
 [System.Serializable]
 public class MapItemData:ScriptableObject,IGameData
 {
@@ -12,8 +12,8 @@ public class MapItemData:ScriptableObject,IGameData
     public string itemName;
 
     public GameObject itemObj;
-  
 
+    public int2[] colliderCells;
     public int2[] triggerCells;
     public int defaultExit, defaultEnter;
     public override string ToString()

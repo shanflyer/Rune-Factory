@@ -124,7 +124,7 @@
             <key>datafile</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../MapTile.tpsheet</filename>
+                <filename>../../../Out/MapTile.tpsheet</filename>
             </struct>
         </map>
         <key>multiPackMode</key>
@@ -612,11 +612,7 @@
             <key type="filename">篱笆41.png</key>
             <key type="filename">篱笆42.png</key>
             <key type="filename">篱笆43.png</key>
-            <key type="filename">篱笆44.png</key>
-            <key type="filename">篱笆73.png</key>
-            <key type="filename">篱笆74.png</key>
-            <key type="filename">篱笆75.png</key>
-            <key type="filename">篱笆76.png</key>
+            <key type="filename">篱笆78.png</key>
             <key type="filename">篱笆96.png</key>
             <key type="filename">篱笆97.png</key>
             <key type="filename">篱笆98.png</key>

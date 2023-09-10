@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class MapEditor : MyEditor
 {
@@ -45,6 +46,9 @@ public class MapEditor : MyEditor
     private CommonEditor roomDataPanel;
     private MapInstanceEditor mapInstance;
 
+    private Tilemap ground, collider, trigger; 
+    private TileBase colliderTile, triggerTile;
+
     [MenuItem("工具/地图编辑")]
     public static void WindowShow()
     {
@@ -72,11 +76,19 @@ public class MapEditor : MyEditor
             MapRoomDataObj mapRoomDataObj = new MapRoomDataObj(mapRoomData);
             mapRoomDataObjs.Add(mapRoomDataObj);
         }
+        var MapEditor = GameObject.Find("MapEditor");
+        if (MapEditor == null)
+        {
+            Debug.LogError("场景不对或无MapEditor物体！");
+            return;
+        }
+        ground = MapEditor.transform.Find("Ground").GetComponent<Tilemap>();
+        collider = MapEditor.transform.Find("Collider").GetComponent<Tilemap>();
+        trigger = MapEditor.transform.Find("Trigger").GetComponent<Tilemap>(); 
 
-        MapItemEditor mapItemEditor = CreateWindow<MapItemEditor>("地图道具");
-        mapItemEditor.minSize = mapItemEditor.maxSize = new Vector2(220, 260);
-        MapItemEditor.Instance = mapItemEditor;
-        mapItemEditor.ShowAuxWindow();
+        colliderTile = AssetDatabase.LoadAssetAtPath<TileBase>(EditorDataPath.colliderTile);
+        triggerTile = AssetDatabase.LoadAssetAtPath<TileBase>(EditorDataPath.triggerTile);
+
     }
 
     private void DrawRoomDataPanel()
@@ -158,7 +170,7 @@ public class MapEditor : MyEditor
 
     public int CreatMapItemInstance(int id)
     {
-        var mapItemInstances = FindObjectsOfType<MapItemInstanceEditor>(true).ToList();
+        var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
         int intanceid = id * 1000 + Random.Range(0, 1000);
         while (mapItemInstances.Exists(m => m.mapItem.instanceId == intanceid))
         {

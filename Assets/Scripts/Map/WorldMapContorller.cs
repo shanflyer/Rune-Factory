@@ -280,9 +280,9 @@ public class WorldMapContorller : Singleton<WorldMapContorller>
     }
 
     //初始化世界数据
-    public async Task InitWorldData()
+    public async Task InitWorldData(string worldName)
     {
-        var worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>();
+        var worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>(worldName);
         MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
 
         roomMapDatas.Clear();

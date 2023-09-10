@@ -17,9 +17,9 @@ public class MapInstanceEditor : MonoBehaviour
 
     public static Dictionary<int, MapItemData> mapItemDatas;
 
-    private static string defaultGroundPath = "Assets/Resources/Prefab/DefaultGround.prefab";
+    private static string defaultGroundPath = "Assets/Resources/Prefabs/DefaultGround.prefab";
 
-    private static string prefabPath = "Assets/Resources/Prefab/Ground/";
+    private static string prefabPath = "Assets/Resources/Prefabs/Ground/";
 
     public static GameObject defaultGround
     {
@@ -104,7 +104,7 @@ public class MapInstanceEditor : MonoBehaviour
                 var tilemapRenderer = MapTile.AddComponent<TilemapRenderer>();
 
                 tilemapRenderer.sortingOrder = 1;
-                grid.cellSize = new Vector3(0.48f, 0.48f, 0);
+                grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
                 tilemapRenderer.enabled = !hideTilemap;
             }
             InitMapObj();
@@ -180,7 +180,7 @@ public class MapInstanceEditor : MonoBehaviour
 
                     MapCellData mapCell = new MapCellData
                     {
-                        coordinate = new Vector2Int(x, y),
+                        coordinate = new int2(x, y),
                         isWalkable = (tile != null && tile.name == "1") ? true : false
                     };
                     mapRoomData.mapCells.Add(mapCell);

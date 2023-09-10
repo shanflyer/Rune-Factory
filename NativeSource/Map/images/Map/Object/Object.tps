@@ -265,14 +265,9 @@
             </struct>
             <key type="filename">书架0.png</key>
             <key type="filename">书架1.png</key>
-            <key type="filename">床59.png</key>
-            <key type="filename">床60.png</key>
-            <key type="filename">床7.png</key>
-            <key type="filename">床8.png</key>
-            <key type="filename">毛片.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0.5,0.833333</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -843,6 +838,25 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">床59.png</key>
+            <key type="filename">床60.png</key>
+            <key type="filename">床7.png</key>
+            <key type="filename">床8.png</key>
+            <key type="filename">毛片.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,24,32,48</rect>
+                <key>scale9Paddings</key>
+                <rect>16,24,32,48</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">手柄10.png</key>
             <key type="filename">手柄30.png</key>
             <struct type="IndividualSpriteSettings">
@@ -1213,8 +1227,6 @@
             </struct>
             <key type="filename">树上果实0.png</key>
             <key type="filename">风车18.png</key>
-            <key type="filename">风车19.png</key>
-            <key type="filename">风车20.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

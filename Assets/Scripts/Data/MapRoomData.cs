@@ -13,7 +13,7 @@ public struct MapItem
 [System.Serializable]
 public struct MapCellData
 {
-    public Vector2Int coordinate;
+    public int2 coordinate;
     public bool isWalkable;
 }
 

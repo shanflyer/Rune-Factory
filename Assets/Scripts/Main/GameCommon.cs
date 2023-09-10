@@ -86,9 +86,9 @@ public class GameCommon
     public const float fightMapMovingSpeed = 0.2f;
 
 
-    public const float cellWidth = 0.32f, cellHigh = 0.32f;
-    public const float cellSize = 0.16f;
-    public const float oneDividCellWidth = 3.125f, oneDividCellHigh =3.125f;
+    public const float cellWidth = 0.16f, cellHigh = 0.16f;
+    public const float cellSize = 0.08f;
+    public const float oneDividCellWidth = 12.5f, oneDividCellHigh =12.5f;
     public const float slantValue = 0.707f;
 
 
@@ -467,8 +467,11 @@ public static class EditorDataPath
     public const string worldMapDataPath = "Assets/Resources/Data/WorldMapData.asset";
 
     public const string mapItemSourcePath = "Assets/Texture/Map/Item/";
-    public const string mapItemPrefabPath = "Assets/Resources/Prefab/MapItem/"; 
-    public const string mapGroundPath = "Assets/Resources/Prefab/Ground/";
+    public const string mapItemPrefabPath = "Assets/Resources/Prefabs/MapItem/"; 
+    public const string mapGroundPath = "Assets/Resources/Prefabs/Ground/";
+
+    public const string colliderTile = "Assets/TileMap/Tiles/Event/0.asset";
+    public const string triggerTile= "Assets/TileMap/Tiles/Event/e.asset";
 
     public const string mapItemStructDataPath = "Assets/Editor/Data/MapItemStruct.json";
     public const string mapItemAnimationPath = "Assets/Animation/MapItem/"; 
