@@ -1,4 +1,75 @@
- 
+public class WorldDataObj : CommonObj
+{
+    public WorldMapData data;
+    public WorldDataObj() { }
+    public WorldDataObj(WorldMapData data)
+    {
+        this.data = data;
+    }
+
+    public void ChecckSearch(string key, ObjSearchType objSearchType)
+    {  
+    }
+
+    public bool CheckHide()
+    {
+        return false;
+    }
+
+    public CommonObj CreatNew(int count)
+    {
+      return  WorldMapEditor.Instance.CreatWorld();
+    }
+
+    public void Delete()
+    {
+        WorldMapEditor.Instance.DeleteWorld(this);
+    }
+
+    public void DrawTextureWithTexCoords(float posX, float posY, int texSize)
+    {
+    }
+
+    public string GetId()
+    {
+        return data.GetKey();
+    }
+
+    public string GetName()
+    {
+        return data.name;
+    }
+
+    public bool GetSearch()
+    {
+        return true;
+    }
+
+    public void InitSearch()
+    { 
+    }
+
+    public void NoSelectAction()
+    { 
+    }
+
+    public void Save()
+    {
+    }
+
+    public void SelectAction()
+    {
+        WorldMapEditor.Instance.SelectWorld(this);
+    }
+
+    public void SetHide()
+    { 
+    }
+
+    public void SetNoHide()
+    { 
+    }
+}
 public class MapRoomDataObj : CommonObj
 {
     public MapRoomData mapRoomData;

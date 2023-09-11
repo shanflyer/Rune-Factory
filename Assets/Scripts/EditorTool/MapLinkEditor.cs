@@ -8,6 +8,7 @@ public class MapLinkEditor : MonoBehaviour
 {
     private Transform startPoint, endPoint;
     private Vector3 startPos, endPos;
+    private Vector2Int startCoordinate, endCoordinate;
     private LineRenderer lineRenderer;
 
     private Vector3 mapPos0, mapPos1;
@@ -20,11 +21,25 @@ public class MapLinkEditor : MonoBehaviour
         startPos = startPoint.position;
         endPos = endPoint.position;
         lineRenderer = GetComponent<LineRenderer>();
-        SetLinePoint();
+        SetLineCoordinatePos();
     }
     [HideInInspector]
     public MapLine mapLine;
     private MapInstanceEditor mapInstance0, mapInstance1;
+
+
+    void SetLineCoordinatePos()
+    {
+
+        startCoordinate = GameCommon.GetMapCoordinate(startPos);
+        endCoordinate = GameCommon.GetMapCoordinate(endPos);
+
+        startPos = GameCommon.GetMapPos(startCoordinate);
+        endPos = GameCommon.GetMapPos(endCoordinate);
+        startPoint.transform.position = startPos;
+        endPoint.transform.position = endPos;
+        SetLinePoint();
+    }
 
     public bool CheckLink(int mapId)
     {
@@ -52,9 +67,10 @@ public class MapLinkEditor : MonoBehaviour
 
     void SetLinePointPos()
     {
+        startCoordinate = new Vector2Int(mapLine.cell0.x, mapLine.cell0.y);
         Vector2 _startPos = mapInstance0.GetMapPos(mapLine.cell0);
         startPoint.position = new Vector3(_startPos.x, _startPos.y, startPoint.position.z);
-
+        endCoordinate = new Vector2Int(mapLine.cell1.x, mapLine.cell1.y);
         Vector2 _endPos = mapInstance1.GetMapPos(mapLine.cell1);
         endPoint.position = new Vector3(_endPos.x, _endPos.y, endPoint.position.z);
 
@@ -67,8 +83,45 @@ public class MapLinkEditor : MonoBehaviour
         SetLinePoint();
     }
 
+    public void CheckPos()
+    {
+        /*
+        if (mapPos0 != mapInstance0.transform.position || mapPos1 != mapInstance1.transform.position)
+        {
+            SetLinePointPos();
+        }
+
+        if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate, ref mapLine))
+        {
+            DestroyImmediate(gameObject);
+        }
+        */
+        mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map0];
+        mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1];
+    }
+
+    private void Update()
+    {
+       startCoordinate = GameCommon.GetMapCoordinate(startPoint.position);
+       endCoordinate = GameCommon.GetMapCoordinate(endPoint.position);
+        startPos = GameCommon.GetMapPos(startCoordinate);
+        endPos = GameCommon.GetMapPos(endCoordinate);
+        startPoint.transform.position = startPos;
+        endPoint.transform.position = endPos;
+        SetLinePoint();
+
+    }
+    public void SetLinkMapData()
+    {
+        if (!WorldInstanceEditor.Instance.InitLinkMap(new int2(startCoordinate.x,startCoordinate.y),
+            new int2(endCoordinate.x, endCoordinate.y),
+             ref mapLine))
+        {
+            DestroyImmediate(gameObject);
+        }
+    }
     // Update is called once per frame
-    void Update()
+    void Update1()
     {
         if (mapPos0 != mapInstance0.transform.position || mapPos1 != mapInstance1.transform.position)
         {

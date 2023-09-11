@@ -464,7 +464,7 @@ public static class EditorDataPath
 
     public const string mapItemDataPath = "Assets/Resources/Data/MapItemData/";
     public const string mapRoomDataPath = "Assets/Resources/Data/MapRoomData/";
-    public const string worldMapDataPath = "Assets/Resources/Data/WorldMapData.asset";
+    public const string worldMapDataPath = "Assets/Resources/Data/WorldMapData/";
 
     public const string mapItemSourcePath = "Assets/Texture/Map/Item/";
     public const string mapItemPrefabPath = "Assets/Resources/Prefabs/MapItem/"; 

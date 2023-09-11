@@ -1,24 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using System.Collections.Generic;
 using System.IO;
+using System.Xml.Schema;
 using UnityEditor;
 using UnityEngine;
 
 public class WorldMapEditor : MyEditor
 {
-    public static WorldMapEditor Instance;
-    private WorldMapData worldMapData;
+    public static WorldMapEditor Instance; 
     private CommonEditor roomMapPanel;
-    private WorldInstanceEditor worldInstanceEditor;
+    private CommonEditor worldPanel;
+    
 
     private List<CommonObj> mapRoomObjs = new List<CommonObj>();
     private Dictionary<string, MapRoomData> mapRoomDatas = new Dictionary<string, MapRoomData>();
+
+    private List<CommonObj> worldObjs = new List<CommonObj>();
+    private WorldDataObj selectWorld;
+    private WorldInstanceEditor worldInstanceEditor;
 
     [MenuItem("工具/世界地图")]
     public static void WindowShow()
     {
         WorldMapEditor worldMapEditor = CreateWindow<WorldMapEditor>("世界编辑");
         Instance = worldMapEditor;
-        worldMapEditor.minSize = worldMapEditor.maxSize = new Vector2(240, 480);
+        //worldMapEditor.minSize = worldMapEditor.maxSize = new Vector2(240, 480);
         Instance.ShowAuxWindow();
     }
 
@@ -26,26 +32,65 @@ public class WorldMapEditor : MyEditor
     {
         roomMapPanel = CreateInstance<CommonEditor>();
         roomMapPanel.InitData(Instance, null);
-
+        MapItemEditor.LoadItemData();
+        worldPanel =CreateInstance<CommonEditor>();
+        worldPanel.InitData(Instance, null);
         LoadWorldData();
-        LoadRoomData();
-         
-        MapInstanceEditor.mapItemDatas = new Dictionary<int, MapItemData>();
-        string itemDataPath = "Assets/Resources/Data/MapItemData/";
-        DirectoryInfo mapItemDir = new DirectoryInfo(itemDataPath);
-        var files = mapItemDir.GetFiles("*.asset");
-        foreach (var file in files)
-        {
-            var mapItemData = AssetDatabase.LoadAssetAtPath<MapItemData>($"{itemDataPath}{file.Name}"); 
-            MapInstanceEditor.mapItemDatas.Add(mapItemData.id, mapItemData);
-        }
-        
-        CreatWorldInstance();
+        LoadRoomData();  
     }
 
+    public CommonObj CreatWorld()
+    {
+        WorldMapData worldMapData = new WorldMapData
+        {
+            name = $"新世界{worldObjs.Count}",
+        };
+        WorldDataObj worldDataObj = new WorldDataObj(worldMapData);
+        worldObjs.Add(worldDataObj);
+        SelectWorld(worldDataObj);
+        return worldDataObj;
+    }
+    public void DeleteWorld(WorldDataObj worldDataObj)
+    {
+        string path=$"{EditorDataPath.worldMapDataPath}{worldDataObj.GetName()}.asset";
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        worldObjs.Remove(worldDataObj);
+        if (selectWorld == worldDataObj)
+        {
+            selectWorld = null;
+        }
+        if (worldInstanceEditor != null)
+        {
+            DestroyImmediate(worldInstanceEditor.gameObject);
+        }
+    }
+    public void SelectWorld(WorldDataObj worldDataObj)
+    {
+        selectWorld = worldDataObj;
+        if (selectWorld == null)
+        {
+            return;
+        }
+        CreatWorldInstance();
+    }
+   
     private void LoadWorldData()
     {
-        worldMapData = AssetDatabase.LoadAssetAtPath<WorldMapData>(EditorDataPath.worldMapDataPath);
+        DirectoryInfo worldDir = new DirectoryInfo(EditorDataPath.worldMapDataPath);
+        var files = worldDir.GetFiles("*.asset");
+        worldObjs.Clear();
+        foreach(var file in files)
+        {
+            var worldData=AssetDatabase.LoadAssetAtPath<WorldMapData>($"{EditorDataPath.worldMapDataPath}{file.Name}");
+            worldObjs.Add(new WorldDataObj(worldData));
+        }
+        if (worldObjs.Count > 0)
+        {
+            //selectWorld = worldObjs[0];
+        }
     }
 
     private void LoadRoomData()
@@ -68,14 +113,22 @@ public class WorldMapEditor : MyEditor
 
     private void CreatWorldInstance()
     {
+        if (worldInstanceEditor != null)
+        {
+            DestroyImmediate(worldInstanceEditor.gameObject);
+        }
         GameObject worldObj = new GameObject("World");
         worldInstanceEditor = worldObj.AddComponent<WorldInstanceEditor>();
-        worldInstanceEditor.InitData(worldMapData, mapRoomDatas);
+        worldInstanceEditor.InitData(selectWorld.data, mapRoomDatas);
     }
 
     public void OnGUI()
     {
-        roomMapPanel.DisplayCommonObjList<MapRoomDataObj>(220, 400, mapRoomObjs, 2);
+        roomMapPanel.DisplayCommonObjList<MapRoomDataObj>(240, (int)(Instance.position.size.y*0.45f), mapRoomObjs, 2);
+
+        EditorGUILayout.BeginVertical("button");
+        worldPanel.DisplayCommonObjList<WorldDataObj>(240, (int)(Instance.position.size.y * 0.3f), worldObjs, 2,false,false,true);
+        EditorGUILayout.EndVertical();
 
         EditorGUILayout.BeginHorizontal();
         DrawButton("添加地图", CreatNewMapInstance, 80);
@@ -87,23 +140,42 @@ public class WorldMapEditor : MyEditor
 
     void SaveWorldData()
     {
-        var mapInstances = FindObjectsOfType<MapInstanceEditor>();
-        var links = FindObjectsOfType<MapLinkEditor>();
+        if(selectWorld == null)
+        {
+            return;
+        }
 
-        worldMapData.mapLines.Clear();
-        worldMapData.worldMaps.Clear();
+        var mapInstances = FindObjectsByType<MapInstanceEditor>(FindObjectsSortMode.None);
+        var links = FindObjectsByType<MapLinkEditor>(FindObjectsSortMode.None);
+
+        
+
+        selectWorld.data.mapLines.Clear();
+        selectWorld.data.worldMaps.Clear();
 
         foreach(var mapInstance in mapInstances)
         {
-            worldMapData.worldMaps.Add(mapInstance.GetWorldMap());
+            selectWorld.data.worldMaps.Add(mapInstance.GetWorldMap());
         }
         foreach(var mapLink in links)
         {
-            worldMapData.mapLines.Add(mapLink.mapLine);
+            mapLink.SetLinkMapData();
+            if (mapLink != null)
+            {
+                selectWorld.data.mapLines.Add(mapLink.mapLine);
+            }
+            
         }
-
-        EditorUtility.SetDirty(worldMapData);
-        AssetDatabase.SaveAssets();
+        if (AssetDatabase.Contains(selectWorld.data))
+        {
+            EditorUtility.SetDirty(selectWorld.data);
+            AssetDatabase.SaveAssets();
+        }
+        else
+        {
+            string path=$"{EditorDataPath.worldMapDataPath}{selectWorld.GetName()}.asset";
+            AssetDatabase.CreateAsset(selectWorld.data,path); 
+        } 
     }
     void CreatMapLink()
     {

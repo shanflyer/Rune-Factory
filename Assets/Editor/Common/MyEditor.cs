@@ -689,7 +689,7 @@ public class CommonEditor : Editor
         }
 
         //this.model = model;
-        int itemWidth = (int)(width / widthCount);
+        int itemWidth = (int)((width-20) / widthCount);
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(width), GUILayout.Height(height));
         if (defaultSelect)
         {
