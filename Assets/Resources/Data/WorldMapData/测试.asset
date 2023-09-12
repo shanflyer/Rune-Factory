@@ -14,24 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMap: 41
   worldMaps:
-  - map: NewRoom1
-    id: 119
-    coordinate:
-      x: 3
-      y: -37
-      z: 0
   - map: NewRoom0
     id: 41
     coordinate:
       x: 0
       y: 0
       z: 0
+  - map: NewRoom1
+    id: 119
+    coordinate:
+      x: 22
+      y: -32
+      z: 0
   mapLines:
-  - map0: 41
-    map1: 119
+  - map0: 119
+    map1: 41
     cell0:
-      x: 0
-      y: 0
+      x: -3
+      y: 9
     cell1:
-      x: 0
-      y: 0
+      x: 19
+      y: -21

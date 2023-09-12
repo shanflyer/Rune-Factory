@@ -88,7 +88,7 @@ public class GameCommon
 
     public const float cellWidth = 0.16f, cellHigh = 0.16f;
     public const float cellSize = 0.08f;
-    public const float oneDividCellWidth = 12.5f, oneDividCellHigh =12.5f;
+    public const float oneDividCellWidth = 6.25f, oneDividCellHigh =6.25f;
     public const float slantValue = 0.707f;
 
 
