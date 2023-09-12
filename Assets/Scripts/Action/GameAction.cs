@@ -15,7 +15,25 @@ public interface GameAction
 
 public delegate void SetValue(int value);
 
+public struct CreatCharacter : GameAction
+{
+    public int characterId;
+    public int mapInstance;
+    public int coordinateX;
+    public int coordinateY;
 
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            mapInstance = int.Parse(parameters[1].value);
+        if (parameters.Count > 2)
+            coordinateX = int.Parse(parameters[2].value);
+        if (parameters.Count > 3)
+            coordinateY = int.Parse(parameters[3].value);
+    }
+}
 public struct ChangeWorld : GameAction
 {
     public string worldName;

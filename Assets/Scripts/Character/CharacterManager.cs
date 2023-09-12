@@ -19,6 +19,8 @@ public class CharacterManager : Singleton<CharacterManager>
     public const float moveSpeed = 5f;
     public const float updataMoveSpeed = 2f;
 
+    private MyInstance myInstance;
+
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
     private Dictionary<int,List<int>> characterInstances=new Dictionary<int, List<int>>();
 
@@ -35,10 +37,14 @@ public class CharacterManager : Singleton<CharacterManager>
     public override void Init()
     {
         base.Init();
+
+        myInstance = new MyInstance();
+
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
         GameActionManager.instance.AddListener<ChangeCharacterProperty>(ChangeCharacterValue);
         GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordiante);
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
+        GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
 
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
@@ -46,18 +52,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public string PlayerName => player.name;
     public Sprite PlayerIcon => playerData.icon;
 
-    public int CreatCaracterInstanceId()
-    {
-        var guid= Guid.NewGuid();
-        int instanceId=guid.GetHashCode();
-        while (instanceIds.Contains(instanceId))
-        {
-            guid = Guid.NewGuid();
-            instanceId = guid.GetHashCode();
-        }
-        instanceIds.Add(instanceId);
-        return instanceId;
-    }
+   
 
     void CreatTeam(CreatTeamPlayer creatTeamPlayer)
     {
@@ -86,14 +81,29 @@ public class CharacterManager : Singleton<CharacterManager>
     public async void CreatPlayer(int id,int bag)
     { 
         playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
-        int instanceId = CreatCaracterInstanceId();
+        int instanceId = myInstance.CreatInstanceId();
         player=new Player(playerData, instanceId);
         AddCharacter(player); 
     }
 
+
+    async void CreatCharacter(CreatCharacter creatCharacter)
+    {
+        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
+        Character character = new Character(characterData, myInstance.CreatInstanceId());
+        AddCharacter(character);
+        character.objCoordinate = new ObjCoordinate
+        {
+            mapInstance = creatCharacter.mapInstance,
+            x = creatCharacter.coordinateX,
+            y = creatCharacter.coordinateY
+        };
+        RefreshNpcRuntimeObj(character);
+    }
+
     Character CreatCharacter(CharacterData characterData,int bag=-1)
     {
-        int instanceId = CreatCaracterInstanceId();
+        int instanceId = myInstance.CreatInstanceId();
         Character character = new Character(characterData, instanceId);
         character.SetLevel(characterData.level,true);
         AddCharacter(character);
@@ -103,7 +113,7 @@ public class CharacterManager : Singleton<CharacterManager>
     async Task<Character> CreatCharacter(int characterId,int bag)
     {
         var characterData=await GameDataManager.instance.GetAsyncData<CharacterData>(characterId);
-        int instanceId = CreatCaracterInstanceId();
+        int instanceId = myInstance.CreatInstanceId();
         Character character = new Character(characterData, instanceId); 
         character.SetLevel(characterData.level);
         AddCharacter(character);
@@ -419,7 +429,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return default(RuntimeObj);
     }
 
-    public async System.Threading.Tasks.Task RefreshNpcRuntimeObj(Character character)
+    public async void RefreshNpcRuntimeObj(Character character)
     {
         CharacterRuntimeObj characterRuntimeObj;
         if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))

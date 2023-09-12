@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class WorldMapController : MonoBehaviour
@@ -7,6 +8,12 @@ public class WorldMapController : MonoBehaviour
     WorldMapManager worldMapManager;
     [SerializeField]
     string worldName;
+    [SerializeField]
+    int characterId;
+    [SerializeField]
+    int mapInstance;
+    [SerializeField]
+    int2 coordinate;
     private void OnEnable()
     {
         instance = this;
@@ -32,7 +39,16 @@ public class WorldMapController : MonoBehaviour
         {
             worldName = worldName
         });
+        GameActionManager.instance.QueueAction(new CreatCharacter
+        {
+            characterId=characterId,
+            mapInstance=mapInstance,
+            coordinateX=coordinate.x,
+            coordinateY=coordinate.y
+        });
     }
+
+
 #if UNITY_EDITOR
     private void Update()
     {
