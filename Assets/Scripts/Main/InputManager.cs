@@ -95,7 +95,7 @@ public class InputManager :Singleton<InputManager>
                     }
                 };
                 action.performed += PerformedDelegate;
-
+                 
 
                 void CanceledDelegate(CallbackContext callbackContext)
                 {
@@ -108,8 +108,9 @@ public class InputManager :Singleton<InputManager>
 
                 InputActions[action.name] = action;
             }
-        } 
-      
+        }
+
+        GameActionManager.instance.QueueAction(new InitInputAction());
     }
 
     public void SwitchInputMap(bool UI)

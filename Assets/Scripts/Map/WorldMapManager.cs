@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEditor.Purchasing;
 using UnityEngine;
 
 public class WorldMapManager : Singleton<WorldMapManager>
@@ -20,7 +21,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public RuntimeObj nowMapRoomObj;
 
-    public int displayMap { get;private set; }
+    public int displayMap { get;set; }
 
     public override void Init()
     {
@@ -121,7 +122,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
     }
 
-    private void DeleteMapItem(DeleteMapItem deleteMapItem)
+    private async void DeleteMapItem(DeleteMapItem deleteMapItem)
     {
         //Vector2Int key = new Vector2Int(deleteMapItem.mapId, deleteMapItem.mapItemInstanceId);
 
@@ -133,7 +134,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
                 if (deleteMapItem.triggerClear)
                 {
-                    MapCellController.instance.RemoveTriggerCell(runtimeMapItem.mapInstanceId, deleteMapItem.mapItemInstanceId);
+                    var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+                    MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells,runtimeMapItem.mapInstanceId, deleteMapItem.mapItemInstanceId);
                 }
             }
         }

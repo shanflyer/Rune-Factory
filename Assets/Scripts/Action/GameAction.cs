@@ -15,12 +15,19 @@ public interface GameAction
 
 public delegate void SetValue(int value);
 
+public struct InitInputAction : GameAction
+{
+    public void Init(List<Parameter> parameters)
+    { 
+    }
+}
 public struct CreatCharacter : GameAction
 {
     public int characterId;
     public int mapInstance;
     public int coordinateX;
     public int coordinateY;
+    public bool controller;
 
     public void Init(List<Parameter> parameters)
     {
@@ -32,6 +39,8 @@ public struct CreatCharacter : GameAction
             coordinateX = int.Parse(parameters[2].value);
         if (parameters.Count > 3)
             coordinateY = int.Parse(parameters[3].value);
+        if (parameters.Count > 4)
+            controller = bool.Parse(parameters[4].value);
     }
 }
 public struct ChangeWorld : GameAction

@@ -25,27 +25,34 @@ public class WorldMapController : MonoBehaviour
     {
         if (Camera.main == null)
         {
+            GameObjectCurveController.instance.SetUpDataComponent(this);
+            worldMapManager.displayMap = mapInstance;
+            var characterManager = CharacterManager.instance;
             var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)
             {
                 Instantiate(cameraPrefab);
-            }
+            } 
+            InputManager.instance.SwitchInputMap(false);
+
+            GameActionManager.instance.QueueAction(new ChangeWorld
+            {
+                worldName = worldName
+            });
+            GameActionManager.instance.QueueAction(new CreatCharacter
+            {
+                characterId = characterId,
+                mapInstance = mapInstance,
+                coordinateX = coordinate.x,
+                coordinateY = coordinate.y,
+                controller = true
+            });
         }
     }
     // Use this for initialization
     void Start()
     {
-        GameActionManager.instance.QueueAction(new ChangeWorld
-        {
-            worldName = worldName
-        });
-        GameActionManager.instance.QueueAction(new CreatCharacter
-        {
-            characterId=characterId,
-            mapInstance=mapInstance,
-            coordinateX=coordinate.x,
-            coordinateY=coordinate.y
-        });
+       
     }
 
 

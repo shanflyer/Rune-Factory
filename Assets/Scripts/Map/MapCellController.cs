@@ -6,6 +6,7 @@ using Unity.Burst;
 using Unity.Jobs;
 using Unity.Mathematics;
 using System.Linq;
+using UnityEngine.Analytics;
 
 public class MapCellController :Singleton<MapCellController>
 {
@@ -14,7 +15,14 @@ public class MapCellController :Singleton<MapCellController>
     [BurstCompile]
     public struct RuntimeMapRoom
     {
-        
+        public readonly void Dispose()
+        {
+            roomCellData.Dispose();
+            linkMaps.Dispose();
+            neighbourMaps.Dispose();
+            triggerEventCells.Dispose();
+        }
+
         public int id;
 
         public int3 coordinate;
@@ -23,9 +31,11 @@ public class MapCellController :Singleton<MapCellController>
         public NativeList<int> neighbourMaps;
 
 
-        public NativeList<TriggerCell> triggerCells;
-        private NativeHashMap<int, int> triggerIndexs;
-        private NativeHashMap<int, int> triggerRefrenceDatas;
+        public NativeHashMap<int2, NativeList<int4>> triggerEventCells;
+
+       // public NativeList<TriggerCell> triggerCells;
+       // private NativeHashMap<int, int> triggerIndexs;
+       // private NativeHashMap<int, int> triggerRefrenceDatas;
 
         public override int GetHashCode()
         {
@@ -34,10 +44,14 @@ public class MapCellController :Singleton<MapCellController>
 
         public void InitTriggerData()
         {
-            triggerCells = new NativeList<TriggerCell>(16, Allocator.TempJob);
-            triggerIndexs = new NativeHashMap<int, int>(16, Allocator.TempJob);
-            triggerRefrenceDatas = new NativeHashMap<int, int>(16, Allocator.TempJob);
+            triggerEventCells=new NativeHashMap<int2, NativeList<int4>>(16,Allocator.TempJob);
+
+
+           // triggerCells = new NativeList<TriggerCell>(16, Allocator.TempJob);
+            //triggerIndexs = new NativeHashMap<int, int>(16, Allocator.TempJob);
+            //triggerRefrenceDatas = new NativeHashMap<int, int>(16, Allocator.TempJob);
         }
+        /*
         public void AddTriggerCell(TriggerCell trigger,int linkId = 0)
         { 
             int id = GameCommon.CreateRandSeed();
@@ -53,7 +67,8 @@ public class MapCellController :Singleton<MapCellController>
                 triggerRefrenceDatas.Add(linkId, id);
             }
         }
-        public void RemoveTriggerCell(int refrenceId)
+        */
+        /*public void RemoveTriggerCell(int refrenceId)
         {
             if(triggerRefrenceDatas.TryGetValue(refrenceId,out int id))
             {
@@ -64,7 +79,7 @@ public class MapCellController :Singleton<MapCellController>
                 }
                 triggerRefrenceDatas.Remove(refrenceId);
             }
-        }
+        }*/
          
 
         public bool GetLinkMapInCoordinate(int linkMap, ref int2 inCoordinate)
@@ -134,6 +149,10 @@ public class MapCellController :Singleton<MapCellController>
     }
     public struct RoomCellData
     {
+        public readonly void Dispose()
+        { 
+            cellValue.Dispose(); 
+        }
         public NativeArray<int> cellValue;
         public int2 startCoordinate, endCoordinate;
 
@@ -183,14 +202,14 @@ public class MapCellController :Singleton<MapCellController>
     }
 
     //触发格子事件
-    public struct TriggerCell  
+    /*public struct TriggerCell  
     {
         public int referenceId;
         public EntityType triggerType;
         public NativeHashSet<int2> cells;
         public int enterLinkEventId;
         public int exitLinkEventId;
-    }
+    }*/
 
 
     private MyNativeData<RuntimeMapRoom> runtimeMapRooms;
@@ -199,6 +218,46 @@ public class MapCellController :Singleton<MapCellController>
     public void CheckTriggerEvent(int entityId,EntityType entityType,int room,int2 oldCell,int2 nowCell,
         TriggerEvent triggerEvent)
     {
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+           var triggerEventCells = runtimeMapRoom.triggerEventCells ;
+            if(triggerEventCells.TryGetValue(oldCell,out var enevntData))
+            {
+                for(int i = 0; i < enevntData.Length; i++)
+                {
+                    var data = enevntData[i]; 
+                    int typeValue = data.x % (int)entityType;
+                    if (typeValue > 0)
+                    {
+                        return;
+                    } 
+                    if (data.z != 0)
+                    {
+                        triggerEvent.Invoke(data.z,data.w, false);
+                    } 
+                }
+            }
+
+            if (triggerEventCells.TryGetValue(nowCell, out var eventData))
+            {
+                for (int i = 0; i < eventData.Length; i++)
+                {
+                    var data = eventData[i];
+                    int typeValue = data.x % (int)entityType;
+                    if (typeValue > 0)
+                    {
+                        return;
+                    }
+                    if (data.y != 0)
+                    {
+                        triggerEvent.Invoke(data.y, data.w, true);
+                    }
+                }
+            }
+        }
+
+
+        /*
         TriggerCell triggerCell; 
         if (GetRuntimeMapRoom(room,out RuntimeMapRoom runtimeMapRoom))
         {
@@ -232,23 +291,46 @@ public class MapCellController :Singleton<MapCellController>
             triggerCells.Dispose();
         }
 
-       
+       */
     }
 
+    public void RemoveTriggerCell(int2[] cells,int room, int linkId)
+    {
+        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            for(int i = 0; i < cells.Length; i++)
+            {
+                if (runtimeMapRoom.triggerEventCells.TryGetValue(cells[i],out  var enevntData))
+                {
+                    for(int j = enevntData.Length-1; j >=0; j--)
+                    {
+                        var data = enevntData[j];
+                        if (data.w == linkId)
+                        {
+                            enevntData.RemoveAt(j);
+                        }
+                    }
+                }
+            }
+            //runtimeMapRoom.RemoveTriggerCell(linkId);
+            runtimeMapRooms.SetData(runtimeMapRoom);
+        }
+    }
+    /*
     public void RemoveTriggerCell(int room,int linkId)
     {
         if(runtimeMapRooms.GetData(room,out RuntimeMapRoom runtimeMapRoom))
         {
             runtimeMapRoom.RemoveTriggerCell(linkId);
             runtimeMapRooms.SetData(runtimeMapRoom); 
-        }
-
-        
-    }
+        } 
+    }*/
     public void AddTriggerCell(int2[] cells,int room,int enterEventId,int exitEventId,EntityType triggerType,int linkId,int2 offset)
     {
         if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
         { 
+            int4 triggerEvent=new int4((int)triggerType,enterEventId,exitEventId,linkId);
+            /*
             TriggerCell triggerCell = new TriggerCell
             {
                 cells = new NativeHashSet<int2>(cells.Length, Allocator.TempJob),
@@ -257,11 +339,20 @@ public class MapCellController :Singleton<MapCellController>
                 referenceId = linkId,
                 triggerType = triggerType
             };
+            */
             for (int i = 0; i < cells.Length; i++)
             {
-                triggerCell.cells.Add(cells[i]+offset);
+                if (!runtimeMapRoom.triggerEventCells.TryGetValue(cells[i] + offset, out var items))
+                {
+                    items = new NativeList<int4>(4, Allocator.TempJob);
+                    
+                }
+                items.Add(triggerEvent);
+                runtimeMapRoom.triggerEventCells.Add(cells[i] + offset, items);
+
+                //triggerCell.cells.Add(cells[i]+offset);
             }
-            runtimeMapRoom.AddTriggerCell(triggerCell, linkId); 
+            //runtimeMapRoom.AddTriggerCell(triggerCell, linkId); 
             runtimeMapRooms.SetData(runtimeMapRoom);
         }
          
@@ -607,6 +698,7 @@ public class MapCellController :Singleton<MapCellController>
         }
     }
 
+    /*
     public struct TriggerJob:IJobParallelFor
     {
        [ReadOnly] public NativeArray<TriggerCell> triggerCells;
@@ -639,4 +731,5 @@ public class MapCellController :Singleton<MapCellController>
             }
         }
     }
+    */
 }

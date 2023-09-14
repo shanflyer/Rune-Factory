@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour
         var fightManager = FightManager.instance;
         var talkManager= TalkManager.instance;
 
+        GameObjectCurveController.instance.SetUpDataComponent(this);
+
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);
 
