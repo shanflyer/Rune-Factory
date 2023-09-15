@@ -1983,7 +1983,7 @@ namespace UnityEngine.InputSystem
             /// <seealso cref="InputAction.ReadValueAsObject"/>
             public object ReadValueAsObject()
             {
-                if (m_State != null && phase.IsInProgress())
+                if (m_State != null)
                     return m_State.ReadValueAsObject(bindingIndex, controlIndex);
                 return null;
             }

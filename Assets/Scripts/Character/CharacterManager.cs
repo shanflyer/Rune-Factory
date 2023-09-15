@@ -167,8 +167,8 @@ public class CharacterManager : Singleton<CharacterManager>
     }
 
     private void MoveAction(object obj)
-    { 
-        var moveValue = obj==null?Vector2.zero:(Vector2)obj;
+    {
+        var moveValue = (Vector2)obj;
         SetControllerCharacterMoveDirection(moveValue);
     }
 
