@@ -168,6 +168,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void MoveAction(object obj)
     {
+        Debug.Log(obj);
         var moveValue = (Vector2)obj;
         SetControllerCharacterMoveDirection(moveValue);
     }
@@ -584,7 +585,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             return;
         }
-        //playerMoveDirction = moveDirection;
+        controllerCharacter.moveDirection= moveDirection;
         var playerRuntimeObj = characterRuntionObjs[controllerCharacter].runtimeObj;
 
         Transform characterTransform = playerRuntimeObj.obj as Transform;
@@ -599,7 +600,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             GameObjectCurveController.instance.ObjectMove(
                 () => { return characterTransform.position; },
-                () => { return moveDirection; },
+                () => { return controllerCharacter.moveDirection; },
                 (int2 targetCoordinate, Vector2 targetPos) =>
                 {
                     characterTransform.position = new Vector3(targetPos.x, targetPos.y, characterTransform.position.z);

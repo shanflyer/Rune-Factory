@@ -252,6 +252,7 @@ public class Character
     public ObjCoordinate objCoordinate;
     public int instanceId;
     public Direction direction;
+    public Vector2 moveDirection;
 
 
     public int behavior;
