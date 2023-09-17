@@ -7,15 +7,20 @@ public class MapNpcData : ScriptableObject,IGameData
 {
     public string npcName;
     public int id;
-    public bool initialBeing;
-    public int beingMap;
-    public int2 beingCoordinate;
+    public int dataId;
+    public bool initialBegin;
+    public int beginMap;
+    public int2 beginCoordinate;
     public string behaviorName;
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
     }
 #endif
+    public override string ToString()
+    {
+        return GetKey();
+    }
     public string GetKey()
     {
         return id.ToString();

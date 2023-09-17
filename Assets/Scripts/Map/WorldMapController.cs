@@ -47,6 +47,7 @@ public class WorldMapController : MonoBehaviour
                 coordinateY = coordinate.y,
                 controller = true
             });
+            GameActionManager.instance.QueueAction(new CreatDefaultNPC());
         }
     }
     // Use this for initialization

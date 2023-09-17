@@ -46,6 +46,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordiante);
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
         GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
+        GameActionManager.instance.AddListener<CreatDefaultNPC>(CreatDefaultNPC);
 
         GameActionManager.instance.AddListener<InitInputAction>(InitInputAction);
         
@@ -168,7 +169,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void MoveAction(object obj)
     {
-        Debug.Log(obj);
+        //Debug.Log(obj);
         var moveValue = (Vector2)obj;
         SetControllerCharacterMoveDirection(moveValue);
     }
@@ -269,7 +270,7 @@ public class CharacterManager : Singleton<CharacterManager>
             Vector2 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
             var transform = runtimeObj.runtimeObj.obj as Transform;
             transform.position = pos;
-            transform.Translate(new Vector3(0, 0, -100));
+            //transform.Translate(new Vector3(0, 0, -100));
         }
     }
 
@@ -306,7 +307,7 @@ public class CharacterManager : Singleton<CharacterManager>
                  if (transform)
                  {
                      transform.transform.position = pos;
-                     transform.Translate(new Vector3(0, 0, -100));
+                     //transform.Translate(Vector3.zero);
                  }
              },
             () =>
@@ -382,17 +383,27 @@ public class CharacterManager : Singleton<CharacterManager>
         characterRuntionObjs.Add(player, runtimeObj); */
     }
 
-    private async void CretaDefaultNpc()
+    async void CreatDefaultNPC(CreatDefaultNPC creatDefaultNPC)
     {
         var mapNpcDatas = await GameDataManager.instance.GetAllAsyncData<MapNpcData>();
         foreach (var mapNpc in mapNpcDatas)
         {
-            CreatNpc(mapNpc);
+            if (mapNpc.initialBegin)
+            {
+                CreatNpc(mapNpc);
+            }
         }
     }
 
-    private void CreatNpc(MapNpcData mapNpcData)
-    {
+    private async void CreatNpc(MapNpcData mapNpcData)
+    { 
+        if(!characters.TryGetValue(mapNpcData.id, out var npc))
+        {
+            var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
+            npc = new NPC(characterData, mapNpcData.id);
+            characters.Add(mapNpcData.id, npc);
+        }
+        npc.SetObjCoordinate(mapNpcData.beginMap, mapNpcData.beginCoordinate);
         /*
         NPC npc = new NPC
         {

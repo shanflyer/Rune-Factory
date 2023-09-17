@@ -500,8 +500,7 @@ public class Character
 
 
 public class NPC : Character
-{
-    public int behavior;
+{ 
 
     public NPC(CharacterData characterData, int instanceId) : base(characterData, instanceId)
     {

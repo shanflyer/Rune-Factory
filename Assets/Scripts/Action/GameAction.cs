@@ -21,6 +21,12 @@ public struct InitInputAction : GameAction
     { 
     }
 }
+public struct CreatDefaultNPC : GameAction
+{
+    public void Init(List<Parameter> parameters)
+    { 
+    }
+}
 public struct CreatCharacter : GameAction
 {
     public int characterId;
