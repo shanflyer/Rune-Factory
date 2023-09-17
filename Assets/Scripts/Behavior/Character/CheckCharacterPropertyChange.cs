@@ -58,6 +58,19 @@ public class CheckCharacterPropertyChange:Action
 		}
 
 	}
+    public override void OnBehaviorComplete()
+    {
+        base.OnBehaviorComplete();
+        GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(PropertyChangeAction);
+        addAction = false;
+    }
+
+    public override void OnEnd()
+    {
+        base.OnEnd();
+        GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(PropertyChangeAction);
+        addAction = false;
+    }
     public override void OnStart()
     {
         if (!addAction)

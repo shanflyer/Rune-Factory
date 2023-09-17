@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Game/Map")]
-[TaskName("¸Ä±äÎïÌåÁ´½ÓÊı¾İºÍ¶¯»­×´Ì¬")]
+[TaskName("æ”¹å˜ç‰©ä½“é“¾æ¥æ•°æ®å’ŒåŠ¨ç”»çŠ¶æ€")]
 public class MapItemPlayAnimationEvent : Action
 {
 	public override void OnStart()

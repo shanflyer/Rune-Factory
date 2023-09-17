@@ -640,7 +640,7 @@ public class FightManager :Singleton<FightManager>
         }
         gameRandomData.Pretreatment();
 
-        var results = GameRandom.instance.GetRandomValue(gameRandomData, targetCount);
+        var results = GameRandom.instance.GetRandomValue(gameRandomData,randomResultCount:targetCount);
         for (int i = 0; i < results.Count; i++)
         {
             result.Add(int.Parse(results[i].result));

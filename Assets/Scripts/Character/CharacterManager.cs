@@ -573,8 +573,6 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-     
-
     public void ControllerCharacterMove(Vector2 mouseScreenPos)
     {
         if (controllerCharacter == null)

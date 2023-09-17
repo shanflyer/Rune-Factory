@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Game/Character")]
-[TaskName("Îª½ÇÉ«¼õÉÙµÀ¾ß")]
+[TaskName("ä¸ºè§’è‰²å‡å°‘é“å…·")]
 public class CharacterRemoveItem : Action
 {
 	public SharedInt packageId;

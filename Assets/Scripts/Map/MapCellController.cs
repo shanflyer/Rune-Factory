@@ -182,13 +182,55 @@ public class MapCellController :Singleton<MapCellController>
             return cellData;
         }
 #endif
+        public List<int2> GetCoordinates(int2 source,int range,bool isWalkable)
+        {
+            List<int2> results = new List<int2>();
+            int sourceIndex=GetCoordinateIndex(source);
+            for(int x = 0; x <= range; x++)
+            {
+                for(int y = 0; y <= range - x; y++)
+                {
+                    int index = GetCoordinateIndex(x, y);
+                    if (index >= 0 && index < cellValue.Length)
+                    {
+                        if (CheckWalkable(index) == isWalkable)
+                        {
+                            results.Add(GetCoordinate(index));
+                        }
+                    }
+                }
+            }
+            return results;
+        }
+        public int2 GetCoordinate(int index)
+        {
+            int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
+            return new int2(index / perRowGridCount, index % perRowGridCount);
+        }
+        public int GetCoordinateIndex(int x,int y)
+        {
+            int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
+            int index = (y - startCoordinate.y) + (x- startCoordinate.x) * perRowGridCount;
+            return index;
+        }
         public int GetCoordinateIndex(int2 coordinate)
         {
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
             int index = (coordinate.y - startCoordinate.y) + (coordinate.x - startCoordinate.x) * perRowGridCount;
             return index;
         }
-
+        public bool CheckWalkable(int index)
+        {
+            if (cellValue[index] == 1)
+            {
+                if (mapObjBarriers.ContainsKey(index))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
         public bool CheckWalkable(int2 coordinate)
         {
             if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&

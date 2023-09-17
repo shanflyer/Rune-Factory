@@ -1,10 +1,10 @@
-using UnityEngine;
+锘縰sing UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 
 [TaskCategory("Game/Map")]
-[TaskName("改变地图道具")]
+[TaskName("鏀瑰彉鍦板浘閬撳叿")]
 public class ChangeMapItemEvent : Action
 {
 	public SharedInt itemId;

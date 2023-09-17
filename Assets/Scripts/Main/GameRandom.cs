@@ -291,7 +291,13 @@ public class GameRandom:Singleton<GameRandom>
         return randomResults;
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="gameRandomData">随机数据</param>
+    /// <param name="innerGroupCount">嵌套层数</param>
+    /// <param name="randomResultCount">试图获取的数量</param>
+    /// <returns></returns>
     public List<RandomResult> GetRandomValue(GameRandomData gameRandomData,int innerGroupCount = 0, int randomResultCount = 1)
     {
         List<RandomResult> randomResults = new List<RandomResult>();
