@@ -346,9 +346,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 {
                     if (runtimeMapItems.GetData(mapItems[i], out RuntimeMapItem mapItem))
                     {
-                        var itemObj =await CreatMapItemRuntime(mapItem.dataId, mapItem.instanceId, mapItem.coordinate);
-                        nowRuntimeMapItemObjs.Add(mapItems[i], itemObj);
-                        await RuntimeMapItemPlay(mapItem, itemObj);
+                        if (!nowRuntimeMapItemObjs.ContainsKey(mapItem.instanceId))
+                        {
+                            var itemObj = await CreatMapItemRuntime(mapItem.dataId, mapItem.instanceId, mapItem.coordinate);
+                            nowRuntimeMapItemObjs.Add(mapItems[i], itemObj);
+                            await RuntimeMapItemPlay(mapItem, itemObj);
+                        } 
                     }
                 }
             }

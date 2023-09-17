@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
+
 [System.Serializable]
 public struct ObjCoordinate
 {
@@ -251,9 +253,51 @@ public class Character
     public string name;
     public ObjCoordinate objCoordinate;
     public int instanceId;
-    public Direction direction;
-    public Vector2 moveDirection;
+    public Direction direction {private set;get; }
 
+    private float2 _moveDirection;
+    public float2 moveDirection
+    {
+        get
+        {
+            return _moveDirection;
+        }
+        set
+        {
+            var bool2 = _moveDirection != value;
+            if (bool2.x || bool2.y) 
+            {
+                _moveDirection = value;
+                direction = GameCommon.GetCharacterDirect(moveDirection);
+
+                if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
+                {
+                    runtimeObj.SetAnimationDirection(value);
+                }
+            }
+           
+        } 
+    }
+
+    private float _nowSpeed;
+    public float nowSpeed
+    {
+        set
+        {
+            if (_nowSpeed != value)
+            {
+                _nowSpeed = value;
+                if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
+                {
+                    runtimeObj.SetAnimationSpeed(value);
+                }
+            } 
+        }
+        get
+        {
+            return _nowSpeed;
+        }
+    }
 
     public int behavior;
     public IEnumerator moveEnumerator;

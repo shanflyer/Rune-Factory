@@ -65,7 +65,8 @@ public enum FightRuntimeObjType
 public static class CharacterAnimatorParameter
 {
     public static int Speed=Animator.StringToHash("Speed");
-    public static int Direction = Animator.StringToHash("Direction");
+    public static int Dir_X = Animator.StringToHash("Dir_X");
+    public static int Dir_Y = Animator.StringToHash("Dir_Y");
 }
 public enum EntityType
 {
@@ -230,6 +231,86 @@ public class GameCommon
             }
         }
 
+        return Direction.Default;
+    }
+
+    public static Direction GetCharacterDirect(float2 offset, Direction oldDirection = Direction.Default)
+    {  
+        if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
+        {
+            if (offset.x < 0)
+            {
+                return Direction.RIGHT;
+            }
+            else
+            {
+                return Direction.LEFT;
+            }
+        }
+        if (Mathf.Abs(offset.x) < Mathf.Abs(offset.y))
+        {
+            if (offset.y < 0)
+            {
+                return Direction.UP;
+            }
+            else
+            {
+                return Direction.DOWN;
+            }
+        }
+        if (offset.x != 0 && offset.y != 0)
+        {
+            if (offset.x < 0)
+            {
+                if (offset.y < 0)
+                {
+                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.UP)
+                    {
+                        return oldDirection;
+                    }
+                    else
+                    {
+                        return Direction.UP;
+                    }
+                }
+                else
+                {
+                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.DOWN)
+                    {
+                        return oldDirection;
+                    }
+                    else
+                    {
+                        return Direction.DOWN;
+                    }
+                }
+            }
+            else
+            {
+                if (offset.y < 0)
+                {
+                    if (oldDirection == Direction.LEFT || oldDirection == Direction.UP)
+                    {
+                        return oldDirection;
+                    }
+                    else
+                    {
+                        return Direction.UP;
+                    }
+                }
+                else
+                {
+                    if (oldDirection == Direction.LEFT || oldDirection == Direction.DOWN)
+                    {
+                        return oldDirection;
+                    }
+                    else
+                    {
+                        return Direction.DOWN;
+                    }
+                }
+            }
+        }
         return Direction.Default;
     }
     public static Direction GetCharacterDirect(int2 start, int2 target, Direction oldDirection = Direction.Default)

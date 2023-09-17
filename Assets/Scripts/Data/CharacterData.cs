@@ -33,7 +33,7 @@ public class CharacterData : ScriptableObject, IGameData
 
     public override string ToString()
     {
-        return characterName;
+        return GetKey();
     }
 #if UNITY_EDITOR
     public void SetReferenceData()

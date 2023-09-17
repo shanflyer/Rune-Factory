@@ -13,6 +13,26 @@ public struct CharacterRuntimeObj
     public RuntimeObj runtimeObj;
     public Animator animator;
     public Transform model;
+
+    public void SetAnimationDirection(float2 direction) 
+    {
+        if (animator != null)
+        {
+            if (direction.x == 0 && direction.y == 0)
+            {
+                return;
+            }
+            animator.SetFloat(CharacterAnimatorParameter.Dir_X, direction.x);
+            animator.SetFloat(CharacterAnimatorParameter.Dir_Y, direction.y);
+        }
+    }
+    public void SetAnimationSpeed(float speed) 
+    {
+        if (animator != null)
+        {
+            animator.SetFloat(CharacterAnimatorParameter.Speed, speed); 
+        }
+    }
 }
 
 public class CharacterManager : Singleton<CharacterManager>
@@ -170,21 +190,21 @@ public class CharacterManager : Singleton<CharacterManager>
     private void MoveAction(object obj)
     {
         //Debug.Log(obj);
-        var moveValue = (Vector2)obj;
+        var moveValue = (Vector2)obj; 
+        
         SetControllerCharacterMoveDirection(moveValue);
     }
 
-    public bool GetRuntimeCharacterObj(int instanceId, out RuntimeObj runtimeObj)
+    public bool GetRuntimeCharacterObj(int instanceId, out CharacterRuntimeObj characterRuntimeObj)
     {
         if (characters.TryGetValue(instanceId, out Character character))
         {
-            if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
-            {
-                runtimeObj = characterRuntimeObj.runtimeObj;
+            if (characterRuntionObjs.TryGetValue(character, out  characterRuntimeObj))
+            { 
                 return true;
             }
         }
-        runtimeObj = new RuntimeObj();
+        characterRuntimeObj = default(CharacterRuntimeObj);
 
         return false;
     }
@@ -283,19 +303,15 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector2 targetPos = GameCommon.GetMapPos(targetCoordinate);
 
         var transform = runtimeObj.runtimeObj.obj as Transform;
-
+         
+        
         Vector2 startPos = transform ? transform.position :
             GameCommon.GetMapPos(character.objCoordinate.coordinate);
         bool slant = targetCoordinate.x != character.objCoordinate.coordinate.x && targetCoordinate.y != character.objCoordinate.coordinate.y;
 
-        var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
-
-        if (direction != Direction.Default && character.direction != direction)
-        {
-            character.direction = direction;
-            SetCharacterAnimationDirection((float)character.direction, character);
-            // Debug.Log($"{character.direction}{"-S"}{character.coordinate}{"-E"}{targetCoordinate}");
-        }
+        character.moveDirection =math.normalize(targetCoordinate - character.objCoordinate.coordinate);
+       // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
+         
 
         Vector2Int offsetCoordinate = Vector2Int.zero;
         character.moveEnumerator =
@@ -404,6 +420,7 @@ public class CharacterManager : Singleton<CharacterManager>
             characters.Add(mapNpcData.id, npc);
         }
         npc.SetObjCoordinate(mapNpcData.beginMap, mapNpcData.beginCoordinate);
+        RefreshNpcRuntimeObj(npc);
         /*
         NPC npc = new NPC
         {
@@ -441,7 +458,7 @@ public class CharacterManager : Singleton<CharacterManager>
     async Task<RuntimeObj> CreatCharacterRuntimeObj(int characterDataId,int instacneId,int2 coordiante)
     {
         Vector3 pos = GameCommon.GetMapPos(coordiante);
-        pos.z = -100;
+        //pos.z = -100;
 
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterDataId);
         if (characterData != null)
@@ -486,8 +503,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     runtimeObj = runtimeObj,
                     animator = transform.GetComponentInChildren<Animator>(),
                     model = transform.Find("Model")
-                };
-                SetCharacterAnimationDirection((float)character.direction, characterRuntimeObj);
+                }; 
                 characterRuntionObjs.Add(character, characterRuntimeObj);
                 if (controller)
                 {
@@ -499,27 +515,42 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public async System.Threading.Tasks.Task RefreshNpcRuntimeObj()
     {
-        foreach (var obj in characterRuntionObjs.Values)
+
+        using(var e = characters.GetEnumerator())
         {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(obj.runtimeObj);
-        }
-        characterRuntionObjs.Clear();
-        foreach (var character in characters.Values)
-        {
-            if (character.objCoordinate.mapInstance == WorldMapManager.instance.displayMap)
+            while (e.MoveNext())
             {
-                RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
-                Transform transform = runtimeObj.obj as Transform;
-                CharacterRuntimeObj characterRuntimeObj = new CharacterRuntimeObj
+                var character = e.Current.Value;
+                if (character.objCoordinate.mapInstance != WorldMapManager.instance.displayMap
+                    && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
-                    runtimeObj = runtimeObj,
-                    animator = transform.GetComponentInChildren<Animator>(),
-                    model = transform.Find("Model")
-                };
-                SetCharacterAnimationDirection((float)character.direction, characterRuntimeObj);
-                characterRuntionObjs.Add(character, characterRuntimeObj);
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+                    characterRuntionObjs.Remove(character);
+                }
+                if (character.objCoordinate.mapInstance == WorldMapManager.instance.displayMap)
+                {
+                    if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
+                    {
+                        var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.objCoordinate.coordinate);
+                        Transform transform = runtimeObj.obj as Transform;
+                        characterRuntimeObj = new CharacterRuntimeObj
+                        {
+                            runtimeObj = runtimeObj,
+                            animator = transform.GetComponentInChildren<Animator>(),
+                            model = transform.Find("Model")
+                        }; 
+                        characterRuntionObjs.Add(character, characterRuntimeObj);
+                    }
+                    else
+                    {
+                        Vector3 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
+                        Transform transform = characterRuntimeObj.runtimeObj.obj as Transform;
+                        transform.localPosition = pos; 
+                    }
+                }
             }
-        }
+            
+        } 
     }
 
     public void SetCharacterAnimationSpeed(float speed, Character character)
@@ -533,23 +564,6 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public void SetCharacterAnimationDirection(float direction, Character character)
-    {
-        if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
-        {
-            if (characterRuntimeObj.animator)
-            {
-                float scaleX = 1;
-                if (direction == 3)
-                {
-                    scaleX = -1;
-                    direction = 1;
-                }
-                characterRuntimeObj.animator.transform.localScale = new Vector3(scaleX, 1, 1);
-                characterRuntimeObj.animator.SetFloat(CharacterAnimatorParameter.Direction, direction);
-            }
-        }
-    }
 
     public void SetCharacterAnimationSpeed(float speed, CharacterRuntimeObj characterRuntimeObj)
     {
@@ -559,20 +573,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public void SetCharacterAnimationDirection(float direction, CharacterRuntimeObj characterRuntimeObj)
-    {
-        if (characterRuntimeObj.animator)
-        {
-            float scaleX = 1;
-            if (direction == 3)
-            {
-                scaleX = -1;
-                direction = 1;
-            }
-            characterRuntimeObj.animator.transform.localScale = new Vector3(scaleX, 1, 1);
-            characterRuntimeObj.animator.SetFloat(CharacterAnimatorParameter.Direction, direction);
-        }
-    }
+     
 
     public void ControllerCharacterMove(Vector2 mouseScreenPos)
     {
@@ -596,6 +597,10 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             return;
         }
+        float speed = moveDirection.magnitude;
+        controllerCharacter.nowSpeed = speed;
+
+
         controllerCharacter.moveDirection= moveDirection;
         var playerRuntimeObj = characterRuntionObjs[controllerCharacter].runtimeObj;
 
