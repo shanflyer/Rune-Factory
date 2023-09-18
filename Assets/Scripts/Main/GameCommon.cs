@@ -62,6 +62,7 @@ public enum FightRuntimeObjType
     PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT, PLAYABLEDIRECTOR,OTHER
 }
 
+ 
 public static class CharacterAnimatorParameter
 {
     public static int Speed=Animator.StringToHash("Speed");
@@ -538,7 +539,7 @@ public static class EditorDataPath
 {
     public const string itemIconPath = "Item/";
 
-
+    public const string npcBehaviorPath = "Assets/Resources/Behavior/NPC/";
     public const string outDataPath = "Assets/Resources/Data/";
     public const string groundSourcePath = "Assets/Texture/Map/Ground/";
     public const string sourceChangeNameDataPath = "Assets/Editor/Data/SourceChangeName.json";

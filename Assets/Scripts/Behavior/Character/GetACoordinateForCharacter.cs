@@ -10,7 +10,7 @@ using Unity.Mathematics;
 public class GetACoordinateForCharacter : Action
 {
     [Header("角色id")]
-    public SharedInt characterId;
+    private SharedInt characterId;
     [Header("范围")]
     public SharedInt range;
     [Header("试图获取的数量")]
@@ -20,10 +20,23 @@ public class GetACoordinateForCharacter : Action
     [Header("是否可行走")]
     public SharedBool isWalkable;
 	[Header("获取的结果")]
-	public SharedInt3List results;
+	private SharedInt3List results;
 	public override void OnStart()
 	{
-        
+        if (characterId == null)
+        {
+            characterId= (SharedInt)Owner.GetVariable("CharacterId");
+        }
+
+        if (results == null)
+        {
+            results = (SharedInt3List)Owner.GetVariable("CoordinateResults");
+            if (results == null)
+            {
+                results = new SharedInt3List();
+                Owner.SetVariable("CoordinateResults", results);
+            }
+        }
     }
 
 	public override TaskStatus OnUpdate()

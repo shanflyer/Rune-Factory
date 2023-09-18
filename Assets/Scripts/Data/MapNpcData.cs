@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using BehaviorDesigner.Runtime;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 [CreateAssetMenu(menuName ="Data/地图NPC")]
 public class MapNpcData : ScriptableObject,IGameData
@@ -12,9 +14,11 @@ public class MapNpcData : ScriptableObject,IGameData
     public int beginMap;
     public int2 beginCoordinate;
     public string behaviorName;
+    public ExternalBehaviorTree externalBehavior;
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
+        externalBehavior=AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>($"{EditorDataPath.npcBehaviorPath}{behaviorName}.asset");
     }
 #endif
     public override string ToString()

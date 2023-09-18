@@ -8,8 +8,8 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 [TaskName("角色移动")]
 public class CharacterMove : Action
 {
-    public SharedInt characterId;
-    public SharedInt3 target;
+    private SharedInt characterId;
+    private SharedInt3 target;
     // Use this for initialization
     TaskStatus taskStatus;
     
@@ -19,6 +19,19 @@ public class CharacterMove : Action
     }
     public override void OnStart()
     {
+        if (characterId == null)
+        {
+            characterId = (SharedInt)Owner.GetVariable("CharacterId");
+        }
+        if (target == null)
+        {
+            target = (SharedInt3)Owner.GetVariable("TargetCoordinate");
+            if (target == null)
+            {
+                target = new SharedInt3();
+                Owner.SetVariable("TargetCoordinate", target);
+            }
+        }
         var character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
         {

@@ -1,0 +1,57 @@
+using UnityEngine;
+using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime.Tasks;
+
+
+[TaskCategory("Game/Character")]
+[TaskName("ÉèÖÃ½ÇÉ«¶¯»­")]
+
+public class SetCharacterAnimation : Action
+{
+    private SharedInt characterId;
+    public AnimationParameter[] animationParameters;
+    public override void OnStart()
+    {
+        if (characterId == null)
+        {
+            characterId = (SharedInt)Owner.GetVariable("CharacterId");
+        }
+        if (animationParameters != null && animationParameters.Length > 0)
+        {
+            for (int i = 0; i < animationParameters.Length; i++)
+            {
+                var animationParameter = animationParameters[i];
+
+                SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+                {
+                    characterId = characterId.Value,
+                    parameter = animationParameter.parameter,
+                    parameterType = animationParameter.parameterType,
+                    boolValue = animationParameter.boolValue,
+                    intValue = animationParameter.intValue,
+                    floatValue = animationParameter.floatValue
+                };
+                GameActionManager.instance.QueueAction(setCharacterAnimator, true);
+            }
+        }
+    }
+
+    public override TaskStatus OnUpdate()
+    {
+       
+        return TaskStatus.Success;
+    }
+}
+public enum ParameterType
+{
+    BOOL, INT, FLOAT
+}
+[System.Serializable]
+public struct AnimationParameter
+{
+    public string parameter;
+    public ParameterType parameterType;
+    public bool boolValue;
+    public int intValue;
+    public float floatValue;
+}

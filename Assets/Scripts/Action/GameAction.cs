@@ -7,6 +7,7 @@ using UnityEngine.Analytics;
 using System.Security.Cryptography;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
 using UnityEngine.TextCore.Text;
+using UnityEngine.InputSystem.XR;
 
 public interface GameAction 
 { 
@@ -21,10 +22,51 @@ public struct InitInputAction : GameAction
     { 
     }
 }
+/// <summary>
+/// 设置角色动画
+/// </summary>
+public struct SetCharacterAnimator : GameAction
+{
+    public int characterId;
+    public string parameter;
+    public ParameterType parameterType;
+    public bool boolValue;
+    public int intValue;
+    public float floatValue;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            parameter = parameters[1].value;
+        if (parameters.Count > 2)
+            parameterType = (ParameterType)int.Parse(parameters[2].value);
+
+        if (parameters.Count > 3)
+        {
+            switch (parameterType)
+            {
+                case ParameterType.BOOL:
+                    boolValue = bool.Parse(parameters[3].value);
+                    break;
+                case ParameterType.INT:
+                    intValue = int.Parse(parameters[3].value);
+                    break;
+                case ParameterType.FLOAT:
+                    floatValue=float.Parse(parameters[3].value);
+                    break;
+            }
+        }
+            
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+//创建默认地图Npc
 public struct CreatDefaultNPC : GameAction
 {
     public void Init(List<Parameter> parameters)
-    { 
+    {
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CreatCharacter : GameAction
@@ -47,6 +89,8 @@ public struct CreatCharacter : GameAction
             coordinateY = int.Parse(parameters[3].value);
         if (parameters.Count > 4)
             controller = bool.Parse(parameters[4].value);
+
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct ChangeWorld : GameAction
@@ -63,12 +107,14 @@ public struct ChangeWorld : GameAction
         {
             displayMap =int.Parse(parameters[1].value);
         }
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct ExploreEnd : GameAction
 {
     public void Init(List<Parameter> parameters)
-    { 
+    {
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CharacterLevelUp : GameAction

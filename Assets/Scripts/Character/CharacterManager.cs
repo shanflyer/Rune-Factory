@@ -1,6 +1,6 @@
  
 using System;
-using System.Collections.Generic;
+using System.Collections.Generic; 
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -67,7 +67,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
         GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
         GameActionManager.instance.AddListener<CreatDefaultNPC>(CreatDefaultNPC);
-
+        GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
         GameActionManager.instance.AddListener<InitInputAction>(InitInputAction);
         
         
@@ -85,6 +85,26 @@ public class CharacterManager : Singleton<CharacterManager>
     public void SetControllerCharacter(int id)
     {
 
+    }
+
+    void SetCharacterAnimator(SetCharacterAnimator setCharacterAnimator)
+    {
+        if(GetRuntimeCharacterObj(setCharacterAnimator.characterId,out CharacterRuntimeObj characterRuntimeObj))
+        {
+            Animator animator = characterRuntimeObj.animator;
+            switch(setCharacterAnimator.parameterType)
+            {
+                case ParameterType.BOOL:
+                    animator.SetBool(setCharacterAnimator.parameter, setCharacterAnimator.boolValue);
+                    break;
+                case ParameterType.INT:
+                    animator.SetInteger(setCharacterAnimator.parameter, setCharacterAnimator.intValue);
+                    break;
+                case ParameterType.FLOAT:
+                    animator.SetFloat(setCharacterAnimator.parameter, setCharacterAnimator.floatValue);
+                    break;
+            }
+        }
     }
 
     void CreatTeam(CreatTeamPlayer creatTeamPlayer)

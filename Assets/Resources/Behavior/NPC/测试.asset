@@ -20,7 +20,7 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(430.5,30)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-4.878088,138.048859)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GetACoordinateForCharacter","NodeData":{"Offset":"(-352.926819,234.390228)"},"ID":2,"Name":"\u83b7\u53d6\u89d2\u8272\u5468\u56f4\u7279\u5b9a\u683c\u5b50","Instant":true,"SharedIntrange":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":4},"SharedIntresultCount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1},"SharedBoolisWalkable":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true}},{"Type":"SetCharacterMoveTarget","NodeData":{"Offset":"(-145.841446,234.390228)"},"ID":3,"Name":"\u8bbe\u7f6e\u89d2\u8272\u79fb\u52a8\u76ee\u6807","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Interrupt","NodeData":{"Offset":"(5.963438,248.585342)"},"ID":4,"Name":"Interrupt","Instant":true,"Children":[{"Type":"CharacterMove","NodeData":{"Offset":"(0,120)"},"ID":5,"Name":"\u89d2\u8272\u79fb\u52a8","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(143.846725,217.294083)"},"ID":6,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":2},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}},{"Type":"SetCharacterAnimation","NodeData":{"Offset":"(302.38324,205.098938)"},"ID":7,"Name":"\u8bbe\u7f6e\u89d2\u8272\u52a8\u753b","Instant":true,"AnimationParameter[]animationParameters":[{"Type":"AnimationParameter","Value":{"Stringparameter":"Speed","ParameterTypeparameterType":"FLOAT","BooleanboolValue":false,"Int32intValue":0,"SinglefloatValue":0}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":0}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -29,4 +29,4 @@ MonoBehaviour:
         unityObjects: []
         byteData: 
         byteDataArray: 
-      Version: 
+      Version: 1.7.7

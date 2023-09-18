@@ -9,12 +9,32 @@ using BehaviorDesigner.Runtime.Tasks;
 public class SetCharacterMoveTarget : Action
 {
     [Header("获取的结果")]
-    public SharedInt3List results;
-    public SharedInt3 target;
+    private SharedInt3List results;
+    private SharedInt3 targetCoordinate;
     public override void OnStart()
     {
+        if (targetCoordinate == null)
+        {
+            targetCoordinate=(SharedInt3)Owner.GetVariable("TargetCoordinate");
+            if (targetCoordinate == null)
+            {
+                targetCoordinate = new SharedInt3();
+                Owner.SetVariable("TargetCoordinate", targetCoordinate);
+            }
+        }
+
+        if (results == null)
+        {
+            results = (SharedInt3List)Owner.GetVariable("CoordinateResults");
+            if (results == null)
+            {
+                results = new SharedInt3List();
+                Owner.SetVariable("CoordinateResults", results);
+            }
+        }
+
         int index = GameRandom.RandomInt(0, results.Value.Count);
-        target = results.Value[index];
+        targetCoordinate = results.Value[index];
     }
 
     public override TaskStatus OnUpdate()
