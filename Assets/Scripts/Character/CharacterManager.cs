@@ -441,6 +441,11 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         npc.SetObjCoordinate(mapNpcData.beginMap, mapNpcData.beginCoordinate);
         RefreshNpcRuntimeObj(npc);
+
+        if (mapNpcData.externalBehavior)
+        {
+            CharacterBehaviorManager.instance.AddBehavior(npc.instanceId, mapNpcData.externalBehavior);
+        }
         /*
         NPC npc = new NPC
         {

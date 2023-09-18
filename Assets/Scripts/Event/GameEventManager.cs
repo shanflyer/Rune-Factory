@@ -16,6 +16,7 @@ public class GameEventManager:Singleton<GameEventManager>
     {
         base.Init();
         obj = GameObject.Find("GameEventManager");
+        Object.DontDestroyOnLoad(obj);
     }
 
     private GameObject obj; 
