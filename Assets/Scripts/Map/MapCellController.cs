@@ -592,7 +592,8 @@ public class MapCellController :Singleton<MapCellController>
                 pathCells = pathCells
             };
 
-            findPath.Schedule().Complete();
+            //findPath.Schedule().Complete();
+            findPath.Run();
 
             for(int i = 0; i < findPath.pathCells.Length; i++)
             {
@@ -662,6 +663,10 @@ public class MapCellController :Singleton<MapCellController>
     private const int MOVE_DIAGONAL_COST = 14;
     private static int CalculateDistanceCost(int2 aPosition, int2 bPosition)
     {
+
+       // int2 d = bPosition - aPosition;
+        //return d.x * d.x + d.y *d.y;
+
         int xDistance = math.abs(aPosition.x - bPosition.x);
         int yDistance = math.abs(aPosition.y - bPosition.y);
         int remaining = math.abs(xDistance - yDistance);
@@ -709,12 +714,14 @@ public class MapCellController :Singleton<MapCellController>
 
                 openCells.Add(startPos);
                 openCellLength++;
-
+               // int cost = CalculateDistanceCost(startPos, targetPos) * 5;
+                cellCost[startPos] =0;
                 while (openCellLength > 0)
                 {
                     int2 nowCell = openCells[0];
 
-                    openCells.RemoveAtSwapBack(0);
+                    openCells.RemoveAt(0);
+                    //openCells.RemoveAtSwapBack(0);
                     openCellLength--;
                     closeCells.Add(nowCell);
                     closeCellLength++;
@@ -722,7 +729,12 @@ public class MapCellController :Singleton<MapCellController>
                     {
                         break;
                     }
-
+                    //int nowCost = 0;
+                    if (!cellCost.TryGetValue(nowCell,out int nowCost))
+                    {
+                        nowCost = 0;
+                    }
+                    //nowCost = 0;
                     for (int i = 0; i < 8; i++)
                     {
                         int2 cell = neighbourOffsetArray[i] + nowCell; 
@@ -740,8 +752,8 @@ public class MapCellController :Singleton<MapCellController>
                         }
 
 
-                        int cost = CalculateDistanceCost(cell, startPos)  +
-                            CalculateDistanceCost(cell, targetPos) * 5;
+                        int cost = CalculateDistanceCost(cell, nowCell) +
+                             CalculateDistanceCost(cell, targetPos) * 5;
                         cellCost[cell] = cost;
                         parentCell[cell] = closeCellLength - 1;
 
