@@ -191,7 +191,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
             {
                 if (WorldMapManager.instance.InitSmoothMove(ref direction, nowPos, mapId))
                 {
-                    Vector2 targetPos = nowPos + direction * CharacterManager.moveSpeed * Time.fixedDeltaTime;
+                    Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.fixedDeltaTime;
                     int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
                     SetMoveTarge(targetCoordinate, targetPos);
                 }
@@ -204,7 +204,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
             }
             else
             {
-                Vector2 targetPos = nowPos + direction * CharacterManager.moveSpeed * Time.fixedDeltaTime;
+                Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.fixedDeltaTime;
                 int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
                 SetMoveTarge(targetCoordinate, targetPos);
             }

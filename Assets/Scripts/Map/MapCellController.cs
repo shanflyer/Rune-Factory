@@ -7,6 +7,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using System.Linq;
 using UnityEngine.Analytics;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 public class MapCellController :Singleton<MapCellController>
 {
@@ -182,20 +183,24 @@ public class MapCellController :Singleton<MapCellController>
             return cellData;
         }
 #endif
-        public List<int2> GetCoordinates(int2 source,int range,bool isWalkable)
+        public List<int2> GetCoordinates(int2 source,int minRange,int maxRange,bool isWalkable)
         {
             List<int2> results = new List<int2>();
-            int sourceIndex=GetCoordinateIndex(source);
-            for(int x = 0; x <= range; x++)
+            for(int x = -maxRange; x <= maxRange; x++)
             {
-                for(int y = 0; y <= range - x; y++)
+                for(int y = -maxRange; y <= maxRange - x; y++)
                 {
-                    int index = GetCoordinateIndex(x, y);
+                    if (math.abs(x) + math.abs(y) > maxRange|| math.abs(x) + math.abs(y)<minRange)
+                    {
+                        continue;
+                    }
+                    int2 coordinate = source + new int2(x, y);
+                    int index = GetCoordinateIndex(coordinate);
                     if (index >= 0 && index < cellValue.Length)
                     {
                         if (CheckWalkable(index) == isWalkable)
                         {
-                            results.Add(GetCoordinate(index));
+                            results.Add(coordinate);
                         }
                     }
                 }
@@ -610,6 +615,11 @@ public class MapCellController :Singleton<MapCellController>
     }
     public Queue<int> FindRoomList(int sourceId, int targetId, Queue<int> roomList, ref bool result)
     {
+        if (sourceId == targetId)
+        { 
+            result = true;
+            return new Queue<int>();
+        }
         if (runtimeMapRooms.GetData(sourceId, out RuntimeMapRoom sourceRoom) &&
             runtimeMapRooms.Contains(targetId))
         { 

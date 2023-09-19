@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Unity.Mathematics;
 #if UNITY_EDITOR
 using UnityEditor;
 public class CellDebugDisplay : MonoBehaviour
@@ -11,6 +12,21 @@ public class CellDebugDisplay : MonoBehaviour
     [SerializeField]
     TileBase colliderTile, defaultTile, triggerTile;
 
+    public static CellDebugDisplay Instance;
+    private void OnEnable()
+    {
+        Instance = this;
+    }
+    public void DisplayPath(int2[] pathNodes)
+    {
+        tilemap.ClearAllTiles();
+        TileBase tileBase = defaultTile;
+        for(int i=0;i<pathNodes.Length;i++)
+        {
+            var node = pathNodes[i];
+            tilemap.SetTile(new Vector3Int(node.x, node.y, 0), tileBase);
+        } 
+    }
     public void RefreshDisplayMapCell()
     {
         tilemap.ClearAllTiles();

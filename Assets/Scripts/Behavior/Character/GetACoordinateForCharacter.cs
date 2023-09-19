@@ -11,8 +11,10 @@ public class GetACoordinateForCharacter : Action
 {
     [Header("角色id")]
     private SharedInt characterId;
-    [Header("范围")]
-    public SharedInt range;
+    [Header("最小范围")]
+    public SharedInt minRange;
+    [Header("最大范围")]
+    public SharedInt maxRange;
     [Header("试图获取的数量")]
     public SharedInt resultCount;
     //[Header("是否有其他角色")]
@@ -45,7 +47,8 @@ public class GetACoordinateForCharacter : Action
         RuntimeMapRoom runtimeMapRoom;
         if (MapCellController.instance.GetRuntimeMapRoom(character.objCoordinate.mapInstance, out runtimeMapRoom))
         {
-            var rangeCoordinates = runtimeMapRoom.roomCellData.GetCoordinates(character.objCoordinate.coordinate, range.Value, isWalkable.Value);
+            var rangeCoordinates = runtimeMapRoom.roomCellData.GetCoordinates(character.objCoordinate.coordinate,
+                minRange.Value, maxRange.Value, isWalkable.Value);
             GameRandomData gameRandomData = new GameRandomData
             {
                 id = -1,

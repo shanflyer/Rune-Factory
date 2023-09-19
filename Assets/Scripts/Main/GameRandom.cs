@@ -52,7 +52,6 @@ public class GameRandom:Singleton<GameRandom>
     [BurstCompile]
     public struct GameRandomJobData:IJob
     {
-         [ReadOnly]
         public Random random;
         [ReadOnly]
         public bool weightRandom;
@@ -92,10 +91,10 @@ public class GameRandom:Singleton<GameRandom>
             if (weightRandom)
             {
                 while (nowRandomJobResult < randomResultCount && barrels.Length > 0)
-                { 
-                    
+                {
                     int randomIndex = random.NextInt(0, barrels.Length);
                     int randomValue = random.NextInt(0, 10000);
+
                     RamdomItemJobData randomItem;
                     WeightBarrel weightBarrel = barrels[randomIndex];
 
@@ -336,8 +335,8 @@ public class GameRandom:Singleton<GameRandom>
         }
         GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random);
 
-
-        gameRandomJobData.Schedule().Complete();
+        gameRandomJobData.Run();
+        //gameRandomJobData.Schedule().Complete();
 
         for (int i = 0; i < gameRandomJobData.randomResults.Length; i++)
         {

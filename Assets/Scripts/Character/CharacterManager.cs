@@ -14,8 +14,12 @@ public struct CharacterRuntimeObj
     public Animator animator;
     public Transform model;
 
-    public void SetAnimationDirection(float2 direction) 
+    public void SetAnimationDirection(float2 direction)
     {
+        if (direction.x == float.NaN || direction.y == float.NaN)
+        {
+            return;
+        }
         if (animator != null)
         {
             if (direction.x == 0 && direction.y == 0)
@@ -37,8 +41,8 @@ public struct CharacterRuntimeObj
 
 public class CharacterManager : Singleton<CharacterManager>
 {
-    public const float moveSpeed = 1f;
-    public const float updataMoveSpeed = 0.5f;
+    public const float moveSpeed = 4f;
+    public const float updataMoveSpeed = 1f;
 
     private MyInstance myInstance;
 
@@ -348,6 +352,7 @@ public class CharacterManager : Singleton<CharacterManager>
              },
             () =>
             {
+               // Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
                     character.SetObjCoordinate(character.objCoordinate.mapInstance, targetCoordinate);
@@ -374,7 +379,6 @@ public class CharacterManager : Singleton<CharacterManager>
             character.SetObjCoordinate(targetMap, targetCoordinate);
             SetPlayerPos(character);
 
-            EndAction?.Invoke();
 
             if (character == controllerCharacter)
             {
@@ -382,7 +386,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 WorldMapManager.instance.DisplayMap(targetMap);
             }
         }
-
+        EndAction?.Invoke();
         newMap = int3.zero;
         return false;
     }

@@ -17,6 +17,10 @@ public struct ObjCoordinate
             return new int2(x, y);
         } 
     }
+    public override string ToString()
+    {
+        return $"{mapInstance}:{x},{y}";
+    }
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
     {
         this.mapInstance = mapInstance;
@@ -500,7 +504,7 @@ public class Character
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.mapInstance, targetMap, moveRoomList, ref result);
         if (result)
         {
-            MoveCrossMap(resultList, targetCoordinate);
+            MoveCrossMap(resultList, targetCoordinate,moveEndAction);
         }
         return result;
     }
@@ -517,6 +521,8 @@ public class Character
             if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, target, ref inCoordinate))
             {
                 Stack<int2> pathNodes =MapCellController.instance.FindPathNode(objCoordinate.coordinate, inCoordinate,nowMap);
+
+
                 PlayerMove(pathNodes, () => { 
                     MoveCrossMap(moveRoomList, targetCoordinate,moveEndAction);
                 });
@@ -524,7 +530,12 @@ public class Character
         }
         else
         {
-            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.coordinate, targetCoordinate, nowMap); 
+            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.coordinate, targetCoordinate, nowMap);
+
+            if (CellDebugDisplay.Instance)
+            {
+                CellDebugDisplay.Instance.DisplayPath(pathNodes.ToArray());
+             }
             PlayerMove(pathNodes, moveEndAction);
         }
 

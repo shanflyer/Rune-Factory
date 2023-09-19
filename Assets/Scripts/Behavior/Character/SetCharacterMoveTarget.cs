@@ -10,7 +10,7 @@ public class SetCharacterMoveTarget : Action
 {
     [Header("获取的结果")]
     private SharedInt3List results;
-    private SharedInt3 targetCoordinate;
+    public SharedInt3 targetCoordinate;
     public override void OnStart()
     {
         if (targetCoordinate == null)
@@ -34,7 +34,7 @@ public class SetCharacterMoveTarget : Action
         }
 
         int index = GameRandom.RandomInt(0, results.Value.Count);
-        targetCoordinate = results.Value[index];
+        targetCoordinate.SetValue(results.Value[index]);
     }
 
     public override TaskStatus OnUpdate()

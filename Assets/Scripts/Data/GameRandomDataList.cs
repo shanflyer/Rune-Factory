@@ -194,7 +194,7 @@ public struct GameRandomData
         WeightBarrel[] barrels = new WeightBarrel[randomItems.Count];
         for (int i = 0; i < barrels.Length; i++)
         {
-            if (fillIndex >= fillRamdomItems.Count)
+            if (fillRamdomItems.Count>0&&fillIndex >= fillRamdomItems.Count)
             {
                 WeightBarrel endBarrel = new WeightBarrel
                 {
@@ -207,16 +207,26 @@ public struct GameRandomData
             }
 
             int value = averageValue - baseRamdomItems[i].y;
-            int fillValue = fillRamdomItems[fillIndex].y - value;
+            int fillValue = -1;
+            if (fillRamdomItems.Count > fillIndex)
+            {
+                fillValue = fillRamdomItems[fillIndex].y - value;
+            }
+            
 
             int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
+            
             WeightBarrel weightBarrel = new WeightBarrel
             {
                 itemIndex = baseRamdomItems[i].x,
                 baseWeight = baseWeight,
-                fillItemIndex = fillRamdomItems[fillIndex].x
+                fillItemIndex = fillRamdomItems.Count>fillIndex?fillRamdomItems[fillIndex].x: baseRamdomItems[i].x
             };
             barrels[i] = weightBarrel;
+            if (baseWeight == 10000)
+            {
+                continue;
+            }
 
             if (fillValue > averageValue)
             {

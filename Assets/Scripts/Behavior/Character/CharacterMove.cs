@@ -9,16 +9,17 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 public class CharacterMove : Action
 {
     private SharedInt characterId;
-    private SharedInt3 target;
+    public SharedInt3 target;
     // Use this for initialization
     TaskStatus taskStatus;
     
     void MoveEndAction()
     {
-        taskStatus = TaskStatus.Success;
+        taskStatus = TaskStatus.Success; 
     }
     public override void OnStart()
     {
+        taskStatus = TaskStatus.Running;
         if (characterId == null)
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
@@ -35,13 +36,18 @@ public class CharacterMove : Action
         var character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
         {
-            if(character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
+            if (character.objCoordinate.mapInstance == target.Value.z &&
+                    character.objCoordinate.x == target.Value.x && character.objCoordinate.y == target.Value.y)
             {
-                taskStatus = TaskStatus.Running;
+                taskStatus = TaskStatus.Success;
             }
             else
             {
-                taskStatus = TaskStatus.Failure;
+                Debug.Log($"characterPos:{character.objCoordinate}-{target.Value}");
+                if (!character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
+                { 
+                    taskStatus = TaskStatus.Failure;
+                }
             }
         }
         else

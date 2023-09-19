@@ -9,6 +9,10 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     {
         base.Init();
         obj = GameObject.Find("CharacterBehaviorManager");
+        if (obj == null)
+        {
+            obj = new GameObject("CharacterBehaviorManager");
+        }
         Object.DontDestroyOnLoad(obj);
     }
 
