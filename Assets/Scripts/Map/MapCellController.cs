@@ -729,12 +729,7 @@ public class MapCellController :Singleton<MapCellController>
                     {
                         break;
                     }
-                    //int nowCost = 0;
-                    if (!cellCost.TryGetValue(nowCell,out int nowCost))
-                    {
-                        nowCost = 0;
-                    }
-                    //nowCost = 0;
+                    
                     for (int i = 0; i < 8; i++)
                     {
                         int2 cell = neighbourOffsetArray[i] + nowCell; 
@@ -752,8 +747,8 @@ public class MapCellController :Singleton<MapCellController>
                         }
 
 
-                        int cost = CalculateDistanceCost(cell, nowCell) +
-                             CalculateDistanceCost(cell, targetPos) * 5;
+                        int cost = CalculateDistanceCost(cell, startPos) +
+                             CalculateDistanceCost(cell, targetPos) * 3;
                         cellCost[cell] = cost;
                         parentCell[cell] = closeCellLength - 1;
 

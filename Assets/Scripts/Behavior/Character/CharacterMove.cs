@@ -42,8 +42,7 @@ public class CharacterMove : Action
                 taskStatus = TaskStatus.Success;
             }
             else
-            {
-                Debug.Log($"characterPos:{character.objCoordinate}-{target.Value}");
+            { 
                 if (!character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
                 { 
                     taskStatus = TaskStatus.Failure;

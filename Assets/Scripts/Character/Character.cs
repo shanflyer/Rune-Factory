@@ -532,10 +532,11 @@ public class Character
         {
             Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.coordinate, targetCoordinate, nowMap);
 
+            /*
             if (CellDebugDisplay.Instance)
             {
                 CellDebugDisplay.Instance.DisplayPath(pathNodes.ToArray());
-             }
+             }*/
             PlayerMove(pathNodes, moveEndAction);
         }
 
