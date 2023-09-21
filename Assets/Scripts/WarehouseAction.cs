@@ -475,7 +475,7 @@ public class WarehouseAction : MonoBehaviour
             case DisplayType.Sell:
                 AudioController.instance.PlayAudio(SE.click);
                 SellSelectObj.SetActive(true);
-                SellSelectObj.GetComponent<SellSellectAction>().InitSellSelectData(selectedItem);
+               // SellSelectObj.GetComponent<SellSellectAction>().InitSellSelectData(selectedItem);
 
                 break;
             case DisplayType.In:
