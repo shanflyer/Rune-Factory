@@ -24,16 +24,16 @@ public class ItemReference : UIObjReference<Item>
         {
             if (value&&SelectAction!=null)
             {
-                SelectAction();
+                SelectAction(item);
             }
         });
         base.SetPanelUISerializeObj();
     }
     Item item;
     ItemData itemData;
-    Action SelectAction;
+    SelectAction<Item> SelectAction;
      
-    public override async void InitData(Item t, Action SelectAction = null)
+    public override async void InitData(Item t, SelectAction<Item> SelectAction = null)
     {
         this.item = t;
         this.SelectAction = SelectAction;

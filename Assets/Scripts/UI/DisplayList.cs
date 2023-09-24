@@ -14,7 +14,7 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
         this.listPrefab = listPrefab;
         list = new List<T>();
     }
-    public void InitListData(List<V> componentData) 
+    public void InitListData(List<V> componentData,SelectAction<V> SelectAction = null) 
     {
         for(int i = list.Count; i < list.Count; i++)
         {
@@ -27,7 +27,7 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-                list[i].InitData(componentData[i]);
+                list[i].InitData(componentData[i], SelectAction);
             }
         }
     }

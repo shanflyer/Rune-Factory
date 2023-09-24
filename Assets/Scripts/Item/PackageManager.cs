@@ -472,3 +472,14 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 }
+public struct PackageList : IReferenceData
+{
+    public List<PackageData> packageDatas;
+}
+public struct PackageData
+{
+    public string name;
+    public int instanceId;
+    public int caseCount; 
+    private List<Item> items;
+}

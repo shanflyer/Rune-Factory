@@ -6,6 +6,7 @@ public interface IReferenceData
 {
 
 }
+public delegate void SelectAction<T>(T t) where T : IReferenceData;
 public class UIObjReference<T> : BaseReference where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
@@ -34,7 +35,7 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
         }
         return null;
     }
-    public virtual void InitData(T t, Action SelectAction = null)
+    public virtual void InitData(T t, SelectAction<T> SelectAction = null)
     {
 
     }

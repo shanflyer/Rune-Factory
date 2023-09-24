@@ -353,7 +353,7 @@ public class WarehouseAction : MonoBehaviour
         {
             GameObject itemBoxObj = Instantiate(ItemBoxPro);
             itemBoxObj.transform.localScale=Vector3.one;
-            itemBoxObj.GetComponent<ItemBoxAction>().InitItemData(packageItem,deskAction);
+            //itemBoxObj.GetComponent<ItemBoxAction>().InitItemData(packageItem,deskAction);
             itemBoxObj.GetComponent<ItemBoxAction>().isWareDisplay = true;
             itemBoxObj.transform.SetParent(ItemBoxParent,false);
             itemBoxObj.GetComponentInChildren<Toggle>().group = ItemBoxParent.GetComponent<ToggleGroup>();
