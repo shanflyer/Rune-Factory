@@ -480,6 +480,6 @@ public struct PackageData
 {
     public string name;
     public int instanceId;
-    public int caseCount; 
-    private List<Item> items;
+    public int caseCount;
+    public List<Item> items;
 }

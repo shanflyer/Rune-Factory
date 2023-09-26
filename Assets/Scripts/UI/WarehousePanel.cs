@@ -50,6 +50,10 @@ public class WarehousePanel : GamePanel<PackageList>
             }
             
         });
+        ReturnButton.onClick.AddListener(Close); 
+        itemBoxs=new DisplayList<ItemBoxReference,Item>(itemBoxReference,itemParent);
+
+        playerEquipQuickReference.InitData(CharacterManager.instance.TeamerEquipAndProperty);
     }
 
     public override void SetPanelUISerializeObj()
@@ -77,14 +81,22 @@ public class WarehousePanel : GamePanel<PackageList>
         selectIndex = 0;
         RefreshPackage();
     }
-    void SelectPackageItem(Item item)
+    async void SelectPackageItem(Item item)
     {
-
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+        ItemIcon.sprite=itemData.icon;
+        ItemIcon.SetNativeSize();
+        ItemName.text = itemData.name;
+        Type.text = itemData.type.ToString();
+        Info.text = itemData.text1.ToString();
+        Property.text = itemData.property.ToString();
+        Price.text = $"º€÷µ:{itemData.sellPrice}G";
     }
     void RefreshPackage()
     {
         var packageData = packageList.packageDatas[selectIndex];
         itemBoxs.InitListData(packageData.items, SelectPackageItem);
         caseCount.text = $"{packageData.items.Count}/{packageData.caseCount}";
+
     }
 }

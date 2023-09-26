@@ -43,7 +43,7 @@ public class ItemData : ScriptableObject, IGameData
     public ShopMoneyType shopMoneyType;
     public int shopPrice, sellPrice;
     public string text1, text2;
-    public Property property;
+    public CharacterProperty property;
 
     public override string ToString()
     {

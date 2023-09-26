@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+
+public struct CharacterEquipAndPropertyData
+{
+    public Equip equip;
+    public CharacterProperty characterProperty;
+}
 
 [System.Serializable]
 public struct ObjCoordinate
@@ -59,6 +64,61 @@ public struct CharacterProperty
     public int HP, MP, Power, MaxHP,MaxMP,MaxPower, AT, DF, Crit, Dodge;
     public int Other;
 
+    public override string ToString()
+    {
+        string result = "";
+        if (MaxHP != 0)
+        {
+            string operatorStr = MaxHP > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.最大生命}{operatorStr}{MaxHP}  ";
+        }
+        if (HP != 0)
+        {
+            string operatorStr = HP > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.生命}{operatorStr}{HP} ";
+        }
+        if (MaxMP != 0)
+        {
+            string operatorStr = MaxMP > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.最大法力}{operatorStr}{MaxMP} ";
+        }
+        if (MP != 0)
+        {
+            string operatorStr = MP > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.法力}{operatorStr}{MP}  ";
+        }
+        if (MaxPower != 0)
+        {
+            string operatorStr = MaxPower > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.最大体力}{operatorStr}{MaxPower}";
+        }
+        if (Power != 0)
+        {
+            string operatorStr = Power > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.体力}{operatorStr}{Power}  ";
+        }
+        if (AT != 0)
+        {
+            string operatorStr = AT > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.攻击}{operatorStr}{AT}  ";
+        }
+        if (DF != 0)
+        {
+            string operatorStr = DF > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.防御}{operatorStr}{DF}  ";
+        }
+        if (Crit != 0)
+        {
+            string operatorStr = Crit > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.暴击}{operatorStr}{Crit}  ";
+        }
+        if (Dodge != 0)
+        {
+            string operatorStr = Dodge > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.闪避}{operatorStr}{Dodge}  ";
+        }
+        return base.ToString();
+    }
     public static CharacterProperty operator -(CharacterProperty property0, CharacterProperty property1)
     {
         CharacterProperty CharacterProperty = new CharacterProperty
@@ -140,7 +200,6 @@ public struct CharacterProperty
             default:
                 return Other;
         }
-        return -1;
     }
     public static CharacterProperty Lerp(CharacterProperty start, CharacterProperty end,float LerpValue)
     {
@@ -232,14 +291,60 @@ public class Character
     }
     public CharacterData characterData;
 
+    public Equip Equip=>equip;
+    private Equip equip;
+    public async void ChangeEquip(int id)
+    {
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(id);
+        if (itemData.type == ItemType.武器)
+        {
+            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon);
+            if (oldItemData != null)
+            {
+                characterProperty = characterProperty - oldItemData.property;
+            }
+        }
+        else if (itemData.type == ItemType.防具)
+        {
+            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes);
+            if (oldItemData != null)
+            {
+                characterProperty = characterProperty - oldItemData.property;
+            }
+        }
+        if (itemData != null)
+        {
+            characterProperty = characterProperty + itemData.property;
+        }
+    }
+
+    public CharacterEquipAndPropertyData CharacterEquipAndPropertyData
+    {
+        get
+        {
+            return new CharacterEquipAndPropertyData { characterProperty = characterProperty, equip = equip };
+        }
+    }
+
     public CharacterProperty CharacterProperty
     {
         get => characterProperty;
         set
         {
             characterProperty=value;
+            CharacterPropertyTrigger();
         }
     }
+    void CharacterPropertyTrigger()
+    {
+        CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
+        {
+            characterId = instanceId,
+            characterProperty = CharacterProperty
+        };
+        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
+    }
+
     private CharacterProperty characterProperty;
 
     public int groupId=-1;
@@ -357,7 +462,9 @@ public class Character
                         skills.Add(skillId);
                     }
                     CharacterProperty = CharacterProperty - nowProperty;
-                    CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
+                    nowProperty = profressionData.GetLevelProperty(level);
+                    CharacterProperty = CharacterProperty + nowProperty;
+                    
                 }
                
             }
@@ -392,23 +499,15 @@ public class Character
         if (Other >= 0)
             characterProperty.Other = Other;
 
-        CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
-        {
-            characterId = instanceId,
-            characterProperty = CharacterProperty
-        };
-        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
+        this.characterProperty = characterProperty;
     }
     public void SetProperty(SetCharacterProperty setCharacterProperty)
     {
         characterProperty.SetProperty(setCharacterProperty); 
-        CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
-        {
-            characterId = instanceId,
-            characterProperty = CharacterProperty
-        };
-        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
     }
+   
+
+
     public void AddProperty(ChangeCharacterProperty changeCharacterProperty)
     {
         switch (changeCharacterProperty.propertyType)
@@ -447,6 +546,7 @@ public class Character
                 characterProperty.Other = changeCharacterProperty.changeValue;
                 break;
         }
+        this.characterProperty = characterProperty;
     }
 
     private void TriggerEventAction(int eventid, int reference, bool enter)

@@ -8,7 +8,65 @@ namespace OldName
     [System.Serializable]
     public struct Property
     {
-        public int MaxHP, HP, AT, DF, EXP, rewardEXP, NeedEXP, Power, MaxPower, Crit, Dodge;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MaxHP, HP, AT, DF, EXP, rewardEXP, NeedEXP, Power, MaxPower;
+        public int Crit;
+        public int Dodge;
+
+        public override string ToString()
+        {
+            string result = "";
+            if (MaxHP != 0)
+            {
+                string operaStr = MaxHP > 0 ? "+" : "-";
+                result = $"最大HP{operaStr}{result}  ";
+            }
+            if (HP != 0)
+            {
+                string operaStr = HP > 0 ? "+" : "-";
+                result = $"HP{operaStr}{result}  ";
+            }
+            if (Power != 0)
+            {
+                string operaStr = Power > 0 ? "+" : "-";
+                result = $"体力{operaStr}{result}  ";
+            }
+
+            if (MaxPower != 0)
+            {
+                string operaStr = MaxPower > 0 ? "+" : "-";
+                result = $"最大体力{operaStr}{result}  ";
+            }
+            if (AT != 0)
+            {
+                string operaStr = AT > 0 ? "+" : "-";
+                result = $"AT{operaStr}{result}  ";
+            }
+            if (DF != 0)
+            {
+                string operaStr = DF > 0 ? "+" : "-";
+                result = $"DF{operaStr}{result}  ";
+            }
+            if (EXP != 0)
+            {
+                string operaStr = EXP > 0 ? "+" : "-";
+                result = $"经验{operaStr}{result}  ";
+            }
+           
+            if (EXP != 0)
+            {
+                string operaStr = EXP > 0 ? "+" : "-";
+                result = $"经验{operaStr}{result}  ";
+            }
+            if (EXP != 0)
+            {
+                string operaStr = EXP > 0 ? "+" : "-";
+                result = $"经验{operaStr}{result}  ";
+            }
+            return base.ToString();
+        }
         public Property(int zero)
         {
             MaxHP = 0;

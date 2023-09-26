@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerEquipQuickReference : UIObjReference<IReferenceData>
+public struct TeamerEquipAndProperty : IReferenceData
+{
+    public CharacterEquipAndPropertyData[] characterEquipAndPropertyDatas;
+}
+public class PlayerEquipQuickReference : UIObjReference<TeamerEquipAndProperty>
 {
     [SerializeField]
     Dropdown playerSelcet;
@@ -48,4 +52,10 @@ public class PlayerEquipQuickReference : UIObjReference<IReferenceData>
 
         Attribute = FindChildGameObject<Text>("Attribute");
     }
+
+    public override void InitData(TeamerEquipAndProperty t, SelectAction<TeamerEquipAndProperty> SelectAction = null)
+    {
+        base.InitData(t, SelectAction);
+    }
+
 }

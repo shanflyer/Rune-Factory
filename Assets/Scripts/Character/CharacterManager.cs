@@ -59,6 +59,22 @@ public class CharacterManager : Singleton<CharacterManager>
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
 
+    public TeamerEquipAndProperty TeamerEquipAndProperty
+    {
+        get
+        {
+            TeamerEquipAndProperty teamer = new TeamerEquipAndProperty
+            {
+                characterEquipAndPropertyDatas = new CharacterEquipAndPropertyData[teamPlayers.Count]
+            };
+            for(int i = 0; i < teamPlayers.Count; i++)
+            {
+                teamer.characterEquipAndPropertyDatas[i] = teamPlayers[i].CharacterEquipAndPropertyData;
+            }
+            return teamer;
+        }
+    }
+
     public override void Init()
     {
         base.Init();
