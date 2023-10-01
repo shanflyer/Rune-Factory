@@ -42,8 +42,8 @@ public class ManufacturingAction : MonoBehaviour
     public Text RPcostValueText, RPTotalText;
 
     public Text TitleText;
-    public List<ItemBoxAction> stuffs;
-    public GameObject product;
+    public List<ItemBoxReference> stuffs;
+    public ItemBoxReference product;
     public Text ProductCountText;
     public Dropdown FormulaDropdown;
     public Button UpButton, DownButton, AutoSelectButton, ProduceButton;
@@ -58,7 +58,7 @@ public class ManufacturingAction : MonoBehaviour
     private List<Formula> formulas;
     private Formula formula;
     private int package;
-    private ItemBoxAction SelectItem;
+    private ItemBoxReference SelectItem;
     private bool isMatch;
     private List<PackageItem> PackageItemCounts;
     private Item produceItem;
@@ -85,11 +85,11 @@ public class ManufacturingAction : MonoBehaviour
         PackageItemCounts=new List<PackageItem>();
         foreach (var stuff in stuffs)
         {
-            stuff.GetComponent<ItemBoxAction>().Hide();
-            stuff.GetComponent<ItemBoxAction>().item = default(Item);
-            stuff.GetComponent<ItemBoxAction>().isFull = false;
+           stuff.Hide();
+           stuff.item = default(Item);
+           stuff.isFull = false;
         }
-        product.GetComponent<ItemBoxAction>().Hide();
+        product.Hide();
         switch (formulaType)
         {
             case FormulaType.药剂:
@@ -135,7 +135,7 @@ public class ManufacturingAction : MonoBehaviour
     {
         foreach (var stuff in stuffs)
         {
-           stuff.GetComponent<ItemBoxAction>().ZeroData();
+           stuff.ClearData();
         }
     }
 
@@ -188,17 +188,17 @@ public class ManufacturingAction : MonoBehaviour
         {
             foreach (var stuff in stuffs)
             {
-                stuff.GetComponent<ItemBoxAction>().DisPlayFormulaItem();
+                stuff.DisPlayFormulaItem();
             }
-            product.GetComponent<ItemBoxAction>().DisPlayFormulaItem();
+            product.DisPlayFormulaItem();
         }
         else
         {
             foreach (var stuff in stuffs)
             {
-                stuff.GetComponent<ItemBoxAction>().ZeroData();
+                stuff.ClearData();
             }
-            product.GetComponent<ItemBoxAction>().ZeroData();
+            product.ClearData();
         }
         ProductCountText.text = "1";
        AutoSelectButton.gameObject.SetActive(false);
@@ -227,16 +227,16 @@ public class ManufacturingAction : MonoBehaviour
             ItemObj.transform.SetParent(ItemParent,true);
             ItemObj.transform.localScale = Vector3.one;
             ItemObj.GetComponentInChildren<Toggle>().group =GetComponentInChildren<ToggleGroup>();
-            ItemBoxAction itemBoxAction = ItemObj.GetComponent<ItemBoxAction>();
-            itemBoxAction.InitItemData(packageItem);
-            itemBoxAction.mask.enabled = false;
+            ItemBoxReference itemBoxAction = ItemObj.GetComponent<ItemBoxReference>();
+            itemBoxAction.InitData(packageItem);
+            //itemBoxAction.mask.enabled = false;
             itemBoxAction.isBox = true;
             if (formulaType == FormulaType.冷食|| formulaType == FormulaType.热食 || formulaType == FormulaType.酒水)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(packageItem.dataId.ToString()); 
                 if (!itemData.isFresh)
                 {
-                    itemBoxAction.mask.enabled = true;
+                    //itemBoxAction.mask.enabled = true;
                 }
             }
         }
@@ -267,17 +267,17 @@ public class ManufacturingAction : MonoBehaviour
             ItemObj.transform.SetParent(ItemParent,true);
             ItemObj.transform.localScale = Vector3.one;
             ItemObj.GetComponentInChildren<Toggle>().group = gameObject.GetComponentInChildren<ToggleGroup>();
-            ItemBoxAction itemBoxAction = ItemObj.GetComponent<ItemBoxAction>();
-            itemBoxAction.InitItemData(packageItem);
-            itemBoxAction.mask.enabled = false;
+            ItemBoxReference itemBoxAction = ItemObj.GetComponent<ItemBoxReference>();
+            itemBoxAction.InitData(packageItem);
+            //itemBoxAction.mask.enabled = false;
             itemBoxAction.isBox = true;
-            itemBoxAction.package = package;
+            //itemBoxAction.package = package;
             if (formulaType == FormulaType.热食||formulaType==FormulaType.冷食 || formulaType == FormulaType.酒水)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(packageItem.dataId.ToString());
                 if (!itemData.isFresh)
                 {
-                    itemBoxAction.mask.enabled = true;
+                   // itemBoxAction.mask.enabled = true;
                 }
             }
         }
@@ -286,12 +286,12 @@ public class ManufacturingAction : MonoBehaviour
     public bool  CheckFormula()
     {
       
-        var x = stuffs.FindAll(s => s.GetComponent<ItemBoxAction>().isFull);
+        var x = stuffs.FindAll(s => s.isFull);
         if (x.Count == formula.Stuffs.Count)
         {
             foreach (var obj in x)
             {
-                Item item = obj.GetComponent<ItemBoxAction>().item;
+                Item item = obj.item;
                 if (formula.Stuffs.Exists(s => s  == item.dataId))
                 {
                     
@@ -317,7 +317,7 @@ public class ManufacturingAction : MonoBehaviour
 
         foreach (var stuff in stuffs)
         {
-            ItemBoxAction itemBoxAction = stuff.GetComponent<ItemBoxAction>();
+            var itemBoxAction = stuff;
             if (itemBoxAction.isFull)
             {
                 int index = stuffItems.FindIndex(i => i.dataId == itemBoxAction.item.dataId);
@@ -388,17 +388,17 @@ public class ManufacturingAction : MonoBehaviour
         dropdown.captionText.text = dropdown.options[index].text;
         foreach (var stuff in stuffs)
         {
-            stuff.GetComponent<ItemBoxAction>().isFull = false;
-            stuff.GetComponent<ItemBoxAction>().Hide();
+            stuff.isFull = false;
+            stuff.Hide();
         }
         if (index == 0)
         {
            
             for (int i = 0; i < formula.Stuffs.Count; i++)
             {
-                stuffs[i].GetComponent<ItemBoxAction>().Hide();
+                stuffs[i].Hide();
             }
-            product.GetComponent<ItemBoxAction>().Hide();
+            product.Hide();
             formula = null;
             AutoSelectButton.gameObject.SetActive(false);
         }
@@ -409,21 +409,21 @@ public class ManufacturingAction : MonoBehaviour
             {
                 for (int i = 0; i < formula.Stuffs.Count; i++)
                 {
-                    stuffs[i].GetComponent<ItemBoxAction>().DisPlayFormulaItem(formula.Stuffs[i]);
+                    stuffs[i].DisPlayFormulaItem(formula.Stuffs[i]);
 
-                    stuffs[i].GetComponent<ItemBoxAction>().mask.enabled = true;
+                   // stuffs[i].GetComponent<ItemBoxAction>().mask.enabled = true;
                 }
-                product.GetComponent<ItemBoxAction>().DisPlayFormulaItem(formula.Product);
-                product.GetComponent<ItemBoxAction>().mask.enabled = true;
+                product.DisPlayFormulaItem(formula.Product);
+               // product.GetComponent<ItemBoxAction>().mask.enabled = true;
                 AutoSelectButton.gameObject.SetActive(true);
             }
             else
             {
                 for (int i = 0; i < formula.Stuffs.Count; i++)
                 {
-                    stuffs[i].GetComponent<ItemBoxAction>().Hide();
+                    stuffs[i].Hide();
                 }
-                product.GetComponent<ItemBoxAction>().Hide();
+                product.Hide();
                 AutoSelectButton.gameObject.SetActive(false);
             }
            
@@ -443,17 +443,17 @@ public class ManufacturingAction : MonoBehaviour
 
             foreach (var stuff in stuffs)
             {
-                stuff.GetComponent<ItemBoxAction>().isFull = false;
-                stuff.GetComponent<ItemBoxAction>().Hide();
+                stuff.isFull = false;
+                stuff.Hide();
             }
             if (index == 0)
             {
 
                 for (int i = 0; i < formula.Stuffs.Count; i++)
                 {
-                    stuffs[i].GetComponent<ItemBoxAction>().Hide();
+                    stuffs[i].Hide();
                 }
-                product.GetComponent<ItemBoxAction>().Hide();
+                product.Hide();
                 formula = null;
                 AutoSelectButton.gameObject.SetActive(false);
             }
@@ -464,21 +464,21 @@ public class ManufacturingAction : MonoBehaviour
                 {
                     for (int i = 0; i < formula.Stuffs.Count; i++)
                     {
-                        stuffs[i].GetComponent<ItemBoxAction>().DisPlayFormulaItem(formula.Stuffs[i]);
+                        stuffs[i].DisPlayFormulaItem(formula.Stuffs[i]);
 
-                        stuffs[i].GetComponent<ItemBoxAction>().mask.enabled = true;
+                        //stuffs[i].GetComponent<ItemBoxAction>().mask.enabled = true;
                     }
-                    product.GetComponent<ItemBoxAction>().DisPlayFormulaItem(formula.Product);
-                    product.GetComponent<ItemBoxAction>().mask.enabled = true;
+                    product.DisPlayFormulaItem(formula.Product);
+                    //product.mask.enabled = true;
                     AutoSelectButton.gameObject.SetActive(true);
                 }
                 else
                 {
                     for (int i = 0; i < formula.Stuffs.Count; i++)
                     {
-                        stuffs[i].GetComponent<ItemBoxAction>().Hide();
+                        stuffs[i].Hide();
                     }
-                    product.GetComponent<ItemBoxAction>().Hide();
+                    product.Hide();
                     AutoSelectButton.gameObject.SetActive(false);
                 }
 
@@ -500,7 +500,7 @@ public class ManufacturingAction : MonoBehaviour
             RpCostValue = 0;
             foreach (var stuff in stuffs)
             {
-                if (stuff.GetComponent<ItemBoxAction>().isFull)
+                if (stuff.isFull)
                 {
                     RpCostValue += 5;
                 }
@@ -511,7 +511,7 @@ public class ManufacturingAction : MonoBehaviour
         }
         
     }
-    public async void DisplaySelectItemInformation(ItemBoxAction itemBoxAction)
+    public async void DisplaySelectItemInformation(ItemBoxReference itemBoxAction)
     {
         Item _item = itemBoxAction.item;
         if (_item.instanceId == 0)
@@ -531,7 +531,7 @@ public class ManufacturingAction : MonoBehaviour
             ItemTypeText.text = LanguageManage.SwitchStr(itemData.type.ToString());
             ItemNoticeText.text = itemData.text2;
             ItemNoticeText1.text = itemData.text1;
-            if (itemBoxAction.mask.enabled)
+           // if (itemBoxAction.mask.enabled)
             {
                 GetOutButton.gameObject.SetActive(false);
                 GetInButton.gameObject.SetActive(false);
@@ -540,12 +540,12 @@ public class ManufacturingAction : MonoBehaviour
                     GetInButton.gameObject.SetActive(true);
                 }
             }
-            else
+            //else
             {
                 if (itemBoxAction.isBox)
                 {
                     int _count = _item.count;
-                    List<ItemBoxAction> itemBoxActions =
+                   var itemBoxActions =
                         stuffs.FindAll(s => s.item.instanceId != 0);
                     if (itemBoxActions.Count>0)
                     {
@@ -577,7 +577,7 @@ public class ManufacturingAction : MonoBehaviour
        
         
     }
-
+    
     public void HideItemInformation()
     {
         ItemNameText.text = "";
@@ -598,7 +598,7 @@ public class ManufacturingAction : MonoBehaviour
         }
         else
         {
-            ItemBoxAction stuff = null;
+            ItemBoxReference stuff = null;
             if (formula != null)
             {
                 if (formula.Stuffs.Exists(s => s == SelectItem.item.dataId))
@@ -610,7 +610,7 @@ public class ManufacturingAction : MonoBehaviour
                         if (!stuffs[index].isFull)
                         {
                             stuff = stuffs[index];
-                            stuff.SetAbleColor();
+                            stuff.SetEnableColor(true);
 
                             stuff.isFull = true;
                             break;
@@ -618,42 +618,42 @@ public class ManufacturingAction : MonoBehaviour
                     }
                     if (stuff == null)
                     {
-                        stuff = stuffs.Find(s => !s.GetComponent<ItemBoxAction>().isFull);
+                        stuff = stuffs.Find(s => !s.isFull);
                         if (stuff != null)
                         {
-                            stuff.GetComponent<ItemBoxAction>().SetUnenableColor();
+                            stuff.SetEnableColor(false);
 
-                            stuff.GetComponent<ItemBoxAction>().isFull = true;
+                            stuff.isFull = true;
                         }
 
                     }
                 }
                 else
                 {
-                    stuff = stuffs.Find(s => !s.GetComponent<ItemBoxAction>().isFull);
+                    stuff = stuffs.Find(s => !s.isFull);
                     if (stuff != null)
                     {
-                        stuff.GetComponent<ItemBoxAction>().SetUnenableColor();
+                        stuff.SetEnableColor(false);
 
-                        stuff.GetComponent<ItemBoxAction>().isFull = true;
+                        stuff.isFull = true;
                     }
                 }
             }
             else
             {
-                stuff = stuffs.Find(s => !s.GetComponent<ItemBoxAction>().isFull);
+                stuff = stuffs.Find(s => !s.isFull);
                 if (stuff != null)
                 {
-                    stuff.GetComponent<ItemBoxAction>().SetAbleColor();
+                    stuff.SetEnableColor(true);
 
-                    stuff.GetComponent<ItemBoxAction>().isFull = true;
+                    stuff.isFull = true;
                 }
             }
             if (stuff != null)
             {
-                stuff.GetComponent<ItemBoxAction>().InitItemData(SelectItem.item);
-                stuff.GetComponent<ItemBoxAction>().count.enabled = false;
-                stuff.GetComponent<ItemBoxAction>().package = package;
+                stuff.InitData(SelectItem.item);
+               // stuff.count.enabled = false;
+                //stuff.package = package;
                 GetInButton.gameObject.SetActive(false);
                 DisplayBoxItem(package);
                 ProduceButton.gameObject.SetActive(true);
@@ -674,7 +674,7 @@ public class ManufacturingAction : MonoBehaviour
                 PackageManager.instance.IsHaveItem(2, formulaStuff))
             {
                 int index = formula.Stuffs.FindIndex(f=>f==formulaStuff);
-                stuffs[index].GetComponent<ItemBoxAction>().SetAbleColor();
+                stuffs[index].SetEnableColor(true);
             }
             else
             {
@@ -722,10 +722,10 @@ public class ManufacturingAction : MonoBehaviour
 
 
        
-        var fullStuffs = stuffs.FindAll(s => s.GetComponent<ItemBoxAction>().isFull);
+        var fullStuffs = stuffs.FindAll(s => s.isFull);
         if (fullStuffs.Count == 0)
         {
-            product.GetComponent<ItemBoxAction>().Hide();
+            product.Hide();
             ProduceButton.gameObject.SetActive(false);
         }
         else
@@ -733,8 +733,8 @@ public class ManufacturingAction : MonoBehaviour
             ProduceButton.gameObject.SetActive(true);
             if (formula == null || !formula.isOpen)
             {
-                product.GetComponent<ItemBoxAction>().icon.sprite = DefaultSprite;
-                product.GetComponent<ItemBoxAction>().icon.enabled = true;
+                //product.icon.sprite = DefaultSprite;
+               //product.icon.enabled = true;
             }
             else
             {
@@ -742,20 +742,20 @@ public class ManufacturingAction : MonoBehaviour
 
                 if (isMatch)
                 {
-                    product.GetComponent<ItemBoxAction>().DisPlayFormulaItem(formula.Product);
-                    product.GetComponent<ItemBoxAction>().SetAbleColor();
+                    product.DisPlayFormulaItem(formula.Product);
+                    product.SetEnableColor(true);
                 }
                 else
                 {
 
-                    if (fullStuffs.Exists(f => !f.GetComponent<ItemBoxAction>().isMatch))
+                    if (fullStuffs.Exists(f => !f.isMatch))
                     {
-                        product.GetComponent<ItemBoxAction>().icon.sprite = DefaultSprite;
-                        product.GetComponent<ItemBoxAction>().icon.enabled = true;
+                       // product.GetComponent<ItemBoxAction>().icon.sprite = DefaultSprite;
+                       // product.GetComponent<ItemBoxAction>().icon.enabled = true;
                     }
                     else
                     {
-                        product.GetComponent<ItemBoxAction>().DisPlayFormulaItem(formula.Product);
+                        product.DisPlayFormulaItem(formula.Product);
                     }
 
                 }
@@ -810,27 +810,27 @@ public class ManufacturingAction : MonoBehaviour
     public void GetOutButtonAction()
     {
         AudioController.instance.PlayAudio(SE.click);
-        int index = stuffs.FindIndex(s => s.GetComponent<ItemBoxAction>() == SelectItem);
+        int index = stuffs.FindIndex(s => s == SelectItem);
         SelectItem.isFull = false;
         SelectItem.gameObject.GetComponentInChildren<Toggle>().isOn = false;
         if (formula != null)
         {
             if (index > formula.Stuffs.Count - 1)
             {
-                SelectItem.ZeroData();
+                SelectItem.ClearData();
             }
             else
             {
                 SelectItem.DisPlayFormulaItem(formula.Stuffs[index]);
-                product.GetComponent<ItemBoxAction>().DisPlayFormulaItem(formula.Product);
+                product.DisPlayFormulaItem(formula.Product);
             }
             
         }
         else
         {
-            SelectItem.ZeroData();
+            SelectItem.ClearData();
         }
-        if (stuffs.Exists(s => s.GetComponent<ItemBoxAction>().isFull))
+        if (stuffs.Exists(s => s.isFull))
         {
             
         }
@@ -883,7 +883,7 @@ public class ManufacturingAction : MonoBehaviour
             {
                 PackageItem packageItem=new PackageItem();
                 
-                Item sitem = stuff.GetComponent<ItemBoxAction>().item;
+                Item sitem = stuff.item;
                 if (sitem.instanceId != 0)
                 {
                     sitem.count = produceCount;
@@ -934,12 +934,12 @@ public class ManufacturingAction : MonoBehaviour
                 List<int> itemIds = new List<int>();
                 foreach (var stuff in stuffs)
                 {
-                    ItemBoxAction stuffBoxAction = stuff.GetComponent<ItemBoxAction>();
+                    var stuffBoxAction = stuff;
                     if (stuffBoxAction.isFull)
                     {
                         itemIds.Add(stuffBoxAction.item.dataId);
                     }
-                    stuff.GetComponent<ItemBoxAction>().isFull=false;
+                    stuff.isFull=false;
 
 
                 }

@@ -315,7 +315,7 @@ namespace OldName
         public Cell cell;
         public string modeValue;
         public int MV;
-        public Property property;
+        public CharacterProperty property;
         public Vector3 distanceHp;
         public bool isMagicHurt;
         public GameObject HpGameObject;

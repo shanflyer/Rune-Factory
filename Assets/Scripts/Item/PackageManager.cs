@@ -5,6 +5,38 @@ using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 public class PackageManager : Singleton<PackageManager>
 {
+    private List<int> playerPackages = new List<int>();
+    public async void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName)
+    {
+        PackageList packageList = new PackageList
+        {
+            packageDatas = new List<PackageData>()
+        };
+        for(int i = 0; i < playerPackages.Count; i++)
+        {
+            if (gamePackages.TryGetValue(playerPackages[i],out GamePackage gamePackage))
+            {
+                packageList.packageDatas.Add(gamePackage.OutGamePackageData());
+            }
+        }
+        var warehousePanel=await  UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+        warehousePanel.SetSelectItemAction(selectItemAction,actionName);
+    }
+    public int GetPlayerItemCount(int itemDataId)
+    {
+        int itemCount = 0;
+        for (int i = 0; i < playerPackages.Count; i++)
+        {
+            if (gamePackages.TryGetValue(playerPackages[i], out GamePackage gamePackage))
+            {
+                itemCount += gamePackage.GetItemCount(itemDataId);
+            }
+        }
+        return itemCount;
+    }
+
+
+
     public override void Init()
     {
         base.Init();
@@ -226,6 +258,18 @@ public class PackageManager : Singleton<PackageManager>
         private Queue<int> nullItems;
         private Dictionary<int, int> packageItemCounts;
         private Dictionary<int, List<int>> packageItemIndexDatas;
+
+        public PackageData OutGamePackageData()
+        {
+            PackageData packageData = new PackageData
+            {
+                caseCount = caseCount,
+                instanceId = instanceId,
+                name = name,
+                items = items,
+            };
+            return packageData;
+        }
 
         public GamePackage(int caseCount, string name, int id)
         {
@@ -482,4 +526,5 @@ public struct PackageData
     public int instanceId;
     public int caseCount;
     public List<Item> items;
+     
 }

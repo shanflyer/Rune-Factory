@@ -87,6 +87,7 @@ public class GameCommon
     public const int SeasonDays = 30;
     public const float fightMapMovingSpeed = 0.2f;
 
+    public const int DefaultOutItemId = -1;
 
     public const float cellWidth = 0.16f, cellHigh = 0.16f;
     public const float cellSize = 0.08f;
@@ -586,6 +587,7 @@ public static class DataPath
         {typeof(MyTimeLineData),"Data/TimeLineData" },
         {typeof(SkillData),"Data/SkillData" },
         {typeof(MapItemData),"Data/MapItemData" },
+        {typeof(FormulaData),"Data/FormulaData" }
     };
 
     public static string GetDataPath(Type type)

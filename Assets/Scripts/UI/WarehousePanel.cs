@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +33,9 @@ public class WarehousePanel : GamePanel<PackageList>
 
     PackageList packageList;
     int selectIndex;
+
+    Item SelectItem;
+    SelectAction<Item> selectItemAction;
     protected override void Awake()
     {
         base.Awake();
@@ -52,6 +56,14 @@ public class WarehousePanel : GamePanel<PackageList>
         });
         ReturnButton.onClick.AddListener(Close); 
         itemBoxs=new DisplayList<ItemBoxReference,Item>(itemBoxReference,itemParent);
+
+        ActionButton.onClick.AddListener(() =>
+        {
+            if(selectItemAction != null)
+            {
+                selectItemAction(SelectItem);
+            }
+        });
 
         playerEquipQuickReference.InitData(CharacterManager.instance.TeamerEquipAndProperty);
     }
@@ -81,8 +93,17 @@ public class WarehousePanel : GamePanel<PackageList>
         selectIndex = 0;
         RefreshPackage();
     }
+
+    
+    public void SetSelectItemAction(SelectAction<Item> selectItemAction,string actionName)
+    {
+        ActionName.text = actionName;
+        this.selectItemAction = selectItemAction;
+    }
+  
     async void SelectPackageItem(Item item)
     {
+        SelectItem = item;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
         ItemIcon.sprite=itemData.icon;
         ItemIcon.SetNativeSize();
@@ -91,6 +112,8 @@ public class WarehousePanel : GamePanel<PackageList>
         Info.text = itemData.text1.ToString();
         Property.text = itemData.property.ToString();
         Price.text = $"º€÷µ:{itemData.sellPrice}G";
+
+
     }
     void RefreshPackage()
     {

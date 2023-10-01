@@ -4,15 +4,7 @@ using UnityEngine;
 using LitJson;
 using System.IO;
 
-[System.Serializable]
-public enum FormulaType
-{
-    装备=0,
-    药剂=1,
-    酒水=2,
-    冷食=3,
-    热食 = 4
-}
+
 [System.Serializable]
 public class FormulasStr
 {

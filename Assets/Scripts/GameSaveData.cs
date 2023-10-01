@@ -108,7 +108,7 @@ namespace OldName
             nowAge = animal.nowAge;
             Hp = animal.property.HP;
             level = animal.level;
-            exp = animal.property.EXP;
+           // exp = animal.property.EXP;
             hungerDays = animal.hungerDays;
             animalStatus = animal.animalStatus;
             oldProduceDays = animal.oldProduceDays;
@@ -176,7 +176,7 @@ namespace OldName
             date = npcx.npcData.brothDate;
             level = npcx.level;
             hp = npcx.property.HP;
-            exp = npcx.property.EXP;
+           // exp = npcx.property.EXP;
             istteamExpAdd = npcx.istteamExpAdd;
             isFriendlyExpAdd = npcx.isFriendlyExpAdd;
             isGiftExpAdd0 = npcx.isGiftExpAdd0;
@@ -265,7 +265,7 @@ namespace OldName
             name = gamePlayer.name;
             attributeType = gamePlayer.attributeType;
             level = gamePlayer.level;
-            exp = gamePlayer.property.EXP;
+            //exp = gamePlayer.property.EXP;
             weapon = gamePlayer.weapon.dataId;
             clothes = gamePlayer.clothes.dataId;
 
@@ -491,7 +491,7 @@ namespace OldName
             {
                 team1Hp = gamePlayer.TeamPlayer0.property.HP;
                 team1Level = gamePlayer.TeamPlayer0.level;
-                team1Exp = gamePlayer.TeamPlayer0.property.EXP;
+                //team1Exp = gamePlayer.TeamPlayer0.property.EXP;
             }
             if (gamePlayer.TeamPlayer1 == null || gamePlayer.TeamPlayer1.name == null)
             {
@@ -503,7 +503,7 @@ namespace OldName
             {
                 team2Hp = gamePlayer.TeamPlayer1.property.HP;
                 team2Level = gamePlayer.TeamPlayer1.level;
-                team2Exp = gamePlayer.TeamPlayer1.property.EXP;
+                //team2Exp = gamePlayer.TeamPlayer1.property.EXP;
             }
         }
     }
@@ -739,8 +739,8 @@ namespace OldName
                     npcx.npcData.friendlyLevel = npcSaveData.friendlyLevel;
                     npcx.npcData.frienflyExp = npcSaveData.friendlyEXP;
                     npcx.level = npcSaveData.level;
-                    npcx.property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
-                    npcx.property.EXP = npcSaveData.exp;
+                   // npcx.property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
+                   // npcx.property.EXP = npcSaveData.exp;
                     npcx.property.HP = npcSaveData.hp;
                     npcx.isFriendlyExpAdd = npcSaveData.isFriendlyExpAdd;
                     npcx.isGiftExpAdd0 = npcSaveData.isGiftExpAdd0;
@@ -782,7 +782,7 @@ namespace OldName
             } 
 
             gamePlayer.InitGamePlayer();
-            gamePlayer.property.EXP = playerSaveData.exp;
+            //gamePlayer.property.EXP = playerSaveData.exp;
             gamePlayer.property.HP = playerMoneyData.Hp;
             gamePlayer.property.Power = playerMoneyData.power;
             gamePlayer.attributeType = playerSaveData.attributeType;
@@ -802,7 +802,7 @@ namespace OldName
                         gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
                         animal.property.HP = playerMoneyData.team1Hp;
                         animal.level = playerMoneyData.team1Level;
-                        animal.property.EXP = playerMoneyData.team1Exp;
+                       // animal.property.EXP = playerMoneyData.team1Exp;
                     }
 
 
@@ -817,7 +817,7 @@ namespace OldName
                         gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
                         npcx.property.HP = playerMoneyData.team1Hp;
                         npcx.level = playerMoneyData.team1Level;
-                        npcx.property.EXP = playerMoneyData.team1Exp;
+                        //npcx.property.EXP = playerMoneyData.team1Exp;
                     }
 
 
@@ -838,7 +838,7 @@ namespace OldName
                         gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
                         animal.property.HP = playerMoneyData.team2Hp;
                         animal.level = playerMoneyData.team2Level;
-                        animal.property.EXP = playerMoneyData.team2Exp;
+                       // animal.property.EXP = playerMoneyData.team2Exp;
                     }
 
                 }
@@ -852,7 +852,7 @@ namespace OldName
                         gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
                         npcx.property.HP = playerMoneyData.team2Hp;
                         npcx.level = playerMoneyData.team2Level;
-                        npcx.property.EXP = playerMoneyData.team2Exp;
+                       // npcx.property.EXP = playerMoneyData.team2Exp;
                     }
 
                 }
@@ -1161,7 +1161,7 @@ namespace OldName
             charactorTitleValue = new CharactorTitleValue();
         }
 
-        public void ZeroInitProperty(Property property)
+        public void ZeroInitProperty(CharacterProperty property)
         {
             if (!DataSaveAndLoadTest.LoadRedMoney())
             {
@@ -1233,8 +1233,8 @@ namespace OldName
                     npcx.npcData.friendlyLevel = npcSaveData.friendlyLevel;
                     npcx.npcData.frienflyExp = npcSaveData.friendlyEXP;
                     npcx.level = npcSaveData.level;
-                    npcx.property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
-                    npcx.property.EXP = npcSaveData.exp;
+                   // npcx.property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
+                   // npcx.property.EXP = npcSaveData.exp;
                     npcx.property.HP = npcSaveData.hp;
                     npcx.isFriendlyExpAdd = npcSaveData.isFriendlyExpAdd;
                     npcx.isGiftExpAdd0 = npcSaveData.isGiftExpAdd0;
@@ -1276,7 +1276,7 @@ namespace OldName
             } 
 
             gamePlayer.InitGamePlayer();
-            gamePlayer.property.EXP = playerSaveData.exp;
+            //gamePlayer.property.EXP = playerSaveData.exp;
             gamePlayer.property.HP = playerMoneyData.Hp;
             gamePlayer.property.Power = playerMoneyData.power;
             gamePlayer.attributeType = playerSaveData.attributeType;
@@ -1296,7 +1296,7 @@ namespace OldName
                         gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
                         animal.property.HP = playerMoneyData.team1Hp;
                         animal.level = playerMoneyData.team1Level;
-                        animal.property.EXP = playerMoneyData.team1Exp;
+                       // animal.property.EXP = playerMoneyData.team1Exp;
                     }
 
 
@@ -1311,7 +1311,7 @@ namespace OldName
                         gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
                         npcx.property.HP = playerMoneyData.team1Hp;
                         npcx.level = playerMoneyData.team1Level;
-                        npcx.property.EXP = playerMoneyData.team1Exp;
+                       // npcx.property.EXP = playerMoneyData.team1Exp;
                     }
 
 
@@ -1332,7 +1332,7 @@ namespace OldName
                         gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
                         animal.property.HP = playerMoneyData.team2Hp;
                         animal.level = playerMoneyData.team2Level;
-                        animal.property.EXP = playerMoneyData.team2Exp;
+                      //  animal.property.EXP = playerMoneyData.team2Exp;
                     }
 
                 }
@@ -1346,7 +1346,7 @@ namespace OldName
                         gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
                         npcx.property.HP = playerMoneyData.team2Hp;
                         npcx.level = playerMoneyData.team2Level;
-                        npcx.property.EXP = playerMoneyData.team2Exp;
+                        //npcx.property.EXP = playerMoneyData.team2Exp;
                     }
 
                 }

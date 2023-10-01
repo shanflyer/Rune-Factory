@@ -33,7 +33,7 @@ public class PastureItemPanelAction : MonoBehaviour
             
             itemObj.transform.SetParent(BoxParent);
             itemObj.transform.localScale = Vector3.one;
-            itemObj.GetComponent<ItemBoxAction>().InitItemData(itemPackageItem);
+            itemObj.GetComponent<ItemBoxReference>().InitData(itemPackageItem);
             Destroy(itemObj.GetComponentInChildren<Toggle>().gameObject);
         }
         int count = caseCount - items.Count;
@@ -43,8 +43,8 @@ public class PastureItemPanelAction : MonoBehaviour
             
             itemObj.transform.SetParent(BoxParent);
             itemObj.transform.localScale = Vector3.one;
-            NullBox.GetComponent<ItemBoxAction>().icon.enabled = false;
-            NullBox.GetComponent<ItemBoxAction>().count.enabled = false;
+            //NullBox.GetComponent<ItemBoxAction>().icon.enabled = false;
+           // NullBox.GetComponent<ItemBoxAction>().count.enabled = false;
         }
         costValue = GameComponentData.gameData.pastureAction.zeroAddCase + (caseCount - 2) *
                         GameComponentData.gameData.pastureAction.addcasePlus;

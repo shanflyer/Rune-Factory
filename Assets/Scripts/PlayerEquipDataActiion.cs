@@ -19,7 +19,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
     private ItemData weaponData, clotherData;
     private int selectItem;
 
-    private Property oldProperty0,newProperty;
+    private CharacterProperty oldProperty0,newProperty;
 	// Use this for initialization
 	void Start () {
 		
@@ -70,8 +70,8 @@ public class PlayerEquipDataActiion : MonoBehaviour
                 {
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.weapon.dataId.ToString());
 
-                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);  
-                    Property oldProperty= oldItemData.property;
+                    oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
+                    var oldProperty = oldItemData.property;
                     gamePlayer.property -= oldProperty;
                     gamePlayer.property += selectItemData.property;
                 }
@@ -88,7 +88,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.clothes.dataId.ToString());
                      
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
-                    Property oldProperty = oldItemData.property;
+                    var oldProperty = oldItemData.property;
                     gamePlayer.property -= oldProperty;
                     gamePlayer.property += selectItemData.property;
                 }
@@ -109,7 +109,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.Weapon.ToString());
                      
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
-                    Property oldProperty = oldItemData.property;
+                   var  oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer0.property -= oldProperty;
                     gamePlayer.TeamPlayer0.property += selectItemData.property;
                 }
@@ -128,7 +128,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer0.clothes.ToString());
                      
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
-                    Property oldProperty = oldItemData.property;
+                    var oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer0.property -= oldProperty;
                     gamePlayer.TeamPlayer0.property += selectItemData.property;
                 }
@@ -150,7 +150,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.Weapon.ToString());
                    
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
-                    Property oldProperty = oldItemData.property;
+                    var oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer1.property -= oldProperty;
                     gamePlayer.TeamPlayer1.property += selectItemData.property;
                 }
@@ -168,7 +168,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
                 {
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(gamePlayer.TeamPlayer1.clothes.ToString()); 
                     oldItem = ItemManager.instance.CreatItem(oldItemData.id, 1);
-                    Property oldProperty = oldItemData.property;
+                    var oldProperty = oldItemData.property;
                     gamePlayer.TeamPlayer1.property -= oldProperty;
                     gamePlayer.TeamPlayer1.property += selectItemData.property;
                 }
@@ -506,7 +506,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
         {
             if (weaponData == null)
             {
-                Property zeroProperty=new Property(0);
+                CharacterProperty zeroProperty = default(CharacterProperty);
                 CompareProperty(zeroProperty,itemData.property);
             }
             else
@@ -519,7 +519,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
         {
             if (clotherData == null)
             {
-                Property zeroProperty = new Property(0);
+                CharacterProperty zeroProperty=default(CharacterProperty);
                 CompareProperty(zeroProperty, itemData.property);
             }
             else
@@ -547,7 +547,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
      
     }
 
-    void CompareProperty(Property property0, Property property1)
+    void CompareProperty(CharacterProperty property0, CharacterProperty property1)
     {
         newProperty = oldProperty0-property0+property1;
         HpText.text = newProperty.HP + "/" + newProperty.MaxHP;

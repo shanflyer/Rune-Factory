@@ -354,7 +354,7 @@ public class WarehouseAction : MonoBehaviour
             GameObject itemBoxObj = Instantiate(ItemBoxPro);
             itemBoxObj.transform.localScale=Vector3.one;
             //itemBoxObj.GetComponent<ItemBoxAction>().InitItemData(packageItem,deskAction);
-            itemBoxObj.GetComponent<ItemBoxAction>().isWareDisplay = true;
+           // itemBoxObj.GetComponent<ItemBoxAction>().isWareDisplay = true;
             itemBoxObj.transform.SetParent(ItemBoxParent,false);
             itemBoxObj.GetComponentInChildren<Toggle>().group = ItemBoxParent.GetComponent<ToggleGroup>();
             ItemBoxObjs.Add(itemBoxObj);
@@ -366,7 +366,7 @@ public class WarehouseAction : MonoBehaviour
         {
             GameObject NullBoxObj = Instantiate(NULLBoxPro) as GameObject;
             NullBoxObj.transform.SetParent(ItemBoxParent, false);
-            NullBoxObj.GetComponent<ItemBoxAction>().Hide();
+            NullBoxObj.GetComponent<ItemBoxReference>().Hide();
             NullBoxObj.GetComponentInChildren<Toggle>().group = ItemBoxParent.GetComponentInChildren<ToggleGroup>();
         }
 
@@ -398,7 +398,7 @@ public class WarehouseAction : MonoBehaviour
         {
             GameObject NullBoxObj = Instantiate(NULLBoxPro) as GameObject;
             NullBoxObj.transform.SetParent(ItemBoxParent, false);
-            NullBoxObj.GetComponent<ItemBoxAction>().Hide();
+            NullBoxObj.GetComponent<ItemBoxReference>().Hide();
             NullBoxObj.GetComponentInChildren<Toggle>().group = ItemBoxParent.GetComponentInChildren<ToggleGroup>();
         }
         for (int i = 0; i < 5; i++)

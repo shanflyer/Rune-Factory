@@ -1,7 +1,4 @@
-﻿using OldName;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,35 +6,40 @@ public class ItemBoxReference : UIObjReference<Item>
 {
     [SerializeField]
     private Toggle toggle;
+
     [SerializeField]
     private Image icon;
+
     [SerializeField]
     private Image mask;
+
     [SerializeField]
     private Image backGround;
+
     [SerializeField]
     private Text count;
 
-    private int package;
 
-    public bool isEnough;
-    [HideInInspector] public bool isFull,isMatch;
+    [HideInInspector] public bool isFull, isMatch;
     [HideInInspector] public bool isBox, isWareDisplay;
-    public Item item;
 
-    SelectAction<Item> SelectAction;
+    private Item item;
+    public Item Item => item;
+    private SelectAction<Item> SelectAction;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        toggle = FindChildGameObject<Toggle>("Toggle");
+        toggle = GetComponent<Toggle>();
         icon = FindChildGameObject<Image>("Icon");
         mask = FindChildGameObject<Image>("mask");
-        backGround = FindChildGameObject<Image>("backGround");
+        backGround = FindChildGameObject<Image>("Image");
         count = FindChildGameObject<Text>("count");
     }
+
     private void Awake()
     {
-        toggle.onValueChanged.AddListener((bool value) => 
+        toggle.onValueChanged.AddListener((bool value) =>
         {
             if (SelectAction != null)
             {
@@ -45,6 +47,8 @@ public class ItemBoxReference : UIObjReference<Item>
             }
         });
     }
+
+   
     public override async void InitData(Item t, SelectAction<Item> SelectAction = null)
     {
         base.InitData(t, SelectAction);
@@ -71,15 +75,36 @@ public class ItemBoxReference : UIObjReference<Item>
         }
     }
 
-    void SetEnableColor(bool enable)
+    public void SetEnableColor(bool enable)
     {
         isFull = enable;
         mask.enabled = enable;
         isMatch = enable;
-        backGround.color= enable?Color.white:new Color(1,0.506f,0.506f);
-        
+        backGround.color = enable ? Color.white : new Color(1, 0.506f, 0.506f);
     }
-  
+
+    public void DisPlayFormulaItem(int _itemid)
+    {
+        //InitData(_itemid);
+        count.enabled = false;
+        GetComponentInChildren<Toggle>().enabled = true;
+        mask.enabled = true;
+    }
+
+    public void DisPlayFormulaItem()
+    {
+        if (item.instanceId != 0)
+        {
+            InitData(item);
+            count.enabled = false;
+            GetComponentInChildren<Toggle>().enabled = true;
+            mask.enabled = true;
+            icon.color = new Color(0.624f, 0.624f, 0.624f, 0.5f);
+        }
+    }
+
+    public void ClearData()
+    { }
 
     public void Hide()
     {

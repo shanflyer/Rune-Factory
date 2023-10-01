@@ -20,7 +20,7 @@ public class Employer
     public bool isHired;
     public AttributeType attributeType;
     public EmployType employType;
-    [HideInInspector] public Property property;
+    [HideInInspector] public CharacterProperty property;
 
     public void AttachTeamPlayer()
     {
@@ -61,7 +61,7 @@ public class Employer
         weapon = npcx.weapon;
         clothes = npcx.clothes;
         employType=EmployType.NPC;
-        property = npcx.property;
+       // property = npcx.property;
         profession = npcx.professionData.id;
         attributeType = npcx.npcData.attributeType;
         skillId = npcx.npcData.skill;
@@ -95,7 +95,7 @@ public class Employer
         charactorImage = animal.animalData.image;
         profession = animal.animalData.professionId;
         employType=EmployType.动物;
-        property = animal.property;
+        //property = animal.property;
         profession = animal.professionData.id;
         skillId = 0;
         AttachTeamPlayer();

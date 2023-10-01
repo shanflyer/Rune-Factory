@@ -54,9 +54,9 @@ namespace OldName
             professionData =
                 GameComponentData.gameData.charactorDataAction.professionDatas0.Find(p => p.id == animalData.professionId);
             level = animalSaveData.level;
-            property = professionData.ZeroProperty + professionData.GetPropertyFromLevel(level);
+            //property = professionData.ZeroProperty + professionData.GetPropertyFromLevel(level);
             property.HP = animalSaveData.Hp;
-            property.EXP = animalSaveData.exp;
+           // property.EXP = animalSaveData.exp;
         }
         public Animal(int _id, string _name, GameObject _Obj, int _mapId, Vector2Int _coordinate,
              ProfessionData _professionData, int _level, AnimalData _animalData, int _nowAge, int _hugerDays, AnimalStatus _animalStatus, Pasture _pasture) :
@@ -70,7 +70,7 @@ namespace OldName
             oldProduceDays = 0;
             pasture = _pasture;
             ageStatus = AgeStatus.成年;
-            property = professionData.ZeroProperty + professionData.GetPropertyFromLevel(level);
+            //property = professionData.ZeroProperty + professionData.GetPropertyFromLevel(level);
 
         }
 

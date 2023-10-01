@@ -465,8 +465,8 @@ public class NPCManager : MonoBehaviour
         {
             NPCX npcx = new NPCX(npcData);
             Npcxs.Add(npcx);
-            Property property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
-            npcx.property = property;
+           // Property property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
+           // npcx.property = property;
         }
         
     }

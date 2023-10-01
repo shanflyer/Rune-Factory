@@ -5,6 +5,10 @@ using UnityEngine;
 
 public struct CharacterEquipAndPropertyData
 {
+    public int id;
+    public string name;
+    public Sprite icon;
+    public AttributeType attributeType;
     public Equip equip;
     public CharacterProperty characterProperty;
 }
@@ -117,7 +121,7 @@ public struct CharacterProperty
             string operatorStr = Dodge > 0 ? "+" : "-";
             result = $"{CharacterPropertyType.иа╠э}{operatorStr}{Dodge}  ";
         }
-        return base.ToString();
+        return result;
     }
     public static CharacterProperty operator -(CharacterProperty property0, CharacterProperty property1)
     {
@@ -322,7 +326,13 @@ public class Character
     {
         get
         {
-            return new CharacterEquipAndPropertyData { characterProperty = characterProperty, equip = equip };
+            return new CharacterEquipAndPropertyData 
+            { 
+                id=instanceId,
+                name=name,
+                characterProperty = characterProperty,
+                equip = equip 
+            };
         }
     }
 

@@ -40,9 +40,9 @@ namespace OldName
         public string charactorImage, ObjName;
         public int skillId;
         public AttributeType attributeType;
-        [HideInInspector] public Property property;
+        [HideInInspector] public CharacterProperty property;
 
-        public TeamPlayer(int _id, string _name, int _level, int _profession, Property _property, int _skill)
+        public TeamPlayer(int _id, string _name, int _level, int _profession, CharacterProperty _property, int _skill)
         {
             id = _id;
             name = _name;
@@ -52,31 +52,7 @@ namespace OldName
             skillId = _skill;
         }
 
-
-        public void AddExpValue(int value)
-        {
-            level = property.AddExp(value, profession, level);
-
-
-            if (id / 1000000 == 2)
-            {
-                Employer employer = GameComponentData.gameData.employerManger.Employers.Find(e => e.id == id);
-                Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.Animals.Exists(a => a.id == id));
-                Animal animal = pasture.Animals.Find(a => a.id == id);
-                animal.property = property;
-                animal.level = level;
-            }
-            else
-            {
-                NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == id);
-                if (npcx != null)
-                {
-                    npcx.property = property;
-                    npcx.level = level;
-                }
-
-            }
-        }
+         
         public void AddHpValue(int value)
         {
             property.HP += value;
@@ -172,7 +148,7 @@ namespace OldName
         public Gender gender;
         public Season season;
         public int date;
-        public Property property;
+        public CharacterProperty property;
         public Item weapon, clothes;
 
         public AttributeType attributeType;
@@ -219,7 +195,7 @@ namespace OldName
             TeamPlayer1 = null;
             ProfessionData playerProfessionData =
                 GameComponentData.gameData.charactorDataAction.professionDatas0.Find(p => p.id == 8);
-            property = playerProfessionData.ZeroProperty + playerProfessionData.GetPropertyFromLevel(level);
+           //property = playerProfessionData.ZeroProperty + playerProfessionData.GetPropertyFromLevel(level);
             attributeType = AttributeType.无;
             if (PlayerDate.weapon == 0)
             {
