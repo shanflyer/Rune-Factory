@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -279,8 +280,8 @@ public struct Equip
 }
 public class Character
 {
-   public Character() { }
-
+    public Character() { }
+    public int characterPackage;
     public List<int> skills = new List<int>();
     public Character(CharacterData characterData,int instanceId)
     {
@@ -290,13 +291,20 @@ public class Character
         professionId = characterData.profession;
         name = characterData.characterName;
         behavior = characterData.behavior;
-
+       
         SetLevel(1,true);
+        CreatCharacterPackage();
+       
     }
     public CharacterData characterData;
 
     public Equip Equip=>equip;
     private Equip equip;
+
+    protected virtual async Task CreatCharacterPackage()
+    {
+        characterPackage = await PackageManager.instance.CreatGamePackage(characterData.packageId, 0);
+    }
     public async void ChangeEquip(int id)
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(id);
@@ -686,10 +694,15 @@ public class Player : Character
     {
        
     }
+    protected override async Task CreatCharacterPackage()
+    {
+       await base.CreatCharacterPackage();
+        PackageManager.instance.AddPlayerPackage(characterPackage);
+    }
     public Player(string name)
     {
         this.name = name;
-        bag = PackageManager.instance.CreatGamePackage(10, "PlayerBag",instanceId);
+        //bag = PackageManager.instance.CreatGamePackage(10, "PlayerBag",instanceId);
         //¡Ÿ ±
     } 
     public Player(CharacterSaveData characterSaveData)

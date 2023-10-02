@@ -590,7 +590,8 @@ public static class DataPath
         {typeof(SkillData),"Data/SkillData" },
         {typeof(MapItemData),"Data/MapItemData" },
         {typeof(FormulaData),"Data/FormulaData" },
-        {typeof(ManufactureData),"Data/ManufactureData" }
+        {typeof(ManufactureData),"Data/ManufactureData" },
+        {typeof(PackageSetData),"Data/PackageSetData" }
     };
 
     public static string GetDataPath(Type type)

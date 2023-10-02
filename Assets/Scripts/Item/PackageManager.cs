@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEngine.Rendering.ReloadAttribute;
 
 public class PackageManager : Singleton<PackageManager>
 {
+    private MyInstance myInstance;
     private List<int> playerPackages = new List<int>();
+
+    public void AddPlayerPackage(int id)
+    {
+        if (!playerPackages.Contains(id))
+        {
+            playerPackages.Add(id);
+        }
+    }
     public async void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName)
     {
         PackageList packageList = new PackageList
@@ -21,7 +31,7 @@ public class PackageManager : Singleton<PackageManager>
                 packageList.packageDatas.Add(gamePackage.OutGamePackageData());
             }
         }
-        var warehousePanel=await  UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+        var warehousePanel=await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
         warehousePanel.SetSelectItemAction(selectItemAction,actionName);
     }
     public int GetPlayerItemCount(int itemDataId)
@@ -80,6 +90,7 @@ public class PackageManager : Singleton<PackageManager>
     public override void Init()
     {
         base.Init();
+        myInstance = new MyInstance();
         GameActionManager.instance.AddListener<ItemUseAction>(UsetItem);
         GameActionManager.instance.AddListener<CreatRuntimePackage>(CreatRuntimePackage);
         GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
@@ -88,14 +99,14 @@ public class PackageManager : Singleton<PackageManager>
 
     private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();
     private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
-    private int nowPackageId;
-
+  
     public void InitFromSaveData(List<PackageSaveData> packageSaveDatas)
     {
         for(int i = 0; i < packageSaveDatas.Count; i++)
         {
             var saveData = packageSaveDatas[i];
-            GamePackage gamePackage = new GamePackage(saveData.caseCount, saveData.packageName, saveData.id) 
+            GamePackage gamePackage = new GamePackage(saveData.caseCount,
+                saveData.packageName, saveData.id,saveData.level,saveData.dataId,saveData.packageType) 
             { 
                 itemPackage = saveData.itemPackage
             };
@@ -114,6 +125,9 @@ public class PackageManager : Singleton<PackageManager>
                 {
                     id = gamePackage.instanceId,
                     caseCount = gamePackage.caseCount,
+                    dataId=gamePackage.dataId,
+                    level=gamePackage.level,
+                    packageType=gamePackage.packageType,
                     packageName = gamePackage.name,
                     itemPackage=gamePackage.itemPackage,
                     items = gamePackage.GetItems()
@@ -169,10 +183,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             gamePackage.GetItemOutPackage(removePackageItem.itemDataId, removePackageItem.itemCount);
         }
-        if (nowPackageId == removePackageItem.packageId)
-        {
-
-        }
+       
     }
     private async void AddPackageItemAction(AddPackageItem addPackageItem)
     {
@@ -222,12 +233,21 @@ public class PackageManager : Singleton<PackageManager>
         gamePackages.Add(creatRuntimePackage.instanceId, gamePackage);
         runtimePackageRuntimes.Add(creatRuntimePackage.key, creatRuntimePackage.instanceId);
     }
-
-    public int CreatGamePackage(int caseCount, string name = null, int packageInstaceId = 0)
+    public async Task<int> CreatGamePackage(int dataId,int level)
     {
-        nowPackageId++;
-        packageInstaceId = nowPackageId;
-        GamePackage gamePackage = new GamePackage(caseCount, name, packageInstaceId);
+        PackageSetData packageSetData =await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId);
+        int packageInstaceId = myInstance.CreatInstanceId();
+        int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
+        GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstaceId,
+             level, packageSetData.id,packageSetData.packageType);
+        gamePackages.Add(packageInstaceId, gamePackage);
+        return packageInstaceId;
+    }
+    public int CreatGamePackage(int caseCount, string name = null,PackageType packageType=PackageType.全部)
+    { 
+        int packageInstaceId = myInstance.CreatInstanceId();
+        GamePackage gamePackage = new GamePackage(caseCount, name, packageInstaceId,packageType:packageType);
+       
         gamePackages.Add(packageInstaceId, gamePackage);
 
         return packageInstaceId;
@@ -290,11 +310,13 @@ public class PackageManager : Singleton<PackageManager>
     {
         public string name;
         public int instanceId;
+        public int dataId;
         public int caseCount;
+        public int level;
         public bool itemPackage;
         private List<Item> items; 
         public int itemCount;
-
+        public PackageType packageType;
         private Queue<int> nullItems;
         private Dictionary<int, int> packageItemCounts;
         private Dictionary<int, List<int>> packageItemIndexDatas;
@@ -311,17 +333,13 @@ public class PackageManager : Singleton<PackageManager>
             return packageData;
         }
 
-        public GamePackage(int caseCount, string name, int id)
+        public GamePackage(int caseCount, string name, int instanceId,int level=0,
+            int dataId=0,PackageType packageType=PackageType.全部)
         {
-            if (id < 0)
-            {
-                instanceId = ItemManager.instance.CreatIntance();
-            }
-            else
-            {
-                instanceId = id;
-            }
-            
+            this.instanceId = instanceId;
+            this.packageType = packageType;
+            this.dataId = dataId;
+            this.level = level;
             itemCount = 0;
             this.name = name;
             this.caseCount = caseCount;
@@ -366,6 +384,15 @@ public class PackageManager : Singleton<PackageManager>
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
             if (!string.IsNullOrEmpty(itemData.name))
             {
+                if (packageType == PackageType.鲜活 && !itemData.isFresh)
+                {
+                    return item.count;
+                }
+                if (packageType != PackageType.鲜活 && itemData.isFresh)
+                {
+                    return item.count;
+                }
+
                 if (itemData.groupCount > 1)
                 {
                     List<int> indexDatas = new List<int>();
@@ -604,6 +631,7 @@ public struct PackageData
     public string name;
     public int instanceId;
     public int caseCount;
+    public PackageType packageType;
     public List<Item> items;
      
 }

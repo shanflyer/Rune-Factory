@@ -37,6 +37,9 @@ public struct PackageSaveData
 {
     public int caseCount;
     public int id;
+    public int dataId;
+    public int level;
+    public PackageType packageType;
     public string packageName;
     public bool itemPackage;
     public List<Item> items;
