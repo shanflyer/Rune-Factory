@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using OldName;
 
 public class NPCFunctionPanel : MonoBehaviour
 {
@@ -272,12 +273,12 @@ public class NPCFunctionPanel : MonoBehaviour
 
     public void ClickGiftButton()
     {
-        AudioController.instance.PlayAudio(SE.click);
-        GameComponentData.gameData.warehouseObj.SetActive(true);
-        List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-        wareDisplayTypes.Add(WareDisplayType.ALL);
-        GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包,wareDisplayTypes,DisplayType.Gift);
-        gameObject.SetActive(false);
+        //AudioController.instance.PlayAudio(SE.click);
+        //GameComponentData.gameData.warehouseObj.SetActive(true);
+        //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+        //wareDisplayTypes.Add(WareDisplayType.ALL);
+        //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包,wareDisplayTypes,DisplayType.Gift);
+        //gameObject.SetActive(false);
     }
     public void LeaveLover()
     {
@@ -304,7 +305,7 @@ public class NPCFunctionPanel : MonoBehaviour
         AudioController.instance.PlayAudio(SE.click);
         if (npcx.isLove)
         {
-            GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("分手"),LanguageManage.SwitchStr("确定要解除情侣关系吗？所有人的友好度都会下降。"),CareType.leaveLove);
+            //GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("分手"),LanguageManage.SwitchStr("确定要解除情侣关系吗？所有人的友好度都会下降。"),CareType.leaveLove);
         }
         else
         {

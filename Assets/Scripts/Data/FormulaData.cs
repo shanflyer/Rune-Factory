@@ -5,8 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public enum FormulaType
 {
-    武器 = 0,
-    防具=1,
+    装备 = 0,
+    衣物=1,
     药剂 = 2,
     酒水 = 3,
     冷食 = 4,
@@ -25,8 +25,29 @@ public class FormulaData : ScriptableObject, IGameData, IReferenceData
     {
         return id.ToString();
     }
-
+    public override string ToString()
+    {
+        return id.ToString(); 
+    }
     public void SetReferenceData()
     { 
+    }
+    public bool Check(List<int> items)
+    {
+        if (Stuffs.Count == items.Count)
+        {
+            List<int> stuffs = Stuffs.GetRange(0,Stuffs.Count); 
+            for(int i = 0; i < items.Count; i++)
+            {
+                int index = stuffs.FindIndex(s => s == items[i]);
+                if (index < 0)
+                {
+                    return false;
+                }
+                stuffs.RemoveAt(index);
+            }
+            return true;
+        }
+        return false;
     }
 }

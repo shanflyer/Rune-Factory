@@ -47,7 +47,13 @@ public class ItemBoxReference : UIObjReference<Item>
             }
         });
     }
-
+    public void ClearData()
+    {
+        item = default(Item);
+        mask.enabled = true;
+        icon.enabled = false;
+        count.enabled = false;
+    }
    
     public override async void InitData(Item t, SelectAction<Item> SelectAction = null)
     {
@@ -102,9 +108,7 @@ public class ItemBoxReference : UIObjReference<Item>
             icon.color = new Color(0.624f, 0.624f, 0.624f, 0.5f);
         }
     }
-
-    public void ClearData()
-    { }
+ 
 
     public void Hide()
     {

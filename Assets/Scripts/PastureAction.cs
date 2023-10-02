@@ -677,13 +677,13 @@ namespace OldName
             {
                 case CameraPosType.中:
                     cameraPosType = CameraPosType.右;
-                    GameComponentData.gameData.cameraMove.MoveX(new Vector3(rightPosx, 0, -10));
+                   // GameComponentData.gameData.cameraMove.MoveX(new Vector3(rightPosx, 0, -10));
                     LeftButton.gameObject.SetActive(true);
                     RightButton.gameObject.SetActive(false);
                     break;
                 case CameraPosType.左:
                     cameraPosType = CameraPosType.中;
-                    GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
+                   // GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
                     LeftButton.gameObject.SetActive(true);
                     RightButton.gameObject.SetActive(true);
                     break;
@@ -697,13 +697,13 @@ namespace OldName
             {
                 case CameraPosType.中:
                     cameraPosType = CameraPosType.左;
-                    GameComponentData.gameData.cameraMove.MoveX(new Vector3(leftPosx, 0, -10));
+                   // GameComponentData.gameData.cameraMove.MoveX(new Vector3(leftPosx, 0, -10));
                     LeftButton.gameObject.SetActive(false);
                     RightButton.gameObject.SetActive(true);
                     break;
                 case CameraPosType.右:
                     cameraPosType = CameraPosType.中;
-                    GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
+                   // GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
                     LeftButton.gameObject.SetActive(true);
                     RightButton.gameObject.SetActive(true);
                     break;
@@ -721,13 +721,13 @@ namespace OldName
                     break;
                 case CameraPosType.左:
                     cameraPosType = CameraPosType.中;
-                    GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
+                   // GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
                     LeftButton.gameObject.SetActive(true);
                     RightButton.gameObject.SetActive(true);
                     break;
                 case CameraPosType.右:
                     cameraPosType = CameraPosType.中;
-                    GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
+                   // GameComponentData.gameData.cameraMove.MoveX(new Vector3(0, 0, -10));
                     LeftButton.gameObject.SetActive(true);
                     RightButton.gameObject.SetActive(true);
                     break;

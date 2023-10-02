@@ -152,9 +152,9 @@ public class DeskItemAction : MonoBehaviour
     {
         AudioController.instance.PlayAudio(SE.click);
         WarehouseObj.SetActive(true);
-        List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-        wareDisplayTypes.Add(WareDisplayType.Good);
-        WarehouseObj.GetComponentInChildren<WarehouseAction>().InitWareHouseData(PackageType.背包,wareDisplayTypes,DisplayType.Sell);
+        //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+        //wareDisplayTypes.Add(WareDisplayType.Good);
+        //WarehouseObj.GetComponentInChildren<WarehouseAction>().InitWareHouseData(PackageType.背包,wareDisplayTypes,DisplayType.Sell);
         gameObject.SetActive(false);
 
     }

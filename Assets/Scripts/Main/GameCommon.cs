@@ -75,6 +75,8 @@ public enum EntityType
 }
 public class GameCommon
 {
+    public const int defaultPerRPCost = 5;
+
     public const float HurtUtlility = 0.6f;
     public static List<int> zeroNPC = new List<int>
     {
@@ -587,7 +589,8 @@ public static class DataPath
         {typeof(MyTimeLineData),"Data/TimeLineData" },
         {typeof(SkillData),"Data/SkillData" },
         {typeof(MapItemData),"Data/MapItemData" },
-        {typeof(FormulaData),"Data/FormulaData" }
+        {typeof(FormulaData),"Data/FormulaData" },
+        {typeof(ManufactureData),"Data/ManufactureData" }
     };
 
     public static string GetDataPath(Type type)

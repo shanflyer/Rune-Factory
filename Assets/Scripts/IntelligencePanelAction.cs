@@ -186,36 +186,36 @@ public class IntelligencePanelAction : MonoBehaviour
         AudioController.instance.PlayAudio(SE.click);
         if (index == 0)
         {
-            GameComponentData.gameData.warehouseObj.SetActive(true);
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.FarmTool);
-            GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
-            GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
-                InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.id);
+            //GameComponentData.gameData.warehouseObj.SetActive(true);
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+            //wareDisplayTypes.Add(WareDisplayType.FarmTool);
+            //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
+            //GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
+            //    InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.id);
         }
         else if(index == 1)
         {
-            GameComponentData.gameData.warehouseObj.SetActive(true);
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.Weapon);
-            GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
-            if (GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id != 0)
-            {
-                GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
-                    InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id);
-            }
+            //GameComponentData.gameData.warehouseObj.SetActive(true);
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+            //wareDisplayTypes.Add(WareDisplayType.Weapon);
+            //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
+            //if (GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id != 0)
+            //{
+            //    GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
+            //        InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id);
+            //}
         }
         else if(index == 2)
         {
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.Weapon);
-            GameComponentData.gameData.warehouseObj.SetActive(true);
-            GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
-            if (GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id != 0)
-            {
-                GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
-                    InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id);
-            }
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+            //wareDisplayTypes.Add(WareDisplayType.Weapon);
+            //GameComponentData.gameData.warehouseObj.SetActive(true);
+            //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
+            //if (GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1 != null&&GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id != 0)
+            //{
+            //    GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
+            //        InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id);
+            //}
             
         }
     }
@@ -230,39 +230,39 @@ public class IntelligencePanelAction : MonoBehaviour
         AudioController.instance.PlayAudio(SE.click);
         if (index == 0)
         {
-            GameComponentData.gameData.warehouseObj.SetActive(true);
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.Clothes);
-            GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
-            GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
-                InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.id);
+            //GameComponentData.gameData.warehouseObj.SetActive(true);
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+            //wareDisplayTypes.Add(WareDisplayType.Clothes);
+            //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
+            //GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
+            //    InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.id);
         }
         else if (index == 1)
         {
-            GameComponentData.gameData.warehouseObj.SetActive(true);
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.Clothes);
-            GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
-            GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
-                InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id);
+            //GameComponentData.gameData.warehouseObj.SetActive(true);
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+            //wareDisplayTypes.Add(WareDisplayType.Clothes);
+            //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
+            //GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
+            //    InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer0.id);
         }
         else if (index == 2)
         {
-            GameComponentData.gameData.warehouseObj.SetActive(true);
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.Clothes);
-            GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
-            GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
-                InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id);
+            //GameComponentData.gameData.warehouseObj.SetActive(true);
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+            //wareDisplayTypes.Add(WareDisplayType.Clothes);
+            //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Normal);
+            //GameComponentData.gameData.warehouseAction.playerEquipDataObj.GetComponent<PlayerEquipDataActiion>().
+            //    InitDataPlayerEquaipData(GameComponentData.gameData.gameManager.gamePlayer.TeamPlayer1.id);
         }
     }
     public void ClickPackage()
     {
-        AudioController.instance.PlayAudio(SE.click);
-        GameComponentData.gameData.warehouseObj.SetActive(true);
-        List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-        wareDisplayTypes.Add(WareDisplayType.ALL);
-        GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包,wareDisplayTypes, DisplayType.Normal);
+        //AudioController.instance.PlayAudio(SE.click);
+        //GameComponentData.gameData.warehouseObj.SetActive(true);
+        //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+        //wareDisplayTypes.Add(WareDisplayType.ALL);
+        //GameComponentData.gameData.warehouseAction.InitWareHouseData(PackageType.背包,wareDisplayTypes, DisplayType.Normal);
     }
     public void ClickAddEmplor()
     {

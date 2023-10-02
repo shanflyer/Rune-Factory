@@ -31,11 +31,11 @@ public class DeskAction : MonoBehaviour
         AudioController.instance.PlayAudio(SE.click);
         if (item.instanceId==0)
         {
-            WarehouseObj.SetActive(true);
-            WarehouseObj.GetComponentInChildren<WarehouseAction>().deskAction = this;
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.Good);
-            WarehouseObj.GetComponentInChildren<WarehouseAction>().InitWareHouseData(PackageType.背包, wareDisplayTypes,DisplayType.Sell);
+            //WarehouseObj.SetActive(true);
+            //WarehouseObj.GetComponentInChildren<WarehouseAction>().deskAction = this;
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+            //wareDisplayTypes.Add(WareDisplayType.Good);
+            //WarehouseObj.GetComponentInChildren<WarehouseAction>().InitWareHouseData(PackageType.背包, wareDisplayTypes,DisplayType.Sell);
         }
         else
         {

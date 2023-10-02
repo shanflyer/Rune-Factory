@@ -43,13 +43,13 @@ public class ShopPanelAction : MonoBehaviour
            
             foreach (var shopItem in shopPackage.ShopItems)
             {
-               Formula formula=GameComponentData.gameData.formulaAction.Formulas.Find(f => f.Product == shopItem.ItemId);
-                if (formula != null&&formula.isOpen)
-                {
-                    shopItem.IsOpen = true;
+               //Formula formula=GameComponentData.gameData.formulaAction.Formulas.Find(f => f.Product == shopItem.ItemId);
+               // if (formula != null&&formula.isOpen)
+               // {
+               //     shopItem.IsOpen = true;
                     
-                   // shop.packages[1].SetItemXInPackage(shopItem.ItemId);
-                }
+               //    // shop.packages[1].SetItemXInPackage(shopItem.ItemId);
+               // }
                
             }
            

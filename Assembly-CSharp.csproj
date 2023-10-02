@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{7E39F9DD-4A47-3EEF-E4E7-5D7B8579DEA5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -71,7 +70,6 @@
     <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities@1.0.14\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Data\FormulaData.cs" />
     <Compile Include="Assets\Scripts\PlacePanelAction.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\SkillManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetRandomString.cs" />
@@ -105,6 +103,7 @@
     <Compile Include="Assets\Scripts\LoveAction.cs" />
     <Compile Include="Assets\Scripts\BookAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetMaxParticles.cs" />
+    <Compile Include="Assets\Scripts\Data\ManufactureData.cs" />
     <Compile Include="Assets\Scripts\CoinAction.cs" />
     <Compile Include="Assets\Scripts\Animation\MyAnimationController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
@@ -194,7 +193,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\GameComponent.cs" />
     <Compile Include="Assets\Scripts\PastureBuildPanel.cs" />
-    <Compile Include="Assets\Scripts\BoxSelectAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetEnableEmission.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindWithTag.cs" />
@@ -257,7 +255,6 @@
     <Compile Include="Assets\Scripts\VillageManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetVector3.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\IsPlaying.cs" />
-    <Compile Include="Assets\Scripts\AddCaseObjAction.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerTopPanel.cs" />
     <Compile Include="Assets\Scripts\UI\FuncReference.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\DeleteMapItemEvent.cs" />
@@ -385,6 +382,7 @@
     <Compile Include="Assets\Scripts\ShopClickEventAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetVelocity.cs" />
     <Compile Include="Assets\Scripts\Main\GameDataManager.cs" />
+    <Compile Include="Assets\Scripts\Data\FormulaData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForce.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
@@ -432,13 +430,13 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetForwardVector.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\Scripts\ValueSetDisplay.cs" />
-    <Compile Include="Assets\Scripts\FormulaAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetMagnitude.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider2D\GetSize.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\StackedAction.cs" />
     <Compile Include="Assets\Scripts\LianjinAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics2D\Raycast.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\Parallel.cs" />
+    <Compile Include="Assets\Scripts\Main\GameManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetRotation.cs" />
     <Compile Include="Assets\SerializableDictionary\Example\UserSerializableDictionaries.cs" />
     <Compile Include="Assets\Scripts\AdventurePanelAction.cs" />
@@ -605,7 +603,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedGameObjectList.cs" />
     <Compile Include="Assets\Scripts\x\Seedaction.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\MapItemPlayAnimationEvent.cs" />
-    <Compile Include="Assets\Scripts\WarehouseAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedTransformToGameObject.cs" />
     <Compile Include="Assets\Scripts\x\BattelcharactorCavasAction.cs" />
     <Compile Include="Assets\Scripts\Main\Singleton.cs" />
@@ -643,7 +640,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddTorque.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetFloatParameter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedTransform.cs" />
-    <Compile Include="Assets\Scripts\ManufacturingAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\SetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonDown.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerPanel.cs" />
@@ -662,7 +658,6 @@
     <Compile Include="Assets\Scripts\EditorTool\MapInstanceEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Clear.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetFloatParameter.cs" />
-    <Compile Include="Assets\Scripts\ManufacBuildClickAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChildCount.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\MatchTarget.cs" />
@@ -881,7 +876,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedObject.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\InterruptMatchTarget.cs" />
-    <Compile Include="Assets\Scripts\CamreaMoveTest.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetCenterOfMass.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetXY.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Stop.cs" />

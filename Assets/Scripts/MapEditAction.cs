@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using LitJson;
 using System.IO;
 using System.Text;
+using OldName;
 [System.Serializable]
 public class OldMapCellData
 {

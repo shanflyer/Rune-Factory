@@ -26,7 +26,7 @@ public class ScrollCircle : ScrollRect
             
         // 获取摇杆，根据锚点的位置。
         var contentPosition = content.anchoredPosition;
-        GameComponentData.gameData.cameraMove.MoveCamera(contentPosition.normalized);
+       // GameComponentData.gameData.cameraMove.MoveCamera(contentPosition.normalized);
         // 判断摇杆的位置 是否大于 半径
         if (contentPosition.magnitude > _mRadius)
         {   

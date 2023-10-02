@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using OldName;
 
 public class LianjinAction : MonoBehaviour
 {

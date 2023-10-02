@@ -190,7 +190,7 @@ public class PlayerEquipDataActiion : MonoBehaviour
         GameActionManager.instance.QueueAction(removePackageItem, true);
        await PackageManager.instance.SetItemInPackage(oldItem, 0); 
         
-        GameComponentData.gameData.warehouseAction.InitWareHouseData();
+       // GameComponentData.gameData.warehouseAction.InitWareHouseData();
         InitDataPlayerEquaipData(playerId);
         GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
     }

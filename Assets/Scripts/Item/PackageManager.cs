@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
+using static UnityEngine.Rendering.ReloadAttribute;
+
 public class PackageManager : Singleton<PackageManager>
 {
     private List<int> playerPackages = new List<int>();
@@ -35,7 +37,45 @@ public class PackageManager : Singleton<PackageManager>
         return itemCount;
     }
 
+    public bool RemovePlayerPackageItem(int itemDataId,int count)
+    {
+        for(int i=0;i<playerPackages.Count;i++)
+        {
+            if (count <= 0)
+            {
+                return true;
+            }
+            int packageId = playerPackages[i];
+            if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+            {
+                count = gamePackage.TryGetItemOutPackage(itemDataId, count);
+            }
+        }
+        return false;
+    }
 
+    public async Task<bool> SetPlayerPackageItem(int itemDataId,int count)
+    {
+        for (int i = 0; i < playerPackages.Count; i++)
+        {
+            if (count <= 0)
+            {
+                return true;
+            }
+            int packageId = playerPackages[i];
+            if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+            {
+                Item item = new Item
+                {
+                    instanceId = ItemManager.instance.CreatIntance(),
+                    dataId = itemDataId,
+                    count = count
+                };
+               count= await gamePackage.SetItemInPackage(item);
+            }
+        }
+        return false;
+    }
 
     public override void Init()
     {
@@ -432,6 +472,45 @@ public class PackageManager : Singleton<PackageManager>
             }
 
             return 0;
+        }
+
+        public int TryGetItemOutPackage(int itemDataId, int count)
+        {
+            if (packageItemCounts.TryGetValue(itemDataId, out int itemCount))
+            {
+                int nowCount = 0;
+                if (itemCount < count)
+                {
+                    nowCount = count - itemCount;
+                    count = itemCount;
+                }
+
+                packageItemCounts[itemDataId] = itemCount - count;
+                List<int> indexDatas = packageItemIndexDatas[itemDataId];
+                int index = indexDatas.Count - 1;
+
+                while (count > 0)
+                {
+                    Item nowItem = items[indexDatas[index]];
+                    if (nowItem.count > count)
+                    {
+                        nowItem.count -= count;
+                        items[indexDatas[index]] = nowItem;
+                        count = 0;
+                    }
+                    else
+                    {
+                        count -= nowItem.count;
+                        ItemManager.instance.DeleteItem(nowItem.instanceId);
+                        nullItems.Enqueue(indexDatas[index]);
+                        itemCount--;
+                        indexDatas.RemoveAt(index);
+                        index--;
+                    }
+                }
+                return nowCount;
+            }
+            return count;
         }
         public bool GetItemOutPackage(int itemDataId, int count)
         {

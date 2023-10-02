@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using OldName;
 [System.Serializable]
 public class Grass
 {
@@ -124,9 +125,9 @@ public class FarmAction : MonoBehaviour
         if (farmToolType == FarmToolType.种子)
         {
             warehouseObj.SetActive(true);
-            List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-            wareDisplayTypes.Add(WareDisplayType.FarmTool);
-            warehouseObj.GetComponentInChildren<WarehouseAction>().InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Equip);
+            //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+           // wareDisplayTypes.Add(WareDisplayType.FarmTool);
+           // warehouseObj.GetComponentInChildren<WarehouseAction>().InitWareHouseData(PackageType.背包, wareDisplayTypes, DisplayType.Equip);
         }
     }
 
@@ -314,7 +315,7 @@ public class FarmAction : MonoBehaviour
             }
             else if (farmToolType == FarmToolType.锄头)
             {
-                GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("清除植物"),LanguageManage.SwitchStr("是否确定清除选择地块植物？"),CareType.ClearPlant);
+              //  GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("清除植物"),LanguageManage.SwitchStr("是否确定清除选择地块植物？"),CareType.ClearPlant);
                 SelectPlant = plant;
             }
             else if (farmToolType == FarmToolType.水壶)

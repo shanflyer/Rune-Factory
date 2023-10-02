@@ -307,14 +307,7 @@ namespace OldName
                 }
             }
 
-            formulas = new List<int>();
-            foreach (var formulaActionFormula in GameComponentData.gameData.formulaAction.Formulas)
-            {
-                if (formulaActionFormula.isOpen)
-                {
-                    formulas.Add(formulaActionFormula.id);
-                }
-            }
+          
 
         }
     }
@@ -867,11 +860,7 @@ namespace OldName
             farmAction.waterValue = playerMoneyData.waterValue / 1000.0f;
 
 
-            foreach (var _formula in playerSaveData.formulas)
-            {
-                Formula formula = GameComponentData.gameData.formulaAction.Formulas.Find(f => f.id == _formula);
-                formula.isOpen = true;
-            }
+             
 
             foreach (var equipMentId in playerSaveData.EquipMentIds)
             {
@@ -991,11 +980,7 @@ namespace OldName
 
             if (playerSaveData.formulas != null)
             {
-                foreach (var formula in playerSaveData.formulas)
-                {
-                    Formula _formula = GameComponentData.gameData.formulaAction.Formulas.Find(f => f.id == formula);
-                    _formula.isOpen = true;
-                }
+                
             }
         }
 
@@ -1361,11 +1346,7 @@ namespace OldName
             farmAction.waterValue = playerMoneyData.waterValue / 1000.0f;
 
 
-            foreach (var _formula in playerSaveData.formulas)
-            {
-                Formula formula = GameComponentData.gameData.formulaAction.Formulas.Find(f => f.id == _formula);
-                formula.isOpen = true;
-            }
+            
 
             foreach (var equipMentId in playerSaveData.EquipMentIds)
             {
@@ -1485,11 +1466,7 @@ namespace OldName
 
             if (playerSaveData.formulas != null)
             {
-                foreach (var formula in playerSaveData.formulas)
-                {
-                    Formula _formula = GameComponentData.gameData.formulaAction.Formulas.Find(f => f.id == formula);
-                    _formula.isOpen = true;
-                }
+                 
             }
         }
 

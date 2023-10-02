@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using OldName;
 
 public class BedClickAction : MonoBehaviour {
 
@@ -11,7 +12,7 @@ public class BedClickAction : MonoBehaviour {
 
     public void ClickBed()
     {
-        GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("睡觉"),LanguageManage.SwitchStr("是否确定睡眠到下一日？"),CareType.SLEEP);
+       // GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("睡觉"),LanguageManage.SwitchStr("是否确定睡眠到下一日？"),CareType.SLEEP);
     }
 	// Update is called once per frame
 	void Update () {

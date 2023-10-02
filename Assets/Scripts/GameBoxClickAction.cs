@@ -45,24 +45,7 @@ public class GameBoxClickAction : MonoBehaviour
         }
        
     }
-    public void ClickObjAction(int index)
-    {
-        if (DataSaveAndLoadTest.isJsonData)
-        {
-            AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.boxSelectFunctionObj.SetActive(true);
-            GameComponentData.gameData.boxSelectFunctionObj.GetComponent<BoxSelectAction>().InitBoxSelectData((PackageType)(index));
-        }
-        else 
-        if (GameComponentData.gameData.guideController.nowGuide == null &&
-            GameComponentData.gameData.filmManager.nowFilm == null)
-        {
-            AudioController.instance.PlayAudio(SE.click);
-            GameComponentData.gameData.boxSelectFunctionObj.SetActive(true);
-            GameComponentData.gameData.boxSelectFunctionObj.GetComponent<BoxSelectAction>().InitBoxSelectData((PackageType)(index));
-        }
-           
-    }
+    
 
     public void ClickYiGui()
     {
@@ -113,20 +96,7 @@ public class GameBoxClickAction : MonoBehaviour
         }
         
     }
-    public void ProduceClickAction(int i)
-    {
-        AudioController.instance.PlayAudio(SE.click);
-        if (GameComponentData.gameData.heritageAction.Heritages.Find(o => o.id == 1004).isGet)
-        {
-            GameComponentData.gameData.formulaAction.DisplayManufacturePanel(i);
-        }
-        else
-        {
-            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("未许可"),LanguageManage.SwitchStr("制作许可未获得，不能制作，详情见许可清单"));
-        }
-       
-        
-    }
+    
 
     public void ClickBabyBed()
     {

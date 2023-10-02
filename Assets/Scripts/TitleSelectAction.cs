@@ -27,19 +27,14 @@ public class TitleSelectAction : MonoBehaviour
         
     }
 
-    public void SelectManufacturingDisplay(int x)
-    {
-        PackageType packageType = (PackageType) x;
-        GameComponentData.gameData.manufacturingAction.DisplayMyBox(packageType);
-        animator.SetBool("IsDown", false);
-    }
+    
     public void SelectButton(int index)
     {
-        AudioController.instance.PlayAudio(SE.click);
-        animator.SetBool("IsDown", false);
-        List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
-        wareDisplayTypes.Add(WareDisplayType.ALL);
-        GameComponentData.gameData.warehouseAction.InitWareHouseData((PackageType)index,wareDisplayTypes, DisplayType.Sell);
+        //AudioController.instance.PlayAudio(SE.click);
+        //animator.SetBool("IsDown", false);
+        //List<WareDisplayType> wareDisplayTypes = new List<WareDisplayType>();
+        //wareDisplayTypes.Add(WareDisplayType.ALL);
+        //GameComponentData.gameData.warehouseAction.InitWareHouseData((PackageType)index,wareDisplayTypes, DisplayType.Sell);
     }
 	// Update is called once per frame
 	void Update () {
