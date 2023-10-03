@@ -100,6 +100,32 @@ public class PackageManager : Singleton<PackageManager>
     private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();
     private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
   
+    public async Task<int> GetPackageLevelUpCost(int id)
+    {
+        if(gamePackages.TryGetValue(id,out GamePackage gamePackage))
+        {
+            var packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(gamePackage.dataId);
+            if (packageSetData)
+            {
+                return (gamePackage.level + 1) * packageSetData.levelUpCost;
+            }
+        }
+        return 0;
+    }
+    public async void AddPackageUpLevel(int id)
+    {
+        if (gamePackages.TryGetValue(id, out GamePackage gamePackage))
+        {
+            var packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(gamePackage.dataId);
+            if (packageSetData)
+            {
+                gamePackage.level += 1;
+                gamePackage.caseCount += packageSetData.levelUpAddCount;
+                gamePackages[id] = gamePackage;
+                GameActionManager.instance.QueueAction(default(RefreshPackage));
+            }
+        }
+    }
     public void InitFromSaveData(List<PackageSaveData> packageSaveDatas)
     {
         for(int i = 0; i < packageSaveDatas.Count; i++)
@@ -327,6 +353,7 @@ public class PackageManager : Singleton<PackageManager>
             {
                 caseCount = caseCount,
                 instanceId = instanceId,
+                dataId=dataId,
                 name = name,
                 items = items,
             };
@@ -630,7 +657,9 @@ public struct PackageData
 {
     public string name;
     public int instanceId;
+    public int dataId;
     public int caseCount;
+
     public PackageType packageType;
     public List<Item> items;
      

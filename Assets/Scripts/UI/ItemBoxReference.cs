@@ -17,11 +17,10 @@ public class ItemBoxReference : UIObjReference<Item>
     private Image backGround;
 
     [SerializeField]
+    private Image lockImage;
+
+    [SerializeField]
     private Text count;
-
-
-    [HideInInspector] public bool isFull, isMatch;
-    [HideInInspector] public bool isBox, isWareDisplay;
 
     private Item item;
     public Item Item => item;
@@ -35,6 +34,7 @@ public class ItemBoxReference : UIObjReference<Item>
         mask = FindChildGameObject<Image>("mask");
         backGround = FindChildGameObject<Image>("Image");
         count = FindChildGameObject<Text>("count");
+        lockImage = FindChildGameObject<Image>("lock");
     }
 
     private void Awake()
@@ -65,16 +65,19 @@ public class ItemBoxReference : UIObjReference<Item>
         if (itemData != null)
         {
             mask.enabled = false;
-
+            lockImage.enabled = false;
             icon.sprite = itemData.icon;
             icon.color = Color.white;
             icon.enabled = true;
             icon.SetNativeSize();
             count.text = item.count.ToString();
             count.enabled = true;
+            toggle.enabled = true;
         }
         else
         {
+            toggle.enabled = t.instanceId<0;
+            lockImage.enabled = t.instanceId < 0;
             mask.enabled = true;
             icon.enabled = false;
             count.enabled = false;
@@ -83,9 +86,7 @@ public class ItemBoxReference : UIObjReference<Item>
 
     public void SetEnableColor(bool enable)
     {
-        isFull = enable;
         mask.enabled = enable;
-        isMatch = enable;
         backGround.color = enable ? Color.white : new Color(1, 0.506f, 0.506f);
     }
 

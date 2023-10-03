@@ -67,7 +67,16 @@ public class WarehousePanel : GamePanel<PackageList>
 
         playerEquipQuickReference.InitData(CharacterManager.instance.TeamerEquipAndProperty);
     }
-
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshPackage>(RefreshPackage);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -103,23 +112,61 @@ public class WarehousePanel : GamePanel<PackageList>
   
     async void SelectPackageItem(Item item)
     {
-        SelectItem = item;
-        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
-        ItemIcon.sprite=itemData.icon;
-        ItemIcon.SetNativeSize();
-        ItemName.text = itemData.name;
-        Type.text = itemData.type.ToString();
-        Info.text = itemData.text1.ToString();
-        Property.text = itemData.property.ToString();
-        Price.text = $"价值:{itemData.sellPrice}G";
+        if (item.instanceId < 0)
+        {
+            PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
+            if (packageSetData && packageSetData.canLevelUp)
+            {
+                int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
+                string notice = $"拓展{packageSetData.packageName}空间?";
+                PayManager.instance.PayAction("空间拓展", notice, cost, PayType.金币, () =>
+                {
+                    PackageManager.instance.AddPackageUpLevel(selectPackageData.instanceId);
+                });
+            }
+        }
+        else
+        {
+            SelectItem = item;
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+            ItemIcon.sprite = itemData.icon;
+            ItemIcon.enabled = true;
+            ItemIcon.SetNativeSize();
+            ItemName.text = itemData.name;
+            Type.text = itemData.type.ToString();
+            Info.text = itemData.text1.ToString();
+            Property.text = itemData.property.ToString();
+            Price.text = $"价值:{itemData.sellPrice}G";
+        }
+      
 
 
     }
-    void RefreshPackage()
+
+    PackageData selectPackageData;
+    void RefreshPackage(RefreshPackage RefreshPackage)
     {
-        var packageData = packageList.packageDatas[selectIndex];
-        itemBoxs.InitListData(packageData.items, SelectPackageItem);
-        caseCount.text = $"{packageData.items.Count}/{packageData.caseCount}";
+        this.RefreshPackage();
+    }
+     async void RefreshPackage()
+    {
+        selectPackageData = packageList.packageDatas[selectIndex];
+
+        List<Item> items = selectPackageData.items;
+        for(int i=items.Count;i< selectPackageData.caseCount;i++)
+        {
+            items.Add(default(Item));
+        }
+        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
+
+        for(int i = 0; i < packageSetData.count; i++)
+        {
+            Item item = default(Item);
+            item.instanceId = -1;
+            items.Add(item);
+        }
+        itemBoxs.InitListData(selectPackageData.items, SelectPackageItem);
+        caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
 
     }
 }

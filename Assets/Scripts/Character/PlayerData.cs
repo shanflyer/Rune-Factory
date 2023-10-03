@@ -20,7 +20,8 @@ public struct ChapterSave
 }
 public struct OtherSaveData
 {
-    public int boxPackageId, icePackageId;
+    public int gold, money;
+    public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
 }
 public struct CharacterSaveData:IReferenceData

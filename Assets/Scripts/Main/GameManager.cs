@@ -15,4 +15,5 @@ public class GameManager : Singleton<GameManager>
         };
         UIManager.instance.ShowGamePanel<TwoSelectPanel,TwoSelectData>(twoSelectData);
     }
+
 }

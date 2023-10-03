@@ -16,6 +16,23 @@ public interface GameAction
 
 public delegate void SetValue(int value);
 
+public struct RefreshPackage : GameAction
+{
+    public int packageId;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+        {
+            packageId = int.Parse(parameters[0].value);
+        }
+    }
+}
+public struct RefreshPlayerGold : GameAction
+{
+    public void Init(List<Parameter> parameters)
+    {
+    }
+}
 public struct InitInputAction : GameAction
 {
     public void Init(List<Parameter> parameters)

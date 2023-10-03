@@ -12,6 +12,7 @@ public class PackageSetData :ScriptableObject,IGameData,IReferenceData
     public int count;
     public bool canLevelUp;
     public int levelUpAddCount;
+    public int levelUpCost;
     public PackageType packageType;
 
     public string GetKey()
