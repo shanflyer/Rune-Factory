@@ -159,7 +159,6 @@ namespace OldName
         public PackageCaseAdd pakageAddData, boxAddData, iceBoxAddData;
 
         public GameObject RedMoneyBuyPanel;
-        public GameObject LianJinPanel;
         public GameObject IntelligencePanelObj;
         public GameObject adventure;
         public Image headIcon;
@@ -244,7 +243,7 @@ namespace OldName
 
                 if (shopMoneyType == ShopMoneyType.金币)
                 {
-                    goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money.ToString();
+                   // goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money.ToString();
                 }
                 return true;
             }
@@ -261,7 +260,7 @@ namespace OldName
 
                 if (shopMoneyType == ShopMoneyType.金币)
                 {
-                    goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money.ToString();
+                    //goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money.ToString();
                 }
                 return true;
             }
@@ -284,7 +283,7 @@ namespace OldName
 
                 if (shopMoneyType == ShopMoneyType.红晶)
                 {
-                    goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money1.ToString();
+                   // goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money1.ToString();
                 }
                 return true;
             }
@@ -299,7 +298,7 @@ namespace OldName
 
                 if (shopMoneyType == ShopMoneyType.红晶)
                 {
-                    goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money1.ToString();
+                    //goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money1.ToString();
                 }
                 return true;
             }
@@ -390,7 +389,7 @@ namespace OldName
             mapEditAction = GameData.mapEditAction;
             result0 = 0;
             result1 = 0;
-            GameData.shopManager.InitData();
+            //GameData.shopManager.InitData();
 
             GameData.shopGoldDeskAction.saleValue = 100;
             if (mapEditAction.isMapEdit)
@@ -683,11 +682,7 @@ namespace OldName
             GameData.adventurePanelAction.ZeroEploring();
         }
 
-        public void BuyGold()
-        {
-            LianJinPanel.SetActive(true);
-            LianJinPanel.GetComponent<LianjinAction>().InitData();
-        }
+       
         public void BuyRedMoney()
         {
             if (Application.platform != RuntimePlatform.Android)
@@ -754,7 +749,7 @@ namespace OldName
             goldCostValue = _costValue;
             shopMoneyType = _shopMoneyType;
             goldCostSelectObj.SetActive(true);
-            goldCostSelectObj.GetComponent<GoldCostSelect>().InitGoldCostData(Title, _costValue, notice, shopMoneyType);
+            //goldCostSelectObj.GetComponent<GoldCostSelect>().InitGoldCostData(Title, _costValue, notice, shopMoneyType);
         }
         public bool InitCostData(int _costValue, ShopMoneyType _shopMoneyType, CostType _costType)
         {
@@ -789,14 +784,14 @@ namespace OldName
                         break;
                     case CostType.购买道具:
 
-                        GameComponentData.gameData.shopPanelAction.BuySucecssful();
+                       // GameComponentData.gameData.shopPanelAction.BuySucecssful();
                         break;
                     case CostType.购买设施:
-                        GameComponentData.gameData.shopPanelAction.BuySucecssful();
+                      //  GameComponentData.gameData.shopPanelAction.BuySucecssful();
                         break;
                      
                     case CostType.炼金:
-                        GameComponentData.gameData.lianjinAction.Lianjin();
+                        //GameComponentData.gameData.lianjinAction.Lianjin();
                         break;
                 }
                 goldCostSelectObj.SetActive(false);
@@ -989,8 +984,8 @@ namespace OldName
                     GameData.farmAction.ClearSelectPlant();
                     break;
                 case CareType.GoldExchange:
-                    LianJinPanel.SetActive(true);
-                    LianJinPanel.GetComponent<LianjinAction>().InitData();
+                 // LianJinPanel.SetActive(true);
+                   // LianJinPanel.GetComponent<LianjinAction>().InitData();
                     break;
                 case CareType.leaveLove:
                     AudioController.instance.PlayAudio(SE.Return);
@@ -1000,12 +995,7 @@ namespace OldName
             }
         }
 
-        public void LianjinAction()
-        {
-            AudioController.instance.PlayAudio(SE.click);
-            LianJinPanel.SetActive(true);
-            LianJinPanel.GetComponent<LianjinAction>().InitData();
-        }
+       
         public void NoButtonAction()
         {
             AudioController.instance.PlayAudio(SE.Return);
@@ -1361,7 +1351,7 @@ namespace OldName
         {
             AudioController.instance.PlayAudio(SE.click);
             //selecteShop = _shop;
-            Shop shop = GameComponentData.gameData.shopManager.Shops.Find(s => s.id == _shop);
+           // Shop shop = GameComponentData.gameData.shopManager.Shops.Find(s => s.id == _shop);
             //selecteShop = _shop;
             ReturnFromAdventure();
             oldPassid = passDataManager.NowPassData.id;
@@ -1369,7 +1359,7 @@ namespace OldName
             {
                 GameData.pastureAction.MoveToCenter();
             }
-            nextPassid = shop.mapid;
+            //nextPassid = shop.mapid;
             MoveMapEnd();
         }
         public void MoveToMap(int _nextMapid)

@@ -87,7 +87,7 @@ public class UIManager:Singleton<UIManager>
     }
     async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1)
     {
-        if (!gamePanels.TryGetValue(type, out BaseReference gamePanel))
+        if (!gamePanels.TryGetValue(type, out BaseReference gamePanel)||gamePanel.pluralUI)
         {
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);

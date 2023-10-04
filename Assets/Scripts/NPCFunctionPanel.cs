@@ -14,7 +14,7 @@ public class NPCFunctionPanel : MonoBehaviour
     public GameObject Npcfunction, NPCGift,marriedFunction;
     private NPCX npcx;
 
-    private Shop npcShop;
+    //private Shop npcShop;
 
     private ItemData giftData;
 
@@ -107,7 +107,7 @@ public class NPCFunctionPanel : MonoBehaviour
             npcx = _npcx;
             Npcfunction.SetActive(true);
             marriedFunction.SetActive(false);
-            npcShop = GameComponentData.gameData.shopManager.Shops.Find(s => s.Npcid == npcx.id);
+            //npcShop = GameComponentData.gameData.shopManager.Shops.Find(s => s.Npcid == npcx.id);
             isCanMarried = true;
             YuehuiButton.GetComponentInChildren<Text>().text = LanguageManage.SwitchStr("我们结婚吧");
         }
@@ -155,15 +155,7 @@ public class NPCFunctionPanel : MonoBehaviour
                 {
                     Npcfunction.SetActive(true);
                     marriedFunction.SetActive(false);
-                    npcShop = GameComponentData.gameData.shopManager.Shops.Find(s => s.Npcid == npcx.id);
-                    if (npcShop != null)
-                    {
-                        StoreButton.gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        StoreButton.gameObject.SetActive(false);
-                    }
+                     
                     if (npcx.isLove)
                     {
                         YuehuiButton.gameObject.SetActive(true);
@@ -365,7 +357,7 @@ public class NPCFunctionPanel : MonoBehaviour
     public void ClickStoreButton()
     {
         AudioController.instance.PlayAudio(SE.click);
-        GameComponentData.gameData.shopManager.InitShopData(npcShop.id);
+        //GameComponentData.gameData.shopManager.InitShopData(npcShop.id);
         gameObject.SetActive(false);
     }
 

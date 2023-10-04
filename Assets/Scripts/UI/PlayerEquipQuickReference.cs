@@ -71,7 +71,7 @@ public class PlayerEquipQuickReference : UIObjReference<TeamerEquipAndProperty>
     TeamerEquipAndProperty teamerEquipAndProperty;
 
     int selectIndex=-1;
-    public override  void InitData(TeamerEquipAndProperty t, SelectAction<TeamerEquipAndProperty> SelectAction = null)
+    public override  void InitData(TeamerEquipAndProperty t, SelectAction<TeamerEquipAndProperty> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction);
         teamerEquipAndProperty = t;

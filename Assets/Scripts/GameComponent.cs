@@ -17,7 +17,6 @@ public class GameComponent : MonoBehaviour
     public LoveAction loveAction;
     public NPCFunctionPanel npcFunctionPanel;
     public SalesetPanelAction salesetPanelAction;
-    public LianjinAction lianjinAction;
     public GameObject InputObj;
     public CoinAction coinAction;
     public GameObject informationObj;
@@ -32,7 +31,7 @@ public class GameComponent : MonoBehaviour
     public EmployerManger employerManger;
     public AdventurePanelAction adventurePanelAction; 
     public GameObject GroundItemPro;  
-    public ShopManager shopManager;
+
     public GameObject calenderPanel; 
     public OldName.GameManager gameManager;
     public FilmManager filmManager;
@@ -55,8 +54,7 @@ public class GameComponent : MonoBehaviour
     public PastureAction pastureAction;
     public PastureItemPanelAction pastureItemPanelAction;
     public PasturePanelAction pasturePanelAction;
-    public AnimalSetPanelAction animalSetPanelAction;
-    public ShopPanelAction shopPanelAction;
+    public AnimalSetPanelAction animalSetPanelAction; 
     public GameObject  PromptObj; 
     public EquipmentManager equipmentManager;
     public static List<Sprite> charactorIcon;

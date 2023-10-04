@@ -9,6 +9,9 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
 {
     Canvas canvas;
     GraphicRaycaster graphicRaycaster;
+
+    
+
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     public virtual void OnEnable()
     {
@@ -93,13 +96,20 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         enabled = true;
     }
     public override void Close()
-    { 
-        gameObject.layer = HideLayer;
-        if (graphicRaycaster)
+    {
+        if (pluralUI)
         {
-            graphicRaycaster.enabled = false;
+            Destroy(this);
         }
-        objectDatas.Clear();
-        enabled = false;
+        else
+        {
+            gameObject.layer = HideLayer;
+            if (graphicRaycaster)
+            {
+                graphicRaycaster.enabled = false;
+            }
+            objectDatas.Clear();
+            enabled = false;
+        } 
     }
 } 

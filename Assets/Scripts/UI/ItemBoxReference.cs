@@ -55,10 +55,12 @@ public class ItemBoxReference : UIObjReference<Item>
         count.enabled = false;
     }
    
-    public override async void InitData(Item t, SelectAction<Item> SelectAction = null)
+    public override async void InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction);
+        base.InitData(t, SelectAction, toggleGroup);
         item = t;
+
+        toggle.group=toggleGroup;
         this.SelectAction = SelectAction;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
 

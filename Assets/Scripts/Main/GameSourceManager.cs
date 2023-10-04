@@ -44,15 +44,17 @@ public class GameSourceManager:Singleton<GameSourceManager>
         sprite = await ExtensionsResources.LoadResourceAsync<Sprite>(path);
         if (sprite == null)
         {
-            var texture = await GetTexture(path);
-            if (texture)
+           var spriteReference= await ExtensionsResources.LoadResourceAsync<SpriteResourceRenference>(path);
+            if (spriteReference != null)
             {
-                sprite = Sprite.Create(texture,new Rect(0,0,texture.width,texture.height), new Vector2(0.5f, 0.5f));
+                sprite = spriteReference.sprite;
             }
         }
+         
         sprites.Add(path, sprite);
         return sprite;
     }
+     
     public async Task<AudioClip> GetAudioClip(string path)
     {
         if(audioClips.TryGetValue(path,out AudioClip audioClip))

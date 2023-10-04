@@ -591,7 +591,9 @@ public static class DataPath
         {typeof(MapItemData),"Data/MapItemData" },
         {typeof(FormulaData),"Data/FormulaData" },
         {typeof(ManufactureData),"Data/ManufactureData" },
-        {typeof(PackageSetData),"Data/PackageSetData" }
+        {typeof(PackageSetData),"Data/PackageSetData" },
+        {typeof(MoneyCreatData), "Data/MoneyCreatData" },
+        {typeof(ShopDataList),"Data/ShopItemData/ShopDataList" },
     };
 
     public static string GetDataPath(Type type)
@@ -602,6 +604,10 @@ public static class DataPath
         }
         return null;
     }
+
+
+    public const string goldSpritePath = "Reference/Gold";
+    public const string diamondSpritePath = "Reference/Diamond";
 
     public const string cameraPrefabPath = "Prefabs/Other/CameraObj";
     public const string InputDataPath = "InputData/MyInput";

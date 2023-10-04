@@ -407,6 +407,10 @@ public class PackageManager : Singleton<PackageManager>
             {
                 return item.count;
             }
+            if (item.instanceId == 0)
+            {
+                item.instanceId = ItemManager.instance.CreatIntance();
+            }
 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
             if (!string.IsNullOrEmpty(itemData.name))

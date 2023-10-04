@@ -1,8 +1,8 @@
-using System.Collections;
+锘縰sing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="Data/多语言精灵资源")]
+[CreateAssetMenu(menuName ="Data/澶氳瑷�绮剧伒璧勬簮")]
 public class LanguageSpriteObj : ScriptableObject
 {
     [System.Serializable]

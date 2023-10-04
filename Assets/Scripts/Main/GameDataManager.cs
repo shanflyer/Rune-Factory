@@ -288,9 +288,13 @@ public class GameDataManager : Singleton<GameDataManager>
         if (_data!=null&&_data.GetKey() ==key)
         {
             _data.Init();
-            dataDic = new Dictionary<string, IGameData>();
-            dataDic[_data.GetKey()] = _data;
-            allGameStaticDatas[type] = dataDic;
+            if (!string.IsNullOrEmpty(_data.GetKey()))
+            {
+                dataDic = new Dictionary<string, IGameData>();
+                dataDic[_data.GetKey()] = _data;
+                allGameStaticDatas[type] = dataDic;
+            } 
+           
             return _data;
         }
 

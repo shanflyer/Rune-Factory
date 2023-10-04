@@ -31,7 +31,7 @@ public class DateReference : UIObjReference<GameDate>
         selectToggle.onValueChanged.AddListener(toggleAction);
     }
  
-    public override void InitData(GameDate _gameDate, SelectAction<GameDate> SelectAction = null)
+    public override void InitData(GameDate _gameDate, SelectAction<GameDate> SelectAction = null,ToggleGroup toggleGroup=null)
     {
         gameDate = _gameDate;
         ValueText.text = _gameDate.date.ToString();

@@ -7,6 +7,7 @@ using UnityEngine.UIElements.Experimental;
 using UnityEngine.Timeline;
 using UnityEngine.Rendering;
 using Unity.Mathematics;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -70,7 +71,37 @@ public class GameController : MonoBehaviour
     {
         SingletonType.instance.UpData(); 
     }
+
+    public void Test()
+    { 
+        Debug.Log($"B:{B.test},C:{C.test}");
+
+       
+    }
+     
 }
+
+public  class A
+{
+    public static bool Test() { return true; }
+    public  static bool test { get; }
+}
+public class B:A
+{
+
+    public static bool test {
+        get => true;
+    }
+}
+public class C : A
+{
+
+    public static bool test
+    {
+        get => false;
+    }
+}
+
 #if UNITY_EDITOR
 [CustomEditor(typeof(GameController))]
 public class GameControllerEditor : Editor
@@ -87,7 +118,7 @@ public class GameControllerEditor : Editor
         base.OnInspectorGUI();
         if (GUILayout.Button("test"))
         {
-            //gameController.Test();
+            gameController.Test();
         }
     }
 }

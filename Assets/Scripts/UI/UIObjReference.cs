@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 public interface IReferenceData
 {
 
@@ -35,7 +37,7 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
         }
         return null;
     }
-    public virtual void InitData(T t, SelectAction<T> SelectAction = null)
+    public virtual void InitData(T t, SelectAction<T> SelectAction = null,ToggleGroup toggleGroup=null)
     {
 
     }

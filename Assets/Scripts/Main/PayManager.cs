@@ -4,21 +4,48 @@ using UnityEngine;
 
 public class PayManager : Singleton<PayManager>
 {
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
         nowGold= GameDataManager.instance.UserGameSaveData.otherSaveData.gold;
-        nowMoney = GameDataManager.instance.UserGameSaveData.otherSaveData.money;
+        nowDiamond = GameDataManager.instance.UserGameSaveData.otherSaveData.diamond;
+        goldIcon = await GameSourceManager.instance.GetSprite(DataPath.goldSpritePath);
+        diamondIcon= await GameSourceManager.instance.GetSprite(DataPath.diamondSpritePath);
+
     }
     public int NowGold=>nowGold;
-    public int NowMoney=>nowMoney;
+    public int NowDiamond => nowDiamond;
+
+    Sprite goldIcon, diamondIcon;
 
     int nowGold;
-    int nowMoney;
+    int nowDiamond;
 
+    public Sprite GetPayMoneySprite(PayType payType)
+    {
+        if (payType == PayType.金币)
+        {
+            return goldIcon;
+        }
+        if (payType == PayType.钻石)
+        {
+            return diamondIcon;
+        }
+        return null;
+    }
+
+    public void AddGold(MoneyCreatData MoneyCreatData)
+    {
+        PayAction("炼金", $"提炼{MoneyCreatData.getValue}金币", MoneyCreatData.costValue, MoneyCreatData.costPayType,
+                   () =>
+                   {
+                       nowGold += MoneyCreatData.getValue;
+                       GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+                   });
+    }
     public void PayAction(string title,string notice,int cost, PayType payType,Action afterAction)
     {
-        GoldCostEventData goldCostEventData = new GoldCostEventData
+        CostEventData CostEventData = new CostEventData
         {
             title = title,
             notice = notice,
@@ -26,25 +53,47 @@ public class PayManager : Singleton<PayManager>
             payType = payType,
             afterAction = afterAction
         };
-        UIManager.instance.ShowGamePanel<GoldCostSelectPanel, GoldCostEventData>(goldCostEventData, 3);
+        UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData, 3);
     }
 
 
-    public bool TryCostGold(int count)
+    public bool TryCost(PayType payType,int count)
     {
-        if (nowGold >= count)
+        switch (payType)
         {
-            nowGold -= count;
-            GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
-            return true;
+            case PayType.金币:
+                if (nowGold >= count)
+                {
+                    nowGold -= count;
+                    GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+                    return true;
+                }
+                else
+                {
+                    TryCreatGold();
+                }
+                break;
+            case PayType.钻石:
+                if (nowDiamond >= count)
+                {
+                    nowDiamond -= count;
+                    GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+                    return true;
+                }
+                else
+                {
+                    TryCreatMoney();
+                }
+                break;
         }
-        else
-        {
-            PayGold();
-        }
+        
         return false;
     }
-    void PayGold()
+    void TryCreatGold()
+    {
+
+    }
+    void TryCreatMoney()
     {
 
     }
@@ -52,9 +101,9 @@ public class PayManager : Singleton<PayManager>
 
 public enum PayType
 {
-    金币,红晶
+    金币,钻石,货币
 }
-public struct GoldCostEventData : IReferenceData
+public struct CostEventData : IReferenceData
 {
     public string title;
     public string notice;

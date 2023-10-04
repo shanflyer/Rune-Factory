@@ -537,6 +537,7 @@ public class NPCManager : MonoBehaviour
 
     public void SetMarriedNpcPos(NPCX npcx)
     {
+        /*
         var shops = GameComponentData.gameData.shopManager.Shops;
         Shop shop = shops.Find(s => s.Npcid == npcx.npcData.id);
         if (shop != null)
@@ -549,7 +550,7 @@ public class NPCManager : MonoBehaviour
             npcx0.npcData.beahaveData.RangePos1 = npcx.npcData.beahaveData.RangePos1;
             npcx0.mapId = npcx.mapId;
             npcx0.coordinate = npcx.coordinate;
-        }
+        }*/
 
         npcx.npcData.beahaveData.MapId = marriedMapId;
         npcx.npcData.beahaveData.beahaveType=BeahaveType.静待;

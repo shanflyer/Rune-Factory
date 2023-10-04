@@ -20,7 +20,7 @@ public struct ChapterSave
 }
 public struct OtherSaveData
 {
-    public int gold, money;
+    public int gold, diamond;
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
 }
