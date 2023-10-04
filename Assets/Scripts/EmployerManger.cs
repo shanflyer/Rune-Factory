@@ -49,26 +49,7 @@ public class Employer
     }
     public Employer() { }
 
-    public Employer(NPCX npcx)
-    {
-        id = npcx.id;
-        name = npcx.Name;
-        charactorImage = npcx.npcData.ImageName;
-        ObjName = npcx.npcData.ObjName;
-        level = npcx.level;
-        profession = npcx.npcData.professionId;
-        cost = 0;
-        weapon = npcx.weapon;
-        clothes = npcx.clothes;
-        employType=EmployType.NPC;
-       // property = npcx.property;
-        profession = npcx.professionData.id;
-        attributeType = npcx.npcData.attributeType;
-        skillId = npcx.npcData.skill;
-        InitEquip();
-        AttachTeamPlayer();
-        //InitProperty();
-    }
+    
     async void InitEquip()
     {
         if (weapon != 0)
@@ -86,19 +67,7 @@ public class Employer
     }
     public Employer(Animal animal)
     {
-        id = animal.id;
-        name = animal.Name;
-        level = animal.level;
-        cost = 0;
-        skillId = 0;
-        ObjName = animal.animalData.oldObj;
-        charactorImage = animal.animalData.image;
-        profession = animal.animalData.professionId;
-        employType=EmployType.动物;
-        //property = animal.property;
-        profession = animal.professionData.id;
-        skillId = 0;
-        AttachTeamPlayer();
+        
         //InitProperty();
 
     }
@@ -114,23 +83,12 @@ public class EmployerManger : MonoBehaviour
 	}
 
     void InitNpcEmployer()
-    {
-        List<NPCX> npcxs = GameComponentData.gameData.NpcManager.Npcxs;
-        foreach (var npcx in npcxs)
-        {
-            Employer employer = new Employer(npcx);
-            Employers.Add(employer);
-        }
+    {  
     }
 
     public void AddAnimal(Animal animal)
     {
-        Employer employer = new Employer(animal);
-        if (!Employers.Exists(e => e.id == animal.id))
-        {
-            Employers.Add(employer);
-        }
-        
+       
     }
     public void AnimalDead(int animalId)
     {

@@ -10,8 +10,7 @@ public enum YueStatus
     互动=1
 }
 public class LoveAction : MonoBehaviour {
-    
-    public NPCX lover;
+     
     public GameObject loveFunctionObj,yueTalkObj1, yueTalkObj2;
     public GameObject MarriedPro;
     private int selectIndex0, selectIndex1;
@@ -58,10 +57,7 @@ public class LoveAction : MonoBehaviour {
     }
 
     public void YuehuiEnd()
-    {
-        lover.AddFriendlyexp(20);
-        lover = null;
-        GameComponentData.gameData.gameManager.lover = null;
+    { 
         GameComponentData.gameData.gameManager.MoveToOldMap();
         Destroy(GameComponentData.gameData.mapParent.GetComponentInChildren<SeasonSelect>().LoverTransform.GetChild(0).gameObject);
     }
@@ -76,8 +72,7 @@ public class LoveAction : MonoBehaviour {
     {
         loveFunctionObj.SetActive(false);
         if (x == selectIndex1)
-        {
-            lover.AddFriendlyexp(50);
+        { 
             //GameComponentData.gameData.talkTextsManager.TalkAction("1481", lover.npcData.headName, lover.Name, lover,TalkActionType.约会中2);
         }
         else
@@ -87,11 +82,9 @@ public class LoveAction : MonoBehaviour {
         selectIndex1 = -1;
     }
 
-    public void MarriedAction(NPCX npc)
+    public void MarriedAction( )
     {
-        lover = npc;
-        npc.isMarried = true;
-        Destroy(npc.Obj);
+        
         GameComponentData.gameData.DisplayWaitPanelData(WaitType.婚礼, "婚礼即将举行的消息传遍了小镇..");
         
 
@@ -103,11 +96,9 @@ public class LoveAction : MonoBehaviour {
  
 
     public void WeddingEnd()
-    {
-       
-        lover.isMarried = true;
+    { 
         GameComponentData.gameData.gameManager.gamePlayer.isMarried = true;
-        GameComponentData.gameData.NpcManager.SetMarriedNpcPos(lover);
+       
         GameComponentData.gameData.gameManager.MoveToMap(1003);
     }
 
@@ -116,8 +107,7 @@ public class LoveAction : MonoBehaviour {
     {
         loveFunctionObj.SetActive(false);
         if (x == selectIndex0)
-        {
-            lover.AddFriendlyexp(30);
+        { 
             selectIndex1 = Random.Range(0, 5);
             if (selectIndex1 == 0)
             {

@@ -16,5 +16,5 @@ public class ShopManager : Singleton<ShopManager>
             initShopGroups[shopDataList.shopGroups[i].name] = shopDataList.shopGroups[i];
         }
     }
-
+    
 }

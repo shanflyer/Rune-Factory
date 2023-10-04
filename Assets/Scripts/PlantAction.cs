@@ -173,17 +173,7 @@ public class Plant : MyGameObject
        if (statusIndex >= plantBaseData.GrowthDays - 1)
         {
             plantStatus=PlantStatus.Mature;
-        }
-        if (GameComponentData.gameData.passDataManager.NowPassData.id == mapId)
-        {
-            Cell cell = AStarTest.GetCellWithCoordinate(coordinate);
-            if (!cell.myGameObjects.Exists(m => m.id == id))
-            {
-                cell.myGameObjects.Add(this);
-            }
-            InitPlantObj();
-        }
-
+        } 
 
     }
     public void InitPlantObj()
@@ -210,8 +200,7 @@ public class Plant : MyGameObject
             {
                 ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.GrowthGameObjectNames[statusIndex - 1]);
             }
-        }
-        Vector3 pos = AStarTest.CoordinateToPos(coordinate);
+        } 
         Obj = new GameObject(Name);
         Obj.AddComponent<SpriteRenderer>();
         SpriteRenderer plantRenderer = Obj.GetComponent<SpriteRenderer>();
@@ -219,8 +208,7 @@ public class Plant : MyGameObject
         plantRenderer.transform.localScale=new Vector3(2,2,2);
         plantRenderer.sortingLayerName = "Map";
         plantRenderer.sortingOrder = 3;
-        Obj.transform.SetParent(GameComponentData.gameData.plantAction.plantParent);
-        Obj.transform.position = pos;
+        Obj.transform.SetParent(GameComponentData.gameData.plantAction.plantParent); 
         if (plantStatus == PlantStatus.Withered)
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一株") + LanguageManage.SwitchStr(plantBaseData.name) + LanguageManage.SwitchStr("处于干旱状态。"));
@@ -257,14 +245,11 @@ public class PlantAction : MonoBehaviour
     [HideInInspector]
     public List<Plant> Plants;
     public Transform plantParent;
-
-    private PassDataManager passDataManager;
+     
 	// Use this for initialization
 	void Start ()
 	{
-       // Plants=new List<Plant>();
-	    passDataManager = GameComponentData.gameData.passDataManager;
-	    JsonToData();
+       // Plants=new List<Plant>(); 
 
     }
 
@@ -334,47 +319,16 @@ public class PlantAction : MonoBehaviour
         }
         
     }
-    public void Planting(Cell cell, int SeedId,Field _field)
-    {
-        int plantId = SeedId/1000 *10000+ cell.coordinate.x*100+cell.coordinate.y;
-        Plant plant=new Plant(plantId,passDataManager.nowPass,cell.coordinate,_field);
-       
-        InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一株")+plant.Name+LanguageManage.SwitchStr("被种下！"));
-        plant.SetPlantStatus();
-        Plants.Add(plant);
-        cell.myGameObjects.Add(plant);
-        GameComponentData.gameData.charactorTitleAction.AddPlantExp(1);
-    }
+ 
 
     public void CleraPlant(Plant _plant)
     {
         Plants.Remove(_plant);
-        if (_plant.mapId == GameComponentData.gameData.passDataManager.nowPass)
-        {
-            Destroy(_plant.Obj);
-            Cell cell = AStarTest.GetCellWithCoordinate(_plant.coordinate);
-            cell.myGameObjects.RemoveAt(0);
-        }
+         
         
         
     }
-    public async void PlantReward(Cell cell)
-    {
-        Plant plant = Plants.Find(p => p.id == cell.myGameObjects[0].id);
-        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(plant.plantBaseData.fruitId);
-        Item item= ItemManager.instance.CreatItem(itemData.id,plant.plantBaseData.fruitIdNum);
-        PackageManager.instance.SetItemInPackage(item,0);
-        plant.turnCount--;
-        if (plant.turnCount <= 0)
-        {
-            CleraPlant(plant);
-        }
-        else
-        {
-            plant.InitNewTurn();
-        }
-        
-    }
+ 
     public async void PlantReward(Plant plant)
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(plant.plantBaseData.fruitId);
@@ -388,8 +342,7 @@ public class PlantAction : MonoBehaviour
             if (plant.turnCount <= 0)
             {
                 CleraPlant(plant);
-                Cell cell = AStarTest.GetCellWithCoordinate(plant.coordinate);
-                GameComponentData.gameData.farmAction.ChangeTileFieldStatus(cell, FieldStatus.Barren);
+                
             }
             else
             {
@@ -409,11 +362,7 @@ public class PlantAction : MonoBehaviour
         List<Plant> dryDeadPlants=new List<Plant>();
         foreach (var plant in Plants)
         {
-            if (plant.field.fieldStatus == FieldStatus.Wet)
-            {
-                plant.growedDays++;
-            }
-            else
+           
             {
                 plant.plantStatus = PlantStatus.Withered;
                 plant.dryDays++;
@@ -434,10 +383,7 @@ public class PlantAction : MonoBehaviour
         }
         foreach (var farmActionField in GameComponentData.gameData.farmAction.Fields)
         {
-            if (farmActionField.fieldStatus == FieldStatus.Wet)
-            {
-                farmActionField.fieldStatus = FieldStatus.Dry;
-            }
+             
         }
     }
     // Update is called once per frame

@@ -100,21 +100,6 @@ namespace OldName
             item.count = _count;
             Obj.GetComponentInChildren<Text>().text = item.count.ToString();
         }
-        public void SetObjPos()
-        {
-            Vector3 pos = AStarTest.CoordinateToPos(coordinate);
-            Obj.transform.position = pos;
-        }
-
-        public void CreatObj()
-        {
-            if (GameComponentData.gameData.passDataManager.nowPass == MapId)
-            {
-                Obj = MonoBehaviour.Instantiate(GameComponentData.gameData.GroundItemPro);
-                SetObjPos();
-                SetData();
-            }
-        }
 
         public void LostAction()
         {
@@ -178,7 +163,6 @@ namespace OldName
         private Transform PlantParent;
         private Transform NpcParent;
         public GameObject tile;
-        private AStarTest astar;
         private Vector2 cellNum;
         private int cameraSelectNum;
         public bool isDisplayCoordinate;
@@ -188,8 +172,6 @@ namespace OldName
         [HideInInspector]
         public float result0, result1;
         public int passId;
-        private PassDataManager passDataManager;
-        private MapEditAction mapEditAction;
         public static List<Sprite> buffIcons;
         public static List<GameObject> effectPro;
 
@@ -205,13 +187,10 @@ namespace OldName
         public GameObject goldCostSelectObj;
         public Text PlayerMoneyText;
         private GameObject mapX;
-        [HideInInspector] public List<Charactor> Charactors;
         private int goldCostValue;
         private CostType costType;
         private ShopMoneyType shopMoneyType;
         [HideInInspector] public Vector2Int euqipmentCoordinate;
-        [HideInInspector]
-        public Charactor playerCharactor;
         [HideInInspector]
         public PlayerMoveType playerMoveType;
 
@@ -222,10 +201,7 @@ namespace OldName
         [HideInInspector]
         public int packageCount, boxCount, iceBoxCount;
         [HideInInspector] public int packageLevel, boxLevel, iceBoxLevel;
-        public NPCX lover;
         public bool IsYueHui;
-        [HideInInspector]
-        public NPCData hurtNpc;
 
 
 
@@ -335,13 +311,7 @@ namespace OldName
             IntelligencePanelObj.SetActive(true);
             IntelligencePanelObj.GetComponent<IntelligencePanelAction>().InitIntelligenceData();
         }
-        public void ClickCell(Cell _cell)
-        {
-            if (_cell.isArable)
-            {
-                GameData.farmAction.FieldAction(_cell);
-            }
-        }
+    
 
         void Start()
         {
@@ -349,15 +319,13 @@ namespace OldName
         }
 
         void Awake()
-        {
-            hurtNpc = null;
+        { 
             IsYueHui = false;
             packageLevel = 0;
             boxLevel = 0;
             iceBoxLevel = 0;
             oldPassid = -1;
-            GroundItems = new List<GroundItem>();
-            Charactors = new List<Charactor>();
+            GroundItems = new List<GroundItem>(); 
             PlayerMoneyText.text = gamePlayer.money.ToString();
             pastureName0 = "";
             pastureName1 = "";
@@ -385,137 +353,12 @@ namespace OldName
 
             cameraSelectNum = 1;
 
-            passDataManager = GameData.passDataManager;
-            mapEditAction = GameData.mapEditAction;
             result0 = 0;
             result1 = 0;
             //GameData.shopManager.InitData();
 
             GameData.shopGoldDeskAction.saleValue = 100;
-            if (mapEditAction.isMapEdit)
-            {
-                SceneData.PassId = passDataManager.nowPass;
-                passId = SceneData.PassId;
-                //加载地图
-                passDataManager.nowPass = passId;
-                passDataManager.InitData();
-                Pass nowPassData = passDataManager.NowPassData;
-                GameObject mapPro = Resources.Load<GameObject>("Map/" + nowPassData.background);
-                if (mapPro != null)
-                {
-                    mapX = Instantiate(mapPro) as GameObject;
-                    mapX.transform.SetParent(mapParent.transform, false);
-                    mapX.transform.position = mapParent.transform.position;
-                }
-                else
-                {
-
-                    mapX = Instantiate(Resources.Load<GameObject>("Map/DefalutMap")) as GameObject;
-                    mapX.transform.SetParent(mapParent.transform);
-                    mapX.transform.position = mapParent.transform.position;
-                    mapX.name = nowPassData.background;
-                }
-
-
-
-                cellNum = new Vector2(nowPassData.mapSizeX, nowPassData.mapSizeY);
-                nowBoundary = CreatBoundary();
-                mapSize = new Vector2(nowPassData.mapSizeX * 48, nowPassData.mapSizeY * 48);
-
-                mapParent.GetComponent<BoxCollider2D>().size = new Vector2(nowPassData.mapSizeX * 48 / 100.0f, nowPassData.mapSizeY * 48 / 100.0f);
-                mapStartPos = new Vector2(-mapSize.x / 200, -mapSize.y / 200);
-                mapEndPos = new Vector2(mapSize.x / 200, mapSize.y / 200);
-                astar = new AStarTest(cellNum, mapStartPos, mapEndPos);
-                mapEditAction.InitData();
-                CreatTile();
-
-                mapEditAction.InitData();
-
-            }
-            else
-            {
-                GameData.charactorDataAction.InitData();
-                GameData.influenceAction.InitInfluenceAction();
-                GameComponentData.gameData.NpcManager.InitData();
-                GameData.charactorTitleAction.Initdata0();
-                if (DataSaveAndLoadTest.isJsonData)
-                {
-
-                    //DataSaveAndLoadTest.LoadUserData();
-                    DataSaveAndLoadTest.gameSaveData.InitPlayerLoadData(gamePlayer);
-                    packageLevel = (PackageManager.instance.GetPackageCaseCount(0) - 5) / 5;
-                    boxLevel = (PackageManager.instance.GetPackageCaseCount(1) - 10) / 5;
-                    iceBoxLevel = (PackageManager.instance.GetPackageCaseCount(2) - 10) / 5;
-
-                    GameData.gameTimeManager.CreatData();
-
-
-                    if (DataSaveAndLoadTest.gameSaveData.marryData == null)
-                    {
-                        DataSaveAndLoadTest.gameSaveData.marryData = new MarryData();
-
-                    }
-                    InitRoom();
-
-                }
-                else
-                {
-                    gamePlayer.InitGamePlayer();
-                    GameData.plantAction.ZeroInitData();
-                    InitZeroSceneData();
-                    gamePlayer.TeamPlayer0 = null;
-                    gamePlayer.TeamPlayer1 = null;
-
-                    PackageManager.instance.SetPackageCaseCount(0, gamePlayer.packageZeroCout);
-                    PackageManager.instance.SetPackageCaseCount(1, gamePlayer.boxZeroCount);
-                    PackageManager.instance.SetPackageCaseCount(2, gamePlayer.iceboxZeroCount);
-
-                    GameData.gameTimeManager.InitData();
-
-
-
-
-                }
-                if (GameComponentData.gameData.gameDebugAction.GameStartTest)
-                {
-                    //GameComponentData.gameData.gameManager.InitRoom();
-                }
-                else
-                {
-                    GameData.eventManager.CheckEvents();
-                }
-
-                ChangePlayerMoney(0);
-                ChangePlayerMoney1(0);
-                GameData.employerManger.InitEmployers();
-
-
-
-                //加载地图
-                //InitGate();
-                // GameData.adventurePanelAction.gameObject.SetActive(true);
-                // GameData.adventurePanelAction.ZeroEploring();
-
-
-                if (DataSaveAndLoadTest.isJsonData)
-                {
-                    DataSaveAndLoadTest.gameSaveData.InitDeskData();
-                    CheckPauseTime();
-                }
-                foreach (var functionText in FunctionTexts)
-                {
-                    functionText.text = LanguageManage.SwitchStr(functionText.text);
-                }
-                if (GameTimeManager.nowGameTime.gameDate.year == 1300 && GameTimeManager.nowGameTime.gameDate.season == Season.春
-                    && GameTimeManager.nowGameTime.gameDate.date == 1)
-                {
-                    functionButtn.SetActive(false);
-                }
-                else
-                {
-                    functionButtn.SetActive(true);
-                }
-            }
+          
             UpDataPlayer();
             headIcon.sprite = GameComponent.headIcons.Find(h => h.name == gamePlayer.IconName);
             //GameData.heritageAction.ClickheritageObjbutton();
@@ -727,22 +570,7 @@ namespace OldName
             HpSlider.value = (float)gamePlayer.property.HP / (float)gamePlayer.property.MaxHP;
             RpSlider.value = (float)gamePlayer.property.Power / (float)gamePlayer.property.MaxPower;
         }
-        public void GreatGroundItem(Item item)
-        {
-
-            Vector2Int _coordinate = new Vector2Int(euqipmentCoordinate.x, euqipmentCoordinate.y + 1);
-            Vector3 pos = AStarTest.CoordinateToPos(_coordinate);
-            GameObject obj = Instantiate(GameData.GroundItemPro, pos, Quaternion.identity);
-            GroundItem groundItem = new GroundItem(item, obj, GameData.passDataManager.nowPass, _coordinate);
-            GroundItems.Add(groundItem);
-        }
-        public void GreatGroundItem(Item item, Vector2Int _coordinate)
-        {
-            Vector3 pos = AStarTest.CoordinateToPos(_coordinate);
-            GameObject obj = Instantiate(GameData.GroundItemPro, pos, Quaternion.identity);
-            GroundItem groundItem = new GroundItem(item, obj, GameData.passDataManager.nowPass, _coordinate);
-            GroundItems.Add(groundItem);
-        }
+       
         public void InitCostData(string Title, int _costValue, string notice, CostType _costType, ShopMoneyType _shopMoneyType)
         {
             costType = _costType;
@@ -838,16 +666,6 @@ namespace OldName
 
         }
 
-
-        public static int HurtValue(Property goldProperty, Property attackProperty)
-        {
-            int hurtValue = 1;
-            if (attackProperty.AT - goldProperty.DF > 0)
-            {
-                hurtValue = attackProperty.AT - goldProperty.DF;
-            }
-            return hurtValue;
-        }
         public void FightAction()
         {
             fieldTool.SetActive(false);
@@ -880,8 +698,7 @@ namespace OldName
             }
             GameData.shopGoldDeskAction.ShopingInBack();
             */
-
-            GameData.mapEditAction.isCamreaMove = false;
+             
             Camera.main.transform.position = new Vector3(0, 0, -10);
         }
         public async void ClickGroundItem(GameObject Obj)
@@ -946,22 +763,7 @@ namespace OldName
             GameTimerController.instance.DelayAction((int)(waitTime * 1000), Losting);
         }
 
-        public void ClickSaveButton()
-        {
-            SaveDataPanel.SetActive(true);
-            SaveDataPanel.GetComponent<MuSaveAction>().Initdata();
-        }
-        public void NextPass()
-        {
-
-
-            StartCoroutine("LoadScene");
-        }
-
-        public void GeOutToMainMenu()
-        {
-            StartCoroutine("LoadMainMenu");
-        }
+      
          
         public void YesButtonAction()
         {
@@ -980,16 +782,14 @@ namespace OldName
                     AudioController.instance.PlayAudio(SE.click);
                     break;
                 case CareType.ClearPlant:
-                    AudioController.instance.PlayAudio(SE.Return);
-                    GameData.farmAction.ClearSelectPlant();
+                    AudioController.instance.PlayAudio(SE.Return); 
                     break;
                 case CareType.GoldExchange:
                  // LianJinPanel.SetActive(true);
                    // LianJinPanel.GetComponent<LianjinAction>().InitData();
                     break;
                 case CareType.leaveLove:
-                    AudioController.instance.PlayAudio(SE.Return);
-                    GameData.npcFunctionPanel.LeaveLover();
+                    AudioController.instance.PlayAudio(SE.Return); 
                     break;
 
             }
@@ -1033,50 +833,8 @@ namespace OldName
         {
             StartCoroutine("LoadScene");
         }
-        public void InitImmediateSceneData(int passId)
-        {
-            /*
-            if (SceneData.startZeroData.zeroPlayers!=null)
-            {
-                ZeroData = SceneData.startZeroData;
-            }*/
-            if (passId == 0)
-            {
-                passId = passDataManager.nowPass;
-                SceneData.PassId = passDataManager.nowPass;
-            }
-            SceneData.isFightEnd = true;
+     
 
-            //加载地图
-
-            passDataManager.nowPass = passId;
-            passDataManager.InitData();
-            Pass nowPassData = passDataManager.NowPassData;
-            GameObject mapPro = Resources.Load<GameObject>("Map/" + nowPassData.background);
-            GameObject mapX = Instantiate(mapPro) as GameObject;
-            mapX.transform.SetParent(mapParent.transform, false);
-            mapX.transform.position = mapParent.transform.position;
-            cellNum = new Vector2(nowPassData.mapSizeX, nowPassData.mapSizeY);
-            nowBoundary = CreatBoundary();
-            mapSize = new Vector2(nowPassData.mapSizeX * 48, nowPassData.mapSizeY * 48);
-
-            mapParent.GetComponent<BoxCollider2D>().size = new Vector2(nowPassData.mapSizeX * 48 / 100.0f, nowPassData.mapSizeY * 38 / 100.0f);
-            mapStartPos = new Vector2(-mapSize.x / 200, -mapSize.y / 200);
-            mapEndPos = new Vector2(mapSize.x / 200, mapSize.y / 200);
-            astar = new AStarTest(cellNum, mapStartPos, mapEndPos);
-            mapEditAction.InitData();
-            CreatTile();
-           
-
-        }
-
-        public void InitEditSceneData()
-        {
-
-
-
-
-        }
 
         public void MoveToOldMap()
         {
@@ -1087,130 +845,12 @@ namespace OldName
         void InitMapData(int _passId)
         {
 
-            nowMapid = _passId;
-            GameComponentData.gameData.pastureAction.HideAnimal();
-
-            foreach (var groundItem in GroundItems)
-            {
-                if (groundItem.MapId == _passId)
-                {
-                    groundItem.Obj.SetActive(true);
-                }
-                else
-                {
-                    groundItem.Obj.SetActive(false);
-                }
-            }
-
-            foreach (Transform mapObj in mapParent)
-            {
-                Destroy(mapObj.gameObject);
-            }
-            foreach (Transform child in NpcParent)
-            {
-                Destroy(child.gameObject);
-            }
-            foreach (Transform child in PlantParent)
-            {
-                Destroy(child.gameObject);
-            }
-            passId = _passId;
-            passDataManager.nowPass = passId;
-            SceneData.PassId = passDataManager.nowPass;
-            passDataManager.InitData();
-            Pass nowPassData = passDataManager.NowPassData;
-            passDataManager.PlayerMapBGM();
-            GameObject mapPro = mapPros.Find(m => m.name == nowPassData.background);
-            mapX = Instantiate(mapPro) as GameObject;
-            mapX.transform.SetParent(mapParent.transform, false);
-            mapX.transform.position = mapParent.transform.position;
-            SeasonSelect seasonSelect = mapX.GetComponent<SeasonSelect>();
-            if (seasonSelect != null)
-            {
-                seasonSelect.SeasonSetData(GameTimeManager.nowGameTime.gameDate.season);
-            }
-
-
-
-            cellNum = new Vector2(nowPassData.mapSizeX, nowPassData.mapSizeY);
-            nowBoundary = CreatBoundary();
-            mapSize = new Vector2(nowPassData.mapSizeX * 48, nowPassData.mapSizeY * 48);
-            mapParent.GetComponent<BoxCollider2D>().size = new Vector2(nowPassData.mapSizeX * 48 / 100.0f, nowPassData.mapSizeY * 48 / 100.0f);
-            mapStartPos = new Vector2(-mapSize.x / 200, -mapSize.y / 200);
-            mapEndPos = new Vector2(mapSize.x / 200, mapSize.y / 200);
-            astar = new AStarTest(cellNum, mapStartPos, mapEndPos);
-            if (passId == 1001)
-            {
-                GameData.farmAction.InitGrassObj(mapX.transform.GetChild(3));
-            }
-
-            mapEditAction.InitData();
-            CreatTile();
-            //cameraMove.InitData();
-            GameComponentData.gameData.NpcManager.SetMapNpc(nowMapid);
+            
             // MoveMapZero();
 
         }
-
-        public void NpcMoveMapZero(int oldPass, NPCX npcx)
-        {
-            MapStartCoordinate mapStartCoordinate =
-                passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == oldPass);
-            Vector2Int zeroCoordinate = new Vector2Int();
-            if (mapStartCoordinate != null)
-            {
-                zeroCoordinate = mapStartCoordinate.coordiante;
-            }
-            else
-            {
-                MapStartCoordinate mapStartCoordinate1 =
-                    passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == 0);
-                zeroCoordinate = mapStartCoordinate1.coordiante;
-            }
-            if (npcx != null)
-            {
-                playerMoveType = PlayerMoveType.Start;
-                Vector3 pos = AStarTest.CoordinateToPos(zeroCoordinate);
-                if (npcx.Obj == null)
-                {
-                    GameObject playerPro = Resources.Load<GameObject>("charactor/" + npcx.npcData.ObjName);
-
-                    npcx.Obj = Instantiate(playerPro);
-                }
-                npcx.Obj.transform.position = pos;
-                npcx.npcAnimationAction = npcx.Obj.GetComponent<NPCAnimationAction>();
-                npcx.npcAnimationAction.animator = npcx.Obj.GetComponent<Animator>();
-                npcx.npcAnimationAction.costTime = GameComponentData.gameData.peopleAction.costTime;
-                npcx.npcAnimationAction.charactor = npcx;
-                npcx.coordinate = zeroCoordinate;
-                npcx.npcAnimationAction.InitPlayerData(npcx, passDataManager.NowPassData.zeroGoldCoordinate);
-            }
-        }
-        void CreatPlayer(Pass nowPassData)
-        {
-            MapStartCoordinate mapStartCoordinate =
-                passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == nextPassid);
-            Vector2Int zeroCoordinate = new Vector2Int();
-            if (mapStartCoordinate != null)
-            {
-                zeroCoordinate = mapStartCoordinate.coordiante;
-            }
-            else
-            {
-                MapStartCoordinate mapStartCoordinate1 =
-                    passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == 0);
-                zeroCoordinate = mapStartCoordinate1.coordiante;
-            }
-
-            GameObject playerPro = Resources.Load<GameObject>("charactor/" + gamePlayer.ObjName);
-            GameObject playerObj = Instantiate(playerPro);
-            playerObj.transform.position = AStarTest.CoordinateToPos(zeroCoordinate);
-            OldName.ProfessionData playerProfessionData = GameData.charactorDataAction.professionDatas0.Find(p => p.id == 8);
-
-            playerCharactor = new Charactor(80, gamePlayer.name, playerObj, nowPassData.id, zeroCoordinate, playerProfessionData, 1);
-
-        }
-
+ 
+     
 
         public void MoveEndAction()
         {
@@ -1255,126 +895,29 @@ namespace OldName
                 case PlayerMoveType.Start:
                     //GameComponentData.gameData.filmAction.MoveEndAction();
                     break;
-                case PlayerMoveType.Fishing:
-                    playerCharactor.Obj.GetComponent<NPCAnimationAction>().SetDirection(Direction.UP);
-                    GameComponentData.gameData.fishManager.StartFish();
+                case PlayerMoveType.Fishing: 
                     break;
             }
 
         }
         void MoveMapZero()
         {
-            if (oldPassid != nextPassid)
-            {
-                MapStartCoordinate mapStartCoordinate =
-                    passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == oldPassid);
-                Vector2Int zeroCoordinate = new Vector2Int();
-                if (mapStartCoordinate != null)
-                {
-                    zeroCoordinate = mapStartCoordinate.coordiante;
-                }
-                else
-                {
-                    MapStartCoordinate mapStartCoordinate1 =
-                        passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == 0);
-                    zeroCoordinate = mapStartCoordinate1.coordiante;
-                }
-                if (playerCharactor != null)
-                {
-                    playerMoveType = PlayerMoveType.Start;
-                    Vector3 pos = AStarTest.CoordinateToPos(zeroCoordinate);
-                    playerCharactor.Obj.transform.position = pos;
-                    playerCharactor.coordinate = zeroCoordinate;
-                    playerCharactor.npcAnimationAction.InitPlayerData(playerCharactor, passDataManager.NowPassData.zeroGoldCoordinate);
-                }
-                else
-                {
-                    CreatPlayer(passDataManager.NowPassData);
-                    playerMoveType = PlayerMoveType.Start;
-                    Vector3 pos = AStarTest.CoordinateToPos(zeroCoordinate);
-                    playerCharactor.Obj.transform.position = pos;
-                    playerCharactor.coordinate = zeroCoordinate;
-                    playerCharactor.npcAnimationAction.InitPlayerData(playerCharactor, passDataManager.NowPassData.zeroGoldCoordinate);
-                }
-                if (!GameData.gameDebugAction.GameStartTest)
-                {
-                    GameData.eventManager.CheckEvents();
-                }
-
-                GameData.guideController.CheckGuide();
-            }
-            oldPassid = passDataManager.NowPassData.id;
-            SeasonSelect seasonSelect = GameData.mapParent.GetComponentInChildren<SeasonSelect>();
-            if (seasonSelect != null)
-            {
-                Transform loverParent = seasonSelect.LoverTransform;
-                if (lover != null && loverParent != null)
-                {
-                    GameObject loverPro = GameComponent.models.Find(m => m.name == lover.npcData.ObjName);
-                    GameObject loverObj = Instantiate(loverPro, loverParent.position, Quaternion.identity);
-                    loverObj.SetActive(true);
-                    loverObj.transform.SetParent(loverParent);
-                    loverObj.GetComponentInChildren<NPCAnimationAction>().SetDirection(Direction.DOWN);
-                }
-            }
-
-
-            lover = null;
+            
         }
 
         void MoveMapEnd()
         {
-            oldPass0 = oldPassid;
-            MapStartCoordinate mapStartCoordinate =
-                passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == nextPassid);
-            Vector2Int endCoordinate = new Vector2Int();
-            if (mapStartCoordinate != null)
-            {
-                endCoordinate = mapStartCoordinate.coordiante;
-            }
-            else
-            {
-                MapStartCoordinate mapStartCoordinate1 =
-                    passDataManager.NowPassData.ZeroMapStartCoordinates.Find(z => z.mapId == 0);
-                endCoordinate = mapStartCoordinate1.coordiante;
-            }
-
-            if (nextPassid != oldPassid)
-            {
-                playerMoveType = PlayerMoveType.End;
-                playerCharactor.npcAnimationAction.InitPlayerData(playerCharactor, endCoordinate);
-            }
+             
 
 
         }
         public void MoveToShopMap(int _shop)
         {
-            AudioController.instance.PlayAudio(SE.click);
-            //selecteShop = _shop;
-           // Shop shop = GameComponentData.gameData.shopManager.Shops.Find(s => s.id == _shop);
-            //selecteShop = _shop;
-            ReturnFromAdventure();
-            oldPassid = passDataManager.NowPassData.id;
-            if (oldPassid == 1001)
-            {
-                GameData.pastureAction.MoveToCenter();
-            }
-            //nextPassid = shop.mapid;
-            MoveMapEnd();
+            
         }
         public void MoveToMap(int _nextMapid)
         {
-            GameData.pastureAction.MoveCameraButtonObj.SetActive(false);
-            AudioController.instance.PlayAudio(SE.click);
-            ReturnFromAdventure();
-
-            oldPassid = passDataManager.NowPassData.id;
-            nextPassid = _nextMapid;
-            if (oldPassid == 1001)
-            {
-                GameData.pastureAction.MoveToCenter();
-            }
-            MoveMapEnd();
+            
         }
         public void UpdataMapSeason()
         {
@@ -1503,40 +1046,7 @@ namespace OldName
         }
 
 
-        IEnumerator InitMyShoping()
-        {
-            yield return new WaitForSeconds(0.1f);
-            GameData.shopGoldDeskAction.CreatDesk();
-            GameData.shopGoldDeskAction.StartNpcShoping();
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-            GameData.mapEditAction.isCamreaMove = false;
-            mapParent.GetComponentInChildren<SaleAction>().SaleValueText.text =
-                GameComponentData.gameData.shopGoldDeskAction.saleValue + "%";
-            MoveMapZero();
-        }
-        IEnumerator InitSquaring()
-        {
-            yield return new WaitForSeconds(0.1f);
-            GameData.mapEditAction.isCamreaMove = false;
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-            MoveMapZero();
-        }
-        IEnumerator InitStreeting()
-        {
-            yield return new WaitForSeconds(0.1f);
-            GameData.mapEditAction.isCamreaMove = false;
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-            MoveMapZero();
-        }
-        IEnumerator InitFarm()
-        {
-
-            yield return new WaitForSeconds(0.1f);
-            GameData.farmAction.InitFarm();
-            GameData.mapEditAction.isCamreaMove = false;
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-            MoveMapZero();
-        }
+       
 
         IEnumerator InitPastureMap()
         {
@@ -1551,16 +1061,7 @@ namespace OldName
             MoveMapZero();
         }
 
-        IEnumerator InitRoomMap()
-        {
-            yield return new WaitForSeconds(0.1f);
-            GameData.mapEditAction.isCamreaMove = false;
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-            GameComponentData.gameData.equipmentManager.DisplayEuqiqment();
-            CheckChild();
-            MoveMapZero();
-        }
-
+    
         public void CheckChild()
         {
             mapParent.GetComponentInChildren<GameBoxClickAction>().CheckChild();
@@ -1641,35 +1142,8 @@ namespace OldName
             nowBoundary = boundary;
             return boundary;
         }
-        void CreatTile()
-        {
-            foreach (Transform child in TileMaskPerent)
-            {
-                Destroy(child.gameObject);
-            }
-            AStarTest.CreatTile(tile, mapX.transform);
-            AStarTest.CreatMaskTile(tilemask, TileMaskPerent);
-        }
-        //手动移动结束前
-        public void StopdDirectDisplay()
-        {
-            StopCoroutine("DirectorCellColorChanging");
-            Cell[] cells = AStarTest.cellList;
-            for (int i = 0; i < cells.Length; i++)
-            {
-                cells[i].SetTileColor(new Color(0, 0, 0, 0));
-            }
-        }
-        public void CellsWhite()
-        {
-            StopCoroutine("DirectorCellColorChanging");
-            Cell[] cells = AStarTest.cellList;
-            for (int i = 0; i < cells.Length; i++)
-            {
-                cells[i].InitCell();
-            }
-
-        }
+         
+      
         
 
        

@@ -5,10 +5,6 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-public enum Sex
-{
-    Male=1,Female=2
-}
 public class CharacterData : ScriptableObject, IGameData
 { 
     public string characterName;

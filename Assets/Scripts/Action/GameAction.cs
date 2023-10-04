@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
 using UnityEngine.TextCore.Text;
 using UnityEngine.InputSystem.XR;
+using static UnityEngine.Rendering.ReloadAttribute;
 
 public interface GameAction 
 { 
@@ -16,6 +17,17 @@ public interface GameAction
 
 public delegate void SetValue(int value);
 
+public struct ShopBuySuccess : GameAction
+{
+    public int buyCount;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+        {
+            buyCount = int.Parse(parameters[0].value);
+        }
+    }
+}
 public struct RefreshPackage : GameAction
 {
     public int packageId;

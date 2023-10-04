@@ -100,20 +100,7 @@ namespace OldName
 
         public AnimalSaveData(Animal animal)
         {
-            id = animal.id;
-            name = animal.Name;
-            mapId = animal.mapId;
-            coordinateX = animal.coordinate.x;
-            coordinateY = animal.coordinate.y;
-            nowAge = animal.nowAge;
-            Hp = animal.property.HP;
-            level = animal.level;
-           // exp = animal.property.EXP;
-            hungerDays = animal.hungerDays;
-            animalStatus = animal.animalStatus;
-            oldProduceDays = animal.oldProduceDays;
-            totalProduceCount = animal.totalProduceCount;
-            ageStatus = animal.ageStatus;
+            
         }
     }
 
@@ -164,29 +151,7 @@ namespace OldName
         public bool isFlower, isLove, isMarried, isYuehui;
 
         public NpcSaveData() { }
-        public NpcSaveData(NPCX npcx)
-        {
-            id = npcx.id;
-            weapon = npcx.weapon;
-            clothes = npcx.clothes;
-            friendlyLevel = npcx.npcData.friendlyLevel;
-            friendlyEXP = npcx.npcData.frienflyExp;
-            waitDays = npcx.WaitDays;
-            season = npcx.npcData.brothSeason;
-            date = npcx.npcData.brothDate;
-            level = npcx.level;
-            hp = npcx.property.HP;
-           // exp = npcx.property.EXP;
-            istteamExpAdd = npcx.istteamExpAdd;
-            isFriendlyExpAdd = npcx.isFriendlyExpAdd;
-            isGiftExpAdd0 = npcx.isGiftExpAdd0;
-            isGiftExpAdd1 = npcx.isGiftExpAdd1;
-            isGiftExpAdd2 = npcx.isGiftExpAdd2;
-            isFlower = npcx.isFlower;
-            isLove = npcx.isLove;
-            isMarried = npcx.isMarried;
-            isYuehui = npcx.isYuehui;
-        }
+       
     }
 
     [System.Serializable]
@@ -528,11 +493,7 @@ namespace OldName
             playerSaveData.UpPlayerData();
             plantSeveDatas.UpData();
 
-            foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-            {
-                NpcSaveData npcSaveData = new NpcSaveData(npcx);
-                npcSaveDatas.Add(npcSaveData);
-            }
+           
 
             pastureSaveDatas = new List<PastureSaveData>();
             for (int i = 0; i < GameComponentData.gameData.pastureAction.Pastures.Count; i++)
@@ -559,16 +520,7 @@ namespace OldName
             //DataSaveAndLoadTest.CreatPauseTimeData();
         }
 
-        public void UpDataNpc()
-        {
-            npcSaveDatas = new List<NpcSaveData>();
-            foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-            {
-                NpcSaveData npcSaveData = new NpcSaveData(npcx);
-                npcSaveDatas.Add(npcSaveData);
-            }
-            DataSaveAndLoadTest.CreatNPCData();
-        }
+     
 
         public void UpDate()
         {
@@ -661,25 +613,7 @@ namespace OldName
             charactorTitleValue = new CharactorTitleValue();
         }
 
-        public void ZeroInitProperty(Property property)
-        {
-            if (!DataSaveAndLoadTest.LoadRedMoney())
-            {
-                reMoney = new RedMoney();
-                reMoney.value = 0;
-            }
-
-            playerMoneyData = new PlayerMoneyData
-            {
-                GroundMoney = 0,
-                Hp = property.HP,
-                power = property.Power,
-                money0 = 0,
-                seedId = 0,
-                seedCount = 0,
-                waterValue = 0
-            };
-        }
+        
 
         public void InitCharactorTitleValue()
         {
@@ -721,34 +655,7 @@ namespace OldName
         {
             if (npcSaveDatas != null)
             {
-                foreach (var npcSaveData in npcSaveDatas)
-                {
-                    NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == npcSaveData.id);
-                    npcx.WaitDays = npcSaveData.waitDays;
-                    npcx.clothes = npcSaveData.clothes;
-                    npcx.weapon = npcSaveData.weapon;
-                    npcx.npcData.brothDate = npcSaveData.date;
-                    npcx.npcData.brothSeason = npcSaveData.season;
-                    npcx.npcData.friendlyLevel = npcSaveData.friendlyLevel;
-                    npcx.npcData.frienflyExp = npcSaveData.friendlyEXP;
-                    npcx.level = npcSaveData.level;
-                   // npcx.property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
-                   // npcx.property.EXP = npcSaveData.exp;
-                    npcx.property.HP = npcSaveData.hp;
-                    npcx.isFriendlyExpAdd = npcSaveData.isFriendlyExpAdd;
-                    npcx.isGiftExpAdd0 = npcSaveData.isGiftExpAdd0;
-                    npcx.isGiftExpAdd1 = npcSaveData.isGiftExpAdd1;
-                    npcx.isGiftExpAdd2 = npcSaveData.isGiftExpAdd2;
-                    npcx.istteamExpAdd = npcSaveData.istteamExpAdd;
-                    npcx.isFlower = npcSaveData.isFlower;
-                    npcx.isLove = npcSaveData.isLove;
-                    npcx.isMarried = npcSaveData.isMarried;
-                    npcx.isYuehui = npcSaveData.isYuehui;
-                    if (npcx.isMarried)
-                    {
-                        GameComponentData.gameData.NpcManager.SetMarriedNpcPos(npcx);
-                    }
-                }
+             
             }
 
         }
@@ -786,71 +693,18 @@ namespace OldName
             {
                 if (playerSaveData.teamPlayer0 / 1000000 == 2)
                 {
-                    Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.Animals.Exists(a => a.id == playerSaveData.teamPlayer0));
-                    if (pasture != null)
-                    {
-                        Animal animal = pasture.Animals.Find(a => a.id == playerSaveData.teamPlayer0);
-                        Employer employer1 = new Employer(animal);
-                        gamePlayer.TeamPlayer0 = new TeamPlayer(employer1);
-                        gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
-                        animal.property.HP = playerMoneyData.team1Hp;
-                        animal.level = playerMoneyData.team1Level;
-                       // animal.property.EXP = playerMoneyData.team1Exp;
-                    }
+                    
 
 
                 }
                 else
                 {
-                    NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == playerSaveData.teamPlayer0);
-                    if (npcx != null)
-                    {
-                        Employer employer = new Employer(npcx);
-                        gamePlayer.TeamPlayer0 = new TeamPlayer(employer);
-                        gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
-                        npcx.property.HP = playerMoneyData.team1Hp;
-                        npcx.level = playerMoneyData.team1Level;
-                        //npcx.property.EXP = playerMoneyData.team1Exp;
-                    }
+                    
 
 
                 }
 
-            }
-            if (playerSaveData.teamPlayer1 != 0)
-            {
-                if (playerSaveData.teamPlayer1 / 1000000 == 2)
-                {
-                    Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.Animals.Exists(a => a.id == playerSaveData.teamPlayer1));
-
-                    if (pasture != null)
-                    {
-                        Animal animal = pasture.Animals.Find(a => a.id == playerSaveData.teamPlayer1);
-                        Employer employer1 = new Employer(animal);
-                        gamePlayer.TeamPlayer1 = new TeamPlayer(employer1);
-                        gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
-                        animal.property.HP = playerMoneyData.team2Hp;
-                        animal.level = playerMoneyData.team2Level;
-                       // animal.property.EXP = playerMoneyData.team2Exp;
-                    }
-
-                }
-                else
-                {
-                    NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == playerSaveData.teamPlayer1);
-                    if (npcx != null)
-                    {
-                        Employer employer = new Employer(npcx);
-                        gamePlayer.TeamPlayer1 = new TeamPlayer(employer);
-                        gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
-                        npcx.property.HP = playerMoneyData.team2Hp;
-                        npcx.level = playerMoneyData.team2Level;
-                       // npcx.property.EXP = playerMoneyData.team2Exp;
-                    }
-
-                }
-
-            }
+            } 
             FarmAction farmAction = GameComponentData.gameData.farmAction;
             if (playerMoneyData.seedId != 0)
             {
@@ -1012,12 +866,7 @@ namespace OldName
             dateData.UpData();
             playerSaveData.UpPlayerData();
             plantSeveDatas.UpData();
-
-            foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-            {
-                NpcSaveData npcSaveData = new NpcSaveData(npcx);
-                npcSaveDatas.Add(npcSaveData);
-            }
+ 
 
             pastureSaveDatas = new List<PastureSaveData>();
             for (int i = 0; i < GameComponentData.gameData.pastureAction.Pastures.Count; i++)
@@ -1044,17 +893,7 @@ namespace OldName
             //DataSaveAndLoadTest.CreatPauseTimeData();
         }
 
-        public void UpDataNpc()
-        {
-            npcSaveDatas = new List<NpcSaveData>();
-            foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-            {
-                NpcSaveData npcSaveData = new NpcSaveData(npcx);
-                npcSaveDatas.Add(npcSaveData);
-            }
-            DataSaveAndLoadTest.CreatNPCData();
-        }
-
+    
         public void UpDate()
         {
             dateData.UpData();
@@ -1206,35 +1045,7 @@ namespace OldName
         public void InitNpcLoadData()
         {
             if (npcSaveDatas != null)
-            {
-                foreach (var npcSaveData in npcSaveDatas)
-                {
-                    NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == npcSaveData.id);
-                    npcx.WaitDays = npcSaveData.waitDays;
-                    npcx.clothes = npcSaveData.clothes;
-                    npcx.weapon = npcSaveData.weapon;
-                    npcx.npcData.brothDate = npcSaveData.date;
-                    npcx.npcData.brothSeason = npcSaveData.season;
-                    npcx.npcData.friendlyLevel = npcSaveData.friendlyLevel;
-                    npcx.npcData.frienflyExp = npcSaveData.friendlyEXP;
-                    npcx.level = npcSaveData.level;
-                   // npcx.property = npcx.professionData.ZeroProperty + npcx.professionData.GetPropertyFromLevel(npcx.level);
-                   // npcx.property.EXP = npcSaveData.exp;
-                    npcx.property.HP = npcSaveData.hp;
-                    npcx.isFriendlyExpAdd = npcSaveData.isFriendlyExpAdd;
-                    npcx.isGiftExpAdd0 = npcSaveData.isGiftExpAdd0;
-                    npcx.isGiftExpAdd1 = npcSaveData.isGiftExpAdd1;
-                    npcx.isGiftExpAdd2 = npcSaveData.isGiftExpAdd2;
-                    npcx.istteamExpAdd = npcSaveData.istteamExpAdd;
-                    npcx.isFlower = npcSaveData.isFlower;
-                    npcx.isLove = npcSaveData.isLove;
-                    npcx.isMarried = npcSaveData.isMarried;
-                    npcx.isYuehui = npcSaveData.isYuehui;
-                    if (npcx.isMarried)
-                    {
-                        GameComponentData.gameData.NpcManager.SetMarriedNpcPos(npcx);
-                    }
-                }
+            { 
             }
 
         }
@@ -1268,75 +1079,7 @@ namespace OldName
             gamePlayer.money = playerMoneyData.money0;
 
             gamePlayer.money1 = reMoney.value;
-            if (playerSaveData.teamPlayer0 != 0)
-            {
-                if (playerSaveData.teamPlayer0 / 1000000 == 2)
-                {
-                    Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.Animals.Exists(a => a.id == playerSaveData.teamPlayer0));
-                    if (pasture != null)
-                    {
-                        Animal animal = pasture.Animals.Find(a => a.id == playerSaveData.teamPlayer0);
-                        Employer employer1 = new Employer(animal);
-                        gamePlayer.TeamPlayer0 = new TeamPlayer(employer1);
-                        gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
-                        animal.property.HP = playerMoneyData.team1Hp;
-                        animal.level = playerMoneyData.team1Level;
-                       // animal.property.EXP = playerMoneyData.team1Exp;
-                    }
-
-
-                }
-                else
-                {
-                    NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == playerSaveData.teamPlayer0);
-                    if (npcx != null)
-                    {
-                        Employer employer = new Employer(npcx);
-                        gamePlayer.TeamPlayer0 = new TeamPlayer(employer);
-                        gamePlayer.TeamPlayer0.property.HP = playerMoneyData.team1Hp;
-                        npcx.property.HP = playerMoneyData.team1Hp;
-                        npcx.level = playerMoneyData.team1Level;
-                       // npcx.property.EXP = playerMoneyData.team1Exp;
-                    }
-
-
-                }
-
-            }
-            if (playerSaveData.teamPlayer1 != 0)
-            {
-                if (playerSaveData.teamPlayer1 / 1000000 == 2)
-                {
-                    Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.Animals.Exists(a => a.id == playerSaveData.teamPlayer1));
-
-                    if (pasture != null)
-                    {
-                        Animal animal = pasture.Animals.Find(a => a.id == playerSaveData.teamPlayer1);
-                        Employer employer1 = new Employer(animal);
-                        gamePlayer.TeamPlayer1 = new TeamPlayer(employer1);
-                        gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
-                        animal.property.HP = playerMoneyData.team2Hp;
-                        animal.level = playerMoneyData.team2Level;
-                      //  animal.property.EXP = playerMoneyData.team2Exp;
-                    }
-
-                }
-                else
-                {
-                    NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == playerSaveData.teamPlayer1);
-                    if (npcx != null)
-                    {
-                        Employer employer = new Employer(npcx);
-                        gamePlayer.TeamPlayer1 = new TeamPlayer(employer);
-                        gamePlayer.TeamPlayer1.property.HP = playerMoneyData.team2Hp;
-                        npcx.property.HP = playerMoneyData.team2Hp;
-                        npcx.level = playerMoneyData.team2Level;
-                        //npcx.property.EXP = playerMoneyData.team2Exp;
-                    }
-
-                }
-
-            }
+           
             FarmAction farmAction = GameComponentData.gameData.farmAction;
             if (playerMoneyData.seedId != 0)
             {

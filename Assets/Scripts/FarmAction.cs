@@ -9,13 +9,14 @@ public class Grass
 {
     public int Mapid;
     public Vector2Int startCoordinate, endCoordinate;
-    [HideInInspector]
-    public List<Cell> cells;
+    //[HideInInspector]
+   // public List<Cell> cells;
     [HideInInspector]
     public GameObject Obj;
     public bool isClear;
     public void InitCells()
     {
+        /*
         cells=new List<Cell>();
         for (int i = startCoordinate.x; i <=endCoordinate.x ; i++)
         {
@@ -24,17 +25,17 @@ public class Grass
                 Cell cell = AStarTest.GetCellWithCoordinate(new Vector2(i, j));
                 cells.Add(cell);
             }
-        }
+        }*/
     }
 
     public void ClearFarm()
     {
         isClear = true;
         Obj.SetActive(false);
-        foreach (var cell in cells)
-        {
-            cell.isArable = true;
-        }
+        //foreach (var cell in cells)
+        //{
+        //    cell.isArable = true;
+        //}
     }
 }
 
@@ -43,14 +44,14 @@ public class FieldStr
 {
     public int mapId;
     public int coordinateX,coordinateY;
-    public FieldStatus fieldStatus;
+   // public FieldStatus fieldStatus;
     public FieldStr() { }
     public FieldStr(Field field)
     {
         mapId = field.mapId;
         coordinateX=field.coordinate.x;
         coordinateY = field.coordinate.y;
-        fieldStatus = field.fieldStatus;
+       // fieldStatus = field.fieldStatus;
     }
 }
 
@@ -59,21 +60,21 @@ public class Field
 {
     public int mapId;
     public Vector2Int coordinate;
-    public FieldStatus fieldStatus;
+   // public FieldStatus fieldStatus;
     public Field() { }
 
     public Field(FieldStr fieldStr)
     {
         mapId = fieldStr.mapId;
         coordinate=new Vector2Int(fieldStr.coordinateX,fieldStr.coordinateY);
-        fieldStatus = fieldStr.fieldStatus;
+       // fieldStatus = fieldStr.fieldStatus;
     }
-    public Field(Cell cell,int _MapId )
-    {
-        mapId = _MapId;
-        coordinate = cell.coordinate;
-        fieldStatus = cell.fieldStatus;
-    }
+    //public Field(Cell cell,int _MapId )
+    //{
+    //    mapId = _MapId;
+    //    coordinate = cell.coordinate;
+    //    fieldStatus = cell.fieldStatus;
+    //}
 }
 
 [System.Serializable]
@@ -151,15 +152,14 @@ public class FarmAction : MonoBehaviour
     }
     public void InitFarm()
     {
-        WaterValueImage.fillAmount = waterValue;
-        int nowPass = GameComponentData.gameData.passDataManager.nowPass;
+        WaterValueImage.fillAmount = waterValue; 
         foreach (var field in Fields)
         {
-            if (field.mapId == nowPass)
-            {
-                Cell cell = AStarTest.GetCellWithCoordinate(field.coordinate);
-                ChangeTileFieldStatus(cell,field.fieldStatus);
-            }
+            //if (field.mapId == nowPass)
+            //{
+            //    Cell cell = AStarTest.GetCellWithCoordinate(field.coordinate);
+            //    ChangeTileFieldStatus(cell,field.fieldStatus);
+            //}
         }
         if (farmTool.instanceId!=0)
         {
@@ -212,303 +212,303 @@ public class FarmAction : MonoBehaviour
 
     public void DryAction(Field _field)
     {
-        _field.fieldStatus=FieldStatus.Dry;
-        if (_field.mapId == GameComponentData.gameData.passDataManager.nowPass)
-        {
-            Cell cell = AStarTest.GetCellWithCoordinate(_field.coordinate);
-            cell.fieldStatus = FieldStatus.Dry;
-            Pass nowPass = GameComponentData.gameData.passDataManager.NowPassData;
-            Vector2Int tileCoordinate =
-                cell.coordinate - new Vector2Int(nowPass.mapSizeX / 2, nowPass.mapSizeY / 2);
+        //_field.fieldStatus=FieldStatus.Dry;
+        //if (_field.mapId == GameComponentData.gameData.passDataManager.nowPass)
+        //{
+        //    Cell cell = AStarTest.GetCellWithCoordinate(_field.coordinate);
+        //    cell.fieldStatus = FieldStatus.Dry;
+        //    Pass nowPass = GameComponentData.gameData.passDataManager.NowPassData;
+        //    Vector2Int tileCoordinate =
+        //        cell.coordinate - new Vector2Int(nowPass.mapSizeX / 2, nowPass.mapSizeY / 2);
 
-            Tilemap tilemap = GameComponentData.gameData.mapParent.GetComponentInChildren<Tilemap>();
-            Tile tile = tilemap.GetTile<Tile>(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
-            tile.sprite = dryField;
-            tilemap.RefreshTile(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
-        }
+        //    Tilemap tilemap = GameComponentData.gameData.mapParent.GetComponentInChildren<Tilemap>();
+        //    Tile tile = tilemap.GetTile<Tile>(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
+        //    tile.sprite = dryField;
+        //    tilemap.RefreshTile(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
+        //}
        
 
     }
-    public void WaterAction(Cell cell)
-    {
-        ChangeTileFieldStatus(cell, FieldStatus.Wet);
+    //public void WaterAction(Cell cell)
+    //{
+    //    ChangeTileFieldStatus(cell, FieldStatus.Wet);
 
-        Plant plant = GameComponentData.gameData.plantAction.Plants.Find(p => p.coordinate == cell.coordinate);
-        if (plant != null)
-        {
-            plant.plantStatus=PlantStatus.Grow;
-            var x = plant.Obj.GetComponentsInChildren<SpriteRenderer>();
-            foreach (var spriteRenderer in x)
-            {
-                spriteRenderer.color = new Color(1f, 1f, 1f, 1);
-            }
-        }
-    }
+    //    Plant plant = GameComponentData.gameData.plantAction.Plants.Find(p => p.coordinate == cell.coordinate);
+    //    if (plant != null)
+    //    {
+    //        plant.plantStatus=PlantStatus.Grow;
+    //        var x = plant.Obj.GetComponentsInChildren<SpriteRenderer>();
+    //        foreach (var spriteRenderer in x)
+    //        {
+    //            spriteRenderer.color = new Color(1f, 1f, 1f, 1);
+    //        }
+    //    }
+    //}
 
-    public void ChangeTileFieldStatus(Cell cell,FieldStatus fieldStatus)
-    {
-        cell.fieldStatus = fieldStatus;
-        Pass nowPass = GameComponentData.gameData.passDataManager.NowPassData;
-        Vector2Int tileCoordinate =
-            cell.coordinate - new Vector2Int(nowPass.mapSizeX / 2, nowPass.mapSizeY / 2);
+    //public void ChangeTileFieldStatus(Cell cell,FieldStatus fieldStatus)
+    //{
+    //    cell.fieldStatus = fieldStatus;
+    //    Pass nowPass = GameComponentData.gameData.passDataManager.NowPassData;
+    //    Vector2Int tileCoordinate =
+    //        cell.coordinate - new Vector2Int(nowPass.mapSizeX / 2, nowPass.mapSizeY / 2);
 
-        Tilemap tilemap = GameComponentData.gameData.mapParent.GetComponentInChildren<Tilemap>();
-        Tile tile = tilemap.GetTile<Tile>(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
-        switch (fieldStatus)
-        {
-                case FieldStatus.Barren:
-                    tile.sprite = normalField;
-                break;
-                case FieldStatus.Dry:
-                    tile.sprite = dryField;
-                break;
-                case FieldStatus.Wet:
-                    tile.sprite = wetField;
-                break;
-        }
+    //    Tilemap tilemap = GameComponentData.gameData.mapParent.GetComponentInChildren<Tilemap>();
+    //    Tile tile = tilemap.GetTile<Tile>(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
+    //    switch (fieldStatus)
+    //    {
+    //            case FieldStatus.Barren:
+    //                tile.sprite = normalField;
+    //            break;
+    //            case FieldStatus.Dry:
+    //                tile.sprite = dryField;
+    //            break;
+    //            case FieldStatus.Wet:
+    //                tile.sprite = wetField;
+    //            break;
+    //    }
         
-        tilemap.RefreshTile(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
-    }
+    //    tilemap.RefreshTile(new Vector3Int(tileCoordinate.x, tileCoordinate.y, 0));
+    //}
 
-    public void ClearSelectPlant()
-    {
-        GameComponentData.gameData.plantAction.Plants.Remove(SelectPlant);
+    //public void ClearSelectPlant()
+    //{
+    //    GameComponentData.gameData.plantAction.Plants.Remove(SelectPlant);
         
-        Cell plantCell = AStarTest.GetCellWithCoordinate(SelectPlant.coordinate);
-        if (hoeObj != null)
-        {
-            Destroy(hoeObj);
-        }
-        hoeObj = Instantiate(hoePro);
-        hoeObj.transform.position = AStarTest.CoordinateToPos(plantCell.coordinate);
-        plantCell.myGameObjects.Remove(SelectPlant);
-        Destroy(SelectPlant.Obj);
-        SelectPlant = null;
+    //    Cell plantCell = AStarTest.GetCellWithCoordinate(SelectPlant.coordinate);
+    //    if (hoeObj != null)
+    //    {
+    //        Destroy(hoeObj);
+    //    }
+    //    hoeObj = Instantiate(hoePro);
+    //    hoeObj.transform.position = AStarTest.CoordinateToPos(plantCell.coordinate);
+    //    plantCell.myGameObjects.Remove(SelectPlant);
+    //    Destroy(SelectPlant.Obj);
+    //    SelectPlant = null;
 
-    }
-    public void FieldAction(Cell cell)
-    {
-        Plant plant = GameComponentData.gameData.plantAction.Plants.Find(p => p.coordinate == cell.coordinate);
-        int nowPass = GameComponentData.gameData.passDataManager.nowPass;
-        if (plant != null)
-        {
-            if (plant.plantStatus == PlantStatus.Mature)
-            {
-                if (GameComponentData.gameData.gameManager.CostRp(workRp))
-                {
-                    AudioController.instance.PlayAudio(SE.click);
-                    GameComponentData.gameData.plantAction.PlantReward(plant);
-                    Field field =
-                        Fields.Find(f => f.mapId == nowPass &&
-                                         f.coordinate == cell.coordinate);
-                    if (field == null)
-                    {
-                        field = new Field(cell, nowPass);
-                        Fields.Add(field);
-                    }
-                    else
-                    {
-                        field.fieldStatus = cell.fieldStatus;
-                    }
+    //}
+    //public void FieldAction(Cell cell)
+    //{
+    //    Plant plant = GameComponentData.gameData.plantAction.Plants.Find(p => p.coordinate == cell.coordinate);
+    //    int nowPass = GameComponentData.gameData.passDataManager.nowPass;
+    //    if (plant != null)
+    //    {
+    //        if (plant.plantStatus == PlantStatus.Mature)
+    //        {
+    //            if (GameComponentData.gameData.gameManager.CostRp(workRp))
+    //            {
+    //                AudioController.instance.PlayAudio(SE.click);
+    //                GameComponentData.gameData.plantAction.PlantReward(plant);
+    //                Field field =
+    //                    Fields.Find(f => f.mapId == nowPass &&
+    //                                     f.coordinate == cell.coordinate);
+    //                if (field == null)
+    //                {
+    //                    field = new Field(cell, nowPass);
+    //                    Fields.Add(field);
+    //                }
+    //                else
+    //                {
+    //                    field.fieldStatus = cell.fieldStatus;
+    //                }
 
-                }
-            }
-            else if (farmToolType == FarmToolType.锄头)
-            {
-              //  GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("清除植物"),LanguageManage.SwitchStr("是否确定清除选择地块植物？"),CareType.ClearPlant);
-                SelectPlant = plant;
-            }
-            else if (farmToolType == FarmToolType.水壶)
-            {
-                if (cell.fieldStatus == FieldStatus.Dry)
-                {
+    //            }
+    //        }
+    //        else if (farmToolType == FarmToolType.锄头)
+    //        {
+    //          //  GameComponentData.gameData.gameManager.InitCareSelectData(LanguageManage.SwitchStr("清除植物"),LanguageManage.SwitchStr("是否确定清除选择地块植物？"),CareType.ClearPlant);
+    //            SelectPlant = plant;
+    //        }
+    //        else if (farmToolType == FarmToolType.水壶)
+    //        {
+    //            if (cell.fieldStatus == FieldStatus.Dry)
+    //            {
 
-                    if (waterValue > 0)
-                    {
+    //                if (waterValue > 0)
+    //                {
 
-                        if (GameComponentData.gameData.gameManager.CostRp(workRp))
-                        {
-                            if (kettleObj != null)
-                            {
-                                Destroy(kettleObj);
-                            }
-                            kettleObj = Instantiate(kettlePro);
-                            kettleObj.GetComponent<kettleAction>().InitKettle();
-                            kettleObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
-                            AudioController.instance.PlayAudio(SE.watering);
-                            waterValue -= 0.05f;
-                            WaterValueImage.fillAmount = waterValue;
-                            WaterAction(cell);
-                            Field field =
-                                Fields.Find(f => f.mapId == nowPass &&
-                                                 f.coordinate == cell.coordinate);
-                            if (field == null)
-                            {
-                                field = new Field(cell, nowPass);
-                                Fields.Add(field);
-                            }
-                            else
-                            {
-                                field.fieldStatus = cell.fieldStatus;
-                            }
+    //                    if (GameComponentData.gameData.gameManager.CostRp(workRp))
+    //                    {
+    //                        if (kettleObj != null)
+    //                        {
+    //                            Destroy(kettleObj);
+    //                        }
+    //                        kettleObj = Instantiate(kettlePro);
+    //                        kettleObj.GetComponent<kettleAction>().InitKettle();
+    //                        kettleObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
+    //                        AudioController.instance.PlayAudio(SE.watering);
+    //                        waterValue -= 0.05f;
+    //                        WaterValueImage.fillAmount = waterValue;
+    //                        WaterAction(cell);
+    //                        Field field =
+    //                            Fields.Find(f => f.mapId == nowPass &&
+    //                                             f.coordinate == cell.coordinate);
+    //                        if (field == null)
+    //                        {
+    //                            field = new Field(cell, nowPass);
+    //                            Fields.Add(field);
+    //                        }
+    //                        else
+    //                        {
+    //                            field.fieldStatus = cell.fieldStatus;
+    //                        }
 
-                        }
-                    }
-                    else
-                    {
-                        AudioController.instance.PlayAudio(SE.Return);
-                        InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
-                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，请到池塘装水！"));
-                    }
+    //                    }
+    //                }
+    //                else
+    //                {
+    //                    AudioController.instance.PlayAudio(SE.Return);
+    //                    InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
+    //                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，请到池塘装水！"));
+    //                }
 
 
 
-                }
-                else
-                {
-                    AudioController.instance.PlayAudio(SE.Fail);
-                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("*此地块不需要浇水了"));
-                }
+    //            }
+    //            else
+    //            {
+    //                AudioController.instance.PlayAudio(SE.Fail);
+    //                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*此地块不需要浇水了"));
+    //            }
 
-            }
-        }
-        else
-        {
-            if (farmToolType ==FarmToolType.Default)
-            {
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (farmToolType ==FarmToolType.Default)
+    //        {
                 
-            }
-            if (farmToolType==FarmToolType.锄头)
-            {
-                if (cell.fieldStatus == FieldStatus.Barren)
-                {
+    //        }
+    //        if (farmToolType==FarmToolType.锄头)
+    //        {
+    //            if (cell.fieldStatus == FieldStatus.Barren)
+    //            {
                    
-                    if (GameComponentData.gameData.gameManager.CostRp(workRp))
-                    {
-                        if (hoeObj != null)
-                        {
-                            Destroy(hoeObj);
-                        }
-                        hoeObj = Instantiate(hoePro);
-                        hoeObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
-                        AudioController.instance.PlayAudio(SE.waJue); 
-                        ChangeTileFieldStatus(cell, FieldStatus.Dry);
-                        Field field =
-                            Fields.Find(f => f.mapId == nowPass &&
-                                             f.coordinate == cell.coordinate);
-                        if (field == null)
-                        {
-                            field = new Field(cell, nowPass);
-                            Fields.Add(field);
-                        }
-                        else
-                        {
-                            field.fieldStatus = cell.fieldStatus;
-                        }
+    //                if (GameComponentData.gameData.gameManager.CostRp(workRp))
+    //                {
+    //                    if (hoeObj != null)
+    //                    {
+    //                        Destroy(hoeObj);
+    //                    }
+    //                    hoeObj = Instantiate(hoePro);
+    //                    hoeObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
+    //                    AudioController.instance.PlayAudio(SE.waJue); 
+    //                    ChangeTileFieldStatus(cell, FieldStatus.Dry);
+    //                    Field field =
+    //                        Fields.Find(f => f.mapId == nowPass &&
+    //                                         f.coordinate == cell.coordinate);
+    //                    if (field == null)
+    //                    {
+    //                        field = new Field(cell, nowPass);
+    //                        Fields.Add(field);
+    //                    }
+    //                    else
+    //                    {
+    //                        field.fieldStatus = cell.fieldStatus;
+    //                    }
 
-                    }
+    //                }
 
-                }
-                else 
-                {
-                    AudioController.instance.PlayAudio(SE.Fail);
-                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("*此地块不需要使用锄头"));
-                }
+    //            }
+    //            else 
+    //            {
+    //                AudioController.instance.PlayAudio(SE.Fail);
+    //                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*此地块不需要使用锄头"));
+    //            }
 
-            }
-            else if (farmToolType == FarmToolType.水壶)
-            {
-                if (cell.fieldStatus == FieldStatus.Dry)
-                {
+    //        }
+    //        else if (farmToolType == FarmToolType.水壶)
+    //        {
+    //            if (cell.fieldStatus == FieldStatus.Dry)
+    //            {
                     
-                    if (waterValue > 0)
-                    {
+    //                if (waterValue > 0)
+    //                {
                         
-                        if (GameComponentData.gameData.gameManager.CostRp(workRp))
-                        {
-                            if (kettleObj != null)
-                            {
-                                Destroy(kettleObj);
-                            }
-                            kettleObj = Instantiate(kettlePro);
-                            kettleObj.GetComponent<kettleAction>().InitKettle();
-                            kettleObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
+    //                    if (GameComponentData.gameData.gameManager.CostRp(workRp))
+    //                    {
+    //                        if (kettleObj != null)
+    //                        {
+    //                            Destroy(kettleObj);
+    //                        }
+    //                        kettleObj = Instantiate(kettlePro);
+    //                        kettleObj.GetComponent<kettleAction>().InitKettle();
+    //                        kettleObj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
 
-                            AudioController.instance.PlayAudio(SE.watering);
-                            waterValue -= 0.05f;
-                            WaterValueImage.fillAmount = waterValue;
-                            WaterAction(cell);
-                            Field field =
-                                Fields.Find(f => f.mapId == nowPass &&
-                                                 f.coordinate == cell.coordinate);
-                            if (field == null)
-                            {
-                                field = new Field(cell, nowPass);
-                                Fields.Add(field);
-                            }
-                            else
-                            {
-                                field.fieldStatus = cell.fieldStatus;
-                            }
+    //                        AudioController.instance.PlayAudio(SE.watering);
+    //                        waterValue -= 0.05f;
+    //                        WaterValueImage.fillAmount = waterValue;
+    //                        WaterAction(cell);
+    //                        Field field =
+    //                            Fields.Find(f => f.mapId == nowPass &&
+    //                                             f.coordinate == cell.coordinate);
+    //                        if (field == null)
+    //                        {
+    //                            field = new Field(cell, nowPass);
+    //                            Fields.Add(field);
+    //                        }
+    //                        else
+    //                        {
+    //                            field.fieldStatus = cell.fieldStatus;
+    //                        }
 
-                        }
-                    }
-                    else
-                    {
-                        AudioController.instance.PlayAudio(SE.Return);
-                        InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
-                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
-                    }
+    //                    }
+    //                }
+    //                else
+    //                {
+    //                    AudioController.instance.PlayAudio(SE.Return);
+    //                    InformationController.instance.AddInformation("*"+LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
+    //                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"),LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
+    //                }
                     
                     
 
-                }
-                else
-                {
-                    AudioController.instance.PlayAudio(SE.Fail);
-                    InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
-                }
+    //            }
+    //            else
+    //            {
+    //                AudioController.instance.PlayAudio(SE.Fail);
+    //                InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("水量不足，需到池塘装水！"));
+    //            }
 
-            }
-            else if (farmToolType == FarmToolType.种子)
-            {
+    //        }
+    //        else if (farmToolType == FarmToolType.种子)
+    //        {
                 
-                if (farmTool.dataId != 0)
-                {
-                    if (cell.fieldStatus != FieldStatus.Barren && cell.myGameObjects.Count == 0)
-                    {
-                        if (GameComponentData.gameData.gameManager.CostRp(workRp))
-                        {
+    //            if (farmTool.dataId != 0)
+    //            {
+    //                if (cell.fieldStatus != FieldStatus.Barren && cell.myGameObjects.Count == 0)
+    //                {
+    //                    if (GameComponentData.gameData.gameManager.CostRp(workRp))
+    //                    {
 
-                            if (seedobj == null)
-                            {
-                                seedobj = Instantiate(seedPro);
-                            }
+    //                        if (seedobj == null)
+    //                        {
+    //                            seedobj = Instantiate(seedPro);
+    //                        }
                            
-                            seedobj.GetComponent<Seedaction>().InitSeed();
-                            seedobj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
+    //                        seedobj.GetComponent<Seedaction>().InitSeed();
+    //                        seedobj.transform.position = AStarTest.CoordinateToPos(cell.coordinate);
 
-                            AudioController.instance.PlayAudio(SE.bo);
-                            Field field = Fields.Find(f => f.coordinate == cell.coordinate);
-                            GameComponentData.gameData.plantAction.Planting(cell, farmTool.dataId, field);
-                            farmTool.count--;
-                            SeedCounText.text = farmTool.count.ToString();
-                            if (farmTool.count == 0)
-                            {
-                                farmTool = default(Item);
-                                SeedCounText.enabled = false;
-                                GameComponentData.gameData.gameManager.fieldTool.GetComponent<FarmToolAction>().DefaultSeedAction();
-                            }
+    //                        AudioController.instance.PlayAudio(SE.bo);
+    //                        Field field = Fields.Find(f => f.coordinate == cell.coordinate);
+    //                        GameComponentData.gameData.plantAction.Planting(cell, farmTool.dataId, field);
+    //                        farmTool.count--;
+    //                        SeedCounText.text = farmTool.count.ToString();
+    //                        if (farmTool.count == 0)
+    //                        {
+    //                            farmTool = default(Item);
+    //                            SeedCounText.enabled = false;
+    //                            GameComponentData.gameData.gameManager.fieldTool.GetComponent<FarmToolAction>().DefaultSeedAction();
+    //                        }
 
-                        }
+    //                    }
 
-                    }
-                }
+    //                }
+    //            }
                
-            }
-        }
+    //        }
+    //    }
           
-    }
+    //}
     public void InitGrassObj(Transform grassParent)
     {
         for (int i = 0; i < Grasses.Count; i++)

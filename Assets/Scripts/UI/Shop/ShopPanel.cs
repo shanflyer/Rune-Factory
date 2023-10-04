@@ -130,6 +130,11 @@ public class ShopPanel : GamePanel<ShopGroup>
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);
                     GameActionData.Action();
                 }
+                ShopBuySuccess shopBuySuccess = new ShopBuySuccess
+                {
+                    buyCount = buyCount
+                };
+                GameActionManager.instance.QueueAction(shopBuySuccess);
             }); 
         }
     }

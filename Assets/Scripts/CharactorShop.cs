@@ -51,39 +51,7 @@ public class CharactorShop : MonoBehaviour
         {
             if (employType == EmployType.NPC)
             {
-                NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == selectedEmployer.id);
-                if (npcx.npcData.friendlyLevel < 4)
-                {
-                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), npcx.Name+LanguageManage.SwitchStr("友好度不足，无法雇佣"));
-                }
-                else
-                {
-                    if (GameComponentData.gameData.gameManager.InitCostData(selectedEmployer.cost,ShopMoneyType.金币, CostType.购买佣兵))
-                    {
-                        MoneyText.text = gamePlayer.money.ToString();
-                        TeamPlayer teamPlayer = new TeamPlayer(selectedEmployer);
-                        if (gamePlayer.TeamPlayer0 == null || gamePlayer.TeamPlayer0.name==null)
-                        {
-                            gamePlayer.TeamPlayer0 = teamPlayer;
-                        }
-                        else
-                        {
-                            gamePlayer.TeamPlayer1 = teamPlayer;
-                        }
-                        GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
-                        if (GameComponentData.gameData.adventurePanelAction.gameObject.activeSelf)
-                        {
-                            GameComponentData.gameData.adventurePanelAction.InitData();
-                        }
-                        SwitchEmployType((int)employType);
-
-                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("雇佣成功"), LanguageManage.SwitchStr("成功雇佣到队友:") + teamPlayer.name);
-                    }
-                    else
-                    {
-                        GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("金币不足，无法雇佣"));
-                    }
-                }
+                 
             }
             else if (GameComponentData.gameData.gameManager.InitCostData(selectedEmployer.cost,ShopMoneyType.金币,  CostType.购买佣兵))
             {
@@ -139,15 +107,7 @@ public class CharactorShop : MonoBehaviour
         
         employButton.GetComponentInChildren<Text>().text = LanguageManage.SwitchStr("雇佣");
         if (employType == EmployType.NPC)
-        {
-            NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == selectedEmployer.id);
-            if (npcx.npcData.npcStatus == NpcStatus.修养中)
-            {
-                _employer.isHired = false;
-                employButton.interactable = false;
-                employButton.GetComponentInChildren<Text>().text = LanguageManage.SwitchStr("休养中");
-            }
-            notice.text = npcx.npcData.NoticeText;
+        { 
         }
         if (employType != EmployType.佣兵)
         {
@@ -227,18 +187,7 @@ public class CharactorShop : MonoBehaviour
                 notice.text = LanguageManage.SwitchStr("动物无法装备武器和防具");
                 break;
             case EmployType.NPC:
-                List<NPCX> npcxs = GameComponentData.gameData.NpcManager.Npcxs;
-                foreach (var npcx in npcxs)
-                {
-                    Employer employer=new Employer(npcx);
-                    GameObject emplorobj = Instantiate(employPro);
-                    emplorobj.transform.SetParent(employParent, true);
-                    emplorobj.GetComponentInChildren<Toggle>().group =
-                        employParent.GetComponentInChildren<ToggleGroup>();
-                    emplorobj.GetComponent<EmplorPanelAction>().InitEmplorData(employer);
-                    emplorObjs.Add(emplorobj);
-                    emplorobj.transform.localScale = Vector3.one;
-                }
+               
 
                 notice.text = LanguageManage.SwitchStr("NPC的友好度越高佣金越低");
                 break;

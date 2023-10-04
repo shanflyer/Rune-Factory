@@ -14,8 +14,7 @@ public class GameComponent : MonoBehaviour
     public EventManager eventManager;
     public GameObject sleepObj;
     public GameObject SaveButtonObj;
-    public LoveAction loveAction;
-    public NPCFunctionPanel npcFunctionPanel;
+    public LoveAction loveAction; 
     public SalesetPanelAction salesetPanelAction;
     public GameObject InputObj;
     public CoinAction coinAction;
@@ -23,9 +22,7 @@ public class GameComponent : MonoBehaviour
     public HeritageAction heritageAction;
     public GameObject BookPanelObj;
     public CharactorTitleAction charactorTitleAction;
-    public FishManager fishManager;
-    public NPCListDataPanelAction NpcListDataPanelAction;
-    public NPCManager NpcManager;
+    public FishManager fishManager; 
     public IntelligencePanelAction intelligencePanelAction;
     public CharactorShop charactorShop;
     public EmployerManger employerManger;
@@ -42,12 +39,8 @@ public class GameComponent : MonoBehaviour
     public GameObject huiFuEffectPro;
     public Transform mapParent;
     public Transform PlantParent;
-    public Transform NpcParent;
-    public MapEditAction mapEditAction;
-    public PeopleAcion peopleAction;
-    public ShopGoldDeskAction shopGoldDeskAction;
-    public CharactorDataAction charactorDataAction; 
-    public PassDataManager passDataManager;
+    public Transform NpcParent; 
+    public ShopGoldDeskAction shopGoldDeskAction; 
     public InfluenceAction influenceAction;
     public FarmAction farmAction;
     public PlantAction plantAction;
