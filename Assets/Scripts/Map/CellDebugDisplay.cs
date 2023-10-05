@@ -41,7 +41,8 @@ public class CellDebugDisplay : MonoBehaviour
             {
                 tileBase = colliderTile;
             }
-            tilemap.SetTile(new Vector3Int(cell.x+roomCoordinate.x, cell.y + roomCoordinate.y, +roomCoordinate.z), tileBase);
+            tilemap.SetTile(new Vector3Int(cell.x, cell.y, +roomCoordinate.z), tileBase);
+            //tilemap.SetTile(new Vector3Int(cell.x+roomCoordinate.x, cell.y + roomCoordinate.y, +roomCoordinate.z), tileBase);
         }
         tilemap.RefreshAllTiles();
     }

@@ -184,6 +184,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
             MapCellController.instance.AddTriggerCell(mapItemData.triggerCells, mapId, mapItemData.defaultEnter,
                 mapItemData.defaultExit, EntityType.角色, instanceId, mapItem.coordinate);
         }
+        if (mapItemData.playerTriggerCells!=null&&mapItemData.playerTriggerCells.Length > 0)
+        {
+            MapCellController.instance.AddPlayerTriggerCell(mapItemData.playerTriggerCells,mapId,mapItemData.playerTriggerEvent,
+                instanceId,mapItem.coordinate); 
+        }
         if (mapItemData.colliderCells.Length > 0)
         {
             MapCellController.instance.AddBarrierCell(mapItemData.colliderCells,mapItem.coordinate, mapId);

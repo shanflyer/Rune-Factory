@@ -50,7 +50,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 open = chapterData.isOpen, 
             };
 
-            fightChapter.findItems = new NativeList<int>(Allocator.Persistent);
+            fightChapter.findItems = new NativeList<int>(Allocator.TempJob);
 
             fightChapters.AddData(fightChapter);
         }

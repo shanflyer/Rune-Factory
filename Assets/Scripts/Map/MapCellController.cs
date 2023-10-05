@@ -1,18 +1,55 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Unity.Collections;
+using System.Linq;
 using Unity.Burst;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using System.Linq;
-using UnityEngine.Analytics;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using UnityEngine;
 
-public class MapCellController :Singleton<MapCellController>
+public class MapCellController : Singleton<MapCellController>
 {
+    public delegate void TriggerEvent(int eventId, int reference, bool enter);
 
-    public delegate void TriggerEvent(int eventId,int reference,bool enter);
+    public struct MapTriggerAreas
+    {
+        public NativeList<TriggerArea> triggerAreas;
+        private NativeHashMap<int, int> triggerIndexs;
+
+        public void InitTriggerData()
+        {
+            triggerAreas = new NativeList<TriggerArea>(4, Allocator.TempJob);
+            triggerIndexs = new NativeHashMap<int, int>(4, Allocator.TempJob);
+        }
+
+        public void AddTriggerCell(TriggerArea trigger)
+        {
+            triggerAreas.Add(trigger);
+            triggerIndexs.Add(trigger.referenceId, triggerAreas.Length - 1);
+        }
+
+        public void RemoveTriggerCell(int refrenceId)
+        {
+            if (triggerIndexs.TryGetValue(refrenceId, out int index))
+            {
+                triggerAreas.RemoveAt(index);
+                triggerIndexs.Remove(refrenceId);
+            }
+        }
+
+        public readonly void Dispose()
+        {
+            for (int i = 0; i < triggerAreas.Length; i++)
+            {
+                triggerAreas[i].Dispose();
+            }
+
+            triggerAreas.Dispose();
+            triggerIndexs.Dispose();
+        }
+    }
+
     [BurstCompile]
     public struct RuntimeMapRoom
     {
@@ -21,7 +58,8 @@ public class MapCellController :Singleton<MapCellController>
             roomCellData.Dispose();
             linkMaps.Dispose();
             neighbourMaps.Dispose();
-            triggerEventCells.Dispose();
+            commonTriggerAreas.Dispose();
+            playerTriggerAreas.Dispose();
         }
 
         public int id;
@@ -31,12 +69,8 @@ public class MapCellController :Singleton<MapCellController>
         public NativeHashMap<int2, LinkMap> linkMaps;
         public NativeList<int> neighbourMaps;
 
-
-        public NativeHashMap<int2, NativeList<int4>> triggerEventCells;
-
-       // public NativeList<TriggerCell> triggerCells;
-       // private NativeHashMap<int, int> triggerIndexs;
-       // private NativeHashMap<int, int> triggerRefrenceDatas;
+        public MapTriggerAreas commonTriggerAreas;
+        public MapTriggerAreas playerTriggerAreas;
 
         public override int GetHashCode()
         {
@@ -45,43 +79,9 @@ public class MapCellController :Singleton<MapCellController>
 
         public void InitTriggerData()
         {
-            triggerEventCells=new NativeHashMap<int2, NativeList<int4>>(16,Allocator.TempJob);
-
-
-           // triggerCells = new NativeList<TriggerCell>(16, Allocator.TempJob);
-            //triggerIndexs = new NativeHashMap<int, int>(16, Allocator.TempJob);
-            //triggerRefrenceDatas = new NativeHashMap<int, int>(16, Allocator.TempJob);
+            commonTriggerAreas.InitTriggerData();
+            playerTriggerAreas.InitTriggerData();
         }
-        /*
-        public void AddTriggerCell(TriggerCell trigger,int linkId = 0)
-        { 
-            int id = GameCommon.CreateRandSeed();
-            while (triggerIndexs.ContainsKey(id))
-            {
-                id = GameCommon.CreateRandSeed();
-            }
-
-            triggerCells.Add(trigger);
-            triggerIndexs.Add(id, triggerCells.Length - 1);
-            if (linkId !=0)
-            {
-                triggerRefrenceDatas.Add(linkId, id);
-            }
-        }
-        */
-        /*public void RemoveTriggerCell(int refrenceId)
-        {
-            if(triggerRefrenceDatas.TryGetValue(refrenceId,out int id))
-            {
-                if(triggerIndexs.TryGetValue(id,out int index))
-                {
-                    triggerCells.RemoveAt(index);
-                    triggerIndexs.Remove(id);
-                }
-                triggerRefrenceDatas.Remove(refrenceId);
-            }
-        }*/
-         
 
         public bool GetLinkMapInCoordinate(int linkMap, ref int2 inCoordinate)
         {
@@ -95,6 +95,7 @@ public class MapCellController :Singleton<MapCellController>
             }
             return false;
         }
+
         public void AddLinkMap(int2 coordinate, Direction direction, int targetMap, int2 targetPoint)
         {
             LinkMap linkMap = new LinkMap
@@ -108,7 +109,6 @@ public class MapCellController :Singleton<MapCellController>
             {
                 neighbourMaps.Add(targetMap);
             }
-
         }
 
         public bool ChangeMap(int2 nowCoordinate, int2 offsetCoordinate, out int3 newMap)
@@ -124,73 +124,80 @@ public class MapCellController :Singleton<MapCellController>
             }
             return false;
         }
-        bool CheckLinkMapDirection(Direction targetDirection, int2 offsetCoordinate)
+
+        private bool CheckLinkMapDirection(Direction targetDirection, int2 offsetCoordinate)
         {
             switch (targetDirection)
             {
                 case Direction.LEFT:
                     return offsetCoordinate.x < 0;
+
                 case Direction.UP:
                     return offsetCoordinate.y > 0;
+
                 case Direction.RIGHT:
                     return offsetCoordinate.x > 0;
+
                 case Direction.DOWN:
                     return offsetCoordinate.y < 0;
             }
             return true;
         }
-
-       
     }
+
     public struct LinkMap
     {
         public Direction direction;
         public int2 startCell;
         public int3 target;
     }
+
     public struct RoomCellData
     {
         public readonly void Dispose()
         {
             mapObjBarriers.Dispose();
-            cellValue.Dispose(); 
+            cellValue.Dispose();
         }
+
         public NativeArray<int> cellValue;
         public NativeHashMap<int, int> mapObjBarriers;
         public int2 startCoordinate, endCoordinate;
 
 #if UNITY_EDITOR
+
         public List<Vector3Int> GetAllCellData()
         {
             List<Vector3Int> cellData = new List<Vector3Int>();
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
-            if (cellValue != null&&cellValue.Length>0)
+            if (cellValue != null && cellValue.Length > 0)
             {
                 for (int i = 0; i < cellValue.Length; i++)
                 {
-                    int x = i / perRowGridCount+startCoordinate.x;
-                    int y = i % perRowGridCount+startCoordinate.y;
+                    int x = i / perRowGridCount + startCoordinate.x;
+                    int y = i % perRowGridCount + startCoordinate.y;
                     int z = cellValue[i];
-                    if (z == 1&&mapObjBarriers.ContainsKey(i))
+                    if (z == 1 && mapObjBarriers.ContainsKey(i))
                     {
-                        z = 0; 
+                        z = 0;
                     }
                     cellData.Add(new Vector3Int(x, y, z));
                 }
             }
-          
 
             return cellData;
         }
+
 #endif
-        public List<int2> GetCoordinates(int2 source,int minRange,int maxRange,bool isWalkable)
+
+        public List<int2> GetCoordinates(int2 source, int minRange, int maxRange, bool isWalkable)
         {
             List<int2> results = new List<int2>();
-            for(int x = -maxRange; x <= maxRange; x++)
+            for (int x = -maxRange; x <= maxRange; x++)
             {
-                for(int y = -maxRange; y <= maxRange - x; y++)
+                for (int y = -maxRange; y <= maxRange - x; y++)
                 {
-                    if (math.abs(x) + math.abs(y) > maxRange|| math.abs(x) + math.abs(y)<minRange)
+                    if (math.abs(x) + math.abs(y) > maxRange || math.abs(x) + math.abs(y) < minRange)
                     {
                         continue;
                     }
@@ -207,23 +214,27 @@ public class MapCellController :Singleton<MapCellController>
             }
             return results;
         }
+
         public int2 GetCoordinate(int index)
         {
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
             return new int2(index / perRowGridCount, index % perRowGridCount);
         }
-        public int GetCoordinateIndex(int x,int y)
+
+        public int GetCoordinateIndex(int x, int y)
         {
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
-            int index = (y - startCoordinate.y) + (x- startCoordinate.x) * perRowGridCount;
+            int index = (y - startCoordinate.y) + (x - startCoordinate.x) * perRowGridCount;
             return index;
         }
+
         public int GetCoordinateIndex(int2 coordinate)
         {
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
             int index = (coordinate.y - startCoordinate.y) + (coordinate.x - startCoordinate.x) * perRowGridCount;
             return index;
         }
+
         public bool CheckWalkable(int index)
         {
             if (cellValue[index] == 1)
@@ -236,6 +247,7 @@ public class MapCellController :Singleton<MapCellController>
             }
             return false;
         }
+
         public bool CheckWalkable(int2 coordinate)
         {
             if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&
@@ -248,11 +260,12 @@ public class MapCellController :Singleton<MapCellController>
                     {
                         return false;
                     }
-                    return true; 
+                    return true;
                 }
             }
             return false;
         }
+
         public bool CheckWalkable(Vector2Int coordinate)
         {
             if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&
@@ -273,202 +286,227 @@ public class MapCellController :Singleton<MapCellController>
         }
     }
 
-    //触发格子事件
-    /*public struct TriggerCell  
-    {
-        public int referenceId;
-        public EntityType triggerType;
-        public NativeHashSet<int2> cells;
-        public int enterLinkEventId;
-        public int exitLinkEventId;
-    }*/
-
-
     private MyNativeData<RuntimeMapRoom> runtimeMapRooms;
 
-    //检测触发事件
-    public void CheckTriggerEvent(int entityId,EntityType entityType,int room,int2 oldCell,int2 nowCell,
-        TriggerEvent triggerEvent)
-    {
-        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
-        {
-           var triggerEventCells = runtimeMapRoom.triggerEventCells ;
-            if(triggerEventCells.TryGetValue(oldCell,out var enevntData))
-            {
-                for(int i = 0; i < enevntData.Length; i++)
-                {
-                    var data = enevntData[i]; 
-                    int typeValue = data.x % (int)entityType;
-                    if (typeValue > 0)
-                    {
-                        return;
-                    } 
-                    if (data.z != 0)
-                    {
-                        triggerEvent.Invoke(data.z,data.w, false);
-                    } 
-                }
-            }
-
-            if (triggerEventCells.TryGetValue(nowCell, out var eventData))
-            {
-                for (int i = 0; i < eventData.Length; i++)
-                {
-                    var data = eventData[i];
-                    int typeValue = data.x % (int)entityType;
-                    if (typeValue > 0)
-                    {
-                        return;
-                    }
-                    if (data.y != 0)
-                    {
-                        triggerEvent.Invoke(data.y, data.w, true);
-                    }
-                }
-            }
-        }
-
-
-        /*
-        TriggerCell triggerCell; 
-        if (GetRuntimeMapRoom(room,out RuntimeMapRoom runtimeMapRoom))
-        {
-            NativeArray<TriggerCell> triggerCells= new  NativeArray<TriggerCell>(runtimeMapRoom.triggerCells.Length, Allocator.TempJob);
-            triggerCells.CopyFrom(runtimeMapRoom.triggerCells.AsArray());
-
-            NativeArray<int3> triggerEvents = new NativeArray<int3>(runtimeMapRoom.triggerCells.Length,Allocator.TempJob);
-
-            TriggerJob triggerJob = new TriggerJob
-            {
-                triggerCells = triggerCells,
-                oldCell = oldCell,
-                nowCell = nowCell,
-                triggerEvents = triggerEvents,
-                triggerType=entityType,
-            };
-            //triggerJob.Run(runtimeMapRoom.triggerCells.Length);
-           triggerJob.Schedule(runtimeMapRoom.triggerCells.Length, 8).Complete();
-
-            int length = triggerJob.triggerEvents.Length;
-            for(int i = 0; i < length; i++)
-            {
-                int eventId = triggerJob.triggerEvents[i].x;
-                if (eventId != 0)
-                {
-                    triggerEvent(eventId, triggerJob.triggerEvents[i].y, triggerJob.triggerEvents[i].z==1);
-                }
-                
-            }
-            triggerEvents.Dispose();
-            triggerCells.Dispose();
-        }
-
-       */
-    }
-
-    public void RemoveTriggerCell(int2[] cells,int room, int linkId)
+    /// <summary>
+    /// 添加障碍
+    /// </summary>
+    /// <param name="cells"></param>
+    /// <param name="itemPos"></param>
+    /// <param name="room"></param>
+    public void AddBarrierCell(int2[] cells, int2 itemPos, int room)
     {
         if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            for(int i = 0; i < cells.Length; i++)
+            for (int i = 0; i < cells.Length; i++)
             {
-                if (runtimeMapRoom.triggerEventCells.TryGetValue(cells[i],out  var enevntData))
-                {
-                    for(int j = enevntData.Length-1; j >=0; j--)
-                    {
-                        var data = enevntData[j];
-                        if (data.w == linkId)
-                        {
-                            enevntData.RemoveAt(j);
-                        }
-                    }
-                }
-            }
-            //runtimeMapRoom.RemoveTriggerCell(linkId);
-            runtimeMapRooms.SetData(runtimeMapRoom);
-        }
-    }
-    /*
-    public void RemoveTriggerCell(int room,int linkId)
-    {
-        if(runtimeMapRooms.GetData(room,out RuntimeMapRoom runtimeMapRoom))
-        {
-            runtimeMapRoom.RemoveTriggerCell(linkId);
-            runtimeMapRooms.SetData(runtimeMapRoom); 
-        } 
-    }*/
-
-    public void AddBarrierCell(int2[] cells, int2 itemPos,int room)
-    {
-        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
-        {
-            for(int i = 0; i < cells.Length; i++)
-            {
-                int index = runtimeMapRoom.roomCellData.GetCoordinateIndex(cells[i]+itemPos);
+                int index = runtimeMapRoom.roomCellData.GetCoordinateIndex(cells[i] + itemPos);
                 runtimeMapRoom.roomCellData.mapObjBarriers.TryGetValue(index, out int count);
                 count++;
                 runtimeMapRoom.roomCellData.mapObjBarriers[index] = count;
             }
         }
     }
+
+    /// <summary>
+    /// 移除障碍
+    /// </summary>
+    /// <param name="cells"></param>
+    /// <param name="itemPos"></param>
+    /// <param name="room"></param>
     public void RemoveBarrierCell(int2[] cells, int2 itemPos, int room)
     {
         if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
         {
             for (int i = 0; i < cells.Length; i++)
             {
-                int index = runtimeMapRoom.roomCellData.GetCoordinateIndex(cells[i]+itemPos);
+                int index = runtimeMapRoom.roomCellData.GetCoordinateIndex(cells[i] + itemPos);
                 runtimeMapRoom.roomCellData.mapObjBarriers.TryGetValue(index, out int count);
                 count--;
                 if (count <= 0)
                 {
                     runtimeMapRoom.roomCellData.mapObjBarriers.Remove(index);
-                } 
+                }
             }
         }
     }
-    public void AddTriggerCell(int2[] cells,int room,int enterEventId,int exitEventId,EntityType triggerType,int linkId,int2 offset)
+
+    /// <summary>
+    /// 添加通用触发格子
+    /// </summary>
+    /// <param name="cells"></param>
+    /// <param name="room"></param>
+    /// <param name="enterEventId"></param>
+    /// <param name="exitEventId"></param>
+    /// <param name="triggerType"></param>
+    /// <param name="linkId"></param>
+    /// <param name="offset"></param>
+    public void AddTriggerCell(int2[] cells, int room, int enterEventId, int exitEventId, EntityType triggerType, int linkId, int2 offset)
     {
         if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
-        { 
-            int4 triggerEvent=new int4((int)triggerType,enterEventId,exitEventId,linkId);
-            /*
-            TriggerCell triggerCell = new TriggerCell
+        {
+            int4 triggerEvent = new int4((int)triggerType, enterEventId, exitEventId, linkId);
+
+            TriggerArea triggerArea = new TriggerArea
             {
-                cells = new NativeHashSet<int2>(cells.Length, Allocator.TempJob),
+                cells = new UnsafeHashSet<int2>(cells.Length, Allocator.TempJob),
                 enterLinkEventId = enterEventId,
                 exitLinkEventId = exitEventId,
                 referenceId = linkId,
                 triggerType = triggerType
             };
-            */
-            for (int i = 0; i < cells.Length; i++)
-            {
-                if (!runtimeMapRoom.triggerEventCells.TryGetValue(cells[i] + offset, out var items))
-                {
-                    items = new NativeList<int4>(4, Allocator.TempJob);
-                    
-                }
-                items.Add(triggerEvent);
-                runtimeMapRoom.triggerEventCells.Add(cells[i] + offset, items);
 
-                //triggerCell.cells.Add(cells[i]+offset);
-            }
-            //runtimeMapRoom.AddTriggerCell(triggerCell, linkId); 
+            runtimeMapRoom.commonTriggerAreas.AddTriggerCell(triggerArea);
             runtimeMapRooms.SetData(runtimeMapRoom);
         }
-         
     }
 
-    public bool GetRuntimeMapRoom(int roomId,out RuntimeMapRoom runtimeMapRoom)
+    /// <summary>
+    /// 移除通用触发格子
+    /// </summary>
+    /// <param name="cells"></param>
+    /// <param name="room"></param>
+    /// <param name="linkId"></param>
+    public void RemoveTriggerCell(int2[] cells, int room, int linkId)
+    {
+        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            runtimeMapRoom.commonTriggerAreas.RemoveTriggerCell(linkId);
+            runtimeMapRooms.SetData(runtimeMapRoom);
+        }
+    }
+
+    /// <summary>
+    /// 添加玩家交互格子
+    /// </summary>
+    /// <param name="cells"></param>
+    /// <param name="room"></param>
+    /// <param name="enterEventId"></param>
+    /// <param name="linkId"></param>
+    /// <param name="offset"></param>
+    public void AddPlayerTriggerCell(int2[] cells, int room, int enterEventId, int linkId, int2 offset)
+    {
+        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            TriggerArea triggerArea = new TriggerArea
+            {
+                cells = new UnsafeHashSet<int2>(4, Allocator.TempJob),
+                enterLinkEventId = enterEventId,
+                referenceId = linkId,
+            };
+
+            for (int i = 0; i < cells.Length; i++)
+            {
+                triggerArea.cells.Add(cells[i] + offset);
+            }
+            runtimeMapRoom.playerTriggerAreas.AddTriggerCell(triggerArea);
+            runtimeMapRooms.SetData(runtimeMapRoom);
+        }
+    }
+
+    /// <summary>
+    /// 移除玩家交互格子
+    /// </summary>
+    /// <param name="cells"></param>
+    /// <param name="room"></param>
+    /// <param name="linkId"></param>
+    public void RemovePlayerTriggerCell(int2[] cells, int room, int linkId)
+    {
+        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            runtimeMapRoom.playerTriggerAreas.RemoveTriggerCell(linkId);
+            runtimeMapRooms.SetData(runtimeMapRoom);
+        }
+    }
+
+    /// <summary>
+    /// 检测触发事件
+    /// </summary>
+    /// <param name="entityId"></param>
+    /// <param name="entityType"></param>
+    /// <param name="room"></param>
+    /// <param name="oldCell"></param>
+    /// <param name="nowCell"></param>
+    /// <param name="triggerEvent"></param>
+    public void CheckTriggerEvent(int entityId, EntityType entityType, int room, int2 oldCell, int2 nowCell,
+        TriggerEvent triggerEvent)
     { 
-        return runtimeMapRooms.GetData(roomId,out runtimeMapRoom);
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        { 
+            NativeArray<int3> triggerEvents = new NativeArray<int3>
+                (runtimeMapRoom.commonTriggerAreas.triggerAreas.Length, Allocator.TempJob); 
+            TriggerJob triggerJob = new TriggerJob
+            {
+                TriggerAreas= runtimeMapRoom.commonTriggerAreas.triggerAreas,
+                oldCell = oldCell,
+                nowCell = nowCell,
+                triggerEvents = triggerEvents,
+                triggerType = entityType,
+            }; 
+            triggerJob.Schedule(triggerEvents.Length, 8).Complete();
+
+            int length = triggerJob.triggerEvents.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int eventId = triggerJob.triggerEvents[i].x;
+                if (eventId != 0)
+                {
+                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1);
+                }
+            }
+            triggerEvents.Dispose(); 
+        }
+    }
+
+    /// <summary>
+    /// 检测是否进入玩家交互区域
+    /// </summary>
+    /// <param name="entityId"></param>
+    /// <param name="entityType"></param>
+    /// <param name="room"></param>
+    /// <param name="oldCell"></param>
+    /// <param name="nowCell"></param>
+    /// <param name="triggerEvent"></param>
+    public void CheckPlayerTriggerEvent(int room, int2 oldCell, int2 nowCell,
+        TriggerEvent triggerEvent)
+    {
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            NativeArray<int3> triggerEvents = new NativeArray<int3>
+                (runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+
+            TriggerJob triggerJob = new TriggerJob
+            {
+                TriggerAreas = runtimeMapRoom.playerTriggerAreas.triggerAreas,
+                oldCell = oldCell,
+                nowCell = nowCell,
+                triggerType = EntityType.玩家,
+                triggerEvents = triggerEvents
+            };
+            triggerJob.Schedule(triggerEvents.Length, 8).Complete();
+            int length = triggerJob.triggerEvents.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int eventId = triggerJob.triggerEvents[i].x;
+                if (eventId != 0)
+                {
+                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1);
+                }
+            }
+            triggerEvents.Dispose();
+        }
+    }
+
+    public bool GetRuntimeMapRoom(int roomId, out RuntimeMapRoom runtimeMapRoom)
+    {
+        return runtimeMapRooms.GetData(roomId, out runtimeMapRoom);
     }
 
     public bool ContainsRoom(int roomId)
     {
         return runtimeMapRooms.Contains(roomId);
     }
+
     public int3 GetRoomCoordinate(int roomId)
     {
         if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
@@ -477,9 +515,10 @@ public class MapCellController :Singleton<MapCellController>
         }
         return int3.zero;
     }
+
     public RoomCellData GetRoomCellData(int roomId)
     {
-        if(runtimeMapRooms.GetData(roomId,out var runtimeMapRoom))
+        if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
         {
             return runtimeMapRoom.roomCellData;
         }
@@ -490,19 +529,18 @@ public class MapCellController :Singleton<MapCellController>
     {
         runtimeMapRooms.Init(roomCount);
     }
-    public void InitMapData(int roomId, MapCellData[] mapCellDatas, 
-        int2 startCoordinate, int2 endCoordinate,int3 coordinate)
+
+    public void InitMapData(int roomId, MapCellData[] mapCellDatas,
+        int2 startCoordinate, int2 endCoordinate, int3 coordinate)
     {
-
-
         RoomCellData roomCellData = new RoomCellData
         {
             cellValue = new NativeArray<int>(mapCellDatas.Length, Allocator.TempJob),
             mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.TempJob),
             startCoordinate = startCoordinate,
-            endCoordinate = endCoordinate, 
-        }; 
-        for(int i = 0; i < mapCellDatas.Length; i++)
+            endCoordinate = endCoordinate,
+        };
+        for (int i = 0; i < mapCellDatas.Length; i++)
         {
             roomCellData.cellValue[i] = mapCellDatas[i].isWalkable ? 1 : 0;
         }
@@ -510,12 +548,10 @@ public class MapCellController :Singleton<MapCellController>
         RuntimeMapRoom runtimeMapRoom = new RuntimeMapRoom
         {
             coordinate = coordinate,
-            roomCellData = roomCellData,
-
-            id=roomId,
-
-            linkMaps = new NativeHashMap<int2, LinkMap>(16, Allocator.Persistent),
-            neighbourMaps = new NativeList<int>(8, Allocator.Persistent), 
+            roomCellData = roomCellData, 
+            id = roomId, 
+            linkMaps = new NativeHashMap<int2, LinkMap>(16, Allocator.TempJob),
+            neighbourMaps = new NativeList<int>(8, Allocator.TempJob),
         };
         runtimeMapRoom.InitTriggerData();
         runtimeMapRooms.AddData(runtimeMapRoom);
@@ -525,7 +561,7 @@ public class MapCellController :Singleton<MapCellController>
     {
         if (runtimeMapRooms.GetData(map0, out var runtimeMapRoom0) &&
             runtimeMapRooms.GetData(map1, out var runtimeMapRoom1))
-        { 
+        {
             coordinate0.x += runtimeMapRoom0.coordinate.x;
             coordinate0.y += runtimeMapRoom0.coordinate.y;
 
@@ -539,21 +575,23 @@ public class MapCellController :Singleton<MapCellController>
 
     public bool GetLinkMapInCoordinate(int nowMap, int linkMap, ref int2 inCoordinate)
     {
-        if(GetRuntimeMapRoom(nowMap,out RuntimeMapRoom nowRuntimeMap))
+        if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom nowRuntimeMap))
         {
             return nowRuntimeMap.GetLinkMapInCoordinate(linkMap, ref inCoordinate);
-        } 
+        }
         return false;
     }
+
     public bool ChangeMap(int2 nowCoordinate, int2 offsetCoordinate, int nowMap, out int3 newMap)
     {
-        if(GetRuntimeMapRoom(nowMap,out RuntimeMapRoom runtimeMapRoom))
+        if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom runtimeMapRoom))
         {
             return runtimeMapRoom.ChangeMap(nowCoordinate, offsetCoordinate, out newMap);
         }
         newMap = int3.zero;
         return false;
     }
+
     public void InitLinkMap(List<MapLine> mapLines)
     {
         foreach (var mapLine in mapLines)
@@ -561,15 +599,14 @@ public class MapCellController :Singleton<MapCellController>
             int2 cell0 = new int2(mapLine.cell0.x, mapLine.cell0.y);
             int2 cell1 = new int2(mapLine.cell1.x, mapLine.cell1.y);
             if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
-            { 
+            {
                 runtimeMapRoom.AddLinkMap(cell0, GetMapDirection(mapLine.map0, mapLine.map1, mapLine.cell0, mapLine.cell1),
                     mapLine.map1, cell1);
-                runtimeMapRooms.SetData(runtimeMapRoom); 
+                runtimeMapRooms.SetData(runtimeMapRoom);
             }
 
             if (runtimeMapRooms.GetData(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
-            { 
-                
+            {
                 _runtimeMapRoom.AddLinkMap(cell1, GetMapDirection(mapLine.map1, mapLine.map0, mapLine.cell1, mapLine.cell0),
                     mapLine.map0, cell0);
                 runtimeMapRooms.SetData(_runtimeMapRoom);
@@ -577,13 +614,13 @@ public class MapCellController :Singleton<MapCellController>
         }
     }
 
-    public Stack<int2> FindPathNode(int2 startPos, int2 targetPos,int mapId)
+    public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId)
     {
         Stack<int2> outData = new Stack<int2>();
-        if (runtimeMapRooms.GetData(mapId,out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
-            NativeList<int2> pathCells = new NativeList<int2>(16,Allocator.TempJob);
+            NativeList<int2> pathCells = new NativeList<int2>(16, Allocator.TempJob);
             FindPath findPath = new FindPath
             {
                 roomCellData = roomCellData,
@@ -595,35 +632,37 @@ public class MapCellController :Singleton<MapCellController>
             //findPath.Schedule().Complete();
             findPath.Run();
 
-            for(int i = 0; i < findPath.pathCells.Length; i++)
+            for (int i = 0; i < findPath.pathCells.Length; i++)
             {
                 outData.Push(findPath.pathCells[i]);
             }
-             
+
             pathCells.Dispose();
         }
         return outData;
     }
+
     public bool CheckIsWalk(Vector2Int coordinate, int mapId)
     {
         if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
-            RoomCellData roomCellData= runtimeMapRoom.roomCellData;
+            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
 
             return roomCellData.CheckWalkable(coordinate);
         }
         return false;
     }
+
     public Queue<int> FindRoomList(int sourceId, int targetId, Queue<int> roomList, ref bool result)
     {
         if (sourceId == targetId)
-        { 
+        {
             result = true;
             return new Queue<int>();
         }
         if (runtimeMapRooms.GetData(sourceId, out RuntimeMapRoom sourceRoom) &&
             runtimeMapRooms.Contains(targetId))
-        { 
+        {
             foreach (var id in sourceRoom.neighbourMaps)
             {
                 roomList.Enqueue(id);
@@ -640,19 +679,21 @@ public class MapCellController :Singleton<MapCellController>
                         return resultList;
                     }
                 }
-
             }
         }
         return null;
     }
+
     public void DeleteRoom(int roomInstanceid)
     {
         runtimeMapRooms.RemoveData(roomInstanceid);
     }
+
     public override void Init()
     {
         base.Init();
     }
+
     protected override void Clear()
     {
         base.Clear();
@@ -661,25 +702,27 @@ public class MapCellController :Singleton<MapCellController>
 
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
+
     private static int CalculateDistanceCost(int2 aPosition, int2 bPosition)
     {
-
-       // int2 d = bPosition - aPosition;
+        // int2 d = bPosition - aPosition;
         //return d.x * d.x + d.y *d.y;
 
         int xDistance = math.abs(aPosition.x - bPosition.x);
         int yDistance = math.abs(aPosition.y - bPosition.y);
         int remaining = math.abs(xDistance - yDistance);
 
-        int cost= MOVE_DIAGONAL_COST * math.min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
-         
+        int cost = MOVE_DIAGONAL_COST * math.min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+
         return cost;
     }
-    public struct FindPath:IJob
+
+    public struct FindPath : IJob
     {
         //[ReadOnly] public int MOVE_STRAIGHT_COST;
-       // [ReadOnly] public int MOVE_DIAGONAL_COST; 
+        // [ReadOnly] public int MOVE_DIAGONAL_COST;
         [ReadOnly] public RoomCellData roomCellData;
+
         [ReadOnly] public int2 startPos, targetPos;
 
         [WriteOnly] public NativeList<int2> pathCells;
@@ -689,10 +732,10 @@ public class MapCellController :Singleton<MapCellController>
             GetPath();
         }
 
-        void GetPath()
-        { 
+        private void GetPath()
+        {
             if (roomCellData.CheckWalkable(startPos) && roomCellData.CheckWalkable(targetPos))
-            { 
+            {
                 NativeArray<int2> neighbourOffsetArray = new NativeArray<int2>(8, Allocator.Temp);
                 neighbourOffsetArray[0] = new int2(-1, 0); // Left
                 neighbourOffsetArray[1] = new int2(+1, 0); // Right
@@ -711,11 +754,10 @@ public class MapCellController :Singleton<MapCellController>
                 int openCellLength = 0;
                 int closeCellLength = 0;
 
-
                 openCells.Add(startPos);
                 openCellLength++;
-               // int cost = CalculateDistanceCost(startPos, targetPos) * 5;
-                cellCost[startPos] =0;
+                // int cost = CalculateDistanceCost(startPos, targetPos) * 5;
+                cellCost[startPos] = 0;
                 while (openCellLength > 0)
                 {
                     int2 nowCell = openCells[0];
@@ -729,10 +771,10 @@ public class MapCellController :Singleton<MapCellController>
                     {
                         break;
                     }
-                    
+
                     for (int i = 0; i < 8; i++)
                     {
-                        int2 cell = neighbourOffsetArray[i] + nowCell; 
+                        int2 cell = neighbourOffsetArray[i] + nowCell;
 
                         if (roomCellData.CheckWalkable(cell))
                         {
@@ -745,7 +787,6 @@ public class MapCellController :Singleton<MapCellController>
                         {
                             continue;
                         }
-
 
                         int cost = CalculateDistanceCost(cell, startPos) +
                              CalculateDistanceCost(cell, targetPos) * 3;
@@ -762,26 +803,24 @@ public class MapCellController :Singleton<MapCellController>
                         bool insert = false;
                         for (int j = 0; j < openCells.Length; j++)
                         {
-                            if (cellCost.TryGetValue(openCells[j],out int _cost))
-                            { 
+                            if (cellCost.TryGetValue(openCells[j], out int _cost))
+                            {
                                 if (_cost > cost)
-                                { 
-                                    openCells.InsertRangeWithBeginEnd(j, j+1);
+                                {
+                                    openCells.InsertRangeWithBeginEnd(j, j + 1);
                                     openCells[j] = cell;
-                                      
+
                                     insert = true;
                                     openCellLength++;
                                     break;
                                 }
                             }
-                            
                         }
                         if (!insert)
                         {
                             openCells.Add(cell);
-                            openCellLength++; 
+                            openCellLength++;
                         }
-                       
                     }
                 }
 
@@ -789,7 +828,7 @@ public class MapCellController :Singleton<MapCellController>
                 pathCells.Add(checkCell);
                 while (checkCell.x != startPos.x || checkCell.y != startPos.y)
                 {
-                    if(parentCell.TryGetValue(checkCell,out int index))
+                    if (parentCell.TryGetValue(checkCell, out int index))
                     {
                         if (closeCellLength <= index)
                         {
@@ -800,8 +839,8 @@ public class MapCellController :Singleton<MapCellController>
                     }
                     else
                     {
-                        break; 
-                    } 
+                        break;
+                    }
                 }
 
                 neighbourOffsetArray.Dispose();
@@ -809,42 +848,53 @@ public class MapCellController :Singleton<MapCellController>
                 closeCells.Dispose();
                 cellCost.Dispose();
                 parentCell.Dispose();
-            } 
+            }
         }
     }
 
-    /*
-    public struct TriggerJob:IJobParallelFor
+    public struct TriggerJob : IJobParallelFor
     {
-       [ReadOnly] public NativeArray<TriggerCell> triggerCells;
-       [WriteOnly] public NativeArray<int3> triggerEvents;
-       [ReadOnly] public int2 oldCell;
-       [ReadOnly] public int2 nowCell;
+        // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
+        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+
+        [WriteOnly] public NativeArray<int3> triggerEvents;
+        [ReadOnly] public int2 oldCell;
+        [ReadOnly] public int2 nowCell;
         [ReadOnly] public EntityType triggerType;
 
         public void Execute(int index)
         {
-            TriggerCell triggerCell = triggerCells[index];
-            int typeValue = (int)triggerCell.triggerType % (int)triggerType;
+            TriggerArea triggerArea = TriggerAreas[index];
+            int typeValue = (int)triggerArea.triggerType % (int)triggerType;
             if (typeValue > 0)
             {
                 return;
             }
 
+            bool oldContanins = triggerArea.cells.Contains(oldCell);
+            bool nowContanins = triggerArea.cells.Contains(nowCell);
 
-
-            bool oldContanins = triggerCell.cells.Contains(oldCell);
-            bool nowContanins = triggerCell.cells.Contains(nowCell);
-
-            if (oldContanins&&!nowContanins)
+            if (oldContanins && !nowContanins)
             {
-                triggerEvents[index]=new int3(triggerCell.exitLinkEventId,triggerCell.referenceId,1);
+                triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 1);
             }
             else if (!oldContanins && nowContanins)
             {
-                triggerEvents[index] = new int3(triggerCell.enterLinkEventId, triggerCell.referenceId,0);
+                triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 0);
             }
         }
     }
-    */
+}
+
+public struct TriggerArea
+{
+    public UnsafeHashSet<int2> cells;
+    public EntityType triggerType;
+    public int referenceId;
+    public int enterLinkEventId, exitLinkEventId;
+
+    public void Dispose()
+    {
+        cells.Dispose();
+    }
 }

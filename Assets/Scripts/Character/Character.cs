@@ -605,7 +605,8 @@ public class Character
     {
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, objCoordinate.coordinate, coordinate,
            TriggerEventAction);
-
+        MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, objCoordinate.coordinate, coordinate,
+           TriggerEventAction);
         objCoordinate.SetObjCoordinate(mapInstance, coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
         {

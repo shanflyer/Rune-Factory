@@ -37,7 +37,8 @@ public class WorldMapController : MonoBehaviour
 
             GameActionManager.instance.QueueAction(new ChangeWorld
             {
-                worldName = worldName
+                worldName = worldName,
+                displayMap=mapInstance
             });
             GameActionManager.instance.QueueAction(new CreatCharacter
             {

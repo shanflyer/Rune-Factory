@@ -15,6 +15,8 @@ public class MapItemData:ScriptableObject,IGameData
 
     public int2[] colliderCells;
     public int2[] triggerCells;
+    public int2[] playerTriggerCells;
+    public int playerTriggerEvent;
     public int defaultExit, defaultEnter;
     public override string ToString()
     {

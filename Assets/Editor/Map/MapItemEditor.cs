@@ -50,7 +50,7 @@ public class MapItemEditor : MyEditor
     private Tilemap ground, collider, trigger;
     private Transform singleItemParent;
     private MyInstance myInstance;
-    private TileBase colliderTile, triggerTile;
+    private TileBase colliderTile, triggerTile,playerTriggerTile;
     private void OnDestroy()
     {
         base.OnDestroy();
@@ -116,6 +116,7 @@ public class MapItemEditor : MyEditor
 
         colliderTile = AssetDatabase.LoadAssetAtPath<TileBase>(EditorDataPath.colliderTile);
         triggerTile = AssetDatabase.LoadAssetAtPath<TileBase>(EditorDataPath.triggerTile);
+        playerTriggerTile = AssetDatabase.LoadAssetAtPath<TileBase>(EditorDataPath.playerTriggerTile);
     }
 
     private Transform itemParent
@@ -211,7 +212,17 @@ public class MapItemEditor : MyEditor
         {
             var coordinate = selectMapItemDataObj.itemData.triggerCells[i];
             trigger.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), triggerTile);
+        } 
+
+        if (selectMapItemDataObj.itemData.playerTriggerCells != null)
+        {
+            for (int i = 0; i < selectMapItemDataObj.itemData.playerTriggerCells.Length; i++)
+            {
+                var coordinate = selectMapItemDataObj.itemData.playerTriggerCells[i];
+                ground.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), playerTriggerTile);
+            }
         }
+       
 
         selectItem = Instantiate(selectMapItemDataObj.itemData.itemObj);
         selectItem.transform.SetParent(singleItemParent, false);
@@ -248,6 +259,21 @@ public class MapItemEditor : MyEditor
             }
         }
         selectMapItemDataObj.itemData.triggerCells = triggerCells.ToArray();
+
+        var playerTriggerBound = ground.cellBounds;
+        List<int2> playerTriggerCells = new List<int2>();
+        for (int x = playerTriggerBound.xMin; x < playerTriggerBound.xMax; x++)
+        {
+            for (int y = playerTriggerBound.yMin; y < playerTriggerBound.yMax; y++)
+            {
+                var tile = ground.GetTile(new Vector3Int(x, y, 0));
+                if (tile != null)
+                {
+                    playerTriggerCells.Add(new int2(x, y));
+                }
+            }
+        }
+        selectMapItemDataObj.itemData.playerTriggerCells = playerTriggerCells.ToArray();
 
         string assetPath = $"{EditorDataPath.mapItemDataPath}{selectMapItemDataObj.GetId()}.asset";
         string objPath = $"{EditorDataPath.mapItemPrefabPath}{selectMapItemDataObj.GetName()}.prefab";
