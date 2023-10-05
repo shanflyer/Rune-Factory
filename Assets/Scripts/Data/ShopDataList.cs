@@ -17,7 +17,7 @@ public struct EditorShopItemData
     public int buyAction;
 }
 [CreateAssetMenu(menuName = "Data/商店数据")]
-public class ShopDataList : ScriptableObject, IGameData
+public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
 {
     public override string ToString()
     {
@@ -107,15 +107,25 @@ public class ShopDataList : ScriptableObject, IGameData
        return "";
     }
 #endif
+    [SerializeField]
+    private List<ShopGroup> shopGroups=new List<ShopGroup>();
 
-    public List<ShopGroup> shopGroups=new List<ShopGroup>();
-    
+    public List<ShopGroup> DataList => shopGroups;
 }
 [Serializable]
-public struct ShopGroup:IReferenceData
+public struct ShopGroup : IReferenceData, IGameData
 { 
     public string name;
     public List<ShopData> shopDatas;
+
+    public string GetKey()
+    {
+        return name;
+    }
+
+    public void SetReferenceData()
+    { 
+    } 
 }
 [Serializable]
 public struct ShopData:IReferenceData
