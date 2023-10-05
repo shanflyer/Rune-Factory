@@ -166,10 +166,7 @@ public class FishingPanelAction : MonoBehaviour
         int x =await PackageManager.instance.SetItemInPackage(fishItem,0);
         if (x > 0)
         {
-            Vector2Int coordinate = GameComponentData.gameData.gameManager.playerCharactor.coordinate;
-            GameComponentData.gameData.gameManager.GreatGroundItem(fishItem,new Vector2Int(coordinate.x,coordinate.y-1));
-            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("背包已满"),LanguageManage.SwitchStr("一条")
-                +selectFish.name+ LanguageManage.SwitchStr("落在地上，落在地上的道具随时会丢失，请及时回收！"));
+           
 
         }
         fishItemObj.SetActive(false);
@@ -193,7 +190,7 @@ public class FishingPanelAction : MonoBehaviour
     public void EndFishing()
     {
         AudioController.instance.PlayAudio(SE.Return);
-        GameComponentData.gameData.passDataManager.PlayerMapBGM();
+        //GameComponentData.gameData.passDataManager.PlayerMapBGM();
         gameObject.SetActive(false);
     }
     IEnumerator FishMoving()

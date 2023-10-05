@@ -60,14 +60,7 @@ public class DeskAction : MonoBehaviour
                 (int) (itemData.sellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f);
             string infomation = "*1 " + itemData.name+LanguageManage.SwitchStr("出售");
             InformationController.instance.AddInformation(infomation);
-            if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
-            {
-                GameComponentData.gameData.coinAction.CreatCoin(sellPrice, transform.position);
-            }
-            else
-            {
-                GameComponentData.gameData.coinAction.GroundMoney += sellPrice;
-            }
+            
             
 
             GameComponentData.gameData.charactorTitleAction.AddBusinessExp(sellPrice);
@@ -118,16 +111,7 @@ public class DeskAction : MonoBehaviour
                 (int)(itemData.sellPrice * GameComponentData.gameData.shopGoldDeskAction.saleValue / 100.0f) * count;
             string infomation = "*"+count+ itemData.name + LanguageManage.SwitchStr("出售");
             InformationController.instance.AddInformation(infomation);
-            if (GameComponentData.gameData.passDataManager.NowPassData.id == 1000)
-            {
-                GameComponentData.gameData.coinAction.CreatCoin(sellPrice, transform.position);
-            }
-            else
-            {
-                GameComponentData.gameData.coinAction.GroundMoney += sellPrice;
-
-                Debug.Log("sell:"+sellPrice+" Ground:"+ GameComponentData.gameData.coinAction.GroundMoney);
-            }
+             
             
 
             GameComponentData.gameData.charactorTitleAction.AddBusinessExp(sellPrice);

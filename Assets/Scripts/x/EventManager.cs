@@ -49,9 +49,9 @@ namespace OldName{
                         return true;
                     }
                     return false;
-                case EventTriggerType.切换地图:
-                    int passId = int.Parse(endTriggerValue.Split(',')[0]);
-                    return passId == GameComponentData.gameData.passDataManager.nowPass;
+                //case EventTriggerType.切换地图:
+                 //   int passId = int.Parse(endTriggerValue.Split(',')[0]);
+                    //return passId == GameComponentData.gameData.passDataManager.nowPass;
                 case EventTriggerType.特定物体Action:
                     if (GameComponent.ActionObjCode == int.Parse(endTriggerValue))
                     {

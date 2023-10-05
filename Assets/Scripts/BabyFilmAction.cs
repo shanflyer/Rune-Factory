@@ -21,110 +21,7 @@ public class BabyFilmAction : MonoBehaviour
 		
 	}
 
-    public void HaveChildAction()
-    {
-        foreach (Transform child in GameComponentData.gameData.NpcParent)
-        {
-            child.gameObject.SetActive(false);
-        }
-        GameComponentData.gameData.gameManager.playerCharactor.Obj.SetActive(false);
-        femeal.SetActive(true);
-        meal.SetActive(true);
-        if (GameComponentData.gameData.gameManager.gamePlayer.gender == Gender.female)
-        {
-            GameObject femealObj = GameComponentData.gameData.gameManager.playerCharactor.Obj;
-            NPCData mealData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.isMarried == true).npcData;
-            GameObject mealObj = GameComponent.models.Find(m => m.name == mealData.ObjName);
-
-            femealName = GameComponentData.gameData.gameManager.gamePlayer.name;
-            femealhead = GameComponentData.gameData.gameManager.gamePlayer.IconName;
-            mealName = mealData.name;
-            mealhead = mealData.headName;
-
-
-
-            List<GameObject> s0 = new List<GameObject>();
-            List<GameObject> s1 = new List<GameObject>();
-            foreach (Transform child in femealObj.transform.GetChild(0))
-            {
-                s0.Add(child.gameObject);
-            }
-            foreach (Transform child in femeal.transform.GetChild(0))
-            {
-                s1.Add(child.gameObject);
-            }
-            for (int i = 0; i < s0.Count; i++)
-            {
-                s1[i].GetComponent<SpriteRenderer>().sprite = s0[i].GetComponent<SpriteRenderer>().sprite;
-            }
-
-            List<GameObject> s2 = new List<GameObject>();
-            List<GameObject> s3 = new List<GameObject>();
-            foreach (Transform child in mealObj.transform.GetChild(0))
-            {
-                s2.Add(child.gameObject);
-            }
-            foreach (Transform child in meal.transform.GetChild(0))
-            {
-                s3.Add(child.gameObject);
-            }
-
-            for (int i = 0; i < s2.Count; i++)
-            {
-                s3[i].GetComponent<SpriteRenderer>().sprite = s2[i].GetComponent<SpriteRenderer>().sprite;
-            }
-        }
-        else
-        {
-            GameObject mealObj = GameComponentData.gameData.gameManager.playerCharactor.Obj;
-            NPCData femealData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.isMarried == true).npcData;
-            GameObject femealObj = GameComponent.models.Find(m => m.name == femealData.ObjName);
-
-
-            mealName = GameComponentData.gameData.gameManager.gamePlayer.name;
-            mealhead = GameComponentData.gameData.gameManager.gamePlayer.IconName;
-            femealName = femealData.name;
-            femealhead = femealData.headName;
-
-
-            List<GameObject> s0 = new List<GameObject>();
-            List<GameObject> s1 = new List<GameObject>();
-            foreach (Transform child in femealObj.transform.GetChild(0))
-            {
-                s0.Add(child.gameObject);
-            }
-            foreach (Transform child in femeal.transform.GetChild(0))
-            {
-                s1.Add(child.gameObject);
-            }
-            for (int i = 0; i < s0.Count; i++)
-            {
-                s1[i].GetComponent<SpriteRenderer>().sprite = s0[i].GetComponent<SpriteRenderer>().sprite;
-            }
-
-            List<GameObject> s2 = new List<GameObject>();
-            List<GameObject> s3 = new List<GameObject>();
-            foreach (Transform child in mealObj.transform.GetChild(0))
-            {
-                s2.Add(child.gameObject);
-            }
-            foreach (Transform child in meal.transform.GetChild(0))
-            {
-                s3.Add(child.gameObject);
-            }
-
-            for (int i = 0; i < s2.Count; i++)
-            {
-                s3[i].GetComponent<SpriteRenderer>().sprite = s2[i].GetComponent<SpriteRenderer>().sprite;
-            }
-        }
-        femeal.GetComponentInChildren<Animator>().SetBool("IsWalk", false);
-        filmObj.SetActive(true);
-        oldWoman.SetActive(true);
-        childObj0.SetActive(true);
-
-        //GameComponentData.gameData.talkTextsManager.TalkAction("1515", null);
-    }
+  
 
     public void SetChildName()
     {
@@ -135,117 +32,8 @@ public class BabyFilmAction : MonoBehaviour
         StartCoroutine("ChangeChilding");
     }
 
-    IEnumerator ChangeChilding()
-    {
-        childObj0.SetActive(false);
-        oldWoman.GetComponentInChildren<NPCAnimationAction>().SetDirection(Direction.UP);
-        yield return new WaitForSeconds(waitTime/2);
-        childObj1.SetActive(true);
-        yield return new WaitForSeconds(waitTime/2);
-        //GameComponentData.gameData.talkTextsManager.TalkAction("1516", null);
-    }
-    public void PlayPregnancy()
-    {
-        foreach (Transform child in GameComponentData.gameData.NpcParent)
-        {
-            child.gameObject.SetActive(false);
-        }
-        GameComponentData.gameData.gameManager.playerCharactor.Obj.SetActive(false);
-        femeal.SetActive(true);
-        meal.SetActive(true);
-        if (GameComponentData.gameData.gameManager.gamePlayer.gender == Gender.female)
-        {
-            GameObject femealObj = GameComponentData.gameData.gameManager.playerCharactor.Obj;
-            NPCData mealData=GameComponentData.gameData.NpcManager.Npcxs.Find(n=>n.isMarried==true).npcData;
-            GameObject mealObj=GameComponent.models.Find(m=>m.name==mealData.ObjName);
-
-            femealName = GameComponentData.gameData.gameManager.gamePlayer.name;
-            femealhead = GameComponentData.gameData.gameManager.gamePlayer.IconName;
-            mealName = mealData.name;
-            mealhead = mealData.headName;
-
-
-
-            List<GameObject> s0 = new List<GameObject>();
-            List<GameObject> s1 = new List<GameObject>();
-            foreach (Transform child in femealObj.transform.GetChild(0))
-            {
-                s0.Add(child.gameObject);
-            }
-            foreach (Transform child in femeal.transform.GetChild(0))
-            {
-                s1.Add(child.gameObject);
-            }
-            for (int i = 0; i < s0.Count; i++)
-            {
-                s1[i].GetComponent<SpriteRenderer>().sprite = s0[i].GetComponent<SpriteRenderer>().sprite;
-            }
-
-            List<GameObject> s2 = new List<GameObject>();
-            List<GameObject> s3 = new List<GameObject>();
-            foreach (Transform child in mealObj.transform.GetChild(0))
-            {
-                s2.Add(child.gameObject);
-            }
-            foreach (Transform child in meal.transform.GetChild(0))
-            {
-                s3.Add(child.gameObject);
-            }
-
-            for (int i = 0; i < s2.Count; i++)
-            {
-                s3[i].GetComponent<SpriteRenderer>().sprite = s2[i].GetComponent<SpriteRenderer>().sprite;
-            }
-        }
-        else
-        {
-            GameObject mealObj = GameComponentData.gameData.gameManager.playerCharactor.Obj;
-            NPCData femealData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.isMarried == true).npcData;
-            GameObject femealObj = GameComponent.models.Find(m => m.name == femealData.ObjName);
-
-
-            mealName = GameComponentData.gameData.gameManager.gamePlayer.name;
-            mealhead = GameComponentData.gameData.gameManager.gamePlayer.IconName;
-            femealName = femealData.name;
-            femealhead = femealData.headName;
-
-
-            List<GameObject> s0 = new List<GameObject>();
-            List<GameObject> s1 = new List<GameObject>();
-            foreach (Transform child in femealObj.transform.GetChild(0))
-            {
-                s0.Add(child.gameObject);
-            }
-            foreach (Transform child in femeal.transform.GetChild(0))
-            {
-                s1.Add(child.gameObject);
-            }
-            for (int i = 0; i < s0.Count; i++)
-            {
-                s1[i].GetComponent<SpriteRenderer>().sprite = s0[i].GetComponent<SpriteRenderer>().sprite;
-            }
-
-            List<GameObject> s2 = new List<GameObject>();
-            List<GameObject> s3 = new List<GameObject>();
-            foreach (Transform child in mealObj.transform.GetChild(0))
-            {
-                s2.Add(child.gameObject);
-            }
-            foreach (Transform child in meal.transform.GetChild(0))
-            {
-                s3.Add(child.gameObject);
-            }
-
-            for (int i = 0; i < s2.Count; i++)
-            {
-                s3[i].GetComponent<SpriteRenderer>().sprite = s2[i].GetComponent<SpriteRenderer>().sprite;
-            }
-        }
-        femeal.GetComponentInChildren<Animator>().SetBool("IsWalk",false);
-        filmObj.SetActive(true);
-
-        //GameComponentData.gameData.talkTextsManager.TalkAction("1509",null);
-    }
+  
+  
 
     public void HaveChildEnd()
     {
@@ -279,7 +67,7 @@ public class BabyFilmAction : MonoBehaviour
                 {
                     child.gameObject.SetActive(true);
                 }
-                GameComponentData.gameData.gameManager.playerCharactor.Obj.SetActive(true);
+               // GameComponentData.gameData.gameManager.playerCharactor.Obj.SetActive(true);
                 filmObj.SetActive(false);
                 speed = -speed;
             }
@@ -332,7 +120,7 @@ public class BabyFilmAction : MonoBehaviour
                 {
                     child.gameObject.SetActive(true);
                 }
-                GameComponentData.gameData.gameManager.playerCharactor.Obj.SetActive(true);
+               // GameComponentData.gameData.gameManager.playerCharactor.Obj.SetActive(true);
                 filmObj.SetActive(false);
                 speed = -speed;
             }
@@ -369,7 +157,7 @@ public class BabyFilmAction : MonoBehaviour
                 timeValue = 1;
                 yield return new WaitForSeconds(waitTime);
                 oldWoman.SetActive(true);
-                oldWoman.GetComponentInChildren<NPCAnimationAction>().SetDirection(Direction.LEFT);
+                //oldWoman.GetComponentInChildren<NPCAnimationAction>().SetDirection(Direction.LEFT);
                 speed = -speed;
             }
             timeValue += speed;

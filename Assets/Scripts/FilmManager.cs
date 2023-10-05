@@ -250,7 +250,7 @@ namespace OldName
                 switch (nowFilm.filmType)
                 {
                     case FilmType.普通:
-                        GameComponentData.gameData.passDataManager.PlayerMapBGM();
+                       // GameComponentData.gameData.passDataManager.PlayerMapBGM();
                         break;
                     case FilmType.结婚:
                         GameComponentData.gameData.loveAction.WeddingEnd();
@@ -345,54 +345,7 @@ namespace OldName
             GameObject mealObj, femealObj;
             mealObj = GameObject.FindGameObjectWithTag("mealObj");
             femealObj = GameObject.FindGameObjectWithTag("femealObj");
-            if (GameComponentData.gameData.NpcManager.Npcxs.Exists(n => n.isMarried))
-            {
-                if (mealObj != null && femealObj != null)
-                {
-                    GameObject _mealobj, _femealObj;
-                    GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-                    NPCData npcData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.isMarried).npcData;
-                    if (gamePlayer.gender == Gender.male)
-                    {
-                        _mealobj = GameComponentData.gameData.gameManager.playerCharactor.Obj;
-                        _femealObj = GameComponent.models.Find(m => m.name == npcData.ObjName);
-                    }
-                    else
-                    {
-                        _femealObj = GameComponentData.gameData.gameManager.playerCharactor.Obj;
-                        _mealobj = GameComponent.models.Find(m => m.name == npcData.ObjName);
-                    }
-                    List<GameObject> s0 = new List<GameObject>();
-                    List<GameObject> s1 = new List<GameObject>();
-                    foreach (Transform child in _femealObj.transform.GetChild(0))
-                    {
-                        s0.Add(child.gameObject);
-                    }
-                    foreach (Transform child in femealObj.transform.GetChild(0))
-                    {
-                        s1.Add(child.gameObject);
-                    }
-                    for (int i = 0; i < s0.Count; i++)
-                    {
-                        s1[i].GetComponent<SpriteRenderer>().sprite = s0[i].GetComponent<SpriteRenderer>().sprite;
-                    }
-
-                    List<GameObject> s2 = new List<GameObject>();
-                    List<GameObject> s3 = new List<GameObject>();
-                    foreach (Transform child in _mealobj.transform.GetChild(0))
-                    {
-                        s2.Add(child.gameObject);
-                    }
-                    foreach (Transform child in mealObj.transform.GetChild(0))
-                    {
-                        s3.Add(child.gameObject);
-                    }
-                    for (int i = 0; i < s0.Count; i++)
-                    {
-                        s2[i].GetComponent<SpriteRenderer>().sprite = s3[i].GetComponent<SpriteRenderer>().sprite;
-                    }
-                }
-            }
+          
 
         }
         public void FilmEndAction()

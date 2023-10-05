@@ -162,11 +162,7 @@ public class IntelligencePanelAction : MonoBehaviour
     public void ClickReturn()
     {
         AudioController.instance.PlayAudio(SE.Return);
-        if (GameComponentData.gameData.passDataManager.NowPassData.id == 1001&&
-            !GameComponentData.gameData.adventurePanelAction.gameObject.activeSelf)
-        {
-            GameComponentData.gameData.gameManager.fieldTool.SetActive(true);
-        }
+        
         gameObject.SetActive(false);
     }
     public void ClickCharactorTitle()
@@ -175,12 +171,7 @@ public class IntelligencePanelAction : MonoBehaviour
         CharactortitleObj.SetActive(true);
         GameComponentData.gameData.charactorTitleAction.InitData();
     }
-    public void ClickNPCButton()
-    {
-        AudioController.instance.PlayAudio(SE.click);
-        NpcListPanel.SetActive(true);
-        NpcListPanel.GetComponent<NPCListDataPanelAction>().InitNpcListData();
-    }
+   
     public void ClickWeapon(int index)
     {
         AudioController.instance.PlayAudio(SE.click);

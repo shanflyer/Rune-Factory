@@ -82,14 +82,7 @@ public class Heritage
                     break;
                 case HeritageType.友好度:
                     int x = 0;
-                    foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-                    {
-                        x += npcx.npcData.friendlyLevel;
-                    }
-                    if (x / GameComponentData.gameData.NpcManager.Npcxs.Count >= heritageValue)
-                    {
-                        isGet = true;
-                    }
+                  
                     break;
             }
         }
@@ -185,17 +178,7 @@ public class Heritage
                         break;
                     case HeritageType.友好度:
                         int x = 0;
-                        foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-                        {
-                            x += npcx.npcData.friendlyLevel;
-                        }
-                        if (x / GameComponentData.gameData.NpcManager.Npcxs.Count >= heritageValue)
-                        {
-                            isGet = true;
-                            GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
-                            GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
-                                                                     openNotice);
-                        }
+                       
                         break;
                 }
                 bookObj.SetActive(isGet);

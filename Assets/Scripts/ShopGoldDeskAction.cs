@@ -74,24 +74,7 @@ public class ShopGoldDeskAction : MonoBehaviour
             }
            // ProfessionData deskProfessionData = CharactorDataAction.professionDatas[1];
            // InfluenceData deskInfluenceData = InfluenceAction.influenceDates0.Find(i => i.name == Influence.NPC0);
-            for (int i = 0; i < OpenDeskCoordinates.Count; i++)
-            {
-                Vector2Int deskCoordinate = OpenDeskCoordinates[i];
-                Vector3 pos = AStarTest.CoordinateToPos(deskCoordinate);
-                GameObject deskObj = Instantiate(deskPro, pos, Quaternion.identity);
-                DeskAction deskAction = deskObj.GetComponent<DeskAction>();
-                deskAction.WarehouseObj = wareHouse;
-                deskAction.DeskItemInformationObj = DeskItemPanel;
-                deskObj.transform.SetParent(deskParent);
-                Desk desk = new Desk(i, "货柜", deskObj, 1000, deskCoordinate, deskObj.GetComponent<DeskAction>());
-                GoodDeskes.Add(desk);
-            }
-            if (openCount < deskCoordinates.Count)
-            {
-                Vector3 pos = AStarTest.CoordinateToPos(deskCoordinates[openCount]);
-                NullDesk = Instantiate(NullDeskPro, pos, Quaternion.identity);
-                NullDesk.transform.SetParent(deskParent);
-            }
+            
         }
         else
         {
@@ -148,24 +131,9 @@ public class ShopGoldDeskAction : MonoBehaviour
         {
             openCount++;
             OpenDeskCoordinates.Add(deskCoordinates[openCount-1]);
-            Vector2Int deskCoordinate = OpenDeskCoordinates[openCount-1];
-            Vector3 deskpos = AStarTest.CoordinateToPos(deskCoordinate);
-            GameObject deskObj = Instantiate(deskPro, deskpos, Quaternion.identity);
-            DeskAction deskAction = deskObj.GetComponent<DeskAction>();
-            deskAction.WarehouseObj = wareHouse;
-            deskAction.DeskItemInformationObj = DeskItemPanel;
-            deskObj.transform.SetParent(deskParent);
-            Desk desk = new Desk(openCount - 1, "货柜", deskObj, 1000, deskCoordinate, deskObj.GetComponent<DeskAction>());
-            GoodDeskes.Add(desk);
+            
 
            
-            Destroy(NullDesk);
-            if (openCount < deskCoordinates.Count)
-            {
-                Vector3 pos = AStarTest.CoordinateToPos(deskCoordinates[openCount]);
-                NullDesk = Instantiate(NullDeskPro, pos, Quaternion.identity);
-                NullDesk.transform.SetParent(deskParent);
-            }
         }
         
     }
@@ -259,7 +227,7 @@ public class ShopGoldDeskAction : MonoBehaviour
                 StopCoroutine("CreatNPC");
                 StartCoroutine("BackGroundSell");
                 countOpen++;
-                GameComponentData.gameData.peopleAction.CleraAllNPC();
+                //GameComponentData.gameData.peopleAction.CleraAllNPC();
             }
 
             GameComponentData.gameData.coinAction.LeaveShopMap();
@@ -305,17 +273,17 @@ public class ShopGoldDeskAction : MonoBehaviour
                 {
                     if (goldDesks[goldIndex].item.dataId != 0 && Random.Range(0,100)>50)
                     {
-                        GameComponentData.gameData.peopleAction.CreatNPC(startCoordinate, endCoordinate, goldCoordinate, shopingTime, goldDesks[goldIndex].deskAction);
+                       // GameComponentData.gameData.peopleAction.CreatNPC(startCoordinate, endCoordinate, goldCoordinate, shopingTime, goldDesks[goldIndex].deskAction);
                     }
                     else
                     {
-                        GameComponentData.gameData.peopleAction.CreatNPC(startCoordinate, endCoordinate, endCoordinate, 0, null);
+                       // GameComponentData.gameData.peopleAction.CreatNPC(startCoordinate, endCoordinate, endCoordinate, 0, null);
                     }
 
                 }
                 else
                 {
-                    GameComponentData.gameData.peopleAction.CreatNPC(startCoordinate, endCoordinate, goldCoordinate, 0, null);
+                  //  GameComponentData.gameData.peopleAction.CreatNPC(startCoordinate, endCoordinate, goldCoordinate, 0, null);
                 }
 
                 timeValue = 0;

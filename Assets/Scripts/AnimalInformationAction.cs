@@ -20,16 +20,16 @@ public class AnimalInformationAction : MonoBehaviour
 
     public void ChangeAnimal(InputField _inputField)
     {
-        animal.Name = _inputField.text;
+       // animal.Name = _inputField.text;
     
     }
     public void InitAnimal(OldName.Animal _animal)
     {
         animal = _animal;
-        AnimalNameInputField.text = animal.Name;
+       // AnimalNameInputField.text = animal.Name;
         animalAge.text = LanguageManage.SwitchStr(animal.ageStatus.ToString());
         animalStatus.text = LanguageManage.SwitchStr(animal.animalStatus.ToString());
-        animalImage.sprite = animal.Obj.GetComponentInChildren<SpriteRenderer>().sprite;
+       //animalImage.sprite = animal.Obj.GetComponentInChildren<SpriteRenderer>().sprite;
     }
 
     public void ClickSetAnimal()

@@ -50,38 +50,7 @@ public class MarryNpcAction : MonoBehaviour
     }
     public void HideNpc()
     {
-        string objName = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.isMarried == true).npcData.ObjName;
-        var x0 = left.Find(objName);
-        if (GameComponentData.gameData.gameManager.gamePlayer.gender == Gender.male)
-        {
-            ChangeModel(gril.gameObject, objName);
-
-        }
-        else
-        {
-            ChangeModel(boy.gameObject, objName);
-        }
-        if (x0 != null)
-        {
-           x0.gameObject.SetActive(false);
-           
-        }
-        else
-        {
-            var x1 = right.Find(objName);
-            if (x1 != null)
-            {
-                x1.gameObject.SetActive(false);
-            }
-            else
-            {
-                var x2 = down.Find(objName);
-                if (x2 != null)
-                {
-                    x2.gameObject.SetActive(false);
-                }
-            }
-        }
+       
 
         
     }

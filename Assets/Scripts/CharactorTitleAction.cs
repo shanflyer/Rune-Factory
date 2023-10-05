@@ -453,15 +453,7 @@ public class CharactorTitleAction : MonoBehaviour
     }
     public void CheckFriendly()
     {
-        var charactorTitles = CharactorTitles.FindAll(c => !c.isGet && c.titleType == TitleType.其他 &&
-                                                           c.typeValue == 2 &&
-                                                           !GameComponentData.gameData.NpcManager.Npcxs.Exists(
-                                                               n => n.npcData.friendlyLevel <= int.Parse(c.valueStr)));
-        foreach (var charactorTitle in charactorTitles)
-        {
-            charactorTitle.isGet = true;
-            GetCharactorTitles.Add(charactorTitle);
-        }
+        
         DisplayGetTitle();
     }
     public void AddGetItems(int itemId)

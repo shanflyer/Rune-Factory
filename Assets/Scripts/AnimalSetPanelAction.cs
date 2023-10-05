@@ -29,9 +29,9 @@ public class AnimalSetPanelAction : MonoBehaviour
             LanguageManage.TextFanyi(text);
         }
         animal = _animal;
-        animalImage.sprite = animal.Obj.GetComponentInChildren<SpriteRenderer>().sprite;
-        AnimalNameText.text = animal.Name;
-        animalLevel.text = animal.level.ToString();
+        //animalImage.sprite = animal.Obj.GetComponentInChildren<SpriteRenderer>().sprite;
+       // AnimalNameText.text = animal.Name;
+       // animalLevel.text = animal.level.ToString();
         animalAge.text = LanguageManage.SwitchStr(animal.ageStatus.ToString());
         animalStatus.text = LanguageManage.SwitchStr(animal.animalStatus.ToString());
         animalCaseCountText.text =LanguageManage.SwitchStr("占据空间:")+animal.animalData.caseCount.ToString();
@@ -47,17 +47,17 @@ public class AnimalSetPanelAction : MonoBehaviour
     public void GetOutToNorture()
     { 
         AudioController.instance.PlayAudio(SE.click);
-        Destroy(animal.Obj);
+       // Destroy(animal.Obj);
         animal.pasture.Animals.Remove(animal);
         animal.pasture.animalCaseCount -= animal.animalData.caseCount;
         GameComponentData.gameData.pasturePanelAction.UpdataPasturePanelData();
-        foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-        {
-            npcx.AddFriendlyexp(1);
-        }
+       // foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
+       // {
+       //     npcx.AddFriendlyexp(1);
+       // }
         
         GameComponentData.gameData.pasturePanelAction.UpdataPasturePanelData(); 
-        InformationController.instance.AddInformation("*" + animal.Name +LanguageManage.SwitchStr(" 被放归野外，全体居民好感度加1"));
+       // InformationController.instance.AddInformation("*" + animal.Name +LanguageManage.SwitchStr(" 被放归野外，全体居民好感度加1"));
         gameObject.SetActive(false);
     }
     public async void KillAnimal()
@@ -70,10 +70,10 @@ public class AnimalSetPanelAction : MonoBehaviour
         if (await PackageManager.instance.CheckPackageTryItemIn(0,itemData.id, 1))
         {
             PackageManager.instance.SetItemInPackage(item, 0); 
-            InformationController.instance.AddInformation("*" + animal.Name + LanguageManage.SwitchStr("被宰杀，获得") + 1 + LanguageManage.SwitchStr("个 ") + itemData.name);
-            animal.pasture.animalCaseCount -= animal.animalData.caseCount;
-            Destroy(animal.Obj);
-            GameComponentData.gameData.employerManger.AnimalDead(animal.id);
+           // InformationController.instance.AddInformation("*" + animal.Name + LanguageManage.SwitchStr("被宰杀，获得") + 1 + LanguageManage.SwitchStr("个 ") + itemData.name);
+           // animal.pasture.animalCaseCount -= animal.animalData.caseCount;
+           // Destroy(animal.Obj);
+           // GameComponentData.gameData.employerManger.AnimalDead(animal.id);
             animal.pasture.Animals.Remove(animal);
             animal.pasture.animalCaseCount -= animal.animalData.caseCount;
             GameComponentData.gameData.pasturePanelAction.UpdataPasturePanelData();

@@ -64,25 +64,7 @@ namespace OldName
             {
                 property.HP = 0;
             }
-            if (id / 1000000 == 2)
-            {
-                Employer employer = GameComponentData.gameData.employerManger.Employers.Find(e => e.id == id);
-                Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.Animals.Exists(a => a.id == id));
-                Animal animal = pasture.Animals.Find(a => a.id == id);
-                animal.property.HP = property.HP;
-                employer.property.HP = property.HP;
-            }
-            else
-            {
-                NPCX npcx = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == id);
-                if (npcx != null)
-                {
-                    npcx.property.HP = property.HP;
-                    Employer employer = GameComponentData.gameData.employerManger.Employers.Find(e => e.id == id);
-                    employer.property.HP = property.HP;
-                }
-
-            }
+           
         }
         public TeamPlayer(Employer _employer)
         {
@@ -193,8 +175,7 @@ namespace OldName
 
             TeamPlayer0 = null;
             TeamPlayer1 = null;
-            ProfessionData playerProfessionData =
-                GameComponentData.gameData.charactorDataAction.professionDatas0.Find(p => p.id == 8);
+         
            //property = playerProfessionData.ZeroProperty + playerProfessionData.GetPropertyFromLevel(level);
             attributeType = AttributeType.无;
             if (PlayerDate.weapon == 0)

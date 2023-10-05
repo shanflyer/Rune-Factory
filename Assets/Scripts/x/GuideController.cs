@@ -88,10 +88,7 @@ public class Guide
                     return GameComponentData.gameData.guideController.startGame;
                     
                 case GuideTriggerType.进入地图:
-                    if (GameComponentData.gameData.passDataManager.nowPass == int.Parse(guideTriggerValue))
-                    {
-                        return true;
-                    }
+                   
                     return false;
                case GuideTriggerType.电影结束:
                    return GameComponentData.gameData.guideController.filmId == int.Parse(guideTriggerValue) ;

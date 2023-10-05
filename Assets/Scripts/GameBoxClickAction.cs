@@ -145,18 +145,7 @@ public class GameBoxClickAction : MonoBehaviour
     }
     public void SetCoordinate(GameObject obj)
     {
-        if (DataSaveAndLoadTest.isJsonData)
-        {
-            coordinate = AStarTest.PosToCoordinate(obj.transform.position);
-            GameComponentData.gameData.gameManager.euqipmentCoordinate = coordinate;
-        }
-        else
-        if (GameComponentData.gameData.guideController.nowGuide == null &&
-            GameComponentData.gameData.filmManager.nowFilm == null)
-        {
-            coordinate = AStarTest.PosToCoordinate(obj.transform.position);
-            GameComponentData.gameData.gameManager.euqipmentCoordinate = coordinate;
-        }
+      
         
     }
     // Update is called once per frame

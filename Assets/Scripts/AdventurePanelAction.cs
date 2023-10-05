@@ -88,17 +88,7 @@ public class AdventurePanelAction : MonoBehaviour
         PlaceObjs[0].GetComponent<PlacePanelAction>().ClickToggleButton();
     }
 
-    public void ReturnButton()
-    {
-        gameObject.SetActive(false);
-        GameComponentData.gameData.SaveButtonObj.SetActive(true);
-        AudioController.instance.PlayAudio(SE.Return);
-        if (GameComponentData.gameData.passDataManager.NowPassData.id == 1001)
-        {
-            GameComponentData.gameData.gameManager.fieldTool.SetActive(true);
-        }
-        GameComponentData.gameData.passDataManager.PlayerMapBGM();
-    }
+   
 
     public void ZeroEploring()
     {

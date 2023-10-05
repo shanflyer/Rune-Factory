@@ -35,30 +35,30 @@ public class EmplorPanelAction : MonoBehaviour
         employer = _employer;
         if (employer.employType == EmployType.NPC)
         {
-            NPCData npcData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == employer.id).npcData;
+           // NPCData npcData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == employer.id).npcData;
             friendObj.SetActive(true);
-            FriendText.text = npcData.friendlyLevel.ToString();
+           // FriendText.text = npcData.friendlyLevel.ToString();
             float modulus = 1.0f;
-            if (npcData.friendlyLevel >= 10)
+            //if (npcData.friendlyLevel >= 10)
             {
                 FrientLevelText.text = LanguageManage.SwitchStr("亲密");
                 modulus = 0.0f;
             }
-            else if(npcData.friendlyLevel>=7)
+           // else if(npcData.friendlyLevel>=7)
             {
                 FrientLevelText.text = LanguageManage.SwitchStr("友爱");
                 modulus = 0.3f;
             }
-            else if(npcData.friendlyLevel>=4)
+            //else if(npcData.friendlyLevel>=4)
             {
                 FrientLevelText.text = LanguageManage.SwitchStr("要好");
                 modulus = 0.6f;
             }
-            else if(npcData.friendlyLevel>=2)
+           // else if(npcData.friendlyLevel>=2)
             {
                 FrientLevelText.text = LanguageManage.SwitchStr("熟悉");
             }
-            else
+            //else
             {
                 FrientLevelText.text = LanguageManage.SwitchStr("陌生");
             }
@@ -68,7 +68,7 @@ public class EmplorPanelAction : MonoBehaviour
             _employer.cost = emplorCost;
             if (employer.employType == EmployType.NPC)
             {
-                if (GameComponentData.gameData.NpcManager.NpcDatas.Find(n => n.id == employer.id).professionId==10)
+              //  if (GameComponentData.gameData.NpcManager.NpcDatas.Find(n => n.id == employer.id).professionId==10)
                 {
                     _employer.cost = 0;
                 }
@@ -78,7 +78,7 @@ public class EmplorPanelAction : MonoBehaviour
         {
             friendObj.SetActive(false);
         }
-        OldName. ProfessionData professionData = CharactorDataAction.professionDatas.Find(p => p.id == employer.id / 1000);
+       // OldName. ProfessionData professionData = CharactorDataAction.professionDatas.Find(p => p.id == employer.id / 1000);
         emplorImage.sprite = GameComponent.charactorIcon.Find(c => c.name == employer.charactorImage);
         emplorNameText.text = employer.name;
         LevelText.text = "Lv." + employer.level;

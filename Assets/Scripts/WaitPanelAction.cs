@@ -57,7 +57,7 @@ public class WaitPanelAction : MonoBehaviour
     public void SleepEndAction()
     {
         GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("新的一天开始了！"));
-        GameComponentData.gameData.passDataManager.PlayerMapBGM();
+        //GameComponentData.gameData.passDataManager.PlayerMapBGM();
         GetComponent<Animator>().SetBool("IsSleep", false);
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         gamePlayer.property.HP = gamePlayer.property.MaxHP;

@@ -61,18 +61,7 @@ public class FestivalManager : Singleton<FestivalManager>
             };
         FestivalDatas.Add(festivalData0);
 
-        foreach (var npcx in GameComponentData.gameData.NpcManager.Npcxs)
-        {
-            FestivalData festivalData = new FestivalData
-            {
-                date = npcx.npcData.brothDate,
-                season = npcx.npcData.brothSeason,
-                id = npcx.id,
-                name = npcx.npcData.name + LanguageManage.SwitchStr(" 的生日"),
-                festivalType = FestivalType.纪念
-            };
-            FestivalDatas.Add(festivalData);
-        }
+        
 
     }
     void CreatNPCBrothDay()
@@ -93,31 +82,7 @@ public class FestivalManager : Singleton<FestivalManager>
         gameTimes.Add(gameTime);
        
 
-        foreach (var npcManagerNpcData in GameComponentData.gameData.NpcManager.NpcDatas)
-        {
-            GameTime x;
-            
-            while (true)
-            {
-                Season season = (Season)Random.Range(1, 5);
-                int day = Random.Range(1, 31);
-                x = new GameTime(0, season, day, 0, 0);
-                if (!gameTimes.Contains(x))
-                {
-                    break;
-                }
-            }
-            gameTimes.Add(x);
-            FestivalData festivalData = new FestivalData
-            {
-                date = x.gameDate.date,
-                season = x.gameDate.season,
-                id = npcManagerNpcData.id,
-                name = npcManagerNpcData.name + LanguageManage.SwitchStr(" 的生日"),
-                festivalType = FestivalType.纪念
-            };
-            FestivalDatas.Add(festivalData);
-        }
+   
     }
    
 }
