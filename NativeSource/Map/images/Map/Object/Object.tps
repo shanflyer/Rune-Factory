@@ -1176,6 +1176,36 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">柜台.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.791667</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,12,32,24</rect>
+                <key>scale9Paddings</key>
+                <rect>16,12,32,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">柜台H.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.603175</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,31</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,31</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">柜子.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>

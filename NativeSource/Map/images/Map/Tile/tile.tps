@@ -441,6 +441,7 @@
             <key type="filename">木入口63.png</key>
             <key type="filename">木入口64.png</key>
             <key type="filename">木入口65.png</key>
+            <key type="filename">木地板.png</key>
             <key type="filename">木墙143.png</key>
             <key type="filename">木墙144.png</key>
             <key type="filename">木墙145.png</key>
