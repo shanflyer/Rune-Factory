@@ -21,8 +21,24 @@ public class InformationController : Singleton<InformationController>
     }
 
     InformationShowPanel InformationShowPanel;
+    PromptPanel PromptPanel
+    {
+        get
+        {
+            if (_PromptPanel == null)
+            {
+                GetPromptPanel();
+                async void GetPromptPanel()
+                {
+                    _PromptPanel = await UIManager.instance.GetGamePanel<PromptPanel>();
+                }
+            }
+            return _PromptPanel;
+        }
+    }
+    PromptPanel _PromptPanel;
     bool nowShow = false;
-    void ShowInformation()
+   async void ShowInformation()
     { 
         if(informationsQueue.Count>0)
         {
@@ -32,7 +48,7 @@ public class InformationController : Singleton<InformationController>
 
             if (InformationShowPanel == null)
             {
-                InformationShowPanel = UIManager.instance.GetGamePanel<InformationShowPanel>();
+                InformationShowPanel =await UIManager.instance.GetGamePanel<InformationShowPanel>(true);
             }
             InformationShowPanel.SetInfo(information);
         }
@@ -41,7 +57,7 @@ public class InformationController : Singleton<InformationController>
             nowShow = false;
         }       
     }
-    public void AddInformation(string information,bool Show = true)
+    public void AddInformation(string information,bool Show = true,bool PromptShow=false)
     {
         if (nowIndex >= 200)
         {
@@ -59,11 +75,17 @@ public class InformationController : Singleton<InformationController>
                 ShowInformation();
             }
         }
-        InformationPanel informationPanel = UIManager.instance.GetGamePanel<InformationPanel>();
-        if (informationPanel)
+        if (PromptShow&& PromptPanel!=null)
         {
-            informationPanel.AddInfo(information);
+            PromptPanel.InitData(information);
+            GameTimerController.instance.DeleyActionMain((int)(GameCommon.PromptTime*1000), ClosePromptPanel);
         }
     }
-
+    void ClosePromptPanel()
+    {
+        if (PromptPanel != null)
+        {
+            PromptPanel.Close();
+        }
+    }
 }
