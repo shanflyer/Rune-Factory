@@ -47,8 +47,7 @@ public class GameComponent : MonoBehaviour
     public PastureAction pastureAction;
     public PastureItemPanelAction pastureItemPanelAction;
     public PasturePanelAction pasturePanelAction;
-    public AnimalSetPanelAction animalSetPanelAction; 
-    public GameObject  PromptObj; 
+    public AnimalSetPanelAction animalSetPanelAction;  
     public EquipmentManager equipmentManager;
     public static List<Sprite> charactorIcon;
     public static List<Sprite> headIcons;
@@ -68,9 +67,7 @@ public class GameComponent : MonoBehaviour
         sleepObj.GetComponent<WaitPanelAction>().InitData(_waitType,_text);
     }
     public void DisplayPrompt(string content)
-    {
-        PromptObj.SetActive(true);
-        PromptObj.GetComponent<PromptAction>().AddInformation(content);
+    { 
     }
   
     public void InitData()

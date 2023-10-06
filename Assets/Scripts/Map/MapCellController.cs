@@ -4,6 +4,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -468,31 +469,67 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="nowCell"></param>
     /// <param name="triggerEvent"></param>
     public void CheckPlayerTriggerEvent(int room, int2 oldCell, int2 nowCell,
-        TriggerEvent triggerEvent)
+        TriggerEvent triggerEvent,int oldLink=0)
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
                 (runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.TempJob);
 
-            TriggerJob triggerJob = new TriggerJob
+            TriggerPlayerJob triggerJob = new TriggerPlayerJob
             {
                 TriggerAreas = runtimeMapRoom.playerTriggerAreas.triggerAreas,
                 oldCell = oldCell,
                 nowCell = nowCell,
+                oldLinkId=oldLink,
                 triggerType = EntityType.玩家,
                 triggerEvents = triggerEvents
             };
             triggerJob.Schedule(triggerEvents.Length, 8).Complete();
             int length = triggerJob.triggerEvents.Length;
+            List<int3> enterEventDatas = new List<int3>();
             for (int i = 0; i < length; i++)
             {
                 int eventId = triggerJob.triggerEvents[i].x;
-                if (eventId != 0)
+                if (eventId == 0)
+                {
+                    continue;
+                }
+                if (triggerEvents[i].z == 0)
+                {
+                    enterEventDatas.Add(triggerEvents[i]);
+                }
+                else
                 {
                     triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1);
-                }
+                } 
             }
+            if (enterEventDatas.Count != 0)
+            {
+                //判断最近距离
+                float distance = 1000;
+                int3 selectEventData = enterEventDatas[0];
+                for (int i = 0; i < enterEventDatas.Count; i++)
+                {
+                    if (WorldMapManager.instance.GetMapItemPos(enterEventDatas[i].y, out var objCoordinate))
+                    {
+                        float dis = CharacterManager.instance.GetDistanceController(objCoordinate.coordinate);
+                        if (dis < distance)
+                        {
+                            distance = dis;
+                            selectEventData = enterEventDatas[i];
+                        }
+                    }
+                    else
+                    {
+                        selectEventData = enterEventDatas[i];
+                        break;
+                    }
+                }
+                triggerEvent(selectEventData.x, selectEventData.y, selectEventData.z == 1);
+            }
+            
+
             triggerEvents.Dispose();
         }
     }
@@ -876,11 +913,52 @@ public class MapCellController : Singleton<MapCellController>
 
             if (oldContanins && !nowContanins)
             {
-                triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 1);
+                //离开事件
+                triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
             }
             else if (!oldContanins && nowContanins)
             {
-                triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 0);
+                //进入事件
+                triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
+            }
+        }
+    }
+    public struct TriggerPlayerJob : IJobParallelFor
+    {
+        // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
+        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+
+        [WriteOnly] public NativeArray<int3> triggerEvents;
+        [ReadOnly] public int oldLinkId;
+        [ReadOnly] public int2 oldCell;
+        [ReadOnly] public int2 nowCell;
+        [ReadOnly] public EntityType triggerType;
+
+        public void Execute(int index)
+        {
+            TriggerArea triggerArea = TriggerAreas[index];
+            int typeValue = (int)triggerArea.triggerType % (int)triggerType;
+            if (typeValue > 0)
+            {
+                return;
+            }
+            bool oldContanins = triggerArea.cells.Contains(oldCell);
+            bool nowContanins = triggerArea.cells.Contains(nowCell);
+            if (triggerArea.referenceId == oldLinkId)
+            {
+                if (oldContanins && !nowContanins)
+                {
+                    //离开事件
+                    triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
+                }
+            }
+            else
+            {
+                if (nowContanins)
+                {
+                    //进入
+                    triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
+                } 
             }
         }
     }

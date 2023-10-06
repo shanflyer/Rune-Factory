@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
-using UnityEngine.UIElements.Experimental;
 using UnityEngine.Timeline;
 using UnityEngine.Rendering;
 using Unity.Mathematics;
 using System;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -31,6 +32,7 @@ public class GameController : MonoBehaviour
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController");
 
+        var gameManager = GameManager.instance;
         var gameActionDataManager = GameActionDataManager.instance;
         var gameRandom = GameRandom.instance;
         var exploreManger = ExploreManager.instance;
@@ -73,12 +75,63 @@ public class GameController : MonoBehaviour
     }
 
     public void Test()
-    { 
-        Debug.Log($"B:{B.test},C:{C.test}");
+    {
+       NativeList<TriggerArea> list = new NativeList<TriggerArea>(2, Allocator.Temp);
+        TriggerArea triggerArea = new TriggerArea
+        {
+            cells = new UnsafeHashSet<int2>(2, Allocator.Temp)
+        };
+        triggerArea.cells.Add(new int2(0, 0));
+        list.Add(triggerArea);
 
-       
+        var test = list[0];
+        foreach(var v in test.cells)
+        {
+            Debug.Log(v);
+        }
+
+        TriggerArea triggerArea1 = new TriggerArea
+        {
+            cells = new UnsafeHashSet<int2>(2, Allocator.Temp)
+        };
+        triggerArea1.cells.Add(new int2(1, 1));
+        list.Add(triggerArea1);
+
+        var test1 = list[0];
+        foreach (var v in test1.cells)
+        {
+            Debug.Log(v);
+        }
+
+        TriggerArea triggerArea2 = new TriggerArea
+        {
+            cells = new UnsafeHashSet<int2>(2, Allocator.Temp)
+        };
+        triggerArea2.cells.Add(new int2(2, 2));
+        list.Add(triggerArea2);
+
+        var test2 = list[0];
+        foreach (var v in test2.cells)
+        {
+            Debug.Log(v);
+        }
+
+        list.RemoveAt(1);
+        var test3 = list[0];
+        foreach (var v in test3.cells)
+        {
+            Debug.Log(v);
+        }
+        list.RemoveAt(0);
+        var test4 = list[0];
+        foreach (var v in test4.cells)
+        {
+            Debug.Log(v);
+        }
+        list.Dispose();
     }
-     
+    
+    
 }
 
 public  class A

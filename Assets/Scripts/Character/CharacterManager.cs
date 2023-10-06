@@ -54,7 +54,6 @@ public class CharacterManager : Singleton<CharacterManager>
     public List<Character> teamPlayers = new List<Character>();
     //private Vector2 playerMoveDirction;
 
-    private HashSet<int> instanceIds = new HashSet<int>();
 
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
@@ -100,8 +99,34 @@ public class CharacterManager : Singleton<CharacterManager>
     }
     public string PlayerName => player.name;
     public Sprite PlayerIcon => playerData.icon;
-    private Character controllerCharacter;
-   
+    private Character _controllerCharacter;
+    private Character controllerCharacter
+    {
+        set
+        {
+            if (value != _controllerCharacter)
+            {
+                if (_controllerCharacter != null)
+                {
+                    _controllerCharacter.isController = false;
+                }
+                _controllerCharacter = value;
+                if (_controllerCharacter != null)
+                {
+                    _controllerCharacter.isController = true;
+                }
+            }
+        }
+        get
+        {
+            return _controllerCharacter;
+        }
+    }
+
+    public float GetDistanceController(int2 coordinate)
+    {
+        return  math.distance(controllerCharacter.objCoordinate.coordinate, coordinate);
+    }
     public void SetControllerCharacter(int id)
     {
 

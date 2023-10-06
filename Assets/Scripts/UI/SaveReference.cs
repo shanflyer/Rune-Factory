@@ -67,11 +67,11 @@ public class SaveReference : UIObjReference<GameSaveData>
     {
         SelectToggle.group = toggleGroup;
     }
-    void SelectAction(bool value)
+    async void SelectAction(bool value)
     {
         if (value)
         {
-           var selectLoadPanel=  UIManager.instance.GetGamePanel<SelectLoadPanel>();
+           var selectLoadPanel=await  UIManager.instance.GetGamePanel<SelectLoadPanel>();
             selectLoadPanel.RefreshDataFuncButton(DataIndex,gameSaveData==null);
         }
     }

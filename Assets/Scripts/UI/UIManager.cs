@@ -6,9 +6,14 @@ using UnityEngine;
 public class UIManager:Singleton<UIManager>
 { 
     private Dictionary<Type, BaseReference> gamePanels = new Dictionary<Type, BaseReference>();
+    private Dictionary<Type, List<BaseReference>> mulitPanels = new Dictionary<Type, List<BaseReference>>();
+
     private Transform canvasParent;
     //private Canvas canvas;
-   
+    public void InitClosePanelParent(BaseReference baseReference)
+    {
+        baseReference.transform.parent = canvasParent;
+    }
     public void SetParent(Transform parent) { canvasParent = parent; }
     public override void Init()
     {
@@ -24,43 +29,46 @@ public class UIManager:Singleton<UIManager>
     }
     public bool GamePanelIsShow<T>() where T : BaseReference
     {
-        if (gamePanels.TryGetValue(typeof(T), out var gamePanel))
+        if (gamePanels.TryGetValue(typeof(T), out var gamePanel)&&gamePanel!=null)
         {
             return gamePanel.enabled;
         }
         return false;
     }
-    public T GetGamePanel<T>() where T:BaseReference
+    public async Task<T> GetGamePanel<T>(bool force=false) where T:BaseReference
     { 
-        if(gamePanels.TryGetValue(typeof(T),out var gamePanel))
+        if(gamePanels.TryGetValue(typeof(T),out var gamePanel)&&gamePanel!=null)
         {
             return (T)gamePanel;
         }
+        else if(force)
+        {
+          return await ShowGamePanel<T>();
+        }
         return null;
     }
-    public async Task<T> ShowGamePanel<T>(string dataKey = null,int layer=-1) where T : BaseReference
+    public async Task<T> ShowGamePanel<T>(string dataKey = null,int layer=-1, Transform parent = null) where T : BaseReference
     {
         var type = typeof(T);
         var gamePanel=  await ShowGamePanel(type, dataKey, layer);
         return (T)gamePanel;
     }
-    public async Task<T> ShowGamePanel<T,V>(V data, int layer = -1) where T : GamePanel<V> where V:IReferenceData
+    public async Task<T> ShowGamePanel<T,V>(V data, int layer = -1,Transform parent=null) where T : GamePanel<V> where V:IReferenceData
     {
         var type = typeof(T);
         var gamePanel = await ShowGamePanel(type, data, layer);
         return (T)gamePanel;
     }
-    async Task<GamePanel<V>> ShowGamePanel<V>(Type type, V data, int layer = -1)where V:IReferenceData
+    async Task<GamePanel<V>> ShowGamePanel<V>(Type type, V data, int layer = -1, Transform parent = null) where V:IReferenceData
     {
-        if (!gamePanels.TryGetValue(type, out BaseReference panel))
-        { 
-            var gamePanel = panel as GamePanel<V>;
+        if (!gamePanels.TryGetValue(type, out BaseReference panel)||panel==null)
+        {  
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
-            var _Panel = GameObject.Instantiate(gamePanelObj, canvasParent);
-
+            var _Panel = GameObject.Instantiate(gamePanelObj, parent==null? canvasParent:parent); 
             var gamePanelComponent = _Panel.GetComponent(type);
-
+            _Panel.transform.localPosition = Vector3.zero;
+            GamePanel<V> gamePanel;
             if (gamePanelComponent == null)
             {
                 gamePanel = (GamePanel<V>)_Panel.AddComponent(type);
@@ -77,7 +85,18 @@ public class UIManager:Singleton<UIManager>
             gamePanel.InitReferenceData(data);
             return gamePanel;
         }
-        return null;
+        else
+        {
+            if (parent != null)
+            {
+                panel.transform.SetParent(parent);
+                panel.transform.localPosition = Vector3.zero;
+            }
+            var gamePanel = panel as GamePanel<V>;
+            gamePanel.Show(layer);
+            gamePanel.InitReferenceData(data);
+            return gamePanel;
+        } 
     }
 
 
@@ -85,15 +104,15 @@ public class UIManager:Singleton<UIManager>
     {
         await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
     }
-    async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1)
+    async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null)
     {
-        if (!gamePanels.TryGetValue(type, out BaseReference gamePanel)||gamePanel.pluralUI)
+        if (!gamePanels.TryGetValue(type, out BaseReference gamePanel)||gamePanel==null||gamePanel.pluralUI)
         {
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
-            var _Panel = GameObject.Instantiate(gamePanelObj, canvasParent);
-
-           var gamePanelComponent= _Panel.GetComponent(type);
+            var _Panel = GameObject.Instantiate(gamePanelObj, parent == null ? canvasParent : parent);
+            _Panel.transform.localPosition = Vector3.zero;
+            var gamePanelComponent= _Panel.GetComponent(type);
 
             if(gamePanelComponent==null)
             {
@@ -102,10 +121,13 @@ public class UIManager:Singleton<UIManager>
             else
             {
                 gamePanel = (BaseReference)gamePanelComponent;
-            }
-            
-
+            } 
             gamePanels[type] = gamePanel;
+        }
+        if (parent != null)
+        {
+            gamePanel.transform.SetParent(parent);
+            gamePanel.transform.localPosition = Vector3.zero;
         }
         gamePanel.Show(layer); 
         await gamePanel.InitData(dataKey);
@@ -117,6 +139,11 @@ public class UIManager:Singleton<UIManager>
         var type = typeof(T);
         if(gamePanels.TryGetValue(type,out BaseReference gamePanel))
         {
+            if (gamePanel == null)
+            {
+                gamePanels.Remove(type);
+                return;
+            }
             gamePanel.Close();
         }
     }
@@ -125,6 +152,11 @@ public class UIManager:Singleton<UIManager>
     {
         if (gamePanels.TryGetValue(closePanelEvent.type, out BaseReference gamePanel))
         {
+            if (gamePanel == null)
+            {
+                gamePanels.Remove(closePanelEvent.type);
+                return;
+            }
             gamePanel.Close();
         }
     }

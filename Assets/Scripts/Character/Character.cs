@@ -280,6 +280,7 @@ public struct Equip
 }
 public class Character
 {
+    public bool isController = false;
     public Character() { }
     public int characterPackage;
     public List<int> skills = new List<int>();
@@ -566,25 +567,70 @@ public class Character
         }
         this.characterProperty = characterProperty;
     }
-
+    /// <summary>
+    /// 事件触发
+    /// </summary>
+    /// <param name="eventid">事件id</param>
+    /// <param name="reference">数据id</param>
+    /// <param name="enter">是否进入事件</param>
     private void TriggerEventAction(int eventid, int reference, bool enter)
     {
-        if (enter)
+        if (eventid == 0)
         {
-            TriggerEnter triggerEnter = new TriggerEnter
+            return;
+        }
+
+        if (isController)
+        {
+            if (enter)
             {
-                eventId = reference
-            };
-            GameActionManager.instance.QueueAction(triggerEnter);
+                ShowMapObjTips showMapObjTips = new ShowMapObjTips
+                {
+                    id = reference
+                };
+                GameActionManager.instance.QueueAction(showMapObjTips);
+
+                TriggerEnter triggerEnter = new TriggerEnter
+                {
+                    eventId = reference
+                };
+                GameActionManager.instance.QueueAction(triggerEnter);
+            }
+            else
+            {
+                CloseMapObjTips closeMapObjTips = new CloseMapObjTips
+                {
+                    id = reference
+                };
+                GameActionManager.instance.QueueAction(closeMapObjTips);
+                TriggerExit triggerExit = new TriggerExit
+                {
+                    eventId = reference
+                };
+                GameActionManager.instance.QueueAction(triggerExit);
+            }
         }
         else
         {
-            TriggerExit triggerExit = new TriggerExit
+            if (enter)
             {
-                eventId = reference
-            };
-            GameActionManager.instance.QueueAction(triggerExit);
+                TriggerEnter triggerEnter = new TriggerEnter
+                {
+                    eventId = reference
+                };
+                GameActionManager.instance.QueueAction(triggerEnter);
+            }
+            else
+            {
+                TriggerExit triggerExit = new TriggerExit
+                {
+                    eventId = reference
+                };
+                GameActionManager.instance.QueueAction(triggerExit);
+            }
         }
+
+      
 
         List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>(2);
         eventReferenceDatas.Add(new EventReferenceData
@@ -599,14 +645,16 @@ public class Character
         });
 
         GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
-    }
-
+    } 
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
     {
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, mapInstance, objCoordinate.coordinate, coordinate,
            TriggerEventAction);
-        MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, objCoordinate.coordinate, coordinate,
+        if (isController)
+        {
+            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, objCoordinate.coordinate, coordinate,
            TriggerEventAction);
+        } 
         objCoordinate.SetObjCoordinate(mapInstance, coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
         {

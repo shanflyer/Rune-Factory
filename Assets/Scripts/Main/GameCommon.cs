@@ -82,6 +82,7 @@ public class GameCommon
     {
         1001,2001
     };
+    
 
     public static float2 dropWaitTime = new float2(0.2f, 0.6f);
     public static float4 dropArea = new float4(1,2,3,4);
@@ -90,7 +91,7 @@ public class GameCommon
     public const float fightMapMovingSpeed = 0.2f;
 
     public const int DefaultOutItemId = -1;
-
+    public const float PromptTime= 2.0f;
     public const float cellWidth = 0.16f, cellHigh = 0.16f;
     public const float cellSize = 0.08f;
     public const float oneDividCellWidth = 6.25f, oneDividCellHigh =6.25f;

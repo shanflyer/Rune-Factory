@@ -89,14 +89,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             return true;
         }
-        runtimeObj = new RuntimeObj();
+        runtimeObj =default(RuntimeObj);
 
         return false;
     }
 
     public bool GetMapItemPos(int id, out ObjCoordinate objCoordinate)
     {
-        objCoordinate = new ObjCoordinate();
+        objCoordinate = default(ObjCoordinate);
         if (runtimeMapItems.GetData(id, out var mapItem))
         {
             objCoordinate.SetObjCoordinate(mapItem.mapInstanceId, mapItem.coordinate);

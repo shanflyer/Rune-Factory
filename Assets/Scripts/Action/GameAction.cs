@@ -16,7 +16,28 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
-
+public struct CloseMapObjTips : GameAction
+{
+    public int id;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+        {
+            id = int.Parse(parameters[0].value);
+        }
+    }
+}
+public struct ShowMapObjTips : GameAction
+{
+    public int id;
+    public void Init(List<Parameter> parameters)
+    {
+        if (parameters.Count > 0)
+        {
+            id = int.Parse(parameters[0].value);
+        }
+    }
+}
 public struct ShopBuySuccess : GameAction
 {
     public int buyCount;
