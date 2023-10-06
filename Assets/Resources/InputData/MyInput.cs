@@ -71,6 +71,15 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pointer"",
+                    ""type"": ""Value"",
+                    ""id"": ""86a3e866-9936-4449-abc9-6bfec5b71c82"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -337,6 +346,72 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""action"": ""TestSave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""a1300114-9cc1-4828-bd45-928e12c1ad39"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""13af97be-a91f-4e67-be20-505e79c67c98"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""41ae499e-1d56-4e29-91ea-441cf6c59acd"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""1cd5bac4-62d5-4571-956c-fc46d579993e"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""f77e8fd7-280a-4020-b00c-83c204786982"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""81991ada-acbf-4e1e-b49a-b5874dded93b"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -433,6 +508,15 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pointer"",
+                    ""type"": ""Value"",
+                    ""id"": ""716ef768-a926-4ad0-a423-31e8dfdca9d1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -853,6 +937,72 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""b8957c0b-3497-44af-8961-b41ae60a38dc"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""1bb85672-adee-4f12-8158-c43a4496be6f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""bdb24677-2939-4652-8fb8-7442b1bf69df"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""6de35d5f-b003-47ec-881d-0168e73fb85b"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""52b43a11-811c-4698-8874-762dd163fa11"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""8a77ea9a-d582-4a1a-9d1f-c9c2d3800443"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -927,6 +1077,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_ClickPos = m_Player.FindAction("ClickPos", throwIfNotFound: true);
         m_Player_TestSave = m_Player.FindAction("TestSave", throwIfNotFound: true);
+        m_Player_Pointer = m_Player.FindAction("Pointer", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -939,6 +1090,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_Pointer = m_UI.FindAction("Pointer", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1005,6 +1157,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_ClickPos;
     private readonly InputAction m_Player_TestSave;
+    private readonly InputAction m_Player_Pointer;
     public struct PlayerActions
     {
         private @MyInput m_Wrapper;
@@ -1014,6 +1167,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @ClickPos => m_Wrapper.m_Player_ClickPos;
         public InputAction @TestSave => m_Wrapper.m_Player_TestSave;
+        public InputAction @Pointer => m_Wrapper.m_Player_Pointer;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1038,6 +1192,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TestSave.started += instance.OnTestSave;
             @TestSave.performed += instance.OnTestSave;
             @TestSave.canceled += instance.OnTestSave;
+            @Pointer.started += instance.OnPointer;
+            @Pointer.performed += instance.OnPointer;
+            @Pointer.canceled += instance.OnPointer;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1057,6 +1214,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TestSave.started -= instance.OnTestSave;
             @TestSave.performed -= instance.OnTestSave;
             @TestSave.canceled -= instance.OnTestSave;
+            @Pointer.started -= instance.OnPointer;
+            @Pointer.performed -= instance.OnPointer;
+            @Pointer.canceled -= instance.OnPointer;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1088,6 +1248,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_RightClick;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_Pointer;
     public struct UIActions
     {
         private @MyInput m_Wrapper;
@@ -1102,6 +1263,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        public InputAction @Pointer => m_Wrapper.m_UI_Pointer;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1141,6 +1303,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+            @Pointer.started += instance.OnPointer;
+            @Pointer.performed += instance.OnPointer;
+            @Pointer.canceled += instance.OnPointer;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1175,6 +1340,9 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+            @Pointer.started -= instance.OnPointer;
+            @Pointer.performed -= instance.OnPointer;
+            @Pointer.canceled -= instance.OnPointer;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1244,6 +1412,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnClickPos(InputAction.CallbackContext context);
         void OnTestSave(InputAction.CallbackContext context);
+        void OnPointer(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1257,5 +1426,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnPointer(InputAction.CallbackContext context);
     }
 }

@@ -16,6 +16,10 @@ public class GameEventManager:Singleton<GameEventManager>
     {
         base.Init();
         obj = GameObject.Find("GameEventManager");
+        if (obj == null)
+        {
+            obj = new GameObject("GameEventManager");
+        }
         Object.DontDestroyOnLoad(obj);
     }
 
@@ -25,6 +29,10 @@ public class GameEventManager:Singleton<GameEventManager>
     public async Task AddGameEvent(int eventId,List<EventReferenceData> eventReferenceDatas=null)
     {
         GameEventData gameEventData =await GameDataManager.instance.GetAsyncData<GameEventData>(eventId);
+        if(gameEventData== null)
+        {
+            return;
+        }
         AddGameEvent(gameEventData, eventReferenceDatas);
     }
     public void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas=null)

@@ -50,7 +50,7 @@ public class UIManager:Singleton<UIManager>
     public async Task<T> ShowGamePanel<T>(string dataKey = null,int layer=-1, Transform parent = null) where T : BaseReference
     {
         var type = typeof(T);
-        var gamePanel=  await ShowGamePanel(type, dataKey, layer);
+        var gamePanel=  await ShowGamePanel(type, dataKey, layer,parent);
         return (T)gamePanel;
     }
     public async Task<T> ShowGamePanel<T,V>(V data, int layer = -1,Transform parent=null) where T : GamePanel<V> where V:IReferenceData

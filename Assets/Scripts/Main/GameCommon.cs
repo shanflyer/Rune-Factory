@@ -614,6 +614,7 @@ public static class DataPath
     public const string cameraPrefabPath = "Prefabs/Other/CameraObj";
     public const string InputDataPath = "InputData/MyInput";
 
+    public const string pointerEffectPath = "Prefabs/Effect/PointerEffect";
     public const string DropItemPrefabPath = "Prefabs/Other/DropItem";
     public const string MonsterDeathPath = "Data/TimeLineData/¹ÖÎïËÀÍö";
     public const string BehaviorPath = "Behavior/";

@@ -132,7 +132,10 @@ namespace UnityEngine.InputSystem.Editor
         {
             m_ActionAssetManager.SaveChangesToAsset();
         }
-
+        public void SaveAssetNameData()
+        {
+            m_ActionAssetManager.SaveChangesToAsset();
+        }
         public void AddNewActionMap()
         {
             m_ActionMapsTree.AddNewActionMap();
@@ -223,6 +226,8 @@ namespace UnityEngine.InputSystem.Editor
             m_Toolbar.onSelectedSchemeChanged = OnControlSchemeSelectionChanged;
             m_Toolbar.onSelectedDeviceChanged = OnControlSchemeSelectionChanged;
             m_Toolbar.onSave = SaveChangesToAsset;
+            m_Toolbar.onSaveNameData = SaveAssetNameData;
+
             m_Toolbar.onControlSchemesChanged = OnControlSchemesModified;
             m_Toolbar.onControlSchemeRenamed = OnControlSchemeRenamed;
             m_Toolbar.onControlSchemeDeleted = OnControlSchemeDeleted;

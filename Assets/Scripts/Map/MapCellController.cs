@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class MapCellController : Singleton<MapCellController>
 {
-    public delegate void TriggerEvent(int eventId, int reference, bool enter);
+    public delegate void TriggerEvent(int eventId, int reference, bool enter,bool controller);
 
     public struct MapTriggerAreas
     {
@@ -443,7 +443,8 @@ public class MapCellController : Singleton<MapCellController>
                 nowCell = nowCell,
                 triggerEvents = triggerEvents,
                 triggerType = entityType,
-            }; 
+            };
+           
             triggerJob.Schedule(triggerEvents.Length, 8).Complete();
 
             int length = triggerJob.triggerEvents.Length;
@@ -452,7 +453,7 @@ public class MapCellController : Singleton<MapCellController>
                 int eventId = triggerJob.triggerEvents[i].x;
                 if (eventId != 0)
                 {
-                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1);
+                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1,false);
                 }
             }
             triggerEvents.Dispose(); 
@@ -485,13 +486,14 @@ public class MapCellController : Singleton<MapCellController>
                 triggerType = EntityType.Íæ¼Ò,
                 triggerEvents = triggerEvents
             };
-            triggerJob.Schedule(triggerEvents.Length, 8).Complete();
+            triggerJob.Run(triggerEvents.Length);
+            //triggerJob.Schedule(triggerEvents.Length, 8).Complete();
             int length = triggerJob.triggerEvents.Length;
             List<int3> enterEventDatas = new List<int3>();
             for (int i = 0; i < length; i++)
             {
                 int eventId = triggerJob.triggerEvents[i].x;
-                if (eventId == 0)
+                if (eventId == 0&& triggerJob.triggerEvents[i].y==0)
                 {
                     continue;
                 }
@@ -501,7 +503,7 @@ public class MapCellController : Singleton<MapCellController>
                 }
                 else
                 {
-                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1);
+                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1,true);
                 } 
             }
             if (enterEventDatas.Count != 0)
@@ -526,7 +528,7 @@ public class MapCellController : Singleton<MapCellController>
                         break;
                     }
                 }
-                triggerEvent(selectEventData.x, selectEventData.y, selectEventData.z == 1);
+                triggerEvent(selectEventData.x, selectEventData.y, selectEventData.z == 1,true);
             }
             
 

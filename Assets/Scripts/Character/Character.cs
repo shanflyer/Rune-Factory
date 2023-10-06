@@ -280,7 +280,14 @@ public struct Equip
 }
 public class Character
 {
-    public bool isController = false;
+    private bool isController = false;
+    private int oldTriggerItem = -1;
+
+    public void SetController(bool controller)
+    {
+        isController = controller;
+        oldTriggerItem = -1;
+    }
     public Character() { }
     public int characterPackage;
     public List<int> skills = new List<int>();
@@ -524,9 +531,7 @@ public class Character
     {
         characterProperty.SetProperty(setCharacterProperty); 
     }
-   
-
-
+    
     public void AddProperty(ChangeCharacterProperty changeCharacterProperty)
     {
         switch (changeCharacterProperty.propertyType)
@@ -573,17 +578,18 @@ public class Character
     /// <param name="eventid">事件id</param>
     /// <param name="reference">数据id</param>
     /// <param name="enter">是否进入事件</param>
-    private void TriggerEventAction(int eventid, int reference, bool enter)
+    private void TriggerEventAction(int eventid, int reference, bool enter,bool controller=false)
     {
-        if (eventid == 0)
+        if (eventid == 0&&reference==0)
         {
             return;
         }
 
-        if (isController)
+        if (controller)
         {
             if (enter)
             {
+                oldTriggerItem = reference;
                 ShowMapObjTips showMapObjTips = new ShowMapObjTips
                 {
                     id = reference
@@ -598,6 +604,10 @@ public class Character
             }
             else
             {
+                if (oldTriggerItem == reference)
+                {
+                    oldTriggerItem = -1;
+                }
                 CloseMapObjTips closeMapObjTips = new CloseMapObjTips
                 {
                     id = reference
@@ -628,10 +638,7 @@ public class Character
                 };
                 GameActionManager.instance.QueueAction(triggerExit);
             }
-        }
-
-      
-
+        } 
         List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>(2);
         eventReferenceDatas.Add(new EventReferenceData
         {
@@ -653,7 +660,7 @@ public class Character
         if (isController)
         {
             MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, objCoordinate.coordinate, coordinate,
-           TriggerEventAction);
+           TriggerEventAction,oldTriggerItem);
         } 
         objCoordinate.SetObjCoordinate(mapInstance, coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger

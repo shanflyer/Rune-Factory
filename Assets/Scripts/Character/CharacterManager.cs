@@ -108,12 +108,12 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 if (_controllerCharacter != null)
                 {
-                    _controllerCharacter.isController = false;
+                    _controllerCharacter.SetController(false);
                 }
                 _controllerCharacter = value;
                 if (_controllerCharacter != null)
                 {
-                    _controllerCharacter.isController = true;
+                    _controllerCharacter.SetController(true);
                 }
             }
         }

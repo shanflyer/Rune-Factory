@@ -149,7 +149,33 @@ namespace UnityEngine.InputSystem.Editor
             m_SerializedObject.ApplyModifiedProperties();
             m_SerializedObject.Update();
         }
+        internal void SaveNameDataData()
+        {
+            if (importedAsset == null)
+            {
+                return;
+            }
 
+            string property = "";
+
+            foreach (var actionMap in importedAsset.actionMaps)
+            {
+                foreach (var d in actionMap.actions)
+                {
+                    string title = $"{actionMap.m_Name}_{d.m_Name}";
+                    title = title.Replace(" ", "_");
+
+                    string value = $"\"{d.m_Name}\"";
+                    property = $"{property}{"public const string "}{title}{"= "}{value}{";"}\n";
+                }
+            }
+
+            string propertyStr = String.Format("{{{0}}}", property);
+            string dataStr = $"public class MyInputNameData\n{propertyStr}";
+
+            string dataPath = path.Replace(".inputactions", "NameData.cs");
+            File.WriteAllText(dataPath, dataStr);
+        }
         internal void SaveChangesToAsset()
         {
             Debug.Assert(importedAsset != null);
@@ -170,6 +196,7 @@ namespace UnityEngine.InputSystem.Editor
 
             m_IsDirty = false;
             onDirtyChanged(false);
+            SaveNameDataData();
         }
 
         public void SetAssetDirty()

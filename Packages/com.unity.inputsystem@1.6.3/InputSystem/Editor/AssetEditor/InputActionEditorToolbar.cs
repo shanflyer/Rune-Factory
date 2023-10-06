@@ -34,6 +34,10 @@ namespace UnityEngine.InputSystem.Editor
             if (!InputEditorUserSettings.autoSaveInputActionAssets)
                 DrawSaveButton();
             GUILayout.FlexibleSpace();
+            if (GUILayout.Button(s_SaveAssetNameLabel, EditorStyles.toolbarButton))
+            {
+                onSaveNameData();
+            }
             DrawAutoSaveToggle();
             GUILayout.Space(5);
             DrawSearchField();
@@ -350,6 +354,7 @@ namespace UnityEngine.InputSystem.Editor
         public Action<string, string> onControlSchemeRenamed;
         public Action<string, string> onControlSchemeDeleted;
         public Action onSave;
+        public Action onSaveNameData;
 
         [SerializeField] private bool m_IsDirty;
         [SerializeField] private int m_SelectedControlSchemeIndex = -1;
@@ -366,6 +371,7 @@ namespace UnityEngine.InputSystem.Editor
         private static readonly GUIContent s_DuplicateControlSchemeLabel = EditorGUIUtility.TrTextContent("Duplicate Control Scheme...");
         private static readonly GUIContent s_DeleteControlSchemeLabel = EditorGUIUtility.TrTextContent("Delete Control Scheme...");
         private static readonly GUIContent s_SaveAssetLabel = EditorGUIUtility.TrTextContent("Save Asset");
+        private static readonly GUIContent s_SaveAssetNameLabel = EditorGUIUtility.TrTextContent("Save Asset Name Data");
         private static readonly GUIContent s_AutoSaveLabel = EditorGUIUtility.TrTextContent("Auto-Save");
         private static readonly GUIContent s_AllDevicesLabel = EditorGUIUtility.TrTextContent("All Devices");
 

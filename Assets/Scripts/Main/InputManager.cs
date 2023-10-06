@@ -63,6 +63,17 @@ public class InputManager :Singleton<InputManager>
     }
 
     Dictionary<string, InputAction> InputActions = new Dictionary<string, InputAction>();
+    ParticleSystem particleSystem;
+
+    void ShowPointerEffect(object obj)
+    {
+        var mouseScreenPos = (Vector2)obj;
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams();
+        ep.position = mousePos;
+        particleSystem.Emit(ep, 1);
+    }
+
     public override async void Init()
     {
         base.Init();
@@ -71,9 +82,13 @@ public class InputManager :Singleton<InputManager>
 
         if (playerInput == null)
         {
-            GameObject inputController = new GameObject("InputController");
+            GameObject inputController = new GameObject("InputController"); 
             playerInput = inputController.AddComponent<PlayerInput>();
             playerInput.actions = await GameSourceManager.instance.GetScriptableObject<InputActionAsset>(DataPath.InputDataPath);
+
+            var pointerPre = await GameSourceManager.instance.GetPrefab(DataPath.pointerEffectPath);
+            var pointerObj = GameObject.Instantiate(pointerPre, inputController.transform); 
+            particleSystem=pointerObj.GetComponent<ParticleSystem>();
         }
         var actionMaps= playerInput.actions.actionMaps;
         foreach(var actionMap in actionMaps)
@@ -111,6 +126,9 @@ public class InputManager :Singleton<InputManager>
         }
 
         GameActionManager.instance.QueueAction(new InitInputAction());
+
+        AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
+        AddInputActionDelegate(MyInputNameData.UI_Pointer, ShowPointerEffect);
     }
 
     public void SwitchInputMap(bool UI)
