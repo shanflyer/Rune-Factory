@@ -104,7 +104,7 @@ public class FuncReference : UIObjReference<FunctionData>
                 var selectButton = Instantiate(secondSelectButton,Vector3.zero,Quaternion.identity, secondParent);
                 selectButton.transform.localScale = Vector3.one;
                 selectButton.GetComponentInChildren<Text>().text = functionData.secondFunctions[i].buttonName;
-                selectButton.onClick.AddListener(functionData.secondFunctions[i].gameActionData.Action);
+                selectButton.onClick.AddListener(()=> { functionData.secondFunctions[i].gameActionData.Action(); });
                 secondSelectButtons.Add(selectButton);
             }
             button.onClick.AddListener(()=>{
@@ -120,7 +120,7 @@ public class FuncReference : UIObjReference<FunctionData>
         }
         else
         {
-            button.onClick.AddListener(this.functionData.gameActionData.Action);
+            button.onClick.AddListener(()=> { this.functionData.gameActionData.Action(); });
         }
        
     }

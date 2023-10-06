@@ -12,7 +12,7 @@ public class GameActionData : ScriptableObject,IGameData
     public string typeName; 
     public List<Parameter> _parameters;
    
-    public void Action(int source,int target)
+    public void Action(int source=0,int target=0)
     {
         GameActionDataManager.instance.GameAction(typeName, _parameters, source, target);
     }
