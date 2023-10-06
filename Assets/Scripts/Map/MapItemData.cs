@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
+using System.Globalization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,6 +18,8 @@ public class MapItemData:ScriptableObject,IGameData
     public int2[] triggerCells;
     public int2[] playerTriggerCells;
     public int playerTriggerEvent;
+    public List<int> operateIds = new List<int>();
+    public List<OperateData> operateDatas = new List<OperateData>();
     public int defaultExit, defaultEnter;
     public override string ToString()
     {
@@ -27,6 +30,12 @@ public class MapItemData:ScriptableObject,IGameData
     {
         string path = $"{EditorDataPath.mapItemPrefabPath}{itemName}{".prefab"}";
         itemObj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+        string operatePath = DataPath.GetDataPath(typeof(OperateData));
+        operateDatas.Clear();
+        foreach (var operate in operateIds)
+        {
+            operateDatas.Add(Resources.Load<OperateData>($"{operatePath}/{operate}"));
+        }
     }
 
     public string GetKey()

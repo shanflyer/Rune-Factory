@@ -82,7 +82,8 @@ public class GameCommon
     {
         1001,2001
     };
-    
+
+    public static int defaultOperateId = 0;
 
     public static float2 dropWaitTime = new float2(0.2f, 0.6f);
     public static float4 dropArea = new float4(1,2,3,4);
@@ -596,6 +597,7 @@ public static class DataPath
         {typeof(PackageSetData),"Data/PackageSetData" },
         {typeof(MoneyCreatData), "Data/MoneyCreatData" },
         {typeof(ShopDataList),"Data/ShopItemData/ShopDataList" },
+        {typeof(OperateData),"Data/OperateData" }
     };
 
     public static string GetDataPath(Type type)

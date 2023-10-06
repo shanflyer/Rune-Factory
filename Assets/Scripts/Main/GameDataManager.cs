@@ -343,7 +343,9 @@ public class GameDataManager : Singleton<GameDataManager>
 public interface IGameData 
 { 
     public string GetKey();
+#if UNITY_EDITOR
     public void SetReferenceData();
+#endif
     public async void Init() { }
 
     public void Clear() { }

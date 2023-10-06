@@ -100,10 +100,11 @@ public class CharacterManager : Singleton<CharacterManager>
     public string PlayerName => player.name;
     public Sprite PlayerIcon => playerData.icon;
     private Character _controllerCharacter;
-    private Character controllerCharacter
+    public Character controllerCharacter
     {
         set
         {
+            var playerOperateManager = PlayerOperateManager.instance;
             if (value != _controllerCharacter)
             {
                 if (_controllerCharacter != null)

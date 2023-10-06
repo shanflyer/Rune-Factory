@@ -12,9 +12,9 @@ public class GameActionData : ScriptableObject,IGameData
     public string typeName; 
     public List<Parameter> _parameters;
    
-    public void Action()
+    public void Action(int source,int target)
     {
-        GameActionDataManager.instance.GameAction(typeName, _parameters);
+        GameActionDataManager.instance.GameAction(typeName, _parameters, source, target);
     }
     
 #if UNITY_EDITOR

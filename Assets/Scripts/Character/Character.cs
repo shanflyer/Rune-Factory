@@ -282,7 +282,7 @@ public class Character
 {
     private bool isController = false;
     private int oldTriggerItem = -1;
-
+    public int triggerItem => oldTriggerItem;
     public void SetController(bool controller)
     {
         isController = controller;
@@ -572,6 +572,14 @@ public class Character
         }
         this.characterProperty = characterProperty;
     }
+
+    public void SetPlayerOperate(int2 targetCoordinate)
+    {
+        MapCellController.instance.CheckPlayerTriggerEvent(objCoordinate.mapInstance, 
+            objCoordinate.coordinate, targetCoordinate,
+          TriggerEventAction, oldTriggerItem);
+    }
+
     /// <summary>
     /// ÊÂ¼þ´¥·¢
     /// </summary>

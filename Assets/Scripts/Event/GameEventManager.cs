@@ -26,6 +26,9 @@ public class GameEventManager:Singleton<GameEventManager>
     private GameObject obj; 
     Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
 
+ 
+   
+
     public async Task AddGameEvent(int eventId,List<EventReferenceData> eventReferenceDatas=null)
     {
         GameEventData gameEventData =await GameDataManager.instance.GetAsyncData<GameEventData>(eventId);

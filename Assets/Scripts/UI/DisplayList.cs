@@ -38,4 +38,12 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
             }
         }
     }
+    public void ClearAll()
+    {
+        for (int i = list.Count; i < list.Count; i++)
+        {
+            list[i].enabled = false;
+            list[i].transform.localScale = Vector3.zero;
+        }
+    }
 }
