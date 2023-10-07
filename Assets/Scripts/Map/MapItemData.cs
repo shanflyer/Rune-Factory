@@ -21,6 +21,7 @@ public class MapItemData:ScriptableObject,IGameData
     public List<int> operateIds = new List<int>();
     public List<OperateData> operateDatas = new List<OperateData>();
     public int defaultExit, defaultEnter;
+    public string playerOperateInfo;
     public override string ToString()
     {
         return id.ToString();

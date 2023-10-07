@@ -10,6 +10,25 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+public struct PlayerTalkItem : GameAction
+{
+    public int displayTime;
+    public int characterId;
+    public int ItemId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+            displayTime = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            characterId = int.Parse(parameters[1].value);
+        if (parameters.Count > 2)
+            ItemId = int.Parse(parameters[2].value);
+
+        characterId = source;
+        ItemId = target;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct SwitchOperateList : GameAction
 {
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)

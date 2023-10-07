@@ -25,7 +25,7 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
             MethodInfo meth = type.GetMethod("Init");
             var _Delegate =(ActionInit) meth.CreateDelegate(typeof(ActionInit), data);
            
-             _Delegate.Invoke(parameters);
+             _Delegate.Invoke(parameters, source, target);
              gameActionDataDelegates.Add(typeName, _Delegate);
         }        
 

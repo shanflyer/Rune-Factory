@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameTimerController : Singleton<GameTimerController>
 {
@@ -15,11 +16,12 @@ public class GameTimerController : Singleton<GameTimerController>
     {
         base.Init();
     }
+   
     public void DeleyActionMain(int delay, Action action)
     {
         if (waitIEnumerators.TryGetValue(action,out var ienumerator))
         {
-            GameController.instance.StopCoroutine(ienumerator);
+            EventSystem.current.StopCoroutine(ienumerator);
         }
         IEnumerator IEnumerator = Wait();
         waitIEnumerators[action] = ienumerator;
@@ -29,7 +31,7 @@ public class GameTimerController : Singleton<GameTimerController>
             action.Invoke();
             waitIEnumerators.Remove(action);
         }
-        GameController.instance.StartCoroutine(IEnumerator);
+        EventSystem.current.StartCoroutine(IEnumerator);
     }
     public void DelayAction(int delay,Action action)
     {

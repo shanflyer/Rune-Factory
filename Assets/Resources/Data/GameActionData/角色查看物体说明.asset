@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1cd738271cd2e64887ed73f1b1f048e, type: 3}
-  m_Name: 1
+  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Name: "\u89D2\u8272\u67E5\u770B\u7269\u4F53\u8BF4\u660E"
   m_EditorClassIdentifier: 
-  operateName: "\u67E5\u770B"
-  id: 1
-  actionId: 100
-  gameActionData: {fileID: 11400000, guid: 3cca757112590dc4787f7f4c2c23710d, type: 2}
+  id: 100
+  typeName: PlayerTalkItem
+  _parameters:
+  - value: 2000
+    parameters: []

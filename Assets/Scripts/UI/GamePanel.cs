@@ -87,7 +87,11 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     public virtual void InitReferenceData(V v) { } 
     public override void Show(int layer = -1)
     {
-        canvas.sortingOrder = layer;
+        if (layer != -1)
+        {
+            canvas.sortingOrder = layer;
+        }
+       
         gameObject.layer = UILayer;
         if (graphicRaycaster)
         {
@@ -99,7 +103,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     {
         if (pluralUI)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
         else
         {

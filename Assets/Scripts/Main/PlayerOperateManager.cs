@@ -13,15 +13,37 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, ClickObj);
         GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
         GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
+        GameActionManager.instance.AddListener<PlayerTalkItem>(PlayerTalkItem);
     }
 
+    async void PlayerTalkItem(PlayerTalkItem playerTalkItem)
+    { 
+        if(CharacterManager.instance.GetRuntimeCharacterObj(playerTalkItem.characterId,out var characterRuntimeObj))
+        {
+            if(WorldMapManager.instance.GetRuntimeMapItem(playerTalkItem.ItemId,out var runtimeMapItem))
+            {
+                MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+                if (mapItemData != null)
+                {
+                    CharacterResponseData responseData = new CharacterResponseData
+                    {
+                        talkValue = mapItemData.playerOperateInfo,
+                        displayTime = GameCommon.defaultPlayerTalkTime
+                    };
+                    UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(responseData,
+                        parent: characterRuntimeObj.runtimeObj.obj as Transform);
+                }
+            } 
+        }
+          
+    }
     /// <summary>
     /// 事件触发
     /// </summary>
     /// <param name="eventid">事件id</param>
     /// <param name="reference">数据id</param>
     /// <param name="enter">是否进入事件</param>
-     
+
     void ClickObj(object obj)
     {
         EventSystem.current.UpData();
@@ -65,7 +87,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         Character controller = CharacterManager.instance.controllerCharacter;
         if (operateData.gameActionData != null)
         {
-            operateData.gameActionData.Action(controller.dataId, controller.triggerItem) ;
+            operateData.gameActionData.Action(controller.instanceId, controller.triggerItem) ;
         }
     }
     protected override void Clear()

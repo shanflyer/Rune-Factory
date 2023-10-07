@@ -84,6 +84,7 @@ public class GameCommon
     };
 
     public static int defaultOperateId = 0;
+    public static int defaultPlayerTalkTime = 2000;
 
     public static float2 dropWaitTime = new float2(0.2f, 0.6f);
     public static float4 dropArea = new float4(1,2,3,4);

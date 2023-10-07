@@ -880,6 +880,10 @@ namespace UnityEngine.UI
                 rectTransform.sizeDelta = new Vector2(w, h);
                 SetAllDirty();
             }
+            else
+            {
+                rectTransform.sizeDelta = Vector2.zero;
+            }
         }
 
         /// <summary>
