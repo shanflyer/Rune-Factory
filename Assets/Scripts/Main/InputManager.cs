@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -73,11 +74,19 @@ public class InputManager :Singleton<InputManager>
         ep.position = mousePos;
         particleSystem.Emit(ep, 1);
     }
-
+    EventSystem eventSystem;
     public override async void Init()
     {
         base.Init();
+
+        var eventSystems =GameObject.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+        if (eventSystems.Length > 1)
+        {
+            GameObject.Destroy(eventSystems[1].gameObject);
+        }
+        eventSystem = eventSystems[0];
         
+
         playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
 
         if (playerInput == null)

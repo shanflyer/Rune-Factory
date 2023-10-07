@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerOperateManager : Singleton<PlayerOperateManager>
 {
@@ -11,6 +12,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         base.Init();
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, ClickObj);
         GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
+        GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
     }
 
     /// <summary>
@@ -22,12 +24,22 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
      
     void ClickObj(object obj)
     {
+        EventSystem.current.UpData();
+        if (EventSystem.current.currentSelectedGameObject != null)
+        {
+            return;
+        }
+
         var mouseScreenPos = (Vector2)obj;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
         Character controller = CharacterManager.instance.controllerCharacter;
 
         controller.SetPlayerOperate(targetCoordinate);
+    }
+    void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
+    {
+        UIManager.instance.CloseGamePanel<OperateButtonPanel>();
     }
     async void ShowMapObjTips(ShowMapObjTips ShowMapObjTips)
     {

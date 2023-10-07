@@ -488,7 +488,10 @@ namespace UnityEngine.EventSystems
             if (!m_HasFocus)
                 TickModules();
         }
-
+        public void UpData()
+        {
+            Update();
+        }
         protected virtual void Update()
         {
             if (current != this)

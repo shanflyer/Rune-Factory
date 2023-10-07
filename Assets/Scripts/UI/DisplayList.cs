@@ -17,7 +17,7 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
     }
     public void InitListData(List<V> componentData,SelectAction<V> SelectAction = null,ToggleGroup toggleGroup=null) 
     {
-        for(int i = list.Count; i < list.Count; i++)
+        for(int i = list.Count-1; i > componentData.Count-1; i--)
         {
             list[i].enabled = false;
             list[i].transform.localScale = Vector3.zero;
@@ -40,7 +40,7 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
     }
     public void ClearAll()
     {
-        for (int i = list.Count; i < list.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             list[i].enabled = false;
             list[i].transform.localScale = Vector3.zero;

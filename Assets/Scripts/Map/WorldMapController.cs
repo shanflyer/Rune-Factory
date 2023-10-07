@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class WorldMapController : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class WorldMapController : MonoBehaviour
     private void OnEnable()
     {
         instance = this;
-        worldMapManager = WorldMapManager.instance;
+        worldMapManager = WorldMapManager.instance; 
         Init();
     }
 
@@ -29,13 +30,14 @@ public class WorldMapController : MonoBehaviour
             worldMapManager.displayMap = mapInstance;
             var characterManager = CharacterManager.instance;
             var gameManager = GameManager.instance;
+            
             var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)
             {
                 Instantiate(cameraPrefab);
             } 
             InputManager.instance.SwitchInputMap(false);
-
+          
             GameActionManager.instance.QueueAction(new ChangeWorld
             {
                 worldName = worldName,

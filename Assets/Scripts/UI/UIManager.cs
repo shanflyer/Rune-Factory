@@ -9,7 +9,7 @@ public class UIManager:Singleton<UIManager>
     private Dictionary<Type, List<BaseReference>> mulitPanels = new Dictionary<Type, List<BaseReference>>();
 
     private Transform canvasParent;
-    //private Canvas canvas;
+    //private Canvas canvas; 
     public void InitClosePanelParent(BaseReference baseReference)
     {
         baseReference.transform.parent = canvasParent;

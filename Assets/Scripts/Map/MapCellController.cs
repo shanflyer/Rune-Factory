@@ -470,7 +470,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="nowCell"></param>
     /// <param name="triggerEvent"></param>
     public void CheckPlayerTriggerEvent(int room, int2 oldCell, int2 nowCell,
-        TriggerEvent triggerEvent,int oldLink=0)
+        TriggerEvent triggerEvent,int oldLink=0,bool trueMove=true)
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
@@ -497,11 +497,11 @@ public class MapCellController : Singleton<MapCellController>
                 {
                     continue;
                 }
-                if (triggerEvents[i].z == 0)
+                if (triggerEvents[i].z == 1)
                 {
                     enterEventDatas.Add(triggerEvents[i]);
                 }
-                else
+                else if(trueMove)
                 {
                     triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1,true);
                 } 

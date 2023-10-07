@@ -98,15 +98,31 @@ public class SourceTool : MonoBehaviour
 
         AssetDatabase.ImportAsset("Assets/Scripts/Audio/AudioSource.cs");
     }
-    // Start is called before the first frame update
-    void Start()
+    [MenuItem("Assets/数据/引用数据刷新")]
+    public static void SetGameDataSerializeObj()
     {
-        
-    }
+        Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
+        string[] resources = new string[selection.Length];
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            for (int i = 0; i < selection.Length; i++)
+            {
+                resources[i] = AssetDatabase.GetAssetPath(selection[i]); 
+                if (selection[i].GetType() == typeof(ScriptableObject)&& selection[i] is IGameData)
+                {
+                    IGameData gameData = (IGameData)selection[i];
+
+                    gameData.SetReferenceData();
+                    EditorUtility.SetDirty(selection[i]);
+                    AssetDatabase.SaveAssets();
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
     }
 }

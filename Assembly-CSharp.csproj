@@ -109,6 +109,7 @@
     <Compile Include="Assets\Scripts\GameBoxClickAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\Resume.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetRemainingDistance.cs" />
+    <Compile Include="Assets\Scripts\UI\Operate\OperateButtonReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetRadius.cs" />
     <Compile Include="Assets\Scripts\UI\GamePanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\RestartBehaviorTree.cs" />
@@ -318,7 +319,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IsFloatPositive.cs" />
     <Compile Include="Assets\Scripts\Main\MyInstance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetKey.cs" />
-    <Compile Include="Assets\Scripts\UI\MapObjTipsPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredCollision.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetEmissionRate.cs" />
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\GetAllReadySkill.cs" />
@@ -372,6 +372,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForce.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
+    <Compile Include="Assets\Scripts\UI\Operate\MapObjTipsPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetFieldValue.cs" />
     <Compile Include="Assets\Scripts\Data\MapRoomData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsPaused.cs" />
@@ -425,7 +426,9 @@
     <Compile Include="Assets\Scripts\Data\ShopDataList.cs" />
     <Compile Include="Assets\Scripts\x\kettleAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics\Linecast.cs" />
+    <Compile Include="Assets\Scripts\Main\PlayerOperateManager.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\RPGM_XP_Water_Tile.cs" />
+    <Compile Include="Assets\Scripts\Data\OperateData.cs" />
     <Compile Include="Assets\Scripts\Film\FilmController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMinDistance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\BehaviorTreeReference.cs" />
@@ -712,6 +715,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetDuration.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\Selector.cs" />
     <Compile Include="Assets\Scripts\CharactorShop.cs" />
+    <Compile Include="Assets\Scripts\UI\Operate\OperateButtonPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetMute.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetCenter.cs" />
     <Compile Include="Assets\Scripts\UI\MainPanel.cs" />

@@ -39,12 +39,13 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
     bool otherListShow = false;
     void SwitchOperateList(SwitchOperateList switchOperateList)
     {
-        if (otherListShow)
-        {
-            OperateList1.ClearAll();
+        otherListShow = !otherListShow;
+        if (!otherListShow)
+        { 
+            OperateList1.ClearAll(); 
         }
         else
-        {
+        { 
             if (operateDataList.OperateDatas.Count <= 4)
             {
                 return;

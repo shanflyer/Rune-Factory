@@ -577,7 +577,7 @@ public class Character
     {
         MapCellController.instance.CheckPlayerTriggerEvent(objCoordinate.mapInstance, 
             objCoordinate.coordinate, targetCoordinate,
-          TriggerEventAction, oldTriggerItem);
+          TriggerEventAction, oldTriggerItem,false);
     }
 
     /// <summary>
