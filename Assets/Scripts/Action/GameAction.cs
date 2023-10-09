@@ -10,6 +10,34 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+
+public struct StoreCounterSetSelectItemAction : GameAction
+{
+    public int sourceObj;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        sourceObj = source;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct OpenPackage : GameAction
+{
+    public int packageId;
+    public string selectActionName;
+    public int selectActionId;
+    public int sourceObj;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 3)
+        {
+            packageId = int.Parse(parameters[0].value);
+            selectActionName = parameters[1].value;
+            selectActionId = int.Parse(parameters[0].value);
+        }
+        sourceObj = source;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct DisplayStoreCounter : GameAction
 {
     public bool display;

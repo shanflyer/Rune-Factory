@@ -18,7 +18,7 @@ public class PackageManager : Singleton<PackageManager>
             playerPackages.Add(id);
         }
     }
-    public async void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName)
+    public async void ShowAllPlayerPackage(PackageItemAction selectItemAction, string actionName)
     {
         PackageList packageList = new PackageList
         {
@@ -95,11 +95,38 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<CreatRuntimePackage>(CreatRuntimePackage);
         GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
         GameActionManager.instance.AddListener<AddPackageItem>(AddPackageItemAction);
+        GameActionManager.instance.AddListener<OpenPackage>(OpenPackage);
+
     }
 
     private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();
     private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
   
+    async void OpenPackage(OpenPackage openPackage)
+    {
+        PackageList packageList=new PackageList 
+        {
+            packageDatas=new List<PackageData>()
+        };
+        int packageId = openPackage.packageId;
+        if (openPackage.packageId == -1)
+        {
+            packageId = CharacterManager.instance.controllerCharacter.characterPackage;
+        }
+        if(gamePackages.TryGetValue(packageId,out GamePackage gamePackage))
+        {
+            PackageData packageData = gamePackage.OutGamePackageData();
+            packageList.packageDatas.Add(packageData);
+            await  UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+
+            GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(openPackage.selectActionId);
+            if (gameActionData != null)
+            {
+                gameActionData.Action(openPackage.sourceObj);
+            }
+        } 
+    }
+
     public async Task<int> GetPackageLevelUpCost(int id)
     {
         if(gamePackages.TryGetValue(id,out GamePackage gamePackage))

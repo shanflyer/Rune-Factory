@@ -32,7 +32,26 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<TryCreatStoreCounter>(TryCreatStoreCounter);
         GameActionManager.instance.AddListener<DisplayStoreCounter>(DisplayStoreCounter);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteStoreCounter);
+        GameActionManager.instance.AddListener<StoreCounterSetSelectItemAction>(StoreCounterSetSelectItemAction);
     }
+     //设置背包界面物体Action
+    async void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
+    {
+        if(runtimeStoreCounters.Contains(storeCounterSetSelectItemAction.sourceObj))
+        {
+            WarehousePanel warehousePanel = await UIManager.instance.GetGamePanel<WarehousePanel>();
+            warehousePanel.SetSelectItemAction((Item item, int packageId) =>
+            {
+                OpenSetItemPanel(storeCounterSetSelectItemAction.sourceObj,item,packageId);
+            }, "选择");
+        }
+    }
+
+    void OpenSetItemPanel(int storeId,Item item,int packageId)
+    {
+
+    }
+
     void TryCreatStoreCounter(TryCreatStoreCounter tryCreatStoreCounter)
     { 
         if (!runtimeStoreCounters.Contains(tryCreatStoreCounter.itemInstanceId) &&

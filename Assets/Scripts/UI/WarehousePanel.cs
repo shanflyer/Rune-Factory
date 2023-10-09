@@ -6,6 +6,7 @@ using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
+public delegate void PackageItemAction(Item item, int packageId);
 public class WarehousePanel : GamePanel<PackageList>
 { 
     [SerializeField]
@@ -44,7 +45,7 @@ public class WarehousePanel : GamePanel<PackageList>
     PackageList packageList;
     PackageData selectPackageData;
     Item SelectItem;
-    SelectAction<Item> selectItemAction;
+    PackageItemAction selectItemAction;
     protected override void Awake()
     {
         base.Awake();
@@ -57,7 +58,7 @@ public class WarehousePanel : GamePanel<PackageList>
         {
             if(selectItemAction != null)
             {
-                selectItemAction(SelectItem);
+                selectItemAction(SelectItem,selectPackageData.instanceId);
             }
         });
 
@@ -127,7 +128,7 @@ public class WarehousePanel : GamePanel<PackageList>
         RefreshPackage();
     }
     
-    public void SetSelectItemAction(SelectAction<Item> selectItemAction,string actionName)
+    public void SetSelectItemAction(PackageItemAction selectItemAction,string actionName)
     {
         ActionName.text = actionName;
         this.selectItemAction = selectItemAction;

@@ -498,7 +498,7 @@ public class ManufacturePanel : GamePanel<ManufactureData>
                         PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, "Ñ¡Ôñ");
                     });
                     
-                    void SetFormulaItem(Item item, bool selected)
+                    void SetFormulaItem(Item item, int packageId)
                     {
                         SelectItemBoxRefrence.InitData(item, DisplayItem,FormulaItemBoxGroup);
                         selectActionButtonName.text = "ÒÆ³ý";

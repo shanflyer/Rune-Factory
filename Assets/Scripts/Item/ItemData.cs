@@ -1,4 +1,4 @@
-using OldName;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public enum ItemType
 {
+    Default=-1,
     ÖÖ×Ó = 0,
     ÎäÆ÷ = 1,
     ·À¾ß = 2,
