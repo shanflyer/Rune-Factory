@@ -2,86 +2,101 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ManufacturePanel : GamePanel<ManufactureData>
 {
     [SerializeField]
-    private Text title;
-
+    private TextMeshProUGUI title;
     [SerializeField]
     private Button ReturnButton;
-
     [SerializeField]
     private Dropdown FormulaDropdown;
-
+    [SerializeField]
+    private FormulaTypeReference formulaTypeReference;
+    [SerializeField]
+    private Transform formulaTypeParent;
+    DisplayList<FormulaTypeReference, FormulaTypeData> formulaTypes;
+    [SerializeField]
+    ToggleGroup FormulaItemBoxGroup;
     [SerializeField]
     private List<ItemBoxReference> FormulaItemBoxReferences;
-
     [SerializeField]
     private ItemBoxReference OutItemBoxReference;
-
     [SerializeField]
     private Button ReduceButton, AddButton;
-
     [SerializeField]
-    private Text ItemCountValue;
-
+    private TextMeshProUGUI ItemCountValue;
     [SerializeField]
     private Button CreatButton;
-
     [SerializeField]
     private Button AutoSelect;
+    [SerializeField]
+    private TextMeshProUGUI RPCost;
 
     [SerializeField]
-    private Text RPCost;
-
+    private Image ItemIcon;
     [SerializeField]
-    private Text ItemType;
-
+    private TextMeshProUGUI ItemType;
     [SerializeField]
-    private Text selectItemName;
+    private TextMeshProUGUI selectItemName;
+    [SerializeField]
+    private TextMeshProUGUI moneyValue;
+    [SerializeField]
+    private TextMeshProUGUI itemInfo;
+    [SerializeField]
+    private TextMeshProUGUI itemProperty;
+    [SerializeField]
+    private Transform InformationObj;
 
     [SerializeField]
     private Button selectActionButton;
-
     [SerializeField]
-    private Text selectActionButtonName;
-
-    [SerializeField]
-    private Button selectBoxInfoButton;
+    private TextMeshProUGUI selectActionButtonName; 
 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
+
+        formulaTypeReference = FindChildGameObject<FormulaTypeReference>("FormulaTypeReference");
+        formulaTypeParent = FindChildGameObject("TypeList");
+
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
         FormulaDropdown = FindChildGameObject<Dropdown>("FormulaDropdown");
+
+
+
         OutItemBoxReference = FindChildGameObject<ItemBoxReference>("OutputItemBoxReference");
         ReduceButton = FindChildGameObject<Button>("ReduceButton");
         AddButton = FindChildGameObject<Button>("AddButton");
-        ItemCountValue = FindChildGameObject<Text>("ItemCountValue");
+        ItemCountValue = FindChildGameObject<TextMeshProUGUI>("ItemCountValue");
         CreatButton = FindChildGameObject<Button>("CreatButton");
         AutoSelect = FindChildGameObject<Button>("AutoSelect");
-        RPCost = FindChildGameObject<Text>("RPCost");
+        RPCost = FindChildGameObject<TextMeshProUGUI>("RPCost");
+
+        FormulaItemBoxGroup = FindChildGameObject<ToggleGroup>("");
         FormulaItemBoxReferences = new List<ItemBoxReference>();
         FormulaItemBoxReferences.Add(FindChildGameObject<ItemBoxReference>("ItemBoxReference1"));
         FormulaItemBoxReferences.Add(FindChildGameObject<ItemBoxReference>("ItemBoxReference2"));
         FormulaItemBoxReferences.Add(FindChildGameObject<ItemBoxReference>("ItemBoxReference3"));
         FormulaItemBoxReferences.Add(FindChildGameObject<ItemBoxReference>("ItemBoxReference4"));
 
-        ItemType = FindChildGameObject<Text>("ItemType");
-        selectItemName = FindChildGameObject<Text>("SelectItemName");
+        ItemType = FindChildGameObject<TextMeshProUGUI>("ItemType");
+        selectItemName = FindChildGameObject<TextMeshProUGUI>("ItemName");
         selectActionButton = FindChildGameObject<Button>("ActionButton");
-        selectBoxInfoButton = FindChildGameObject<Button>("Item");
+        itemInfo = FindChildGameObject<TextMeshProUGUI>("Info");
+        itemProperty = FindChildGameObject<TextMeshProUGUI>("Property");
+        moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
+        ItemIcon = FindChildGameObject<Image>("ItemIcon");
+        InformationObj = FindChildGameObject("InformationObj");
+
     }
 
     protected override void Awake()
     {
         base.Awake();
-        for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
-        {
-            var formulaItemBoxRefrence = FormulaItemBoxReferences[i];
-            SetFormulaItemBoxData(formulaItemBoxRefrence);
-        }
+
+        formulaTypes = new DisplayList<FormulaTypeReference, FormulaTypeData>(formulaTypeReference, formulaTypeParent);
 
         ReduceButton.onClick.AddListener(() =>
         {
@@ -209,6 +224,7 @@ public class ManufacturePanel : GamePanel<ManufactureData>
         FormulaDropdown.onValueChanged.AddListener((int index) =>
         {
             selectFormulaData = seletFormulaDatas[index];
+            DisplayFormula();
         });
     }
 
@@ -240,21 +256,36 @@ public class ManufacturePanel : GamePanel<ManufactureData>
             }
             formulaCost *= formulaCount;
 
-            DisplayDefaultOutItem();
+            Item item = new Item
+            {
+                instanceId = formulaCount>= FormulaItemBoxReferences.Count?0:-1,
+                dataId = GameCommon.DefaultOutItemId,
+                count = produceCount
+            };
+            SetOutItemBoxReference(item);
         }
         else
         {
-            formulaCost = matchFormula.PowerCost;
-
-            Item outItem = new Item
+            int clearCount = 0;
+            for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
             {
-                instanceId = 1,
+                var referene = FormulaItemBoxReferences[i];
+                if (referene.Item.instanceId < 0)
+                {
+                    clearCount++; 
+                }
+            }
+
+            Item item = new Item
+            {
+                instanceId = clearCount >= FormulaItemBoxReferences.Count ? -1 : 0,
                 dataId = matchFormula.Product,
-                count = 1
+                count = produceCount
             };
-            SetOutItemBoxReference(outItem);
+            SetOutItemBoxReference(item);
+
         }
-        RefreshCost();
+        RefreshCost(); 
     }
 
     private void RefreshCost()
@@ -276,7 +307,33 @@ public class ManufacturePanel : GamePanel<ManufactureData>
         ItemCountValue.text = produceCount.ToString();
         ReduceButton.transform.localScale = produceCount > 1 ? Vector3.one : Vector3.zero;
     }
-
+    private void DisplayFormula()
+    {
+        if (selectFormulaData)
+        {
+            ClearFormulaItemBoxReferences(); 
+            produceCount = 1;
+            for (int i = 0; i < selectFormulaData.Stuffs.Count; i++)
+            {
+                int itemDataId = selectFormulaData.Stuffs[i];
+                Item item = new Item
+                {
+                    instanceId = -1,
+                    dataId = itemDataId,
+                    count = 1
+                };
+                FormulaItemBoxReferences[i].InitData(item, DisplayItem, FormulaItemBoxGroup);
+            } 
+            Item outItem = new Item
+            {
+                instanceId = -1,
+                dataId = matchFormula.Product,
+                count = 1
+            };
+            SetOutItemBoxReference(outItem);
+            RefreshRPCostAndOut();
+        }
+    }
     //自动选择材料
     private void AutoSelectMaterials()
     {
@@ -297,21 +354,17 @@ public class ManufacturePanel : GamePanel<ManufactureData>
                         dataId = itemDataId,
                         count = 1
                     };
-                    FormulaItemBoxReferences[i].InitData(item, (Item item) =>
-                    {
-                        DisplayItem(item);
-                        SelectActionName = "移除";
-                        selectActionButtonName.text = SelectActionName;
-                        SelectAction = (Item item) =>
-                        {
-                            selectItem = default(Item);
-                            DisplayItem(selectItem);
-                            SetFormulaItemBoxData(FormulaItemBoxReferences[i]);
-                        };
-                    });
+                    FormulaItemBoxReferences[i].InitData(item, DisplayItem, FormulaItemBoxGroup);
                 }
                 else
                 {
+                    Item item = new Item
+                    {
+                        instanceId = -1,
+                        dataId = itemDataId,
+                        count = 1
+                    };
+                    FormulaItemBoxReferences[i].InitData(item, DisplayItem, FormulaItemBoxGroup);
                     successSelect = false;
                 }
             }
@@ -319,37 +372,29 @@ public class ManufacturePanel : GamePanel<ManufactureData>
             {
                 InformationController.instance.AddInformation("原料不足!");
             }
-
+            Item outItem = new Item
+            {
+                instanceId = !successSelect?-1:0,
+                dataId = matchFormula.Product,
+                count = 1
+            };
+            SetOutItemBoxReference(outItem);
             RefreshRPCostAndOut();
         }
     }
 
     private void SetOutItemBoxReference(Item item)
     {
-        OutItemBoxReference.InitData(item, (Item item) =>
-        {
-            SelectAction = null; DisplayItem(item);
-        });
+        OutItemBoxReference.InitData(item,DisplayItem,FormulaItemBoxGroup);
     }
-
-    private void DisplayDefaultOutItem()
-    {
-        Item item = new Item
-        {
-            instanceId = -1,
-            dataId = GameCommon.DefaultOutItemId,
-            count = produceCount
-        };
-        SetOutItemBoxReference(item);
-    }
-
+ 
     private FormulaData CheckFormula()
     {
         List<int> items = new List<int>();
         for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
         {
             var reference = FormulaItemBoxReferences[i];
-            if (reference.Item.instanceId != 0)
+           // if (reference.Item.instanceId != 0)
             {
                 items.Add(reference.Item.dataId);
             }
@@ -379,93 +424,101 @@ public class ManufacturePanel : GamePanel<ManufactureData>
         RefreshCost();
         ClearFormulaItemBoxReferences();
     }
-    public override async void InitReferenceData(ManufactureData v)
+    public override void InitReferenceData(ManufactureData v)
     {
         base.InitReferenceData(v);
         manufactureData = v;
         title.text = manufactureData.manufactureName;
-       
-
-        var formulaDatas = await GameDataManager.instance.GetAllAsyncData<FormulaData>();
-        allFormulaDatas = new List<FormulaData>();
-        for (int i = 0; i < formulaDatas.Count; i++)
+         
+        List<FormulaTypeData> formulaTypeDatas = new List<FormulaTypeData>();
+        for(int i=0;i< manufactureData.formulaTypes.Count; i++)
         {
-            var formulaData = formulaDatas[i];
-            if (manufactureData.formulaTypes.Contains(formulaData.formulaType))
-            {
-                allFormulaDatas.Add(formulaData);
-            }
+            formulaTypeDatas.Add(new FormulaTypeData { formulaType = manufactureData.formulaTypes[i] });
         }
+        formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData);
 
         RefreshFormulaSelect(); 
         InitDisplay();
     }
-
-    //ItemBoxReference SelectItemBoxRefrence;
-
-    private void SetFormulaItemBoxData(ItemBoxReference formulaItemBoxRefrence)
+    async void SelectFormulaTypeData(FormulaTypeData formulaTypeData,bool seleted)
     {
-        formulaItemBoxRefrence.InitData(default(Item), (Item item) =>
+        if (seleted)
         {
-            //SelectItemBoxRefrence = formulaItemBoxRefrence;
-            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, "选择");
-            void SetFormulaItem(Item item)
-            {
-                formulaItemBoxRefrence.InitData(item, (Item item) =>
-                {
-                    DisplayItem(item);
-                    SelectActionName = "移除";
-                    selectActionButtonName.text = SelectActionName;
-                    SelectAction = (Item item) =>
-                    {
-                        selectItem = default(Item);
-                        DisplayItem(selectItem);
-                        SetFormulaItemBoxData(formulaItemBoxRefrence);
-                        RefreshRPCostAndOut();
-                    };
-                });
-            }
-            RefreshRPCostAndOut();
-        });
-    }
-
-    private Item selectItem;
-
-    private SelectAction<Item> SelectAction;
-    private string SelectActionName;
-
-    private async void ClickItemInfoAction()
-    {
-        if (selectItem.instanceId != 0)
-        {
-            var panel = await UIManager.instance.ShowGamePanel<ItemInfoPanel, Item>(selectItem);
-            if (panel != null && SelectAction != null)
-            {
-                panel.SetAction(SelectAction, SelectActionName);
-            }
-        }
-    }
-
-    private async void DisplayItem(Item item)
-    {
-        if (item.instanceId == 0)
-        {
-            selectItemName.enabled = false;
-            ItemType.enabled = false;
-            selectActionButton.gameObject.SetActive(false);
-            selectBoxInfoButton.gameObject.SetActive(false);
+            nowSelectFormulaTypes.Remove(formulaTypeData.formulaType);
         }
         else
         {
+            nowSelectFormulaTypes.Add(formulaTypeData.formulaType);
+        }
+
+        var formulaDatas = await GameDataManager.instance.GetAllAsyncData<FormulaData>();
+        allFormulaDatas = new List<FormulaData>(); 
+        for (int i = 0; i < formulaDatas.Count; i++)
+        {
+            var formulaData = formulaDatas[i];
+            if (nowSelectFormulaTypes.Contains(formulaData.formulaType))
+            {
+                allFormulaDatas.Add(formulaData);
+            }
+        }
+    }
+    HashSet<FormulaType> nowSelectFormulaTypes = new HashSet<FormulaType>();
+    ItemBoxReference SelectItemBoxRefrence;
+
+    private async void DisplayItem(Item item,bool selected=true)
+    {
+        if (item.instanceId == 0)
+        {
+            InformationObj.transform.localScale = Vector3.zero;
+        }
+        else
+        {
+            InformationObj.transform.localScale = Vector3.one;
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
             selectItemName.text = itemData.itemName;
             ItemType.text = itemData.type.ToString();
+            itemInfo.text = itemData.text1;
+            itemProperty.text = itemData.property.ToString();
+            moneyValue.text = itemData.sellPrice.ToString();
+            ItemIcon.sprite = itemData.icon;
 
-            selectItemName.enabled = true;
-            ItemType.enabled = true;
-            selectBoxInfoButton.gameObject.SetActive(true);
-
-            selectActionButton.gameObject.SetActive(SelectAction != null);
+            if (item.instanceId == 0)
+            {
+                selectActionButton.transform.localScale = Vector3.zero;
+            }
+            else
+            {
+                selectActionButton.transform.localScale = Vector3.one;
+                if (item.instanceId == -1)
+                {
+                    selectActionButtonName.text = "放入";
+                    selectActionButton.onClick.RemoveAllListeners();
+                    selectActionButton.onClick.AddListener(() =>
+                    {
+                        PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, "选择");
+                    });
+                    
+                    void SetFormulaItem(Item item, bool selected)
+                    {
+                        SelectItemBoxRefrence.InitData(item, DisplayItem,FormulaItemBoxGroup);
+                        selectActionButtonName.text = "移除";
+                    }
+                    RefreshRPCostAndOut();
+                }
+                else
+                {
+                    selectActionButtonName.text = "移除";
+                    selectActionButton.onClick.RemoveAllListeners();
+                    selectActionButton.onClick.AddListener(() =>
+                    {
+                        selectActionButtonName.text = "放入";
+                        SelectItemBoxRefrence.InitData(default(Item), DisplayItem, FormulaItemBoxGroup);
+                    });
+                    
+                    RefreshRPCostAndOut();
+                }
+            }
+            
         }
     }
 }

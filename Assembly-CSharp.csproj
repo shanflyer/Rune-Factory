@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\UI\Operate\OperateButtonReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetRadius.cs" />
     <Compile Include="Assets\Scripts\UI\GamePanel.cs" />
+    <Compile Include="Assets\Scripts\PlayerStore\StoreCounterDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\RestartBehaviorTree.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\UntilFailure.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetDrag.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadows.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedVector3Int.cs" />
     <Compile Include="Assets\Scripts\Map\MapCellController.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerEquipQuickPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IntComparison.cs" />
     <Compile Include="Assets\Resources\InputData\MyInput.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetRightVector.cs" />
@@ -276,7 +278,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\CompareTo.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\PrioritySelector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Play.cs" />
-    <Compile Include="Assets\Scripts\UI\PlayerEquipQuickReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetUseGravity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetEnableEmission.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetIsStopped.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\RandomBool.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetCenter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\WaitForState.cs" />
+    <Compile Include="Assets\Scripts\PlayerStore\PlayerStoreManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\GetSize.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayScheduled.cs" />
@@ -331,6 +333,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedFloat.cs" />
     <Compile Include="Assets\Scripts\x\GameDebugAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowStrength.cs" />
+    <Compile Include="Assets\Scripts\PlayerStore\SellItem.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChild.cs" />
     <Compile Include="Assets\Scripts\CameraselectMove.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetUpVector.cs" />
@@ -699,6 +702,7 @@
     <Compile Include="Assets\Scripts\UI\AdventureResultPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\BehaviorTree.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaPosition.cs" />
+    <Compile Include="Assets\Scripts\UI\FormulaTypeReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAngularSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\IsName.cs" />
     <Compile Include="Assets\Scripts\IOSTest.cs" />
@@ -761,6 +765,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetPosition.cs" />
     <Compile Include="Assets\Scripts\MoveSelect.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterMove.cs" />
+    <Compile Include="Assets\Scripts\UI\PackageSelectReference.cs" />
     <Compile Include="Assets\Scripts\ScrollCircle.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\RotateTowards.cs" />

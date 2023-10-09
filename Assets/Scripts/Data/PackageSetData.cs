@@ -13,6 +13,7 @@ public class PackageSetData :ScriptableObject,IGameData,IReferenceData
     public bool canLevelUp;
     public int levelUpAddCount;
     public int levelUpCost;
+    public SpriteResourceRenference icon;
     public PackageType packageType;
 
     public string GetKey()

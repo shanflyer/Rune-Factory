@@ -30,6 +30,7 @@ public class WorldMapController : MonoBehaviour
             worldMapManager.displayMap = mapInstance;
             var characterManager = CharacterManager.instance;
             var gameManager = GameManager.instance;
+            var playerStoreManager= PlayerStoreManager.instance;
             
             var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)

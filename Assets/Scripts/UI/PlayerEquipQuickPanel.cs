@@ -8,7 +8,7 @@ public struct TeamerEquipAndProperty : IReferenceData
 {
     public CharacterEquipAndPropertyData[] characterEquipAndPropertyDatas;
 }
-public class PlayerEquipQuickReference : UIObjReference<TeamerEquipAndProperty>
+public class PlayerEquipQuickPanel : GamePanel<TeamerEquipAndProperty>
 {
     [SerializeField]
     Dropdown playerSelcet;
@@ -24,26 +24,10 @@ public class PlayerEquipQuickReference : UIObjReference<TeamerEquipAndProperty>
     Image HpUp, HpDown, AtUp, AtDown, DfUp, DfDown;
     [SerializeField]
     Text Attribute;
-
-    private void Awake()
+     
+    protected override void Awake()
     {
-        playerSelcet = FindChildGameObject<Dropdown>("");
-        icon = FindChildGameObject<Image>("");
-        type = FindChildGameObject<Text>("Type");
-        Name=FindChildGameObject<Text>("Name");
-        Hp = FindChildGameObject<Text>("Hp");
-        Rp = FindChildGameObject<Text>("Rp");
-        At = FindChildGameObject<Text>("At");
-        Df = FindChildGameObject<Text>("Df");
-        Weapon = FindChildGameObject<Text>("Weapon");
-        Clothes = FindChildGameObject<Text>("Clothes");
-        HpUp = FindChildGameObject<Image>("HpUp");
-        HpDown = FindChildGameObject<Image>("HpDown");
-        AtUp = FindChildGameObject<Image>("AtUp");
-        AtDown = FindChildGameObject<Image>("AtDown");
-        DfUp = FindChildGameObject<Image>("DfUp");
-        DfDown = FindChildGameObject<Image>("DfDown");
-        Attribute = FindChildGameObject<Text>("Attribute");
+        base.Awake(); 
     }
     public override void SetPanelUISerializeObj()
     {
@@ -71,16 +55,16 @@ public class PlayerEquipQuickReference : UIObjReference<TeamerEquipAndProperty>
     TeamerEquipAndProperty teamerEquipAndProperty;
 
     int selectIndex=-1;
-    public override  void InitData(TeamerEquipAndProperty t, SelectAction<TeamerEquipAndProperty> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitReferenceData(TeamerEquipAndProperty v)
     {
-        base.InitData(t, SelectAction);
-        teamerEquipAndProperty = t;
+        base.InitReferenceData(v);
+        teamerEquipAndProperty = v;
         playerSelcet.options.Clear();
         for (int i = 0; i < teamerEquipAndProperty.characterEquipAndPropertyDatas.Length; i++)
         {
-           
+
             CharacterEquipAndPropertyData characterEquipAndPropertyData = teamerEquipAndProperty.characterEquipAndPropertyDatas[i];
-             
+
             playerSelcet.options.Add(new Dropdown.OptionData(characterEquipAndPropertyData.name));
         }
         playerSelcet.onValueChanged.AddListener((int index) =>
@@ -89,9 +73,9 @@ public class PlayerEquipQuickReference : UIObjReference<TeamerEquipAndProperty>
             {
                 selectIndex = index;
                 RefreshCharacter();
-            } 
+            }
         });
-    }
+    } 
     async void RefreshCharacter()
     {
         if (selectIndex < teamerEquipAndProperty.characterEquipAndPropertyDatas.Length)

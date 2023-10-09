@@ -657,7 +657,7 @@ public struct PackageList : IReferenceData
 {
     public List<PackageData> packageDatas;
 }
-public struct PackageData
+public struct PackageData:IReferenceData
 {
     public string name;
     public int instanceId;

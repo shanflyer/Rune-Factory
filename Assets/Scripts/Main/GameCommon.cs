@@ -55,7 +55,7 @@ public enum Direction
 }
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER
+    MAPGROUND, MAPITEM, CHARACTER,STOREITEM
 }
 public enum FightRuntimeObjType
 {
@@ -598,7 +598,8 @@ public static class DataPath
         {typeof(PackageSetData),"Data/PackageSetData" },
         {typeof(MoneyCreatData), "Data/MoneyCreatData" },
         {typeof(ShopDataList),"Data/ShopItemData/ShopDataList" },
-        {typeof(OperateData),"Data/OperateData" }
+        {typeof(OperateData),"Data/OperateData" },
+        {typeof(StoreCounterData),"Data/StoreCounterDataList" }
     };
 
     public static string GetDataPath(Type type)
@@ -610,7 +611,7 @@ public static class DataPath
         return null;
     }
 
-
+    public const string StoreCounterPrefab = "Prefabs/Other/SellItem";
     public const string goldSpritePath = "Reference/Gold";
     public const string diamondSpritePath = "Reference/Diamond";
 

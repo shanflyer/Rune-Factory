@@ -16,7 +16,7 @@ public struct MyNativeData<T> where T : unmanaged
     public void Dispose()
     {
         try
-        { 
+        {  
             datas.Dispose();
             itemIndexes.Dispose();
             nullIndexes.Dispose();

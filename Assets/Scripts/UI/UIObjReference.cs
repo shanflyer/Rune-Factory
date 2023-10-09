@@ -8,11 +8,11 @@ public interface IReferenceData
 {
 
 }
-public delegate void SelectAction<T>(T t) where T : IReferenceData;
+public delegate void SelectAction<T>(T t,bool selected=true) where T : IReferenceData;
 public class UIObjReference<T> : BaseReference where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
-
+    
     public virtual void OnEnable()
     {
         transform.localScale = Vector3.one;
@@ -37,9 +37,12 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
         }
         return null;
     }
+    protected T data;
+    protected SelectAction<T> SelectAction;
     public virtual void InitData(T t, SelectAction<T> SelectAction = null,ToggleGroup toggleGroup=null)
     {
-
+        data = t;
+        this.SelectAction = SelectAction;
     }
     public virtual void InitChildObjData()
     {

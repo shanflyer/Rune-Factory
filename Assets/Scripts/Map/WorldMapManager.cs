@@ -25,7 +25,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     public override void Init()
     {
         base.Init();
-        runtimeMapItems.Init(1000);
+        runtimeMapItems.Init(128);
 
         mapItemInstance = new MyInstance();
 
@@ -178,6 +178,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         items.Add(instanceId);
 
+        //尝试创建柜台
+        TryCreatStoreCounter tryCreatStoreCounter = new TryCreatStoreCounter
+        {
+            itemDataId = mapItem.id,
+            itemInstanceId = instanceId
+        };
+        GameActionManager.instance.QueueAction(tryCreatStoreCounter,true);
+
         var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
         if (mapItemData.triggerCells.Length > 0)
         {
@@ -281,6 +289,15 @@ public class WorldMapManager : Singleton<WorldMapManager>
             var mapItemRuntime= GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), dataId.ToString(), mapItemData.itemObj.transform, instanceId);
             (mapItemRuntime.obj as Transform).localPosition = pos;
 
+
+            DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
+            {
+                display = true,
+                itemInstanceId = instanceId,
+                transform = mapItemRuntime.obj as Transform
+            };
+            GameActionManager.instance.QueueAction(displayStoreCounter);
+
             return mapItemRuntime;
         }
         return default(RuntimeObj);
@@ -328,7 +345,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             var runtimeObj = await CreatMapItemRuntime(runtimeMapItem.dataId,runtimeMapItem.instanceId,runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = runtimeObj;
 
-            await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
+            await RuntimeMapItemPlay(runtimeMapItem, runtimeObj); 
         }
     }
 
@@ -355,7 +372,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                         {
                             var itemObj = await CreatMapItemRuntime(mapItem.dataId, mapItem.instanceId, mapItem.coordinate);
                             nowRuntimeMapItemObjs.Add(mapItems[i], itemObj);
-                            await RuntimeMapItemPlay(mapItem, itemObj);
+                            await RuntimeMapItemPlay(mapItem, itemObj); 
                         } 
                     }
                 }
@@ -372,10 +389,17 @@ public class WorldMapManager : Singleton<WorldMapManager>
     public void RecycleMap()
     {
         GameRuntimeObjManager.instance.RecycleRuntimeObj(nowMapRoomObj);
-        foreach (var obj in nowRuntimeMapItemObjs.Values)
+
+        foreach(var runTimeMapItemData in nowRuntimeMapItemObjs)
         {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(obj);
-        }
+            DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
+            {
+                display = false,
+                itemInstanceId = runTimeMapItemData.Key, 
+            };
+            GameActionManager.instance.QueueAction(displayStoreCounter,true); 
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(runTimeMapItemData.Value);
+        } 
         nowRuntimeMapItemObjs.Clear();
         MyAnimationController.instance.ClearAnimation();
     }
@@ -389,6 +413,16 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 runtimeMapItem.dataId = changeMapItem.newDataId;
                 if (nowRuntimeMapItemObjs.TryGetValue(changeMapItem.itemId, out RuntimeObj runtimeObj))
                 {
+
+                    DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
+                    {
+                        display = false,
+                        itemInstanceId = runtimeMapItem.instanceId,
+                    };
+                    GameActionManager.instance.QueueAction(displayStoreCounter, true); 
+
+
+
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                     var newObj = await CreatMapItemRuntime(runtimeMapItem.dataId,runtimeMapItem.instanceId,runtimeMapItem.coordinate);
                     nowRuntimeMapItemObjs[changeMapItem.itemId] = newObj;

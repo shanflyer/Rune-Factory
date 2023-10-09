@@ -1,59 +1,55 @@
+using BehaviorDesigner.Runtime.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WarehousePanel : GamePanel<PackageList>
-{
+{ 
     [SerializeField]
-    PlayerEquipQuickReference playerEquipQuickReference;
+    PackageSelectReference packageSelect;
     [SerializeField]
-    Dropdown packageSelect;
+    Transform packageSelectParent;
     [SerializeField]
-    Text caseCount;
+    ToggleGroup packageSelectGroup;
+    [SerializeField]
+    Button packageLevelUp;
+
+    [SerializeField]
+    TextMeshProUGUI Title;
+    [SerializeField]
+    TextMeshProUGUI caseCount;
     [SerializeField]
     Image ItemIcon;
     [SerializeField]
-    Text ItemName;
+    TextMeshProUGUI ItemName;
     [SerializeField]
-    Text Price;
+    TextMeshProUGUI Price;
     [SerializeField]
-    Text Type, Property, Info;
+    TextMeshProUGUI Type, Property, Info;
     [SerializeField]
     Button ActionButton,ReturnButton;
     [SerializeField]
-    Text ActionName;
+    TextMeshProUGUI ActionName;
 
     [SerializeField]
     ItemBoxReference itemBoxReference;
     [SerializeField]
     Transform itemParent; 
     DisplayList<ItemBoxReference, Item> itemBoxs;
+    DisplayList<PackageSelectReference, PackageData> packageSelectList;
 
     PackageList packageList;
-    int selectIndex;
-
+    PackageData selectPackageData;
     Item SelectItem;
     SelectAction<Item> selectItemAction;
     protected override void Awake()
     {
         base.Awake();
         var packageDatas = packageList.packageDatas;
-        packageSelect.options.Clear();
-        for (int i = 0; i < packageDatas.Count; i++)
-        {
-            packageSelect.options.Add(new Dropdown.OptionData(packageDatas[i].name));
-        } 
-        packageSelect.onValueChanged.AddListener((int index) =>
-        {
-            if (selectIndex != index)
-            {
-                selectIndex = index;
-                RefreshPackage();
-            }
-            
-        });
+       
         ReturnButton.onClick.AddListener(Close); 
         itemBoxs=new DisplayList<ItemBoxReference,Item>(itemBoxReference,itemParent);
 
@@ -65,7 +61,8 @@ public class WarehousePanel : GamePanel<PackageList>
             }
         });
 
-        playerEquipQuickReference.InitData(CharacterManager.instance.TeamerEquipAndProperty);
+        packageSelectList = new DisplayList<PackageSelectReference, PackageData>(packageSelect, packageSelectParent);
+        packageLevelUp.onClick.AddListener(TryPackageLevelUp);
     }
     public override void OnEnable()
     {
@@ -79,30 +76,56 @@ public class WarehousePanel : GamePanel<PackageList>
     }
     public override void SetPanelUISerializeObj()
     {
-        base.SetPanelUISerializeObj();
-        playerEquipQuickReference = FindChildGameObject<PlayerEquipQuickReference>("PlayerEquipQuickReference");
-        packageSelect = FindChildGameObject<Dropdown>("PackageSelect");
-        caseCount = FindChildGameObject<Text>("CaseCount");
+        base.SetPanelUISerializeObj(); 
+        packageSelect = FindChildGameObject<PackageSelectReference>("PackageSelect");
+        packageSelectParent = FindChildGameObject("PackageSelectParent");
+
+        Title = FindChildGameObject<TextMeshProUGUI>("Title");
+        caseCount = FindChildGameObject<TextMeshProUGUI>("CaseCount");
         ItemIcon = FindChildGameObject<Image>("ItemIcon");
-        ItemName = FindChildGameObject<Text>("ItemName");
-        Price = FindChildGameObject<Text>("Price");
-        Type = FindChildGameObject<Text>("Type");
-        Property = FindChildGameObject<Text>("Prooerty");
-        Info = FindChildGameObject<Text>("Info");
+        ItemName = FindChildGameObject<TextMeshProUGUI>("ItemName");
+        Price = FindChildGameObject<TextMeshProUGUI>("Price");
+        Type = FindChildGameObject<TextMeshProUGUI>("Type");
+        Property = FindChildGameObject<TextMeshProUGUI>("Prooerty");
+        Info = FindChildGameObject<TextMeshProUGUI>("Info");
         ActionButton = FindChildGameObject<Button>("ActionButton"); 
-        ActionName = FindChildGameObject<Text>("ActionName");
+        ActionName = FindChildGameObject<TextMeshProUGUI>("ActionName");
         itemBoxReference = FindChildGameObject<ItemBoxReference>("ItemBoxReference");
         itemParent = FindChildGameObject("ItemParent");
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
+
+        packageSelectGroup = FindChildGameObject<ToggleGroup>("PackageSelectParent");
+        Price = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
+        packageLevelUp = FindChildGameObject<Button>("LevelUp");
     }
     public override void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
         packageList = v;
-        selectIndex = 0;
+
+        packageSelectList.InitListData(packageList.packageDatas, SelectPackage, packageSelectGroup);
+
+        //RefreshPackage();
+    }
+    async void TryPackageLevelUp()
+    {
+        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
+        if (packageSetData && packageSetData.canLevelUp)
+        {
+            int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
+            string notice = $"拓展{packageSetData.packageName}空间?";
+            PayManager.instance.PayAction("空间拓展", notice, cost, PayType.金币, () =>
+            {
+                PackageManager.instance.AddPackageUpLevel(selectPackageData.instanceId);
+            });
+        }
+    }
+    void SelectPackage(PackageData packageData, bool selected = true)
+    {
+        selectPackageData = packageData;
+        
         RefreshPackage();
     }
-
     
     public void SetSelectItemAction(SelectAction<Item> selectItemAction,string actionName)
     {
@@ -110,56 +133,35 @@ public class WarehousePanel : GamePanel<PackageList>
         this.selectItemAction = selectItemAction;
     }
   
-    async void SelectPackageItem(Item item)
+    async void SelectPackageItem(Item item,bool selected= true)
     {
-        if (item.instanceId < 0)
-        {
-            PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
-            if (packageSetData && packageSetData.canLevelUp)
-            {
-                int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
-                string notice = $"拓展{packageSetData.packageName}空间?";
-                PayManager.instance.PayAction("空间拓展", notice, cost, PayType.金币, () =>
-                {
-                    PackageManager.instance.AddPackageUpLevel(selectPackageData.instanceId);
-                });
-            }
-        }
-        else
-        {
-            SelectItem = item;
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
-            ItemIcon.sprite = itemData.icon;
-            ItemIcon.enabled = true;
-            ItemIcon.SetNativeSize();
-            ItemName.text = itemData.name;
-            Type.text = itemData.type.ToString();
-            Info.text = itemData.text1.ToString();
-            Property.text = itemData.property.ToString();
-            Price.text = $"价值:{itemData.sellPrice}G";
-        }
-      
-
-
-    }
-
-    PackageData selectPackageData;
+        SelectItem = item;
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+        ItemIcon.sprite = itemData.icon;
+        ItemIcon.enabled = true;
+        ItemIcon.SetNativeSize();
+        ItemName.text = itemData.name;
+        Type.text = itemData.type.ToString();
+        Info.text = itemData.text1.ToString();
+        Property.text = itemData.property.ToString();
+        Price.text = $"价值:{itemData.sellPrice}G";
+    } 
     void RefreshPackage(RefreshPackage RefreshPackage)
     {
         this.RefreshPackage();
     }
-     async void RefreshPackage()
+    async void RefreshPackage()
     {
-        selectPackageData = packageList.packageDatas[selectIndex];
+        //selectPackageData = packageList.packageDatas[selectIndex];
 
         List<Item> items = selectPackageData.items;
-        for(int i=items.Count;i< selectPackageData.caseCount;i++)
+        for (int i = items.Count; i < selectPackageData.caseCount; i++)
         {
             items.Add(default(Item));
         }
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
-
-        for(int i = 0; i < packageSetData.count; i++)
+        Title.text = packageSetData.packageName;
+        for (int i = 0; i < packageSetData.count; i++)
         {
             Item item = default(Item);
             item.instanceId = -1;
