@@ -82,7 +82,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         }
     }
 
-    public void OperateAction(OperateData operateData)
+    public void OperateAction(OperateData operateData, bool selected=true)
     {
         Character controller = CharacterManager.instance.controllerCharacter;
         if (operateData.gameActionData != null)

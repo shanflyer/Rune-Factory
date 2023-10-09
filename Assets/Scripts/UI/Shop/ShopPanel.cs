@@ -138,7 +138,7 @@ public class ShopPanel : GamePanel<ShopGroup>
             }); 
         }
     }
-    async void SeletShopItem(ShopItemData shopItemData)
+    async void SeletShopItem(ShopItemData shopItemData, bool selected=true)
     {
         selectShopItemData = shopItemData;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemData.item);
@@ -162,7 +162,7 @@ public class ShopPanel : GamePanel<ShopGroup>
         base.InitReferenceData(v);
         Title.text = v.name;
         shops.InitListData(v.shopDatas,
-            (ShopData shopData) =>
+            (ShopData shopData, bool selected) =>
             {
                 List<ShopItemData> shopItemDatas = shopData.shopItem.FindAll(s=>s.open);  
                 shopItems.InitListData(shopItemDatas, SeletShopItem,ItemGroup);
