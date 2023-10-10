@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -33,6 +34,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<DisplayStoreCounter>(DisplayStoreCounter);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteStoreCounter);
         GameActionManager.instance.AddListener<StoreCounterSetSelectItemAction>(StoreCounterSetSelectItemAction);
+        GameActionManager.instance.AddListener<SetStoreCounterItem>(SetStoreCounterItem);
     }
      //设置背包界面物体Action
     async void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
@@ -49,9 +51,41 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
     void OpenSetItemPanel(int storeId,Item item,int packageId)
     {
-
+        SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
+        {
+            storeCounterId = storeId,
+            itemId = item.dataId,
+            count = item.count
+        };
+        UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
     }
 
+    void SetStoreCounterItem(SetStoreCounterItem setStoreCounterItem)
+    {
+        if(runtimeStoreCounters.GetData(setStoreCounterItem.storeCounterId,out var runtimeStoreCounter))
+        {
+            runtimeStoreCounter.itemId = setStoreCounterItem.itemId;
+            runtimeStoreCounter.count = setStoreCounterItem.count;
+            if (runtimeStoreCounter.count == 0)
+            {
+                runtimeStoreCounter.itemId = 0;
+            }
+            runtimeStoreCounters.SetData(runtimeStoreCounter);
+
+            if(nowRuntimeStoreCounterObjs.TryGetValue(setStoreCounterItem.storeCounterId,out var runtimeObj))
+            {
+                SellItem sellItem = runtimeObj.obj as SellItem;
+                if (sellItem != null)
+                {
+                    sellItem.InitReferenceData(new Item
+                    {
+                        dataId = setStoreCounterItem.itemId,
+                        count=setStoreCounterItem.count
+                    });
+                }
+            }
+        }
+    }
     void TryCreatStoreCounter(TryCreatStoreCounter tryCreatStoreCounter)
     { 
         if (!runtimeStoreCounters.Contains(tryCreatStoreCounter.itemInstanceId) &&
@@ -115,9 +149,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         return runtimeStoreCounters.GetData(instanceId, out runtimeStoreCounter);
     }
     
-}
+} 
 
- 
 public struct RuntimeStoreCounter
 {
     public override int GetHashCode()
@@ -129,3 +162,4 @@ public struct RuntimeStoreCounter
     public int itemId;
     public int count;
 }
+ 

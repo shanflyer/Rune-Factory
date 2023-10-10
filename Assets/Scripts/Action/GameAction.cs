@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
+using static UnityEngine.Rendering.ReloadAttribute;
+using OfficeOpenXml.FormulaParsing.Utilities;
 
 public interface GameAction 
 { 
@@ -10,7 +12,32 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+public struct SetStoreCounterItem : GameAction,IReferenceData
+{
+    public int storeCounterId;
+    public int itemId;
+    public int count;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 3)
+        {
+            storeCounterId = int.Parse(parameters[0].value);
+            itemId = int.Parse(parameters[1].value);
+            count = int.Parse(parameters[0].value);
+        }
+        if (source != 0)
+        {
+            storeCounterId = source;
+        }
+        if (target != 0)
+        {
+            itemId = target;
+            count = -1;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct StoreCounterSetSelectItemAction : GameAction
 {
     public int sourceObj;

@@ -18,6 +18,8 @@ public class PackageManager : Singleton<PackageManager>
             playerPackages.Add(id);
         }
     }
+
+   
     public async void ShowAllPlayerPackage(PackageItemAction selectItemAction, string actionName)
     {
         PackageList packageList = new PackageList
@@ -101,7 +103,14 @@ public class PackageManager : Singleton<PackageManager>
 
     private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();
     private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
-  
+    public PackageData GetPackageData(int packageId)
+    {
+        if (gamePackages.TryGetValue(packageId, out var gamePackage))
+        {
+            return gamePackage.OutGamePackageData();
+        }
+        return default(PackageData);
+    }
     async void OpenPackage(OpenPackage openPackage)
     {
         PackageList packageList=new PackageList 
@@ -321,7 +330,14 @@ public class PackageManager : Singleton<PackageManager>
         }
         return null;
     }
-
+    public bool GetOutItenFromPackage(int packageId,int itemid,int count)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return gamePackage.GetItemOutPackage(itemid, count);
+        }
+        return false;
+    }
     public async Task<int> SetItemInPackage(Item item, int packageId)
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
