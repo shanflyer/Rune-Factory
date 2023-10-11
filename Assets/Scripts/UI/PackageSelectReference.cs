@@ -38,6 +38,8 @@ public class PackageSelectReference : UIObjReference<PackageData>
         PackageSetData  packageSetData= await GameDataManager.instance.GetAsyncData<PackageSetData>(PackageData.dataId);
         toggle.group = toggleGroup;
         background.sprite= check.sprite = packageSetData.icon.sprite;
+        background.SetNativeSize();
+        check.SetNativeSize();
     }
 
 }

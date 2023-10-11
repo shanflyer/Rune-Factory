@@ -312,6 +312,8 @@ public class Character
     protected virtual async Task CreatCharacterPackage()
     {
         characterPackage = await PackageManager.instance.CreatGamePackage(characterData.packageId, 0);
+
+        PackageManager.instance.SetItemInPackage(ItemManager.instance.CreatItem(1007,8), characterPackage);
     }
     public async void ChangeEquip(int id)
     {

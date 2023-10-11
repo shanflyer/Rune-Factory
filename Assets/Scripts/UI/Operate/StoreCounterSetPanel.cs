@@ -28,26 +28,22 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         {
             int count = int.Parse(value);
             changeCount = count-storeCunterSetData.count;
-            RefreshChangeCount();
-            sellCount.SetTextWithoutNotify(storeCunterSetData.count.ToString());
+            RefreshChangeCount(); 
         });
         addButton.onClick.AddListener(() =>
         {
             changeCount++;
-            RefreshChangeCount();
-            sellCount.SetTextWithoutNotify(storeCunterSetData.count.ToString());
+            RefreshChangeCount(); 
         });
         reduceButton.onClick.AddListener(() =>
         { 
             changeCount--;
             RefreshChangeCount();
-            sellCount.SetTextWithoutNotify(storeCunterSetData.count.ToString());
         });
         topButton.onClick.AddListener(() =>
         {
             changeCount = 99999; 
-            RefreshChangeCount();
-            sellCount.SetTextWithoutNotify(storeCunterSetData.count.ToString()); 
+            RefreshChangeCount(); 
         });
 
         getItemDownButton.onClick.AddListener(GetItemDownAction);
@@ -148,7 +144,8 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             {
                 InformationController.instance.AddInformation("背包空间不足!", PromptShow: true);
             }
-        } 
+        }
+        Close();
     }
     void RefreshChangeCount()
     {
@@ -193,7 +190,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(storeCunterSetData.itemId);
         if (itemData != null)
         {
-            sellItemName.text = itemData.name;
+            sellItemName.text = itemData.itemName;
             priceValue.text = itemData.sellPrice.ToString();
             sellCount.text = storeCunterSetData.count.ToString();
         }

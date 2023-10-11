@@ -28,12 +28,13 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-                list[i].InitData(componentData[i], SelectAction);
+                list[i].InitData(componentData[i], SelectAction, toggleGroup);
             }
             else
             {
-                T t = GameObject.Instantiate(listPrefab, parent, toggleGroup);
-                t.InitData(componentData[i], SelectAction);
+                T t = GameObject.Instantiate(listPrefab, parent);
+                t.InitData(componentData[i], SelectAction, toggleGroup);
+                t.enabled = true;
                 list.Add(t);
             }
         }

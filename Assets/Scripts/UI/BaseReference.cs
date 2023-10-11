@@ -9,6 +9,7 @@ public class BaseReference : MonoBehaviour
     public static LayerMask UILayer;
     public static LayerMask HideLayer;
     public virtual bool pluralUI { get; }
+    public virtual bool changeInputModel { get=>true; }
     public virtual void SetPanelUISerializeObj()
     { 
     }

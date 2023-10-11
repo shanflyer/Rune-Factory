@@ -60,7 +60,7 @@ public class ItemBoxReference : UIObjReference<Item>
             icon.enabled = true;
             icon.SetNativeSize();
             count.text = item.count.ToString();
-            count.enabled = true;
+            count.enabled = item.count>0;
             toggle.enabled = true; 
         }
         else

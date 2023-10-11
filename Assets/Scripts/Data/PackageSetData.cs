@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mono.Cecil;
+using System.Collections;
 using UnityEngine;
 
 public enum PackageType
@@ -13,8 +14,9 @@ public class PackageSetData :ScriptableObject,IGameData,IReferenceData
     public bool canLevelUp;
     public int levelUpAddCount;
     public int levelUpCost;
-    public SpriteResourceRenference icon;
+    public string iconName;
     public PackageType packageType;
+    public SpriteResourceRenference icon;
 
     public string GetKey()
     {
@@ -26,7 +28,7 @@ public class PackageSetData :ScriptableObject,IGameData,IReferenceData
     }
     public void SetReferenceData()
     {
-        
+        icon = Resources.Load<SpriteResourceRenference>($"Reference/{iconName}");
     }
 
      

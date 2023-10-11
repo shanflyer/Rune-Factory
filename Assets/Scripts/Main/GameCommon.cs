@@ -578,6 +578,7 @@ public static class DataPath
         {typeof(GameEventData),"Data/GameEventData" },
         {typeof(GameRandomDataList),"Data/GameRandomDataEditor/GameRandomDataList" },
         {typeof(GrowModelData),"Data/GrowModelDataList" },
+        {typeof(ItemData),"Data/ItemData" },
         {typeof(ItemAnimationData),"Data/ItemAnimationData" },
         {typeof(MapNpcData),"Data/MapNpcData" },
         {typeof(MapRoomData),"Data/MapRoomData" },

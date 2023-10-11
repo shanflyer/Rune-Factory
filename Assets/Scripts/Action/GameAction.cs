@@ -20,11 +20,11 @@ public struct SetStoreCounterItem : GameAction,IReferenceData
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)
     {
-        if (parameters.Count > 3)
+        if (parameters.Count > 2)
         {
             storeCounterId = int.Parse(parameters[0].value);
             itemId = int.Parse(parameters[1].value);
-            count = int.Parse(parameters[0].value);
+            count = int.Parse(parameters[2].value);
         }
         if (source != 0)
         {
@@ -40,28 +40,43 @@ public struct SetStoreCounterItem : GameAction,IReferenceData
 }
 public struct StoreCounterSetSelectItemAction : GameAction
 {
-    public int sourceObj;
+    public int targetObj;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)
     {
-        sourceObj = source;
+        targetObj = target;
         GameActionManager.instance.QueueAction(this);
     }
 }
+
+public struct SetStoreCounter : GameAction
+{
+    public int storeCounterId;
+    public int playerId;
+    public int nullAction;
+    public  void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        nullAction =int.Parse(parameters[0].value);
+        playerId = source;
+        storeCounterId = target;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+
 public struct OpenPackage : GameAction
 {
     public int packageId;
     public string selectActionName;
     public int selectActionId;
-    public int sourceObj;
+    public int targetObj;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)
     {
-        if (parameters.Count > 3)
+        if (parameters.Count > 2)
         {
             packageId = int.Parse(parameters[0].value);
             selectActionName = parameters[1].value;
-            selectActionId = int.Parse(parameters[0].value);
+            selectActionId = int.Parse(parameters[2].value);
         }
-        sourceObj = source;
+        targetObj = target;
         GameActionManager.instance.QueueAction(this);
     }
 }

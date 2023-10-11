@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Purchasing;
 
 public class PlayerStoreManager : Singleton<PlayerStoreManager>
 {
@@ -35,28 +36,63 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteStoreCounter);
         GameActionManager.instance.AddListener<StoreCounterSetSelectItemAction>(StoreCounterSetSelectItemAction);
         GameActionManager.instance.AddListener<SetStoreCounterItem>(SetStoreCounterItem);
+        GameActionManager.instance.AddListener<SetStoreCounter>(SetStoreCounter);
     }
+
+    async void SetStoreCounter(SetStoreCounter setStoreCounter)
+    {
+        int characterId = setStoreCounter.playerId;
+        if(runtimeStoreCounters.GetData(setStoreCounter.storeCounterId,out var runtimeStoreCounter))
+        {
+            if (runtimeStoreCounter.count == 0)
+            {
+                var gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(setStoreCounter.nullAction);
+                gameActionData.Action(characterId, setStoreCounter.storeCounterId);
+            }
+            else
+            {
+                OpenStoreCounter(setStoreCounter.storeCounterId);
+            }
+        }
+    }
+
      //设置背包界面物体Action
     async void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
     {
-        if(runtimeStoreCounters.Contains(storeCounterSetSelectItemAction.sourceObj))
+        if(runtimeStoreCounters.Contains(storeCounterSetSelectItemAction.targetObj))
         {
             WarehousePanel warehousePanel = await UIManager.instance.GetGamePanel<WarehousePanel>();
             warehousePanel.SetSelectItemAction((Item item, int packageId) =>
             {
-                OpenSetItemPanel(storeCounterSetSelectItemAction.sourceObj,item,packageId);
+                UIManager.instance.CloseGamePanel<WarehousePanel>();
+                OpenSetItemPanel(storeCounterSetSelectItemAction.targetObj, item,packageId);
             }, "选择");
         }
     }
-
+    void OpenStoreCounter(int storeId)
+    {
+        if (runtimeStoreCounters.GetData(storeId, out var runtimeStoreCounter))
+        {
+            SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
+            {
+                storeCounterId = storeId,
+                itemId = runtimeStoreCounter.itemId,
+                count=runtimeStoreCounter.count
+            };
+            UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+        }
+    }
     void OpenSetItemPanel(int storeId,Item item,int packageId)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {
             storeCounterId = storeId,
-            itemId = item.dataId,
-            count = item.count
+            itemId = item.dataId, 
         };
+        if(runtimeStoreCounters.GetData(storeId,out var runtimeStoreCounter))
+        {
+            setStoreCounterItem.count = runtimeStoreCounter.count;
+        }
         UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
     }
 

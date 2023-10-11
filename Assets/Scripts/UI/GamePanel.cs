@@ -87,6 +87,11 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     public virtual void InitReferenceData(V v) { } 
     public override void Show(int layer = -1)
     {
+        if (changeInputModel) 
+        {
+            InputManager.instance.SwitchInputMap(true);
+        }
+
         if (layer != -1)
         {
             canvas.sortingOrder = layer;
@@ -101,6 +106,10 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     }
     public override void Close()
     {
+        if (changeInputModel)
+        {
+            InputManager.instance.SwitchInputMap(false);
+        }
         if (pluralUI)
         {
             Destroy(gameObject);

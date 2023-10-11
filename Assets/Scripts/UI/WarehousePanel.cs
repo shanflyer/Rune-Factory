@@ -19,6 +19,9 @@ public class WarehousePanel : GamePanel<PackageList>
     Button packageLevelUp;
 
     [SerializeField]
+    Transform ItemInformation;
+
+    [SerializeField]
     TextMeshProUGUI Title;
     [SerializeField]
     TextMeshProUGUI caseCount;
@@ -62,6 +65,8 @@ public class WarehousePanel : GamePanel<PackageList>
             }
         });
 
+        ItemInformation.localScale = Vector3.zero;
+
         packageSelectList = new DisplayList<PackageSelectReference, PackageData>(packageSelect, packageSelectParent);
         packageLevelUp.onClick.AddListener(TryPackageLevelUp);
     }
@@ -87,14 +92,14 @@ public class WarehousePanel : GamePanel<PackageList>
         ItemName = FindChildGameObject<TextMeshProUGUI>("ItemName");
         Price = FindChildGameObject<TextMeshProUGUI>("Price");
         Type = FindChildGameObject<TextMeshProUGUI>("Type");
-        Property = FindChildGameObject<TextMeshProUGUI>("Prooerty");
+        Property = FindChildGameObject<TextMeshProUGUI>("Property");
         Info = FindChildGameObject<TextMeshProUGUI>("Info");
         ActionButton = FindChildGameObject<Button>("ActionButton"); 
         ActionName = FindChildGameObject<TextMeshProUGUI>("ActionName");
         itemBoxReference = FindChildGameObject<ItemBoxReference>("ItemBoxReference");
         itemParent = FindChildGameObject("ItemParent");
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
-
+        ItemInformation = FindChildGameObject("InformationObj");
         packageSelectGroup = FindChildGameObject<ToggleGroup>("PackageSelectParent");
         Price = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
         packageLevelUp = FindChildGameObject<Button>("LevelUp");
@@ -105,7 +110,7 @@ public class WarehousePanel : GamePanel<PackageList>
         packageList = v;
 
         packageSelectList.InitListData(packageList.packageDatas, SelectPackage, packageSelectGroup);
-
+        this.RefreshPackage();
         //RefreshPackage();
     }
     async void TryPackageLevelUp()
@@ -136,16 +141,26 @@ public class WarehousePanel : GamePanel<PackageList>
   
     async void SelectPackageItem(Item item,bool selected= true)
     {
-        SelectItem = item;
-        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
-        ItemIcon.sprite = itemData.icon;
-        ItemIcon.enabled = true;
-        ItemIcon.SetNativeSize();
-        ItemName.text = itemData.name;
-        Type.text = itemData.type.ToString();
-        Info.text = itemData.text1.ToString();
-        Property.text = itemData.property.ToString();
-        Price.text = $"º€÷µ:{itemData.sellPrice}G";
+        if (item.dataId == 0)
+        {
+            ItemInformation.localScale = Vector3.zero;
+        }
+        else
+        {
+            ItemInformation.localScale = Vector3.one;
+            SelectItem = item;
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+            ItemIcon.sprite = itemData.icon;
+            ItemIcon.enabled = true;
+            ItemIcon.SetNativeSize();
+            ItemName.text = itemData.itemName;
+            Type.text = itemData.type.ToString();
+            Info.text = itemData.text1.ToString();
+            Property.text = itemData.property.ToString();
+            Price.text = itemData.sellPrice.ToString();
+        }
+
+        
     } 
     void RefreshPackage(RefreshPackage RefreshPackage)
     {
@@ -155,20 +170,20 @@ public class WarehousePanel : GamePanel<PackageList>
     {
         //selectPackageData = packageList.packageDatas[selectIndex];
 
-        List<Item> items = selectPackageData.items;
+        List<Item> items = new List<Item>();
+        if (selectPackageData.items != null)
+        {
+            items.AddRange(selectPackageData.items);
+        }
+        
         for (int i = items.Count; i < selectPackageData.caseCount; i++)
         {
             items.Add(default(Item));
         }
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
         Title.text = packageSetData.packageName;
-        for (int i = 0; i < packageSetData.count; i++)
-        {
-            Item item = default(Item);
-            item.instanceId = -1;
-            items.Add(item);
-        }
-        itemBoxs.InitListData(selectPackageData.items, SelectPackageItem);
+        
+        itemBoxs.InitListData(items, SelectPackageItem);
         caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
 
     }

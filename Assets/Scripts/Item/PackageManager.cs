@@ -61,6 +61,7 @@ public class PackageManager : Singleton<PackageManager>
             if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
             {
                 count = gamePackage.TryGetItemOutPackage(itemDataId, count);
+                gamePackages[packageId] = gamePackage;
             }
         }
         return false;
@@ -84,6 +85,7 @@ public class PackageManager : Singleton<PackageManager>
                     count = count
                 };
                count= await gamePackage.SetItemInPackage(item);
+                gamePackages[packageId] = gamePackage;
             }
         }
         return false;
@@ -131,7 +133,7 @@ public class PackageManager : Singleton<PackageManager>
             GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(openPackage.selectActionId);
             if (gameActionData != null)
             {
-                gameActionData.Action(openPackage.sourceObj);
+                gameActionData.Action(packageId,openPackage.targetObj);
             }
         } 
     }
@@ -228,6 +230,7 @@ public class PackageManager : Singleton<PackageManager>
         if(gamePackages.TryGetValue(packageId,out GamePackage gamePackage))
         {
             gamePackage.caseCount += count;
+            gamePackages[packageId] = gamePackage;
             return gamePackage.caseCount;
         }
         return 0;
@@ -236,7 +239,8 @@ public class PackageManager : Singleton<PackageManager>
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
-            gamePackage.caseCount = count;
+            gamePackage.caseCount = count; 
+            gamePackages[packageId] = gamePackage;
         }
     }
     private void RemovePackageItemAction(RemovePackageItem removePackageItem)
@@ -244,6 +248,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(removePackageItem.packageId, out GamePackage gamePackage))
         {
             gamePackage.GetItemOutPackage(removePackageItem.itemDataId, removePackageItem.itemCount);
+            gamePackages[removePackageItem.packageId] = gamePackage;
         }
        
     }
@@ -334,7 +339,9 @@ public class PackageManager : Singleton<PackageManager>
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
-            return gamePackage.GetItemOutPackage(itemid, count);
+            bool result= gamePackage.GetItemOutPackage(itemid, count);
+            gamePackages[packageId] = gamePackage;
+            return result;
         }
         return false;
     }
@@ -342,7 +349,9 @@ public class PackageManager : Singleton<PackageManager>
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
-            return await gamePackage.SetItemInPackage(item);
+            int result = await gamePackage.SetItemInPackage(item);
+            gamePackages[packageId] = gamePackage;
+            return result;
         }
 
         return -1;
@@ -361,6 +370,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             UsetItemAction(itemUseEvent.itemId);
             gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
+            gamePackages[itemUseEvent.packageId] = gamePackage;
         }
     }
     async void UsetItemAction(int itemId)
@@ -462,7 +472,7 @@ public class PackageManager : Singleton<PackageManager>
                 {
                     return item.count;
                 }
-                if (packageType != PackageType.鲜活 && itemData.isFresh)
+                if (packageType == PackageType.非鲜活 && itemData.isFresh)
                 {
                     return item.count;
                 }
@@ -506,6 +516,7 @@ public class PackageManager : Singleton<PackageManager>
 
                     int inCount = item.count;
                     int oldCount = 0;
+                    packageItemCounts.TryGetValue(itemData.id, out oldCount);
                     while (inCount > 0)
                     {
                         Item setItem = items[index];
@@ -521,7 +532,7 @@ public class PackageManager : Singleton<PackageManager>
                         }
                         else
                         {
-                            setItem.count = inCount;
+                            setItem.count += inCount;
                             items[index] = setItem;
 
                             oldCount += inCount;

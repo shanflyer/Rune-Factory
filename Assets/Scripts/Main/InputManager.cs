@@ -14,7 +14,7 @@ public class InputManager :Singleton<InputManager>
      
     private PlayerInput playerInput;
     public InputActionMap playerAction;
-
+    public InputActionMap uiAction;
     public InputActionAsset inputActions;
 
     private Dictionary<string, InputActionDelegate> performDelegates = new Dictionary<string, InputActionDelegate>();
@@ -106,11 +106,16 @@ public class InputManager :Singleton<InputManager>
             {
                 playerAction = actionMap;
             }
+            if (actionMap.name == UIActionMap)
+            {
+                uiAction = actionMap;
+            }
             var actions = actionMap.actions;
 
             for (int i = 0; i < actions.Count; i++)
             {
                 var action = actions[i];
+                Debug.Log($"actionName:{action.name}");
                 void PerformedDelegate(CallbackContext callbackContext)
                 {
                     if (performDelegates.TryGetValue(action.name, out var del))
@@ -135,6 +140,7 @@ public class InputManager :Singleton<InputManager>
         }
 
         GameActionManager.instance.QueueAction(new InitInputAction());
+        playerInput.defaultActionMap =PlayerActionMap;
 
         AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
         AddInputActionDelegate(MyInputNameData.UI_Pointer, ShowPointerEffect);
@@ -142,6 +148,11 @@ public class InputManager :Singleton<InputManager>
 
     public void SwitchInputMap(bool UI)
     {
+        if (uiAction != null || playerAction != null)
+        {
+          //  playerInput.currentActionMap = UI ? uiAction : playerAction;
+        }
+       // 
         playerInput.defaultActionMap = UI ? UIActionMap : PlayerActionMap;
     }
 
