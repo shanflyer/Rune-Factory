@@ -313,7 +313,8 @@ public class Character
     {
         characterPackage = await PackageManager.instance.CreatGamePackage(characterData.packageId, 0);
 
-        PackageManager.instance.SetItemInPackage(ItemManager.instance.CreatItem(1007,8), characterPackage);
+        await PackageManager.instance.SetItemInPackage(ItemManager.instance.CreatItem(1007,8), characterPackage);
+        await PackageManager.instance.SetItemInPackage(ItemManager.instance.CreatItem(1008, 6), characterPackage);
     }
     public async void ChangeEquip(int id)
     {

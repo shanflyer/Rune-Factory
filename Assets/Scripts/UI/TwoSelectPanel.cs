@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public struct TwoSelectData:IReferenceData
 public class TwoSelectPanel : GamePanel<TwoSelectData>
 {
     [SerializeField]
-    Text TitleText, NoticeText;
+    TextMeshProUGUI TitleText, NoticeText;
     [SerializeField]
     Button YesButton, NoButton;
 
@@ -23,8 +24,8 @@ public class TwoSelectPanel : GamePanel<TwoSelectData>
     public override void SetPanelUISerializeObj()
     { 
         base.SetPanelUISerializeObj();
-        TitleText = FindChildGameObject<Text>("Title");
-        NoticeText = FindChildGameObject<Text>("Notice");
+        TitleText = FindChildGameObject<TextMeshProUGUI>("Title");
+        NoticeText = FindChildGameObject<TextMeshProUGUI>("Notice");
         YesButton = FindChildGameObject<Button>("YesButton");
         NoButton = FindChildGameObject<Button>("NoButton");
     }

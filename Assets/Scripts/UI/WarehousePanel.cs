@@ -41,7 +41,9 @@ public class WarehousePanel : GamePanel<PackageList>
     [SerializeField]
     ItemBoxReference itemBoxReference;
     [SerializeField]
-    Transform itemParent; 
+    Transform itemParent;
+    [SerializeField]
+    ToggleGroup itemSelectGroup;
     DisplayList<ItemBoxReference, Item> itemBoxs;
     DisplayList<PackageSelectReference, PackageData> packageSelectList;
 
@@ -98,6 +100,7 @@ public class WarehousePanel : GamePanel<PackageList>
         ActionName = FindChildGameObject<TextMeshProUGUI>("ActionName");
         itemBoxReference = FindChildGameObject<ItemBoxReference>("ItemBoxReference");
         itemParent = FindChildGameObject("ItemParent");
+        itemSelectGroup = FindChildGameObject<ToggleGroup>("ItemParent");
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
         ItemInformation = FindChildGameObject("InformationObj");
         packageSelectGroup = FindChildGameObject<ToggleGroup>("PackageSelectParent");
@@ -110,7 +113,7 @@ public class WarehousePanel : GamePanel<PackageList>
         packageList = v;
 
         packageSelectList.InitListData(packageList.packageDatas, SelectPackage, packageSelectGroup);
-        this.RefreshPackage();
+        //this.RefreshPackage();
         //RefreshPackage();
     }
     async void TryPackageLevelUp()
@@ -128,9 +131,12 @@ public class WarehousePanel : GamePanel<PackageList>
     }
     void SelectPackage(PackageData packageData, bool selected = true)
     {
-        selectPackageData = packageData;
-        
-        RefreshPackage();
+        if (selected)
+        {
+            selectPackageData = packageData;
+
+            RefreshPackage();
+        } 
     }
     
     public void SetSelectItemAction(PackageItemAction selectItemAction,string actionName)
@@ -183,7 +189,7 @@ public class WarehousePanel : GamePanel<PackageList>
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
         Title.text = packageSetData.packageName;
         
-        itemBoxs.InitListData(items, SelectPackageItem);
+        itemBoxs.InitListData(items, SelectPackageItem,toggleGroup: itemSelectGroup);
         caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
 
     }

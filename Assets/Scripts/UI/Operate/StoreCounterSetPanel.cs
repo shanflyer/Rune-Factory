@@ -4,6 +4,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.ReloadAttribute;
 
 public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
 {
@@ -74,54 +75,58 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
 
     async void SelectPackageItem(Item item,int packageId)
     {
-        if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
+        SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {
-            if (await PackageManager.instance.CheckPackageTryItemIn(packageId, runtimeStoreCounter.itemId, runtimeStoreCounter.count))
-            {
-                PackageManager.instance.GetOutItenFromPackage(packageId, item.dataId, item.count);
-                await PackageManager.instance.SetItemInPackage(new Item
-                {
-                    dataId = runtimeStoreCounter.itemId,
-                    count = runtimeStoreCounter.count
-                },packageId);
-                storeCunterSetData.itemId = item.dataId;
-                storeCunterSetData.count = item.count;
-                GameActionManager.instance.QueueAction(storeCunterSetData,false);
-
-                InitReferenceData(storeCunterSetData);
-            }
-        } 
+            itemId = item.dataId,
+            storeCounterId = storeCunterSetData.storeCounterId,
+            count = 0
+        };
+        UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
         UIManager.instance.CloseGamePanel<WarehousePanel>();
     }
 
     async void SetItemCountAction()
     {
-        int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
-        int maxCount= PackageManager.instance.GetPackageItemCount(packageId, storeCunterSetData.itemId);
-
-        changeCount = math.clamp(changeCount, changeCount, maxCount); 
-        if (changeCount < 0)
+         
+        if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
         {
-            if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
+            int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
+            if (runtimeStoreCounter.itemId == 0 || runtimeStoreCounter.itemId == storeCunterSetData.itemId)
+            { 
+                int maxCount = PackageManager.instance.GetPackageItemCount(packageId, storeCunterSetData.itemId);
+
+                changeCount = math.clamp(changeCount, changeCount, maxCount);
+                if (changeCount < 0)
+                {
+                    changeCount = -math.clamp(-changeCount, 0, runtimeStoreCounter.count);
+                    storeCunterSetData.count = runtimeStoreCounter.count + changeCount;
+                    GameActionManager.instance.QueueAction(storeCunterSetData);
+
+                    await PackageManager.instance.SetItemInPackage(new Item { dataId = storeCunterSetData.itemId, count = -changeCount }, packageId);
+
+                }
+                else
+                {
+                    if (PackageManager.instance.GetOutItenFromPackage(packageId, storeCunterSetData.itemId,  changeCount))
+                    {
+                        storeCunterSetData.count = runtimeStoreCounter.count + changeCount;
+                        GameActionManager.instance.QueueAction(storeCunterSetData);
+                    }
+                }
+            }
+            else
             {
-               changeCount = -math.clamp(-changeCount, 0, runtimeStoreCounter.count);
-                storeCunterSetData.count = runtimeStoreCounter.count + changeCount;
-                GameActionManager.instance.QueueAction(storeCunterSetData);
-
-               await PackageManager.instance.SetItemInPackage(new Item { dataId = storeCunterSetData.itemId, count = -changeCount }, packageId);
-
-            } 
+                storeCunterSetData.count = changeCount;
+                if (PackageManager.instance.GetOutItenFromPackage(packageId, storeCunterSetData.itemId, storeCunterSetData.count))
+                {
+                    await PackageManager.instance.SetItemInPackage(new Item { dataId = runtimeStoreCounter.itemId, count = runtimeStoreCounter.count }, packageId);
+                    GameActionManager.instance.QueueAction(storeCunterSetData);
+                }
+            }
         }
         else
         {
-            if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
-            { 
-                if(PackageManager.instance.GetOutItenFromPackage(packageId,storeCunterSetData.itemId, runtimeStoreCounter.count + changeCount))
-                {
-                    storeCunterSetData.count = runtimeStoreCounter.count + changeCount;
-                    GameActionManager.instance.QueueAction(storeCunterSetData);
-                } 
-            }
+           
         }
         //changeCount = count - storeCunterSetData.count;
         //RefreshChangeCount(); 

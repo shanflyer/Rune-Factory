@@ -7,7 +7,8 @@ public class ItemBoxReference : UIObjReference<Item>
 {
     [SerializeField]
     private Toggle toggle;
-
+    //[SerializeField]
+   // private Image icon;
     [SerializeField]
     private Image icon;
      
@@ -56,7 +57,7 @@ public class ItemBoxReference : UIObjReference<Item>
         if (itemData != null)
         { 
             icon.sprite = itemData.icon;
-            icon.color =item.instanceId>=0? Color.white:new Color(1,1,1,0.5f);
+            icon.color =(item.instanceId!=-1)? Color.white:new Color(1,1,1,0.3f);
             icon.enabled = true;
             icon.SetNativeSize();
             count.text = item.count.ToString();

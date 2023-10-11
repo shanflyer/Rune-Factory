@@ -1,19 +1,20 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CostSelectPanel : GamePanel<CostEventData> 
 {
     [SerializeField]
-    private Text TitleText;
+    private TextMeshProUGUI TitleText;
     [SerializeField]
-    private Text CostValueText;
+    private TextMeshProUGUI CostValueText;
     [SerializeField]
     private Image MoneyImage0, MoneyImage1, TotalMonet0, TotalMonet1;
     [SerializeField]
-    private Text noticeText;
+    private TextMeshProUGUI noticeText;
     [SerializeField]
-    private Text TotalText;
+    private TextMeshProUGUI TotalText;
     [SerializeField]
     Button yesButton, noButton;
 
@@ -33,14 +34,17 @@ public class CostSelectPanel : GamePanel<CostEventData>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        TitleText = FindChildGameObject<Text>("Title");
-        noticeText = FindChildGameObject<Text>("Notice");
-        CostValueText = FindChildGameObject<Text>("Cost");
-        TotalText = FindChildGameObject<Text>("Total");
+        TitleText = FindChildGameObject<TextMeshProUGUI>("Title");
+        noticeText = FindChildGameObject<TextMeshProUGUI>("Notice");
+        CostValueText = FindChildGameObject<TextMeshProUGUI>("Cost");
+        TotalText = FindChildGameObject<TextMeshProUGUI>("Total");
         MoneyImage0 = FindChildGameObject<Image>("money0");
         MoneyImage1 = FindChildGameObject<Image>("money1");
         TotalMonet0 = FindChildGameObject<Image>("TotalMoney0");
         TotalMonet1= FindChildGameObject<Image>("TotalMoney1");
+
+        yesButton = FindChildGameObject<Button>("YesButton");
+        noButton = FindChildGameObject<Button>("NoButton");
     }
     void RefreshPlayerGold(RefreshPlayerGold refreshPlayerGold)
     {
