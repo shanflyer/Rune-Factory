@@ -57,6 +57,6 @@ public class ItemInfoPanel : GamePanel<Item>
         type.text = $"[{itemData.type}]";
         price.text = $"{itemData.sellPrice}G";
         Property.text = itemData.property.ToString();
-        Info.text = itemData.text1;
+        Info.text = itemData.info;
     }
 }

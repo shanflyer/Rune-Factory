@@ -161,7 +161,7 @@ public class WarehousePanel : GamePanel<PackageList>
             ItemIcon.SetNativeSize();
             ItemName.text = itemData.itemName;
             Type.text = itemData.type.ToString();
-            Info.text = itemData.text1.ToString();
+            Info.text = itemData.info;
             Property.text = itemData.property.ToString();
             Price.text = itemData.sellPrice.ToString();
         }

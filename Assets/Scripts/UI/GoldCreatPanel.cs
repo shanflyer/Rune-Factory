@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +9,11 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
     [SerializeField]
     Transform createrParent;
     [SerializeField]
-    Text resultValue;
+    TextMeshProUGUI resultValue;
     [SerializeField]
     Button actionButton;
+    [SerializeField]
+    Button ReturnButton;
     [SerializeField]
     ToggleGroup CreaterGroup;
     [SerializeField]
@@ -28,22 +31,30 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
                 PayManager.instance.AddGold(selectMoneyCreatData);
             }
         });
+        ReturnButton.onClick.AddListener(Close);
         resultValue.text = "";
     }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         createrParent = FindChildGameObject("CreaterList");
-        resultValue = FindChildGameObject<Text>("ResultValue");
+        resultValue = FindChildGameObject<TextMeshProUGUI>("ResultValue");
         actionButton = FindChildGameObject<Button>("Action");
         createrReference = FindChildGameObject<CreaterReference>("CreaterReference");
         CreaterGroup = createrParent.GetComponent<ToggleGroup>();
+
+        ReturnButton = FindChildGameObject<Button>("ReturnButton");
     } 
 
     MoneyCreatData selectMoneyCreatData;
     void SelectCreater(MoneyCreatData MoneyCreatData,bool selected)
     {
-        selectMoneyCreatData = MoneyCreatData;
+        if (selected)
+        {
+            selectMoneyCreatData = MoneyCreatData;
+            resultValue.text = MoneyCreatData.getValue.ToString();
+        }
+        
     }
     public override async void InitReferenceData(IReferenceData v)
     {

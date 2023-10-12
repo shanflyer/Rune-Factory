@@ -477,7 +477,7 @@ public class ManufacturePanel : GamePanel<ManufactureData>
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
             selectItemName.text = itemData.itemName;
             ItemType.text = itemData.type.ToString();
-            itemInfo.text = itemData.text1;
+            itemInfo.text = itemData.info;
             itemProperty.text = itemData.property.ToString();
             moneyValue.text = itemData.sellPrice.ToString();
             ItemIcon.sprite = itemData.icon;

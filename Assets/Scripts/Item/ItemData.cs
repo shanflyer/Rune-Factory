@@ -43,7 +43,6 @@ public class ItemData : ScriptableObject, IGameData
     public int groupCount;
     public ShopMoneyType shopMoneyType;
     public int shopPrice, sellPrice;
-    public string text1, text2;
     public CharacterProperty property;
 
     public override string ToString()

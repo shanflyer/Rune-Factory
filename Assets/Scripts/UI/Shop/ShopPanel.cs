@@ -145,7 +145,7 @@ public class ShopPanel : GamePanel<ShopGroup>
         if (itemData == null)
         {
             selectItemName.text = itemData.name;
-            selectItemInfo.text = itemData.text1;
+            selectItemInfo.text = itemData.info;
             selectItemProperty.text = itemData.property.ToString();
             selectItemIcon.sprite = itemData.icon;
             selectItemIcon.SetNativeSize();

@@ -29,7 +29,7 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         itemIcon = FindChildGameObject<Image>("Icon");
         toggle = GetComponent<Toggle>();
         moneyIcon = FindChildGameObject<Image>("MoneyIcon");
-        moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
+        moneyValue = FindChildGameObject<TextMeshProUGUI>("CostValue");
     }
     SelectAction<ShopItemData> SelectAction;
     ShopItemData ShopItemData;

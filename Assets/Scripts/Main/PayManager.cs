@@ -91,7 +91,7 @@ public class PayManager : Singleton<PayManager>
     }
     void TryCreatGold()
     {
-
+        UIManager.instance.ShowGamePanel<GoldCreatPanel,IReferenceData>(null);
     }
     void TryCreatMoney()
     {
@@ -101,7 +101,7 @@ public class PayManager : Singleton<PayManager>
 
 public enum PayType
 {
-    金币,钻石,货币
+    金币=0,钻石=1,货币=2
 }
 public struct CostEventData : IReferenceData
 {
