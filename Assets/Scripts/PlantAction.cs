@@ -141,7 +141,7 @@ public class Plant : MyGameObject
     {
         int statusNum = plantBaseData.GrowthGameObjectNames.Count + 2;
         int statusDays;
-        if (plantBaseData.AdvantageSeasons.Contains(GameTimeManager.nowGameTime.gameDate.season))
+        if (plantBaseData.AdvantageSeasons.Contains(GameTimeManager.instance.nowGameTime.gameDate.season))
         {
             statusDays = plantBaseData.GrowthDays / statusNum;
         }
@@ -157,7 +157,7 @@ public class Plant : MyGameObject
     {
         float statusNum = plantBaseData.GrowthGameObjectNames.Count + 2;
         float statusDays;
-        if (plantBaseData.AdvantageSeasons.Contains(GameTimeManager.nowGameTime.gameDate.season))
+        if (plantBaseData.AdvantageSeasons.Contains(GameTimeManager.instance.nowGameTime.gameDate.season))
         {
             statusDays = plantBaseData.GrowthDays / statusNum;
         }

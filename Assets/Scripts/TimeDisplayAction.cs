@@ -26,7 +26,7 @@ public class TimeDisplayAction : MonoBehaviour
     }
     public void UpdataTime()
     {
-        gameTime = GameTimeManager.nowGameTime;
+        gameTime = GameTimeManager.instance.nowGameTime;
         
         SeasonText0.text = gameTime.gameDate.season.ToString();
         DateText0.text = gameTime.gameDate.date + "日";

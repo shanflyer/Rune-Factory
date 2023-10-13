@@ -926,7 +926,7 @@ namespace OldName
                 SeasonSelect seasonSelect = mapX.GetComponent<SeasonSelect>();
                 if (seasonSelect != null)
                 {
-                    seasonSelect.SeasonSetData(GameTimeManager.nowGameTime.gameDate.season);
+                    seasonSelect.SeasonSetData(GameTimeManager.instance.nowGameTime.gameDate.season);
                 }
             }
 

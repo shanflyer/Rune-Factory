@@ -76,7 +76,7 @@ public enum EntityType
 public class GameCommon
 {
     public const int defaultPerRPCost = 5;
-
+    public const int storeCoinTime = 1000;
     public const float HurtUtlility = 0.6f;
     public static List<int> zeroNPC = new List<int>
     {
@@ -612,6 +612,7 @@ public static class DataPath
         return null;
     }
 
+    public const string StoreCoinPrefab = "Prefabs/Other/Coin";
     public const string StoreCounterPrefab = "Prefabs/Other/SellItem";
     public const string goldSpritePath = "Reference/Gold";
     public const string diamondSpritePath = "Reference/Diamond";

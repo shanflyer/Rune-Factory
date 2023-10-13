@@ -33,7 +33,11 @@ public class PayManager : Singleton<PayManager>
         }
         return null;
     }
-
+    public void AddGold(int count)
+    {
+        nowGold += count;
+        GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+    }
     public void AddGold(MoneyCreatData MoneyCreatData)
     {
         PayAction("炼金", $"提炼{MoneyCreatData.getValue}金币", MoneyCreatData.costValue, MoneyCreatData.costPayType,
@@ -89,11 +93,11 @@ public class PayManager : Singleton<PayManager>
         
         return false;
     }
-    void TryCreatGold()
+    public void TryCreatGold()
     {
         UIManager.instance.ShowGamePanel<GoldCreatPanel,IReferenceData>(null);
     }
-    void TryCreatMoney()
+    public void TryCreatMoney()
     {
 
     }

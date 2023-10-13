@@ -134,7 +134,6 @@ public class GameTime
             GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood = false;
 
             
-            DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
         }
         if (gameDate.date > 30)
         {
@@ -208,7 +207,7 @@ public class GameTime
 }
 public class GameTimeManager : Singleton<GameTimeManager>
 {
-    public static GameTime nowGameTime;
+    public GameTime nowGameTime;
     public GameTime startTime;
     public float timeRunScale=1;
 
@@ -217,7 +216,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public TimeDisplayAction timeDisplayAction;
     [HideInInspector]
     public List<GameDate> gameDates;
- 
+
+    public override void Init()
+    {
+        base.Init();
+        nowGameTime = startTime;
+        CreatData();
+    }
     public string GameTimeToString()
     {
         string timeStr = nowGameTime.gameDate.year.ToString();
@@ -245,11 +250,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         return (years * 4 + months) * 30 + days;
 
     }
-    public void InitData()
-    {
-        nowGameTime = startTime;
-        CreatData();
-    }
+     
    public void CreatData()
     {
         gameDates=new List<GameDate>();

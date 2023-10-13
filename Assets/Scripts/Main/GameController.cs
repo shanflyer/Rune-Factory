@@ -48,10 +48,7 @@ public class GameController : MonoBehaviour
         var audio = transform.Find("Audio");
         AudioController.instance.SetAudioSource(audio.gameObject);
     }
-    public void AddGold()
-    {
-        AudioController.instance.PlayAudio(SE.click); 
-    }
+  
     public void AddCrystal()
     {
         if (Application.platform != RuntimePlatform.Android)

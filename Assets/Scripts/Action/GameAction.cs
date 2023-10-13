@@ -5,6 +5,8 @@ using System;
 using Unity.Mathematics;
 using static UnityEngine.Rendering.ReloadAttribute;
 using OfficeOpenXml.FormulaParsing.Utilities;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using static UnityEditor.PlayerSettings;
 
 public interface GameAction 
 { 
@@ -12,6 +14,42 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+public struct BuyPlayerGood: GameAction
+{
+    public int storeCounterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 1)
+        {
+            storeCounterId = int.Parse(parameters[0].value); 
+        }
+        if (target != 0)
+        {
+            storeCounterId = target;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct ShowCoin : GameAction
+{
+    public Vector2 pos;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 1)
+        {
+            pos.x = float.Parse(parameters[0].value);
+            pos.y = float.Parse(parameters[1].value); 
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct UpdateGameTime : GameAction
+{
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct SetStoreCounterItem : GameAction,IReferenceData
 {
     public int storeCounterId;

@@ -43,7 +43,7 @@ namespace OldName{
 
                 case EventTriggerType.时间:
                     var x = endTriggerValue.Split('|');
-                    GameDate gameDate = GameTimeManager.nowGameTime.gameDate;
+                    GameDate gameDate = GameTimeManager.instance.nowGameTime.gameDate;
                     if ((int)gameDate.season >= int.Parse(x[0]) && gameDate.date >= int.Parse(x[1]))
                     {
                         return true;

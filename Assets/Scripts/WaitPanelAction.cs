@@ -120,13 +120,13 @@ public class WaitPanelAction : MonoBehaviour
         GameComponentData.gameData.gameTimeManager.NextDate();
 
        
-        Debug.Log(GameTimeManager.nowGameTime.gameDate.year + "," + GameTimeManager.nowGameTime.gameDate.season.ToString() + "," + GameTimeManager.nowGameTime.gameDate.date);
+        Debug.Log(GameTimeManager.instance.nowGameTime.gameDate.year + "," + GameTimeManager.instance.nowGameTime.gameDate.season.ToString() + "," + GameTimeManager.instance.nowGameTime.gameDate.date);
 
         //
         GameComponentData.gameData.gameManager.functionButtn.SetActive(true);
 
-        if (GameTimeManager.nowGameTime.gameDate.year == 1300 && GameTimeManager.nowGameTime.gameDate.season == Season.夏
-            && GameTimeManager.nowGameTime.gameDate.date == 21)
+        if (GameTimeManager.instance.nowGameTime.gameDate.year == 1300 && GameTimeManager.instance.nowGameTime.gameDate.season == Season.夏
+            && GameTimeManager.instance.nowGameTime.gameDate.date == 21)
         { 
             if (PackageManager.instance.GetPackageItems(0).Count > 0)
             {

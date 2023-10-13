@@ -28,6 +28,7 @@ public class WorldMapController : MonoBehaviour
         {
             GameObjectCurveController.instance.SetUpDataComponent(this);
             worldMapManager.displayMap = mapInstance;
+           
             var characterManager = CharacterManager.instance;
             var gameManager = GameManager.instance;
             var playerStoreManager= PlayerStoreManager.instance;
@@ -54,6 +55,8 @@ public class WorldMapController : MonoBehaviour
             });
             GameActionManager.instance.QueueAction(new CreatDefaultNPC());
         }
+
+        UIManager.instance.ShowGamePanel<PlayerTopPanel>();
     }
     // Use this for initialization
     void Start()

@@ -19,7 +19,9 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
     public override async void Init()
     {
-        base.Init();
+        base.Init(); 
+        var storeShow= StoreShow.instance;
+
         var  playerStorePrefab = await GameSourceManager.instance.GetPrefab(DataPath.StoreCounterPrefab);
         sellItem= playerStorePrefab.GetComponent<SellItem>();
         runtimeStoreCounters.Init(32);
@@ -37,8 +39,49 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<StoreCounterSetSelectItemAction>(StoreCounterSetSelectItemAction);
         GameActionManager.instance.AddListener<SetStoreCounterItem>(SetStoreCounterItem);
         GameActionManager.instance.AddListener<SetStoreCounter>(SetStoreCounter);
+        GameActionManager.instance.AddListener<BuyPlayerGood>(BuyPlayerGood);
     }
 
+    async void BuyPlayerGood(BuyPlayerGood buyPlayerGood)
+    {
+        if (runtimeStoreCounters.GetData(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
+        {
+            if (runtimeStoreCounter.count <= 0)
+            {
+                return;
+            }
+            if (nowRuntimeStoreCounterObjs.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeObj))
+            {
+                ShowCoin showCoin = new ShowCoin
+                {
+                    pos = (runtimeObj.obj as Transform).position,
+                };
+                GameActionManager.instance.QueueAction(showCoin);
+            }
+       
+            runtimeStoreCounter.count--;
+            if (runtimeStoreCounter.count > 0)
+            { 
+                runtimeStoreCounters.SetData(runtimeStoreCounter);
+                if(runtimeObj.obj != null)
+                {
+                    (runtimeObj.obj as SellItem).AddItemCount(-1);
+                }
+            }
+            else
+            {
+                runtimeStoreCounter.itemId = 0;
+                runtimeStoreCounter.count = 0;
+                if (runtimeObj.obj!=null)
+                {
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+                }
+            }
+
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
+            PayManager.instance.AddGold(itemData.sellPrice);
+        }
+    }
     async void SetStoreCounter(SetStoreCounter setStoreCounter)
     {
         int characterId = setStoreCounter.playerId;

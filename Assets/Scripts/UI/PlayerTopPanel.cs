@@ -2,29 +2,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerTopPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Text goldValue, crystalValue;
+    TextMeshProUGUI goldValue, crystalValue;
     [SerializeField]
     Button goldAdd, crystalAdd;
     [SerializeField]
-    Text date;
+    TextMeshProUGUI date;
     [SerializeField]
-    Button calendar;
+    Button calendar, SetButton;
 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        goldValue = FindChildGameObject<Text>("GoldValue");
-        crystalValue = FindChildGameObject<Text>("CrystalValue");
-        goldAdd = FindChildGameObject<Button>("GoldAdd");
-        crystalAdd = FindChildGameObject<Button>("CrystalAdd");
-        date=FindChildGameObject<Text>("Date");
-        calendar = FindChildGameObject<Button>("CalendarButton");
+        goldValue = FindChildGameObject<TextMeshProUGUI>("GoldValue");
+        crystalValue = FindChildGameObject<TextMeshProUGUI>("CrystalValue");
+        goldAdd = FindChildGameObject<Button>("Gold");
+        crystalAdd = FindChildGameObject<Button>("Crystal");
+        date=FindChildGameObject<TextMeshProUGUI>("Date");
+        calendar = FindChildGameObject<Button>("TimeObj");
+        SetButton = FindChildGameObject<Button>("SetButton");
+       
     }
     protected override void Awake()
     {
@@ -33,25 +36,57 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         {
             UIManager.instance.ShowGamePanel<CalendarPanel>(layer: 3);
         });
-        goldAdd.onClick.AddListener(GameController.instance.AddGold);
-        crystalAdd.onClick.AddListener(GameController.instance.AddGold);
+        goldAdd.onClick.AddListener(PayManager.instance.TryCreatGold);
+        crystalAdd.onClick.AddListener(PayManager.instance.TryCreatMoney);
+
+        SetButton.onClick.AddListener(() =>
+        {
+            AudioController.instance.PlayAudio(SE.click);
+            UIManager.instance.ShowGamePanel<SetPanel>();
+        });
+
+        GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
+        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
     }
 
    
     public override Task InitData(string dataKay)
     {
-        UpdateGameTime();
+        goldValue.text = PayManager.instance.NowGold.ToString();
+        crystalValue.text = PayManager.instance.NowDiamond.ToString();
+
+        var gameTime = GameTimeManager.instance.nowGameTime;
+        if (gameTime != null)
+        {
+            date.text = LanguageManage.instance.GameTimeToString(gameTime);
+        }
+
         return base.InitData(dataKay);
 
     }
-    public void UpdateMoney()
+    public override void Show(int layer = -1)
     {
+        base.Show(layer);
+    }
+    public override void InitReferenceData(IReferenceData v)
+    {
+        RefreshPlayerGold(default(RefreshPlayerGold));
+        UpdateGameTime(default(UpdateGameTime)); 
+        base.InitReferenceData(v);
+    }
+    void RefreshPlayerGold(RefreshPlayerGold updateMoney)
+    {
+        goldValue.text = PayManager.instance.NowGold.ToString();
+        crystalValue.text = PayManager.instance.NowDiamond.ToString();
+    }
+    void UpdateGameTime(UpdateGameTime updateGameTime)
+    {
+        var gameTime = GameTimeManager.instance.nowGameTime;
+        if (gameTime != null)
+        {
+            date.text = LanguageManage.instance.GameTimeToString(gameTime);
+        }
+      
+    }
 
-    }
-    public void UpdateGameTime()
-    {
-      var gameTime = GameTimeManager.nowGameTime;
-        date.text = LanguageManage.instance.GameTimeToString(gameTime);
-    }
-    
 }

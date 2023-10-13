@@ -115,7 +115,7 @@ public class InputManager :Singleton<InputManager>
             for (int i = 0; i < actions.Count; i++)
             {
                 var action = actions[i];
-                Debug.Log($"actionName:{action.name}");
+               // Debug.Log($"actionName:{action.name}");
                 void PerformedDelegate(CallbackContext callbackContext)
                 {
                     if (performDelegates.TryGetValue(action.name, out var del))

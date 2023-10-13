@@ -327,9 +327,9 @@ namespace OldName
 
         public void UpData()
         {
-            year = GameTimeManager.nowGameTime.gameDate.year;
-            season = GameTimeManager.nowGameTime.gameDate.season;
-            date = GameTimeManager.nowGameTime.gameDate.date;
+            year = GameTimeManager.instance.nowGameTime.gameDate.year;
+            season = GameTimeManager.instance.nowGameTime.gameDate.season;
+            date = GameTimeManager.instance.nowGameTime.gameDate.date;
         }
     }
 
@@ -661,7 +661,7 @@ namespace OldName
         }
         public void InitPlayerLoadData(GamePlayer gamePlayer)
         {
-            GameTimeManager.nowGameTime = new GameTime(dateData.year, dateData.season, dateData.date, 0, 0);
+            GameTimeManager.instance.nowGameTime = new GameTime(dateData.year, dateData.season, dateData.date, 0, 0);
             InitPastureData();
             InitPlantData();
             InitNpcLoadData();
@@ -1051,7 +1051,7 @@ namespace OldName
         }
         public void InitPlayerLoadData(GamePlayer gamePlayer)
         {
-            GameTimeManager.nowGameTime = new GameTime(dateData.year, dateData.season, dateData.date, 0, 0);
+            GameTimeManager.instance.nowGameTime = new GameTime(dateData.year, dateData.season, dateData.date, 0, 0);
             InitPastureData();
             InitPlantData();
             InitNpcLoadData();

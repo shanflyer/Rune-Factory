@@ -75,6 +75,16 @@ public class GameSourceManager:Singleton<GameSourceManager>
         textures.Add(path, texture);
         return texture;
     }
+    public async Task<T> GetComponent<T>(string path) where T: Component
+    {
+        if (prefabs.TryGetValue(path, out GameObject obj))
+        {
+            return obj.GetComponentInChildren<T>();
+        }
+        obj = await ExtensionsResources.LoadResourceAsync<GameObject>(path);
+        prefabs.Add(path, obj);
+        return obj.GetComponentInChildren<T>();
+    }
     public async Task<GameObject> GetPrefab(string path)
     {
         if(prefabs.TryGetValue(path,out GameObject obj))

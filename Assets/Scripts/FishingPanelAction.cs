@@ -121,7 +121,7 @@ public class FishingPanelAction : MonoBehaviour
 
             var fishes =
                 GameComponentData.gameData.fishManager.Fishes.FindAll(
-                    f => f.Seasons.Exists(s => s == GameTimeManager.nowGameTime.gameDate.season));
+                    f => f.Seasons.Exists(s => s == GameTimeManager.instance.nowGameTime.gameDate.season));
             int maxValue = 0;
             List<int> indexes = new List<int>();
             if (fishes.Count > 0)
