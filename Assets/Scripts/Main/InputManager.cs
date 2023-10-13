@@ -148,8 +148,19 @@ public class InputManager :Singleton<InputManager>
 
     public void SwitchInputMap(bool UI)
     {
-        if (uiAction != null || playerAction != null)
+        if (uiAction != null && playerAction != null)
         {
+            if (UI)
+            {
+                uiAction.Enable();
+                playerAction.Disable();
+            }
+            else
+            {
+                uiAction.Disable();
+                playerAction.Enable();
+            }
+           
           //  playerInput.currentActionMap = UI ? uiAction : playerAction;
         }
        // 

@@ -54,7 +54,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             {
                 ShowCoin showCoin = new ShowCoin
                 {
-                    pos = (runtimeObj.obj as Transform).position,
+                    pos = (runtimeObj.obj as SellItem).transform.position,
                 };
                 GameActionManager.instance.QueueAction(showCoin);
             }
@@ -67,19 +67,22 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 {
                     (runtimeObj.obj as SellItem).AddItemCount(-1);
                 }
+
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
+                PayManager.instance.AddGold(itemData.sellPrice);
             }
             else
-            {
+            { 
                 runtimeStoreCounter.itemId = 0;
                 runtimeStoreCounter.count = 0;
+                runtimeStoreCounters.SetData(runtimeStoreCounter);
                 if (runtimeObj.obj!=null)
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                 }
             }
 
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
-            PayManager.instance.AddGold(itemData.sellPrice);
+           
         }
     }
     async void SetStoreCounter(SetStoreCounter setStoreCounter)

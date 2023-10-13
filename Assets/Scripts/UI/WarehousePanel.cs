@@ -113,6 +113,7 @@ public class WarehousePanel : GamePanel<PackageList>
         packageList = v;
 
         packageSelectList.InitListData(packageList.packageDatas, SelectPackage, packageSelectGroup);
+        SelectPackage(packageList.packageDatas[0]);
         //this.RefreshPackage();
         //RefreshPackage();
     }
@@ -190,6 +191,8 @@ public class WarehousePanel : GamePanel<PackageList>
         Title.text = packageSetData.packageName;
         
         itemBoxs.InitListData(items, SelectPackageItem,toggleGroup: itemSelectGroup);
+        if(items.Count>0) { SelectPackageItem(items[0]); }
+        
         caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
 
     }

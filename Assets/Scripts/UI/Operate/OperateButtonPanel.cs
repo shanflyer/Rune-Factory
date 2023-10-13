@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class OperateButtonPanel : GamePanel<OperateDataList>
 {
+    public override bool changeInputModel => false;
+
     [SerializeField]
     Transform OperateParent0, OperateParent1;
     [SerializeField]

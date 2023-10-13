@@ -408,7 +408,7 @@ public class PackageManager : Singleton<PackageManager>
                 instanceId = instanceId,
                 dataId=dataId,
                 name = name,
-                items = items,
+                items = GetItems(),
             };
             return packageData;
         }
@@ -650,6 +650,7 @@ public class PackageManager : Singleton<PackageManager>
                             nullItems.Enqueue(indexDatas[index]);
                             itemCount--;
                             indexDatas.RemoveAt(index);
+                            items[index]=default(Item);
                             index--;
                         }
                     }

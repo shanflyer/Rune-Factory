@@ -24,7 +24,7 @@ public class SetPanel : GamePanel<IReferenceData>
 
         returnButton.onClick.AddListener(() =>
         {
-            AudioController.instance.PlayAudio(SE.Return);
+           // AudioController.instance.PlayAudio(SE.Return);
             Close();
         });
         bgmSlider.onValueChanged.AddListener((float value) =>

@@ -41,7 +41,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         SetButton.onClick.AddListener(() =>
         {
-            AudioController.instance.PlayAudio(SE.click);
+           // AudioController.instance.PlayAudio(SE.click);
             UIManager.instance.ShowGamePanel<SetPanel>();
         });
 
@@ -55,6 +55,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         goldValue.text = PayManager.instance.NowGold.ToString();
         crystalValue.text = PayManager.instance.NowDiamond.ToString();
 
+       
         var gameTime = GameTimeManager.instance.nowGameTime;
         if (gameTime != null)
         {
