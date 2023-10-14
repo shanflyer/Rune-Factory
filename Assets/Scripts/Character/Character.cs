@@ -749,7 +749,8 @@ public class Character
 
 public class TempCharacter : Character
 {
-    int tempDataId;
+    public int tempDataId => _tempDataId;
+    private int _tempDataId;
     public int templevel
     {
         set
@@ -765,7 +766,7 @@ public class TempCharacter : Character
     public int _templevel;
     public TempCharacter(CharacterData characterData, int instanceId, int tempDataId) : base(characterData, instanceId)
     {
-        this.tempDataId = tempDataId;
+        this._tempDataId = tempDataId;
     }
     
     async void RefreshBehavior()

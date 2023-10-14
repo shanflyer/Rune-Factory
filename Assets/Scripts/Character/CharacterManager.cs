@@ -1,4 +1,4 @@
- 
+
 using System;
 using System.Collections.Generic; 
 using System.Threading.Tasks;
@@ -102,10 +102,19 @@ public class CharacterManager : Singleton<CharacterManager>
 
         GameActionManager.instance.AddListener<CreatDefaultNPC>(CreatDefaultNPC);
         GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
-        GameActionManager.instance.AddListener<InitInputAction>(InitInputAction); 
-        
+        GameActionManager.instance.AddListener<InitInputAction>(InitInputAction);
+
+        GameActionManager.instance.AddListener<SetDirection>(SetDirection);
+        GameActionManager.instance.AddListener<SetTargetDirection>(SetTargetDirection);
+        GameActionManager.instance.AddListener<GetCharacterDataId>(GetCharacterDataId);
     }
-    
+    void GetCharacterDataId(GetCharacterDataId getCharacterDataId)
+    {
+        if(characters.TryGetValue(getCharacterDataId.characterId,out var character))
+        {
+            getCharacterDataId.SetValue(character.dataId);
+        }
+    }
     void InitInputAction(InitInputAction initInputAction)
     {
         //InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
@@ -639,7 +648,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async System.Threading.Tasks.Task RefreshNpcRuntimeObj()
+    public async Task RefreshNpcRuntimeObj()
     {
 
         using(var e = characters.GetEnumerator())
@@ -751,6 +760,21 @@ public class CharacterManager : Singleton<CharacterManager>
                     }
                 },
                 WorldMapManager.instance.displayMap, playerRuntimeObj.linkId, true);
+        }
+    }
+
+    void SetTargetDirection(SetTargetDirection SetTargetDirection)
+    {
+        if (characters.TryGetValue(SetTargetDirection.characterId, out var character))
+        {
+            character.moveDirection =math.normalize(SetTargetDirection.targetCoordinate-character.objCoordinate.coordinate);
+        }
+    }
+    void SetDirection(SetDirection SetCharacterDirection)
+    {
+        if(characters.TryGetValue(SetCharacterDirection.characterId,out var character))
+        {
+            character.moveDirection = SetCharacterDirection.direction;
         }
     }
 }

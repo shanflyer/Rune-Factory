@@ -8,6 +8,7 @@ using OfficeOpenXml.FormulaParsing.Utilities;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using static UnityEditor.PlayerSettings;
 using UnityEngine.TextCore.Text;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public interface GameAction 
 { 
@@ -15,7 +16,79 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+public delegate void SetInt3Value(int3 value);
+public delegate void SetResult(bool value);
+public struct GetCharacterDataId : GameAction
+{
+    public int characterId;
+    public SetValue SetValue;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct GetTempCharacterExit : GameAction
+{
+    public SetInt3Value SetInt3Value;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct GetTempCharacterEnter : GameAction
+{
+    public SetInt3Value SetInt3Value;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct TryBuyPlayerGood : GameAction
+{
+    public int characterId;
+    public int storeCounterId;
+    public SetResult setResult;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    { 
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct SetDirection : GameAction
+{
+    public int characterId;
+    public float2 direction;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+        {
+            direction.x = float.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            direction.y= float.Parse(parameters[1].value);
+        }
 
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct SetTargetDirection : GameAction
+{
+    public int characterId;
+    public int2 targetCoordinate;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+        {
+            targetCoordinate.x = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            targetCoordinate.y = int.Parse(parameters[1].value);
+        }
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct SetCreateTempCharacterLevel : GameAction
 {
     public int level;

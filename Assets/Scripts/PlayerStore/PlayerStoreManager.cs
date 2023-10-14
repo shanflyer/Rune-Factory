@@ -8,6 +8,7 @@ using UnityEngine.Purchasing;
 
 public class PlayerStoreManager : Singleton<PlayerStoreManager>
 {
+    public MyNativeData<RuntimeStoreCounter> RuntimeStoreCounters=>runtimeStoreCounters;
     private MyNativeData<RuntimeStoreCounter> runtimeStoreCounters;
     private Dictionary<int, RuntimeObj> nowRuntimeStoreCounterObjs = new Dictionary<int, RuntimeObj>();
     
@@ -40,8 +41,52 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<SetStoreCounterItem>(SetStoreCounterItem);
         GameActionManager.instance.AddListener<SetStoreCounter>(SetStoreCounter);
         GameActionManager.instance.AddListener<BuyPlayerGood>(BuyPlayerGood);
+        GameActionManager.instance.AddListener<TryBuyPlayerGood>(TryBuyPlayerGood);
     }
+    async void TryBuyPlayerGood(TryBuyPlayerGood buyPlayerGood)
+    {
+        if (runtimeStoreCounters.GetData(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
+        {
+            if (runtimeStoreCounter.count <= 0)
+            {
+                buyPlayerGood.setResult(false);
+                return;
+            }
+            if (nowRuntimeStoreCounterObjs.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeObj))
+            {
+                ShowCoin showCoin = new ShowCoin
+                {
+                    pos = (runtimeObj.obj as SellItem).transform.position,
+                };
+                GameActionManager.instance.QueueAction(showCoin);
+            }
 
+            runtimeStoreCounter.count--;
+            if (runtimeStoreCounter.count > 0)
+            {
+                runtimeStoreCounters.SetData(runtimeStoreCounter);
+                if (runtimeObj.obj != null)
+                {
+                    (runtimeObj.obj as SellItem).AddItemCount(-1);
+                }
+
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
+                PayManager.instance.AddGold(itemData.sellPrice);
+            }
+            else
+            {
+                runtimeStoreCounter.itemId = 0;
+                runtimeStoreCounter.count = 0;
+                runtimeStoreCounters.SetData(runtimeStoreCounter);
+                if (runtimeObj.obj != null)
+                {
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+                }
+            }
+
+            buyPlayerGood.setResult(true);
+        }
+    }
     async void BuyPlayerGood(BuyPlayerGood buyPlayerGood)
     {
         if (runtimeStoreCounters.GetData(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))

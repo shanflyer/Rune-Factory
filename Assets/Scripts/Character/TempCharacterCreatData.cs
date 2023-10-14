@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 [System.Serializable]
-public struct TempBornData
+public struct TempPosRange
 {
     public int mapInstance;
     public int2 posMin;
@@ -18,7 +18,8 @@ public class TempCharacterCreatData : ScriptableObject, IGameData, IReferenceDat
     public List<int> tempCharacters;
     public List<int> tempGroupCharacters;
 
-    public List<TempBornData> tempBornDatas;
+    public List<TempPosRange> tempEnterDatas;
+    public List<TempPosRange> tempExitDatas;
     public string GetKey()
     {
         return level.ToString();

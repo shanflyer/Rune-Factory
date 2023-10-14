@@ -14,6 +14,7 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
         base.Init();
         GameActionManager.instance.AddListener<SetCreateTempCharacterLevel>(SetCreateTempCharacterLevel);
         GameActionManager.instance.AddListener<DestoryTempCharacter>(DestoryTempCharacter);
+        GameActionManager.instance.AddListener<GetTempCharacterExit>(GetTempCharacterExit);
     }
     TempCharacterCreatData NowTempCharacterCreatData;
     List<int> tempCharacters;
@@ -21,6 +22,16 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
     int nowCd;
     int waitTime;
     public int level { get; private set; }
+
+    void GetTempCharacterExit(GetTempCharacterExit getTempCharacterExit)
+    {
+        var TempPosRanges = NowTempCharacterCreatData.tempExitDatas;
+        int index = GameRandom.RandomInt(0, TempPosRanges.Count);
+        var tempPosRange = TempPosRanges[index];
+        int2 coordinate = GameRandom.RandomInt2(tempPosRange.posMin, tempPosRange.posMax);
+        getTempCharacterExit.SetInt3Value(new int3(coordinate, tempPosRange.mapInstance));
+    }
+    
 
     void DestoryTempCharacter(DestoryTempCharacter destoryTempCharacter)
     {
@@ -51,8 +62,8 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
         int characterId = 0;
         bool groupCreat=true;
 
-        int BornIndex = GameRandom.RandomInt(0, NowTempCharacterCreatData.tempBornDatas.Count);
-        TempBornData tempBornData = NowTempCharacterCreatData.tempBornDatas[BornIndex];
+        int BornIndex = GameRandom.RandomInt(0, NowTempCharacterCreatData.tempEnterDatas.Count);
+        TempPosRange tempBornData = NowTempCharacterCreatData.tempEnterDatas[BornIndex];
         int2 coordinate = GameRandom.RandomInt2(tempBornData.posMin, tempBornData.posMax);
 
         if (tempCharacters.Count > 0)

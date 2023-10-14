@@ -1,17 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Collections;
 
-public struct MyNativeData<T> where T : unmanaged
+public struct MyNativeData<T>where T : unmanaged
 {
     private NativeList<T> datas;
     private NativeHashMap<int, int> itemIndexes;
     private NativeQueue<int> nullIndexes;
     private int nowIndex;
     private T nullData;
+
+    public IEnumerator GetEnumerator()
+    {
+        foreach(var itemIndex in itemIndexes)
+        {
+            yield return datas[itemIndex.Value];
+        }
+    }
 
     public void Dispose()
     {
@@ -83,6 +92,6 @@ public struct MyNativeData<T> where T : unmanaged
     {
         return itemIndexes.ContainsKey(id);
     }
-   
 
+   
 }

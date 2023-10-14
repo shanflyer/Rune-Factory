@@ -691,6 +691,16 @@ public class MapCellController : Singleton<MapCellController>
         }
         return false;
     }
+    public bool CheckIsWalk(int2 coordinate, int mapId)
+    {
+        if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
+        {
+            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
+
+            return roomCellData.CheckWalkable(coordinate);
+        }
+        return false;
+    }
 
     public Queue<int> FindRoomList(int sourceId, int targetId, Queue<int> roomList, ref bool result)
     {
