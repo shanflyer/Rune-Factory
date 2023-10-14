@@ -293,10 +293,10 @@ namespace OldName
         }
         public void UpData()
         {
-            deskCount = GameComponentData.gameData.shopGoldDeskAction.openCount;
+            //deskCount = GameComponentData.gameData.shopGoldDeskAction.openCount;
             deskItemIds = new List<int>();
             deskItenCounts = new List<int>();
-
+            /*
             if (GameComponentData.gameData.shopGoldDeskAction.GoodDeskes != null)
             {
                 foreach (var desk in GameComponentData.gameData.shopGoldDeskAction.GoodDeskes)
@@ -314,7 +314,7 @@ namespace OldName
 
                 }
             }
-
+            */
 
         }
     }
@@ -414,7 +414,7 @@ namespace OldName
         public PlayerMoneyData() { }
         public void UpData()
         {
-            GroundMoney = GameComponentData.gameData.coinAction.GroundMoney;
+           // GroundMoney = GameComponentData.gameData.coinAction.GroundMoney;
             GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
             money0 = gamePlayer.money;
             power = gamePlayer.property.Power;
@@ -725,7 +725,7 @@ namespace OldName
             {
                 playerMoneyData.GroundMoney = 0;
             }
-            GameComponentData.gameData.coinAction.GroundMoney = playerMoneyData.GroundMoney;
+           // GameComponentData.gameData.coinAction.GroundMoney = playerMoneyData.GroundMoney;
             if (marryData != null)
             {
                 GameComponentData.gameData.gameManager.childData = new ChildData
@@ -763,7 +763,7 @@ namespace OldName
         }
         public void InitDeskData()
         {
-            GameComponentData.gameData.shopGoldDeskAction.LoadData(deskData);
+           // GameComponentData.gameData.shopGoldDeskAction.LoadData(deskData);
         }
         public void InitPlantData()
         {
@@ -1100,7 +1100,7 @@ namespace OldName
             {
                 playerMoneyData.GroundMoney = 0;
             }
-            GameComponentData.gameData.coinAction.GroundMoney = playerMoneyData.GroundMoney;
+            //GameComponentData.gameData.coinAction.GroundMoney = playerMoneyData.GroundMoney;
             if (marryData != null)
             {
                 GameComponentData.gameData.gameManager.childData = new ChildData
@@ -1138,7 +1138,7 @@ namespace OldName
         }
         public void InitDeskData()
         {
-            GameComponentData.gameData.shopGoldDeskAction.LoadData(deskData);
+           // GameComponentData.gameData.shopGoldDeskAction.LoadData(deskData);
         }
         public void InitPlantData()
         {

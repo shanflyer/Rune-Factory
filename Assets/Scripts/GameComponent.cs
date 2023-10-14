@@ -15,9 +15,7 @@ public class GameComponent : MonoBehaviour
     public GameObject sleepObj;
     public GameObject SaveButtonObj;
     public LoveAction loveAction; 
-    public SalesetPanelAction salesetPanelAction;
-    public GameObject InputObj;
-    public CoinAction coinAction;
+    public GameObject InputObj; 
     public GameObject informationObj;
     public HeritageAction heritageAction;
     public GameObject BookPanelObj;
@@ -39,8 +37,7 @@ public class GameComponent : MonoBehaviour
     public GameObject huiFuEffectPro;
     public Transform mapParent;
     public Transform PlantParent;
-    public Transform NpcParent; 
-    public ShopGoldDeskAction shopGoldDeskAction; 
+    public Transform NpcParent;  
     public InfluenceAction influenceAction;
     public FarmAction farmAction;
     public PlantAction plantAction;

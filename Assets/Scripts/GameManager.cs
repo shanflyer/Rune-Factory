@@ -357,7 +357,7 @@ namespace OldName
             result1 = 0;
             //GameData.shopManager.InitData();
 
-            GameData.shopGoldDeskAction.saleValue = 100;
+            //GameData.shopGoldDeskAction.saleValue = 100;
           
             UpDataPlayer();
             headIcon.sprite = GameComponent.headIcons.Find(h => h.name == gamePlayer.IconName);
@@ -514,7 +514,7 @@ namespace OldName
                 DateTime nowDateTime = DateTime.Now;
                 var x = nowDateTime - pause;
                 int total = (int)x.TotalMinutes;
-                GameData.shopGoldDeskAction.SellInBack(total);
+                //GameData.shopGoldDeskAction.SellInBack(total);
 
             }
         }
@@ -595,7 +595,7 @@ namespace OldName
                 {
                     case CostType.增加柜台:
                         InformationController.instance.AddInformation("*消耗金币" + goldCostValue + ",新增加一个柜台。");
-                        GameComponentData.gameData.shopGoldDeskAction.AddNewDesk();
+                       // GameComponentData.gameData.shopGoldDeskAction.AddNewDesk();
                         break;
                     case CostType.增加牧场:
                         GameComponentData.gameData.pastureAction.BuildSucessful();
@@ -949,7 +949,7 @@ namespace OldName
                 fieldTool.SetActive(false);
                 if (oldPass0 == 1000)
                 {
-                    GameData.shopGoldDeskAction.ShopingInBack();
+                   // GameData.shopGoldDeskAction.ShopingInBack();
                 }
                 InitMapData(2001);
                 StartCoroutine("InitSquaring");
@@ -963,7 +963,7 @@ namespace OldName
                 fieldTool.SetActive(false);
                 if (oldPass0 == 1000)
                 {
-                    GameData.shopGoldDeskAction.ShopingInBack();
+                   // GameData.shopGoldDeskAction.ShopingInBack();
                 }
 
                 InitMapData(2000);
@@ -977,14 +977,14 @@ namespace OldName
             if (nowMapid != _mapid)
             {
                 fieldTool.SetActive(false);
-                GameData.shopGoldDeskAction.ShopingInBack();
+               // GameData.shopGoldDeskAction.ShopingInBack();
                 InitMapData(_mapid);
                 StartCoroutine("InitStreeting");
             }
         }
         public void InitGate()
         {
-            GameData.shopGoldDeskAction.ShopingInBack();
+           // GameData.shopGoldDeskAction.ShopingInBack();
             if (nowMapid != 2002)
             {
                 fieldTool.SetActive(false);
@@ -1002,7 +1002,7 @@ namespace OldName
                 fieldTool.SetActive(true);
                 if (oldPass0 == 1000)
                 {
-                    GameData.shopGoldDeskAction.ShopingInBack();
+                  //  GameData.shopGoldDeskAction.ShopingInBack();
                 }
                 InitMapData(1001);
                 StartCoroutine("InitFarm");
@@ -1016,7 +1016,7 @@ namespace OldName
                 fieldTool.SetActive(false);
                 if (oldPass0 == 1000)
                 {
-                    GameData.shopGoldDeskAction.ShopingInBack();
+                  //  GameData.shopGoldDeskAction.ShopingInBack();
                 }
                 InitMapData(1002);
 
@@ -1036,7 +1036,7 @@ namespace OldName
 
                 if (oldPass0 == 1000)
                 {
-                    GameData.shopGoldDeskAction.ShopingInBack();
+                  //  GameData.shopGoldDeskAction.ShopingInBack();
                 }
                 InitMapData(1003);
                 StartCoroutine("InitRoomMap");

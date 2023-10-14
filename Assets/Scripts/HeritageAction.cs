@@ -42,7 +42,7 @@ public class Heritage
             switch (heritageType)
             {
                 case HeritageType.金币捡完:
-                    if ((GameComponentData.gameData.coinAction.Coins!=null&&GameComponentData.gameData.coinAction.Coins.Count <= 0)&& charactorTitleAction.busicessExp >0)
+                    //if ((GameComponentData.gameData.coinAction.Coins!=null&&GameComponentData.gameData.coinAction.Coins.Count <= 0)&& charactorTitleAction.busicessExp >0)
                     {
                         isGet = true;
                     }
@@ -119,7 +119,7 @@ public class Heritage
                         }
                         else
                         {
-                            if ((GameComponentData.gameData.coinAction.Coins != null && GameComponentData.gameData.coinAction.Coins.Count <= 0) && charactorTitleAction.busicessExp > 0)
+                           // if ((GameComponentData.gameData.coinAction.Coins != null && GameComponentData.gameData.coinAction.Coins.Count <= 0) && charactorTitleAction.busicessExp > 0)
                             {
                                 isGet = true;
                                 GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
