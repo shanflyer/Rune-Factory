@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
+using static NPCManager;
 
 public delegate void MoveEndAction();
 
@@ -48,12 +50,22 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
     private Dictionary<int,List<int>> characterInstances=new Dictionary<int, List<int>>();
+    private Dictionary<int, TempCharacter> tempCharacters = new Dictionary<int, TempCharacter>();
+
 
     public Player player;
     private CharacterData playerData;
     public List<Character> teamPlayers = new List<Character>();
     //private Vector2 playerMoveDirction;
 
+    public int GetCharacterInstance()
+    {
+        return myInstance.CreatInstanceId();
+    }
+    public void RemoveInstance(int id)
+    {
+        myInstance.RemoveInstance(id);
+    }
 
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
@@ -85,13 +97,15 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordiante);
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
         GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
+        GameActionManager.instance.AddListener<CreatTempCharacter>(CreatTempCharacter);
+        GameActionManager.instance.AddListener<DestoryTempCharacter>(DestoryTempCharacter);
+
         GameActionManager.instance.AddListener<CreatDefaultNPC>(CreatDefaultNPC);
         GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
-        GameActionManager.instance.AddListener<InitInputAction>(InitInputAction);
-        
+        GameActionManager.instance.AddListener<InitInputAction>(InitInputAction); 
         
     }
-
+    
     void InitInputAction(InitInputAction initInputAction)
     {
         //InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
@@ -184,7 +198,46 @@ public class CharacterManager : Singleton<CharacterManager>
         player=new Player(playerData, instanceId);
         AddCharacter(player); 
     }
+    /// <summary>
+    /// 销毁消费者
+    /// </summary>
+    /// <param name="DestoryTempCharacter"></param>
+    void DestoryTempCharacter(DestoryTempCharacter destoryTempCharacter)
+    {
+        if(characters.TryGetValue(destoryTempCharacter.characterId,out var character))
+        {
+            if (characterInstances.TryGetValue(character.dataId, out List<int> instances))
+            {
+                instances.Remove(character.instanceId); 
+            }
+            characters.Remove(destoryTempCharacter.characterId);
 
+            CharacterBehaviorManager.instance.DestroyBehavior(destoryTempCharacter.characterId);
+        } 
+    }
+
+    /// <summary>
+    /// 创建消费者
+    /// </summary>
+    /// <param name="creatTempCharacter"></param>
+    async void CreatTempCharacter(CreatTempCharacter creatTempCharacter)
+    {
+        var tempCharacterData = await GameDataManager.instance.GetAsyncData<TempCharacterData>(creatTempCharacter.characterId);
+        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
+        int level = TempCharacterManager.instance.level;
+
+        TempCharacter character = new TempCharacter(characterData, myInstance.CreatInstanceId(),tempCharacterData.id);
+        
+        AddCharacter(character);
+        character.objCoordinate = new ObjCoordinate
+        {
+            mapInstance = creatTempCharacter.mapInstance,
+            x = creatTempCharacter.coordinateX,
+            y = creatTempCharacter.coordinateY
+        };
+        character.templevel = level;
+        RefreshNpcRuntimeObj(character);
+    }
 
     async void CreatCharacter(CreatCharacter creatCharacter)
     {
@@ -533,9 +586,11 @@ public class CharacterManager : Singleton<CharacterManager>
 
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterDataId);
         if (characterData != null)
-        { 
-           return  GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.objName,
+        {
+            var runtimeObj=GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.objName,
                characterData.obj.transform, instacneId);
+            (runtimeObj.obj as Transform).position=pos;
+            return runtimeObj;
         }
         return default(RuntimeObj);
     }

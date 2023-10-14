@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
@@ -16,6 +17,9 @@ public class MapInstanceEditor : MonoBehaviour
     private Tilemap tilemap;
     [SerializeField]
     private bool hideTilemap;
+
+    [SerializeField]
+    private bool displayCoordinate;
 
     public static Dictionary<int, MapItemData> mapItemDatas;
 
@@ -67,6 +71,20 @@ public class MapInstanceEditor : MonoBehaviour
 
     List<TilemapRenderer> tilemapRenderers = new List<TilemapRenderer>();
 
+    private GameObject coordinateDisplayParent;
+    private TextMeshPro editorCoordinate
+    {
+        get
+        {
+            if (_editorCoordinate == null)
+            {
+                _editorCoordinate= AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Editor/Source/Text.prefab").GetComponent<TextMeshPro>();
+            }
+            return _editorCoordinate;
+        }
+    }
+    private TextMeshPro _editorCoordinate;
+
     public WorldMap GetWorldMap()
     {
         WorldMap worldMap = new WorldMap
@@ -105,6 +123,9 @@ public class MapInstanceEditor : MonoBehaviour
 
                 GameObject MapTile = new GameObject("MapTile");
                 MapTile.transform.SetParent(Grid.transform, false);
+
+                coordinateDisplayParent = new GameObject("CoordinateDisplay");
+                coordinateDisplayParent.transform.SetParent(transform, false);
 
                 var grid = Grid.AddComponent<Grid>();
                 tilemap = MapTile.AddComponent<Tilemap>();
@@ -251,12 +272,23 @@ public class MapInstanceEditor : MonoBehaviour
     private void InitMapTile()
     {
         tilemap.ClearAllTiles();
+
+        GameObject.DestroyImmediate(coordinateDisplayParent);
+        coordinateDisplayParent = new GameObject("CoordinateDisplay");
+        coordinateDisplayParent.transform.SetParent(transform, false);
+
+
         foreach (var tileData in mapRoomData.mapCells)
         {
             TileBase tileBase = tileData.isWalkable ? walkTile : barrierTile;
             tilemap.SetTile(new Vector3Int(tileData.coordinate.x, tileData.coordinate.y, 0),
                 tileBase);
-        }
+
+            Vector2 pos = GameCommon.GetMapPos(tileData.coordinate);
+            var editorCoordinate = Instantiate(this.editorCoordinate, pos, Quaternion.identity, coordinateDisplayParent.transform);
+            editorCoordinate.SetText($"{tileData.coordinate.x},{tileData.coordinate.y}");
+            coordinateDisplayParent.SetActive(displayCoordinate);
+        } 
     }
 
     private Vector3 oldPos;
@@ -272,8 +304,15 @@ public class MapInstanceEditor : MonoBehaviour
     }
     int2 coordinate;
     bool oldhideTilemap;
+    bool oldDisplayCoordinate;
     private void Update()
     {
+        if (oldDisplayCoordinate != displayCoordinate)
+        {
+            oldDisplayCoordinate = displayCoordinate;
+            coordinateDisplayParent.SetActive(displayCoordinate);
+        }
+
         if (oldhideTilemap != hideTilemap)
         {
             oldhideTilemap = hideTilemap; 

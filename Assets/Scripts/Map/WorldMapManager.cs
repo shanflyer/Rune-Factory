@@ -326,6 +326,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 await AddMapItem(data, room.id);
             }
+
+            if (room.eventId != 0)
+            {
+                GameEventManager.instance.AddGameEvent(room.eventId);
+            }
         }
         //生成地图链接
         MapCellController.instance.InitLinkMap(worldMapData.mapLines);

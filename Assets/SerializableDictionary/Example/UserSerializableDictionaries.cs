@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using BehaviorDesigner.Runtime;
+[Serializable]
+public class IntBehaviorDictionary: SerializableDictionary<int,ExternalBehaviorTree> { }
 
 [Serializable]
 public class StringStringDictionary : SerializableDictionary<string, string> {}

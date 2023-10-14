@@ -85,7 +85,6 @@ public class GameEventManager:Singleton<GameEventManager>
         {
             behaviorTree.PauseWhenDisabled = pause;
             behaviorTree.enabled = awake;
-          
         }
     }
   

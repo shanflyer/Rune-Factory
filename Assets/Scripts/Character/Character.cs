@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using static NPCManager;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -746,7 +747,38 @@ public class Character
    
 }
 
-
+public class TempCharacter : Character
+{
+    int tempDataId;
+    public int templevel
+    {
+        set
+        {
+            if (_templevel != templevel)
+            {
+                _templevel = templevel;
+                RefreshBehavior();
+            }
+        }
+        get => _templevel;
+    }
+    public int _templevel;
+    public TempCharacter(CharacterData characterData, int instanceId, int tempDataId) : base(characterData, instanceId)
+    {
+        this.tempDataId = tempDataId;
+    }
+    
+    async void RefreshBehavior()
+    {
+        var tempCharacterData = await GameDataManager.instance.GetAsyncData<TempCharacterData>(tempDataId);
+        if (!tempCharacterData.levelBehavior.TryGetValue(templevel,out var externalBehaviorTree))
+        {
+            externalBehaviorTree = tempCharacterData.defaultBehavior;
+        }
+        CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
+        CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree);
+    }
+}
 
 public class NPC : Character
 { 

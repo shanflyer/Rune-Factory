@@ -28,7 +28,9 @@ public class WorldMapController : MonoBehaviour
         {
             GameObjectCurveController.instance.SetUpDataComponent(this);
             worldMapManager.displayMap = mapInstance;
-           
+
+            var gameEventManager = GameEventManager.instance;
+            var tempCharacterManager = TempCharacterManager.instance;
             var characterManager = CharacterManager.instance;
             var gameManager = GameManager.instance;
             var playerStoreManager= PlayerStoreManager.instance;

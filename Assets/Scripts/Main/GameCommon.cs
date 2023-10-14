@@ -564,8 +564,8 @@ public static class EditorDataPath
 
     public const string mapItemStructDataPath = "Assets/Editor/Data/MapItemStruct.json";
     public const string mapItemAnimationPath = "Assets/Animation/MapItem/"; 
-    public const string gameEventDataPath = "Assets/Resources/Behavior/"; 
-
+    public const string gameEventDataPath = "Assets/Resources/Behavior/";
+    public const string tempCharacterBehaviorPath = "Assets/Resources/Behavior/TempCharacter/";
 
 }
 public static class DataPath
@@ -599,8 +599,10 @@ public static class DataPath
         {typeof(PackageSetData),"Data/PackageSetData" },
         {typeof(MoneyCreatData), "Data/MoneyCreatData" },
         {typeof(ShopDataList),"Data/ShopItemData/ShopDataList" },
+        {typeof(TempCharacterCreatData),"Data/TempCharacterCreatData" },
         {typeof(OperateData),"Data/OperateData" },
-        {typeof(StoreCounterData),"Data/StoreCounterDataList" }
+        {typeof(StoreCounterData),"Data/StoreCounterDataList" },
+        {typeof(TempCharacterData),"Data/TempCharacterData"}
     };
 
     public static string GetDataPath(Type type)

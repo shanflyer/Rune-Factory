@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: "\u8BBE\u7F6E\u5F00\u59CB\u751F\u4EA7\u6D88\u8D39\u8005"
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(399.5,30)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-0.5,120)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"RunGameActions","NodeData":{"Offset":"(-130,150)","Comment":"\u521d\u59cb\u5316\u6d88\u8d39\u8005\u7b49\u7ea7"},"ID":2,"Name":"\u6267\u884cGameAction","Instant":true,"List`1gameActionDatas":[0]},{"Type":"GameEventEnd","NodeData":{"Offset":"(139.5,170)"},"ID":3,"Name":"\u4e8b\u4ef6\u7ed3\u675f\u79fb\u9664","Instant":true,"SharedIntgameEventId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"ID","IsShared":true,"Int32mValue":0}}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"ID","IsShared":true,"Int32mValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 11400000, guid: 6573191fba0cf95478603ee82fe1b8b1, type: 2}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.7

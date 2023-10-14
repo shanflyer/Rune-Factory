@@ -33,10 +33,37 @@ public class CharacterData : ScriptableObject, IGameData
         return GetKey();
     }
 #if UNITY_EDITOR
+    static Dictionary<string, Sprite> headDatas = new Dictionary<string, Sprite>();
+    static Dictionary<string, Sprite> iconDatas = new Dictionary<string, Sprite>();
     public void SetReferenceData()
     {
-        head = Resources.Load<Sprite>(headName);
-        icon = Resources.Load<Sprite>(iconName);
+        if (headDatas.Count == 0)
+        {
+            var sprites = Resources.LoadAll<Sprite>(headName.Split('/')[0]);
+            for(int i = 0; i < sprites.Length; i++)
+            {
+                headDatas.Add(sprites[i].name, sprites[i]);
+            }
+        }
+        if (iconDatas.Count == 0)
+        {
+            var sprites = Resources.LoadAll<Sprite>(iconName.Split('/')[0]);
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                iconDatas.Add(sprites[i].name, sprites[i]);
+            }
+        }
+        if (!string.IsNullOrEmpty(headName))
+        {
+            headDatas.TryGetValue(headName.Split('/')[1], out head);
+        }
+        if (!string.IsNullOrEmpty(iconName))
+        {
+            iconDatas.TryGetValue(iconName.Split('/')[1], out icon);
+        }
+       
+
+       
         obj = Resources.Load<GameObject>(objName);
     }
 #endif

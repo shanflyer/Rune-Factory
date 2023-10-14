@@ -7,6 +7,7 @@ using static UnityEngine.Rendering.ReloadAttribute;
 using OfficeOpenXml.FormulaParsing.Utilities;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using static UnityEditor.PlayerSettings;
+using UnityEngine.TextCore.Text;
 
 public interface GameAction 
 { 
@@ -14,6 +15,25 @@ public interface GameAction
 }
 
 public delegate void SetValue(int value);
+
+public struct SetCreateTempCharacterLevel : GameAction
+{
+    public int level;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+        {
+            level = int.Parse(parameters[0].value);
+        }
+        if (target != 0)
+        {
+            level = target;
+        }
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct BuyPlayerGood: GameAction
 {
     public int storeCounterId;
@@ -280,6 +300,41 @@ public struct CreatDefaultNPC : GameAction
 {
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)
     {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct DestoryTempCharacter : GameAction
+{
+    public int characterId;
+    public int dataId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            dataId = int.Parse(parameters[1].value);
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct CreatTempCharacter : GameAction
+{
+    public int characterId;
+    public int mapInstance;
+    public int coordinateX;
+    public int coordinateY; 
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            mapInstance = int.Parse(parameters[1].value);
+        if (parameters.Count > 2)
+            coordinateX = int.Parse(parameters[2].value);
+        if (parameters.Count > 3)
+            coordinateY = int.Parse(parameters[3].value); 
+
         GameActionManager.instance.QueueAction(this);
     }
 }

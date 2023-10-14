@@ -6,6 +6,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public class ExcelDataEditor : MyEditor
     public static void WindowShow()
     {
         ExcelDataEditor excelDataEditor = CreateWindow<ExcelDataEditor>("Excel数据管理");
-        excelDataEditor.minSize = excelDataEditor.maxSize = new Vector2(320, 480);
+        excelDataEditor.minSize = excelDataEditor.maxSize = new Vector2(400, 480);
         excelDataEditor.Show();
 
         Instance = excelDataEditor;
@@ -43,7 +44,7 @@ public class ExcelDataEditor : MyEditor
 
     public void OnGUI()
     {
-        excelDataPanel.DisplayCommonObjList<ExcelDataObj>(240, 400, commonObjs, 2, false);
+        excelDataPanel.DisplayCommonObjList<ExcelDataObj>(360, 400, commonObjs, 2, false);
         DrawButton("输出选择数据", () =>
         {
             RefreshAllData(selectDatas);
@@ -284,6 +285,36 @@ public class ExcelDataEditor : MyEditor
                 foreach (var str in strs)
                 {
                     _value.Add(int.Parse(str));
+                }
+                value = _value;
+                fieldInfo.SetValue(data, value);
+            }
+        }
+        else if (fieldInfo.FieldType == typeof(int2))
+        {
+            var valueStr = value.ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var strs = value.ToString().Split(',');
+
+                int2 _value = int2.zero;
+                _value.x = int.Parse(strs[0]);
+                _value.y = int.Parse(strs[1]);
+                value = _value;
+                fieldInfo.SetValue(data, value);
+            }
+        }
+        else if (fieldInfo.FieldType == typeof(List<string>))
+        {
+            var valueStr = value.ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var strs = value.ToString().Split(',');
+
+                List<string> _value = new List<string>();
+                foreach (var str in strs)
+                {
+                    _value.Add(str);
                 }
                 value = _value;
                 fieldInfo.SetValue(data, value);

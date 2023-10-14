@@ -25,6 +25,7 @@ public struct WorldMap
     public string map;
     public int id;
     public int3 coordinate;
+    public int eventId;
 }
 
 [System.Serializable]
