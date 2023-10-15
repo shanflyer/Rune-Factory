@@ -87,7 +87,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         Character controller = CharacterManager.instance.controllerCharacter;
         if (operateData.gameActionData != null)
         {
-            operateData.gameActionData.Action(controller.instanceId, controller.triggerItem) ;
+            operateData.gameActionData.Action(controller.instanceId, controller.OperateItem) ;
         }
     }
     protected override void Clear()

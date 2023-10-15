@@ -353,7 +353,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
             await RuntimeMapItemPlay(runtimeMapItem, runtimeObj); 
         }
     }
-
+    public void DisplayMap()
+    {
+        DisplayMap(displayMap);
+    }
     public async Task DisplayMap(int mapId)
     {
         displayMap = mapId;

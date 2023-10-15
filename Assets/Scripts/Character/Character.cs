@@ -13,14 +13,12 @@ public struct CharacterEquipAndPropertyData
     public AttributeType attributeType;
     public Equip equip;
     public CharacterProperty characterProperty;
-}
-
+} 
 [System.Serializable]
 public struct ObjCoordinate
 {
     public int mapInstance;
-    public int x,y;
-     
+    public int x,y; 
     public int2 coordinate
     {
         get
@@ -32,11 +30,13 @@ public struct ObjCoordinate
     {
         return $"{mapInstance}:{x},{y}";
     }
+
+   
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
-    {
+    { 
         this.mapInstance = mapInstance;
         x = coordinate.x;
-        y = coordinate.y;
+        y = coordinate.y; 
     }
     public static bool operator ==(ObjCoordinate obj0, ObjCoordinate obj1)
     {
@@ -282,16 +282,27 @@ public struct Equip
 public class Character
 {
     private bool isController = false;
-    private int oldTriggerItem = -1;
-    public int triggerItem => oldTriggerItem;
+    private int oldOperateItem = -1; 
+    public int OperateItem => oldOperateItem;
+
+    private int2 OldOperaCoordinate=new int2(int.MinValue);
+
+    public CharacterData characterData;
+
+    public Equip Equip => equip;
+    private Equip equip;
+    public int characterPackage;
+    public List<int> skills = new List<int>();
+
     public void SetController(bool controller)
     {
         isController = controller;
-        oldTriggerItem = -1;
+        oldOperateItem= -1;
     }
-    public Character() { }
-    public int characterPackage;
-    public List<int> skills = new List<int>();
+    public Character() 
+    {
+    }
+   
     public Character(CharacterData characterData,int instanceId)
     {
         this.characterData = characterData;
@@ -300,16 +311,11 @@ public class Character
         professionId = characterData.profession;
         name = characterData.characterName;
         behavior = characterData.behavior;
-       
         SetLevel(1,true);
         CreatCharacterPackage();
        
     }
-    public CharacterData characterData;
-
-    public Equip Equip=>equip;
-    private Equip equip;
-
+   
     protected virtual async Task CreatCharacterPackage()
     {
         characterPackage = await PackageManager.instance.CreatGamePackage(characterData.packageId, 0);
@@ -388,6 +394,8 @@ public class Character
 
     public string name;
     public ObjCoordinate objCoordinate;
+     
+
     public int instanceId;
     public Direction direction {private set;get; }
 
@@ -437,14 +445,11 @@ public class Character
 
     public int behavior;
     public IEnumerator moveEnumerator;
-
+    private CharacterProperty nowProperty;
     public void StopMove()
     {
         GameController.instance.StopCoroutine(moveEnumerator);
-    }
-
-    private CharacterProperty nowProperty;
-
+    } 
     public async void AddExp(int value)
     {
         bool levelUp = false;
@@ -576,9 +581,15 @@ public class Character
 
     public void SetPlayerOperate(int2 targetCoordinate)
     {
-        MapCellController.instance.CheckPlayerTriggerEvent(objCoordinate.mapInstance, 
-            objCoordinate.coordinate, targetCoordinate,
-          TriggerEventAction, oldTriggerItem,false);
+        int2 oldCoordinate = objCoordinate.coordinate;
+        if (OldOperaCoordinate.x != int.MinValue)
+        {
+            oldCoordinate=OldOperaCoordinate;
+        }
+        MapCellController.instance.CheckPlayerTriggerEvent(objCoordinate.mapInstance,
+            oldCoordinate, targetCoordinate,
+          TriggerEventAction, oldOperateItem, false);
+        OldOperaCoordinate = targetCoordinate;
     }
 
     /// <summary>
@@ -597,8 +608,8 @@ public class Character
         if (controller)
         {
             if (enter)
-            {
-                oldTriggerItem = reference;
+            { 
+                oldOperateItem = reference;
                 ShowMapObjTips showMapObjTips = new ShowMapObjTips
                 {
                     id = reference
@@ -613,9 +624,9 @@ public class Character
             }
             else
             {
-                if (oldTriggerItem == reference)
+                if (oldOperateItem == reference)
                 {
-                    oldTriggerItem = -1;
+                    oldOperateItem = -1;
                 }
                 CloseMapObjTips closeMapObjTips = new CloseMapObjTips
                 {
@@ -662,15 +673,42 @@ public class Character
 
         GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
     } 
-    public void SetObjCoordinate(int mapInstance, int2 coordinate)
+     
+
+    public  void SetObjCoordinate(int mapInstance, int2 coordinate)
     {
-        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, objCoordinate.coordinate, coordinate,
+        int2 oldCoordinate = objCoordinate.coordinate;
+        if (mapInstance != objCoordinate.mapInstance)
+        {
+            MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«,
+                objCoordinate.mapInstance, oldCoordinate, true, TriggerEventAction);
+             
+            if(isController)
+            {
+                int2 oldOperaCoordinate = objCoordinate.coordinate;
+                if (OldOperaCoordinate.x != int.MinValue)
+                {
+                    oldOperaCoordinate = OldOperaCoordinate;
+                }
+                MapCellController.instance.CheckPlayerTriggerEvent(
+                objCoordinate.mapInstance, oldCoordinate, true, TriggerEventAction, oldOperateItem);
+            }
+            oldCoordinate = OldOperaCoordinate = new int2(int.MinValue);
+        } 
+
+
+        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, oldCoordinate, coordinate,
            TriggerEventAction);
         if (isController)
         {
-            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, objCoordinate.coordinate, coordinate,
-           TriggerEventAction,oldTriggerItem);
-        } 
+            int2 oldOperaCoordinate = objCoordinate.coordinate;
+            if (OldOperaCoordinate.x != int.MinValue)
+            {
+                oldOperaCoordinate = OldOperaCoordinate;
+            }
+            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, coordinate,
+           TriggerEventAction,oldOperateItem);
+        }
         objCoordinate.SetObjCoordinate(mapInstance, coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
         {

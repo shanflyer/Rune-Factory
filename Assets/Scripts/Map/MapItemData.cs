@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 using System.Globalization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-[CreateAssetMenu(menuName ="Data/µØÍ¼ÎïÌå")]
+[CreateAssetMenu(menuName ="Data/åœ°å›¾ç‰©ä½“")]
 [System.Serializable]
 public class MapItemData:ScriptableObject,IGameData
 {

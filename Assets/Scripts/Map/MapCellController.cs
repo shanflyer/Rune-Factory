@@ -420,6 +420,102 @@ public class MapCellController : Singleton<MapCellController>
         }
     }
 
+    public void CheckTriggerEvent(int entityId, EntityType entityType, int room, int2 cell,bool exit, TriggerEvent triggerEvent)
+    {
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            NativeArray<int3> triggerEvents = new NativeArray<int3>
+                (runtimeMapRoom.commonTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+            SingleTriggerJob triggerJob = new SingleTriggerJob
+            {
+                TriggerAreas = runtimeMapRoom.commonTriggerAreas.triggerAreas,
+                cell=cell,
+                exit=exit,
+                triggerEvents = triggerEvents,
+                triggerType = entityType,
+            };
+
+            triggerJob.Schedule(triggerEvents.Length, 8).Complete();
+
+            int length = triggerJob.triggerEvents.Length;
+            for (int i = 0; i < length; i++)
+            {
+                int eventId = triggerJob.triggerEvents[i].x;
+                if (eventId != 0)
+                {
+                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1, false);
+                }
+            }
+            triggerEvents.Dispose();
+        }
+    }
+
+    public void CheckPlayerTriggerEvent(int room, int2 cell, bool exit,
+        TriggerEvent triggerEvent, int oldLink = 0, bool trueMove = true)
+    {
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            NativeArray<int3> triggerEvents = new NativeArray<int3>
+                (runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+
+            SingleTriggerPlayerJob triggerJob = new SingleTriggerPlayerJob
+            {
+                TriggerAreas = runtimeMapRoom.playerTriggerAreas.triggerAreas, 
+                cell = cell,
+                exit=exit,
+                oldLinkId = oldLink,
+                triggerType = EntityType.玩家,
+                triggerEvents = triggerEvents
+            };
+            //triggerJob.Run(triggerEvents.Length);
+            triggerJob.Schedule(triggerEvents.Length, 8).Complete();
+            int length = triggerJob.triggerEvents.Length;
+            List<int3> enterEventDatas = new List<int3>();
+            for (int i = 0; i < length; i++)
+            {
+                int eventId = triggerJob.triggerEvents[i].x;
+                if (eventId == 0 && triggerJob.triggerEvents[i].y == 0)
+                {
+                    continue;
+                }
+                if (triggerEvents[i].z == 1)
+                {
+                    enterEventDatas.Add(triggerEvents[i]);
+                }
+                else if (trueMove)
+                {
+                    triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1, true);
+                }
+            }
+            if (enterEventDatas.Count != 0)
+            {
+                //判断最近距离
+                float distance = 1000;
+                int3 selectEventData = enterEventDatas[0];
+                for (int i = 0; i < enterEventDatas.Count; i++)
+                {
+                    if (WorldMapManager.instance.GetMapItemPos(enterEventDatas[i].y, out var objCoordinate))
+                    {
+                        float dis = CharacterManager.instance.GetDistanceController(objCoordinate.coordinate);
+                        if (dis < distance)
+                        {
+                            distance = dis;
+                            selectEventData = enterEventDatas[i];
+                        }
+                    }
+                    else
+                    {
+                        selectEventData = enterEventDatas[i];
+                        break;
+                    }
+                }
+                triggerEvent(selectEventData.x, selectEventData.y, selectEventData.z == 1, true);
+            }
+
+
+            triggerEvents.Dispose();
+        }
+    }
     /// <summary>
     /// 检测触发事件
     /// </summary>
@@ -485,9 +581,9 @@ public class MapCellController : Singleton<MapCellController>
                 oldLinkId=oldLink,
                 triggerType = EntityType.玩家,
                 triggerEvents = triggerEvents
-            };
-            triggerJob.Run(triggerEvents.Length);
-            //triggerJob.Schedule(triggerEvents.Length, 8).Complete();
+            }; 
+           // triggerJob.Run(triggerEvents.Length);
+             triggerJob.Schedule(triggerEvents.Length, 8).Complete();
             int length = triggerJob.triggerEvents.Length;
             List<int3> enterEventDatas = new List<int3>();
             for (int i = 0; i < length; i++)
@@ -501,7 +597,7 @@ public class MapCellController : Singleton<MapCellController>
                 {
                     enterEventDatas.Add(triggerEvents[i]);
                 }
-                else if(trueMove)
+                else //if(trueMove)
                 {
                     triggerEvent(eventId, triggerEvents[i].y, triggerEvents[i].z == 1,true);
                 } 
@@ -668,8 +764,8 @@ public class MapCellController : Singleton<MapCellController>
                 pathCells = pathCells
             };
 
-            //findPath.Schedule().Complete();
-            findPath.Run();
+            findPath.Schedule().Complete();
+            //findPath.Run();
 
             for (int i = 0; i < findPath.pathCells.Length; i++)
             {
@@ -900,7 +996,41 @@ public class MapCellController : Singleton<MapCellController>
             }
         }
     }
+    public struct SingleTriggerJob : IJobParallelFor
+    {
+        // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
+        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
 
+        [WriteOnly] public NativeArray<int3> triggerEvents;
+        [ReadOnly] public int2 cell;
+        [ReadOnly] public bool exit;
+        [ReadOnly] public EntityType triggerType;
+
+        public void Execute(int index)
+        {
+            TriggerArea triggerArea = TriggerAreas[index];
+            int typeValue = (int)triggerArea.triggerType % (int)triggerType;
+            if (typeValue > 0)
+            {
+                return;
+            }
+             
+
+            if (triggerArea.cells.Contains(cell))
+            {
+                if (exit)
+                {
+                    //离开事件
+                    triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
+                }
+                else
+                {
+                    //进入事件
+                    triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
+                } 
+            } 
+        }
+    }
     public struct TriggerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
@@ -972,6 +1102,43 @@ public class MapCellController : Singleton<MapCellController>
                     triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
                 } 
             }
+        }
+    }
+
+    public struct SingleTriggerPlayerJob : IJobParallelFor
+    {
+        // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
+        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+
+        [WriteOnly] public NativeArray<int3> triggerEvents;
+        [ReadOnly] public int oldLinkId;
+        [ReadOnly] public int2 cell;
+        [ReadOnly] public bool exit;
+        [ReadOnly] public EntityType triggerType;
+
+        public void Execute(int index)
+        {
+            TriggerArea triggerArea = TriggerAreas[index];
+            int typeValue = (int)triggerArea.triggerType % (int)triggerType;
+            if (typeValue > 0)
+            {
+                return;
+            }
+            bool contanins = triggerArea.cells.Contains(cell);
+            if (contanins)
+            {
+                if (triggerArea.referenceId == oldLinkId&& exit)
+                {
+                    //离开事件
+                    triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
+                }
+                if (!exit&& triggerArea.referenceId != oldLinkId)
+                {
+                    //进入
+                    triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
+                } 
+            }
+           
         }
     }
 }
