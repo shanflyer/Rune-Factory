@@ -12,16 +12,16 @@ public class TempBuyPlayerGood : Action
     public override void OnStart()
     {
         taskStatus = TaskStatus.Running;
-        if (selectStoreCounterId == null)
+        if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
         {
             selectStoreCounterId = (SharedInt)Owner.GetVariable("SelectStoreCounterId");
              
         }
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        if (selectStoreCounterId == null|| characterId == null)
+        if (selectStoreCounterId==null|| selectStoreCounterId.IsNull() || characterId==null|| characterId.IsNull())
         {
             taskStatus = TaskStatus.Failure;
             return;

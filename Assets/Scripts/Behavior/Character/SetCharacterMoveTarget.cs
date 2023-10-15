@@ -13,10 +13,10 @@ public class SetCharacterMoveTarget : Action
     public SharedInt3 targetCoordinate;
     public override void OnStart()
     {
-        if (targetCoordinate == null)
+        if (targetCoordinate==null|| targetCoordinate.IsNull())
         {
             targetCoordinate=(SharedInt3)Owner.GetVariable("TargetCoordinate");
-            if (targetCoordinate == null)
+            if (targetCoordinate==null|| targetCoordinate.IsNull())
             {
                 targetCoordinate = new SharedInt3();
                 Owner.SetVariable("TargetCoordinate", targetCoordinate);

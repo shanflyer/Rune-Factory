@@ -13,7 +13,7 @@ public class GameRuntimeItemCreat : Action
 	public override void OnStart()
 	{
 		int trueMapId = mapId.Value;
-        if (mapId==null||mapId.Value == -1)
+        if (mapId==null|| mapId.IsNull() ||mapId.Value == -1)
         {
 			trueMapId = WorldMapManager.instance.displayMap;
         }

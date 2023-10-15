@@ -221,6 +221,11 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             characters.Remove(destoryTempCharacter.characterId);
 
+            if(characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
+            {
+                GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+                characterRuntionObjs.Remove(character);
+            }
             CharacterBehaviorManager.instance.DestroyBehavior(destoryTempCharacter.characterId);
         } 
     }

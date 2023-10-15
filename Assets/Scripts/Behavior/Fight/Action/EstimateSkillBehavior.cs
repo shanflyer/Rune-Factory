@@ -24,7 +24,7 @@ public class EstimateSkillBehavior : Action
         base.OnAwake();
         if (sharedSkillList == null)
             sharedSkillList = (SharedSkillList)Owner.GetVariable("ReadySkill");
-        if (fightCharacter == null)
+        if (fightCharacter==null|| fightCharacter.IsNull())
             fightCharacter = (SharedInt)Owner.GetVariable("fightCharacter");
     }
 

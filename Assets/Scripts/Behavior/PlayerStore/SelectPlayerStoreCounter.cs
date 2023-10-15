@@ -11,13 +11,13 @@ public class SelectPlayerStoreCounter : Action
     public SharedInt selectStoreCounterId;
 	public override void OnStart()
 	{
-        if (selectStoreCounterId == null)
+        if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
         {
             selectStoreCounterId = (SharedInt)Owner.GetVariable("SelectStoreCounterId");
-            if (selectStoreCounterId == null)
+            if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
             {
                 selectStoreCounterId = new SharedInt();
-                Owner.SetVariable("TargetCoordinate", selectStoreCounterId);
+                Owner.SetVariable("SelectStoreCounterId", selectStoreCounterId);
             }
         }
 		SelectStoreCounter();
@@ -43,7 +43,7 @@ public class SelectPlayerStoreCounter : Action
 		if (HaveGoodStoreCounters.Count > 0)
 		{
 			int index = GameRandom.RandomInt(0, HaveGoodStoreCounters.Count);
-			selectStoreCounterId = HaveGoodStoreCounters[index].instanceId;
+			selectStoreCounterId.SetValue(HaveGoodStoreCounters[index].instanceId);
 			taskStatus = TaskStatus.Success;
 			return;
 		} 

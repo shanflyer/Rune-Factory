@@ -28,7 +28,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
         behaviorTree.StopAllTaskCoroutines();
         behaviorTree.ExternalBehavior = externalBehavior;
-        behaviorTree.SetVariableValue("CharacterId", characterId);
+        behaviorTree.SetVariable("CharacterId",new SharedInt { Value=characterId}); 
         behaviorTree.RestartWhenComplete = true;
         behaviorTree.Start();
     }

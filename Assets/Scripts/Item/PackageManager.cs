@@ -308,6 +308,16 @@ public class PackageManager : Singleton<PackageManager>
         GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstaceId,
              level, packageSetData.id,packageSetData.packageType);
         gamePackages.Add(packageInstaceId, gamePackage);
+
+        if (level <= 1)
+        {
+            for(int i = 0; i < packageSetData.initItems.Count; i++)
+            {
+                gamePackage.SetItemInPackage(
+                    new Item(packageSetData.initItems[i].x, packageSetData.initItems[i].y));
+            }
+        }
+
         return packageInstaceId;
     }
     public int CreatGamePackage(int caseCount, string name = null,PackageType packageType=PackageType.全部)

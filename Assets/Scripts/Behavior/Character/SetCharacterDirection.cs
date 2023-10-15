@@ -11,11 +11,11 @@ public class SetCharacterDirection : Action
     private SharedInt characterId;
     public override void OnStart()
     {
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        if (faceTargetCoordinate == null)
+        if (faceTargetCoordinate==null|| faceTargetCoordinate.IsNull())
         {
             faceTargetCoordinate = (SharedInt2)Owner.GetVariable("FaceTargetCoordinate");
         }
@@ -23,7 +23,7 @@ public class SetCharacterDirection : Action
 
     public override TaskStatus OnUpdate()
     {
-        if (characterId == null || faceTargetCoordinate == null)
+        if (characterId==null|| characterId.IsNull() || faceTargetCoordinate==null|| faceTargetCoordinate.IsNull())
         {
             return TaskStatus.Failure;
         }

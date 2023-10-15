@@ -11,11 +11,11 @@ public class TempCharacterExit : Action
     public override void OnStart()
     {
         taskStatus = TaskStatus.Running;
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             taskStatus = TaskStatus.Failure;
             return;

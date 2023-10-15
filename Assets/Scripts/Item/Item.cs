@@ -9,6 +9,12 @@ public struct Item:IReferenceData
     public int instanceId;
     public int dataId;
     public int count;
+    public Item(int dataId,int count)
+    {
+        this.dataId = dataId;
+        this.count = count;
+        instanceId = 0;
+    }
 }
 
 public class ItemManager

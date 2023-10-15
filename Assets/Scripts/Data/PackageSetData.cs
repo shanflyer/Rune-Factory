@@ -1,6 +1,7 @@
-﻿using Mono.Cecil;
+﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Unity.Mathematics;
 
 public enum PackageType
 {
@@ -17,6 +18,7 @@ public class PackageSetData :ScriptableObject,IGameData,IReferenceData
     public string iconName;
     public PackageType packageType;
     public SpriteResourceRenference icon;
+    public List<int2> initItems = new List<int2>();
 
     public string GetKey()
     {

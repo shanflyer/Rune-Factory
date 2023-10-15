@@ -25,7 +25,7 @@ public class GetACoordinateForCharacter : Action
 	private SharedInt3List results;
 	public override void OnStart()
 	{
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             characterId= (SharedInt)Owner.GetVariable("CharacterId");
         }

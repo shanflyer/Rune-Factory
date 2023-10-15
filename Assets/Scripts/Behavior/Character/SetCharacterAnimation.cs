@@ -12,7 +12,7 @@ public class SetCharacterAnimation : Action
     public AnimationParameter[] animationParameters;
     public override void OnStart()
     {
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }

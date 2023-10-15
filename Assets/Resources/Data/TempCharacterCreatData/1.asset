@@ -15,12 +15,12 @@ MonoBehaviour:
   level: 1
   creatName: "\u6D4B\u8BD5\u6D88\u8D39"
   cd:
-    x: 1000
-    y: 2000
+    x: 10000
+    y: 20000
   maxCharacterCount: 10
   tempCharacters: 
   tempGroupCharacters: 89130000
-  tempBornDatas:
+  tempEnterDatas:
   - mapInstance: 297
     posMin:
       x: -1
@@ -28,3 +28,11 @@ MonoBehaviour:
     posMax:
       x: 1
       y: 12
+  tempExitDatas:
+  - mapInstance: 297
+    posMin:
+      x: 14
+      y: -9
+    posMax:
+      x: 16
+      y: -8

@@ -22,7 +22,7 @@ public class RuntimeObjMoveEvent : Action
     // Start is called before the first frame update
     public override void OnStart()
     {
-        if (objId == null)
+        if (objId==null|| objId.IsNull())
         {
             taskStatus = TaskStatus.Failure;
             return;

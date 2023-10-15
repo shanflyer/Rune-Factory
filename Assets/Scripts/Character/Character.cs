@@ -313,9 +313,6 @@ public class Character
     protected virtual async Task CreatCharacterPackage()
     {
         characterPackage = await PackageManager.instance.CreatGamePackage(characterData.packageId, 0);
-
-        await PackageManager.instance.SetItemInPackage(ItemManager.instance.CreatItem(1007,8), characterPackage);
-        await PackageManager.instance.SetItemInPackage(ItemManager.instance.CreatItem(1008, 6), characterPackage);
     }
     public async void ChangeEquip(int id)
     {
@@ -755,9 +752,9 @@ public class TempCharacter : Character
     {
         set
         {
-            if (_templevel != templevel)
+            if (_templevel != value)
             {
-                _templevel = templevel;
+                _templevel = value;
                 RefreshBehavior();
             }
         }

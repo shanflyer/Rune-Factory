@@ -13,28 +13,28 @@ public class GetStoreCounterPos : Action
     public SharedInt2 faceTargetCoordinate;
     public override void OnStart()
     {
-        if (selectStoreCounterId == null)
+        if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
         {
             selectStoreCounterId = (SharedInt)Owner.GetVariable("SelectStoreCounterId");
-            if (selectStoreCounterId == null)
+            if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
             {
-                selectStoreCounterId = new SharedInt();
-                Owner.SetVariable("TargetCoordinate", selectStoreCounterId);
+                taskStatus = TaskStatus.Failure;
+                return;
             }
         }
-        if (targetCoordinate == null)
+        if (targetCoordinate==null|| targetCoordinate.IsNull())
         {
             targetCoordinate = (SharedInt3)Owner.GetVariable("TargetCoordinate");
-            if (targetCoordinate == null)
+            if (targetCoordinate==null|| targetCoordinate.IsNull())
             {
                 targetCoordinate = new SharedInt3();
                 Owner.SetVariable("TargetCoordinate", targetCoordinate);
             }
         }
-        if (faceTargetCoordinate == null)
+        if (faceTargetCoordinate==null|| faceTargetCoordinate.IsNull())
         {
             faceTargetCoordinate = (SharedInt2)Owner.GetVariable("FaceTargetCoordinate");
-            if (faceTargetCoordinate == null)
+            if (faceTargetCoordinate==null|| faceTargetCoordinate.IsNull())
             {
                 faceTargetCoordinate = new SharedInt2();
                 Owner.SetVariable("FaceTargetCoordinate", faceTargetCoordinate);

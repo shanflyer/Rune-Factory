@@ -17,7 +17,7 @@ public class RoundStartFight : Action
         {
             fightCharacters = (SharedQueneInt)Owner.GetVariable("fightCharacters");
         }
-        if (nowFightCharacter == null)
+        if (nowFightCharacter==null|| nowFightCharacter.IsNull())
         {
             nowFightCharacter=(SharedInt)Owner.GetVariable("nowFightCharacter");
         }

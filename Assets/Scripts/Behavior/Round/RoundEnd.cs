@@ -12,7 +12,7 @@ public class RoundEnd : Action
     public override void OnStart()
     {
         Debug.Log("RoundEnd");
-        if (nowFightCharacter == null)
+        if (nowFightCharacter==null|| nowFightCharacter.IsNull())
         {
             nowFightCharacter = (SharedInt)Owner.GetVariable("nowFightCharacter");
         }

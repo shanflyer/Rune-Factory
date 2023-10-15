@@ -20,17 +20,17 @@ public class CharacterMove : Action
     public override void OnStart()
     {
         taskStatus = TaskStatus.Running;
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        if (target == null)
+        if (target==null|| target.IsNull())
         {
             target = (SharedInt3)Owner.GetVariable("TargetCoordinate");
-            if (target == null)
+            if (target==null|| target.IsNull())
             {
-                target = new SharedInt3();
-                Owner.SetVariable("TargetCoordinate", target);
+                taskStatus = TaskStatus.Failure;
+                return;
             }
         }
         var character = CharacterManager.instance.GetCharacter(characterId.Value);

@@ -9,16 +9,17 @@ public class GetTempCharacterExitPos : Action
 {
     private SharedInt characterId;
     public SharedInt3 targetCoordinate;
+    
     public override void OnStart()
     {
-        if (characterId == null)
+        if (characterId==null|| characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        if (targetCoordinate == null)
+        if (targetCoordinate==null|| targetCoordinate.IsNull())
         {
             targetCoordinate = (SharedInt3)Owner.GetVariable("TargetCoordinate");
-            if (targetCoordinate == null)
+            if (targetCoordinate==null|| targetCoordinate.IsNull())
             {
                 targetCoordinate = new SharedInt3();
                 Owner.SetVariable("TargetCoordinate", targetCoordinate);
