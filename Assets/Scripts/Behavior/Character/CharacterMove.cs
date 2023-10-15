@@ -36,8 +36,8 @@ public class CharacterMove : Action
         var character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
         {
-            if (character.objCoordinate.mapInstance == target.Value.z &&
-                    character.objCoordinate.x == target.Value.x && character.objCoordinate.y == target.Value.y)
+            if (character.mapInstance == target.Value.z &&
+                    character.coordinate.x == target.Value.x && character.coordinate.y == target.Value.y)
             {
                 taskStatus = TaskStatus.Success;
             }

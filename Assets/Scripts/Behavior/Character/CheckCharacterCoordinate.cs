@@ -27,20 +27,20 @@ public class CheckCharacterCoordinate : Action
         { 
             if (continued)
             { 
-                if (character.objCoordinate==coordinate.Value)
+                if (character.ObjCoordinate==coordinate.Value)
                 {
                     return TaskStatus.Success;
                 }
             }
             else
             { 
-                if (character.objCoordinate != oldCoordinate)
+                if (character.ObjCoordinate != oldCoordinate)
                 {
-                    if (character.objCoordinate==coordinate.Value)
+                    if (character.ObjCoordinate == coordinate.Value)
                     {
                         return TaskStatus.Success;
                     }
-                    oldCoordinate = character.objCoordinate;
+                    oldCoordinate = character.ObjCoordinate;
                 }
             }
 

@@ -13,6 +13,21 @@ public class MapCellController : Singleton<MapCellController>
 {
     public delegate void TriggerEvent(int eventId, int reference, bool enter,bool controller);
 
+    private Dictionary<int3, HashSet<int>> characterCells = new Dictionary<int3, HashSet<int>>();
+    public void SetCharacterCoordinate(int3 oldCoordinate,int3 newCoordinate,int characterId)
+    {
+        if(characterCells.TryGetValue(oldCoordinate,out var ints))
+        {
+            ints.Remove(characterId);
+        }
+        if(!characterCells.TryGetValue(newCoordinate,out var ids))
+        {
+            ids = new HashSet<int>();
+            characterCells[newCoordinate] = ids;
+        }
+        ids.Add(characterId);
+    }
+
     public struct MapTriggerAreas
     {
         public NativeList<TriggerArea> triggerAreas;

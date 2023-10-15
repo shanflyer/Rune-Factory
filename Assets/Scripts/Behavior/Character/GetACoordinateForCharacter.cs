@@ -45,9 +45,9 @@ public class GetACoordinateForCharacter : Action
 	{
         Character character = CharacterManager.instance.GetCharacter(characterId.Value);
         RuntimeMapRoom runtimeMapRoom;
-        if (MapCellController.instance.GetRuntimeMapRoom(character.objCoordinate.mapInstance, out runtimeMapRoom))
+        if (MapCellController.instance.GetRuntimeMapRoom(character.mapInstance, out runtimeMapRoom))
         {
-            var rangeCoordinates = runtimeMapRoom.roomCellData.GetCoordinates(character.objCoordinate.coordinate,
+            var rangeCoordinates = runtimeMapRoom.roomCellData.GetCoordinates(character.coordinate,
                 minRange.Value, maxRange.Value, isWalkable.Value);
             GameRandomData gameRandomData = new GameRandomData
             {
@@ -84,7 +84,7 @@ public class GetACoordinateForCharacter : Action
                 {
                     int index =int.Parse(randomResults[i].result);
                     int2 coordinate = rangeCoordinates[index];
-                    resultValue.Add(new int3(coordinate,character.objCoordinate.mapInstance));
+                    resultValue.Add(new int3(coordinate,character.mapInstance));
                 }
                 results.Value=resultValue;
             }

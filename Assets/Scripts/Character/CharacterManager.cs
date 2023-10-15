@@ -40,18 +40,15 @@ public struct CharacterRuntimeObj
         }
     }
 }
-
+ 
 public class CharacterManager : Singleton<CharacterManager>
 {
     public const float moveSpeed = 4f;
     public const float updataMoveSpeed = 1f;
-
     private MyInstance myInstance;
-
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
     private Dictionary<int,List<int>> characterInstances=new Dictionary<int, List<int>>();
     private Dictionary<int, TempCharacter> tempCharacters = new Dictionary<int, TempCharacter>();
-
 
     public Player player;
     private CharacterData playerData;
@@ -149,7 +146,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public float GetDistanceController(int2 coordinate)
     {
-        return  math.distance(controllerCharacter.objCoordinate.coordinate, coordinate);
+        return  math.distance(controllerCharacter.coordinate, coordinate);
     }
     public void SetControllerCharacter(int id)
     {
@@ -243,7 +240,7 @@ public class CharacterManager : Singleton<CharacterManager>
         TempCharacter character = new TempCharacter(characterData, myInstance.CreatInstanceId(),tempCharacterData.id);
         
         AddCharacter(character);
-        character.objCoordinate.SetObjCoordinate(creatTempCharacter.mapInstance,
+        character.SetObjCoordinate(creatTempCharacter.mapInstance,
             new int2(creatTempCharacter.coordinateX, creatTempCharacter.coordinateY));
          
         character.templevel = level;
@@ -255,7 +252,7 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
         Character character = new Character(characterData, myInstance.CreatInstanceId());
         AddCharacter(character);
-        character.objCoordinate.SetObjCoordinate(creatCharacter.mapInstance,
+        character.SetObjCoordinate(creatCharacter.mapInstance,
             new int2(creatCharacter.coordinateX, creatCharacter.coordinateY)); 
         RefreshNpcRuntimeObj(character,creatCharacter.controller);
         if (creatCharacter.controller)
@@ -362,7 +359,7 @@ public class CharacterManager : Singleton<CharacterManager>
         character.StopMove();
         if (character != null)
         {
-            character.SetObjCoordinate(setCharacterCoordinate.mapId, setCharacterCoordinate.coordinate);
+            character.SetCoordinate(setCharacterCoordinate.mapId, setCharacterCoordinate.coordinate);
 
             RefreshNpcRuntimeObj(character);
         }
@@ -401,7 +398,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characters.TryGetValue(id, out Character character))
         {
-            coordinate = character.objCoordinate;
+            coordinate = character.ObjCoordinate;
         }
         coordinate = new ObjCoordinate();
         return false;
@@ -411,7 +408,7 @@ public class CharacterManager : Singleton<CharacterManager>
     { 
         if(characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
         {
-            if (character.objCoordinate.mapInstance != WorldMapManager.instance.displayMap)
+            if (character.mapInstance != WorldMapManager.instance.displayMap)
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                 characterRuntionObjs.Remove(character);
@@ -420,17 +417,17 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 if (characterRuntimeObj.runtimeObj.obj)
                 {
-                    Vector2 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
+                    Vector2 pos = GameCommon.GetMapPos(character.coordinate);
                     var transform = characterRuntimeObj.runtimeObj.obj as Transform;
                     transform.position = pos;
                     //transform.Translate(new Vector3(0, 0, -100));
                 }
             }
         }
-        else if (character.objCoordinate.mapInstance == WorldMapManager.instance.displayMap)
+        else if (character.mapInstance == WorldMapManager.instance.displayMap)
         {
-            var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.objCoordinate.coordinate);
-            Vector2 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
+            var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
+            Vector2 pos = GameCommon.GetMapPos(character.coordinate);
             var transform = characterRuntimeObj.runtimeObj.obj as Transform;
             transform.position = pos;
             characterRuntimeObj = new CharacterRuntimeObj
@@ -456,10 +453,10 @@ public class CharacterManager : Singleton<CharacterManager>
          
         
         Vector2 startPos = transform ? transform.position :
-            GameCommon.GetMapPos(character.objCoordinate.coordinate);
-        bool slant = targetCoordinate.x != character.objCoordinate.coordinate.x && targetCoordinate.y != character.objCoordinate.coordinate.y;
+            GameCommon.GetMapPos(character.coordinate);
+        bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
 
-        character.moveDirection =math.normalize(targetCoordinate - character.objCoordinate.coordinate);
+        character.moveDirection =math.normalize(targetCoordinate - character.coordinate);
        // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
          
 
@@ -481,7 +478,7 @@ public class CharacterManager : Singleton<CharacterManager>
                // Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
-                    character.SetObjCoordinate(character.objCoordinate.mapInstance, targetCoordinate);
+                    character.SetCoordinate(character.mapInstance, targetCoordinate);
                     CharacterMoveTarget(character, pathNodes, EndAction);
                 }
                 else
@@ -495,14 +492,14 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null)
     {
-        int2 offsetCoordinate = targetCoordinate - character.objCoordinate.coordinate;
-        character.SetObjCoordinate(character.objCoordinate.mapInstance, targetCoordinate);
-        if (MapCellController.instance.ChangeMap(targetCoordinate, offsetCoordinate, character.objCoordinate.mapInstance, out newMap))
+        int2 offsetCoordinate = targetCoordinate - character.coordinate;
+        character.SetCoordinate(character.mapInstance, targetCoordinate);
+        if (MapCellController.instance.ChangeMap(targetCoordinate, offsetCoordinate, character.mapInstance, out newMap))
         {
             int targetMap = newMap.x;
             targetCoordinate = new int2(newMap.y, newMap.z);
 
-            character.SetObjCoordinate(targetMap, targetCoordinate);
+            character.SetCoordinate(targetMap, targetCoordinate);
             
             if (character == controllerCharacter)
             {
@@ -521,7 +518,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(string characterName)
     {
         player = new Player(characterName);
-        player.SetObjCoordinate(WorldMapManager.instance.displayMap, int2.zero);
+        player.SetCoordinate(WorldMapManager.instance.displayMap, int2.zero);
         //player.mapInstance = GameManager.instance.nowMap;
 
         foreach (var item in GameController.instance.testPlayerItems)
@@ -540,7 +537,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(CharacterSaveData characterSaveData)
     {
         player = new Player(characterSaveData);
-        player.SetObjCoordinate(WorldMapManager.instance.displayMap, int2.zero);
+        player.SetCoordinate(WorldMapManager.instance.displayMap, int2.zero);
 
         AddCharacter(player);
 
@@ -570,7 +567,7 @@ public class CharacterManager : Singleton<CharacterManager>
             npc = new NPC(characterData, mapNpcData.id);
             characters.Add(mapNpcData.id, npc);
         }
-        npc.SetObjCoordinate(mapNpcData.beginMap, mapNpcData.beginCoordinate);
+        npc.SetCoordinate(mapNpcData.beginMap, mapNpcData.beginCoordinate);
         RefreshNpcRuntimeObj(npc);
 
         if (mapNpcData.externalBehavior)
@@ -632,14 +629,14 @@ public class CharacterManager : Singleton<CharacterManager>
         CharacterRuntimeObj characterRuntimeObj;
         if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
         {
-            if (character.objCoordinate.mapInstance != WorldMapManager.instance.displayMap)
+            if (character.mapInstance != WorldMapManager.instance.displayMap)
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                 characterRuntionObjs.Remove(character);
             }
             else
             {
-                Vector3 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
+                Vector3 pos = GameCommon.GetMapPos(character.coordinate);
                 var transform = characterRuntimeObj.runtimeObj.obj as Transform;
                 Vector3 oldPos = transform.position;
                 pos.z = oldPos.z;
@@ -652,9 +649,9 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
-            if (character.objCoordinate.mapInstance == WorldMapManager.instance.displayMap)
+            if (character.mapInstance == WorldMapManager.instance.displayMap)
             {
-                RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.objCoordinate.coordinate);
+                RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId,character.instanceId,character.coordinate);
                 Transform transform = runtimeObj.obj as Transform;
                 characterRuntimeObj = new CharacterRuntimeObj
                 {
@@ -679,17 +676,17 @@ public class CharacterManager : Singleton<CharacterManager>
             while (e.MoveNext())
             {
                 var character = e.Current.Value;
-                if (character.objCoordinate.mapInstance != WorldMapManager.instance.displayMap
+                if (character.mapInstance != WorldMapManager.instance.displayMap
                     && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                     characterRuntionObjs.Remove(character);
                 }
-                if (character.objCoordinate.mapInstance == WorldMapManager.instance.displayMap)
+                if (character.mapInstance == WorldMapManager.instance.displayMap)
                 {
                     if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
                     {
-                        var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.objCoordinate.coordinate);
+                        var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
                         Transform transform = runtimeObj.obj as Transform;
                         characterRuntimeObj = new CharacterRuntimeObj
                         {
@@ -701,7 +698,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     }
                     else
                     {
-                        Vector3 pos = GameCommon.GetMapPos(character.objCoordinate.coordinate);
+                        Vector3 pos = GameCommon.GetMapPos(character.coordinate);
                         Transform transform = characterRuntimeObj.runtimeObj.obj as Transform;
                         transform.localPosition = pos; 
                     }
@@ -740,9 +737,9 @@ public class CharacterManager : Singleton<CharacterManager>
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
-        int2 startCoordinate = controllerCharacter.objCoordinate.coordinate;
+        int2 startCoordinate = controllerCharacter.coordinate;
         Stack<int2> pathNodes = MapCellController.instance.FindPathNode(startCoordinate, targetCoordinate,
-            controllerCharacter.objCoordinate.mapInstance);
+            controllerCharacter.mapInstance);
         controllerCharacter.PlayerMove(pathNodes);
     }
 
@@ -764,7 +761,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
         Vector2 _playerMoveDirction = moveDirection;
         if (!WorldMapManager.instance.InitSmoothMove(ref _playerMoveDirction, characterTransform.position,
-            controllerCharacter.objCoordinate.mapInstance))
+            controllerCharacter.mapInstance))
         {
             GameObjectCurveController.instance.StopObjectMove(playerRuntimeObj.linkId);
         }
@@ -776,8 +773,8 @@ public class CharacterManager : Singleton<CharacterManager>
                 (int2 targetCoordinate, Vector2 targetPos) =>
                 {
                     characterTransform.position = new Vector3(targetPos.x, targetPos.y, characterTransform.position.z);
-                    if (controllerCharacter.objCoordinate.coordinate.x != targetCoordinate.x ||
-                    controllerCharacter.objCoordinate.coordinate.y != targetCoordinate.y)
+                    if (controllerCharacter.coordinate.x != targetCoordinate.x ||
+                    controllerCharacter.coordinate.y != targetCoordinate.y)
                     {
                         CrossMap(targetCoordinate, controllerCharacter, out int3 newMap);
                     }
@@ -790,7 +787,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characters.TryGetValue(SetTargetDirection.characterId, out var character))
         {
-            character.moveDirection =math.normalize(SetTargetDirection.targetCoordinate-character.objCoordinate.coordinate);
+            character.moveDirection =math.normalize(SetTargetDirection.targetCoordinate-character.coordinate);
         }
     }
     void SetDirection(SetDirection SetCharacterDirection)

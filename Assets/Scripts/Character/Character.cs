@@ -393,8 +393,11 @@ public class Character
     public int bag;
 
     public string name;
-    public ObjCoordinate objCoordinate;
-     
+    private ObjCoordinate objCoordinate;
+
+    public ObjCoordinate ObjCoordinate=>objCoordinate;
+    public int2 coordinate => objCoordinate.coordinate;
+    public int mapInstance => objCoordinate.mapInstance;
 
     public int instanceId;
     public Direction direction {private set;get; }
@@ -446,6 +449,13 @@ public class Character
     public int behavior;
     public IEnumerator moveEnumerator;
     private CharacterProperty nowProperty;
+
+    public void SetObjCoordinate(int mapInstance, int2 coordinate)
+    {
+        MapCellController.instance.SetCharacterCoordinate(new int3(objCoordinate.x, objCoordinate.y, objCoordinate.mapInstance),
+            new int3(coordinate, mapInstance), instanceId);
+        objCoordinate.SetObjCoordinate(mapInstance, coordinate);
+    }
     public void StopMove()
     {
         GameController.instance.StopCoroutine(moveEnumerator);
@@ -675,7 +685,7 @@ public class Character
     } 
      
 
-    public  void SetObjCoordinate(int mapInstance, int2 coordinate)
+    public void SetCoordinate(int mapInstance, int2 coordinate)
     {
         int2 oldCoordinate = objCoordinate.coordinate;
         if (mapInstance != objCoordinate.mapInstance)
@@ -709,7 +719,7 @@ public class Character
             MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, coordinate,
            TriggerEventAction,oldOperateItem);
         }
-        objCoordinate.SetObjCoordinate(mapInstance, coordinate);
+        SetObjCoordinate(mapInstance, coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
         {
             characterId = instanceId,
