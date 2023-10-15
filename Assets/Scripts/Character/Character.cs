@@ -14,56 +14,7 @@ public struct CharacterEquipAndPropertyData
     public Equip equip;
     public CharacterProperty characterProperty;
 } 
-[System.Serializable]
-public struct ObjCoordinate
-{
-    public int mapInstance;
-    public int x,y; 
-    public int2 coordinate
-    {
-        get
-        {
-            return new int2(x, y);
-        } 
-    }
-    public override string ToString()
-    {
-        return $"{mapInstance}:{x},{y}";
-    }
 
-   
-    public void SetObjCoordinate(int mapInstance, int2 coordinate)
-    { 
-        this.mapInstance = mapInstance;
-        x = coordinate.x;
-        y = coordinate.y; 
-    }
-    public static bool operator ==(ObjCoordinate obj0, ObjCoordinate obj1)
-    {
-        return obj0.mapInstance == obj1.mapInstance &&
-            obj0.x == obj1.x && obj0.y == obj1.y;
-    }
-    public override bool Equals(object obj)
-    {
-        try
-        {
-            return (ObjCoordinate)(obj) == this;
-        }
-        catch
-        { 
-        }
-        return false;
-    }
-    public override int GetHashCode()
-    {
-        return mapInstance*100+ coordinate.x+ coordinate.y;
-    }
-    public static bool operator !=(ObjCoordinate obj0, ObjCoordinate obj1)
-    {
-        return obj0.mapInstance != obj1.mapInstance || obj0.x != obj1.x
-            || obj0.y != obj1.y;
-    }
-}
 [System.Serializable]
 public struct CharacterProperty
 {
@@ -393,11 +344,11 @@ public class Character
     public int bag;
 
     public string name;
-    private ObjCoordinate objCoordinate;
+    private int3 objCoordinate;
 
-    public ObjCoordinate ObjCoordinate=>objCoordinate;
-    public int2 coordinate => objCoordinate.coordinate;
-    public int mapInstance => objCoordinate.mapInstance;
+    public int3 ObjCoordinate =>objCoordinate;
+    public int2 coordinate => objCoordinate.xy;
+    public int mapInstance => objCoordinate.z;
 
     public int instanceId;
     public Direction direction {private set;get; }
@@ -449,12 +400,16 @@ public class Character
     public int behavior;
     public IEnumerator moveEnumerator;
     private CharacterProperty nowProperty;
-
+    public void SetObjCoordinate(int3 coordinate)
+    { 
+        MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
+        objCoordinate = coordinate;
+    }
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
     {
-        MapCellController.instance.SetCharacterCoordinate(new int3(objCoordinate.x, objCoordinate.y, objCoordinate.mapInstance),
-            new int3(coordinate, mapInstance), instanceId);
-        objCoordinate.SetObjCoordinate(mapInstance, coordinate);
+        int3 newCoordinate = new int3(coordinate, mapInstance);
+        MapCellController.instance.SetCharacterCoordinate(objCoordinate,newCoordinate,instanceId);
+        objCoordinate=newCoordinate;
     }
     public void StopMove()
     {
@@ -591,12 +546,12 @@ public class Character
 
     public void SetPlayerOperate(int2 targetCoordinate)
     {
-        int2 oldCoordinate = objCoordinate.coordinate;
+        int2 oldCoordinate = objCoordinate.xy;
         if (OldOperaCoordinate.x != int.MinValue)
         {
             oldCoordinate=OldOperaCoordinate;
         }
-        MapCellController.instance.CheckPlayerTriggerEvent(objCoordinate.mapInstance,
+        MapCellController.instance.CheckPlayerTriggerEvent(objCoordinate.z,
             oldCoordinate, targetCoordinate,
           TriggerEventAction, oldOperateItem, false);
         OldOperaCoordinate = targetCoordinate;
@@ -682,48 +637,46 @@ public class Character
         });
 
         GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
-    } 
+    }
      
-
-    public void SetCoordinate(int mapInstance, int2 coordinate)
+    public void SetCoordinate(int3 coordinate)
     {
-        int2 oldCoordinate = objCoordinate.coordinate;
-        if (mapInstance != objCoordinate.mapInstance)
+        int2 oldCoordinate = objCoordinate.xy;
+        if (mapInstance != objCoordinate.z)
         {
             MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«,
-                objCoordinate.mapInstance, oldCoordinate, true, TriggerEventAction);
+                objCoordinate.z, oldCoordinate, true, TriggerEventAction);
              
             if(isController)
             {
-                int2 oldOperaCoordinate = objCoordinate.coordinate;
+                int2 oldOperaCoordinate = objCoordinate.xy;
                 if (OldOperaCoordinate.x != int.MinValue)
                 {
                     oldOperaCoordinate = OldOperaCoordinate;
                 }
                 MapCellController.instance.CheckPlayerTriggerEvent(
-                objCoordinate.mapInstance, oldCoordinate, true, TriggerEventAction, oldOperateItem);
+                objCoordinate.z, oldCoordinate, true, TriggerEventAction, oldOperateItem);
             }
             oldCoordinate = OldOperaCoordinate = new int2(int.MinValue);
         } 
 
 
-        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, oldCoordinate, coordinate,
+        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, oldCoordinate, coordinate.xy,
            TriggerEventAction);
         if (isController)
         {
-            int2 oldOperaCoordinate = objCoordinate.coordinate;
+            int2 oldOperaCoordinate = objCoordinate.xy;
             if (OldOperaCoordinate.x != int.MinValue)
             {
                 oldOperaCoordinate = OldOperaCoordinate;
             }
-            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, coordinate,
+            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, coordinate.xy,
            TriggerEventAction,oldOperateItem);
         }
-        SetObjCoordinate(mapInstance, coordinate);
+        SetObjCoordinate(coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
         {
-            characterId = instanceId,
-            mapId = mapInstance,
+            characterId = instanceId, 
             coordinate = coordinate
         };
         GameActionManager.instance.QueueAction(characterCoordinateTrigger);
@@ -732,7 +685,7 @@ public class Character
     {
         Queue<int> moveRoomList = new Queue<int>();
         bool result = false;
-        Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.mapInstance, targetMap, moveRoomList, ref result);
+        Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, moveRoomList, ref result);
         if (result)
         {
             MoveCrossMap(resultList, targetCoordinate,moveEndAction);
@@ -743,7 +696,7 @@ public class Character
 
     void MoveCrossMap(Queue<int> moveRoomList, int2 targetCoordinate, MoveEndAction moveEndAction = null)
     {
-        int nowMap = objCoordinate.mapInstance;
+        int nowMap = objCoordinate.z;
         if (moveRoomList.Count > 0)
         {
             int target = moveRoomList.Dequeue();
@@ -751,7 +704,7 @@ public class Character
             int2 inCoordinate = int2.zero;
             if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, target, ref inCoordinate))
             {
-                Stack<int2> pathNodes =MapCellController.instance.FindPathNode(objCoordinate.coordinate, inCoordinate,nowMap);
+                Stack<int2> pathNodes =MapCellController.instance.FindPathNode(objCoordinate.xy, inCoordinate,nowMap);
 
 
                 PlayerMove(pathNodes, () => { 
@@ -761,7 +714,7 @@ public class Character
         }
         else
         {
-            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.coordinate, targetCoordinate, nowMap);
+            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, targetCoordinate, nowMap);
 
             /*
             if (CellDebugDisplay.Instance)

@@ -9,14 +9,13 @@ using Unity.Mathematics;
 public class SetCharacterCoordinateBehavior:Action
 {
     public SharedInt characterId;
-    public SharedObjCoordinate coordinate; 
+    public SharedInt3 coordinate; 
     public override void OnStart()
     {
         SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
         {
-            characterId = characterId.Value,
-            mapId = coordinate.Value.mapInstance,
-            coordinate =new int2(coordinate.Value.x, coordinate.Value.y)
+            characterId = characterId.Value, 
+            coordinate = coordinate.Value
         };
         GameActionManager.instance.QueueAction(setCharacterCoordinate,true);
     }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using Unity.Mathematics;
 
 [TaskCategory("Game/Character")]
 [TaskName("检查角色位置")]
@@ -8,11 +9,10 @@ using BehaviorDesigner.Runtime.Tasks;
 public class CheckCharacterCoordinate : Action
 {
     public SharedInt characterId;
-    public SharedObjCoordinate coordinate; 
+    public SharedInt3 coordinate; 
     public bool continued;
-
     Character character; 
-    private ObjCoordinate oldCoordinate;
+    private int3 oldCoordinate;
 
     public override void OnStart()
     {
@@ -27,16 +27,16 @@ public class CheckCharacterCoordinate : Action
         { 
             if (continued)
             { 
-                if (character.ObjCoordinate==coordinate.Value)
+                if (character.ObjCoordinate.Equals(coordinate.Value))
                 {
                     return TaskStatus.Success;
                 }
             }
             else
             { 
-                if (character.ObjCoordinate != oldCoordinate)
+                if (!character.ObjCoordinate.Equals(oldCoordinate))
                 {
-                    if (character.ObjCoordinate == coordinate.Value)
+                    if (character.ObjCoordinate.Equals(coordinate.Value))
                     {
                         return TaskStatus.Success;
                     }

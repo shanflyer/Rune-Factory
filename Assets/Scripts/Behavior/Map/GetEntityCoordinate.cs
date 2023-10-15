@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using Unity.Mathematics;
+
 [TaskCategory("Game/Map")]
 [TaskName("获取个体坐标")]
 public class GetEntityCoordinate : Action
 { 
 
     [Header("保存坐标的共享变量")]
-    public SharedObjCoordinate targetCoordinate;
+    public SharedInt3 targetCoordinate;
     [Header("个体id")]
     public SharedInt entityId;
 
@@ -25,7 +27,7 @@ public class GetEntityCoordinate : Action
             return;
         }
 
-        ObjCoordinate coordinate=new ObjCoordinate();
+        int3 coordinate=int3.zero;
         switch (entityType)
         {
             case EntityType.地图道具:

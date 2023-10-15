@@ -8,7 +8,7 @@ using BehaviorDesigner.Runtime.Tasks;
 public class CheckCharacterCoordinateChange:Action
 {
     public SharedInt characterId; 
-    public SharedObjCoordinate coordinate;
+    public SharedInt3 coordinate;
     public bool continued;
 
     private bool addAction = false;
@@ -16,16 +16,12 @@ public class CheckCharacterCoordinateChange:Action
 
     private void CharacterCoordinateTriggerAction(CharacterCoordinateTrigger characterCoordinateTrigger)
     {
-        if (characterId.Value == characterCoordinateTrigger.characterId)
+        if (characterId.Value == characterCoordinateTrigger.characterId&&
+            coordinate.Equals(characterCoordinateTrigger.coordinate))
         {
-            if (coordinate.Value.mapInstance == characterCoordinateTrigger.mapId &&
-                coordinate.Value.x == characterCoordinateTrigger.coordinate.x&&
-                coordinate.Value.y == characterCoordinateTrigger.coordinate.y)
-            {
-                result = true;
-            }
-            result = false;
+            result = true;
         }
+        result = false;
     }
     public override void OnStart()
     {

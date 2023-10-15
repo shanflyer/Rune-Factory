@@ -511,7 +511,7 @@ public class MapCellController : Singleton<MapCellController>
                 {
                     if (WorldMapManager.instance.GetMapItemPos(enterEventDatas[i].y, out var objCoordinate))
                     {
-                        float dis = CharacterManager.instance.GetDistanceController(objCoordinate.coordinate);
+                        float dis = CharacterManager.instance.GetDistanceController(objCoordinate.xy);
                         if (dis < distance)
                         {
                             distance = dis;
@@ -626,7 +626,7 @@ public class MapCellController : Singleton<MapCellController>
                 {
                     if (WorldMapManager.instance.GetMapItemPos(enterEventDatas[i].y, out var objCoordinate))
                     {
-                        float dis = CharacterManager.instance.GetDistanceController(objCoordinate.coordinate);
+                        float dis = CharacterManager.instance.GetDistanceController(objCoordinate.xy);
                         if (dis < distance)
                         {
                             distance = dis;

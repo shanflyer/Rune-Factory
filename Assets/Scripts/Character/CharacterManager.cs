@@ -359,7 +359,7 @@ public class CharacterManager : Singleton<CharacterManager>
         character.StopMove();
         if (character != null)
         {
-            character.SetCoordinate(setCharacterCoordinate.mapId, setCharacterCoordinate.coordinate);
+            character.SetCoordinate(setCharacterCoordinate.coordinate);
 
             RefreshNpcRuntimeObj(character);
         }
@@ -394,13 +394,13 @@ public class CharacterManager : Singleton<CharacterManager>
         return -1;
     }
 
-    public bool GetCharacterCoordiante(int id, out ObjCoordinate coordinate)
+    public bool GetCharacterCoordiante(int id, out int3 coordinate)
     {
         if (characters.TryGetValue(id, out Character character))
         {
             coordinate = character.ObjCoordinate;
         }
-        coordinate = new ObjCoordinate();
+        coordinate = int3.zero;
         return false;
     }
 
@@ -478,7 +478,7 @@ public class CharacterManager : Singleton<CharacterManager>
                // Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
-                    character.SetCoordinate(character.mapInstance, targetCoordinate);
+                    character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
                     CharacterMoveTarget(character, pathNodes, EndAction);
                 }
                 else
@@ -493,13 +493,13 @@ public class CharacterManager : Singleton<CharacterManager>
     public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null)
     {
         int2 offsetCoordinate = targetCoordinate - character.coordinate;
-        character.SetCoordinate(character.mapInstance, targetCoordinate);
+        character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
         if (MapCellController.instance.ChangeMap(targetCoordinate, offsetCoordinate, character.mapInstance, out newMap))
         {
             int targetMap = newMap.x;
             targetCoordinate = new int2(newMap.y, newMap.z);
 
-            character.SetCoordinate(targetMap, targetCoordinate);
+            character.SetCoordinate(new int3(targetCoordinate, targetMap));
             
             if (character == controllerCharacter)
             {
@@ -518,7 +518,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(string characterName)
     {
         player = new Player(characterName);
-        player.SetCoordinate(WorldMapManager.instance.displayMap, int2.zero);
+        player.SetCoordinate(new int3(int2.zero,WorldMapManager.instance.displayMap));
         //player.mapInstance = GameManager.instance.nowMap;
 
         foreach (var item in GameController.instance.testPlayerItems)
@@ -537,7 +537,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(CharacterSaveData characterSaveData)
     {
         player = new Player(characterSaveData);
-        player.SetCoordinate(WorldMapManager.instance.displayMap, int2.zero);
+        player.SetCoordinate(new int3(int2.zero, WorldMapManager.instance.displayMap));
 
         AddCharacter(player);
 
@@ -567,7 +567,7 @@ public class CharacterManager : Singleton<CharacterManager>
             npc = new NPC(characterData, mapNpcData.id);
             characters.Add(mapNpcData.id, npc);
         }
-        npc.SetCoordinate(mapNpcData.beginMap, mapNpcData.beginCoordinate);
+        npc.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
         RefreshNpcRuntimeObj(npc);
 
         if (mapNpcData.externalBehavior)

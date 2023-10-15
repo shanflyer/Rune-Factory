@@ -1161,7 +1161,7 @@ public struct SetCharacterCoordinate : GameAction
         if (parameters.Count >= 3)
         {
             characterId = int.Parse(parameters[0].value);
-            mapId= int.Parse(parameters[1].value);
+            coordinate.z = int.Parse(parameters[1].value);
             var parameter = parameters[2];
             if (parameter.parameters.Count >= 2)
             {
@@ -1171,9 +1171,8 @@ public struct SetCharacterCoordinate : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
-    public int characterId;
-    public int mapId;
-    public int2 coordinate;
+    public int characterId; 
+    public int3 coordinate;
     
 }
 public struct CharacterCoordinateTrigger : GameAction
@@ -1183,7 +1182,7 @@ public struct CharacterCoordinateTrigger : GameAction
         if (parameters.Count >= 3)
         {
             characterId = int.Parse(parameters[0].value);
-            mapId = int.Parse(parameters[1].value);
+            coordinate.z = int.Parse(parameters[1].value);
             var parameter = parameters[2];
             if (parameter.parameters.Count >= 2)
             {
@@ -1193,8 +1192,7 @@ public struct CharacterCoordinateTrigger : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
-    public int characterId;
-    public int mapId;
-    public int2 coordinate;
+    public int characterId; 
+    public int3 coordinate;
  
 }

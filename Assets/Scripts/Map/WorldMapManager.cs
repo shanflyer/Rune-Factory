@@ -94,12 +94,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return false;
     }
 
-    public bool GetMapItemPos(int id, out ObjCoordinate objCoordinate)
+    public bool GetMapItemPos(int id, out int3 objCoordinate)
     {
-        objCoordinate = default(ObjCoordinate);
+        objCoordinate = int3.zero;
         if (runtimeMapItems.GetData(id, out var mapItem))
         {
-            objCoordinate.SetObjCoordinate(mapItem.mapInstanceId, mapItem.coordinate);
+            objCoordinate=new int3(mapItem.coordinate, mapItem.mapInstanceId);
             return true;
         }
         return false;
