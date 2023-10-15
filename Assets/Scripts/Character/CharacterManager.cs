@@ -212,21 +212,25 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if(characters.TryGetValue(destoryTempCharacter.characterId,out var character))
         {
-            if (characterInstances.TryGetValue(character.dataId, out List<int> instances))
-            {
-                instances.Remove(character.instanceId); 
-            }
-            characters.Remove(destoryTempCharacter.characterId);
-
-            if(characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
-            {
-                GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
-                characterRuntionObjs.Remove(character);
-            }
-            CharacterBehaviorManager.instance.DestroyBehavior(destoryTempCharacter.characterId);
+            RemoveCharacter(character);
         } 
     }
+    void RemoveCharacter(Character character)
+    {
+        if (characterInstances.TryGetValue(character.dataId, out List<int> instances))
+        {
+            instances.Remove(character.instanceId);
+            characters.Remove(character.instanceId);
+        }
 
+        if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+        {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+            characterRuntionObjs.Remove(character);
+        }
+        MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId);
+        CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
+    }
     /// <summary>
     /// 创建消费者
     /// </summary>
@@ -294,16 +298,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         characters[character.instanceId] = character;
     }
-    void RemoveCharacter(Character character) 
-    {
-        if(characterInstances.TryGetValue(character.dataId,out List<int> instances))
-        {
-            instances.Remove(character.instanceId);
-            characters.Remove(character.instanceId);
-        }
-    }
-
-
+    
     private void MapClickAction(object obj)
     {
         Vector2 mouseScreenPos = (Vector2)obj;

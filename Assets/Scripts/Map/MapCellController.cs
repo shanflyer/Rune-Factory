@@ -27,7 +27,31 @@ public class MapCellController : Singleton<MapCellController>
         }
         ids.Add(characterId);
     }
-
+    public void RemoveCharacterCoordinate(int3 coordinate,int characterId)
+    {
+        if (characterCells.TryGetValue(coordinate, out var ints))
+        {
+            ints.Remove(characterId);
+        }
+    }
+    public int GetClickCharacter(int3 coordinate)
+    {
+        if(characterCells.TryGetValue(coordinate,out var ints))
+        {
+            if (ints.Count > 0)
+            {
+                using(var e = ints.GetEnumerator())
+                {
+                    if (e.MoveNext())
+                    {
+                        return e.Current;
+                    }
+                    
+                } 
+            }
+        }
+        return -1;
+    }
     public struct MapTriggerAreas
     {
         public NativeList<TriggerArea> triggerAreas;

@@ -5,6 +5,12 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public struct NPCTalkOperateData : IReferenceData
+{
+    public int characterId;
+    public TalkData defaultTalk;
+    public List<NPCFunctionData> npcFunctionDatas;
+}
 public class PlayerOperateManager : Singleton<PlayerOperateManager>
 {
     public override void Init()
@@ -58,6 +64,24 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         Character controller = CharacterManager.instance.controllerCharacter;
 
         controller.SetPlayerOperate(targetCoordinate);
+        int clickCharacter = MapCellController.instance.GetClickCharacter(
+            new int3(targetCoordinate, WorldMapManager.instance.displayMap));
+        if (clickCharacter!=-1&&clickCharacter != controller.instanceId)
+        {
+            Character character = CharacterManager.instance.GetCharacter(clickCharacter);
+            if (character!=null)
+            {
+                EventReferenceData eventReferenceData = new EventReferenceData
+                {
+                    name = "CharacterId",
+                    value = clickCharacter
+                };
+                GameEventManager.instance.AddGameEvent(character.characterData.defaultTalkEventId,new List<EventReferenceData>
+                {
+                    eventReferenceData
+                });
+            }
+        }
     }
     void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
     {

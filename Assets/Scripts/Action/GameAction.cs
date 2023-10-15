@@ -598,6 +598,7 @@ public struct JumpFilm : GameAction
 public struct Talk : GameAction
 {
     public int talkId, characterId;
+    public bool displayFunction;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)
     {
         if (parameters.Count >= 1)
@@ -610,7 +611,11 @@ public struct Talk : GameAction
         {
             characterId = -1;
         }
-        GameActionManager.instance.QueueAction(this);
+        if (parameters.Count >= 3)
+        {
+            displayFunction = bool.Parse(parameters[2].value);
+        }
+            GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CreatTeamPlayer : GameAction

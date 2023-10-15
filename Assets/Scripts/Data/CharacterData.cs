@@ -22,6 +22,10 @@ public class CharacterData : ScriptableObject, IGameData
     public int packageId;
     public bool zeroCreate;
     public AttributeType attributeType;
+    public int defaultTalkEventId;
+    public int tempTalkEventId;
+    public List<int> functionIds;
+
 
     public string GetKey()
     {

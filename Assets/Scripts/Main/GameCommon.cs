@@ -602,7 +602,8 @@ public static class DataPath
         {typeof(TempCharacterCreatData),"Data/TempCharacterCreatData" },
         {typeof(OperateData),"Data/OperateData" },
         {typeof(StoreCounterData),"Data/StoreCounterDataList" },
-        {typeof(TempCharacterData),"Data/TempCharacterData"}
+        {typeof(TempCharacterData),"Data/TempCharacterData"},
+        {typeof(NPCFunctionData), "Data/NPCFunctionData"}
     };
 
     public static string GetDataPath(Type type)

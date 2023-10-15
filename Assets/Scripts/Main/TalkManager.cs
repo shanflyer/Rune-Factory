@@ -12,10 +12,12 @@ public class TalkManager : Singleton<TalkManager>
     }
     void Talk(Talk talk)
     {
-        Talk(talk.talkId, talk.characterId);
+        Talk(talk.talkId, talk.characterId,talk.displayFunction);
     }
-    public void Talk(int talkId,int characterId=-1)
+    public async void Talk(int talkId,int characterId=-1,bool displayFunction=false)
     {
+        TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkId);
+
         UIManager.instance.ShowGamePanel<TalkPanel>(talkId.ToString(), 2);
     }
 }

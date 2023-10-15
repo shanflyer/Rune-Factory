@@ -39,6 +39,14 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
     }
     protected T data;
     protected SelectAction<T> SelectAction;
+
+    protected void ClickAction()
+    {
+        if (SelectAction != null)
+        {
+            SelectAction(data);
+        }
+    }
     public virtual void InitData(T t, SelectAction<T> SelectAction = null,ToggleGroup toggleGroup=null)
     {
         data = t;
