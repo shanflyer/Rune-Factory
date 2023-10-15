@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -17,7 +17,14 @@ public class TalkManager : Singleton<TalkManager>
     public async void Talk(int talkId,int characterId=-1,bool displayFunction=false)
     {
         TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkId);
+        NPCTalkOperateData NPCTalkOperateData = new NPCTalkOperateData
+        {
+            characterId = characterId,
+            defaultTalk = talkData,
+            displayFunction=displayFunction,
+            npcFunctionDatas = new List<NPCFunctionData>()
+        };
 
-        UIManager.instance.ShowGamePanel<TalkPanel>(talkId.ToString(), 2);
+        UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
     }
 }

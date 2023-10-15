@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class TalkPanel : GamePanel<NPCTalkOperateData>
 {
     [SerializeField]
-    Image rightHead, leftHead, leftNameBg, rightNameBg;
+    Image rightHead, leftHead;
+    [SerializeField]
+    Transform leftNameBg, rightNameBg;
     [SerializeField]
     TextMeshProUGUI rightNameValue, leftNameValue;
     [SerializeField]
@@ -20,14 +22,18 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
     NPCFunctionReference NPCFunctionReference;
     [SerializeField]
     Transform NPCFunctionParent;
+    [SerializeField]
+    Button closeButton;
 
     DisplayList<NPCFunctionReference, NPCFunctionData> NPCFunctionList;
 
     TalkData talkData;
+    NPCTalkOperateData NPCTalkOperateData;
     protected override void Awake()
     {
         base.Awake();
         nextButton.onClick.AddListener(NextAction);
+        closeButton.onClick.AddListener(Close);
         NPCFunctionList = new DisplayList<NPCFunctionReference, NPCFunctionData>(NPCFunctionReference, NPCFunctionParent);
     }
   
@@ -44,8 +50,17 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
     public override void InitReferenceData(NPCTalkOperateData v)
     {
         base.InitReferenceData(v);
+        NPCTalkOperateData = v;
         talkData = v.defaultTalk;
-        NPCFunctionList.InitListData(v.npcFunctionDatas); 
+        if (v.displayFunction)
+        {
+            NPCFunctionList.InitListData(v.npcFunctionDatas);
+        }
+        else
+        {
+            NPCFunctionList.InitListData(null);
+        }
+        
         InitData();
     }
     void InitData()
@@ -56,8 +71,23 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             return;
         }
         talkValue.text = talkData.text;
-        var talkerName = talkData.myTalk ? CharacterManager.instance.player.name : talkData.talkerName;
-        Sprite talkerIcon = talkData.myTalk ? CharacterManager.instance.PlayerIcon : talkData.talkerIcon;
+
+        var talkerName = talkData.talkerName;
+        Sprite talkerIcon =  talkData.talkerIcon;
+        if (talkData.myTalk)
+        {
+            Character character = CharacterManager.instance.GetCharacter(NPCTalkOperateData.characterId);
+            if (character == null)
+            {
+                talkerName =  CharacterManager.instance.PlayerName;
+                talkerIcon = CharacterManager.instance.PlayerHead;
+            }
+            else
+            {
+                talkerName = character.name;
+                talkerIcon = character.characterData.head;
+            }
+        }  
 
         switch (talkData.talkerDir)
         {
@@ -95,14 +125,15 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         base.SetPanelUISerializeObj();
         rightHead = FindChildGameObject<Image>("RightHead");
         leftHead = FindChildGameObject<Image>("LeftHead");
-        rightNameBg = FindChildGameObject<Image>("RightName");
-        leftNameBg = FindChildGameObject<Image>("LeftName");
+        rightNameBg = FindChildGameObject("RightName");
+        leftNameBg = FindChildGameObject("LeftName");
         rightNameValue = FindChildGameObject<TextMeshProUGUI>("RightNameValue");
         leftNameValue = FindChildGameObject<TextMeshProUGUI>("LeftNameValue");
         talkValue = FindChildGameObject<TextMeshProUGUI>("Value"); 
 
         tipes = FindChildGameObject<TextMeshProUGUI>("Tipes");
         nextButton = FindChildGameObject<Button>("Next");
+        closeButton = FindChildGameObject<Button>("Close");
 
         NPCFunctionReference = FindChildGameObject<NPCFunctionReference>("NPCFunctionReference");
         NPCFunctionParent = FindChildGameObject("Functions");

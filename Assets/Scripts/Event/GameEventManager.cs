@@ -62,6 +62,11 @@ public class GameEventManager:Singleton<GameEventManager>
                     {
                         var sharedrefrence = (SharedInt)shared;
                         sharedrefrence.SetValue(intReferenceId);
+                    }else
+                    {
+                        SharedInt sharedInt = new SharedInt();
+                        sharedInt.SetValue(intReferenceId);
+                        behaviorTree.SetVariable(referenceName,sharedInt);
                     }
                 }
             }

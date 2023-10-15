@@ -9,6 +9,7 @@ public struct NPCTalkOperateData : IReferenceData
 {
     public int characterId;
     public TalkData defaultTalk;
+    public bool displayFunction;
     public List<NPCFunctionData> npcFunctionDatas;
 }
 public class PlayerOperateManager : Singleton<PlayerOperateManager>

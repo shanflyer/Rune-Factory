@@ -118,7 +118,7 @@ public class CharacterManager : Singleton<CharacterManager>
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
     public string PlayerName => player.name;
-    public Sprite PlayerIcon => playerData.icon;
+    public Sprite PlayerHead => playerData.head;
     private Character _controllerCharacter;
     public Character controllerCharacter
     {
