@@ -413,8 +413,22 @@ public class Character
     }
     public void StopMove()
     {
-        GameController.instance.StopCoroutine(moveEnumerator);
-    } 
+        if (moveEnumerator == null)
+        {
+            return;
+        }
+        GameObjectCurveController.instance.StopMove(moveEnumerator);
+       // GameController.instance.StopCoroutine(moveEnumerator);
+    }
+    public void StartMove()
+    {
+        if (moveEnumerator == null)
+        {
+            return;
+        }
+        GameObjectCurveController.instance.StartMove(moveEnumerator);
+        // GameController.instance.StopCoroutine(moveEnumerator);
+    }
     public async void AddExp(int value)
     {
         bool levelUp = false;
@@ -776,7 +790,7 @@ public class TempCharacter : Character
         }
         CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
         CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree);
-    }
+    } 
 }
 
 public class NPC : Character

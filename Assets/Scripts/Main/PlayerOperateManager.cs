@@ -77,7 +77,9 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                     name = "CharacterId",
                     value = clickCharacter
                 };
-                GameEventManager.instance.AddGameEvent(character.characterData.defaultTalkEventId,new List<EventReferenceData>
+                bool temp = character is TempCharacter;
+                GameEventManager.instance.AddGameEvent(
+                temp? character.characterData.tempTalkEventId: character.characterData.defaultTalkEventId,new List<EventReferenceData>
                 {
                     eventReferenceData
                 });

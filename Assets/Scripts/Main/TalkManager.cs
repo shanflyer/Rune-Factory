@@ -9,6 +9,22 @@ public class TalkManager : Singleton<TalkManager>
     {
         base.Init();
         GameActionManager.instance.AddListener<Talk>(Talk);
+        GameActionManager.instance.AddListener<SimpleTalk>(SimpleTalk);
+    }
+    async void SimpleTalk(SimpleTalk simpleTalk)
+    { 
+        if (CharacterManager.instance.GetRuntimeCharacterObj(simpleTalk.characterId,out var characterRuntimeObj))
+        {
+            Character character = CharacterManager.instance.GetCharacter(simpleTalk.characterId);
+            character.StopMove();
+            TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(simpleTalk.talkId);
+            CharacterResponseData characterResponseData = new CharacterResponseData
+            {
+                talkValue = talkData.text,
+                endAction=  character.StartMove,
+            };
+            UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(characterResponseData, parent: characterRuntimeObj.runtimeObj.obj as Transform);
+        }
     }
     void Talk(Talk talk)
     {

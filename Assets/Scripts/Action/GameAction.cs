@@ -595,6 +595,29 @@ public struct JumpFilm : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+public struct SimpleTalk : GameAction
+{
+    public int talkId, characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count >= 1)
+            talkId = int.Parse(parameters[0].value);
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[1].value);
+        }
+        if(target != 0)
+        {
+            talkId = target;
+        }
+        if (source != 0)
+        {
+            characterId = source;
+        }
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct Talk : GameAction
 {
     public int talkId, characterId;

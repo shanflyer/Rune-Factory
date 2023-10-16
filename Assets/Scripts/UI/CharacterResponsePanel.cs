@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 using UnityEngine.Animations;
+using static UnityEngine.Rendering.BoolParameter;
+using System;
 
 public struct CharacterResponseData:IReferenceData
 {
@@ -12,6 +14,7 @@ public struct CharacterResponseData:IReferenceData
     public Sprite icon;
     public AnimationClip clip;
     public int displayTime;
+    public Action endAction;
 }
 public class CharacterResponsePanel : GamePanel<CharacterResponseData>
 {
@@ -50,7 +53,15 @@ public class CharacterResponsePanel : GamePanel<CharacterResponseData>
         var clipPlayable= AnimationClipPlayable.Create(graph, characterResponseData.clip);
         animationPlayableOutput.SetSourcePlayable(clipPlayable);
         graph.Play();
-        GameTimerController.instance.DeleyActionMain(characterResponseData.displayTime, Close);
+ 
+        GameTimerController.instance.DeleyActionMain(characterResponseData.displayTime==0? GameCommon.defaultPlayerTalkTime: characterResponseData.displayTime,
+            ()=> {
+                if (characterResponseData.endAction!=null)
+                {
+                    characterResponseData.endAction();
+                }
+                Close();
+            });
     }
     
 }

@@ -48,7 +48,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private MyInstance myInstance;
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
     private Dictionary<int,List<int>> characterInstances=new Dictionary<int, List<int>>();
-    private Dictionary<int, TempCharacter> tempCharacters = new Dictionary<int, TempCharacter>();
+   
 
     public Player player;
     private CharacterData playerData;
@@ -104,7 +104,26 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetDirection>(SetDirection);
         GameActionManager.instance.AddListener<SetTargetDirection>(SetTargetDirection);
         GameActionManager.instance.AddListener<GetCharacterDataId>(GetCharacterDataId);
+
+        GameActionManager.instance.AddListener<CheckCharacterTemp>(CheckCharacterTemp);
     }
+
+    public bool IsTempCharacter(int characterId)
+    {
+        if(characters.TryGetValue(characterId,out var character))
+        {
+            if(character is TempCharacter)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    void CheckCharacterTemp(CheckCharacterTemp checkCharacterTemp)
+    {
+       
+    }
+
     void GetCharacterDataId(GetCharacterDataId getCharacterDataId)
     {
         if(characters.TryGetValue(getCharacterDataId.characterId,out var character))

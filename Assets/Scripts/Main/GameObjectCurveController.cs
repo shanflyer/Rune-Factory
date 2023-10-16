@@ -26,6 +26,14 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
 
     private MonoBehaviour UpDataComponent;
 
+    public void StopMove(IEnumerator enumerator)
+    {
+        UpDataComponent.StopCoroutine(enumerator);
+    }
+    public void StartMove(IEnumerator enumerator)
+    { 
+        UpDataComponent.StartCoroutine(enumerator);
+    }
     public void SetUpDataComponent(MonoBehaviour UpDataComponent)
     {
         this.UpDataComponent=UpDataComponent; 

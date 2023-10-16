@@ -19,6 +19,10 @@ public class MapCellController : Singleton<MapCellController>
         if(characterCells.TryGetValue(oldCoordinate,out var ints))
         {
             ints.Remove(characterId);
+            if (ints.Count == 0)
+            {
+                characterCells.Remove(oldCoordinate);
+            }
         }
         if(!characterCells.TryGetValue(newCoordinate,out var ids))
         {
@@ -32,24 +36,42 @@ public class MapCellController : Singleton<MapCellController>
         if (characterCells.TryGetValue(coordinate, out var ints))
         {
             ints.Remove(characterId);
+            if (ints.Count == 0)
+            {
+                characterCells.Remove(coordinate);
+            }
         }
     }
     public int GetClickCharacter(int3 coordinate)
-    {
+    { 
         if(characterCells.TryGetValue(coordinate,out var ints))
         {
             if (ints.Count > 0)
             {
-                using(var e = ints.GetEnumerator())
+                foreach(var e in ints)
                 {
-                    if (e.MoveNext())
-                    {
-                        return e.Current;
-                    }
-                    
+                    return e;
                 } 
             }
         }
+
+        for(int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 0; y++)
+            {
+                int3 nowCoordinate = coordinate + new int3(x, y, 0);
+                if (characterCells.TryGetValue(nowCoordinate, out ints))
+                {
+                    if (ints.Count > 0)
+                    {
+                        foreach (var e in ints)
+                        {
+                            return e;
+                        }
+                    }
+                }
+            }
+        } 
         return -1;
     }
     public struct MapTriggerAreas
