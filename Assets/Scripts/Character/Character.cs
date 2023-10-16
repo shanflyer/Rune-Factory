@@ -398,7 +398,8 @@ public class Character
     }
 
     public int behavior;
-    public IEnumerator moveEnumerator;
+
+    public int moveEnumeratorId;  
     private CharacterProperty nowProperty;
     public void SetObjCoordinate(int3 coordinate)
     { 
@@ -413,20 +414,18 @@ public class Character
     }
     public void StopMove()
     {
-        if (moveEnumerator == null)
+        if (GameObjectCurveController.instance.StopLineMove(moveEnumeratorId))
         {
-            return;
+            CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
         }
-        GameObjectCurveController.instance.StopMove(moveEnumerator);
        // GameController.instance.StopCoroutine(moveEnumerator);
     }
     public void StartMove()
     {
-        if (moveEnumerator == null)
+        if (GameObjectCurveController.instance.StartLineMove(moveEnumeratorId))
         {
-            return;
+            CharacterManager.instance.SetCharacterAnimationSpeed(1, this);
         }
-        GameObjectCurveController.instance.StartMove(moveEnumerator);
         // GameController.instance.StopCoroutine(moveEnumerator);
     }
     public async void AddExp(int value)

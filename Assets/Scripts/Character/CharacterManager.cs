@@ -1,4 +1,5 @@
 
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System;
 using System.Collections.Generic; 
 using System.Threading.Tasks;
@@ -106,8 +107,23 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<GetCharacterDataId>(GetCharacterDataId);
 
         GameActionManager.instance.AddListener<CheckCharacterTemp>(CheckCharacterTemp);
+        GameActionManager.instance.AddListener<StartCharacterMove>(StartCharacterMove);
+        GameActionManager.instance.AddListener<StopCharacterMove>(StopCharacterMove);
     }
-
+    public void StartCharacterMove(StartCharacterMove startCharacterMove)
+    {
+        if(characters.TryGetValue(startCharacterMove.characterId,out var character))
+        {
+            character.StartMove();
+        }
+    }
+    public void StopCharacterMove(StopCharacterMove stopCharacterMove)
+    {
+        if (characters.TryGetValue(stopCharacterMove.characterId, out var character))
+        {
+            character.StopMove();
+        }
+    }
     public bool IsTempCharacter(int characterId)
     {
         if(characters.TryGetValue(characterId,out var character))
@@ -475,7 +491,7 @@ public class CharacterManager : Singleton<CharacterManager>
          
 
         Vector2Int offsetCoordinate = Vector2Int.zero;
-        character.moveEnumerator =
+        character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(slant ? moveSpeed * GameCommon.slantValue : moveSpeed, startPos, targetPos, (Vector2 pos) =>
              {
                  SetCharacterAnimationSpeed(1, runtimeObj);

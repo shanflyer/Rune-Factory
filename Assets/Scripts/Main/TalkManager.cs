@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class TalkManager : Singleton<TalkManager>
 {
@@ -15,22 +16,23 @@ public class TalkManager : Singleton<TalkManager>
     { 
         if (CharacterManager.instance.GetRuntimeCharacterObj(simpleTalk.characterId,out var characterRuntimeObj))
         {
-            Character character = CharacterManager.instance.GetCharacter(simpleTalk.characterId);
-            character.StopMove();
+            //Character character = CharacterManager.instance.GetCharacter(simpleTalk.characterId);
+            //character.StopMove();
             TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(simpleTalk.talkId);
             CharacterResponseData characterResponseData = new CharacterResponseData
             {
                 talkValue = talkData.text,
-                endAction=  character.StartMove,
+                endAction= simpleTalk.endAction
             };
             UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(characterResponseData, parent: characterRuntimeObj.runtimeObj.obj as Transform);
         }
     }
     void Talk(Talk talk)
     {
-        Talk(talk.talkId, talk.characterId,talk.displayFunction);
+        Talk(talk.talkId, talk.characterId,talk.displayFunction,talk.endAction);
     }
-    public async void Talk(int talkId,int characterId=-1,bool displayFunction=false)
+    public async void Talk(int talkId,int characterId=-1,
+        bool displayFunction=false,Action endAction=null)
     {
         TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkId);
         NPCTalkOperateData NPCTalkOperateData = new NPCTalkOperateData
@@ -38,7 +40,8 @@ public class TalkManager : Singleton<TalkManager>
             characterId = characterId,
             defaultTalk = talkData,
             displayFunction=displayFunction,
-            npcFunctionDatas = new List<NPCFunctionData>()
+            npcFunctionDatas = new List<NPCFunctionData>(),
+            endAction=endAction
         };
 
         UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);

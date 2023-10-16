@@ -36,7 +36,14 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         closeButton.onClick.AddListener(Close);
         NPCFunctionList = new DisplayList<NPCFunctionReference, NPCFunctionData>(NPCFunctionReference, NPCFunctionParent);
     }
-  
+    public override void Close()
+    {
+        if (NPCTalkOperateData.endAction != null)
+        {
+            NPCTalkOperateData.endAction();
+        }
+        base.Close();
+    }
     async void NextAction()
     {
         var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(talkData.actionId.ToString());

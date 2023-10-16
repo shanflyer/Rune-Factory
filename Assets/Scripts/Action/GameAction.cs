@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
-using static UnityEngine.Rendering.ReloadAttribute;
-using OfficeOpenXml.FormulaParsing.Utilities;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using static UnityEditor.PlayerSettings;
-using UnityEngine.TextCore.Text;
 using static Cinemachine.DocumentationSortingAttribute;
 
 public interface GameAction 
@@ -18,6 +13,38 @@ public interface GameAction
 public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
+public struct StopCharacterMove : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        if (target != 0)
+        {
+            characterId = target;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct StartCharacterMove : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        if (target != 0)
+        {
+            characterId = target;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct GetCharacterDataId : GameAction
 {
     public int characterId;
@@ -598,6 +625,8 @@ public struct JumpFilm : GameAction
 public struct SimpleTalk : GameAction
 {
     public int talkId, characterId;
+    public Action endAction;
+    
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)
     {
         if (parameters.Count >= 1)
@@ -622,6 +651,7 @@ public struct Talk : GameAction
 {
     public int talkId, characterId;
     public bool displayFunction;
+    public Action endAction;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0)
     {
         if (parameters.Count >= 1)

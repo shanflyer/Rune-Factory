@@ -23,17 +23,37 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
     public delegate void CurveAction(Vector2 pos);
     public delegate void CurveEndAction();
     private Dictionary<int, IEnumerator> objectMoveIEnumerator = new Dictionary<int, IEnumerator>();
+    private Dictionary<int, IEnumerator> runIEnumerator = new Dictionary<int, IEnumerator>();
+    private Dictionary<int, IEnumerator> pauseEnumerator = new Dictionary<int, IEnumerator>();
+    private MyInstance myInstance;
+
 
     private MonoBehaviour UpDataComponent;
 
-    public void StopMove(IEnumerator enumerator)
+    public bool StopLineMove(int instanceId)
     {
-        UpDataComponent.StopCoroutine(enumerator);
+        if (!pauseEnumerator.ContainsKey(instanceId) && runIEnumerator.TryGetValue(instanceId, out var enumerator))
+        {
+            UpDataComponent.StopCoroutine(enumerator);
+            runIEnumerator.Remove(instanceId);
+            pauseEnumerator.Add(instanceId, enumerator);
+            return true;
+        }
+        return false;
     }
-    public void StartMove(IEnumerator enumerator)
-    { 
-        UpDataComponent.StartCoroutine(enumerator);
+    public bool StartLineMove(int instanceId)
+    {
+        if (!runIEnumerator.ContainsKey(instanceId) && pauseEnumerator.TryGetValue(instanceId, out var enumerator))
+        {
+            UpDataComponent.StartCoroutine(enumerator);
+            pauseEnumerator.Remove(instanceId);
+            runIEnumerator.Add(instanceId, enumerator);
+
+            return true;
+        }
+        return false;
     }
+
     public void SetUpDataComponent(MonoBehaviour UpDataComponent)
     {
         this.UpDataComponent=UpDataComponent; 
@@ -41,10 +61,12 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
     protected override void Clear()
     {
         base.Clear();
+        myInstance.Clear();
     }
     public override void Init()
     {
         base.Init();
+        myInstance = new MyInstance();
     }
 
 
@@ -131,7 +153,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
             yield return new WaitForFixedUpdate();
             curveAction(getCurvePos(timeValue));
         }
-        if (curveEndAction != null) ;
+        if (curveEndAction != null)
         {
             curveEndAction();
         }
@@ -152,17 +174,30 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         return enumerator;
     }
 
-    public IEnumerator Line(float speed, Vector2 startPos,Vector2 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
-    { 
+    public int Line(float speed, Vector2 startPos,Vector2 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
+    {
+        int instanceId = myInstance.CreatInstanceId();
         IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) => {
 
             Vector2 pos = startPos + (targetPos - startPos) * timeValue;
             return pos;
-        }, curveEndAction);
+        }, EnnAction);
+
+        void EnnAction()
+        {
+            if (curveEndAction != null)
+            {
+                curveEndAction();
+            }
+            runIEnumerator.Remove(instanceId);
+            pauseEnumerator.Remove(instanceId);
+            myInstance.RemoveInstance(instanceId);
+        }
 
         UpDataComponent.StartCoroutine(enumerator);
+        runIEnumerator.Add(instanceId, enumerator);
 
-        return enumerator;
+        return instanceId ;
     }
     public void StopObjectMove(int instanceId)
     {

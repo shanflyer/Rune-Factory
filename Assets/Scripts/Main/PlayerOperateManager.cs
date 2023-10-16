@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -11,6 +12,7 @@ public struct NPCTalkOperateData : IReferenceData
     public TalkData defaultTalk;
     public bool displayFunction;
     public List<NPCFunctionData> npcFunctionDatas;
+    public Action endAction;
 }
 public class PlayerOperateManager : Singleton<PlayerOperateManager>
 {
