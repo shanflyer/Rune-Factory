@@ -114,6 +114,8 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if(characters.TryGetValue(startCharacterMove.characterId,out var character))
         {
+             
+
             character.StartMove();
         }
     }
@@ -544,7 +546,15 @@ public class CharacterManager : Singleton<CharacterManager>
         newMap = int3.zero;
         return false;
     }
+    public CharacterData GetCharacterDataFromInstance(int Id)
+    {
+        if(characters.TryGetValue(Id,out var character))
+        {
+            return character.characterData;
+        }
 
+        return null;
+    }
     private void CreatPlayer(string characterName)
     {
         player = new Player(characterName);

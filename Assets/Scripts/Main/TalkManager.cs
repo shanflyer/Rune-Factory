@@ -27,6 +27,7 @@ public class TalkManager : Singleton<TalkManager>
             UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(characterResponseData, parent: characterRuntimeObj.runtimeObj.obj as Transform);
         }
     }
+    
     void Talk(Talk talk)
     {
         Talk(talk.talkId, talk.characterId,talk.displayFunction,talk.endAction);
@@ -43,6 +44,16 @@ public class TalkManager : Singleton<TalkManager>
             npcFunctionDatas = new List<NPCFunctionData>(),
             endAction=endAction
         };
+        CharacterData characterData = CharacterManager.instance.GetCharacterDataFromInstance(characterId);
+        if (characterData != null)
+        {
+            for(int i = 0; i < characterData.functionIds.Count; i++)
+            {
+                int funtionId = characterData.functionIds[i];
+                NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
+                NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+            }
+        }
 
         UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
     }

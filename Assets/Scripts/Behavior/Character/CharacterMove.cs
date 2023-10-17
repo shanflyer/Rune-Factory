@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using BehaviorDesigner.Runtime.Tasks; 
 
 [TaskCategory("Game/Character")]
 [TaskName("角色移动")]

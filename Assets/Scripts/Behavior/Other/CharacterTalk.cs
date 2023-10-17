@@ -9,10 +9,12 @@ using Unity.Mathematics;
 public class CharacterTalk : Action
 {
     private SharedInt characterId;
+    public SharedInt TargetCharacter;
     public SharedInt talkId;
     public SharedBool displayFunction;
     public SharedBool isSimpleTalk;
     public SharedBool isStopMove;
+    public SharedBool faceTarget;
 
     void CharacterStartMoveAction()
     {
@@ -28,6 +30,25 @@ public class CharacterTalk : Action
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
+        if (TargetCharacter == null|| TargetCharacter.IsNull())
+        {
+            TargetCharacter= (SharedInt)Owner.GetVariable("TargetCharacter");
+        }
+
+        if (faceTarget.Value)
+        {
+            Character character = CharacterManager.instance.GetCharacter(TargetCharacter.Value);
+            if (character != null)
+            {
+                SetTargetDirection setTargetDirection = new SetTargetDirection
+                {
+                    characterId = characterId.Value,
+                    targetCoordinate = character.coordinate
+                };
+                GameActionManager.instance.QueueAction(setTargetDirection);
+            }
+        }
+
         if (isStopMove.Value)
         {
             StopCharacterMove stopCharacterMove = new StopCharacterMove

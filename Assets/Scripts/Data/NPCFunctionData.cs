@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
 {
@@ -20,8 +23,13 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     {
         return id.ToString();
     }
+#if UNITY_EDITOR
     public void SetReferenceData()
     {
-        throw new NotImplementedException();
+        string path = $"Reference/{iconName}";
+       var spriteRenference= Resources.Load<SpriteResourceRenference>(path);
+        icon = spriteRenference.sprite;
     }
+#endif
+
 }

@@ -100,7 +100,20 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
         GameActionManager.instance.AddListener<AddPackageItem>(AddPackageItemAction);
         GameActionManager.instance.AddListener<OpenPackage>(OpenPackage);
-
+        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+    }
+    void GiveGift(GiveGift giveGift)
+    { 
+        Character receiveCharacter = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter); 
+        if (receiveCharacter != null)
+        {
+            SetItemInPackage(new Item(giveGift.giftId, 1), receiveCharacter.characterPackage);
+        }
+        Character giveCharacter = CharacterManager.instance.GetCharacter(giveGift.giveCharacter);
+        if (giveCharacter != null)
+        {
+            GetOutItenFromPackage(giveCharacter.characterPackage, giveGift.giftId, 1); 
+        }
     }
 
     private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();

@@ -75,6 +75,7 @@ public enum EntityType
 }
 public class GameCommon
 {
+    public const int defaultGiftTalk = 8888;
     public const int defaultPerRPCost = 5;
     public const int storeCoinTime = 1000;
     public const float HurtUtlility = 0.6f;

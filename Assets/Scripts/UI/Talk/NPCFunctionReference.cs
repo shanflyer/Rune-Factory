@@ -24,11 +24,11 @@ public class NPCFunctionReference:UIObjReference<NPCFunctionData>
     private void Awake()
     {
         button.onClick.AddListener(ClickAction);
-    }
+    } 
     public override void InitData(NPCFunctionData t, SelectAction<NPCFunctionData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         icon.sprite = data.icon;
-        Name.text = data.npcFunctionName;
+        Name.text = data.npcFunctionName; 
     }
 }

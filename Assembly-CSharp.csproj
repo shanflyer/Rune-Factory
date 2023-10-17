@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\eyeMove.cs" />
     <Compile Include="Assets\Scripts\ChildFunctionAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Play.cs" />
+    <Compile Include="Assets\Scripts\Action\GameCheckAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetEmissionRate.cs" />
     <Compile Include="Assets\Scripts\Action\GameActionManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetPosition.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Assets\Scripts\Main\GameTimerController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedQuaternion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MovePosition.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CharacterCheck.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetXY.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetIsKinematic.cs" />
     <Compile Include="Assets\Scripts\Film\FightEventTrack.cs" />
@@ -267,6 +269,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Dot.cs" />
     <Compile Include="Assets\Scripts\Main\GameRandom.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedBool.cs" />
+    <Compile Include="Assets\Scripts\Main\FriendManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\Sequence.cs" />
     <Compile Include="Assets\Scripts\UI\TeamerRenference.cs" />
     <Compile Include="Assets\Scripts\UI\InformationPanel.cs" />
@@ -436,6 +439,7 @@
     <Compile Include="Assets\Scripts\Film\FilmController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMinDistance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\BehaviorTreeReference.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\GetSomeOneGift.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetDrag.cs" />
     <Compile Include="Assets\Scripts\Main\MyNativeData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\SetCenter.cs" />

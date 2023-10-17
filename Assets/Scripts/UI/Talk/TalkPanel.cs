@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using BehaviorDesigner.Runtime.Tasks;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -51,17 +53,38 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         {
             actionData.Action();
         }
-        talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkData.nexTalkId); 
+        talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkData.nexTalkId);
         InitData();
+    }
+
+    async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData,bool selected= true)
+    {
+        List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
+
+        EventReferenceData eventReferenceData = new EventReferenceData
+        {
+            name = "CharacterId",
+            value = NPCTalkOperateData.characterId
+        };
+        eventReferenceDatas.Add(eventReferenceData);
+        EventReferenceData targetReferenceData = new EventReferenceData
+        {
+            name = "SourceCharacter",
+            value = CharacterManager.instance.controllerCharacter.instanceId
+        };
+        eventReferenceDatas.Add(targetReferenceData);
+        var GameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(NPCFunctionData.OperateAction);
+        GameEventManager.instance.AddGameEvent(GameEventData, eventReferenceDatas);
     }
     public override void InitReferenceData(NPCTalkOperateData v)
     {
         base.InitReferenceData(v);
         NPCTalkOperateData = v;
         talkData = v.defaultTalk;
+        NPCFunctionParent.localScale = v.displayFunction ? Vector3.one : Vector3.zero;
         if (v.displayFunction)
         {
-            NPCFunctionList.InitListData(v.npcFunctionDatas);
+            NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData);
         }
         else
         {
