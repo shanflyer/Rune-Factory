@@ -36,6 +36,14 @@ public class GetSomeOneGift : Action
                 characterId = characterId.Value,
                 talkId = GameCommon.defaultGiftTalk,
                 displayFunction = false,
+                endAction = () =>
+                {
+                    StartCharacterMove StartCharacterMove = new StartCharacterMove
+                    {
+                        characterId = characterId.Value,
+                    };
+                    GameActionManager.instance.QueueAction(StartCharacterMove);
+                }
             };
             GameActionManager.instance.QueueAction(talk);
             taskStatus = TaskStatus.Success;

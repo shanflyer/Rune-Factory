@@ -78,8 +78,8 @@ public class UIManager:Singleton<UIManager>
                 gamePanel = (GamePanel<V>)gamePanelComponent;
             }
 
-
-            gamePanels[type] = gamePanel;
+            if (gamePanel.pluralUI == false)
+                gamePanels[type] = gamePanel;
 
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
@@ -122,7 +122,11 @@ public class UIManager:Singleton<UIManager>
             {
                 gamePanel = (BaseReference)gamePanelComponent;
             } 
-            gamePanels[type] = gamePanel;
+            if(gamePanel.pluralUI == false)
+            {
+                gamePanels[type] = gamePanel;
+            }
+           
         }
         if (parent != null)
         {

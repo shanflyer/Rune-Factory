@@ -98,7 +98,7 @@ public class ExcelDataEditor : MyEditor
 
                 Type type = null;
                 Type dataType = null;
-
+                 
                 var dataName = result.Tables[0].Rows[0][0].ToString();
 
                 var fieldName = result.Tables[0].Rows[0][1].ToString();
@@ -169,8 +169,8 @@ public class ExcelDataEditor : MyEditor
                         } 
                     } 
                 }
-
-                string outPath = dataType != null? $"{EditorDataPath.outDataPath}{dataName}": $"{EditorDataPath.outDataPath}{listStr}";
+                string outPath = $"{EditorDataPath.outDataPath}{result.Tables[0].TableName}"; 
+               // string outPath = dataType != null? $"{EditorDataPath.outDataPath}{dataName}": $"{EditorDataPath.outDataPath}{listStr}";
                 if (Directory.Exists(outPath))
                 {
                     Directory.Delete(outPath, true);

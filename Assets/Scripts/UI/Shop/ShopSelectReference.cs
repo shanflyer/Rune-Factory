@@ -17,27 +17,24 @@ public class ShopSelectReference : UIObjReference<ShopData>
             shopName1.enabled = value;
             if (value&& SelectAction!=null)
             {
-                SelectAction(shopData);
+                SelectAction(data);
             }
         });
     }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        toggle = GetComponent<Toggle>();
+        toggle = GetComponent<Toggle>(); 
         shopName0 = FindChildGameObject<TextMeshProUGUI>("ShopName0");
         shopName1 = FindChildGameObject<TextMeshProUGUI>("ShopName1");
-    }
-    ShopData shopData;
-    SelectAction<ShopData> SelectAction;
+    } 
     public override void InitData(ShopData t, SelectAction<ShopData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
-        toggle.group = toggleGroup;
-        shopData = t;
+        toggle.group = toggleGroup; 
         this.SelectAction = SelectAction;
-        shopName0.text = shopData.shopName;
-        shopName1.text = shopData.shopName;
+        shopName0.text = data.shopName;
+        shopName1.text = data.shopName;
 
         shopName0.enabled = !toggle.isOn;
         shopName1.enabled = toggle.isOn;

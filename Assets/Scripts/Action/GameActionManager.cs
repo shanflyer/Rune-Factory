@@ -56,6 +56,7 @@ public class GameActionManager:Singleton<GameActionManager>
             {
                 delegates.Remove(type);
             }
+            delegates[type] = _d;
         } 
           
     }

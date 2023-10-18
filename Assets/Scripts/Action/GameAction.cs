@@ -14,6 +14,27 @@ public interface GameAction
 public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
+public struct TryVisitShop : GameAction
+{
+    public string ShopName;
+    public int CharacterId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            ShopName = parameters[0].value;
+        if (parameters.Count > 1)
+            CharacterId = int.Parse(parameters[1].value);
+
+        if (source != 0)
+        {
+            CharacterId = source;
+        }
+
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct TryGiveGiftOpenPackage : GameAction
 {
     public int fromCharacterId;

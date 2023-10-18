@@ -8,6 +8,7 @@ using Unity.Mathematics;
 
 public class ShopPanel : GamePanel<ShopGroup>
 {
+    //public override bool changeInputModel => false;
     [SerializeField]
     TextMeshProUGUI Title;
     [SerializeField]
@@ -47,18 +48,14 @@ public class ShopPanel : GamePanel<ShopGroup>
     {
         base.SetPanelUISerializeObj();
         Title = FindChildGameObject<TextMeshProUGUI>("Title");
-        CloseButton = FindChildGameObject<Button>("CloseButton");
-        CloseButton.onClick.AddListener(Close);
+        CloseButton = FindChildGameObject<Button>("CloseButton"); 
 
         ShopSelectReference = FindChildGameObject<ShopSelectReference>("ShopSelect");
         ShopItemReference = FindChildGameObject<ShopItemReference>("ShopItem");
         ShopItemParent = FindChildGameObject("ShopItemList");
         ShopSelectParent = FindChildGameObject("ShopSelectList");
         ItemGroup = ShopItemParent.GetComponent<ToggleGroup>();
-        ShopGroup = ShopItemParent.GetComponent<ToggleGroup>();
-
-        shopItems = new DisplayList<ShopItemReference, ShopItemData>(ShopItemReference, ShopItemParent);
-        shops = new DisplayList<ShopSelectReference, ShopData>(ShopSelectReference, ShopSelectParent);
+        ShopGroup = ShopSelectParent.GetComponent<ToggleGroup>(); 
 
         selectItemName = FindChildGameObject<TextMeshProUGUI>("SelectItemName");
         selectItemIcon = FindChildGameObject<Image>("SelectIcon");
@@ -69,7 +66,24 @@ public class ShopPanel : GamePanel<ShopGroup>
 
         buyCountValue = FindChildGameObject<TMP_InputField>("BuyCountValue");
         addButton = FindChildGameObject<Button>("AddButton");
-        reduceButton = FindChildGameObject<Button>("ReduceButton");
+        reduceButton = FindChildGameObject<Button>("ReduceButton"); 
+        buyButton = FindChildGameObject<Button>("BuyButton");
+
+        selectItemProperty = FindChildGameObject<TextMeshProUGUI>("Property");
+    }
+
+    ShopItemData selectShopItemData;
+    int buyCount=1;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        SelectInformation.transform.localScale = Vector3.zero;
+
+        CloseButton.onClick.AddListener(Close);
+        shopItems = new DisplayList<ShopItemReference, ShopItemData>(ShopItemReference, ShopItemParent);
+        shops = new DisplayList<ShopSelectReference, ShopData>(ShopSelectReference, ShopSelectParent);
+
         buyCountValue.onValueChanged.AddListener((string value) =>
         {
             buyCount = int.Parse(value);
@@ -85,19 +99,7 @@ public class ShopPanel : GamePanel<ShopGroup>
             buyCount--;
             RefreshBuyCount();
         });
-
-
-        buyButton = FindChildGameObject<Button>("BuyButton");
         buyButton.onClick.AddListener(BuyAction);
-    }
-
-    ShopItemData selectShopItemData;
-    int buyCount=1;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        SelectInformation.transform.localScale = Vector3.zero; 
     }
     void RefreshBuyCount()
     {
@@ -106,7 +108,7 @@ public class ShopPanel : GamePanel<ShopGroup>
     }
     async void BuyAction()
     {
-        if(!await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.player.characterPackage, selectShopItemData.item, buyCount))
+        if(!await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
         {
             GameNotificationManager.instance.DisplayTips($"空间不足", "背包无法放下这么多东西");
             return;
@@ -116,13 +118,13 @@ public class ShopPanel : GamePanel<ShopGroup>
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f)*buyCount;
-            PayManager.instance.PayAction("购买", $"购买{buyCount}个+ {itemData.name} +", trueCost, selectShopItemData.payType, async () =>
+            PayManager.instance.PayAction("购买", $"购买{buyCount}个+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async () =>
             {
                 await PackageManager.instance.SetItemInPackage(new Item 
                 { 
                     dataId = selectShopItemData.item,
                     count=buyCount
-                },CharacterManager.instance.player.characterPackage);
+                },CharacterManager.instance.controllerCharacter.characterPackage);
 
                 InformationController.instance.AddInformation($"成功购买{buyCount}个+ {itemData.name} +");
                 if (selectShopItemData.buyAction != 0)
@@ -142,9 +144,9 @@ public class ShopPanel : GamePanel<ShopGroup>
     {
         selectShopItemData = shopItemData;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemData.item);
-        if (itemData == null)
+        if (itemData != null)
         {
-            selectItemName.text = itemData.name;
+            selectItemName.text =$"+ {itemData.itemName} +";
             selectItemInfo.text = itemData.info;
             selectItemProperty.text = itemData.property.ToString();
             selectItemIcon.sprite = itemData.icon;
@@ -164,8 +166,12 @@ public class ShopPanel : GamePanel<ShopGroup>
         shops.InitListData(v.shopDatas,
             (ShopData shopData, bool selected) =>
             {
-                List<ShopItemData> shopItemDatas = shopData.shopItem.FindAll(s=>s.open);  
-                shopItems.InitListData(shopItemDatas, SeletShopItem,ItemGroup);
+                if (selected)
+                {
+                    List<ShopItemData> shopItemDatas = shopData.shopItem.FindAll(s => s.open);
+                    shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup);
+                }
+               
             },ShopGroup);
         buyCount = 1;
         RefreshBuyCount();

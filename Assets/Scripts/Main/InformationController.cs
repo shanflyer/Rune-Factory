@@ -55,6 +55,10 @@ public class InformationController : Singleton<InformationController>
         else
         {
             nowShow = false;
+            if(InformationShowPanel != null)
+            {
+                InformationShowPanel.Close();
+            }
         }       
     }
     public void AddInformation(string information,bool Show = true,bool PromptShow=false)

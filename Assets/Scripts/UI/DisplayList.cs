@@ -42,9 +42,11 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
             }
             else
             {
-                T t = GameObject.Instantiate(listPrefab, parent);
+                T t = GameObject.Instantiate(listPrefab);
                 t.InitData(componentData[i], SelectAction, toggleGroup);
                 t.enabled = true;
+                t.transform.SetParent(parent);
+                t.transform.localScale = Vector3.one;
                 list.Add(t);
             }
         }

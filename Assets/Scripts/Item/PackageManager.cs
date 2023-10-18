@@ -653,7 +653,16 @@ public class PackageManager : Singleton<PackageManager>
             {
                 if (itemCount >= count)
                 {
-                    packageItemCounts[itemDataId] = itemCount - count;
+                    int nowCount= itemCount - count;
+                    if (nowCount > 0)
+                    {
+                        packageItemCounts[itemDataId] = nowCount;
+                    }
+                    else
+                    {
+                        packageItemCounts.Remove(itemDataId);
+                    }
+                   
                     List<int> indexDatas = packageItemIndexDatas[itemDataId];
                     int index = indexDatas.Count - 1;
 
@@ -671,9 +680,9 @@ public class PackageManager : Singleton<PackageManager>
                             count -= nowItem.count;
                             ItemManager.instance.DeleteItem(nowItem.instanceId);
                             nullItems.Enqueue(indexDatas[index]);
-                            itemCount--;
-                            indexDatas.RemoveAt(index);
-                            items[index]=default(Item);
+                            itemCount -= nowItem.count;
+                            items[indexDatas[index]] = default(Item);
+                            indexDatas.RemoveAt(index); 
                             index--;
                         }
                     }

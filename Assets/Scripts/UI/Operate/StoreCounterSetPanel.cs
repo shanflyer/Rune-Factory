@@ -93,11 +93,11 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
             if (runtimeStoreCounter.itemId == 0 || runtimeStoreCounter.itemId == storeCunterSetData.itemId)
             { 
-                int maxCount = PackageManager.instance.GetPackageItemCount(packageId, storeCunterSetData.itemId);
-
-                changeCount = math.clamp(changeCount, changeCount, maxCount);
                 if (changeCount < 0)
                 {
+                    int maxChange = runtimeStoreCounter.count - storeCunterSetData.count;
+                    changeCount= math.clamp(changeCount, maxChange, 0);
+
                     changeCount = -math.clamp(-changeCount, 0, runtimeStoreCounter.count);
                     storeCunterSetData.count = runtimeStoreCounter.count + changeCount;
                     GameActionManager.instance.QueueAction(storeCunterSetData);
@@ -107,6 +107,9 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
                 }
                 else
                 {
+                    int maxCount = PackageManager.instance.GetPackageItemCount(packageId, storeCunterSetData.itemId);
+                    changeCount = math.clamp(changeCount, changeCount, maxCount);
+
                     if (PackageManager.instance.GetOutItenFromPackage(packageId, storeCunterSetData.itemId,  changeCount))
                     {
                         storeCunterSetData.count = runtimeStoreCounter.count + changeCount;
@@ -116,6 +119,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             }
             else
             {
+              
                 storeCunterSetData.count = changeCount;
                 if (PackageManager.instance.GetOutItenFromPackage(packageId, storeCunterSetData.itemId, storeCunterSetData.count))
                 {

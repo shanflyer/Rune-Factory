@@ -32,6 +32,11 @@ public class ItemBoxReference : UIObjReference<Item>
     {
         toggle.onValueChanged.AddListener((bool value) =>
         {
+            if (!icon.enabled)
+            {
+                toggle.SetIsOnWithoutNotify(false);
+                return;
+            }
             if (SelectAction != null)
             {
                 SelectAction.Invoke(item);
@@ -53,7 +58,7 @@ public class ItemBoxReference : UIObjReference<Item>
         toggle.group=toggleGroup;
         this.SelectAction = SelectAction;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-
+        toggle.enabled = true;
         if (itemData != null)
         { 
             icon.sprite = itemData.icon;
@@ -66,7 +71,10 @@ public class ItemBoxReference : UIObjReference<Item>
         }
         else
         {
+            
+            toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = false;
+            toggle.graphic.enabled = false;
             icon.enabled = false;
             count.enabled = false;
         }

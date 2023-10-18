@@ -599,7 +599,7 @@ public static class DataPath
         {typeof(ManufactureData),"Data/ManufactureData" },
         {typeof(PackageSetData),"Data/PackageSetData" },
         {typeof(MoneyCreatData), "Data/MoneyCreatData" },
-        {typeof(ShopDataList),"Data/ShopItemData/ShopDataList" },
+        {typeof(ShopGroup),"Data/ShopItemData/ShopDataList" },
         {typeof(TempCharacterCreatData),"Data/TempCharacterCreatData" },
         {typeof(OperateData),"Data/OperateData" },
         {typeof(StoreCounterData),"Data/StoreCounterDataList" },

@@ -63,7 +63,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private async Task RuntimeMapItemPlay(RuntimeMapItem mapItem, RuntimeObj runtimeObj)
     {
         
-        Animator animator = (runtimeObj.obj as Transform).GetComponentInChildren<Animator>(true);
+        Animator animator = (runtimeObj.obj as Transform).GetComponent<Animator>();
         if (animator)
         {
             MyAnimationController.instance.AddItemAnimation(mapItem.instanceId, animator, mapItem.dataId.ToString());

@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InformationShowPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Text info;
+    TextMeshProUGUI info;
     [SerializeField]
     Button display;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        info = FindChildGameObject<Text>("Info");
+        info = FindChildGameObject<TextMeshProUGUI>("Info");
         display = FindChildGameObject<Button>("Display");
         
     }
@@ -21,7 +22,7 @@ public class InformationShowPanel : GamePanel<IReferenceData>
         base.Awake();
         display.onClick.AddListener(() =>
         {
-            AudioController.instance.PlayAudio(SE.click);
+            //AudioController.instance.PlayAudio(SE.click);
             UIManager.instance.ShowGamePanel<InformationPanel>(layer:20);
         });
     }
