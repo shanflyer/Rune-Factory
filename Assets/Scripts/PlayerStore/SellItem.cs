@@ -15,6 +15,22 @@ public class SellItem : GamePanel<Item>
         count = FindChildGameObject<TextMeshPro>("Count");
 
     }
+    public override void Close()
+    {
+        //base.Close();
+    }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        icon.enabled = item.count > 0;
+        count.enabled = item.count > 0;
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        item = default(Item);
+    }
+
     protected override void Awake()
     {
         //base.Awake();

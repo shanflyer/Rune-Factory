@@ -244,6 +244,15 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     nowRuntimeStoreCounterObjs.Add(displayStoreCounter.itemInstanceId, runtimeObj);
                 }
                 SellItem nowSellItem = runtimeObj.obj as SellItem;
+                if (nowSellItem != null)
+                {
+                    nowSellItem.InitReferenceData(new Item
+                    {
+                        dataId = runtimeStoreCounter.itemId,
+                        count = runtimeStoreCounter.count
+                    });
+                }
+
                 nowSellItem.enabled = true;
                 Transform transform = nowSellItem.transform;
                 transform.gameObject.SetActive(true);
