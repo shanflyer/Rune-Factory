@@ -60,28 +60,18 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 };
                 GameActionManager.instance.QueueAction(showCoin);
             }
-
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
+            PayManager.instance.AddGold(itemData.sellPrice);
             runtimeStoreCounter.count--;
-            if (runtimeStoreCounter.count > 0)
-            {
-                runtimeStoreCounters.SetData(runtimeStoreCounter);
-                if (runtimeObj.obj != null)
-                {
-                    (runtimeObj.obj as SellItem).AddItemCount(-1);
-                }
-
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
-                PayManager.instance.AddGold(itemData.sellPrice);
-            }
-            else
+            if (runtimeStoreCounter.count <= 0)
             {
                 runtimeStoreCounter.itemId = 0;
-                runtimeStoreCounter.count = 0;
-                runtimeStoreCounters.SetData(runtimeStoreCounter);
-                if (runtimeObj.obj != null)
-                {
-                    GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
-                }
+                runtimeStoreCounter.count = 0; 
+            }
+            runtimeStoreCounters.SetData(runtimeStoreCounter);
+            if (runtimeObj.obj != null)
+            {
+                (runtimeObj.obj as SellItem).SetItemCount(runtimeStoreCounter.count);
             }
 
             buyPlayerGood.setResult(true);

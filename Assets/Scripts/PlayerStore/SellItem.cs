@@ -49,7 +49,7 @@ public class SellItem : GamePanel<Item>
         item.count = count;
         RefreshDisplay();
     }
-    void RefreshDisplay()
+    public void RefreshDisplay()
     {
         count.text = item.count.ToString();
         if (item.count > 0)
