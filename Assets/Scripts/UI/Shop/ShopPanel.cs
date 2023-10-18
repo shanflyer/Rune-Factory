@@ -126,7 +126,7 @@ public class ShopPanel : GamePanel<ShopGroup>
                     count=buyCount
                 },CharacterManager.instance.controllerCharacter.characterPackage);
 
-                InformationController.instance.AddInformation($"成功购买{buyCount}个+ {itemData.name} +");
+                InformationController.instance.AddInformation($"成功购买{buyCount}个+ {itemData.itemName} +");
                 if (selectShopItemData.buyAction != 0)
                 {
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);

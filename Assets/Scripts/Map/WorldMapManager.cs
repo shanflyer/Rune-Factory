@@ -380,6 +380,15 @@ public class WorldMapManager : Singleton<WorldMapManager>
                         {
                             var itemObj = await CreatMapItemRuntime(mapItem.dataId, mapItem.instanceId, mapItem.coordinate);
                             nowRuntimeMapItemObjs.Add(mapItems[i], itemObj);
+
+                            DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
+                            {
+                                display = true,
+                                itemInstanceId = mapItem.instanceId,
+                                transform = itemObj.obj as Transform
+                            };
+                            GameActionManager.instance.QueueAction(displayStoreCounter);
+
                             await RuntimeMapItemPlay(mapItem, itemObj); 
                         } 
                     }

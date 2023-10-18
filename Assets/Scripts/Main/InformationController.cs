@@ -44,7 +44,7 @@ public class InformationController : Singleton<InformationController>
         {
             nowShow = true;
             var information = informationsQueue.Dequeue();
-            GameTimerController.instance.DelayAction(2000, ShowInformation);
+            GameTimerController.instance.DeleyActionMain(2000, ShowInformation);
 
             if (InformationShowPanel == null)
             {

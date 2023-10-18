@@ -236,25 +236,26 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 {
                     return;
                 }
-                if (!nowRuntimeStoreCounterObjs.ContainsKey(displayStoreCounter.itemInstanceId))
+                var storeCounterData = StoreCounterDataForMapItem[runtimeStoreCounter.dataId]; 
+                if (!nowRuntimeStoreCounterObjs.TryGetValue(displayStoreCounter.itemInstanceId,out var runtimeObj))
                 {
-                    RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",
-                        sellItem, displayStoreCounter.itemInstanceId);
-
-                    var storeCounterData = StoreCounterDataForMapItem[runtimeStoreCounter.dataId];
-                    SellItem nowSellItem = runtimeObj.obj as SellItem;
-
-                    Transform transform = nowSellItem.transform;
-                    transform.SetParent(displayStoreCounter.transform, false);
-                    transform.localPosition = storeCounterData.offset;
+                    runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",
+                        sellItem, displayStoreCounter.itemInstanceId); 
                     nowRuntimeStoreCounterObjs.Add(displayStoreCounter.itemInstanceId, runtimeObj);
                 }
+                SellItem nowSellItem = runtimeObj.obj as SellItem;
+                nowSellItem.enabled = true;
+                Transform transform = nowSellItem.transform;
+                transform.gameObject.SetActive(true);
+                transform.SetParent(displayStoreCounter.transform, false);
+                transform.localPosition = storeCounterData.offset;
             }
             else
             {
                 if (nowRuntimeStoreCounterObjs.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeObj))
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+                    nowRuntimeStoreCounterObjs.Remove(displayStoreCounter.itemInstanceId);
                 }
             }
         }
