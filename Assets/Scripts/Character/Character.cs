@@ -685,6 +685,7 @@ public class Character
             }
             MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, coordinate.xy,
            TriggerEventAction,oldOperateItem);
+            oldCoordinate = OldOperaCoordinate = coordinate.xy;
         }
         SetObjCoordinate(coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
@@ -792,13 +793,7 @@ public class TempCharacter : Character
     } 
 }
 
-public class NPC : Character
-{ 
 
-    public NPC(CharacterData characterData, int instanceId) : base(characterData, instanceId)
-    {
-    }
-}
 public class Player : Character
 { 
     public Player(CharacterData characterData, int instanceId) : base(characterData, instanceId)

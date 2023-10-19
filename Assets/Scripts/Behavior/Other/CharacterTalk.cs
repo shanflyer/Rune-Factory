@@ -11,6 +11,7 @@ public class CharacterTalk : Action
     private SharedInt characterId;
     public SharedInt TargetCharacter;
     public SharedInt talkId;
+    public SharedInt nextTalkEventId;
     public SharedBool displayFunction;
     public SharedBool isSimpleTalk;
     public SharedBool isStopMove;
@@ -33,6 +34,10 @@ public class CharacterTalk : Action
         if (TargetCharacter == null|| TargetCharacter.IsNull())
         {
             TargetCharacter= (SharedInt)Owner.GetVariable("TargetCharacter");
+        }
+        if (nextTalkEventId == null || nextTalkEventId.IsNull())
+        {
+            nextTalkEventId = (SharedInt)Owner.GetVariable("NextTalkEventId");
         }
 
         if (faceTarget.Value)
@@ -74,6 +79,7 @@ public class CharacterTalk : Action
                 characterId = characterId.Value,
                 talkId = talkId.Value,
                 displayFunction = displayFunction.Value,
+                nextTalkEventId = nextTalkEventId.Value,
                 endAction = isStopMove.Value ? CharacterStartMoveAction : null
             };
             GameActionManager.instance.QueueAction(talk);

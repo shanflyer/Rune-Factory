@@ -65,7 +65,7 @@ public class CharactorShop : MonoBehaviour
                 {
                     gamePlayer.TeamPlayer1 = teamPlayer;
                 }
-                GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
+               // GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
                 if (GameComponentData.gameData.adventurePanelAction.gameObject.activeSelf)
                 {
                     GameComponentData.gameData.adventurePanelAction.InitData();

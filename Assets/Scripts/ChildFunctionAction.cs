@@ -97,8 +97,6 @@ public class ChildFunctionAction : MonoBehaviour
         LanguageManage.TextFanyi(MindStatusText);
 
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-        PlayerImage2.sprite = PlayerImage1.sprite = PlayerImage0.sprite = 
-            GameComponent.charactorIcon.Find(icon => icon.name == gamePlayer.playerImage);
         
     }
 

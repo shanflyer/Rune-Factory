@@ -31,7 +31,7 @@ public class EquipmentManager : MonoBehaviour
 
     public void DisplayEuqiqment()
     {
-        FurnitureTransform = GameComponentData.gameData.mapParent.GetChild(0).GetChild(2);
+       // FurnitureTransform = GameComponentData.gameData.mapParent.GetChild(0).GetChild(2);
         foreach (var euqipment in Euqipments)
         {
             if (euqipment.objName != "")

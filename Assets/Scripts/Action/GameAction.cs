@@ -727,6 +727,7 @@ public struct Talk : GameAction
 {
     public int talkId, characterId;
     public bool displayFunction;
+    public int nextTalkEventId;
     public Action endAction;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {

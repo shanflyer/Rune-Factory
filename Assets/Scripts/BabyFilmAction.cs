@@ -62,7 +62,7 @@ public class BabyFilmAction : MonoBehaviour
                 femeal.SetActive(false);
                 childObj1.SetActive(false);
                 DataSaveAndLoadTest.gameSaveData.marryData.SaveHaveChildrenTimeTime();
-                GameComponentData.gameData.mapParent.GetComponentInChildren<GameBoxClickAction>().CheckChild();
+               // GameComponentData.gameData.mapParent.GetComponentInChildren<GameBoxClickAction>().CheckChild();
                 foreach (Transform child in GameComponentData.gameData.NpcParent)
                 {
                     child.gameObject.SetActive(true);

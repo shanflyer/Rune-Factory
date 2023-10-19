@@ -12,30 +12,21 @@ public class GameComponent : MonoBehaviour
     public GuideController guideController;
     public GameDebugAction gameDebugAction;
     public EventManager eventManager;
-    public GameObject sleepObj;
     public GameObject SaveButtonObj;
     public LoveAction loveAction; 
-    public GameObject InputObj; 
-    public GameObject informationObj;
     public HeritageAction heritageAction;
     public GameObject BookPanelObj;
     public CharactorTitleAction charactorTitleAction;
     public FishManager fishManager; 
-    public IntelligencePanelAction intelligencePanelAction;
     public CharactorShop charactorShop;
     public EmployerManger employerManger;
     public AdventurePanelAction adventurePanelAction; 
-    public GameObject GroundItemPro;  
 
     public GameObject calenderPanel; 
     public OldName.GameManager gameManager;
     public FilmManager filmManager;
-    public GameTimeManager gameTimeManager;
     public FestivalManager festivalManager;  
-    public GameObject warehouseObj;
-    public GameObject boxSelectFunctionObj; 
     public GameObject huiFuEffectPro;
-    public Transform mapParent;
     public Transform PlantParent;
     public Transform NpcParent;  
     public InfluenceAction influenceAction;
@@ -46,35 +37,18 @@ public class GameComponent : MonoBehaviour
     public PasturePanelAction pasturePanelAction;
     public AnimalSetPanelAction animalSetPanelAction;  
     public EquipmentManager equipmentManager;
-    public static List<Sprite> charactorIcon;
-    public static List<Sprite> headIcons;
-    public static List<Sprite> PlantSprites;
-    public static List<GameObject> models;
-    public static List<GameObject> Effects;
-    public static List<GameObject> monsterobjs;
-    public static int ActionObjCode;
     void Awake()
     {
         
     }
 
-    public void DisplayWaitPanelData(WaitType _waitType, string _text)
-    {
-        sleepObj.SetActive(true);
-        sleepObj.GetComponent<WaitPanelAction>().InitData(_waitType,_text);
-    }
+    
     public void DisplayPrompt(string content)
     { 
     }
   
     public void InitData()
     { 
-        charactorIcon = Resources.LoadAll<Sprite>("Charactor/Image/").ToList();
-        models = Resources.LoadAll<GameObject>("Charactor/").ToList();
-        headIcons = Resources.LoadAll<Sprite>("Charactor/Head").ToList();
-        PlantSprites = Resources.LoadAll<Sprite>("Plant/").ToList();
-        Effects = Resources.LoadAll<GameObject>("effect/").ToList();
-        monsterobjs = Resources.LoadAll<GameObject>("Monster/").ToList();
         GameComponentData.gameData = this;
     }
     // Use this for initialization

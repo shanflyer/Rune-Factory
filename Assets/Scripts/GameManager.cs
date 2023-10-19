@@ -304,15 +304,6 @@ namespace OldName
             // Debug.Log("cancel: " + result);
 
         }
-        public void ClickIntelligenceButton()
-        {
-            AudioController.instance.PlayAudio(SE.click);
-            fieldTool.SetActive(false);
-            IntelligencePanelObj.SetActive(true);
-            IntelligencePanelObj.GetComponent<IntelligencePanelAction>().InitIntelligenceData();
-        }
-    
-
         void Start()
         {
 
@@ -347,7 +338,7 @@ namespace OldName
             //GameData.gameTimeManager.InitData();
 
 
-            mapParent = GameData.mapParent;
+            //mapParent = GameData.mapParent;
             PlantParent = GameData.PlantParent;
             NpcParent = GameData.NpcParent;
 
@@ -360,7 +351,7 @@ namespace OldName
             //GameData.shopGoldDeskAction.saleValue = 100;
           
             UpDataPlayer();
-            headIcon.sprite = GameComponent.headIcons.Find(h => h.name == gamePlayer.IconName);
+           // headIcon.sprite = GameComponent.headIcons.Find(h => h.name == gamePlayer.IconName);
             //GameData.heritageAction.ClickheritageObjbutton();
             // GameData.NpcManager.InitData();
             float waitTime = UnityEngine.Random.Range(LostCd.x, LostCd.y);
@@ -775,7 +766,7 @@ namespace OldName
                     break;
                 case CareType.SLEEP:
                     AudioController.instance.PlayAudio(SE.click);
-                    GameComponentData.gameData.DisplayWaitPanelData(WaitType.SLEEP, LanguageManage.SwitchStr("夜深了，风声伴人入眠..."));
+                   // GameComponentData.gameData.DisplayWaitPanelData(WaitType.SLEEP, LanguageManage.SwitchStr("夜深了，风声伴人入眠..."));
                     break;
                 
                 case CareType.OutBattle:

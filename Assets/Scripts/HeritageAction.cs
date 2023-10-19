@@ -257,7 +257,6 @@ public class HeritageAction : MonoBehaviour
 
     public void ClickReturnbutton()
     {
-        GameComponent.ActionObjCode = heritageObj.GetComponentInChildren<ObjCode>().code;
         GameComponentData.gameData.eventManager.CheckEvents();
         AudioController.instance.PlayAudio(SE.Return);
         heritageObj.SetActive(false);

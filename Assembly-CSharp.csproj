@@ -292,7 +292,6 @@
     <Compile Include="Assets\Scripts\GamePlayer.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedTransform.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\IsKinematic.cs" />
-    <Compile Include="Assets\Scripts\IntelligencePanelAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetType.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\LayerMask\SetLayer.cs" />
@@ -334,6 +333,7 @@
     <Compile Include="Assets\Scripts\x\GameDebugAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowStrength.cs" />
     <Compile Include="Assets\Scripts\PlayerStore\SellItem.cs" />
+    <Compile Include="Assets\Scripts\UI\NPCPanel\NPCReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChild.cs" />
     <Compile Include="Assets\Scripts\CameraselectMove.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetUpVector.cs" />
@@ -398,7 +398,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\GetAnimatePhysics.cs" />
     <Compile Include="Assets\Resources\InputData\MyInputNameData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Warp.cs" />
-    <Compile Include="Assets\Scripts\WaitPanelAction.cs" />
     <Compile Include="Assets\Scripts\Action\GameActionDataManager.cs" />
     <Compile Include="Assets\Scripts\Map\WorldMapData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetXYZ.cs" />
@@ -898,6 +897,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />
     <Compile Include="Assets\Scripts\UI\StartEventPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\NPCPanel\NPCPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\RandomSequence.cs" />
     <Compile Include="Assets\Scripts\Main\AudioController.cs" />

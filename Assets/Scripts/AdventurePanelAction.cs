@@ -51,11 +51,11 @@ public class AdventurePanelAction : MonoBehaviour
             PlaceObjs=new List<GameObject>();
         }
         GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-        TeamPlayerImage0.sprite = GameComponent.charactorIcon.Find(c => c.name == gamePlayer.playerImage);
+        //TeamPlayerImage0.sprite = GameComponent.charactorIcon.Find(c => c.name == gamePlayer.playerImage);
         if (gamePlayer.TeamPlayer0 != null&&gamePlayer.TeamPlayer0.id != 0)
         {
             
-            TeamPlayerImage1.sprite = GameComponent.charactorIcon.Find(c => c.name == gamePlayer.TeamPlayer0.charactorImage);
+           // TeamPlayerImage1.sprite = GameComponent.charactorIcon.Find(c => c.name == gamePlayer.TeamPlayer0.charactorImage);
         }
         else
         {
@@ -63,7 +63,7 @@ public class AdventurePanelAction : MonoBehaviour
         }
         if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 )
         {
-            TeamPlayerImage2.sprite = GameComponent.charactorIcon.Find(c => c.name == gamePlayer.TeamPlayer1.charactorImage);
+            //TeamPlayerImage2.sprite = GameComponent.charactorIcon.Find(c => c.name == gamePlayer.TeamPlayer1.charactorImage);
         }
         else
         {
@@ -103,12 +103,12 @@ public class AdventurePanelAction : MonoBehaviour
         //BatteleMap batteleMap = GameComponentData.gameData.BattleMapAction.BatteleMaps.Find(b => b.id == 4100);
   
         AudioController.instance.PlayAudio(BGM.Move);
-        GameComponentData.gameData.mapParent.gameObject.SetActive(false); 
+        //GameComponentData.gameData.mapParent.gameObject.SetActive(false); 
         GameComponentData.gameData.gameManager.StartFight(); 
         
 
         
-        GameComponentData.gameData.informationObj.SetActive(false);
+        //GameComponentData.gameData.informationObj.SetActive(false);
         gameObject.SetActive(false);
     }
 

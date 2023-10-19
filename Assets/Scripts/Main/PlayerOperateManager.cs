@@ -8,7 +8,8 @@ using UnityEngine.EventSystems;
 
 public struct NPCTalkOperateData : IReferenceData
 {
-    public int characterId; 
+    public int characterId;
+    public int nextTalkEventId;
     public TalkData defaultTalk;
     public bool displayFunction;
     public List<NPCFunctionData> npcFunctionDatas;
@@ -84,9 +85,14 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                     name = "TargetCharacter",
                     value = CharacterManager.instance.controllerCharacter.instanceId
                 };
+                EventReferenceData NextTalkReferenceData = new EventReferenceData
+                {
+                    name = "NextTalkEventId",
+                    value = character.characterData.nextTalkEventId
+                };
                 bool temp = character is TempCharacter;
                 GameEventManager.instance.AddGameEvent(
-                temp? character.characterData.tempTalkEventId: character.characterData.defaultTalkEventId,new List<EventReferenceData>
+                temp? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
                 {
                     eventReferenceData,targetReferenceData
                 });

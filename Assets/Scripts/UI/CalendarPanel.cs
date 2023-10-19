@@ -52,7 +52,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
 
         year = GameTimeManager.instance.nowGameTime.gameDate.year;
         season = GameTimeManager.instance.nowGameTime.gameDate.season;
-        GameComponentData.gameData.gameTimeManager.StopTimeRun();
+        GameTimeManager.instance.StopTimeRun();
         CreatSeason(GameTimeManager.instance.nowGameTime.gameDate.season);
         if (year <= 1 && season == Season.春)
         {
@@ -120,7 +120,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
     void CreatSeason(Season season)
     {
         List<GameDate> gameDates =
-            GameComponentData.gameData.gameTimeManager.gameDates.FindAll(g => g.season == season);
+            GameTimeManager.instance.gameDates.FindAll(g => g.season == season);
 
         if (DatesParent.transform.childCount > gameDates.Count)
         {

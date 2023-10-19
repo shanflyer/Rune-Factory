@@ -604,7 +604,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if(!characters.TryGetValue(mapNpcData.id, out var npc))
         {
             var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
-            npc = new NPC(characterData, mapNpcData.id);
+            npc = new Character(characterData, mapNpcData.id);
             characters.Add(mapNpcData.id, npc);
         }
         npc.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));

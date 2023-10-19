@@ -183,28 +183,28 @@ public class Plant : MyGameObject
         if (plantStatus == PlantStatus.Mature)
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("*一株")+ LanguageManage.SwitchStr(plantBaseData.name)+ LanguageManage.SwitchStr("已经成熟。"));
-            ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.MatureGameObjectName);
+           // ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.MatureGameObjectName);
         }
         else
         {
             int statusNum = plantBaseData.GrowthGameObjectNames.Count + 2;
             if (statusIndex == 0)
             {
-                ObjPro = GameComponent.PlantSprites.Find(p=>p.name==plantBaseData.SeedGameObjectName);
+             //   ObjPro = GameComponent.PlantSprites.Find(p=>p.name==plantBaseData.SeedGameObjectName);
             }
             else if (statusIndex >= statusNum - 1)
             {
-                ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.MatureGameObjectName);
+               // ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.MatureGameObjectName);
             }
             else
             {
-                ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.GrowthGameObjectNames[statusIndex - 1]);
+                //ObjPro = GameComponent.PlantSprites.Find(p => p.name == plantBaseData.GrowthGameObjectNames[statusIndex - 1]);
             }
         } 
         Obj = new GameObject(Name);
         Obj.AddComponent<SpriteRenderer>();
         SpriteRenderer plantRenderer = Obj.GetComponent<SpriteRenderer>();
-        plantRenderer.sprite = ObjPro;
+       // plantRenderer.sprite = ObjPro;
         plantRenderer.transform.localScale=new Vector3(2,2,2);
         plantRenderer.sortingLayerName = "Map";
         plantRenderer.sortingOrder = 3;

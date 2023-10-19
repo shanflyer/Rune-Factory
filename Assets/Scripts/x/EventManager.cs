@@ -53,11 +53,7 @@ namespace OldName{
                  //   int passId = int.Parse(endTriggerValue.Split(',')[0]);
                     //return passId == GameComponentData.gameData.passDataManager.nowPass;
                 case EventTriggerType.特定物体Action:
-                    if (GameComponent.ActionObjCode == int.Parse(endTriggerValue))
-                    {
-                        GameComponent.ActionObjCode = 0;
-                        return true;
-                    }
+                     
                     break;
                 case EventTriggerType.开放清单:
                     if (GameComponentData.gameData.heritageAction.nowOpen == int.Parse(endTriggerValue))

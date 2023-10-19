@@ -437,7 +437,6 @@ public class CharactorTitleAction : MonoBehaviour
     public void ClicnReturenButton()
     {
         AudioController.instance.PlayAudio(SE.Return);
-        GameComponentData.gameData.intelligencePanelAction.CharactortitleObj.SetActive(false);
     }
     public void AddSleepDays()
     {

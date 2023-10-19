@@ -9,7 +9,7 @@ public class PastureNameClick : MonoBehaviour
     public Text text0, text1, text2, text3;
     public void ClickTips(Text nameText)
     {
-        InputGameObject = GameComponentData.gameData.InputObj;
+      //InputGameObject = GameComponentData.gameData.InputObj;
         int index = int.Parse(nameText.name);
         if (GameComponentData.gameData.pastureAction.IsPastures[index])
         {

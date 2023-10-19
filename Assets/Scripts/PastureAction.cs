@@ -521,7 +521,7 @@ namespace OldName
             IsPastures[pastureIndex] = true;
             tipsList[pastureIndex].SetActive(true);
             Houses[pastureIndex].SetActive(true);
-            GameComponentData.gameData.mapParent.GetComponentInChildren<PastureNameClick>().SetPastureName(pastureIndex, pastureNameInput.text);
+           // GameComponentData.gameData.mapParent.GetComponentInChildren<PastureNameClick>().SetPastureName(pastureIndex, pastureNameInput.text);
             Pastures[pastureIndex].name = pastureNameInput.text;
             Pastures[pastureIndex].caseCount = zeroAnimalCount;
             pastureNum++;

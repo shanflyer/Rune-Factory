@@ -51,7 +51,7 @@ public class LoveAction : MonoBehaviour {
         }
         else
         {
-            GameComponentData.gameData.DisplayWaitPanelData(WaitType.约会, "甜蜜的时光，总是短暂的...");
+          //  GameComponentData.gameData.DisplayWaitPanelData(WaitType.约会, "甜蜜的时光，总是短暂的...");
         }
         
     }
@@ -59,7 +59,7 @@ public class LoveAction : MonoBehaviour {
     public void YuehuiEnd()
     { 
         GameComponentData.gameData.gameManager.MoveToOldMap();
-        Destroy(GameComponentData.gameData.mapParent.GetComponentInChildren<SeasonSelect>().LoverTransform.GetChild(0).gameObject);
+       // Destroy(GameComponentData.gameData.mapParent.GetComponentInChildren<SeasonSelect>().LoverTransform.GetChild(0).gameObject);
     }
     public void YueTalk0End()
     {
@@ -85,7 +85,7 @@ public class LoveAction : MonoBehaviour {
     public void MarriedAction( )
     {
         
-        GameComponentData.gameData.DisplayWaitPanelData(WaitType.婚礼, "婚礼即将举行的消息传遍了小镇..");
+        //GameComponentData.gameData.DisplayWaitPanelData(WaitType.婚礼, "婚礼即将举行的消息传遍了小镇..");
         
 
 

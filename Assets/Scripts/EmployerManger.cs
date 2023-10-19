@@ -105,7 +105,7 @@ public class EmployerManger : MonoBehaviour
                 gamePlayer.TeamPlayer1 = null;
             }
             employer.isHired = false;
-            GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
+            //GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
             Employers.Remove(employer);
         }
         

@@ -29,14 +29,15 @@ public class GameEventManager:Singleton<GameEventManager>
  
    
 
-    public async Task AddGameEvent(int eventId,List<EventReferenceData> eventReferenceDatas=null)
+    public async Task<bool> AddGameEvent(int eventId,List<EventReferenceData> eventReferenceDatas=null)
     {
         GameEventData gameEventData =await GameDataManager.instance.GetAsyncData<GameEventData>(eventId);
         if(gameEventData== null)
         {
-            return;
+            return false;
         }
         AddGameEvent(gameEventData, eventReferenceDatas);
+        return true;
     }
     public void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas=null)
     {

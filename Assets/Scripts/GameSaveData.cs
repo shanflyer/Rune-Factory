@@ -169,17 +169,17 @@ namespace OldName
 
         public void SaveBabyBedTime()
         {
-            babyBedBuyTime = GameComponentData.gameData.gameTimeManager.GameTimeToString();
+           // babyBedBuyTime = GameTimeManager.instance.GameTimeToString();
             //DataSaveAndLoadTest.CreatMarryData();
         }
         public void SavePregnancyTime()
         {
-            pregnancyTime = GameComponentData.gameData.gameTimeManager.GameTimeToString();
+          //  pregnancyTime = GameTimeManager.instance.GameTimeToString();
             //DataSaveAndLoadTest.CreatMarryData();
         }
         public void SaveHaveChildrenTimeTime()
         {
-            haveChildrenTime = GameComponentData.gameData.gameTimeManager.GameTimeToString();
+            haveChildrenTime = GameTimeManager.instance.GameTimeToString();
             //DataSaveAndLoadTest.CreatMarryData();
         }
 

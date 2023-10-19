@@ -311,10 +311,6 @@ namespace OldName
                     //GameComponentData.gameData.talkTextsManager.TalkAction(_filmData.value, TalkActionType.剧情);
                     break;
                 case FilmDisplayType.过渡:
-                    AudioController.instance.StopBgm();
-                    GameComponentData.gameData.sleepObj.SetActive(true);
-                    GameComponentData.gameData.sleepObj.GetComponent<WaitPanelAction>().InitData(WaitType.Transition,
-                        _filmData.value);
                     break;
                 case FilmDisplayType.播放影片:
                     var films = transform.GetComponentsInChildren<PlayableDirector>().ToList();
@@ -324,7 +320,6 @@ namespace OldName
                     }
                     break;
                 case FilmDisplayType.初始化:
-                    GameComponentData.gameData.gameTimeManager.StopTimeRun();
 
 
                     PlayNowFilm();
