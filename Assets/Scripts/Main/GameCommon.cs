@@ -75,6 +75,8 @@ public enum EntityType
 }
 public class GameCommon
 {
+    public const int selectEquipBoxAction = 90;
+
     public const int defaultGiftTalk = 8888;
     public const int defaultPerRPCost = 5;
     public const int storeCoinTime = 1000;
@@ -604,7 +606,8 @@ public static class DataPath
         {typeof(OperateData),"Data/OperateData" },
         {typeof(StoreCounterData),"Data/StoreCounterDataList" },
         {typeof(TempCharacterData),"Data/TempCharacterData"},
-        {typeof(NPCFunctionData), "Data/NPCFunctionData"}
+        {typeof(NPCFunctionData), "Data/NPCFunctionData"},
+        {typeof(NPCData),"Data/NPCData" }
     };
 
     public static string GetDataPath(Type type)

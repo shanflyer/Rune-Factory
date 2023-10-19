@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine;
-using static NPCManager;
+using UnityEngine; 
 
 public struct CharacterEquipAndPropertyData
 {
@@ -230,7 +229,7 @@ public struct Equip
     public int weapon;
     public int clothes;
 }
-public class Character
+public partial class Character
 {
     private bool isController = false;
     private int oldOperateItem = -1; 
@@ -254,7 +253,7 @@ public class Character
     {
     }
    
-    public Character(CharacterData characterData,int instanceId)
+    public Character(CharacterData characterData,int instanceId,int overridePackage=0)
     {
         this.characterData = characterData;
         this.instanceId = instanceId;
@@ -263,13 +262,14 @@ public class Character
         name = characterData.characterName;
         behavior = characterData.behavior;
         SetLevel(1,true);
-        CreatCharacterPackage();
+        CreatCharacterPackage(overridePackage);
        
     }
    
-    protected virtual async Task CreatCharacterPackage()
+    protected virtual async Task CreatCharacterPackage(int overridePackage = 0)
     {
-        characterPackage = await PackageManager.instance.CreatGamePackage(characterData.packageId, 0);
+        characterPackage = await PackageManager.instance.CreatGamePackage(overridePackage == 0?
+            characterData.packageId:overridePackage, 0);
     }
     public async void ChangeEquip(int id)
     {
@@ -800,10 +800,10 @@ public class Player : Character
     {
        
     }
-    protected override async Task CreatCharacterPackage()
+    protected override async Task CreatCharacterPackage(int overridePackageId=0)
     {
        await base.CreatCharacterPackage();
-        PackageManager.instance.AddPlayerPackage(characterPackage);
+        PackageManager.instance.AddPlayerPackage(overridePackageId == 0?characterPackage:overridePackageId);
     }
     public Player(string name)
     {

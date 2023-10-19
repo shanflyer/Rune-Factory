@@ -187,6 +187,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\GameComponent.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\ItemBoxReference.cs" />
     <Compile Include="Assets\Scripts\PastureBuildPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetEnableEmission.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindWithTag.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\GetSize.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayScheduled.cs" />
+    <Compile Include="Assets\Scripts\UI\CharacterInformationPanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\GameRuntimeItemCreat.cs" />
     <Compile Include="Assets\Scripts\Item\PackageManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetForwardVector.cs" />
@@ -368,6 +370,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetMass.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\SetActive.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtPosition.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\ItemReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerVolume.cs" />
     <Compile Include="Assets\Scripts\ShopClickEventAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetVelocity.cs" />
@@ -517,6 +520,7 @@
     <Compile Include="Assets\Scripts\EmployerManger.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetVelocity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Dot.cs" />
+    <Compile Include="Assets\Scripts\Data\NPCData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetAngleToTarget.cs" />
     <Compile Include="Assets\Scripts\PasturePanelAction.cs" />
@@ -541,7 +545,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\CrossFadeQueued.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedRect.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetSpotAngle.cs" />
-    <Compile Include="Assets\Scripts\UI\SelectItemCountPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\RandomInt.cs" />
     <Compile Include="Assets\Scripts\HookAction.cs" />
@@ -631,6 +634,7 @@
     <Compile Include="Assets\Scripts\EditorTool\MapInstanceEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Clear.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetFloatParameter.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\SelectItemCountPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChildCount.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\MatchTarget.cs" />
@@ -643,6 +647,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetEulerAngles.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\Translate.cs" />
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventAwake.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\ItemInfoPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetParticleCount.cs" />
     <Compile Include="Assets\Scripts\Action\GameAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Sample.cs" />
@@ -669,7 +674,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Slerp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPitch.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Resume.cs" />
-    <Compile Include="Assets\Scripts\UI\ItemInfoPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetDestination.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularDrag.cs" />
     <Compile Include="Assets\Scripts\UI\PromptPanel.cs" />
@@ -678,6 +682,7 @@
     <Compile Include="Assets\Scripts\Behavior\Character\SetCharacterCoordinateBehavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsStopped.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetCenter.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\WarehousePanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Distance.cs" />
     <Compile Include="Assets\Scripts\DataSaveAndLoadTest.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterPropertyCheck.cs" />
@@ -694,6 +699,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetMass.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\ActiveSelf.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FightManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\EquipBoxReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Collider\SetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventEnd.cs" />
@@ -702,7 +708,6 @@
     <Compile Include="Assets\Scripts\GrassAction.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedSkillEstimateData.cs" />
     <Compile Include="Assets\Scripts\GroundItemClickAction.cs" />
-    <Compile Include="Assets\Scripts\UI\WarehousePanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetStepOffset.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetAngularVelocity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\InvokeMethod.cs" />
@@ -780,7 +785,6 @@
     <Compile Include="Assets\Scripts\DestoryAfterTime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetLayerWeight.cs" />
     <Compile Include="Assets\SerializableDictionary\Example\SerializableDictionaryExample.cs" />
-    <Compile Include="Assets\Scripts\UI\ItemBoxReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetUpVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\GetComponent.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedVector2.cs" />
@@ -830,7 +834,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalRotation.cs" />
     <Compile Include="Assets\Scripts\UI\Talk\TalkPanel.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\A1_Water_Tile.cs" />
-    <Compile Include="Assets\Scripts\UI\ItemReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetApplyRootMotion.cs" />
     <Compile Include="Assets\Scripts\Data\CharacterGroupData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetLoop.cs" />

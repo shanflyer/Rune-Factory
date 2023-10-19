@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
-public class NPCPanel : GamePanel<NPCDataList>
+public class NPCPanel : GamePanel<NPCList>
 {
     [SerializeField]
     TextMeshProUGUI Title;
@@ -16,7 +17,7 @@ public class NPCPanel : GamePanel<NPCDataList>
     NPCReference NPCReference;
     [SerializeField]
     Transform NPCParent;
-    DisplayList<NPCReference, NPCData> displayList;
+    DisplayList<NPCReference, NPC> displayList;
     protected override void Awake()
     {
         base.Awake();
@@ -24,7 +25,7 @@ public class NPCPanel : GamePanel<NPCDataList>
         VisitButton.onClick.AddListener(VisitAction);
         DetailsButton.onClick.AddListener(DetailAction);
 
-        displayList = new DisplayList<NPCReference, NPCData>(NPCReference, NPCParent);
+        displayList = new DisplayList<NPCReference, NPC>(NPCReference, NPCParent);
     }
     public override void SetPanelUISerializeObj()
     {
@@ -40,23 +41,41 @@ public class NPCPanel : GamePanel<NPCDataList>
 
     void VisitAction()
     {
-
+        if (selectNpc != null)
+        {
+            VisitNPC visitNPC = new VisitNPC
+            {
+                sourceId = CharacterManager.instance.controllerCharacter.instanceId,
+                targetId = selectNpc.instanceId
+            };
+            GameActionManager.instance.QueueAction(visitNPC);
+        }
+      
     }
     void DetailAction()
     {
-
+        if (selectNpc == null)
+        {
+            return;
+        }
+            CharacterInformationData characterInformationData = selectNpc.GetInformation();
+        UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
     }
 
-    void SelectAction(NPCData nPCData,bool selected)
+    NPC selectNpc;
+    void SelectAction(NPC npc,bool selected)
     {
-
+        if (selected)
+        {
+            selectNpc = npc;
+        }
     }
 
-    NPCDataList NPCDatas;
-    public override void InitReferenceData(NPCDataList v)
+    NPCList NPCList;
+    public override void InitReferenceData(NPCList v)
     {
         base.InitReferenceData(v);
-        NPCDatas = v;
-        displayList.InitListData(NPCDatas.NPCDatas, SelectAction, toggleGroup);
+        NPCList = v;
+        displayList.InitListData(NPCList.npcs, SelectAction, toggleGroup);
     }
 }

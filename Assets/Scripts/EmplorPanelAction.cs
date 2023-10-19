@@ -35,7 +35,7 @@ public class EmplorPanelAction : MonoBehaviour
         employer = _employer;
         if (employer.employType == EmployType.NPC)
         {
-           // NPCData npcData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == employer.id).npcData;
+           // NPC npcData = GameComponentData.gameData.NpcManager.Npcxs.Find(n => n.id == employer.id).npcData;
             friendObj.SetActive(true);
            // FriendText.text = npcData.friendlyLevel.ToString();
             float modulus = 1.0f;

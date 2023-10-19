@@ -17,6 +17,12 @@ public struct Item:IReferenceData
     }
 }
 
+public struct Equipment: IReferenceData
+{
+    public int characterId;
+    public int dataId;
+    public ItemType ItemType;
+}
 public class ItemManager
 {
     public static ItemManager instance

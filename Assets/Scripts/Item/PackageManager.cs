@@ -143,6 +143,7 @@ public class PackageManager : Singleton<PackageManager>
             packageList.packageDatas.Add(packageData);
             await  UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
 
+
             GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(openPackage.selectActionId);
             if (gameActionData != null)
             {

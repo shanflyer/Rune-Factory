@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NPCReference : UIObjReference<NPCData>
+public class NPCReference : UIObjReference<NPC>
 {
     [SerializeField]
     Image Icon;
@@ -35,12 +35,13 @@ public class NPCReference : UIObjReference<NPCData>
         FriendValue = FindChildGameObject<TextMeshProUGUI>("FriendValue");
         toggle=GetComponent<Toggle>();
     }
-    public override async void InitData(NPCData t, SelectAction<NPCData> SelectAction = null, ToggleGroup toggleGroup = null)
+  
+    public override void InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
 
-        CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.characterDataId);
+        CharacterData characterData = data.characterData;
         Icon.sprite = characterData.icon;
         Icon.SetNativeSize();
         NPCName.text = $"+ {characterData.characterName} +";
