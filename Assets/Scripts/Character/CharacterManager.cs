@@ -63,19 +63,6 @@ public class CharacterManager : Singleton<CharacterManager>
     }
 
 
-    public NPCList GetAllNPC()
-    {
-        NPCList NPCList = new NPCList
-        {
-            npcs=new List<NPC>()
-        };
-        for(int i = 0; i < npcInstances.Count; i++)
-        {
-            NPCList.npcs.Add(characters[npcInstances[i]] as NPC);
-        }
-        return NPCList;
-    }
-
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
 
@@ -98,7 +85,6 @@ public class CharacterManager : Singleton<CharacterManager>
     public override void Init()
     {
         base.Init();
-
         myInstance = new MyInstance();
 
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
@@ -120,8 +106,28 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<CheckCharacterTemp>(CheckCharacterTemp);
         GameActionManager.instance.AddListener<StartCharacterMove>(StartCharacterMove);
         GameActionManager.instance.AddListener<StopCharacterMove>(StopCharacterMove);
+        GameActionManager.instance.AddListener<ChangeEquip>(ChangeEquip);
     }
-
+    public async void ChangeEquip(ChangeEquip changeEquip)
+    {
+        if (characters.TryGetValue(changeEquip.characterId, out var character))
+        {
+            PackageManager.instance.GetOutItenFromPackage(changeEquip.outPackageId, changeEquip.itemId, 1);
+            ItemData itemData;
+            if (changeEquip.outPackageId!= 0){
+                itemData = await GameDataManager.instance.GetAsyncData<ItemData>(changeEquip.itemId);
+            }
+            else
+            {
+                Item item = PackageManager.instance.GetItemFromInstanceId(changeEquip.outPackageId, changeEquip.itemId);
+                itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+            }
+            if (itemData != null)
+            {
+                character.ChangeEquip(itemData, changeEquip.outPackageId);
+            }
+        }
+    }
     public void StartCharacterMove(StartCharacterMove startCharacterMove)
     {
         if (characters.TryGetValue(startCharacterMove.characterId, out var character))

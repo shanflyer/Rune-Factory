@@ -30,9 +30,10 @@ public class EquipBoxReference:UIObjReference<Equipment>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        typeText = FindChildGameObject<TextMeshProUGUI>("Title");
+        typeText = FindChildGameObject<TextMeshProUGUI>("Type");
         equipMentIcon = FindChildGameObject<Image>("Icon");
         NameText = FindChildGameObject<TextMeshProUGUI>("Name");
+        clickButton = GetComponent<Button>();
     }
     public override async void InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
     {

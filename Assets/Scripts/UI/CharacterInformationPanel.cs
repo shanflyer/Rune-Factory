@@ -24,7 +24,7 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
     [SerializeField]
     TextMeshProUGUI LevelValue;
     [SerializeField]
-    Image AttackUp, AttackDown, DefenseUp, DefenseDown;
+    TextMeshProUGUI AttackUp, AttackDown, DefenseUp, DefenseDown;
     [SerializeField]
     EquipBoxReference WeaponBox, ClothesBox;
     [SerializeField]
@@ -32,17 +32,80 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
 
     void SelectEquipReference(Equipment equipment,bool selected=false)
     {
-        if (equipment.characterId == CharacterManager.instance.controllerCharacter.instanceId)
+        bool isController = equipment.characterId == CharacterManager.instance.controllerCharacter.instanceId;
+
+        if (equipment.dataId != 0)
+        { 
+            ItemInfo itemInfo = new ItemInfo
+            {
+                otherValue=equipment.characterId,
+                itemId = equipment.dataId,
+                dataId=(int)equipment.ItemType,
+                ActionName = isController ? "Ð¶ÏÂ" : null,
+                action= SelectAction
+            };
+            void SelectAction(ItemInfo item, bool selected = true)
+            {
+                ChangeEquip changeEquip = new ChangeEquip
+                {
+                    characterId = equipment.characterId,
+                    itemId = item.itemId, 
+                    outPackageId = 0
+                };
+                GameActionManager.instance.QueueAction(changeEquip);
+            }
+            UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+        }
+        else if(isController)
         {
             OpenPackage openPackage = new OpenPackage
             {
                 packageId = -1,
                 selectActionName = "×°±¸",
                 targetObj = equipment.characterId,
-                selectActionId=GameCommon.selectEquipBoxAction
+                selectItemTypes=new List<ItemType>(),
+                selectAction= ChangeEquip
+                //selectActionId = GameCommon.selectEquipBoxAction
             };
+            openPackage.selectItemTypes.Add(equipment.ItemType);
+            GameActionManager.instance.QueueAction(openPackage);
+            
+            async void ChangeEquip(Item item, int packageId)
+            {
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+                if (itemData.type != equipment.ItemType)
+                {
+                    return;
+                }
+                ChangeEquip changeEquip = new ChangeEquip
+                {
+                    characterId = equipment.characterId,
+                    itemId = item.instanceId,
+                    outPackageId = packageId
+                };
+                GameActionManager.instance.QueueAction(changeEquip);
+            }
+           
             GameActionManager.instance.QueueAction(openPackage);
         }
+       
+    }
+    void RefreshCharacterProperty(RefreshCharacterProperty refreshCharacterProperty)
+    {
+        if(characterId==refreshCharacterProperty.id)
+        {
+            DisplayProperty(refreshCharacterProperty.characterProperty);
+        }
+    }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshCharacterProperty>(RefreshCharacterProperty);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshCharacterProperty>(RefreshCharacterProperty);
     }
 
     protected override void Awake()
@@ -76,10 +139,10 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
         AttackValue = FindChildGameObject<TextMeshProUGUI>("AttackValue");
         DefenseValue = FindChildGameObject<TextMeshProUGUI>("DefenseValue");
         LevelValue = FindChildGameObject<TextMeshProUGUI>("Level");
-        AttackUp = FindChildGameObject<Image>("AttackUp");
-        AttackDown = FindChildGameObject<Image>("AttackDown");
-        DefenseUp = FindChildGameObject<Image>("DefenseUp");
-        DefenseDown = FindChildGameObject<Image>("DefenseDown");
+        AttackUp = FindChildGameObject<TextMeshProUGUI>("AttackUp");
+        AttackDown = FindChildGameObject<TextMeshProUGUI>("AttackDown");
+        DefenseUp = FindChildGameObject<TextMeshProUGUI>("DefenseUp");
+        DefenseDown = FindChildGameObject<TextMeshProUGUI>("DefenseDown");
 
         WeaponBox = FindChildGameObject<EquipBoxReference>("Weapon");
         ClothesBox = FindChildGameObject<EquipBoxReference>("Clothes");
@@ -88,9 +151,38 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
           
     }
     int characterId;
+
+    void DisplayProperty(CharacterProperty characterProperty)
+    {
+        int maxHP = characterProperty.MaxHP;
+        int maxRP = characterProperty.MaxPower;
+        int HP =characterProperty.HP;
+        int RP = characterProperty.Power;
+
+        HPSliderValue.fillAmount = HP / (float)maxHP;
+        RPSliderValue.fillAmount = RP / (float)maxRP;
+        HPValue.text = $"{HP}/{maxHP}";
+        RPValue.text = $"{RP}/{maxRP}";
+
+        AttackValue.text = characterProperty.AT.ToString();
+        DefenseValue.text = characterProperty.DF.ToString();
+         
+        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled = false;
+        if (data.characterProperty.AT > characterProperty.AT)
+            AttackUp.enabled = true;
+        if (data.characterProperty.DF > characterProperty.DF)
+            DefenseUp.enabled = true;
+        if (data.characterProperty.AT < characterProperty.AT)
+            AttackDown.enabled = true;
+        if (data.characterProperty.DF < characterProperty.DF)
+            DefenseDown.enabled = true;
+    }
+
+    CharacterInformationData data;
     public override void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
+        data = v;
         characterHead.sprite = v.head;
         characterId = v.characterId;
         CharacterName.text = v.name;

@@ -271,30 +271,41 @@ public partial class Character
         characterPackage = await PackageManager.instance.CreatGamePackage(overridePackage == 0?
             characterData.packageId:overridePackage, 0);
     }
-    public async void ChangeEquip(int id)
+
+    public async void ChangeEquip(ItemData itemData, int packageId)
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(id);
+        Item item = new Item();
         if (itemData.type == ItemType.ÎäÆ÷)
         {
             ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon);
             if (oldItemData != null)
             {
+                item.count = 1;
+                item.dataId = oldItemData.id;
                 characterProperty = characterProperty - oldItemData.property;
             }
+            
         }
         else if (itemData.type == ItemType.·À¾ß)
         {
             ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes);
             if (oldItemData != null)
             {
-                characterProperty = characterProperty - oldItemData.property;
+                item.count = 1;
+                item.dataId = oldItemData.id;
+                CharacterProperty = characterProperty - oldItemData.property;
             }
+        }
+        if (item.dataId != 0)
+        {
+            PackageManager.instance.SetItemInPackage(item, packageId);
         }
         if (itemData != null)
         {
-            characterProperty = characterProperty + itemData.property;
+            CharacterProperty = characterProperty + itemData.property;
         }
     }
+    
 
     public CharacterEquipAndPropertyData CharacterEquipAndPropertyData
     {

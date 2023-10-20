@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class NPCPanel : GamePanel<NPCList>
 {
     [SerializeField]
-    TextMeshProUGUI Title;
+    private TextMeshProUGUI Title;
+
     [SerializeField]
-    Button CloseButton,VisitButton,DetailsButton;
+    private Button CloseButton, VisitButton, DetailsButton;
+
     [SerializeField]
-    ToggleGroup toggleGroup;
+    private ToggleGroup toggleGroup;
+
     [SerializeField]
-    NPCReference NPCReference;
+    private NPCReference NPCReference;
+
     [SerializeField]
-    Transform NPCParent;
-    DisplayList<NPCReference, NPC> displayList;
+    private Transform NPCParent;
+
+    private DisplayList<NPCReference, NPC> displayList;
+
     protected override void Awake()
     {
         base.Awake();
@@ -27,6 +30,7 @@ public class NPCPanel : GamePanel<NPCList>
 
         displayList = new DisplayList<NPCReference, NPC>(NPCReference, NPCParent);
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -39,7 +43,7 @@ public class NPCPanel : GamePanel<NPCList>
         toggleGroup = NPCParent.GetComponent<ToggleGroup>();
     }
 
-    void VisitAction()
+    private void VisitAction()
     {
         if (selectNpc != null)
         {
@@ -50,20 +54,21 @@ public class NPCPanel : GamePanel<NPCList>
             };
             GameActionManager.instance.QueueAction(visitNPC);
         }
-      
     }
-    void DetailAction()
+
+    private void DetailAction()
     {
         if (selectNpc == null)
         {
             return;
         }
-            CharacterInformationData characterInformationData = selectNpc.GetInformation();
+        CharacterInformationData characterInformationData = selectNpc.GetInformation();
         UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
     }
 
-    NPC selectNpc;
-    void SelectAction(NPC npc,bool selected)
+    private NPC selectNpc;
+
+    private void SelectAction(NPC npc, bool selected)
     {
         if (selected)
         {
@@ -71,7 +76,8 @@ public class NPCPanel : GamePanel<NPCList>
         }
     }
 
-    NPCList NPCList;
+    private NPCList NPCList;
+
     public override void InitReferenceData(NPCList v)
     {
         base.InitReferenceData(v);

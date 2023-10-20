@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -760,7 +760,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1036,7 +1036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1456,6 +1456,7 @@ GameObject:
   - component: {fileID: 4947917389036516308}
   - component: {fileID: 6377661543607695997}
   - component: {fileID: 8620075679311796142}
+  - component: {fileID: 4348980044869609680}
   m_Layer: 5
   m_Name: Clothes
   m_TagString: Untagged
@@ -1536,10 +1537,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a202e9f0c2f53b4a82450b23ff84047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeText: {fileID: 0}
-  NameText: {fileID: 0}
-  equipMentIcon: {fileID: 0}
-  clickButton: {fileID: 0}
+  typeText: {fileID: 8584737153242298821}
+  NameText: {fileID: 8473273929703047280}
+  equipMentIcon: {fileID: 7642448921189171044}
+  clickButton: {fileID: 4348980044869609680}
+--- !u!114 &4348980044869609680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3067682042668244330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 9071946256360817379}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3132625361125915935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,7 +1781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3096,7 +3141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3289,27 +3334,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069cc45b4868b5f439029dbe1cd4fb28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterHead: {fileID: 0}
-  Attribute: {fileID: 0}
-  CharacterName: {fileID: 0}
-  State: {fileID: 0}
-  HPSliderValue: {fileID: 0}
-  RPSliderValue: {fileID: 0}
-  EXPSliderValue: {fileID: 0}
-  HPValue: {fileID: 0}
-  RPValue: {fileID: 0}
-  EXPValue: {fileID: 0}
-  AttackValue: {fileID: 0}
-  DefenseValue: {fileID: 0}
-  LevelValue: {fileID: 0}
-  AttackUp: {fileID: 0}
-  AttackDown: {fileID: 0}
-  DefenseUp: {fileID: 0}
-  DefenseDown: {fileID: 0}
-  WeaponBox: {fileID: 0}
-  ClothesBox: {fileID: 0}
-  visitButton: {fileID: 0}
-  closeButton: {fileID: 0}
+  characterHead: {fileID: 6189740544263141794}
+  Attribute: {fileID: 128609142904098042}
+  CharacterName: {fileID: 9055946140301365989}
+  State: {fileID: 3774175761115801051}
+  HPSliderValue: {fileID: 1825960007803988650}
+  RPSliderValue: {fileID: 8929345747584787896}
+  EXPSliderValue: {fileID: 1825960007803988650}
+  HPValue: {fileID: 550873353676420563}
+  RPValue: {fileID: 2288782035642412990}
+  EXPValue: {fileID: 2288782035642412990}
+  AttackValue: {fileID: 520613730639227200}
+  DefenseValue: {fileID: 3269362624106477429}
+  LevelValue: {fileID: 7507804196518645131}
+  AttackUp: {fileID: 1250479157247179890}
+  AttackDown: {fileID: 7774668335724840778}
+  DefenseUp: {fileID: 2770174049256948754}
+  DefenseDown: {fileID: 2356350288821086433}
+  WeaponBox: {fileID: 7038237230084521620}
+  ClothesBox: {fileID: 8620075679311796142}
+  visitButton: {fileID: 5857605099309898805}
+  closeButton: {fileID: 5824646621647231143}
 --- !u!1 &4927729855088402300
 GameObject:
   m_ObjectHideFlags: 0
@@ -4249,7 +4294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4386,7 +4431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4631,6 +4676,7 @@ GameObject:
   - component: {fileID: 7581365957538413752}
   - component: {fileID: 9071946256360817379}
   - component: {fileID: 7038237230084521620}
+  - component: {fileID: 5598994786488102041}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -4711,10 +4757,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a202e9f0c2f53b4a82450b23ff84047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  typeText: {fileID: 0}
-  NameText: {fileID: 0}
-  equipMentIcon: {fileID: 0}
-  clickButton: {fileID: 0}
+  typeText: {fileID: 6923237788077840038}
+  NameText: {fileID: 7380226544156424137}
+  equipMentIcon: {fileID: 5135940018022918866}
+  clickButton: {fileID: 5598994786488102041}
+--- !u!114 &5598994786488102041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7759416861005728028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 9071946256360817379}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7798554570551405024
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,7 +14,54 @@ public interface GameAction
 public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
+public struct ClearEquip : GameAction
+{
+    public int characterId;
+    public int outPackageId;
+    public ItemType itemType;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            outPackageId = int.Parse(parameters[1].value);
+        if (parameters.Count > 2)
+            itemType = (ItemType)int.Parse(parameters[2].value);
 
+        if (source != 0)
+            characterId = source;
+        if (target != 0)
+            outPackageId = target;
+        if (value != 0)
+            itemType = (ItemType)value;
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct ChangeEquip : GameAction
+{
+    public int characterId;
+    public int outPackageId;
+    public int itemId; 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            outPackageId = int.Parse(parameters[1].value);
+        if (parameters.Count > 2)
+            itemId = int.Parse(parameters[2].value);
+
+        if (source != 0)
+            characterId = source;
+        if (target != 0)
+            outPackageId = target;
+        if (value != 0)
+            itemId = value;
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct VisitNPC : GameAction
 {
     public int targetId,sourceId;
@@ -309,6 +356,8 @@ public struct OpenPackage : GameAction
     public string selectActionName;
     public int selectActionId;
     public int targetObj;
+    public List<ItemType> selectItemTypes;
+    public PackageItemAction  selectAction;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
         if (parameters.Count > 2)

@@ -141,13 +141,17 @@ public class PackageManager : Singleton<PackageManager>
         {
             PackageData packageData = gamePackage.OutGamePackageData();
             packageList.packageDatas.Add(packageData);
-            await  UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+            var WarehousePanel= await  UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
 
-
+            if (openPackage.selectActionId == 0&&
+                openPackage.selectAction!=null)
+            {
+                WarehousePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
+            }
             GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(openPackage.selectActionId);
             if (gameActionData != null)
             {
-                gameActionData.Action(packageId,openPackage.targetObj);
+                gameActionData.Action(packageId,target:openPackage.targetObj);
             }
         } 
     }
@@ -408,7 +412,14 @@ public class PackageManager : Singleton<PackageManager>
         }
 
     }
-
+    public Item GetItemFromInstanceId(int packageId, int itemInstanceId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return gamePackage.GetItemFromInstanceId(itemInstanceId);
+        }
+        return default(Item);
+    }
     struct GamePackage
     {
         public string name;
@@ -424,6 +435,10 @@ public class PackageManager : Singleton<PackageManager>
         private Dictionary<int, int> packageItemCounts;
         private Dictionary<int, List<int>> packageItemIndexDatas;
 
+        public Item GetItemFromInstanceId(int itemInstanceId)
+        {
+            return items.Find(item => item.instanceId == itemInstanceId);
+        }
         public PackageData OutGamePackageData()
         {
             PackageData packageData = new PackageData
