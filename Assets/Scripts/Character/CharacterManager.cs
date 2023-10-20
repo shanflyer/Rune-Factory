@@ -107,8 +107,30 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<StartCharacterMove>(StartCharacterMove);
         GameActionManager.instance.AddListener<StopCharacterMove>(StopCharacterMove);
         GameActionManager.instance.AddListener<ChangeEquip>(ChangeEquip);
+        GameActionManager.instance.AddListener<ClearEquip>(ClearEquip);
     }
-    public async void ChangeEquip(ChangeEquip changeEquip)
+    void ClearEquip(ClearEquip clearEquip)
+    {
+        if (characters.TryGetValue(clearEquip.characterId, out var character))
+        {
+            character.ClearEquip(clearEquip.itemType);
+            int itemId = 0;
+            switch (clearEquip.itemType)
+            {
+                case ItemType.ÎäÆ÷:
+                    itemId = character.Equip.weapon;
+                    break;
+                case ItemType.·À¾ß:
+                    itemId = character.Equip.clothes;
+                    break;
+            }
+            if (itemId != 0&&clearEquip.outPackageId!=0)
+            {
+                PackageManager.instance.SetItemInPackage(new Item(itemId,1), clearEquip.outPackageId);
+            } 
+        }
+    }
+    async void ChangeEquip(ChangeEquip changeEquip)
     {
         if (characters.TryGetValue(changeEquip.characterId, out var character))
         {

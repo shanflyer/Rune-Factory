@@ -46,13 +46,15 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
             };
             void SelectAction(ItemInfo item, bool selected = true)
             {
-                ChangeEquip changeEquip = new ChangeEquip
+                Character character = CharacterManager.instance.GetCharacter(equipment.characterId);
+
+                ClearEquip clearEquip = new ClearEquip
                 {
                     characterId = equipment.characterId,
-                    itemId = item.itemId, 
-                    outPackageId = 0
+                    itemType = equipment.ItemType,
+                    outPackageId = character.characterPackage
                 };
-                GameActionManager.instance.QueueAction(changeEquip);
+                GameActionManager.instance.QueueAction(clearEquip);
             }
             UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         }
@@ -100,14 +102,24 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
     public override void OnEnable()
     {
         base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshEquip>(RefreshEquip);
         GameActionManager.instance.AddListener<RefreshCharacterProperty>(RefreshCharacterProperty);
     }
     public override void OnDisable()
     {
         base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshEquip>(RefreshEquip);
         GameActionManager.instance.RemoveListener<RefreshCharacterProperty>(RefreshCharacterProperty);
     }
 
+    void RefreshEquip(RefreshEquip refreshEquip)
+    {
+        if (refreshEquip.characterId == characterId)
+        {
+            Character character = CharacterManager.instance.GetCharacter(characterId);
+            InitReferenceData(character.GetInformation());
+        }
+    }
     protected override void Awake()
     {
         base.Awake();

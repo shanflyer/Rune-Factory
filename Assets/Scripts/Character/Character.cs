@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine; 
@@ -272,6 +273,32 @@ public partial class Character
             characterData.packageId:overridePackage, 0);
     }
 
+    public async void ClearEquip(ItemType itemType)
+    {
+        switch(itemType)
+        {
+            case ItemType.ÎäÆ÷:
+                {
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon);
+                    if (oldItemData != null)
+                        characterProperty = characterProperty - oldItemData.property;
+                }
+                equip.weapon = 0;
+                break;
+            case ItemType.·À¾ß:
+                {
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes);
+                    if (oldItemData != null)
+                        characterProperty = characterProperty - oldItemData.property;
+                }
+                equip.clothes = 0;
+                break;
+        }
+        GameActionManager.instance.QueueAction(new RefreshEquip
+        {
+            characterId = instanceId
+        }) ;
+    }
     public async void ChangeEquip(ItemData itemData, int packageId)
     {
         Item item = new Item();
@@ -284,7 +311,7 @@ public partial class Character
                 item.dataId = oldItemData.id;
                 characterProperty = characterProperty - oldItemData.property;
             }
-            
+            equip.weapon = itemData.id;
         }
         else if (itemData.type == ItemType.·À¾ß)
         {
@@ -295,6 +322,7 @@ public partial class Character
                 item.dataId = oldItemData.id;
                 CharacterProperty = characterProperty - oldItemData.property;
             }
+            equip.clothes = itemData.id;
         }
         if (item.dataId != 0)
         {
@@ -304,6 +332,10 @@ public partial class Character
         {
             CharacterProperty = characterProperty + itemData.property;
         }
+        GameActionManager.instance.QueueAction(new RefreshEquip
+        {
+            characterId = instanceId
+        });
     }
     
 

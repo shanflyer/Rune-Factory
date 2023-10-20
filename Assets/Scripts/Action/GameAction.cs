@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
-using static Cinemachine.DocumentationSortingAttribute;
-using UnityEngine.TextCore.Text;
 
 public interface GameAction 
 { 
@@ -14,6 +12,14 @@ public interface GameAction
 public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
+public struct RefreshEquip : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct ClearEquip : GameAction
 {
     public int characterId;
