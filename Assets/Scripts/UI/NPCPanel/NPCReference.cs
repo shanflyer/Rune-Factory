@@ -26,6 +26,23 @@ public class NPCReference : UIObjReference<NPC>
             }
         });
     }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshFriendShip>(RefreshFriendShip);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshFriendShip>(RefreshFriendShip);
+    }
+    void RefreshFriendShip(RefreshFriendShip refreshFriendShip)
+    {
+        if (refreshFriendShip.characterId == data.instanceId)
+        {
+            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.instanceId).ToString();
+        }
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -45,7 +62,8 @@ public class NPCReference : UIObjReference<NPC>
         Icon.sprite = characterData.icon;
         Icon.SetNativeSize();
         NPCName.text = $"+ {characterData.characterName} +";
-        FriendValue.text = data.friendLevel.ToString();
+        
+        FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.instanceId).ToString();
         StateValue.text = data.npcState.ToString();
         if (data.npcState == NPCState.修养中)
         {

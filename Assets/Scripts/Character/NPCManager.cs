@@ -58,15 +58,12 @@ public class NPC:Character,IReferenceData
     }
     public new string name => NPCData.npcName;
 
-    public NPCData NPCData;  
-    public int friendValue;
-    public int friendLevel;
+    public NPCData NPCData;   
     public NPCState npcState;
     public NPC(NPCData NPCData,CharacterData characterData, int instanceId) 
         :base(characterData,instanceId, NPCData.overridePackage)
     {
         this.NPCData = NPCData;
-        friendLevel = NPCData.zeroFriendShipLevel;
         npcState = NPCData.zeroState;
     }
 }

@@ -607,7 +607,8 @@ public static class DataPath
         {typeof(StoreCounterData),"Data/StoreCounterDataList" },
         {typeof(TempCharacterData),"Data/TempCharacterData"},
         {typeof(NPCFunctionData), "Data/NPCFunctionData"},
-        {typeof(NPCData),"Data/NPCData" }
+        {typeof(NPCData),"Data/NPCData" },
+        {typeof(FriendShipData),"Data/FriendShipData" }
     };
 
     public static string GetDataPath(Type type)
