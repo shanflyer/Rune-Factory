@@ -17,6 +17,15 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     [SerializeField]
     Button calendar, SetButton;
 
+    [SerializeField]
+    Image PlayerHead;
+    [SerializeField]
+    TextMeshProUGUI PlayerName;
+    [SerializeField]
+    Image HPSlider, RPSlider;
+    [SerializeField]
+    TextMeshProUGUI HPValue, RPValue;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -27,6 +36,13 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         date=FindChildGameObject<TextMeshProUGUI>("Date");
         calendar = FindChildGameObject<Button>("TimeObj");
         SetButton = FindChildGameObject<Button>("SetButton");
+
+        PlayerHead = FindChildGameObject<Image>("Head");
+        PlayerName = FindChildGameObject<TextMeshProUGUI>("Name");
+        HPSlider = FindChildGameObject<Image>("HPSlider");
+        RPSlider = FindChildGameObject<Image>("RPSlider");
+        HPValue = FindChildGameObject<TextMeshProUGUI>("HPValue");
+        RPValue = FindChildGameObject<TextMeshProUGUI>("RPValue");
        
     }
     protected override void Awake()
@@ -47,23 +63,41 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
+        GameActionManager.instance.AddListener<RefreshCharacterProperty>(RefreshCharacterProperty);
     }
 
-   
+    void RefreshCharacterProperty(RefreshCharacterProperty refreshCharacterProperty)
+    {
+        if (refreshCharacterProperty.id == CharacterManager.instance.controllerCharacter.instanceId)
+        {
+            var characterProperty = CharacterManager.instance.controllerCharacter.CharacterProperty;
+            HPSlider.fillAmount = characterProperty.HP / (float)characterProperty.MaxHP;
+            RPSlider.fillAmount = characterProperty.Power / (float)characterProperty.MaxPower;
+            HPValue.text = $"{characterProperty.HP}/{characterProperty.MaxHP}";
+            RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
+        }
+    }
     public override Task InitData(string dataKay)
     {
         goldValue.text = PayManager.instance.NowGold.ToString();
         crystalValue.text = PayManager.instance.NowDiamond.ToString();
-
-       
+         
         var gameTime = GameTimeManager.instance.nowGameTime;
         if (gameTime != null)
         {
             date.text = LanguageManage.instance.GameTimeToString(gameTime);
         }
 
-        return base.InitData(dataKay);
+        var headSprite = CharacterManager.instance.controllerCharacter.characterData.head;
+        PlayerHead.sprite = CharacterManager.instance.controllerCharacter.characterData.head;
+        (PlayerHead.transform as RectTransform).sizeDelta = new Vector2(headSprite.rect.width, headSprite.rect.height) * 0.5f;
+        var characterProperty = CharacterManager.instance.controllerCharacter.CharacterProperty;
+        HPSlider.fillAmount = characterProperty.HP / (float)characterProperty.MaxHP;
+        RPSlider.fillAmount = characterProperty.Power / (float)characterProperty.MaxPower;
+        HPValue.text = $"{characterProperty.HP}/{characterProperty.MaxHP}";
+        RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
 
+        return base.InitData(dataKay);
     }
     public override void Show(int layer = -1)
     {
