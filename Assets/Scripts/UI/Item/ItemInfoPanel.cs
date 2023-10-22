@@ -6,6 +6,7 @@ public struct ItemInfo:IReferenceData
 {
     public int itemId;
     public int dataId;
+    public float itemValue;
     public int otherValue;
     public string ActionName;
     public SelectAction<ItemInfo> action;
@@ -26,6 +27,11 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
     private Image Icon; 
     private Image MoneyIcon;
     private TextMeshProUGUI MoneyValue;
+
+    [SerializeField]
+    Transform InfoItemValueBg;
+    [SerializeField]
+    Image InfoItemValue;
     protected override void Awake()
     {
         base.Awake();
@@ -56,6 +62,9 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         Info = FindChildGameObject<TextMeshProUGUI>("Info");
         ActionName = FindChildGameObject<TextMeshProUGUI>("ActionName");
         ActionButton = FindChildGameObject<Button>("ActionButton");
+
+        InfoItemValueBg = FindChildGameObject("InfoItemValueBg");
+        InfoItemValue = FindChildGameObject<Image>("InfoItemValue");
     }
     public void SetAction(SelectAction<ItemInfo> action, string actionName)
     {
@@ -78,6 +87,9 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         Property.text = itemData.property.ToString();
         Info.text = itemData.info;
         this.action = v.action;
+
+        InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
+        InfoItemValue.fillAmount = v.itemValue;
 
         if (v.ActionName == null)
         {

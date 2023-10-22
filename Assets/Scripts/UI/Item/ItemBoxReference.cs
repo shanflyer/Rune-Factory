@@ -11,8 +11,10 @@ public class ItemBoxReference : UIObjReference<Item>
    // private Image icon;
     [SerializeField]
     private Image icon;
-     
-
+    [SerializeField]
+    private Transform ItemValueBg;
+    [SerializeField]
+    private Image ItemValue;
     [SerializeField]
     private TextMeshProUGUI count;
 
@@ -26,6 +28,8 @@ public class ItemBoxReference : UIObjReference<Item>
         toggle = GetComponent<Toggle>();
         icon = FindChildGameObject<Image>("Icon");  
         count = FindChildGameObject<TextMeshProUGUI>("count");
+        ItemValue = FindChildGameObject<Image>("ItemValue");
+        ItemValueBg = FindChildGameObject("ItemValueBg");
     }
 
     private void Awake()
@@ -67,11 +71,13 @@ public class ItemBoxReference : UIObjReference<Item>
             icon.SetNativeSize();
             count.text = item.count.ToString();
             count.enabled = item.count>0;
-            toggle.enabled = true; 
+            toggle.enabled = true;
+            ItemValueBg.transform.localScale = Vector3.zero;
         }
         else
         {
-            
+            ItemValueBg.transform.localScale =itemData.itemValue?Vector3.one: Vector3.zero;
+            ItemValue.fillAmount = item.value;
             toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = false;
             toggle.graphic.enabled = false;

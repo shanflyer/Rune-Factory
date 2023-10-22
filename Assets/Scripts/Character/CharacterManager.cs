@@ -37,6 +37,10 @@ public struct CharacterRuntimeObj
     }
 }
 
+public struct TeamerEquipAndProperty : IReferenceData
+{
+    public CharacterEquipAndPropertyData[] characterEquipAndPropertyDatas;
+}
 public class CharacterManager : Singleton<CharacterManager>
 {
     public const float moveSpeed = 4f;
@@ -118,10 +122,10 @@ public class CharacterManager : Singleton<CharacterManager>
             switch (clearEquip.itemType)
             {
                 case ItemType.ÎäÆ÷:
-                    itemId = character.Equip.weapon;
+                    itemId = character.Equip.weapon.x;
                     break;
                 case ItemType.·À¾ß:
-                    itemId = character.Equip.clothes;
+                    itemId = character.Equip.clothes.x;
                     break;
             }
             if (itemId != 0&&clearEquip.outPackageId!=0)
@@ -217,6 +221,8 @@ public class CharacterManager : Singleton<CharacterManager>
                     _controllerCharacter.SetController(true);
                 }
             }
+
+            UIManager.instance.ShowGamePanel<PlayerTopPanel>();
         }
         get
         {

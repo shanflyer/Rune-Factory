@@ -227,8 +227,8 @@ public struct Exp
 
 public struct Equip
 {
-    public int weapon;
-    public int clothes;
+    public int2 weapon;
+    public int2 clothes;
 }
 public partial class Character
 {
@@ -279,7 +279,7 @@ public partial class Character
         {
             case ItemType.ÎäÆ÷:
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon);
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon.x);
                     if (oldItemData != null)
                         characterProperty = characterProperty - oldItemData.property;
                 }
@@ -287,7 +287,7 @@ public partial class Character
                 break;
             case ItemType.·À¾ß:
                 {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes);
+                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes.x);
                     if (oldItemData != null)
                         characterProperty = characterProperty - oldItemData.property;
                 }
@@ -304,7 +304,7 @@ public partial class Character
         Item item = new Item();
         if (itemData.type == ItemType.ÎäÆ÷)
         {
-            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon);
+            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon.x);
             if (oldItemData != null)
             {
                 item.count = 1;
@@ -315,7 +315,7 @@ public partial class Character
         }
         else if (itemData.type == ItemType.·À¾ß)
         {
-            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes);
+            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes.x);
             if (oldItemData != null)
             {
                 item.count = 1;
@@ -726,9 +726,30 @@ public partial class Character
             {
                 oldOperaCoordinate = OldOperaCoordinate;
             }
-            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, coordinate.xy,
+            int2 offsetCoordinate = int2.zero;
+            switch (direction)
+            {
+                case Direction.UP:
+                    offsetCoordinate = new int2(0, 1);
+                    break;
+                case Direction.RIGHT:
+                    offsetCoordinate = new int2(1, 0);
+                    break;
+                case Direction.LEFT:
+                    offsetCoordinate = new int2(-1, 0);
+                    break;
+                case Direction.DOWN:
+                    offsetCoordinate = new int2(0, -1);
+                    break;
+            }
+            int3 checkCoordinate = coordinate;
+            checkCoordinate.xy += offsetCoordinate;
+
+
+            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, checkCoordinate.xy,
            TriggerEventAction,oldOperateItem);
-            oldCoordinate = OldOperaCoordinate = coordinate.xy;
+            oldCoordinate = OldOperaCoordinate = checkCoordinate.xy; 
+            
         }
         SetObjCoordinate(coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
@@ -737,7 +758,32 @@ public partial class Character
             coordinate = coordinate
         };
         GameActionManager.instance.QueueAction(characterCoordinateTrigger);
+
+       // ForwardTrigger(coordinate, direction);
     }
+
+    void ForwardTrigger(int3 coordinate, Direction direction)
+    {
+        int2 offsetCoordinate = int2.zero;
+        switch (direction)
+        {
+            case Direction.UP:
+                offsetCoordinate = new int2(0, 1);
+                break;
+            case Direction.RIGHT:
+                offsetCoordinate = new int2(1, 0);
+                break;
+            case Direction.LEFT:
+                offsetCoordinate = new int2(-1, 0);
+                break;
+            case Direction.DOWN:
+                offsetCoordinate = new int2(0, -1);
+                break; 
+        }
+        coordinate.xy += offsetCoordinate;
+    }
+
+
     public bool MoveCrossMap(int targetMap, int2 targetCoordinate,MoveEndAction moveEndAction=null)
     {
         Queue<int> moveRoomList = new Queue<int>();

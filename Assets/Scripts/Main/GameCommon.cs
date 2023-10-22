@@ -250,22 +250,22 @@ public class GameCommon
         {
             if (offset.x < 0)
             {
-                return Direction.RIGHT;
+                return Direction.LEFT;
             }
             else
             {
-                return Direction.LEFT;
+                return Direction.RIGHT;
             }
         }
         if (Mathf.Abs(offset.x) < Mathf.Abs(offset.y))
         {
             if (offset.y < 0)
             {
-                return Direction.UP;
+                return Direction.DOWN;
             }
             else
             {
-                return Direction.DOWN;
+                return Direction.UP;
             }
         }
         if (offset.x != 0 && offset.y != 0)
@@ -274,42 +274,6 @@ public class GameCommon
             {
                 if (offset.y < 0)
                 {
-                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.UP)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.UP;
-                    }
-                }
-                else
-                {
-                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.DOWN)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.DOWN;
-                    }
-                }
-            }
-            else
-            {
-                if (offset.y < 0)
-                {
-                    if (oldDirection == Direction.LEFT || oldDirection == Direction.UP)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.UP;
-                    }
-                }
-                else
-                {
                     if (oldDirection == Direction.LEFT || oldDirection == Direction.DOWN)
                     {
                         return oldDirection;
@@ -317,6 +281,42 @@ public class GameCommon
                     else
                     {
                         return Direction.DOWN;
+                    }
+                }
+                else
+                {
+                    if (oldDirection == Direction.LEFT|| oldDirection == Direction.UP)
+                    {
+                        return oldDirection;
+                    }
+                    else
+                    {
+                        return Direction.UP;
+                    }
+                }
+            }
+            else
+            {
+                if (offset.y < 0)
+                {
+                    if (oldDirection == Direction.RIGHT|| oldDirection == Direction.DOWN)
+                    {
+                        return oldDirection;
+                    }
+                    else
+                    {
+                        return Direction.DOWN;
+                    }
+                }
+                else
+                {
+                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.UP)
+                    {
+                        return oldDirection;
+                    }
+                    else
+                    {
+                        return Direction.UP;
                     }
                 }
             }
@@ -608,7 +608,8 @@ public static class DataPath
         {typeof(TempCharacterData),"Data/TempCharacterData"},
         {typeof(NPCFunctionData), "Data/NPCFunctionData"},
         {typeof(NPCData),"Data/NPCData" },
-        {typeof(FriendShipData),"Data/FriendShipData" }
+        {typeof(FriendShipData),"Data/FriendShipData" },
+        {typeof(PlantData),"Data/PlantData" }
     };
 
     public static string GetDataPath(Type type)

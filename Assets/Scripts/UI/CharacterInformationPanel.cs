@@ -40,6 +40,7 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
             {
                 otherValue=equipment.characterId,
                 itemId = equipment.dataId,
+                itemValue=equipment.itemValue,
                 dataId=(int)equipment.ItemType,
                 ActionName = isController ? "Ð¶ÏÂ" : null,
                 action= SelectAction
@@ -223,13 +224,15 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
         WeaponBox.InitData(new Equipment
         {
             characterId = characterId,
-            dataId = v.equip.weapon,
+            dataId = v.equip.weapon.x,
+            itemValue=v.equip.weapon.y/100.0f,
             ItemType=ItemType.ÎäÆ÷
-        }, SelectEquipReference);
+        }, SelectEquipReference);;
         ClothesBox.InitData(new Equipment
         {
             characterId = characterId,
-            dataId = v.equip.clothes,
+            dataId = v.equip.clothes.x,
+            itemValue = v.equip.clothes.y / 100.0f,
             ItemType = ItemType.·À¾ß
         }, SelectEquipReference);
 

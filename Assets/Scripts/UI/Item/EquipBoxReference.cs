@@ -16,6 +16,10 @@ public class EquipBoxReference:UIObjReference<Equipment>
     Image equipMentIcon;
     [SerializeField]
     Button clickButton;
+    [SerializeField]
+    Transform itemValueBg;
+    [SerializeField]
+    Image itemValue;
 
     private void Awake()
     {
@@ -34,6 +38,8 @@ public class EquipBoxReference:UIObjReference<Equipment>
         equipMentIcon = FindChildGameObject<Image>("Icon");
         NameText = FindChildGameObject<TextMeshProUGUI>("Name");
         clickButton = GetComponent<Button>();
+        itemValueBg = FindChildGameObject("ItemValueBg");
+        itemValue = FindChildGameObject<Image>("ItemValue");
     }
     public override async void InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
     {
@@ -47,11 +53,14 @@ public class EquipBoxReference:UIObjReference<Equipment>
 
             NameText.enabled = true;
             equipMentIcon.enabled = true;
+            itemValueBg.localScale = Vector3.zero;
         }
         else
         {
             NameText.enabled = false;
             equipMentIcon.enabled = false;
+            itemValueBg.localScale = itemData.itemValue?Vector3.one:Vector3.zero;
+            itemValue.fillAmount = t.itemValue;
         }
     }
 }

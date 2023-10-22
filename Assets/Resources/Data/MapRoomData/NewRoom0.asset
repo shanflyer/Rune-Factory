@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid:a0f00c5b0e9bc69419e0fea03ee1493e, type: 3}
+  m_Script: {fileID: 11500000, guid: a0f00c5b0e9bc69419e0fea03ee1493e, type: 3}
   m_Name: NewRoom0
   m_EditorClassIdentifier: 
   roomName: NewRoom0
@@ -3795,11 +3795,23 @@ MonoBehaviour:
       y: 5
     isWalkable: 1
   mapItems:
+  - id: 820000
+    instanceId: 820000852
+    coordinate:
+      x: 11
+      y: 1
+    animationKey: 0
   - id: 800000
     instanceId: 800000074
     coordinate:
       x: 5
       y: -6
+    animationKey: 0
+  - id: 800001
+    instanceId: 800001630
+    coordinate:
+      x: 12
+      y: -13
     animationKey: 0
   startCoordinate:
     x: -15

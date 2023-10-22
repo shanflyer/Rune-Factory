@@ -9,11 +9,13 @@ public struct Item:IReferenceData
     public int instanceId;
     public int dataId;
     public int count;
-    public Item(int dataId,int count)
+    public float value;
+    public Item(int dataId,int count,float value=1)
     {
         this.dataId = dataId;
         this.count = count;
         instanceId = 0;
+        this.value = value;
     }
 }
 
@@ -21,6 +23,7 @@ public struct Equipment: IReferenceData
 {
     public int characterId;
     public int dataId;
+    public float itemValue;
     public ItemType ItemType;
 }
 public class ItemManager

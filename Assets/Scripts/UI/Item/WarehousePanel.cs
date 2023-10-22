@@ -37,7 +37,10 @@ public class WarehousePanel : GamePanel<PackageList>
     Button ActionButton,ReturnButton;
     [SerializeField]
     TextMeshProUGUI ActionName;
-
+    [SerializeField]
+    Transform InfoItemValueBg;
+    [SerializeField]
+    Image InfoItemValue;
     [SerializeField]
     ItemBoxReference itemBoxReference;
     [SerializeField]
@@ -106,6 +109,8 @@ public class WarehousePanel : GamePanel<PackageList>
         packageSelectGroup = FindChildGameObject<ToggleGroup>("PackageSelectParent");
         Price = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
         packageLevelUp = FindChildGameObject<Button>("LevelUp");
+        InfoItemValueBg = FindChildGameObject("InfoItemValueBg");
+        InfoItemValue = FindChildGameObject<Image>("InfoItemValue");
     }
     public override void InitReferenceData(PackageList v)
     {
@@ -160,11 +165,13 @@ public class WarehousePanel : GamePanel<PackageList>
             ItemIcon.sprite = itemData.icon;
             ItemIcon.enabled = true;
             ItemIcon.SetNativeSize();
-            ItemName.text = itemData.itemName;
+            ItemName.text =$"+ {itemData.itemName} +";
             Type.text = itemData.type.ToString();
             Info.text = itemData.info;
             Property.text = itemData.property.ToString();
             Price.text = itemData.sellPrice.ToString();
+            InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
+            InfoItemValue.fillAmount = item.value;
         }
 
         

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class PlayerTopPanel : GamePanel<IReferenceData>
 {
+    public override bool changeInputModel => false;
     [SerializeField]
     TextMeshProUGUI goldValue, crystalValue;
     [SerializeField]
@@ -81,13 +82,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     {
         goldValue.text = PayManager.instance.NowGold.ToString();
         crystalValue.text = PayManager.instance.NowDiamond.ToString();
-         
-        var gameTime = GameTimeManager.instance.nowGameTime;
-        if (gameTime != null)
-        {
-            date.text = LanguageManage.instance.GameTimeToString(gameTime);
-        }
 
+        PlayerName.text = CharacterManager.instance.controllerCharacter.name;
         var headSprite = CharacterManager.instance.controllerCharacter.characterData.head;
         PlayerHead.sprite = CharacterManager.instance.controllerCharacter.characterData.head;
         (PlayerHead.transform as RectTransform).sizeDelta = new Vector2(headSprite.rect.width, headSprite.rect.height) * 0.5f;
@@ -96,6 +92,12 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         RPSlider.fillAmount = characterProperty.Power / (float)characterProperty.MaxPower;
         HPValue.text = $"{characterProperty.HP}/{characterProperty.MaxHP}";
         RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
+
+        var gameTime = GameTimeManager.instance.nowGameTime;
+        if (gameTime != null)
+        {
+            date.text = LanguageManage.instance.GameTimeToString(gameTime);
+        }
 
         return base.InitData(dataKay);
     }

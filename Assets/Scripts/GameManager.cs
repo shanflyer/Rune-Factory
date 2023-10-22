@@ -1055,7 +1055,7 @@ namespace OldName
     
         public void CheckChild()
         {
-            mapParent.GetComponentInChildren<GameBoxClickAction>().CheckChild();
+            //mapParent.GetComponentInChildren<GameBoxClickAction>().CheckChild();
         }
         public void CheakPlayerMoveEnd()
         {
