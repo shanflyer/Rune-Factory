@@ -26,12 +26,9 @@ public class GameComponent : MonoBehaviour
     public OldName.GameManager gameManager;
     public FilmManager filmManager;
     public FestivalManager festivalManager;  
-    public GameObject huiFuEffectPro;
-    public Transform PlantParent;
+    public GameObject huiFuEffectPro; 
     public Transform NpcParent;  
-    public InfluenceAction influenceAction;
-    public FarmAction farmAction;
-    public PlantAction plantAction;
+    public InfluenceAction influenceAction; 
     public PastureAction pastureAction;
     public PastureItemPanelAction pastureItemPanelAction;
     public PasturePanelAction pasturePanelAction;

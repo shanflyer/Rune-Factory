@@ -3,7 +3,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-public class PlantData : ScriptableObject
+public class PlantData : ScriptableObject, IGameData
 {
     public int id;
     public string plantName;
@@ -18,6 +18,18 @@ public class PlantData : ScriptableObject
     public string GrowthStageStr; 
 #endif
     public List<GrowthStage> growthStages = new List<GrowthStage>();
+
+    public string GetKey()
+    {
+        return id.ToString();
+    }
+    public override string ToString()
+    {
+        return id.ToString();
+    }
+    public void SetReferenceData()
+    { 
+    }
 }
 public struct GrowthStage
 {

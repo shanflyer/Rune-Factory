@@ -120,6 +120,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector2.cs" />
     <Compile Include="Assets\Scripts\UI\CreaterReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\ActiveInHierarchy.cs" />
+    <Compile Include="Assets\Scripts\Farm\FarmManagercs.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedObject.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetRightVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Object Drawers\FloatSliderAttribute.cs" />
@@ -132,7 +133,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Object Drawers\IntSliderAttribute.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedFloat.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetHeight.cs" />
-    <Compile Include="Assets\Scripts\FarmAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedRect.cs" />
     <Compile Include="Assets\Scripts\Main\InformationController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayOneShot.cs" />
@@ -431,7 +431,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedVector3.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetVelocity.cs" />
     <Compile Include="Assets\Scripts\Data\ShopDataList.cs" />
-    <Compile Include="Assets\Scripts\x\kettleAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics\Linecast.cs" />
     <Compile Include="Assets\Scripts\Main\PlayerOperateManager.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\RPGM_XP_Water_Tile.cs" />
@@ -579,7 +578,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Angle.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedGameObjectList.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopSelectReference.cs" />
-    <Compile Include="Assets\Scripts\x\Seedaction.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\MapItemPlayAnimationEvent.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedTransformToGameObject.cs" />
     <Compile Include="Assets\Scripts\x\BattelcharactorCavasAction.cs" />
@@ -603,7 +601,6 @@
     <Compile Include="Assets\Scripts\UI\Shop\ShopPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetFloat.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularVelocity.cs" />
-    <Compile Include="Assets\Scripts\PlantAction.cs" />
     <Compile Include="Assets\Scripts\PlayerStore\StoreShow.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\DeleteAll.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Angle.cs" />
@@ -650,12 +647,12 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Sample.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\GetEnabled.cs" />
     <Compile Include="Assets\Scripts\Data\DataArray.cs" />
-    <Compile Include="Assets\Scripts\SeasonSelect.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterBehaviorManager.cs" />
     <Compile Include="Assets\Scripts\Map\MapRoomData.cs" />
     <Compile Include="Assets\Scripts\Main\TalkManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FightAIController.cs" />
+    <Compile Include="Assets\Scripts\Farm\FieldArea.cs" />
     <Compile Include="Assets\Scripts\UI\FightPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector4.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\GetCenter.cs" />
@@ -702,7 +699,6 @@
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventEnd.cs" />
     <Compile Include="Assets\Scripts\Main\ShopManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\FightTypeSelect.cs" />
-    <Compile Include="Assets\Scripts\GrassAction.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedSkillEstimateData.cs" />
     <Compile Include="Assets\Scripts\GroundItemClickAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetStepOffset.cs" />
@@ -741,7 +737,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetAxis.cs" />
     <Compile Include="Assets\Scripts\Character\Character.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterPropertyChange.cs" />
-    <Compile Include="Assets\Scripts\Data\PlantData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\SetBool.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\IsChildOf.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\UtilitySelector.cs" />
@@ -862,7 +857,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatClamp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsKinematic.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />
-    <Compile Include="Assets\Scripts\FarmToolAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetPlaybackSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsSleeping.cs" />
     <Compile Include="Assets\Scripts\x\ObjCode.cs" />
@@ -907,6 +901,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Wait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Lerp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\MoveTowards.cs" />
+    <Compile Include="Assets\Scripts\Farm\PlantData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowBias.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsPlaying.cs" />
     <Compile Include="Assets\Scripts\BookLanguageaction.cs" />

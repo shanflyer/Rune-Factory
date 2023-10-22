@@ -160,7 +160,7 @@ namespace OldName
         public Boundary nowBoundary;
         public GameComponent GameData;
         private Transform mapParent;
-        private Transform PlantParent;
+        //private Transform PlantParent;
         private Transform NpcParent;
         public GameObject tile;
         private Vector2 cellNum;
@@ -339,7 +339,7 @@ namespace OldName
 
 
             //mapParent = GameData.mapParent;
-            PlantParent = GameData.PlantParent;
+           // PlantParent = GameData.PlantParent;
             NpcParent = GameData.NpcParent;
 
             cameraSelectNum = 1;
@@ -598,8 +598,8 @@ namespace OldName
                         GameComponentData.gameData.pasturePanelAction.AddPastureCaseCount();
                         break;
                     case CostType.增加田地:
-                        InformationController.instance.AddInformation("*消耗金币" + goldCostValue + ",新开发一块田地。");
-                        GameComponentData.gameData.farmAction.GrassClearAction();
+                        //InformationController.instance.AddInformation("*消耗金币" + goldCostValue + ",新开发一块田地。");
+                       // GameComponentData.gameData.farmAction.GrassClearAction();
                         break;
                     case CostType.购买道具:
 
@@ -912,16 +912,6 @@ namespace OldName
         }
         public void UpdataMapSeason()
         {
-            if (mapX != null)
-            {
-                SeasonSelect seasonSelect = mapX.GetComponent<SeasonSelect>();
-                if (seasonSelect != null)
-                {
-                    seasonSelect.SeasonSetData(GameTimeManager.instance.nowGameTime.gameDate.season);
-                }
-            }
-
-
         }
         public void InitMyShop()
         {

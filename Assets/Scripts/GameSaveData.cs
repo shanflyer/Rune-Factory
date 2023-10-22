@@ -17,71 +17,8 @@ namespace OldName
     {
         public string value;
     }
-    [System.Serializable]
-    public class PlantSaveData
-    {
-        public int id;
-        public int growedDays;
-        public int turnCount;
-        public PlantStatus plantStatus;
-        public int dryDays;
-        public int statusIndex;
-        public int mapId, coordinateX, coordinateY;
-        public PlantSaveData() { }
-
-        public PlantSaveData(Plant plant)
-        {
-            id = plant.id;
-            growedDays = plant.growedDays;
-            turnCount = plant.turnCount;
-            plantStatus = plant.plantStatus;
-            dryDays = plant.dryDays;
-            statusIndex = plant.statusIndex;
-            mapId = plant.mapId;
-            coordinateX = plant.field.coordinate.x;
-            coordinateY = plant.field.coordinate.y;
-        }
-    }
-    [System.Serializable]
-    public class PlantFieldSeveData
-    {
-        public List<bool> isGrassClear;
-        public List<FieldStr> fields;
-        public List<PlantSaveData> plantSaveDatas;
-
-        public PlantFieldSeveData()
-        {
-            isGrassClear = new List<bool>();
-            fields = new List<FieldStr>();
-            plantSaveDatas = new List<PlantSaveData>();
-        }
-        public void UpData()
-        {
-            FarmAction farmAction = GameComponentData.gameData.farmAction;
-            isGrassClear = new List<bool>();
-            foreach (var farmActionGrass in farmAction.Grasses)
-            {
-                isGrassClear.Add(farmActionGrass.isClear);
-            }
-            fields = new List<FieldStr>();
-            foreach (var farmActionField in farmAction.Fields)
-            {
-                FieldStr fieldStr = new FieldStr(farmActionField);
-                fields.Add(fieldStr);
-            }
-            plantSaveDatas = new List<PlantSaveData>();
-            if (GameComponentData.gameData.plantAction.Plants != null)
-            {
-                foreach (var plantActionPlant in GameComponentData.gameData.plantAction.Plants)
-                {
-                    PlantSaveData plantSaveData = new PlantSaveData(plantActionPlant);
-                    plantSaveDatas.Add(plantSaveData);
-                }
-            }
-
-            DataSaveAndLoadTest.CreatPlantData();
-        }
-    }
+   
+ 
     [System.Serializable]
     public class AnimalSaveData
     {
@@ -423,21 +360,8 @@ namespace OldName
             boxId = gamePlayer.box;
             iceboxId = gamePlayer.icebox;
 
-            battleAllValues = new List<int>();
-          
-
-            Item seedItem = GameComponentData.gameData.farmAction.farmTool;
-            if (seedItem.dataId != 0)
-            {
-                seedId = seedItem.dataId;
-                seedCount = seedItem.count;
-            }
-            else
-            {
-                seedId = 0;
-                seedCount = 0;
-            }
-            waterValue = Mathf.RoundToInt(GameComponentData.gameData.farmAction.waterValue * 1000);
+            battleAllValues = new List<int>();  
+           // waterValue = Mathf.RoundToInt(GameComponentData.gameData.farmAction.waterValue * 1000);
 
             if (gamePlayer.TeamPlayer0 == null || gamePlayer.TeamPlayer0.name == null)
             {
@@ -475,7 +399,7 @@ namespace OldName
         public DeskData deskData;
         public DateData dateData;
         public PlayerSaveData playerSaveData;
-        public PlantFieldSeveData plantSeveDatas;
+       // public PlantFieldSeveData plantSeveDatas;
         public List<NpcSaveData> npcSaveDatas;
         public List<PastureSaveData> pastureSaveDatas;
         public SaveTime saveTime1;
@@ -491,7 +415,7 @@ namespace OldName
             deskData.UpData();
             dateData.UpData();
             playerSaveData.UpPlayerData();
-            plantSeveDatas.UpData();
+            //plantSeveDatas.UpData();
 
            
 
@@ -573,8 +497,8 @@ namespace OldName
         }
         public void UpPlantData()
         {
-            plantSeveDatas.UpData();
-            DataSaveAndLoadTest.CreatPlantData();
+           // plantSeveDatas.UpData();
+           // DataSaveAndLoadTest.CreatPlantData();
         }
 
         public void UpCharactorTitleValue()
@@ -604,7 +528,7 @@ namespace OldName
 
             deskData = new DeskData();
             playerMoneyData = new PlayerMoneyData();
-            plantSeveDatas = new PlantFieldSeveData();
+           // plantSeveDatas = new PlantFieldSeveData();
             npcSaveDatas = new List<NpcSaveData>();
             pastureSaveDatas = new List<PastureSaveData>();
             playerSaveData.EquipMentIds = new List<int>();
@@ -705,6 +629,7 @@ namespace OldName
                 }
 
             } 
+            /*
             FarmAction farmAction = GameComponentData.gameData.farmAction;
             if (playerMoneyData.seedId != 0)
             {
@@ -712,7 +637,7 @@ namespace OldName
             }
 
             farmAction.waterValue = playerMoneyData.waterValue / 1000.0f;
-
+            */
 
              
 
@@ -767,7 +692,7 @@ namespace OldName
         }
         public void InitPlantData()
         {
-
+            /*
             FarmAction farmAction = GameComponentData.gameData.farmAction;
             if (plantSeveDatas != null)
             {
@@ -791,7 +716,7 @@ namespace OldName
                     plantAction.Plants.Add(plant);
                 }
             }
-
+            */
 
 
         }
@@ -849,7 +774,7 @@ namespace OldName
         public DeskData deskData;
         public DateData dateData;
         public PlayerSaveData playerSaveData;
-        public PlantFieldSeveData plantSeveDatas;
+        //public PlantFieldSeveData plantSeveDatas;
         public List<NpcSaveData> npcSaveDatas;
         public List<PastureSaveData> pastureSaveDatas;
         public SaveTime saveTime1;
@@ -865,7 +790,7 @@ namespace OldName
             deskData.UpData();
             dateData.UpData();
             playerSaveData.UpPlayerData();
-            plantSeveDatas.UpData();
+           // plantSeveDatas.UpData();
  
 
             pastureSaveDatas = new List<PastureSaveData>();
@@ -945,8 +870,8 @@ namespace OldName
         }
         public void UpPlantData()
         {
-            plantSeveDatas.UpData();
-            DataSaveAndLoadTest.CreatPlantData();
+           // plantSeveDatas.UpData();
+           // DataSaveAndLoadTest.CreatPlantData();
         }
 
         public void UpCharactorTitleValue()
@@ -976,7 +901,7 @@ namespace OldName
 
             deskData = new DeskData();
             playerMoneyData = new PlayerMoneyData();
-            plantSeveDatas = new PlantFieldSeveData();
+           // plantSeveDatas = new PlantFieldSeveData();
             npcSaveDatas = new List<NpcSaveData>();
             pastureSaveDatas = new List<PastureSaveData>();
             playerSaveData.EquipMentIds = new List<int>();
@@ -1080,6 +1005,7 @@ namespace OldName
 
             gamePlayer.money1 = reMoney.value;
            
+            /*
             FarmAction farmAction = GameComponentData.gameData.farmAction;
             if (playerMoneyData.seedId != 0)
             {
@@ -1088,7 +1014,7 @@ namespace OldName
 
             farmAction.waterValue = playerMoneyData.waterValue / 1000.0f;
 
-
+            */
             
 
             foreach (var equipMentId in playerSaveData.EquipMentIds)
@@ -1142,7 +1068,7 @@ namespace OldName
         }
         public void InitPlantData()
         {
-
+            /*
             FarmAction farmAction = GameComponentData.gameData.farmAction;
             if (plantSeveDatas != null)
             {
@@ -1166,7 +1092,7 @@ namespace OldName
                     plantAction.Plants.Add(plant);
                 }
             }
-
+            */
 
 
         }

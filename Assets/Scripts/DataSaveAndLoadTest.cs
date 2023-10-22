@@ -120,19 +120,7 @@ public static class DataSaveAndLoadTest
         sw.Write(jsonStr);
         sw.Close();
     }
-    public static void CreatPlantData()
-    {
-        if (File.Exists(path3))
-        {
-            File.Delete(path3);
-        }
-        string DataStr3 = JsonMapper.ToJson(gameSaveData.plantSeveDatas);
-        string jsonStr3 = EncryptDES(DataStr3, Mykey);
-        FileStream fileStream3 = new FileStream(path3, FileMode.OpenOrCreate);
-        StreamWriter sw3 = new StreamWriter(fileStream3);
-        sw3.Write(jsonStr3);
-        sw3.Close();
-    }
+   
     public static void CreatNPCData()
     {
         if (File.Exists(path2))
@@ -216,96 +204,7 @@ public static class DataSaveAndLoadTest
     public static void CreatNewData()
     {
 
-        if (File.Exists(path7))
-        {
-            File.Delete(path7);
-        }
-        string DataStr7 = JsonMapper.ToJson(gameSaveData.charactorTitleValue);
-        string jsonStr7 = EncryptDES(DataStr7, Mykey);
-        FileStream fileStream7 = new FileStream(path7, FileMode.OpenOrCreate);
-        StreamWriter sw7 = new StreamWriter(fileStream7);
-        sw7.Write(jsonStr7);
-        sw7.Close();
-
-        if (File.Exists(path0))
-        {
-            File.Delete(path0);
-        }
-        string DataStr = JsonMapper.ToJson(gameSaveData.dateData);
-        string jsonStr = EncryptDES(DataStr, Mykey);
-        FileStream fileStream = new FileStream(path0, FileMode.OpenOrCreate);
-        StreamWriter sw = new StreamWriter(fileStream);
-        sw.Write(jsonStr);
-        sw.Close();
-
-        if (File.Exists(path1))
-        {
-            File.Delete(path1);
-        }
-        string DataStr1 = JsonMapper.ToJson(gameSaveData.playerSaveData);
-        string jsonStr1 = EncryptDES(DataStr1, Mykey);
-
-        //string dataStr1 = DecryptDES(jsonStr1, Mykey);
-
-        FileStream fileStream1 = new FileStream(path1, FileMode.OpenOrCreate);
-        StreamWriter sw1 = new StreamWriter(fileStream1);
-        sw1.Write(jsonStr1);
-        sw1.Close();
-
-        if (File.Exists(path2))
-        {
-            File.Delete(path2);
-        }
-        string DataStr2 = JsonMapper.ToJson(gameSaveData.npcSaveDatas);
-        string jsonStr2 = EncryptDES(DataStr2, Mykey);
-        FileStream fileStream2 = new FileStream(path2, FileMode.OpenOrCreate);
-        StreamWriter sw2 = new StreamWriter(fileStream2);
-        sw2.Write(jsonStr2);
-        sw2.Close();
-
-        if (File.Exists(path3))
-        {
-            File.Delete(path3);
-        }
-        string DataStr3 = JsonMapper.ToJson(gameSaveData.plantSeveDatas);
-        string jsonStr3 = EncryptDES(DataStr3, Mykey);
-        FileStream fileStream3 = new FileStream(path3, FileMode.OpenOrCreate);
-        StreamWriter sw3 = new StreamWriter(fileStream3);
-        sw3.Write(jsonStr3);
-        sw3.Close();
-
-        if (File.Exists(path4))
-        {
-            File.Delete(path4);
-        }
-        string DataStr4 = JsonMapper.ToJson(gameSaveData.pastureSaveDatas);
-        string jsonStr4 = EncryptDES(DataStr4, Mykey);
-        FileStream fileStream4 = new FileStream(path4, FileMode.OpenOrCreate);
-        StreamWriter sw4= new StreamWriter(fileStream4);
-        sw4.Write(jsonStr4);
-        sw4.Close();
-
-        if (File.Exists(path5))
-        {
-            File.Delete(path5);
-        }
-        string DataStr5 = JsonMapper.ToJson(gameSaveData.deskData);
-        string jsonStr5 = EncryptDES(DataStr5, Mykey);
-        FileStream fileStream5 = new FileStream(path5, FileMode.OpenOrCreate);
-        StreamWriter sw5 = new StreamWriter(fileStream5);
-        sw5.Write(jsonStr5);
-        sw5.Close();
-
-        if (File.Exists(path6))
-        {
-            File.Delete(path6);
-        }
-        string DataStr6 = JsonMapper.ToJson(gameSaveData.playerMoneyData);
-        string jsonStr6 = EncryptDES(DataStr6, Mykey);
-        FileStream fileStream6 = new FileStream(path6, FileMode.OpenOrCreate);
-        StreamWriter sw6 = new StreamWriter(fileStream6);
-        sw6.Write(jsonStr6);
-        sw6.Close();
+         
     }
     public static void CreatMarryData()
     {
@@ -395,7 +294,7 @@ public static class DataSaveAndLoadTest
         }
         string jsonStr3 = File.ReadAllText(path3);
         string dataStr3 = DecryptDES(jsonStr3, Mykey);
-        gameSaveData.plantSeveDatas = JsonMapper.ToObject<PlantFieldSeveData>(dataStr3);
+       // gameSaveData.plantSeveDatas = JsonMapper.ToObject<PlantFieldSeveData>(dataStr3);
 
         if (!File.Exists(path4))
         {

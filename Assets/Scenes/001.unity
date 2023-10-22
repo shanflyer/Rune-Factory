@@ -11853,8 +11853,6 @@ GameObject:
   - component: {fileID: 374224097}
   - component: {fileID: 374224099}
   - component: {fileID: 374224105}
-  - component: {fileID: 374224108}
-  - component: {fileID: 374224109}
   - component: {fileID: 374224110}
   - component: {fileID: 374224115}
   - component: {fileID: 374224118}
@@ -11915,11 +11913,8 @@ MonoBehaviour:
   gameManager: {fileID: 374224099}
   filmManager: {fileID: 0}
   huiFuEffectPro: {fileID: 374224094}
-  PlantParent: {fileID: 1583437350}
   NpcParent: {fileID: 0}
   influenceAction: {fileID: 374224105}
-  farmAction: {fileID: 374224108}
-  plantAction: {fileID: 374224109}
   pastureAction: {fileID: 374224110}
   pastureItemPanelAction: {fileID: 542981974}
   pasturePanelAction: {fileID: 1673992088}
@@ -12078,10 +12073,12 @@ MonoBehaviour:
       instanceId: 0
       dataId: 0
       count: 0
+      value: 0
     clothes:
       instanceId: 0
       dataId: 0
       count: 0
+      value: 0
     attributeType: 1
     TeamPlayer0:
       id: 0
@@ -12175,526 +12172,6 @@ MonoBehaviour:
   - name: 4
     friends: 000000000400000001000000
     enemies: 0200000003000000
---- !u!114 &374224108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374224094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c17ab4f82af1b2a4881f938942d657bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GrassRp: 8
-  workRp: 2
-  clearZeroCost: 500
-  clearAddCost: 500
-  clearFieldNum: 0
-  normalField: {fileID: 21300000, guid: e053bc01f74eb704c9b2f7b0d42675e3, type: 3}
-  dryField: {fileID: 21300000, guid: b50c6df76826e034097e1cc17042c3bd, type: 3}
-  wetField: {fileID: 21300000, guid: 9f1d447f8fdc6c4498e20626c06d7dd1, type: 3}
-  Grasses:
-  - Mapid: 0
-    startCoordinate: {x: 3, y: 3}
-    endCoordinate: {x: 5, y: 4}
-    Obj: {fileID: 0}
-    isClear: 1
-  - Mapid: 0
-    startCoordinate: {x: 6, y: 3}
-    endCoordinate: {x: 8, y: 4}
-    Obj: {fileID: 0}
-    isClear: 0
-  - Mapid: 0
-    startCoordinate: {x: 3, y: 5}
-    endCoordinate: {x: 5, y: 6}
-    Obj: {fileID: 0}
-    isClear: 0
-  - Mapid: 0
-    startCoordinate: {x: 6, y: 5}
-    endCoordinate: {x: 8, y: 6}
-    Obj: {fileID: 0}
-    isClear: 0
-  - Mapid: 0
-    startCoordinate: {x: 3, y: 7}
-    endCoordinate: {x: 5, y: 8}
-    Obj: {fileID: 0}
-    isClear: 0
-  - Mapid: 0
-    startCoordinate: {x: 6, y: 7}
-    endCoordinate: {x: 8, y: 8}
-    Obj: {fileID: 0}
-    isClear: 0
-  - Mapid: 0
-    startCoordinate: {x: 3, y: 9}
-    endCoordinate: {x: 5, y: 10}
-    Obj: {fileID: 0}
-    isClear: 0
-  - Mapid: 0
-    startCoordinate: {x: 6, y: 9}
-    endCoordinate: {x: 8, y: 10}
-    Obj: {fileID: 0}
-    isClear: 0
-  Fields: []
-  farmTool:
-    instanceId: 0
-    dataId: 0
-    count: 0
-  warehouseObj: {fileID: 0}
-  farmToolSprite: {fileID: 937426334}
-  WaterValueImage: {fileID: 1462200902}
-  SeedCounText: {fileID: 658048460}
-  TitleText: {fileID: 996732054}
-  waterValue: 0
-  hoePro: {fileID: 1041807363312788, guid: 9c06000920fe8d14782969c71c0aa610, type: 3}
-  kettlePro: {fileID: 1797982358436212, guid: b3f2a41ddb7266547a9c89d0748a0587, type: 3}
-  seedPro: {fileID: 1681390085559168, guid: da3f6e11d8add134cab3600f4838c2a5, type: 3}
---- !u!114 &374224109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374224094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33ebe4d4cbd36e644b8b4ae20e5f93e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlantBaseDataStrs:
-  - name: "\u5377\u5FC3\u83DC"
-    SeedId: 1132
-    fruitId: 1001
-    fruitIdNum: 2
-    GrowthDays: 4
-    turnCount: 0
-    AdvantageSeasons: 1,2
-    SeedGameObjectName: seed2
-    MatureGameObjectName: p3_5
-    GrowthGameObjectNames: p3_1,p3_2,p3_3,p3_4
-  - name: "\u5357\u74DC"
-    SeedId: 1133
-    fruitId: 1002
-    fruitIdNum: 2
-    GrowthDays: 9
-    turnCount: 0
-    AdvantageSeasons: 2,3
-    SeedGameObjectName: seed12
-    MatureGameObjectName: p13_5
-    GrowthGameObjectNames: p13_1,p13_2,p13_3,p13_4
-  - name: "\u9EC4\u74DC"
-    SeedId: 1134
-    fruitId: 1003
-    fruitIdNum: 2
-    GrowthDays: 10
-    turnCount: 0
-    AdvantageSeasons: 1,2
-    SeedGameObjectName: seed1
-    MatureGameObjectName: p2_6
-    GrowthGameObjectNames: p2_1,p2_2,p2_3,p2_4,p2_5
-  - name: "\u7389\u7C73"
-    SeedId: 1135
-    fruitId: 1004
-    fruitIdNum: 2
-    GrowthDays: 20
-    turnCount: 0
-    AdvantageSeasons: 1,2
-    SeedGameObjectName: seed11
-    MatureGameObjectName: p12_6
-    GrowthGameObjectNames: p12_1,p12_2,p12_3,p12_4,p12_5
-  - name: "\u756A\u8304"
-    SeedId: 1136
-    fruitId: 1005
-    fruitIdNum: 2
-    GrowthDays: 10
-    turnCount: 0
-    AdvantageSeasons: 2
-    SeedGameObjectName: seed13
-    MatureGameObjectName: p14_5
-    GrowthGameObjectNames: p14_1,p14_2,p14_3,p14_4
-  - name: "\u8304\u5B50"
-    SeedId: 1137
-    fruitId: 1006
-    fruitIdNum: 2
-    GrowthDays: 8
-    turnCount: 0
-    AdvantageSeasons: 3
-    SeedGameObjectName: seed10
-    MatureGameObjectName: p11_5
-    GrowthGameObjectNames: p11_1,p11_2,p11_3,p11_4
-  - name: "\u9A6C\u94C3\u85AF"
-    SeedId: 1138
-    fruitId: 1007
-    fruitIdNum: 2
-    GrowthDays: 15
-    turnCount: 0
-    AdvantageSeasons: 2,3
-    SeedGameObjectName: seed3
-    MatureGameObjectName: p4_5
-    GrowthGameObjectNames: p4_1,p4_2,p4_3,p4_4
-  - name: "\u80E1\u841D\u535C"
-    SeedId: 1139
-    fruitId: 1008
-    fruitIdNum: 2
-    GrowthDays: 9
-    turnCount: 0
-    AdvantageSeasons: 3
-    SeedGameObjectName: seed6
-    MatureGameObjectName: p7_5
-    GrowthGameObjectNames: p7_1,p7_2,p7_3,p7_4
-  - name: "\u829C\u83C1"
-    SeedId: 1140
-    fruitId: 1009
-    fruitIdNum: 2
-    GrowthDays: 4
-    turnCount: 0
-    AdvantageSeasons: 1
-    SeedGameObjectName: seed14
-    MatureGameObjectName: p15_4
-    GrowthGameObjectNames: p15_1,p15_2,p15_3
-  - name: "\u841D\u535C"
-    SeedId: 1141
-    fruitId: 1010
-    fruitIdNum: 2
-    GrowthDays: 7
-    turnCount: 0
-    AdvantageSeasons: 3
-    SeedGameObjectName: seed5
-    MatureGameObjectName: p6_5
-    GrowthGameObjectNames: p6_1,p6_2,p6_3,p6_4
-  - name: "\u5927\u8471"
-    SeedId: 1142
-    fruitId: 1011
-    fruitIdNum: 2
-    GrowthDays: 5
-    turnCount: 0
-    AdvantageSeasons: 2,3
-    SeedGameObjectName: seed4
-    MatureGameObjectName: p5_4
-    GrowthGameObjectNames: p5_1,p5_2,p5_3
-  - name: "\u7518\u84DD"
-    SeedId: 1143
-    fruitId: 1012
-    fruitIdNum: 2
-    GrowthDays: 5
-    turnCount: 0
-    AdvantageSeasons: 1
-    SeedGameObjectName: seed9
-    MatureGameObjectName: p10_5
-    GrowthGameObjectNames: p10_1,p10_2,p10_3,p10_4
-  - name: "\u8461\u8404"
-    SeedId: 1144
-    fruitId: 1013
-    fruitIdNum: 2
-    GrowthDays: 30
-    turnCount: 0
-    AdvantageSeasons: 1,2
-    SeedGameObjectName: seed17
-    MatureGameObjectName: p18_5
-    GrowthGameObjectNames: p18_1,p18_2,p18_3,p18_4
-  - name: "\u84DD\u8393"
-    SeedId: 1145
-    fruitId: 1014
-    fruitIdNum: 2
-    GrowthDays: 30
-    turnCount: 0
-    AdvantageSeasons: 1,4
-    SeedGameObjectName: seed16
-    MatureGameObjectName: p17_5
-    GrowthGameObjectNames: p17_1,p17_2,p17_3,p17_4
-  - name: "\u8FA3\u6912"
-    SeedId: 1146
-    fruitId: 1015
-    fruitIdNum: 2
-    GrowthDays: 7
-    turnCount: 0
-    AdvantageSeasons: 2
-    SeedGameObjectName: seed8
-    MatureGameObjectName: p9_5
-    GrowthGameObjectNames: p9_1,p9_2,p9_3,p9_4
-  - name: "\u5927\u849C"
-    SeedId: 1147
-    fruitId: 1016
-    fruitIdNum: 2
-    GrowthDays: 6
-    turnCount: 0
-    AdvantageSeasons: 2,3
-    SeedGameObjectName: seed0
-    MatureGameObjectName: p1_4
-    GrowthGameObjectNames: p1_1,p1_2,p1_3
-  - name: "\u8349\u8393"
-    SeedId: 1148
-    fruitId: 1017
-    fruitIdNum: 2
-    GrowthDays: 30
-    turnCount: 0
-    AdvantageSeasons: 1,2
-    SeedGameObjectName: seed15
-    MatureGameObjectName: p16_5
-    GrowthGameObjectNames: p16_1,p16_2,p16_3,p16_4
-  - name: "\u7267\u8349"
-    SeedId: 1149
-    fruitId: 1018
-    fruitIdNum: 2
-    GrowthDays: 4
-    turnCount: 0
-    AdvantageSeasons: 1,2,3
-    SeedGameObjectName: seed7
-    MatureGameObjectName: p8_4
-    GrowthGameObjectNames: p8_1,p8_2,p8_3
-  PlantBaseDatas:
-  - name: "\u5377\u5FC3\u83DC"
-    SeedId: 1132
-    fruitId: 1001
-    fruitIdNum: 2
-    GrowthDays: 4
-    turnCount: 0
-    AdvantageSeasons: 0100000002000000
-    SeedGameObjectName: seed2
-    MatureGameObjectName: p3_5
-    GrowthGameObjectNames:
-    - p3_1
-    - p3_2
-    - p3_3
-    - p3_4
-  - name: "\u5357\u74DC"
-    SeedId: 1133
-    fruitId: 1002
-    fruitIdNum: 2
-    GrowthDays: 9
-    turnCount: 0
-    AdvantageSeasons: 0200000003000000
-    SeedGameObjectName: seed12
-    MatureGameObjectName: p13_5
-    GrowthGameObjectNames:
-    - p13_1
-    - p13_2
-    - p13_3
-    - p13_4
-  - name: "\u9EC4\u74DC"
-    SeedId: 1134
-    fruitId: 1003
-    fruitIdNum: 2
-    GrowthDays: 10
-    turnCount: 0
-    AdvantageSeasons: 0100000002000000
-    SeedGameObjectName: seed1
-    MatureGameObjectName: p2_6
-    GrowthGameObjectNames:
-    - p2_1
-    - p2_2
-    - p2_3
-    - p2_4
-    - p2_5
-  - name: "\u7389\u7C73"
-    SeedId: 1135
-    fruitId: 1004
-    fruitIdNum: 2
-    GrowthDays: 20
-    turnCount: 0
-    AdvantageSeasons: 0100000002000000
-    SeedGameObjectName: seed11
-    MatureGameObjectName: p12_6
-    GrowthGameObjectNames:
-    - p12_1
-    - p12_2
-    - p12_3
-    - p12_4
-    - p12_5
-  - name: "\u756A\u8304"
-    SeedId: 1136
-    fruitId: 1005
-    fruitIdNum: 2
-    GrowthDays: 10
-    turnCount: 0
-    AdvantageSeasons: 02000000
-    SeedGameObjectName: seed13
-    MatureGameObjectName: p14_5
-    GrowthGameObjectNames:
-    - p14_1
-    - p14_2
-    - p14_3
-    - p14_4
-  - name: "\u8304\u5B50"
-    SeedId: 1137
-    fruitId: 1006
-    fruitIdNum: 2
-    GrowthDays: 8
-    turnCount: 0
-    AdvantageSeasons: 03000000
-    SeedGameObjectName: seed10
-    MatureGameObjectName: p11_5
-    GrowthGameObjectNames:
-    - p11_1
-    - p11_2
-    - p11_3
-    - p11_4
-  - name: "\u9A6C\u94C3\u85AF"
-    SeedId: 1138
-    fruitId: 1007
-    fruitIdNum: 2
-    GrowthDays: 15
-    turnCount: 0
-    AdvantageSeasons: 0200000003000000
-    SeedGameObjectName: seed3
-    MatureGameObjectName: p4_5
-    GrowthGameObjectNames:
-    - p4_1
-    - p4_2
-    - p4_3
-    - p4_4
-  - name: "\u80E1\u841D\u535C"
-    SeedId: 1139
-    fruitId: 1008
-    fruitIdNum: 2
-    GrowthDays: 9
-    turnCount: 0
-    AdvantageSeasons: 03000000
-    SeedGameObjectName: seed6
-    MatureGameObjectName: p7_5
-    GrowthGameObjectNames:
-    - p7_1
-    - p7_2
-    - p7_3
-    - p7_4
-  - name: "\u829C\u83C1"
-    SeedId: 1140
-    fruitId: 1009
-    fruitIdNum: 2
-    GrowthDays: 4
-    turnCount: 0
-    AdvantageSeasons: 01000000
-    SeedGameObjectName: seed14
-    MatureGameObjectName: p15_4
-    GrowthGameObjectNames:
-    - p15_1
-    - p15_2
-    - p15_3
-  - name: "\u841D\u535C"
-    SeedId: 1141
-    fruitId: 1010
-    fruitIdNum: 2
-    GrowthDays: 7
-    turnCount: 0
-    AdvantageSeasons: 03000000
-    SeedGameObjectName: seed5
-    MatureGameObjectName: p6_5
-    GrowthGameObjectNames:
-    - p6_1
-    - p6_2
-    - p6_3
-    - p6_4
-  - name: "\u5927\u8471"
-    SeedId: 1142
-    fruitId: 1011
-    fruitIdNum: 2
-    GrowthDays: 5
-    turnCount: 0
-    AdvantageSeasons: 0200000003000000
-    SeedGameObjectName: seed4
-    MatureGameObjectName: p5_4
-    GrowthGameObjectNames:
-    - p5_1
-    - p5_2
-    - p5_3
-  - name: "\u7518\u84DD"
-    SeedId: 1143
-    fruitId: 1012
-    fruitIdNum: 2
-    GrowthDays: 5
-    turnCount: 0
-    AdvantageSeasons: 01000000
-    SeedGameObjectName: seed9
-    MatureGameObjectName: p10_5
-    GrowthGameObjectNames:
-    - p10_1
-    - p10_2
-    - p10_3
-    - p10_4
-  - name: "\u8461\u8404"
-    SeedId: 1144
-    fruitId: 1013
-    fruitIdNum: 2
-    GrowthDays: 30
-    turnCount: 0
-    AdvantageSeasons: 0100000002000000
-    SeedGameObjectName: seed17
-    MatureGameObjectName: p18_5
-    GrowthGameObjectNames:
-    - p18_1
-    - p18_2
-    - p18_3
-    - p18_4
-  - name: "\u84DD\u8393"
-    SeedId: 1145
-    fruitId: 1014
-    fruitIdNum: 2
-    GrowthDays: 30
-    turnCount: 0
-    AdvantageSeasons: 0100000004000000
-    SeedGameObjectName: seed16
-    MatureGameObjectName: p17_5
-    GrowthGameObjectNames:
-    - p17_1
-    - p17_2
-    - p17_3
-    - p17_4
-  - name: "\u8FA3\u6912"
-    SeedId: 1146
-    fruitId: 1015
-    fruitIdNum: 2
-    GrowthDays: 7
-    turnCount: 0
-    AdvantageSeasons: 02000000
-    SeedGameObjectName: seed8
-    MatureGameObjectName: p9_5
-    GrowthGameObjectNames:
-    - p9_1
-    - p9_2
-    - p9_3
-    - p9_4
-  - name: "\u5927\u849C"
-    SeedId: 1147
-    fruitId: 1016
-    fruitIdNum: 2
-    GrowthDays: 6
-    turnCount: 0
-    AdvantageSeasons: 0200000003000000
-    SeedGameObjectName: seed0
-    MatureGameObjectName: p1_4
-    GrowthGameObjectNames:
-    - p1_1
-    - p1_2
-    - p1_3
-  - name: "\u8349\u8393"
-    SeedId: 1148
-    fruitId: 1017
-    fruitIdNum: 2
-    GrowthDays: 30
-    turnCount: 0
-    AdvantageSeasons: 0100000002000000
-    SeedGameObjectName: seed15
-    MatureGameObjectName: p16_5
-    GrowthGameObjectNames:
-    - p16_1
-    - p16_2
-    - p16_3
-    - p16_4
-  - name: "\u7267\u8349"
-    SeedId: 1149
-    fruitId: 1018
-    fruitIdNum: 2
-    GrowthDays: 4
-    turnCount: 0
-    AdvantageSeasons: 010000000200000003000000
-    SeedGameObjectName: seed7
-    MatureGameObjectName: p8_4
-    GrowthGameObjectNames:
-    - p8_1
-    - p8_2
-    - p8_3
-  plantParent: {fileID: 1583437350}
 --- !u!114 &374224110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36536,7 +36013,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 00c20ac287746dc468950a8a70bfd0f4, type: 3}
 --- !u!224 &1084053902 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 224573189944260828, guid: 00c20ac287746dc468950a8a70bfd0f4,
+  m_CorrespondingSourceObject: {fileID: 9223372036854775806, guid: 00c20ac287746dc468950a8a70bfd0f4,
     type: 3}
   m_PrefabInstance: {fileID: 1084053901}
   m_PrefabAsset: {fileID: 0}
@@ -42738,7 +42215,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 53da5f05e10dec540b9ca5a0a4d3221f, type: 3}
 --- !u!224 &1300165695 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 224325155037776382, guid: 53da5f05e10dec540b9ca5a0a4d3221f,
+  m_CorrespondingSourceObject: {fileID: 224053761227728866, guid: 53da5f05e10dec540b9ca5a0a4d3221f,
     type: 3}
   m_PrefabInstance: {fileID: 1300165694}
   m_PrefabAsset: {fileID: 0}
@@ -43355,7 +42832,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 53da5f05e10dec540b9ca5a0a4d3221f, type: 3}
 --- !u!224 &1310887091 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 224325155037776382, guid: 53da5f05e10dec540b9ca5a0a4d3221f,
+  m_CorrespondingSourceObject: {fileID: 9223372036854775806, guid: 53da5f05e10dec540b9ca5a0a4d3221f,
     type: 3}
   m_PrefabInstance: {fileID: 1310887090}
   m_PrefabAsset: {fileID: 0}
@@ -46793,7 +46270,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 53da5f05e10dec540b9ca5a0a4d3221f, type: 3}
 --- !u!224 &1457553944 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 224325155037776382, guid: 53da5f05e10dec540b9ca5a0a4d3221f,
+  m_CorrespondingSourceObject: {fileID: 224053761227728866, guid: 53da5f05e10dec540b9ca5a0a4d3221f,
     type: 3}
   m_PrefabInstance: {fileID: 1457553943}
   m_PrefabAsset: {fileID: 0}
@@ -64429,7 +63906,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374224108}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: SelectFarmToolType
         m_Mode: 3

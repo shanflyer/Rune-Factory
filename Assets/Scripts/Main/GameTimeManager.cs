@@ -126,8 +126,7 @@ public class GameTime
             hour = hour % 24;
 
            
-            GameComponentData.gameData.charactorTitleAction.AddSleepDays(); 
-            GameComponentData.gameData.plantAction.PlantGrowing();
+            GameComponentData.gameData.charactorTitleAction.AddSleepDays();  
             GameComponentData.gameData.pastureAction.DayUpdata();
             GameComponentData.gameData.gameManager.ChildDateCost();
             GameComponentData.gameData.gameManager.gamePlayer.isAnMo = false;

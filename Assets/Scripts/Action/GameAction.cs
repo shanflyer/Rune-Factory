@@ -12,6 +12,17 @@ public interface GameAction
 public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
+
+public struct RefreshItemValue : GameAction
+{
+    public int characterId;
+    public int itemId;
+    public float itemValue;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct RefreshFriendShip : GameAction
 {
     public int characterId;
@@ -421,6 +432,19 @@ public struct DisplayStoreCounter : GameAction
             display =bool.Parse(parameters[0].value);
             itemInstanceId = int.Parse(parameters[1].value);
             
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct TryCreatField : GameAction
+{
+    public int roomId;
+    public int itemInstanceId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 1)
+        {
+            itemInstanceId = int.Parse(parameters[0].value); 
         }
         GameActionManager.instance.QueueAction(this);
     }

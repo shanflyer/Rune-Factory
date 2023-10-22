@@ -10,6 +10,12 @@ public class OperateButtonReference : UIObjReference<OperateData>
     TextMeshProUGUI nameText;
     [SerializeField]
     Button button;
+    [SerializeField]
+    Transform ValueBg;
+    [SerializeField]
+    Image Value;
+    [SerializeField]
+    Image Icon;
     OperateData operateData;
     SelectAction<OperateData> SelectAction;
     private void Awake()
@@ -22,11 +28,54 @@ public class OperateButtonReference : UIObjReference<OperateData>
             }
         });
     }
-    public override void InitData(OperateData t, SelectAction<OperateData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
+    }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshItemValue>(RefreshItemValue);
+    }
+    void RefreshItemValue(RefreshItemValue refreshItemValue)
+    {
+        if (refreshItemValue.characterId == CharacterManager.instance.controllerCharacter.instanceId)
+        {
+            if (refreshItemValue.itemId == linkItemId)
+            {
+                Value.fillAmount = refreshItemValue.itemValue;
+            }
+        }
+    }
+    int linkItemId = 0;
+    
+    public override async void InitData(OperateData t, SelectAction<OperateData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         operateData = t;
         nameText.text = operateData.operateName;
+        if (operateData.linkItem == 0)
+        {
+            Icon.enabled = false;
+            ValueBg.localScale = Vector3.zero;
+        }
+        else
+        {
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(operateData.linkItem);
+            if(itemData!= null)
+            {
+                linkItemId = operateData.linkItem;
+                Icon.enabled = true;
+                Icon.sprite = itemData.icon; 
+                ValueBg.localScale =itemData.itemValue? Vector3.one:Vector3.zero;
+            }
+            else
+            {
+                Icon.enabled = false;
+                ValueBg.localScale = Vector3.zero;
+            } 
+        } 
         this.SelectAction = SelectAction;
     }
     public override void SetPanelUISerializeObj()
@@ -34,5 +83,8 @@ public class OperateButtonReference : UIObjReference<OperateData>
         base.SetPanelUISerializeObj();
         nameText = FindChildGameObject<TextMeshProUGUI>("Name");
         button = GetComponent<Button>();
+        ValueBg = FindChildGameObject("ValueBg");
+        Value = FindChildGameObject<Image>("Value");
+        Icon = FindChildGameObject<Image>("Icon");
     }
 }

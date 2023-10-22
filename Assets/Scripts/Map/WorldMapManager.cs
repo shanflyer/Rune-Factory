@@ -176,7 +176,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
             itemInMapDatas.Add(mapId, items);
         }
         items.Add(instanceId);
-
+        TryCreatField tryCreatField = new TryCreatField
+        {
+            roomId=mapId,
+            itemInstanceId = instanceId
+        };
+        GameActionManager.instance.QueueAction(tryCreatField, true);
         //尝试创建柜台
         TryCreatStoreCounter tryCreatStoreCounter = new TryCreatStoreCounter
         {
