@@ -14,7 +14,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     //每个地图对应的地图数据
     private Dictionary<int, string> roomMapDatas = new Dictionary<int, string>(); 
 
-    private Dictionary<Vector2Int, int> editorItemRemapInstanceIds = new Dictionary<Vector2Int, int>();
+    private Dictionary<int2, int> editorItemRemapInstanceIds = new Dictionary<int2, int>();
 
     public RuntimeObj nowMapRoomObj;
 
@@ -92,7 +92,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         return false;
     }
-
+    public bool GetMapItemPos(int mapId, int editorInstanceId, out int3 objCoordinate)
+    {
+        objCoordinate = int3.zero;
+        if(editorItemRemapInstanceIds.TryGetValue(new int2(mapId,editorInstanceId),out var instance))
+        {
+            if (runtimeMapItems.GetData(instance, out var mapItem))
+            {
+                objCoordinate = new int3(mapItem.coordinate, mapItem.mapInstanceId);
+                return true;
+            }
+        } 
+        return false;
+    }
     public bool GetMapItemPos(int id, out int3 objCoordinate)
     {
         objCoordinate = int3.zero;
@@ -211,7 +223,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             DisplayMapItem(runtimeMapItem);
         }
 
-        editorItemRemapInstanceIds.Add(new Vector2Int(mapId, mapItem.instanceId), instanceId);
+        editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
     }
 
     private async void AddMapItem(AddMapItem addMapItem)
@@ -469,17 +481,13 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
 }
 
-public struct RuntimeMapItem
+public struct RuntimeMapItem : INativeData
 {
-    public override int GetHashCode()
-    {
-        return instanceId;
-    }
-
     public int instanceId;
     public int editorInstanceId;
     public int dataId;
     public int mapInstanceId;
     public int2 coordinate;
     public int2 animationKey;
+    public int2 Key => instanceId;
 }

@@ -1,15 +1,21 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Collections;
+using Unity.Mathematics;
 
-public struct MyNativeData<T>where T : unmanaged
+public interface INativeData
+{
+    public int2 Key { get; }
+}
+public struct MyNativeData<T>where T : unmanaged, INativeData
 {
     private NativeList<T> datas;
-    private NativeHashMap<int, int> itemIndexes;
+    private NativeHashMap<int2, int> itemIndexes;
     private NativeQueue<int> nullIndexes;
     private int nowIndex;
     private T nullData;
@@ -36,13 +42,13 @@ public struct MyNativeData<T>where T : unmanaged
     public void Init(int count)
     {
         datas = new NativeList<T>(count, Allocator.TempJob);
-        itemIndexes = new NativeHashMap<int, int>(count, Allocator.TempJob);
+        itemIndexes = new NativeHashMap<int2, int>(count, Allocator.TempJob);
         nullIndexes = new NativeQueue<int>(Allocator.TempJob);
     }
 
     public void AddData(T data)
     {
-        int id = data.GetHashCode();
+        int2 id = data.Key;
         int index = nowIndex;
         if (nullIndexes.Count > 0)
         {
@@ -56,7 +62,7 @@ public struct MyNativeData<T>where T : unmanaged
         }
         itemIndexes.Add(id, index);
     }
-    public bool RemoveData(int id)
+    public bool RemoveData(int2 id)
     {
         if (itemIndexes.TryGetValue(id, out int index))
         {
@@ -65,7 +71,7 @@ public struct MyNativeData<T>where T : unmanaged
         }
         return false;
     }
-    public bool GetData(int id, out T t)
+    public bool GetData(int2 id, out T t)
     {
         if (itemIndexes.TryGetValue(id, out int index))
         {
@@ -77,7 +83,7 @@ public struct MyNativeData<T>where T : unmanaged
     }
     public void SetData(T t)
     {
-        int id = t.GetHashCode();
+        int2 id = t.Key;
         if (itemIndexes.TryGetValue(id, out int index))
         {
             datas[index] = t;
@@ -88,7 +94,7 @@ public struct MyNativeData<T>where T : unmanaged
         }
     }
 
-    public bool Contains(int id)
+    public bool Contains(int2 id)
     {
         return itemIndexes.ContainsKey(id);
     }

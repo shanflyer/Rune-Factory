@@ -278,15 +278,14 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     
 } 
 
-public struct RuntimeStoreCounter
+public struct RuntimeStoreCounter:INativeData
 {
-    public override int GetHashCode()
-    {
-        return instanceId;
-    } 
+   
     public int instanceId; 
     public int dataId;
     public int itemId;
     public int count;
+
+    public int2 Key => instanceId;
 }
  

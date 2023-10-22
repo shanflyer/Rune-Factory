@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Animations;
+using Unity.Mathematics;
 //using Unity.Collections;
 
 public class MyAnimationController :Singleton<MyAnimationController>
@@ -51,16 +52,14 @@ public class MyAnimationController :Singleton<MyAnimationController>
         animationStructData.Dispose(); 
     }
 
-    public struct AnimationStruct
+    public struct AnimationStruct : INativeData
     {
         public int id;
         public PlayableGraph playableGraph;
         public AnimationPlayableOutput playableOutput;
 
-        public override int GetHashCode()
-        {
-            return id;
-        }
+        public int2 Key => id;
+
         public void InitAnimator(Animator animator,int id,string name)
         {
             this.id = id;

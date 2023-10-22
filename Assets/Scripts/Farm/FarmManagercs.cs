@@ -1,4 +1,6 @@
 ﻿
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +24,9 @@ public class FarmManager:Singleton<FarmManager>
             FieldAreas.Add(new int2(fieldArea.mapId, fieldArea.linkItem), fieldArea);
         }
         GameActionManager.instance.AddListener<TryCreatField>(TryCreatField);
-    }
+        GameActionManager.instance.AddListener<CheckFieldState>(CheckFieldState);
+        GameActionManager.instance.AddListener<TrySmoothField>(TrySmoothField);
+    } 
     void TryCreatField(TryCreatField tryCreatField)
     {
         int2 key = new int2(tryCreatField.roomId, tryCreatField.itemInstanceId);
@@ -32,22 +36,95 @@ public class FarmManager:Singleton<FarmManager>
             {
                 for (int i = 0; i < fieldArea.fields.Count; i++)
                 {
-                    int id = fieldArea.fields[i];
+                    int2 id = new int2(tryCreatField.roomId,fieldArea.fields[i]);
                     if (!fields.Contains(id))
                     {
                         Field field = new Field
                         {
-                            instanceId = id,
+                            mapId=id.x,
+                            instanceId = id.y,
                             fieldState = FieldState.待平整
                         };
                         fields.SetData(field);
                     }
                 }
             }
-            
         }
     }
-    
+    void CheckFieldState(CheckFieldState checkFieldState)
+    {
+        if (fields.GetData(new int2(checkFieldState.mapId,checkFieldState.instanceid), out var field))
+        {
+            checkFieldState.setValue((int)field.fieldState);
+        }
+    }
+    void TrySmoothField(TrySmoothField TrySmoothField)
+    {
+        if (fields.GetData(new int2(TrySmoothField.mapId,TrySmoothField.fieldId), out var field))
+        {
+            switch (field.fieldState)
+            {
+                case FieldState.待平整:
+                    field.fieldState = FieldState.已平整;
+                    TrySmoothField.setResult(true);
+                    break;
+                case FieldState.已平整:
+                    GameNotificationManager.instance.DisplayTips("", "土地已经平整完毕");
+                    TrySmoothField.setResult(false);
+                    break;
+                case FieldState.已栽种:
+                    GameManager.instance.ShowTwoSelectAction("注意", "土地上已有作物，是否铲除旧作物？", () =>
+                    {
+                        plants.RemoveData(field.plantId);
+                        field.fieldState = FieldState.已平整;
+                        TrySmoothField.setResult(true);
+                    }, null);
+                    break;
+            }
+            fields.SetData(field);
+        }
+    }
+
+    async void CreatPlant(TryCreatPlant creatPlant)
+    {
+        PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(creatPlant.plantId);
+        if(plantData == null)
+        {
+            creatPlant.setResult(false);
+            return;
+        }
+        int2 key = new int2(creatPlant.mapId, creatPlant.fieldId);
+        if(fields.GetData(key,out var field)&&
+            WorldMapManager.instance.GetMapItemPos(field.mapId, field.instanceId, out var coordinate))
+        { 
+            AddMapItem addMapItem = new AddMapItem
+            {
+                dataId = plantData.mapItem,
+                coordinate = coordinate.xy,
+                mapId = coordinate.z,
+                setValue = SetPlantInstanceId
+            };
+            void SetPlantInstanceId(int instanceId)
+            {
+                field.plantId = instanceId;
+                fields.SetData(field);
+
+                Plant plant = new Plant
+                {
+                    instaceId = instanceId,
+                    mapId= coordinate.z,
+                    dataId = instanceId,
+                    field = creatPlant.fieldId,
+                    plantState = PlantState.正常,
+                    setWater = field.isSetWater
+                };
+                plants.SetData(plant);
+                fields.SetData(field);
+            }
+        }
+        creatPlant.setResult(false);
+    }
+
     async void CreatPlant(int plantId,int mapId,int2 coordinate,int fieldId)
     {
         PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(plantId);
@@ -74,9 +151,8 @@ public class FarmManager:Singleton<FarmManager>
                     setWater=field.isSetWater
                 };
                 plants.SetData(plant);
-            }
-            
-           
+                fields.SetData(field);
+            } 
         }
     }
     void SetWaterField(int fieldId)
@@ -91,7 +167,9 @@ public class FarmManager:Singleton<FarmManager>
                 {
                     plant.plantState = PlantState.正常;
                 }
-            }
+                plants.SetData(plant);
+            } 
+            fields.SetData(field);
         }
     }
     void NewDay()
@@ -132,23 +210,23 @@ public enum FieldState
 {
     待平整,已平整,已栽种
 }
-public struct Field
+public struct Field : INativeData
 {
+    public int mapId;
     public int instanceId;
     public FieldState fieldState;
     public bool isSetWater;
     public int plantId;
-    public override int GetHashCode()
-    {
-        return instanceId;
-    }
+
+    public int2 Key => new int2(mapId,instanceId);
 }
 public enum PlantState 
 {
     正常,干旱,枯死,死亡,成熟
 }
-public struct Plant
+public struct Plant:INativeData
 {
+    public int mapId;
     public int instaceId;
     public int field;
     public int dataId;
@@ -157,6 +235,8 @@ public struct Plant
     public bool setWater;
     public PlantState plantState;
     public int nowCycle;
+
+    public int2 Key => new int2(mapId,instaceId);
 
     public async void Grow()
     {
@@ -215,10 +295,5 @@ public struct Plant
             return false;
         }
         return false ;
-    }
-  
-    public override int GetHashCode()
-    {
-        return instaceId;
-    }
+    } 
 }

@@ -113,7 +113,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     [BurstCompile]
-    public struct RuntimeMapRoom
+    public struct RuntimeMapRoom : INativeData
     {
         public readonly void Dispose()
         {
@@ -134,11 +134,7 @@ public class MapCellController : Singleton<MapCellController>
         public MapTriggerAreas commonTriggerAreas;
         public MapTriggerAreas playerTriggerAreas;
 
-        public override int GetHashCode()
-        {
-            return id;
-        }
-
+        public int2 Key => id; 
         public void InitTriggerData()
         {
             commonTriggerAreas.InitTriggerData();

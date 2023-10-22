@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public struct FightChapter:IReferenceData
+public struct FightChapter:IReferenceData,INativeData
 {
     public int mapId;
     public int completeValue;
@@ -15,10 +16,7 @@ public struct FightChapter:IReferenceData
     public int nowStep;
     public bool open;
 
-    public override int GetHashCode()
-    {
-        return mapId;
-    }
+    public int2 Key => mapId; 
 }
 public class ExploreManager : Singleton<ExploreManager>
 {

@@ -13,6 +13,47 @@ public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
 
+public struct CreatPlant : GameAction
+{
+    public int plantId;
+    public int field; 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct TryCreatPlant : GameAction
+{
+    public int mapId;
+    public int fieldId;
+    public int plantId;
+    public SetResult setResult;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct TrySmoothField : GameAction
+{
+    public int mapId;
+    public int fieldId;
+    public SetResult setResult;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct CheckFieldState : GameAction
+{
+    public int mapId;
+    public int instanceid;
+    public SetValue setValue;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct RefreshItemValue : GameAction
 {
     public int characterId;
@@ -442,9 +483,21 @@ public struct TryCreatField : GameAction
     public int itemInstanceId;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
+        if (parameters.Count > 0)
+        {
+            roomId = int.Parse(parameters[0].value);
+        }
         if (parameters.Count > 1)
         {
-            itemInstanceId = int.Parse(parameters[0].value); 
+            itemInstanceId = int.Parse(parameters[1].value); 
+        }
+        if (source != 0)
+        {
+            roomId = source;
+        }
+        if (target != 0)
+        {
+            itemInstanceId = target;
         }
         GameActionManager.instance.QueueAction(this);
     }
