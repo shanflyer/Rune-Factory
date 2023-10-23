@@ -5,7 +5,8 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskName("检查背包道具")]
 public class CheckPackageItem : Action
 {
-	public SharedInt packageId;
+	public SharedInt characterId;
+    public SharedInt packageId;
 	public SharedInt itemId;
 	public SharedInt itemCount;
 
@@ -17,7 +18,17 @@ public class CheckPackageItem : Action
 
 	public override TaskStatus OnUpdate()
 	{
-		int count = PackageManager.instance.GetPackageItemCount(packageId.Value, itemId.Value);
+		int package = packageId.Value;
+		if (!characterId.IsNull())
+		{
+			Character character = CharacterManager.instance.GetCharacter(characterId.Value);
+			if (character != null)
+			{
+				package = character.characterPackage;
+			}
+        }
+
+        int count = PackageManager.instance.GetPackageItemCount(package, itemId.Value);
         if (count >= itemCount.Value)
         {
 			return TaskStatus.Success;

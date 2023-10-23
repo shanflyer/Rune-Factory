@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -15,6 +13,7 @@ public struct NPCTalkOperateData : IReferenceData
     public List<NPCFunctionData> npcFunctionDatas;
     public Action endAction;
 }
+
 public class PlayerOperateManager : Singleton<PlayerOperateManager>
 {
     public override void Init()
@@ -26,11 +25,11 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         GameActionManager.instance.AddListener<PlayerTalkItem>(PlayerTalkItem);
     }
 
-    async void PlayerTalkItem(PlayerTalkItem playerTalkItem)
-    { 
-        if(CharacterManager.instance.GetRuntimeCharacterObj(playerTalkItem.characterId,out var characterRuntimeObj))
+    private async void PlayerTalkItem(PlayerTalkItem playerTalkItem)
+    {
+        if (CharacterManager.instance.GetRuntimeCharacterObj(playerTalkItem.characterId, out var characterRuntimeObj))
         {
-            if(WorldMapManager.instance.GetRuntimeMapItem(playerTalkItem.ItemId,out var runtimeMapItem))
+            if (WorldMapManager.instance.GetRuntimeMapItem(playerTalkItem.ItemId, out var runtimeMapItem))
             {
                 MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
                 if (mapItemData != null)
@@ -43,10 +42,10 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                     UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(responseData,
                         parent: characterRuntimeObj.runtimeObj.obj as Transform);
                 }
-            } 
+            }
         }
-          
     }
+
     /// <summary>
     /// 事件触发
     /// </summary>
@@ -54,7 +53,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
     /// <param name="reference">数据id</param>
     /// <param name="enter">是否进入事件</param>
 
-    void ClickObj(object obj)
+    private void ClickObj(object obj)
     {
         EventSystem.current.UpData();
         if (EventSystem.current.currentSelectedGameObject != null)
@@ -70,10 +69,10 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         controller.SetPlayerOperate(targetCoordinate);
         int clickCharacter = MapCellController.instance.GetClickCharacter(
             new int3(targetCoordinate, WorldMapManager.instance.displayMap));
-        if (clickCharacter!=-1&&clickCharacter != controller.instanceId)
+        if (clickCharacter != -1 && clickCharacter != controller.instanceId)
         {
             Character character = CharacterManager.instance.GetCharacter(clickCharacter);
-            if (character!=null)
+            if (character != null)
             {
                 EventReferenceData eventReferenceData = new EventReferenceData
                 {
@@ -92,25 +91,27 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 };
                 bool temp = character is TempCharacter;
                 GameEventManager.instance.AddGameEvent(
-                temp? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+                temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
                 {
                     eventReferenceData,targetReferenceData
                 });
             }
         }
     }
-    void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
+
+    private void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
     {
         UIManager.instance.CloseGamePanel<OperateButtonPanel>();
     }
-    async void ShowMapObjTips(ShowMapObjTips ShowMapObjTips)
+
+    private async void ShowMapObjTips(ShowMapObjTips ShowMapObjTips)
     {
         if (ShowMapObjTips.id != 0)
         {
             if (WorldMapManager.instance.GetRuntimeMapItem(ShowMapObjTips.id, out var runtimMapItem))
             {
                 MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimMapItem.dataId);
-                if (mapItemData != null&& mapItemData.operateDatas.Count>0)
+                if (mapItemData != null && mapItemData.operateDatas.Count > 0)
                 {
                     OperateDataList operateDataList = new OperateDataList
                     {
@@ -118,18 +119,37 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                     };
                     UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
                 }
-            } 
+            }
         }
     }
 
-    public void OperateAction(OperateData operateData, bool selected=true)
+    public void OperateAction(OperateData operateData, bool selected = true)
     {
         Character controller = CharacterManager.instance.controllerCharacter;
         if (operateData.gameActionData != null)
         {
-            operateData.gameActionData.Action(controller.instanceId, controller.OperateItem) ;
+            operateData.gameActionData.Action(controller.instanceId, controller.OperateItem);
+        }
+        if (operateData.gameEventData != null)
+        {
+            List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
+            {
+                new EventReferenceData
+                {
+                  name = "CharacterId",
+                  value = controller.instanceId
+                },
+                new EventReferenceData
+                {
+                  name = "TargetItem",
+                  value = controller.OperateItem
+                },
+            };
+
+            GameEventManager.instance.AddGameEvent(operateData.gameEventData, eventReferenceDatas);
         }
     }
+
     protected override void Clear()
     {
         base.Clear();

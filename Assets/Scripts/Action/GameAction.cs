@@ -12,6 +12,8 @@ public interface GameAction
 public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
+
+
 public struct NewDay : GameAction
 {
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
@@ -80,6 +82,10 @@ public struct CheckFieldState : GameAction
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
         GameActionManager.instance.QueueAction(this);
+        if (source != 0)
+        {
+            instanceid = source;
+        }
     }
 }
 public struct RefreshItemValue : GameAction

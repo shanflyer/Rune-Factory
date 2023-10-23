@@ -15,6 +15,9 @@ public class FarmManager:Singleton<FarmManager>
     public override async void Init()
     {
         base.Init();
+        fields.Init(16);
+        plants.Init(16);
+
         var allFieldAreas=await GameDataManager.instance.GetAllAsyncData<FieldArea>();
         for(int i = 0; i < allFieldAreas.Count; i++)
         {

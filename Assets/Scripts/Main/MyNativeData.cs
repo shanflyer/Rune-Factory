@@ -64,6 +64,7 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
     }
     public bool RemoveData(int id)
     {
+        if(itemIndexes.IsEmpty) return false;
         if (itemIndexes.TryGetValue(id, out int index))
         {
             nullIndexes.Enqueue(index);
@@ -73,6 +74,8 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
     }
     public bool GetData(int id, out T t)
     {
+        t = nullData;
+        if (itemIndexes.IsEmpty) return false;
         if (itemIndexes.TryGetValue(id, out int index))
         {
             t = datas[index];
@@ -96,6 +99,10 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
 
     public bool Contains(int id)
     {
+        if (itemIndexes.IsEmpty)
+        {
+            return false;
+        }
         return itemIndexes.ContainsKey(id);
     }
 

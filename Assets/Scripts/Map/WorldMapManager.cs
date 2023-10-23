@@ -188,7 +188,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private async Task AddMapItem(MapItem mapItem, int mapId)
     {
         int instanceId = mapItemInstance.CreatInstanceId();
-
+        editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
         RuntimeMapItem runtimeMapItem = new RuntimeMapItem
         {
             coordinate = mapItem.coordinate,
@@ -205,12 +205,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             itemInMapDatas.Add(mapId, items);
         }
         items.Add(instanceId);
-        TryCreatField tryCreatField = new TryCreatField
-        {
-            roomId=mapId,
-            itemInstanceId = instanceId
-        };
-        GameActionManager.instance.QueueAction(tryCreatField, true);
+      
         //尝试创建柜台
         TryCreatStoreCounter tryCreatStoreCounter = new TryCreatStoreCounter
         {
@@ -240,7 +235,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
             DisplayMapItem(runtimeMapItem);
         }
 
-        editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
+        
+
+        TryCreatField tryCreatField = new TryCreatField
+        {
+            roomId = mapId,
+            itemInstanceId = mapItem.instanceId,
+        };
+        GameActionManager.instance.QueueAction(tryCreatField, true);
     }
 
     private async void AddMapItem(AddMapItem addMapItem)

@@ -579,7 +579,7 @@ public static class DataPath
         {typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" },
         {typeof(FunctionData),"Data/FunctionDataList" },
         {typeof(GameEventData),"Data/GameEventData" },
-        {typeof(GameRandomDataList),"Data/GameRandomDataEditor/GameRandomDataList" },
+        {typeof(GameRandomDataList),"Data/GameRandomData/GameRandomDataList" },
         {typeof(GrowModelData),"Data/GrowModelDataList" },
         {typeof(ItemData),"Data/ItemData" },
         {typeof(ItemAnimationData),"Data/ItemAnimationData" },
@@ -609,7 +609,8 @@ public static class DataPath
         {typeof(NPCFunctionData), "Data/NPCFunctionData"},
         {typeof(NPCData),"Data/NPCData" },
         {typeof(FriendShipData),"Data/FriendShipData" },
-        {typeof(PlantData),"Data/PlantData" }
+        {typeof(PlantData),"Data/PlantData" },
+        {typeof(FieldArea),"Data/FieldArea" }
     };
 
     public static string GetDataPath(Type type)
