@@ -16,7 +16,7 @@ public struct FightChapter:IReferenceData,INativeData
     public int nowStep;
     public bool open;
 
-    public int2 Key => mapId; 
+    public int Key => mapId; 
 }
 public class ExploreManager : Singleton<ExploreManager>
 {

@@ -48,17 +48,34 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     private async void SetItemAnimation(SetItemAnimation setItemAnimation)
     {
-        if (runtimeMapItems.GetData(setItemAnimation.id, out RuntimeMapItem runtimeMapItem))
+        int instanceid = setItemAnimation.id;
+        
+        if (setItemAnimation.mapId !=0)
+        {
+            if(editorItemRemapInstanceIds.TryGetValue(new int2(setItemAnimation.mapId,setItemAnimation.editorId),
+                out instanceid))
+            {
+
+            }
+        }
+        if (runtimeMapItems.GetData(instanceid, out RuntimeMapItem runtimeMapItem))
         {
             runtimeMapItem.animationKey = new int2(setItemAnimation.keyX, setItemAnimation.keyY);
 
-            if (nowRuntimeMapItemObjs.ContainsKey(setItemAnimation.id))
+            if (nowRuntimeMapItemObjs.ContainsKey(instanceid))
             {
-                await SetItemAimation(runtimeMapItem.animationKey, runtimeMapItem.dataId, setItemAnimation.id);
+                await SetItemAimation(runtimeMapItem.animationKey, runtimeMapItem.dataId, instanceid);
             }
         }
     }
-
+    public int GetInstanceFromEditorId(int2 editorKey)
+    {
+        if(editorItemRemapInstanceIds.TryGetValue(editorKey,out  var instanceid))
+        {
+            return instanceid;
+        }
+        return -1;
+    }
     private async Task RuntimeMapItemPlay(RuntimeMapItem mapItem, RuntimeObj runtimeObj)
     {
         
@@ -489,5 +506,5 @@ public struct RuntimeMapItem : INativeData
     public int mapInstanceId;
     public int2 coordinate;
     public int2 animationKey;
-    public int2 Key => instanceId;
+    public int Key => instanceId;
 }

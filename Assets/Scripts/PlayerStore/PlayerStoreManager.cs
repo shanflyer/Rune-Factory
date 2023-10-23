@@ -286,6 +286,6 @@ public struct RuntimeStoreCounter:INativeData
     public int itemId;
     public int count;
 
-    public int2 Key => instanceId;
+    public int Key => instanceId;
 }
  

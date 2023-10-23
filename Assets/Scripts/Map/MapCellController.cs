@@ -134,7 +134,7 @@ public class MapCellController : Singleton<MapCellController>
         public MapTriggerAreas commonTriggerAreas;
         public MapTriggerAreas playerTriggerAreas;
 
-        public int2 Key => id; 
+        public int Key => id; 
         public void InitTriggerData()
         {
             commonTriggerAreas.InitTriggerData();

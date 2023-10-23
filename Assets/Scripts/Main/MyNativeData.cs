@@ -10,12 +10,12 @@ using Unity.Mathematics;
 
 public interface INativeData
 {
-    public int2 Key { get; }
+    public int Key { get; }
 }
 public struct MyNativeData<T>where T : unmanaged, INativeData
 {
     private NativeList<T> datas;
-    private NativeHashMap<int2, int> itemIndexes;
+    private NativeHashMap<int, int> itemIndexes;
     private NativeQueue<int> nullIndexes;
     private int nowIndex;
     private T nullData;
@@ -42,13 +42,13 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
     public void Init(int count)
     {
         datas = new NativeList<T>(count, Allocator.TempJob);
-        itemIndexes = new NativeHashMap<int2, int>(count, Allocator.TempJob);
+        itemIndexes = new NativeHashMap<int, int>(count, Allocator.TempJob);
         nullIndexes = new NativeQueue<int>(Allocator.TempJob);
     }
 
     public void AddData(T data)
     {
-        int2 id = data.Key;
+        int id = data.Key;
         int index = nowIndex;
         if (nullIndexes.Count > 0)
         {
@@ -62,7 +62,7 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
         }
         itemIndexes.Add(id, index);
     }
-    public bool RemoveData(int2 id)
+    public bool RemoveData(int id)
     {
         if (itemIndexes.TryGetValue(id, out int index))
         {
@@ -71,7 +71,7 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
         }
         return false;
     }
-    public bool GetData(int2 id, out T t)
+    public bool GetData(int id, out T t)
     {
         if (itemIndexes.TryGetValue(id, out int index))
         {
@@ -83,7 +83,7 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
     }
     public void SetData(T t)
     {
-        int2 id = t.Key;
+        int id = t.Key;
         if (itemIndexes.TryGetValue(id, out int index))
         {
             datas[index] = t;
@@ -94,7 +94,7 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
         }
     }
 
-    public bool Contains(int2 id)
+    public bool Contains(int id)
     {
         return itemIndexes.ContainsKey(id);
     }

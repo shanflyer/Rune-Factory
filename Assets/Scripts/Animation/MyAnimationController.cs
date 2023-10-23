@@ -58,7 +58,7 @@ public class MyAnimationController :Singleton<MyAnimationController>
         public PlayableGraph playableGraph;
         public AnimationPlayableOutput playableOutput;
 
-        public int2 Key => id;
+        public int Key => id;
 
         public void InitAnimator(Animator animator,int id,string name)
         {

@@ -12,11 +12,42 @@ public interface GameAction
 public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
-
-public struct CreatPlant : GameAction
+public struct NewDay : GameAction
 {
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct RefreshField : GameAction
+{ 
+    public int fieldId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct RefreshPlant : GameAction
+{ 
     public int plantId;
-    public int field; 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct TryGetPlantFruit : GameAction
+{
+    public int fieldId;
+    public SetResult setResult;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct SetWaterField : GameAction
+{
+    public int fieldId;
+    public SetResult setResult;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
         GameActionManager.instance.QueueAction(this);
@@ -24,7 +55,6 @@ public struct CreatPlant : GameAction
 }
 public struct TryCreatPlant : GameAction
 {
-    public int mapId;
     public int fieldId;
     public int plantId;
     public SetResult setResult;
@@ -35,7 +65,6 @@ public struct TryCreatPlant : GameAction
 }
 public struct TrySmoothField : GameAction
 {
-    public int mapId;
     public int fieldId;
     public SetResult setResult;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
@@ -45,7 +74,6 @@ public struct TrySmoothField : GameAction
 }
 public struct CheckFieldState : GameAction
 {
-    public int mapId;
     public int instanceid;
     public SetValue setValue;
 
@@ -1101,6 +1129,8 @@ public struct PauseFilm : GameAction
 }
 public struct SetItemAnimation : GameAction
 {
+    public int mapId;
+    public int editorId;
     public int id;
     public int keyX;
     public int keyY;
