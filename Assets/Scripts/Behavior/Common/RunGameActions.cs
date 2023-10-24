@@ -8,7 +8,7 @@ using Unity.Mathematics;
 [System.Serializable]
 public struct DynamicData
 {
-    public SharedInt source, target;
+    public SharedInt source, target,value;
 }
 [TaskCategory("NewGame/Common")]
 [TaskName("执行GameAction")]
@@ -27,7 +27,7 @@ public class RunGameActions : Action
             if (otherDatas!=null&&i < otherDatas.Count)
             {
                 DynamicData otherData = otherDatas[i];
-                gameActionDatas[i].Action(otherData.source.Value,otherData.target.Value);
+                gameActionDatas[i].Action(otherData.source.Value,otherData.target.Value,otherData.value.Value);
             }
             else
             {

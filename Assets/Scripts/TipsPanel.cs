@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine .UI;
+using UnityEngine.UI;
+using TMPro;
 
 public class TipsPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Text TitleText, NotceText;
+    TextMeshProUGUI TitleText, NoticeText;
     [SerializeField]
     Button CloseButton;
     // Use this for initialization
@@ -14,8 +15,8 @@ public class TipsPanel : GamePanel<IReferenceData>
     {
         base.SetPanelUISerializeObj();
         CloseButton = FindChildGameObject<Button>("YesButton");
-        TitleText=FindChildGameObject<Text>("Title");
-        NotceText = FindChildGameObject<Text>("Notce");
+        TitleText=FindChildGameObject<TextMeshProUGUI>("Title");
+        NoticeText = FindChildGameObject<TextMeshProUGUI>("Notice");
     }
     protected override void Awake()
     {
@@ -26,7 +27,7 @@ public class TipsPanel : GamePanel<IReferenceData>
     public void InitTipsData(string title, string Notice)
     {
         TitleText.text = title;
-        NotceText.text = Notice;
+        NoticeText.text = Notice;
     }
 	 
 }

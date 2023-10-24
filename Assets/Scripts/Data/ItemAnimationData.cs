@@ -8,10 +8,17 @@ using Random = Unity.Mathematics.Random;
 public class ItemAnimationData : ScriptableObject,IGameData
 { 
     public List<AnimationStateData> animationStateDatas = new List<AnimationStateData>();
-    private Dictionary<int2, AnimationStateData> animationStateDataDic = new Dictionary<int2, AnimationStateData>();
+    public ItemAnimationDictionary animationStateDataDic=new ItemAnimationDictionary();
+   // private Dictionary<int2, AnimationStateData> animationStateDataDic = new Dictionary<int2, AnimationStateData>();
     
     public void InitDic()
     {
+        animationStateDataDic.Clear();
+        for (int i = 0; i < animationStateDatas.Count; i++)
+        {
+            animationStateDataDic[animationStateDatas[i].key] = animationStateDatas[i];
+        }
+        /*
         if (animationStateDataDic.Count == 0)
         {
             animationStateDataDic = new Dictionary<int2, AnimationStateData>();
@@ -19,8 +26,8 @@ public class ItemAnimationData : ScriptableObject,IGameData
             {
                 animationStateDataDic[animationStateDatas[i].key] = animationStateDatas[i];
             }
-        }
-       
+        }*/
+
     }
     public AnimationClip GetAnimationClip(int2 key, out int clipCount)
     {
@@ -43,6 +50,11 @@ public class ItemAnimationData : ScriptableObject,IGameData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
+        animationStateDataDic.Clear();
+        for (int i = 0; i < animationStateDatas.Count; i++)
+        {
+            animationStateDataDic[animationStateDatas[i].key] = animationStateDatas[i];
+        }
     }
 #endif
     public string GetKey()

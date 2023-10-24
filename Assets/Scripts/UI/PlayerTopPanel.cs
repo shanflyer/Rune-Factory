@@ -64,12 +64,12 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
-        GameActionManager.instance.AddListener<RefreshCharacterProperty>(RefreshCharacterProperty);
+        GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
     }
 
-    void RefreshCharacterProperty(RefreshCharacterProperty refreshCharacterProperty)
+    void RefreshCharacterProperty(CharacterPropertyTrigger refreshCharacterProperty)
     {
-        if (refreshCharacterProperty.id == CharacterManager.instance.controllerCharacter.instanceId)
+        if (refreshCharacterProperty.characterId == CharacterManager.instance.controllerCharacter.instanceId)
         {
             var characterProperty = CharacterManager.instance.controllerCharacter.CharacterProperty;
             HPSlider.fillAmount = characterProperty.HP / (float)characterProperty.MaxHP;

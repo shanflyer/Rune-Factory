@@ -1080,21 +1080,7 @@ public struct RefreshCharacter : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
-public struct RefreshCharacterProperty : GameAction
-{
-    public int id;
-    public CharacterProperty characterProperty;
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
-    {
-        if (parameters.Count >= 0)
-        {
-            id =int.Parse(parameters[0].value);
-        }
-
-        GameActionManager.instance.QueueAction(this);
-    }
-}
+ 
 
 public struct StopFilm : GameAction
 {
@@ -1148,6 +1134,12 @@ public struct SetItemAnimation : GameAction
             keyX = int.Parse(parameters[1].value);
             keyY = int.Parse(parameters[2].value); 
         }
+        if (source != 0)
+            id = source;
+        if (target != 0)
+            keyX = target;
+        if (value != 0)
+            keyY = value;
         GameActionManager.instance.QueueAction(this);
     }
 }

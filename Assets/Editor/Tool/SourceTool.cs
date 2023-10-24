@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
@@ -98,6 +99,8 @@ public class SourceTool : MonoBehaviour
 
         AssetDatabase.ImportAsset("Assets/Scripts/Audio/AudioSource.cs");
     }
+    
+
     [MenuItem("Assets/数据/引用数据刷新")]
     public static void SetGameDataSerializeObj()
     {
@@ -109,14 +112,15 @@ public class SourceTool : MonoBehaviour
             AssetDatabase.StartAssetEditing();
             for (int i = 0; i < selection.Length; i++)
             {
-                resources[i] = AssetDatabase.GetAssetPath(selection[i]); 
-                if (selection[i].GetType() == typeof(ScriptableObject)&& selection[i] is IGameData)
+                resources[i] = AssetDatabase.GetAssetPath(selection[i]);
+                IGameData gameData = selection[i] as IGameData;
+                if (gameData != null)
                 {
-                    IGameData gameData = (IGameData)selection[i];
 
                     gameData.SetReferenceData();
                     EditorUtility.SetDirty(selection[i]);
                     AssetDatabase.SaveAssets();
+
                 }
             }
         }

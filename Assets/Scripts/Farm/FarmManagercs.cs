@@ -53,7 +53,7 @@ public class FarmManager:Singleton<FarmManager>
             SetItemAnimation setItemAnimation = new SetItemAnimation
             {
                 keyX = (int)field.fieldState,
-                editorId = refreshField.fieldId, 
+                id = refreshField.fieldId, 
             };
             GameActionManager.instance.QueueAction(setItemAnimation);
         }

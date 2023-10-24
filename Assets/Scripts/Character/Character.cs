@@ -203,6 +203,46 @@ public struct CharacterProperty
         }
         
     }
+    public void ChangeProperty(ChangeCharacterProperty changeCharacterProperty)
+    {
+        switch (changeCharacterProperty.propertyType)
+        {
+            case CharacterPropertyType.体力:
+                Power += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.生命:
+                HP += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.法力:
+                MP += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.最大体力:
+                MaxPower += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.最大法力:
+                MaxMP += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.最大生命:
+                MaxHP += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.攻击:
+                AT += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.防御:
+                DF += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.闪避:
+                Crit += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.暴击:
+                Dodge += changeCharacterProperty.changeValue;
+                break;
+            case CharacterPropertyType.自定义值:
+                Other += changeCharacterProperty.changeValue;
+                break;
+        }
+
+    }
 
 }
 public struct Exp
@@ -561,43 +601,8 @@ public partial class Character
     
     public void AddProperty(ChangeCharacterProperty changeCharacterProperty)
     {
-        switch (changeCharacterProperty.propertyType)
-        {
-            case CharacterPropertyType.体力:
-                characterProperty.Power = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.生命:
-                characterProperty.HP = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.法力:
-                characterProperty.MP = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.最大体力:
-                characterProperty.MaxPower = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.最大法力:
-                characterProperty.MaxMP = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.最大生命:
-                characterProperty.MaxHP = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.攻击:
-                characterProperty.AT = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.防御:
-                characterProperty.DF = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.闪避:
-                characterProperty.Crit = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.暴击:
-                characterProperty.Dodge = changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.自定义值:
-                characterProperty.Other = changeCharacterProperty.changeValue;
-                break;
-        }
-        this.characterProperty = characterProperty;
+        characterProperty.ChangeProperty(changeCharacterProperty);
+        CharacterPropertyTrigger();
     }
 
     public void SetPlayerOperate(int2 targetCoordinate)

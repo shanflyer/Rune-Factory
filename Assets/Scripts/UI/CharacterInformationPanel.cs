@@ -93,9 +93,9 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
         }
        
     }
-    void RefreshCharacterProperty(RefreshCharacterProperty refreshCharacterProperty)
+    void RefreshCharacterProperty(CharacterPropertyTrigger refreshCharacterProperty)
     {
-        if(characterId==refreshCharacterProperty.id)
+        if(characterId==refreshCharacterProperty.characterId)
         {
             DisplayProperty(refreshCharacterProperty.characterProperty);
         }
@@ -104,13 +104,13 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshEquip>(RefreshEquip);
-        GameActionManager.instance.AddListener<RefreshCharacterProperty>(RefreshCharacterProperty);
+        GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
     }
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshEquip>(RefreshEquip);
-        GameActionManager.instance.RemoveListener<RefreshCharacterProperty>(RefreshCharacterProperty);
+        GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
     }
 
     void RefreshEquip(RefreshEquip refreshEquip)

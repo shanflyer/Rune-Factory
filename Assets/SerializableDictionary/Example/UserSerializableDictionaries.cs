@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
+[Serializable]
+public class ItemAnimationDictionary : SerializableDictionary<int2, AnimationStateData> { }
 [Serializable]
 public class IntBehaviorDictionary: SerializableDictionary<int,ExternalBehaviorTree> { }
 

@@ -5,9 +5,12 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskName("改变物体链接数据和动画状态")]
 public class MapItemPlayAnimationEvent : Action
 {
-	public override void OnStart()
+    public SharedInt targetId;
+	public SharedInt keyX;
+    public SharedInt keyY;
+    public override void OnStart()
 	{
-		
+		//SetA
 	}
 
 	public override TaskStatus OnUpdate()
