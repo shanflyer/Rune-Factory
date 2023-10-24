@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 public class DateReference : UIObjReference<GameDate>
 {
     [SerializeField]
-    private Text ValueText;
+    private TextMeshProUGUI ValueText;
     [SerializeField]
     private Image festivalTips;
     [SerializeField]
@@ -21,7 +22,7 @@ public class DateReference : UIObjReference<GameDate>
     {
         base.SetPanelUISerializeObj();
         selectToggle = GetComponent<Toggle>();
-        ValueText = FindChildGameObject<Text>("Value");
+        ValueText = FindChildGameObject<TextMeshProUGUI>("Value");
         festivalTips = FindChildGameObject<Image>("festivalTips");
         backGround = FindChildGameObject<Image>("backGround");
     }

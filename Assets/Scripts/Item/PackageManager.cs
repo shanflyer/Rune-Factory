@@ -101,6 +101,35 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<AddPackageItem>(AddPackageItemAction);
         GameActionManager.instance.AddListener<OpenPackage>(OpenPackage);
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+        GameActionManager.instance.AddListener<CheckItemValue>(CheckItemValue);
+    }
+    void CheckItemValue(CheckItemValue checkItemValue)
+    {
+        if(gamePackages.TryGetValue(checkItemValue.packageId,out var gamePackage))
+        {
+            var items=gamePackage.GetItemFromDataId(checkItemValue.itemDataId);
+            if (items != null)
+            {
+                int totalValue = 0;
+                for(int i = 0; i < items.Count; i++)
+                {
+                    totalValue += (int)items[i].value*100;
+                }
+                if (totalValue >= checkItemValue.itemValue)
+                {
+                    checkItemValue.setResult(true);
+                }
+                else
+                {
+                    checkItemValue.setResult(false);
+                }
+                return;
+            }
+            if (checkItemValue.setResult != null)
+            {
+                checkItemValue.setResult(false);
+            }
+        }
     }
     void GiveGift(GiveGift giveGift)
     { 
@@ -625,6 +654,19 @@ public class PackageManager : Singleton<PackageManager>
             return 0;
         }
 
+        public List<Item> GetItemFromDataId(int itemDataId)
+        {
+            if(packageItemIndexDatas.TryGetValue(itemDataId,out var ints))
+            {
+                List<Item> results = new List<Item>();
+                for(int i = 0; i < ints.Count; i++)
+                {
+                    results.Add(items[ints[i]]);
+                }
+                return results;
+            }
+            return null;
+        }
         public int TryGetItemOutPackage(int itemDataId, int count)
         {
             if (packageItemCounts.TryGetValue(itemDataId, out int itemCount))

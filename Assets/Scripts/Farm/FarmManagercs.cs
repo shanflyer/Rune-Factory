@@ -222,6 +222,12 @@ public class FarmManager:Singleton<FarmManager>
                         plant.plantState = PlantState.枯死;
                         break; 
                     case PlantState.死亡:
+                        DeleteMapItem deleteMapItem = new DeleteMapItem
+                        {
+                            mapItemInstanceId = plant.instaceId,
+                            triggerClear = true
+                        };
+                        GameActionManager.instance.QueueAction(deleteMapItem);
                         plants.RemoveData(data.plantId);
                         field.plantId = 0;
                         field.fieldState = FieldState.待平整;
@@ -251,16 +257,44 @@ public class FarmManager:Singleton<FarmManager>
                     field.fieldState = FieldState.待平整;
                     field.plantId = 0;
 
-                    RefreshPlant refreshPlant = new RefreshPlant
-                    { plantId = plant.instaceId };
-                    RefreshPlant(refreshPlant);
+                    DeleteMapItem deleteMapItem = new DeleteMapItem
+                    {
+                        mapItemInstanceId = plant.instaceId,
+                        triggerClear = true
+                    };
+                    GameActionManager.instance.QueueAction(deleteMapItem);
+                   // RefreshPlant refreshPlant = new RefreshPlant
+                   //{ plantId = plant.instaceId };
+                   // RefreshPlant(refreshPlant);
 
                     plants.RemoveData(plant.Key);
                 }else
                 {
-                    RefreshPlant refreshPlant = new RefreshPlant
-                    { plantId = plant.instaceId };
-                    RefreshPlant(refreshPlant);
+                    PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(plant.dataId);
+                    plant.nowCycle++;
+                    if(plant.nowCycle>= plantData.pickTimes)
+                    {
+                        plant.plantState = PlantState.死亡;
+                        field.fieldState = FieldState.待平整;
+                        field.plantId = 0;
+
+                        DeleteMapItem deleteMapItem = new DeleteMapItem
+                        {
+                            mapItemInstanceId = plant.instaceId,
+                            triggerClear = true
+                        };
+                        GameActionManager.instance.QueueAction(deleteMapItem);
+                        plants.RemoveData(plant.Key);
+                    }
+                    else
+                    {
+                        plant.plantState = PlantState.正常;
+                        plant.growthStage = plantData.cycleStage;
+
+                        RefreshPlant refreshPlant = new RefreshPlant
+                        { plantId = plant.instaceId };
+                        RefreshPlant(refreshPlant);
+                    }
                 }
                 
 

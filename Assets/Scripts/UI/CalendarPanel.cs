@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Data;
+using System.Collections.Generic; 
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CalendarPanel : GamePanel<IReferenceData>
 {
@@ -14,9 +14,9 @@ public class CalendarPanel : GamePanel<IReferenceData>
     [SerializeField]
     private DateReference dateReference;
     [SerializeField]
-    private Text DataTimeText;
+    private TextMeshProUGUI DataTimeText;
     [SerializeField]
-    private Text festivaltext;
+    private TextMeshProUGUI festivaltext;
     [SerializeField]
     private Button returnButton;
 
@@ -32,8 +32,8 @@ public class CalendarPanel : GamePanel<IReferenceData>
         DatesParent = FindChildGameObject<ToggleGroup>("DatesParent");
         dateReference = FindChildGameObject<DateReference>("DateReference");
         returnButton = FindChildGameObject<Button>("ReturnButton");
-        DataTimeText = FindChildGameObject<Text>("time");
-        festivaltext = FindChildGameObject<Text>("festival");
+        DataTimeText = FindChildGameObject<TextMeshProUGUI>("time");
+        festivaltext = FindChildGameObject<TextMeshProUGUI>("festival");
     }
     protected override void Awake()
     {
