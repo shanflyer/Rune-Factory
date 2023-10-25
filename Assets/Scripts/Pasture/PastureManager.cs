@@ -9,7 +9,7 @@ public class PastureManager:Singleton<PastureManager>
    
 }
 [System.Serializable]
-public enum AnimalStatus
+public enum AnimalState
 {
     正常 = 0,
     饥饿 = 1,
@@ -25,13 +25,15 @@ public enum AgeStatus
     成年 = 1,
     老年 = 2
 }
-/*
+
+public enum PastureState
+{
+
+}
 public struct Pasture : INativeData
 {
     public int instanceId;
-    public FieldState fieldState;
-    public bool isSetWater;
-    public int plantId;
+    public PastureState pastureState; 
 
     public int Key => instanceId;
 }
@@ -40,18 +42,19 @@ public struct Animal : INativeData
 {
     public int mapId;
     public int instaceId;
-    public int field;
+    public int pasture;
     public int dataId;
     public int growthStage;
     public int growthDay;
     public bool setWater;
-    public PlantState plantState;
+    public AnimalState animalState;
     public int nowCycle;
 
     public int Key => instaceId;
 
     public async void Grow()
     {
+        /*
         if (plantState == PlantState.死亡 || plantState == PlantState.枯死)
         {
             return;
@@ -71,10 +74,11 @@ public struct Animal : INativeData
             {
                 plantState = PlantState.成熟;
             }
-        }
+        }*/
     }
     public async Task<bool> GetPlantFruit()
     {
+        /*
         if (plantState == PlantState.成熟)
         {
             PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(dataId);
@@ -105,7 +109,7 @@ public struct Animal : INativeData
             }
 
             return false;
-        }
+        }*/
         return false;
     }
-}*/
+}
