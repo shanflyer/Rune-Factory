@@ -33,9 +33,7 @@ public class AdventurePanelAction : MonoBehaviour
         {
             LanguageManage.TextFanyi(functionText);
         }
-
-
-        GameComponentData.gameData.pastureAction.MoveCameraButtonObj.SetActive(false);
+         
         AudioController.instance.PlayAudio(BGM.bgm002);
          
         if (PlaceObjs == null)

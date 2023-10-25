@@ -23,31 +23,7 @@ public class InputFieldAction : MonoBehaviour
 	    shuruTitle.text = LanguageManage.SwitchStr(shuruTitle.text);
 	}
 
-    public void InputEnd()
-    {
-        AudioController.instance.PlayAudio(SE.click);
-        NameText.text = inputStr;
-        if (NameText.name == "0")
-        {
-            GameComponentData.gameData.gameManager.pastureName0 = inputStr;
-            GameComponentData.gameData.pastureAction.Pastures[0].name = inputStr;
-        }
-        else if (NameText.name == "1")
-        {
-            GameComponentData.gameData.gameManager.pastureName1 = inputStr;
-            GameComponentData.gameData.pastureAction.Pastures[1].name = inputStr;
-        }
-        else if (NameText.name == "2")
-        {
-            GameComponentData.gameData.gameManager.pastureName2 = inputStr;
-            GameComponentData.gameData.pastureAction.Pastures[2].name = inputStr;
-        }
-        else if (NameText.name == "3")
-        {
-            GameComponentData.gameData.gameManager.pastureName3 = inputStr;
-            GameComponentData.gameData.pastureAction.Pastures[3].name = inputStr;
-        }
-    }
+    
     public int Text_Length(string Text)
     {
         int len = 0;

@@ -576,61 +576,7 @@ namespace OldName
             costType = _costType;
             goldCostValue = _costValue;
             return CostAction();
-        }
-        public void GoldCostYes()
-        {
-            if (CostAction())
-            {
-                AudioController.instance.PlayAudio(SE.Click2);
-                switch (costType)
-                {
-                    case CostType.增加柜台:
-                        InformationController.instance.AddInformation("*消耗金币" + goldCostValue + ",新增加一个柜台。");
-                       // GameComponentData.gameData.shopGoldDeskAction.AddNewDesk();
-                        break;
-                    case CostType.增加牧场:
-                        GameComponentData.gameData.pastureAction.BuildSucessful();
-                        break;
-                    case CostType.增加牧场产出格子:
-                        GameComponentData.gameData.pastureItemPanelAction.AddCase();
-                        break;
-                    case CostType.增加牧场容量:
-                        GameComponentData.gameData.pasturePanelAction.AddPastureCaseCount();
-                        break;
-                    case CostType.增加田地:
-                        //InformationController.instance.AddInformation("*消耗金币" + goldCostValue + ",新开发一块田地。");
-                       // GameComponentData.gameData.farmAction.GrassClearAction();
-                        break;
-                    case CostType.购买道具:
-
-                       // GameComponentData.gameData.shopPanelAction.BuySucecssful();
-                        break;
-                    case CostType.购买设施:
-                      //  GameComponentData.gameData.shopPanelAction.BuySucecssful();
-                        break;
-                     
-                    case CostType.炼金:
-                        //GameComponentData.gameData.lianjinAction.Lianjin();
-                        break;
-                }
-                goldCostSelectObj.SetActive(false);
-            }
-            else
-            {
-                AudioController.instance.PlayAudio(SE.Return);
-                if (shopMoneyType == ShopMoneyType.金币)
-                {
-                    //InitCareSelectData(LanguageManage.SwitchStr("金币不足"), LanguageManage.SwitchStr("需消耗金币:") + goldCostValue
-                    //    + LanguageManage.SwitchStr("现有金币:") + gamePlayer.money + LanguageManage.SwitchStr(",是否使用炼金术提炼金币？"), CareType.GoldExchange);
-                }
-                else
-                {
-                    BuyRedMoney();
-                }
-
-
-            }
-        }
+        } 
         public bool CostAction()
         {
             if (shopMoneyType == ShopMoneyType.红晶)
@@ -1025,23 +971,7 @@ namespace OldName
 
 
         }
-
-
-       
-
-        IEnumerator InitPastureMap()
-        {
-            yield return new WaitForSeconds(0.1f);
-            //GameData.mapEditAction.isCamreaMove = true;
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-            PastureNameClick pastureNameClick = mapParent.GetComponentInChildren<PastureNameClick>();
-
-            pastureNameClick.InitPastureName();
-            GameData.pastureAction.InitPastureData(mapParent.GetChild(0).GetChild(0).GetChild(3));
-            GameData.pastureAction.DisplayAnimal();
-            MoveMapZero();
-        }
-
+         
     
         public void CheckChild()
         {

@@ -17,61 +17,7 @@ namespace OldName
     {
         public string value;
     }
-   
- 
-    [System.Serializable]
-    public class AnimalSaveData
-    {
-        public int id;
-        public string name;
-        public int mapId, coordinateX, coordinateY;
-        public int nowAge;
-        public int Hp;
-        public int level, exp;
-        public int hungerDays;
-        public AnimalStatus animalStatus;
-        public AgeStatus ageStatus;
-        public int oldProduceDays;
-        public int totalProduceCount;
-        public AnimalSaveData() { }
-
-        public AnimalSaveData(Animal animal)
-        {
-            
-        }
-    }
-
-    public class PastureSaveData
-    {
-        public int id;
-        public string name;
-        public List<AnimalSaveData> animalSaveDatas;
-        public int grassCount;
-        public int caseCount;
-        public bool isOpen;
-        public int packageId;
-        public PastureSaveData() { }
-
-        public PastureSaveData(Pasture pasture, bool _isOpen)
-        {
-            isOpen = _isOpen;
-            id = pasture.id;
-            name = pasture.name;
-            grassCount = pasture.grassCount;
-            caseCount = pasture.caseCount;
-            packageId = pasture.itemPackage;
-
-            animalSaveDatas = new List<AnimalSaveData>();
-            if (pasture.Animals != null)
-            {
-                foreach (var pastureAnimal in pasture.Animals)
-                {
-                    AnimalSaveData animalSaveData = new AnimalSaveData(pastureAnimal);
-                    animalSaveDatas.Add(animalSaveData);
-                }
-            }
-        }
-    }
+    
     [System.Serializable]
     public class NpcSaveData
     {
@@ -400,8 +346,7 @@ namespace OldName
         public DateData dateData;
         public PlayerSaveData playerSaveData;
        // public PlantFieldSeveData plantSeveDatas;
-        public List<NpcSaveData> npcSaveDatas;
-        public List<PastureSaveData> pastureSaveDatas;
+        public List<NpcSaveData> npcSaveDatas; 
         public SaveTime saveTime1;
         public string saveTime;
 
@@ -415,16 +360,8 @@ namespace OldName
             deskData.UpData();
             dateData.UpData();
             playerSaveData.UpPlayerData();
-            //plantSeveDatas.UpData();
-
-           
-
-            pastureSaveDatas = new List<PastureSaveData>();
-            for (int i = 0; i < GameComponentData.gameData.pastureAction.Pastures.Count; i++)
-            {
-                PastureSaveData pastureSaveData = new PastureSaveData(GameComponentData.gameData.pastureAction.Pastures[i], GameComponentData.gameData.pastureAction.IsPastures[i]);
-                pastureSaveDatas.Add(pastureSaveData);
-            }
+            //plantSeveDatas.UpData(); 
+ 
             saveTime1.value = System.DateTime.Now.ToString();
             UpRedMoney();
 
@@ -484,17 +421,7 @@ namespace OldName
             DataSaveAndLoadTest.CreatDeskData();
 
         }
-        public void UpDataPastureData()
-        {
-            pastureSaveDatas = new List<PastureSaveData>();
-            for (int i = 0; i < GameComponentData.gameData.pastureAction.Pastures.Count; i++)
-            {
-                PastureSaveData pastureSaveData = new PastureSaveData(GameComponentData.gameData.pastureAction.Pastures[i], GameComponentData.gameData.pastureAction.IsPastures[i]);
-                pastureSaveDatas.Add(pastureSaveData);
-            }
-            DataSaveAndLoadTest.CreatPastureData();
-
-        }
+       
         public void UpPlantData()
         {
            // plantSeveDatas.UpData();
@@ -530,7 +457,7 @@ namespace OldName
             playerMoneyData = new PlayerMoneyData();
            // plantSeveDatas = new PlantFieldSeveData();
             npcSaveDatas = new List<NpcSaveData>();
-            pastureSaveDatas = new List<PastureSaveData>();
+            
             playerSaveData.EquipMentIds = new List<int>();
             playerSaveData.formulas = new List<int>();
             playerSaveData.titles = new List<int>();
@@ -586,7 +513,7 @@ namespace OldName
         public void InitPlayerLoadData(GamePlayer gamePlayer)
         {
             GameTimeManager.instance.nowGameTime = new GameTime(dateData.year, dateData.season, dateData.date, 0, 0);
-            InitPastureData();
+             
             InitPlantData();
             InitNpcLoadData();
             InitLoadData();
@@ -664,28 +591,9 @@ namespace OldName
                     moodValue = marryData.moodValue,
                     name = marryData.childName
                 };
-            }
-
-
-
+            } 
         }
-
-        public void InitPastureData()
-        {
-            if (pastureSaveDatas != null)
-            {
-                for (int i = 0; i < pastureSaveDatas.Count; i++)
-                {
-                    Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.id == pastureSaveDatas[i].id);
-                    pasture.InitPasture(pastureSaveDatas[i]);
-                    GameComponentData.gameData.pastureAction.IsPastures[i] = pastureSaveDatas[i].isOpen;
-                }
-
-                var x = pastureSaveDatas.FindAll(p => p.isOpen);
-                GameComponentData.gameData.pastureAction.pastureNum = x.Count;
-            }
-
-        }
+         
         public void InitDeskData()
         {
            // GameComponentData.gameData.shopGoldDeskAction.LoadData(deskData);
@@ -775,8 +683,7 @@ namespace OldName
         public DateData dateData;
         public PlayerSaveData playerSaveData;
         //public PlantFieldSeveData plantSeveDatas;
-        public List<NpcSaveData> npcSaveDatas;
-        public List<PastureSaveData> pastureSaveDatas;
+        public List<NpcSaveData> npcSaveDatas; 
         public SaveTime saveTime1;
         public string saveTime;
 
@@ -791,14 +698,7 @@ namespace OldName
             dateData.UpData();
             playerSaveData.UpPlayerData();
            // plantSeveDatas.UpData();
- 
-
-            pastureSaveDatas = new List<PastureSaveData>();
-            for (int i = 0; i < GameComponentData.gameData.pastureAction.Pastures.Count; i++)
-            {
-                PastureSaveData pastureSaveData = new PastureSaveData(GameComponentData.gameData.pastureAction.Pastures[i], GameComponentData.gameData.pastureAction.IsPastures[i]);
-                pastureSaveDatas.Add(pastureSaveData);
-            }
+  
             saveTime1.value = System.DateTime.Now.ToString();
             UpRedMoney();
 
@@ -857,17 +757,7 @@ namespace OldName
             DataSaveAndLoadTest.CreatDeskData();
 
         }
-        public void UpDataPastureData()
-        {
-            pastureSaveDatas = new List<PastureSaveData>();
-            for (int i = 0; i < GameComponentData.gameData.pastureAction.Pastures.Count; i++)
-            {
-                PastureSaveData pastureSaveData = new PastureSaveData(GameComponentData.gameData.pastureAction.Pastures[i], GameComponentData.gameData.pastureAction.IsPastures[i]);
-                pastureSaveDatas.Add(pastureSaveData);
-            }
-            DataSaveAndLoadTest.CreatPastureData();
-
-        }
+        
         public void UpPlantData()
         {
            // plantSeveDatas.UpData();
@@ -902,8 +792,7 @@ namespace OldName
             deskData = new DeskData();
             playerMoneyData = new PlayerMoneyData();
            // plantSeveDatas = new PlantFieldSeveData();
-            npcSaveDatas = new List<NpcSaveData>();
-            pastureSaveDatas = new List<PastureSaveData>();
+            npcSaveDatas = new List<NpcSaveData>(); 
             playerSaveData.EquipMentIds = new List<int>();
             playerSaveData.formulas = new List<int>();
             playerSaveData.titles = new List<int>();
@@ -977,7 +866,7 @@ namespace OldName
         public void InitPlayerLoadData(GamePlayer gamePlayer)
         {
             GameTimeManager.instance.nowGameTime = new GameTime(dateData.year, dateData.season, dateData.date, 0, 0);
-            InitPastureData();
+            
             InitPlantData();
             InitNpcLoadData();
             InitLoadData();
@@ -1044,24 +933,7 @@ namespace OldName
 
 
 
-        }
-
-        public void InitPastureData()
-        {
-            if (pastureSaveDatas != null)
-            {
-                for (int i = 0; i < pastureSaveDatas.Count; i++)
-                {
-                    Pasture pasture = GameComponentData.gameData.pastureAction.Pastures.Find(p => p.id == pastureSaveDatas[i].id);
-                    pasture.InitPasture(pastureSaveDatas[i]);
-                    GameComponentData.gameData.pastureAction.IsPastures[i] = pastureSaveDatas[i].isOpen;
-                }
-
-                var x = pastureSaveDatas.FindAll(p => p.isOpen);
-                GameComponentData.gameData.pastureAction.pastureNum = x.Count;
-            }
-
-        }
+        } 
         public void InitDeskData()
         {
            // GameComponentData.gameData.shopGoldDeskAction.LoadData(deskData);

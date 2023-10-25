@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\PlacePanelAction.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\SkillManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetRandomString.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Common\CheckItemValueBehavior.cs" />
     <Compile Include="Assets\Scripts\eyeMove.cs" />
     <Compile Include="Assets\Scripts\ChildFunctionAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Play.cs" />
@@ -178,10 +179,8 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsAlive.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\AngleAxis.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Lerp.cs" />
-    <Compile Include="Assets\Scripts\PastureNameClick.cs" />
     <Compile Include="Assets\Scripts\UI\SetPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetSqrMagnitude.cs" />
-    <Compile Include="Assets\Scripts\PastureGrassAddPanelAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\GameComponent.cs" />
@@ -191,7 +190,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindWithTag.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\A3_Tile.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalPosition.cs" />
-    <Compile Include="Assets\Scripts\AnimalSetPanelAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedInt.cs" />
     <Compile Include="Assets\Scripts\Map\MapItemData.cs" />
     <Compile Include="Assets\Scripts\Map\MapNpcData.cs" />
@@ -235,7 +233,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\SetRadius.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterAddItem.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\CompareLayer.cs" />
-    <Compile Include="Assets\Scripts\AnimalInformationAction.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FightController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\HasKey.cs" />
     <Compile Include="Assets\Scripts\Film\TimeLineManger.cs" />
@@ -270,6 +267,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedBool.cs" />
     <Compile Include="Assets\Scripts\Main\FriendManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\Sequence.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Farm\TrySetWaterFieldBeHavior.cs" />
     <Compile Include="Assets\Scripts\UI\TeamerRenference.cs" />
     <Compile Include="Assets\Scripts\UI\InformationPanel.cs" />
     <Compile Include="Assets\Scripts\Data\GameRandomDataList.cs" />
@@ -416,6 +414,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\WakeUp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetForwardVector.cs" />
     <Compile Include="Assets\Scripts\ValueSetDisplay.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Farm\TryCreatPlantBeHavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetMagnitude.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider2D\GetSize.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\StackedAction.cs" />
@@ -455,7 +454,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Reflection\ComparePropertyValue.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetCenter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPriority.cs" />
-    <Compile Include="Assets\Scripts\PastureAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedCollision.cs" />
     <Compile Include="Assets\Scripts\UI\Talk\NPCFunctionReference.cs" />
     <Compile Include="Assets\Scripts\Audio\AudioSource.cs" />
@@ -520,7 +518,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Dot.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetAngleToTarget.cs" />
-    <Compile Include="Assets\Scripts\PasturePanelAction.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt3List.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IntOperator.cs" />
     <Compile Include="Assets\Scripts\Data\FightMapDataList.cs" />
@@ -814,7 +811,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetAcceleration.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\RandomProbability.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetIgnoreListenerPause.cs" />
-    <Compile Include="Assets\Scripts\PastureItemPanelAction.cs" />
     <Compile Include="Assets\Scripts\GameSaveData.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Data\PackageSetData.cs" />
@@ -835,8 +831,8 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\ParallelSelector.cs" />
     <Compile Include="Assets\Scripts\test\NativeAppendOnlyList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetHeight.cs" />
+    <Compile Include="Assets\Scripts\Pasture\PastureManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\DestroyImmediate.cs" />
-    <Compile Include="Assets\Scripts\SelectPastureButtonAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedObject.cs" />
     <Compile Include="Assets\Scripts\UI\CostSelectPanel.cs" />
     <Compile Include="Assets\Scripts\Data\MyString.cs" />
@@ -847,6 +843,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Stop.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\BoolFlip.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularDrag.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Farm\TryGetPlantFruitBeHavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\GetRadius.cs" />
     <Compile Include="Assets\Scripts\Action\GameActionData.cs" />
     <Compile Include="Assets\Scripts\Main\GameCommon.cs" />

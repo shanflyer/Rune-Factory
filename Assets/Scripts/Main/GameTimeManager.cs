@@ -124,10 +124,9 @@ public class GameTime
         {
             gameDate.date += hour / 24;
             hour = hour % 24;
-
+            GameActionManager.instance.QueueAction(new NewDay());
            
-            GameComponentData.gameData.charactorTitleAction.AddSleepDays();  
-            GameComponentData.gameData.pastureAction.DayUpdata();
+            GameComponentData.gameData.charactorTitleAction.AddSleepDays();   
             GameComponentData.gameData.gameManager.ChildDateCost();
             GameComponentData.gameData.gameManager.gamePlayer.isAnMo = false;
             GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood = false;
@@ -147,37 +146,11 @@ public class GameTime
                 seasonId = 1;
             }
             gameDate.season = (Season)seasonId;
-            gameDate.date = 1;
-           
-           
-            GameComponentData.gameData.gameManager.UpdataMapSeason();
+            gameDate.date = 1; 
         }
         int x = gameDate.date %6;
-        if (x == 0)
-        {
-            week=Week.FriDay;
-        }
-        if (x==1)
-        {
-            week=Week.SunDay;
-        }
-        if (x == 2)
-        {
-            week = Week.Monday;
-        }
-        if (x == 3)
-        {
-            week = Week.TuesDay;
-        }
-        if (x == 4)
-        {
-            week = Week.WednesDay;
-        }
-        if (x == 5)
-        {
-            week = Week.ThursDay;
-        }
-
+        week = (Week)x;
+          
         if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
         {
             InformationController.instance.AddInformation("*" + gameDate.year + "年" + gameDate.season + "之月" + gameDate.date + "日");
@@ -258,7 +231,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             int seasonId = (i-1) / 30 + 1;
             int date = i - (seasonId-1) * 30;
             Season season = (Season) seasonId;
-            List<FestivalData> festivals=GameComponentData.gameData.festivalManager.FestivalDatas.FindAll(f=>f.season==season&&
+            List<FestivalData> festivals=FestivalManager.instance.FestivalDatas.FindAll(f=>f.season==season&&
             f.date==date);
             List<int> festivalIds=new List<int>();
             foreach (var festivalData in festivals)

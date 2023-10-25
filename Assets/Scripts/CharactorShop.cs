@@ -161,28 +161,7 @@ public class CharactorShop : MonoBehaviour
                 break;
             case EmployType.动物:
                 
-                List<Pasture> pastures = GameComponentData.gameData.pastureAction.Pastures;
-                List<Animal> animals=new List<Animal>();
-                foreach (var pasture in pastures)
-                {
-                    if (pasture.Animals != null)
-                    {
-                        animals.AddRange(pasture.Animals);
-                    }
-                    
-                }
-                foreach (var animal in animals)
-                {
-                    
-                    Employer employer=new Employer(animal);
-                    GameObject emplorobj = Instantiate(employPro);
-                    emplorobj.transform.SetParent(employParent, true);
-                    emplorobj.GetComponentInChildren<Toggle>().group =
-                        employParent.GetComponentInChildren<ToggleGroup>();
-                    emplorobj.GetComponent<EmplorPanelAction>().InitEmplorData(employer);
-                    emplorObjs.Add(emplorobj);
-                    emplorobj.transform.localScale = Vector3.one;
-                }
+               
 
                 notice.text = LanguageManage.SwitchStr("动物无法装备武器和防具");
                 break;

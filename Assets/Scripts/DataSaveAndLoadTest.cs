@@ -175,19 +175,7 @@ public static class DataSaveAndLoadTest
         sw7.Write(jsonStr7);
         sw7.Close();
     }
-    public static void CreatPastureData()
-    {
-        if (File.Exists(path4))
-        {
-            File.Delete(path4);
-        }
-        string DataStr4 = JsonMapper.ToJson(gameSaveData.pastureSaveDatas);
-        string jsonStr4 = EncryptDES(DataStr4, Mykey);
-        FileStream fileStream4 = new FileStream(path4, FileMode.OpenOrCreate);
-        StreamWriter sw4 = new StreamWriter(fileStream4);
-        sw4.Write(jsonStr4);
-        sw4.Close();
-    }
+    
     public static void CreatDeskData()
     {
         if (File.Exists(path5))
@@ -302,8 +290,7 @@ public static class DataSaveAndLoadTest
             return false;
         }
         string jsonStr4 = File.ReadAllText(path4);
-        string dataStr4 = DecryptDES(jsonStr4, Mykey);
-        gameSaveData.pastureSaveDatas = JsonMapper.ToObject<List<PastureSaveData>>(dataStr4);
+        string dataStr4 = DecryptDES(jsonStr4, Mykey); 
 
         if (!File.Exists(path5))
         {

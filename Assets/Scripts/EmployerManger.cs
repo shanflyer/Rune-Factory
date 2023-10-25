@@ -65,12 +65,7 @@ public class Employer
             property += oldItemData.property;
         }
     }
-    public Employer(Animal animal)
-    {
-        
-        //InitProperty();
-
-    }
+   
 }
 public class EmployerManger : MonoBehaviour
 {
@@ -86,56 +81,12 @@ public class EmployerManger : MonoBehaviour
     {  
     }
 
-    public void AddAnimal(Animal animal)
-    {
-       
-    }
-    public void AnimalDead(int animalId)
-    {
-        Employer employer = Employers.Find(e => e.id == animalId);
-        if (employer != null)
-        {
-            GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
-            if (gamePlayer.TeamPlayer0 != null&&gamePlayer.TeamPlayer0.id != 0 && gamePlayer.TeamPlayer0.id == employer.id)
-            {
-                gamePlayer.TeamPlayer0 = null;
-            }
-            if (gamePlayer.TeamPlayer1 != null&&gamePlayer.TeamPlayer1.id != 0 && gamePlayer.TeamPlayer1.id == employer.id)
-            {
-                gamePlayer.TeamPlayer1 = null;
-            }
-            employer.isHired = false;
-            //GameComponentData.gameData.intelligencePanelAction.InitIntelligenceData();
-            Employers.Remove(employer);
-        }
-        
-        
-    }
     public void InitEmployers()
     {
         Employers = new List<Employer>();
-        InitNpcEmployer();
-        InitAnimalEmployer();
+        InitNpcEmployer(); 
     }
-    void InitAnimalEmployer()
-    {
-        List<Pasture> pastures = GameComponentData.gameData.pastureAction.Pastures;
-        List<Animal> animals = new List<Animal>();
-        foreach (var pasture in pastures)
-        {
-            if (pasture.Animals != null)
-            {
-                animals.AddRange(pasture.Animals);
-            }
-
-        }
-        foreach (var animal in animals)
-        {
-
-            Employer employer = new Employer(animal);
-            Employers.Add(employer);
-        }
-    }
+     
     public void DataToJson()
     {
         string filePath = Application.dataPath + @"/Resources/Datas/" + "Employers.json";

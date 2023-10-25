@@ -56,7 +56,7 @@ namespace UnityEngine.UI
             for (int i = 0; i < rectTransform.childCount; i++)
             {
                 var rect = rectTransform.GetChild(i) as RectTransform;
-                if (rect == null || !rect.gameObject.activeInHierarchy)
+                if (rect == null || !rect.gameObject.activeInHierarchy||rect.lossyScale==Vector3.zero)
                     continue;
 
                 rect.GetComponents(typeof(ILayoutIgnorer), toIgnoreList);

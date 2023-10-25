@@ -164,8 +164,8 @@ public class CalendarPanel : GamePanel<IReferenceData>
         date = _gameDate.date;
         DataTimeText.text = year + LanguageManage.SwitchStr("年") + "  " + LanguageManage.SwitchStr(_gameDate.season + "之月");
         string festivalStr = "";
-        List<FestivalData> festivalDatas = GameComponentData.gameData.festivalManager.FestivalDatas;
-        List<FestivalData> customFestivalDatas = GameComponentData.gameData.festivalManager.customFestivalDatas;
+        List<FestivalData> festivalDatas = FestivalManager.instance.FestivalDatas;
+        List<FestivalData> customFestivalDatas = FestivalManager.instance.customFestivalDatas;
         foreach (var festivalId in _gameDate.FestivaList)
         {
             FestivalData festivalData = festivalDatas.Find(f => f.id == festivalId);

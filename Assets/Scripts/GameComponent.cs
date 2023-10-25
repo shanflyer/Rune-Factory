@@ -25,14 +25,9 @@ public class GameComponent : MonoBehaviour
     public GameObject calenderPanel; 
     public OldName.GameManager gameManager;
     public FilmManager filmManager;
-    public FestivalManager festivalManager;  
     public GameObject huiFuEffectPro; 
     public Transform NpcParent;  
-    public InfluenceAction influenceAction; 
-    public PastureAction pastureAction;
-    public PastureItemPanelAction pastureItemPanelAction;
-    public PasturePanelAction pasturePanelAction;
-    public AnimalSetPanelAction animalSetPanelAction;  
+    public InfluenceAction influenceAction;  
     public EquipmentManager equipmentManager;
     void Awake()
     {
