@@ -50,7 +50,6 @@ public class PastureManager:Singleton<PastureManager>
                     Pasture pasture = new Pasture
                     {
                         name = pastureData.name,
-                        
                         pastureState=PastureState.平常,
                         instanceId = instanceId
                     };
