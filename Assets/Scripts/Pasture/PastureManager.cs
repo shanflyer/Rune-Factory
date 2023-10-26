@@ -3,10 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 
 public class PastureManager:Singleton<PastureManager>
 {
-   
+    MyNativeData<Pasture> pastures = new MyNativeData<Pasture>();
+    MyNativeData<Animal> animals = new MyNativeData<Animal>();
+
+
+    Dictionary<int2, PastureData> PastureDatas = new Dictionary<int2, PastureData>();
+    protected override void Clear()
+    {
+        base.Clear();
+        foreach(Pasture pasture in pastures)
+        {
+            pasture.Dispose();  
+        }
+        pastures.Dispose();
+        animals.Dispose();
+    }
+    public override async void Init()
+    {
+        base.Init();
+        pastures.Init(16);
+        animals.Init(16);
+
+        var allPastureDatas = await GameDataManager.instance.GetAllAsyncData<PastureData>();
+        for (int i = 0; i < allPastureDatas.Count; i++)
+        {
+            var pastureData = allPastureDatas[i];
+            PastureDatas.Add(new int2(pastureData.mapId, pastureData.linkItem), pastureData);
+        }
+    }
+    void TryCreatPasture(TryCreatPasture tryCreatPasture)
+    {
+        int2 key = new int2(tryCreatPasture.roomId, tryCreatPasture.itemInstanceId);
+        if(PastureDatas.TryGetValue(key,out var pastureData))
+        {
+            if (pastureData.open)
+            {
+                int instanceId = WorldMapManager.instance.GetInstanceFromEditorId(key);
+                if (!pastures.Contains(instanceId))
+                {
+                    Pasture pasture = new Pasture
+                    {
+                        name = pastureData.name,
+                        
+                        pastureState=PastureState.平常,
+                        instanceId = instanceId
+                    };
+                    pastures.SetData(pasture);
+                } 
+            }
+        }
+    }
 }
 [System.Serializable]
 public enum AnimalState
@@ -28,14 +80,22 @@ public enum AgeStatus
 
 public enum PastureState
 {
-
+    平常,损毁,
 }
 public struct Pasture : INativeData
 {
     public int instanceId;
-    public PastureState pastureState; 
+    public PastureState pastureState;
+    public UnsafeList<int> animals;
+    public int dataId;
+    public FixedString64Bytes name;
 
     public int Key => instanceId;
+
+    public void Dispose()
+    {
+        animals.Dispose();
+    }
 }
 
 public struct Animal : INativeData

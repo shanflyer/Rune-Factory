@@ -610,7 +610,9 @@ public static class DataPath
         {typeof(NPCData),"Data/NPCData" },
         {typeof(FriendShipData),"Data/FriendShipData" },
         {typeof(PlantData),"Data/PlantData" },
-        {typeof(FieldArea),"Data/FieldArea" }
+        {typeof(FieldArea),"Data/FieldArea" },
+        {typeof(PastureData),"Data/PastureData" },
+        {typeof(AnimalData),"Data/AnimalData" }
     };
 
     public static string GetDataPath(Type type)

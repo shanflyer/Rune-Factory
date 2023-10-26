@@ -12,6 +12,12 @@ public class FarmManager:Singleton<FarmManager>
     MyNativeData<Plant> plants = new MyNativeData<Plant>();
 
     Dictionary<int2, FieldArea> FieldAreas = new Dictionary<int2, FieldArea>();
+    protected override void Clear()
+    {
+        base.Clear();
+        fields.Dispose();
+        plants.Dispose();
+    }
     public override async void Init()
     {
         base.Init();

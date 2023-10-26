@@ -11,6 +11,7 @@ public class PastureData : ScriptableObject, IGameData
     public int id;
     public int mapId;
     public int linkItem;
+    public int linkRoom;
     public int zeroLevel;
     public bool open = false;
     public string GetKey()
