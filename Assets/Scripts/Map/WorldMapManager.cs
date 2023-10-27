@@ -21,6 +21,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     public int displayMap { get;set; }
 
     private MyInstance mapItemInstance;
+    private MyInstance mapRoomInstance;
     public override void Init()
     {
         base.Init();
@@ -33,6 +34,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<ChangeMapItem>(ChangeMapItem);
         GameActionManager.instance.AddListener<SetItemAnimation>(SetItemAnimation);
         GameActionManager.instance.AddListener<ChangeWorld>(ChangeWorld);
+        GameActionManager.instance.AddListener<TryCreatRoom>(TryCreatRoom);
+        GameActionManager.instance.AddListener<TryDeleteRoom>(TryDeleteRoom);
     }
 
     protected override void Clear()
@@ -41,7 +44,51 @@ public class WorldMapManager : Singleton<WorldMapManager>
         nowRuntimeMapItemObjs.Clear();
         runtimeMapItems.Dispose();
     }
+    async void TryCreatRoom(TryCreatRoom creatRoom)
+    {
+        int instanceId = mapRoomInstance.CreatInstanceId();
+        var MapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(creatRoom.roomId); 
+        roomMapDatas.Add(instanceId, MapRoomData.roomName); 
+        //创建地图房间
+        MapCellController.instance.InitMapData(instanceId, MapRoomData.mapCells.ToArray(),
+            MapRoomData.startCoordinate, MapRoomData.endCoordinate, int3.zero);
 
+        foreach (var data in MapRoomData.mapItems)
+        {
+            await AddMapItem(data, instanceId);
+        }
+
+        if (creatRoom.eventId != 0)
+        {
+          await GameEventManager.instance.AddGameEvent(creatRoom.eventId);
+        }
+        if (creatRoom.setValue != null)
+            creatRoom.setValue(instanceId);
+    }
+    private void TryDeleteRoom(TryDeleteRoom deleteRoom)
+    {
+        int roomInstanceid = deleteRoom.roomId;
+        if (itemInMapDatas.TryGetValue(roomInstanceid, out List<int> mapItems))
+        {
+            for (int i = 0; i < mapItems.Count; i++)
+            {
+                int mapItemInstanceId = mapItems[i];
+                runtimeMapItems.RemoveData(mapItemInstanceId);
+                if (nowRuntimeMapItemObjs.TryGetValue(mapItemInstanceId, out RuntimeObj RuntimeObj))
+                {
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(RuntimeObj);
+                }
+            }
+
+            itemInMapDatas.Remove(roomInstanceid);
+            if (deleteRoom.setResult != null)
+                deleteRoom.setResult(true);
+
+            return;
+        }
+        if (deleteRoom.setResult != null)
+            deleteRoom.setResult(false);
+    }
     async void ChangeWorld(ChangeWorld changeWorld)
     {
        await InitWorldData(changeWorld.worldName,changeWorld.displayMap); 
@@ -133,23 +180,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return false;
     }
 
-    private void DeleteRoom(int roomInstanceid)
-    {
-        if (itemInMapDatas.TryGetValue(roomInstanceid, out List<int> mapItems))
-        {
-            for (int i = 0; i < mapItems.Count; i++)
-            {
-                int mapItemInstanceId = mapItems[i];
-                runtimeMapItems.RemoveData(mapItemInstanceId);
-                if (nowRuntimeMapItemObjs.TryGetValue(mapItemInstanceId, out RuntimeObj RuntimeObj))
-                {
-                    GameRuntimeObjManager.instance.RecycleRuntimeObj(RuntimeObj);
-                }
-            }
-
-            itemInMapDatas.Remove(roomInstanceid);
-        }
-    }
+   
 
     private async void DeleteMapItem(DeleteMapItem deleteMapItem)
     {

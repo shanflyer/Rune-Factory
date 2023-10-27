@@ -272,21 +272,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 teamPlayers.Add(character);
             }
         }
-    }
-
-    public async void CreatZeroNPC()
-    {
-        var NPCDatas = await GameDataManager.instance.GetAllAsyncData<NPCData>();
-        for (int i = 0; i < NPCDatas.Count; i++)
-        {
-            var NPCData = NPCDatas[i];
-            if (NPCData.zeroCreate)
-            {
-              
-            }
-        }
-    }
-
+    }  
     public async void CreatPlayer(int id, int bag)
     {
         playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
@@ -357,38 +343,7 @@ public class CharacterManager : Singleton<CharacterManager>
             controllerCharacter = character;
         }
     }
-    private async Task<NPC> CreatNPC(NPCData NPCData)
-    {
-        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(NPCData.linkCharacterId);
-          
-        int instanceId = myInstance.CreatInstanceId();
-        NPC NPC = new NPC(NPCData, characterData, instanceId); 
-        NPC.SetLevel(characterData.level, true);
-        AddCharacter(NPC);
-
-        npcInstances.Add(NPC.instanceId);
-        return NPC;
-    }
-    private Character CreatCharacter(CharacterData characterData, int bag = -1)
-    {
-        int instanceId = myInstance.CreatInstanceId();
-        Character character = new Character(characterData, instanceId);
-        character.SetLevel(characterData.level, true);
-        AddCharacter(character);
-
-        return character;
-    }
-
-    private async Task<Character> CreatCharacter(int characterId, int bag)
-    {
-        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterId);
-        int instanceId = myInstance.CreatInstanceId();
-        Character character = new Character(characterData, instanceId);
-        character.SetLevel(characterData.level);
-        AddCharacter(character);
-
-        return character;
-    }
+   
 
     private void AddCharacter(Character character)
     {
@@ -668,19 +623,24 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private async void CreatNpc(MapNpcData mapNpcData)
     {
-        if (!characters.TryGetValue(mapNpcData.id, out var npc))
+        if(NPCManager.instance.GetNPC(mapNpcData.dataId,out var npc))
         {
-            var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
-            npc = new Character(characterData, mapNpcData.id);
-            characters.Add(mapNpcData.id, npc);
-        }
-        npc.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
-        RefreshNpcRuntimeObj(npc);
+            if (!characters.TryGetValue(npc.characterId, out var character))
+            {
+                var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
+                character = new Character(characterData, mapNpcData.id);
+                characters.Add(mapNpcData.id, character);
+            }
+            character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
+            RefreshNpcRuntimeObj(character);
 
-        if (mapNpcData.externalBehavior)
-        {
-            CharacterBehaviorManager.instance.AddBehavior(npc.instanceId, mapNpcData.externalBehavior);
+            if (mapNpcData.externalBehavior)
+            {
+                CharacterBehaviorManager.instance.AddBehavior(npc.characterId, mapNpcData.externalBehavior);
+            }
         }
+
+       
         /*
         NPC npc = new NPC
         {

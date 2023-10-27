@@ -183,9 +183,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public GameTime startTime;
     public float timeRunScale=1;
 
-    
-
-    public TimeDisplayAction timeDisplayAction;
     [HideInInspector]
     public List<GameDate> gameDates;
 
@@ -242,7 +239,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             gameDates.Add(gameDate);
 
         }
-        timeDisplayAction.UpdataTime();
+        //timeDisplayAction.UpdataTime();
     }
 
     IEnumerator TimeRunIEnumerator;
@@ -264,7 +261,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         nowGameTime.minute = 0;
         
         nowGameTime.AddDate();
-        timeDisplayAction.UpdataTime();
+        //timeDisplayAction.UpdataTime();
         //StartTimeRun();
     }
 
@@ -278,7 +275,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 waitTime = waitTime / timeRunScale;
             }
             nowGameTime.TimeRun();
-            timeDisplayAction.UpdataTime();
+            //timeDisplayAction.UpdataTime();
             yield return new WaitForSeconds(waitTime);
         }
     }

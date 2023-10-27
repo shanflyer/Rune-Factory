@@ -5,6 +5,42 @@ using System.Text;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 
+public struct TryDeleteRoom : GameAction
+{
+    public int roomId;
+    public SetResult setResult;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+        {
+            roomId = int.Parse(parameters[0].value);
+        }
+        if (source != 0)
+        {
+            roomId = source;
+        }
+
+    }
+}
+public struct TryCreatRoom : GameAction
+{
+    public int roomId;
+    public string roomName;
+    public int eventId;
+    public SetValue setValue;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+        {
+            roomId = int.Parse(parameters[0].value);
+        }
+        if (source != 0)
+        {
+            roomId = source;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct CloseMapObjTips : GameAction
 {
     public int id;

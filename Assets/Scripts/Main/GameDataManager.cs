@@ -46,10 +46,9 @@ public class GameDataManager : Singleton<GameDataManager>
             year = year,
             season = season,
             day = day
-        }; 
-        CharacterManager.instance.CreatPlayer((int)gender, 0);
-        CharacterManager.instance.CreatZeroNPC();
-
+        };
+        NPCManager.instance.CreatZeroNPC();
+        CharacterManager.instance.CreatPlayer((int)gender, 0); 
     }
 
     void SaveUserGameSaveData()

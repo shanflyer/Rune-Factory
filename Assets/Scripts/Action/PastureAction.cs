@@ -7,6 +7,7 @@ public struct TryCreatPasture : GameAction
     public int roomId;
     public int itemInstanceId;
     public string pastureName;
+    public SetResult setResult;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
         if (parameters.Count > 0)
@@ -29,6 +30,25 @@ public struct TryCreatPasture : GameAction
         {
             itemInstanceId = target;
         }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+
+public struct TryDeletePasture : GameAction
+{
+    public int instanceId;
+    public SetResult setResult;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    { 
+        if (parameters.Count > 0)
+        {
+            instanceId = int.Parse(parameters[0].value);
+        }
+         
+        if (source != 0)
+        {
+            instanceId = source;
+        } 
         GameActionManager.instance.QueueAction(this);
     }
 }

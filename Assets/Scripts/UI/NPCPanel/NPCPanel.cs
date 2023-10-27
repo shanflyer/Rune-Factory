@@ -45,23 +45,16 @@ public class NPCPanel : GamePanel<NPCList>
 
     private void VisitAction()
     {
-        if (selectNpc != null)
+        VisitNPC visitNPC = new VisitNPC
         {
-            VisitNPC visitNPC = new VisitNPC
-            {
-                sourceId = CharacterManager.instance.controllerCharacter.instanceId,
-                targetId = selectNpc.instanceId
-            };
-            GameActionManager.instance.QueueAction(visitNPC);
-        }
+            sourceId = CharacterManager.instance.controllerCharacter.instanceId,
+            targetId = selectNpc.characterId
+        };
+        GameActionManager.instance.QueueAction(visitNPC);
     }
 
     private void DetailAction()
     {
-        if (selectNpc == null)
-        {
-            return;
-        }
         CharacterInformationData characterInformationData = selectNpc.GetInformation();
         UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
     }

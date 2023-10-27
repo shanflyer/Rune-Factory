@@ -36,6 +36,9 @@ public class PastureManager:Singleton<PastureManager>
             var pastureData = allPastureDatas[i];
             PastureDatas.Add(new int2(pastureData.mapId, pastureData.linkItem), pastureData);
         }
+
+        GameActionManager.instance.AddListener<TryCreatPasture>(TryCreatPasture);
+        GameActionManager.instance.AddListener<TryDeletePasture>(TryDeletePasture);
     }
     void TryCreatPasture(TryCreatPasture tryCreatPasture)
     {
@@ -50,14 +53,49 @@ public class PastureManager:Singleton<PastureManager>
                     Pasture pasture = new Pasture
                     {
                         name = pastureData.name,
-                        pastureState=PastureState.平常,
-                        instanceId = instanceId
+                        pastureState = PastureState.平常,
+                        instanceId = instanceId,
+                        animals = new UnsafeList<int>(4, Allocator.TempJob),
+                        dataId=pastureData.id, 
                     };
-                    pastures.SetData(pasture);
+
+                    TryCreatRoom tryCreatRoom = new TryCreatRoom
+                    {
+                        roomName = tryCreatPasture.pastureName,
+                        roomId = pastureData.linkRoom,
+                        eventId = pastureData.eventId,
+                        setValue=(int instanceId) =>
+                        {
+                            pasture.roomInstanceId = instanceId;
+                            pastures.SetData(pasture);
+                            tryCreatPasture.setResult(true);
+                        }
+                    };
                 } 
             }
         }
     }
+    void TryDeletePasture(TryDeletePasture tryDeletePasture)
+    {
+        if(pastures.GetData(tryDeletePasture.instanceId,out var pasture))
+        {
+            int linkRoom = pasture.roomInstanceId;
+
+
+
+            TryDeleteRoom tryDeleteRoom = new TryDeleteRoom
+            {
+                roomId = linkRoom
+            };
+            GameActionManager.instance.QueueAction(tryDeleteRoom, true);
+
+            pastures.RemoveData(pasture.instanceId);
+            tryDeletePasture.setResult(true);
+            return;
+        }
+        tryDeletePasture.setResult(false);
+    }
+     
 }
 [System.Serializable]
 public enum AnimalState
@@ -87,6 +125,7 @@ public struct Pasture : INativeData
     public PastureState pastureState;
     public UnsafeList<int> animals;
     public int dataId;
+    public int roomInstanceId;
     public FixedString64Bytes name;
 
     public int Key => instanceId;

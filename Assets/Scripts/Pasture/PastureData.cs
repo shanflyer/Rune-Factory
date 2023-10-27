@@ -13,6 +13,7 @@ public class PastureData : ScriptableObject, IGameData
     public int linkItem;
     public int linkRoom;
     public int zeroLevel;
+    public int eventId;
     public bool open = false;
     public string GetKey()
     {

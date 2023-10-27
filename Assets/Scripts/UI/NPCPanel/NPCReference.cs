@@ -38,9 +38,9 @@ public class NPCReference : UIObjReference<NPC>
     }
     void RefreshFriendShip(RefreshFriendShip refreshFriendShip)
     {
-        if (refreshFriendShip.characterId == data.instanceId)
+        if (refreshFriendShip.characterId == data.characterId)
         {
-            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.instanceId).ToString();
+            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.characterId).ToString();
         }
     }
     public override void SetPanelUISerializeObj()
@@ -53,17 +53,17 @@ public class NPCReference : UIObjReference<NPC>
         toggle=GetComponent<Toggle>();
     }
   
-    public override void InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
 
-        CharacterData characterData = data.characterData;
+        CharacterData characterData =await data.GetCharacterData();
         Icon.sprite = characterData.icon;
         Icon.SetNativeSize();
         NPCName.text = $"+ {characterData.characterName} +";
         
-        FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.instanceId).ToString();
+        FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.characterId).ToString();
         StateValue.text = data.npcState.ToString();
         if (data.npcState == NPCState.修养中)
         {
