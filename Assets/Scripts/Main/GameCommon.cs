@@ -149,7 +149,11 @@ public class GameCommon
     public const string characterTriggerRenferenceName = "Entity";
     public const string triggerRenferenceName = "Reference";
 
-
+    public static int GetCellDistance(int2 coordinate0,int2 coordinate1)
+    {
+        int2 result = coordinate0 - coordinate1;
+        return math.abs(result.x)+math.abs(result.y);
+    }
     public static string AddString(string s0,string s1)
     { 
         var span = s1.AsSpan(); 

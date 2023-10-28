@@ -789,20 +789,20 @@ public partial class Character
     }
 
 
-    public bool MoveCrossMap(int targetMap, int2 targetCoordinate,MoveEndAction moveEndAction=null)
+    public bool MoveCrossMap(int targetMap, int2 targetCoordinate,MoveEndAction moveEndAction=null,MoveEndAction changeCoordinateAction=null)
     {
         Queue<int> moveRoomList = new Queue<int>();
         bool result = false;
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, moveRoomList, ref result);
         if (result)
         {
-            MoveCrossMap(resultList, targetCoordinate,moveEndAction);
+            MoveCrossMap(resultList, targetCoordinate,moveEndAction,changeCoordinateAction);
         }
         return result;
     }
 
 
-    void MoveCrossMap(Queue<int> moveRoomList, int2 targetCoordinate, MoveEndAction moveEndAction = null)
+    void MoveCrossMap(Queue<int> moveRoomList, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null)
     {
         int nowMap = objCoordinate.z;
         if (moveRoomList.Count > 0)
@@ -817,7 +817,7 @@ public partial class Character
 
                 PlayerMove(pathNodes, () => { 
                     MoveCrossMap(moveRoomList, targetCoordinate,moveEndAction);
-                });
+                }, changeCoordinateAction);
             }
         }
         else
@@ -835,11 +835,11 @@ public partial class Character
 
     }
 
-    public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null)
+    public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null,MoveEndAction changeCoordinateAction = null)
     {
         if (pathNodes.Count > 0)
         {
-            CharacterManager.instance.CharacterMoveTarget(this, pathNodes, endAction);
+            CharacterManager.instance.CharacterMoveTarget(this, pathNodes, endAction, changeCoordinateAction);
         }
         else
         {

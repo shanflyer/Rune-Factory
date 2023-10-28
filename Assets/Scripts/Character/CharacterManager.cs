@@ -524,7 +524,54 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public void CharacterMoveTarget(Character character, Stack<int2> pathNodes, MoveEndAction EndAction = null)
+    /// <summary>
+    /// 移动到一个格子
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="targetCoordinate"></param>
+    /// <param name="EndAction"></param>
+    public void CharacterMoveTarget(Character character, int2 targetCoordinate, MoveEndAction EndAction = null, MoveEndAction changeCoordinateAction = null)
+    { 
+        CharacterRuntimeObj runtimeObj;
+        characterRuntionObjs.TryGetValue(character, out runtimeObj);
+
+        Vector2 targetPos = GameCommon.GetMapPos(targetCoordinate);
+
+        var transform = runtimeObj.runtimeObj.obj as Transform;
+
+        Vector2 startPos = transform ? transform.position :
+            GameCommon.GetMapPos(character.coordinate);
+        bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
+
+        character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
+        // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
+
+        Vector2Int offsetCoordinate = Vector2Int.zero;
+        character.moveEnumeratorId =
+        GameObjectCurveController.instance.Line(slant ? moveSpeed * GameCommon.slantValue : moveSpeed, startPos, targetPos, (Vector2 pos) =>
+        {
+            SetCharacterAnimationSpeed(1, runtimeObj);
+
+            var transform = runtimeObj.runtimeObj.obj as Transform;
+            if (transform)
+            {
+                transform.transform.position = pos;
+                //transform.Translate(Vector3.zero);
+            }
+        },
+            () =>
+            {
+                SetCharacterAnimationSpeed(0, runtimeObj);
+                CrossMap(targetCoordinate, character, out int3 newMap, EndAction);
+                if (changeCoordinateAction != null)
+                {
+                    changeCoordinateAction.Invoke();
+                }
+            }
+      );
+    }
+
+    public void CharacterMoveTarget(Character character, Stack<int2> pathNodes, MoveEndAction EndAction = null, MoveEndAction changeCoordinateAction = null)
     {
         var targetCoordinate = pathNodes.Pop();
         CharacterRuntimeObj runtimeObj;
@@ -560,12 +607,17 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (pathNodes.Count > 0)
                 {
                     character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
+                   
                     CharacterMoveTarget(character, pathNodes, EndAction);
                 }
                 else
                 {
                     SetCharacterAnimationSpeed(0, runtimeObj);
                     CrossMap(targetCoordinate, character, out int3 newMap, EndAction);
+                }
+                if (changeCoordinateAction != null)
+                {
+                    changeCoordinateAction.Invoke();
                 }
             }
              );
