@@ -6,9 +6,9 @@ using UnityEngine;
 public class MonsterDeloyList : ScriptableObject, IGameData, IDataArray<MonsterDeploy>
 {
     [SerializeField]
-    List<MonsterDeploy> monsterDeploys = new List<MonsterDeploy>();
+    MonsterDeploy[] monsterDeploys;
 
-    List<MonsterDeploy> IDataArray<MonsterDeploy>.DataList => monsterDeploys;
+    MonsterDeploy[] IDataArray<MonsterDeploy>.DataList => monsterDeploys;
 
     string IGameData.GetKey()
     {

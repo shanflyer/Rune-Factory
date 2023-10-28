@@ -6,9 +6,9 @@ using UnityEngine;
 public class GrowModelDataList: ScriptableObject, IDataArray<GrowModelData>
 {
     [SerializeField]
-    List<GrowModelData> growModelDatas;
+    GrowModelData[] growModelDatas;
 
-    public List<GrowModelData> DataList => growModelDatas;
+    public GrowModelData[] DataList => growModelDatas;
 #if UNITY_EDITOR
     public void SetReferenceData()
     {

@@ -96,10 +96,10 @@ public class FuncReference : UIObjReference<FunctionData>
         nameText.text = functionData.buttonName;
         secondButtonHigh = secondSelectButton.GetComponent<RectTransform>().sizeDelta.y;
 
-        if (functionData.secondFunctions!=null&&functionData.secondFunctions.Count > 0)
+        if (functionData.secondFunctions!=null&&functionData.secondFunctions.Length > 0)
         {
             secondSelectButtons.Clear();
-            for(int i = 0; i < functionData.secondFunctions.Count; i++)
+            for(int i = 0; i < functionData.secondFunctions.Length; i++)
             {
                 var selectButton = Instantiate(secondSelectButton,Vector3.zero,Quaternion.identity, secondParent);
                 selectButton.transform.localScale = Vector3.one;

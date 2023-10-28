@@ -6,9 +6,9 @@ using UnityEngine;
 public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapData>
 {
     [SerializeField]
-    List<FightMapData> FightMapDatas;
+    FightMapData[] FightMapDatas;
 
-    public List<FightMapData> DataList => FightMapDatas;
+    public FightMapData[] DataList => FightMapDatas;
 #if UNITY_EDITOR
     public void SetReferenceData()
     {

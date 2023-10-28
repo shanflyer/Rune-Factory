@@ -605,6 +605,7 @@ public static class DataPath
         {typeof(TempCharacterCreatData),"Data/TempCharacterCreatData" },
         {typeof(OperateData),"Data/OperateData" },
         {typeof(StoreCounterData),"Data/StoreCounterDataList" },
+        {typeof(FestivalData),"Data/FestivalData/FestivalDataList"},
         {typeof(TempCharacterData),"Data/TempCharacterData"},
         {typeof(NPCFunctionData), "Data/NPCFunctionData"},
         {typeof(NPCData),"Data/NPCData" },

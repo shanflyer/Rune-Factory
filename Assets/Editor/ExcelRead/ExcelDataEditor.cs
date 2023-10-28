@@ -1,4 +1,4 @@
-﻿using Excel;
+﻿using Excel; 
 using OldName;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,7 @@ using UnityEngine;
 public class ExcelDataEditor : MyEditor
 {
     public static ExcelDataEditor Instance;
+
 
     [MenuItem("工具/Excel数据管理")]
     public static void WindowShow()
@@ -178,6 +179,7 @@ public class ExcelDataEditor : MyEditor
                 Directory.CreateDirectory(outPath);
 
                 object listData = null;
+                
                 Array array=null;
                 if (dataType != null)
                 {

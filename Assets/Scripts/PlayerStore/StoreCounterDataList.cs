@@ -6,8 +6,8 @@ using UnityEngine;
 public class StoreCounterDataList : ScriptableObject, IGameData, IDataArray<StoreCounterData>
 {
     [SerializeField]
-    List<StoreCounterData> storeCounterDatas;
-    public List<StoreCounterData> DataList => storeCounterDatas;
+    StoreCounterData[] storeCounterDatas;
+    public StoreCounterData[] DataList => storeCounterDatas;
 
     public string GetKey()
     {

@@ -27,7 +27,7 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
     public EditorShopItemData[] shopItemDatas;
     public void SetReferenceData()
     {
-        shopGroups.Clear();
+        List<ShopGroup> shopGroups = new List<ShopGroup>(); 
         int groupIndex = -2;
         int shopIndex = -2;
         ShopGroup shopGroup=default(ShopGroup);
@@ -100,6 +100,8 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
                 shopGroups[groupIndex] = shopGroup;
             }
         }
+
+        this.shopGroups = shopGroups.ToArray();
     }
 
     public string GetKey()
@@ -108,9 +110,10 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
     }
 #endif
     [SerializeField]
-    private List<ShopGroup> shopGroups=new List<ShopGroup>();
+    private ShopGroup[] shopGroups;
 
-    public List<ShopGroup> DataList => shopGroups;
+    public ShopGroup[] DataList => shopGroups;
+     
 }
 [Serializable]
 public struct ShopGroup : IReferenceData, IGameData

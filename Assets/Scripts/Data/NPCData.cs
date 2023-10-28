@@ -4,8 +4,7 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public int id;
     public string npcName;
     public int linkCharacterId;
-    public bool zeroCreate;
-    public int behavior; 
+    public bool zeroCreate; 
     public int zeroFriendShipLevel;
     public int overridePackage;
     public NPCState zeroState;

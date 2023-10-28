@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+using UnityEngine; 
 
 public enum NPCState
 {
@@ -152,7 +151,7 @@ public class NPCManager : Singleton<NPCManager>
     public override void Init()
     {
         base.Init();
-        npcs.Init(16);
+        npcs.Init(16); CreatZeroNPC();
     }
     protected override void Clear()
     {

@@ -47,7 +47,7 @@ public class GameDataManager : Singleton<GameDataManager>
             season = season,
             day = day
         };
-        NPCManager.instance.CreatZeroNPC();
+        //NPCManager.instance.CreatZeroNPC();
         CharacterManager.instance.CreatPlayer((int)gender, 0); 
     }
 
@@ -96,7 +96,7 @@ public class GameDataManager : Singleton<GameDataManager>
            try
             {
                 var results = dataArray.DataList;
-                for (int i = 0; i < results.Count; i++)
+                for (int i = 0; i < results.Length; i++)
                 {
                     var data = results[i];
                     data.Init();
@@ -136,16 +136,16 @@ public class GameDataManager : Singleton<GameDataManager>
      
     public async Task<List<T>> GetAllAsyncData<T>() where T :  IGameData
     {
-        List<T> results = new List<T>();
+        List<T> results = new List<T>(); ;
         Type type = typeof(T);
         if (allGameStaticDatas.TryGetValue(type, out var dataDic))
-        {
+        {  
             using (var e = dataDic.GetEnumerator())
             {
                 while (e.MoveNext())
                 {
                     var data = e.Current.Value;
-                    results.Add((T)data);
+                    results.Add((T)data); 
                 }
             }
         }
@@ -173,7 +173,7 @@ public class GameDataManager : Singleton<GameDataManager>
                 dataDic = new Dictionary<string, IGameData>();
                 try
                 {
-                    results = dataArray.DataList;
+                    results = dataArray.DataList.ToList();
                     for (int i = 0; i < results.Count; i++)
                     {
                         var data = results[i];
@@ -301,7 +301,7 @@ public class GameDataManager : Singleton<GameDataManager>
         if (dataAsset != null && dataAsset is IDataArray<T> dataArray)
         {
             dataDic = new Dictionary<string, IGameData>();
-            for (int i = 0; i < dataArray.DataList.Count; i++)
+            for (int i = 0; i < dataArray.DataList.Length; i++)
             {
                 var item = dataArray.DataList[i];
                 item.Init();

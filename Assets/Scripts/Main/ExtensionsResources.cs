@@ -28,6 +28,7 @@ public  static class ExtensionsResources
         }
         return default(T);
     }
+ 
     public static List<T> LoadAllIGameData<T>(string path) where T: IGameData
     {
         var gres = Resources.LoadAll(path);
@@ -50,6 +51,7 @@ public  static class ExtensionsResources
        
         return ts;
     }
+ 
     
     public static T[] LoadAllResource<T>(string path) where T : UnityEngine.Object
     {

@@ -4,36 +4,7 @@ using UnityEngine;
 using LitJson;
 using System.IO;
 
-[System.Serializable]
-public enum FestivalType
-{
-    比赛=1,
-    售卖=2,
-    纪念=3,
-    狂欢=4
-}
-[System.Serializable]
-public struct FestivalData : IGameData
-{
-    public string name;
-    public string englishName;
-    public int id;
-    public Season season;
-    public int date;
-    public FestivalType festivalType;
-    public string value;
-    public string text;
-    public string englishText;
-#if UNITY_EDITOR
-    public void SetReferenceData()
-    {
-    }
-#endif
-    public string GetKey()
-    {
-        return id.ToString();
-    }
-}
+
 public class FestivalManager : Singleton<FestivalManager>
 {
     public override async void Init()
@@ -41,6 +12,7 @@ public class FestivalManager : Singleton<FestivalManager>
         base.Init();
 
         customFestivalDatas = await GameDataManager.instance.GetAllAsyncData<FestivalData>();
+        FestivalDatas = new List<FestivalData>();
         CreatNPCBrothDay();
         LoadBrothDay();
     }
@@ -50,13 +22,12 @@ public class FestivalManager : Singleton<FestivalManager>
    
     void LoadBrothDay()
     {
-        FestivalDatas = new List<FestivalData>();
         FestivalData festivalData0 =
             new FestivalData
             {
-                name = GameComponentData.gameData.gameManager.gamePlayer.name + LanguageManage.SwitchStr(" 的生日"),
-                season = GameComponentData.gameData.gameManager.gamePlayer.season,
-                date = GameComponentData.gameData.gameManager.gamePlayer.date,
+                name = GameDataManager.instance.UserGameSaveData.playerData.name + LanguageManage.SwitchStr(" 的生日"),
+                season = GameDataManager.instance.UserGameSaveData.playerData.brithDay.season,
+                date = GameDataManager.instance.UserGameSaveData.playerData.brithDay.day,
                 id = 8
             };
         FestivalDatas.Add(festivalData0);

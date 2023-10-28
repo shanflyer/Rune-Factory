@@ -5,9 +5,9 @@ using UnityEngine;
 public class FunctionDataList : ScriptableObject, IGameData,IDataArray<FunctionData>
 {
     [SerializeField]
-    List<FunctionData> functionDatas;
+    FunctionData[] functionDatas;
 
-    public List<FunctionData> DataList => functionDatas;
+    public FunctionData[] DataList => functionDatas;
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
@@ -23,7 +23,7 @@ public struct FunctionData : IGameData,IReferenceData
 {
     public int id;
     public string buttonName;
-    public List<FunctionData> secondFunctions;
+    public FunctionData[] secondFunctions;
     public GameActionData gameActionData;
     public string GetKey()
     {
