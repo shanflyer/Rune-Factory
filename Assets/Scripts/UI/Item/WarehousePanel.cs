@@ -129,9 +129,13 @@ public class WarehousePanel : GamePanel<PackageList>
         {
             int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
             string notice = $"拓展{packageSetData.packageName}空间?";
-            PayManager.instance.PayAction("空间拓展", notice, cost, PayType.金币, () =>
+            PayManager.instance.PayAction("空间拓展", notice, cost, PayType.金币, (bool result) =>
             {
-                PackageManager.instance.AddPackageUpLevel(selectPackageData.instanceId);
+                if (result)
+                {
+                    PackageManager.instance.AddPackageUpLevel(selectPackageData.instanceId);
+                }
+                
             });
         }
     }

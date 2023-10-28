@@ -46,7 +46,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     async void TryCreatRoom(TryCreatRoom creatRoom)
     {
-        int instanceId = mapRoomInstance.CreatInstanceId();
+        int instanceId = creatRoom.instance;
+        if (instanceId == 0)
+        {
+             instanceId = mapRoomInstance.CreatInstanceId();
+        }
+        
         var MapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(creatRoom.roomId); 
         roomMapDatas.Add(instanceId, MapRoomData.roomName); 
         //创建地图房间

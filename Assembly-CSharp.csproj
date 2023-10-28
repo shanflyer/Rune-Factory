@@ -288,7 +288,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedTransform.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\IsKinematic.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
-    <Compile Include="Assets\Scripts\Character\Animal.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetType.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\LayerMask\SetLayer.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterCoordinateChange.cs" />
@@ -313,6 +312,7 @@
     <Compile Include="Assets\Scripts\Main\GameController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetPropertyValue.cs" />
     <Compile Include="Assets\Scripts\EmplorPanelAction.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterGroupData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Collider\GetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IsFloatPositive.cs" />
     <Compile Include="Assets\Scripts\Main\MyInstance.cs" />
@@ -366,6 +366,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\SetActive.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtPosition.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ItemReference.cs" />
+    <Compile Include="Assets\Scripts\Character\ProfessionData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerVolume.cs" />
     <Compile Include="Assets\Scripts\ShopClickEventAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetVelocity.cs" />
@@ -534,6 +535,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedVector4.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt2.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPanLevel.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetFreezeRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\IsStopped.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\SelectPlayerStoreCounter.cs" />
@@ -585,7 +587,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPaused.cs" />
     <Compile Include="Assets\Scripts\UI\BaseReference.cs" />
     <Compile Include="Assets\Scripts\Data\GameEventData.cs" />
-    <Compile Include="Assets\Scripts\Data\CharacterData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\SetAnimatePhysics.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
     <Compile Include="Assets\Scripts\EditorTool\MapLinkEditor.cs" />
@@ -747,6 +748,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\UtilitySelector.cs" />
     <Compile Include="Assets\Scripts\x\EffectAudio.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowSoftness.cs" />
+    <Compile Include="Assets\Scripts\Action\ItemAction.cs" />
     <Compile Include="Assets\Scripts\EffectCamera.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FilghtTilmeLineController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
@@ -831,7 +833,6 @@
     <Compile Include="Assets\Scripts\UI\Talk\TalkPanel.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\A1_Water_Tile.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetApplyRootMotion.cs" />
-    <Compile Include="Assets\Scripts\Data\CharacterGroupData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetLoop.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\ParallelSelector.cs" />
     <Compile Include="Assets\Scripts\test\NativeAppendOnlyList.cs" />
@@ -901,7 +902,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\RandomSequence.cs" />
     <Compile Include="Assets\Scripts\Main\AudioController.cs" />
-    <Compile Include="Assets\Scripts\Data\ProfessionData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Wait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Lerp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\MoveTowards.cs" />

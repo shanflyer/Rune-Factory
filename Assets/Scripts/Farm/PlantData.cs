@@ -33,7 +33,9 @@ public class PlantData : ScriptableObject, IGameData
 }
 public struct GrowthStage
 {
+    public string stageName;
     public int stage;
     public int growthDay;
+    public int productValue;
     public int objAnimationStage;
 }

@@ -97,7 +97,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
         GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
         GameActionManager.instance.AddListener<CreatTempCharacter>(CreatTempCharacter);
-        GameActionManager.instance.AddListener<DestoryTempCharacter>(DestoryTempCharacter);
+        GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
 
         GameActionManager.instance.AddListener<CreatDefaultNPC>(CreatDefaultNPC);
         GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
@@ -112,6 +112,32 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<StopCharacterMove>(StopCharacterMove);
         GameActionManager.instance.AddListener<ChangeEquip>(ChangeEquip);
         GameActionManager.instance.AddListener<ClearEquip>(ClearEquip);
+        GameActionManager.instance.AddListener<ChangeCharacter>(ChangeCharacter);
+    }
+    async void ChangeCharacter(ChangeCharacter ChangeCharacter)
+    {
+        if(characters.TryGetValue(ChangeCharacter.instanceId,out var character))
+        {
+            if (character.dataId != ChangeCharacter.newDataId)
+            {
+                character.dataId = ChangeCharacter.newDataId;
+                if(characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
+                {
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+                    characterRuntionObjs.Remove(character);
+
+                    RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
+                    Transform transform = runtimeObj.obj as Transform;
+                    characterRuntimeObj = new CharacterRuntimeObj
+                    {
+                        runtimeObj = runtimeObj,
+                        animator = transform.GetComponentInChildren<Animator>(),
+                        model = transform.Find("Model")
+                    };
+                    characterRuntionObjs.Add(character, characterRuntimeObj);
+                }
+            } 
+        }
     }
     void ClearEquip(ClearEquip clearEquip)
     {
@@ -244,6 +270,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (GetRuntimeCharacterObj(setCharacterAnimator.characterId, out CharacterRuntimeObj characterRuntimeObj))
         {
             Animator animator = characterRuntimeObj.animator;
+            if (animator == null) { return; }
             switch (setCharacterAnimator.parameterType)
             {
                 case ParameterType.BOOL:
@@ -282,12 +309,12 @@ public class CharacterManager : Singleton<CharacterManager>
     }
 
     /// <summary>
-    /// 销毁消费者
+    /// 销毁角色
     /// </summary>
     /// <param name="DestoryTempCharacter"></param>
-    private void DestoryTempCharacter(DestoryTempCharacter destoryTempCharacter)
+    private void DestoryCharacter(DestoryCharacter destoryCharacter)
     {
-        if (characters.TryGetValue(destoryTempCharacter.characterId, out var character))
+        if (characters.TryGetValue(destoryCharacter.characterId, out var character))
         {
             RemoveCharacter(character);
         }

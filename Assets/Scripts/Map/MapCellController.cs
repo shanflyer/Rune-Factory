@@ -222,6 +222,22 @@ public class MapCellController : Singleton<MapCellController>
         public NativeHashMap<int, int> mapObjBarriers;
         public int2 startCoordinate, endCoordinate;
 
+        public int2 GetRandomCanWalkCell()
+        {
+            if (mapObjBarriers.Count < cellValue.Length)
+            {
+                HashSet<int> tempCells = cellValue.ToHashSet();
+                HashSet<int> barrierCells=mapObjBarriers.GetKeyArray(Allocator.Temp).ToHashSet();
+                tempCells.ExceptWith(barrierCells);
+                var cells= tempCells.ToArray();
+                int index = GameRandom.RandomInt(0, cells.Length);
+                int cell = cells[index];
+                return GetCoordinate(cell);
+            }
+           
+            return new int2(int.MinValue, int.MinValue);
+        }
+
 #if UNITY_EDITOR
 
         public List<Vector3Int> GetAllCellData()
@@ -345,6 +361,16 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     private MyNativeData<RuntimeMapRoom> runtimeMapRooms;
+
+    public int2 GetRandomRoomCell(int roomId)
+    {
+        if(runtimeMapRooms.GetData(roomId,out var runtimeMapRoom))
+        {
+            return runtimeMapRoom.roomCellData.GetRandomCanWalkCell();
+        }
+
+        return new int2(int.MinValue, int.MinValue);
+    }
 
     /// <summary>
     /// ÃÌº”’œ∞≠

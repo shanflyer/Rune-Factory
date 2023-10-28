@@ -118,8 +118,12 @@ public class ShopPanel : GamePanel<ShopGroup>
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f)*buyCount;
-            PayManager.instance.PayAction("¹ºÂò", $"¹ºÂò{buyCount}¸ö+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async () =>
+            PayManager.instance.PayAction("¹ºÂò", $"¹ºÂò{buyCount}¸ö+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
+                if (!result)
+                {
+                    return;
+                }
                 await PackageManager.instance.SetItemInPackage(new Item 
                 { 
                     dataId = selectShopItemData.item,

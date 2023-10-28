@@ -4,7 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEngine.TextCore.Text;
 
+public struct ChangeCharacter : GameAction
+{
+    public int instanceId;
+    public int newDataId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            instanceId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            newDataId = int.Parse(parameters[1].value);
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 /// <summary>
 /// 设置角色动画
 /// </summary>
@@ -52,10 +67,11 @@ public struct CreatDefaultNPC : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
-public struct DestoryTempCharacter : GameAction
+public struct DestoryCharacter : GameAction
 {
     public int characterId;
     public int dataId;
+    public bool isTemp;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
         if (parameters.Count > 0)
@@ -95,6 +111,7 @@ public struct CreatCharacter : GameAction
     public int coordinateY;
     public bool controller;
 
+    public SetValue setValue;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
         if (parameters.Count > 0)
@@ -316,6 +333,9 @@ public struct SetCharacterCoordinate : GameAction
         GameActionManager.instance.QueueAction(this);
     }
     public int characterId;
+    /// <summary>
+    /// x:坐标x,y:坐标y,z:地图id
+    /// </summary>
     public int3 coordinate;
 
 }

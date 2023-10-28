@@ -12,6 +12,7 @@ public class AnimalData : ScriptableObject, IGameData
     public int goodId;
     public int linkCharacter;
     public int age;
+    public List<int> foods=new List<int>();
     public int produceCycle;
     public int product;
     public int cycleStage;

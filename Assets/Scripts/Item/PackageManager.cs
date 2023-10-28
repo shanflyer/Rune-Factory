@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static UnityEngine.Rendering.ReloadAttribute;
 
 public class PackageManager : Singleton<PackageManager>
 {
@@ -102,7 +99,21 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<OpenPackage>(OpenPackage);
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
         GameActionManager.instance.AddListener<CheckItemValue>(CheckItemValue);
+        GameActionManager.instance.AddListener<CreatPackage>(CreatPackage);
+        GameActionManager.instance.AddListener<RemovePackage>(RemovePackage);
     }
+
+    async void CreatPackage(CreatPackage creatPackage)
+    {
+       int instanceId=await CreatGamePackage(creatPackage.packageDataId, creatPackage.level);
+        creatPackage.setValue(instanceId);
+    }
+    void RemovePackage(RemovePackage removePackage)
+    {
+        bool result = gamePackages.Remove(removePackage.packageDataId);
+        removePackage.setResult(result);
+    }
+
     void CheckItemValue(CheckItemValue checkItemValue)
     {
         if(gamePackages.TryGetValue(checkItemValue.packageId,out var gamePackage))
@@ -353,7 +364,7 @@ public class PackageManager : Singleton<PackageManager>
         int packageInstaceId = myInstance.CreatInstanceId();
         int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
         GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstaceId,
-             level, packageSetData.id,packageSetData.packageType);
+             level, packageSetData.id,packageSetData.packageType,packageSetData.singleCase);
         gamePackages.Add(packageInstaceId, gamePackage);
 
         if (level <= 1)
@@ -392,6 +403,7 @@ public class PackageManager : Singleton<PackageManager>
         }
         return null;
     }
+   
     public bool GetOutItenFromPackage(int packageId,int itemid,int count)
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
@@ -455,6 +467,7 @@ public class PackageManager : Singleton<PackageManager>
         public int instanceId;
         public int dataId;
         public int caseCount;
+        public bool singleCase;
         public int level;
         public bool itemPackage;
         private List<Item> items; 
@@ -482,12 +495,13 @@ public class PackageManager : Singleton<PackageManager>
         }
 
         public GamePackage(int caseCount, string name, int instanceId,int level=0,
-            int dataId=0,PackageType packageType=PackageType.全部)
+            int dataId=0,PackageType packageType=PackageType.全部,bool singleCase=false)
         {
             this.instanceId = instanceId;
             this.packageType = packageType;
             this.dataId = dataId;
             this.level = level;
+            this.singleCase = singleCase;
             itemCount = 0;
             this.name = name;
             this.caseCount = caseCount;
@@ -544,21 +558,21 @@ public class PackageManager : Singleton<PackageManager>
                 {
                     return item.count;
                 }
+                int groupCount = singleCase?1: itemData.groupCount;
 
-                if (itemData.groupCount > 1)
+                List<int> indexDatas = new List<int>();
+                if (!packageItemIndexDatas.TryGetValue(item.dataId, out indexDatas))
                 {
-                    List<int> indexDatas = new List<int>();
-                    if (!packageItemIndexDatas.TryGetValue(item.dataId, out indexDatas))
-                    {
-                        indexDatas = new List<int>();
-                        packageItemIndexDatas.Add(item.dataId, indexDatas);
-                    }
+                    indexDatas = new List<int>();
+                    packageItemIndexDatas.Add(item.dataId, indexDatas);
+                }// 如果背包内没有同类物体，则新建索引
 
-
-                    int index =nullItems.Count!=0?nullItems.Dequeue(): items.Count;
+                if (groupCount > 1)//物体堆叠数量
+                { 
+                    int index =nullItems.Count!=0?nullItems.Dequeue(): items.Count;//空物体位置
                     if (indexDatas.Count > 0)
                     {
-                        index = indexDatas[indexDatas.Count - 1];
+                        index = indexDatas[indexDatas.Count - 1];//旧物体最后一个未填满的位置
                     }
                     else
                     {
@@ -582,21 +596,22 @@ public class PackageManager : Singleton<PackageManager>
                     }
 
 
-                    int inCount = item.count;
+                    int inCount = item.count;//要放入的数量
                     int oldCount = 0;
-                    packageItemCounts.TryGetValue(itemData.id, out oldCount);
+                    packageItemCounts.TryGetValue(itemData.id, out oldCount);//旧有数量
                     while (inCount > 0)
                     {
                         Item setItem = items[index];
-                        int setCount = itemData.groupCount - setItem.count;
+                        int setCount = itemData.groupCount - setItem.count;//填充一个消耗数量
 
-                        if (inCount - setCount > 0)
+                        if (inCount - setCount > 0)//剩余的数量大于0
                         {
                             setItem.count = itemData.groupCount;
                             items[index] = setItem;
 
                             oldCount += setCount;
                             packageItemCounts[itemData.id] = oldCount;
+                              
                         }
                         else
                         {
@@ -608,15 +623,15 @@ public class PackageManager : Singleton<PackageManager>
                             break;
                         }
 
-                        inCount -= setCount;
-                        if (caseCount <= items.Count)
+                        inCount -= setCount;//当前剩余数量
+                        if (caseCount <= items.Count)//背包格子是否还有空白
                         {
-                            oldCount += setCount - inCount;
-                            packageItemCounts[itemData.id] = oldCount;
+                            //oldCount += setCount - inCount;//????
+                           // packageItemCounts[itemData.id] = oldCount;
                             return inCount;
                         }
-
-                        index = itemData.groupCount - setItem.count;
+                        index = nullItems.Count != 0 ? nullItems.Dequeue() : items.Count; 
+                        //index = itemData.groupCount - setItem.count;
                         Item item1 = new Item
                         {
                             instanceId = ItemManager.instance.CreatIntance(),
@@ -638,16 +653,43 @@ public class PackageManager : Singleton<PackageManager>
                     packageItemIndexDatas[itemData.id] = indexDatas;
                 }
                 else
-                {
-                    if (nullItems.Count > 0)
+                { 
+                    int addCount = 0;
+                    for (int i = 0; i < item.count; i++)
                     {
-                        items[nullItems.Dequeue()] = item;
+                        if(caseCount<= items.Count)
+                        {
+                            break;
+                        }
+
+                        Item item1 = new Item
+                        {
+                            instanceId = ItemManager.instance.CreatIntance(),
+                            dataId = itemData.id,
+                            count = 1
+                        };
+                        int index = items.Count;
+                        if (nullItems.Count > 0)
+                        {
+                            index = nullItems.Dequeue();
+                            items[index] = item1;
+                        }
+                        else
+                        {
+                            items.Add(item1);
+                        }
+                        addCount++;
+                        indexDatas.Add(index); 
+                        itemCount++;
                     }
-                    else
+                    packageItemIndexDatas.Add(itemData.id, indexDatas);
+                    if (addCount > 0)
                     {
-                        items.Add(item);
+                        packageItemCounts.TryGetValue(itemData.id, out int count);
+                        count += addCount;
+                        packageItemCounts[itemData.id] = count;
                     }
-                    itemCount++;
+                    return item.count - addCount;
                 }
             }
 

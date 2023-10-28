@@ -75,8 +75,8 @@ public enum EntityType
 }
 public class GameCommon
 {
+    public const int animalDefaultFoodItem = 70;
     public const int selectEquipBoxAction = 90;
-
     public const int defaultGiftTalk = 8888;
     public const int defaultPerRPCost = 5;
     public const int storeCoinTime = 1000;

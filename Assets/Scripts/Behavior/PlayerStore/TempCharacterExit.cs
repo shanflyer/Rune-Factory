@@ -25,10 +25,11 @@ public class TempCharacterExit : Action
             characterId=characterId.Value,
             SetValue = (int value) =>
             {
-                DestoryTempCharacter destoryTempCharacter = new DestoryTempCharacter
+                DestoryCharacter destoryTempCharacter = new DestoryCharacter
                 {
                     characterId = characterId.Value,
-                    dataId = value
+                    dataId = value,
+                    isTemp=true
                 };
                 GameActionManager.instance.QueueAction(destoryTempCharacter);
                 taskStatus=TaskStatus.Success; 

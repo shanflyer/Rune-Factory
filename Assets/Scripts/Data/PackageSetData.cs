@@ -17,6 +17,7 @@ public class PackageSetData :ScriptableObject,IGameData,IReferenceData
     public int levelUpCost;
     public string iconName;
     public PackageType packageType;
+    public bool singleCase;
     public SpriteResourceRenference icon;
     public List<int2> initItems = new List<int2>();
 

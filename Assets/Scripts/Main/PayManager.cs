@@ -41,13 +41,17 @@ public class PayManager : Singleton<PayManager>
     public void AddGold(MoneyCreatData MoneyCreatData)
     {
         PayAction("炼金", $"提炼{MoneyCreatData.getValue}金币", MoneyCreatData.costValue, MoneyCreatData.costPayType,
-                   () =>
+                   (bool result) =>
                    {
-                       nowGold += MoneyCreatData.getValue;
-                       GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+                       if (result)
+                       {
+                           nowGold += MoneyCreatData.getValue;
+                           GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+                       }
+                     
                    });
     }
-    public void PayAction(string title,string notice,int cost, PayType payType,Action afterAction)
+    public void PayAction(string title,string notice,int cost, PayType payType,SetResult afterAction)
     {
         CostEventData CostEventData = new CostEventData
         {
@@ -113,5 +117,5 @@ public struct CostEventData : IReferenceData
     public string notice;
     public int costValue;
     public PayType payType;
-    public Action afterAction;
+    public SetResult afterAction; 
 }

@@ -27,6 +27,7 @@ public struct TryCreatRoom : GameAction
     public int roomId;
     public string roomName;
     public int eventId;
+    public int instance;
     public SetValue setValue;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {

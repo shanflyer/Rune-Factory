@@ -13,7 +13,7 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
     {
         base.Init();
         GameActionManager.instance.AddListener<SetCreateTempCharacterLevel>(SetCreateTempCharacterLevel);
-        GameActionManager.instance.AddListener<DestoryTempCharacter>(DestoryTempCharacter);
+        GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
         GameActionManager.instance.AddListener<GetTempCharacterExit>(GetTempCharacterExit);
     }
     TempCharacterCreatData NowTempCharacterCreatData;
@@ -33,14 +33,18 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
     }
     
 
-    void DestoryTempCharacter(DestoryTempCharacter destoryTempCharacter)
+    void DestoryCharacter(DestoryCharacter destoryCharacter)
     {
-        if (NowTempCharacterCreatData.tempCharacters.Contains(destoryTempCharacter.dataId)&&
-            !tempCharacters.Contains(destoryTempCharacter.dataId))
+        if (destoryCharacter.isTemp)
         {
-            tempCharacters.Add(destoryTempCharacter.dataId);
-        }
-        totalCharacterCount--;
+            if (NowTempCharacterCreatData.tempCharacters.Contains(destoryCharacter.dataId) &&
+            !tempCharacters.Contains(destoryCharacter.dataId))
+            {
+                tempCharacters.Add(destoryCharacter.dataId);
+            }
+            totalCharacterCount--;
+
+        } 
     }
     async void SetCreateTempCharacterLevel(SetCreateTempCharacterLevel setCreateTempCharacterLevel)
     {

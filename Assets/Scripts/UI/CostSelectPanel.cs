@@ -80,17 +80,20 @@ public class CostSelectPanel : GamePanel<CostEventData>
         yesButton.onClick.AddListener(() =>
         {
             bool costSuccess = PayManager.instance.TryCost(CostEventData.payType,CostEventData.costValue);
-            if (costSuccess)
+            if (CostEventData.afterAction != null)
             {
-                if (CostEventData.afterAction != null)
-                {
-                    CostEventData.afterAction();
-                    Close();
-                }
-            } 
-                
+                CostEventData.afterAction(costSuccess); 
+            }
+            Close();
         });
-        noButton.onClick.AddListener(Close);
+        noButton.onClick.AddListener(()=> {
+
+            if (CostEventData.afterAction != null)
+            {
+                CostEventData.afterAction(false);
+            }
+            Close();
+        });
 
     }
     public override void InitReferenceData(CostEventData v)

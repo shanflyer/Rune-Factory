@@ -93,7 +93,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 GameEventManager.instance.AddGameEvent(
                 temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
                 {
-                    eventReferenceData,targetReferenceData
+                    eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });
             }
         }
