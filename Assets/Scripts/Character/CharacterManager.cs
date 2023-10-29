@@ -733,13 +733,6 @@ public class CharacterManager : Singleton<CharacterManager>
         //  behaviorTree.startTask.AddChildTask(logTask);
     }
 
-    public void StopCharacterMove(int id)
-    {
-        if (characters.TryGetValue(id, out Character character))
-        {
-            character.StopMove();
-        }
-    }
 
     public async Task<Sprite> GetPlayerIcon()
     {

@@ -6,6 +6,49 @@ using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine.TextCore.Text;
 
+public struct JoinTeam : GameAction
+{
+    public int characterId;
+    public int teamCharacterId;
+    public SetResult setResult;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            teamCharacterId = int.Parse(parameters[1].value);
+        if (source != 0)
+            characterId = source;
+        if (target != 0)
+            teamCharacterId = target;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct StopCharacterBehavior : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct StartCharacterBehavior : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+
 public struct ChangeCharacter : GameAction
 {
     public int instanceId;

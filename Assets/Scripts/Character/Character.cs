@@ -436,6 +436,31 @@ public partial class Character
     public int instanceId;
     public Direction direction {private set;get; }
 
+    public void SetDirection(Direction direction)
+    {
+        this.direction = direction;
+        
+        switch (direction)
+        {
+            case Direction.UP:
+                _moveDirection =new int2(0, 1);
+                break;
+            case Direction.LEFT:
+                _moveDirection = new int2(-1, 0);
+                break;
+            case Direction.DOWN:
+                _moveDirection = new int2(0, -1);
+                break;
+            case Direction.RIGHT:
+                _moveDirection = new int2(1, 0);
+                break;
+        }
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
+        {
+            runtimeObj.SetAnimationDirection(_moveDirection);
+        }
+    }
+
     private float2 _moveDirection;
     public float2 moveDirection
     {
@@ -484,7 +509,7 @@ public partial class Character
 
     public int moveEnumeratorId;  
     private CharacterProperty nowProperty;
-    public void SetObjCoordinate(int3 coordinate)
+    void SetObjCoordinate(int3 coordinate)
     { 
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
         objCoordinate = coordinate;
@@ -699,7 +724,10 @@ public partial class Character
 
         GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
     }
-     
+     /// <summary>
+     /// ÉèÖÃ×ø±ê
+     /// </summary>
+     /// <param name="coordinate">x.y;z:µØÍ¼id</param>
     public void SetCoordinate(int3 coordinate)
     {
         int2 oldCoordinate = objCoordinate.xy;
