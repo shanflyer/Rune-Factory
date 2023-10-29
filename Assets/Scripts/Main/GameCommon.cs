@@ -51,7 +51,7 @@ public enum CharacterPropertyType
 }
 public enum Direction
 {
-   Default=-1, UP=0,RIGHT=3,DOWN=2,LEFT=1
+    Default = -1, UP =0,RIGHT=3,DOWN=2,LEFT=1
 }
 public enum RuntimeObjType
 {
@@ -148,7 +148,11 @@ public class GameCommon
 
     public const string characterTriggerRenferenceName = "Entity";
     public const string triggerRenferenceName = "Reference";
-
+    public static float GetCellTrueDistance(int2 coordinate0, int2 coordinate1)
+    {
+        int2 result = coordinate0 - coordinate1;
+        return math.length(new float2(result.x * cellWidth, result.y * cellHigh)); 
+    }
     public static int GetCellDistance(int2 coordinate0,int2 coordinate1)
     {
         int2 result = coordinate0 - coordinate1;
@@ -218,7 +222,7 @@ public class GameCommon
 
         return Direction.Default;
     }
-    public static Direction GetDirect(Vector2Int start,Vector2Int target)
+    public static Direction GetDirect(Vector2Int start, Vector2Int target)
     {
         Vector2Int offset = start - target;
 
@@ -247,9 +251,8 @@ public class GameCommon
 
         return Direction.Default;
     }
-
     public static Direction GetCharacterDirect(float2 offset, Direction oldDirection = Direction.Default)
-    {  
+    {
         if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
         {
             if (offset.x < 0)
@@ -289,7 +292,7 @@ public class GameCommon
                 }
                 else
                 {
-                    if (oldDirection == Direction.LEFT|| oldDirection == Direction.UP)
+                    if (oldDirection == Direction.LEFT || oldDirection == Direction.UP)
                     {
                         return oldDirection;
                     }
@@ -303,7 +306,7 @@ public class GameCommon
             {
                 if (offset.y < 0)
                 {
-                    if (oldDirection == Direction.RIGHT|| oldDirection == Direction.DOWN)
+                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.DOWN)
                     {
                         return oldDirection;
                     }
@@ -353,7 +356,7 @@ public class GameCommon
                 return Direction.DOWN;
             }
         }
-        if (offset.x!=0&& offset.y != 0)
+        if (offset.x != 0 && offset.y != 0)
         {
             if (offset.x < 0)
             {
@@ -408,7 +411,7 @@ public class GameCommon
         }
         return Direction.Default;
     }
-    public static Direction GetCharacterDirect(Vector2Int start, Vector2Int target,Direction oldDirection=Direction.Default)
+    public static Direction GetCharacterDirect(Vector2Int start, Vector2Int target, Direction oldDirection = Direction.Default)
     {
         Vector2Int offset = start - target;
 
@@ -489,7 +492,6 @@ public class GameCommon
         }
         return Direction.Default;
     }
-   
     public static float2 WorldCoordinateToPos(float2 coordinate)
     {
         float2 pos = new float2(coordinate.x * worldMapTileSize + worldMapTileSize * 0.5f, coordinate.y * worldMapTileSize + worldMapTileSize * 0.5f);

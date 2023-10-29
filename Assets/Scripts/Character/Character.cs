@@ -484,6 +484,17 @@ public partial class Character
            
         } 
     }
+    public void SetDataDirection(float2 value)
+    {
+        _moveDirection = value;
+    }
+    public void SetAnimationDirection(float2 value)
+    {
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
+        {
+            runtimeObj.SetAnimationDirection(value);
+        }
+    }
 
     private float _nowSpeed;
     public float nowSpeed
@@ -519,15 +530,22 @@ public partial class Character
         int3 newCoordinate = new int3(coordinate, mapInstance);
         MapCellController.instance.SetCharacterCoordinate(objCoordinate,newCoordinate,instanceId);
         objCoordinate=newCoordinate;
-    }
+    } 
+
     public void StopMove()
     {
         if (GameObjectCurveController.instance.StopLineMove(moveEnumeratorId))
         {
             CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
-        }
-       // GameController.instance.StopCoroutine(moveEnumerator);
+        } 
     }
+    public void RemoveMove()
+    {
+        GameObjectCurveController.instance.RemoveLineMove(moveEnumeratorId);
+        CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
+        moveEnumeratorId = 0;
+    }
+
     public void StartMove()
     {
         if (GameObjectCurveController.instance.StartLineMove(moveEnumeratorId))

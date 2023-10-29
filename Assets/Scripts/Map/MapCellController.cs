@@ -788,7 +788,7 @@ public class MapCellController : Singleton<MapCellController>
 
             return GameCommon.GetDirect(coordinate0, coordinate1);
         }
-        return Direction.Default;
+        return Direction.LEFT;
     }
 
     public bool GetLinkMapInCoordinate(int nowMap, int linkMap, ref int2 inCoordinate)

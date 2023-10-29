@@ -28,8 +28,20 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
     private MyInstance myInstance;
 
 
-    private MonoBehaviour UpDataComponent;
+    public MonoBehaviour UpDataComponent;
 
+    public void RemoveLineMove(int instanceId)
+    {
+        if (runIEnumerator.TryGetValue(instanceId, out var enumerator))
+        {
+            UpDataComponent.StopCoroutine(enumerator);
+            runIEnumerator.Remove(instanceId); 
+        } 
+        if(pauseEnumerator.TryGetValue(instanceId,out  enumerator))
+        {
+            pauseEnumerator.Remove(instanceId);
+        }
+    }
     public bool StopLineMove(int instanceId)
     {
         if (!pauseEnumerator.ContainsKey(instanceId) && runIEnumerator.TryGetValue(instanceId, out var enumerator))
@@ -234,7 +246,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
             {
                 if (WorldMapManager.instance.InitSmoothMove(ref direction, nowPos, mapId))
                 {
-                    Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.fixedDeltaTime;
+                    Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.deltaTime;
                     int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
                     SetMoveTarge(targetCoordinate, targetPos);
                 }
@@ -247,12 +259,12 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
             }
             else
             {
-                Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.fixedDeltaTime;
+                Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.deltaTime;
                 int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
                 SetMoveTarge(targetCoordinate, targetPos);
             }
 
-            yield return new WaitForFixedUpdate();
+            yield return 0;
         }
     }
 

@@ -4,8 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine.TextCore.Text;
+using UnityEngine;
 
+public struct TryTeamLeaderMove : GameAction
+{
+    public int characterId;
+    public float length;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value); 
+        if (source != 0)
+            characterId = source; 
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct TryTeamLeaderSetCoordinate : GameAction
+{
+    public int characterId;
+  
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct JoinTeam : GameAction
 {
     public int characterId;
@@ -506,6 +532,22 @@ public struct VisitNPC : GameAction
             sourceId = source;
         if (target != 0)
             targetId = target;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct RemoveCharacterMove : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        if (target != 0)
+        {
+            characterId = target;
+        }
         GameActionManager.instance.QueueAction(this);
     }
 }
