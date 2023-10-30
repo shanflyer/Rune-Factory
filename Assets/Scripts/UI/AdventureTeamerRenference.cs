@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
-public class TeamerRenference: UIObjReference<FighterResult>
+public class AdventureTeamerRenference: UIObjReference<FighterResult>
 {
     [SerializeField]
     Image Icon;

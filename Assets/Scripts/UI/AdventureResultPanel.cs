@@ -12,20 +12,20 @@ public class AdventureResultPanel: GamePanel<FightResult>
     [SerializeField]
     ItemReference itemReference;
     [SerializeField]
-    TeamerRenference teamerRenference;
+    AdventureTeamerRenference teamerRenference;
     [SerializeField]
     Transform Team;
     [SerializeField]
     Button OkButton;
 
     DisplayList<ItemReference, Item> itemList;
-    DisplayList<TeamerRenference, FighterResult> teamerList;
+    DisplayList<AdventureTeamerRenference, FighterResult> teamerList;
 
     protected override void Awake()
     {
         OkButton.onClick.AddListener(OKAction);
         itemList = new DisplayList<ItemReference, Item>(itemReference, ItemsContent);
-        teamerList=new DisplayList<TeamerRenference, FighterResult>(teamerRenference,Team);
+        teamerList=new DisplayList<AdventureTeamerRenference, FighterResult>(teamerRenference,Team);
         base.Awake();
     }
     void OKAction()
@@ -50,7 +50,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         ItemsContent = FindChildGameObject("ItemsContent");
         itemReference = FindChildGameObject<ItemReference>("Item");
         Team = FindChildGameObject("Team");
-        teamerRenference = FindChildGameObject<TeamerRenference>("Teamer");
+        teamerRenference = FindChildGameObject<AdventureTeamerRenference>("Teamer");
         OkButton = FindChildGameObject<Button>("OkButton");
 
         base.SetPanelUISerializeObj();
