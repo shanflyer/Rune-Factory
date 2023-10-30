@@ -72,12 +72,12 @@ public class ItemBoxReference : UIObjReference<Item>
             count.text = item.count.ToString();
             count.enabled = item.count>0;
             toggle.enabled = true;
-            ItemValueBg.transform.localScale = Vector3.zero;
+            ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
+            ItemValue.fillAmount = item.value;
         }
         else
         {
-            ItemValueBg.transform.localScale =itemData.itemValue?Vector3.one: Vector3.zero;
-            ItemValue.fillAmount = item.value;
+            ItemValueBg.transform.localScale = Vector3.zero; 
             toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = false;
             toggle.graphic.enabled = false;

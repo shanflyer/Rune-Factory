@@ -136,6 +136,11 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
         });
         
     }
+    public override void Close()
+    {
+        base.Close();
+        UIManager.instance.CloseGamePanel<TeamPanel>();
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();

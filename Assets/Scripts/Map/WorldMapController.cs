@@ -62,6 +62,8 @@ public class WorldMapController : MonoBehaviour
                 controller = true
             });
             GameActionManager.instance.QueueAction(new CreatDefaultNPC());
+
+            UIManager.instance.ShowGamePanel<MainPanel>();
         } 
     }
     // Use this for initialization

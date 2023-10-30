@@ -53,13 +53,14 @@ public class EquipBoxReference:UIObjReference<Equipment>
 
             NameText.enabled = true;
             equipMentIcon.enabled = true;
-            itemValueBg.localScale = Vector3.zero;
+            itemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
+           
         }
         else
         {
             NameText.enabled = false;
             equipMentIcon.enabled = false;
-            itemValueBg.localScale = itemData.itemValue?Vector3.one:Vector3.zero;
+            itemValueBg.localScale = Vector3.zero;
             itemValue.fillAmount = t.itemValue;
         }
     }

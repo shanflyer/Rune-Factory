@@ -7,6 +7,10 @@ public enum NPCState
 {
     修养中=0,正常=1
 }
+public struct CharacterInformationDataList : IReferenceData
+{
+    public List<CharacterInformationData> characterInformationDatas;
+}
 public struct CharacterInformationData:IReferenceData
 {
     public string name;

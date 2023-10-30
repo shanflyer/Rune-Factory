@@ -9,6 +9,17 @@ using UnityEngine.UIElements;
 
 public class TeamManager : Singleton<TeamManager>
 {
+    public Team playerTeam
+    {
+        get
+        {
+            if(teams.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId,out var team))
+            {
+                return team;
+            }
+            return null;
+        }
+    }
     private Dictionary<int, Team> teams = new Dictionary<int, Team>();
 
     public Team GetTeam(Character character)
@@ -77,7 +88,7 @@ public class TeamManager : Singleton<TeamManager>
         if (!teams.ContainsKey(character.instanceId))
         {
             Team team = new Team(character);
-            teams.Add(character.instanceId, team);
+            teams.Add(character.instanceId, team); 
         } 
     } 
 
@@ -153,7 +164,19 @@ public class Team
     private List<Vector2> targetPos = new List<Vector2>();
     private List<Character> characters = new List<Character>();
     private HashSet<int> characterInstances = new HashSet<int>();
-     
+    
+    public CharacterInformationDataList GetTeamCharacterInfo()
+    {
+        CharacterInformationDataList characterInformationDataList = new CharacterInformationDataList
+        {
+            characterInformationDatas=new List<CharacterInformationData>()
+        };
+        for(int i = 0; i < characters.Count; i++)
+        {
+            characterInformationDataList.characterInformationDatas.Add(characters[i].GetInformation());
+        }
+        return characterInformationDataList;
+    }
     public Team(Character leader)
     {
         this.characters.Clear();
