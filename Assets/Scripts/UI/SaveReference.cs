@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SaveReference : UIObjReference<GameSaveData>
+public class SaveReference : UIObjReference<UserGameSaveData>
 {
     [SerializeField]
     Toggle SelectToggle;
@@ -20,8 +20,7 @@ public class SaveReference : UIObjReference<GameSaveData>
     Text Time;
     [SerializeField]
     Text SaveTime;
-
-    GameSaveData gameSaveData;
+     
     int DataIndex = 0;
     public override void SetPanelUISerializeObj()
     {
@@ -36,21 +35,21 @@ public class SaveReference : UIObjReference<GameSaveData>
         Time = FindChildGameObject<Text>("Time");
         SaveTime = FindChildGameObject<Text>("SaveTime");
     }
-    public void Refresh(GameSaveData gameSaveData,int index)
+    public override void InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        this.DataIndex = index;
-        this.gameSaveData = gameSaveData;
-        if (string.IsNullOrEmpty(gameSaveData.saveTime))
+        base.InitData(t, SelectAction, toggleGroup);
+        SelectToggle.group = toggleGroup;
+        if (string.IsNullOrEmpty(data.saveTime))
         {
-            Meal.enabled = gameSaveData.playerSaveData.gender==Gender.male;
-            Femeal.enabled = gameSaveData.playerSaveData.gender == Gender.female;
+            Meal.enabled = data.playerData.gender == Gender.male;
+            Femeal.enabled = data.playerData.gender == Gender.female;
 
 
-            Level.text =GameCommon.AddString("Lv." ,gameSaveData.playerSaveData.level.ToString());
-            Name.text = gameSaveData.playerSaveData.name;
-            Money.text = gameSaveData.money0.ToString();
-            Time.text =$"{gameSaveData.dateData.date}/{LanguageManage.SwitchStr(gameSaveData.dateData.season.ToString())}/{gameSaveData.dateData.year}";
-            SaveTime.text = gameSaveData.saveTime;
+            Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
+            Name.text = data.playerData.name;
+            Money.text = data.otherSaveData.gold.ToString();
+            Time.text = $"{data.dateData.day}/{LanguageManage.SwitchStr(data.dateData.season.ToString())}/{data.dateData.year}";
+            SaveTime.text = data.saveTime;
         }
         else
         {
@@ -62,22 +61,16 @@ public class SaveReference : UIObjReference<GameSaveData>
             Time.text = "-";
             SaveTime.text = "-";
         }
-    }
-    public void SetToggleGroup(ToggleGroup toggleGroup)
-    {
-        SelectToggle.group = toggleGroup;
-    }
-    async void SelectAction(bool value)
-    {
-        if (value)
+        SelectToggle.onValueChanged.AddListener((bool value) =>
         {
-           var selectLoadPanel=await  UIManager.instance.GetGamePanel<SelectLoadPanel>();
-            selectLoadPanel.RefreshDataFuncButton(DataIndex,gameSaveData.IsNull());
-        }
+            if (SelectAction != null)
+            {
+                SelectAction(data, value);
+            }
+        });
     }
-  
+     
     public void Awake()
-    {
-        SelectToggle.onValueChanged.AddListener(SelectAction);
+    { 
     }
 }

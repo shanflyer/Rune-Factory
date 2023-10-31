@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SavePanel : GamePanel<IReferenceData>
+public class SavePanel : GamePanel<UserGameSaveDataList>
 {
     [SerializeField]
     ToggleGroup toggleGroup;
@@ -15,6 +15,8 @@ public class SavePanel : GamePanel<IReferenceData>
     Button Copy, Delete, Save, Return;
     [SerializeField]
     Transform SaveDataParent;
+
+    DisplayList<SaveReference, UserGameSaveData> saveList;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -25,7 +27,11 @@ public class SavePanel : GamePanel<IReferenceData>
         Return = FindChildGameObject<Button>("ReturnButton");
         SaveDataParent = FindChildGameObject("ManualParent");
         toggleGroup=GetComponent<ToggleGroup>();
+    }
 
+    protected override void Awake()
+    {
+        base.Awake();
         Copy.onClick.AddListener(CopyData);
         Delete.onClick.AddListener(DeleteData);
         Save.onClick.AddListener(SaveAction);
@@ -35,49 +41,70 @@ public class SavePanel : GamePanel<IReferenceData>
             Close();
         });
 
-        SaveReference.SetToggleGroup(toggleGroup); 
-        //Delete.interactable = false;
+        saveList = new DisplayList<SaveReference, UserGameSaveData>(SaveReference, SaveDataParent);
     }
-
-    public override Task InitData(string dataKay)
+    public override void OnEnable()
     {
-        
-        for(int i = 1; i <= 3; i++)
-        {
-            GameSaveData ManualSaveData;
-            GameDataSaveManager.instance.LoadSaveData(i, out ManualSaveData);
-            var saveReference = Instantiate(SaveReference, SaveDataParent);
-            saveReference.Refresh(ManualSaveData, i);
-            saveReference.SetToggleGroup(toggleGroup);
-
-        } 
-        return base.InitData(dataKay);
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshGameSaveData>(RefreshGameSaveData);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshGameSaveData>(RefreshGameSaveData);
+    }
+    void RefreshGameSaveData(RefreshGameSaveData refreshGameSaveData)
+    {
+        InitReferenceData(GameDataSaveManager.instance.UserGameSaveDataList);
     }
 
+    UserGameSaveData selectGameSaveData;
+    void SelectAction(UserGameSaveData userGameSaveData, bool selected)
+    {
+        if (selected)
+        {
+            selectGameSaveData = userGameSaveData;
+            bool dataIsNull = string.IsNullOrEmpty(userGameSaveData.saveTime);
+            Copy.interactable = !dataIsNull;
+            Delete.interactable = userGameSaveData.index > 0 && !dataIsNull; 
+        }
+    }
+    public override void InitReferenceData(UserGameSaveDataList v)
+    {
+        base.InitReferenceData(v);
+        selectGameSaveData = default(UserGameSaveData);
+        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+    }
     void SaveAction()
     {
-        if (GameDataSaveManager.instance.SaveData(SelectedIndex))
+        if (GameDataSaveManager.instance.SaveData(selectGameSaveData))
         {
             //DataSaveAndLoadTest.LoadSaveData(SelectedIndex);  
             
-            Close();
+           // Close();
         } 
     }
     void CopyData()
     {
-       // DataSaveAndLoadTest.gameSaveData.SaveData();
-       // DataSaveAndLoadTest.CreatSaveData(SelectedIndex);
+        if (!string.IsNullOrEmpty(selectGameSaveData.saveTime))
+        {
+            if (GameDataSaveManager.instance.CopySaveData(selectGameSaveData))
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+        else
+        {
+
+        }
     }
     void DeleteData()
     {
-        GameDataSaveManager.instance.DeleteSaveData(SelectedIndex);
+        GameDataSaveManager.instance.DeletaSaveData(selectGameSaveData);
     }
-    int SelectedIndex;
-    public void RefreshDataFuncButton(int index,bool nullData)
-    {
-        SelectedIndex = index;
-        Copy.interactable = !nullData;
-        Delete.interactable = index>0&& !nullData;
-        Save.interactable = !nullData;
-    }
+
 }

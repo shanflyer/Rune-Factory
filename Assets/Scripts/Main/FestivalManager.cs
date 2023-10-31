@@ -22,23 +22,28 @@ public class FestivalManager : Singleton<FestivalManager>
    
     void LoadBrothDay()
     {
+        if (GameDataSaveManager.instance.IsZeroGameSave)
+        {
+            return;
+        }
         FestivalData festivalData0 =
             new FestivalData
             {
-                name = GameDataManager.instance.UserGameSaveData.playerData.name + LanguageManage.SwitchStr(" 的生日"),
-                season = GameDataManager.instance.UserGameSaveData.playerData.brithDay.season,
-                date = GameDataManager.instance.UserGameSaveData.playerData.brithDay.day,
+                name = GameDataSaveManager.instance.UserGameSaveData.playerData.name + LanguageManage.SwitchStr(" 的生日"),
+                season = GameDataSaveManager.instance.UserGameSaveData.playerData.brithDay.season,
+                date = GameDataSaveManager.instance.UserGameSaveData.playerData.brithDay.day,
                 id = 8
             };
-        FestivalDatas.Add(festivalData0);
-
-        
-
+        FestivalDatas.Add(festivalData0);  
     }
     void CreatNPCBrothDay()
     {
+        if (GameDataSaveManager.instance.IsZeroGameSave)
+        {
+            return;
+        }
         List<GameTime> gameTimes=new List<GameTime>();
-        CharacterSaveData characterSaveData = GameDataManager.instance.UserGameSaveData.playerData;
+        CharacterSaveData characterSaveData = GameDataSaveManager.instance.UserGameSaveData.playerData;
 
         FestivalData festivalData0 =
             new FestivalData
@@ -51,9 +56,6 @@ public class FestivalManager : Singleton<FestivalManager>
         FestivalDatas.Add(festivalData0);
         GameTime gameTime=new GameTime(0,festivalData0.season,festivalData0.date,0,0);
         gameTimes.Add(gameTime);
-       
-
-   
     }
    
 }

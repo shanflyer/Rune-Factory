@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectLoadPanel : GamePanel<IReferenceData>
+public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
 {
     [SerializeField]
     ToggleGroup toggleGroup;
@@ -15,6 +15,8 @@ public class SelectLoadPanel : GamePanel<IReferenceData>
     Button Copy, Delete, Start, Return;
     [SerializeField]
     Transform SaveDataParent;
+
+    DisplayList<SaveReference, UserGameSaveData> saveList;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -24,8 +26,26 @@ public class SelectLoadPanel : GamePanel<IReferenceData>
         Start = FindChildGameObject<Button>("StartButton");
         Return = FindChildGameObject<Button>("ReturnButton");
         SaveDataParent = FindChildGameObject("ManualParent");
-        toggleGroup=GetComponent<ToggleGroup>();
+        toggleGroup=GetComponent<ToggleGroup>(); 
+    }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshGameSaveData>(RefreshGameSaveData);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshGameSaveData>(RefreshGameSaveData);
+    }
 
+    void RefreshGameSaveData(RefreshGameSaveData refreshGameSaveData)
+    {
+        InitReferenceData(GameDataSaveManager.instance.UserGameSaveDataList);
+    }
+    protected override void Awake()
+    {
+        base.Awake();
         Copy.onClick.AddListener(CopyData);
         Delete.onClick.AddListener(DeleteData);
         Start.onClick.AddListener(StartAction);
@@ -35,35 +55,30 @@ public class SelectLoadPanel : GamePanel<IReferenceData>
             Close();
         });
 
-        SaveReference.SetToggleGroup(toggleGroup); 
-        //Delete.interactable = false;
+        saveList = new DisplayList<SaveReference, UserGameSaveData>(SaveReference, SaveDataParent);
     }
-
-    public override Task InitData(string dataKay)
+    void SelectAction(UserGameSaveData userGameSaveData,bool selected)
     {
-        GameSaveData gameSaveData;
-        if (GameDataSaveManager.instance.LoadSaveData(0,out gameSaveData))
-        { 
-            SaveReference.Refresh(gameSaveData, 0);
-        }  
-        for(int i = 1; i <= 3; i++)
+        if (selected)
         {
-            GameSaveData ManualSaveData;
-            GameDataSaveManager.instance.LoadSaveData(i, out ManualSaveData);
-            var saveReference = Instantiate(SaveReference, SaveDataParent);
-            saveReference.Refresh(ManualSaveData, i);
-            saveReference.SetToggleGroup(toggleGroup);
-
-        } 
-        return base.InitData(dataKay);
+            selectGameSaveData = userGameSaveData;
+            bool dataIsNull= string.IsNullOrEmpty(userGameSaveData.saveTime);
+            Copy.interactable = !dataIsNull;
+            Delete.interactable = userGameSaveData.index > 0 && !dataIsNull;
+            Start.interactable = !dataIsNull;
+        }
     }
-
+    UserGameSaveData selectGameSaveData;
+    public override void InitReferenceData(UserGameSaveDataList v)
+    {
+        base.InitReferenceData(v);
+        selectGameSaveData = default(UserGameSaveData);
+        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup) ;
+    } 
     void StartAction()
     {
-        if (GameDataSaveManager.instance.CheckSaveData(SelectedIndex))
-        {
-           // DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
-           // DataSaveAndLoadTest.isJsonData = true;
+        if (!string.IsNullOrEmpty(selectGameSaveData.saveTime))
+        { 
             ExploreManager.instance.EnterChapter(-1);
            // SceneManager.instance.SwitchScene("001");
             //UIManager.instance.ShowGamePanel<LoadingPanel>();
@@ -73,38 +88,24 @@ public class SelectLoadPanel : GamePanel<IReferenceData>
     }
     void CopyData()
     {
-        if (!GameDataSaveManager.instance.CheckSaveData(SelectedIndex))
+        if (!string.IsNullOrEmpty(selectGameSaveData.saveTime))
         {
-            GameDataSaveManager.instance.CreatSaveData(SelectedIndex);
+            if (GameDataSaveManager.instance.CopySaveData(selectGameSaveData))
+            {
+
+            }
+            else
+            {
+
+            }
         }
         else
         {
-            bool copySuccess = false;
-            for (int target = 1; target <= 3; target++)
-            {
-                if (!GameDataSaveManager.instance.CheckSaveData(target))
-                {
-                    GameDataSaveManager.instance.CopySaveData(SelectedIndex, target);
-                    copySuccess = true;
-                    break;
-                }
-            }
-            if (!copySuccess)
-            {
-                //zeroSceneStart.InitTipsData(LanguageManage.SwitchStr("提示"), LanguageManage.SwitchStr("没有空白存档，无法复制！"));
-            }
+
         } 
     }
     void DeleteData()
     {
-        GameDataSaveManager.instance.DeletaSaveData(SelectedIndex);
-    }
-    int SelectedIndex;
-    public void RefreshDataFuncButton(int index,bool nullData)
-    {
-        SelectedIndex = index;
-        Copy.interactable = !nullData;
-        Delete.interactable = index>0&& !nullData;
-        Start.interactable = !nullData;
-    }
+        GameDataSaveManager.instance.DeletaSaveData(selectGameSaveData);
+    }  
 }

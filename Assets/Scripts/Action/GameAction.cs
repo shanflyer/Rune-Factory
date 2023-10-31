@@ -13,6 +13,12 @@ public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
 
+public struct RefreshGameSaveData : GameAction
+{
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    { 
+    }
+}
 
 public struct NewDay : GameAction
 {

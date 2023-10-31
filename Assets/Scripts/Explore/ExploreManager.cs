@@ -52,10 +52,10 @@ public class ExploreManager : Singleton<ExploreManager>
 
             fightChapters.AddData(fightChapter);
         }
-        if (GameDataManager.instance.UserGameSaveData.chapters != null&&
-            GameDataManager.instance.UserGameSaveData.chapters.Count > 0)
+        if (GameDataSaveManager.instance.UserGameSaveData.chapters != null&&
+            GameDataSaveManager.instance.UserGameSaveData.chapters.Count > 0)
         {
-            var chapters = GameDataManager.instance.UserGameSaveData.chapters;
+            var chapters = GameDataSaveManager.instance.UserGameSaveData.chapters;
             for(int i = 0; i < chapters.Count; i++)
             {
                 FightChapter fightChapter;

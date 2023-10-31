@@ -39,7 +39,7 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
     }
     public override Task InitData(string dataKay)
     {
-        CharacterSaveData characterSaveData = GameDataManager.instance.UserGameSaveData.playerData;
+        CharacterSaveData characterSaveData = GameDataSaveManager.instance.UserGameSaveData.playerData;
 
         Meal.enabled = characterSaveData.gender == Gender.male;
         Female.enabled = characterSaveData.gender == Gender.female;

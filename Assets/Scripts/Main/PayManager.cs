@@ -7,8 +7,8 @@ public class PayManager : Singleton<PayManager>
     public override async void Init()
     {
         base.Init();
-        nowGold= GameDataManager.instance.UserGameSaveData.otherSaveData.gold;
-        nowDiamond = GameDataManager.instance.UserGameSaveData.otherSaveData.diamond;
+        nowGold= GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold;
+        nowDiamond = GameDataSaveManager.instance.UserGameSaveData.otherSaveData.diamond;
         goldIcon = await GameSourceManager.instance.GetSprite(DataPath.goldSpritePath);
         diamondIcon= await GameSourceManager.instance.GetSprite(DataPath.diamondSpritePath);
 

@@ -11,59 +11,12 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 public class GameDataManager : Singleton<GameDataManager> 
-{
-    private string userName = "User";
-    private UserGameSaveData userGameSaveData;
-    public UserGameSaveData UserGameSaveData
-    {
-        get => userGameSaveData;
-    }
-    private async void InitUserSaveData()
-    {
-        userGameSaveData = await LoadUserGameSaveData(userName);
-    }
-    public async Task<UserGameSaveData> LoadUserGameSaveData(string userName)
-    {
-        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-        if (File.Exists(saveDataPath))
-        {
-            string dataStr = await File.ReadAllTextAsync(saveDataPath);
-            UserGameSaveData userGameSaveData = JsonMapper.ToObject<UserGameSaveData>(dataStr);
-            return userGameSaveData;
-        }
-        else
-        {
-            return new UserGameSaveData();
-        }
-    }
-
-    public void InitPlayerData(string playerName,Gender gender, Season season,int day,int year=1300)
-    { 
-        userGameSaveData.playerData.name = playerName;
-        userGameSaveData.playerData.gender = gender;
-        userGameSaveData.playerData.brithDay = new BrithDay
-        {
-            year = year,
-            season = season,
-            day = day
-        };
-        //NPCManager.instance.CreatZeroNPC();
-        CharacterManager.instance.CreatPlayer((int)gender, 0); 
-    }
-
-    void SaveUserGameSaveData()
-    {
-        userGameSaveData.packageSaveDatas = PackageManager.instance.GetPackageSaveData();
-        string strs = JsonMapper.ToJson(userGameSaveData);
-        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-
-        File.WriteAllText(saveDataPath, strs);
-    }
+{ 
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
     public override async void Init()
     {
         base.Init();
-        InitUserSaveData();
+        var gameDataSaveManager= GameDataSaveManager.instance;
         //初始加载
         await LoadAllAsyncData<GameActionData>();
         await LoadAllAsyncData<GrowModelData>();
