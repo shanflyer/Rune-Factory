@@ -66,26 +66,7 @@ namespace OldName
             }
            
         }
-        public TeamPlayer(Employer _employer)
-        {
-            _employer.isHired = true;
-            id = _employer.id;
-            name = _employer.name;
-            level = _employer.level;
-            profession = _employer.profession;
-            skillId = _employer.skillId;
-            property = _employer.property;
-            charactorImage = _employer.charactorImage;
-            ObjName = _employer.ObjName;
-            Weapon = _employer.weapon;
-            clothes = _employer.clothes;
-            attributeType = _employer.attributeType;
-        }
-    }
-    [System.Serializable]
-    public class GameTeam
-    {
-
+        
     }
 
     [System.Serializable]

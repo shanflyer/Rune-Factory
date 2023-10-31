@@ -86,14 +86,6 @@ public class Heritage
                     break;
             }
         }
-        if (!GameComponentData.gameData.gameDebugAction.GameStartTest)
-        {
-            bookObj.SetActive(isGet);
-            foreach (var buttonn in buttonns)
-            {
-                buttonn.interactable = isGet;
-            }
-        }
         
 
 
@@ -122,8 +114,7 @@ public class Heritage
                            // if ((GameComponentData.gameData.coinAction.Coins != null && GameComponentData.gameData.coinAction.Coins.Count <= 0) && charactorTitleAction.busicessExp > 0)
                             {
                                 isGet = true;
-                                GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
-                                                                         openNotice);
+                                
                             }
                         }
                        
@@ -134,46 +125,40 @@ public class Heritage
                         {
 
                             isGet = true;
-                            GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
-                            GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
-                                                                                                       openNotice);
-
+                           // GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
+                           
                         }
                         break;
                     case HeritageType.植物成熟:
                         if (charactorTitleAction.plantingExp >= heritageValue)
                         {
                             isGet = true;
-                            GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
-                            GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
-                                                                     openNotice);
+                           // GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
+                           
                         }
                         break;
                     case HeritageType.收获动物:
                         if (charactorTitleAction.livestockExp >= heritageValue)
                         {
                             isGet = true;
-                            GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
-                            GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
-                                                                     openNotice);
+                           // GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
+                          
                         }
                         break;
                     case HeritageType.售卖件数:
                         if (charactorTitleAction.busicessExp >= heritageValue)
                         {
                             isGet = true;
-                            GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
-                            GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
-                                                                     openNotice);
+                            //GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
+                           
                         }
                         break;
                     case HeritageType.钓鱼次数:
                         if (charactorTitleAction.fishingExp >= heritageValue)
                         {
                             isGet = true;
-                            GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
-                            GameComponentData.gameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:") + rewardValue + "," +
-                                                                     openNotice);
+                            //GameComponentData.gameData.gameManager.ChangePlayerMoney1(rewardValue);
+                           
                         }
                         break;
                     case HeritageType.友好度:
@@ -186,7 +171,6 @@ public class Heritage
             if (isGet)
             {
                 GameComponentData.gameData.heritageAction.nowOpen = id;
-                GameComponentData.gameData.eventManager.CheckEvents();
             }
 
         }
@@ -257,7 +241,7 @@ public class HeritageAction : MonoBehaviour
 
     public void ClickReturnbutton()
     {
-        GameComponentData.gameData.eventManager.CheckEvents();
+        //GameComponentData.gameData.eventManager.CheckEvents();
         AudioController.instance.PlayAudio(SE.Return);
         heritageObj.SetActive(false);
 

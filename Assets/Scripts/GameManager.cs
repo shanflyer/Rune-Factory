@@ -71,42 +71,6 @@ namespace OldName
         增加冰箱格子 = 11,
         炼金 = 12
     }
-    public class GroundItem
-    {
-        public Item item;
-        public GameObject Obj;
-        public int MapId;
-        public Vector2Int coordinate;
-        public GroundItem(Item _item, GameObject _obj, int _MapId, Vector2Int _coordinate)
-        {
-            item = _item;
-            Obj = _obj;
-            SetData();
-            MapId = _MapId;
-            coordinate = _coordinate;
-            Vector3 objPos = Obj.transform.position;
-            Obj.transform.position = new Vector3(objPos.x, objPos.y, -1);
-        }
-
-        public async void SetData()
-        {
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-            Obj.GetComponentInChildren<SpriteRenderer>().sprite = itemData.icon;
-            Obj.GetComponentInChildren<Text>().text = item.count.ToString();
-        }
-
-        public void ChangeCount(int _count)
-        {
-            item.count = _count;
-            Obj.GetComponentInChildren<Text>().text = item.count.ToString();
-        }
-
-        public void LostAction()
-        {
-            item.count--;
-
-        }
-    }
     [System.Serializable]
     public struct Money1
     {
@@ -149,7 +113,6 @@ namespace OldName
         public Image headIcon;
         public Slider HpSlider, RpSlider;
         public Vector2 LostCd;
-        private List<GroundItem> GroundItems;
         public Text MoneyText, Money1Text;
         public GameObject tilemask;
         public Transform TileMaskPerent;
@@ -159,15 +122,9 @@ namespace OldName
         [HideInInspector]
         public Boundary nowBoundary;
         public GameComponent GameData;
-        private Transform mapParent;
-        //private Transform PlantParent;
-        private Transform NpcParent;
         public GameObject tile;
-        private Vector2 cellNum;
         private int cameraSelectNum;
         public bool isDisplayCoordinate;
-        private List<GroundItem> groundItems;
-        private Vector2 mapStartPos, mapEndPos;
 
         [HideInInspector]
         public float result0, result1;
@@ -186,15 +143,11 @@ namespace OldName
         public GamePlayer gamePlayer;
         public GameObject goldCostSelectObj;
         public Text PlayerMoneyText;
-        private GameObject mapX;
-        private int goldCostValue;
-        private CostType costType;
-        private ShopMoneyType shopMoneyType;
         [HideInInspector] public Vector2Int euqipmentCoordinate;
         [HideInInspector]
         public PlayerMoveType playerMoveType;
 
-        private int nextPassid, oldPassid, oldPass0;
+        private int nextPassid,  oldPass0;
         private int nowMapid;
         [HideInInspector]
         public List<GameObject> mapPros, battleMapPros;
@@ -204,96 +157,6 @@ namespace OldName
         public bool IsYueHui;
 
 
-
-
-        public bool ChangePlayerMoney(int value)
-        {
-            if (value < 0 && gamePlayer.money >= value)
-            {
-                gamePlayer.money += value;
-                if (gamePlayer.money <= 0)
-                {
-                    gamePlayer.money = 0;
-                }
-                MoneyText.text = gamePlayer.money.ToString();
-
-                if (shopMoneyType == ShopMoneyType.金币)
-                {
-                   // goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money.ToString();
-                }
-                return true;
-            }
-            else if (value >= 0)
-            {
-
-                gamePlayer.money += value;
-                if (gamePlayer.money <= 0)
-                {
-                    gamePlayer.money = 0;
-                }
-                MoneyText.text = gamePlayer.money.ToString();
-                GameData.charactorTitleAction.CheckMoney();
-
-                if (shopMoneyType == ShopMoneyType.金币)
-                {
-                    //goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money.ToString();
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-        public bool ChangePlayerMoney1(int value)
-        {
-            if (value < 0 && gamePlayer.money1 >= value)
-            {
-                gamePlayer.money1 += value;
-                if (gamePlayer.money1 <= 0)
-                {
-                    gamePlayer.money1 = 0;
-                }
-                Money1Text.text = gamePlayer.money1.ToString();
-
-                if (shopMoneyType == ShopMoneyType.红晶)
-                {
-                   // goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money1.ToString();
-                }
-                return true;
-            }
-            else if (value >= 0)
-            {
-                gamePlayer.money1 += value;
-                if (gamePlayer.money1 <= 0)
-                {
-                    gamePlayer.money1 = 0;
-                }
-                Money1Text.text = gamePlayer.money1.ToString();
-
-                if (shopMoneyType == ShopMoneyType.红晶)
-                {
-                    //goldCostSelectObj.GetComponent<GoldCostSelect>().TotalText.text = gamePlayer.money1.ToString();
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-        public void AddMoney1(int value)
-        {
-            GetComponent<payAction>().waitApple.SetActive(false);
-
-            if (value > 0)
-            {
-                ChangePlayerMoney1(value);
-                GameData.DisplayPrompt(LanguageManage.SwitchStr("获得红晶:" + value));
-            }
-        }
         private void OnNativeShareSuccess(string result)
         {
             // Debug.Log("success: " + result);
@@ -315,8 +178,6 @@ namespace OldName
             packageLevel = 0;
             boxLevel = 0;
             iceBoxLevel = 0;
-            oldPassid = -1;
-            GroundItems = new List<GroundItem>(); 
             PlayerMoneyText.text = gamePlayer.money.ToString();
             pastureName0 = "";
             pastureName1 = "";
@@ -329,7 +190,6 @@ namespace OldName
             mapPros = Resources.LoadAll<GameObject>("Map").ToList();
             battleMapPros = Resources.LoadAll<GameObject>("FightMap").ToList();
 
-            groundItems = new List<GroundItem>();
 
             GameData.InitData();
 
@@ -340,7 +200,7 @@ namespace OldName
 
             //mapParent = GameData.mapParent;
            // PlantParent = GameData.PlantParent;
-            NpcParent = GameData.NpcParent;
+           // NpcParent = GameData.NpcParent;
 
             cameraSelectNum = 1;
 
@@ -355,7 +215,6 @@ namespace OldName
             //GameData.heritageAction.ClickheritageObjbutton();
             // GameData.NpcManager.InitData();
             float waitTime = UnityEngine.Random.Range(LostCd.x, LostCd.y);
-            GameTimerController.instance.DelayAction((int)(waitTime * 1000), Losting);
         }
         public static void OutputRt(Texture2D rt)
         {
@@ -509,12 +368,6 @@ namespace OldName
 
             }
         }
-        public void ZeroFight()
-        {
-            //InitGate();
-            GameData.adventurePanelAction.gameObject.SetActive(true);
-            GameData.adventurePanelAction.ZeroEploring();
-        }
 
        
         public void BuyRedMoney()
@@ -561,55 +414,7 @@ namespace OldName
             HpSlider.value = (float)gamePlayer.property.HP / (float)gamePlayer.property.MaxHP;
             RpSlider.value = (float)gamePlayer.property.Power / (float)gamePlayer.property.MaxPower;
         }
-       
-        public void InitCostData(string Title, int _costValue, string notice, CostType _costType, ShopMoneyType _shopMoneyType)
-        {
-            costType = _costType;
-            goldCostValue = _costValue;
-            shopMoneyType = _shopMoneyType;
-            goldCostSelectObj.SetActive(true);
-            //goldCostSelectObj.GetComponent<GoldCostSelect>().InitGoldCostData(Title, _costValue, notice, shopMoneyType);
-        }
-        public bool InitCostData(int _costValue, ShopMoneyType _shopMoneyType, CostType _costType)
-        {
-            shopMoneyType = _shopMoneyType;
-            costType = _costType;
-            goldCostValue = _costValue;
-            return CostAction();
-        } 
-        public bool CostAction()
-        {
-            if (shopMoneyType == ShopMoneyType.红晶)
-            {
-                if (gamePlayer.money1 >= goldCostValue)
-                {
-                    gamePlayer.money1 -= goldCostValue;
-                    Money1Text.text = gamePlayer.money1.ToString();
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                if (gamePlayer.money >= goldCostValue)
-                {
-                    gamePlayer.money -= goldCostValue;
-                    PlayerMoneyText.text = gamePlayer.money.ToString();
-
-                    return true;
-                }
-                return false;
-            }
-
-        }
-
-        public void FightAction()
-        {
-            fieldTool.SetActive(false);
-            AudioController.instance.PlayAudio(SE.click);
-            adventure.SetActive(true);
-            adventure.GetComponent<AdventurePanelAction>().InitData();
-        }
+      
 
         public void StartFight()
         {
@@ -638,70 +443,7 @@ namespace OldName
              
             Camera.main.transform.position = new Vector3(0, 0, -10);
         }
-        public async void ClickGroundItem(GameObject Obj)
-        {
-            GroundItem groundItem = GroundItems.Find(g => g.Obj == Obj);
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(groundItem.item.dataId.ToString());
-            int xcount = await PackageManager.instance.SetItemInPackage(groundItem.item, 0);
-
-            if (xcount > 0)
-            {
-                groundItem.item.count = xcount;
-                groundItem.ChangeCount(xcount);
-
-                int clickCount = groundItem.item.count - xcount;
-                if (clickCount > 0)
-                {
-                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了")
-                        + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.name + "," + LanguageManage.SwitchStr("地上还有")
-                        + xcount + LanguageManage.SwitchStr("个"));
-
-                    InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + ":" + itemData.name);
-                }
-                else
-                {
-                    InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("背包已满，无法捡起物品"));
-                    GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("背包已满，无法捡起物品"));
-                }
-
-            }
-            else
-            {
-                InformationController.instance.AddInformation("*" + LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.name);
-                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("捡起物品"), LanguageManage.SwitchStr("捡起了") + (groundItem.item.count - xcount) + LanguageManage.SwitchStr("个") + itemData.name);
-                Destroy(groundItem.Obj);
-                GroundItems.Remove(groundItem);
-            }
-        }
-        async void Losting()
-        {
-
-            if (GroundItems.Count > 0)
-            {
-                int index = UnityEngine.Random.Range(0, groundItems.Count - 1);
-                GroundItem groundItem = GroundItems[index];
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(groundItem.item.dataId.ToString());
-                int lostcount = UnityEngine.Random.Range(1, groundItem.item.count);
-                int count = groundItem.item.count - lostcount;
-                InformationController.instance.AddInformation(LanguageManage.SwitchStr("*地底哥布林偷走了掉在地上的") + lostcount + LanguageManage.SwitchStr("个") + itemData.name);
-                if (count > 0)
-                {
-                    groundItem.ChangeCount(count);
-
-                }
-                else
-                {
-                    Destroy(groundItem.Obj);
-                    GroundItems.Remove(groundItem);
-
-                }
-            }
-            float waitTime = UnityEngine.Random.Range(LostCd.x, LostCd.y);
-            GameTimerController.instance.DelayAction((int)(waitTime * 1000), Losting);
-        }
-
-      
-         
+   
         public void YesButtonAction()
         {
             TwoSelectPanel1.SetActive(false);
@@ -1030,29 +772,7 @@ namespace OldName
             }
            // cameraMove.SetBoundary();
         }
-        public Boundary CreatBoundary()
-        {
-            float screenWith = Screen.width;
-            float screenHight = Screen.height;
-            float mapWith = mapSize.x;
-            float mapHight = mapSize.y;
-            mapStartPos = new Vector2(-mapWith / 200.0f, -mapHight / 200.0f);
-            mapEndPos = new Vector2(mapWith / 200.0f, mapHight / 200.0f);
-
-            float cameraSize = Camera.main.orthographicSize;
-            float dy = mapHight / 200.0f - cameraSize;
-            float dx = mapWith / 200.0f - screenWith * cameraSize / screenHight;
-
-            Boundary boundary = new Boundary
-            {
-                MaxX = dx,
-                MaxY = dy,
-                MinX = -dx,
-                MinY = -dy - 0.8f
-            };
-            nowBoundary = boundary;
-            return boundary;
-        }
+     
          
       
         

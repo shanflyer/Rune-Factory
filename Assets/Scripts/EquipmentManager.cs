@@ -37,7 +37,7 @@ public class EquipmentManager : MonoBehaviour
             if (euqipment.objName != "")
             {
                GameObject obj=FurnitureTransform.Find(euqipment.objName).gameObject;
-                if (euqipment.id == 2006&&GameComponentData.gameData.gameDebugAction.HaveChildTest)
+                if (euqipment.id == 2006)
                 {
                     euqipment.isBuy = true;
                 }

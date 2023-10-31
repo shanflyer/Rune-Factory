@@ -101,7 +101,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     public void NameInputAction(string value)
     {
-        string nameStr = InputFieldAction.Ctr(value, 12);
+        string nameStr = value;
         playerName = nameStr;
         NameInputField.text = nameStr;
     }

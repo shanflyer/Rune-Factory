@@ -21,7 +21,7 @@ public class SetChildNameAction : MonoBehaviour
 
     public void SetInputFieldValue()
     {
-        childName = InputFieldAction.Ctr(inputField.text, 15);
+       // childName = InputFieldAction.Ctr(inputField.text, 15);
         inputField.text = childName;
     }
 
@@ -29,7 +29,7 @@ public class SetChildNameAction : MonoBehaviour
     {
         GameComponentData.gameData.gameManager.childData=new ChildData(childName);
         
-        GameComponentData.gameData.filmManager.PlayNowFilm();
+       // GameComponentData.gameData.filmManager.PlayNowFilm();
         gameObject.SetActive(false);
     }
 	// Update is called once per frame

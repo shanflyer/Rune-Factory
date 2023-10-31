@@ -168,7 +168,7 @@ public class GuideController : MonoBehaviour
         {
             Time.timeScale = 1;
             nowGuide.end = true;
-            GameComponentData.gameData.eventManager.CheckEvents();
+           // GameComponentData.gameData.eventManager.CheckEvents();
             nowGuide = null;
             guideStep = null;
             maskObj.SetActive(false);

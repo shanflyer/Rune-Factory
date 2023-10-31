@@ -17,7 +17,7 @@ public class ChildFunctionAction : MonoBehaviour
     public InputField NameInputField;
     public Text BodyText, MindText, BodyStatusText, MindStatusText;
 
-    public ValueSetDisplay FoodValueSetDisplay, MoodValueSetDisplay, CleanValueSetDisplay;
+   // public ValueSetDisplay FoodValueSetDisplay, MoodValueSetDisplay, CleanValueSetDisplay;
 
     private ChildData childData;
     public GameObject milkObj, niaobuObj, flyObj;
@@ -26,7 +26,7 @@ public class ChildFunctionAction : MonoBehaviour
     private string displayText;
     public void ChangeName()
     {
-        NameInputField.text = InputFieldAction.Ctr(NameInputField.text,15);
+       // NameInputField.text = InputFieldAction.Ctr(NameInputField.text,15);
         GameComponentData.gameData.gameManager.childData.name = NameInputField.text;
         DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
     }
@@ -39,9 +39,9 @@ public class ChildFunctionAction : MonoBehaviour
         BodyStatusText.text = childData.BodyGrowStatus.ToString();
         MindStatusText.text = childData.MindGrowStatus.ToString();
 
-        FoodValueSetDisplay.SetValue(childData.foodValue);
-        MoodValueSetDisplay.SetValue(childData.moodValue);
-        CleanValueSetDisplay.SetValue(childData.cleanValue);
+        //FoodValueSetDisplay.SetValue(childData.foodValue);
+        //MoodValueSetDisplay.SetValue(childData.moodValue);
+        //CleanValueSetDisplay.SetValue(childData.cleanValue);
 
         int bodyGrowValue = Mathf.RoundToInt((childData.foodValue + childData.moodValue) / 2.0f);
         if (childData.foodValue == 0)
