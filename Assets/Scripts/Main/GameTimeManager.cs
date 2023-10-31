@@ -128,8 +128,6 @@ public class GameTime
            
             GameComponentData.gameData.charactorTitleAction.AddSleepDays();   
             GameComponentData.gameData.gameManager.ChildDateCost();
-            GameComponentData.gameData.gameManager.gamePlayer.isAnMo = false;
-            GameComponentData.gameData.gameManager.gamePlayer.isMarriedFood = false;
 
             
         }

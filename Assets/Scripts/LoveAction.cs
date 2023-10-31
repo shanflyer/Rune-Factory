@@ -39,7 +39,7 @@ public class LoveAction : MonoBehaviour {
     }
     public void YueHuiEndTalkAction()
     {
-        GameComponentData.gameData.gameManager.MoveToMap(2010);
+       // GameComponentData.gameData.gameManager.MoveToMap(2010);
 
     }
     public void YueTalk1End() {
@@ -55,18 +55,7 @@ public class LoveAction : MonoBehaviour {
         }
         
     }
-
-    public void YuehuiEnd()
-    { 
-        GameComponentData.gameData.gameManager.MoveToOldMap();
-       // Destroy(GameComponentData.gameData.mapParent.GetComponentInChildren<SeasonSelect>().LoverTransform.GetChild(0).gameObject);
-    }
-    public void YueTalk0End()
-    {
-        loveFunctionObj.SetActive(true);
-        yueTalkObj1.SetActive(true);
-        yueTalkObj2.SetActive(false);
-    }
+ 
 
     public void SelectYueButton1(int x)
     {
@@ -97,9 +86,9 @@ public class LoveAction : MonoBehaviour {
 
     public void WeddingEnd()
     { 
-        GameComponentData.gameData.gameManager.gamePlayer.isMarried = true;
+       // GameComponentData.gameData.gameManager.gamePlayer.isMarried = true;
        
-        GameComponentData.gameData.gameManager.MoveToMap(1003);
+       // GameComponentData.gameData.gameManager.MoveToMap(1003);
     }
 
  

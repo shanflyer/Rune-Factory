@@ -41,31 +41,29 @@ public class SelectLoadPanel : GamePanel<IReferenceData>
 
     public override Task InitData(string dataKay)
     {
-        if (DataSaveAndLoadTest.LoadSaveData(0))
-        {
-            GameSaveData gameSaveData = DataSaveAndLoadTest.gameSaveData;
+        GameSaveData gameSaveData;
+        if (GameDataSaveManager.instance.LoadSaveData(0,out gameSaveData))
+        { 
             SaveReference.Refresh(gameSaveData, 0);
         }  
         for(int i = 1; i <= 3; i++)
         {
-            if (DataSaveAndLoadTest.LoadSaveData(i))
-            {
-                GameSaveData ManualSaveData = DataSaveAndLoadTest.gameSaveData;
-                var saveReference = Instantiate(SaveReference, SaveDataParent);
-                saveReference.Refresh(ManualSaveData, i);
-                saveReference.SetToggleGroup(toggleGroup);
-            }
-           
+            GameSaveData ManualSaveData;
+            GameDataSaveManager.instance.LoadSaveData(i, out ManualSaveData);
+            var saveReference = Instantiate(SaveReference, SaveDataParent);
+            saveReference.Refresh(ManualSaveData, i);
+            saveReference.SetToggleGroup(toggleGroup);
+
         } 
         return base.InitData(dataKay);
     }
 
     void StartAction()
     {
-        if (DataSaveAndLoadTest.CheckSaveData(SelectedIndex))
+        if (GameDataSaveManager.instance.CheckSaveData(SelectedIndex))
         {
-            DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
-            DataSaveAndLoadTest.isJsonData = true;
+           // DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
+           // DataSaveAndLoadTest.isJsonData = true;
             ExploreManager.instance.EnterChapter(-1);
            // SceneManager.instance.SwitchScene("001");
             //UIManager.instance.ShowGamePanel<LoadingPanel>();
@@ -75,18 +73,18 @@ public class SelectLoadPanel : GamePanel<IReferenceData>
     }
     void CopyData()
     {
-        if (!DataSaveAndLoadTest.CheckSaveData(SelectedIndex))
+        if (!GameDataSaveManager.instance.CheckSaveData(SelectedIndex))
         {
-            DataSaveAndLoadTest.CreatSaveData(SelectedIndex);
+            GameDataSaveManager.instance.CreatSaveData(SelectedIndex);
         }
         else
         {
             bool copySuccess = false;
             for (int target = 1; target <= 3; target++)
             {
-                if (!DataSaveAndLoadTest.CheckSaveData(target))
+                if (!GameDataSaveManager.instance.CheckSaveData(target))
                 {
-                    DataSaveAndLoadTest.CopySaveData(SelectedIndex, target);
+                    GameDataSaveManager.instance.CopySaveData(SelectedIndex, target);
                     copySuccess = true;
                     break;
                 }
@@ -99,7 +97,7 @@ public class SelectLoadPanel : GamePanel<IReferenceData>
     }
     void DeleteData()
     {
-        DataSaveAndLoadTest.DeletaSaveData(SelectedIndex);
+        GameDataSaveManager.instance.DeletaSaveData(SelectedIndex);
     }
     int SelectedIndex;
     public void RefreshDataFuncButton(int index,bool nullData)

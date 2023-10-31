@@ -40,7 +40,7 @@ public class SaveReference : UIObjReference<GameSaveData>
     {
         this.DataIndex = index;
         this.gameSaveData = gameSaveData;
-        if (gameSaveData != null)
+        if (string.IsNullOrEmpty(gameSaveData.saveTime))
         {
             Meal.enabled = gameSaveData.playerSaveData.gender==Gender.male;
             Femeal.enabled = gameSaveData.playerSaveData.gender == Gender.female;
@@ -48,9 +48,9 @@ public class SaveReference : UIObjReference<GameSaveData>
 
             Level.text =GameCommon.AddString("Lv." ,gameSaveData.playerSaveData.level.ToString());
             Name.text = gameSaveData.playerSaveData.name;
-            Money.text = gameSaveData.playerMoneyData.money0.ToString();
+            Money.text = gameSaveData.money0.ToString();
             Time.text =$"{gameSaveData.dateData.date}/{LanguageManage.SwitchStr(gameSaveData.dateData.season.ToString())}/{gameSaveData.dateData.year}";
-            SaveTime.text = gameSaveData.saveTime1.value;
+            SaveTime.text = gameSaveData.saveTime;
         }
         else
         {
@@ -72,7 +72,7 @@ public class SaveReference : UIObjReference<GameSaveData>
         if (value)
         {
            var selectLoadPanel=await  UIManager.instance.GetGamePanel<SelectLoadPanel>();
-            selectLoadPanel.RefreshDataFuncButton(DataIndex,gameSaveData==null);
+            selectLoadPanel.RefreshDataFuncButton(DataIndex,gameSaveData.IsNull());
         }
     }
   

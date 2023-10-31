@@ -105,18 +105,7 @@ public class Heritage
                 switch (heritageType)
                 {
                     case HeritageType.金币捡完:
-                        if (DataSaveAndLoadTest.isJsonData)
-                        {
-                            isGet = true;
-                        }
-                        else
-                        {
-                           // if ((GameComponentData.gameData.coinAction.Coins != null && GameComponentData.gameData.coinAction.Coins.Count <= 0) && charactorTitleAction.busicessExp > 0)
-                            {
-                                isGet = true;
-                                
-                            }
-                        }
+                      
                        
 
                         break;

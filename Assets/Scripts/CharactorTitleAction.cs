@@ -194,28 +194,6 @@ public class CharactorTitleAction : MonoBehaviour
         DisplayGetTitle();
     }
 
-    public void CheckMoney()
-    {
-        var charactorTitles = CharactorTitles.FindAll(c => c.titleType == TitleType.其他 && !c.isGet &&
-                                                           c.typeValue == 0 &&
-                                                           int.Parse(c.valueStr) <=
-                                                           GameComponentData.gameData.gameManager.gamePlayer.money);
-        if (charactorTitles != null)
-        {
-            foreach (var charactorTitle in charactorTitles)
-            {
-                if (GetCharactorTitles == null)
-                {
-                    GetCharactorTitles = new List<CharactorTitle>();
-                }
-                GetCharactorTitles.Add(charactorTitle);
-                charactorTitle.isGet = true;
-            }
-            DisplayGetTitle();
-        }
-       
-        
-    }
     public void AddCookCount(int value, int index)
     {
         int Xcount = 0;

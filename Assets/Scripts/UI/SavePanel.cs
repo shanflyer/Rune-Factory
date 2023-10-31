@@ -44,36 +44,33 @@ public class SavePanel : GamePanel<IReferenceData>
         
         for(int i = 1; i <= 3; i++)
         {
-            if (DataSaveAndLoadTest.LoadSaveData(i))
-            {
-                GameSaveData ManualSaveData = DataSaveAndLoadTest.gameSaveData;
-                var saveReference = Instantiate(SaveReference, SaveDataParent);
-                saveReference.Refresh(ManualSaveData, i);
-                saveReference.SetToggleGroup(toggleGroup);
-            }
-           
+            GameSaveData ManualSaveData;
+            GameDataSaveManager.instance.LoadSaveData(i, out ManualSaveData);
+            var saveReference = Instantiate(SaveReference, SaveDataParent);
+            saveReference.Refresh(ManualSaveData, i);
+            saveReference.SetToggleGroup(toggleGroup);
+
         } 
         return base.InitData(dataKay);
     }
 
     void SaveAction()
     {
-        if (DataSaveAndLoadTest.CheckSaveData(SelectedIndex))
+        if (GameDataSaveManager.instance.SaveData(SelectedIndex))
         {
-            DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
-            DataSaveAndLoadTest.isJsonData = true; 
-
+            //DataSaveAndLoadTest.LoadSaveData(SelectedIndex);  
+            
             Close();
         } 
     }
     void CopyData()
     {
-        DataSaveAndLoadTest.gameSaveData.SaveData();
-        DataSaveAndLoadTest.CreatSaveData(SelectedIndex);
+       // DataSaveAndLoadTest.gameSaveData.SaveData();
+       // DataSaveAndLoadTest.CreatSaveData(SelectedIndex);
     }
     void DeleteData()
     {
-        DataSaveAndLoadTest.DeletaSaveData(SelectedIndex);
+        GameDataSaveManager.instance.DeleteSaveData(SelectedIndex);
     }
     int SelectedIndex;
     public void RefreshDataFuncButton(int index,bool nullData)

@@ -28,7 +28,7 @@ public class ChildFunctionAction : MonoBehaviour
     {
        // NameInputField.text = InputFieldAction.Ctr(NameInputField.text,15);
         GameComponentData.gameData.gameManager.childData.name = NameInputField.text;
-        DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
+        //DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
     }
     public void DisplayChildData()
     {
@@ -96,7 +96,6 @@ public class ChildFunctionAction : MonoBehaviour
         LanguageManage.TextFanyi(BodyStatusText);
         LanguageManage.TextFanyi(MindStatusText);
 
-        GamePlayer gamePlayer = GameComponentData.gameData.gameManager.gamePlayer;
         
     }
 
@@ -119,7 +118,7 @@ public class ChildFunctionAction : MonoBehaviour
             }
             StartCoroutine("Displaying");
             displayText = "宝宝的饮食系数增加了！";
-            DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
+            //DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
         }
         else
         {
@@ -147,7 +146,7 @@ public class ChildFunctionAction : MonoBehaviour
             }
             StartCoroutine("Displaying");
             displayText = "宝宝的清洁系数增加了！";
-            DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
+            //DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
         }
         else
         {
@@ -175,7 +174,7 @@ public class ChildFunctionAction : MonoBehaviour
             }
             StartCoroutine("Displaying");
             displayText = "宝宝的情绪系数增加了！";
-            DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
+            //DataSaveAndLoadTest.gameSaveData.marryData.SetChildData();
         }
         else
         {

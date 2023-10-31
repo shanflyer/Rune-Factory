@@ -139,7 +139,7 @@ public class GuideController : MonoBehaviour
 
     public void CheckGuide()
     {
-        if (!DataSaveAndLoadTest.isJsonData&&isGuide)
+        //if (!DataSaveAndLoadTest.isJsonData&&isGuide)
         {
             foreach (var guide in guides)
             {

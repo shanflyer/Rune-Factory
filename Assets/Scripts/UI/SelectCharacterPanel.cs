@@ -119,7 +119,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
             optionData.text = LanguageManage.SwitchStr(optionData.text);
         }
 
-        DataSaveAndLoadTest.isJsonData = false;
+        //DataSaveAndLoadTest.isJsonData = false;
         AudioController.instance.PlayAudio(SE.click);
         gender = Gender.male;
         playerName = LanguageManage.SwitchStr("亚历克斯");
@@ -135,7 +135,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         AudioController.instance.PlayAudio(SE.click);
 
         GameDataManager.instance.InitPlayerData(playerName, gender, brothSeason, brothDate); 
-        DataSaveAndLoadTest.IniteZerodata();
+        //DataSaveAndLoadTest.IniteZerodata();
         UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel>(layer: 3);
 
     }
