@@ -146,6 +146,9 @@ public struct NPC : INativeData, IReferenceData
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(npcData.linkCharacterId);
         return characterData;
     }
+    public void Dispose()
+    {
+    }
     public int Key => dataId;
 }
 public class NPCManager : Singleton<NPCManager>

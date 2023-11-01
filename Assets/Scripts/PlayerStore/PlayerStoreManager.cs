@@ -278,7 +278,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     
 } 
 
-public struct RuntimeStoreCounter:INativeData
+public struct RuntimeStoreCounter : INativeData
 {
    
     public int instanceId; 
@@ -287,5 +287,9 @@ public struct RuntimeStoreCounter:INativeData
     public int count;
 
     public int Key => instanceId;
+
+    public void Dispose()
+    {
+    }
 }
  

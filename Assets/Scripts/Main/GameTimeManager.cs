@@ -1,6 +1,9 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 [System.Serializable]
@@ -20,84 +23,60 @@ public enum Season
 }
 
 [System.Serializable]
-public class GameDate:IReferenceData
+public struct GameDate : IReferenceData, INativeData
 {
-    public int year;
     public Season season;
     public int date;
-    [HideInInspector]
-    public List<int> FestivaList;
-    [HideInInspector]
-    public List<int> CustomFestival;
-    public GameDate()
+    public UnsafeList<int> FestivaList;
+    public UnsafeList<int> CustomFestival;
+     
+    public GameDate(Season _season,int _date,List<int> _festivals)
     {
-        year = 1330;
-        season=Season.春;
-        date = 1;
-        FestivaList=new List<int>();
-        CustomFestival=new List<int>();
-    }
-    public GameDate(GameDate gameDate)
-    {
-        year = gameDate.year;
-        season = gameDate.season;
-        date = gameDate.date;
-        FestivaList = new List<int>();
-        foreach (var i in gameDate.FestivaList)
-        {
-            FestivaList.Add(i);
-        }
-        CustomFestival = new List<int>();
-        foreach (var i in gameDate.CustomFestival)
-        {
-            CustomFestival.Add(i);
-        }
-    }
-    public GameDate(int _year,Season _season,int _date,List<int> _festivals)
-    {
-        year = _year;
         season = _season;
         date = _date;
-        FestivaList=new List<int>();
+        FestivaList=new UnsafeList<int>(4, Allocator.TempJob);
         foreach (var festival in _festivals)
         {
             FestivaList.Add(festival);
         }
-        CustomFestival=new List<int>();
+        CustomFestival= new UnsafeList<int>(4, Allocator.TempJob);
     }
+    public void Dispose()
+    {
+        FestivaList.Dispose();
+        CustomFestival.Dispose();
+    }
+    public int Key => (int)season * 100 + date;
 }
 [System.Serializable]
 public class GameTime
-{
-    public GameDate gameDate;
+{ 
+    public int year;
+    public Season season;
+    public int date;
     public int hour;
-    public int minute;
-    [HideInInspector]
+    public int minute; 
     public Week week;
 
     public GameTime()
-    {
-        gameDate=new GameDate();
+    { 
         hour = 0;
         minute = 0;
-        week=Week.SunDay;
-
+        week=Week.SunDay; 
     }
-
-    public GameTime(GameTime gameTime)
+    public int GetTimeKey()
     {
-        gameDate = new GameDate(gameTime.gameDate);
-        hour = gameTime.hour;
-        minute = gameTime.minute;
-        week = gameTime.week;
+      return (year*1000+ (int)season * 100) + date;
     }
-
+    public int GetTimeKeyNoYear()
+    {
+        return ((int)season * 100) + date;
+    }
     public GameTime(int _year, Season _season, int _date, int _hour, int _minute)
-    {
-        gameDate=new GameDate();
-        gameDate.year = _year;
-        gameDate.season = _season;
-        gameDate.date = _date;
+    { 
+        year = _year;
+        season = _season;
+        date = _date;
         hour = _hour;
         minute = _minute;
         TimeInit();
@@ -122,7 +101,7 @@ public class GameTime
         }
         if (hour >= 24)
         {
-            gameDate.date += hour / 24;
+            date += hour / 24;
             hour = hour % 24;
             GameActionManager.instance.QueueAction(new NewDay());
            
@@ -131,38 +110,38 @@ public class GameTime
 
             
         }
-        if (gameDate.date > 30)
+        if (date > 30)
         {
-            int seasonId = (int)gameDate.season;
+            int seasonId = (int)season;
             if (seasonId < 4)
             {
                 seasonId++;
             }
             else if(seasonId == 4)
             {
-                gameDate.year++;
+                year++;
                 seasonId = 1;
             }
-            gameDate.season = (Season)seasonId;
-            gameDate.date = 1; 
+            season = (Season)seasonId;
+            date = 1; 
         }
-        int x = gameDate.date %6;
+        int x = date %6;
         week = (Week)x;
           
         if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
         {
-            InformationController.instance.AddInformation("*" + gameDate.year + "年" + gameDate.season + "之月" + gameDate.date + "日");
+            InformationController.instance.AddInformation("*" + year + "年" + season + "之月" + date + "日");
         }
         else
         {
-            InformationController.instance.AddInformation("*" + gameDate.date + "," + LanguageManage.SwitchStr(gameDate.season.ToString()) + "," + gameDate.year + LanguageManage.SwitchStr("年"));
+            InformationController.instance.AddInformation("*" + date + "," + LanguageManage.SwitchStr(season.ToString()) + "," + year + LanguageManage.SwitchStr("年"));
         }
     }
     public void Sleep()
     {
         minute = 0;
         hour = 6;
-        gameDate.date++;
+        date++;
         TimeInit();
     }
 
@@ -177,65 +156,86 @@ public class GameTime
 }
 public class GameTimeManager : Singleton<GameTimeManager>
 {
-    public GameTime nowGameTime;
-    public GameTime startTime;
+    private GameTime nowGameTime;
     public float timeRunScale=1;
 
-    [HideInInspector]
-    public List<GameDate> gameDates;
+    public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime);
+    public int Year => nowGameTime.year;
+    public Season Season => nowGameTime.season;
+    public int Day => nowGameTime.date;
 
+    MyNativeData<GameDate> gameDates = new MyNativeData<GameDate>();
+    public List<GameDate> GetGameDataForSeason(Season season)
+    {
+        List<GameDate> results = new List<GameDate>();
+        for(int i = 1; i <= 30; i++)
+        {
+            int key = (int)season * 100 + i;
+            if(gameDates.GetData(key,out var gameDate))
+            {
+                results.Add(gameDate);
+            }            
+        }
+        return results;
+    }
+    protected override void Clear()
+    {
+        base.Clear();
+        gameDates.Dispose();
+    }
     public override void Init()
     {
         base.Init();
-        nowGameTime = startTime;
+        gameDates.Init(120);
         CreatData();
+    }
+
+    void ZeroGameTime()
+    {
+
     }
     public string GameTimeToString()
     {
-        string timeStr = nowGameTime.gameDate.year.ToString();
-        timeStr += "," + nowGameTime.gameDate.season;
-        timeStr += "," + nowGameTime.gameDate.date;
+        string timeStr = nowGameTime.year.ToString();
+        timeStr += "," + nowGameTime.season;
+        timeStr += "," + nowGameTime.date;
         return timeStr;
     }
 
-    public GameDate StringToGameTime(string timeStr)
+    public void StringToGameTime(string timeStr)
     {
         var x = timeStr.Split(',');
-        GameDate gameDate=new GameDate();
-        gameDate.year = int.Parse(x[0]);
-        gameDate.season = (Season) Enum.Parse(typeof(Season),x[1]);
-        gameDate.date = int.Parse(x[2]);
-        return gameDate;
+        nowGameTime.year = int.Parse(x[0]);
+        nowGameTime.season = (Season) Enum.Parse(typeof(Season),x[1]);
+        nowGameTime.date = int.Parse(x[2]); 
     }
 
     public int DaysToSave(string timeStr)
     {
-        GameDate saveDate = StringToGameTime(timeStr);
-        int years = nowGameTime.gameDate.year - saveDate.year;
-        int months= nowGameTime.gameDate.season - saveDate.season;
-        int days = nowGameTime.gameDate.date - saveDate.date;
+        var x = timeStr.Split(',');
+        int years = int.Parse(x[0]);
+        int months = (int)Enum.Parse(typeof(Season), x[1]);
+        int days = int.Parse(x[2]);
         return (years * 4 + months) * 30 + days;
-
     }
-     
-   public void CreatData()
+
+    public void CreatData()
     {
-        gameDates=new List<GameDate>();
+        //gameDates=new List<GameDate>();
         for (int i = 1; i <= 120; i++)
         {
-            int seasonId = (i-1) / 30 + 1;
-            int date = i - (seasonId-1) * 30;
-            Season season = (Season) seasonId;
-            List<FestivalData> festivals=FestivalManager.instance.FestivalDatas.FindAll(f=>f.season==season&&
-            f.date==date);
-            List<int> festivalIds=new List<int>();
+            int seasonId = (i - 1) / 30 + 1;
+            int date = i - (seasonId - 1) * 30;
+            Season season = (Season)seasonId;
+            List<FestivalData> festivals = FestivalManager.instance.FestivalDatas.FindAll(f => f.season == season &&
+            f.date == date);
+            List<int> festivalIds = new List<int>();
             foreach (var festivalData in festivals)
             {
                 festivalIds.Add(festivalData.id);
             }
-            GameDate gameDate=new GameDate(nowGameTime.gameDate.year,season,date,festivalIds);
-            gameDates.Add(gameDate);
-
+            GameDate gameDate = new GameDate(season, date, festivalIds);
+            gameDates.AddData(gameDate);
         }
         //timeDisplayAction.UpdataTime();
     }
@@ -257,10 +257,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public void NextDate()
     {
         nowGameTime.minute = 0;
-        
         nowGameTime.AddDate();
-        //timeDisplayAction.UpdataTime();
-        //StartTimeRun();
     }
 
     IEnumerator TimeRun()

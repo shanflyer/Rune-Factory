@@ -15,7 +15,9 @@ public struct FightChapter:IReferenceData,INativeData
     public int successEventId;
     public int nowStep;
     public bool open;
-
+    public void Dispose()
+    {
+    }
     public int Key => mapId; 
 }
 public class ExploreManager : Singleton<ExploreManager>

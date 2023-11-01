@@ -10,6 +10,7 @@ using Unity.Mathematics;
 
 public interface INativeData
 {
+    public void Dispose();
     public int Key { get; }
 }
 public struct MyNativeData<T>where T : unmanaged, INativeData
@@ -32,6 +33,11 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
     {
         try
         {  
+            for(int  i = 0; i < datas.Length; i++)
+            {
+                datas[i].Dispose();
+            }
+
             datas.Dispose();
             itemIndexes.Dispose();
             nullIndexes.Dispose();

@@ -326,7 +326,9 @@ public struct Field : INativeData
     public FieldState fieldState;
     public bool isSetWater;
     public int plantId;
-
+    public void Dispose()
+    {
+    }
     public int Key => instanceId;
 }
 public enum PlantState 
@@ -404,5 +406,9 @@ public struct Plant:INativeData
             return false;
         }
         return false ;
-    } 
+    }
+
+    public void Dispose()
+    {
+    }
 }

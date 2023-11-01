@@ -545,4 +545,7 @@ public struct RuntimeMapItem : INativeData
     public int2 coordinate;
     public int2 animationKey;
     public int Key => instanceId;
+    public void Dispose()
+    {
+    }
 }

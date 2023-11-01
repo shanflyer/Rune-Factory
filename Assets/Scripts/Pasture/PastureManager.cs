@@ -504,4 +504,7 @@ public struct Animal : INativeData
             }
         }
     }
+    public void Dispose()
+    {
+    }
 }

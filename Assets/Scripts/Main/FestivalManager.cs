@@ -42,7 +42,6 @@ public class FestivalManager : Singleton<FestivalManager>
         {
             return;
         }
-        List<GameTime> gameTimes=new List<GameTime>();
         CharacterSaveData characterSaveData = GameDataSaveManager.instance.UserGameSaveData.playerData;
 
         FestivalData festivalData0 =
@@ -54,8 +53,6 @@ public class FestivalManager : Singleton<FestivalManager>
                 id = 8
             };
         FestivalDatas.Add(festivalData0);
-        GameTime gameTime=new GameTime(0,festivalData0.season,festivalData0.date,0,0);
-        gameTimes.Add(gameTime);
     }
    
 }

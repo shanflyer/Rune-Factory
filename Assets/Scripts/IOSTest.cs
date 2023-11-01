@@ -18,10 +18,10 @@ public class IOSTest : MonoBehaviour
     public void SharWebUrl()
     {
         string notice = LanguageManage.SwitchStr("我发现的一款好玩的游戏");
-        if (GameTimeManager.instance.nowGameTime.gameDate.season ==Season.春&&GameTimeManager.instance.nowGameTime.gameDate.year!=1300)
+        if (GameTimeManager.instance.Season ==Season.春&&GameTimeManager.instance.Year!=1300)
         {
             notice = LanguageManage.SwitchStr("我已经在这个游戏中度过") +
-                (GameTimeManager.instance.nowGameTime.gameDate.year - 1300 )+ LanguageManage.SwitchStr("年了！");
+                (GameTimeManager.instance.Year - 1300 )+ LanguageManage.SwitchStr("年了！");
         }
         if (Application.platform == RuntimePlatform.IPhonePlayer)
         {

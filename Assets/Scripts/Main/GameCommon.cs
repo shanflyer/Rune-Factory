@@ -75,6 +75,11 @@ public enum EntityType
 }
 public class GameCommon
 {
+    public const int zeroGameYear=1300;
+    public const Season zeroSeasom = Season.´º;
+    public const int zeroDay = 1;
+
+
     public const int animalDefaultFoodItem = 70;
     public const int selectEquipBoxAction = 90;
     public const int defaultGiftTalk = 8888;
@@ -545,7 +550,7 @@ public class GameCommon
 }
 
 public static class DefaultGameData
-{
+{ 
     public const int defaultDay = 1;
     public const int defaultHour = 8;
     
@@ -619,7 +624,9 @@ public static class DataPath
         {typeof(PlantData),"Data/PlantData" },
         {typeof(FieldArea),"Data/FieldArea" },
         {typeof(PastureData),"Data/PastureData" },
-        {typeof(AnimalData),"Data/AnimalData" }
+        {typeof(AnimalData),"Data/AnimalData" },
+        {typeof(FishData),"Data/FishData" },
+        {typeof(FishPondData),"Data/FishPondData" }
     };
 
     public static string GetDataPath(Type type)

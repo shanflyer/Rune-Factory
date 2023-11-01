@@ -50,10 +50,10 @@ public class CalendarPanel : GamePanel<IReferenceData>
     public override Task InitData(string dataKay)
     {
 
-        year = GameTimeManager.instance.nowGameTime.gameDate.year;
-        season = GameTimeManager.instance.nowGameTime.gameDate.season;
+        year = GameTimeManager.instance.Year;
+        season = GameTimeManager.instance.Season;
         GameTimeManager.instance.StopTimeRun();
-        CreatSeason(GameTimeManager.instance.nowGameTime.gameDate.season);
+        CreatSeason(season);
         if (year <= 1 && season == Season.春)
         {
             forwardMonthButton.interactable = false;
@@ -68,7 +68,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
     
     void AfterDisplay()
     {
-        date = GameTimeManager.instance.nowGameTime.gameDate.date;
+        date = GameTimeManager.instance.Day;
         DataTimeText.text = year + LanguageManage.SwitchStr("年") + " " + LanguageManage.SwitchStr(season + "之月");
         DatesParent.transform.GetChild(date - 1).GetComponentInChildren<Toggle>().isOn =
           true;
@@ -119,9 +119,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
     } 
     void CreatSeason(Season season)
     {
-        List<GameDate> gameDates =
-            GameTimeManager.instance.gameDates.FindAll(g => g.season == season);
-
+        List<GameDate> gameDates = GameTimeManager.instance.GetGameDataForSeason(season);  
         if (DatesParent.transform.childCount > gameDates.Count)
         {
             for(int i = gameDates.Count; i < DatesParent.transform.childCount; i++)
@@ -171,7 +169,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
             FestivalData festivalData = festivalDatas.Find(f => f.id == festivalId);
             festivalStr += "·" + festivalData.name+"\n";
         }
-        if (year == GameTimeManager.instance.nowGameTime.gameDate.year)
+        if (year == GameTimeManager.instance.Year)
         {
             foreach (var festivalId in _gameDate.CustomFestival)
             {

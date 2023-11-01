@@ -93,11 +93,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         HPValue.text = $"{characterProperty.HP}/{characterProperty.MaxHP}";
         RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
 
-        var gameTime = GameTimeManager.instance.nowGameTime;
-        if (gameTime != null)
-        {
-            date.text = LanguageManage.instance.GameTimeToString(gameTime);
-        }
+        date.text = GameTimeManager.instance.NowGameTime;
 
         return base.InitData(dataKay);
     }
@@ -118,12 +114,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     }
     void UpdateGameTime(UpdateGameTime updateGameTime)
     {
-        var gameTime = GameTimeManager.instance.nowGameTime;
-        if (gameTime != null)
-        {
-            date.text = LanguageManage.instance.GameTimeToString(gameTime);
-        }
-      
+        date.text = GameTimeManager.instance.NowGameTime; 
     }
 
 }
