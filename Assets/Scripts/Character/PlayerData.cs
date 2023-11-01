@@ -60,6 +60,7 @@ public struct OtherSaveData
 public struct CharacterSaveData:IReferenceData
 {
     public string name;
+    public int characterId;
     public int level;
     public int exp;
     public Gender gender;

@@ -1,6 +1,7 @@
 using OldName;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,42 +10,39 @@ public class SaveReference : UIObjReference<UserGameSaveData>
     [SerializeField]
     Toggle SelectToggle;
     [SerializeField]
-    Image Meal,Femeal;
+    Image Icon;
     [SerializeField]
-    Text Name;
+    TextMeshProUGUI Name;
     [SerializeField]
-    Text Level;
+    TextMeshProUGUI Level;
     [SerializeField]
-    Text Money; 
+    TextMeshProUGUI Money; 
     [SerializeField]
-    Text Time;
+    TextMeshProUGUI Time;
     [SerializeField]
-    Text SaveTime;
-     
-    int DataIndex = 0;
+    TextMeshProUGUI SaveTime;
+      
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
 
         SelectToggle = GetComponent<Toggle>();
-        Meal = FindChildGameObject<Image>("Meal");
-        Femeal = FindChildGameObject<Image>("Femeal");
-        Name = FindChildGameObject<Text>("Name");
-        Level = FindChildGameObject<Text>("Level");
-        Money = FindChildGameObject<Text>("Money");
-        Time = FindChildGameObject<Text>("Time");
-        SaveTime = FindChildGameObject<Text>("SaveTime");
+        Icon = FindChildGameObject<Image>("NPCImage"); 
+        Name = FindChildGameObject<TextMeshProUGUI>("Name");
+        Level = FindChildGameObject<TextMeshProUGUI>("Level");
+        Money = FindChildGameObject< TextMeshProUGUI>("Money");
+        Time = FindChildGameObject<TextMeshProUGUI>("Time");
+        SaveTime = FindChildGameObject<TextMeshProUGUI>("SaveTime");
     }
-    public override void InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
         if (string.IsNullOrEmpty(data.saveTime))
         {
-            Meal.enabled = data.playerData.gender == Gender.male;
-            Femeal.enabled = data.playerData.gender == Gender.female;
-
-
+            Icon.enabled = true;
+            CharacterData characterData=await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.characterId);
+            Icon.sprite = characterData.icon;
             Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
             Name.text = data.playerData.name;
             Money.text = data.otherSaveData.gold.ToString();
@@ -53,8 +51,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         }
         else
         {
-            Meal.enabled = false;
-            Femeal.enabled = false;
+            Icon.enabled = false;
             Level.text = "-";
             Name.text = "-";
             Money.text = "-";

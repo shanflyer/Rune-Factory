@@ -73,7 +73,8 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     {
         base.InitReferenceData(v);
         selectGameSaveData = default(UserGameSaveData);
-        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup) ;
+        SaveReference.InitData(v.nowSaveData,SelectAction, toggleGroup);
+        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
     } 
     void StartAction()
     {
