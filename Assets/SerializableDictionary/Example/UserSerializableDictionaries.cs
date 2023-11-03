@@ -5,6 +5,8 @@ using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
 [Serializable]
+public class SeasonRandomDictionary : SerializableDictionary<Season, int> { }
+[Serializable]
 public class ItemAnimationDictionary : SerializableDictionary<int2, AnimationStateData> { }
 [Serializable]
 public class IntBehaviorDictionary: SerializableDictionary<int,ExternalBehaviorTree> { }

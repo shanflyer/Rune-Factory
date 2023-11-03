@@ -292,7 +292,24 @@ public class ExcelDataEditor : MyEditor
                 fieldInfo.SetValue(data, value);
             }
         }
-        else if (fieldInfo.FieldType == typeof(List<int3>))
+        else if(fieldInfo.FieldType == typeof(List<int2>))
+        {
+            var valueStr = value.ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var strs = value.ToString().Split('|');
+
+                List<int2> _value = new List<int2>();
+                foreach (var str in strs)
+                {
+                    var _strs = str.Split(',');
+                    int2 int3Value = new int2(int.Parse(_strs[0]), int.Parse(_strs[1]));
+                    _value.Add(int3Value);
+                }
+                value = _value;
+                fieldInfo.SetValue(data, value);
+            }
+        }else if (fieldInfo.FieldType == typeof(List<int3>))
         {
             var valueStr = value.ToString();
             if (!string.IsNullOrEmpty(valueStr))

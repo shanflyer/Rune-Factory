@@ -66,6 +66,60 @@ public class FishingManager:Singleton<FishingManager>
             }
         }
     }
+
+    async void TryGetFish(TryGetFish tryGetFish)
+    {
+        if (fishPonds.GetData(tryGetFish.fishPondId, out var fish))
+        {
+            Season season = GameTimeManager.instance.Season;
+            FishPondData fishPondData = await GameDataManager.instance.GetAsyncData<FishPondData>(tryGetFish.fishPondId);
+            if(fishPondData != null)
+            {
+                int randomId = 0;
+                if(!fishPondData.seasonRandomValue.TryGetValue(season, out randomId))
+                {
+                    fishPondData.seasonRandomValue.TryGetValue(Season.Default, out randomId);
+                } 
+               var randomResults=GameRandom.instance.GetRandomValue(randomId);
+                if (randomResults.Count > 0)
+                {
+                    
+                    try
+                    {
+                        var randomResult = randomResults[0];
+                        FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(int.Parse(randomResult.result));
+                        if (fishData != null)
+                        {
+                            tryGetFish.setResult(true);
+                        }
+                        else
+                        {
+                            int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
+                            Item item = new Item
+                            {
+                                dataId = fishData.itemId,
+                                count = 1,
+                                value = randomResult.count
+                            };
+                            PackageManager.instance.SetItemInPackage(item, packageId);
+                        }
+                       
+                    }
+                    catch
+                    {
+                        tryGetFish.setResult(false);
+                    }
+                    
+                }
+            }
+            else
+            {
+                tryGetFish.setResult(false);
+            }
+            return;
+        }
+        tryGetFish.setResult(false);
+    }
 }
 public struct FishPond:INativeData
 {
