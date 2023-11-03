@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BehaviorDesigner.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,12 @@ using UnityEngine;
 public class FishData:ScriptableObject,IGameData,IReferenceData
 {
     public int id;
-    public string fishName;
     public int itemId;
+    public string fishName;
+    public string showObjName;
+    public GameObject showObj;
+    public string behaviorName;
+    public ExternalBehaviorTree externalBehavior;
     public string GetKey()
     {
         return id.ToString();

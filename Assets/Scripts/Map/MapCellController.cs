@@ -79,6 +79,15 @@ public class MapCellController : Singleton<MapCellController>
         public NativeList<TriggerArea> triggerAreas;
         private NativeHashMap<int, int> triggerIndexs;
 
+        public int2[] GetItemTriggerCells(int instanceId)
+        {
+            if(triggerIndexs.TryGetValue(instanceId,out var index))
+            {
+                return triggerAreas[index].cells.ToArray();
+            }
+            return null;
+        }
+
         public void InitTriggerData()
         {
             triggerAreas = new NativeList<TriggerArea>(4, Allocator.TempJob);
@@ -140,7 +149,6 @@ public class MapCellController : Singleton<MapCellController>
             commonTriggerAreas.InitTriggerData();
             playerTriggerAreas.InitTriggerData();
         }
-
         public bool GetLinkMapInCoordinate(int linkMap, ref int2 inCoordinate)
         {
             foreach (var linkMapData in linkMaps)
@@ -370,6 +378,15 @@ public class MapCellController : Singleton<MapCellController>
         }
 
         return new int2(int.MinValue, int.MinValue);
+    }
+
+    public int2[] GetItemTriggerCells(int instanceId,int room)
+    {
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            return runtimeMapRoom.commonTriggerAreas.GetItemTriggerCells(instanceId);
+        }
+        return null;
     }
 
     /// <summary>

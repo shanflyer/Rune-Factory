@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Collections;
+using UnityEngine.InputSystem;
 
 public class FishingManager:Singleton<FishingManager>
 {
@@ -22,6 +24,53 @@ public class FishingManager:Singleton<FishingManager>
         myInstance.Clear();
         fishPonds.Dispose();
     }
+
+    async void CreatFish(int pondId)
+    {
+        if(fishPonds.GetData(pondId,out var fishPond))
+        {
+            FishPondData fishPondData = await GameDataManager.instance.GetAsyncData<FishPondData>(fishPond.Key);
+            if (fishPond.fishs.Count < fishPondData.maxFishCount)
+            {
+                Season season = GameTimeManager.instance.Season;
+                if (!fishPondData.seasonRandomValue.TryGetValue(season, out var randomId))
+                {
+                    fishPondData.seasonRandomValue.TryGetValue(Season.Default, out randomId);
+                }
+                var randomResults = GameRandom.instance.GetRandomValue(randomId);
+                if (randomResults.Count > 0)
+                {
+                    var randomResult = randomResults[0];
+                    CreatFish CreatFish = new CreatFish
+                    {
+                        dataId = int.Parse(randomResult.result),
+                        fishValue = randomResult.count,
+                        pondId = pondId,
+                        room = fishPond.room,
+                        setValue=SetValue
+                    };
+
+                    void SetValue(int fishId)
+                    {
+                        fishPond.fishs.Add(fishId);
+                        fishPonds.SetData(fishPond);
+                    }
+
+                    GameActionManager.instance.QueueAction(CreatFish,true);
+                }
+            }
+            GameTimerController.instance.DelayAction(fishPondData.produceCD, () =>
+            {
+                CreatFish(pondId);
+            });
+        }
+    }
+
+    public bool GetFishPond(int instanceId,out FishPond fishPond)
+    {
+        return fishPonds.GetData(instanceId, out fishPond);
+    }
+
     void TryDeleteFishPond(TryDeleteFishPond tryDeleteFishPond)
     {
         if (tryDeleteFishPond.instanceId != 0)
@@ -57,78 +106,44 @@ public class FishingManager:Singleton<FishingManager>
             {
                 dataId = tryCreatFishPond.dataId,
                 instanceId = instanceId,
-                iteminstanceId = tryCreatFishPond.itemId
+                itemInstanceId = tryCreatFishPond.itemId,
+                room = tryCreatFishPond.room,
+                fishs = new NativeHashSet<int>(8,Allocator.TempJob)
             };
             fishPonds.SetData(fishPond);
             if (tryCreatFishPond.setValue != null)
             {
                 tryCreatFishPond.setValue(instanceId);
             }
+            GameActionManager.instance.QueueAction(new RefreshFishPondObj
+            {
+                pondId=instanceId,
+                room=tryCreatFishPond.room,
+            });
         }
     }
 
-    async void TryGetFish(TryGetFish tryGetFish)
+    public void TryRemoveFish(int pondId,int fishId)
     {
-        if (fishPonds.GetData(tryGetFish.fishPondId, out var fish))
+        if(fishPonds.GetData(pondId,out var fishPond))
         {
-            Season season = GameTimeManager.instance.Season;
-            FishPondData fishPondData = await GameDataManager.instance.GetAsyncData<FishPondData>(tryGetFish.fishPondId);
-            if(fishPondData != null)
-            {
-                int randomId = 0;
-                if(!fishPondData.seasonRandomValue.TryGetValue(season, out randomId))
-                {
-                    fishPondData.seasonRandomValue.TryGetValue(Season.Default, out randomId);
-                } 
-               var randomResults=GameRandom.instance.GetRandomValue(randomId);
-                if (randomResults.Count > 0)
-                {
-                    
-                    try
-                    {
-                        var randomResult = randomResults[0];
-                        FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(int.Parse(randomResult.result));
-                        if (fishData != null)
-                        {
-                            tryGetFish.setResult(true);
-                        }
-                        else
-                        {
-                            int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
-                            Item item = new Item
-                            {
-                                dataId = fishData.itemId,
-                                count = 1,
-                                value = randomResult.count
-                            };
-                            PackageManager.instance.SetItemInPackage(item, packageId);
-                        }
-                       
-                    }
-                    catch
-                    {
-                        tryGetFish.setResult(false);
-                    }
-                    
-                }
-            }
-            else
-            {
-                tryGetFish.setResult(false);
-            }
-            return;
+            fishPond.fishs.Remove(fishId);
         }
-        tryGetFish.setResult(false);
     }
+   
 }
 public struct FishPond:INativeData
 {
     public int instanceId;
-    public int iteminstanceId;
+    public int itemInstanceId;
+    public int room;
     public int dataId;
+     
+    public NativeHashSet<int> fishs;
     public int Key => instanceId;
 
     public void Dispose()
-    { 
+    {
+        fishs.Dispose();
     }
 }
