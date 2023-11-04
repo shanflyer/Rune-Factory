@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\Main\GameNotificationManager.cs" />
     <Compile Include="Assets\RPG_Maker_Tiles_Importer\script\A5_Tile.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayDelayed.cs" />
+    <Compile Include="Assets\Scripts\Fishing\FishData.cs" />
     <Compile Include="Assets\Scripts\LoveAction.cs" />
     <Compile Include="Assets\Scripts\BookAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetMaxParticles.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IntComparison.cs" />
     <Compile Include="Assets\Resources\InputData\MyInput.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetRightVector.cs" />
+    <Compile Include="Assets\Scripts\Fishing\FishPondData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForceAtPosition.cs" />
     <Compile Include="Assets\Scripts\UI\FunctionsPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\RotateAround.cs" />
@@ -216,8 +218,10 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedQuaternion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredTrigger.cs" />
     <Compile Include="Assets\Scripts\UI\AdventureTeamerRenference.cs" />
+    <Compile Include="Assets\Scripts\Main\GameDataSaveManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics\Raycast.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetRange.cs" />
+    <Compile Include="Assets\Scripts\Fishing\FishingManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Round\CheckNowFightCharacterActionEnd.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
     <Compile Include="Assets\Scripts\Behavior\Other\CharacterTalk.cs" />
@@ -265,6 +269,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\CompareTo.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\PrioritySelector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Play.cs" />
+    <Compile Include="Assets\Scripts\Item\ShortcutManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetUseGravity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetEnableEmission.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetIsStopped.cs" />
@@ -308,6 +313,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IsFloatPositive.cs" />
     <Compile Include="Assets\Scripts\Main\MyInstance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetKey.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\ShortcutItemReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredCollision.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetEmissionRate.cs" />
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\GetAllReadySkill.cs" />
@@ -330,7 +336,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\ReturnFailure.cs" />
     <Compile Include="Assets\Scripts\Character\TempCharacterData.cs" />
     <Compile Include="Assets\Scripts\Main\GameTimeManager.cs" />
-    <Compile Include="Assets\Scripts\Data\SaveData\GameDataSaveManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\GetRadius.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Debug\DrawLine.cs" />
     <Compile Include="Assets\Scripts\Event\GameEventManager.cs" />
@@ -373,6 +378,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector3.cs" />
     <Compile Include="Assets\Scripts\test\ScreenShotAction.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\GetStoreCounterPos.cs" />
+    <Compile Include="Assets\Scripts\Fishing\FishController.cs" />
     <Compile Include="Assets\Scripts\UI\SelectStartPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\EntryTask.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPlaying.cs" />
@@ -607,6 +613,7 @@
     <Compile Include="Assets\Scripts\Film\FightEventAsset.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\LerpAngle.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetIntensity.cs" />
+    <Compile Include="Assets\Scripts\Action\FishingAction.cs" />
     <Compile Include="Assets\Scripts\UI\FightCharacterReference.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedQueneInt.cs" />
     <Compile Include="Assets\Scripts\EditorTool\MapInstanceEditor.cs" />
@@ -618,7 +625,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\MatchTarget.cs" />
     <Compile Include="Assets\Scripts\Data\FunctionDataList.cs" />
     <Compile Include="Assets\Scripts\Data\SkillData.cs" />
-    <Compile Include="Assets\Scripts\Data\SaveData\GameSaveData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPitch.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MovePosition.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedQuaternion.cs" />
@@ -741,12 +747,14 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\Scripts\Character\NPCManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetBoolParameter.cs" />
+    <Compile Include="Assets\Scripts\UI\Item\ShortcutPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetTimeScale.cs" />
     <Compile Include="Assets\Scripts\CaptrueCameraScript.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerPause.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetRange.cs" />
+    <Compile Include="Assets\Scripts\UI\SomethingGetPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\StartBehaviorTree.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetStepOffset.cs" />
     <Compile Include="Assets\Scripts\SetChildNameAction.cs" />
@@ -864,6 +872,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedRect.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\CheckPackageItem.cs" />
     <Compile Include="Assets\Scripts\test\InputTest.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt2List.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\IsParameterControlledByCurve.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />

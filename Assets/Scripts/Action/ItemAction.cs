@@ -2,6 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine; 
 using Unity.Mathematics;
+
+public struct RefreshShortcut : GameAction 
+{
+    public int packageId;
+}
+public struct RemoveShortcutItem : GameAction
+{
+    public int characterId;
+    public int index;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    {
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct SetShortcutItem : GameAction
+{
+    public int characterId;
+    public int index;
+    public Item Item;
+}
+public struct ChangeShortcutItemIndex : GameAction
+{
+    public int characterId;
+    public int sourceIndex,targetIndex;
+}
+
 public struct RefreshItemValue : GameAction
 {
     public int characterId;
@@ -20,6 +46,7 @@ public struct OpenPackage : GameAction
     public int targetObj;
     public List<ItemType> selectItemTypes;
     public PackageItemAction selectAction;
+    public SetPanelReference setPanel;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
     {
         if (parameters.Count > 2)

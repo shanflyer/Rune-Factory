@@ -122,6 +122,14 @@ public class WarehousePanel : GamePanel<PackageList>
         //this.RefreshPackage();
         //RefreshPackage();
     }
+    public override void Close()
+    {
+        base.Close();
+        if (otherSelectItemAction != null)
+        {
+            otherSelectItemAction(default(Item), selectPackageData.instanceId);
+        }
+    }
     async void TryPackageLevelUp()
     {
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
@@ -154,31 +162,46 @@ public class WarehousePanel : GamePanel<PackageList>
         ActionName.text = actionName;
         this.selectItemAction = selectItemAction;
     }
-  
+    
+    public void SetOtherSelectAction(PackageItemAction selectItemAction)
+    {
+        otherSelectItemAction = selectItemAction;
+    }
+    PackageItemAction otherSelectItemAction;
     async void SelectPackageItem(Item item,bool selected= true)
     {
-        if (item.dataId == 0)
+        if (selected)
         {
-            ItemInformation.localScale = Vector3.zero;
-        }
-        else
-        {
-            ItemInformation.localScale = Vector3.one;
-            SelectItem = item;
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
-            ItemIcon.sprite = itemData.icon;
-            ItemIcon.enabled = true;
-            ItemIcon.SetNativeSize();
-            ItemName.text =$"+ {itemData.itemName} +";
-            Type.text = itemData.type.ToString();
-            Info.text = itemData.info;
-            Property.text = itemData.property.ToString();
-            Price.text = itemData.sellPrice.ToString();
-            InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-            InfoItemValue.fillAmount = item.value;
-        }
+            if (item.dataId == 0)
+            {
+                ItemInformation.localScale = Vector3.zero;
+                if (otherSelectItemAction != null)
+                {
+                    otherSelectItemAction.Invoke(default(Item), selectPackageData.instanceId);
+                }
+            }
+            else
+            {
+                ItemInformation.localScale = Vector3.one;
+                SelectItem = item;
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+                ItemIcon.sprite = itemData.icon;
+                ItemIcon.enabled = true;
+                ItemIcon.SetNativeSize();
+                ItemName.text = $"+ {itemData.itemName} +";
+                Type.text = itemData.type.ToString();
+                Info.text = itemData.info;
+                Property.text = itemData.property.ToString();
+                Price.text = itemData.sellPrice.ToString();
+                InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
+                InfoItemValue.fillAmount = item.value;
 
-        
+                if (otherSelectItemAction != null)
+                {
+                    otherSelectItemAction.Invoke(item, selectPackageData.instanceId);
+                }
+            }
+        } 
     } 
     void RefreshPackage(RefreshPackage RefreshPackage)
     {
@@ -202,7 +225,12 @@ public class WarehousePanel : GamePanel<PackageList>
         Title.text = packageSetData.packageName;
         
         itemBoxs.InitListData(items, SelectPackageItem,toggleGroup: itemSelectGroup);
-        if(items.Count>0) { SelectPackageItem(items[0]); }
+        // if(items.Count>0) { SelectPackageItem(items[0]); }
+        if(selectPackageData.items.Count > 0)
+        {
+            itemBoxs.SelectDefault();
+            SelectPackageItem(items[0]);
+        }
         
         caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
 

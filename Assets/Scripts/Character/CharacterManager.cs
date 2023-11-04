@@ -258,6 +258,9 @@ public class CharacterManager : Singleton<CharacterManager>
             }
 
             UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+            UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(
+                ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId)
+                );
         }
         get
         {

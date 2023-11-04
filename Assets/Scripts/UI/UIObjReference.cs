@@ -40,6 +40,7 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
     protected T data;
     protected SelectAction<T> SelectAction;
 
+    public virtual void SelectDefault() { }
     protected void ClickAction()
     {
         if (SelectAction != null)

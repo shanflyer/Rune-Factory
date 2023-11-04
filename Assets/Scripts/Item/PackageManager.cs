@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class PackageManager : Singleton<PackageManager>
-{
+{ 
     private MyInstance myInstance;
     private List<int> playerPackages = new List<int>();
 
@@ -193,6 +193,10 @@ public class PackageManager : Singleton<PackageManager>
             {
                 gameActionData.Action(packageId,target:openPackage.targetObj);
             }
+            if (openPackage.setPanel != null)
+            { 
+                openPackage.setPanel(WarehousePanel);
+            }
         } 
     }
 
@@ -323,6 +327,11 @@ public class PackageManager : Singleton<PackageManager>
             });
 
             gamePackages[addPackageItem.packageId] = gamePackage;
+
+            GameActionManager.instance.QueueAction(new RefreshShortcut
+            {
+                packageId=gamePackage.instanceId
+            });
         }
     }
 
@@ -410,6 +419,11 @@ public class PackageManager : Singleton<PackageManager>
         {
             bool result= gamePackage.GetItemOutPackage(itemid, count);
             gamePackages[packageId] = gamePackage;
+
+            GameActionManager.instance.QueueAction(new RefreshShortcut
+            {
+                packageId = gamePackage.instanceId
+            });
             return result;
         }
         return false;
@@ -420,6 +434,11 @@ public class PackageManager : Singleton<PackageManager>
         {
             int result = await gamePackage.SetItemInPackage(item);
             gamePackages[packageId] = gamePackage;
+
+            GameActionManager.instance.QueueAction(new RefreshShortcut
+            {
+                packageId = gamePackage.instanceId
+            });
             return result;
         }
 
@@ -433,24 +452,36 @@ public class PackageManager : Singleton<PackageManager>
         }
         return false;
     }
-    private void UsetItem(ItemUseAction itemUseEvent)
+    private async void UsetItem(ItemUseAction itemUseEvent)
     {
         if (gamePackages.TryGetValue(itemUseEvent.packageId, out GamePackage gamePackage))
         {
-            UsetItemAction(itemUseEvent.itemId);
-            gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
-            gamePackages[itemUseEvent.packageId] = gamePackage;
+            if (await UsetItemAction(itemUseEvent.itemId))
+            {
+                gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
+                gamePackages[itemUseEvent.packageId] = gamePackage;
+
+                GameActionManager.instance.QueueAction(new RefreshShortcut
+                {
+                    packageId = gamePackage.instanceId
+                });
+            }
+          
         }
     }
-    async void UsetItemAction(int itemId)
+    async Task<bool> UsetItemAction(int itemId)
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.ToString());
-
-        for (int i = 0; i < itemData.useEventId.Count; i++)
+        if (itemData != null&&itemData.useEventId.Count>0)
         {
-            GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(itemData.useEventId[i].ToString());
-            gameActionData.Action();
+            for (int i = 0; i < itemData.useEventId.Count; i++)
+            {
+                GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(itemData.useEventId[i].ToString());
+                gameActionData.Action();
+            }
+            return true;
         }
+        return false;
 
     }
     public Item GetItemFromInstanceId(int packageId, int itemInstanceId)

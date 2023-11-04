@@ -51,6 +51,7 @@ public class FishController:Singleton<FishController>
             dataId = creatFish.dataId,
             pondId=creatFish.pondId,
             room=creatFish.room,
+            value=creatFish.fishValue,
             cell = cells[index]
         };
         fishRuntimes.SetData(fishRuntime);
@@ -219,11 +220,19 @@ public class FishController:Singleton<FishController>
             Item item = new Item
             {
                 dataId = fishData.itemId,
-                count = 1
+                count = 1,
+                value=fishRuntime.value
             };
             int count=  await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage);
             if (count > 0) { 
                 tryGetFish.setResult(true);
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(fishData.itemId);
+                Something something = new Something
+                {
+                    sprite = itemData.icon,
+                    info = $"获得了一条{item.value}cm的{itemData.itemName}!",
+                };
+                UIManager.instance.ShowGamePanel<SomethingGetPanel, Something>(something);
             }
             else
             {
@@ -242,6 +251,7 @@ public struct FishRuntime:INativeData
 { 
     public int intanceId;
     public int dataId;
+    public int value;
     public int pondId;
     public int room;
     public int2 cell;

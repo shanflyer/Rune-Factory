@@ -60,9 +60,7 @@ public enum RuntimeObjType
 public enum FightRuntimeObjType
 {
     PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT, PLAYABLEDIRECTOR,OTHER
-}
-
- 
+} 
 public static class CharacterAnimatorParameter
 {
     public static int Speed=Animator.StringToHash("Speed");
@@ -79,6 +77,7 @@ public class GameCommon
     public const Season zeroSeasom = Season.´º;
     public const int zeroDay = 1;
 
+    public const int shortcutItemCount = 5;
 
     public const int animalDefaultFoodItem = 70;
     public const int selectEquipBoxAction = 90;

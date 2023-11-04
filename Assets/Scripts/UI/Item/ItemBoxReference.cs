@@ -35,7 +35,7 @@ public class ItemBoxReference : UIObjReference<Item>
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
-        {
+        { 
             if (!icon.enabled)
             {
                 toggle.SetIsOnWithoutNotify(false);
@@ -43,7 +43,7 @@ public class ItemBoxReference : UIObjReference<Item>
             }
             if (SelectAction != null)
             {
-                SelectAction.Invoke(item);
+                SelectAction.Invoke(item,value);
             }
         });
     }
@@ -53,7 +53,11 @@ public class ItemBoxReference : UIObjReference<Item>
         icon.enabled = false;
         count.enabled = false;
     }
-   
+    public override void SelectDefault()
+    {
+        base.SelectDefault();
+        toggle.isOn = true;
+    }
     public override async void InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);

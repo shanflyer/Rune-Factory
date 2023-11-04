@@ -15,6 +15,13 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
         this.listPrefab = listPrefab;
         list = new List<T>();
     }
+    public void SelectDefault()
+    {
+        if(list.Count>0)
+        {
+            list[0].SelectDefault();
+        }
+    }
     public void InitListData(List<V> componentData,SelectAction<V> SelectAction = null,ToggleGroup toggleGroup=null) 
     {
         if (componentData == null)
