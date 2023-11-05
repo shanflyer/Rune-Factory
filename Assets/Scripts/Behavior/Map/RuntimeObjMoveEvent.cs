@@ -18,7 +18,7 @@ public class RuntimeObjMoveEvent : Action
 
     TaskStatus taskStatus = TaskStatus.Success;
 
-    RuntimeObj runtimeObj;
+    Transform runtimeObjTransform;
     // Start is called before the first frame update
     public override void OnStart()
     {
@@ -31,8 +31,9 @@ public class RuntimeObjMoveEvent : Action
         switch (entityType)
         {
             case EntityType.地图道具:
-                if (WorldMapObjManager.instance.GetRuntimeMapItemObj(objId.Value, out runtimeObj))
+                if (WorldMapObjManager.instance.GetRuntimeMapItemObj(objId.Value, out var runtimeObj))
                 {
+                    runtimeObjTransform = runtimeObj.transform;
                     taskStatus = TaskStatus.Running;
                 }
                 else
@@ -45,13 +46,14 @@ public class RuntimeObjMoveEvent : Action
                 
                 if (CharacterManager.instance.GetRuntimeCharacterObj(objId.Value, out CharacterRuntimeObj characterRuntimeObj))
                 {
+                    runtimeObjTransform = characterRuntimeObj.runtimeObj.obj as Transform;
                     taskStatus = TaskStatus.Running;
                 }
                 else
                 {
                     taskStatus = TaskStatus.Failure;
                 }
-                runtimeObj = characterRuntimeObj.runtimeObj;
+               // runtimeObj = characterRuntimeObj.runtimeObj;
                 break;
         }
         if(taskStatus== TaskStatus.Running)
@@ -82,9 +84,8 @@ public class RuntimeObjMoveEvent : Action
     }
     void SetObjPos(Vector2 pos)
     {
-        if (runtimeObj.obj != null && runtimeObj.use)
-        {
-            Transform transform = runtimeObj.obj as Transform;
+        if (transform != null && transform.gameObject.activeSelf)
+        { 
             if(transform!= null)
             {
                 float z = transform.position.z;

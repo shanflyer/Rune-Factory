@@ -5,6 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 
+public struct MoveTempMapObjItem : GameAction
+{
+    public int characterId; 
+}
+public struct ChangeMapObjPosFromTemp : GameAction
+{
+    public int characterId;
+}
+public struct CreatTempMapObjItem : GameAction
+{
+    public int characterId;
+    public int2 coordinate;
+    public int2 offSetCoordinate;
+    public int mapItemInstanceId;
+    public SetResult setResult;
+}
+public struct DeleteTempMapObjItem : GameAction
+{
+    public int mapItemInstanceId;
+    public SetResult setResult;
+}
 public struct TryDeleteRoom : GameAction
 {
     public int roomId;

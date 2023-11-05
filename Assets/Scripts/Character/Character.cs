@@ -270,6 +270,8 @@ public struct Equip
     public int2 weapon;
     public int2 clothes;
 }
+
+public delegate void SetCoordinate(int3 coordinate);
 public partial class Character
 {
     private bool isController = false;
@@ -523,10 +525,39 @@ public partial class Character
     private CharacterProperty nowProperty;
 
     public bool CanMoveCrossMap = true;
+
+    SetCoordinate SetCoordianteDele;
+
+    public void AddSetCoordinateDele(SetCoordinate setCoordinate)
+    {
+        if (SetCoordianteDele == null)
+        {
+            SetCoordianteDele = setCoordinate;
+        }
+        else
+        {
+            SetCoordianteDele += setCoordinate;
+        }
+    }
+    public void RemoveSetCoordinateDele(SetCoordinate setCoordinate)
+    {
+        if (SetCoordianteDele != null)
+        {
+            SetCoordianteDele -= setCoordinate;
+        }
+        if(SetCoordianteDele.GetInvocationList().Length == 0)
+        {
+            SetCoordianteDele = null;
+        }
+    }
     void SetObjCoordinate(int3 coordinate)
     { 
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
         objCoordinate = coordinate;
+        if (SetCoordianteDele != null)
+        {
+            SetCoordianteDele.Invoke(coordinate);
+        }
     }
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
     {

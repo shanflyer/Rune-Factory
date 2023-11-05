@@ -28,9 +28,9 @@ public class GameManager : Singleton<GameManager>
         {
             if (WorldMapObjManager.instance.GetRuntimeMapItemObj(closeMapObjTips.id, out var runtimeObj))
             {
-                if (runtimeObj.obj != null)
+                if (runtimeObj.transform != null)
                 {
-                    Transform parent = runtimeObj.obj as Transform;
+                    Transform parent = runtimeObj.transform;
                     if (mapObjTipsPanel.transform.parent == parent)
                     {
                         mapObjTipsPanel.Close();
@@ -44,9 +44,9 @@ public class GameManager : Singleton<GameManager>
         int itemId = showMapObjTips.id;
         if (WorldMapObjManager.instance.GetRuntimeMapItemObj(itemId, out var runtimeObj))
         {
-            if (runtimeObj.obj != null)
+            if (runtimeObj.transform != null)
             {
-                Transform parent = runtimeObj.obj as Transform; 
+                Transform parent = runtimeObj.transform; 
                 MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeObj.key);
                 if (mapItemData != null)
                 {

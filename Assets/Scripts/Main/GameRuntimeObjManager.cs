@@ -55,7 +55,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         runtimeObj = new RuntimeObj();
         return false;
     }
-
+ 
     public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId)where T:Component
     {
         if(!objParents.TryGetValue(runtimeObjType,out Transform parent))
