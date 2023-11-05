@@ -9,15 +9,12 @@ public static class GameComponentData
 }
 public class GameComponent : MonoBehaviour
 {
-    public GuideController guideController;
     public LoveAction loveAction; 
     public HeritageAction heritageAction;
     public GameObject BookPanelObj;
     public CharactorTitleAction charactorTitleAction;
 
     public OldName.GameManager gameManager;
-    public GameObject huiFuEffectPro;   
-    public EquipmentManager equipmentManager;
     void Awake()
     {
         

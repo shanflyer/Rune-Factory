@@ -141,6 +141,7 @@ public struct ShopData:IReferenceData
 public struct ShopItemData: IReferenceData
 {
     public int item;
+    public ShopItemType type;
     public PayType payType;
     public int priceValue;
     public bool open;

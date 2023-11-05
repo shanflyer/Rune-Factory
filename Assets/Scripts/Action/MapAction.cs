@@ -146,7 +146,6 @@ public struct DeleteMapItem : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
-
 public struct ChangeMapItem : GameAction
 {
     public int itemId;
@@ -169,7 +168,6 @@ public struct ChangeMapItem : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
-
 public struct AddMapItem : GameAction
 {
     public int mapId;
@@ -193,6 +191,12 @@ public struct AddMapItem : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
+}
+public struct MoveMapItem : GameAction
+{
+    public int mapItemInstanceId;
+    public int mapInstance;
+    public int2 coordinate;
 }
 public struct AttachMapItemData : GameAction
 {

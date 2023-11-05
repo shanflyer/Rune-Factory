@@ -106,7 +106,10 @@ public class PayManager : Singleton<PayManager>
 
     }
 }
-
+public enum ShopItemType
+{
+    道具=0,动物=1,家具=2
+}
 public enum PayType
 {
     金币=0,钻石=1,货币=2

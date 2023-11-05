@@ -643,7 +643,8 @@ public class CharacterManager : Singleton<CharacterManager>
       );
     }
 
-    public void CharacterMoveTarget(Character character, Stack<int2> pathNodes, MoveEndAction EndAction = null, MoveEndAction changeCoordinateAction = null)
+    public void CharacterMoveTarget(Character character, Stack<int2> pathNodes, MoveEndAction EndAction = null, 
+        MoveEndAction changeCoordinateAction = null, MoveEndAction failedMoveAction = null)
     {
         var targetCoordinate = pathNodes.Pop();
         CharacterRuntimeObj runtimeObj;
@@ -659,6 +660,15 @@ public class CharacterManager : Singleton<CharacterManager>
 
         character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
+        if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
+        {
+            if (failedMoveAction != null)
+            {
+                failedMoveAction();
+            } 
+            return;
+        }
+
 
         Vector2Int offsetCoordinate = Vector2Int.zero;
         character.moveEnumeratorId =
@@ -680,7 +690,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
                    
-                    CharacterMoveTarget(character, pathNodes, EndAction);
+                    CharacterMoveTarget(character, pathNodes, EndAction, failedMoveAction);
                 }
                 else
                 {

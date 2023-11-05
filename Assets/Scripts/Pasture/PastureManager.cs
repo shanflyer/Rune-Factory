@@ -303,8 +303,11 @@ public class PastureManager:Singleton<PastureManager>
             { 
                 animal.instaceId = value;
                 animals.AddData(animal);
-                pasture.animals.Add(animal.instaceId);
-                pastures.SetData(pasture);
+                if (pasture.dataId != 0)
+                {
+                    pasture.animals.Add(animal.instaceId);
+                    pastures.SetData(pasture);
+                }
             }
             tryCreatAnimal.setValue(value);
         }

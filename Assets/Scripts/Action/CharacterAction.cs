@@ -662,3 +662,9 @@ public struct SetCreateTempCharacterLevel : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+public struct CharacterMoveFailed : GameAction
+{
+    public int characterId; 
+    public int oldTargetMapInstance;
+    public int2 oldTargetCoordinate;
+}

@@ -1,7 +1,8 @@
 using NUnit.Framework.Interfaces;
 using System;
 using System.Collections;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 [System.Serializable]
 public struct Item:IReferenceData
@@ -80,6 +81,45 @@ public class ItemManager
         if (IntanceIds.Contains(intanceId))
         {
             IntanceIds.Remove(intanceId);
+        }
+    }
+
+    public async Task BuyActionAsync(ShopItemData selectShopItemData, int buyCount)
+    {
+        if (!await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
+        {
+            GameNotificationManager.instance.DisplayTips($"空间不足", "背包无法放下这么多东西");
+            return;
+        }
+
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectShopItemData.item);
+        if (itemData != null)
+        {
+            int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;
+            PayManager.instance.PayAction("购买", $"购买{buyCount}个+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
+            {
+                if (!result)
+                {
+                    return;
+                }
+                await PackageManager.instance.SetItemInPackage(new Item
+                {
+                    dataId = selectShopItemData.item,
+                    count = buyCount
+                }, CharacterManager.instance.controllerCharacter.characterPackage);
+
+                InformationController.instance.AddInformation($"成功购买{buyCount}个+ {itemData.itemName} +");
+                if (selectShopItemData.buyAction != 0)
+                {
+                    var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);
+                    GameActionData.Action();
+                }
+                ShopBuySuccess shopBuySuccess = new ShopBuySuccess
+                {
+                    buyCount = buyCount
+                };
+                GameActionManager.instance.QueueAction(shopBuySuccess);
+            });
         }
     }
 

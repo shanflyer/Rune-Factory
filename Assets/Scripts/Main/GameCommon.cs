@@ -152,6 +152,24 @@ public class GameCommon
 
     public const string characterTriggerRenferenceName = "Entity";
     public const string triggerRenferenceName = "Reference";
+
+    public static Vector2 SetImageSize(Sprite sprite,Vector2 size)
+    {
+        Vector2 spriteSize = sprite.rect.size;
+        if (spriteSize.x > spriteSize.y)
+        {
+            float value = size.x / spriteSize.x;
+            float y=spriteSize.y*value;
+            return new Vector2(size.x,y);
+        }
+        else
+        {
+            float value = size.y / spriteSize.y;
+            float x = spriteSize.x * value;
+            return new Vector2(x, size.y);
+        }
+         
+    }
     public static float GetCellTrueDistance(int2 coordinate0, int2 coordinate1)
     {
         int2 result = coordinate0 - coordinate1;

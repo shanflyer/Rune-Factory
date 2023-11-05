@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics; 
 using UnityEngine;
@@ -36,6 +37,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<ChangeWorld>(ChangeWorld);
         GameActionManager.instance.AddListener<TryCreatRoom>(TryCreatRoom);
         GameActionManager.instance.AddListener<TryDeleteRoom>(TryDeleteRoom);
+        GameActionManager.instance.AddListener<MoveMapItem>(MoveMapItem);
     }
 
     protected override void Clear()
@@ -302,6 +304,66 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             addMapItem.setValue(instanceId);
         }
+    }
+
+    private async void MoveMapItem(MoveMapItem moveMapItem)
+    {
+        if (runtimeMapItems.GetData(moveMapItem.mapItemInstanceId, out var runtimeMapItem))
+        {
+            if (runtimeMapItem.mapInstanceId == moveMapItem.mapItemInstanceId &&
+                runtimeMapItem.coordinate.Equals(moveMapItem.coordinate))
+            {
+
+            }
+            else
+            {
+                var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+
+                MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
+                MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+
+                if (nowRuntimeMapItemObjs.TryGetValue(runtimeMapItem.instanceId, out RuntimeObj RuntimeObj))
+                {
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(RuntimeObj);
+                    nowRuntimeMapItemObjs.Remove(runtimeMapItem.mapInstanceId);
+
+                    RemoveRuntimePackage removeRuntimePackage = new RemoveRuntimePackage
+                    {
+                        key = new Vector2Int(WorldMapManager.instance.displayMap, runtimeMapItem.instanceId)
+                    };
+                    GameActionManager.instance.QueueAction(removeRuntimePackage,true); 
+                    MyAnimationController.instance.RemoveItemAnimation(runtimeMapItem.instanceId);
+                }
+                 
+                //设置新位置
+                runtimeMapItem.mapInstanceId = moveMapItem.mapInstance;
+                runtimeMapItem.coordinate = moveMapItem.coordinate;
+
+                if (runtimeMapItem.mapInstanceId != 0)
+                {
+                    if (mapItemData.triggerCells.Length > 0)
+                    {
+                        MapCellController.instance.AddTriggerCell(mapItemData.triggerCells, moveMapItem.mapInstance, mapItemData.defaultEnter,
+                            mapItemData.defaultExit, EntityType.角色, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
+                    }
+                    if (mapItemData.playerTriggerCells != null && mapItemData.playerTriggerCells.Length > 0)
+                    {
+                        MapCellController.instance.AddPlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.instanceId, mapItemData.playerTriggerEvent,
+                            runtimeMapItem.instanceId, moveMapItem.coordinate);
+                    }
+                    if (mapItemData.colliderCells.Length > 0)
+                    {
+                        MapCellController.instance.AddBarrierCell(mapItemData.colliderCells, moveMapItem.coordinate, moveMapItem.mapInstance);
+                    }
+
+                    if (moveMapItem.mapInstance == WorldMapManager.instance.displayMap)
+                    {
+                        DisplayMapItem(runtimeMapItem);
+                    }
+                }  
+            }
+        }
+       
     }
 
     public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId)

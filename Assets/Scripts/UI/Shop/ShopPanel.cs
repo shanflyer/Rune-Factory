@@ -106,30 +106,55 @@ public class ShopPanel : GamePanel<ShopGroup>
         buyCount = math.clamp(buyCount, 1, 999);
         buyCountValue.SetTextWithoutNotify(buyCount.ToString());
     }
-    async void BuyAction()
+    void BuyAction()
     {
-        if(!await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
+        switch (selectShopItemData.type)
         {
-            GameNotificationManager.instance.DisplayTips($"空间不足", "背包无法放下这么多东西");
-            return;
-        }
+            case ShopItemType.道具:
+                ItemManager.instance.BuyActionAsync(selectShopItemData, buyCount);
+                break;
+            case ShopItemType.动物:
+                BuyAnimal();
+                break;
+            case ShopItemType.家具:
+                HomeEquipManager.instance.BuyAction(selectShopItemData);
+                break;
+        } 
+    }
 
+    async void BuyAnimal()
+    {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectShopItemData.item);
         if (itemData != null)
         {
-            int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f)*buyCount;
+            int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;
             PayManager.instance.PayAction("购买", $"购买{buyCount}个+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
                 if (!result)
                 {
                     return;
                 }
-                await PackageManager.instance.SetItemInPackage(new Item 
-                { 
-                    dataId = selectShopItemData.item,
-                    count=buyCount
-                },CharacterManager.instance.controllerCharacter.characterPackage);
 
+                var controllerCharacter= CharacterManager.instance.controllerCharacter;
+                TryCreatAnimal tryCreatAnimal = new TryCreatAnimal
+                {
+                    dataId = itemData.typeValue,
+                    coordinate = controllerCharacter.coordinate,
+                    roomId = controllerCharacter.mapInstance,
+                    setValue = CreatAnimalEnd
+                };
+                GameActionManager.instance.QueueAction(tryCreatAnimal,true);
+
+                void CreatAnimalEnd(int animalInstanceId)
+                {
+                    JoinTeam joinTeam = new JoinTeam
+                    {
+                        characterId = controllerCharacter.instanceId,
+                        teamCharacterId = animalInstanceId
+                    };
+                    GameActionManager.instance.QueueAction(joinTeam);
+                }
+                 
                 InformationController.instance.AddInformation($"成功购买{buyCount}个+ {itemData.itemName} +");
                 if (selectShopItemData.buyAction != 0)
                 {
@@ -141,7 +166,7 @@ public class ShopPanel : GamePanel<ShopGroup>
                     buyCount = buyCount
                 };
                 GameActionManager.instance.QueueAction(shopBuySuccess);
-            }); 
+            });
         }
     }
     async void SeletShopItem(ShopItemData shopItemData, bool selected=true)

@@ -842,13 +842,25 @@ public partial class Character
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, moveRoomList, ref result);
         if (result)
         {
-            MoveCrossMap(resultList, targetCoordinate,moveEndAction,changeCoordinateAction);
+            void FailedMoveAction()
+            {
+                CharacterMoveFailed characterMoveFailed = new CharacterMoveFailed
+                {
+                    characterId = instanceId,
+                    oldTargetCoordinate = targetCoordinate,
+                    oldTargetMapInstance = targetMap,
+                };
+                GameActionManager.instance.QueueAction(characterMoveFailed, true);
+            }
+
+            MoveCrossMap(resultList, targetCoordinate,moveEndAction,changeCoordinateAction, FailedMoveAction);
         }
         return result;
     }
 
 
-    void MoveCrossMap(Queue<int> moveRoomList, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null)
+    void MoveCrossMap(Queue<int> moveRoomList, int2 targetCoordinate, MoveEndAction moveEndAction = null, 
+        MoveEndAction changeCoordinateAction = null, MoveEndAction failedMoveAction = null)
     {
         int nowMap = objCoordinate.z;
         if (moveRoomList.Count > 0)
@@ -863,7 +875,7 @@ public partial class Character
 
                 PlayerMove(pathNodes, () => { 
                     MoveCrossMap(moveRoomList, targetCoordinate,moveEndAction);
-                }, changeCoordinateAction);
+                }, changeCoordinateAction, failedMoveAction);
             }
         }
         else
@@ -875,17 +887,18 @@ public partial class Character
             {
                 CellDebugDisplay.Instance.DisplayPath(pathNodes.ToArray());
              }*/
-            PlayerMove(pathNodes, moveEndAction);
+            PlayerMove(pathNodes, moveEndAction, failedMoveAction);
         }
 
 
     }
 
-    public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null,MoveEndAction changeCoordinateAction = null)
+    public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null,MoveEndAction changeCoordinateAction = null,
+        MoveEndAction failedMoveAction=null)
     {
         if (pathNodes.Count > 0)
         {
-            CharacterManager.instance.CharacterMoveTarget(this, pathNodes, endAction, changeCoordinateAction);
+            CharacterManager.instance.CharacterMoveTarget(this, pathNodes, endAction, changeCoordinateAction,failedMoveAction);
         }
         else
         {
