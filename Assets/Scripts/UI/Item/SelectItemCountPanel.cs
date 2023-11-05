@@ -18,6 +18,7 @@ public struct SelectItemData:IReferenceData
 }
 public class SelectItemCountPanel :GamePanel<SelectItemData>
 {
+    public override bool changeInputModel => false;
     [SerializeField]
     InputField InputField;
     [SerializeField]

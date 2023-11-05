@@ -26,7 +26,7 @@ public class GameManager : Singleton<GameManager>
         var mapObjTipsPanel =await UIManager.instance.GetGamePanel<MapObjTipsPanel>();
         if (mapObjTipsPanel)
         {
-            if (WorldMapManager.instance.GetRuntimeMapItemObj(closeMapObjTips.id, out var runtimeObj))
+            if (WorldMapObjManager.instance.GetRuntimeMapItemObj(closeMapObjTips.id, out var runtimeObj))
             {
                 if (runtimeObj.obj != null)
                 {
@@ -42,7 +42,7 @@ public class GameManager : Singleton<GameManager>
     async void ShowMapObjTips(ShowMapObjTips showMapObjTips)
     {
         int itemId = showMapObjTips.id;
-        if (WorldMapManager.instance.GetRuntimeMapItemObj(itemId, out var runtimeObj))
+        if (WorldMapObjManager.instance.GetRuntimeMapItemObj(itemId, out var runtimeObj))
         {
             if (runtimeObj.obj != null)
             {

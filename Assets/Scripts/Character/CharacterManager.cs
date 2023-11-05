@@ -504,7 +504,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
         {
-            if (character.mapInstance != WorldMapManager.instance.displayMap)
+            if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                 characterRuntionObjs.Remove(character);
@@ -520,7 +520,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
             }
         }
-        else if (character.mapInstance == WorldMapManager.instance.displayMap)
+        else if (character.mapInstance == WorldMapObjManager.instance.displayMap)
         {
             var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
             Vector2 pos = GameCommon.GetMapPos(character.coordinate);
@@ -709,7 +709,8 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         int2 offsetCoordinate = targetCoordinate - character.coordinate;
         character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
-        if (MapCellController.instance.ChangeMap(targetCoordinate, offsetCoordinate, character.mapInstance, out newMap))
+        if (character.CanMoveCrossMap&&
+            MapCellController.instance.ChangeMap(targetCoordinate, offsetCoordinate, character.mapInstance, out newMap))
         {
             int targetMap = newMap.x;
             targetCoordinate = new int2(newMap.y, newMap.z);
@@ -718,8 +719,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
             if (character == controllerCharacter)
             {
-                WorldMapManager.instance.RecycleMap();
-                WorldMapManager.instance.DisplayMap(targetMap);
+                WorldMapObjManager.instance.RecycleMap();
+                WorldMapObjManager.instance.DisplayMap(targetMap);
             }
             SetPlayerPos(character);
         }
@@ -741,7 +742,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(string characterName)
     {
         player = new Player(characterName);
-        player.SetCoordinate(new int3(int2.zero, WorldMapManager.instance.displayMap));
+        player.SetCoordinate(new int3(int2.zero, WorldMapObjManager.instance.displayMap));
         //player.mapInstance = GameManager.instance.nowMap;
 
         foreach (var item in GameController.instance.testPlayerItems)
@@ -760,7 +761,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void CreatPlayer(CharacterSaveData characterSaveData)
     {
         player = new Player(characterSaveData);
-        player.SetCoordinate(new int3(int2.zero, WorldMapManager.instance.displayMap));
+        player.SetCoordinate(new int3(int2.zero, WorldMapObjManager.instance.displayMap));
 
         AddCharacter(player);
 
@@ -848,7 +849,7 @@ public class CharacterManager : Singleton<CharacterManager>
         CharacterRuntimeObj characterRuntimeObj;
         if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
         {
-            if (character.mapInstance != WorldMapManager.instance.displayMap)
+            if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                 characterRuntionObjs.Remove(character);
@@ -868,7 +869,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
-            if (character.mapInstance == WorldMapManager.instance.displayMap)
+            if (character.mapInstance == WorldMapObjManager.instance.displayMap)
             {
                 RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
                 Transform transform = runtimeObj.obj as Transform;
@@ -894,13 +895,13 @@ public class CharacterManager : Singleton<CharacterManager>
             while (e.MoveNext())
             {
                 var character = e.Current.Value;
-                if (character.mapInstance != WorldMapManager.instance.displayMap
+                if (character.mapInstance != WorldMapObjManager.instance.displayMap
                     && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                     characterRuntionObjs.Remove(character);
                 }
-                if (character.mapInstance == WorldMapManager.instance.displayMap)
+                if (character.mapInstance == WorldMapObjManager.instance.displayMap)
                 {
                     if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
                     {
@@ -1014,7 +1015,7 @@ public class CharacterManager : Singleton<CharacterManager>
                        GameActionManager.instance.QueueAction(tryTeamLeaderSetCoordinate, true); 
                     }
                 },
-                WorldMapManager.instance.displayMap, playerRuntimeObj.linkId, true);
+                WorldMapObjManager.instance.displayMap, playerRuntimeObj.linkId, true);
         }
     }
 

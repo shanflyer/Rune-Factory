@@ -68,7 +68,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
 
         controller.SetPlayerOperate(targetCoordinate);
         int clickCharacter = MapCellController.instance.GetClickCharacter(
-            new int3(targetCoordinate, WorldMapManager.instance.displayMap));
+            new int3(targetCoordinate, WorldMapObjManager.instance.displayMap));
         if (clickCharacter != -1 && clickCharacter != controller.instanceId)
         {
             Character character = CharacterManager.instance.GetCharacter(clickCharacter);

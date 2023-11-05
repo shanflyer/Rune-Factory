@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MainPanel : GamePanel<IReferenceData>
 {
+    public override bool changeInputModel => false;
     [SerializeField]
     Button teamButton;
     public override void SetPanelUISerializeObj()

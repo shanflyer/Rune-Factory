@@ -83,7 +83,7 @@ public class FishController:Singleton<FishController>
 
     void RefreshFish(int instanceId,int room,int pondId)
     {
-        if (room == WorldMapManager.instance.displayMap)
+        if (room == WorldMapObjManager.instance.displayMap)
         {
             if (fishRuntimes.GetData(instanceId, out var fishRuntime))
             {
@@ -101,7 +101,7 @@ public class FishController:Singleton<FishController>
 
     void RefreshFishPondObj(RefreshFishPondObj RefreshFishPondObj)
     {
-        if (RefreshFishPondObj.room == WorldMapManager.instance.displayMap)
+        if (RefreshFishPondObj.room == WorldMapObjManager.instance.displayMap)
         {
             if (fishPondFishes.TryGetValue(RefreshFishPondObj.pondId, out var ints))
             {

@@ -11,6 +11,7 @@ public struct ShortcutItem: IReferenceData
 }
 public class ShortcutPanel : GamePanel<ShortcutPackage>
 {
+    public override bool changeInputModel => false;
     DisplayList<ShortcutItemReference, ShortcutItem> itemList;
     [SerializeField]
     Transform itemParent;

@@ -30,8 +30,8 @@ public class CellDebugDisplay : MonoBehaviour
     public void RefreshDisplayMapCell()
     {
         tilemap.ClearAllTiles();
-        var roomCoordinate=MapCellController.instance.GetRoomCoordinate(WorldMapManager.instance.displayMap);
-        var data = MapCellController.instance.GetRoomCellData(WorldMapManager.instance.displayMap);
+        var roomCoordinate=MapCellController.instance.GetRoomCoordinate(WorldMapObjManager.instance.displayMap);
+        var data = MapCellController.instance.GetRoomCellData(WorldMapObjManager.instance.displayMap);
         var cellData = data.GetAllCellData();
         for (int i = 0; i < cellData.Count; i++)
         {

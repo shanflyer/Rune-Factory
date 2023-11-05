@@ -31,7 +31,7 @@ public class RuntimeObjMoveEvent : Action
         switch (entityType)
         {
             case EntityType.地图道具:
-                if (WorldMapManager.instance.GetRuntimeMapItemObj(objId.Value, out runtimeObj))
+                if (WorldMapObjManager.instance.GetRuntimeMapItemObj(objId.Value, out runtimeObj))
                 {
                     taskStatus = TaskStatus.Running;
                 }

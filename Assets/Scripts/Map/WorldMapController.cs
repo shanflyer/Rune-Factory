@@ -19,6 +19,7 @@ public class WorldMapController : MonoBehaviour
     {
         instance = this;
         worldMapManager = WorldMapManager.instance; 
+        
         Init();
     }
 
@@ -27,7 +28,7 @@ public class WorldMapController : MonoBehaviour
         if (Camera.main == null)
         {
             GameObjectCurveController.instance.SetUpDataComponent(this);
-            worldMapManager.displayMap = mapInstance;
+            WorldMapObjManager.instance.displayMap = mapInstance;
 
             var teamManager = TeamManager.instance;
             var npcManager = NPCManager.instance;

@@ -15,7 +15,7 @@ public class GameRuntimeItemCreat : Action
 		int trueMapId = mapId.Value;
         if (mapId==null|| mapId.IsNull() ||mapId.Value == -1)
         {
-			trueMapId = WorldMapManager.instance.displayMap;
+			trueMapId = WorldMapObjManager.instance.displayMap;
         }
 
 		AddMapItem addMapItem = new AddMapItem

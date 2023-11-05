@@ -490,7 +490,8 @@ public partial class Character
     }
     public void SetAnimationDirection(float2 value)
     {
-        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj)&&
+            CanMoveCrossMap)
         {
             runtimeObj.SetAnimationDirection(value);
         }
@@ -520,6 +521,8 @@ public partial class Character
 
     public int moveEnumeratorId;  
     private CharacterProperty nowProperty;
+
+    public bool CanMoveCrossMap = true;
     void SetObjCoordinate(int3 coordinate)
     { 
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
@@ -837,6 +840,11 @@ public partial class Character
 
     public bool MoveCrossMap(int targetMap, int2 targetCoordinate,MoveEndAction moveEndAction=null,MoveEndAction changeCoordinateAction=null)
     {
+        if (!CanMoveCrossMap)
+        {
+            return false;
+        }
+
         Queue<int> moveRoomList = new Queue<int>();
         bool result = false;
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, moveRoomList, ref result);
