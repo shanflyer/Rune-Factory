@@ -8,8 +8,12 @@ public class GameEventEnd : Action
 	public SharedInt gameEventId;
 	public override void OnStart()
 	{
-		//var behavior = this.Owner;
-		//var id=(int)behavior.GetVariable("ID").GetValue();
+		if (gameEventId.IsNull())
+		{
+            var behavior = this.Owner;
+			gameEventId = (SharedInt)behavior.GetVariable("ID");
+        }
+		 
 		GameEventManager.instance.RemoveGameEvent(gameEventId.Value);
 	}
 

@@ -181,6 +181,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 if (deleteMapItem.triggerClear)
                 {
                     var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+
+                    MapCellController.instance.RemovePlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
                     MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells,runtimeMapItem.mapInstanceId, deleteMapItem.mapItemInstanceId);
                     MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells,runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
                 }
@@ -284,6 +286,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
 
+                MapCellController.instance.RemovePlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
                 MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
                 MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
 
@@ -305,7 +308,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     }
                     if (mapItemData.playerTriggerCells != null && mapItemData.playerTriggerCells.Length > 0)
                     {
-                        MapCellController.instance.AddPlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.instanceId, mapItemData.playerTriggerEvent,
+                        MapCellController.instance.AddPlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.mapInstanceId, mapItemData.playerTriggerEvent,
                             runtimeMapItem.instanceId, moveMapItem.coordinate);
                     }
                     if (mapItemData.colliderCells.Length > 0)
@@ -317,7 +320,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     {
                         WorldMapObjManager.instance.DisplayMapItem(runtimeMapItem);
                     }
-                }  
+                }
+
+                runtimeMapItems.SetData(runtimeMapItem);
             }
         }
        

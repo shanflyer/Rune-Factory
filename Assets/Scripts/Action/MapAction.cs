@@ -1,36 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEngine.TextCore.Text;
 
-public struct MoveTempMapObjItem : GameAction
+public struct TrySetTempMapItem : GameAction
 {
-    public int characterId; 
+    public int instanceId;
+    public SetResult setResult { set; get; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        
+        if (parameters.Count > 0)
+        {
+            instanceId = int.Parse(parameters[0].value);
+        }
+        if (target != 0)
+        {
+            instanceId = target;
+        }
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this);
+    }
 }
-public struct ChangeMapObjPosFromTemp : GameAction
+public struct CheckTempMapItemSet : GameAction
 {
+    public SetResult setResult { set; get; }
+    public int instanceId;
+}
+public struct CreatTempMapItem : GameAction
+{ 
     public int characterId;
+    public int instanceId;
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            instanceId = int.Parse(parameters[1].value);
+        }
+        if (source != 0)
+        {
+            characterId = source;
+        }
+        if (target != 0)
+        {
+            instanceId = target;
+        }
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this);
+    }
 }
-public struct CreatTempMapObjItem : GameAction
+public struct DestoryTempMapItem : GameAction
 {
-    public int characterId;
-    public int2 coordinate;
-    public int2 offSetCoordinate;
-    public int mapItemInstanceId;
-    public SetResult setResult;
+    public SetResult setResult { set; get; }
+    public int instanceId;
 }
-public struct DeleteTempMapObjItem : GameAction
+public struct RefreshTempMapItemCoordinate : GameAction
 {
-    public int mapItemInstanceId;
-    public SetResult setResult;
+    public SetResult setResult { set; get; }
+    public int instanceId;
+    public int chatacterId;
 }
+public struct RefreshTempMapItem : GameAction
+{
+    public SetResult setResult { set; get; }
+    public int instanceId;
+}
+
+ 
 public struct TryDeleteRoom : GameAction
 {
     public int roomId;
-    public SetResult setResult;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count > 0)
         {
@@ -40,17 +88,18 @@ public struct TryDeleteRoom : GameAction
         {
             roomId = source;
         }
-
+        GameActionManager.instance.QueueAction(this);
     }
 }
 public struct TryCreatRoom : GameAction
 {
+    public SetResult setResult { set; get; }
     public int roomId;
     public string roomName;
     public int eventId;
     public int instance;
     public SetValue setValue;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count > 0)
         {
@@ -66,7 +115,8 @@ public struct TryCreatRoom : GameAction
 public struct CloseMapObjTips : GameAction
 {
     public int id;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count > 0)
         {
@@ -77,8 +127,9 @@ public struct CloseMapObjTips : GameAction
 }
 public struct ShowMapObjTips : GameAction
 {
+    public SetResult setResult { get; set; }
     public int id;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count > 0)
         {
@@ -91,7 +142,8 @@ public struct ChangeWorld : GameAction
 {
     public string worldName;
     public int displayMap;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count > 0)
         {
@@ -106,12 +158,13 @@ public struct ChangeWorld : GameAction
 }
 public struct SetItemAnimation : GameAction
 {
+    public SetResult setResult { get; set; }
     public int mapId;
     public int editorId;
     public int id;
     public int keyX;
     public int keyY;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 3)
         {
@@ -130,8 +183,9 @@ public struct SetItemAnimation : GameAction
 }
 public struct TriggerEnter : GameAction
 {
+    public SetResult setResult { get; set; }
     public int eventId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 1)
         {
@@ -142,8 +196,9 @@ public struct TriggerEnter : GameAction
 }
 public struct TriggerExit : GameAction
 {
+    public SetResult setResult { get; set; }
     public int eventId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 1)
         {
@@ -157,7 +212,8 @@ public struct DeleteMapItem : GameAction
     //public int mapId;
     public int mapItemInstanceId;
     public bool triggerClear;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 2)
         {
@@ -172,7 +228,8 @@ public struct ChangeMapItem : GameAction
     public int itemId;
     public int newDataId;
     public int2 animationKey;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 4)
         {
@@ -196,7 +253,10 @@ public struct AddMapItem : GameAction
     public int2 coordinate;
 
     public SetValue setValue;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+
+    public SetResult setResult { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 3)
         {
@@ -215,6 +275,7 @@ public struct AddMapItem : GameAction
 }
 public struct MoveMapItem : GameAction
 {
+    public SetResult setResult { set; get; }
     public int mapItemInstanceId;
     public int mapInstance;
     public int2 coordinate;
@@ -222,7 +283,10 @@ public struct MoveMapItem : GameAction
 public struct AttachMapItemData : GameAction
 {
     public int mapItemIntanceId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+
+    public SetResult setResult { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 1)
         {

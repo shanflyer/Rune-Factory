@@ -7,16 +7,16 @@ using System.Reflection;
 using System.Security.Permissions;
 using UnityEngine;
 
-public delegate void ActionInit(List<Parameter> parameters, int source = 0, int target = 0,int value=-1);
+public delegate void ActionInit(List<Parameter> parameters, int source = 0, int target = 0,int value=-1, SetResult setResult = null);
 public class GameActionDataManager : Singleton<GameActionDataManager>
 {
    public  Dictionary<string, ActionInit> gameActionDataDelegates = new Dictionary<string, ActionInit>();
 
-    public void GameAction(string typeName, List<Parameter> parameters,int source=0,int target=0,int value=-1)
+    public void GameAction(string typeName, List<Parameter> parameters,int source=0,int target=0,int value=-1, SetResult setResult = null)
     {
         if(gameActionDataDelegates.TryGetValue(typeName,out var actionInit))
         {
-            actionInit.Invoke(parameters,source,target);
+            actionInit.Invoke(parameters,source,target,value,setResult);
         }
         else
         {
@@ -25,7 +25,7 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
             MethodInfo meth = type.GetMethod("Init");
             var _Delegate =(ActionInit) meth.CreateDelegate(typeof(ActionInit), data);
            
-             _Delegate.Invoke(parameters, source, target, value);
+             _Delegate.Invoke(parameters, source, target, value, setResult);
              gameActionDataDelegates.Add(typeName, _Delegate);
         }        
 

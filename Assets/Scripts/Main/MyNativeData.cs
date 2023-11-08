@@ -74,6 +74,7 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
         if (itemIndexes.TryGetValue(id, out int index))
         {
             nullIndexes.Enqueue(index);
+            itemIndexes.Remove(id);
             return true;
         }
         return false;

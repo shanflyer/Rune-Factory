@@ -31,7 +31,7 @@ public class RunGameActions : Action
             }
             else
             {
-                gameActionDatas[i].Action();
+                gameActionDatas[i].Action(source.Value,target.Value);
             }
            
         }

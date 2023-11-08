@@ -12,9 +12,16 @@ public class GameActionData : ScriptableObject,IGameData
     public string typeName; 
     public List<Parameter> _parameters;
    
-    public void Action(int source=0,int target=0,int value=0)
+    public GameActionData(GameActionData gameActionData)
     {
-        GameActionDataManager.instance.GameAction(typeName, _parameters, source, target,value);
+        id=gameActionData.id;
+        typeName = gameActionData.typeName;
+        _parameters = new List<Parameter>();
+        _parameters.AddRange(gameActionData._parameters);
+    }
+    public void Action(int source=0,int target=0,int value=0, SetResult setResult = null)
+    {
+        GameActionDataManager.instance.GameAction(typeName, _parameters, source, target,value, setResult);
     }
     
 #if UNITY_EDITOR

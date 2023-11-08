@@ -3,43 +3,49 @@ using System.Collections.Generic;
 using UnityEngine; 
 using Unity.Mathematics;
 
-public struct RefreshShortcut : GameAction 
+public struct RefreshShortcut : GameAction
 {
+    public SetResult setResult { get; set; }
     public int packageId;
 }
 public struct RemoveShortcutItem : GameAction
 {
+    public SetResult setResult { get; set; }
     public int characterId;
     public int index;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
 public struct SetShortcutItem : GameAction
 {
+    public SetResult setResult { get; set; }
     public int characterId;
     public int index;
     public Item Item;
 }
 public struct ChangeShortcutItemIndex : GameAction
 {
+    public SetResult setResult { get; set; }
     public int characterId;
     public int sourceIndex,targetIndex;
 }
 
 public struct RefreshItemValue : GameAction
 {
+    public SetResult setResult { get; set; }
     public int characterId;
     public int itemId;
     public float itemValue;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
 public struct OpenPackage : GameAction
 {
+    public SetResult setResult { get; set; }
     public int packageId;
     public string selectActionName;
     public int selectActionId;
@@ -47,7 +53,7 @@ public struct OpenPackage : GameAction
     public List<ItemType> selectItemTypes;
     public PackageItemAction selectAction;
     public SetPanelReference setPanel;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count > 2)
         {
@@ -61,10 +67,11 @@ public struct OpenPackage : GameAction
 }
 public struct RemovePackageItem : GameAction
 {
+    public SetResult setResult { get; set; }
     public int packageId;
     public int itemDataId;
     public int itemCount;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 3)
         {
@@ -77,10 +84,11 @@ public struct RemovePackageItem : GameAction
 }
 public struct AddPackageItem : GameAction
 {
+    public SetResult setResult { get; set; }
     public int packageId;
     public int itemDataId;
     public int itemCount;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 3)
         {
@@ -94,10 +102,11 @@ public struct AddPackageItem : GameAction
 
 public struct CreatPackage : GameAction
 {
+    public SetResult setResult { get; set; }
     public int packageDataId;
     public int level;
     public SetValue setValue;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
@@ -105,21 +114,22 @@ public struct CreatPackage : GameAction
 public struct RemovePackage : GameAction
 {
     public int packageDataId;
-    public SetResult setResult;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CreatRuntimePackage : GameAction
 {
+    public SetResult setResult { get; set; }
     public string name;
     public Vector2Int key;
     public int instanceId;
     public int caseCount;
     public List<Item> Items;
     public bool itemPackage;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         /*
         if (parameters.Count >= 6)
@@ -166,8 +176,9 @@ public struct CreatRuntimePackage : GameAction
 }
 public struct RemoveRuntimePackage : GameAction
 {
+    public SetResult setResult { get; set; }
     public Vector2Int key;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 1)
         {
@@ -184,10 +195,11 @@ public struct RemoveRuntimePackage : GameAction
 
 public struct ItemUseAction : GameAction
 {
+    public SetResult setResult { get; set; }
     public int packageId;
     public int itemId;
     public int itemCount;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count >= 3)
         {
@@ -197,12 +209,6 @@ public struct ItemUseAction : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
-
-    public ItemUseAction(int packageId, int itemId, int itemCount)
-    {
-        this.packageId = packageId;
-        this.itemId = itemId;
-        this.itemCount = itemCount;
-    }
+     
 
 }

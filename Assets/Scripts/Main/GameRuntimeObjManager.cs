@@ -56,12 +56,16 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         return false;
     }
  
-    public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId)where T:Component
+    public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,Transform overrideParent=null)where T:Component
     {
         if(!objParents.TryGetValue(runtimeObjType,out Transform parent))
         {
             parent = new GameObject(runtimeObjType).transform;
             objParents[runtimeObjType] = parent;
+        }
+        if (overrideParent != null)
+        {
+            parent = overrideParent;
         }
 
         RuntimeObj runtimeObj;
@@ -74,28 +78,42 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         runtimeObj.linkId = linkId;
         var obj = runtimeObj.obj as Component;
         obj.gameObject.SetActive(true);
+        obj.transform.SetParent(parent, false);
         runtimeObj.use = true;
         return runtimeObj;
     }
     public void RecycleRuntimeObj(RuntimeObj runtimeObj)
     {
-        runtimeObj.use = false;
-        var component = runtimeObj.obj as Component;
-        component.gameObject.SetActive(false);
-        Dictionary<string, Stack<RuntimeObj>> objs;
-        if(!unusedRuntimeObjs.TryGetValue(runtimeObj.runtimeObjType,out objs))
+        if(runtimeObj.obj == null)
         {
-            objs = new Dictionary<string, Stack<RuntimeObj>>();
-            unusedRuntimeObjs.Add(runtimeObj.runtimeObjType, objs);
-        }
-        Stack<RuntimeObj> runtimeObjs;
-        if(!objs.TryGetValue(runtimeObj.key,out runtimeObjs))
-        {
-            runtimeObjs = new Stack<RuntimeObj>();
-            objs[runtimeObj.key] = runtimeObjs;
-        }
 
-        runtimeObjs.Push(runtimeObj);
+        }
+        else
+        {
+            runtimeObj.use = false;
+            var component = runtimeObj.obj as Component;
+
+            if (objParents.TryGetValue(runtimeObj.runtimeObjType, out Transform parent))
+            {
+                component.transform.SetParent(parent, false);
+            }
+            component.gameObject.SetActive(false);
+            Dictionary<string, Stack<RuntimeObj>> objs;
+            if (!unusedRuntimeObjs.TryGetValue(runtimeObj.runtimeObjType, out objs))
+            {
+                objs = new Dictionary<string, Stack<RuntimeObj>>();
+                unusedRuntimeObjs.Add(runtimeObj.runtimeObjType, objs);
+            }
+            Stack<RuntimeObj> runtimeObjs;
+            if (!objs.TryGetValue(runtimeObj.key, out runtimeObjs))
+            {
+                runtimeObjs = new Stack<RuntimeObj>();
+                objs[runtimeObj.key] = runtimeObjs;
+            }
+
+            runtimeObjs.Push(runtimeObj);
+        }
+        
     }
 
     public void SetObjParent(string runtimeObjType, bool hide)

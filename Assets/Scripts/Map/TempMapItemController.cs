@@ -1,0 +1,234 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Unity.Collections;
+using Unity.Entities.UniversalDelegates;
+using Unity.Mathematics;
+
+public class TempMapItemController:Singleton<TempMapItemController>
+{
+    MyNativeData<TempMapItem> tempMapItems = new MyNativeData<TempMapItem>();
+    Dictionary<int, int> characterTempMapItems = new Dictionary<int, int>();
+    Dictionary<int, SetCoordinate> characterSetCoordinates = new Dictionary<int, SetCoordinate>();
+    public override void Init()
+    {
+        base.Init();
+        tempMapItems.Init(4);
+        GameActionManager.instance.AddListener<TrySetTempMapItem>(TrySetTempMapItem);
+        GameActionManager.instance.AddListener<CheckTempMapItemSet>(CheckTempMapItemSet);
+        GameActionManager.instance.AddListener<RefreshTempMapItemCoordinate>(RefreshTempMapItemCoordinate);
+        GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
+        GameActionManager.instance.AddListener<CreatTempMapItem>(CreatTempMapItem);
+
+       // InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, Test);
+    }
+
+    public void Test(object value)
+    {
+        if (CharacterManager.instance.controllerCharacter != null)
+        {
+            if(characterTempMapItems.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId,out var itemId))
+            {
+                TrySetTempMapItem TrySetTempMapItem = new TrySetTempMapItem
+                {
+                    instanceId = itemId,
+                };
+                GameActionManager.instance.QueueAction(TrySetTempMapItem);
+            }
+        }
+    }
+
+    protected override void Clear()
+    {
+        base.Clear();
+    } 
+    public List<TempMapItem> GetTempMapItems(int roomId)
+    {
+        List<TempMapItem> list = new List<TempMapItem>();
+        foreach(TempMapItem item in tempMapItems)
+        {
+            if (item.roomId == roomId)
+            {
+                list.Add(item);
+            }
+        }
+        return list;
+    }
+    void TrySetTempMapItem(TrySetTempMapItem TrySetTempMapItem)
+    {
+        if (tempMapItems.GetData(TrySetTempMapItem.instanceId, out var tempMapItem))
+        {
+            if (tempMapItem.CanSet)
+            {
+                MoveMapItem moveMapItem = new MoveMapItem
+                {
+                    mapItemInstanceId = TrySetTempMapItem.instanceId,
+                    mapInstance = tempMapItem.roomId,
+                    coordinate = tempMapItem.coordinate
+                };
+                GameActionManager.instance.QueueAction(moveMapItem,true);
+
+                DestoryTempMapItem DestoryTempMapItem=new DestoryTempMapItem 
+                {
+                    instanceId=TrySetTempMapItem.instanceId,
+                };
+                GameActionManager.instance.QueueAction(DestoryTempMapItem, true);
+            }
+            if (TrySetTempMapItem.setResult != null)
+                TrySetTempMapItem.setResult(true);
+            return;
+        }
+        if (TrySetTempMapItem.setResult != null)
+            TrySetTempMapItem.setResult(false);
+    }
+    void CheckTempMapItemSet(CheckTempMapItemSet CheckTempMapItemSet)
+    {
+        if(tempMapItems.GetData(CheckTempMapItemSet.instanceId,out var tempMapItem))
+        {
+            tempMapItem.InitTempSet();
+            tempMapItems.SetData(tempMapItem);
+            WorldMapObjManager.instance.RefreshTempMapItemColor(tempMapItem);
+        }
+    }
+    async void RefreshTempMapItemCoordinate(RefreshTempMapItemCoordinate RefreshTempMapItemCoordinate)
+    {
+        int tempId = RefreshTempMapItemCoordinate.instanceId;
+        if (tempId == 0)
+        {
+            characterTempMapItems.TryGetValue(RefreshTempMapItemCoordinate.chatacterId, out tempId);
+        }
+
+        if (tempMapItems.GetData(RefreshTempMapItemCoordinate.instanceId, out var tempMapItem))
+        {
+            tempMapItem.InitCoordinate();
+            tempMapItems.SetData(tempMapItem);
+            WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
+        }
+
+    }
+
+    
+
+    void DestoryTempMapItem(DestoryTempMapItem destoryTempMapItem)
+    {
+        if(tempMapItems.GetData(destoryTempMapItem.instanceId,out var tempMapItem))
+        {
+            tempMapItems.RemoveData(tempMapItem.instanceId);
+            characterTempMapItems.Remove(tempMapItem.characterId);
+
+            Character character = CharacterManager.instance.GetCharacter(tempMapItem.characterId);
+            if(characterSetCoordinates.TryGetValue(character.instanceId,out var setCoordinate))
+            {
+                character.RemoveSetCoordinateDele(setCoordinate);
+                characterSetCoordinates.Remove(character.instanceId);
+            } 
+            character.CanMoveCrossMap = true;
+        }
+    }
+    async void CreatTempMapItem(CreatTempMapItem creatTempMapItem)
+    {
+        if (characterTempMapItems.ContainsKey(creatTempMapItem.characterId))
+        {
+            if (creatTempMapItem.setResult != null)
+                creatTempMapItem.setResult(false);
+            return;
+        }
+        if (tempMapItems.Contains(creatTempMapItem.instanceId))
+        {
+            if (creatTempMapItem.setResult != null)
+                creatTempMapItem.setResult(false);
+            return;
+        }
+        if(WorldMapManager.instance.GetRuntimeMapItem(creatTempMapItem.instanceId,out var runtimeMapItem))
+        {
+            Character character = CharacterManager.instance.GetCharacter(creatTempMapItem.characterId);
+            if (character!=null)
+            {
+                TempMapItem tempMapItem = new TempMapItem
+                {
+                    characterId = character.instanceId,
+                    instanceId = runtimeMapItem.instanceId,
+                    dataId = runtimeMapItem.dataId,
+                    roomId = runtimeMapItem.mapInstanceId,
+                    colliderCells=new NativeList<int2>(8,Allocator.TempJob)
+                };
+
+                MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+                for(int i = 0; i < mapItemData.colliderCells.Length; i++)
+                {
+                    tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
+                }
+
+
+                tempMapItem.offsetCoordinate = runtimeMapItem.coordinate - character.coordinate; 
+                tempMapItem.coordinate = runtimeMapItem.coordinate; 
+                tempMapItems.SetData(tempMapItem);
+
+                characterTempMapItems[creatTempMapItem.characterId] = tempMapItem.instanceId; 
+
+                character.CanMoveCrossMap = false;
+                WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
+                SetCoordinate setCoordinate = async (int3 coordinate) =>
+                {
+                    tempMapItem.InitCoordinate();
+                    tempMapItems.SetData(tempMapItem);
+                    WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
+                };
+
+                character.AddSetCoordinateDele(setCoordinate);
+                characterSetCoordinates.Add(character.instanceId, setCoordinate);
+
+                if (creatTempMapItem.setResult != null)
+                    creatTempMapItem.setResult(true);
+                return;
+            }
+        }
+        if (creatTempMapItem.setResult != null)
+            creatTempMapItem.setResult(false);
+    }
+}
+public struct TempMapItem:INativeData
+{
+    public int instanceId;
+    public int dataId;
+    public int characterId;
+    public int roomId;
+    public int2 coordinate;
+    public int2 offsetCoordinate;
+    public bool CanSet;
+
+    public NativeList<int2> colliderCells;
+    public void InitTempSet()
+    {
+        CanSet = true;
+        for (int i = 0; i < colliderCells.Length; i++)
+        {
+            int2 cell = colliderCells[i] + coordinate;
+            if (!MapCellController.instance.CheckIsWalk(cell, roomId))
+            {
+                CanSet = false;
+                break;
+            }
+        }
+    }
+    public void InitCoordinate()
+    {
+        Character character = CharacterManager.instance.GetCharacter(characterId);
+        if (character != null)
+        {
+            coordinate = character.coordinate + offsetCoordinate;
+            InitTempSet();
+        }
+    }
+    public int Key => instanceId;
+    public override int GetHashCode()
+    {
+        return instanceId;
+    }
+    public void Dispose()
+    {
+        colliderCells.Dispose();
+    }
+}

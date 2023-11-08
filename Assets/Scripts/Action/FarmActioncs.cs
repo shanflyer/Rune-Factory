@@ -3,16 +3,18 @@ using System.Collections.Generic;
 
 public struct RefreshField : GameAction
 {
+    public SetResult setResult { get; set; }
     public int fieldId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
 public struct RefreshPlant : GameAction
 {
+    public SetResult setResult { get; set; }
     public int plantId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
@@ -20,8 +22,8 @@ public struct RefreshPlant : GameAction
 public struct TryGetPlantFruit : GameAction
 {
     public int fieldId;
-    public SetResult setResult;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
@@ -29,8 +31,8 @@ public struct TryGetPlantFruit : GameAction
 public struct SetWaterField : GameAction
 {
     public int fieldId;
-    public SetResult setResult;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
@@ -39,8 +41,8 @@ public struct TryCreatPlant : GameAction
 {
     public int fieldId;
     public int plantId;
-    public SetResult setResult;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
@@ -48,18 +50,19 @@ public struct TryCreatPlant : GameAction
 public struct TrySmoothField : GameAction
 {
     public int fieldId;
-    public SetResult setResult;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
 public struct CheckFieldState : GameAction
 {
+    public SetResult setResult { get; set; }
     public int instanceid;
     public SetValue setValue;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
         if (source != 0)
@@ -71,9 +74,10 @@ public struct CheckFieldState : GameAction
 }
 public struct TryCreatField : GameAction
 {
+    public SetResult setResult { get; set; }
     public int roomId;
     public int itemInstanceId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1)
+    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         if (parameters.Count > 0)
         {

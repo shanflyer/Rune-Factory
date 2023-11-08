@@ -242,7 +242,6 @@ public class GameCommon
             }
         }
 
-        return Direction.Default;
     }
     public static Direction GetDirect(Vector2Int start, Vector2Int target)
     {
@@ -269,9 +268,7 @@ public class GameCommon
             {
                 return Direction.DOWN;
             }
-        }
-
-        return Direction.Default;
+        } 
     }
     public static Direction GetCharacterDirect(float2 offset, Direction oldDirection = Direction.Default)
     {
@@ -350,7 +347,7 @@ public class GameCommon
                 }
             }
         }
-        return Direction.Default;
+        return oldDirection;
     }
     public static Direction GetCharacterDirect(int2 start, int2 target, Direction oldDirection = Direction.Default)
     {
@@ -431,7 +428,7 @@ public class GameCommon
                 }
             }
         }
-        return Direction.Default;
+        return oldDirection;
     }
     public static Direction GetCharacterDirect(Vector2Int start, Vector2Int target, Direction oldDirection = Direction.Default)
     {
@@ -512,7 +509,7 @@ public class GameCommon
                 }
             }
         }
-        return Direction.Default;
+        return oldDirection;
     }
     public static float2 WorldCoordinateToPos(float2 coordinate)
     {

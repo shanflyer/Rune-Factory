@@ -1,23 +1,22 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+﻿
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
-using UnityEditor.Purchasing;
 using UnityEngine;
 
 public class WorldMapObjManager:Singleton<WorldMapObjManager>
 {
     Dictionary<int, MapItemRuntimeObj> nowRuntimeMapItemObjs = new Dictionary<int, MapItemRuntimeObj>();
     Dictionary<int, MapItemRuntimeObj> tempRuntimeMapItemObjs = new Dictionary<int, MapItemRuntimeObj>();
-
-    Dictionary<int, int3> characterLinkTempObjs = new Dictionary<int, int3>();
+     
     RuntimeObj nowMapRoomObj; 
     public override void Init()
     {
         base.Init();
         GameActionManager.instance.AddListener<TryDeleteRoom>(TryDeleteRoomObj);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
+        GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
     }
     protected override void Clear()
     {
@@ -25,62 +24,69 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         nowRuntimeMapItemObjs.Clear();
     }
 
-    void CreatTempMapObjItem(CreatTempMapObjItem creatTempMapObjItem)
+    public void RefreshTempMapItem(TempMapItem tempMapItem)
     {
-        if(tempRuntimeMapItemObjs.ContainsKey(creatTempMapObjItem.mapItemInstanceId)||
-           !nowRuntimeMapItemObjs.TryGetValue(creatTempMapObjItem.mapItemInstanceId,out var mapItemRuntimeObj))
+        if (tempMapItem.roomId == displayMap)
         {
-            creatTempMapObjItem.setResult(false);
+            if(tempRuntimeMapItemObjs.TryGetValue(tempMapItem.instanceId,out var mapItemRuntimeObj))
+            {
+                mapItemRuntimeObj.transform.position = GameCommon.GetMapPos(tempMapItem.coordinate);
+            }
+            else
+            {
+                CreatTempMapObjItem(tempMapItem);
+            }
+            RefreshTempMapItemColor(tempMapItem);
         }
         else
         {
-            //mapItemRuntimeObj.SetColor(new Color(1, 1, 1, 0.5f));
-            var itemObj =GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
-               mapItemRuntimeObj.key,mapItemRuntimeObj.transform,-1);
-            MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj);
-            tempMapItemObj.SetCoordinate(creatTempMapObjItem.coordinate);
-            tempRuntimeMapItemObjs.Add(creatTempMapObjItem.mapItemInstanceId, tempMapItemObj);
-
-            creatTempMapObjItem.setResult(true);
+            if (tempRuntimeMapItemObjs.TryGetValue(tempMapItem.instanceId, out var mapItemRuntimeObj))
+            {
+                tempRuntimeMapItemObjs.Remove(tempMapItem.instanceId);
+                mapItemRuntimeObj.Recycle();
+            }
         }
     }
-    void DeleteTempMapObjItem(DeleteTempMapObjItem DeleteTempMapObjItem)
+    void DestoryTempMapItem(DestoryTempMapItem destoryTempMapItem)
     {
-        if(tempRuntimeMapItemObjs.TryGetValue(DeleteTempMapObjItem.mapItemInstanceId,out var mapItemRuntimeObj))
+        if(tempRuntimeMapItemObjs.TryGetValue(destoryTempMapItem.instanceId,out var mapItemRuntimeObj))
         {
             mapItemRuntimeObj.Recycle();
-            tempRuntimeMapItemObjs.Remove(DeleteTempMapObjItem.mapItemInstanceId);
-
-            if (nowRuntimeMapItemObjs.TryGetValue(DeleteTempMapObjItem.mapItemInstanceId, out var mapItemRuntimeObj1))
+            tempRuntimeMapItemObjs.Remove(destoryTempMapItem.instanceId);
+            if(nowRuntimeMapItemObjs.TryGetValue(destoryTempMapItem.instanceId,out var mapItemRuntimeObj1))
             {
                 mapItemRuntimeObj1.SetColor(Color.white);
             }
-            DeleteTempMapObjItem.setResult(true);
         }
-        else
+    }
+    bool CreatTempMapObjItem(TempMapItem tempMapItem)
+    {
+        if(nowRuntimeMapItemObjs.TryGetValue(tempMapItem.instanceId,out var mapItemRuntimeObj))
         {
-            DeleteTempMapObjItem.setResult(false);
+            Transform overrideParent = null;
+            if(CharacterManager.instance.GetRuntimeCharacterObj(tempMapItem.characterId, out var characterRuntimeObj))
+            {
+                overrideParent = characterRuntimeObj.animator.transform;
+            }
+
+            var itemObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
+                 tempMapItem.dataId.ToString(), mapItemRuntimeObj.transform, -1, overrideParent);
+            MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj);
+            tempMapItemObj.SetCoordinate(tempMapItem.coordinate);
+            tempRuntimeMapItemObjs.Add(tempMapItem.instanceId, tempMapItemObj);
+
+            mapItemRuntimeObj.SetColor(new Color(1, 1, 1, 0.5f)); ;
+            tempMapItemObj.SetColor(tempMapItem.CanSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f));
+            return true;
         }
-        
+        return false;
     }
 
-    async void CheckTempMapObjPos(int instanceId) 
-    { 
-        if(tempRuntimeMapItemObjs.TryGetValue(instanceId,out var mapItemRuntimeObj))
+    public void RefreshTempMapItemColor(TempMapItem tempMapItem)
+    {
+        if(tempRuntimeMapItemObjs.TryGetValue(tempMapItem.instanceId,out var mapItemRuntimeObj))
         {
-            MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItemRuntimeObj.key);
-            var cells = mapItemData.colliderCells;
-            bool canSet = true;
-            for(int i = 0; i < cells.Length; i++)
-            {
-                int2 cell = cells[i];
-                if(!MapCellController.instance.CheckIsWalk(cell, displayMap))
-                {
-                    canSet = false;
-                    break;
-                }
-            }
-            mapItemRuntimeObj.SetColor(canSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f));
+            mapItemRuntimeObj.SetColor(tempMapItem.CanSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f));
         }
     }
 
@@ -138,7 +144,6 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
             //Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
             nowMapRoomObj = await CreatMapRunTime(dataId, mapId);
-
             (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
             List<int> mapItems = WorldMapManager.instance.GetMapItems(mapId);
             for (int i = 0; i < mapItems.Count; i++)
@@ -161,6 +166,12 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
                         await RuntimeMapItemPlay(mapItem, itemObj);
                     }
                 }
+            }
+
+            var tempItems = TempMapItemController.instance.GetTempMapItems(mapId);
+            for(int i = 0; i < tempItems.Count; i++)
+            {
+                RefreshTempMapItem(tempItems[i]);
             }
 #if UNITY_EDITOR
             // if (MapCellTestDisplay.Instance)
@@ -185,8 +196,12 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
     private async Task SetItemAimation(int2 key, int dataId, int instaceId)
     {
         var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
-        AnimationClip animationClip = animationData.GetAnimationClip(key, out int count);
-        MyAnimationController.instance.PlayAnimation(instaceId, animationClip);
+        if (animationData != null)
+        {
+            AnimationClip animationClip = animationData.GetAnimationClip(key, out int count);
+            MyAnimationController.instance.PlayAnimation(instaceId, animationClip);
+        }
+        
     }
 
     public void RecycleMap()
@@ -203,6 +218,8 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             GameActionManager.instance.QueueAction(displayStoreCounter, true);
             runTimeMapItemData.Value.Recycle(); 
         }
+        var temps = tempRuntimeMapItemObjs.Keys.ToArray();
+        
         foreach(var runtimeObj in tempRuntimeMapItemObjs)
         {
             runtimeObj.Value.Recycle();
@@ -309,7 +326,7 @@ public struct MapItemRuntimeObj
     SpriteRenderer[] spriteRenderers;
     public Animator animator;
     public Transform transform;
-    RuntimeObj runtimeObj;
+    RuntimeObj runtimeObj; 
     public int2 coordinate;
     public string key => runtimeObj.key;
 
@@ -322,24 +339,10 @@ public struct MapItemRuntimeObj
         spriteRenderers = transform.GetChild(0).GetComponentsInChildren<SpriteRenderer>(true);
     }
 
-    public async void SetCoordinate(int2 coordinate)
+    public void SetCoordinate(int2 coordinate)
     {
         this.coordinate = coordinate;
         transform.position= GameCommon.GetMapPos(coordinate);
-
-        MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(key);
-        var cells = mapItemData.colliderCells;
-        bool canSet = true;
-        for (int i = 0; i < cells.Length; i++)
-        {
-            int2 cell = cells[i];
-            if (!MapCellController.instance.CheckIsWalk(cell, WorldMapObjManager.instance.displayMap))
-            {
-                canSet = false;
-                break;
-            }
-        }
-        SetColor(canSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f));
     }
     public void SetColor(Color color)
     {

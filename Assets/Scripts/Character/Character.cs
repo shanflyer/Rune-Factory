@@ -476,7 +476,7 @@ public partial class Character
             if (bool2.x || bool2.y) 
             {
                 _moveDirection = value;
-                direction = GameCommon.GetCharacterDirect(moveDirection);
+                direction = GameCommon.GetCharacterDirect(moveDirection,direction);
 
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
@@ -528,6 +528,21 @@ public partial class Character
 
     SetCoordinate SetCoordianteDele;
 
+    public void RemoveSetCoordinateDele(object obj)
+    {
+        if (SetCoordianteDele != null)
+        {
+            var deles = SetCoordianteDele.GetInvocationList();
+            for(int i = 0; i < deles.Length; i++)
+            {
+                if (deles[i].Target.GetHashCode() == obj.GetHashCode())
+                {
+                    SetCoordianteDele -= (SetCoordinate)deles[i];
+                    break;
+                }
+            }
+        } 
+    }
     public void AddSetCoordinateDele(SetCoordinate setCoordinate)
     {
         if (SetCoordianteDele == null)
@@ -540,14 +555,18 @@ public partial class Character
         }
     }
     public void RemoveSetCoordinateDele(SetCoordinate setCoordinate)
-    {
+    { 
         if (SetCoordianteDele != null)
         {
             SetCoordianteDele -= setCoordinate;
         }
-        if(SetCoordianteDele.GetInvocationList().Length == 0)
+        if(SetCoordianteDele != null&&SetCoordianteDele.GetInvocationList().Length == 0)
         {
-            SetCoordianteDele = null;
+            var InvocationList = SetCoordianteDele.GetInvocationList();
+            if(InvocationList.Length == 0)
+            {
+                SetCoordianteDele = null;
+            } 
         }
     }
     void SetObjCoordinate(int3 coordinate)
@@ -558,12 +577,17 @@ public partial class Character
         {
             SetCoordianteDele.Invoke(coordinate);
         }
+        
     }
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
     {
         int3 newCoordinate = new int3(coordinate, mapInstance);
         MapCellController.instance.SetCharacterCoordinate(objCoordinate,newCoordinate,instanceId);
-        objCoordinate=newCoordinate;
+        objCoordinate=newCoordinate; 
+        if (SetCoordianteDele != null)
+        {
+            SetCoordianteDele.Invoke(objCoordinate);
+        }
     } 
 
     public void StopMove()

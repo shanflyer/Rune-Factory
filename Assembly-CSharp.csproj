@@ -126,6 +126,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartLifetime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedFloat.cs" />
     <Compile Include="Assets\Scripts\EditorTool\MapItemInstanceEditor.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Variables\SharedSharedInt3List.cs" />
     <Compile Include="Assets\Scripts\Character\Team.cs" />
     <Compile Include="Assets\Scripts\UI\InformationShowPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Object Drawers\IntSliderAttribute.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Assets\Scripts\Main\GameRuntimeObjManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindGameObjectsWithTag.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetUseGravity.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Common\DisplayOtherFunctionPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddRelativeTorque.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalEulerAngles.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetAudioClip.cs" />
@@ -471,7 +473,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\IsNullOrEmpty.cs" />
     <Compile Include="Assets\Scripts\Map\WorldMapManager.cs" />
     <Compile Include="Assets\Scripts\Film\FightEventBehavior.cs" />
-    <Compile Include="Assets\Scripts\Map\MapMoveItemController.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterCoordinate.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetSpread.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetMagnitude.cs" />
@@ -513,6 +514,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetVelocity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Dot.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedColor.cs" />
+    <Compile Include="Assets\Scripts\Map\TempMapItemController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetAngleToTarget.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt3List.cs" />
     <Compile Include="Assets\Scripts\UI\TipsPanel.cs" />
@@ -666,6 +668,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Resume.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetDestination.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularDrag.cs" />
+    <Compile Include="Assets\Scripts\UI\Operate\OtherFunctionButtonReference.cs" />
     <Compile Include="Assets\Scripts\Action\MapAction.cs" />
     <Compile Include="Assets\Scripts\UI\PromptPanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\TempBuyPlayerGood.cs" />
@@ -750,14 +753,14 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetForwardVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\Scripts\Character\NPCManager.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetBoolParameter.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ShortcutPanel.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetBoolParameter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetTimeScale.cs" />
+    <Compile Include="Assets\Scripts\UI\SomethingGetPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerPause.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetRange.cs" />
-    <Compile Include="Assets\Scripts\UI\SomethingGetPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\StartBehaviorTree.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetStepOffset.cs" />
     <Compile Include="Assets\Scripts\SetChildNameAction.cs" />
@@ -831,6 +834,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetXY.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Stop.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\BoolFlip.cs" />
+    <Compile Include="Assets\Scripts\UI\Operate\OtherFuntionPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularDrag.cs" />
     <Compile Include="Assets\Scripts\Behavior\Farm\TryGetPlantFruitBeHavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\GetRadius.cs" />
@@ -840,6 +844,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MoveRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonUp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetLoop.cs" />
+    <Compile Include="Assets\Scripts\Data\FunctionButtonData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\Play.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetDeltaTime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatClamp.cs" />
