@@ -24,7 +24,8 @@ namespace UnityEngine.Rendering.Universal
             Unlit,
             Custom
         }
-
+        [SerializeField]
+        LayerMask m_renderLayerMask;
         [SerializeField]
         TransparencySortMode m_TransparencySortMode = TransparencySortMode.Default;
 
@@ -122,6 +123,8 @@ namespace UnityEngine.Rendering.Universal
         internal Shader geometryUnshadowShader => m_GeometryUnshadowShader;
         internal Shader projectedShadowShader => m_ProjectedShadowShader;
         internal TransparencySortMode transparencySortMode => m_TransparencySortMode;
+
+        internal LayerMask renderLayerMask => m_renderLayerMask;
         internal Vector3 transparencySortAxis => m_TransparencySortAxis;
         internal uint lightRenderTextureMemoryBudget => m_MaxLightRenderTextureCount;
         internal uint shadowRenderTextureMemoryBudget => m_MaxShadowRenderTextureCount;

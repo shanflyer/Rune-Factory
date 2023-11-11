@@ -38,7 +38,7 @@ namespace UnityEngine.Rendering.Universal
         private readonly Renderer2DData m_Renderer2DData;
         private bool m_NeedsDepth;
         private short m_CameraSortingLayerBoundsIndex;
-
+        LayerMask layerMask;
         public Render2DLightingPass(Renderer2DData rendererData, Material blitMaterial, Material samplingMaterial)
         {
             m_Renderer2DData = rendererData;
@@ -52,7 +52,10 @@ namespace UnityEngine.Rendering.Universal
         {
             m_NeedsDepth = useDepth;
         }
-
+        private void GetFilterSettingMode(ref FilteringSettings FilterSetting)
+        {
+            FilterSetting.layerMask = m_Renderer2DData.renderLayerMask;
+        }
         private void GetTransparencySortingMode(Camera camera, ref SortingSettings sortingSettings)
         {
             var mode = m_Renderer2DData.transparencySortMode;
@@ -464,6 +467,8 @@ namespace UnityEngine.Rendering.Universal
             filterSettings.renderingLayerMask = 0xFFFFFFFF;
             filterSettings.sortingLayerRange = SortingLayerRange.all;
 
+            GetFilterSettingMode(ref filterSettings);
+
             LayerUtility.InitializeBudget(m_Renderer2DData.lightRenderTextureMemoryBudget);
             ShadowRendering.InitializeBudget(m_Renderer2DData.shadowRenderTextureMemoryBudget);
             RendererLighting.lightBatch.Reset();
@@ -553,6 +558,7 @@ namespace UnityEngine.Rendering.Universal
             }
 
             filterSettings.sortingLayerRange = SortingLayerRange.all;
+            //filterSettings.layerMask = 1;
 
             RendererList objectsWithErrorRendererList = RendererList.nullRendererList;
             RenderingUtils.CreateRendererListObjectsWithError(context, ref renderingData.cullResults, camera, filterSettings, SortingCriteria.None, ref objectsWithErrorRendererList);
