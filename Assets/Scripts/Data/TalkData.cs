@@ -20,6 +20,7 @@ public class TalkData : ScriptableObject, IGameData,IReferenceData
     public string text;
     public int nexTalkId;
     public int actionId;
+    public bool DisplayClose;
     public string GetKey()
     {
         return id.ToString();

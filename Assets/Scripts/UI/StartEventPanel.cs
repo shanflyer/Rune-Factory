@@ -3,28 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UI;
+using TMPro;
 
 public class StartEventPanel : GamePanel<IReferenceData>
 { 
     [SerializeField]
     Button LetterButton;
     [SerializeField]
-    Text contentValue;
+    Transform content;
+    [SerializeField]
+    TextMeshProUGUI[] texts;
     [SerializeField]
     Button contentButton;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
 
-        LetterButton = FindChildGameObject<Button>("LetterButton");
-        contentValue = FindChildGameObject<Text>("ContentValue");
-        contentButton = FindChildGameObject<Button>("Content");
-
+        content = FindChildGameObject("Content");
+        LetterButton = FindChildGameObject<Button>("LetterButton"); 
+        contentButton = FindChildGameObject<Button>("EndButton");
+        texts = transform.GetComponentsInChildren<TextMeshProUGUI>();
        
     }
     protected override void Awake()
     {
         base.Awake();
+
+        for(int i=0;i<texts.Length;i++)
+        {
+            texts[i].text = string.Format(texts[i].text, GameDataSaveManager.instance.UserGameSaveData.playerData.name);
+        }
+
         LetterButton.onClick.AddListener(ClickXinStart);
         contentButton.onClick.AddListener(ClickXinEnd);
     }
@@ -34,7 +43,7 @@ public class StartEventPanel : GamePanel<IReferenceData>
         AudioController.instance.PlayAudio(SE.Book);
         AudioController.instance.PlayAudio(BGM.tt2);
          
-        contentButton.gameObject.SetActive(true);
+        content.gameObject.SetActive(true);
     }
     void ClickXinEnd()
     {
@@ -42,7 +51,7 @@ public class StartEventPanel : GamePanel<IReferenceData>
         Close();
         GameActionManager.instance.QueueAction(new PlayFilm
         {
-            filmName = "StartStory"
+            filmName = "角色选择"
         });       
         
     }

@@ -19,7 +19,7 @@ public enum Week
 [System.Serializable]
 public enum Season
 {
-  Default=0, 春=1,夏=2,秋=3,冬=4
+  Default=-1, 春=0,夏=1,秋=2,冬=3
 }
 
 [System.Serializable]

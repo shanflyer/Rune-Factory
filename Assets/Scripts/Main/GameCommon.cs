@@ -631,6 +631,7 @@ public static class DataPath
         {typeof(OperateData),"Data/OperateData" },
         {typeof(StoreCounterData),"Data/StoreCounterDataList" },
         {typeof(FestivalData),"Data/FestivalData/FestivalDataList"},
+        {typeof(PermissionData),"Data/PermissionData/PermissionDataList"},
         {typeof(TempCharacterData),"Data/TempCharacterData"},
         {typeof(NPCFunctionData), "Data/NPCFunctionData"},
         {typeof(NPCData),"Data/NPCData" },
@@ -640,7 +641,8 @@ public static class DataPath
         {typeof(PastureData),"Data/PastureData" },
         {typeof(AnimalData),"Data/AnimalData" },
         {typeof(FishData),"Data/FishData" },
-        {typeof(FishPondData),"Data/FishPondData" }
+        {typeof(FishPondData),"Data/FishPondData" },
+        {typeof(FilmData),"Data/FilmData" }
     };
 
     public static string GetDataPath(Type type)

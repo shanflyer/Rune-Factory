@@ -35,6 +35,9 @@ MonoBehaviour:
   - {fileID: 6183544113875661279}
   m_RendererFeatureMap: df3184189c5cd055
   m_UseNativeRenderPass: 0
+  m_renderLayerMask:
+    serializedVersion: 2
+    m_Bits: 3857
   m_TransparencySortMode: 3
   m_TransparencySortAxis: {x: 0, y: 1, z: 1}
   m_HDREmulationScale: 1
@@ -97,16 +100,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 573e83345e5a3524e8d46ac9229de438, type: 3}
-  m_Name: BakerRenderPassFeature
+  m_Name: Shadow
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   settings:
-    m_transparencySortMode: 0
-    m_transparencySortAxis: {x: 0, y: 0, z: 1}
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
     overrideDepthState: 0
     depthCompareFunction: 4
     enableWrite: 1
-    overrideStencilState: 0
+    overrideStencilState: 1
     stencilStateData:
       overrideStencilState: 0
       stencilReference: 0
@@ -114,15 +117,16 @@ MonoBehaviour:
       passOperation: 0
       failOperation: 0
       zFailOperation: 0
-    renderPassEvent: 500
+    renderPassEvent: 250
     layerMask:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 64
     overrideMat: {fileID: 0}
-    PassNames: []
+    PassNames:
+    - Shadow
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
-    textureName: 
+    textureName: _ShadowTex
     blitToCameraTarget: 0
-    clearFlag: 0
+    clearFlag: 1
     clearColor: {r: 0, g: 0, b: 0, a: 1}

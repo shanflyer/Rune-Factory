@@ -1,9 +1,11 @@
+ 
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
+using UnityEngine.Timeline; 
 
 public class FilmController : Singleton<FilmController>
 {
@@ -17,18 +19,109 @@ public class FilmController : Singleton<FilmController>
     private Dictionary<string, Film> nowFilms = new Dictionary<string, Film>();
     private Transform filmParent;
 
-    void PlayFilm(PlayFilm playFilm) 
+    async void PlayFilm(PlayFilm playFilm) 
     { 
         if(!nowFilms.TryGetValue(playFilm.filmName,out Film film))
         {
-            CreatAndPlayFilm(playFilm.filmName);
+           await CreatAndPlayFilm(playFilm.filmName,playFilm.assetName);
         }
         else
         {
-            film.playableDirector.Play();
-        }
-       ;
+            FilmData filmData = await GameDataManager.instance.GetAsyncData<FilmData>(playFilm.filmName);
+            if (filmData != null)
+            {
+                var assetData = filmData.GetTimeLineAsset(playFilm.assetName);
+                BindFilm(assetData, film.playableDirector);
+            }
+            else
+            {
+                film.playableDirector.transform.localScale = Vector3.one;
+                film.playableDirector.Play();
+            }
+        };
     }
+
+    void BindFilm(TimelineAssetData assetData, PlayableDirector playableDirector)
+    {
+        if (assetData.asset == null)
+        {
+            playableDirector.transform.localScale = Vector3.one;
+            playableDirector.Play();
+            return;
+        }
+        playableDirector.playableAsset = assetData.asset;
+        TimelineAsset timelineAsset = assetData.asset;
+        using (var playBindings = timelineAsset.outputs.GetEnumerator())
+        {
+            int i = 0;
+            while (playBindings.MoveNext() && i < assetData.pathes.Count)
+            {
+                string streamName = playBindings.Current.streamName;
+                if (streamName == "Markers")
+                {
+                    continue;
+                }
+
+                Object sourceObject = playBindings.Current.sourceObject; 
+                
+                Transform child = playableDirector.transform.Find(assetData.pathes[i]);
+                if (child != null)
+                {
+                    if(child.gameObject.TryGetComponent(out Animator component))
+                    {
+                        playableDirector.SetGenericBinding(sourceObject, component.gameObject);
+                    }
+                }
+                else
+                {
+                    playableDirector.SetGenericBinding(sourceObject, playableDirector);
+                }
+                 
+                i++;
+            }
+        }
+        playableDirector.transform.localScale = Vector3.one;
+        playableDirector.Play();
+    }
+    void DisplayFilm(DisplayFilm hideFilm)
+    {
+        if (nowFilms.TryGetValue(hideFilm.filmName, out var film))
+        {
+            if (film.playableDirector != null)
+            {
+                if (string.IsNullOrEmpty(hideFilm.path))
+                {
+                    film.playableDirector.transform.localScale = Vector3.one;
+                }
+                else
+                {
+                    Transform child = film.playableDirector.transform.Find(hideFilm.path);
+                    child.localScale = Vector3.one;
+                }
+
+            }
+        }
+    }
+    void HideFilm(HideFilm hideFilm)
+    {
+        if (nowFilms.TryGetValue(hideFilm.filmName, out var film))
+        {
+           if(film.playableDirector != null)
+            {
+                if (string.IsNullOrEmpty(hideFilm.path))
+                {
+                    film.playableDirector.transform.localScale = Vector3.zero;
+                }
+                else
+                {
+                    Transform child = film.playableDirector.transform.Find(hideFilm.path);
+                    child.localScale = Vector3.zero;
+                }
+                
+            }
+        }
+    }
+
     void JumpFilm(JumpFilm jumpFilm)
     {
         if(nowFilms.TryGetValue(jumpFilm.filmName,out var film))
@@ -58,23 +151,44 @@ public class FilmController : Singleton<FilmController>
         }
     }
 
-    async Task CreatAndPlayFilm(string filmName)
+    async Task CreatAndPlayFilm(string filmName,string assetName)
     {
-        string filmPath = GameCommon.AddString(DataPath.filmDataPath, filmName);
-        var filmPrefab =await GameSourceManager.instance.GetPrefab(filmPath);
-        if (filmPrefab != null)
+        FilmData filmData=await GameDataManager.instance.GetAsyncData<FilmData>(filmName);
+        if (filmData != null)
         {
-            GameObject filmObj = GameObject.Instantiate(filmPrefab, filmParent);
-            PlayableDirector playableDirector=filmObj.GetComponent<PlayableDirector>();
-            Film film = new Film
+            if (filmData.FilmObj)
             {
-                obj = filmObj,
-                playableDirector = playableDirector
-            };
-            playableDirector.Play();
-            nowFilms.Add(filmName, film);
+                GameObject filmObj = GameObject.Instantiate(filmData.FilmObj, filmParent);
+                PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
+                BindFilm(filmData.GetTimeLineAsset(assetName), playableDirector);
+                Film film = new Film
+                {
+                    obj = filmObj,
+                    playableDirector = playableDirector
+                };
+                playableDirector.transform.localScale = Vector3.one;
+                playableDirector.Play();
+                nowFilms.Add(filmName, film);
+            }
         }
-         
+        else
+        {
+            string filmPath = GameCommon.AddString(DataPath.filmDataPath, filmName);
+            var filmPrefab = await GameSourceManager.instance.GetPrefab(filmPath);
+            if (filmPrefab != null)
+            {
+                GameObject filmObj = GameObject.Instantiate(filmPrefab, filmParent);
+                PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
+                Film film = new Film
+                {
+                    obj = filmObj,
+                    playableDirector = playableDirector
+                };
+                playableDirector.transform.localScale = Vector3.one;
+                playableDirector.Play();
+                nowFilms.Add(filmName, film);
+            }
+        } 
     }
     void DestoryFilm(string filmName)
     {
@@ -96,6 +210,8 @@ public class FilmController : Singleton<FilmController>
         GameActionManager.instance.AddListener<StopFilm>(StopFilm);
         GameActionManager.instance.AddListener<PauseFilm>(PauseFilm);
         GameActionManager.instance.AddListener<JumpFilm>(JumpFilm);
+        GameActionManager.instance.AddListener<HideFilm>(HideFilm);
+        GameActionManager.instance.AddListener<DisplayFilm>(DisplayFilm);
     }
     protected override void Clear()
     {

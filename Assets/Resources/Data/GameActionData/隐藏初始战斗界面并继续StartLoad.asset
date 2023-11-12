@@ -17,11 +17,15 @@ MonoBehaviour:
   _parameters:
   - value: HideFightScene
     parameters: []
-  - value: PlayFilm
+  - value: WaitAction
     parameters:
-    - value: StartLoad1
-      parameters: []
-  - value: StopFilm
-    parameters:
-    - value: StartLoad
-      parameters: []
+    - value: 2
+      parameters:
+      - value: PauseFilm
+        parameters:
+        - value: "\u89D2\u8272\u9009\u62E9"
+          parameters: []
+      - value: Talk
+        parameters:
+        - value: 2001
+          parameters: []

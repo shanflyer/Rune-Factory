@@ -183,20 +183,34 @@ public class FightController : MonoBehaviour
     float cycleSize;
     Vector3 cyclePos;
     public void CreatFightMap(FightMapData fightMapData)
-    { 
-        fightMapRuntime0 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
-            fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 0);
-        fightMapRuntime1 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
-            fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 1);
+    {
+        if (fightMapData.fightMapObj != null)
+        {
+            fightMapRuntime0 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
+           fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 0);
+            fightMapRuntime1 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
+                fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 1);
 
-        Vector3 zeroPos = new Vector3(0, fightMapData.offsetY, 0);
-        cyclePos = new Vector3(fightMapData.cycleSize, fightMapData.offsetY, 0);
+            Vector3 zeroPos = new Vector3(0, fightMapData.offsetY, 0);
+            cyclePos = new Vector3(fightMapData.cycleSize, fightMapData.offsetY, 0);
 
-        cycleSize = fightMapData.cycleSize;
-        var transform = fightMapRuntime0.obj as Transform;
-        var transform1 = fightMapRuntime1.obj as Transform;
-        transform.localPosition = zeroPos;
-        transform1.localPosition = cyclePos; 
+            cycleSize = fightMapData.cycleSize;
+            var transform = fightMapRuntime0.obj as Transform;
+            var transform1 = fightMapRuntime1.obj as Transform;
+            transform.localPosition = zeroPos;
+            transform1.localPosition = cyclePos;
+        }
+        else
+        {
+            if (fightMapRuntime0.use)
+            {
+                GameRuntimeObjManager.instance.RecycleRuntimeObj(fightMapRuntime0);
+            }
+            if (fightMapRuntime1.use)
+            {
+                GameRuntimeObjManager.instance.RecycleRuntimeObj(fightMapRuntime1);
+            }
+        }
     }
     public async void CreatFightPlayer(int dataId,int instanceId,int index)
     {
@@ -300,7 +314,11 @@ public class FightController : MonoBehaviour
     } 
     public void StartWalk()
     {
-        StartCoroutine(MapMoving());
+        if (fightMapRuntime0.use && fightMapRuntime1.use)
+        {
+            StartCoroutine(MapMoving());
+        }
+        
     }
     public void StopWalk()
     {

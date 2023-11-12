@@ -234,8 +234,7 @@ public class CharacterManager : Singleton<CharacterManager>
         //InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
-
-    public string PlayerName => player.name;
+     
     public Sprite PlayerHead => playerData.head;
     private Character _controllerCharacter;
 

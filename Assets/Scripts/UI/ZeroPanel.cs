@@ -36,7 +36,13 @@ public class ZeroPanel : GamePanel<IReferenceData>
     {
         AudioController.instance.PlayAudio(SE.click); 
         Close();
-        UIManager.instance.ShowGamePanel<SelectCharacterPanel>(layer:2);
+        PlayFilm playFilm = new PlayFilm
+        {
+            filmName = "½ÇÉ«Ñ¡Ôñ",
+            assetName= "Default"
+        };
+        GameActionManager.instance.QueueAction(playFilm,true);
+        UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
     }
     public override Task InitData(string dataKay)
     {

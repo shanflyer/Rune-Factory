@@ -533,7 +533,42 @@ public struct EnterChapter : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
- 
+public struct DisplayFilm : GameAction
+{
+    public SetResult setResult { get; set; }
+    public string filmName;
+    public string path;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        if (parameters.Count > 0)
+        {
+            filmName = parameters[0].value;
+        }
+        if (parameters.Count > 1)
+        {
+            path = parameters[1].value;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct HideFilm : GameAction
+{
+    public SetResult setResult { get; set; }
+    public string filmName;
+    public string path;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        if (parameters.Count > 0)
+        {
+            filmName = parameters[0].value;
+        }
+        if (parameters.Count > 1)
+        {
+            path = parameters[1].value;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+} 
 public struct StopFilm : GameAction
 {
     public SetResult setResult { get; set; }
@@ -551,11 +586,16 @@ public struct PlayFilm : GameAction
 {
     public SetResult setResult { get; set; }
     public string filmName;
+    public string assetName;
     public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
-        if (parameters.Count >= 0)
+        if (parameters.Count >= 1)
         {
             filmName = parameters[0].value;
+        }
+        if (parameters.Count >= 2)
+        {
+            assetName = parameters[1].value;
         }
         GameActionManager.instance.QueueAction(this);
     }

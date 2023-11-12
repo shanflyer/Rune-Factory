@@ -22,12 +22,38 @@ Shader "MySprite-Lit-Default"
         Cull Off
         ZWrite Off
 
+        HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        CBUFFER_START(UnityPerMaterial)
+            half4 _MainTex_ST;
+            half4 _NormalMap_ST;  // Is this the right way to do this?
+            half4 _Color;
+            half _WetValue;
+        CBUFFER_END 
+        TEXTURE2D(_MainTex);
+        SAMPLER(sampler_MainTex);
+        TEXTURE2D(_MaskTex);
+        SAMPLER(sampler_MaskTex);
+
+        TEXTURE2D(_ShadowTex);
+        SAMPLER(sampler_ShadowTex);
+
+        void Unity_Remap_float(float In, float2 InMinMax, float2 OutMinMax, out float Out)
+        {
+            Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
+        }
+
+
+
+
+        ENDHLSL
+
         Pass
         {
             Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
 
             #pragma vertex CombinedShapeLightVertex
@@ -43,7 +69,7 @@ Shader "MySprite-Lit-Default"
             {
                 float3 positionOS   : POSITION;
                 float4 color        : COLOR;
-                float2 uv           : TEXCOORD0;
+                float2 uv           : TEXCOORD0; 
                 UNITY_SKINNED_VERTEX_INPUTS
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -53,42 +79,35 @@ Shader "MySprite-Lit-Default"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1;
+                half2   lightingUV  : TEXCOORD1; 
+                float3  worldPos : TEXCOORD4;
                 #if defined(DEBUG_DISPLAY)
-                float3  positionWS  : TEXCOORD2;
+                    float3  positionWS  : TEXCOORD2;
                 #endif
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/LightingUtility.hlsl"
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-            TEXTURE2D(_MaskTex);
-            SAMPLER(sampler_MaskTex);
+            
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
-            CBUFFER_START(UnityPerMaterial)
-                half4 _MainTex_ST;
-                half4 _NormalMap_ST;  // Is this the right way to do this?
-                half4 _Color;
-                half _WetValue;
-            CBUFFER_END
+            
 
             #if USE_SHAPE_LIGHT_TYPE_0
-            SHAPE_LIGHT(0)
+                SHAPE_LIGHT(0)
             #endif
 
             #if USE_SHAPE_LIGHT_TYPE_1
-            SHAPE_LIGHT(1)
+                SHAPE_LIGHT(1)
             #endif
 
             #if USE_SHAPE_LIGHT_TYPE_2
-            SHAPE_LIGHT(2)
+                SHAPE_LIGHT(2)
             #endif
 
             #if USE_SHAPE_LIGHT_TYPE_3
-            SHAPE_LIGHT(3)
+                SHAPE_LIGHT(3)
             #endif
 
             Varyings CombinedShapeLightVertex(Attributes v)
@@ -100,11 +119,14 @@ Shader "MySprite-Lit-Default"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
+                o.worldPos=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos.z+=o.worldPos.y;
                 #if defined(DEBUG_DISPLAY)
-                o.positionWS = TransformObjectToWorld(v.positionOS);
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+ 
 
                 o.color = v.color * _Color * unity_SpriteColor;
                 return o;
@@ -114,11 +136,7 @@ Shader "MySprite-Lit-Default"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                 half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                 half4 WetColor=main*main;
-                WetColor.a=main.a;
-                main=main*(1-_WetValue)+WetColor*_WetValue;
-
+                const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
@@ -126,7 +144,16 @@ Shader "MySprite-Lit-Default"
                 InitializeSurfaceData(main.rgb, main.a, mask, surfaceData);
                 InitializeInputData(i.uv, i.lightingUV, inputData);
 
-                return CombinedShapeLightShared(surfaceData, inputData);
+                half4 result=CombinedShapeLightShared(surfaceData, inputData);
+                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV);
+                //return half4(i.screenUV.xy,0,1);
+                half3 shadowResult=result.xyz*(1-shadow.r);  
+                half shadowStep=step(99.9,i.worldPos.z);
+                //return half4(shadowStep.xxx,1);
+
+                result.xyz=result.xyz*(1-shadowStep)+shadowResult*shadowStep;                
+
+                return result;
             }
             ENDHLSL
         }
@@ -164,18 +191,10 @@ Shader "MySprite-Lit-Default"
                 half3   bitangentWS     : TEXCOORD3;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
-
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
+            
             TEXTURE2D(_NormalMap);
             SAMPLER(sampler_NormalMap);
-
-            // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
-            CBUFFER_START( UnityPerMaterial )
-                half4 _MainTex_ST;
-                half4 _NormalMap_ST;  // Is this the right way to do this?
-                half4 _Color;
-            CBUFFER_END
+            
 
             Varyings NormalsRenderingVertex(Attributes attributes)
             {
@@ -186,6 +205,7 @@ Shader "MySprite-Lit-Default"
 
                 attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                
                 o.uv = TRANSFORM_TEX(attributes.uv, _NormalMap);
                 o.color = attributes.color;
                 o.normalWS = -GetViewForwardDir();
@@ -234,20 +254,12 @@ Shader "MySprite-Lit-Default"
                 float4  color           : COLOR;
                 float2  uv              : TEXCOORD0;
                 #if defined(DEBUG_DISPLAY)
-                float3  positionWS  : TEXCOORD2;
+                    float3  positionWS  : TEXCOORD2;
                 #endif
                 UNITY_VERTEX_OUTPUT_STEREO
             };
-
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-
-            // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
-            CBUFFER_START( UnityPerMaterial )
-                half4 _MainTex_ST;
-                half4 _NormalMap_ST;  // Is this the right way to do this?
-                half4 _Color;
-            CBUFFER_END
+            
+            
 
             Varyings UnlitVertex(Attributes attributes)
             {
@@ -259,7 +271,7 @@ Shader "MySprite-Lit-Default"
                 attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
                 #if defined(DEBUG_DISPLAY)
-                o.positionWS = TransformObjectToWorld(v.positionOS);
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
                 o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
                 o.color = attributes.color * _Color * unity_SpriteColor;
@@ -271,21 +283,99 @@ Shader "MySprite-Lit-Default"
                 float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
 
                 #if defined(DEBUG_DISPLAY)
-                SurfaceData2D surfaceData;
-                InputData2D inputData;
-                half4 debugColor = 0;
+                    SurfaceData2D surfaceData;
+                    InputData2D inputData;
+                    half4 debugColor = 0;
 
-                InitializeSurfaceData(mainTex.rgb, mainTex.a, surfaceData);
-                InitializeInputData(i.uv, inputData);
-                SETUP_DEBUG_DATA_2D(inputData, i.positionWS);
+                    InitializeSurfaceData(mainTex.rgb, mainTex.a, surfaceData);
+                    InitializeInputData(i.uv, inputData);
+                    SETUP_DEBUG_DATA_2D(inputData, i.positionWS);
 
-                if(CanDebugOverrideOutputColor(surfaceData, inputData, debugColor))
-                {
-                    return debugColor;
-                }
+                    if(CanDebugOverrideOutputColor(surfaceData, inputData, debugColor))
+                    {
+                        return debugColor;
+                    }
                 #endif
 
                 return mainTex;
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Tags { "LightMode" = "Shadow" "Queue"="Transparent" "RenderType"="Transparent"}
+            BlendOp Max 
+
+            HLSLPROGRAM
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+
+            #pragma vertex UnlitVertex
+            #pragma fragment UnlitFragment
+
+            #pragma multi_compile _ SKINNED_SPRITE
+
+            struct Attributes
+            {
+                float3 positionOS   : POSITION;
+                float4 color        : COLOR;
+                float2 uv           : TEXCOORD0;
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS      : SV_POSITION;
+                float4  color           : COLOR;
+                float2  uv              : TEXCOORD0;
+                #if defined(DEBUG_DISPLAY)
+                    float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+            
+            
+
+            Varyings UnlitVertex(Attributes attributes)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(attributes);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(attributes);
+
+                attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                #if defined(DEBUG_DISPLAY)
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
+                o.color = attributes.color * _Color * unity_SpriteColor;
+                return o;
+            }
+
+            float4 UnlitFragment(Varyings i) : SV_Target
+            {
+                float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                mainTex.xyz=float3(1,1,1)*mainTex.a; 
+                #if defined(DEBUG_DISPLAY)
+                    SurfaceData2D surfaceData;
+                    InputData2D inputData;
+                    half4 debugColor = 0;
+
+                    InitializeSurfaceData(mainTex.rgb, mainTex.a, surfaceData);
+                    InitializeInputData(i.uv, inputData);
+                    SETUP_DEBUG_DATA_2D(inputData, i.positionWS);
+
+                    if(CanDebugOverrideOutputColor(surfaceData, inputData, debugColor))
+                    {
+                        return debugColor;
+                    }
+                #endif
+
+                return mainTex;
+                
             }
             ENDHLSL
         }

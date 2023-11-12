@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System.IO;
+using UnityEngine; 
+using UnityEngine.UI; 
 using System.Threading.Tasks;
+using TMPro;
 
 public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
 {
+    public override bool changeInputModel => false;
     [SerializeField]
-    Text PlayerText, BrothText;
+    TextMeshProUGUI PlayerText, BrothText;
     [SerializeField]
     Image MealIcon, FemaleIcon;
     [SerializeField]
@@ -21,8 +21,8 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        PlayerText=FindChildGameObject<Text>("NameValue");
-        BrothText = FindChildGameObject<Text>("BrothValue");
+        PlayerText=FindChildGameObject<TextMeshProUGUI>("NameValue");
+        BrothText = FindChildGameObject<TextMeshProUGUI>("BrothValue");
         MealIcon = FindChildGameObject<Image>("MealIcon");
         FemaleIcon = FindChildGameObject<Image>("FemaleIcon");
         Meal = FindChildGameObject<Image>("Meal");
@@ -66,7 +66,8 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
         UIManager.instance.CloseGamePanel<SelectCharacterPanel>(); 
         GameActionManager.instance.QueueAction(new PlayFilm
         {
-            filmName = "StartStory" 
+            filmName = "角色选择",
+            assetName= "ZeroStory"
         }); 
     }
   

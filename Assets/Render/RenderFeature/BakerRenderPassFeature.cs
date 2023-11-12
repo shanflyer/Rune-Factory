@@ -132,7 +132,7 @@ public class BakerRenderPassFeature : ScriptableRendererFeature
         {  
             if (Camera.main == null)
             {
-                return;
+              //  return;
             }
       
 

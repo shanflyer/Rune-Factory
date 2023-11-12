@@ -49,6 +49,8 @@ public class TimeLineManger : Singleton<TimeLineManger>
                             case BindType.FightTarget:
                                 animator = FightController.instance.FindFightCharacter(skillEstimateData.target[0][0]);
                                 break;
+                            case BindType.Default:
+                                break;
                             
                         }
                         if(animator!=null)

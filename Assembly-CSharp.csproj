@@ -310,6 +310,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetForwardVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\RandomFloat.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\Find.cs" />
+    <Compile Include="Assets\Scripts\Data\FilmData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IsIntPositive.cs" />
     <Compile Include="Assets\Scripts\Main\GameController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetPropertyValue.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\ReturnFailure.cs" />
     <Compile Include="Assets\Scripts\Character\TempCharacterData.cs" />
     <Compile Include="Assets\Scripts\Main\GameTimeManager.cs" />
+    <Compile Include="Assets\Scripts\Main\AchievementManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\GetRadius.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Debug\DrawLine.cs" />
     <Compile Include="Assets\Scripts\Event\GameEventManager.cs" />
@@ -538,6 +540,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\CrossFadeQueued.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedRect.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetSpotAngle.cs" />
+    <Compile Include="Assets\Scripts\Data\PermissionDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\RandomInt.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedBool.cs" />
@@ -707,6 +710,7 @@
     <Compile Include="Assets\Scripts\UI\AdventureResultPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\BehaviorTree.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaPosition.cs" />
+    <Compile Include="Assets\Scripts\Main\GamePlayerRecordManager.cs" />
     <Compile Include="Assets\Scripts\UI\FormulaTypeReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAngularSpeed.cs" />
     <Compile Include="Assets\Render\RenderFeature\CustomRenderPassFeature.cs" />
@@ -742,8 +746,10 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowSoftness.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FilghtTilmeLineController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
+    <Compile Include="Assets\Scripts\UI\PermissionPanel\PermissionReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Distance.cs" />
     <Compile Include="Assets\Scripts\UI\TeamPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\PermissionPanel\PermissionPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetTime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsKeyDown.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedGameObjectToTransform.cs" />

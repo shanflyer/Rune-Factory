@@ -4,6 +4,10 @@ using System;
 using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
+using UnityEngine.Timeline;
+
+[Serializable]
+public class StringTimelineAssetDataDictionary : SerializableDictionary<string, TimelineAssetData> { }
 [Serializable]
 public class SeasonRandomDictionary : SerializableDictionary<Season, int> { }
 [Serializable]

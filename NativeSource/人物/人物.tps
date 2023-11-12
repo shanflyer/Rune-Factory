@@ -778,6 +778,96 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">小船01.png</key>
+            <key type="filename">小船02.png</key>
+            <key type="filename">小船03.png</key>
+            <key type="filename">小船25.png</key>
+            <key type="filename">小船26.png</key>
+            <key type="filename">小船27.png</key>
+            <key type="filename">小船37.png</key>
+            <key type="filename">小船38.png</key>
+            <key type="filename">小船39.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">帆船04.png</key>
+            <key type="filename">帆船05.png</key>
+            <key type="filename">帆船06.png</key>
+            <key type="filename">帆船28.png</key>
+            <key type="filename">帆船29.png</key>
+            <key type="filename">帆船30.png</key>
+            <key type="filename">帆船40.png</key>
+            <key type="filename">帆船41.png</key>
+            <key type="filename">帆船42.png</key>
+            <key type="filename">飞艇10.png</key>
+            <key type="filename">飞艇11.png</key>
+            <key type="filename">飞艇12.png</key>
+            <key type="filename">飞艇34.png</key>
+            <key type="filename">飞艇35.png</key>
+            <key type="filename">飞艇36.png</key>
+            <key type="filename">飞艇46.png</key>
+            <key type="filename">飞艇47.png</key>
+            <key type="filename">飞艇48.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.791667</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">木排58.png</key>
+            <key type="filename">木排59.png</key>
+            <key type="filename">木排60.png</key>
+            <key type="filename">木排82.png</key>
+            <key type="filename">木排83.png</key>
+            <key type="filename">木排84.png</key>
+            <key type="filename">木排94.png</key>
+            <key type="filename">木排95.png</key>
+            <key type="filename">木排96.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.708333</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">气球07.png</key>
+            <key type="filename">气球08.png</key>
+            <key type="filename">气球09.png</key>
+            <key type="filename">气球19.png</key>
+            <key type="filename">气球20.png</key>
+            <key type="filename">气球21.png</key>
+            <key type="filename">气球31.png</key>
+            <key type="filename">气球32.png</key>
+            <key type="filename">气球33.png</key>
+            <key type="filename">气球43.png</key>
+            <key type="filename">气球44.png</key>
+            <key type="filename">气球45.png</key>
             <key type="filename">马01.png</key>
             <key type="filename">马02.png</key>
             <key type="filename">马03.png</key>
@@ -787,9 +877,50 @@
             <key type="filename">马10.png</key>
             <key type="filename">马11.png</key>
             <key type="filename">马12.png</key>
+            <key type="filename">马49.png</key>
+            <key type="filename">马50.png</key>
+            <key type="filename">马51.png</key>
+            <key type="filename">马73.png</key>
+            <key type="filename">马74.png</key>
+            <key type="filename">马75.png</key>
+            <key type="filename">马85.png</key>
+            <key type="filename">马86.png</key>
+            <key type="filename">马87.png</key>
+            <key type="filename">马车52.png</key>
+            <key type="filename">马车53.png</key>
+            <key type="filename">马车54.png</key>
+            <key type="filename">马车76.png</key>
+            <key type="filename">马车77.png</key>
+            <key type="filename">马车78.png</key>
+            <key type="filename">马车88.png</key>
+            <key type="filename">马车89.png</key>
+            <key type="filename">马车90.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.895833</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">矿车55.png</key>
+            <key type="filename">矿车56.png</key>
+            <key type="filename">矿车57.png</key>
+            <key type="filename">矿车79.png</key>
+            <key type="filename">矿车80.png</key>
+            <key type="filename">矿车81.png</key>
+            <key type="filename">矿车91.png</key>
+            <key type="filename">矿车92.png</key>
+            <key type="filename">矿车93.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.85</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>

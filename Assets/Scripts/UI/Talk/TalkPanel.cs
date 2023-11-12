@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using TMPro;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TalkPanel : GamePanel<NPCTalkOperateData>
 {
     [SerializeField]
-    private Image rightHead, leftHead;
+    Transform rightHead, leftHead;
+    [SerializeField]
+    private Image rightHeadValue, leftHeadValue;
 
     [SerializeField]
     private Transform leftNameBg, rightNameBg;
@@ -28,7 +31,8 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     [SerializeField]
     private Transform NPCFunctionParent;
-
+    [SerializeField]
+    Transform close;
     [SerializeField]
     private Button closeButton;
 
@@ -91,7 +95,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         runNextTalkEvent = false;
         NPCTalkOperateData = v;
         talkData = v.defaultTalk;
-        NPCFunctionParent.localScale = v.displayFunction ? Vector3.one : Vector3.zero;
+       
         if (v.displayFunction)
         {
             NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData);
@@ -126,8 +130,8 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
            
         }else
         {
-            talkValue.text = talkData.text;
-
+            close.localScale= talkData.DisplayClose? Vector3.one : Vector3.zero;  
+            talkValue.text = talkData.text; 
             var talkerName = talkData.talkerName;
             Sprite talkerIcon = talkData.talkerIcon;
             if (talkData.myTalk)
@@ -135,7 +139,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                 Character character = CharacterManager.instance.GetCharacter(NPCTalkOperateData.characterId);
                 if (character == null)
                 {
-                    talkerName = CharacterManager.instance.PlayerName;
+                    talkerName = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
                     talkerIcon = CharacterManager.instance.PlayerHead;
                 }
                 else
@@ -149,41 +153,49 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             {
                 case TalkerDir.左:
                     leftNameValue.text = talkerName;
-                    leftNameBg.transform.localScale = Vector3.one;
-                    rightNameBg.transform.localScale = Vector3.zero;
-                    leftHead.color = Color.white;
-                    leftHead.sprite = talkerIcon;
-                    rightHead.color = new Color(0.5f, 0.5f, 0.5f);
-                    rightHead.enabled = !talkData.clearTalkIcon;
+                    leftNameBg.gameObject.SetActive(true);
+                    rightNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
+                    leftHeadValue.color = Color.white;
+                    leftHeadValue.sprite = talkerIcon;
+                    rightHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
+                    leftHead.transform.localScale = Vector3.one;
+                    rightHead.transform.localScale= talkData.clearTalkIcon?Vector3.zero:Vector3.one;
                     break;
 
                 case TalkerDir.右:
                     rightNameValue.text = talkerName;
-                    leftNameBg.transform.localScale = Vector3.zero;
-                    rightNameBg.transform.localScale = Vector3.one;
-                    rightHead.color = Color.white;
-                    rightHead.sprite = talkerIcon;
-                    leftHead.color = new Color(0.5f, 0.5f, 0.5f);
-                    leftHead.enabled = !talkData.clearTalkIcon;
+                    leftNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
+                    rightNameBg.gameObject.SetActive(true);
+                    rightHeadValue.color = Color.white;
+                    rightHeadValue.sprite = talkerIcon;
+                    leftHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
+                    rightHead.transform.localScale = Vector3.one;
+                    leftHead.transform.localScale = talkData.clearTalkIcon ? Vector3.zero : Vector3.one;
                     break;
 
                 case TalkerDir.无:
-                    leftNameBg.transform.localScale = Vector3.zero;
-                    rightNameBg.transform.localScale = Vector3.zero;
-                    rightHead.enabled = !talkData.clearTalkIcon;
-                    leftHead.enabled = !talkData.clearTalkIcon;
-                    rightHead.color = new Color(0.5f, 0.5f, 0.5f);
-                    leftHead.color = new Color(0.5f, 0.5f, 0.5f);
+                    leftNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
+                    rightNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
+                    rightHeadValue.transform.localScale = talkData.clearTalkIcon ? Vector3.zero : Vector3.one;
+                    leftHeadValue.transform.localScale= talkData.clearTalkIcon?Vector3.zero:Vector3.one;
+                    rightHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
+                    leftHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
                     break;
             }
+
+            NPCFunctionParent.localScale = !talkData.clearTalkIcon ? Vector3.one : Vector3.zero;
         } 
     }
 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        rightHead = FindChildGameObject<Image>("RightHead");
-        leftHead = FindChildGameObject<Image>("LeftHead");
+        rightHead = FindChildGameObject("RightHead");
+        leftHead = FindChildGameObject("LeftHead");
+
+        rightHeadValue = FindChildGameObject<Image>("RightHeadValue");
+        leftHeadValue = FindChildGameObject<Image>("LeftHeadValue");
+
         rightNameBg = FindChildGameObject("RightName");
         leftNameBg = FindChildGameObject("LeftName");
         rightNameValue = FindChildGameObject<TextMeshProUGUI>("RightNameValue");
@@ -192,7 +204,8 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
         tipes = FindChildGameObject<TextMeshProUGUI>("Tipes");
         nextButton = FindChildGameObject<Button>("Next");
-        closeButton = FindChildGameObject<Button>("Close");
+        close = FindChildGameObject("Close");
+        closeButton = FindChildGameObject<Button>("CloseButton");
 
         NPCFunctionReference = FindChildGameObject<NPCFunctionReference>("NPCFunctionReference");
         NPCFunctionParent = FindChildGameObject("Functions");

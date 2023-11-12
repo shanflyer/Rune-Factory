@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554efa8e63f5dfb409790cda234c470d, type: 3}
+  m_Name: "\u89D2\u8272\u9009\u62E9"
+  m_EditorClassIdentifier: 
+  FilmName: "\u89D2\u8272\u9009\u62E9"
+  FilmObj: {fileID: 2243161820592016898, guid: b4db9ab8657a21b4f87a1e586594417f, type: 3}
+  TimelineAssets:
+  - asset: {fileID: 11400000, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u7537"
+  - asset: {fileID: 11400000, guid: 6d79e24db132de842a050435864ee5e6, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u5973"
+    - "Character/\u4E3B\u89D2\u7537"
+  - asset: {fileID: 11400000, guid: e3875045bdf54534ea0b4ddef5caa1b1, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u5973"
+  - asset: {fileID: 11400000, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    pathes:
+    - Character
+    - "Character/\u9A6C\u8F66"
+    - "Character/\u9A6C\u8F66/\u73ED\u5C3C\u8FEA\u514B"
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u5973"
+    - "Character/\u4E3B\u89D2\u5973"
+    - 
+  timelineAssets:
+    m_keys:
+    - Default
+    - SelectMeal
+    - SelectFeMeal
+    - ZeroStory
+    m_values:
+    - asset: {fileID: 11400000, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u7537"
+    - asset: {fileID: 11400000, guid: 6d79e24db132de842a050435864ee5e6, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u5973"
+      - "Character/\u4E3B\u89D2\u7537"
+    - asset: {fileID: 11400000, guid: e3875045bdf54534ea0b4ddef5caa1b1, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u5973"
+    - asset: {fileID: 11400000, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+      pathes:
+      - Character
+      - "Character/\u9A6C\u8F66"
+      - "Character/\u9A6C\u8F66/\u73ED\u5C3C\u8FEA\u514B"
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u5973"
+      - "Character/\u4E3B\u89D2\u5973"
+      - 

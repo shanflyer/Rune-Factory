@@ -15,6 +15,7 @@ public struct TwoSelectData:IReferenceData
 }
 public class TwoSelectPanel : GamePanel<TwoSelectData>
 {
+    public override bool changeInputModel => false;
     [SerializeField]
     TextMeshProUGUI TitleText, NoticeText;
     [SerializeField]

@@ -164,7 +164,7 @@ public class InputManager :Singleton<InputManager>
           //  playerInput.currentActionMap = UI ? uiAction : playerAction;
         }
        // 
-        playerInput.defaultActionMap = UI ? UIActionMap : PlayerActionMap;
+       // playerInput.defaultActionMap = UI ? UIActionMap : PlayerActionMap;
     }
 
     public void AddInputActionDelegate(string actionName, InputActionDelegate inputActionDelegate,bool cancledAction=false)
