@@ -2,19 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InformationPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Text info;
+    TextMeshProUGUI info;
     [SerializeField]
     Transform infoParent;
+    [SerializeField]
+    Button close;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        infoParent = FindChildGameObject("Parent");
-        info=FindChildGameObject<Text>("Info");
+        infoParent = FindChildGameObject("Content");
+        info=FindChildGameObject<TextMeshProUGUI>("Info");
         info.transform.localScale = Vector3.zero;
+        close = FindChildGameObject<Button>("Close");
+        close.onClick.AddListener(Close);
     }
     public void RefreshInformations(List<string> strs,int startIndex)
     {
@@ -24,12 +29,12 @@ public class InformationPanel : GamePanel<IReferenceData>
             if (infoParent.childCount > index)
             {
                 Transform child=infoParent.GetChild(index);
-                child.GetComponent<Text>().text = strs[i];
+                child.GetComponent<TextMeshProUGUI>().text = strs[i];
                 child.localScale = Vector3.one;
             }
             else
             {
-                Text infoObj = Instantiate(info, infoParent, false);
+                TextMeshProUGUI infoObj = Instantiate(info, infoParent, false);
                 infoObj.text = strs[i];
                 infoObj.transform.localScale = Vector3.one;
             }
@@ -42,12 +47,12 @@ public class InformationPanel : GamePanel<IReferenceData>
                 if (infoParent.childCount > index)
                 {
                     Transform child = infoParent.GetChild(index);
-                    child.GetComponent<Text>().text = strs[i];
+                    child.GetComponent<TextMeshProUGUI>().text = strs[i];
                     child.localScale = Vector3.one;
                 }
                 else
                 {
-                    Text infoObj = Instantiate(info, infoParent, false);
+                    TextMeshProUGUI infoObj = Instantiate(info, infoParent, false);
                     infoObj.text = strs[i];
                     infoObj.transform.localScale = Vector3.one;
                 }
@@ -68,12 +73,12 @@ public class InformationPanel : GamePanel<IReferenceData>
         if (cycle&&infoParent.childCount>0)
         {
             Transform child = infoParent.GetChild(0);
-            child.GetComponent<Text>().text = information;
+            child.GetComponent<TextMeshProUGUI>().text = information;
             child.SetAsLastSibling();
         }
         else
         {
-            Text infoObj = Instantiate(info, infoParent, false);
+            TextMeshProUGUI infoObj = Instantiate(info, infoParent, false);
             infoObj.text = information;
             infoObj.transform.localScale = Vector3.one;
         }

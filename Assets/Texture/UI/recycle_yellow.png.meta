@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: b19ba42858d0bcc41b28bb7df6b6589e
+guid: 3dcb0dc3c1959f74da387fabaa2292fd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4841720520028814253
-    second: Note_0
+      213: 3248137500336927004
+    second: recycle_yellow_0
+  - first:
+      213: -6031756551263165321
+    second: recycle_yellow_1
+  - first:
+      213: 3475747186611482908
+    second: recycle_yellow_2
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -37,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,8 +57,8 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 40
-  spriteBorder: {x: 13, y: 9, z: 17, w: 8}
+  spritePixelsToUnits: 50
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -98,22 +104,64 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Note_0
+      name: recycle_yellow_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 125
-        height: 34
+        y: 5
+        width: 11
+        height: 27
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 35486fde6d0ceccb0800000000000000
-      internalID: -4841720520028814253
+      spriteID: c113531e8d3b31d20800000000000000
+      internalID: 3248137500336927004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: recycle_yellow_1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 0
+        width: 23
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 774e25ecf55ea4ca0800000000000000
+      internalID: -6031756551263165321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: recycle_yellow_2
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 18
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c117a03a6a55c3030800000000000000
+      internalID: 3475747186611482908
       vertices: []
       indices: 
       edges: []
@@ -122,14 +170,16 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Note_0: -4841720520028814253
+      recycle_yellow_0: 3248137500336927004
+      recycle_yellow_1: -6031756551263165321
+      recycle_yellow_2: 3475747186611482908
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
