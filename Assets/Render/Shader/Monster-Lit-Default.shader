@@ -4,6 +4,7 @@ Shader "MyGame/Monster-Lit-Default"
     {
         _MainTex("Diffuse", 2D) = "white" {}
         _MaskTex("Mask", 2D) = "white" {}
+        _MyMaskTex("MyMask", 2D) = "white" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
 
         _NoiseValue("NoiseValue",int)=500
@@ -70,6 +71,8 @@ Shader "MyGame/Monster-Lit-Default"
             SAMPLER(sampler_MainTex);
             TEXTURE2D(_MaskTex);
             SAMPLER(sampler_MaskTex);
+            TEXTURE2D(_MyMaskTex);
+            SAMPLER(sampler_MyMaskTex);
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             CBUFFER_START(UnityPerMaterial)
@@ -77,7 +80,7 @@ Shader "MyGame/Monster-Lit-Default"
                 half _NoiseAlpha;
                 half4 _ForceColor; 
 
-                half4 _MainTex_ST;
+                half4 _MainTex_ST; 
                 half4 _NormalMap_ST;  // Is this the right way to do this?
                 half4 _Color;
             CBUFFER_END
@@ -123,6 +126,8 @@ Shader "MyGame/Monster-Lit-Default"
             {
                 const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
+
+                const half4 myMask = SAMPLE_TEXTURE2D(_MyMaskTex, sampler_MyMaskTex, i.uv);
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 
@@ -131,10 +136,10 @@ Shader "MyGame/Monster-Lit-Default"
 
                 half4 result=CombinedShapeLightShared(surfaceData, inputData);
                 float noise=1;
-                Unity_SimpleNoise_float(i.uv,_NoiseValue,noise);
+                Unity_SimpleNoise_float(myMask.xy,_NoiseValue,noise);
                 result.a*=step(noise,_NoiseAlpha);
                 result.xyz=lerp(result.xyz,_ForceColor.xyz,_ForceColor.a);
-                
+  
                 return result;
             }
             ENDHLSL
