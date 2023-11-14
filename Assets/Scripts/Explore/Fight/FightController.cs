@@ -16,11 +16,9 @@ public struct FightPlayerRuntime
 }
 public class FightController : MonoBehaviour
 {
-    public static FightController instance;
-
+    public static FightController instance; 
     private BehaviorTree controllerBehavior;
-    
-
+      
     RuntimeObj fightMapRuntime0, fightMapRuntime1;
     [SerializeField]
     List<Transform> playerPos=new List<Transform>();
