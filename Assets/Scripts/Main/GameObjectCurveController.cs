@@ -101,7 +101,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         float timeValue = 0;
         float deltaValue = Time.fixedDeltaTime;
         int endCount = 0;
-        while (endCount>=curveMoveDatas.Count)
+        while (endCount<curveMoveDatas.Count)
         {
             timeValue += deltaValue;
             endCount = 0;
@@ -121,6 +121,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
                     }
                     else if (timeValue >= curveMoveData.waitTime)
                     {
+                        curveMoveData.transform.localScale = Vector3.one;
                         float lerpValue = (timeValue - curveMoveData.waitTime) / curveMoveData.moveTime;
                         SetCurvePos(lerpValue, curveMoveData);
                     }

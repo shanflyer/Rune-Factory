@@ -38,7 +38,12 @@ public class SceneManager : Singleton<SceneManager>
         loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
         nowSceen = sceneName;
 
+    } 
+    public void UnloadNowScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
     }
+
     LoadingPanel loadingPanel;
     AsyncOperation AsyncOperation;
     Action loadSceneAction;

@@ -141,16 +141,17 @@ public class ExploreManager : Singleton<ExploreManager>
     {
         ExploreFailed();
     }
-    public void StepFightSucceed()
+    public bool StepFightSucceed()
     {
         fightChapter.nowStep++;
         if (fightChapter.nowStep >= nowFightMapData.monsterDeploys.Count)
         {
             ExploreSuccessful();
+            return true;
         }
         else
         {
-           
+            return false;
         }
     }
     async void ExploreFailed()

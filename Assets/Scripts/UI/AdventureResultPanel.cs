@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class AdventureResultPanel: GamePanel<FightResult>
 {
@@ -48,9 +49,9 @@ public class AdventureResultPanel: GamePanel<FightResult>
         SuccessTitle = FindChildGameObject("SuccessTitle");
         FailureTitle = FindChildGameObject("FailureTitle");
         ItemsContent = FindChildGameObject("ItemsContent");
-        itemReference = FindChildGameObject<ItemReference>("Item");
+        itemReference = FindChildGameObject<ItemReference>("ItemBoxReference");
         Team = FindChildGameObject("Team");
-        teamerRenference = FindChildGameObject<AdventureTeamerRenference>("Teamer");
+        teamerRenference = FindChildGameObject<AdventureTeamerRenference>("AdventureTeamer");
         OkButton = FindChildGameObject<Button>("OkButton");
 
         base.SetPanelUISerializeObj();

@@ -93,9 +93,9 @@ public class GameCommon
     public static int defaultOperateId = 0;
     public static int defaultPlayerTalkTime = 2000;
 
-    public static float2 dropWaitTime = new float2(0.2f, 0.6f);
-    public static float4 dropArea = new float4(1,2,3,4);
-    public const float dropItemFlyerSpeed = 1.0f;
+    public static float2 dropWaitTime = new float2(0.4f, 0.8f);
+    public static float4 dropArea = new float4(-0.6f,-0.3f, 0.6f, 0.3f);
+    public const float dropItemFlyerSpeed = 3f;
     public const int SeasonDays = 30;
     public const float fightMapMovingSpeed = 0.2f;
 

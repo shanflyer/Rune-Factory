@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
@@ -7,7 +7,7 @@ using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-[CreateAssetMenu(menuName ="Data/ÀÊª˙ ˝æ›")]
+[CreateAssetMenu(menuName ="Data/ÈöèÊú∫Êï∞ÊçÆ")]
 public class GameRandomDataList : ScriptableObject
 {
 #if UNITY_EDITOR
@@ -84,43 +84,59 @@ public class GameRandomDataList : ScriptableObject
 
         int fillIndex = 0;
         WeightBarrel[] barrels = new WeightBarrel[gameRandomData.randomItems.Count];
-        for (int i = 0; i < barrels.Length; i++)
+
+        if (fillRamdomItems.Count > 0)
         {
-            if (fillIndex >= fillRamdomItems.Count)
+            for (int i = 0; i < barrels.Length; i++)
             {
-                WeightBarrel endBarrel = new WeightBarrel
+                if (fillIndex >= fillRamdomItems.Count)
+                {
+                    WeightBarrel endBarrel = new WeightBarrel
+                    {
+                        itemIndex = baseRamdomItems[i].x,
+                        baseWeight = 10000,
+                        fillItemIndex = -1
+                    };
+                    barrels[i] = endBarrel;
+                    break;
+                }
+
+                int value = averageValue - baseRamdomItems[i].y;
+                int fillValue = fillRamdomItems[fillIndex].y - value;
+
+                int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
+                WeightBarrel weightBarrel = new WeightBarrel
+                {
+                    itemIndex = baseRamdomItems[i].x,
+                    baseWeight = baseWeight,
+                    fillItemIndex = fillRamdomItems[fillIndex].x
+                };
+                barrels[i] = weightBarrel;
+
+                if (fillValue > averageValue)
+                {
+                    Vector2Int nowFill = new Vector2Int(fillRamdomItems[fillIndex].x, fillValue);
+                    fillRamdomItems[fillIndex] = nowFill;
+                }
+                else
+                {
+                    baseRamdomItems.Add(new Vector2Int(fillRamdomItems[fillIndex].x, fillValue));
+                    fillIndex++;
+                }
+            }
+        }else
+        {
+            for (int i = 0; i < barrels.Length; i++)
+            {
+                WeightBarrel weightBarrel = new WeightBarrel
                 {
                     itemIndex = baseRamdomItems[i].x,
                     baseWeight = 10000,
-                    fillItemIndex = -1
                 };
-                barrels[i] = endBarrel;
-                break;
-            }
-
-            int value = averageValue - baseRamdomItems[i].y;
-            int fillValue = fillRamdomItems[fillIndex].y - value;
-
-            int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
-            WeightBarrel weightBarrel = new WeightBarrel
-            {
-                itemIndex = baseRamdomItems[i].x,
-                baseWeight = baseWeight,
-                fillItemIndex = fillRamdomItems[fillIndex].x
-            };
-            barrels[i] = weightBarrel;
-
-            if (fillValue > averageValue)
-            {
-                Vector2Int nowFill = new Vector2Int(fillRamdomItems[fillIndex].x, fillValue);
-                fillRamdomItems[fillIndex] = nowFill;
-            }
-            else
-            {
-                baseRamdomItems.Add(new Vector2Int(fillRamdomItems[fillIndex].x, fillValue));
-                fillIndex++;
+                barrels[i] = weightBarrel;
             }
         }
+      
 
         gameRandomData.barrels = barrels.ToList();
 
@@ -192,51 +208,68 @@ public struct GameRandomData
 
         int fillIndex = 0;
         WeightBarrel[] barrels = new WeightBarrel[randomItems.Count];
-        for (int i = 0; i < barrels.Length; i++)
+
+        if (fillRamdomItems.Count > 0)
         {
-            if (fillRamdomItems.Count>0&&fillIndex >= fillRamdomItems.Count)
+            for (int i = 0; i < barrels.Length; i++)
             {
-                WeightBarrel endBarrel = new WeightBarrel
+                if (fillRamdomItems.Count > 0 && fillIndex >= fillRamdomItems.Count)
+                {
+                    WeightBarrel endBarrel = new WeightBarrel
+                    {
+                        itemIndex = baseRamdomItems[i].x,
+                        baseWeight = 10000,
+                        fillItemIndex = -1
+                    };
+                    barrels[i] = endBarrel;
+                    break;
+                }
+
+                int value = averageValue - baseRamdomItems[i].y;
+                int fillValue = -1;
+                if (fillRamdomItems.Count > fillIndex)
+                {
+                    fillValue = fillRamdomItems[fillIndex].y - value;
+                }
+
+
+                int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
+
+                WeightBarrel weightBarrel = new WeightBarrel
+                {
+                    itemIndex = baseRamdomItems[i].x,
+                    baseWeight = baseWeight,
+                    fillItemIndex = fillRamdomItems.Count > fillIndex ? fillRamdomItems[fillIndex].x : baseRamdomItems[i].x
+                };
+                barrels[i] = weightBarrel;
+                if (baseWeight == 10000)
+                {
+                    continue;
+                }
+
+                if (fillValue > averageValue)
+                {
+                    Vector2Int nowFill = new Vector2Int(fillRamdomItems[fillIndex].x, fillValue);
+                    fillRamdomItems[fillIndex] = nowFill;
+                }
+                else
+                {
+                    baseRamdomItems.Add(new Vector2Int(fillRamdomItems[fillIndex].x, fillValue));
+                    fillIndex++;
+                }
+            }
+
+        }
+        else
+        {
+            for (int i = 0; i < barrels.Length; i++)
+            {
+                WeightBarrel weightBarrel = new WeightBarrel
                 {
                     itemIndex = baseRamdomItems[i].x,
                     baseWeight = 10000,
-                    fillItemIndex = -1
                 };
-                barrels[i] = endBarrel;
-                break;
-            }
-
-            int value = averageValue - baseRamdomItems[i].y;
-            int fillValue = -1;
-            if (fillRamdomItems.Count > fillIndex)
-            {
-                fillValue = fillRamdomItems[fillIndex].y - value;
-            }
-            
-
-            int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
-            
-            WeightBarrel weightBarrel = new WeightBarrel
-            {
-                itemIndex = baseRamdomItems[i].x,
-                baseWeight = baseWeight,
-                fillItemIndex = fillRamdomItems.Count>fillIndex?fillRamdomItems[fillIndex].x: baseRamdomItems[i].x
-            };
-            barrels[i] = weightBarrel;
-            if (baseWeight == 10000)
-            {
-                continue;
-            }
-
-            if (fillValue > averageValue)
-            {
-                Vector2Int nowFill = new Vector2Int(fillRamdomItems[fillIndex].x, fillValue);
-                fillRamdomItems[fillIndex] = nowFill;
-            }
-            else
-            {
-                baseRamdomItems.Add(new Vector2Int(fillRamdomItems[fillIndex].x, fillValue));
-                fillIndex++;
+                barrels[i] = weightBarrel;
             }
         }
 
@@ -283,14 +316,16 @@ public class GameRandomDataListEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("≤‚ ‘"))
+        if (GUILayout.Button("ÊµãËØï"))
         {
             for(int i=0;i< gameRandomDataList.gameRandomDatas.Count; i++)
             {
                 var randomData = gameRandomDataList.gameRandomDatas[i];
                 gameRandomDataList.Pretreatment(ref randomData);
                 gameRandomDataList.gameRandomDatas[i] = randomData;
-            } 
+            }
+            EditorUtility.SetDirty(gameRandomDataList);
+            AssetDatabase.SaveAssets();
         }
     }
 }

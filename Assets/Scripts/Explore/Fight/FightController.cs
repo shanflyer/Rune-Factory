@@ -36,23 +36,36 @@ public class FightController : MonoBehaviour
             instance = this;
         }
         GameRuntimeObjManager.instance.CreatParent<FightRuntimeObjType>(transform);
-        GameActionManager.instance.AddListener((HideFightScene hideFightScene) =>
-        {
-            GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), true);
-        });
-        GameActionManager.instance.AddListener((DisplayFightScene displayFightScene) =>
-        {
-            GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), false);
-        });
+        GameActionManager.instance.AddListener<HideFightScene>(HideFightScene);
+        GameActionManager.instance.AddListener<DisplayFightScene>(DisplayFightScene);
         GameActionManager.instance.AddListener<StartRoundFight>(EndFightRound);
         GameActionManager.instance.AddListener<DisplayHurt>(DisplayHurt);
-        controllerBehavior = GetComponent<BehaviorTree>();
+        GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
 
-        
-
+        controllerBehavior = GetComponent<BehaviorTree>(); 
         var sceneInfoManager = SceneInfoManager.instance;
     }
-     
+    void DisplayFightScene(DisplayFightScene displayFightScene)
+    {
+        GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), false);
+    }
+    void HideFightScene(HideFightScene hideFightScene)
+    {
+        GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), true);
+    }
+    void ExploreEnd(ExploreEnd exploreEnd)
+    {
+        GameActionManager.instance.RemoveListener<HideFightScene>(HideFightScene);
+        GameActionManager.instance.RemoveListener<DisplayFightScene>(DisplayFightScene);
+        GameActionManager.instance.RemoveListener<StartRoundFight>(EndFightRound);
+        GameActionManager.instance.RemoveListener<DisplayHurt>(DisplayHurt);
+        GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd);
+        UIManager.instance.CloseGamePanel<FightPanel>();
+        SceneManager.instance.UnloadNowScene();
+    }
+
+
+
     public void RemoveFightPlayerRuntime(int characterId)
     {
         if (!fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayerRuntime))
@@ -99,26 +112,34 @@ public class FightController : MonoBehaviour
                 for(int j = 0; j < itemCount; j++)
                 {
                     var itemRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
-                      "dropItem", GameSourceManager.instance.dropItem, itemData.id);
-                    (itemRuntime.obj as SpriteRenderer).sprite = itemData.icon;
-                    var targetPos = new Vector2(GameRandom.RandomFloat(dropArea.x, dropArea.z),GameRandom.RandomFloat(dropArea.y, dropArea.w));
+                      "dropItem", GameSourceManager.instance.dropItem, itemData.id); 
+                    SpriteRenderer spriteRenderer = itemRuntime.obj as SpriteRenderer;
+                    spriteRenderer.sprite = itemData.icon;
+                    spriteRenderer.transform.position = startPos;
+                    spriteRenderer.transform.localScale = Vector3.zero;
+
+                    var targetPos = finalPos+ new Vector2(GameRandom.RandomFloat(dropArea.x, dropArea.z),GameRandom.RandomFloat(dropArea.y, dropArea.w));
+                    var middlePos = startPos + (targetPos - startPos) * 0.5f;
+                    middlePos.y += Vector2.Distance(startPos, middlePos);
 
                     float waitTime = GameRandom.RandomFloat(GameCommon.dropWaitTime.x, GameCommon.dropWaitTime.y);
                     float moveTime = Vector2.Distance(startPos, targetPos)/GameCommon.dropItemFlyerSpeed;
 
                     CurveMoveData curveMoveData = new CurveMoveData
                     {
+                        transform = spriteRenderer.transform,
                         waitTime = waitTime,
                         moveTime = moveTime,
                         startPos = startPos,
                         targetPos = targetPos,
-                        middlePos = startPos + (targetPos - startPos) * 0.5f
+                        middlePos = middlePos
                     };
                     CurveMoveDatas.Add(curveMoveData);
 
 
                     CurveMoveData curveMoveDataLine = new CurveMoveData
                     {
+                        transform = spriteRenderer.transform,
                         waitTime = 0,
                         moveTime = Vector2.Distance(targetPos, finalPos) / GameCommon.dropItemFlyerSpeed,
                         startPos = targetPos,
@@ -132,7 +153,7 @@ public class FightController : MonoBehaviour
 
             GameObjectCurveController.instance.CurveList(CurveMoveDatas, () =>
             {
-                GameObjectCurveController.instance.LineList(CurveMoveDatasLine,null);
+               GameObjectCurveController.instance.LineList(CurveMoveDatasLine,null);
             });
         } 
     }

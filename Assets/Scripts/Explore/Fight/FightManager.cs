@@ -210,7 +210,6 @@ public class FightManager :Singleton<FightManager>
     List<int> fightPlayers = new List<int>();
     List<int> fightMonsters = new List<int>();
 
-    public FightController fightController; 
     public override async void Init()
     {
         base.Init();
@@ -223,6 +222,7 @@ public class FightManager :Singleton<FightManager>
         deathTimeLineData = await GameSourceManager.instance.GetScriptableObject<MyTimeLineData>(DataPath.MonsterDeathPath);
         GameActionManager.instance.AddListener<CharacterDeath>(CharacterDeath);
         GameActionManager.instance.AddListener<CharacterLevelUp>(CharacterLevelUp);
+        GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
 
         fightResult = new FightResult
         {
@@ -234,6 +234,14 @@ public class FightManager :Singleton<FightManager>
     public FightResult FightResult { get { return fightResult; } }
     FightResult fightResult;
 
+    void ExploreEnd(ExploreEnd exploreEnd)
+    {
+        myInstance.Clear();
+        fightCharacters.Clear();
+        fightPlayers.Clear();
+        fightMonsters.Clear();
+        GetItemIndexs.Clear();
+    }
     protected override void Clear()
     {
         myInstance.Clear();
@@ -307,7 +315,7 @@ public class FightManager :Singleton<FightManager>
                     {
                         instanceId = -1,
                         dataId = itemId,
-                        count = 0
+                        count = count
                     };
                     fightResult.getItems.Add(item);
                     GetItemIndexs.Add(itemId, fightResult.getItems.Count - 1);

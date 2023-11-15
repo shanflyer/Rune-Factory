@@ -380,6 +380,12 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             controllerCharacter = character;
         }
+        if(!characterInstances.TryGetValue(creatCharacter.characterId,out var ints))
+        {
+            ints = new List<int>();
+        }
+        ints.Add(character.instanceId);
+        characterInstances[creatCharacter.characterId] = ints;
     }
    
 
@@ -791,6 +797,13 @@ public class CharacterManager : Singleton<CharacterManager>
                 var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
                 character = new Character(characterData, npc.characterId);
                 characters.Add(npc.characterId, character);
+
+                if(!characterInstances.TryGetValue(character.dataId,out var ints))
+                {
+                    ints = new List<int>();
+                }
+                ints.Add(character.instanceId);
+                characterInstances[character.dataId] = ints;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
             RefreshNpcRuntimeObj(character);
