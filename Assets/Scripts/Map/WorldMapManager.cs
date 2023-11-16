@@ -103,6 +103,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     async void ChangeWorld(ChangeWorld changeWorld)
     {
+       
        await InitWorldData(changeWorld.worldName,changeWorld.displayMap); 
     }
     private void SetItemAnimation(SetItemAnimation setItemAnimation)

@@ -4,6 +4,17 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine.TextCore.Text;
 
+public struct ZeroWorld : GameAction
+{
+    public SetResult setResult { set; get; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct TrySetTempMapItem : GameAction
 {
     public int instanceId;

@@ -31,7 +31,7 @@ public class ExploreManager : Singleton<ExploreManager>
     FightChapter fightChapter;
     public FightChapter GetFigehtChapter(int id)
     {
-        FightChapter fightChapter=default(FightChapter);
+        fightChapter=default(FightChapter);
 
         fightChapters.GetData(id, out fightChapter);
         return fightChapter;
@@ -48,6 +48,8 @@ public class ExploreManager : Singleton<ExploreManager>
             {
                 mapId = chapterData.id,
                 open = chapterData.isOpen, 
+                failureEventId=chapterData.failureEventId,
+                successEventId=chapterData.successEventId
             };
 
             fightChapter.findItems = new NativeList<int>(Allocator.TempJob);

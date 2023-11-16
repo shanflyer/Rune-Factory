@@ -31,7 +31,18 @@ public class AdventureResultPanel: GamePanel<FightResult>
     }
     void OKAction()
     {
-        GameActionManager.instance.QueueAction(new ExploreEnd());
+        WaitAction waitAction = new WaitAction();
+        Parameter parameter = new Parameter
+        {
+            value = "2",
+            parameters = new List<Parameter>()
+        };
+        parameter.parameters.Add(new Parameter
+        {
+            value= "ExploreEnd"
+        });
+        waitAction.Init(new List<Parameter> {parameter});
+        //GameActionManager.instance.QueueAction(new ExploreEnd());
         Close();
     }
  

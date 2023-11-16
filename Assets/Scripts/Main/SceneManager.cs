@@ -11,8 +11,9 @@ public class SceneManager : Singleton<SceneManager>
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<SwitchScene>(SwitchScene);
+        GameActionManager.instance.AddListener<SwitchScene>(SwitchScene); 
     }
+     
     async void SwitchScene(SwitchScene switchScene)
     {
         GameActionData beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(switchScene.beforeLoadActionId);
@@ -31,17 +32,19 @@ public class SceneManager : Singleton<SceneManager>
         }
         if (!string.IsNullOrEmpty(nowSceen))
         { 
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+            //UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+            nowSceen = null;
         }
        
         this.AsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
+         loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
         nowSceen = sceneName;
 
     } 
     public void UnloadNowScene()
     {
         UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+        nowSceen = null;
     }
 
     LoadingPanel loadingPanel;
@@ -52,11 +55,12 @@ public class SceneManager : Singleton<SceneManager>
     protected override void UpData()
     {
         base.UpData();
-        if (AsyncOperation == null||loadingPanel==null)
+        if (AsyncOperation == null)
         {
             return;
         }
-        loadingPanel.RefreshLoadValue(AsyncOperation.progress);
+        if (loadingPanel != null)
+            loadingPanel.RefreshLoadValue(AsyncOperation.progress);
         if (AsyncOperation.progress >= 1)
         {
             if (loadSceneAction != null)
@@ -64,7 +68,11 @@ public class SceneManager : Singleton<SceneManager>
                 loadSceneAction.Invoke();
             }
             loadSceneAction = null;
-            loadingPanel.Close();
+            if (loadingPanel != null)
+            {
+                loadingPanel.Close();
+            }
+                
             loadingPanel = null;
             AsyncOperation = null;
         }

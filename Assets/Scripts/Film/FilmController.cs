@@ -31,7 +31,17 @@ public class FilmController : Singleton<FilmController>
             if (filmData != null)
             {
                 var assetData = filmData.GetTimeLineAsset(playFilm.assetName);
-                BindFilm(assetData, film.playableDirector);
+
+                if (film.playableDirector.playableAsset!=null&&!string.IsNullOrEmpty(playFilm.assetName)&&
+                    playFilm.assetName != film.playableDirector.playableAsset.name)
+                {
+                    BindFilm(assetData, film.playableDirector);
+                }
+                else
+                {
+                    film.playableDirector.transform.localScale = Vector3.one;
+                    film.playableDirector.Play();
+                }
             }
             else
             {
@@ -46,6 +56,8 @@ public class FilmController : Singleton<FilmController>
         if (assetData.asset == null)
         {
             playableDirector.transform.localScale = Vector3.one;
+            playableDirector.Stop();
+            playableDirector.time = 0;
             playableDirector.Play();
             return;
         }
@@ -81,21 +93,23 @@ public class FilmController : Singleton<FilmController>
             }
         }
         playableDirector.transform.localScale = Vector3.one;
+        playableDirector.Stop();
+        playableDirector.time = 0;
         playableDirector.Play();
     }
-    void DisplayFilm(DisplayFilm hideFilm)
+    void DisplayFilm(DisplayFilm DisplayFilm)
     {
-        if (nowFilms.TryGetValue(hideFilm.filmName, out var film))
+        if (nowFilms.TryGetValue(DisplayFilm.filmName, out var film))
         {
             if (film.playableDirector != null)
             {
-                if (string.IsNullOrEmpty(hideFilm.path))
+                if (string.IsNullOrEmpty(DisplayFilm.path))
                 {
                     film.playableDirector.transform.localScale = Vector3.one;
                 }
                 else
                 {
-                    Transform child = film.playableDirector.transform.Find(hideFilm.path);
+                    Transform child = film.playableDirector.transform.Find(DisplayFilm.path);
                     child.localScale = Vector3.one;
                 }
 

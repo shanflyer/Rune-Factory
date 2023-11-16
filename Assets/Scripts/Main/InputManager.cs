@@ -139,7 +139,7 @@ public class InputManager :Singleton<InputManager>
             }
         }
 
-        GameActionManager.instance.QueueAction(new InitInputAction());
+        
         playerInput.defaultActionMap =PlayerActionMap;
 
         AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);

@@ -43,6 +43,8 @@ public struct FightMapData : IGameData
     public bool isOpen;
     public bool isZeroTeam;
     public int beforeActionId,afterActionId;
+    public int failureEventId;
+    public int successEventId;
     public string battleNotice;
 #if UNITY_EDITOR
     public void SetReferenceData()

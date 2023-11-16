@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Name: "\u6062\u590D\u7535\u5F71"
+  m_EditorClassIdentifier: 
+  id: 24
+  typeName: ActionList
+  _parameters:
+  - value: PlayFilm
+    parameters:
+    - value: "\u89D2\u8272\u9009\u62E9"
+      parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 3000
+      parameters:
+      - value: PlayFilm
+        parameters:
+        - value: "\u89D2\u8272\u9009\u62E9"
+          parameters: []
+        - value: EndFirstFight
+          parameters: []

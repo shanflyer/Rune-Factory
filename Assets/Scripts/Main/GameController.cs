@@ -20,7 +20,34 @@ public class GameController : MonoBehaviour
     public SystemLanguage SetSystemLanguage;
 
     public Item[] testPlayerItems;
-
+    [SerializeField]
+    string worldName;
+    [SerializeField]
+    int characterId;
+    [SerializeField]
+    int mapInstance;
+    [SerializeField]
+    int2 coordinate;
+    async void ZeroWorld(ZeroWorld zeroWorld)
+    {
+        GameActionManager.instance.QueueAction(new ChangeWorld
+        {
+            worldName = worldName,
+            displayMap = mapInstance
+        });
+        /* GameActionManager.instance.QueueAction(new CreatCharacter
+          {
+              characterId = characterId,
+              mapInstance = mapInstance,
+              coordinateX = coordinate.x,
+              coordinateY = coordinate.y,
+              controller = true
+          });
+          GameActionManager.instance.QueueAction(new CreatDefaultNPC());
+        */
+        await UIManager.instance.ShowGamePanel<MainPanel>();
+        InputManager.instance.SwitchInputMap(false);
+    }
     private void OnApplicationQuit()
     {
         SingletonType.instance.ClearAll();
@@ -65,6 +92,8 @@ public class GameController : MonoBehaviour
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         AudioController.instance.PlayAudio(BGM.Town1);
         UIManager.instance.ShowGamePanel<ZeroPanel>();
+
+       // GameActionManager.instance.AddListener<ZeroWorld>(ZeroWorld);
     }
     private void Update()
     {
@@ -130,27 +159,7 @@ public class GameController : MonoBehaviour
     
     
 }
-
-public  class A
-{
-    public static bool Test() { return true; }
-    public  static bool test { get; }
-}
-public class B:A
-{
-
-    public static bool test {
-        get => true;
-    }
-}
-public class C : A
-{
-
-    public static bool test
-    {
-        get => false;
-    }
-}
+ 
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(GameController))]

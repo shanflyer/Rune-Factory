@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using System;
+using UnityEngine.TextCore.Text;
+using Unity.Mathematics;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -9,7 +11,9 @@ public class GameManager : Singleton<GameManager>
         base.Init();
         GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
         GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
+      
     }
+    
     public void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
     {
         TwoSelectData twoSelectData = new TwoSelectData
