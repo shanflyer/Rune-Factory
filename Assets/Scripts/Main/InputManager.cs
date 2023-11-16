@@ -152,12 +152,12 @@ public class InputManager :Singleton<InputManager>
         {
             if (UI)
             {
-                uiAction.Enable();
+                //uiAction.Enable();
                 playerAction.Disable();
             }
             else
             {
-                uiAction.Disable();
+                //uiAction.Disable();
                 playerAction.Enable();
             }
            
