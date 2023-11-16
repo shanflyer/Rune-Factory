@@ -6,6 +6,7 @@ Shader "MySprite-Lit-Default"
         _MaskTex("Mask", 2D) = "white" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WetValue("WetValue",Range(0,1))=0
+        _shadowStep("ShadowStep",int)=0
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color("Tint", Color) = (1,1,1,1)
@@ -29,6 +30,7 @@ Shader "MySprite-Lit-Default"
             half4 _NormalMap_ST;  // Is this the right way to do this?
             half4 _Color;
             half _WetValue;
+            int _shadowStep;
         CBUFFER_END 
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
@@ -138,6 +140,7 @@ Shader "MySprite-Lit-Default"
             {
                 const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
+ 
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 
@@ -146,12 +149,10 @@ Shader "MySprite-Lit-Default"
 
                 half4 result=CombinedShapeLightShared(surfaceData, inputData);
                 half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV);
-                //return half4(i.screenUV.xy,0,1);
-                half3 shadowResult=result.xyz*(1-shadow.r);  
-                half shadowStep=step(99.9,i.worldPos.z);
-                //return half4(shadowStep.xxx,1);
+                //  return half4(i.lightingUV.xy,0,1);
+                half3 shadowResult=result.xyz*(1-shadow.r);   
 
-                result.xyz=result.xyz*(1-shadowStep)+shadowResult*shadowStep;                
+                result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;                
 
                 return result;
             }

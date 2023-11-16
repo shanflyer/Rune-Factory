@@ -18,6 +18,10 @@ public class AudioController : Singleton<AudioController>
         StopBGS();
         StopME();
         StopSE();
+        bgmGraph.Destroy();
+        bgsGraph.Destroy();
+        seGraph.Destroy();
+        meGraph.Destroy();
     }
     public void SetAudioSource(GameObject audioObj)
     {

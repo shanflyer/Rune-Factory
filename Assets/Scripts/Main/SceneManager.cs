@@ -37,7 +37,7 @@ public class SceneManager : Singleton<SceneManager>
         }
        
         this.AsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-         loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
+         //loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
         nowSceen = sceneName;
 
     } 
@@ -47,7 +47,6 @@ public class SceneManager : Singleton<SceneManager>
         nowSceen = null;
     }
 
-    LoadingPanel loadingPanel;
     AsyncOperation AsyncOperation;
     Action loadSceneAction;
 
@@ -59,8 +58,8 @@ public class SceneManager : Singleton<SceneManager>
         {
             return;
         }
-        if (loadingPanel != null)
-            loadingPanel.RefreshLoadValue(AsyncOperation.progress);
+       // if (loadingPanel != null)
+       //     loadingPanel.RefreshLoadValue(AsyncOperation.progress);
         if (AsyncOperation.progress >= 1)
         {
             if (loadSceneAction != null)
@@ -68,12 +67,12 @@ public class SceneManager : Singleton<SceneManager>
                 loadSceneAction.Invoke();
             }
             loadSceneAction = null;
-            if (loadingPanel != null)
+           // if (loadingPanel != null)
             {
-                loadingPanel.Close();
+            //    loadingPanel.Close();
             }
                 
-            loadingPanel = null;
+            //loadingPanel = null;
             AsyncOperation = null;
         }
     }
