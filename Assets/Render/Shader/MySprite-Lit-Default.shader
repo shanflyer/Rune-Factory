@@ -380,6 +380,73 @@ Shader "MySprite-Lit-Default"
             }
             ENDHLSL
         }
+
+        Pass
+        {
+            Tags { "LightMode" = "MyDepth" "Queue"="Transparent" "RenderType"="Transparent"}
+            BlendOp Max 
+
+            HLSLPROGRAM
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+
+            #pragma vertex UnlitVertex
+            #pragma fragment UnlitFragment
+
+            #pragma multi_compile _ SKINNED_SPRITE
+
+            struct Attributes
+            {
+                float3 positionOS   : POSITION; 
+                float2 uv           : TEXCOORD0;
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS      : SV_POSITION;
+                float  color           : COLOR;
+                float2  uv              : TEXCOORD0;
+                #if defined(DEBUG_DISPLAY)
+                    float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+            
+            
+
+            Varyings UnlitVertex(Attributes attributes)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(attributes);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(attributes);
+
+                attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                #if defined(DEBUG_DISPLAY)
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
+
+                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+                float myDepth=(ObjPos.y+ObjPos.z+200)/400;
+                o.color = myDepth;
+                return o;
+            }
+
+            float4 UnlitFragment(Varyings i) : SV_Target
+            {
+                float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                mainTex.xyz=i.color.xxx; 
+                
+
+                return mainTex;
+                
+            }
+            ENDHLSL
+        }
     }
 
     Fallback "Sprites/Default"
