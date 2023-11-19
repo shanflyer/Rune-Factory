@@ -4,9 +4,48 @@ Shader "MySprite-Lit-Default"
     {
         _MainTex("Diffuse", 2D) = "white" {}
         _MaskTex("Mask", 2D) = "white" {}
+        _WaterMaskTex("WaterMaskTex", 2D) = "black" {}
+
+        _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WetValue("WetValue",Range(0,1))=0
         _shadowStep("ShadowStep",int)=0
+        
+        //水面颜色
+        [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
+        //初始透明
+        _WaterZero("_WaterZero", Range(0,1)) = 0
+        //水低调整
+        _WaterBottom("_WaterBottom", Range(0,4)) = 1
+        //水面高度
+        _WaterHigh("_WaterHigh", Range(0,1)) = 0 
+        //波纹亮度补偿
+        waterValue("waterValue", Range(0, 0.4)) = 0.2 
+        //噪声纹理系数
+        waterNoiseScale("waterNoiseScale", Range(0, 300)) = 0  
+        
+        //噪声运动方向角1
+        _WaveAngle0("_WaveAngle0",  Range(-180, 180)) = 0
+        //噪声运动速度1
+        _WaveSpeed0("_WaveSpeed0",  Range(0, 0.2)) = 0
+        //噪声碎片大小1
+        WaveScale0("WaveScale0", Vector) = (1, 1, 0, 0)
+
+        //噪声运动方向角2
+        _WaveAngle1("_WaveAngle1",  Range(-180, 180)) = 0
+        //噪声运动速度2
+        _WaveSpeed1("_WaveSpeed1",  Range(0, 0.2)) = 0
+        //噪声碎片大小2
+        WaveScale1("WaveScale1", Vector) = (1, 1, 0, 0)
+        
+
+        [Title(water,Edge)] 
+        //边缘颜色
+        [HDR]EdgeColor("EdgeColor", Color) = (0.990566, 0.9765486, 0.9765486, 0)
+        //边缘宽度
+        EdgeValue("EdgeValue",  Range(0, 0.2))=0.1
+        
+        
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color("Tint", Color) = (1,1,1,1)
@@ -25,28 +64,46 @@ Shader "MySprite-Lit-Default"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Assets/Render/Shader/UnityAction.cginc"
         CBUFFER_START(UnityPerMaterial)
             half4 _MainTex_ST;
             half4 _NormalMap_ST;  // Is this the right way to do this?
             half4 _Color;
             half _WetValue;
             int _shadowStep;
+            
+            half4 waterColor;
+            half _WaterZero;
+            half _WaterBottom;   
+            half _WaveAngle0;
+            half _WaveSpeed0;
+            half _WaveAngle1;
+            half _WaveSpeed1; 
+            half _EdgeSpeed;
+            half _EdgeOffset;  
+            half WaveColorValue;   
+            half waterNoiseScale;
+            half waterValue;   
+            half2 WaveScale0;
+            half2 WaveScale1; 
+            half4 EdgeColor;
+            half EdgeValue;  
+            half _WaterHigh; 
+            
         CBUFFER_END 
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
         TEXTURE2D(_MaskTex);
         SAMPLER(sampler_MaskTex);
+        TEXTURE2D(_WaterMaskTex);
+        SAMPLER(sampler_WaterMaskTex);
+
+        TEXTURE2D(_WaterNormalMap);
+        SAMPLER(sampler_WaterNormalMap);
 
         TEXTURE2D(_ShadowTex);
         SAMPLER(sampler_ShadowTex);
-
-        void Unity_Remap_float(float In, float2 InMinMax, float2 OutMinMax, out float Out)
-        {
-            Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
-        }
-
-
-
+        
 
         ENDHLSL
 
@@ -91,7 +148,83 @@ Shader "MySprite-Lit-Default"
 
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/LightingUtility.hlsl"
 
-            
+            float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
+            {
+                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
+                //水域范围
+                float stepMask=step(0.04,_WaterMask.r);
+
+                
+                float svalue =_ScreenParams.y/ 1136;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*400/_ScreenParams.xy;
+                screenUV+=offsetUv;
+                
+                //波纹1
+                float angle0=radians(_WaveAngle0);//转换角度为弧度
+                float2 waveValue0=float2(cos(angle0),sin(angle0))*_WaveSpeed0;  
+
+                float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
+                float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
+                float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
+                _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
+                //波纹2
+                float angle1=radians(_WaveAngle1);
+                float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
+                float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
+                float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
+                float4 _WaveCol1= SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset1);
+                _WaveCol1.rgb = UnpackNormal(_WaveCol1);
+                
+                
+                //波纹叠加
+                float3 _endWave=_WaveCol0.xyz +_WaveCol1.xyz;   
+                //波纹r、g叠加
+                float waveBlendCol=_endWave[0]+_endWave[1]; 
+                waveBlendCol=clamp(waveBlendCol,0,1); 
+                waveBlendCol*=waterValue;
+                //噪声
+                float _waterNoise;
+                Unity_SimpleNoise_float(screenUV.xy, waterNoiseScale, _waterNoise);  
+                waveBlendCol*=_waterNoise;
+                
+
+                //波纹与边缘混合 
+                //映射水面深度
+                Unity_Remap_float(_WaterMask.r,float2(0,1),float2(_WaterZero,_WaterBottom),_WaterMask.r);
+                _WaterMask.r=clamp(_WaterMask.r,0,1);
+                
+
+                float _WaterMask1=step(_WaterHigh,_WaterMask.r);	 
+                float _WaterMask2=step(_WaterHigh+EdgeValue,_WaterMask.r); 
+                stepMask*=_WaterMask1;
+
+                float _EdgeMaskValue=_WaterMask.r;
+                Unity_Remap_float(_EdgeMaskValue,float2(_WaterHigh,_WaterHigh+EdgeValue),float2(0,1),_EdgeMaskValue);
+                
+                float edge=(_WaterMask1-_WaterMask2)*_EdgeMaskValue; 
+                
+                
+                //float3 edgeAddColor=edge*float3(0,1,1)*2; 
+                float3 endWaveColor=edge*EdgeColor*waveBlendCol+waveBlendCol*_WaterMask1.rrr;
+                endWaveColor=clamp(endWaveColor,0,1);
+                
+                
+
+                //主颜色
+                float3 _MainColor=waterColor.xyz*waterColor.a;	 
+                _MainColor+=(1-waterColor.a)*_MainTexColor.xyz;
+                _MainColor.xyz*=_WaterMask.r;
+
+                float3 outWater=endWaveColor+_MainColor; 
+                outWater=clamp(outWater,0,1);   
+                
+                outWater=outWater+waterColor.xyz*waterColor.a;
+                outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
+                return outWater;
+            }
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             
@@ -128,7 +261,7 @@ Shader "MySprite-Lit-Default"
                 #endif
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
- 
+                
 
                 o.color = v.color * _Color * unity_SpriteColor;
                 return o;
@@ -140,7 +273,8 @@ Shader "MySprite-Lit-Default"
             {
                 const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
- 
+                //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
+                
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 
@@ -152,7 +286,9 @@ Shader "MySprite-Lit-Default"
                 //  return half4(i.lightingUV.xy,0,1);
                 half3 shadowResult=result.xyz*(1-shadow.r);   
 
-                result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;                
+                result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
+                float3 waterColor=WaterFragment(i.uv,i.lightingUV,result);
+                result.xyz=waterColor.xyz; 
 
                 return result;
             }
@@ -190,11 +326,60 @@ Shader "MySprite-Lit-Default"
                 half3   normalWS        : TEXCOORD1;
                 half3   tangentWS       : TEXCOORD2;
                 half3   bitangentWS     : TEXCOORD3;
+                half2   screenUV : TEXCOORD4;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
             
             TEXTURE2D(_NormalMap);
             SAMPLER(sampler_NormalMap);
+
+            float3 WaterFragment(float2 uv,float2 screenUV,float3 _MainTexColor)
+            {
+                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
+                //水域范围
+                float stepMask=step(0.04,_WaterMask.r);
+
+                
+                float svalue =_ScreenParams.y/ 1136;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*400/_ScreenParams.xy;
+                screenUV+=offsetUv;
+                
+                //波纹1
+                float angle0=radians(_WaveAngle0);//转换角度为弧度
+                float2 waveValue0=float2(cos(angle0),sin(angle0))*_WaveSpeed0;  
+
+                float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
+                float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
+                float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
+                _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
+                //波纹2
+                float angle1=radians(_WaveAngle1);
+                float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
+                float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
+                float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
+                float4 _WaveCol1= SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset1);
+                _WaveCol1.rgb = UnpackNormal(_WaveCol1);
+                
+
+                //波纹与边缘混合 
+                //映射水面深度
+                Unity_Remap_float(_WaterMask.r,float2(0,1),float2(_WaterZero,_WaterBottom),_WaterMask.r);
+                _WaterMask.r=clamp(_WaterMask.r,0,1);
+                
+
+                float _WaterMask1=step(_WaterHigh,_WaterMask.r);	  
+                stepMask*=_WaterMask1;
+
+                float3 outWater=_WaveCol0.rgb +_WaveCol1.rgb;
+                outWater=clamp(outWater,0,1);
+
+
+                return stepMask*outWater+_MainTexColor.xyz*(1-stepMask); 
+                
+            }
             
 
             Varyings NormalsRenderingVertex(Attributes attributes)
@@ -206,6 +391,10 @@ Shader "MySprite-Lit-Default"
 
                 attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
+
+                o.screenUV=o.positionCS.xy;               
+                Unity_Remap_float(o.screenUV.x,float2(-1,1),float2(0,1),o.screenUV.x);
+                Unity_Remap_float(o.screenUV.y,float2(-1,1),float2(1,0),o.screenUV.y);
                 
                 o.uv = TRANSFORM_TEX(attributes.uv, _NormalMap);
                 o.color = attributes.color;
@@ -220,7 +409,9 @@ Shader "MySprite-Lit-Default"
             half4 NormalsRenderingFragment(Varyings i) : SV_Target
             {
                 const half4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                const half3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv));
+                half3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv));
+
+                //normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
 
                 return NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
             }
