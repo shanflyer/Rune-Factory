@@ -67,6 +67,7 @@ namespace UnityEngine.Rendering.Universal
         private static readonly int k_L2DInvMatrix = Shader.PropertyToID("L2DInvMatrix");
         private static readonly int k_L2DColor = Shader.PropertyToID("L2DColor");
         private static readonly int k_L2DPosition = Shader.PropertyToID("L2DPosition");
+        private static readonly int k_L2DDirection = Shader.PropertyToID("L2DDirection");
         private static readonly int k_L2DFalloffIntensity = Shader.PropertyToID("L2DFalloffIntensity");
         private static readonly int k_L2DFalloffDistance = Shader.PropertyToID("L2DFalloffDistance");
         private static readonly int k_L2DOuterAngle = Shader.PropertyToID("L2DOuterAngle");
@@ -439,6 +440,8 @@ namespace UnityEngine.Rendering.Universal
                 PerLight2D perLight = lightBatch.GetLight(slot);
                 perLight.Position = new float4(light.transform.position, light.normalMapDistance);
                 perLight.FalloffIntensity = light.falloffIntensity;
+                 
+                perLight.Direction = light.Direction;
                 perLight.FalloffDistance = light.shapeLightFalloffSize;
                 perLight.Color = new float4(color.r, color.g, color.b, color.a);
                 perLight.VolumeOpacity = volumeIntensity;
@@ -451,6 +454,7 @@ namespace UnityEngine.Rendering.Universal
             else
             {
                 cmd.SetGlobalVector(k_L2DPosition, new float4(light.transform.position, light.normalMapDistance));
+                cmd.SetGlobalVector(k_L2DDirection, light.Direction);
                 cmd.SetGlobalFloat(k_L2DFalloffIntensity, light.falloffIntensity);
                 cmd.SetGlobalFloat(k_L2DFalloffDistance, light.shapeLightFalloffSize);
                 cmd.SetGlobalColor(k_L2DColor, color);

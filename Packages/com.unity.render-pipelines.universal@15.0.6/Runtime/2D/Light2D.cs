@@ -55,7 +55,9 @@ namespace UnityEngine.Rendering.Universal
             /// <summary>
             /// Shapeless light that affects the entire screen.
             /// </summary>
-            Global = 4
+            Global = 4,
+            Directional = 5
+
         }
 
         /// <summary>
@@ -111,7 +113,7 @@ namespace UnityEngine.Rendering.Universal
         int m_BlendStyleIndex = 0;
 
         [SerializeField] float m_FalloffIntensity = 0.5f;
-
+        [SerializeField] Vector3 m_Direction = new Vector3(0,0,-0.02f);
         [ColorUsage(true)]
         [SerializeField] Color m_Color = Color.white;
         [SerializeField] float m_Intensity = 1;
@@ -293,6 +295,8 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         public Sprite lightCookieSprite { get { return m_LightType != LightType.Point ? m_LightCookieSprite : m_DeprecatedPointLightCookieSprite; } set => m_LightCookieSprite = value; }
 
+
+        public Vector3 Direction { get => m_Direction; set => m_Direction = value; }
         /// <summary>
         /// Controls the brightness and distance of the fall off (edge) of the light
         /// </summary>
@@ -391,7 +395,13 @@ namespace UnityEngine.Rendering.Universal
             }
             return true;
         }
-
+        static Vector3[] DirectionalShapePath = new Vector3[4]
+        {
+            new Vector3(-9999999,-9999999,0),
+            new Vector3(-9999999,9999999,0),
+            new Vector3(9999999,9999999,0),
+            new Vector3(9999999,-9999999,0),
+        };
         internal void UpdateMesh(bool forceUpdate = false)
         {
             var shapePathHash = LightUtility.GetShapePathHash(shapePath);
@@ -411,7 +421,8 @@ namespace UnityEngine.Rendering.Universal
                 var batchChannelColor = LightBatch.GetBatchColor();
 
                 switch (m_LightType)
-                {
+                { 
+                    case LightType.Directional:
                     case LightType.Freeform:
                         m_LocalBounds = LightUtility.GenerateShapeMesh(this, m_ShapePath, m_ShapeLightFalloffSize, batchChannelColor);
                         break;
@@ -499,10 +510,19 @@ namespace UnityEngine.Rendering.Universal
 #endif
         }
 
+        Color oldColor;
         private void LateUpdate()
         {
             if (m_LightType == LightType.Global)
+            {
+                if (color != oldColor)
+                {
+                    oldColor = color;
+                    Shader.SetGlobalColor("GlobalColor", color);
+                }
                 return;
+            }
+                
 
             UpdateMesh(forceUpdate);
             UpdateBoundingSphere();

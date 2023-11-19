@@ -54,6 +54,7 @@ Shader "Hidden/Light2D"
 
             TEXTURE2D(_CookieTex);          // This can either be a sprite texture uv or a falloff texture
             SAMPLER(sampler_CookieTex);
+            
 
             TEXTURE2D(_FalloffLookup);
             SAMPLER(sampler_FalloffLookup);
@@ -62,16 +63,18 @@ Shader "Hidden/Light2D"
             SAMPLER(sampler_LightLookup);
             half4 _LightLookup_TexelSize;
 
-#if USE_POINT_LIGHT_COOKIES
-            TEXTURE2D(_PointLightCookieTex);
-            SAMPLER(sampler_PointLightCookieTex);
-#endif
+            #if USE_POINT_LIGHT_COOKIES
+                TEXTURE2D(_PointLightCookieTex);
+                SAMPLER(sampler_PointLightCookieTex);
+            #endif
 
             NORMALS_LIGHTING_VARIABLES
             SHADOW_VARIABLES
             UNITY_LIGHT2D_DATA
 
             half _InverseHDREmulationScale;
+            half4 GlobalColor;
+            int blendGloble;
 
             Varyings vert_shape(Attributes a, PerLight2D light)
             {
@@ -84,9 +87,9 @@ Shader "Hidden/Light2D"
                 o.positionCS = TransformObjectToHClip(positionOS);
                 o.color = _L2D_COLOR * _InverseHDREmulationScale;
                 o.color.a = a.color.a;
-#if USE_VOLUMETRIC
-                o.color.a = _L2D_COLOR.a * _L2D_VOLUME_OPACITY;
-#endif
+                #if USE_VOLUMETRIC
+                    o.color.a = _L2D_COLOR.a * _L2D_VOLUME_OPACITY;
+                #endif
 
                 // If Sprite use UV.
                 o.uv = (_L2D_LIGHT_TYPE == 2) ? a.uv : float2(a.color.a, _L2D_FALLOFF_INTENSITY);
@@ -94,7 +97,15 @@ Shader "Hidden/Light2D"
                 float4 worldSpacePos;
                 worldSpacePos.xyz = TransformObjectToWorld(positionOS);
                 worldSpacePos.w = 1;
-                TRANSFER_NORMALS_LIGHTING(o, worldSpacePos, _L2D_POSITION.xyz, _L2D_POSITION.w)
+
+                
+                if(_L2D_LIGHT_TYPE!=5)
+                {
+                     TRANSFER_NORMALS_LIGHTING(o, worldSpacePos, _L2D_POSITION.xyz, _L2D_POSITION.w)
+                }else
+                {
+                     Directional_NORMALS_LIGHTING(o,  _L2D_DIRECTION.xyz, _L2D_POSITION.w)
+                }
                 TRANSFER_SHADOWS(o)
                 return o;
             }
@@ -117,19 +128,22 @@ Shader "Hidden/Light2D"
                 TRANSFER_SHADOWS(output)
                 return output;
             }
+            
+
 
             Varyings vert(Attributes attributes)
             {
 
                 PerLight2D light;
-#if USE_STRUCTURED_BUFFER_FOR_LIGHT2D_DATA
-                light = GetPerLight2D(attributes.color);
-#endif
+                #if USE_STRUCTURED_BUFFER_FOR_LIGHT2D_DATA
+                    light = GetPerLight2D(attributes.color);
+                #endif
 
                 switch (_L2D_LIGHT_TYPE)
                 {
                     case 0:
                     case 1:
+                    case 5:
                     case 2:
                     {
                         Varyings v = vert_shape(attributes, light);
@@ -143,6 +157,7 @@ Shader "Hidden/Light2D"
                         v.lightOffset = attributes.color;
                         return v;
                     }
+                    break;
                 }
 
                 Varyings v = (Varyings)0;
@@ -152,30 +167,33 @@ Shader "Hidden/Light2D"
             FragmentOutput frag_shape(Varyings i, PerLight2D light)
             {
                 half4 lightColor = i.color;
+                lightColor.xyz=lightColor.xyz*GlobalColor.xyz;
+
                 if (_L2D_LIGHT_TYPE == 2)
                 {
                     half4 cookie = SAMPLE_TEXTURE2D(_CookieTex, sampler_CookieTex, i.uv);
-#if USE_ADDITIVE_BLENDING
-                    lightColor *= cookie * cookie.a;
-#else
-                    lightColor *= cookie;
-#endif
+                    #if USE_ADDITIVE_BLENDING
+                        lightColor *= cookie * cookie.a;
+                    #else
+                        lightColor *= cookie;
+                    #endif
                 }
                 else
                 {
-#if USE_ADDITIVE_BLENDING
-                    lightColor *= SAMPLE_TEXTURE2D(_FalloffLookup, sampler_FalloffLookup, i.uv).r;
-#elif USE_VOLUMETRIC
-                    lightColor.a = i.color.a * SAMPLE_TEXTURE2D(_FalloffLookup, sampler_FalloffLookup, i.uv).r;
-#else
-                    lightColor.a = SAMPLE_TEXTURE2D(_FalloffLookup, sampler_FalloffLookup, i.uv).r;
-#endif
+                    #if USE_ADDITIVE_BLENDING
+                        lightColor *= SAMPLE_TEXTURE2D(_FalloffLookup, sampler_FalloffLookup, i.uv).r;
+                    #elif USE_VOLUMETRIC
+                        lightColor.a = i.color.a * SAMPLE_TEXTURE2D(_FalloffLookup, sampler_FalloffLookup, i.uv).r;
+                    #else
+                        lightColor.a = SAMPLE_TEXTURE2D(_FalloffLookup, sampler_FalloffLookup, i.uv).r;
+                    #endif
                 }
 
-#if !USE_VOLUMETRIC
-                APPLY_NORMALS_LIGHTING(i, lightColor, _L2D_POSITION.xyz, _L2D_POSITION.w);
-#endif
+                #if !USE_VOLUMETRIC
+                    APPLY_NORMALS_LIGHTING(i, lightColor,_L2D_DIRECTION.xyz, _L2D_POSITION.w);
+                #endif
                 APPLY_SHADOWS(i, lightColor, _L2D_SHADOW_INTENSITY);
+ 
                 return ToFragmentOutput(lightColor);
             }
 
@@ -197,59 +215,63 @@ Shader "Hidden/Light2D"
                 attenuation = SAMPLE_TEXTURE2D(_FalloffLookup, sampler_FalloffLookup, mappedUV).r;
 
                 half4 lightColor = _L2D_COLOR;
-#if USE_POINT_LIGHT_COOKIES
-                half4 cookieColor = SAMPLE_TEXTURE2D(_PointLightCookieTex, sampler_PointLightCookieTex, i.lookupUV);
-                lightColor = cookieColor * _L2D_COLOR;
-#endif
+                #if USE_POINT_LIGHT_COOKIES
+                    half4 cookieColor = SAMPLE_TEXTURE2D(_PointLightCookieTex, sampler_PointLightCookieTex, i.lookupUV);
+                    lightColor = cookieColor * _L2D_COLOR;
+                #endif
 
-#if USE_ADDITIVE_BLENDING || USE_VOLUMETRIC
-                lightColor *= attenuation;
-#else
-                lightColor.a = attenuation;
-#endif
+                #if USE_ADDITIVE_BLENDING || USE_VOLUMETRIC
+                    lightColor *= attenuation;
+                #else
+                    lightColor.a = attenuation;
+                #endif
 
 
-#if !USE_VOLUMETRIC
-                APPLY_NORMALS_LIGHTING(i, lightColor, _L2D_POSITION.xyz, _L2D_POSITION.w);
-#endif
+                #if !USE_VOLUMETRIC
+                    APPLY_NORMALS_LIGHTING(i, lightColor, _L2D_POSITION.xyz, _L2D_POSITION.w);
+                #endif
                 APPLY_SHADOWS(i, lightColor, _L2D_SHADOW_INTENSITY);
 
-#if USE_VOLUMETRIC
-                lightColor *= _L2D_VOLUME_OPACITY;
-#endif
+                #if USE_VOLUMETRIC
+                    lightColor *= _L2D_VOLUME_OPACITY;
+                #endif
+                
 
                 return ToFragmentOutput(lightColor * _InverseHDREmulationScale);
             }
 
-            FragmentOutput frag(Varyings i) : SV_Target
-            {
+            
 
-                PerLight2D light;
-#if USE_STRUCTURED_BUFFER_FOR_LIGHT2D_DATA
+        FragmentOutput frag(Varyings i) : SV_Target
+        {
+
+            PerLight2D light;
+            #if USE_STRUCTURED_BUFFER_FOR_LIGHT2D_DATA
                 light = GetPerLight2D(i.lightOffset);
-#endif
+            #endif
 
-                switch (_L2D_LIGHT_TYPE)
+            switch (_L2D_LIGHT_TYPE)
+            {
+                case 0:
+                case 1:
+                case 5:
+                case 2:
                 {
-                    case 0:
-                    case 1:
-                    case 2:
-                    {
-                        FragmentOutput output = frag_shape(i, light);
-                        return output;
-                    }
-                    break;
-                    case 3:
-                    {
-                        FragmentOutput output = frag_point(i, light);
-                        return output;
-                    }
+                    FragmentOutput output = frag_shape(i, light);
+                    return output;
                 }
-
-                half4 color = i.color;
-                return ToFragmentOutput(color);
+                break;
+                case 3:
+                {
+                    FragmentOutput output = frag_point(i, light);
+                    return output;
+                } 
             }
-            ENDHLSL
+
+            half4 color = i.color;
+            return ToFragmentOutput(color);
         }
+        ENDHLSL
     }
+}
 }

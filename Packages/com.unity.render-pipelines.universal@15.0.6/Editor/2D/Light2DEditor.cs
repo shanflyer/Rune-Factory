@@ -24,7 +24,8 @@ namespace UnityEditor.Rendering.Universal
                 if (light == null)
                     return false;
                 else
-                    return base.IsAvailable() && light.lightType == Light2D.LightType.Freeform;
+                    return base.IsAvailable() && (light.lightType == Light2D.LightType.Freeform||
+                        light.lightType == Light2D.LightType.Directional);
             }
 
             protected override IShape GetShape(Object target)
@@ -71,7 +72,8 @@ namespace UnityEditor.Rendering.Universal
             public static GUIContent lightTypeSprite = new GUIContent("Sprite", Resources.Load("InspectorIcons/SpriteLight") as Texture);
             public static GUIContent lightTypePoint = new GUIContent("Spot", Resources.Load("InspectorIcons/PointLight") as Texture);
             public static GUIContent lightTypeGlobal = new GUIContent("Global", Resources.Load("InspectorIcons/GlobalLight") as Texture);
-            public static GUIContent[] lightTypeOptions = new GUIContent[] { lightTypeFreeform, lightTypeSprite, lightTypePoint, lightTypeGlobal };
+            public static GUIContent lightDirectional = new GUIContent("Directional", Resources.Load("InspectorIcons/GlobalLight") as Texture);
+            public static GUIContent[] lightTypeOptions = new GUIContent[] { lightTypeFreeform, lightTypeSprite, lightTypePoint, lightTypeGlobal, lightDirectional };
 
 
             public static GUIContent blendingSettingsFoldout = EditorGUIUtility.TrTextContent("Blending", "Options used for blending");
@@ -80,6 +82,8 @@ namespace UnityEditor.Rendering.Universal
             public static GUIContent normalMapsSettingsFoldout = EditorGUIUtility.TrTextContent("Normal Maps", "Options used for normal maps");
 
             public static GUIContent generalLightType = EditorGUIUtility.TrTextContent("Light Type", "Select the light type. \n\nGlobal Light: For ambient light. \nSpot Light: For a spot light / point light. \nFreeform Light: For a custom shape light. \nSprite Light: For a custom light cookie using Sprites.");
+
+            public static GUIContent generalDirection = EditorGUIUtility.TrTextContent("Direction", "Direction");
 
             public static GUIContent generalFalloffSize = EditorGUIUtility.TrTextContent("Falloff", "Adjusts the falloff area of this light. The higher the falloff value, the larger area the falloff spans.");
             public static GUIContent generalFalloffIntensity = EditorGUIUtility.TrTextContent("Falloff Strength", "Adjusts the falloff curve to control the softness of this light’s edges. The higher the falloff strength, the softer the edges of this light.");
@@ -130,6 +134,7 @@ namespace UnityEditor.Rendering.Universal
 
         SerializedProperty m_LightType;
         SerializedProperty m_LightColor;
+        SerializedProperty m_LightDirection;
         SerializedProperty m_LightIntensity;
         SerializedProperty m_UseNormalMap;
         SerializedProperty m_ShadowsEnabled;
@@ -226,6 +231,7 @@ namespace UnityEditor.Rendering.Universal
 
             m_LightType = serializedObject.FindProperty("m_LightType");
             m_LightColor = serializedObject.FindProperty("m_Color");
+            m_LightDirection = serializedObject.FindProperty("m_Direction");
             m_LightIntensity = serializedObject.FindProperty("m_Intensity");
             m_UseNormalMap = serializedObject.FindProperty("m_UseNormalMap");
             m_ShadowsEnabled = serializedObject.FindProperty("m_ShadowsEnabled");
@@ -557,7 +563,7 @@ namespace UnityEditor.Rendering.Universal
                 meshChanged = true;
             }
             EditorGUI.EndProperty();
-
+            EditorGUILayout.PropertyField(m_LightDirection, Styles.generalDirection);
             // Color and intensity
             EditorGUILayout.PropertyField(m_LightColor, Styles.generalLightColor);
             EditorGUI.BeginChangeCheck();
@@ -600,7 +606,8 @@ namespace UnityEditor.Rendering.Universal
 
             m_SortingLayerDropDown.OnTargetSortingLayers(serializedObject, targets, Styles.generalSortingLayerPrefixLabel, AnalyticsTrackChanges);
 
-            if (m_LightType.intValue == (int)Light2D.LightType.Freeform)
+            if (m_LightType.intValue == (int)Light2D.LightType.Freeform||
+                m_LightType.intValue == (int)Light2D.LightType.Directional)
             {
                 DoEditButton<FreeformShapeTool>(PathEditorToolContents.icon, "Edit Shape");
                 DoPathInspector<FreeformShapeTool>();
@@ -839,9 +846,10 @@ namespace UnityEditor.Rendering.Universal
                             DrawSpotLight(serializedObject);
                         }
                         break;
+                        case (int)Light2D.LightType.Directional:
                         case (int)Light2D.LightType.Freeform:
                         {
-                            DrawShapeLight(serializedObject);
+                                DrawShapeLight(serializedObject);
                         }
                         break;
                         case (int)Light2D.LightType.Sprite:

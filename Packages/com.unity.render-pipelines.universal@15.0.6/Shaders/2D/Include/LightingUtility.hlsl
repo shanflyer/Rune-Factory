@@ -12,12 +12,21 @@
             half3 planeNormal = -GetViewForwardDir();\
             half3 projLightPos = lightPosition.xyz - (dot(lightPosition.xyz - worldSpacePos.xyz, planeNormal) - lightZDistance) * planeNormal;\
             output.lightDirection.xyz = projLightPos - worldSpacePos.xyz;\
+            output.lightDirection.xyz=normalize(output.lightDirection.xyz);\
+            output.lightDirection.w = 0;
+        
+        #define Directional_NORMALS_LIGHTING(output, lightPosition, lightZDistance)\
+            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w);\ 
+            half3 planeNormal = -GetViewForwardDir();\
+             half3 projLightPos =-(dot(lightPosition.xyz, planeNormal) - lightZDistance) * planeNormal;\
+            output.lightDirection.xyz=normalize(lightPosition.xyz);\  
+            output.lightDirection.z=-output.lightDirection.z;\
             output.lightDirection.w = 0;
 
         #define APPLY_NORMALS_LIGHTING(input, lightColor, lightPosition, lightZDistance)\
             half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, input.screenUV);\
             half3 normalUnpacked = UnpackNormalRGBNoScale(normal);\
-            half3 dirToLight = normalize(input.lightDirection.xyz);\
+            half3 dirToLight =input.lightDirection.xyz;\ 
             lightColor = lightColor * saturate(dot(dirToLight, normalUnpacked));
     #else
         #define NORMALS_LIGHTING_COORDS(TEXCOORDA, TEXCOORDB) \
@@ -27,6 +36,11 @@
         #define TRANSFER_NORMALS_LIGHTING(output, worldSpacePos, lightPosition, lightZDistance) \
             output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w); \
             output.positionWS = worldSpacePos;
+
+         #define Directional_NORMALS_LIGHTING(output, lightPosition, lightZDistance)\
+            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w);\ 
+            output.lightDirection.xyz=lightPosition.xyz;\ 
+            output.lightDirection.w = 0;
 
         #define APPLY_NORMALS_LIGHTING(input, lightColor, lightPosition, lightZDistance)\
             half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, input.screenUV);\
@@ -43,6 +57,7 @@
 #else
     #define NORMALS_LIGHTING_COORDS(TEXCOORDA, TEXCOORDB)
     #define NORMALS_LIGHTING_VARIABLES
+    #define Directional_NORMALS_LIGHTING(output, lightPosition, lightZDistance)
     #define TRANSFER_NORMALS_LIGHTING(output, worldSpacePos, lightPosition, lightZDistance)
     #define APPLY_NORMALS_LIGHTING(input, lightColor, lightPosition, lightZDistance)
 #endif
@@ -130,6 +145,7 @@ struct PerLight2D
     float4x4    InvMatrix;
     float4      Color;
     float4      Position;
+    float3      Direction;
     float       FalloffIntensity;
     float       FalloffDistance;
     float       OuterAngle;
@@ -138,6 +154,7 @@ struct PerLight2D
     float       VolumeOpacity;
     float       ShadowIntensity;
     int         LightType;
+    int         LightDirection;
 };
 
 #if USE_STRUCTURED_BUFFER_FOR_LIGHT2D_DATA
@@ -157,6 +174,7 @@ struct PerLight2D
     #define _L2D_INVMATRIX          light.InvMatrix
     #define _L2D_COLOR              light.Color
     #define _L2D_POSITION           light.Position
+    #define _L2D_DIRECTION          light.Direction
     #define _L2D_FALLOFF_INTENSITY  light.FalloffIntensity
     #define _L2D_FALLOFF_DISTANCE   light.FalloffDistance
     #define _L2D_OUTER_ANGLE        light.OuterAngle
@@ -165,6 +183,7 @@ struct PerLight2D
     #define _L2D_VOLUME_OPACITY     light.VolumeOpacity
     #define _L2D_SHADOW_INTENSITY   light.ShadowIntensity
     #define _L2D_LIGHT_TYPE         light.LightType
+    #define _L2D_LIGHT_DIRECTION    light.LightDirection
 
 #else
 
@@ -173,6 +192,7 @@ struct PerLight2D
             float4x4    L2DInvMatrix;           \
             float4      L2DColor;               \
             float4      L2DPosition;            \
+            float3      L2DDirection;           \
             float       L2DFalloffIntensity;    \
             float       L2DFalloffDistance;     \
             float       L2DOuterAngle;          \
@@ -181,10 +201,12 @@ struct PerLight2D
             float       L2DVolumeOpacity;       \
             float       L2DShadowIntensity;     \
             int         L2DLightType;           \
+            int         L2DLightDirection;      \
 
     #define _L2D_INVMATRIX          L2DInvMatrix
     #define _L2D_COLOR              L2DColor
     #define _L2D_POSITION           L2DPosition
+    #define _L2D_DIRECTION          L2DDirection
     #define _L2D_FALLOFF_INTENSITY  L2DFalloffIntensity
     #define _L2D_FALLOFF_DISTANCE   L2DFalloffDistance
     #define _L2D_OUTER_ANGLE        L2DOuterAngle
@@ -193,5 +215,6 @@ struct PerLight2D
     #define _L2D_VOLUME_OPACITY     L2DVolumeOpacity
     #define _L2D_SHADOW_INTENSITY   L2DShadowIntensity
     #define _L2D_LIGHT_TYPE         L2DLightType
+    #define _L2D_LIGHT_DIRECTION    L2DLightDirection
 
 #endif

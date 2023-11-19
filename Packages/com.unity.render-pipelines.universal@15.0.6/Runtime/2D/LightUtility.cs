@@ -12,6 +12,7 @@ namespace UnityEngine.Rendering.Universal
         internal float4x4 InvMatrix;
         internal float4 Color;
         internal float4 Position;
+        internal float3 Direction;
         internal float FalloffIntensity;
         internal float FalloffDistance;
         internal float OuterAngle;
