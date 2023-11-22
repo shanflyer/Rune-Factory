@@ -10,6 +10,9 @@ Shader "MySprite-Lit-Default"
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WetValue("WetValue",Range(0,1))=0
         _shadowStep("ShadowStep",int)=0
+
+
+        _Water("Water",int)=0
         
         //水面颜色
         [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
@@ -71,6 +74,7 @@ Shader "MySprite-Lit-Default"
             half4 _Color;
             half _WetValue;
             int _shadowStep;
+            int _Water;
             
             half4 waterColor;
             half _WaterZero;
@@ -89,7 +93,9 @@ Shader "MySprite-Lit-Default"
             half4 EdgeColor;
             half EdgeValue;  
             half _WaterHigh; 
-            
+
+            half2 LightDirection;
+            half4 GlobalColor;            
         CBUFFER_END 
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
@@ -275,20 +281,25 @@ Shader "MySprite-Lit-Default"
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
                 
+                float3 waterColor=main.xyz;
+                if(_Water==1)
+                {
+                    waterColor=WaterFragment(i.uv,i.lightingUV,main);
+                }
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 
-                InitializeSurfaceData(main.rgb, main.a, mask, surfaceData);
+                InitializeSurfaceData(waterColor, main.a, mask, surfaceData);
                 InitializeInputData(i.uv, i.lightingUV, inputData);
 
                 half4 result=CombinedShapeLightShared(surfaceData, inputData);
-                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV);
-                //  return half4(i.lightingUV.xy,0,1);
-                half3 shadowResult=result.xyz*(1-shadow.r);   
+                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
+                half3 shadowColor=GlobalColor*shadow.r*GlobalColor.a; 
 
+                half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
                 result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
-                float3 waterColor=WaterFragment(i.uv,i.lightingUV,result);
-                result.xyz=waterColor.xyz; 
+                
+                //result.xyz=waterColor.xyz; 
 
                 return result;
             }
@@ -411,7 +422,7 @@ Shader "MySprite-Lit-Default"
                 const half4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 half3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv));
 
-                //normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
+                // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
 
                 return NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
             }
@@ -537,10 +548,22 @@ Shader "MySprite-Lit-Default"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 UNITY_SKINNED_VERTEX_COMPUTE(attributes);
 
+                float4x4 m_Data=UNITY_MATRIX_M;
+                float lightAngleValue=sin(LightDirection.x);
+                m_Data[0][0]+=m_Data[0][0]*abs(lightAngleValue)*0.5*LightDirection.y;
+
                 attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                float3 worldPos=mul(m_Data, float4(attributes.positionOS, 1.0));
+                 
+                float scaleZ=UNITY_MATRIX_M._m22*LightDirection.y;
+                scaleZ+=  scaleZ*abs(lightAngleValue)*0.5*LightDirection.y;
+
+                float2 offset=scaleZ.xx*float2(sin(LightDirection.x),cos(LightDirection.x));
+                worldPos.xy+=offset;
+                
+                o.positionCS = TransformWorldToHClip(worldPos);
                 #if defined(DEBUG_DISPLAY)
-                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                    o.positionWS = worldPos;
                 #endif
                 o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
                 o.color = attributes.color * _Color * unity_SpriteColor;

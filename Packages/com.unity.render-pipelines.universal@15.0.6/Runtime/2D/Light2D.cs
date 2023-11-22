@@ -3,6 +3,7 @@ using UnityEngine.Serialization;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.U2D;
 using Unity.Collections;
+using Unity.Mathematics;
 #if UNITY_EDITOR
 using System.Linq;
 using UnityEditor.Experimental.SceneManagement;
@@ -511,10 +512,21 @@ namespace UnityEngine.Rendering.Universal
         }
 
         Color oldColor;
+        Vector3 lightDirection;
         private void LateUpdate()
         {
-            if (m_LightType == LightType.Global)
+            if (m_LightType == LightType.Directional)
             {
+                if (lightDirection != Direction)
+                {
+                    lightDirection = Direction;
+                    Vector2 directionValue = new Vector2(-Direction.x / 90.0f*math.PI*0.5f,1- Direction.y / 90.0f);
+                    Shader.SetGlobalVector("LightDirection", directionValue);
+                }  
+            }
+
+            if (m_LightType == LightType.Global)
+            { 
                 if (color != oldColor)
                 {
                     oldColor = color;
