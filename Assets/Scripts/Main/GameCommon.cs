@@ -642,7 +642,9 @@ public static class DataPath
         {typeof(AnimalData),"Data/AnimalData" },
         {typeof(FishData),"Data/FishData" },
         {typeof(FishPondData),"Data/FishPondData" },
-        {typeof(FilmData),"Data/FilmData" }
+        {typeof(FilmData),"Data/FilmData" },
+        {typeof(SeasonData),"Data/SeasonDataList" },
+        {typeof(WeatherData),"Data/WeatherData" }
     };
 
     public static string GetDataPath(Type type)

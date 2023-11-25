@@ -7,9 +7,7 @@ using UnityEngine.UI;
 public class TalkPanel : GamePanel<NPCTalkOperateData>
 {
     [SerializeField]
-    Transform rightHead, leftHead;
-    [SerializeField]
-    private Image rightHeadValue, leftHeadValue;
+    Image rightHead, leftHead; 
 
     [SerializeField]
     private Transform leftNameBg, rightNameBg;
@@ -155,31 +153,31 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     leftNameValue.text = talkerName;
                     leftNameBg.gameObject.SetActive(true);
                     rightNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
-                    leftHeadValue.color = Color.white;
-                    leftHeadValue.sprite = talkerIcon;
-                    rightHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
-                    leftHead.transform.localScale = Vector3.one;
-                    rightHead.transform.localScale= talkData.clearTalkIcon?Vector3.zero:Vector3.one;
+                    leftHead.color = Color.white;
+                    leftHead.sprite = talkerIcon;
+                    rightHead.color = new Color(0.5f, 0.5f, 0.5f);
+                    leftHead.enabled = true;
+                    rightHead.enabled= !talkData.clearTalkIcon;
                     break;
 
                 case TalkerDir.右:
                     rightNameValue.text = talkerName;
                     leftNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
                     rightNameBg.gameObject.SetActive(true);
-                    rightHeadValue.color = Color.white;
-                    rightHeadValue.sprite = talkerIcon;
-                    leftHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
-                    rightHead.transform.localScale = Vector3.one;
-                    leftHead.transform.localScale = talkData.clearTalkIcon ? Vector3.zero : Vector3.one;
+                    rightHead.color = Color.white;
+                    rightHead.sprite = talkerIcon;
+                    leftHead.color = new Color(0.5f, 0.5f, 0.5f);
+                    rightHead.enabled = true;
+                    leftHead.enabled = !talkData.clearTalkIcon;
                     break;
 
                 case TalkerDir.无:
                     leftNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
                     rightNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
-                    rightHeadValue.transform.localScale = talkData.clearTalkIcon ? Vector3.zero : Vector3.one;
-                    leftHeadValue.transform.localScale= talkData.clearTalkIcon?Vector3.zero:Vector3.one;
-                    rightHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
-                    leftHeadValue.color = new Color(0.5f, 0.5f, 0.5f);
+                    rightHead.enabled = !talkData.clearTalkIcon;
+                    leftHead.enabled = !talkData.clearTalkIcon;
+                    rightHead.color = new Color(0.5f, 0.5f, 0.5f);
+                    leftHead.color = new Color(0.5f, 0.5f, 0.5f);
                     break;
             }
 
@@ -190,11 +188,9 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        rightHead = FindChildGameObject("RightHead");
-        leftHead = FindChildGameObject("LeftHead");
 
-        rightHeadValue = FindChildGameObject<Image>("RightHeadValue");
-        leftHeadValue = FindChildGameObject<Image>("LeftHeadValue");
+        rightHead = FindChildGameObject<Image>("RightHead");
+        leftHead = FindChildGameObject<Image>("LeftHead");
 
         rightNameBg = FindChildGameObject("RightName");
         leftNameBg = FindChildGameObject("LeftName");

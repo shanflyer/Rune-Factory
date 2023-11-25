@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 using UnityEngine;
 
 [System.Serializable]
@@ -50,14 +51,93 @@ public struct GameDate : IReferenceData, INativeData
 }
 [System.Serializable]
 public class GameTime
-{ 
+{
     public int year;
-    public Season season;
+    public Season Season
+    {
+        get
+        {
+            return season;
+        }
+        set
+        {
+            season=value; InitSeasonData();
+        }
+    }
+    Season season;
     public int date;
     public int hour;
     public int minute; 
     public Week week;
 
+    SeasonData SeasonData;
+    EnvironmentData dayEnvironmentData, nightEnvironmentData;
+    int startMinute,endMinute;
+    int totalSunMinute, totalMoonMinute;
+    bool night = false;
+    async void InitSeasonData()
+    {
+        SeasonData =await GameDataManager.instance.GetAsyncData<SeasonData>(season.ToString());
+        startMinute = SeasonData.sunupHour * 60 + SeasonData.sunupMinute;
+        endMinute = SeasonData.sundownHour * 60 + SeasonData.sundownMinute;
+        totalSunMinute = endMinute - startMinute;
+        totalMoonMinute = 24 * 60 - endMinute + startMinute;
+
+        dayEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.dayEnvironmentDataId);
+        nightEnvironmentData=await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.nightEnvironmentDataId);
+
+    }
+    void SetLightValue()
+    {
+        int nowMinute = hour * 60 + minute;
+        if (nowMinute < startMinute || nowMinute > endMinute)
+        {
+            night = false;
+            float sunValue =(nowMinute-startMinute)/(float)(totalSunMinute);
+            SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
+            { 
+                environmentLightData=new EnvironmentLightData
+                {
+                    globalColor=dayEnvironmentData.GlobalColor.Evaluate(sunValue),
+                    globalIntensity = dayEnvironmentData.GlobalIntensity.Evaluate(sunValue),
+                    color =dayEnvironmentData.Color.Evaluate(sunValue),
+                    direction=new Vector3(dayEnvironmentData.directionXValue.Evaluate(sunValue),
+                    dayEnvironmentData.directionYValue.Evaluate(sunValue),120),
+                    intensity=dayEnvironmentData.intensity.Evaluate(sunValue),
+                }
+            };
+            GameActionManager.instance.QueueAction(setEnvironmentLight, true);
+             
+        }
+        else
+        { 
+            night = true;
+            float nowNightMinute = 0;
+            if (minute < startMinute)
+            {
+                nowNightMinute = totalMoonMinute -(startMinute - nowMinute);
+            }
+            else
+            {
+                nowNightMinute = nowNightMinute - totalSunMinute;
+            }
+            float moonValue = nowNightMinute / (float)totalMoonMinute;
+            SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
+            {
+                environmentLightData = new EnvironmentLightData
+                {
+                    globalColor = nightEnvironmentData.GlobalColor.Evaluate(moonValue),
+                    globalIntensity = nightEnvironmentData.GlobalIntensity.Evaluate(moonValue),
+                    color = nightEnvironmentData.Color.Evaluate(moonValue),
+                    direction = new Vector3(nightEnvironmentData.directionXValue.Evaluate(moonValue),
+                    nightEnvironmentData.directionYValue.Evaluate(moonValue), 120),
+                    intensity = nightEnvironmentData.intensity.Evaluate(moonValue),
+                }
+            };
+            GameActionManager.instance.QueueAction(setEnvironmentLight, true);
+
+        }
+    }
     public GameTime()
     { 
         hour = 0;
@@ -66,16 +146,16 @@ public class GameTime
     }
     public int GetTimeKey()
     {
-      return (year*1000+ (int)season * 100) + date;
+      return (year*1000+ (int)Season * 100) + date;
     }
     public int GetTimeKeyNoYear()
     {
-        return ((int)season * 100) + date;
+        return ((int)Season * 100) + date;
     }
     public GameTime(int _year, Season _season, int _date, int _hour, int _minute)
     { 
         year = _year;
-        season = _season;
+        Season = _season;
         date = _date;
         hour = _hour;
         minute = _minute;
@@ -112,7 +192,7 @@ public class GameTime
         }
         if (date > 30)
         {
-            int seasonId = (int)season;
+            int seasonId = (int)Season;
             if (seasonId < 4)
             {
                 seasonId++;
@@ -122,7 +202,7 @@ public class GameTime
                 year++;
                 seasonId = 1;
             }
-            season = (Season)seasonId;
+            Season = (Season)seasonId;
             date = 1; 
         }
         int x = date %6;
@@ -130,12 +210,14 @@ public class GameTime
           
         if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
         {
-            InformationController.instance.AddInformation("*" + year + "年" + season + "之月" + date + "日");
+            InformationController.instance.AddInformation("*" + year + "年" + Season + "之月" + date + "日");
         }
         else
         {
-            InformationController.instance.AddInformation("*" + date + "," + LanguageManage.SwitchStr(season.ToString()) + "," + year + LanguageManage.SwitchStr("年"));
+            InformationController.instance.AddInformation("*" + date + "," + LanguageManage.SwitchStr(Season.ToString()) + "," + year + LanguageManage.SwitchStr("年"));
         }
+
+        SetLightValue();
     }
     public void Sleep()
     {
@@ -161,8 +243,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
     public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime);
     public int Year => nowGameTime.year;
-    public Season Season => nowGameTime.season;
+    public Season Season => nowGameTime.Season;
     public int Day => nowGameTime.date;
+
+    
 
     MyNativeData<GameDate> gameDates = new MyNativeData<GameDate>();
     public List<GameDate> GetGameDataForSeason(Season season)
@@ -197,7 +281,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public string GameTimeToString()
     {
         string timeStr = nowGameTime.year.ToString();
-        timeStr += "," + nowGameTime.season;
+        timeStr += "," + nowGameTime.Season;
         timeStr += "," + nowGameTime.date;
         return timeStr;
     }
@@ -206,7 +290,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     {
         var x = timeStr.Split(',');
         nowGameTime.year = int.Parse(x[0]);
-        nowGameTime.season = (Season) Enum.Parse(typeof(Season),x[1]);
+        nowGameTime.Season = (Season) Enum.Parse(typeof(Season),x[1]);
         nowGameTime.date = int.Parse(x[2]); 
     }
 

@@ -22,7 +22,7 @@ public class StartEventPanel : GamePanel<IReferenceData>
         content = FindChildGameObject("Content");
         LetterButton = FindChildGameObject<Button>("LetterButton"); 
         contentButton = FindChildGameObject<Button>("EndButton");
-        texts = transform.GetComponentsInChildren<TextMeshProUGUI>();
+        texts = transform.GetComponentsInChildren<TextMeshProUGUI>(true);
        
     }
     protected override void Awake()
