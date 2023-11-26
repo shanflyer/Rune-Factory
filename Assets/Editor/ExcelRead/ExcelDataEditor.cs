@@ -373,8 +373,16 @@ public class ExcelDataEditor : MyEditor
         }
         else
         {
-            value = Convert.ChangeType(value, fieldInfo.FieldType);
-            fieldInfo.SetValue(data, value);
+            try
+            {
+                value = Convert.ChangeType(value, fieldInfo.FieldType);
+                fieldInfo.SetValue(data, value);
+            }
+            catch
+            {
+                Debug.LogError($"{fieldInfo.Name}-{value.ToString()}");
+            }
+           
         }
     }
 
