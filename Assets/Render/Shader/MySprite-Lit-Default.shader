@@ -68,6 +68,9 @@ Shader "MySprite-Lit-Default"
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Assets/Render/Shader/UnityAction.cginc"
+
+         half4 GlobalColor; 
+         half2 LightDirection;
         CBUFFER_START(UnityPerMaterial)
             half4 _MainTex_ST;
             half4 _NormalMap_ST;  // Is this the right way to do this?
@@ -92,10 +95,8 @@ Shader "MySprite-Lit-Default"
             half2 WaveScale1; 
             half4 EdgeColor;
             half EdgeValue;  
-            half _WaterHigh; 
-
-            half2 LightDirection;
-            half4 GlobalColor;            
+            half _WaterHigh;  
+                      
         CBUFFER_END 
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);

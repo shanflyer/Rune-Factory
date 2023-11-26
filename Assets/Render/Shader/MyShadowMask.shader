@@ -46,13 +46,15 @@ Shader "MyShadowMask"
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
+            half2 LightDirection;
+            half4 GlobalColor;   
+
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             CBUFFER_START( UnityPerMaterial )
                 half4 _MainTex_ST;
                 half4 _Color;
                 half _DirValue;
-                half2 LightDirection;
-                half4 GlobalColor;    
+                
             CBUFFER_END
 
             Varyings UnlitVertex(Attributes attributes)
@@ -78,10 +80,10 @@ Shader "MyShadowMask"
                 const half4 main =  SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv); 
                 float aplhaValue=0;
                 Unity_Remap_float(main.r,float2(i.uv2.x-0.2,i.uv2.x),float2(0,1),aplhaValue);
-               
-               // 
-                 aplhaValue=clamp(aplhaValue,0,1);
-                 aplhaValue=1-aplhaValue;
+                
+                // 
+                aplhaValue=clamp(aplhaValue,0,1);
+                aplhaValue=1-aplhaValue;
                 return float4(0,0,0,aplhaValue*0.4*i.uv2.y);
             }
             ENDHLSL

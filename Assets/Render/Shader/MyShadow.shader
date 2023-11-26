@@ -45,13 +45,14 @@ Shader "MyShadow"
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
+            half2 LightDirection;
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             CBUFFER_START( UnityPerMaterial )
                 half4 _MainTex_ST;
                 half4 _Color;
-                half2 LightDirection;
-            half4 GlobalColor;    
+                
+                half4 GlobalColor;    
             CBUFFER_END
 
             Varyings UnlitVertex(Attributes attributes)
@@ -70,7 +71,7 @@ Shader "MyShadow"
                 worldPos.xy+=offset*attributes.uv2.y;
                 
                 o.positionCS = TransformWorldToHClip(worldPos);
- 
+                
                 o.uv = attributes.uv; 
                 o.uv2=attributes.uv2;
                 o.color=attributes.color;
