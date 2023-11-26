@@ -12,6 +12,7 @@ public struct EnvironmentLightData
     public Color color;
     public Vector3 direction;
     public float intensity;
+    public float shadowValue;
 }
 public class EnvironmentManger:Singleton<EnvironmentManger>
 {
@@ -53,6 +54,7 @@ public class EnvironmentManger:Singleton<EnvironmentManger>
             directionLight.Direction = natureLightData.direction;
             directionLight.color = natureLightData.color;
             directionLight.intensity = natureLightData.intensity;
+            Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue);
         } 
     }
      
@@ -71,6 +73,7 @@ public class EnvironmentManger:Singleton<EnvironmentManger>
             globalLight.color = environmentLight.globalColor;
             globalLight.intensity = environmentLight.globalIntensity;
         }
+        Shader.SetGlobalFloat("_ShadowValue", environmentLight.shadowValue);
     }
     
     void ClearOverrideEnvironmentLight(ClearOverrideEnvironmentLight clearOverrideEnvironmentLight)
@@ -87,6 +90,7 @@ public class EnvironmentManger:Singleton<EnvironmentManger>
             globalLight.color = natureLightData.globalColor;
             globalLight.intensity = natureLightData.globalIntensity;
         }
+        Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue);
     }
     
     protected override void Clear()

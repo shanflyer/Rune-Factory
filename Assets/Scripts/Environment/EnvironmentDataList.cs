@@ -29,7 +29,7 @@ public struct EnvironmentData : IGameData
     public Gradient Color;
     public Gradient GlobalColor;
     public AnimationCurve GlobalIntensity;
-
+    public AnimationCurve shadowValue;
     public AnimationCurve directionXValue, directionYValue, intensity;
     public bool overrideDirection;
     public bool overrideGlobal;

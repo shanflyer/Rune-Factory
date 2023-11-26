@@ -104,6 +104,7 @@ public class GameTime
                     direction=new Vector3(dayEnvironmentData.directionXValue.Evaluate(sunValue),
                     dayEnvironmentData.directionYValue.Evaluate(sunValue),120),
                     intensity=dayEnvironmentData.intensity.Evaluate(sunValue),
+                    shadowValue=dayEnvironmentData.shadowValue.Evaluate(sunValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -132,6 +133,7 @@ public class GameTime
                     direction = new Vector3(nightEnvironmentData.directionXValue.Evaluate(moonValue),
                     nightEnvironmentData.directionYValue.Evaluate(moonValue), 120),
                     intensity = nightEnvironmentData.intensity.Evaluate(moonValue),
+                    shadowValue=nightEnvironmentData.shadowValue.Evaluate(moonValue),
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);

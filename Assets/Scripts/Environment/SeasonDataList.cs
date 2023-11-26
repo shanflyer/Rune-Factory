@@ -24,7 +24,7 @@ public class SeasonDataList : ScriptableObject, IGameData, IDataArray<SeasonData
     {
     }
 }
-
+[Serializable]
 public struct SeasonData:IGameData
 {
     public Season season;
