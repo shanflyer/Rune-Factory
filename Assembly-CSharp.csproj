@@ -196,6 +196,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedQuaternion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MovePosition.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterCheck.cs" />
+    <Compile Include="Assets\Scripts\Environment\WeatherData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetXY.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetIsKinematic.cs" />
     <Compile Include="Assets\Scripts\Film\FightEventTrack.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetRolloffMode.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Normalize.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetRealtimeSinceStartup.cs" />
+    <Compile Include="Assets\Scripts\Environment\EnvironmentManger.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\GetFieldValue.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\SetString.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\CrossFade.cs" />
@@ -485,6 +487,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\ResetPath.cs" />
     <Compile Include="Assets\Scripts\UI\UIObjReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\GetOffset.cs" />
+    <Compile Include="Assets\Scripts\Environment\SeasonDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\Instantiate.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Idle.cs" />
@@ -733,6 +736,7 @@
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXFireProjectile.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetBoolParameter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetDuration.cs" />
+    <Compile Include="Assets\Scripts\Action\GameTimeAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\Selector.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\OperateButtonPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetMute.cs" />
@@ -750,6 +754,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\UtilitySelector.cs" />
     <Compile Include="Assets\Scripts\Action\ItemAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowSoftness.cs" />
+    <Compile Include="Assets\Scripts\Environment\EnvironmentDataList.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FilghtTilmeLineController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
     <Compile Include="Assets\Scripts\UI\PermissionPanel\PermissionReference.cs" />
