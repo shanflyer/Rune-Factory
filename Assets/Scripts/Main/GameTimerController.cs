@@ -1,39 +1,39 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class GameTimerController : Singleton<GameTimerController>
 {
-    Dictionary<Delegate, IEnumerator> waitIEnumerators = new Dictionary<Delegate, IEnumerator>();
-    Dictionary<Delegate, CancellationTokenSource> waitTasks = new Dictionary<Delegate, CancellationTokenSource>();
+    private Dictionary<Delegate, IEnumerator> waitIEnumerators = new Dictionary<Delegate, IEnumerator>();
+    private Dictionary<Delegate, CancellationTokenSource> waitTasks = new Dictionary<Delegate, CancellationTokenSource>();
     public override bool NeedUpdata => true;
+
     public override void Init()
     {
         base.Init();
     }
-   
+
     public void DeleyActionMain(int delay, Action action)
     {
-        if (waitIEnumerators.TryGetValue(action,out var ienumerator))
+        if (waitIEnumerators.TryGetValue(action, out var ienumerator))
         {
-            EventSystem.current.StopCoroutine(ienumerator);
+            GameObjectCurveController.instance.UpDataComponent.StopCoroutine(ienumerator);
         }
-        IEnumerator IEnumerator = Wait();
+        ienumerator = Wait();
         waitIEnumerators[action] = ienumerator;
         IEnumerator Wait()
         {
-            yield return new WaitForSeconds(delay*0.001f);
+            yield return new WaitForSeconds(delay * 0.001f);
             action.Invoke();
             waitIEnumerators.Remove(action);
         }
-        EventSystem.current.StartCoroutine(IEnumerator);
+        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(ienumerator);
     }
-    public void DelayAction(int delay,Action action)
+
+    public void DelayAction(int delay, Action action)
     {
         if (waitTasks.TryGetValue(action, out var tokenSource))
         {

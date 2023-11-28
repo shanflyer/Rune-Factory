@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine.Animations;
+
 #if !UNITY_2020_2_OR_NEWER
 using UnityEngine.Experimental.Animations;
 #endif
@@ -8,11 +9,11 @@ using UnityEngine.Playables;
 
 namespace UnityEngine.Timeline
 {
-    class AnimationPreviewUpdateCallback : ITimelineEvaluateCallback
+    internal class AnimationPreviewUpdateCallback : ITimelineEvaluateCallback
     {
-        AnimationPlayableOutput m_Output;
-        PlayableGraph m_Graph;
-        List<IAnimationWindowPreview> m_PreviewComponents;
+        private AnimationPlayableOutput m_Output;
+        private PlayableGraph m_Graph;
+        private List<IAnimationWindowPreview> m_PreviewComponents;
 
         public AnimationPreviewUpdateCallback(AnimationPlayableOutput output)
         {

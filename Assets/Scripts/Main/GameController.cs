@@ -1,12 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
-using UnityEngine.Rendering;
-using Unity.Mathematics;
-using System;
+ 
+using Unity.Mathematics; 
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Collections;
 #if UNITY_EDITOR
@@ -15,6 +11,15 @@ using UnityEditor;
 
 public class GameController : MonoBehaviour
 {
+
+#if UNITY_EDITOR
+    public bool runTime { get => GameTimeManager.instance.runTime; set => GameTimeManager.instance.runTime = value; }
+   
+    public int runTimeHour { get => GameTimeManager.instance.Hour; set => GameTimeManager.instance.SetTime(value); }
+     
+    public int runTimeMinute { get => GameTimeManager.instance.Minute; set => GameTimeManager.instance.SetTime(minute:value); }
+#endif
+
     public static GameController instance;
     public bool SetLanguage;
     public SystemLanguage SetSystemLanguage;
@@ -66,6 +71,7 @@ public class GameController : MonoBehaviour
         var sceneManager = SceneManager.instance;
         var fightManager = FightManager.instance;
         var talkManager= TalkManager.instance;
+        var festivalManager = FestivalManager.instance;
 
         GameObjectCurveController.instance.SetUpDataComponent(this);
 
@@ -74,6 +80,8 @@ public class GameController : MonoBehaviour
 
         var audio = transform.Find("Audio");
         AudioController.instance.SetAudioSource(audio.gameObject);
+
+        var environmentManger= EnvironmentManger.instance; 
     }
   
     public void AddCrystal()
@@ -86,12 +94,12 @@ public class GameController : MonoBehaviour
 
     }
     // Start is called beforee the first frame update
-    void Start()
+    async void Start()
     {
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         AudioController.instance.PlayAudio(BGM.Town1);
-        UIManager.instance.ShowGamePanel<ZeroPanel>();
+        await UIManager.instance.ShowGamePanel<ZeroPanel>();
 
        // GameActionManager.instance.AddListener<ZeroWorld>(ZeroWorld);
     }
@@ -175,6 +183,9 @@ public class GameControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+        gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
+        gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
+        gameController.runTimeMinute= EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
         if (GUILayout.Button("test"))
         {
             gameController.Test();

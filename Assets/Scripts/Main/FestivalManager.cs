@@ -15,6 +15,7 @@ public class FestivalManager : Singleton<FestivalManager>
         FestivalDatas = new List<FestivalData>();
         CreatNPCBrothDay();
         LoadBrothDay();
+        GameTimeManager.instance.CreatData();
     }
     public List<FestivalData> FestivalDatas;
      

@@ -27,8 +27,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         systemRenderer = FindChildGameObject<ParticleSystemRenderer>("Cloud");
     }
     protected override void Awake()
-    {
-         
+    { 
         base.Awake();
         InitTitleIcon();
         start.onClick.AddListener(StartGame);
@@ -63,8 +62,9 @@ public class ZeroPanel : GamePanel<IReferenceData>
         var sprite= title.GetSprite(LanguageManage.nowLanguage);
         titleIcon.sprite = sprite;
     }
-    void StartGame()
+    async void StartGame()
     {
+        GameTimeManager.instance.ZeroGameTime();
         AudioController.instance.PlayAudio(SE.click); 
         Close();
         PlayFilm playFilm = new PlayFilm
@@ -73,7 +73,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
             assetName= "Default"
         };
         GameActionManager.instance.QueueAction(playFilm,true);
-        UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+        await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
     }
     public override Task InitData(string dataKay)
     {

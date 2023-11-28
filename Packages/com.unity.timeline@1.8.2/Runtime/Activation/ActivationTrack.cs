@@ -14,8 +14,9 @@ namespace UnityEngine.Timeline
     public class ActivationTrack : TrackAsset
     {
         [SerializeField]
-        PostPlaybackState m_PostPlaybackState = PostPlaybackState.LeaveAsIs;
-        ActivationMixerPlayable m_ActivationMixer;
+        private PostPlaybackState m_PostPlaybackState = PostPlaybackState.LeaveAsIs;
+
+        private ActivationMixerPlayable m_ActivationMixer;
 
         /// <summary>
         /// Specify what state to leave the GameObject in after the Timeline has finished playing.

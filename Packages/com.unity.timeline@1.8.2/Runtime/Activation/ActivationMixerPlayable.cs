@@ -2,13 +2,12 @@ using UnityEngine.Playables;
 
 namespace UnityEngine.Timeline
 {
-    class ActivationMixerPlayable : PlayableBehaviour
+    internal class ActivationMixerPlayable : PlayableBehaviour
     {
-        ActivationTrack.PostPlaybackState m_PostPlaybackState;
-        bool m_BoundGameObjectInitialStateIsActive;
+        private ActivationTrack.PostPlaybackState m_PostPlaybackState;
+        private bool m_BoundGameObjectInitialStateIsActive;
 
         private GameObject m_BoundGameObject;
-
 
         public static ScriptPlayable<ActivationMixerPlayable> Create(PlayableGraph graph, int inputCount)
         {
@@ -31,12 +30,15 @@ namespace UnityEngine.Timeline
                 case ActivationTrack.PostPlaybackState.Active:
                     m_BoundGameObject.SetActive(true);
                     break;
+
                 case ActivationTrack.PostPlaybackState.Inactive:
                     m_BoundGameObject.SetActive(false);
                     break;
+
                 case ActivationTrack.PostPlaybackState.Revert:
                     m_BoundGameObject.SetActive(m_BoundGameObjectInitialStateIsActive);
                     break;
+
                 case ActivationTrack.PostPlaybackState.LeaveAsIs:
                 default:
                     break;

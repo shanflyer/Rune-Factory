@@ -7,18 +7,18 @@ namespace UnityEngine.Timeline
     // Does a post processing of the weights on an animation track to properly normalize
     // the mixer weights so that blending does not bring default poses and subtracks, layers and
     // layer graphs blend correctly
-    class AnimationOutputWeightProcessor : ITimelineEvaluateCallback
+    internal class AnimationOutputWeightProcessor : ITimelineEvaluateCallback
     {
-        struct WeightInfo
+        private struct WeightInfo
         {
             public Playable mixer;
             public Playable parentMixer;
             public int port;
         }
 
-        AnimationPlayableOutput m_Output;
-        AnimationMotionXToDeltaPlayable m_MotionXPlayable;
-        readonly List<WeightInfo> m_Mixers = new List<WeightInfo>();
+        private AnimationPlayableOutput m_Output;
+        private AnimationMotionXToDeltaPlayable m_MotionXPlayable;
+        private readonly List<WeightInfo> m_Mixers = new List<WeightInfo>();
 
         public AnimationOutputWeightProcessor(AnimationPlayableOutput output)
         {
@@ -27,7 +27,7 @@ namespace UnityEngine.Timeline
             FindMixers();
         }
 
-        void FindMixers()
+        private void FindMixers()
         {
             var playable = m_Output.GetSourcePlayable();
             var outputPort = m_Output.GetSourceOutputPort();
@@ -38,7 +38,7 @@ namespace UnityEngine.Timeline
         }
 
         // Recursively accumulates mixers.
-        void FindMixers(Playable parent, int port, Playable node)
+        private void FindMixers(Playable parent, int port, Playable node)
         {
             if (!node.IsValid())
                 return;

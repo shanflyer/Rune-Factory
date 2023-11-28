@@ -34,7 +34,6 @@ namespace UnityEngine.Timeline
             Off = 2
         }
 
-
         [SerializeField] private AnimationClip m_Clip;
         [SerializeField] private Vector3 m_Position = Vector3.zero;
         [SerializeField] private Vector3 m_EulerAngles = Vector3.zero;
@@ -43,7 +42,6 @@ namespace UnityEngine.Timeline
         [SerializeField] private bool m_RemoveStartOffset = true; // set by animation track prior to compilation
         [SerializeField] private bool m_ApplyFootIK = true;
         [SerializeField] private LoopMode m_Loop = LoopMode.UseSourceAsset;
-
 
 #if UNITY_EDITOR
         private AnimationOffsetPlayable m_AnimationOffsetPlayable;
@@ -134,7 +132,6 @@ namespace UnityEngine.Timeline
             set { m_RemoveStartOffset = value; }
         }
 
-
         /// <summary>
         /// Enable to apply foot IK to the AnimationClip when the target is humanoid.
         /// </summary>
@@ -153,7 +150,6 @@ namespace UnityEngine.Timeline
             set { m_Loop = value; }
         }
 
-
         internal bool hasRootTransforms
         {
             get { return m_Clip != null && HasRootTransforms(m_Clip); }
@@ -161,7 +157,6 @@ namespace UnityEngine.Timeline
 
         // used for legacy 'scene' mode.
         internal AppliedOffsetMode appliedOffsetMode { get; set; }
-
 
         /// <summary>
         /// The source animation clip
@@ -227,7 +222,6 @@ namespace UnityEngine.Timeline
             if (clip == null || clip.legacy)
                 return Playable.Null;
 
-
             var clipPlayable = AnimationClipPlayable.Create(graph, clip);
             clipPlayable.SetRemoveStartOffset(removeStartOffset);
             clipPlayable.SetApplyFootIK(applyFootIK);
@@ -269,6 +263,7 @@ namespace UnityEngine.Timeline
         }
 
 #if UNITY_EDITOR
+
         public void LiveLink()
         {
             if (m_AnimationOffsetPlayable.IsValid())

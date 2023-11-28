@@ -1,6 +1,9 @@
 #if UNITY_EDITOR
+
 using System.ComponentModel;
+
 #endif
+
 using UnityEngine.Playables;
 
 namespace UnityEngine.Timeline
@@ -9,14 +12,17 @@ namespace UnityEngine.Timeline
     /// Playable Asset class for Activation Tracks
     /// </summary>
 #if UNITY_EDITOR
+
     [DisplayName("Activation Clip")]
+    internal
 #endif
     class ActivationPlayableAsset : PlayableAsset, ITimelineClipAsset
     {
         /// <summary>
         /// Returns a description of the features supported by activation clips
         /// </summary>
-        public ClipCaps clipCaps { get { return ClipCaps.None; } }
+        public ClipCaps clipCaps
+        { get { return ClipCaps.None; } }
 
         /// <summary>
         /// Overrides PlayableAsset.CreatePlayable() to inject needed Playables for an activation asset

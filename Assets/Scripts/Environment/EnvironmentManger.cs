@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering.Universal;
+
 public struct EnvironmentLightData
 {
     public Color globalColor;
+    public Color cloudColor;
+    public Color skyTopColor,skyBottomColor;
     public float globalIntensity;
     public Color color;
     public Vector3 direction;
     public float intensity;
     public float shadowValue;
 }
-public class EnvironmentManger:Singleton<EnvironmentManger>
+
+public class EnvironmentManger : Singleton<EnvironmentManger>
 {
-    Transform environmentParent;
-    Light2D directionLight;
-    Light2D globalLight;
+    private Transform environmentParent;
+    private Light2D directionLight;
+    private Light2D globalLight;
+
     public override void Init()
     {
         base.Init();
@@ -27,11 +27,19 @@ public class EnvironmentManger:Singleton<EnvironmentManger>
         GameObject DirectionLightGameObject = new GameObject("DirectionLight");
         directionLight = DirectionLightGameObject.AddComponent<Light2D>();
         directionLight.lightType = Light2D.LightType.Directional;
+        directionLight.useNormalMap = true;
+        directionLight.normalMapQuality = Light2D.NormalMapQuality.Fast;
+        directionLight.SetShapePath(new Vector3[]
+        {
+            new Vector3(-100,-100),new Vector3(-100,100),new Vector3(100,100),new Vector3(100,-100)
+        });
         DirectionLightGameObject.transform.SetParent(environmentParent, false);
 
         GameObject GlobalLightGameObject = new GameObject("GlobalLight");
         globalLight = GlobalLightGameObject.AddComponent<Light2D>();
-        globalLight.lightType = Light2D.LightType.Global; 
+        globalLight.lightType = Light2D.LightType.Global;
+        GlobalLightGameObject.transform.SetParent(environmentParent, false);
+
         GameObject.DontDestroyOnLoad(environmentParent.gameObject);
 
         GameActionManager.instance.AddListener<SetEnvironmentLight>(SetEnvironmentLight);
@@ -39,26 +47,29 @@ public class EnvironmentManger:Singleton<EnvironmentManger>
         GameActionManager.instance.AddListener<ClearOverrideEnvironmentLight>(ClearOverrideEnvironmentLight);
     }
 
-    EnvironmentLightData natureLightData;
-    bool overrideEnvironment; 
+    private EnvironmentLightData natureLightData;
+    private bool overrideEnvironment;
 
-    void SetEnvironmentLight(SetEnvironmentLight SetEnvironmentLight)
+    private void SetEnvironmentLight(SetEnvironmentLight SetEnvironmentLight)
     {
         natureLightData = SetEnvironmentLight.environmentLightData;
+        Shader.SetGlobalColor("_CloudColor", natureLightData.cloudColor);
+        Shader.SetGlobalColor("_SkyTopColor", natureLightData.skyTopColor);
+        Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
 
         if (!overrideEnvironment)
         {
             globalLight.color = natureLightData.globalColor;
-            globalLight.intensity = natureLightData.globalIntensity;  
+            globalLight.intensity = natureLightData.globalIntensity;
 
             directionLight.Direction = natureLightData.direction;
             directionLight.color = natureLightData.color;
             directionLight.intensity = natureLightData.intensity;
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue);
-        } 
+        }
     }
-     
-    void OverrideEnvironmentLight(OverrideEnvironmentLight OverrideEnvironmentLight)
+
+    private void OverrideEnvironmentLight(OverrideEnvironmentLight OverrideEnvironmentLight)
     {
         var environmentLight = OverrideEnvironmentLight.environmentLightData;
         overrideEnvironment = true;
@@ -75,8 +86,8 @@ public class EnvironmentManger:Singleton<EnvironmentManger>
         }
         Shader.SetGlobalFloat("_ShadowValue", environmentLight.shadowValue);
     }
-    
-    void ClearOverrideEnvironmentLight(ClearOverrideEnvironmentLight clearOverrideEnvironmentLight)
+
+    private void ClearOverrideEnvironmentLight(ClearOverrideEnvironmentLight clearOverrideEnvironmentLight)
     {
         overrideEnvironment = false;
         if (directionLight)
@@ -92,7 +103,7 @@ public class EnvironmentManger:Singleton<EnvironmentManger>
         }
         Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue);
     }
-    
+
     protected override void Clear()
     {
         base.Clear();

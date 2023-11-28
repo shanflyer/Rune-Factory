@@ -1,10 +1,19 @@
 ﻿using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.EventSystems;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class WorldMapController : MonoBehaviour
 {
+#if UNITY_EDITOR
+    public bool runTime { get => GameTimeManager.instance.runTime; set => GameTimeManager.instance.runTime = value; }
+
+    public int runTimeHour { get => GameTimeManager.instance.Hour; set => GameTimeManager.instance.SetTime(value); }
+
+    public int runTimeMinute { get => GameTimeManager.instance.Minute; set => GameTimeManager.instance.SetTime(minute: value); }
+#endif
     public static WorldMapController instance;
     WorldMapManager worldMapManager;
     [SerializeField]
@@ -55,7 +64,8 @@ public class WorldMapController : MonoBehaviour
         var shopManager = ShopManager.instance;
         var farmManager = FarmManager.instance;
         var tempMapItemController = TempMapItemController.instance;
-         
+        var festivalManager = FestivalManager.instance;
+
         GameActionManager.instance.QueueAction(new ChangeWorld
         {
             worldName = worldName,
@@ -74,6 +84,9 @@ public class WorldMapController : MonoBehaviour
         await UIManager.instance.ShowGamePanel<MainPanel>();
         InputManager.instance.SwitchInputMap(false);
         GameActionManager.instance.QueueAction(new InitInputAction());
+
+        var environmentManger = EnvironmentManger.instance;
+        GameTimeManager.instance.ZeroGameTime();
     }
     // Use this for initialization
     void Start()
@@ -92,3 +105,23 @@ public class WorldMapController : MonoBehaviour
     }
 #endif 
 }
+#if UNITY_EDITOR
+[CustomEditor(typeof(WorldMapController))]
+public class WorldMapControllerEditor : Editor
+{
+    public WorldMapController gameController
+    {
+        get
+        {
+           return target as WorldMapController;
+        }
+    }
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
+        gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
+        gameController.runTimeMinute = EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
+    }
+}
+#endif

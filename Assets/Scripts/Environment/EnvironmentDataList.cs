@@ -28,9 +28,15 @@ public struct EnvironmentData : IGameData
     public string name;
     public Gradient Color;
     public Gradient GlobalColor;
+    public Gradient CloudColor;
+    public Gradient SkyTopColor, SkyBottomColor;
+    public AnimationCurve SkyHalfValue;
     public AnimationCurve GlobalIntensity;
     public AnimationCurve shadowValue;
     public AnimationCurve directionXValue, directionYValue, intensity;
+    public AnimationCurve sunXValue, sunYValue,sunScaleValue;
+    public Gradient sunColor;
+    public AnimationCurve sunColorValue;
     public bool overrideDirection;
     public bool overrideGlobal;
 
@@ -38,7 +44,10 @@ public struct EnvironmentData : IGameData
     {
         return name;
     }
-
+    public override string ToString()
+    {
+        return name;
+    }
     public void SetReferenceData()
     { 
     }

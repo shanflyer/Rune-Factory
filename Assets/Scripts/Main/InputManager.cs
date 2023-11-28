@@ -84,8 +84,8 @@ public class InputManager :Singleton<InputManager>
         {
             GameObject.Destroy(eventSystems[1].gameObject);
         }
-        eventSystem = eventSystems[0];
-        
+        if (eventSystems.Length > 0)
+            eventSystem = eventSystems[0];
 
         playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.Animations;
+
 #if !UNITY_2020_2_OR_NEWER
 using UnityEngine.Experimental.Animations;
 #endif
@@ -9,7 +10,9 @@ using UnityEngine.Playables;
 using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
+
 using UnityEditor;
+
 #endif
 
 namespace UnityEngine.Timeline
@@ -24,22 +27,27 @@ namespace UnityEngine.Timeline
         /// Translation X value
         /// </summary>
         PositionX = 1 << 0,
+
         /// <summary>
         /// Translation Y value
         /// </summary>
         PositionY = 1 << 1,
+
         /// <summary>
         /// Translation Z value
         /// </summary>
         PositionZ = 1 << 2,
+
         /// <summary>
         /// Rotation Euler Angle X value
         /// </summary>
         RotationX = 1 << 3,
+
         /// <summary>
         /// Rotation Euler Angle Y value
         /// </summary>
         RotationY = 1 << 4,
+
         /// <summary>
         /// Rotation Euler Angle Z value
         /// </summary>
@@ -59,10 +67,12 @@ namespace UnityEngine.Timeline
         /// Use this setting to offset each Animation Track based on a set position and orientation.
         /// </summary>
         ApplyTransformOffsets,
+
         /// <summary>
         /// Use this setting to offset each Animation Track based on the current position and orientation in the scene.
         /// </summary>
         ApplySceneOffsets,
+
         /// <summary>
         /// Use this setting to offset root transforms based on the state of the animator.
         /// </summary>
@@ -77,7 +87,7 @@ namespace UnityEngine.Timeline
     }
 
     // offset mode
-    enum AppliedOffsetMode
+    internal enum AppliedOffsetMode
     {
         NoRootTransform,
         TransformOffset,
@@ -89,7 +99,7 @@ namespace UnityEngine.Timeline
     }
 
     // separate from the enum to hide them from UI elements
-    static class MatchTargetFieldConstants
+    internal static class MatchTargetFieldConstants
     {
         public static MatchTargetFields All = MatchTargetFields.PositionX | MatchTargetFields.PositionY |
             MatchTargetFields.PositionZ | MatchTargetFields.RotationX |
@@ -124,56 +134,56 @@ namespace UnityEngine.Timeline
     [TimelineHelpURL(typeof(AnimationTrack))]
     public partial class AnimationTrack : TrackAsset, ILayerable
     {
-        const string k_DefaultInfiniteClipName = "Recorded";
-        const string k_DefaultRecordableClipName = "Recorded";
+        private const string k_DefaultInfiniteClipName = "Recorded";
+        private const string k_DefaultRecordableClipName = "Recorded";
 
         [SerializeField, FormerlySerializedAs("m_OpenClipPreExtrapolation")]
-        TimelineClip.ClipExtrapolation m_InfiniteClipPreExtrapolation = TimelineClip.ClipExtrapolation.None;
+        private TimelineClip.ClipExtrapolation m_InfiniteClipPreExtrapolation = TimelineClip.ClipExtrapolation.None;
 
         [SerializeField, FormerlySerializedAs("m_OpenClipPostExtrapolation")]
-        TimelineClip.ClipExtrapolation m_InfiniteClipPostExtrapolation = TimelineClip.ClipExtrapolation.None;
+        private TimelineClip.ClipExtrapolation m_InfiniteClipPostExtrapolation = TimelineClip.ClipExtrapolation.None;
 
         [SerializeField, FormerlySerializedAs("m_OpenClipOffsetPosition")]
-        Vector3 m_InfiniteClipOffsetPosition = Vector3.zero;
+        private Vector3 m_InfiniteClipOffsetPosition = Vector3.zero;
 
         [SerializeField, FormerlySerializedAs("m_OpenClipOffsetEulerAngles")]
-        Vector3 m_InfiniteClipOffsetEulerAngles = Vector3.zero;
+        private Vector3 m_InfiniteClipOffsetEulerAngles = Vector3.zero;
 
         [SerializeField, FormerlySerializedAs("m_OpenClipTimeOffset")]
-        double m_InfiniteClipTimeOffset;
+        private double m_InfiniteClipTimeOffset;
 
         [SerializeField, FormerlySerializedAs("m_OpenClipRemoveOffset")]
-        bool m_InfiniteClipRemoveOffset; // cached value for remove offset
+        private bool m_InfiniteClipRemoveOffset; // cached value for remove offset
 
         [SerializeField]
-        bool m_InfiniteClipApplyFootIK = true;
+        private bool m_InfiniteClipApplyFootIK = true;
 
         [SerializeField, HideInInspector]
-        AnimationPlayableAsset.LoopMode mInfiniteClipLoop = AnimationPlayableAsset.LoopMode.UseSourceAsset;
+        private AnimationPlayableAsset.LoopMode mInfiniteClipLoop = AnimationPlayableAsset.LoopMode.UseSourceAsset;
 
         [SerializeField]
-        MatchTargetFields m_MatchTargetFields = MatchTargetFieldConstants.All;
+        private MatchTargetFields m_MatchTargetFields = MatchTargetFieldConstants.All;
+
         [SerializeField]
-        Vector3 m_Position = Vector3.zero;
+        private Vector3 m_Position = Vector3.zero;
+
         [SerializeField]
-        Vector3 m_EulerAngles = Vector3.zero;
+        private Vector3 m_EulerAngles = Vector3.zero;
 
+        [SerializeField] private AvatarMask m_AvatarMask;
+        [SerializeField] private bool m_ApplyAvatarMask = true;
 
-        [SerializeField] AvatarMask m_AvatarMask;
-        [SerializeField] bool m_ApplyAvatarMask = true;
+        [SerializeField] private TrackOffset m_TrackOffset = TrackOffset.ApplyTransformOffsets;
 
-        [SerializeField] TrackOffset m_TrackOffset = TrackOffset.ApplyTransformOffsets;
-
-        [SerializeField, HideInInspector] AnimationClip m_InfiniteClip;
-
+        [SerializeField, HideInInspector] private AnimationClip m_InfiniteClip;
 
 #if UNITY_EDITOR
         private AnimationClip m_DefaultPoseClip;
         private AnimationClip m_CachedPropertiesClip;
-        private int           m_CachedHash;
+        private int m_CachedHash;
         private EditorCurveBinding[] m_CachedBindings;
 
-        AnimationOffsetPlayable m_ClipOffset;
+        private AnimationOffsetPlayable m_ClipOffset;
 
         private Vector3 m_SceneOffsetPosition = Vector3.zero;
         private Vector3 m_SceneOffsetRotation = Vector3.zero;
@@ -295,7 +305,6 @@ namespace UnityEngine.Timeline
             get { yield return AnimationPlayableBinding.Create(name, this); }
         }
 
-
         /// <summary>
         /// Specifies whether the Animation Track has clips, or is in infinite mode.
         /// </summary>
@@ -371,7 +380,7 @@ namespace UnityEngine.Timeline
         }
 
         [ContextMenu("Reset Offsets")]
-        void ResetOffsets()
+        private void ResetOffsets()
         {
             m_Position = Vector3.zero;
             m_EulerAngles = Vector3.zero;
@@ -462,6 +471,7 @@ namespace UnityEngine.Timeline
         }
 
 #if UNITY_EDITOR
+
         internal Vector3 sceneOffsetPosition
         {
             get { return m_SceneOffsetPosition; }
@@ -490,6 +500,7 @@ namespace UnityEngine.Timeline
                 return false;
             }
         }
+
 #endif
 
         /// <summary>
@@ -521,7 +532,7 @@ namespace UnityEngine.Timeline
 #endif
         }
 
-        Playable CompileTrackPlayable(PlayableGraph graph, AnimationTrack track, GameObject go, IntervalTree<RuntimeElement> tree, AppliedOffsetMode mode)
+        private Playable CompileTrackPlayable(PlayableGraph graph, AnimationTrack track, GameObject go, IntervalTree<RuntimeElement> tree, AppliedOffsetMode mode)
         {
             var mixer = AnimationMixerPlayable.Create(graph, track.clips.Length);
             for (int i = 0; i < track.clips.Length; i++)
@@ -626,7 +637,6 @@ namespace UnityEngine.Timeline
                 mixer = (Playable)motionXToDelta;
             }
 
-
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
@@ -710,7 +720,7 @@ namespace UnityEngine.Timeline
         private static string k_DefaultHumanoidClipPath = "Packages/com.unity.timeline/Editor/StyleSheets/res/HumanoidDefault.anim";
         private static AnimationClip s_DefaultHumanoidClip = null;
 
-        AnimationClip GetDefaultHumanoidClip()
+        private AnimationClip GetDefaultHumanoidClip()
         {
             if (s_DefaultHumanoidClip == null)
             {
@@ -724,7 +734,7 @@ namespace UnityEngine.Timeline
 
 #endif
 
-        bool RequiresMotionXPlayable(AppliedOffsetMode mode, GameObject gameObject)
+        private bool RequiresMotionXPlayable(AppliedOffsetMode mode, GameObject gameObject)
         {
             if (mode == AppliedOffsetMode.NoRootTransform)
                 return false;
@@ -736,7 +746,7 @@ namespace UnityEngine.Timeline
             return true;
         }
 
-        static bool UsesAbsoluteMotion(AppliedOffsetMode mode)
+        private static bool UsesAbsoluteMotion(AppliedOffsetMode mode)
         {
 #if UNITY_EDITOR
             // in editor, previewing is always done in absolute motion
@@ -747,7 +757,7 @@ namespace UnityEngine.Timeline
                 mode != AppliedOffsetMode.SceneOffsetLegacy;
         }
 
-        bool HasController(GameObject gameObject)
+        private bool HasController(GameObject gameObject)
         {
             var animator = GetBinding(gameObject != null ? gameObject.GetComponent<PlayableDirector>() : null);
 
@@ -779,7 +789,7 @@ namespace UnityEngine.Timeline
             return animator;
         }
 
-        static AnimationLayerMixerPlayable CreateGroupMixer(PlayableGraph graph, GameObject go, int inputCount)
+        private static AnimationLayerMixerPlayable CreateGroupMixer(PlayableGraph graph, GameObject go, int inputCount)
         {
 #if UNITY_2022_2_OR_NEWER
             return AnimationLayerMixerPlayable.Create(graph, inputCount, false);
@@ -788,7 +798,7 @@ namespace UnityEngine.Timeline
 #endif
         }
 
-        Playable CreateInfiniteTrackPlayable(PlayableGraph graph, GameObject go, IntervalTree<RuntimeElement> tree, AppliedOffsetMode mode)
+        private Playable CreateInfiniteTrackPlayable(PlayableGraph graph, GameObject go, IntervalTree<RuntimeElement> tree, AppliedOffsetMode mode)
         {
             if (m_InfiniteClip == null)
                 return Playable.Null;
@@ -813,7 +823,7 @@ namespace UnityEngine.Timeline
             return rootTrack.ApplyTrackOffset(graph, mixer, go, mode);
         }
 
-        Playable ApplyTrackOffset(PlayableGraph graph, Playable root, GameObject go, AppliedOffsetMode mode)
+        private Playable ApplyTrackOffset(PlayableGraph graph, Playable root, GameObject go, AppliedOffsetMode mode)
         {
 #if UNITY_EDITOR
             m_ClipOffset = AnimationOffsetPlayable.Null;
@@ -825,7 +835,6 @@ namespace UnityEngine.Timeline
                 mode == AppliedOffsetMode.NoRootTransform
             )
                 return root;
-
 
             var pos = position;
             var rot = rotation;
@@ -876,7 +885,7 @@ namespace UnityEngine.Timeline
             }
         }
 
-        void AssignAnimationClip(TimelineClip clip, AnimationClip animClip)
+        private void AssignAnimationClip(TimelineClip clip, AnimationClip animClip)
         {
             if (clip == null || animClip == null)
                 return;
@@ -966,7 +975,7 @@ namespace UnityEngine.Timeline
         }
 
         // calculate which offset mode to apply
-        AppliedOffsetMode GetOffsetMode(GameObject go, bool animatesRootTransform)
+        private AppliedOffsetMode GetOffsetMode(GameObject go, bool animatesRootTransform)
         {
             if (!animatesRootTransform)
                 return AppliedOffsetMode.NoRootTransform;
@@ -1056,6 +1065,7 @@ namespace UnityEngine.Timeline
         }
 
         private static readonly Queue<Transform> s_CachedQueue = new Queue<Transform>(100);
+
         private static Transform FindInHierarchyBreadthFirst(Transform t, string name)
         {
             s_CachedQueue.Clear();

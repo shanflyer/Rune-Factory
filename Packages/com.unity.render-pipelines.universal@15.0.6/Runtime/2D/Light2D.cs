@@ -333,8 +333,9 @@ namespace UnityEngine.Rendering.Universal
         /// <summary>
         /// Returns the calculation quality for the normal map rendering. Please refer to NormalMapQuality.
         /// </summary>
-        public NormalMapQuality normalMapQuality => m_NormalMapQuality;
+        public NormalMapQuality normalMapQuality { get => m_NormalMapQuality; set => m_NormalMapQuality = value; }
 
+        public bool useNormalMap { get => m_UseNormalMap; set => m_UseNormalMap = value; }
         /// <summary>
         /// Returns if volumetric shadows should be rendered.
         /// </summary>

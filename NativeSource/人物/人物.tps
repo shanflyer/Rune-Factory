@@ -859,42 +859,6 @@
             <key type="filename">小男孩38.png</key>
             <key type="filename">小男孩39$Normal.png</key>
             <key type="filename">小男孩39.png</key>
-            <key type="filename">小船01$Normal.png</key>
-            <key type="filename">小船01.png</key>
-            <key type="filename">小船02$Normal.png</key>
-            <key type="filename">小船02.png</key>
-            <key type="filename">小船03$Normal.png</key>
-            <key type="filename">小船03.png</key>
-            <key type="filename">小船25$Normal.png</key>
-            <key type="filename">小船25.png</key>
-            <key type="filename">小船26$Normal.png</key>
-            <key type="filename">小船26.png</key>
-            <key type="filename">小船27$Normal.png</key>
-            <key type="filename">小船27.png</key>
-            <key type="filename">小船37$Normal.png</key>
-            <key type="filename">小船37.png</key>
-            <key type="filename">小船38$Normal.png</key>
-            <key type="filename">小船38.png</key>
-            <key type="filename">小船39$Normal.png</key>
-            <key type="filename">小船39.png</key>
-            <key type="filename">帆船04$Normal.png</key>
-            <key type="filename">帆船04.png</key>
-            <key type="filename">帆船05$Normal.png</key>
-            <key type="filename">帆船05.png</key>
-            <key type="filename">帆船06$Normal.png</key>
-            <key type="filename">帆船06.png</key>
-            <key type="filename">帆船28$Normal.png</key>
-            <key type="filename">帆船28.png</key>
-            <key type="filename">帆船29$Normal.png</key>
-            <key type="filename">帆船29.png</key>
-            <key type="filename">帆船30$Normal.png</key>
-            <key type="filename">帆船30.png</key>
-            <key type="filename">帆船40$Normal.png</key>
-            <key type="filename">帆船40.png</key>
-            <key type="filename">帆船41$Normal.png</key>
-            <key type="filename">帆船41.png</key>
-            <key type="filename">帆船42$Normal.png</key>
-            <key type="filename">帆船42.png</key>
             <key type="filename">帽男55$Normal.png</key>
             <key type="filename">帽男55.png</key>
             <key type="filename">帽男56$Normal.png</key>
@@ -967,48 +931,6 @@
             <key type="filename">普通男44.png</key>
             <key type="filename">普通男45$Normal.png</key>
             <key type="filename">普通男45.png</key>
-            <key type="filename">木排58$Normal.png</key>
-            <key type="filename">木排58.png</key>
-            <key type="filename">木排59$Normal.png</key>
-            <key type="filename">木排59.png</key>
-            <key type="filename">木排60$Normal.png</key>
-            <key type="filename">木排60.png</key>
-            <key type="filename">木排82$Normal.png</key>
-            <key type="filename">木排82.png</key>
-            <key type="filename">木排83$Normal.png</key>
-            <key type="filename">木排83.png</key>
-            <key type="filename">木排84$Normal.png</key>
-            <key type="filename">木排84.png</key>
-            <key type="filename">木排94$Normal.png</key>
-            <key type="filename">木排94.png</key>
-            <key type="filename">木排95$Normal.png</key>
-            <key type="filename">木排95.png</key>
-            <key type="filename">木排96$Normal.png</key>
-            <key type="filename">木排96.png</key>
-            <key type="filename">气球07$Normal.png</key>
-            <key type="filename">气球07.png</key>
-            <key type="filename">气球08$Normal.png</key>
-            <key type="filename">气球08.png</key>
-            <key type="filename">气球09$Normal.png</key>
-            <key type="filename">气球09.png</key>
-            <key type="filename">气球19$Normal.png</key>
-            <key type="filename">气球19.png</key>
-            <key type="filename">气球20$Normal.png</key>
-            <key type="filename">气球20.png</key>
-            <key type="filename">气球21$Normal.png</key>
-            <key type="filename">气球21.png</key>
-            <key type="filename">气球31$Normal.png</key>
-            <key type="filename">气球31.png</key>
-            <key type="filename">气球32$Normal.png</key>
-            <key type="filename">气球32.png</key>
-            <key type="filename">气球33$Normal.png</key>
-            <key type="filename">气球33.png</key>
-            <key type="filename">气球43$Normal.png</key>
-            <key type="filename">气球43.png</key>
-            <key type="filename">气球44$Normal.png</key>
-            <key type="filename">气球44.png</key>
-            <key type="filename">气球45$Normal.png</key>
-            <key type="filename">气球45.png</key>
             <key type="filename">水手49$Normal.png</key>
             <key type="filename">水手49.png</key>
             <key type="filename">水手50$Normal.png</key>
@@ -1261,24 +1183,6 @@
             <key type="filename">眼镜男41.png</key>
             <key type="filename">眼镜男42$Normal.png</key>
             <key type="filename">眼镜男42.png</key>
-            <key type="filename">矿车55$Normal.png</key>
-            <key type="filename">矿车55.png</key>
-            <key type="filename">矿车56$Normal.png</key>
-            <key type="filename">矿车56.png</key>
-            <key type="filename">矿车57$Normal.png</key>
-            <key type="filename">矿车57.png</key>
-            <key type="filename">矿车79$Normal.png</key>
-            <key type="filename">矿车79.png</key>
-            <key type="filename">矿车80$Normal.png</key>
-            <key type="filename">矿车80.png</key>
-            <key type="filename">矿车81$Normal.png</key>
-            <key type="filename">矿车81.png</key>
-            <key type="filename">矿车91$Normal.png</key>
-            <key type="filename">矿车91.png</key>
-            <key type="filename">矿车92$Normal.png</key>
-            <key type="filename">矿车92.png</key>
-            <key type="filename">矿车93$Normal.png</key>
-            <key type="filename">矿车93.png</key>
             <key type="filename">老头255$Normal.png</key>
             <key type="filename">老头255.png</key>
             <key type="filename">老头256$Normal.png</key>
@@ -1405,6 +1309,88 @@
             <key type="filename">蒙面男47.png</key>
             <key type="filename">蒙面男48$Normal.png</key>
             <key type="filename">蒙面男48.png</key>
+            <key type="filename">龙女55$Normal.png</key>
+            <key type="filename">龙女56$Normal.png</key>
+            <key type="filename">龙女57$Normal.png</key>
+            <key type="filename">龙女79$Normal.png</key>
+            <key type="filename">龙女80$Normal.png</key>
+            <key type="filename">龙女81$Normal.png</key>
+            <key type="filename">龙女91$Normal.png</key>
+            <key type="filename">龙女92$Normal.png</key>
+            <key type="filename">龙女93$Normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">小船01$Normal.png</key>
+            <key type="filename">小船01.png</key>
+            <key type="filename">小船02$Normal.png</key>
+            <key type="filename">小船02.png</key>
+            <key type="filename">小船03$Normal.png</key>
+            <key type="filename">小船03.png</key>
+            <key type="filename">小船25$Normal.png</key>
+            <key type="filename">小船25.png</key>
+            <key type="filename">小船26$Normal.png</key>
+            <key type="filename">小船26.png</key>
+            <key type="filename">小船27$Normal.png</key>
+            <key type="filename">小船27.png</key>
+            <key type="filename">小船37$Normal.png</key>
+            <key type="filename">小船37.png</key>
+            <key type="filename">小船38$Normal.png</key>
+            <key type="filename">小船38.png</key>
+            <key type="filename">小船39$Normal.png</key>
+            <key type="filename">小船39.png</key>
+            <key type="filename">龙女55.png</key>
+            <key type="filename">龙女56.png</key>
+            <key type="filename">龙女57.png</key>
+            <key type="filename">龙女79.png</key>
+            <key type="filename">龙女80.png</key>
+            <key type="filename">龙女81.png</key>
+            <key type="filename">龙女91.png</key>
+            <key type="filename">龙女92.png</key>
+            <key type="filename">龙女93.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">帆船04$Normal.png</key>
+            <key type="filename">帆船04.png</key>
+            <key type="filename">帆船05$Normal.png</key>
+            <key type="filename">帆船05.png</key>
+            <key type="filename">帆船06$Normal.png</key>
+            <key type="filename">帆船06.png</key>
+            <key type="filename">帆船28$Normal.png</key>
+            <key type="filename">帆船28.png</key>
+            <key type="filename">帆船29$Normal.png</key>
+            <key type="filename">帆船29.png</key>
+            <key type="filename">帆船30$Normal.png</key>
+            <key type="filename">帆船30.png</key>
+            <key type="filename">帆船40$Normal.png</key>
+            <key type="filename">帆船40.png</key>
+            <key type="filename">帆船41$Normal.png</key>
+            <key type="filename">帆船41.png</key>
+            <key type="filename">帆船42$Normal.png</key>
+            <key type="filename">帆船42.png</key>
             <key type="filename">飞艇10$Normal.png</key>
             <key type="filename">飞艇10.png</key>
             <key type="filename">飞艇11$Normal.png</key>
@@ -1423,6 +1409,76 @@
             <key type="filename">飞艇47.png</key>
             <key type="filename">飞艇48$Normal.png</key>
             <key type="filename">飞艇48.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.791667</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">木排58$Normal.png</key>
+            <key type="filename">木排58.png</key>
+            <key type="filename">木排59$Normal.png</key>
+            <key type="filename">木排59.png</key>
+            <key type="filename">木排60$Normal.png</key>
+            <key type="filename">木排60.png</key>
+            <key type="filename">木排82$Normal.png</key>
+            <key type="filename">木排82.png</key>
+            <key type="filename">木排83$Normal.png</key>
+            <key type="filename">木排83.png</key>
+            <key type="filename">木排84$Normal.png</key>
+            <key type="filename">木排84.png</key>
+            <key type="filename">木排94$Normal.png</key>
+            <key type="filename">木排94.png</key>
+            <key type="filename">木排95$Normal.png</key>
+            <key type="filename">木排95.png</key>
+            <key type="filename">木排96$Normal.png</key>
+            <key type="filename">木排96.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.708333</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">气球07$Normal.png</key>
+            <key type="filename">气球07.png</key>
+            <key type="filename">气球08$Normal.png</key>
+            <key type="filename">气球08.png</key>
+            <key type="filename">气球09$Normal.png</key>
+            <key type="filename">气球09.png</key>
+            <key type="filename">气球19$Normal.png</key>
+            <key type="filename">气球19.png</key>
+            <key type="filename">气球20$Normal.png</key>
+            <key type="filename">气球20.png</key>
+            <key type="filename">气球21$Normal.png</key>
+            <key type="filename">气球21.png</key>
+            <key type="filename">气球31$Normal.png</key>
+            <key type="filename">气球31.png</key>
+            <key type="filename">气球32$Normal.png</key>
+            <key type="filename">气球32.png</key>
+            <key type="filename">气球33$Normal.png</key>
+            <key type="filename">气球33.png</key>
+            <key type="filename">气球43$Normal.png</key>
+            <key type="filename">气球43.png</key>
+            <key type="filename">气球44$Normal.png</key>
+            <key type="filename">气球44.png</key>
+            <key type="filename">气球45$Normal.png</key>
+            <key type="filename">气球45.png</key>
             <key type="filename">马01$Normal.png</key>
             <key type="filename">马01.png</key>
             <key type="filename">马02$Normal.png</key>
@@ -1477,27 +1533,41 @@
             <key type="filename">马车89.png</key>
             <key type="filename">马车90$Normal.png</key>
             <key type="filename">马车90.png</key>
-            <key type="filename">龙女55$Normal.png</key>
-            <key type="filename">龙女55.png</key>
-            <key type="filename">龙女56$Normal.png</key>
-            <key type="filename">龙女56.png</key>
-            <key type="filename">龙女57$Normal.png</key>
-            <key type="filename">龙女57.png</key>
-            <key type="filename">龙女79$Normal.png</key>
-            <key type="filename">龙女79.png</key>
-            <key type="filename">龙女80$Normal.png</key>
-            <key type="filename">龙女80.png</key>
-            <key type="filename">龙女81$Normal.png</key>
-            <key type="filename">龙女81.png</key>
-            <key type="filename">龙女91$Normal.png</key>
-            <key type="filename">龙女91.png</key>
-            <key type="filename">龙女92$Normal.png</key>
-            <key type="filename">龙女92.png</key>
-            <key type="filename">龙女93$Normal.png</key>
-            <key type="filename">龙女93.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0.5,0.895833</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">矿车55$Normal.png</key>
+            <key type="filename">矿车55.png</key>
+            <key type="filename">矿车56$Normal.png</key>
+            <key type="filename">矿车56.png</key>
+            <key type="filename">矿车57$Normal.png</key>
+            <key type="filename">矿车57.png</key>
+            <key type="filename">矿车79$Normal.png</key>
+            <key type="filename">矿车79.png</key>
+            <key type="filename">矿车80$Normal.png</key>
+            <key type="filename">矿车80.png</key>
+            <key type="filename">矿车81$Normal.png</key>
+            <key type="filename">矿车81.png</key>
+            <key type="filename">矿车91$Normal.png</key>
+            <key type="filename">矿车91.png</key>
+            <key type="filename">矿车92$Normal.png</key>
+            <key type="filename">矿车92.png</key>
+            <key type="filename">矿车93$Normal.png</key>
+            <key type="filename">矿车93.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.85</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>

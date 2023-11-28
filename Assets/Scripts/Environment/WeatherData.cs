@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
-[CreateAssetMenu(menuName ="Datas/天气数据")]
+﻿using UnityEngine;
+
+[CreateAssetMenu(menuName = "Datas/天气数据")]
 public class WeatherData : ScriptableObject, IGameData
 {
     public int id;
@@ -23,7 +20,8 @@ public class WeatherData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
+
     public void SetReferenceData()
-    { 
+    {
     }
 }
