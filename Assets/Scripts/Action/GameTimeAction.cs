@@ -5,6 +5,7 @@
 } 
 public struct OverrideEnvironmentLight : GameAction
 {
+    public bool overSkyAndSun;
     public EnvironmentLightData environmentLightData;
     public SetResult setResult { get; set; }
 }

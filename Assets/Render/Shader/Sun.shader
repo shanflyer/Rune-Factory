@@ -29,8 +29,7 @@ Shader "Sun"
         #include "Assets/Render/Shader/UnityAction.cginc"
 
          half4 GlobalColor; 
-         half4 _CloudColor;
-         half2 LightDirection;
+         half4 _SunColor; 
         CBUFFER_START(UnityPerMaterial)
             half _RemapMinValue;
             half _RemapMaxValue;
@@ -106,7 +105,7 @@ Shader "Sun"
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex); 
                 
 
-                o.color = v.color * _Color * unity_SpriteColor;
+                o.color = v.color * _Color * unity_SpriteColor*_SunColor;
                 return o;
             }
 

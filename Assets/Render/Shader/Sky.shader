@@ -19,13 +19,12 @@ Shader "Sky"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Assets/Render/Shader/UnityAction.cginc"
 
-         half4 GlobalColor; 
-         half4 _SkyColor;
-         half2 LightDirection;
+         half4 _SkyTopColor;
+         half4 _SkyBottomColor; 
+         half _SkyHalfValue;
         CBUFFER_START(UnityPerMaterial)
-            half _halfValue;
-            half4 _topColor;
-            half4 _bottomColor; 
+            
+            
         CBUFFER_END  
         
 
@@ -89,14 +88,14 @@ Shader "Sky"
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
                 float colorValue0=0;
-                Unity_Remap_float(i.uv.y,float2(0,_halfValue),float2(0,0.5),colorValue0);
+                Unity_Remap_float(i.uv.y,float2(0,_SkyHalfValue),float2(0,0.5),colorValue0);
                 float colorValue1=0;
-                Unity_Remap_float(i.uv.y,float2(_halfValue,1),float2(0.5,1),colorValue1);
-                float setpValue=step(_halfValue,i.uv.y);
+                Unity_Remap_float(i.uv.y,float2(_SkyHalfValue,1),float2(0.5,1),colorValue1);
+                float setpValue=step(_SkyHalfValue,i.uv.y);
 
                 float value=colorValue0*(1-setpValue)+colorValue1*setpValue; 
                 float4 result=float4(1,1,1,1);
-                result.xyz=_bottomColor.xyz+(_topColor.xyz-_bottomColor.xyz)*value;
+                result.xyz=_SkyBottomColor.xyz+(_SkyTopColor.xyz-_SkyBottomColor.xyz)*value;
 
                 return result;
             }

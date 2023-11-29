@@ -6,11 +6,15 @@ public struct EnvironmentLightData
     public Color globalColor;
     public Color cloudColor;
     public Color skyTopColor,skyBottomColor;
+    public float skyHalfValue;
     public float globalIntensity;
     public Color color;
     public Vector3 direction;
     public float intensity;
     public float shadowValue;
+    public Vector2 sunPos;
+    public float sunScale;
+    public Color sunColor;
 }
 
 public class EnvironmentManger : Singleton<EnvironmentManger>
@@ -18,11 +22,18 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     private Transform environmentParent;
     private Light2D directionLight;
     private Light2D globalLight;
+    private Transform sunTransform;
 
     public override void Init()
     {
         base.Init();
         environmentParent = new GameObject("Environment").transform;
+
+        GameObject sunPrefab = Resources.Load<GameObject>("Sun");
+        if (sunPrefab)
+        {
+            sunTransform = GameObject.Instantiate(sunPrefab, environmentParent).transform;
+        }
 
         GameObject DirectionLightGameObject = new GameObject("DirectionLight");
         directionLight = DirectionLightGameObject.AddComponent<Light2D>();
@@ -53,12 +64,17 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     private void SetEnvironmentLight(SetEnvironmentLight SetEnvironmentLight)
     {
         natureLightData = SetEnvironmentLight.environmentLightData;
-        Shader.SetGlobalColor("_CloudColor", natureLightData.cloudColor);
-        Shader.SetGlobalColor("_SkyTopColor", natureLightData.skyTopColor);
-        Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
-
+         
         if (!overrideEnvironment)
         {
+            Shader.SetGlobalColor("_CloudColor", natureLightData.cloudColor);
+            Shader.SetGlobalColor("_SkyTopColor", natureLightData.skyTopColor);
+            Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
+            Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
+            Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
+            sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
+            sunTransform.localPosition = natureLightData.sunPos;
+
             globalLight.color = natureLightData.globalColor;
             globalLight.intensity = natureLightData.globalIntensity;
 
@@ -84,6 +100,16 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             globalLight.color = environmentLight.globalColor;
             globalLight.intensity = environmentLight.globalIntensity;
         }
+        if (OverrideEnvironmentLight.overSkyAndSun)
+        {
+            Shader.SetGlobalColor("_CloudColor", environmentLight.cloudColor);
+            Shader.SetGlobalColor("_SkyTopColor", environmentLight.skyTopColor);
+            Shader.SetGlobalColor("_SkyBottomColor", environmentLight.skyBottomColor);
+            Shader.SetGlobalFloat("_SkyHalfValue", environmentLight.skyHalfValue);
+            Shader.SetGlobalColor("_SunColor", environmentLight.sunColor);
+            sunTransform.localScale = new Vector3(environmentLight.sunScale, environmentLight.sunScale, 1);
+            sunTransform.localPosition = environmentLight.sunPos;
+        }
         Shader.SetGlobalFloat("_ShadowValue", environmentLight.shadowValue);
     }
 
@@ -102,6 +128,14 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             globalLight.intensity = natureLightData.globalIntensity;
         }
         Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue);
+
+        Shader.SetGlobalColor("_CloudColor", natureLightData.cloudColor);
+        Shader.SetGlobalColor("_SkyTopColor", natureLightData.skyTopColor);
+        Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
+        Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
+        Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
+        sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
+        sunTransform.localPosition = natureLightData.sunPos;
     }
 
     protected override void Clear()

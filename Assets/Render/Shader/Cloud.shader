@@ -96,7 +96,7 @@ Shader "Cloud"
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex); 
                 
 
-                o.color = v.color * _Color * unity_SpriteColor;
+                o.color = v.color * _Color * unity_SpriteColor*_CloudColor;
                 return o;
             }
  

@@ -10,6 +10,8 @@ using Unity.Entities.UniversalDelegates;
 public class ZeroPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
+    Color cloudColor;
+    [SerializeField]
     Image titleIcon;
     [SerializeField]
     Button start;
@@ -29,6 +31,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     protected override void Awake()
     { 
         base.Awake();
+        Shader.SetGlobalColor("_CloudColor", cloudColor);
         InitTitleIcon();
         start.onClick.AddListener(StartGame);
     }

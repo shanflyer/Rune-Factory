@@ -372,12 +372,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b80c757fd39119c49ab030e1bbfad21d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cloudColor: {r: 1, g: 0.94040495, b: 0.9009434, a: 1}
   titleIcon: {fileID: 8120541174018358599}
   start: {fileID: 1315645264724718202}
   canvas:
   - {fileID: 8292712866195228604}
   - {fileID: 3677028413133272002}
-  canvasGroup: {fileID: 0}
   systemRenderer: {fileID: 5353662029632528141}
 --- !u!223 &8292712866195228604
 Canvas:
@@ -1360,6 +1360,11 @@ PrefabInstance:
       propertyPath: m_RenderAlignment
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8739351385345708235, guid: 7f04acab93ffb7541ac15a9186822cab,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 186fb6eb93b08fc41842f00012544030, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

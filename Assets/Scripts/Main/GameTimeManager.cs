@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityLight;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -149,6 +150,20 @@ public class GameTime
                           dawnEnvironmentData.directionYValue.Evaluate(lightValue), 120);
             environmentLightData.intensity = dawnEnvironmentData.intensity.Evaluate(lightValue);
             environmentLightData.shadowValue = dawnEnvironmentData.shadowValue.Evaluate(lightValue);
+
+            environmentLightData.skyHalfValue = dawnEnvironmentData.SkyHalfValue.Evaluate(lightValue);
+            environmentLightData.skyTopColor = dawnEnvironmentData.SkyTopColor.Evaluate(lightValue);
+            environmentLightData.skyBottomColor = dawnEnvironmentData.SkyBottomColor.Evaluate(lightValue);
+            Color sunColor = dawnEnvironmentData.sunColor.Evaluate(lightValue);
+            float a = sunColor.a;
+            sunColor*=dawnEnvironmentData.sunColorValue.Evaluate(lightValue);
+            sunColor.a = a;
+            environmentLightData.sunColor = sunColor;
+            environmentLightData.sunScale = dawnEnvironmentData.sunScaleValue.Evaluate(lightValue);
+            environmentLightData.sunPos = new Vector2(dawnEnvironmentData.sunXValue.Evaluate(lightValue),
+                dawnEnvironmentData.sunYValue.Evaluate(lightValue));
+            environmentLightData.cloudColor = dawnEnvironmentData.CloudColor.Evaluate(lightValue);
+
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = environmentLightData
@@ -159,20 +174,31 @@ public class GameTime
         {
             night = false;
             float sunValue = (nowMinute - dayStart + mySecond * 0.05f) / (float)(totalSunMinute);
+
+            Color sunColor = dayEnvironmentData.sunColor.Evaluate(sunValue); 
+            float a = sunColor.a;
+            sunColor *= dayEnvironmentData.sunColorValue.Evaluate(sunValue);
+            sunColor.a = a;
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                {
-                    cloudColor = dayEnvironmentData.CloudColor.Evaluate(sunValue),
-                    skyTopColor = dayEnvironmentData.SkyTopColor.Evaluate(sunValue),
-                    skyBottomColor = dayEnvironmentData.SkyBottomColor.Evaluate(sunValue),
+                { 
                     globalColor = dayEnvironmentData.GlobalColor.Evaluate(sunValue),
                     globalIntensity = dayEnvironmentData.GlobalIntensity.Evaluate(sunValue),
                     color = dayEnvironmentData.Color.Evaluate(sunValue),
                     direction = new Vector3(dayEnvironmentData.directionXValue.Evaluate(sunValue),
                     dayEnvironmentData.directionYValue.Evaluate(sunValue), 120),
                     intensity = dayEnvironmentData.intensity.Evaluate(sunValue),
-                    shadowValue = dayEnvironmentData.shadowValue.Evaluate(sunValue)
+                    shadowValue = dayEnvironmentData.shadowValue.Evaluate(sunValue),
+
+                    skyHalfValue = dayEnvironmentData.SkyHalfValue.Evaluate(sunValue), 
+                    cloudColor = dayEnvironmentData.CloudColor.Evaluate(sunValue),
+                    skyTopColor = dayEnvironmentData.SkyTopColor.Evaluate(sunValue),
+                    skyBottomColor = dayEnvironmentData.SkyBottomColor.Evaluate(sunValue),
+                    sunColor = sunColor,
+                    sunScale = dayEnvironmentData.sunScaleValue.Evaluate(sunValue),
+                    sunPos = new Vector2(dayEnvironmentData.sunXValue.Evaluate(sunValue),
+                      dayEnvironmentData.sunYValue.Evaluate(sunValue)), 
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -180,20 +206,32 @@ public class GameTime
         else if (nowMinute < duskEnd)
         {
             float lightValue = (float)(nowMinute - duskStart + mySecond * 0.05f) / (60);
+
+            Color sunColor = duskEnvironmentData.sunColor.Evaluate(lightValue);
+            float a = sunColor.a;
+            sunColor *= duskEnvironmentData.sunColorValue.Evaluate(lightValue);
+            sunColor.a = a;
+
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                {
-                    cloudColor = duskEnvironmentData.CloudColor.Evaluate(lightValue),
-                    skyTopColor = duskEnvironmentData.SkyTopColor.Evaluate(lightValue),
-                    skyBottomColor = duskEnvironmentData.SkyBottomColor.Evaluate(lightValue),
+                { 
                     globalColor = duskEnvironmentData.GlobalColor.Evaluate(lightValue),
                     globalIntensity = duskEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = duskEnvironmentData.Color.Evaluate(lightValue),
                     direction = new Vector3(duskEnvironmentData.directionXValue.Evaluate(lightValue),
                                duskEnvironmentData.directionYValue.Evaluate(lightValue), 120),
                     intensity = duskEnvironmentData.intensity.Evaluate(lightValue),
-                    shadowValue = duskEnvironmentData.shadowValue.Evaluate(lightValue)
+                    shadowValue = duskEnvironmentData.shadowValue.Evaluate(lightValue),
+
+                    skyHalfValue = duskEnvironmentData.SkyHalfValue.Evaluate(lightValue),
+                    cloudColor = duskEnvironmentData.CloudColor.Evaluate(lightValue),
+                    skyTopColor = duskEnvironmentData.SkyTopColor.Evaluate(lightValue),
+                    skyBottomColor = duskEnvironmentData.SkyBottomColor.Evaluate(lightValue),
+                    sunColor = sunColor,
+                    sunScale = duskEnvironmentData.sunScaleValue.Evaluate(lightValue),
+                    sunPos = new Vector2(duskEnvironmentData.sunXValue.Evaluate(lightValue),
+                      duskEnvironmentData.sunYValue.Evaluate(lightValue)),
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -202,20 +240,32 @@ public class GameTime
         {
             night = true;
             float lightValue = (float)(nowMinute - duskEnd + mySecond * 0.05f) / totalMoonMinute;
+
+            Color sunColor = nightEnvironmentData.sunColor.Evaluate(lightValue);
+            float a = sunColor.a;
+            sunColor *= nightEnvironmentData.sunColorValue.Evaluate(lightValue);
+            sunColor.a = a;
+
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                {
-                    cloudColor=nightEnvironmentData.CloudColor.Evaluate(lightValue),
-                    skyTopColor = nightEnvironmentData.SkyTopColor.Evaluate(lightValue),
-                    skyBottomColor = nightEnvironmentData.SkyBottomColor.Evaluate(lightValue),
+                { 
                     globalColor = nightEnvironmentData.GlobalColor.Evaluate(lightValue),
                     globalIntensity = nightEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = nightEnvironmentData.Color.Evaluate(lightValue),
                     direction = new Vector3(nightEnvironmentData.directionXValue.Evaluate(lightValue),
                                nightEnvironmentData.directionYValue.Evaluate(lightValue), 120),
                     intensity = nightEnvironmentData.intensity.Evaluate(lightValue),
-                    shadowValue = nightEnvironmentData.shadowValue.Evaluate(lightValue)
+                    shadowValue = nightEnvironmentData.shadowValue.Evaluate(lightValue),
+
+                    skyHalfValue = nightEnvironmentData.SkyHalfValue.Evaluate(lightValue),
+                    cloudColor = nightEnvironmentData.CloudColor.Evaluate(lightValue),
+                    skyTopColor = nightEnvironmentData.SkyTopColor.Evaluate(lightValue),
+                    skyBottomColor = nightEnvironmentData.SkyBottomColor.Evaluate(lightValue),
+                    sunColor = sunColor,
+                    sunScale = nightEnvironmentData.sunScaleValue.Evaluate(lightValue),
+                    sunPos = new Vector2(nightEnvironmentData.sunXValue.Evaluate(lightValue),
+                      nightEnvironmentData.sunYValue.Evaluate(lightValue)),
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -224,20 +274,32 @@ public class GameTime
         {
             night = true;
             float lightValue = (float)(totalMoonMinute - (dawnStart - nowMinute) + mySecond * 0.05f) / totalMoonMinute;
+
+            Color sunColor = nightEnvironmentData.sunColor.Evaluate(lightValue);
+            float a = sunColor.a;
+            sunColor *= nightEnvironmentData.sunColorValue.Evaluate(lightValue);
+            sunColor.a = a;
+
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                {
-                    cloudColor=nightEnvironmentData.CloudColor.Evaluate(lightValue),
-                    skyTopColor = nightEnvironmentData.SkyTopColor.Evaluate(lightValue),
-                    skyBottomColor = nightEnvironmentData.SkyBottomColor.Evaluate(lightValue),
+                { 
                     globalColor = nightEnvironmentData.GlobalColor.Evaluate(lightValue),
                     globalIntensity = nightEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = nightEnvironmentData.Color.Evaluate(lightValue),
                     direction = new Vector3(nightEnvironmentData.directionXValue.Evaluate(lightValue),
                                nightEnvironmentData.directionYValue.Evaluate(lightValue), 120),
                     intensity = nightEnvironmentData.intensity.Evaluate(lightValue),
-                    shadowValue = nightEnvironmentData.shadowValue.Evaluate(lightValue)
+                    shadowValue = nightEnvironmentData.shadowValue.Evaluate(lightValue),
+
+                    skyHalfValue = nightEnvironmentData.SkyHalfValue.Evaluate(lightValue),
+                    cloudColor = nightEnvironmentData.CloudColor.Evaluate(lightValue),
+                    skyTopColor = nightEnvironmentData.SkyTopColor.Evaluate(lightValue),
+                    skyBottomColor = nightEnvironmentData.SkyBottomColor.Evaluate(lightValue),
+                    sunColor = sunColor,
+                    sunScale = nightEnvironmentData.sunScaleValue.Evaluate(lightValue),
+                    sunPos = new Vector2(nightEnvironmentData.sunXValue.Evaluate(lightValue),
+                      nightEnvironmentData.sunYValue.Evaluate(lightValue)),
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
