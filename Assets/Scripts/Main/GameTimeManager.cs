@@ -170,7 +170,7 @@ public class GameTime
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
         }
-        else if (nowMinute < dayEnd)
+        else if (nowMinute> dawnEnd&&nowMinute <= dayEnd)
         {
             night = false;
             float sunValue = (nowMinute - dayStart + mySecond * 0.05f) / (float)(totalSunMinute);
@@ -203,7 +203,7 @@ public class GameTime
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
         }
-        else if (nowMinute < duskEnd)
+        else if (nowMinute > dayEnd && nowMinute < duskEnd)
         {
             float lightValue = (float)(nowMinute - duskStart + mySecond * 0.05f) / (60);
 
@@ -236,7 +236,7 @@ public class GameTime
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
         }
-        else if (nowMinute < 24 * 60)
+        else if (nowMinute > dawnStart)
         {
             night = true;
             float lightValue = (float)(nowMinute - duskEnd + mySecond * 0.05f) / totalMoonMinute;

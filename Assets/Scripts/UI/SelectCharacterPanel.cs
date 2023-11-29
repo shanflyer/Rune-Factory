@@ -20,8 +20,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Button Ok, Return;
-
-    public GameObject SelecCharactorInformationPanel;
+     
 
     private Gender gender;
     private string playerName;
@@ -77,14 +76,14 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         for (int i = 0; i < Enum.GetValues(typeof(Season)).Length; i++)
         {
             var season = Enum.GetValues(typeof(Season)).GetValue(i);
-            if ((int)season >= 0)
+            if ((int)season > 0)
             {
                 var seasonStr = season.ToString();
                 SeasonDropdown.options.Add(new TMP_Dropdown.OptionData(seasonStr));
             }
         }
         SeasonDropdown.onValueChanged.AddListener(SelectSeason);
-        SeasonDropdown.value = 0;
+        SeasonDropdown.value = 1;
 
         DateDropdown.options.Clear();
         for (int i = 1; i <= GameCommon.SeasonDays; i++)

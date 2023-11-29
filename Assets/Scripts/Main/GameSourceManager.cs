@@ -16,6 +16,16 @@ public class GameSourceManager:Singleton<GameSourceManager>
     private Dictionary<string, ExternalBehavior> behaviors = new Dictionary<string, ExternalBehavior>();
 
     public SpriteRenderer dropItem;
+    protected override void Clear()
+    {
+        base.Clear();
+        prefabs.Clear();
+        textures.Clear();
+        sprites.Clear();
+        scriptableObjects.Clear();
+        audioClips.Clear();
+        behaviors.Clear();
+    }
     public async override void Init()
     {
         //º”‘ÿµÙ¬‰‘§÷∆ÃÂ
@@ -62,7 +72,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
             return audioClip;
         }
         audioClip= await ExtensionsResources.LoadResourceAsync<AudioClip>(path);
-        audioClips.Add(path, audioClip);
+        audioClips[path]= audioClip;
         return audioClip;
     }
     public async Task<Texture2D> GetTexture(string path)

@@ -18,7 +18,7 @@ MonoBehaviour:
       serializedVersion: 2
       key0: {r: 0.8301887, g: 0.46916506, b: 0.011747932, a: 0.38431373}
       key1: {r: 0.9529412, g: 0.88027805, b: 0.28235295, a: 1}
-      key2: {r: 0.990566, g: 0.3970484, b: 0.18222679, a: 0}
+      key2: {r: 0.990566, g: 0.3970484, b: 0.18222679, a: 0.38431373}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -33,8 +33,8 @@ MonoBehaviour:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
+      atime1: 32576
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
       m_Mode: 0
       m_ColorSpace: -1
       m_NumColorKeys: 3
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 3
     GlobalColor:
       serializedVersion: 2
       key0: {r: 0.3490566, g: 0.3243592, b: 0.3243592, a: 1}
@@ -425,15 +425,15 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 1.3
-        inSlope: -0.9999999
-        outSlope: -0.9999999
+        inSlope: -0.5999999
+        outSlope: -0.5999999
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.5
-        value: 0.8
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 34
@@ -443,8 +443,8 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1.3
-        inSlope: 0.9999999
-        outSlope: 0.9999999
+        inSlope: 0.5999999
+        outSlope: 0.5999999
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -454,9 +454,9 @@ MonoBehaviour:
       m_RotationOrder: 4
     sunColor:
       serializedVersion: 2
-      key0: {r: 0.7490196, g: 0.1764706, b: 0.011764706, a: 0.4}
-      key1: {r: 0.7490196, g: 0.6745098, b: 0.2509804, a: 0.5294118}
-      key2: {r: 0.7490196, g: 0.1764706, b: 0.011764706, a: 0.4}
+      key0: {r: 0.7490196, g: 0.1764706, b: 0.011764706, a: 1}
+      key1: {r: 0.7490196, g: 0.6745098, b: 0.2509804, a: 1}
+      key2: {r: 0.7490196, g: 0.1764706, b: 0.011764706, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -470,7 +470,7 @@ MonoBehaviour:
       ctime5: 0
       ctime6: 0
       ctime7: 0
-      atime0: 0
+      atime0: 575
       atime1: 32768
       atime2: 65535
       atime3: 0
@@ -520,9 +520,9 @@ MonoBehaviour:
   - name: "\u9EC4\u660F"
     Color:
       serializedVersion: 2
-      key0: {r: 0.990566, g: 0.3970484, b: 0.18222679, a: 1}
-      key1: {r: 0.18039216, g: 0.47616565, b: 0.99215686, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
+      key0: {r: 0.990566, g: 0.3970484, b: 0.18222679, a: 0.38431373}
+      key1: {r: 0.18039216, g: 0.47616565, b: 0.99215686, a: 0.38431373}
+      key2: {r: 0, g: 0, b: 0, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -537,8 +537,8 @@ MonoBehaviour:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
+      atime1: 31809
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0
@@ -547,20 +547,20 @@ MonoBehaviour:
       m_Mode: 0
       m_ColorSpace: -1
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 3
     GlobalColor:
       serializedVersion: 2
       key0: {r: 0.4811321, g: 0.43801177, b: 0.43801177, a: 1}
       key1: {r: 0.26072446, g: 0.27780896, b: 0.2924528, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
+      key2: {r: 0.15312387, g: 0.18540698, b: 0.3490566, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
-      ctime1: 65535
-      ctime2: 0
+      ctime1: 32768
+      ctime2: 65535
       ctime3: 0
       ctime4: 0
       ctime5: 0
@@ -576,7 +576,7 @@ MonoBehaviour:
       atime7: 0
       m_Mode: 2
       m_ColorSpace: -1
-      m_NumColorKeys: 2
+      m_NumColorKeys: 3
       m_NumAlphaKeys: 2
     CloudColor:
       serializedVersion: 2
@@ -610,7 +610,7 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
     SkyTopColor:
       serializedVersion: 2
-      key0: {r: 0.06755074, g: 0.20215093, b: 0.4339623, a: 1}
+      key0: {r: 0.019624433, g: 0.23074336, b: 0.5943396, a: 1}
       key1: {r: 0.05517978, g: 0.17514002, b: 0.3773585, a: 1}
       key2: {r: 0.0040049767, g: 0.10914063, b: 0.2830189, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -640,7 +640,7 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
     SkyBottomColor:
       serializedVersion: 2
-      key0: {r: 0.6698113, g: 0.39549345, b: 0.2432805, a: 1}
+      key0: {r: 1, g: 0.35794678, b: 0, a: 1}
       key1: {r: 0.18823424, g: 0.4255717, b: 0.8490566, a: 1}
       key2: {r: 0, g: 0.2373905, b: 0.6603774, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -673,9 +673,9 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.01
-        inSlope: 0
-        outSlope: 0
+        value: 0.29
+        inSlope: -0.56
+        outSlope: -0.56
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
@@ -755,17 +755,17 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: -90
-        inSlope: 0
-        outSlope: 0
+        inSlope: 180
+        outSlope: 180
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: -90
-        inSlope: 0
-        outSlope: 0
+        value: 90
+        inSlope: 180
+        outSlope: 180
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -970,7 +970,7 @@ MonoBehaviour:
   - name: "\u665A\u4E0A"
     Color:
       serializedVersion: 2
-      key0: {r: 0.18039216, g: 0.22065386, b: 0.99215686, a: 1}
+      key0: {r: 0.18039216, g: 0.47616565, b: 0.99215686, a: 1}
       key1: {r: 0.36873695, g: 0.18039216, b: 0.99215686, a: 1}
       key2: {r: 0.47067267, g: 0.32226774, b: 0.9622642, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -1030,7 +1030,7 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
     CloudColor:
       serializedVersion: 2
-      key0: {r: 0.33681917, g: 0.36585066, b: 0.8207547, a: 1}
+      key0: {r: 0.15312387, g: 0.18540698, b: 0.3490566, a: 1}
       key1: {r: 0.6578698, g: 0.5821022, b: 0.9716981, a: 1}
       key2: {r: 0.33681917, g: 0.36585066, b: 0.8207547, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -1360,9 +1360,9 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1.3
-        inSlope: -0.9999999
-        outSlope: -0.9999999
+        value: 1
+        inSlope: -0.39999998
+        outSlope: -0.39999998
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
@@ -1378,9 +1378,9 @@ MonoBehaviour:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 1.3
-        inSlope: 0.9999999
-        outSlope: 0.9999999
+        value: 1
+        inSlope: 0.39999998
+        outSlope: 0.39999998
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -1390,9 +1390,9 @@ MonoBehaviour:
       m_RotationOrder: 4
     sunColor:
       serializedVersion: 2
-      key0: {r: 0.15294118, g: 0.20392157, b: 0.7490196, a: 0.6}
-      key1: {r: 0.25490198, g: 0.21176471, b: 0.7490196, a: 0.6}
-      key2: {r: 0.15294118, g: 0.20392157, b: 0.7490196, a: 0.6}
+      key0: {r: 0.15294118, g: 0.20392157, b: 0.7490196, a: 1}
+      key1: {r: 0.25490198, g: 0.21176471, b: 0.7490196, a: 1}
+      key2: {r: 0.15294118, g: 0.20392157, b: 0.7490196, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -1457,7 +1457,7 @@ MonoBehaviour:
     Color:
       serializedVersion: 2
       key0: {r: 0.47067267, g: 0.32226774, b: 0.9622642, a: 1}
-      key1: {r: 0.8301887, g: 0.46916506, b: 0.011747932, a: 1}
+      key1: {r: 0.8301887, g: 0.46916506, b: 0.011747932, a: 0.38431373}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1517,7 +1517,7 @@ MonoBehaviour:
     CloudColor:
       serializedVersion: 2
       key0: {r: 0.33681917, g: 0.36585066, b: 0.8207547, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 0.81960785, g: 0.5298946, b: 0.33725494, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1610,17 +1610,17 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0.4
-        inSlope: 0
-        outSlope: 0
+        inSlope: -0.110000014
+        outSlope: -0.110000014
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.4
-        inSlope: 0
-        outSlope: 0
+        value: 0.29
+        inSlope: -0.110000014
+        outSlope: -0.110000014
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -1682,17 +1682,17 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: -90
-        inSlope: 0
-        outSlope: 0
+        inSlope: 180
+        outSlope: 180
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: -90
-        inSlope: 0
-        outSlope: 0
+        value: 90
+        inSlope: 180
+        outSlope: 180
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -1729,9 +1729,9 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 4
-        inSlope: -2
-        outSlope: -2
+        value: 2
+        inSlope: 0
+        outSlope: 0
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
@@ -1739,8 +1739,8 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 2
-        inSlope: -2
-        outSlope: -2
+        inSlope: 0
+        outSlope: 0
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334

@@ -29,7 +29,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         base.Init();
         environmentParent = new GameObject("Environment").transform;
 
-        GameObject sunPrefab = Resources.Load<GameObject>("Sun");
+        GameObject sunPrefab = Resources.Load<GameObject>("Prefabs/Sun");
         if (sunPrefab)
         {
             sunTransform = GameObject.Instantiate(sunPrefab, environmentParent).transform;

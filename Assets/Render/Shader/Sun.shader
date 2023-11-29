@@ -20,7 +20,7 @@ Shader "Sun"
     {
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
 
-        BlendOp Max 
+       Blend OneMinusDstColor One 
         Cull Off
         ZWrite Off
 
@@ -105,7 +105,7 @@ Shader "Sun"
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex); 
                 
 
-                o.color = v.color * _Color * unity_SpriteColor*_SunColor;
+                o.color = v.color  * unity_SpriteColor*_SunColor;
                 return o;
             }
 
@@ -121,7 +121,7 @@ Shader "Sun"
                 Unity_Remap_float(maskR,float2(_RemapMinValue,_RemapMaxValue),float2(0,1),maskR);
                 maskR=clamp(maskR,0,1);
 
-                half4 mask1 = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv+float2(0.4,0.4));
+                half4 mask1 = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv+float2(1,1));
                 half maskR1=mask1.r;
                 Unity_Remap_float(maskR1,float2(_RemapMinValue,_RemapMaxValue),float2(0,1),maskR1);
                 maskR1=clamp(maskR1,0,1); 
@@ -132,7 +132,7 @@ Shader "Sun"
                 Unity_Remap_float(i.uv.y,float2(1-_ScaleValue,_ScaleValue),float2(0,1),i.uv.y);  
 
                 half4 moonMask=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv);  
-                half4 moonMask1=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv+float2(0.4,0.4)); 
+                half4 moonMask1=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv+float2(1,1)); 
 
                 half3 moonColor=moonMask.xyz*(moonMask.a-moonMask1.a);
                 moonColor+=moonMask.xyz*(1-moonMask.a+moonMask1.a)*0.3;
@@ -141,6 +141,7 @@ Shader "Sun"
                 maskR=(1-step(1,maskR))*maskR;
                 moonMask.xyz=moonMask.xyz*(1-maskR)+maskR*i.color.a;
                 moonMask.xyz*=i.color;
+                moonMask.xyz+=maskR.xxx*0*(1-moonMask.a);
                 moonMask.a+=maskR;
                 moonMask.a=clamp(moonMask.a,0,1);
                 return moonMask;
