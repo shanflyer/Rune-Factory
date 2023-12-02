@@ -11,7 +11,7 @@ using UnityEditor;
 [RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
-[ExecuteAlways]
+//[ExecuteAlways]
 public class MyShadowPolygon : MonoBehaviour
 {
     [SerializeField]
@@ -30,7 +30,7 @@ public class MyShadowPolygon : MonoBehaviour
     float shadowOffset;
     [SerializeField]
     Color color;
-    private void Awake()
+    private void OnEnable()
     {
         if (meshRenderer == null || meshRenderer.sharedMaterial == null)
         {
@@ -39,9 +39,17 @@ public class MyShadowPolygon : MonoBehaviour
             meshRenderer = GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = Resources.Load<Material>("MyShadow");
         }
+        //CreatMesh();
+    }
+    private void Awake()
+    {
+        
+       
+    }
+    private void Start()
+    {
         CreatMesh();
     }
-
     void InitMeshData(Vector2 uv1,Vector2 uv2,float scale, float offset, ref List<Vector3> verticeList,ref List<int> triangleList,ref List<Vector2> uv2s
         ,ref List<Color> colors,ref List<Vector2> uvs)
     {
@@ -150,7 +158,16 @@ public class MyShadowPolygon : MonoBehaviour
         newMesh.uv = uvs.ToArray();
         newMesh.uv2 = uv2s.ToArray();
         newMesh.triangles = triangleList.ToArray(); 
-        newMesh.RecalculateBounds(); 
+        newMesh.RecalculateBounds();
+        var bounds = mesh.bounds;
+
+        Vector3 minOffset = bounds.min - bounds.center;
+        Vector3 maxOffset = bounds.max - bounds.center;
+        Vector3 min=bounds.center+ minOffset- new Vector3(shadowLength + shadow2Length, shadowLength + shadow2Length, 0);
+        Vector3 max = bounds.center + maxOffset + new Vector3(shadowLength + shadow2Length, shadowLength + shadow2Length, 0);
+
+        bounds=new Bounds(Vector3.zero,max-min);
+        newMesh.bounds = bounds;
         meshFilter.mesh = newMesh;
     }
     

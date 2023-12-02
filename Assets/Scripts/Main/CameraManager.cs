@@ -12,6 +12,7 @@ public class CameraManager : Singleton<CameraManager>
 
     private CinemachineMixingCamera mixingCamera;
     private CinemachineVirtualCamera followCamera, fixedCamera;
+    private CinemachineConfiner2D confiner2D;
     public override void Init()
     {
         base.Init();
@@ -22,8 +23,13 @@ public class CameraManager : Singleton<CameraManager>
         mixingCamera = mainCamera.transform.parent.GetComponentInChildren<CinemachineMixingCamera>();
         followCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[0];
         fixedCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[1];
+        confiner2D = mixingCamera.GetComponentInChildren<CinemachineConfiner2D>();
 
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
+    }
+    public void SetConfiner2DCollider(PolygonCollider2D polygonCollider2D)
+    {
+        confiner2D.m_BoundingShape2D= polygonCollider2D;
     }
     public void SetFollowTarget(Transform target)
     {

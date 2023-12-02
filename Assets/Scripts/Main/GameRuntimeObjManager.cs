@@ -56,7 +56,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         return false;
     }
  
-    public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,Transform overrideParent=null)where T:Component
+    public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,Transform overrideParent=null,bool isActive=true)where T:Component
     {
         if(!objParents.TryGetValue(runtimeObjType,out Transform parent))
         {
@@ -77,8 +77,9 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         }
         runtimeObj.linkId = linkId;
         var obj = runtimeObj.obj as Component;
-        obj.gameObject.SetActive(true);
-        obj.transform.SetParent(parent, false);
+       
+        obj.transform.SetParent(parent, false); 
+        obj.gameObject.SetActive(isActive);
         runtimeObj.use = true;
         return runtimeObj;
     }

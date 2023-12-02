@@ -405,6 +405,29 @@ public struct CharacterPropertyTrigger : GameAction
     public CharacterProperty characterProperty;
 
 }
+
+public struct DisplayOrHideCharacter : GameAction
+{
+    public int characterId;
+    public bool display;
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+            display = bool.Parse(parameters[1].value); 
+        }
+        if (source != 0)
+        {
+            characterId = source;
+        }
+        display = target == 1;
+        GameActionManager.instance.QueueAction(this);
+    }
+    
+}
+
 public struct SetCharacterCoordinate : GameAction
 {
     public SetResult setResult { get; set; }

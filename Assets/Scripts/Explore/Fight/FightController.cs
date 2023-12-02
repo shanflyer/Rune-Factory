@@ -238,7 +238,7 @@ public class FightController : MonoBehaviour
         if (characterData != null)
         {
             var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
-                characterData.objName, characterData.obj.transform, instanceId);
+                characterData.objName, characterData.obj.transform, instanceId,isActive:false);
             var transform = characterRuntime.obj as Transform;
             transform.position = playerPos[index].position;
             FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime
@@ -248,7 +248,7 @@ public class FightController : MonoBehaviour
                 playableDirector = transform.GetComponentInChildren<PlayableDirector>(),
                 behaviorTree = transform.GetComponent<BehaviorTree>()
             };
-           
+            transform.gameObject.SetActive(true);
             var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.behavior}");
             fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
             fightPlayerRuntimes[instanceId] = fightPlayerRuntime;
@@ -266,9 +266,10 @@ public class FightController : MonoBehaviour
         if (characterData != null)
         {
             var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.MONSTRT.ToString(),
-                characterData.monsterName, characterData.obj.transform, instanceId);
+                characterData.monsterName, characterData.obj.transform, instanceId,isActive:false);
             var transform = characterRuntime.obj as Transform;
             transform.position = monsterPos[index].position;
+            transform.gameObject.SetActive(true);
             FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime
             {
                 playerObj = characterRuntime,

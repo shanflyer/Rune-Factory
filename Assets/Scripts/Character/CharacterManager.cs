@@ -116,6 +116,15 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<ChangeEquip>(ChangeEquip);
         GameActionManager.instance.AddListener<ClearEquip>(ClearEquip);
         GameActionManager.instance.AddListener<ChangeCharacter>(ChangeCharacter);
+        GameActionManager.instance.AddListener<DisplayOrHideCharacter>(DisplayOrHideCharacter);
+    }
+    void DisplayOrHideCharacter(DisplayOrHideCharacter displayOrHideCharacter)
+    {
+       var character= GetCharacterForDataId(displayOrHideCharacter.characterId);
+        if(characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
+        {
+            characterRuntimeObj.model.gameObject.SetActive(displayOrHideCharacter.display);
+        }
     }
     async void ChangeCharacter(ChangeCharacter ChangeCharacter)
     {
@@ -742,25 +751,6 @@ public class CharacterManager : Singleton<CharacterManager>
         }
 
         return null;
-    }
-
-    private void CreatPlayer(string characterName)
-    {
-        player = new Player(characterName);
-        player.SetCoordinate(new int3(int2.zero, WorldMapObjManager.instance.displayMap));
-        //player.mapInstance = GameManager.instance.nowMap;
-
-        foreach (var item in GameController.instance.testPlayerItems)
-        {
-            PackageManager.instance.SetItemInPackage(item, player.bag);
-        }
-
-        AddCharacter(player);
-
-        //BehaviorTree behaviorTree = BehaviorManager.Instance.CreatBehaviorTree(GameManager.instance.testTreeData);
-        /*
-        RuntimeObj runtimeObj=await GameRuntimeObjManager.Instance.CreatCharacterRuntimeObj(player);
-        characterRuntionObjs.Add(player, runtimeObj); */
     }
 
     private void CreatPlayer(CharacterSaveData characterSaveData)

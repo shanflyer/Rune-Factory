@@ -71,6 +71,7 @@ public class WorldMapController : MonoBehaviour
             worldName = worldName,
             displayMap = mapInstance
         });
+        /*
         GameActionManager.instance.QueueAction(new CreatCharacter
         {
             characterId = characterId,
@@ -78,7 +79,7 @@ public class WorldMapController : MonoBehaviour
             coordinateX = coordinate.x,
             coordinateY = coordinate.y,
             controller = true
-        });
+        });*/
         GameActionManager.instance.QueueAction(new CreatDefaultNPC());
 
         await UIManager.instance.ShowGamePanel<MainPanel>();

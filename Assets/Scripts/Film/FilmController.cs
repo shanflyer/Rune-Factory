@@ -89,13 +89,13 @@ public class FilmController : Singleton<FilmController>
                     var strs = assetData.pathes[i].Split('/');
                     if (strs.Length>0&&strs[0] == "Camera")
                     {
-                        var path = assetData.pathes[i].Replace(strs[0], "");
+                        var path = assetData.pathes[i].Replace($"{strs[0]}/", "");
                         child = CameraManager.instance.mainCamera.transform.parent.Find(path);
                         if (child)
                         {
                             if (child.gameObject.TryGetComponent(out Animator component))
                             {
-                                playableDirector.SetGenericBinding(sourceObject, playableDirector);
+                                playableDirector.SetGenericBinding(sourceObject, component.gameObject);
                             } 
                         }
                     }

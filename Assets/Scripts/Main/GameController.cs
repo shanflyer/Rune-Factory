@@ -5,6 +5,7 @@ using UnityEngine;
 using Unity.Mathematics; 
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Collections;
+using System.Threading.Tasks;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -76,13 +77,22 @@ public class GameController : MonoBehaviour
         SingletonType.instance.ClearAll();
         instance = null;
     }
-    private void OnEnable()
+    private async void OnEnable()
     {  
         instance = this;
+        GameObject.DontDestroyOnLoad(gameObject);
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController");
         GameObjectCurveController.instance.SetUpDataComponent(this);
-
+        if (Camera.main == null)
+        {
+            var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
+            if (cameraPrefab != null)
+            {
+                var cameraObj = Instantiate(cameraPrefab);
+                GameObject.DontDestroyOnLoad(cameraObj);
+            }
+        }
         var environmentManger = EnvironmentManger.instance;
 
         var gameManager = GameManager.instance;
