@@ -173,26 +173,6 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">Boss_01.png</key>
-            <key type="filename">Boss_02.png</key>
-            <key type="filename">Boss_03.png</key>
-            <key type="filename">Boss_04.png</key>
-            <key type="filename">Boss_05.png</key>
-            <key type="filename">Boss_06.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,1</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>24,24,48,48</rect>
-                <key>scale9Paddings</key>
-                <rect>24,24,48,48</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">Monsters_01.png</key>
             <key type="filename">Monsters_02.png</key>
             <key type="filename">Monsters_03.png</key>
