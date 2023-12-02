@@ -76,7 +76,7 @@ public class FilmController : Singleton<FilmController>
 
                 Object sourceObject = playBindings.Current.sourceObject; 
                 
-                Transform child = playableDirector.transform.Find(assetData.pathes[i]);
+                Transform child =playableDirector.transform.Find(assetData.pathes[i]);
                 if (child != null)
                 {
                     if(child.gameObject.TryGetComponent(out Animator component))
@@ -86,7 +86,24 @@ public class FilmController : Singleton<FilmController>
                 }
                 else
                 {
-                    playableDirector.SetGenericBinding(sourceObject, playableDirector);
+                    var strs = assetData.pathes[i].Split('/');
+                    if (strs.Length>0&&strs[0] == "Camera")
+                    {
+                        var path = assetData.pathes[i].Replace(strs[0], "");
+                        child = CameraManager.instance.mainCamera.transform.parent.Find(path);
+                        if (child)
+                        {
+                            if (child.gameObject.TryGetComponent(out Animator component))
+                            {
+                                playableDirector.SetGenericBinding(sourceObject, playableDirector);
+                            } 
+                        }
+                    }
+                    else
+                    {
+                        playableDirector.SetGenericBinding(sourceObject, playableDirector);
+                    }
+                    
                 }
                  
                 i++;
@@ -211,6 +228,7 @@ public class FilmController : Singleton<FilmController>
             GameObject.Destroy(film.obj);
             nowFilms.Remove(filmName);
         }
+        
     }
 
     public void SetParent(Transform filmParent)

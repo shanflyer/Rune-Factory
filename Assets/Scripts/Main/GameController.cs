@@ -81,6 +81,9 @@ public class GameController : MonoBehaviour
         instance = this;
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController");
+        GameObjectCurveController.instance.SetUpDataComponent(this);
+
+        var environmentManger = EnvironmentManger.instance;
 
         var gameManager = GameManager.instance;
         var gameActionDataManager = GameActionDataManager.instance;
@@ -90,16 +93,13 @@ public class GameController : MonoBehaviour
         var fightManager = FightManager.instance;
         var talkManager= TalkManager.instance;
         var festivalManager = FestivalManager.instance;
-
-        GameObjectCurveController.instance.SetUpDataComponent(this);
-
+        GameTimeManager.instance.ZeroGameTime();
+         
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);
 
         var audio = transform.Find("Audio");
-        AudioController.instance.SetAudioSource(audio.gameObject);
-
-        var environmentManger= EnvironmentManger.instance; 
+        AudioController.instance.SetAudioSource(audio.gameObject); 
     }
   
     public void AddCrystal()
@@ -118,8 +118,9 @@ public class GameController : MonoBehaviour
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         AudioController.instance.PlayAudio(BGM.Town1);
         await UIManager.instance.ShowGamePanel<ZeroPanel>();
-
-       // GameActionManager.instance.AddListener<ZeroWorld>(ZeroWorld);
+         
+        GameTimeManager.instance.SetTime(12, 0);
+        // GameActionManager.instance.AddListener<ZeroWorld>(ZeroWorld);
     }
     private void Update()
     {

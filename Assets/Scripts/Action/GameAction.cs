@@ -18,6 +18,19 @@ public delegate void SetValue(int value);
 public delegate void SetInt3Value(int3 value);
 public delegate void SetResult(bool value);
 
+public struct SetFixedCamera : GameAction
+{
+    public bool fixedCamera;
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        if (parameters.Count > 0)
+        {
+            fixedCamera = bool.Parse(parameters[0].value);
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct RefreshGameSaveData : GameAction
 {
     public SetResult setResult { get; set; }

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -163,6 +164,7 @@ public class GameTime
             environmentLightData.sunPos = new Vector2(dawnEnvironmentData.sunXValue.Evaluate(lightValue),
                 dawnEnvironmentData.sunYValue.Evaluate(lightValue));
             environmentLightData.cloudColor = dawnEnvironmentData.CloudColor.Evaluate(lightValue);
+            environmentLightData.sunValue = 1;
 
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
@@ -199,6 +201,7 @@ public class GameTime
                     sunScale = dayEnvironmentData.sunScaleValue.Evaluate(sunValue),
                     sunPos = new Vector2(dayEnvironmentData.sunXValue.Evaluate(sunValue),
                       dayEnvironmentData.sunYValue.Evaluate(sunValue)), 
+                    sunValue=1
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -232,6 +235,7 @@ public class GameTime
                     sunScale = duskEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(duskEnvironmentData.sunXValue.Evaluate(lightValue),
                       duskEnvironmentData.sunYValue.Evaluate(lightValue)),
+                    sunValue=1
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -266,6 +270,7 @@ public class GameTime
                     sunScale = nightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(nightEnvironmentData.sunXValue.Evaluate(lightValue),
                       nightEnvironmentData.sunYValue.Evaluate(lightValue)),
+                    sunValue=0
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -300,6 +305,7 @@ public class GameTime
                     sunScale = nightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(nightEnvironmentData.sunXValue.Evaluate(lightValue),
                       nightEnvironmentData.sunYValue.Evaluate(lightValue)),
+                    sunValue=0
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -351,11 +357,11 @@ public class GameTime
         TimeInit();
     }
 
-    private void TimeInit()
+    public void TimeInit()
     {
         if (mySecond >= 20)
         {
-            mySecond = 0;
+            mySecond = mySecond%20;
             minute++;
         }
         if (minute >= 60)
@@ -368,7 +374,16 @@ public class GameTime
             date += hour / 24;
             hour = hour % 24;
             GameActionManager.instance.QueueAction(new NewDay());
-
+            if (date <= 15)
+            {
+                float moonOffSet = date / 15.0f;
+                Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
+            }
+            else
+            {
+                float moonOffSet = (30-date) / 15.0f;
+                Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
+            }
         }
         if (date > 30)
         {
@@ -484,7 +499,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public override void Init()
     {
         base.Init();
-        gameDates.Init(120);
+        gameDates.Init(120); 
+        GameActionManager.instance.AddListener<LerpGameTime>(LerpGameTime);
        // CreatData();
     }
 
@@ -495,9 +511,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
             nowGameTime = new GameTime
             {
                 Season = Season.春,
-                hour = 6
+                hour = 12
             };
-            StartTimeRun();
+            nowGameTime.SetTime(12, 0);
+           // StartTimeRun();
         } 
     }
 
@@ -556,13 +573,17 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
     public void StartTimeRun()
     {
-        TimeRunIEnumerator = TimeRun();
-        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(TimeRunIEnumerator);
+        if (GameObjectCurveController.instance.UpDataComponent)
+        {
+            TimeRunIEnumerator = TimeRun();
+            GameObjectCurveController.instance.UpDataComponent.StartCoroutine(TimeRunIEnumerator);
+        }
+       
     }
 
     public void StopTimeRun()
     {
-        if (TimeRunIEnumerator != null)
+        if (TimeRunIEnumerator != null&& GameObjectCurveController.instance.UpDataComponent)
         {
             GameObjectCurveController.instance.UpDataComponent.StopCoroutine(TimeRunIEnumerator);
         }
@@ -572,6 +593,29 @@ public class GameTimeManager : Singleton<GameTimeManager>
     {
         nowGameTime.minute = 0;
         nowGameTime.AddDate();
+    }
+
+    void LerpGameTime(LerpGameTime lerpGameTime)
+    {
+        StopTimeRun();
+        var lerpTimeIEnumerator = LerpTime(lerpGameTime.targetHour, lerpGameTime.targetMinute, lerpGameTime.totalTime);
+        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
+    }
+    private IEnumerator LerpTime(int targetHour,int targetMinue,float totalTime)
+    {
+        int startValue = (Hour * 60 + Minute) * 20;
+        int endValue= (targetHour * 60 + targetMinue) * 20;
+        int addValue =(int)math.round((endValue - startValue) / totalTime * UnityEngine.Time.fixedDeltaTime);
+        float timeValue = 0;
+        while (timeValue<totalTime)
+        {
+            timeValue += UnityEngine.Time.deltaTime;
+            nowGameTime.mySecond += addValue;
+            nowGameTime.TimeInit();
+            //Debug.Log($"Time:{timeValue}-hour:{nowGameTime.hour}-minute:{nowGameTime.minute}--second:{nowGameTime.mySecond}");
+
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     private IEnumerator TimeRun()

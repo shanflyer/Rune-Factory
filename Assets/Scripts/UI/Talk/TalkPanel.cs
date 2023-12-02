@@ -155,6 +155,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     rightNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
                     leftHead.color = Color.white;
                     leftHead.sprite = talkerIcon;
+                    leftHead.SetNativeSize();
                     rightHead.color = new Color(0.5f, 0.5f, 0.5f);
                     leftHead.enabled = true;
                     rightHead.enabled= !talkData.clearTalkIcon;
@@ -166,6 +167,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     rightNameBg.gameObject.SetActive(true);
                     rightHead.color = Color.white;
                     rightHead.sprite = talkerIcon;
+                    rightHead.SetNativeSize();
                     leftHead.color = new Color(0.5f, 0.5f, 0.5f);
                     rightHead.enabled = true;
                     leftHead.enabled = !talkData.clearTalkIcon;

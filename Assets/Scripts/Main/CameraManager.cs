@@ -22,10 +22,25 @@ public class CameraManager : Singleton<CameraManager>
         mixingCamera = mainCamera.transform.parent.GetComponentInChildren<CinemachineMixingCamera>();
         followCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[0];
         fixedCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[1];
+
+        GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
     }
     public void SetFollowTarget(Transform target)
     {
         followCamera.Follow = target;
         followCamera.m_Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
+    }
+    public void SetFixedCamera(SetFixedCamera setFixedCamera)
+    {
+        if (setFixedCamera.fixedCamera)
+        {
+            mixingCamera.SetWeight(0, 0);
+            mixingCamera.SetWeight(1, 1);
+        }
+        else
+        {
+            mixingCamera.SetWeight(1, 1);
+            mixingCamera.SetWeight(0, 0);
+        }
     }
 }

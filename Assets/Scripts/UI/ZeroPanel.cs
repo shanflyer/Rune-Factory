@@ -66,8 +66,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         titleIcon.sprite = sprite;
     }
     async void StartGame()
-    {
-        GameTimeManager.instance.ZeroGameTime();
+    { 
         AudioController.instance.PlayAudio(SE.click); 
         Close();
         PlayFilm playFilm = new PlayFilm
