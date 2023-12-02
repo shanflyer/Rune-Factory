@@ -10,10 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
-  m_Name: "\u9500\u6BC1\u5F00\u573A\u7535\u5F71"
+  m_Name: "\u7B49\u5F854s\u52A0\u8F7D\u5F00\u59CB"
   m_EditorClassIdentifier: 
-  id: 30
-  typeName: StopFilm
+  id: 0
+  typeName: WaitAction
   _parameters:
-  - value: "\u89D2\u8272\u9009\u62E9"
-    parameters: []
+  - value: 5000
+    parameters:
+    - value: CreatDefaultNPC
+      parameters: []
+    - value: EnterChapter
+      parameters: []
