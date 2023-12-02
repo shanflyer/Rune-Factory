@@ -6865,8 +6865,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.14264995, y: -0.26250002, z: 0}
-    m_Extent: {x: 1.99635, y: 1.2484, z: 0}
+    m_Center: {x: 0.15380001, y: -0.27055, z: 0}
+    m_Extent: {x: 2.0032, y: 1.24555, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -15578,7 +15578,7 @@ Transform:
   m_GameObject: {fileID: 5666710481718913893}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.079, y: 2.239, z: 0}
+  m_LocalPosition: {x: 0.079, y: 2.239, z: 190}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16232,6 +16232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2630910840365956160}
   - component: {fileID: 6252757526484515113}
+  - component: {fileID: 5634748597963252524}
   m_Layer: 0
   m_Name: Room0
   m_TagString: Untagged
@@ -16269,6 +16270,57 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!60 &5634748597963252524
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7583086924174512326}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 3.4316058, y: 4.95836}
+      - {x: -3.5707006, y: 4.95836}
+      - {x: -3.570701, y: -2.971314}
+      - {x: 3.431606, y: -2.971314}
+  m_UseDelaunayMesh: 0
 --- !u!1 &8239083259634060870
 GameObject:
   m_ObjectHideFlags: 0
@@ -16295,7 +16347,7 @@ Transform:
   m_GameObject: {fileID: 8239083259634060870}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.476, z: 180}
+  m_LocalPosition: {x: 0, y: -0.476, z: 380}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
