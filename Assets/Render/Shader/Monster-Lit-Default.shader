@@ -45,8 +45,6 @@ Shader "MyGame/Monster-Lit-Default"
             SAMPLER(sampler_MainTex);
             TEXTURE2D(_MaskTex);
             SAMPLER(sampler_MaskTex);
-            TEXTURE2D(_MyMaskTex);
-            SAMPLER(sampler_MyMaskTex);
         ENDHLSL
 
         Pass
@@ -132,7 +130,6 @@ Shader "MyGame/Monster-Lit-Default"
                 const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
 
-                const half4 myMask = SAMPLE_TEXTURE2D(_MyMaskTex, sampler_MyMaskTex, i.uv);
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 
@@ -141,7 +138,7 @@ Shader "MyGame/Monster-Lit-Default"
 
                 half4 result=CombinedShapeLightShared(surfaceData, inputData);
                 float noise=1;
-                Unity_SimpleNoise_float(myMask.xy,_NoiseValue,noise);
+                Unity_SimpleNoise_float(i.lightingUV,_NoiseValue,noise);
                 result.a*=step(noise,_NoiseAlpha);
                 result.xyz=lerp(result.xyz,_ForceColor.xyz,_ForceColor.a);
   

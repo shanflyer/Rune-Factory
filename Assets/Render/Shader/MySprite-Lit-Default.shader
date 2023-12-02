@@ -71,6 +71,7 @@ Shader "MySprite-Lit-Default"
 
          half4 GlobalColor; 
          half2 LightDirection;
+         half _ShadowValue;
         CBUFFER_START(UnityPerMaterial)
             half4 _MainTex_ST;
             half4 _NormalMap_ST;  // Is this the right way to do this?

@@ -5,6 +5,8 @@ Shader "Sun"
         _MainTex("Diffuse", 2D) = "white" {}
         _MaskTex("Mask", 2D) = "black" {}
         _MoonMask("MoonMask", 2D) = "white" {}
+
+       // _moonOffSet("MoonOffSet",float)=0
    
         [HDR]_Color("Tint", Color) = (1,1,1,1)
         _RemapMinValue("RemapMinValue",float)=0
@@ -30,6 +32,8 @@ Shader "Sun"
 
          half4 GlobalColor; 
          half4 _SunColor; 
+         int _Sun;
+         float _moonOffSet;
         CBUFFER_START(UnityPerMaterial)
             half _RemapMinValue;
             half _RemapMaxValue;
@@ -115,13 +119,18 @@ Shader "Sun"
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
                 //const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+
+                Unity_Remap_float(_moonOffSet,float2(0,0.7),float2(0,1),_moonOffSet);
+                if(_Sun==1){
+                     _moonOffSet=1;
+                }
                
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 half maskR=mask.r;
                 Unity_Remap_float(maskR,float2(_RemapMinValue,_RemapMaxValue),float2(0,1),maskR);
                 maskR=clamp(maskR,0,1);
 
-                half4 mask1 = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv+float2(1,1));
+                half4 mask1 = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv+float2(-_moonOffSet,-_moonOffSet));
                 half maskR1=mask1.r;
                 Unity_Remap_float(maskR1,float2(_RemapMinValue,_RemapMaxValue),float2(0,1),maskR1);
                 maskR1=clamp(maskR1,0,1); 
@@ -131,8 +140,16 @@ Shader "Sun"
                 Unity_Remap_float(i.uv.x,float2(1-_ScaleValue,_ScaleValue),float2(0,1),i.uv.x);
                 Unity_Remap_float(i.uv.y,float2(1-_ScaleValue,_ScaleValue),float2(0,1),i.uv.y);  
 
-                half4 moonMask=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv);  
-                half4 moonMask1=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv+float2(1,1)); 
+                half4 moonMask,moonMask1;
+
+                if(_Sun==1){
+                     moonMask=SAMPLE_TEXTURE2D(_MainTex, sampler_MoonMask, i.uv);  
+                     moonMask1=SAMPLE_TEXTURE2D(_MainTex, sampler_MoonMask, i.uv+float2(-_moonOffSet,-_moonOffSet));                      
+                }else{
+                     moonMask=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv);  
+                     moonMask1=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv+float2(-_moonOffSet,-_moonOffSet)); 
+                }
+                
 
                 half3 moonColor=moonMask.xyz*(moonMask.a-moonMask1.a);
                 moonColor+=moonMask.xyz*(1-moonMask.a+moonMask1.a)*0.3;

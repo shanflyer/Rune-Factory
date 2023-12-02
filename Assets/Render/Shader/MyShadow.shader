@@ -46,6 +46,7 @@ Shader "MyShadow"
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
             half2 LightDirection;
+            half _ShadowValue;
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             CBUFFER_START( UnityPerMaterial )
@@ -76,6 +77,7 @@ Shader "MyShadow"
                 o.uv2=attributes.uv2;
                 o.color=attributes.color;
                 o.color.xyz*=1-o.uv.x;
+                o.color.xyz*=_ShadowValue;
                 return o;
             }
 
