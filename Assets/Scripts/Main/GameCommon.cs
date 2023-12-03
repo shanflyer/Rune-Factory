@@ -153,6 +153,38 @@ public class GameCommon
     public const string characterTriggerRenferenceName = "Entity";
     public const string triggerRenferenceName = "Reference";
 
+    public static Vector2 GetScreenResolution()
+    {
+        Vector2 gameViewSize;
+        //使用宏编译主要是为了打包的时候不会报错
+#if UNITY_EDITOR
+        gameViewSize = GameViewSize();
+#else
+        gameViewSize = new Vector2(Screen.currentResolution.width,
+            Screen.currentResolution.height) ;
+#endif
+
+        return gameViewSize;
+    }
+
+#if UNITY_EDITOR
+    static Vector2 GameViewSize()
+    {
+        var mouseOverWindow = UnityEditor.EditorWindow.mouseOverWindow;
+        System.Reflection.Assembly assembly = typeof(UnityEditor.EditorWindow).Assembly;
+        System.Type type = assembly.GetType("UnityEditor.PlayModeView");
+
+        Vector2 size = (Vector2)type.GetMethod(
+            "GetMainPlayModeViewTargetSize",
+            System.Reflection.BindingFlags.NonPublic |
+            System.Reflection.BindingFlags.Static
+        ).Invoke(mouseOverWindow, null);
+
+        return size;
+    }
+
+#endif 
+
     public static Vector2 SetImageSize(Sprite sprite,Vector2 size)
     {
         Vector2 spriteSize = sprite.rect.size;

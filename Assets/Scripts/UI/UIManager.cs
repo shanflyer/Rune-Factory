@@ -9,12 +9,17 @@ public class UIManager:Singleton<UIManager>
     private Dictionary<Type, List<BaseReference>> mulitPanels = new Dictionary<Type, List<BaseReference>>();
 
     private Transform canvasParent;
+    private CanvasGroup canvasGroup;
     //private Canvas canvas; 
     public void InitClosePanelParent(BaseReference baseReference)
     {
         baseReference.transform.parent = canvasParent;
     }
-    public void SetParent(Transform parent) { canvasParent = parent; }
+    public void SetParent(Transform parent) 
+    { 
+        canvasParent = parent;
+        canvasGroup = parent.GetComponent<CanvasGroup>();
+    }
     public override void Init()
     {
         base.Init();
@@ -25,8 +30,9 @@ public class UIManager:Singleton<UIManager>
        // canvas = UnityEngine.Object.FindAnyObjectByType<Canvas>();
         GameActionManager.instance.AddListener<ClosePanelAction>(ClosePanel);
         GameActionManager.instance.AddListener<OpenPanelAction>(OpenPanel);
-         
+        //GameActionManager.instance.AddListener<ShowPanel>(ShowPanel);
     }
+    
     public bool GamePanelIsShow<T>() where T : BaseReference
     {
         if (gamePanels.TryGetValue(typeof(T), out var gamePanel)&&gamePanel!=null)

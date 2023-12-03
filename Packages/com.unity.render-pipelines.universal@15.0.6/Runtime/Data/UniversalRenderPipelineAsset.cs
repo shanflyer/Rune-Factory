@@ -437,6 +437,7 @@ namespace UnityEngine.Rendering.Universal
         [Obsolete("Use m_RendererDataList instead.")]
         [SerializeField] internal ScriptableRendererData m_RendererData = null;
 
+        public ScriptableRendererData[] RendererDataList => m_RendererDataList;
         // Renderer settings
         [SerializeField] internal ScriptableRendererData[] m_RendererDataList = new ScriptableRendererData[1];
         [SerializeField] internal int m_DefaultRendererIndex = 0;

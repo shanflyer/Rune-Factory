@@ -82,7 +82,7 @@ public class WorldMapController : MonoBehaviour
         });*/
         GameActionManager.instance.QueueAction(new CreatDefaultNPC());
 
-        await UIManager.instance.ShowGamePanel<MainPanel>();
+        //await UIManager.instance.ShowGamePanel<MainPanel>();
         InputManager.instance.SwitchInputMap(false);
         GameActionManager.instance.QueueAction(new InitInputAction());
 

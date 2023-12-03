@@ -152,7 +152,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                 case TalkerDir.左:
                     leftNameValue.text = talkerName;
                     leftNameBg.gameObject.SetActive(true);
-                    rightNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
+                    rightNameBg.gameObject.SetActive(false);
                     leftHead.color = Color.white;
                     leftHead.sprite = talkerIcon;
                     leftHead.SetNativeSize();
@@ -163,7 +163,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
                 case TalkerDir.右:
                     rightNameValue.text = talkerName;
-                    leftNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
+                    leftNameBg.gameObject.SetActive(false);
                     rightNameBg.gameObject.SetActive(true);
                     rightHead.color = Color.white;
                     rightHead.sprite = talkerIcon;
@@ -174,8 +174,8 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     break;
 
                 case TalkerDir.无:
-                    leftNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
-                    rightNameBg.gameObject.SetActive(!talkData.clearTalkIcon);
+                    leftNameBg.gameObject.SetActive(false);
+                    rightNameBg.gameObject.SetActive(false);
                     rightHead.enabled = !talkData.clearTalkIcon;
                     leftHead.enabled = !talkData.clearTalkIcon;
                     rightHead.color = new Color(0.5f, 0.5f, 0.5f);

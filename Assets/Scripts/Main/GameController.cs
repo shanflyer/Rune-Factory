@@ -94,7 +94,7 @@ public class GameController : MonoBehaviour
             }
         }
         var environmentManger = EnvironmentManger.instance;
-
+        var gameVolumeManager = GameVolumeManager.instance;
         var gameManager = GameManager.instance;
         var gameActionDataManager = GameActionDataManager.instance;
         var gameRandom = GameRandom.instance;
@@ -136,65 +136,17 @@ public class GameController : MonoBehaviour
     {
         SingletonType.instance.UpData(); 
     }
-
+#if UNITY_EDITOR
+    public Transform testObj;
     public void Test()
     {
-       NativeList<TriggerArea> list = new NativeList<TriggerArea>(2, Allocator.Temp);
-        TriggerArea triggerArea = new TriggerArea
-        {
-            cells = new UnsafeHashSet<int2>(2, Allocator.Temp)
-        };
-        triggerArea.cells.Add(new int2(0, 0));
-        list.Add(triggerArea);
-
-        var test = list[0];
-        foreach(var v in test.cells)
-        {
-            Debug.Log(v);
-        }
-
-        TriggerArea triggerArea1 = new TriggerArea
-        {
-            cells = new UnsafeHashSet<int2>(2, Allocator.Temp)
-        };
-        triggerArea1.cells.Add(new int2(1, 1));
-        list.Add(triggerArea1);
-
-        var test1 = list[0];
-        foreach (var v in test1.cells)
-        {
-            Debug.Log(v);
-        }
-
-        TriggerArea triggerArea2 = new TriggerArea
-        {
-            cells = new UnsafeHashSet<int2>(2, Allocator.Temp)
-        };
-        triggerArea2.cells.Add(new int2(2, 2));
-        list.Add(triggerArea2);
-
-        var test2 = list[0];
-        foreach (var v in test2.cells)
-        {
-            Debug.Log(v);
-        }
-
-        list.RemoveAt(1);
-        var test3 = list[0];
-        foreach (var v in test3.cells)
-        {
-            Debug.Log(v);
-        }
-        list.RemoveAt(0);
-        var test4 = list[0];
-        foreach (var v in test4.cells)
-        {
-            Debug.Log(v);
-        }
-        list.Dispose();
+        Vector2 pos = Camera.main.WorldToScreenPoint(testObj.position);
+        Vector2 screenSize = GameCommon.GetScreenResolution();
+        Vector2 screenValue = new Vector2(pos.x / screenSize.x, pos.y / screenSize.y);
+        Debug.Log($"pos:{pos}--ScreenSize:{screenSize}--ScreenValue:{screenValue}");
     }
-    
-    
+#endif 
+
 }
  
 

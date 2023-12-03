@@ -94,8 +94,7 @@ public class FullScreenPassRendererFeature : ScriptableRendererFeature
     protected override void Dispose(bool disposing)
     {
         fullScreenPass.Dispose();
-    }
-
+    } 
     class FullScreenRenderPass : ScriptableRenderPass
     {
         private static Material s_PassMaterial;

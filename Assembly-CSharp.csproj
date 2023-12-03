@@ -406,6 +406,7 @@
     <Compile Include="Assets\Scripts\Map\WorldMapData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetXYZ.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsMouseUp.cs" />
+    <Compile Include="Assets\Scripts\Action\GameVolumeAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetButton.cs" />
     <Compile Include="Assets\Scripts\UI\CharacterSelectInformationPanel.cs" />
     <Compile Include="Assets\Scripts\HeritageAction.cs" />
@@ -458,6 +459,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedCollision.cs" />
     <Compile Include="Assets\Scripts\UI\Talk\NPCFunctionReference.cs" />
     <Compile Include="Assets\Scripts\Audio\AudioSource.cs" />
+    <Compile Include="Assets\Scripts\Main\GameVolumeManager.cs" />
     <Compile Include="Assets\Scripts\Main\CameraManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Operator.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSize.cs" />
@@ -810,6 +812,7 @@
     <Compile Include="Assets\Scripts\Behavior\Map\RuntimeObjMoveEvent.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\BoolComparison.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetTime.cs" />
+    <Compile Include="Assets\Scripts\Action\UIAction.cs" />
     <Compile Include="Assets\Scripts\Main\GameSourceManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterPropertyEvent.cs" />
     <Compile Include="Assets\Scripts\Data\ItemAnimationData.cs" />
@@ -955,6 +958,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\Render\Shader\ScreenCycle.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll" />
     <None Include="Assets\Render\Shader\UnityAction.cginc" />

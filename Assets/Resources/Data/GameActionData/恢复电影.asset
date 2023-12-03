@@ -21,7 +21,7 @@ MonoBehaviour:
       parameters: []
   - value: WaitAction
     parameters:
-    - value: 3000
+    - value: 5000
       parameters:
       - value: PlayFilm
         parameters:
@@ -47,11 +47,27 @@ MonoBehaviour:
           parameters: []
         - value: EndFirstFight
           parameters: []
-    - value: 5
+    - value: 7
       parameters:
       - value: PlayFilm
         parameters:
         - value: "\u89D2\u8272\u9009\u62E9"
           parameters: []
         - value: EndFirstFight
+          parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 6000
+      parameters:
+      - value: LerpScreenCycleValue
+        parameters:
+        - value: 0
+          parameters: []
+        - value: 1
+          parameters: []
+        - value: 0.6
+          parameters: []
+        - value: 1.8
+          parameters: []
+        - value: -1
           parameters: []
