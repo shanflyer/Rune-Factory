@@ -393,7 +393,7 @@ namespace UnityEditor.Rendering.Universal
                 EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(m_NormalMapZDistance, Styles.generalNormalMapZDistance);
                 if (EditorGUI.EndChangeCheck())
-                    m_NormalMapZDistance.floatValue = Mathf.Max(0.0f, m_NormalMapZDistance.floatValue);
+                    m_NormalMapZDistance.floatValue = m_NormalMapZDistance.floatValue;
 
                 EditorGUI.EndDisabledGroup();
             }

@@ -38,9 +38,8 @@
             output.positionWS = worldSpacePos;
 
          #define Directional_NORMALS_LIGHTING(output, lightPosition, lightZDistance)\
-            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w);\ 
-            output.lightDirection.xyz=lightPosition.xyz;\ 
-            output.lightDirection.w = 0;
+            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w); \
+            output.positionWS = worldSpacePos;
 
         #define APPLY_NORMALS_LIGHTING(input, lightColor, lightPosition, lightZDistance)\
             half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, input.screenUV);\
