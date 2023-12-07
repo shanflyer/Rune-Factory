@@ -148,7 +148,7 @@ public class GameTime
             environmentLightData.globalIntensity = dawnEnvironmentData.GlobalIntensity.Evaluate(lightValue);
             environmentLightData.color = dawnEnvironmentData.Color.Evaluate(lightValue);
             environmentLightData.direction = new Vector3(dawnEnvironmentData.directionXValue.Evaluate(lightValue),
-                          dawnEnvironmentData.directionYValue.Evaluate(lightValue), 120);
+                          dawnEnvironmentData.directionYValue.Evaluate(lightValue), dawnEnvironmentData.directionZValue.Evaluate(lightValue));
             environmentLightData.intensity = dawnEnvironmentData.intensity.Evaluate(lightValue);
             environmentLightData.shadowValue = dawnEnvironmentData.shadowValue.Evaluate(lightValue);
 
@@ -189,7 +189,7 @@ public class GameTime
                     globalIntensity = dayEnvironmentData.GlobalIntensity.Evaluate(sunValue),
                     color = dayEnvironmentData.Color.Evaluate(sunValue),
                     direction = new Vector3(dayEnvironmentData.directionXValue.Evaluate(sunValue),
-                    dayEnvironmentData.directionYValue.Evaluate(sunValue), 120),
+                    dayEnvironmentData.directionYValue.Evaluate(sunValue), dayEnvironmentData.directionZValue.Evaluate(sunValue)),
                     intensity = dayEnvironmentData.intensity.Evaluate(sunValue),
                     shadowValue = dayEnvironmentData.shadowValue.Evaluate(sunValue),
 
@@ -223,7 +223,7 @@ public class GameTime
                     globalIntensity = duskEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = duskEnvironmentData.Color.Evaluate(lightValue),
                     direction = new Vector3(duskEnvironmentData.directionXValue.Evaluate(lightValue),
-                               duskEnvironmentData.directionYValue.Evaluate(lightValue), 120),
+                               duskEnvironmentData.directionYValue.Evaluate(lightValue), duskEnvironmentData.directionZValue.Evaluate(lightValue)),
                     intensity = duskEnvironmentData.intensity.Evaluate(lightValue),
                     shadowValue = duskEnvironmentData.shadowValue.Evaluate(lightValue),
 
@@ -258,7 +258,7 @@ public class GameTime
                     globalIntensity = nightEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = nightEnvironmentData.Color.Evaluate(lightValue),
                     direction = new Vector3(nightEnvironmentData.directionXValue.Evaluate(lightValue),
-                               nightEnvironmentData.directionYValue.Evaluate(lightValue), 120),
+                               nightEnvironmentData.directionYValue.Evaluate(lightValue), nightEnvironmentData.directionZValue.Evaluate(lightValue)),
                     intensity = nightEnvironmentData.intensity.Evaluate(lightValue),
                     shadowValue = nightEnvironmentData.shadowValue.Evaluate(lightValue),
 
@@ -293,7 +293,7 @@ public class GameTime
                     globalIntensity = nightEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = nightEnvironmentData.Color.Evaluate(lightValue),
                     direction = new Vector3(nightEnvironmentData.directionXValue.Evaluate(lightValue),
-                               nightEnvironmentData.directionYValue.Evaluate(lightValue), 120),
+                               nightEnvironmentData.directionYValue.Evaluate(lightValue), nightEnvironmentData.directionZValue.Evaluate(lightValue)),
                     intensity = nightEnvironmentData.intensity.Evaluate(lightValue),
                     shadowValue = nightEnvironmentData.shadowValue.Evaluate(lightValue),
 

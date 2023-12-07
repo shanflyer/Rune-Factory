@@ -1,7 +1,8 @@
-using System;
+锘縰sing System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +15,7 @@ public enum sxx
 }
 public class SourceTool : MonoBehaviour
 {
-    [MenuItem("Assets/音效工具/刷新音效资源数据")]
+    [MenuItem("Assets/闊虫晥宸ュ叿/鍒锋柊闊虫晥璧勬簮鏁版嵁")]
     public static void RefreshAudioSourceEnum()
     {
         Dictionary<string, List<string>> sources = new Dictionary<string, List<string>>();
@@ -101,7 +102,7 @@ public class SourceTool : MonoBehaviour
     }
     
 
-    [MenuItem("Assets/数据/引用数据刷新")]
+    [MenuItem("Assets/鏁版嵁/寮曠敤鏁版嵁鍒锋柊")]
     public static void SetGameDataSerializeObj()
     {
         Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
@@ -128,5 +129,128 @@ public class SourceTool : MonoBehaviour
         {
             AssetDatabase.StopAssetEditing();
         }
+    }
+
+    [MenuItem("Assets/杈撳嚭绮剧伒璧勬簮")]
+    public static void OutSpriteSource()
+    {
+
+        foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+        {
+            var path = AssetDatabase.GetAssetPath(obj);
+            if (obj)
+            {
+                var strs = path.Split('.');
+                if (strs[strs.Length - 1] == "png")
+                {
+                    OutSprite(path);
+                }
+            }
+
+            if (string.IsNullOrEmpty(path))
+                continue; 
+        }
+    }
+
+    [MenuItem("Assets/杈撳嚭绮剧伒璧勬簮X2")]
+    public static void OutSpriteSource2()
+    {
+
+        foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+        {
+            var path = AssetDatabase.GetAssetPath(obj);
+            if (obj)
+            {
+                var strs = path.Split('.');
+                if (strs[strs.Length - 1] == "png")
+                {
+                    OutSprite(path,2);
+                }
+            }
+
+            if (string.IsNullOrEmpty(path))
+                continue;
+        }
+    }
+    static void OutSprite(string path,int scale=1)
+    {
+        var sources = AssetDatabase.LoadAllAssetsAtPath(path);
+        foreach (var source in sources)
+        {
+            if (source.GetType().Name == "Sprite")
+            {
+                Sprite sprite = (Sprite)source;
+                SaveTexture(sprite,scale); 
+            }
+        }
+    }
+
+    static void SaveTexture(Sprite sprite, int scale = 1)
+    {
+        int width = Mathf.RoundToInt(sprite.rect.width*2);
+        int height = Mathf.RoundToInt(sprite.rect.height * 2);
+        Texture2D texture2D = new Texture2D(width, height);
+        
+
+
+        int x0 = 0;
+        int y0 = 0;
+        int x1 = width;
+        int y1 = height;
+
+        List<Color> defaultColors = new List<Color>();
+        for (int i = 0; i < x1 * y1; i++)
+        {
+            defaultColors.Add(new Color(0, 0, 0, 0));
+        }
+        texture2D.SetPixels(defaultColors.ToArray());
+
+        Color[] SpriteColors = sprite.texture.GetPixels(Mathf.RoundToInt(sprite.rect.x), Mathf.RoundToInt(sprite.rect.y),
+            Mathf.RoundToInt(sprite.rect.width), Mathf.RoundToInt(sprite.rect.height));
+        //Color[] SpriteColors = sprite.texture.GetPixels(4, 4, 18, 52);
+
+        Color[] outColor=new Color[SpriteColors.Length*scale*scale];
+        
+        for(int i = 0; i < SpriteColors.Length; i++)
+        {
+            int raw = i % Mathf.RoundToInt(sprite.rect.width)*scale;
+            int col=i/ Mathf.RoundToInt(sprite.rect.width)*scale;
+            
+
+            for(int j = 0; j < scale; j++)
+            {
+                int index=col*width+j+raw;
+                outColor[index] = SpriteColors[i];
+                int index1=col*width+width+j+raw;
+                outColor[index1] = SpriteColors[i];
+            }
+        }
+         
+        texture2D.SetPixels(x0, y0, width, height, outColor.ToArray());
+
+        string dir = "OutTexture";
+
+
+        SaveFileTexture(dir, texture2D, sprite.name);
+    }
+
+    static async void SaveFileTexture(string outPath, Texture2D texture, string name)
+    {
+        byte[] dataBytes = texture.EncodeToPNG();
+        if (!Directory.Exists(outPath))
+        {
+            Directory.CreateDirectory(outPath);
+        }
+        string strSaveFile = outPath + "/" + name + ".png";
+        if (File.Exists(strSaveFile))
+        {
+            File.Delete(strSaveFile);
+        }
+        using (FileStream fs = File.Open(strSaveFile, FileMode.CreateNew))
+        {
+            fs.Seek(0, SeekOrigin.End);
+            await fs.WriteAsync(dataBytes, 0, dataBytes.Length);
+        }
+
     }
 }

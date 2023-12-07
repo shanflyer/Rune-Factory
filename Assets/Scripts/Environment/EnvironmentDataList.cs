@@ -33,7 +33,7 @@ public struct EnvironmentData : IGameData
     public AnimationCurve SkyHalfValue;
     public AnimationCurve GlobalIntensity;
     public AnimationCurve shadowValue;
-    public AnimationCurve directionXValue, directionYValue, intensity;
+    public AnimationCurve directionXValue, directionYValue, directionZValue, intensity;
     public AnimationCurve sunXValue, sunYValue,sunScaleValue;
     public Gradient sunColor;
     public AnimationCurve sunColorValue;

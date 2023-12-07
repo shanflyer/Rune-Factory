@@ -425,8 +425,9 @@ Shader "MySprite-Lit-Default"
                 half3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv));
 
                 // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
-
-                return NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
+                half4 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
+                result.z=0;
+                return result;
             }
             ENDHLSL
         }
