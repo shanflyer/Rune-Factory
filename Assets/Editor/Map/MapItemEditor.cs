@@ -200,6 +200,8 @@ public class MapItemEditor : MyEditor
         ground.enabled = false;
         collider.ClearAllTiles();
         trigger.ClearAllTiles();
+        ground.ClearAllTiles();
+        ground.RefreshAllTiles();
         collider.RefreshAllTiles();
         trigger.RefreshAllTiles();
 

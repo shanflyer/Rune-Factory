@@ -101,17 +101,17 @@ public class GameCommon
 
     public const int DefaultOutItemId = -1;
     public const float PromptTime= 2.0f;
-    public const float cellWidth = 0.16f, cellHigh = 0.16f;
-    public const float cellSize = 0.08f;
-    public const float oneDividCellWidth = 6.25f, oneDividCellHigh =6.25f;
-    public const float slantValue = 0.707f;
+    public const float cellWidth = 0.08f, cellHigh = 0.08f;
+    public const float cellSize = 0.04f;
+    public const float oneDividCellWidth = 12.5f, oneDividCellHigh =12.5f;
+    public const float slantValue = 0.303f;
 
 
     public const int randomInnerGroupMax = 5;
 
     public const int worldMapSizeX = 80;
     public const int worldMapSizeY = 45;
-    public const float worldMapTileSize = 0.16f;
+    public const float worldMapTileSize = 0.08f;
     
 
     public const float hightMin = -0.5f;
