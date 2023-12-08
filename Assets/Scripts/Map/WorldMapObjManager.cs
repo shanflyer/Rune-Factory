@@ -134,6 +134,26 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         }
         return default(RuntimeObj);
     }
+    async void SetMapOverrideEnvirmentData(int mapId)
+    {
+        MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(mapId);
+        if (string.IsNullOrEmpty(mapRoomData.dawnEnvironmentDataName))
+        {
+
+            SetMapOverrideEnvironment setMapOverrideEnvironment = new SetMapOverrideEnvironment
+            {
+                dawnEnvironmentDataName = mapRoomData.dawnEnvironmentDataName,
+                dayEnvironmentDataName = mapRoomData.dayEnvironmentDataName,
+                duskEnvironmentDataName = mapRoomData.duskEnvironmentDataName,
+                nightEnvironmentDataName = mapRoomData.nightEnvironmentDataName
+            };
+            GameActionManager.instance.QueueAction(setMapOverrideEnvironment,true); 
+        }
+        else
+        {
+            GameActionManager.instance.QueueAction(new ClearOverrideEnvironment(), true);
+        }
+    }
     public async Task DisplayMap(int mapId)
     {
         displayMap = mapId;

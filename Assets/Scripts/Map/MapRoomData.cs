@@ -24,6 +24,7 @@ public class MapRoomData : ScriptableObject,IGameData
     public List<MapItem> mapItems = new List<MapItem>();
     public int2 startCoordinate, endCoordinate;
     public GameObject mapObj;
+    public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
 
     public bool CheckBoundary(int2 coordinate)
     {
