@@ -1,13 +1,10 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityLight;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [System.Serializable]
 public enum Week
@@ -81,15 +78,16 @@ public class GameTime
 
     private SeasonData SeasonData;
     private EnvironmentData dayEnvironmentData, nightEnvironmentData;
-    private EnvironmentData dawnEnvironmentData, duskEnvironmentData; 
+    private EnvironmentData dawnEnvironmentData, duskEnvironmentData;
     private EnvironmentData overrideDayEnvironmentData, overrideNightEnvironmentData;
     private EnvironmentData overrideDawnEnvironmentData, overrideDuskEnvironmentData;
     private bool overrideEnvironment;
 
     private EnvironmentData DayEnvironmentData => overrideEnvironment ? overrideDayEnvironmentData : dayEnvironmentData;
-    private EnvironmentData NightEnvironmentData => overrideEnvironment?overrideNightEnvironmentData:nightEnvironmentData;
+    private EnvironmentData NightEnvironmentData => overrideEnvironment ? overrideNightEnvironmentData : nightEnvironmentData;
     private EnvironmentData DawnEnvironmentData => overrideEnvironment ? overrideDawnEnvironmentData : dawnEnvironmentData;
-    private EnvironmentData DuskEnvironmentData=>overrideEnvironment?overrideDuskEnvironmentData:duskEnvironmentData;
+    private EnvironmentData DuskEnvironmentData => overrideEnvironment ? overrideDuskEnvironmentData : duskEnvironmentData;
+
     /// <summary>
     /// 白天时间
     /// </summary>
@@ -108,14 +106,15 @@ public class GameTime
     private int totalSunMinute, totalMoonMinute;
     private bool night = false;
 
-    public void SetTime(int hour,int minute)
+    public void SetTime(int hour, int minute)
     {
-        if(hour>0)
+        if (hour > 0)
             this.hour = hour;
         if (minute > 0)
             this.minute = minute;
         TimeInit();
     }
+
     public async void SetMapOverrideEnvironment(string dayEnvironmentDataName,
         string duskEnvironmentDataName, string dawnEnvironmentDataName, string nightEnvironmentDataName)
     {
@@ -125,10 +124,12 @@ public class GameTime
         overrideNightEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(nightEnvironmentDataName);
         overrideEnvironment = true;
     }
+
     public void ClearOverrideEnvironment()
     {
         overrideEnvironment = false;
     }
+
     private async void InitSeasonData()
     {
         SeasonData = await GameDataManager.instance.GetAsyncData<SeasonData>(season.ToString());
@@ -157,9 +158,12 @@ public class GameTime
             return;
         int nowMinute = hour * 60 + minute;
 
+        float timeValue = (nowMinute + mySecond * 0.05f) / (totalSunMinute + totalMoonMinute);
+        EnvironmentManger.instance.UpDataMyLightTimeValue(timeValue);
+
         if (nowMinute >= dawnStart && nowMinute <= dawnEnd)
         {
-            float lightValue = (float)(nowMinute - dawnStart+mySecond* 0.05f) / (60);
+            float lightValue = (float)(nowMinute - dawnStart + mySecond * 0.05f) / (60);
             var environmentLightData = new EnvironmentLightData();
             environmentLightData.cloudColor = DawnEnvironmentData.CloudColor.Evaluate(lightValue);
             environmentLightData.skyTopColor = DawnEnvironmentData.SkyTopColor.Evaluate(lightValue);
@@ -177,7 +181,7 @@ public class GameTime
             environmentLightData.skyBottomColor = DawnEnvironmentData.SkyBottomColor.Evaluate(lightValue);
             Color sunColor = DawnEnvironmentData.sunColor.Evaluate(lightValue);
             float a = sunColor.a;
-            sunColor*=DawnEnvironmentData.sunColorValue.Evaluate(lightValue);
+            sunColor *= DawnEnvironmentData.sunColorValue.Evaluate(lightValue);
             sunColor.a = a;
             environmentLightData.sunColor = sunColor;
             environmentLightData.sunScale = DawnEnvironmentData.sunScaleValue.Evaluate(lightValue);
@@ -192,19 +196,19 @@ public class GameTime
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
         }
-        else if (nowMinute> dawnEnd&&nowMinute <= dayEnd)
+        else if (nowMinute > dawnEnd && nowMinute <= dayEnd)
         {
             night = false;
             float sunValue = (nowMinute - dayStart + mySecond * 0.05f) / (float)(totalSunMinute);
 
-            Color sunColor = DayEnvironmentData.sunColor.Evaluate(sunValue); 
+            Color sunColor = DayEnvironmentData.sunColor.Evaluate(sunValue);
             float a = sunColor.a;
             sunColor *= DayEnvironmentData.sunColorValue.Evaluate(sunValue);
             sunColor.a = a;
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                { 
+                {
                     globalColor = DayEnvironmentData.GlobalColor.Evaluate(sunValue),
                     globalIntensity = DayEnvironmentData.GlobalIntensity.Evaluate(sunValue),
                     color = DayEnvironmentData.Color.Evaluate(sunValue),
@@ -213,15 +217,15 @@ public class GameTime
                     intensity = DayEnvironmentData.intensity.Evaluate(sunValue),
                     shadowValue = DayEnvironmentData.shadowValue.Evaluate(sunValue),
 
-                    skyHalfValue = DayEnvironmentData.SkyHalfValue.Evaluate(sunValue), 
+                    skyHalfValue = DayEnvironmentData.SkyHalfValue.Evaluate(sunValue),
                     cloudColor = DayEnvironmentData.CloudColor.Evaluate(sunValue),
                     skyTopColor = DayEnvironmentData.SkyTopColor.Evaluate(sunValue),
                     skyBottomColor = DayEnvironmentData.SkyBottomColor.Evaluate(sunValue),
                     sunColor = sunColor,
                     sunScale = DayEnvironmentData.sunScaleValue.Evaluate(sunValue),
                     sunPos = new Vector2(DayEnvironmentData.sunXValue.Evaluate(sunValue),
-                      DayEnvironmentData.sunYValue.Evaluate(sunValue)), 
-                    sunValue=1
+                      DayEnvironmentData.sunYValue.Evaluate(sunValue)),
+                    sunValue = 1
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -238,7 +242,7 @@ public class GameTime
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                { 
+                {
                     globalColor = DuskEnvironmentData.GlobalColor.Evaluate(lightValue),
                     globalIntensity = DuskEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = DuskEnvironmentData.Color.Evaluate(lightValue),
@@ -255,7 +259,7 @@ public class GameTime
                     sunScale = DuskEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(DuskEnvironmentData.sunXValue.Evaluate(lightValue),
                       DuskEnvironmentData.sunYValue.Evaluate(lightValue)),
-                    sunValue=1
+                    sunValue = 1
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -273,7 +277,7 @@ public class GameTime
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                { 
+                {
                     globalColor = NightEnvironmentData.GlobalColor.Evaluate(lightValue),
                     globalIntensity = NightEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = NightEnvironmentData.Color.Evaluate(lightValue),
@@ -290,7 +294,7 @@ public class GameTime
                     sunScale = NightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
                       NightEnvironmentData.sunYValue.Evaluate(lightValue)),
-                    sunValue=0
+                    sunValue = 0
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -308,7 +312,7 @@ public class GameTime
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
                 environmentLightData = new EnvironmentLightData
-                { 
+                {
                     globalColor = NightEnvironmentData.GlobalColor.Evaluate(lightValue),
                     globalIntensity = NightEnvironmentData.GlobalIntensity.Evaluate(lightValue),
                     color = NightEnvironmentData.Color.Evaluate(lightValue),
@@ -325,7 +329,7 @@ public class GameTime
                     sunScale = NightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
                       NightEnvironmentData.sunYValue.Evaluate(lightValue)),
-                    sunValue=0
+                    sunValue = 0
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -366,7 +370,7 @@ public class GameTime
         {
             return;
         }
-#endif 
+#endif
         mySecond++;
         TimeInit();
     }
@@ -381,7 +385,7 @@ public class GameTime
     {
         if (mySecond >= 20)
         {
-            mySecond = mySecond%20;
+            mySecond = mySecond % 20;
             minute++;
         }
         if (minute >= 60)
@@ -401,7 +405,7 @@ public class GameTime
             }
             else
             {
-                float moonOffSet = (30-date) / 15.0f;
+                float moonOffSet = (30 - date) / 15.0f;
                 Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
             }
         }
@@ -430,7 +434,7 @@ public class GameTime
             }
         }
         int x = date % 6;
-        week = (Week)x; 
+        week = (Week)x;
         SetLightValue();
     }
 
@@ -475,6 +479,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             return 0;
         }
     }
+
     public int Minute
     {
         get
@@ -486,7 +491,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
             return 0;
         }
     }
-    public void SetTime(int hour=-1,int minute=-1)
+
+    public void SetTime(int hour = -1, int minute = -1)
     {
         if (nowGameTime != null)
         {
@@ -519,22 +525,25 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public override void Init()
     {
         base.Init();
-        gameDates.Init(120); 
+        gameDates.Init(120);
         GameActionManager.instance.AddListener<LerpGameTime>(LerpGameTime);
         GameActionManager.instance.AddListener<SetMapOverrideEnvironment>(SetMapOverrideEnvironment);
         GameActionManager.instance.AddListener<ClearOverrideEnvironment>(ClearOverrideEnvironment);
-       // CreatData();
+        // CreatData();
     }
-    void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)
+
+    private void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)
     {
         nowGameTime.ClearOverrideEnvironment();
     }
-    void SetMapOverrideEnvironment(SetMapOverrideEnvironment setMapOverrideEnvironment)
+
+    private void SetMapOverrideEnvironment(SetMapOverrideEnvironment setMapOverrideEnvironment)
     {
         nowGameTime.SetMapOverrideEnvironment(setMapOverrideEnvironment.dayEnvironmentDataName,
             setMapOverrideEnvironment.duskEnvironmentDataName, setMapOverrideEnvironment.dawnEnvironmentDataName,
             setMapOverrideEnvironment.nightEnvironmentDataName);
     }
+
     public void ZeroGameTime()
     {
         if (nowGameTime == null)
@@ -545,8 +554,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 hour = 12
             };
             nowGameTime.SetTime(12, 0);
-           // StartTimeRun();
-        } 
+            // StartTimeRun();
+        }
     }
 
     public string GameTimeToString()
@@ -574,7 +583,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
         return (years * 4 + months) * 30 + days;
     }
 
-    
     public void CreatData()
     {
         if (FestivalManager.instance.FestivalDatas == null)
@@ -609,12 +617,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
             TimeRunIEnumerator = TimeRun();
             GameObjectCurveController.instance.UpDataComponent.StartCoroutine(TimeRunIEnumerator);
         }
-       
     }
 
     public void StopTimeRun()
     {
-        if (TimeRunIEnumerator != null&& GameObjectCurveController.instance.UpDataComponent)
+        if (TimeRunIEnumerator != null && GameObjectCurveController.instance.UpDataComponent)
         {
             GameObjectCurveController.instance.UpDataComponent.StopCoroutine(TimeRunIEnumerator);
         }
@@ -626,19 +633,20 @@ public class GameTimeManager : Singleton<GameTimeManager>
         nowGameTime.AddDate();
     }
 
-    void LerpGameTime(LerpGameTime lerpGameTime)
+    private void LerpGameTime(LerpGameTime lerpGameTime)
     {
         StopTimeRun();
         var lerpTimeIEnumerator = LerpTime(lerpGameTime.targetHour, lerpGameTime.targetMinute, lerpGameTime.totalTime);
         GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
     }
-    private IEnumerator LerpTime(int targetHour,int targetMinue,float totalTime)
+
+    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime)
     {
         int startValue = (Hour * 60 + Minute) * 20;
-        int endValue= (targetHour * 60 + targetMinue) * 20;
-        int addValue =(int)math.round((endValue - startValue) / totalTime * UnityEngine.Time.fixedDeltaTime);
+        int endValue = (targetHour * 60 + targetMinue) * 20;
+        int addValue = (int)math.round((endValue - startValue) / totalTime * UnityEngine.Time.fixedDeltaTime);
         float timeValue = 0;
-        while (timeValue<totalTime)
+        while (timeValue < totalTime)
         {
             timeValue += UnityEngine.Time.deltaTime;
             nowGameTime.mySecond += addValue;
@@ -661,7 +669,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
             nowGameTime.TimeRun();
             //timeDisplayAction.UpdataTime();
             yield return new WaitForSeconds(waitTime);
-           
         }
     }
 }

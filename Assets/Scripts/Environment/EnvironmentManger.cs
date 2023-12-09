@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public struct EnvironmentLightData
@@ -24,6 +25,29 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     private Light2D directionLight;
     private Light2D globalLight;
     private Transform sunTransform;
+
+    private Dictionary<int,MyLight> lights=new Dictionary<int, MyLight>();
+    private List<int> lightIds =new List<int>();  
+    public void AddMyLight(MyLight myLight)
+    {
+        int instanceID = myLight.GetInstanceID();
+        lights.Add(instanceID, myLight);
+        lightIds.Add(instanceID);
+    }
+    public void RemoveMyLight(MyLight myLight)
+    {
+        int instanceID = myLight.GetInstanceID();
+        lights.Remove(instanceID);
+        lightIds.Remove(instanceID );
+    }
+
+    public void UpDataMyLightTimeValue(float timeValue)
+    {
+        for(int i = 0; i < lightIds.Count; i++)
+        {
+            lights[lightIds[i]].LerpTimeValue(timeValue);
+        }
+    }
 
     public override void Init()
     {

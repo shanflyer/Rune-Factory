@@ -339,7 +339,7 @@ Shader "MySprite-Lit-Default"
                 half3   normalWS        : TEXCOORD1;
                 half3   tangentWS       : TEXCOORD2;
                 half3   bitangentWS     : TEXCOORD3;
-                half2   screenUV : TEXCOORD4;
+                half3   screenUV : TEXCOORD4;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
             
@@ -405,7 +405,8 @@ Shader "MySprite-Lit-Default"
                 attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
 
-                o.screenUV=o.positionCS.xy;               
+                o.screenUV.xy=o.positionCS.xy;        
+                o.screenUV.z=unity_SpriteProps.x;       
                 Unity_Remap_float(o.screenUV.x,float2(-1,1),float2(0,1),o.screenUV.x);
                 Unity_Remap_float(o.screenUV.y,float2(-1,1),float2(1,0),o.screenUV.y);
                 
@@ -426,6 +427,7 @@ Shader "MySprite-Lit-Default"
 
                 // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
                 half4 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
+                result.x=unity_SpriteProps.x*result.x+(1-unity_SpriteProps.x)*(1-result.x);
                 result.z=0;
                 return result;
             }

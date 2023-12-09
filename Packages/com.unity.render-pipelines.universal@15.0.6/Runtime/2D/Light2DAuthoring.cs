@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace UnityEngine.Rendering.Universal
 {
-    public sealed partial class Light2D
+    public  partial class Light2D
     {
 #if UNITY_EDITOR
         private const string s_IconsPath = "Packages/com.unity.render-pipelines.universal/Editor/2D/Resources/SceneViewIcons/";

@@ -19,7 +19,7 @@ namespace UnityEngine.Rendering.Universal
     [MovedFrom(true, "UnityEngine.Experimental.Rendering.Universal", "Unity.RenderPipelines.Universal.Runtime")]
     [AddComponentMenu("Rendering/2D/Light 2D")]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest/index.html?subfolder=/manual/2DLightProperties.html")]
-    public sealed partial class Light2D : Light2DBase, ISerializationCallbackReceiver
+    public partial class Light2D : Light2DBase, ISerializationCallbackReceiver
     {
         /// <summary>
         /// Deprecated Light types that are no supported. Please migrate to either Freeform or Point lights.

@@ -1,6 +1,6 @@
 namespace UnityEngine.Rendering.Universal
 {
-    public sealed partial class Light2D
+    public   partial class Light2D
     {
         [SerializeField] int m_ShapeLightParametricSides = 5;
         [SerializeField] float m_ShapeLightParametricAngleOffset = 0.0f;
