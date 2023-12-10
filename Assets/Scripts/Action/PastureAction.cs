@@ -1,86 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Unity.Mathematics;
 
 public struct GetPastureNextLevelCost : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int pastureId;
-    public SetValue setValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct GetPastureLevel : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int pastureId;
-    public SetValue setValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TryUpPastureLevel : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int pastureId;
-    public SetValue setValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TryDeleteAnimal : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int animalId;
-    public SetValue setValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct GetAnimalOutFromPasture : GameAction
 {
     public int pastureId;
     public int animalId;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct SetAnimalToPasture : GameAction
 {
     public int pastureId;
     public int animalId;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TryCreatAnimal : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int roomId;
     public int2 coordinate;
     public int dataId;
-    public SetValue setValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct AnimalCostFood : GameAction
-{ 
+{
     public int pastureId;
     public int animalDataId;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -89,7 +105,7 @@ public struct AnimalCostFood : GameAction
         if (parameters.Count > 1)
         {
             animalDataId = int.Parse(parameters[1].value);
-        } 
+        }
         if (source != 0)
         {
             pastureId = source;
@@ -98,16 +114,19 @@ public struct AnimalCostFood : GameAction
         {
             animalDataId = target;
         }
-        
+
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TryGetAnimalFoodFromPasture : GameAction
 {
     public int pastureId;
     public Item item;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -136,13 +155,15 @@ public struct TryGetAnimalFoodFromPasture : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TrySetAnimalFoodToPasture : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int pastureId;
     public Item item;
-    public SetValue setValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -171,12 +192,15 @@ public struct TrySetAnimalFoodToPasture : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TryGetItemFromPastureBox : GameAction
 {
     public int pastureId;
     public Item item;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -205,20 +229,23 @@ public struct TryGetItemFromPastureBox : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TrySetItemToPastureBox : GameAction
 {
     public int pastureId;
     public Item item;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
-            pastureId= int.Parse(parameters[0].value);
+            pastureId = int.Parse(parameters[0].value);
         }
         if (parameters.Count > 1)
         {
-            item.value= int.Parse(parameters[1].value);
+            item.value = int.Parse(parameters[1].value);
         }
         if (parameters.Count > 2)
         {
@@ -239,14 +266,17 @@ public struct TrySetItemToPastureBox : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct TryCreatPasture : GameAction
 {
     public int roomId;
     public int itemInstanceId;
     public int linkItemDataId;
     public string pastureName;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -279,18 +309,20 @@ public struct TryCreatPasture : GameAction
 public struct TryDeletePasture : GameAction
 {
     public int instanceId;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
-    { 
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
         if (parameters.Count > 0)
         {
             instanceId = int.Parse(parameters[0].value);
         }
-         
+
         if (source != 0)
         {
             instanceId = source;
-        } 
+        }
         GameActionManager.instance.QueueAction(this);
     }
 }

@@ -9,8 +9,8 @@ using UnityEngine.TextCore.Text;
 public struct DisplaySky : GameAction
 {
     public bool display;
-    public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 1)
         {
@@ -24,9 +24,9 @@ public struct LerpScreenCycleValue : GameAction
 {
     public float minCycleValue,maxCycleValue,lerpTime;
     public Vector2 cyclePos;
-    public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 5)
         {

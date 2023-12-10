@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public struct CheckItemValue : GameAction
 {
-    public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
     public int packageId;
     public int itemDataId; 
     public int itemValue; 
@@ -30,7 +30,7 @@ public struct CheckItemValue : GameAction
 
 public struct GameCheckAction : GameAction
 {
-    public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
     public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);
@@ -40,7 +40,7 @@ public struct GameCheckAction : GameAction
 public struct CheckCharacterTemp : GameAction
 {
     public int characterId;
-    public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
     public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
         GameActionManager.instance.QueueAction(this);

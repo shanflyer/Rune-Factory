@@ -5,7 +5,7 @@ public struct LerpGameTime : GameAction
 {
     public int targetHour,targetMinute;
     public float totalTime;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             targetHour = int.Parse(parameters[0].value);
@@ -15,12 +15,12 @@ public struct LerpGameTime : GameAction
             totalTime = float.Parse(parameters[2].value);
         GameActionManager.instance.QueueAction(this);
     }
-    public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
 }
 public struct ClearOverrideEnvironment : GameAction
 { 
-    public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     { 
         GameActionManager.instance.QueueAction(this);
     }
@@ -31,8 +31,8 @@ public struct SetMapOverrideEnvironment : GameAction
     public string duskEnvironmentDataName;
     public string dawnEnvironmentDataName;
     public string nightEnvironmentDataName;
-    public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             dayEnvironmentDataName = parameters[0].value;
@@ -48,15 +48,15 @@ public struct SetMapOverrideEnvironment : GameAction
 public struct SetEnvironmentLight : GameAction
 {
     public EnvironmentLightData environmentLightData;
-    public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
 } 
 public struct OverrideEnvironmentLight : GameAction
 {
     public bool overSkyAndSun;
     public EnvironmentLightData environmentLightData;
-    public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
 }
 public struct ClearOverrideEnvironmentLight : GameAction
 {
-     public SetResult setResult { get; set; }
+      public SetValue setValue { get; set; } public SetResult setResult { get; set; }
 }

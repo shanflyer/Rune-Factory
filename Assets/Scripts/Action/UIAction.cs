@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public struct SwitchInputMap : GameAction
 {
     public bool UI;
-    public SetResult setResult { set; get; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 1)
         {
@@ -17,11 +16,14 @@ public struct SwitchInputMap : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct ClosePanelAction : GameAction
 {
     public Type type;
-    public SetResult setResult { set; get; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 1)
         {
@@ -29,16 +31,16 @@ public struct ClosePanelAction : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
-
-
 }
 
 public struct OpenPanelAction : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public Type type;
     public string dataId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 2)
         {
@@ -55,13 +57,15 @@ public struct OpenPanelAction : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
-
 }
+
 public struct ShowPanel : GameAction
 {
     public bool show;
-    public SetResult setResult { get; set; } 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 1)
         {
@@ -69,5 +73,4 @@ public struct ShowPanel : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
-
 }

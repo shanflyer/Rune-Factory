@@ -1,32 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine;
 
 public struct TryTeamLeaderMove : GameAction
 {
     public int characterId;
     public float length;
 
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
-    {
-        if (parameters.Count > 0)
-            characterId = int.Parse(parameters[0].value); 
-        if (source != 0)
-            characterId = source; 
-        GameActionManager.instance.QueueAction(this);
-    }
-}
-public struct TryTeamLeaderSetCoordinate : GameAction
-{
-    public int characterId;
-    public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -35,12 +19,31 @@ public struct TryTeamLeaderSetCoordinate : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
+public struct TryTeamLeaderSetCoordinate : GameAction
+{
+    public int characterId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+
 public struct JoinTeam : GameAction
 {
     public int characterId;
     public int teamCharacterId;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -53,11 +56,14 @@ public struct JoinTeam : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct StopCharacterBehavior : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -66,11 +72,14 @@ public struct StopCharacterBehavior : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct StartCharacterBehavior : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -84,8 +93,10 @@ public struct ChangeCharacter : GameAction
 {
     public int instanceId;
     public int newDataId;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             instanceId = int.Parse(parameters[0].value);
@@ -94,11 +105,13 @@ public struct ChangeCharacter : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 /// <summary>
 /// 设置角色动画
 /// </summary>
 public struct SetCharacterAnimator : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public string parameter;
@@ -106,7 +119,8 @@ public struct SetCharacterAnimator : GameAction
     public bool boolValue;
     public int intValue;
     public float floatValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -122,9 +136,11 @@ public struct SetCharacterAnimator : GameAction
                 case ParameterType.BOOL:
                     boolValue = bool.Parse(parameters[3].value);
                     break;
+
                 case ParameterType.INT:
                     intValue = int.Parse(parameters[3].value);
                     break;
+
                 case ParameterType.FLOAT:
                     floatValue = float.Parse(parameters[3].value);
                     break;
@@ -134,22 +150,28 @@ public struct SetCharacterAnimator : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 //创建默认地图Npc
 public struct CreatDefaultNPC : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct DestoryCharacter : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int dataId;
     public bool isTemp;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -159,15 +181,17 @@ public struct DestoryCharacter : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct CreatTempCharacter : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int mapInstance;
     public int coordinateX;
     public int coordinateY;
 
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -181,8 +205,10 @@ public struct CreatTempCharacter : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct CreatCharacter : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int mapInstance;
@@ -190,8 +216,7 @@ public struct CreatCharacter : GameAction
     public int coordinateY;
     public bool controller;
 
-    public SetValue setValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -210,18 +235,23 @@ public struct CreatCharacter : GameAction
 
 public struct ExploreEnd : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct CharacterLevelUp : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int level;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -234,11 +264,14 @@ public struct CharacterLevelUp : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct CharacterDeath : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -247,11 +280,14 @@ public struct CharacterDeath : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct CreatTeamPlayer : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public List<int> players;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         players = new List<int>();
         for (int i = 0; i < parameters.Count; i++)
@@ -261,11 +297,14 @@ public struct CreatTeamPlayer : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct CreatFightPlayer : GameAction
 {
+    public SetValue setValue { get; set; }
     public List<int> players;
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         players = new List<int>();
         for (int i = 0; i < parameters.Count; i++)
@@ -275,11 +314,14 @@ public struct CreatFightPlayer : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct RefreshFightCharacterInfo : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -289,11 +331,14 @@ public struct RefreshFightCharacterInfo : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct RefreshFightCharactersInfo : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public List<int> characters;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         characters = new List<int>();
         for (int i = 0; i < parameters.Count; i++)
@@ -304,11 +349,14 @@ public struct RefreshFightCharactersInfo : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct RefreshFightChapter : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int id;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 1)
         {
@@ -317,11 +365,14 @@ public struct RefreshFightChapter : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct RefreshCharacter : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int id;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 0)
         {
@@ -333,26 +384,31 @@ public struct RefreshCharacter : GameAction
 
 public struct SetCharacterProperty : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 2)
         {
             characterId = int.Parse(parameters[0].value);
             propertyType = (CharacterPropertyType)Enum.Parse(typeof(CharacterPropertyType), parameters[1].value);
-            setValue = int.Parse(parameters[2].value);
+            Value = int.Parse(parameters[2].value);
         }
         GameActionManager.instance.QueueAction(this);
     }
+
     public int characterId;
     public CharacterPropertyType propertyType;
-    public int setValue;
-
+    public int Value;
 }
+
 public struct ChangeCharacterProperty : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 2)
         {
@@ -362,6 +418,7 @@ public struct ChangeCharacterProperty : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
+
     public int characterId;
     public CharacterPropertyType propertyType;
     public int changeValue;
@@ -369,8 +426,10 @@ public struct ChangeCharacterProperty : GameAction
 
 public struct CharacterPropertyTrigger : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 2)
         {
@@ -396,27 +455,28 @@ public struct CharacterPropertyTrigger : GameAction
                 };
             }
             finally { }
-
         }
 
         GameActionManager.instance.QueueAction(this);
     }
+
     public int characterId;
     public CharacterProperty characterProperty;
-
 }
 
 public struct DisplayOrHideCharacter : GameAction
 {
+    public SetValue setValue { get; set; }
     public int characterId;
     public bool display;
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 2)
         {
             characterId = int.Parse(parameters[0].value);
-            display = bool.Parse(parameters[1].value); 
+            display = bool.Parse(parameters[1].value);
         }
         if (source != 0)
         {
@@ -425,17 +485,18 @@ public struct DisplayOrHideCharacter : GameAction
         display = target == 1;
         GameActionManager.instance.QueueAction(this);
     }
-    
 }
 
 public struct SetCharacterCoordinate : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 2)
         {
-            characterId = int.Parse(parameters[0].value); 
+            characterId = int.Parse(parameters[0].value);
             coordinate.z = int.Parse(parameters[1].value);
             var parameter = parameters[1];
             if (parameter.parameters.Count >= 2)
@@ -446,17 +507,21 @@ public struct SetCharacterCoordinate : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
+
     public int characterId;
+
     /// <summary>
     /// x:坐标x,y:坐标y,z:地图id
     /// </summary>
     public int3 coordinate;
-
 }
+
 public struct CharacterCoordinateTrigger : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count >= 3)
         {
@@ -471,27 +536,33 @@ public struct CharacterCoordinateTrigger : GameAction
         }
         GameActionManager.instance.QueueAction(this);
     }
+
     public int characterId;
     public int3 coordinate;
-
 }
+
 public struct RefreshFriendShip : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct AddFriendShipValue : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int value;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -511,22 +582,27 @@ public struct AddFriendShipValue : GameAction
 
 public struct RefreshEquip : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct ClearEquip : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int outPackageId;
     public ItemType itemType;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -545,13 +621,16 @@ public struct ClearEquip : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct ChangeEquip : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int outPackageId;
     public int itemId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
@@ -570,11 +649,14 @@ public struct ChangeEquip : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct VisitNPC : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int targetId, sourceId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
             sourceId = int.Parse(parameters[0].value);
@@ -587,11 +669,14 @@ public struct VisitNPC : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct RemoveCharacterMove : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -604,11 +689,14 @@ public struct RemoveCharacterMove : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct StopCharacterMove : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -621,11 +709,14 @@ public struct StopCharacterMove : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct StartCharacterMove : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -638,40 +729,52 @@ public struct StartCharacterMove : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct GetCharacterDataId : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public SetValue SetValue;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct GetTempCharacterExit : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public SetInt3Value SetInt3Value;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct GetTempCharacterEnter : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public SetInt3Value SetInt3Value;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct SetDirection : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public float2 direction;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -685,12 +788,15 @@ public struct SetDirection : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct SetTargetDirection : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
     public int2 targetCoordinate;
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -704,11 +810,14 @@ public struct SetTargetDirection : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct SetCreateTempCharacterLevel : GameAction
 {
     public int level;
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
         {
@@ -722,10 +831,12 @@ public struct SetCreateTempCharacterLevel : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct CharacterMoveFailed : GameAction
 {
+    public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int characterId; 
+    public int characterId;
     public int oldTargetMapInstance;
     public int2 oldTargetCoordinate;
 }
