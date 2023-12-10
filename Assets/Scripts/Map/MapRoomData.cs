@@ -25,7 +25,9 @@ public class MapRoomData : ScriptableObject,IGameData
     public int2 startCoordinate, endCoordinate;
     public GameObject mapObj;
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
-
+    public bool displaySky=true;
+    public bool fixedCamera;
+    public Vector3 fixedCameraPos;
     public bool CheckBoundary(int2 coordinate)
     {
         if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoordinate.x

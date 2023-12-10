@@ -4,6 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+public struct SwitchInputMap : GameAction
+{
+    public bool UI;
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        if (parameters.Count >= 1)
+        {
+            UI = bool.Parse(parameters[0].value);
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct ClosePanelAction : GameAction
 {
     public Type type;

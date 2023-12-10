@@ -459,12 +459,19 @@ public class CharacterManager : Singleton<CharacterManager>
     public Character GetCharacter(int characterId)
     {
         Character character = null;
-        if (characters.TryGetValue(characterId, out character)) ;
+        if (characterId == 0)
+        {
+            character = player;
+        }
+        else
+        {
+            characters.TryGetValue(characterId, out character);
+        } 
         return character;
     }
 
     private void SetCharacterCoordiante(SetCharacterCoordinate setCharacterCoordinate)
-    {
+    { 
         Character character = GetCharacter(setCharacterCoordinate.characterId);
         character.RemoveMove();
         if (character != null)
@@ -757,7 +764,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         player = new Player(characterSaveData);
         player.SetCoordinate(new int3(int2.zero, WorldMapObjManager.instance.displayMap));
-
+        controllerCharacter = player;
         AddCharacter(player);
 
         //BehaviorTree behaviorTree = BehaviorManager.Instance.CreatBehaviorTree(GameManager.instance.testTreeData);

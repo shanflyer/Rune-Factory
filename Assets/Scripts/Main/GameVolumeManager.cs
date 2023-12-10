@@ -18,6 +18,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     protected override void Clear()
     {
         base.Clear();
+        screenMat.SetVector("_Offset", new Vector2(0.5f,0.5f));
         SetScreenCycleValue(0);
     }
     void LerpScreenCycleValue(LerpScreenCycleValue LerpScreenCycleValue)

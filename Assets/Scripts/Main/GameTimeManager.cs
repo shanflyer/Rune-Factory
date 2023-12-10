@@ -105,7 +105,9 @@ public class GameTime
 
     private int totalSunMinute, totalMoonMinute;
     private bool night = false;
+    private float timeValue;
 
+    public float TimeValue=>timeValue;
     public void SetTime(int hour, int minute)
     {
         if (hour > 0)
@@ -123,6 +125,7 @@ public class GameTime
         overrideDayEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(dayEnvironmentDataName);
         overrideNightEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(nightEnvironmentDataName);
         overrideEnvironment = true;
+        SetLightValue();
     }
 
     public void ClearOverrideEnvironment()
@@ -158,7 +161,7 @@ public class GameTime
             return;
         int nowMinute = hour * 60 + minute;
 
-        float timeValue = (nowMinute + mySecond * 0.05f) / (totalSunMinute + totalMoonMinute);
+        timeValue = (nowMinute + mySecond * 0.05f) / (totalSunMinute + totalMoonMinute);
         EnvironmentManger.instance.UpDataMyLightTimeValue(timeValue);
 
         if (nowMinute >= dawnStart && nowMinute <= dawnEnd)

@@ -6,6 +6,20 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
+public struct DisplaySky : GameAction
+{
+    public bool display;
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        if (parameters.Count >= 1)
+        {
+            display = bool.Parse(parameters[0].value); 
+        }
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct LerpScreenCycleValue : GameAction
 {
     public float minCycleValue,maxCycleValue,lerpTime;

@@ -55,6 +55,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         itemInMapDatas.TryGetValue(mapId, out result);
         return result;
     }
+   
     async void TryCreatRoom(TryCreatRoom creatRoom)
     {
         int instanceId = creatRoom.instance;
@@ -376,8 +377,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             //获取房间数据
             var MapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(room.map);
-
             roomMapDatas.Add(room.id, room.map);
+
+
 
             //创建地图房间
             MapCellController.instance.InitMapData(room.id, MapRoomData.mapCells.ToArray(),

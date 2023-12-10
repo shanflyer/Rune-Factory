@@ -21,10 +21,10 @@ public struct EnvironmentLightData
 
 public class EnvironmentManger : Singleton<EnvironmentManger>
 {
-    private Transform environmentParent;
-    private Light2D directionLight;
-    private Light2D globalLight;
-    private Transform sunTransform;
+    SkyEnviromentMono skyEnviromentMono;
+    Transform sunTransform => skyEnviromentMono.Sun;
+    Light2D globalLight=> skyEnviromentMono.GlobalLight;
+    Light2D directionLight => skyEnviromentMono.DirectionLight;
 
     private Dictionary<int,MyLight> lights=new Dictionary<int, MyLight>();
     private List<int> lightIds =new List<int>();  
@@ -33,6 +33,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         int instanceID = myLight.GetInstanceID();
         lights.Add(instanceID, myLight);
         lightIds.Add(instanceID);
+        myLight.LerpTimeValue(timeValue);
     }
     public void RemoveMyLight(MyLight myLight)
     {
@@ -41,8 +42,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         lightIds.Remove(instanceID );
     }
 
+    float timeValue;
     public void UpDataMyLightTimeValue(float timeValue)
     {
+        this.timeValue = timeValue;
         for(int i = 0; i < lightIds.Count; i++)
         {
             lights[lightIds[i]].LerpTimeValue(timeValue);
@@ -51,33 +54,14 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
     public override void Init()
     {
-        base.Init();
-        environmentParent = new GameObject("Environment").transform;
-
-        GameObject sunPrefab = Resources.Load<GameObject>("Prefabs/Sun");
-        if (sunPrefab)
+        base.Init(); 
+        if (skyEnviromentMono == null)
         {
-            sunTransform = GameObject.Instantiate(sunPrefab, environmentParent).transform;
+            var _skyEnviromentMono = Resources.Load<SkyEnviromentMono>("Prefabs/Environment");
+            skyEnviromentMono = GameObject.Instantiate(_skyEnviromentMono);
+            GameObject.DontDestroyOnLoad(skyEnviromentMono.gameObject);
         }
-
-        GameObject DirectionLightGameObject = new GameObject("DirectionLight");
-        directionLight = DirectionLightGameObject.AddComponent<Light2D>();
-        directionLight.lightType = Light2D.LightType.Directional;
-        directionLight.useNormalMap = true;
-        directionLight.normalMapQuality = Light2D.NormalMapQuality.Fast;
-        directionLight.SetShapePath(new Vector3[]
-        {
-            new Vector3(-100,-100),new Vector3(-100,100),new Vector3(100,100),new Vector3(100,-100)
-        });
-        DirectionLightGameObject.transform.SetParent(environmentParent, false);
-
-        GameObject GlobalLightGameObject = new GameObject("GlobalLight");
-        globalLight = GlobalLightGameObject.AddComponent<Light2D>();
-        globalLight.lightType = Light2D.LightType.Global;
-        GlobalLightGameObject.transform.SetParent(environmentParent, false);
-
-        GameObject.DontDestroyOnLoad(environmentParent.gameObject);
-
+         
         GameActionManager.instance.AddListener<SetEnvironmentLight>(SetEnvironmentLight);
         GameActionManager.instance.AddListener<OverrideEnvironmentLight>(OverrideEnvironmentLight);
         GameActionManager.instance.AddListener<ClearOverrideEnvironmentLight>(ClearOverrideEnvironmentLight);
@@ -99,8 +83,12 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
             Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
-            sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
-            sunTransform.localPosition = natureLightData.sunPos;
+            if (sunTransform)
+            {
+                sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
+                sunTransform.localPosition = natureLightData.sunPos;
+            }
+            
 
             globalLight.color = natureLightData.globalColor;
             globalLight.intensity = natureLightData.globalIntensity;
@@ -135,8 +123,12 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             Shader.SetGlobalFloat("_SkyHalfValue", environmentLight.skyHalfValue);
             Shader.SetGlobalColor("_SunColor", environmentLight.sunColor);
             Shader.SetGlobalInt("_Sun", environmentLight.sunValue);
-            sunTransform.localScale = new Vector3(environmentLight.sunScale, environmentLight.sunScale, 1);
-            sunTransform.localPosition = environmentLight.sunPos;
+            if (sunTransform)
+            {
+                sunTransform.localScale = new Vector3(environmentLight.sunScale, environmentLight.sunScale, 1);
+                sunTransform.localPosition = environmentLight.sunPos;
+            }
+                
         }
         Shader.SetGlobalFloat("_ShadowValue", environmentLight.shadowValue);
     }
@@ -163,8 +155,11 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
         Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
         Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
-        sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
-        sunTransform.localPosition = natureLightData.sunPos;
+        if (sunTransform)
+        {
+            sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
+            sunTransform.localPosition = natureLightData.sunPos;
+        } 
     }
 
     protected override void Clear()

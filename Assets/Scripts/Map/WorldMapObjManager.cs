@@ -17,6 +17,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<TryDeleteRoom>(TryDeleteRoomObj);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
         GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
+        GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
     }
     protected override void Clear()
     {
@@ -98,6 +99,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             displayMap = defaultMap;
         }
         DisplayMap(displayMap);
+       
     }
     private async Task<RuntimeObj> CreatMapRunTime(string roomName, int instanceId)
     {
@@ -134,12 +136,24 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         }
         return default(RuntimeObj);
     }
-    async void SetMapOverrideEnvirmentData(int mapId)
+    async void SetMapOverrideEnvirmentData(string roomName)
     {
-        MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(mapId);
-        if (string.IsNullOrEmpty(mapRoomData.dawnEnvironmentDataName))
+        MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(roomName);
+        DisplaySky displaySky = new DisplaySky
         {
+            display = mapRoomData.displaySky
+        };
+        GameActionManager.instance.QueueAction(displaySky);
 
+        SetFixedCamera setFixedCamera = new SetFixedCamera
+        {
+            fixedCamera = mapRoomData.fixedCamera,
+            fixedPos=mapRoomData.fixedCameraPos
+        };
+        GameActionManager.instance.QueueAction(setFixedCamera);
+
+        if (!string.IsNullOrEmpty(mapRoomData.dawnEnvironmentDataName))
+        { 
             SetMapOverrideEnvironment setMapOverrideEnvironment = new SetMapOverrideEnvironment
             {
                 dawnEnvironmentDataName = mapRoomData.dawnEnvironmentDataName,
@@ -154,11 +168,27 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             GameActionManager.instance.QueueAction(new ClearOverrideEnvironment(), true);
         }
     }
+
+    async void DisplayMap(DisplayMap displayMap)
+    {
+        if (this.displayMap != displayMap.displayMap)
+        {
+            RecycleMap();
+            await DisplayMap(displayMap.displayMap);
+            if (displayMap.actionId != 0)
+            {
+                GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(displayMap.actionId);
+                gameActionData.Action();
+            }
+        } 
+    }
+
     public async Task DisplayMap(int mapId)
     {
         displayMap = mapId;
         await CharacterManager.instance.RefreshNpcRuntimeObj();
         string dataId = WorldMapManager.instance.GerMapDataName(mapId);
+        SetMapOverrideEnvirmentData(dataId);
         if (!string.IsNullOrEmpty(dataId))
         {
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);

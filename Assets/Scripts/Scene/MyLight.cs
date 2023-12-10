@@ -47,11 +47,17 @@ public class MyLight : MonoBehaviour
         {
             light2D = GetComponent<Light2D>();
         }
-        EnvironmentManger.instance.AddMyLight(this);
+
+        if (Application.isPlaying)
+            EnvironmentManger.instance.AddMyLight(this);
     }
     private void OnDisable()
     {
-        EnvironmentManger.instance.RemoveMyLight(this);
+        if (Application.isPlaying&&GameController.instance!=null)
+        {
+            EnvironmentManger.instance.RemoveMyLight(this);
+        }
+      
     }
     public void LerpTimeValue(float timeValue)
     {

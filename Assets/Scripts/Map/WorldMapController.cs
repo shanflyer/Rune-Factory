@@ -71,18 +71,21 @@ public class WorldMapController : MonoBehaviour
             worldName = worldName,
             displayMap = mapInstance
         });
-        /*
-        GameActionManager.instance.QueueAction(new CreatCharacter
+        if (GameController.instance == null)
         {
-            characterId = characterId,
-            mapInstance = mapInstance,
-            coordinateX = coordinate.x,
-            coordinateY = coordinate.y,
-            controller = true
-        });*/
+            GameActionManager.instance.QueueAction(new CreatCharacter
+            {
+                characterId = characterId,
+                mapInstance = mapInstance,
+                coordinateX = coordinate.x,
+                coordinateY = coordinate.y,
+                controller = true
+            });
+            await UIManager.instance.ShowGamePanel<MainPanel>();
+        } 
         GameActionManager.instance.QueueAction(new CreatDefaultNPC());
 
-        //await UIManager.instance.ShowGamePanel<MainPanel>();
+         
         InputManager.instance.SwitchInputMap(false);
         GameActionManager.instance.QueueAction(new InitInputAction());
 

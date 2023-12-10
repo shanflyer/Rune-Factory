@@ -433,11 +433,11 @@ public struct SetCharacterCoordinate : GameAction
     public SetResult setResult { get; set; }
     public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult=null)
     {
-        if (parameters.Count >= 3)
+        if (parameters.Count >= 2)
         {
-            characterId = int.Parse(parameters[0].value);
+            characterId = int.Parse(parameters[0].value); 
             coordinate.z = int.Parse(parameters[1].value);
-            var parameter = parameters[2];
+            var parameter = parameters[1];
             if (parameter.parameters.Count >= 2)
             {
                 coordinate.x = int.Parse(parameter.parameters[0].value);

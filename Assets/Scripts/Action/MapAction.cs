@@ -149,6 +149,32 @@ public struct ShowMapObjTips : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+public struct DisplayMap : GameAction
+{
+    public int displayMap;
+    public int actionId;
+    public SetResult setResult { set; get; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
+    {
+        if (parameters.Count > 0)
+        {
+            displayMap = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            actionId = int.Parse(parameters[1].value);
+        }
+        if (source !=0)
+        {
+            displayMap = source;
+        }
+        if (target != 0)
+        {
+            actionId = target;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct ChangeWorld : GameAction
 {
     public string worldName;

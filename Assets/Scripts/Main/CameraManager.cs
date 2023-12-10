@@ -36,12 +36,16 @@ public class CameraManager : Singleton<CameraManager>
         followCamera.Follow = target;
         followCamera.m_Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
     }
-    public void SetFixedCamera(SetFixedCamera setFixedCamera)
+    void SetFixedCamera(SetFixedCamera setFixedCamera)
     {
         if (setFixedCamera.fixedCamera)
         {
             mixingCamera.SetWeight(0, 0);
             mixingCamera.SetWeight(1, 1);
+            if (setFixedCamera.fixedPos.x != float.MinValue)
+            {
+                fixedCamera.transform.position = setFixedCamera.fixedPos;
+            }
         }
         else
         {

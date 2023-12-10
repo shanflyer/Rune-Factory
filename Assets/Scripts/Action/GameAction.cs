@@ -21,12 +21,22 @@ public delegate void SetResult(bool value);
 public struct SetFixedCamera : GameAction
 {
     public bool fixedCamera;
+    public Vector3 fixedPos;
     public SetResult setResult { get; set; }
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null)
     {
         if (parameters.Count > 0)
         {
             fixedCamera = bool.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 3)
+        {
+            fixedPos =new Vector3(float.Parse(parameters[1].value), float.Parse(parameters[2].value),
+                float.Parse(parameters[3].value));
+        }
+        else
+        {
+            fixedPos.x = float.MinValue;
         }
         GameActionManager.instance.QueueAction(this);
     }
