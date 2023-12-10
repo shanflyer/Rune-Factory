@@ -1,11 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+[CreateAssetMenu(menuName ="Datas/事件数据")]
 public class GameEventData : ScriptableObject,IGameData
 {
     public int id;

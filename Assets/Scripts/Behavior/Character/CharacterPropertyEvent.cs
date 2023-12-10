@@ -30,7 +30,7 @@ public class CharacterPropertyEvent : Action
 			{
 				characterId = characterId.Value,
 				propertyType = characterPropertyType,
-				setValue = value.Value
+				Value = value.Value
 			};
 			GameActionManager.instance.QueueAction(changeCharacterProperty);
 		}

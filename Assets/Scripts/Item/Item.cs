@@ -8,10 +8,10 @@ using UnityEngine;
 public struct Item:IReferenceData
 {
     public int instanceId;
-    public int dataId;
+    public int dataId; 
     public int count;
     public float value;
-    public Item(int dataId,int count,float value=1)
+    public Item(int dataId,int count, float value=1)
     {
         this.dataId = dataId;
         this.count = count;

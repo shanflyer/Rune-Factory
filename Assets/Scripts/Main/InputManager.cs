@@ -79,6 +79,8 @@ public class InputManager :Singleton<InputManager>
     {
         base.Init();
 
+        GameActionManager.instance.AddListener<SwitchInputMap>(SwitchInputMap);
+
         var eventSystems =GameObject.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
         if (eventSystems.Length > 1)
         {
@@ -144,8 +146,13 @@ public class InputManager :Singleton<InputManager>
 
         AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
         AddInputActionDelegate(MyInputNameData.UI_Pointer, ShowPointerEffect);
-    }
 
+        
+    }
+    void SwitchInputMap(SwitchInputMap switchInputMap)
+    {
+        SwitchInputMap(switchInputMap.UI);
+    }
     public void SwitchInputMap(bool UI)
     {
         if (uiAction != null && playerAction != null)

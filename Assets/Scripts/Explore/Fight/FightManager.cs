@@ -690,7 +690,7 @@ public class FightManager :Singleton<FightManager>
                 {
                     characterId = target.instanceId,
                     propertyType = CharacterPropertyType.生命,
-                    setValue = hp
+                    Value = hp
                 };
                 GameActionManager.instance.QueueAction(setCharacterProperty, true);
                 if (actionSkillEstimate.displayHurt)

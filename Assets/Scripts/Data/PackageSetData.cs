@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
-using UnityEngine;
 using Unity.Mathematics;
+using UnityEngine;
 
 public enum PackageType
 {
     全部, 鲜活, 非鲜活,
 }
-public class PackageSetData :ScriptableObject,IGameData,IReferenceData
+
+public class PackageSetData : ScriptableObject, IGameData, IReferenceData
 {
     public int id;
     public string packageName;
@@ -25,14 +25,14 @@ public class PackageSetData :ScriptableObject,IGameData,IReferenceData
     {
         return id.ToString();
     }
+
     public override string ToString()
     {
         return id.ToString();
     }
+
     public void SetReferenceData()
     {
         icon = Resources.Load<SpriteResourceRenference>($"Reference/{iconName}");
     }
-
-     
 }
