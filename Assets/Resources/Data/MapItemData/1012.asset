@@ -15,8 +15,70 @@ MonoBehaviour:
   id: 1012
   itemName: "\u7BB1\u5B50"
   itemObj: {fileID: 5430793153651470313, guid: 9ed088c2a1e706a47b971ace72d249c2, type: 3}
-  colliderCells: []
+  colliderCells:
+  - x: -2
+    y: -2
+  - x: -2
+    y: -1
+  - x: -2
+    y: 0
+  - x: -2
+    y: 1
+  - x: -2
+    y: 2
+  - x: -1
+    y: -2
+  - x: -1
+    y: -1
+  - x: -1
+    y: 0
+  - x: -1
+    y: 1
+  - x: -1
+    y: 2
+  - x: 0
+    y: -2
+  - x: 0
+    y: -1
+  - x: 0
+    y: 0
+  - x: 0
+    y: 1
+  - x: 0
+    y: 2
+  - x: 1
+    y: -2
+  - x: 1
+    y: -1
+  - x: 1
+    y: 0
+  - x: 1
+    y: 1
+  - x: 1
+    y: 2
+  - x: 2
+    y: -2
+  - x: 2
+    y: -1
+  - x: 2
+    y: 0
+  - x: 2
+    y: 1
+  - x: 2
+    y: 2
   triggerCells:
+  - x: -4
+    y: -2
+  - x: -4
+    y: -1
+  - x: -4
+    y: 0
+  - x: -4
+    y: 1
+  - x: -4
+    y: 2
+  - x: -3
+    y: -3
   - x: -3
     y: -2
   - x: -3
@@ -27,20 +89,16 @@ MonoBehaviour:
     y: 1
   - x: -3
     y: 2
+  - x: -3
+    y: 3
+  - x: -2
+    y: -4
   - x: -2
     y: -3
   - x: -2
-    y: -2
-  - x: -2
-    y: -1
-  - x: -2
-    y: 0
-  - x: -2
-    y: 1
-  - x: -2
-    y: 2
-  - x: -2
     y: 3
+  - x: -2
+    y: 4
   - x: -1
     y: -4
   - x: -1
@@ -66,19 +124,15 @@ MonoBehaviour:
   - x: 1
     y: 4
   - x: 2
+    y: -4
+  - x: 2
     y: -3
   - x: 2
-    y: -2
-  - x: 2
-    y: -1
-  - x: 2
-    y: 0
-  - x: 2
-    y: 1
-  - x: 2
-    y: 2
-  - x: 2
     y: 3
+  - x: 2
+    y: 4
+  - x: 3
+    y: -3
   - x: 3
     y: -2
   - x: 3
@@ -88,8 +142,42 @@ MonoBehaviour:
   - x: 3
     y: 1
   - x: 3
+    y: 2
+  - x: 3
+    y: 3
+  - x: 4
+    y: -2
+  - x: 4
+    y: -1
+  - x: 4
+    y: 0
+  - x: 4
+    y: 1
+  - x: 4
     y: 2
   playerTriggerCells:
+  - x: -4
+    y: -4
+  - x: -4
+    y: -3
+  - x: -4
+    y: -2
+  - x: -4
+    y: -1
+  - x: -4
+    y: 0
+  - x: -4
+    y: 1
+  - x: -4
+    y: 2
+  - x: -4
+    y: 3
+  - x: -4
+    y: 4
+  - x: -3
+    y: -4
+  - x: -3
+    y: -3
   - x: -3
     y: -2
   - x: -3
@@ -100,6 +188,12 @@ MonoBehaviour:
     y: 1
   - x: -3
     y: 2
+  - x: -3
+    y: 3
+  - x: -3
+    y: 4
+  - x: -2
+    y: -4
   - x: -2
     y: -3
   - x: -2
@@ -114,6 +208,8 @@ MonoBehaviour:
     y: 2
   - x: -2
     y: 3
+  - x: -2
+    y: 4
   - x: -1
     y: -4
   - x: -1
@@ -169,6 +265,8 @@ MonoBehaviour:
   - x: 1
     y: 4
   - x: 2
+    y: -4
+  - x: 2
     y: -3
   - x: 2
     y: -2
@@ -182,6 +280,12 @@ MonoBehaviour:
     y: 2
   - x: 2
     y: 3
+  - x: 2
+    y: 4
+  - x: 3
+    y: -4
+  - x: 3
+    y: -3
   - x: 3
     y: -2
   - x: 3
@@ -192,9 +296,33 @@ MonoBehaviour:
     y: 1
   - x: 3
     y: 2
+  - x: 3
+    y: 3
+  - x: 3
+    y: 4
+  - x: 4
+    y: -4
+  - x: 4
+    y: -3
+  - x: 4
+    y: -2
+  - x: 4
+    y: -1
+  - x: 4
+    y: 0
+  - x: 4
+    y: 1
+  - x: 4
+    y: 2
+  - x: 4
+    y: 3
+  - x: 4
+    y: 4
   playerTriggerEvent: 0
-  operateIds: 
-  operateDatas: []
+  operateIds: 0200000006000000
+  operateDatas:
+  - {fileID: 11400000, guid: 054e2d8d5601b9540beb92c7a3d52b41, type: 2}
+  - {fileID: 11400000, guid: 6a30f3d3434075041af89b7f8c0a81aa, type: 2}
   defaultExit: 0
   defaultEnter: 0
   playerOperateInfo: 
