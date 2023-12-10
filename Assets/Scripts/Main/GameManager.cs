@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using UnityEngine.TextCore.Text;
 using Unity.Mathematics;
+using BehaviorDesigner.Runtime;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -62,5 +63,10 @@ public class GameManager : Singleton<GameManager>
     public void ShowObjTips(string info,Transform parent)
     {
         UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
+    }
+    public int GetPlayerBoxId()
+    {
+       int id=(int) GlobalVariables.Instance.GetVariable(GameCommon.PlayerBoxId).GetValue();
+        return id;
     }
 }

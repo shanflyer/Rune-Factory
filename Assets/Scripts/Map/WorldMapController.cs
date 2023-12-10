@@ -71,8 +71,20 @@ public class WorldMapController : MonoBehaviour
             worldName = worldName,
             displayMap = mapInstance
         });
+      
+        GameActionManager.instance.QueueAction(new CreatDefaultNPC());
+
+         
+        InputManager.instance.SwitchInputMap(false);
+        GameActionManager.instance.QueueAction(new InitInputAction());
+
+        var environmentManger = EnvironmentManger.instance;
+        GameTimeManager.instance.ZeroGameTime();
+
+
         if (GameController.instance == null)
         {
+            GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
             GameActionManager.instance.QueueAction(new CreatCharacter
             {
                 characterId = characterId,
@@ -82,15 +94,7 @@ public class WorldMapController : MonoBehaviour
                 controller = true
             });
             await UIManager.instance.ShowGamePanel<MainPanel>();
-        } 
-        GameActionManager.instance.QueueAction(new CreatDefaultNPC());
-
-         
-        InputManager.instance.SwitchInputMap(false);
-        GameActionManager.instance.QueueAction(new InitInputAction());
-
-        var environmentManger = EnvironmentManger.instance;
-        GameTimeManager.instance.ZeroGameTime();
+        }
     }
     // Use this for initialization
     void Start()

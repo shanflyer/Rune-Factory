@@ -153,6 +153,7 @@ public class GameCommon
     public const string characterTriggerRenferenceName = "Entity";
     public const string triggerRenferenceName = "Reference";
 
+    public const string PlayerBoxId = "PlayerBoxId";
     public static Vector2 GetScreenResolution()
     {
         Vector2 gameViewSize;
