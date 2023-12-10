@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -9,23 +6,30 @@ using UnityEngine.UI;
 public class PlayerTopPanel : GamePanel<IReferenceData>
 {
     public override bool changeInputModel => false;
-    [SerializeField]
-    TextMeshProUGUI goldValue, crystalValue;
-    [SerializeField]
-    Button goldAdd, crystalAdd;
-    [SerializeField]
-    TextMeshProUGUI date;
-    [SerializeField]
-    Button calendar, SetButton;
 
     [SerializeField]
-    Image PlayerHead;
+    private TextMeshProUGUI goldValue, crystalValue;
+
     [SerializeField]
-    TextMeshProUGUI PlayerName;
+    private Button goldAdd, crystalAdd;
+
     [SerializeField]
-    Image HPSlider, RPSlider;
+    private TextMeshProUGUI date;
+
     [SerializeField]
-    TextMeshProUGUI HPValue, RPValue;
+    private Button calendar, SetButton;
+
+    [SerializeField]
+    private Image PlayerHead;
+
+    [SerializeField]
+    private TextMeshProUGUI PlayerName;
+
+    [SerializeField]
+    private Image HPSlider, RPSlider;
+
+    [SerializeField]
+    private TextMeshProUGUI HPValue, RPValue;
 
     public override void SetPanelUISerializeObj()
     {
@@ -34,7 +38,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         crystalValue = FindChildGameObject<TextMeshProUGUI>("CrystalValue");
         goldAdd = FindChildGameObject<Button>("Gold");
         crystalAdd = FindChildGameObject<Button>("Crystal");
-        date=FindChildGameObject<TextMeshProUGUI>("Date");
+        date = FindChildGameObject<TextMeshProUGUI>("Date");
         calendar = FindChildGameObject<Button>("TimeObj");
         SetButton = FindChildGameObject<Button>("SetButton");
 
@@ -44,8 +48,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         RPSlider = FindChildGameObject<Image>("RPSlider");
         HPValue = FindChildGameObject<TextMeshProUGUI>("HPValue");
         RPValue = FindChildGameObject<TextMeshProUGUI>("RPValue");
-       
     }
+
     protected override void Awake()
     {
         base.Awake();
@@ -58,7 +62,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         SetButton.onClick.AddListener(() =>
         {
-           // AudioController.instance.PlayAudio(SE.click);
+            // AudioController.instance.PlayAudio(SE.click);
             UIManager.instance.ShowGamePanel<SetPanel>();
         });
 
@@ -67,7 +71,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
     }
 
-    void RefreshCharacterProperty(CharacterPropertyTrigger refreshCharacterProperty)
+    private void RefreshCharacterProperty(CharacterPropertyTrigger refreshCharacterProperty)
     {
         if (refreshCharacterProperty.characterId == CharacterManager.instance.controllerCharacter.instanceId)
         {
@@ -78,6 +82,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
             RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
         }
     }
+
     public override Task InitData(string dataKay)
     {
         goldValue.text = PayManager.instance.NowGold.ToString();
@@ -97,24 +102,27 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         return base.InitData(dataKay);
     }
+
     public override void Show(int layer = -1)
     {
         base.Show(layer);
     }
+
     public override void InitReferenceData(IReferenceData v)
     {
         RefreshPlayerGold(default(RefreshPlayerGold));
-        UpdateGameTime(default(UpdateGameTime)); 
+        UpdateGameTime(default(UpdateGameTime));
         base.InitReferenceData(v);
     }
-    void RefreshPlayerGold(RefreshPlayerGold updateMoney)
+
+    private void RefreshPlayerGold(RefreshPlayerGold updateMoney)
     {
         goldValue.text = PayManager.instance.NowGold.ToString();
         crystalValue.text = PayManager.instance.NowDiamond.ToString();
     }
-    void UpdateGameTime(UpdateGameTime updateGameTime)
-    {
-        date.text = GameTimeManager.instance.NowGameTime; 
-    }
 
+    private void UpdateGameTime(UpdateGameTime updateGameTime)
+    {
+        date.text = GameTimeManager.instance.NowGameTime;
+    }
 }

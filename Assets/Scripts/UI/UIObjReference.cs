@@ -13,6 +13,7 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     
+    public virtual void ClearSelect() { }
     public virtual void OnEnable()
     {
         transform.localScale = Vector3.one;

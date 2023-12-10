@@ -15,6 +15,13 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
         this.listPrefab = listPrefab;
         list = new List<T>();
     }
+    public virtual void ClearSelect() 
+    { 
+        for(int i=0;i<list.Count;i++)
+        {
+            list[i].ClearSelect();
+        }
+    }
     public void SelectDefault()
     {
         if(list.Count>0)

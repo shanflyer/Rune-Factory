@@ -31,7 +31,11 @@ public class ItemBoxReference : UIObjReference<Item>
         ItemValue = FindChildGameObject<Image>("ItemValue");
         ItemValueBg = FindChildGameObject("ItemValueBg");
     }
-
+    public override void ClearSelect()
+    {
+        base.ClearSelect();
+        toggle.SetIsOnWithoutNotify(false);
+    }
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
