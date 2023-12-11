@@ -74,3 +74,42 @@ public struct ShowPanel : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+public struct ShowMultiPackagePanel : GameAction
+{
+    public int packageId0, packageId1;
+
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count >= 2)
+        {
+            packageId0 = int.Parse(parameters[0].value);
+            packageId1 = int.Parse(parameters[1].value);
+        }
+        if (packageId0 == 0)
+        {
+            if(source == 0)
+            {
+                packageId0 = CharacterManager.instance.controllerCharacter.characterPackage;
+            }
+            else
+            {
+                packageId0 = source;
+            }
+        }
+        if (packageId1 == 0)
+        {
+            if (target == 0)
+            {
+                packageId1 = CharacterManager.instance.controllerCharacter.characterPackage;
+            }
+            else
+            {
+                packageId1 = target;
+            }
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}

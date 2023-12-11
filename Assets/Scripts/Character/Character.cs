@@ -462,8 +462,7 @@ public partial class Character
 
     private int level;
 
-    public Exp exp;
-    public int bag;
+    public Exp exp; 
 
     public string name;
     private int3 objCoordinate;
@@ -775,7 +774,7 @@ public partial class Character
     private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
         if (eventid == 0 && reference == 0)
-        {
+        { 
             return;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -110,15 +111,20 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         {
             if (WorldMapManager.instance.GetRuntimeMapItem(ShowMapObjTips.id, out var runtimMapItem))
             {
-                MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimMapItem.dataId);
-                if (mapItemData != null && mapItemData.operateDatas.Count > 0)
+                int operateDataLength = runtimMapItem.operateDatas.Count;
+                OperateDataList operateDataList = new OperateDataList
                 {
-                    OperateDataList operateDataList = new OperateDataList
+                    OperateDatas = new List<OperateData>()
+                };
+                if (operateDataLength > 0)
+                { 
+                    foreach(var id in runtimMapItem.operateDatas)
                     {
-                        OperateDatas = mapItemData.operateDatas
-                    };
-                    UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
+                        OperateData operateData = await GameDataManager.instance.GetAsyncData<OperateData>(id);
+                        operateDataList.OperateDatas.Add(operateData);
+                    }  
                 }
+                UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
             }
         }
     }

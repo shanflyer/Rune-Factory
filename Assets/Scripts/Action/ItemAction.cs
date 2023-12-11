@@ -134,12 +134,14 @@ public struct CreatPackage : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
+        
         if(parameters.Count >= 2)
         {
             packageDataId =int.Parse(parameters[0].value);
             level = int.Parse(parameters[1].value);
         }
         this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this,true);
     }
 }

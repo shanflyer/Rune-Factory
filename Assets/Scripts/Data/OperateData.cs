@@ -29,7 +29,7 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
         string actionDataPath = $"{DataPath.GetDataPath(typeof(GameActionData))}/{actionId}";
         gameActionData = Resources.Load<GameActionData>(actionDataPath);
 
-        string eventDataPath = $"{DataPath.GetDataPath(typeof(GameEventData))}/{actionId}";
+        string eventDataPath = $"{DataPath.GetDataPath(typeof(GameEventData))}/{eventId}";
         gameEventData = Resources.Load<GameEventData>(eventDataPath);
     }
 #endif

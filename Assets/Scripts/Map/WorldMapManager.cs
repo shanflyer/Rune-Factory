@@ -1,6 +1,8 @@
 ﻿ 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Unity.Collections;
 using Unity.Mathematics; 
 using UnityEngine;
 
@@ -41,8 +43,24 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<TryCreatRoom>(TryCreatRoom);
         GameActionManager.instance.AddListener<TryDeleteRoom>(TryDeleteRoom);
         GameActionManager.instance.AddListener<MoveMapItem>(MoveMapItem);
+        GameActionManager.instance.AddListener<RemoveMapItemOperate>(RemoveMapItemOperate);
+        GameActionManager.instance.AddListener<AddMapItemOperate>(AddMapItemOperate);
     }
+    void AddMapItemOperate(AddMapItemOperate AddMapItemOperate)
+    {
 
+        if (GetRuntimeMapItem(AddMapItemOperate.mapItemId, out var runtimeMapItem))
+        {
+            runtimeMapItem.operateDatas.Add(AddMapItemOperate.addeOperateId);
+        }
+    }
+    void RemoveMapItemOperate(RemoveMapItemOperate removeMapItemOperate)
+    {
+        if(GetRuntimeMapItem(removeMapItemOperate.mapItemId,out var runtimeMapItem))
+        {
+            runtimeMapItem.operateDatas.Remove(removeMapItemOperate.removeOperateId);
+        }
+    }
     protected override void Clear()
     {
         base.Clear(); 
@@ -203,7 +221,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
             instanceId = instanceId,
             editorInstanceId = mapItem.instanceId,
             animationKey = mapItem.animationKey,
-            mapInstanceId = mapId
+            mapInstanceId = mapId,
+            operateDatas=new NativeHashSet<int>(8,Allocator.Persistent)
         };
         runtimeMapItems.AddData(runtimeMapItem);
         if (!itemInMapDatas.TryGetValue(mapId, out List<int> items))
@@ -222,6 +241,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.QueueAction(tryCreatStoreCounter,true);
 
         var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
+
+        for(int i = 0; i < mapItemData.operateIds.Count; i++)
+        {
+            runtimeMapItem.operateDatas.Add(mapItemData.operateIds[i]);
+        }
+
         if (mapItemData.triggerCells.Length > 0)
         {
             MapCellController.instance.AddTriggerCell(mapItemData.triggerCells, mapId, mapItemData.defaultEnter,
@@ -434,8 +459,10 @@ public struct RuntimeMapItem : INativeData
     public int mapInstanceId;
     public int2 coordinate;
     public int2 animationKey;
+    public NativeHashSet<int> operateDatas;
     public int Key => instanceId;
     public void Dispose()
     {
+        operateDatas.Dispose();
     }
 }

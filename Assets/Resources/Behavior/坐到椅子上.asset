@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: "\u5750\u5230\u6905\u5B50\u4E0A"
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(527.5,10)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-1.81973839,191.4286)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GetEntityPos","NodeData":{"Offset":"(-212.764954,220.84198)"},"ID":2,"Name":"\u83b7\u53d6\u4e2a\u4f53\u4f4d\u7f6e","Instant":true,"SharedVector3targetPos":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"MapItemPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedIntentityId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"TargetItem","IsShared":true,"Int32mValue":-2147483648},"EntityTypeentityType":"\u5730\u56fe\u9053\u5177"},{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.UnityVector3.Operator","NodeData":{"Offset":"(-140.722183,335.071625)"},"ID":3,"Name":"\u7269\u4f53\u4f4d\u7f6e\u52a0\u504f\u79fb\u4f4d\u7f6e","Instant":true,"Operationoperation":"Add","SharedVector3firstVector3":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"MapItemPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedVector3secondVector3":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"OffsetPos","IsShared":true,"Vector3mValue":"(0,0,0)"},"SharedVector3storeResult":{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"TruePos","IsShared":true,"Vector3mValue":"(0,0,0)"}},{"Type":"RunGameActions","NodeData":{"Offset":"(-33.19795,233.865112)"},"ID":4,"Name":"\u8bbe\u7f6e\u89d2\u8272\u4e34\u65f6\u4f4d\u7f6e","Instant":true,"SharedIntsource":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"SharedInttarget":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"SharedIntsharedSetIntValue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"List`1otherDatas":[],"List`1dynamicParameterDatas":[{"Type":"DynamicParameterData","Value":{"List`1Parameters":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"TruePos","IsShared":true,"Vector3mValue":"(0,0,0)"}]}}],"List`1gameActionDatas":[0],"BooleanwaitResult":false},{"Type":"SetCharacterAnimation","NodeData":{"Offset":"(114.449829,387.8548)"},"ID":5,"Name":"\u8bbe\u7f6e\u89d2\u8272\u52a8\u753b","Instant":true,"AnimationParameter[]animationParameters":[{"Type":"AnimationParameter","Value":{"Stringparameter":"Dir_X","ParameterTypeparameterType":"FLOAT","BooleanboolValue":false,"Int32intValue":0,"SinglefloatValue":0}},{"Type":"AnimationParameter","Value":{"Stringparameter":"Dir_Y","ParameterTypeparameterType":"FLOAT","BooleanboolValue":false,"Int32intValue":0,"SinglefloatValue":-1}}]},{"Type":"RunGameActions","NodeData":{"Offset":"(225.985718,261.832367)"},"ID":6,"Name":"\u79fb\u9664\u5750\u4e0b\uff0c\u589e\u52a0\u7ad9\u8d77","Instant":true,"SharedIntsource":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"SharedInttarget":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"SharedIntsharedSetIntValue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"List`1otherDatas":[{"Type":"DynamicData","Value":{"SharedIntsource":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"TargetItem","IsShared":true,"Int32mValue":-2147483648},"SharedInttarget":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":7},"SharedIntvalue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648}}},{"Type":"DynamicData","Value":{"SharedIntsource":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"TargetItem","IsShared":true,"Int32mValue":-2147483648},"SharedInttarget":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":8},"SharedIntvalue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648}}}],"List`1dynamicParameterDatas":[],"List`1gameActionDatas":[1,2],"BooleanwaitResult":false},{"Type":"RunGameActions","NodeData":{"Offset":"(318.78067,402.975555)"},"ID":7,"Name":"\u5237\u65b0\u4ea4\u4e92\u5217\u8868","Instant":true,"SharedIntsource":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"SharedInttarget":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"SharedIntsharedSetIntValue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"List`1otherDatas":[],"List`1dynamicParameterDatas":[{"Type":"DynamicParameterData","Value":{"List`1Parameters":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"TargetItem","IsShared":true,"Int32mValue":-2147483648}]}}],"List`1gameActionDatas":[3],"BooleanwaitResult":false},{"Type":"GameEventEnd","NodeData":{"Offset":"(387.64566,231.982635)"},"ID":8,"Name":"\u4e8b\u4ef6\u7ed3\u675f\u79fb\u9664","Instant":true,"SharedIntgameEventId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648}}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"MapItemPos","IsShared":true,"Vector3mValue":"(0,0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"OffsetPos","IsShared":true,"Vector3mValue":"(0,0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedVector3","Name":"TruePos","IsShared":true,"Vector3mValue":"(0,0,0)"},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"TargetItem","IsShared":true,"Int32mValue":-2147483648}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 11400000, guid: 3e56ac16c7995c84a90f87b7d389a6be, type: 2}
+        - {fileID: 11400000, guid: 4fd11e69f99cd1a4a98049fa8ce8060e, type: 2}
+        - {fileID: 11400000, guid: afe7773859851c0438fb5366fbdea226, type: 2}
+        - {fileID: 11400000, guid: 38ba98c915b084249bf4485894964154, type: 2}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.7

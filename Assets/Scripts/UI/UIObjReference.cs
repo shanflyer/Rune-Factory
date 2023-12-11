@@ -12,7 +12,7 @@ public delegate void SelectAction<T>(T t,bool selected=true) where T : IReferenc
 public class UIObjReference<T> : BaseReference where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
-    
+     
     public virtual void ClearSelect() { }
     public virtual void OnEnable()
     {

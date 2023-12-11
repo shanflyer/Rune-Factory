@@ -1,10 +1,25 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.TextCore.Text;
 
+public struct PlayerSleep : GameAction
+{
+    public int targetHour, targetMinute;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+            targetHour = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            targetMinute = int.Parse(parameters[1].value); 
+        GameActionManager.instance.QueueAction(this);
+    }
+
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+}
 public struct LerpGameTime : GameAction
 {
-    public int targetHour,targetMinute;
+    public int targetHour, targetMinute;
     public float totalTime;
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
@@ -15,23 +30,31 @@ public struct LerpGameTime : GameAction
             totalTime = float.Parse(parameters[2].value);
         GameActionManager.instance.QueueAction(this);
     }
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 }
+
 public struct ClearOverrideEnvironment : GameAction
-{ 
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
-    { 
+    {
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct SetMapOverrideEnvironment : GameAction
 {
     public string dayEnvironmentDataName;
     public string duskEnvironmentDataName;
     public string dawnEnvironmentDataName;
     public string nightEnvironmentDataName;
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {
         if (parameters.Count > 0)
@@ -45,18 +68,24 @@ public struct SetMapOverrideEnvironment : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+
 public struct SetEnvironmentLight : GameAction
 {
     public EnvironmentLightData environmentLightData;
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
-} 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+}
+
 public struct OverrideEnvironmentLight : GameAction
 {
     public bool overSkyAndSun;
     public EnvironmentLightData environmentLightData;
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 }
+
 public struct ClearOverrideEnvironmentLight : GameAction
 {
-      public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 }

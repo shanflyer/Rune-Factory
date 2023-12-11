@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine;
 
 public struct TryTeamLeaderMove : GameAction
 {
@@ -89,6 +90,79 @@ public struct StartCharacterBehavior : GameAction
     }
 }
 
+public struct SetCharacterRandomPos : GameAction 
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
+    public Vector3 pos;
+    public int range;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+
+        if (parameters.Count >= 5)
+        {
+            pos.x = float.Parse(parameters[1].value);
+            pos.y = float.Parse(parameters[2].value);
+            pos.z = float.Parse(parameters[3].value);
+            range = int.Parse(parameters[4].value);
+        }
+        else if (parameters.Count >= 3)
+        {
+            pos = GameCommon.StringToVector3(parameters[1].value);
+            range = int.Parse(parameters[2].value);
+        }
+        else
+        {
+            pos.x = target;
+            pos.y = value;
+        }
+        
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct SetCharacterTempPos : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
+    public Vector3 pos;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+
+        if (parameters.Count >= 4)
+        {
+            pos.x = float.Parse(parameters[1].value);
+            pos.y = float.Parse(parameters[2].value);
+            pos.z = float.Parse(parameters[3].value);
+        }
+        else if (parameters.Count >= 2)
+        {
+            pos = GameCommon.StringToVector3(parameters[1].value);
+        }
+        else
+        {
+            pos.x = target;
+            pos.y = value;
+        }
+        
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct ChangeCharacter : GameAction
 {
     public int instanceId;
@@ -145,6 +219,10 @@ public struct SetCharacterAnimator : GameAction
                     floatValue = float.Parse(parameters[3].value);
                     break;
             }
+        }
+        if (source != 0)
+        {
+            characterId = source;
         }
 
         GameActionManager.instance.QueueAction(this);

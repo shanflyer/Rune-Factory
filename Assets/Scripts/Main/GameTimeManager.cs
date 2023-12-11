@@ -532,7 +532,12 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameActionManager.instance.AddListener<LerpGameTime>(LerpGameTime);
         GameActionManager.instance.AddListener<SetMapOverrideEnvironment>(SetMapOverrideEnvironment);
         GameActionManager.instance.AddListener<ClearOverrideEnvironment>(ClearOverrideEnvironment);
+        GameActionManager.instance.AddListener<PlayerSleep>(PlayerSleep);
         // CreatData();
+    }
+    void PlayerSleep(PlayerSleep playerSleep)
+    {
+
     }
 
     private void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)

@@ -152,7 +152,66 @@ public struct CloseMapObjTips : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
+public struct AddMapItemOperate : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int mapItemId;
+    public int addeOperateId;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+        {
+            mapItemId = int.Parse(parameters[0].value);
+            if (parameters.Count > 1)
+            {
+                addeOperateId = int.Parse(parameters[1].value);
+            }
+        }
+        else
+        {
+            mapItemId = source;
+            addeOperateId = target;
+        }
+        if (setResult != null)
+        {
+            this.setResult = setResult;
+        }
+
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct RemoveMapItemOperate : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int mapItemId;
+    public int removeOperateId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+        {
+            mapItemId = int.Parse(parameters[0].value);
+            if (parameters.Count > 1)
+            {
+                removeOperateId = int.Parse(parameters[1].value);
+            }
+        }
+        else
+        {
+            mapItemId = source;
+            removeOperateId= target;
+        }
+        if(setResult != null)
+        {
+            this.setResult = setResult;
+        }
+        
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct ShowMapObjTips : GameAction
 {
     public SetValue setValue { get; set; }
@@ -373,6 +432,29 @@ public struct AttachMapItemData : GameAction
         if (parameters.Count >= 1)
         {
             mapItemIntanceId = int.Parse(parameters[0].value);
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
+public struct GetMapItemPos : GameAction
+{
+    public int mapItemIntanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count >= 1)
+        {
+            mapItemIntanceId = int.Parse(parameters[0].value);
+        }
+        if (setResult!=null)
+        {
+            this.setResult = setResult;
+        }
+        if (setValue != null)
+        {
+            this.setValue = setValue;
         }
         GameActionManager.instance.QueueAction(this);
     }

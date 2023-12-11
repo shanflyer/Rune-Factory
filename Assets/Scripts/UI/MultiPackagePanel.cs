@@ -313,45 +313,77 @@ public class MultiPackagePanel : GamePanel<PackageList>
     public override async void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
-
-        Item defaultItem = default(Item);
         var packageData0 = v.packageDatas[0];
+        var packageData1 = v.packageDatas[1];
+        PackageCaseCount0 = packageData0.caseCount;
+        packageSetData0 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData0.dataId);
+        PackageCaseCount1 = packageData1.caseCount;
+        packageSetData1 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData1.dataId);
+
+        Item defaultItem = default(Item); 
         List<Item> items0 = new List<Item>();
+        int itemCaseCount0 = 0;
         if (packageData0.items != null)
         {
-            items0.AddRange(packageData0.items);
+            for(int i = 0; i < packageData0.items.Count; i++)
+            {
+                Item item = packageData0.items[i];
+                if (packageSetData1.packageType == PackageType.鲜活&&!item.isFresh)
+                {
+                    item.locked = true;
+                }
+                if (packageSetData1.packageType == PackageType.非鲜活&& item.isFresh)
+                {
+                    item.locked = true;
+                }
+                items0.Add(item);
+            } 
+            itemCaseCount0 = packageData0.items.Count;
         }
         for (int i = items0.Count; i < packageData0.caseCount; i++)
         {
             items0.Add(defaultItem);
         }
 
-        PackageCaseCount0 = packageData0.caseCount;
-        packageSetData0 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData0.dataId);
+       
 
         Title0.text = packageSetData0.packageName;
         itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
-        caseCount0.text = $"{packageData0.items.Count}/{packageData0.caseCount}";
+        caseCount0.text = $"{itemCaseCount0}/{packageData0.caseCount}";
         packageLevelUp0.transform.localScale = packageSetData0.canLevelUp ? Vector3.one : Vector3.zero;
         packageId0 = packageData0.instanceId;
 
-        var packageData1 = v.packageDatas[1];
+       
         List<Item> items1 = new List<Item>();
+        int itemCaseCount1 = 0;
         if (packageData1.items != null)
         {
-            items1.AddRange(packageData1.items);
+            for (int i = 0; i < packageData1.items.Count; i++)
+            {
+                Item item = packageData1.items[i];
+                if (packageSetData0.packageType == PackageType.鲜活 && !item.isFresh)
+                {
+                    item.locked = true;
+                }
+                if (packageSetData0.packageType == PackageType.非鲜活 && item.isFresh)
+                {
+                    item.locked = true;
+                }
+                items1.Add(item);
+            }
+             
+            itemCaseCount1 = packageData1.items.Count;
         }
         for (int i = items1.Count; i < packageData1.caseCount; i++)
         {
             items1.Add(defaultItem);
         }
 
-        PackageCaseCount1 = packageData1.caseCount;
-        packageSetData1 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData1.dataId);
+       
 
         Title1.text = packageSetData1.packageName;
         itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
-        caseCount1.text = $"{packageData1.items.Count}/{packageData1.caseCount}";
+        caseCount1.text = $"{itemCaseCount1}/{packageData1.caseCount}";
         packageLevelUp1.transform.localScale = packageSetData1.canLevelUp ? Vector3.one : Vector3.zero;
         packageId1 = packageData1.instanceId;
 

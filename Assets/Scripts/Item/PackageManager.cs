@@ -104,6 +104,22 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<CreatPackage>(CreatPackage);
         GameActionManager.instance.AddListener<RemovePackage>(RemovePackage);
         GameActionManager.instance.AddListener<RemovePackageItem>(RemovePackageItemAction);
+        GameActionManager.instance.AddListener<ShowMultiPackagePanel>(ShowMultiPackagePanel);
+    }
+    
+    void ShowMultiPackagePanel(ShowMultiPackagePanel showMultiPackagePanel)
+    {
+        PackageData packageData0 = GetPackageData(showMultiPackagePanel.packageId0);
+        PackageData packageData1 = GetPackageData(showMultiPackagePanel.packageId1);
+
+        PackageList packageList = new PackageList
+        {
+            packageDatas = new List<PackageData>
+            {
+                packageData0,packageData1
+            }
+        };
+        UIManager.instance.ShowGamePanel<MultiPackagePanel, PackageList>(packageList);
     }
 
     private async void CreatPackage(CreatPackage creatPackage)
@@ -113,6 +129,10 @@ public class PackageManager : Singleton<PackageManager>
         if (GameManager.instance.GetPlayerBoxId() == instanceId)
         {
             AddPlayerPackage(instanceId);
+        }
+        if (creatPackage.setResult != null)
+        {
+            creatPackage.setResult(true);
         }
     }
 
@@ -654,6 +674,7 @@ public class PackageManager : Singleton<PackageManager>
                             instanceId = ItemManager.instance.CreatIntance(),
                             dataId = itemData.id,
                             value=instanceId,
+                            isFresh=itemData.isFresh,
                             count = 0
                         };
                         if (items.Count <= index)
@@ -709,6 +730,7 @@ public class PackageManager : Singleton<PackageManager>
                             instanceId = ItemManager.instance.CreatIntance(),
                             dataId = itemData.id,
                             value = instanceId,
+                            isFresh = itemData.isFresh,
                             count = 0
                         };
 
@@ -740,6 +762,7 @@ public class PackageManager : Singleton<PackageManager>
                             instanceId = ItemManager.instance.CreatIntance(),
                             dataId = itemData.id,
                             value = instanceId,
+                            isFresh = itemData.isFresh,
                             count = 1
                         };
                         int index = items.Count;

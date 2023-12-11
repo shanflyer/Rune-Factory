@@ -117,8 +117,51 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<ClearEquip>(ClearEquip);
         GameActionManager.instance.AddListener<ChangeCharacter>(ChangeCharacter);
         GameActionManager.instance.AddListener<DisplayOrHideCharacter>(DisplayOrHideCharacter);
-    }
 
+        GameActionManager.instance.AddListener<SetCharacterTempPos>(SetCharacterTempPos);
+        GameActionManager.instance.AddListener<SetCharacterRandomPos>(SetCharacterRandomPos);
+    }
+    void SetCharacterRandomPos(SetCharacterRandomPos SetCharacterRandomPos)
+    {
+        Character character = GetCharacter(SetCharacterRandomPos.characterId);
+        if (character != null&& characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
+        {
+            int2 coordinate = GameCommon.GetMapCoordinateInt(SetCharacterRandomPos.pos);
+            int2 targetCoordinate = MapCellController.instance.GetRandomWalkable(new int3(coordinate.xy, character.mapInstance), SetCharacterRandomPos.range);
+             
+            character.RemoveMove();
+            if (character != null)
+            {
+                character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
+
+                RefreshNpcRuntimeObj(character);
+            }
+
+            if (SetCharacterRandomPos.setResult != null)
+            {
+                SetCharacterRandomPos.setResult(true);
+            }
+        }
+        if (SetCharacterRandomPos.setResult != null)
+        {
+            SetCharacterRandomPos.setResult(false);
+        }
+    }
+    void SetCharacterTempPos(SetCharacterTempPos setCharacterTempPos)
+    {
+        if(GetRuntimeCharacterObj(setCharacterTempPos.characterId,out var characterRuntimeObj))
+        {
+            characterRuntimeObj.animator.transform.position = setCharacterTempPos.pos;
+            if (setCharacterTempPos.setResult != null)
+            {
+                setCharacterTempPos.setResult(true);
+            }
+        }
+        if (setCharacterTempPos.setResult != null)
+        {
+            setCharacterTempPos.setResult(false);
+        }
+    }
     private void DisplayOrHideCharacter(DisplayOrHideCharacter displayOrHideCharacter)
     {
         var character = GetCharacterForDataId(displayOrHideCharacter.characterId);

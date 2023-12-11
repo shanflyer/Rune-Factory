@@ -17,6 +17,8 @@ public class ItemBoxReference : UIObjReference<Item>
     private Image ItemValue;
     [SerializeField]
     private TextMeshProUGUI count;
+    [SerializeField]
+    Image LockMask;
 
     private Item item;
     public Item Item => item;
@@ -30,6 +32,7 @@ public class ItemBoxReference : UIObjReference<Item>
         count = FindChildGameObject<TextMeshProUGUI>("count");
         ItemValue = FindChildGameObject<Image>("ItemValue");
         ItemValueBg = FindChildGameObject("ItemValueBg");
+        LockMask = FindChildGameObject<Image>("LockMask");
     }
     public override void ClearSelect()
     {
@@ -71,6 +74,22 @@ public class ItemBoxReference : UIObjReference<Item>
         this.SelectAction = SelectAction;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
         toggle.enabled = true;
+
+        if (t.locked && LockMask)
+        {
+            LockMask.transform.localScale = Vector3.one;
+            toggle.interactable = false;
+            toggle.SetIsOnWithoutNotify(false);
+        }
+        else
+        {
+            if (LockMask)
+            {
+                LockMask.transform.localScale = Vector3.zero;
+            } 
+            toggle.interactable = true; 
+        }
+
         if (itemData != null)
         { 
             icon.sprite = itemData.icon;

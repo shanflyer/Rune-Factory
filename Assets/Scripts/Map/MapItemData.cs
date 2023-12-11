@@ -11,6 +11,7 @@ public class MapItemData:ScriptableObject,IGameData
 {
     public int id;
     public string itemName;
+    public string objName;
 
     public GameObject itemObj;
 
@@ -18,8 +19,7 @@ public class MapItemData:ScriptableObject,IGameData
     public int2[] triggerCells;
     public int2[] playerTriggerCells;
     public int playerTriggerEvent;
-    public List<int> operateIds = new List<int>();
-    public List<OperateData> operateDatas = new List<OperateData>();
+    public List<int> operateIds = new List<int>(); 
     public int defaultExit, defaultEnter;
     public string playerOperateInfo;
     public override string ToString()
@@ -29,14 +29,22 @@ public class MapItemData:ScriptableObject,IGameData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
-        string path = $"{EditorDataPath.mapItemPrefabPath}{itemName}{".prefab"}";
-        itemObj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+        if (!string.IsNullOrEmpty(objName))
+        {
+            string path = $"{EditorDataPath.mapItemPrefabPath}{objName}{".prefab"}";
+            itemObj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+        }
+        else if(itemObj!=null)
+        {
+            objName = itemObj.name;
+        }
+         /*
         string operatePath = DataPath.GetDataPath(typeof(OperateData));
         operateDatas.Clear();
         foreach (var operate in operateIds)
         {
             operateDatas.Add(Resources.Load<OperateData>($"{operatePath}/{operate}"));
-        }
+        }*/
     }
 
     public string GetKey()

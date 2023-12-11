@@ -11,12 +11,16 @@ public struct Item:IReferenceData
     public int dataId; 
     public int count;
     public float value;
+    public bool isFresh;
+    public bool locked;
     public Item(int dataId,int count, float value=1)
     {
         this.dataId = dataId;
         this.count = count;
         instanceId = 0;
         this.value = value;
+        isFresh = false;
+        locked = false;
     }
 }
 

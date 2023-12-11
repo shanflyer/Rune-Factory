@@ -186,6 +186,26 @@ public class GameCommon
 
 #endif 
 
+    public static Vector3 StringToVector3(string str)
+    {
+        Vector3 vector3 = new Vector3();
+        try
+        {
+            if (str.Length > 2)
+            {
+                str = str.Substring(1, str.Length - 1);
+                var strs = str.Split(',');
+                vector3.x = float.Parse(strs[0]);
+                vector3.y = float.Parse(strs[1]);
+                vector3.z = float.Parse(strs[2]);
+            }
+        }
+        catch { }
+        
+
+        return vector3;
+    }
+
     public static Vector2 SetImageSize(Sprite sprite,Vector2 size)
     {
         Vector2 spriteSize = sprite.rect.size;

@@ -74,6 +74,35 @@ public class MapCellController : Singleton<MapCellController>
         } 
         return -1;
     }
+
+    public int2 GetRandomWalkable(int3 centerCoordinate, int range)
+    {
+        var cells = GetWalkableCells(centerCoordinate, range);
+        if (cells.Count == 0)
+        {
+            return centerCoordinate.xy;
+        }
+        int index = GameRandom.RandomInt(0, cells.Count);
+        return cells[index];
+    }
+    public List<int2> GetWalkableCells(int3 centerCoordinate,int range)
+    {
+        List<int2> cells = new List<int2>();
+
+        for(int x = -range; x < range; x++)
+        {
+            for (int y = -range; y < range; y++)
+            {
+                int2 coordinate=centerCoordinate.xy+new int2(x,y);
+                if (CheckIsWalk(coordinate, centerCoordinate.z))
+                {
+                    cells.Add(coordinate);
+                }
+            }
+        }
+
+        return cells;
+    }
     public struct MapTriggerAreas
     {
         public NativeList<TriggerArea> triggerAreas;
