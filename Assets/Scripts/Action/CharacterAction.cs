@@ -90,6 +90,43 @@ public struct StartCharacterBehavior : GameAction
     }
 }
 
+public struct SetCharacterRandomCoordinate : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
+    public int2 Coordinate;
+    public int range;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+
+        if (parameters.Count >= 4)
+        {
+            Coordinate.x = int.Parse(parameters[1].value);
+            Coordinate.y = int.Parse(parameters[2].value); 
+            range = int.Parse(parameters[3].value);
+        }
+        else if (parameters.Count >= 3)
+        {
+            Coordinate = GameCommon.StringToInt2(parameters[1].value);
+            range = int.Parse(parameters[2].value);
+        }
+        else
+        {
+            Coordinate.x = target;
+            Coordinate.y = value;
+        }
+
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct SetCharacterRandomPos : GameAction 
 {
     public SetValue setValue { get; set; }

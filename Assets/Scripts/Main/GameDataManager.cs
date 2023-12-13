@@ -297,7 +297,7 @@ public interface IGameData
     public string GetKey();
 #if UNITY_EDITOR
     public void SetReferenceData();
-#endif
+#endif 
     public async void Init() { }
 
     public void Clear() { }

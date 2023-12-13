@@ -1,6 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+public struct OpenOrCloseInputMap : GameAction
+{
+    public bool open;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count >= 1)
+        {
+            open = bool.Parse(parameters[0].value);
+        }
+        else
+        {
+            open = source != 1;
+        }
+        GameActionManager.instance.QueueAction(this);
+    }
+}
 public struct SwitchInputMap : GameAction
 {
     public bool UI;
@@ -52,7 +70,7 @@ public struct OpenPanelAction : GameAction
             if (parameters.Count >= 1)
             {
                 type = Type.GetType(parameters[0].value);
-                dataId = null;
+                dataId = source.ToString();
             }
         }
         GameActionManager.instance.QueueAction(this);

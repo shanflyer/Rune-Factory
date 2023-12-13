@@ -388,13 +388,13 @@ public class GameTime
     {
         if (mySecond >= 20)
         {
-            mySecond = mySecond % 20;
-            minute++;
+            minute += mySecond / 20;
+            mySecond = mySecond % 20; 
         }
         if (minute >= 60)
         {
             hour += minute / 60;
-            minute = 0;
+            minute = minute % 20;
         }
         if (hour >= 24)
         {
@@ -537,7 +537,62 @@ public class GameTimeManager : Singleton<GameTimeManager>
     }
     void PlayerSleep(PlayerSleep playerSleep)
     {
+        UIManager.instance.CloseGamePanel<OperateButtonPanel>(); 
+        void WakeUp()
+        {
+            PlayerWakeUp playerWakeUp = new PlayerWakeUp
+            {
+                characterId = playerSleep.characterId
+            };
+            GameActionManager.instance.QueueAction(playerWakeUp);
+            SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+            {
+                characterId = playerSleep.characterId,
+                parameter = "State",
+                parameterType = ParameterType.INT,
+                intValue = 0
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimator);
 
+            SetCharacterAnimator setCharacterAnimatorDir_X = new SetCharacterAnimator
+            {
+                characterId = playerSleep.characterId,
+                parameter = "Dir_X",
+                parameterType = ParameterType.FLOAT,
+                floatValue = 0
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimatorDir_X, true);
+            SetCharacterAnimator setCharacterAnimatorDir_Y = new SetCharacterAnimator
+            {
+                characterId = playerSleep.characterId,
+                parameter = "Dir_Y",
+                parameterType = ParameterType.FLOAT,
+                floatValue = -1
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimatorDir_Y, true);
+             
+
+            GameTimerController.instance.DelayAction(1200,
+                () =>
+                {
+                    Character character = CharacterManager.instance.GetCharacter(playerSleep.characterId);
+                    SetCharacterRandomCoordinate setCharacterRandomCoordinate = new SetCharacterRandomCoordinate
+                    {
+                        characterId = playerSleep.characterId,
+                        Coordinate = character.coordinate,
+                        range = 3
+                    };
+                    GameActionManager.instance.QueueAction(setCharacterRandomCoordinate);
+
+                    OpenOrCloseInputMap openOrCloseInputMap = new OpenOrCloseInputMap
+                    {
+                        open = true,
+                    };
+                    GameActionManager.instance.QueueAction(openOrCloseInputMap);
+                });
+           
+        }
+        LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute, GameCommon.sleepCostTime, WakeUp);
     }
 
     private void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)
@@ -640,7 +695,12 @@ public class GameTimeManager : Singleton<GameTimeManager>
         nowGameTime.minute = 0;
         nowGameTime.AddDate();
     }
-
+    private void LerpGameTime(int targetHour,int targetMinute,float costTime, Action endAction = null)
+    {
+        StopTimeRun();
+        var lerpTimeIEnumerator = LerpTime(targetHour, targetMinute, costTime, endAction);
+        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
+    }
     private void LerpGameTime(LerpGameTime lerpGameTime)
     {
         StopTimeRun();
@@ -648,9 +708,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
     }
 
-    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime)
+    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime,Action endAction=null)
     {
-        int startValue = (Hour * 60 + Minute) * 20;
+        int startValue = (Hour * 60 + Minute) * 20; 
+        if (targetHour < Hour)
+        {
+            targetHour += 24;
+        }
         int endValue = (targetHour * 60 + targetMinue) * 20;
         int addValue = (int)math.round((endValue - startValue) / totalTime * UnityEngine.Time.fixedDeltaTime);
         float timeValue = 0;
@@ -662,6 +726,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
             //Debug.Log($"Time:{timeValue}-hour:{nowGameTime.hour}-minute:{nowGameTime.minute}--second:{nowGameTime.mySecond}");
 
             yield return new WaitForFixedUpdate();
+        }
+        if (endAction!=null)
+        {
+            endAction.Invoke();
         }
     }
 

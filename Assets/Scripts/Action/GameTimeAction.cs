@@ -1,7 +1,29 @@
 ﻿using System.Collections.Generic;
 
+public struct PlayerWakeUp : GameAction
+{
+    public int characterId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        else
+        {
+            characterId = source;
+        }
+
+        GameActionManager.instance.QueueAction(this);
+    }
+
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+}
+ 
 public struct PlayerSleep : GameAction
 {
+    public int characterId;
     public int targetHour, targetMinute;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
     {

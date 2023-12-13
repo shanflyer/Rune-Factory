@@ -76,7 +76,7 @@ public class GameCommon
     public const int zeroGameYear=1300;
     public const Season zeroSeasom = Season.´º;
     public const int zeroDay = 1;
-
+    public const float sleepCostTime = 8.0f;
     public const int shortcutItemCount = 5;
 
     public const int animalDefaultFoodItem = 70;
@@ -185,7 +185,24 @@ public class GameCommon
     }
 
 #endif 
+    public static int2 StringToInt2(string str)
+    {
+        int2 result = new int2();
+        try
+        {
+            if (str.Length > 2)
+            {
+                str = str.Substring(1, str.Length - 1);
+                var strs = str.Split(',');
+                result.x = int.Parse(strs[0]);
+                result.y = int.Parse(strs[1]); 
+            }
+        }
+        catch { }
 
+
+        return result;
+    }
     public static Vector3 StringToVector3(string str)
     {
         Vector3 vector3 = new Vector3();
@@ -698,7 +715,9 @@ public static class DataPath
         {typeof(FilmData),"Data/FilmData" },
         {typeof(SeasonData),"Data/SeasonDataList" },
         {typeof(WeatherData),"Data/WeatherData" },
-        {typeof(EnvironmentData),"Data/EnvironmentDataList" }
+        {typeof(EnvironmentData),"Data/EnvironmentDataList" },
+        {typeof(SleepSetData),"Data/SleepSetData/SleepSetDataList" },
+        {typeof(SleepSetDataList),"Data/SleepSetData" },
     };
 
     public static string GetDataPath(Type type)

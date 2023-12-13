@@ -80,6 +80,7 @@ public class InputManager :Singleton<InputManager>
         base.Init();
 
         GameActionManager.instance.AddListener<SwitchInputMap>(SwitchInputMap);
+        GameActionManager.instance.AddListener<OpenOrCloseInputMap>(OpenOrCloseInputMap);
 
         var eventSystems =GameObject.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
         if (eventSystems.Length > 1)
@@ -149,14 +150,46 @@ public class InputManager :Singleton<InputManager>
 
         
     }
+    void OpenOrCloseInputMap(OpenOrCloseInputMap OpenOrCloseInputMap)
+    {
+        if (uiAction != null)
+        {
+            if (OpenOrCloseInputMap.open)
+            { 
+                uiAction.Enable();
+            }
+            else
+            {
+                uiAction.Disable();
+            }
+        }
+
+        if (playerAction != null)
+        {
+            if (OpenOrCloseInputMap.open)
+            {
+                if (!OnlyUI)
+                {
+                    playerAction.Enable();
+                } 
+            }
+            else
+            {
+                playerAction.Disable();
+            }
+        }
+    }
     void SwitchInputMap(SwitchInputMap switchInputMap)
     {
         SwitchInputMap(switchInputMap.UI);
     }
+
+    private bool OnlyUI = false;
     public void SwitchInputMap(bool UI)
     {
         if (uiAction != null && playerAction != null)
         {
+            OnlyUI = UI;
             if (UI)
             {
                 //uiAction.Enable();

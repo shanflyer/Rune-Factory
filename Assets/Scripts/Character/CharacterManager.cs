@@ -120,6 +120,33 @@ public class CharacterManager : Singleton<CharacterManager>
 
         GameActionManager.instance.AddListener<SetCharacterTempPos>(SetCharacterTempPos);
         GameActionManager.instance.AddListener<SetCharacterRandomPos>(SetCharacterRandomPos);
+        GameActionManager.instance.AddListener<SetCharacterRandomCoordinate>(SetCharacterRandomCoordinate);
+    }
+    void SetCharacterRandomCoordinate(SetCharacterRandomCoordinate setCharacterRandomCoordinate)
+    {
+        Character character = GetCharacter(setCharacterRandomCoordinate.characterId);
+        if (character != null )
+        { 
+            int2 targetCoordinate = MapCellController.instance.GetRandomWalkable(new int3(setCharacterRandomCoordinate.Coordinate.xy, character.mapInstance),
+                setCharacterRandomCoordinate.range);
+
+            character.RemoveMove();
+            if (character != null)
+            {
+                character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
+
+                RefreshNpcRuntimeObj(character);
+            }
+
+            if (setCharacterRandomCoordinate.setResult != null)
+            {
+                setCharacterRandomCoordinate.setResult(true);
+            }
+        }
+        if (setCharacterRandomCoordinate.setResult != null)
+        {
+            setCharacterRandomCoordinate.setResult(false);
+        }
     }
     void SetCharacterRandomPos(SetCharacterRandomPos SetCharacterRandomPos)
     {

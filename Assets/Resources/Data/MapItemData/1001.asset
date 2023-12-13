@@ -14,13 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1001
   itemName: "\u5E8A"
+  objName: 
   itemObj: {fileID: 7270157817043345538, guid: 0825d06e8ad28fd49ac05d97e4887f71, type: 3}
   colliderCells:
   - x: -3
-    y: -4
-  - x: -3
-    y: -3
-  - x: -3
     y: -2
   - x: -3
     y: -1
@@ -32,10 +29,10 @@ MonoBehaviour:
     y: 2
   - x: -3
     y: 3
-  - x: -2
-    y: -4
-  - x: -2
-    y: -3
+  - x: -3
+    y: 4
+  - x: -3
+    y: 5
   - x: -2
     y: -2
   - x: -2
@@ -48,10 +45,10 @@ MonoBehaviour:
     y: 2
   - x: -2
     y: 3
-  - x: -1
-    y: -4
-  - x: -1
-    y: -3
+  - x: -2
+    y: 4
+  - x: -2
+    y: 5
   - x: -1
     y: -2
   - x: -1
@@ -64,10 +61,10 @@ MonoBehaviour:
     y: 2
   - x: -1
     y: 3
-  - x: 0
-    y: -4
-  - x: 0
-    y: -3
+  - x: -1
+    y: 4
+  - x: -1
+    y: 5
   - x: 0
     y: -2
   - x: 0
@@ -80,10 +77,10 @@ MonoBehaviour:
     y: 2
   - x: 0
     y: 3
-  - x: 1
-    y: -4
-  - x: 1
-    y: -3
+  - x: 0
+    y: 4
+  - x: 0
+    y: 5
   - x: 1
     y: -2
   - x: 1
@@ -96,10 +93,10 @@ MonoBehaviour:
     y: 2
   - x: 1
     y: 3
-  - x: 2
-    y: -4
-  - x: 2
-    y: -3
+  - x: 1
+    y: 4
+  - x: 1
+    y: 5
   - x: 2
     y: -2
   - x: 2
@@ -112,10 +109,10 @@ MonoBehaviour:
     y: 2
   - x: 2
     y: 3
-  - x: 3
-    y: -4
-  - x: 3
-    y: -3
+  - x: 2
+    y: 4
+  - x: 2
+    y: 5
   - x: 3
     y: -2
   - x: 3
@@ -128,12 +125,12 @@ MonoBehaviour:
     y: 2
   - x: 3
     y: 3
+  - x: 3
+    y: 4
+  - x: 3
+    y: 5
   triggerCells:
   - x: -5
-    y: -4
-  - x: -5
-    y: -3
-  - x: -5
     y: -2
   - x: -5
     y: -1
@@ -145,8 +142,10 @@ MonoBehaviour:
     y: 2
   - x: -5
     y: 3
-  - x: -4
-    y: -4
+  - x: -5
+    y: 4
+  - x: -5
+    y: 5
   - x: -4
     y: -3
   - x: -4
@@ -161,22 +160,38 @@ MonoBehaviour:
     y: 2
   - x: -4
     y: 3
+  - x: -4
+    y: 4
+  - x: -4
+    y: 5
   - x: -3
-    y: -5
+    y: -4
+  - x: -3
+    y: -3
   - x: -2
-    y: -5
+    y: -4
+  - x: -2
+    y: -3
   - x: -1
-    y: -5
+    y: -4
+  - x: -1
+    y: -3
   - x: 0
-    y: -5
+    y: -4
+  - x: 0
+    y: -3
   - x: 1
-    y: -5
+    y: -4
+  - x: 1
+    y: -3
   - x: 2
-    y: -5
+    y: -4
+  - x: 2
+    y: -3
   - x: 3
-    y: -5
-  - x: 4
     y: -4
+  - x: 3
+    y: -3
   - x: 4
     y: -3
   - x: 4
@@ -191,10 +206,10 @@ MonoBehaviour:
     y: 2
   - x: 4
     y: 3
-  - x: 5
-    y: -4
-  - x: 5
-    y: -3
+  - x: 4
+    y: 4
+  - x: 4
+    y: 5
   - x: 5
     y: -2
   - x: 5
@@ -207,6 +222,10 @@ MonoBehaviour:
     y: 2
   - x: 5
     y: 3
+  - x: 5
+    y: 4
+  - x: 5
+    y: 5
   playerTriggerCells:
   - x: -5
     y: -4
@@ -224,6 +243,10 @@ MonoBehaviour:
     y: 2
   - x: -5
     y: 3
+  - x: -5
+    y: 4
+  - x: -5
+    y: 5
   - x: -4
     y: -4
   - x: -4
@@ -240,8 +263,10 @@ MonoBehaviour:
     y: 2
   - x: -4
     y: 3
-  - x: -3
-    y: -5
+  - x: -4
+    y: 4
+  - x: -4
+    y: 5
   - x: -3
     y: -4
   - x: -3
@@ -258,8 +283,10 @@ MonoBehaviour:
     y: 2
   - x: -3
     y: 3
-  - x: -2
-    y: -5
+  - x: -3
+    y: 4
+  - x: -3
+    y: 5
   - x: -2
     y: -4
   - x: -2
@@ -276,8 +303,10 @@ MonoBehaviour:
     y: 2
   - x: -2
     y: 3
-  - x: -1
-    y: -5
+  - x: -2
+    y: 4
+  - x: -2
+    y: 5
   - x: -1
     y: -4
   - x: -1
@@ -294,8 +323,10 @@ MonoBehaviour:
     y: 2
   - x: -1
     y: 3
-  - x: 0
-    y: -5
+  - x: -1
+    y: 4
+  - x: -1
+    y: 5
   - x: 0
     y: -4
   - x: 0
@@ -312,8 +343,10 @@ MonoBehaviour:
     y: 2
   - x: 0
     y: 3
-  - x: 1
-    y: -5
+  - x: 0
+    y: 4
+  - x: 0
+    y: 5
   - x: 1
     y: -4
   - x: 1
@@ -330,8 +363,10 @@ MonoBehaviour:
     y: 2
   - x: 1
     y: 3
-  - x: 2
-    y: -5
+  - x: 1
+    y: 4
+  - x: 1
+    y: 5
   - x: 2
     y: -4
   - x: 2
@@ -348,8 +383,10 @@ MonoBehaviour:
     y: 2
   - x: 2
     y: 3
-  - x: 3
-    y: -5
+  - x: 2
+    y: 4
+  - x: 2
+    y: 5
   - x: 3
     y: -4
   - x: 3
@@ -366,6 +403,10 @@ MonoBehaviour:
     y: 2
   - x: 3
     y: 3
+  - x: 3
+    y: 4
+  - x: 3
+    y: 5
   - x: 4
     y: -4
   - x: 4
@@ -382,6 +423,10 @@ MonoBehaviour:
     y: 2
   - x: 4
     y: 3
+  - x: 4
+    y: 4
+  - x: 4
+    y: 5
   - x: 5
     y: -4
   - x: 5
@@ -398,9 +443,12 @@ MonoBehaviour:
     y: 2
   - x: 5
     y: 3
+  - x: 5
+    y: 4
+  - x: 5
+    y: 5
   playerTriggerEvent: 0
-  operateIds: 
-  operateDatas: []
+  operateIds: 09000000
   defaultExit: 0
   defaultEnter: 0
   playerOperateInfo: 
