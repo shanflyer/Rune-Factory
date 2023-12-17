@@ -15,9 +15,9 @@ public struct RemoveShortcutItem : GameAction
     public int characterId;
     public int index;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -46,9 +46,9 @@ public struct RefreshItemValue : GameAction
     public int itemId;
     public float itemValue;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -64,7 +64,7 @@ public struct OpenPackage : GameAction
     public PackageItemAction selectAction;
     public SetPanelReference setPanel;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 2)
         {
@@ -72,16 +72,13 @@ public struct OpenPackage : GameAction
             selectActionName = parameters[1].value;
             selectActionId = int.Parse(parameters[2].value);
         }
-        if (source != 0)
-        {
+        else {
             packageId = source;
-        }
-        if (value != -1)
-        {
             selectActionId = value;
         }
+        
         targetObj = target;
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -93,7 +90,7 @@ public struct RemovePackageItem : GameAction
     public int itemDataId;
     public int itemCount;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 3)
         {
@@ -101,7 +98,7 @@ public struct RemovePackageItem : GameAction
             itemDataId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -113,7 +110,7 @@ public struct AddPackageItem : GameAction
     public int itemDataId;
     public int itemCount;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 3)
         {
@@ -121,7 +118,7 @@ public struct AddPackageItem : GameAction
             itemDataId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -132,7 +129,7 @@ public struct CreatPackage : GameAction
     public int packageDataId;
     public int level;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         
         if(parameters.Count >= 2)
@@ -152,9 +149,9 @@ public struct RemovePackage : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -169,7 +166,7 @@ public struct CreatRuntimePackage : GameAction
     public List<Item> Items;
     public bool itemPackage;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         /*
         if (parameters.Count >= 6)
@@ -210,7 +207,7 @@ public struct CreatRuntimePackage : GameAction
 
         */
 
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -220,7 +217,7 @@ public struct RemoveRuntimePackage : GameAction
     public SetResult setResult { get; set; }
     public Vector2Int key;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 1)
         {
@@ -231,7 +228,7 @@ public struct RemoveRuntimePackage : GameAction
                 key.y = int.Parse(parameter.parameters[1].value);
             }
         }
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -243,7 +240,7 @@ public struct ItemUseAction : GameAction
     public int itemId;
     public int itemCount;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 3)
         {
@@ -251,6 +248,6 @@ public struct ItemUseAction : GameAction
             itemId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }

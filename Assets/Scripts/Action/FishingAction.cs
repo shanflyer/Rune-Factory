@@ -6,9 +6,9 @@ public struct DestoryFishPond : GameAction
     public SetResult setResult { get; set; }
     public int PondId;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -19,9 +19,9 @@ public struct RefreshFishPondObj : GameAction
     public int pondId;
     public int room;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -34,9 +34,9 @@ public struct CreatFish : GameAction
     public int fishValue;
     public int room;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -46,9 +46,9 @@ public struct RemoveFish : GameAction
     public SetResult setResult { get; set; }
     public int instanceId;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -60,9 +60,9 @@ public struct TryGetFish : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -75,9 +75,9 @@ public struct TryCreatFishPond : GameAction
     public int itemId;
     public int room;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -88,8 +88,8 @@ public struct TryDeleteFishPond : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }

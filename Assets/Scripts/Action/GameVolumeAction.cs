@@ -10,14 +10,14 @@ public struct DisplaySky : GameAction
 {
     public bool display;
      public SetValue setValue { get; set; } public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 1)
         {
             display = bool.Parse(parameters[0].value); 
         }
 
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 public struct LerpScreenCycleValue : GameAction
@@ -26,7 +26,7 @@ public struct LerpScreenCycleValue : GameAction
     public Vector2 cyclePos;
      public SetValue setValue { get; set; } public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 5)
         {
@@ -37,7 +37,14 @@ public struct LerpScreenCycleValue : GameAction
             cyclePos = new Vector2(float.Parse(parameters[3].value), 
                 float.Parse(parameters[4].value));
         }
-        GameActionManager.instance.QueueAction(this);
+        else if (parameters.Count >= 4)
+        {
+            minCycleValue = float.Parse(parameters[0].value);
+            maxCycleValue = float.Parse(parameters[1].value);
+            lerpTime = float.Parse(parameters[2].value);
+            cyclePos = GameCommon.StringToVector3(parameters[3].value);
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 
 }

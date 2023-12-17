@@ -3,7 +3,7 @@
 public struct PlayerWakeUp : GameAction
 {
     public int characterId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 0)
         {
@@ -14,7 +14,7 @@ public struct PlayerWakeUp : GameAction
             characterId = source;
         }
 
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 
     public SetValue setValue { get; set; }
@@ -25,13 +25,13 @@ public struct PlayerSleep : GameAction
 {
     public int characterId;
     public int targetHour, targetMinute;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 0)
             targetHour = int.Parse(parameters[0].value);
         if (parameters.Count > 1)
             targetMinute = int.Parse(parameters[1].value); 
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 
     public SetValue setValue { get; set; }
@@ -42,7 +42,7 @@ public struct LerpGameTime : GameAction
     public int targetHour, targetMinute;
     public float totalTime;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 0)
             targetHour = int.Parse(parameters[0].value);
@@ -50,7 +50,7 @@ public struct LerpGameTime : GameAction
             targetMinute = int.Parse(parameters[1].value);
         if (parameters.Count > 2)
             totalTime = float.Parse(parameters[2].value);
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 
     public SetValue setValue { get; set; }
@@ -62,9 +62,9 @@ public struct ClearOverrideEnvironment : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
@@ -77,7 +77,7 @@ public struct SetMapOverrideEnvironment : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 0)
             dayEnvironmentDataName = parameters[0].value;
@@ -87,7 +87,7 @@ public struct SetMapOverrideEnvironment : GameAction
             dawnEnvironmentDataName = parameters[2].value;
         if (parameters.Count > 3)
             nightEnvironmentDataName = parameters[3].value;
-        GameActionManager.instance.QueueAction(this);
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 

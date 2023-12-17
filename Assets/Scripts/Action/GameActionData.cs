@@ -19,7 +19,7 @@ public class GameActionData : ScriptableObject,IGameData
         _parameters = new List<Parameter>();
         _parameters.AddRange(gameActionData._parameters);
     }
-    public void Action(int source=0,int target=0,int value=0, SetResult setResult = null, SetValue setValue = null)
+    public void Action(int source=0,int target=0,int value=0, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         GameActionDataManager.instance.GameAction(typeName, _parameters, source, target,value, setResult,setValue);
     }
