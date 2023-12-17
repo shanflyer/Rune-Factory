@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public enum TimeEventType
+{
+    时间序列,苏醒序列
+}
+[CreateAssetMenu(menuName ="Datas/游戏时间事件数据")]
+public class GameTimeEventData : ScriptableObject, IGameData
+{
+    public int id;
+    public string text;
+    public TimeEventType timeEventType;
+    public bool startEnable;
+    public int triggerValue;
+    public int actionValue;
+    public int actionCount;
+
+    public override string ToString()
+    {
+        return id.ToString();
+    }
+    public string GetKey()
+    {
+        return id.ToString();
+    }
+#if UNITY_EDITOR
+    public void SetReferenceData()
+    {
+        string actionPath = $"Assets/Resources/Data/GameActionData/{name}.asset"; 
+    }
+#endif
+
+}
+
+ 

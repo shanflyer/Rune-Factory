@@ -49,8 +49,9 @@ public class CameraManager : Singleton<CameraManager>
         }
         else
         {
-            mixingCamera.SetWeight(1, 1);
-            mixingCamera.SetWeight(0, 0);
+            mixingCamera.SetWeight(0, 1);
+            mixingCamera.SetWeight(1, 0);
+            followCamera.Follow = CharacterManager.instance.controllerTransform;
         }
     }
 }

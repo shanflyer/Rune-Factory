@@ -44,6 +44,10 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
        // var types = assembly.GetTypes().Where(t => t.IsSubclassOf(baseType));
     }
 
-
+    public async void Action(int dataId)
+    {
+        GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(dataId);
+        gameActionData.Action();
+    }
 
 }

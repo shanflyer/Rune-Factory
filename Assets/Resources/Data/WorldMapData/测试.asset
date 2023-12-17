@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMap: 41
   worldMaps:
-  - map: "\u6211\u7684\u5546\u5E97"
-    id: 297
-    coordinate:
-      x: -80
-      y: -99
-      z: 0
-    eventId: 0
   - map: "\u5367\u5BA4"
     id: 405
     coordinate:
       x: -79
       y: 174
+      z: 0
+    eventId: 0
+  - map: "\u6211\u7684\u5546\u5E97"
+    id: 297
+    coordinate:
+      x: -80
+      y: -99
       z: 0
     eventId: 0
   - map: NewRoom0
@@ -35,18 +35,25 @@ MonoBehaviour:
       y: -84
       z: 0
     eventId: 0
+  - map: NewRoom1
+    id: 119
+    coordinate:
+      x: 91
+      y: -107
+      z: 0
+    eventId: 0
+  - map: "\u5546\u5E97"
+    id: 547
+    coordinate:
+      x: -39
+      y: 150
+      z: 0
+    eventId: 0
   - map: Room0
     id: 302
     coordinate:
       x: 3
       y: 29
-      z: 0
-    eventId: 0
-  - map: NewRoom1
-    id: 119
-    coordinate:
-      x: 92
-      y: -107
       z: 0
     eventId: 0
   mapLines: []

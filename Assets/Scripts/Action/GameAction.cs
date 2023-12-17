@@ -61,7 +61,7 @@ public struct RefreshGameSaveData : GameAction
         GameActionManager.instance.QueueAction(this);
     }
 }
-
+ 
 public struct NewDay : GameAction
 {
     public SetValue setValue { get; set; }

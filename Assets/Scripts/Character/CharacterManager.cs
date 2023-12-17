@@ -354,6 +354,22 @@ public class CharacterManager : Singleton<CharacterManager>
             return _controllerCharacter;
         }
     }
+    public Transform controllerTransform
+    {
+        get
+        {
+            if (controllerCharacter != null)
+            {
+                if (characterRuntionObjs.TryGetValue(controllerCharacter, out var characterRuntimeObj))
+                {
+                    var transform = characterRuntimeObj.animator.transform;
+                    return transform;
+                }
+                
+            }
+            return null;
+        }
+    }
 
     public float GetDistanceController(int2 coordinate)
     {

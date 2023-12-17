@@ -718,6 +718,7 @@ public static class DataPath
         {typeof(EnvironmentData),"Data/EnvironmentDataList" },
         {typeof(SleepSetData),"Data/SleepSetData/SleepSetDataList" },
         {typeof(SleepSetDataList),"Data/SleepSetData" },
+        {typeof(GameTimeEventData),"Data/GameTimeEventData" }
     };
 
     public static string GetDataPath(Type type)

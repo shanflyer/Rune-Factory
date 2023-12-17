@@ -103,6 +103,7 @@ public class GameController : MonoBehaviour
         var fightManager = FightManager.instance;
         var talkManager= TalkManager.instance;
         var festivalManager = FestivalManager.instance;
+        var gameTimeEventManager = GameTimeEventManager.instance;
         GameTimeManager.instance.ZeroGameTime();
          
         FilmController.instance.SetParent(filmParent);
