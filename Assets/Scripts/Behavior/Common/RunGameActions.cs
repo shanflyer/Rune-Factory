@@ -16,7 +16,8 @@ public struct DynamicParameterData
 [TaskCategory("NewGame/Common")]
 [TaskName("执行GameAction")]
 public class RunGameActions : Action
-{ 
+{
+    public bool immediately;
     public SharedInt source, target;
     public SharedInt sharedSetIntValue;
     [Header("动态填充数据")]
@@ -78,12 +79,12 @@ public class RunGameActions : Action
             {
                 DynamicData otherData = otherDatas[i];
                 gameActionDatas[i].Action(otherData.source.Value, otherData.target.Value, otherData.value.Value,
-                   setResult:waitResult? SetActionResult:null,setValue: SetValue);
+                   setResult:waitResult? SetActionResult:null,setValue: SetValue, immediately: immediately);
             }
             else
             {
                 gameActionDatas[i].Action(source.Value, target.Value, setResult: waitResult ? SetActionResult : null,
-                    setValue: SetValue);
+                    setValue: SetValue, immediately: immediately);
             }
         }
     }

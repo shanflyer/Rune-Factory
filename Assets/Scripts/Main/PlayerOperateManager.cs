@@ -151,6 +151,13 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                   value = controller.OperateItem
                 },
             };
+            if (operateData.eventReferenceDatas!=null&&operateData.eventReferenceDatas.Count > 0)
+            {
+                for(int i = 0; i < operateData.eventReferenceDatas.Count; i++)
+                {
+                    eventReferenceDatas.Add(operateData.eventReferenceDatas[i]);
+                }
+            }
 
             GameEventManager.instance.AddGameEvent(operateData.gameEventData, eventReferenceDatas);
         }

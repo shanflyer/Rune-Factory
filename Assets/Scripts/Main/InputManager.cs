@@ -121,6 +121,10 @@ public class InputManager :Singleton<InputManager>
                // Debug.Log($"actionName:{action.name}");
                 void PerformedDelegate(CallbackContext callbackContext)
                 {
+                    if (!action.enabled)
+                    {
+                        return;
+                    }
                     if (performDelegates.TryGetValue(action.name, out var del))
                     {
                         del.Invoke(callbackContext.ReadValueAsObject());
@@ -131,6 +135,10 @@ public class InputManager :Singleton<InputManager>
 
                 void CanceledDelegate(CallbackContext callbackContext)
                 {
+                    if (!action.enabled)
+                    {
+                        return;
+                    }
                     if (cancelDelegates.TryGetValue(action.name, out var del))
                     {
                         del.Invoke(callbackContext.ReadValueAsObject());

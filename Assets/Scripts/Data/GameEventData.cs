@@ -12,6 +12,7 @@ public class GameEventData : ScriptableObject,IGameData
     public string eventName;
     public string behaviorTreeName;
     public bool defaultAwake;
+    public List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
     public ExternalBehaviorTree behaviorTree;
 
     public override string ToString()

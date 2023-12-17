@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -618,6 +619,7 @@ public partial class Character
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
         objCoordinate = coordinate;
+       // Debug.Log($"setCoordinate0:{coordinate}");
         if (SetCoordianteDele != null)
         {
             SetCoordianteDele.Invoke(coordinate);
@@ -629,6 +631,7 @@ public partial class Character
         int3 newCoordinate = new int3(coordinate, mapInstance);
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, newCoordinate, instanceId);
         objCoordinate = newCoordinate;
+        //Debug.Log($"setCoordinate:{newCoordinate}");
         if (SetCoordianteDele != null)
         {
             SetCoordianteDele.Invoke(objCoordinate);
@@ -637,6 +640,7 @@ public partial class Character
 
     public void StopMove()
     {
+        GameObjectCurveController.instance.StopObjectMove(instanceId);
         if (GameObjectCurveController.instance.StopLineMove(moveEnumeratorId))
         {
             CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
@@ -854,7 +858,7 @@ public partial class Character
     public void SetCoordinate(int3 coordinate)
     {
         int2 oldCoordinate = objCoordinate.xy;
-        if (mapInstance != objCoordinate.z)
+        if (mapInstance != coordinate.z)
         {
             MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«,
                 objCoordinate.z, oldCoordinate, true, TriggerEventAction);
@@ -868,6 +872,12 @@ public partial class Character
                 }
                 MapCellController.instance.CheckPlayerTriggerEvent(
                 objCoordinate.z, oldCoordinate, true, TriggerEventAction, oldOperateItem);
+
+                DisplayMap displayMap = new DisplayMap
+                {
+                    displayMap = coordinate.z
+                };
+                GameActionManager.instance.QueueAction(displayMap);
             }
             oldCoordinate = OldOperaCoordinate = new int2(int.MinValue);
         }
@@ -905,7 +915,7 @@ public partial class Character
 
             MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, checkCoordinate.xy,
            TriggerEventAction, oldOperateItem);
-            oldCoordinate = OldOperaCoordinate = checkCoordinate.xy;
+            oldCoordinate = OldOperaCoordinate = checkCoordinate.xy; 
         }
         SetObjCoordinate(coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger

@@ -176,14 +176,19 @@ public class CharacterManager : Singleton<CharacterManager>
     }
     void SetCharacterTempPos(SetCharacterTempPos setCharacterTempPos)
     {
-        if(GetRuntimeCharacterObj(setCharacterTempPos.characterId,out var characterRuntimeObj))
+        if(characters.TryGetValue(setCharacterTempPos.characterId,out var character))
         {
-            characterRuntimeObj.animator.transform.position = setCharacterTempPos.pos;
-            if (setCharacterTempPos.setResult != null)
+            if(characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
             {
-                setCharacterTempPos.setResult(true);
-            }
+                characterRuntimeObj.animator.transform.position = setCharacterTempPos.pos;
+                if (setCharacterTempPos.setResult != null)
+                {
+                    setCharacterTempPos.setResult(true);
+                }
+                character.StopMove();
+            } 
         }
+         
         if (setCharacterTempPos.setResult != null)
         {
             setCharacterTempPos.setResult(false);
@@ -192,9 +197,13 @@ public class CharacterManager : Singleton<CharacterManager>
     private void DisplayOrHideCharacter(DisplayOrHideCharacter displayOrHideCharacter)
     {
         var character = GetCharacterForDataId(displayOrHideCharacter.characterId);
+        if (character == null)
+        {
+            characters.TryGetValue(displayOrHideCharacter.characterId, out character);
+        }
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
-            characterRuntimeObj.model.gameObject.SetActive(displayOrHideCharacter.display);
+            characterRuntimeObj.animator.gameObject.SetActive(displayOrHideCharacter.display);
         }
     }
 
@@ -216,7 +225,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     {
                         runtimeObj = runtimeObj,
                         animator = transform.GetComponentInChildren<Animator>(),
-                        model = transform.Find("Model")
+                        model = transform.Find("Body")
                     };
                     characterRuntionObjs.Add(character, characterRuntimeObj);
                 }
@@ -288,7 +297,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public void StopCharacterMove(StopCharacterMove stopCharacterMove)
     {
         if (characters.TryGetValue(stopCharacterMove.characterId, out var character))
-        {
+        { 
             character.StopMove();
         }
     }
@@ -612,6 +621,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (characters.TryGetValue(id, out Character character))
         {
             coordinate = character.ObjCoordinate;
+            return true;
         }
         coordinate = int3.zero;
         return false;
@@ -647,7 +657,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 runtimeObj = runtimeObj,
                 animator = transform.GetComponentInChildren<Animator>(),
-                model = transform.Find("Model")
+                model = transform.Find("Body")
             };
             characterRuntionObjs.Add(character, characterRuntimeObj);
         }
@@ -976,7 +986,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     runtimeObj = runtimeObj,
                     animator = transform.GetComponentInChildren<Animator>(),
-                    model = transform.Find("Model"),
+                    model = transform.Find("Body"),
                     // myShadow=transform.GetComponentInChildren<MyShadowPolygon>(),
                 };
                 /*
@@ -1016,7 +1026,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         {
                             runtimeObj = runtimeObj,
                             animator = transform.GetComponentInChildren<Animator>(),
-                            model = transform.Find("Model")
+                            model = transform.Find("Body")
                         };
                         characterRuntionObjs.Add(character, characterRuntimeObj);
                     }

@@ -19,6 +19,7 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
     public GameActionData gameActionData;
     public int eventId;
     public GameEventData gameEventData;
+    public List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
     public string GetKey()
     {
         return id.ToString();

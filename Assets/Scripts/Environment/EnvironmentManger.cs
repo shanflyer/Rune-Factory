@@ -31,9 +31,13 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     public void AddMyLight(MyLight myLight)
     {
         int instanceID = myLight.GetInstanceID();
-        lights.Add(instanceID, myLight);
-        lightIds.Add(instanceID);
-        myLight.LerpTimeValue(timeValue);
+        if (!lightIds.Contains(instanceID))
+        {
+            lights.Add(instanceID, myLight);
+            lightIds.Add(instanceID);
+            myLight.LerpTimeValue(timeValue);
+        }
+       
     }
     public void RemoveMyLight(MyLight myLight)
     {

@@ -150,7 +150,7 @@ public class GameCommon
     public const float ScreenHalfSizeX = 960;
     public const float ScreenHalfSizeY = 540;
 
-    public const string characterTriggerRenferenceName = "Entity";
+    public const string characterTriggerRenferenceName = "CharacterId";
     public const string triggerRenferenceName = "Reference";
 
     public const string PlayerBoxId = "PlayerBoxId";
@@ -190,9 +190,9 @@ public class GameCommon
         int2 result = new int2();
         try
         {
-            if (str.Length > 2)
+            if (str.Length > 4)
             {
-                str = str.Substring(1, str.Length - 1);
+                str = str.Substring(4, str.Length - 4);
                 var strs = str.Split(',');
                 result.x = int.Parse(strs[0]);
                 result.y = int.Parse(strs[1]); 
@@ -221,6 +221,28 @@ public class GameCommon
         
 
         return vector3;
+    }
+    public static int3 StringToInt3(string str)
+    {
+        int3 int3 = new int3();
+        try
+        {
+            if (str.Length > 5)
+            {
+                str = str.Substring(5, str.Length - 6);
+                var strs = str.Split(',');
+                int3.x = int.Parse(strs[0]);
+                int3.y = int.Parse(strs[1]);
+                int3.z = int.Parse(strs[2]);
+            }
+        }
+        catch(Exception e) 
+        {
+            Debug.Log(e);
+        }
+
+
+        return int3;
     }
 
     public static Vector2 SetImageSize(Sprite sprite,Vector2 size)

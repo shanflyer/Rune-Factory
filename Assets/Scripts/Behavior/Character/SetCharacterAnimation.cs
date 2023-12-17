@@ -27,9 +27,9 @@ public class SetCharacterAnimation : Action
                     characterId = characterId.Value,
                     parameter = animationParameter.parameter,
                     parameterType = animationParameter.parameterType,
-                    boolValue = animationParameter.boolValue,
-                    intValue = animationParameter.intValue,
-                    floatValue = animationParameter.floatValue
+                    boolValue = animationParameter.boolValue.Value,
+                    intValue = animationParameter.intValue.Value,
+                    floatValue = animationParameter.floatValue.Value
                 };
                 GameActionManager.instance.QueueAction(setCharacterAnimator, true);
             }
@@ -51,7 +51,7 @@ public struct AnimationParameter
 {
     public string parameter;
     public ParameterType parameterType;
-    public bool boolValue;
-    public int intValue;
-    public float floatValue;
+    public SharedBool boolValue;
+    public SharedInt intValue;
+    public SharedFloat floatValue;
 }
