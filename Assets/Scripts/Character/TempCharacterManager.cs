@@ -15,14 +15,20 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
         GameActionManager.instance.AddListener<SetCreateTempCharacterLevel>(SetCreateTempCharacterLevel);
         GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
         GameActionManager.instance.AddListener<GetTempCharacterExit>(GetTempCharacterExit);
+        GameActionManager.instance.AddListener<SetTempCharacterUpdata>(SetTempCharacterUpdata);
     }
     TempCharacterCreatData NowTempCharacterCreatData;
     List<int> tempCharacters;
     int totalCharacterCount;
     int nowCd;
     int waitTime;
+    bool updataCreatCharacter = false;
     public int level { get; private set; }
 
+    void SetTempCharacterUpdata(SetTempCharacterUpdata setTempCharacterUpdata)
+    {
+        updataCreatCharacter = setTempCharacterUpdata.canUpdata;
+    }
     void GetTempCharacterExit(GetTempCharacterExit getTempCharacterExit)
     {
         var TempPosRanges = NowTempCharacterCreatData.tempExitDatas;
@@ -55,6 +61,7 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
         {
             tempCharacters.AddRange(NowTempCharacterCreatData.tempCharacters);
         }
+        updataCreatCharacter = true;
     }
     void CreatTempCharacter()
     {
@@ -102,6 +109,10 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
     protected override void UpData()
     {
         base.UpData();
+        if (!updataCreatCharacter)
+        {
+            return;
+        }
         if (NowTempCharacterCreatData == null)
         {
             return;

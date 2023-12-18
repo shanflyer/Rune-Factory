@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public struct TryTeamLeaderMove : GameAction
 {
@@ -297,6 +298,25 @@ public struct DestoryCharacter : GameAction
     }
 }
 
+public struct SetTempCharacterUpdata : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public bool canUpdata;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            canUpdata = parameters[0].value == "1";
+        }
+        else
+        {
+            canUpdata = source == 1;
+        }           
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct CreatTempCharacter : GameAction
 {
     public SetValue setValue { get; set; }
@@ -947,10 +967,10 @@ public struct SetCreateTempCharacterLevel : GameAction
         {
             level = int.Parse(parameters[0].value);
         }
-        if (target != 0)
+        else
         {
             level = target;
-        }
+        } 
 
         GameActionManager.instance.QueueAction(this, immediately);
     }

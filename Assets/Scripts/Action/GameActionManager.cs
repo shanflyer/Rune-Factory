@@ -66,6 +66,11 @@ public class GameActionManager:Singleton<GameActionManager>
         if (delegates.TryGetValue(type, out Delegate d))
         {
             var _d = d as ActionDelegate<T>;
+            if (_d == null)
+            {
+                delegates.Remove(type);
+                return;
+            }
             _d(gameAction);
 
             foreach (Delegate _delegate in d.GetInvocationList())

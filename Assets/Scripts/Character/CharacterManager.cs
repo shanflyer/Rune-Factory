@@ -813,7 +813,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
 
-                    CharacterMoveTarget(character, pathNodes, EndAction, failedMoveAction);
+                    CharacterMoveTarget(character, pathNodes, EndAction,changeCoordinateAction, failedMoveAction);
                 }
                 else
                 {

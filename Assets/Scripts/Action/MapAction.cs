@@ -224,6 +224,10 @@ public struct ShowMapObjTips : GameAction
         {
             id = int.Parse(parameters[0].value);
         }
+        else
+        {
+            id = source;
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -296,12 +300,12 @@ public struct SetItemAnimation : GameAction
             keyX = int.Parse(parameters[1].value);
             keyY = int.Parse(parameters[2].value);
         }
-        if (source != 0)
+        else
+        {
             id = source;
-        if (target != 0)
             keyX = target;
-        if (value != 0)
             keyY = value;
+        }  
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

@@ -1008,7 +1008,7 @@ public partial class Character
             {
                 CellDebugDisplay.Instance.DisplayPath(pathNodes.ToArray());
              }*/
-            PlayerMove(pathNodes, moveEndAction, failedMoveAction);
+            PlayerMove(pathNodes, moveEndAction, changeCoordinateAction, failedMoveAction);
         }
     }
 

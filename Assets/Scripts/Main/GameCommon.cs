@@ -104,7 +104,7 @@ public class GameCommon
     public const float cellWidth = 0.08f, cellHigh = 0.08f;
     public const float cellSize = 0.04f;
     public const float oneDividCellWidth = 12.5f, oneDividCellHigh =12.5f;
-    public const float slantValue = 0.303f;
+    public const float slantValue = 0.707f;
 
 
     public const int randomInnerGroupMax = 5;

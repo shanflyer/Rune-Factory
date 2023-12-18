@@ -374,8 +374,8 @@ TextureImporter:
       name: "\u5706\u51F31"
       rect:
         serializedVersion: 2
-        x: 277
-        y: 358
+        x: 247
+        y: 326
         width: 22
         height: 27
       alignment: 9
@@ -1004,8 +1004,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_07"
       rect:
         serializedVersion: 2
-        x: 209
-        y: 351
+        x: 248
+        y: 450
         width: 32
         height: 29
       alignment: 9
@@ -1025,8 +1025,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_08"
       rect:
         serializedVersion: 2
-        x: 269
-        y: 294
+        x: 311
+        y: 484
         width: 30
         height: 27
       alignment: 9
@@ -1046,8 +1046,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_09"
       rect:
         serializedVersion: 2
-        x: 217
-        y: 415
+        x: 248
+        y: 481
         width: 27
         height: 30
       alignment: 9
@@ -1067,8 +1067,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_10"
       rect:
         serializedVersion: 2
-        x: 243
-        y: 384
+        x: 277
+        y: 482
         width: 32
         height: 29
       alignment: 9
@@ -1088,8 +1088,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_11"
       rect:
         serializedVersion: 2
-        x: 246
-        y: 416
+        x: 243
+        y: 384
         width: 32
         height: 29
       alignment: 9
@@ -1109,8 +1109,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_12"
       rect:
         serializedVersion: 2
-        x: 243
-        y: 353
+        x: 251
+        y: 419
         width: 32
         height: 29
       alignment: 9
@@ -1194,7 +1194,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 209
-        y: 382
+        y: 350
         width: 32
         height: 30
       alignment: 9
@@ -1382,8 +1382,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_26"
       rect:
         serializedVersion: 2
-        x: 247
-        y: 323
+        x: 282
+        y: 452
         width: 30
         height: 28
       alignment: 9
@@ -1550,8 +1550,8 @@ TextureImporter:
       name: "\u7BB1\u5B50_35"
       rect:
         serializedVersion: 2
-        x: 277
-        y: 387
+        x: 243
+        y: 355
         width: 30
         height: 27
       alignment: 9
@@ -2323,6 +2323,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: ClosedMask
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 382
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec6020b8a254cdd4b9226b2afdb23c8a
+      internalID: -1874922860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OpenMask
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 415
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c207ac78dd7c9b4ca374e1b1b5e0ac9
+      internalID: -446418289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -2336,6 +2378,8 @@ TextureImporter:
     - texture: {fileID: 2800000, guid: 58b0ad96400d0994ba445e2caab3c051, type: 3}
       name: _NormalMap
     nameFileIdTable:
+      ClosedMask: -1874922860
+      OpenMask: -446418289
       "\u4E66\u5806": 290444252
       "\u4E66\u67B6": 2045592471
       "\u4E66\u67B61": -842173131

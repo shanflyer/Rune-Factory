@@ -173,6 +173,24 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">ClosedMask.png</key>
+            <key type="filename">ClosedMask_normal.png</key>
+            <key type="filename">OpenMask.png</key>
+            <key type="filename">OpenMask_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,16,15</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,16,15</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">书堆.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
