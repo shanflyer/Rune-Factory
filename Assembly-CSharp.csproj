@@ -299,6 +299,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetAcceleration.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedTrigger2D.cs" />
+    <Compile Include="Assets\Scripts\UI\Sleep\SleepPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\RandomBool.cs" />
     <Compile Include="Assets\Scripts\Main\HomeEquipManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetCenter.cs" />
@@ -780,6 +781,7 @@
     <Compile Include="Assets\Scripts\UI\Item\ShortcutPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetBoolParameter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
+    <Compile Include="Assets\Scripts\Event\GameTimeEventManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetTimeScale.cs" />
     <Compile Include="Assets\Scripts\UI\SomethingGetPanel.cs" />
@@ -840,6 +842,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Renderer\SetMaterial.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalRotation.cs" />
     <Compile Include="Assets\Scripts\UI\Talk\TalkPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Sleep\SleepReference.cs" />
     <Compile Include="Assets\Scripts\UI\TeamerReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetApplyRootMotion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetLoop.cs" />
@@ -868,6 +871,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonUp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetLoop.cs" />
     <Compile Include="Assets\Scripts\Data\FunctionButtonData.cs" />
+    <Compile Include="Assets\Scripts\Data\SleepSetDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\Play.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetDeltaTime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatClamp.cs" />
@@ -882,6 +886,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedString.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredTrigger2D.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\SetValue.cs" />
+    <Compile Include="Assets\Scripts\Event\GameTimeEventData.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\VFX Library\UICanvasManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetVolume.cs" />

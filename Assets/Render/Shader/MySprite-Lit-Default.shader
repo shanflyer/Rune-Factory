@@ -160,7 +160,7 @@ Shader "MySprite-Lit-Default"
             {
                 float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
                 //水域范围
-                float stepMask=step(0.04,_WaterMask.r);
+                float stepMask=step(0.06,_WaterMask.r); 
 
                 
                 float svalue =_ScreenParams.y/ 1136;
@@ -225,6 +225,8 @@ Shader "MySprite-Lit-Default"
                 float3 _MainColor=waterColor.xyz*waterColor.a;	 
                 _MainColor+=(1-waterColor.a)*_MainTexColor.xyz;
                 _MainColor.xyz*=_WaterMask.r;
+
+              
 
                 float3 outWater=endWaveColor+_MainColor; 
                 outWater=clamp(outWater,0,1);   
