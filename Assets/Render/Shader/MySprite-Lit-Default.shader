@@ -10,6 +10,7 @@ Shader "MySprite-Lit-Default"
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WetValue("WetValue",Range(0,1))=0
         _shadowStep("ShadowStep",int)=0
+        _LightBlend("LightBlend",int)=1
 
 
         _Water("Water",int)=0
@@ -79,6 +80,8 @@ Shader "MySprite-Lit-Default"
             half _WetValue;
             int _shadowStep;
             int _Water;
+
+            int _LightBlend;
             
             half4 waterColor;
             half _WaterZero;
@@ -148,6 +151,7 @@ Shader "MySprite-Lit-Default"
                 float2  uv          : TEXCOORD0;
                 half2   lightingUV  : TEXCOORD1; 
                 float3  worldPos : TEXCOORD4;
+                half2   fixScreenUV: TEXCOORD3;
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
                 #endif
@@ -163,11 +167,11 @@ Shader "MySprite-Lit-Default"
                 float stepMask=step(0.06,_WaterMask.r); 
 
                 
-                float svalue =_ScreenParams.y/ 1136;
+                float svalue =_ScreenParams.y/ 1920;
                 svalue=floor(svalue);
                 svalue=clamp(svalue,1,svalue);
                 svalue/=2;
-                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*400/_ScreenParams.xy;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
                 screenUV+=offsetUv;
                 
                 //波纹1
@@ -271,7 +275,14 @@ Shader "MySprite-Lit-Default"
                 #endif
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
-                
+
+
+                half3 pos=TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
+                half4 carmeraPos=TransformWorldToHClip(pos);
+
+
+
+                o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
 
                 o.color = v.color * _Color * unity_SpriteColor;
                 return o;
@@ -297,6 +308,8 @@ Shader "MySprite-Lit-Default"
                 InitializeInputData(i.uv, i.lightingUV, inputData);
 
                 half4 result=CombinedShapeLightShared(surfaceData, inputData);
+                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor;
+
                 half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
                 half3 shadowColor=GlobalColor*shadow.r*GlobalColor.a; 
 
@@ -348,14 +361,14 @@ Shader "MySprite-Lit-Default"
             TEXTURE2D(_NormalMap);
             SAMPLER(sampler_NormalMap);
 
-            float3 WaterFragment(float2 uv,float2 screenUV,float3 _MainTexColor)
+            /*float3 WaterFragment(float2 uv,float2 screenUV,float3 _MainTexColor)
             {
                 float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
                 //水域范围
                 float stepMask=step(0.04,_WaterMask.r);
 
                 
-                float svalue =_ScreenParams.y/ 1136;
+                float svalue =_ScreenParams.y/ 1920;
                 svalue=floor(svalue);
                 svalue=clamp(svalue,1,svalue);
                 svalue/=2;
@@ -394,7 +407,7 @@ Shader "MySprite-Lit-Default"
 
                 return stepMask*outWater+_MainTexColor.xyz*(1-stepMask); 
                 
-            }
+            }*/
             
 
             Varyings NormalsRenderingVertex(Attributes attributes)

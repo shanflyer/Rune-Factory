@@ -21,6 +21,7 @@ public class MapItemData:ScriptableObject,IGameData
     public int playerTriggerEvent;
     public List<int> operateIds = new List<int>(); 
     public int defaultExit, defaultEnter;
+    public bool displayTips=true;
     public string playerOperateInfo;
     public override string ToString()
     {

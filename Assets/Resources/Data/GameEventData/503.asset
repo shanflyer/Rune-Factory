@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cccc70193ff36f418e08f6f50d5b397, type: 3}
   m_Name: 503
   m_EditorClassIdentifier: 
-  id: 501
+  id: 503
   eventName: "\u5BA4\u5916\u5230\u5E7F\u573A\u4E0B"
   behaviorTreeName: "\u8DF3\u8F6C\u5730\u56FE"
   defaultAwake: 1
@@ -20,10 +20,10 @@ MonoBehaviour:
   - name: TargetPos
     valueType: 2
     value: 0
-    vectorValue: {x: -90, y: -27, z: 0}
+    vectorValue: {x: 0, y: 0, z: 0}
     int3Value:
-      x: 12
-      y: 14
+      x: -89
+      y: -27
       z: 512
   - name: Dir_X
     valueType: 1

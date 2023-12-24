@@ -53,7 +53,7 @@ public class GameManager : Singleton<GameManager>
             {
                 Transform parent = runtimeObj.transform; 
                 MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeObj.key);
-                if (mapItemData != null)
+                if (mapItemData != null&&mapItemData.displayTips)
                 {
                     ShowObjTips(mapItemData.itemName, parent);
                 }
