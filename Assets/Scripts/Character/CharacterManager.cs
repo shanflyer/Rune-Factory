@@ -830,10 +830,10 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null)
     {
-        int2 offsetCoordinate = targetCoordinate - character.coordinate;
+       // int2 offsetCoordinate = targetCoordinate - character.coordinate;
         character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
         if (character.CanMoveCrossMap &&
-            MapCellController.instance.ChangeMap(targetCoordinate, offsetCoordinate, character.mapInstance, out newMap))
+            MapCellController.instance.ChangeMap(targetCoordinate, character.direction, character.mapInstance, out newMap))
         {
             int targetMap = newMap.x;
             targetCoordinate = new int2(newMap.y, newMap.z);

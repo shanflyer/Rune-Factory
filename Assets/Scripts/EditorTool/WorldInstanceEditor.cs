@@ -5,6 +5,7 @@ using UnityEditor;
 using System.Linq;
 using Unity.Mathematics;
 using Random = UnityEngine.Random;
+using UnityEngine.Tilemaps;
 
 [ExecuteAlways]
 public class WorldInstanceEditor : MonoBehaviour
@@ -61,7 +62,7 @@ public class WorldInstanceEditor : MonoBehaviour
     }
 
 
-    public bool InitLinkMap(int2 coordinate0, int2 coordinate1, ref MapLine mapLine)
+    public bool InitLinkMap(int2 coordinate0, int2 coordinate1,Tilemap tilemap0,Tilemap tilemap1, List<Direction> directValue0, List<Direction> directValue1, ref MapLine mapLine)
     {
         bool init0 = false;
         bool init1 = false;
@@ -96,14 +97,46 @@ public class WorldInstanceEditor : MonoBehaviour
         {
             mapLine.map0 = map0;
             mapLine.map1 = map1;
-            mapLine.cell0 = coordinate0;
-            mapLine.cell1 = coordinate1;
+
+            mapLine.cells0.directions = new List<Direction>();
+            mapLine.cells0.directions.AddRange(directValue0);
+            mapLine.cells0.cells = new List<int2>();
+            
+            for(int x = tilemap0.cellBounds.min.x; x<= tilemap0.cellBounds.max.x; x++)
+            {
+                for (int y = tilemap0.cellBounds.min.y; y <= tilemap0.cellBounds.max.y; y++)
+                {
+                    if(tilemap0.GetTile(new Vector3Int(x, y, 0)) != null)
+                    {
+                        mapLine.cells0.cells.Add(new int2(x, y)+ coordinate0);
+                    } 
+                }
+            }
+
+
+            mapLine.cells1.directions = new List<Direction>();
+            mapLine.cells1.directions.AddRange(directValue1);
+            mapLine.cells1.cells = new List<int2>();
+
+            for (int x = tilemap1.cellBounds.min.x; x <= tilemap1.cellBounds.max.x; x++)
+            {
+                for (int y = tilemap1.cellBounds.min.y; y <= tilemap1.cellBounds.max.y; y++)
+                {
+                    if (tilemap1.GetTile(new Vector3Int(x, y, 0)) != null)
+                    {
+                        mapLine.cells1.cells.Add(new int2(x, y)+ coordinate1);
+                    }
+                }
+            }
 
             return true;
         }
 
         return false;
     }
+
+
+   
     public void AddNewLink()
     {
         if (mapInstanceEditors.Count > 0)

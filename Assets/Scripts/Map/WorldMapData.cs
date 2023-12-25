@@ -32,5 +32,54 @@ public struct WorldMap
 public struct MapLine
 {
     public int map0, map1;
-    public int2 cell0, cell1;
+    public LinkMapCell cells0, cells1; 
+    public int2 center0
+    {
+        get
+        {
+            return cells0.center;
+        }
+    }
+    public int2 center1
+    {
+        get
+        {
+            return cells1.center;
+        }
+    }
+}
+[System.Serializable]
+public struct LinkMapCell
+{
+    public List<Direction> directions;
+    public List<int2> cells;
+    public int3 targetCell;
+
+    public int2 center
+    {
+        get
+        {
+            int minX = 10000, minY = 10000, maxX = -10000, maxY = -10000;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                if (minX < cells[i].x)
+                {
+                    minX = cells[i].x;
+                }
+                if (minY < cells[i].y)
+                {
+                    minY = cells[i].y;
+                }
+                if (maxX > cells[i].x)
+                {
+                    maxX = cells[i].x;
+                }
+                if (maxY > cells[i].y)
+                {
+                    maxY = cells[i].y;
+                }
+            }
+            return new int2(minX + (maxX - minX) / 2, minY + (maxY - minY) / 2);
+        }
+    }
 }

@@ -51,7 +51,7 @@ public enum CharacterPropertyType
 }
 public enum Direction
 {
-    Default = -1, UP =0,RIGHT=3,DOWN=2,LEFT=1
+    Default = -1, UP =0, LEFT = 1, DOWN = 2, RIGHT =3,
 }
 public enum RuntimeObjType
 {
@@ -185,6 +185,29 @@ public class GameCommon
     }
 
 #endif 
+    /// <summary>
+    /// 转换方向为值
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    public static int GetDirectionValue(Direction direction)
+    { 
+        var value = Convert.ToString((int)direction, 2);
+        return int.Parse(value);
+         
+    }
+    /// <summary>
+    /// 检查方向值
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    public static bool CheckDirectionValue(Direction direction,int target)
+    {
+        var value = Convert.ToString(target, 2);
+        int index = (int)direction;
+        return value[index] == 1; 
+    }
     public static int2 StringToInt2(string str)
     {
         int2 result = new int2();
