@@ -146,6 +146,7 @@ public class GameCommon
     public const float waterLerpValueMax_Min = 1f;
     public const float waterLerpValueMax_Max = 2.0f;
 
+    public const float mapChangeLerpTime = 0.4f;
 
     public const float ScreenHalfSizeX = 960;
     public const float ScreenHalfSizeY = 540;

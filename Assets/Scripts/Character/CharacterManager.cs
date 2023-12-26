@@ -836,16 +836,40 @@ public class CharacterManager : Singleton<CharacterManager>
             MapCellController.instance.ChangeMap(targetCoordinate, character.direction, character.mapInstance, out newMap))
         {
             int targetMap = newMap.x;
-            targetCoordinate = new int2(newMap.y, newMap.z);
-
+            targetCoordinate = new int2(newMap.y, newMap.z); 
             character.SetCoordinate(new int3(targetCoordinate, targetMap));
 
             if (character == controllerCharacter)
             {
-                WorldMapObjManager.instance.RecycleMap();
-                WorldMapObjManager.instance.DisplayMap(targetMap);
+                LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
+                {
+                    cyclePos = GameCommon.GetMapPos(character.coordinate),
+                    minCycleValue = 0,
+                    maxCycleValue = 1,
+                    lerpTime = GameCommon.mapChangeLerpTime
+                };
+                GameActionManager.instance.QueueAction(lerpScreenCycleValue,true);
+
+                GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                {
+                    WorldMapObjManager.instance.RecycleMap();
+                    WorldMapObjManager.instance.DisplayMap(targetMap);
+                    SetPlayerPos(character);
+                     
+                    LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
+                    {
+                        cyclePos = GameCommon.GetMapPos(character.coordinate),
+                        minCycleValue = 1,
+                        maxCycleValue = 0,
+                        lerpTime = GameCommon.mapChangeLerpTime
+                    };
+                    GameActionManager.instance.QueueAction(lerpScreenCycleValue, true); 
+                }); 
             }
-            SetPlayerPos(character);
+            else
+            {
+                SetPlayerPos(character);
+            } 
         }
         EndAction?.Invoke();
         newMap = int3.zero;
