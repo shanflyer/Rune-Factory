@@ -190,8 +190,14 @@ public class MapEditor : MyEditor
 
             selectMapRoomDataObj.mapRoomData.mapItems.Clear();
             var mapItemInstances = FindObjectsOfType<MapItemInstanceEditor>(true);
+            HashSet<int> instanceId = new HashSet<int>();
             foreach (var mapItemInstance in mapItemInstances)
             {
+                if (instanceId.Contains(mapItemInstance.mapItem.instanceId))
+                {
+                    mapItemInstance.mapItem.instanceId = MapEditor.Instance.CreatMapItemInstance(mapItemInstance.mapItem.id);
+                }
+                instanceId.Add(mapItemInstance.mapItem.instanceId);
                 selectMapRoomDataObj.mapRoomData.mapItems.Add(mapItemInstance.mapItem);
             }
 
