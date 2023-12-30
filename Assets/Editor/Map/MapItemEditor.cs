@@ -152,14 +152,14 @@ public class MapItemEditor : MyEditor
             }
         }
     }
-
+    [SerializeField]
     GameObject selectItem; 
     private void NewMapItem()
     {
         DestroyImmediate(singleItemParent.gameObject);
         GameObject newItemParent = new GameObject("ItemParent");
         singleItemParent = newItemParent.transform;
-        newItemParent.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
+        //newItemParent.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
         ground.enabled = false;
         collider.ClearAllTiles();
         trigger.ClearAllTiles();
@@ -196,7 +196,7 @@ public class MapItemEditor : MyEditor
         DestroyImmediate(singleItemParent.gameObject);
         GameObject newItemParent = new GameObject("ItemParent");
         singleItemParent = newItemParent.transform;
-        newItemParent.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
+        //newItemParent.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
 
         ground.enabled = false;
         collider.ClearAllTiles();

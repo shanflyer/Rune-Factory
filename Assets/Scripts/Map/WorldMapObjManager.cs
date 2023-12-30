@@ -194,7 +194,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
             //Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
             nowMapRoomObj = await CreatMapRunTime(dataId, mapId);
-            (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
+           // (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
            
             PolygonCollider2D polygonCollider2D= (nowMapRoomObj.obj as Transform).GetComponent<PolygonCollider2D>();
             CameraManager.instance.SetConfiner2DCollider(polygonCollider2D);

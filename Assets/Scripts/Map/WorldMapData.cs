@@ -37,14 +37,14 @@ public struct MapLine
     {
         get
         {
-            return cells0.center;
+            return cells1.targetCell.xy;
         }
     }
     public int2 center1
     {
         get
         {
-            return cells1.center;
+            return cells0.targetCell.xy;
         }
     }
 }
@@ -60,21 +60,26 @@ public struct LinkMapCell
         get
         {
             int minX = 10000, minY = 10000, maxX = -10000, maxY = -10000;
+            if (cells== null)
+            {
+                cells = new List<int2>();
+                return int2.zero;
+            }
             for (int i = 0; i < cells.Count; i++)
             {
-                if (minX < cells[i].x)
+                if (minX > cells[i].x)
                 {
                     minX = cells[i].x;
                 }
-                if (minY < cells[i].y)
+                if (minY > cells[i].y)
                 {
                     minY = cells[i].y;
                 }
-                if (maxX > cells[i].x)
+                if (maxX < cells[i].x)
                 {
                     maxX = cells[i].x;
                 }
-                if (maxY > cells[i].y)
+                if (maxY < cells[i].y)
                 {
                     maxY = cells[i].y;
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO; 
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class WorldMapEditor : MyEditor
 {
@@ -18,6 +19,7 @@ public class WorldMapEditor : MyEditor
     private WorldDataObj selectWorld;
     private WorldInstanceEditor worldInstanceEditor;
 
+    public TileBase linkTile;
     [MenuItem("工具/世界地图")]
     public static void WindowShow()
     {
@@ -35,7 +37,8 @@ public class WorldMapEditor : MyEditor
         worldPanel =CreateInstance<CommonEditor>();
         worldPanel.InitData(Instance, null);
         LoadWorldData();
-        LoadRoomData();  
+        LoadRoomData();
+        linkTile= AssetDatabase.LoadAssetAtPath<TileBase>("Assets/TileMap/Tiles/Event/1.asset");
     }
 
     public CommonObj CreatWorld()

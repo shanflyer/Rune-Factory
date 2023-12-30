@@ -873,11 +873,11 @@ public partial class Character
                 MapCellController.instance.CheckPlayerTriggerEvent(
                 objCoordinate.z, oldCoordinate, true, TriggerEventAction, oldOperateItem);
 
-                DisplayMap displayMap = new DisplayMap
+               /* DisplayMap displayMap = new DisplayMap
                 {
                     displayMap = coordinate.z
                 };
-                GameActionManager.instance.QueueAction(displayMap);
+                GameActionManager.instance.QueueAction(displayMap);*/
             }
             oldCoordinate = OldOperaCoordinate = new int2(int.MinValue);
         }

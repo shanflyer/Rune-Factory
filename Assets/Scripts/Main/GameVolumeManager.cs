@@ -46,6 +46,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
             yield return waitTime;
             timeValue += Time.fixedDeltaTime;
         }
+        SetScreenCycleValue(maxCycleValue);
     }
 
     public void SetScreenCycleValue(float value)

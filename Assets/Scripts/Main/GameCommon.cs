@@ -192,9 +192,13 @@ public class GameCommon
     /// <param name="direction"></param>
     /// <returns></returns>
     public static int GetDirectionValue(Direction direction)
-    { 
-        var value = Convert.ToString((int)direction, 2);
-        return int.Parse(value);
+    {
+        var value = 1;
+        for (int i = 0; i < (int)direction; i++)
+        {
+            value *= 2;
+        } 
+        return value;
          
     }
     /// <summary>
@@ -203,11 +207,20 @@ public class GameCommon
     /// <param name="direction"></param>
     /// <param name="target"></param>
     /// <returns></returns>
-    public static bool CheckDirectionValue(Direction direction,int target)
+    public static bool CheckDirectionValue(Direction direction, int target)
     {
-        var value = Convert.ToString(target, 2);
+        var value = Convert.ToString(target, 2).ToCharArray();
         int index = (int)direction;
-        return value[index] == 1; 
+        try
+        {
+            return value[value.Length - 1 - index] == '1';
+        }
+        catch
+        {
+            return false;
+        }
+        
+        
     }
     public static int2 StringToInt2(string str)
     {

@@ -855,13 +855,13 @@ public class MapCellController : Singleton<MapCellController>
         {
             if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
             { 
-                runtimeMapRoom.AddLinkMap(mapLine.cells1);
+                runtimeMapRoom.AddLinkMap(mapLine.cells0);
                 runtimeMapRooms.SetData(runtimeMapRoom);
             }
 
             if (runtimeMapRooms.GetData(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
             {
-                _runtimeMapRoom.AddLinkMap(mapLine.cells0);
+                _runtimeMapRoom.AddLinkMap(mapLine.cells1);
                 runtimeMapRooms.SetData(_runtimeMapRoom);
             }
         }

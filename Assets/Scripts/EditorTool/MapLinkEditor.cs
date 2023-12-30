@@ -5,6 +5,7 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.Tilemaps;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using UnityEditor;
 
 [ExecuteAlways]
 public class MapLinkEditor : MonoBehaviour
@@ -15,20 +16,34 @@ public class MapLinkEditor : MonoBehaviour
     private LineRenderer lineRenderer;
 
     private Vector3 mapPos0, mapPos1;
-
+    [SerializeField]
     private Tilemap tilemap0, tilemap1;
     public List<Direction> directions0;
     public List<Direction> directions1;
+
+    private  static TileBase linkTile
+    {
+        get
+        {
+            if (_linkTile == null)
+            {
+                _linkTile = AssetDatabase.LoadAssetAtPath<TileBase>("Assets/TileMap/Tiles/Event/1.asset");
+            }
+            return _linkTile;
+        }
+    }
+    private static TileBase _linkTile;
     private void OnEnable()
     {
         startPoint = transform.GetChild(0);
         endPoint = transform.GetChild(1);
+        tilemap0=startPoint.GetChild(0).GetComponent<Tilemap>();
+        tilemap1 = endPoint.GetChild(0).GetComponent<Tilemap>();
         startPos = startPoint.position;
         endPos = endPoint.position;
         lineRenderer = GetComponent<LineRenderer>();
         SetLineCoordinatePos();
-    }
-    [HideInInspector]
+    } 
     public MapLine mapLine;
     private MapInstanceEditor mapInstance0, mapInstance1;
 
@@ -58,6 +73,8 @@ public class MapLinkEditor : MonoBehaviour
 
         mapPos0 = mapInstance0.transform.position;
         mapPos1 = mapInstance1.transform.position;
+        directions0 = mapLine.cells0.directions;
+        directions1 = mapLine.cells1.directions;
 
         SetLinePointPos();
     }
@@ -72,10 +89,10 @@ public class MapLinkEditor : MonoBehaviour
 
     void SetLinePointPos()
     {
-        startCoordinate = mapLine.center0;
+        startCoordinate = mapLine.center0+ mapInstance0.coordinate;
         Vector2 _startPos = mapInstance0.GetMapPos(startCoordinate);
         startPoint.position = new Vector3(_startPos.x, _startPos.y, startPoint.position.z);
-        endCoordinate = mapLine.center1;
+        endCoordinate = mapLine.center1 + mapInstance1.coordinate;
         Vector2 _endPos = mapInstance1.GetMapPos(endCoordinate);
         endPoint.position = new Vector3(_endPos.x, _endPos.y, endPoint.position.z);
 
@@ -86,6 +103,27 @@ public class MapLinkEditor : MonoBehaviour
         endPos = endPoint.position;
 
         SetLinePoint();
+        tilemap0.ClearAllTiles();
+        if (mapLine.cells0.cells != null)
+        {
+            for (int i = 0; i < mapLine.cells0.cells.Count; i++)
+            {
+                var cell = mapLine.cells0.cells[i] - startCoordinate;
+                tilemap0.SetTile(new Vector3Int(cell.x, cell.y, 0), linkTile);
+            }
+        }
+      
+
+        tilemap1.ClearAllTiles();
+        if (mapLine.cells1.cells != null)
+        {
+            for (int i = 0; i < mapLine.cells1.cells.Count; i++)
+            {
+                var cell = mapLine.cells1.cells[i] - endCoordinate;
+                tilemap1.SetTile(new Vector3Int(cell.x, cell.y, 0), linkTile);
+            }
+        }
+            
     }
 
     public void CheckPos()
@@ -118,9 +156,14 @@ public class MapLinkEditor : MonoBehaviour
     }
     public void SetLinkMapData()
     {
-        if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate,tilemap0,tilemap1,directions0,directions1,
+        var trueStartCoordinate = startCoordinate - mapInstance0.coordinate;
+        var trueEndCoordinate=endCoordinate-mapInstance1.coordinate;
+        if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate,tilemap0,tilemap1,
+            mapInstance0.coordinate,mapInstance1.coordinate,directions0,directions1,
              ref mapLine))
-        {
+        { 
+
+
             DestroyImmediate(gameObject);
         }
     }
@@ -145,7 +188,8 @@ public class MapLinkEditor : MonoBehaviour
             endPos = endPoint.position;
             SetLinePoint();
 
-            if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate, tilemap0, tilemap1, directions0, directions1,
+            if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate, tilemap0, tilemap1, 
+            mapInstance0.coordinate, mapInstance1.coordinate, directions0, directions1,
              ref mapLine))
             {
                 DestroyImmediate(gameObject);

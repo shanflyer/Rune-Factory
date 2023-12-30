@@ -30,6 +30,7 @@ public class CameraManager : Singleton<CameraManager>
     public void SetConfiner2DCollider(PolygonCollider2D polygonCollider2D)
     {
         confiner2D.m_BoundingShape2D= polygonCollider2D;
+        confiner2D.InvalidateCache();
     }
     public void SetFollowTarget(Transform target)
     {

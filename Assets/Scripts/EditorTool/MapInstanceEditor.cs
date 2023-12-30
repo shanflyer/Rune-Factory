@@ -111,7 +111,7 @@ public class MapInstanceEditor : MonoBehaviour
                 groundParentObj = new GameObject("GroundParent").transform;
                 groundParentObj.transform.SetParent(transform, false); 
                 groundParent = groundParentObj.transform;
-                groundParent.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
+                //roundParent.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
                 GameObject itemParentObj = new GameObject("ItemParent");
                 itemParentObj.transform.SetParent(transform, false);
@@ -194,7 +194,7 @@ public class MapInstanceEditor : MonoBehaviour
                         grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
 
                         Grid.transform.SetParent(itemInstance, false);
-                        Grid.transform.localPosition = new Vector3(-GameCommon.cellSize, -GameCommon.cellSize,0);
+                        //Grid.transform.localPosition = new Vector3(-GameCommon.cellSize, -GameCommon.cellSize,0);
                         tilemapRenderer.enabled = !hideTilemap;
                         tilemapRenderer.sortingOrder = 2; 
                         tilemapRenderers.Add(tilemapRenderer);
@@ -302,7 +302,7 @@ public class MapInstanceEditor : MonoBehaviour
         }
 
     }
-    int2 coordinate;
+    public int2 coordinate;
     bool oldhideTilemap;
     bool oldDisplayCoordinate;
     private void Update()

@@ -68,9 +68,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
 
     public List<int> GetMapItems(int mapId)
-    {
-        List<int> result = new List<int>();
-        itemInMapDatas.TryGetValue(mapId, out result);
+    { 
+        if (!itemInMapDatas.TryGetValue(mapId, out var result))
+        {
+            result = new List<int>();
+        }
         return result;
     }
    
