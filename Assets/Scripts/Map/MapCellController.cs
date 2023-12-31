@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst;
@@ -8,6 +9,7 @@ using Unity.Entities.UniversalDelegates;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MapCellController : Singleton<MapCellController>
 {
@@ -158,6 +160,7 @@ public class MapCellController : Singleton<MapCellController>
             roomCellData.Dispose();
             linkMapIndexs.Dispose();
             linkMaps.Dispose();
+            linkActions.Dispose();
             neighbourMaps.Dispose();
             commonTriggerAreas.Dispose();
             playerTriggerAreas.Dispose();
@@ -170,6 +173,10 @@ public class MapCellController : Singleton<MapCellController>
 
         public NativeHashMap<int2, int> linkMapIndexs;
         public NativeList<int4> linkMaps;
+        /// <summary>
+        /// 玩家转换地图前后的事件
+        /// </summary>
+        public NativeList<int2> linkActions;
 
         public NativeList<int> neighbourMaps;
 
@@ -191,7 +198,7 @@ public class MapCellController : Singleton<MapCellController>
                 {
                     coordinates.Add(inCoordinate); 
                 }
-            }
+            } 
             if (coordinates.Length > 0)
             {
                 inCoordinate = GameRandom.RandomInt(0, coordinates.Length);
@@ -211,6 +218,9 @@ public class MapCellController : Singleton<MapCellController>
             int4 target = new int4(linkMapCell.targetCell.xyz, directionValue);
             linkMaps.Add(target);
 
+            int2 linkAction = new int2(linkMapCell.beforAction, linkMapCell.afterAction);
+            linkActions.Add(linkAction);
+
             for (int i = 0; i < linkMapCell.cells.Count; i++)
             {
                 linkMapIndexs.Add(linkMapCell.cells[i], linkMaps.Length - 1);
@@ -221,7 +231,22 @@ public class MapCellController : Singleton<MapCellController>
                 neighbourMaps.Add(linkMapCell.targetCell.z);
             }
         }
-
+        public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap,out int2 changeAction)
+        {
+            newMap = int3.zero;
+            changeAction = int2.zero;
+            if (linkMapIndexs.TryGetValue(nowCoordinate, out int index))
+            {
+                int4 linkData = linkMaps[index];
+                if (GameCommon.CheckDirectionValue(direction, linkData.w))
+                {
+                    newMap = linkData.xyz;
+                    changeAction = linkActions[index];
+                    return true;
+                }
+            }
+            return false;
+        }
         public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap)
         {
             newMap = int3.zero;
@@ -808,6 +833,7 @@ public class MapCellController : Singleton<MapCellController>
             id = roomId,
             linkMapIndexs = new NativeHashMap<int2, int>(16, Allocator.Persistent),
             linkMaps = new NativeList<int4>(16, Allocator.Persistent),
+            linkActions=new NativeList<int2>(16,Allocator.Persistent),
             neighbourMaps = new NativeList<int>(8, Allocator.Persistent),
         };
         runtimeMapRoom.InitTriggerData();
@@ -848,6 +874,31 @@ public class MapCellController : Singleton<MapCellController>
         newMap = int3.zero;
         return false;
     }
+
+    public async void ChangeMapAction(int2 nowCoordinate, Direction direction, int nowMap, Int3Action action)
+    {
+        int3 newMap = int3.zero;
+        if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom runtimeMapRoom))
+        {
+            if (runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap,out var changeAction)) 
+            {
+                if (changeAction.x != 0)
+                {
+                    var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(changeAction.x);
+                    actionData.Action(setResult: (bool value) =>
+                    {
+                        action.Invoke(newMap,changeAction.y);
+                    });
+                }
+                else
+                {
+                    action.Invoke(newMap);
+                }
+               
+            }
+        } 
+    }
+
 
     public void InitLinkMap(List<MapLine> mapLines)
     {

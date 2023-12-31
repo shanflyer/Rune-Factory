@@ -56,7 +56,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             tempRuntimeMapItemObjs.Remove(destoryTempMapItem.instanceId);
             if(nowRuntimeMapItemObjs.TryGetValue(destoryTempMapItem.instanceId,out var mapItemRuntimeObj1))
             {
-                mapItemRuntimeObj1.SetColor(Color.white);
+                mapItemRuntimeObj1.ResetColor();
             }
         }
     }
@@ -143,7 +143,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         {
             display = mapRoomData.displaySky
         };
-        GameActionManager.instance.QueueAction(displaySky);
+        GameActionManager.instance.QueueAction(displaySky,true);
 
         SetFixedCamera setFixedCamera = new SetFixedCamera
         {
@@ -377,6 +377,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
 public struct MapItemRuntimeObj
 {
     SpriteRenderer[] spriteRenderers;
+    Color[] rendererColors;
     public Animator animator;
     public Transform transform;
     RuntimeObj runtimeObj; 
@@ -390,12 +391,28 @@ public struct MapItemRuntimeObj
         transform = (runtimeObj.obj as Transform);
         animator = transform.GetComponentInChildren<Animator>();
         spriteRenderers = transform.GetChild(0).GetComponentsInChildren<SpriteRenderer>(true);
+        rendererColors = new Color[spriteRenderers.Length];
+        for(int i = 0; i < spriteRenderers.Length; i++)
+        {
+            rendererColors[i] = spriteRenderers[i].color;
+        }
     }
 
     public void SetCoordinate(int2 coordinate)
     {
         this.coordinate = coordinate;
         transform.position= GameCommon.GetMapPos(coordinate);
+    }
+    public void ResetColor()
+    {
+        if (rendererColors.Length != spriteRenderers.Length)
+        {
+            return;
+        }
+        for(int i = 0; i < spriteRenderers.Length; i++)
+        {
+            spriteRenderers[i].color = rendererColors[i];
+        }
     }
     public void SetColor(Color color)
     {
@@ -415,7 +432,7 @@ public struct MapItemRuntimeObj
     {
         if(spriteRenderers != null)
         {
-            SetColor(Color.white);
+           ResetColor();
         }
         spriteRenderers = null;
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);

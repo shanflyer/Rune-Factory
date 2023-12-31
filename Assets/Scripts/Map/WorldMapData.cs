@@ -32,7 +32,8 @@ public struct WorldMap
 public struct MapLine
 {
     public int map0, map1;
-    public LinkMapCell cells0, cells1; 
+    public LinkMapCell cells0, cells1;
+    public int beforeActionId,afterActionId;
     public int2 center0
     {
         get
@@ -54,7 +55,7 @@ public struct LinkMapCell
     public List<Direction> directions;
     public List<int2> cells;
     public int3 targetCell;
-
+    public int beforAction, afterAction;
     public int2 center
     {
         get

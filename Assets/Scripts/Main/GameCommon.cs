@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
-using UnityEngine; 
- 
+using UnityEngine;
+
+public delegate void Int3Action(int3 value,int action=0);
 public delegate Vector2 GetMoveVector();
 public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
 [System.Serializable]

@@ -143,7 +143,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             runtimeMapItem.animationKey = new int2(setItemAnimation.keyX, setItemAnimation.keyY);
 
-            WorldMapObjManager.instance.SetItemAnimation(runtimeMapItem); 
+            WorldMapObjManager.instance.SetItemAnimation(runtimeMapItem);
+            if (setItemAnimation.setResult!=null)
+            {
+                setItemAnimation.setResult(true);
+            }
         }
     }
     public int GetInstanceFromEditorId(int2 editorKey)

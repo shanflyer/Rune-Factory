@@ -47,6 +47,10 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
             timeValue += Time.fixedDeltaTime;
         }
         SetScreenCycleValue(maxCycleValue);
+        if (LerpScreenCycleValue.setResult != null)
+        {
+            LerpScreenCycleValue.setResult(true);
+        }
     }
 
     public void SetScreenCycleValue(float value)

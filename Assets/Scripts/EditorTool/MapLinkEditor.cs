@@ -75,7 +75,7 @@ public class MapLinkEditor : MonoBehaviour
         mapPos1 = mapInstance1.transform.position;
         directions0 = mapLine.cells0.directions;
         directions1 = mapLine.cells1.directions;
-
+        
         SetLinePointPos();
     }
     void SetLinePoint()
