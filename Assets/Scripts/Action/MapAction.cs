@@ -2,6 +2,32 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 
+public struct RemoveMapItemCollider : GameAction
+{
+    public int mapItemInstanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        mapItemInstanceId = source;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+public struct ReSetMapItemCollider : GameAction
+{
+    public int mapItemInstanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        mapItemInstanceId = source;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct ZeroWorld : GameAction
 {
     public SetValue setValue { get; set; }

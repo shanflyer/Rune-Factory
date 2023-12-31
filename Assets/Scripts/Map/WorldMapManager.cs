@@ -35,6 +35,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         mapItemInstance = new MyInstance();
 
+
+        GameActionManager.instance.AddListener<RemoveMapItemCollider>(RemoveMapItemCollider);
+        GameActionManager.instance.AddListener<ReSetMapItemCollider>(ReSetMapItemCollider);
         GameActionManager.instance.AddListener<AddMapItem>(AddMapItem);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
         GameActionManager.instance.AddListener<ChangeMapItem>(ChangeMapItem);
@@ -194,6 +197,24 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         return false;
     } 
+
+    private async void RemoveMapItemCollider(RemoveMapItemCollider removeMapItemCollider)
+    {
+        if (runtimeMapItems.GetData(removeMapItemCollider.mapItemInstanceId, out var runtimeMapItem))
+        {
+            var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+            MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+        }
+    }
+    private async void ReSetMapItemCollider(ReSetMapItemCollider reSetMapItemCollider)
+    {
+        if (runtimeMapItems.GetData(reSetMapItemCollider.mapItemInstanceId, out var runtimeMapItem))
+        {
+            var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+            MapCellController.instance.AddBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+        }
+    }
+
     private async void DeleteMapItem(DeleteMapItem deleteMapItem)
     {
         //Vector2Int key = new Vector2Int(deleteMapItem.mapId, deleteMapItem.mapItemInstanceId);
