@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ScreenCycle
-  m_Shader: {fileID: 4800000, guid: de95b2ee3a90eff49a4073756f099c2a, type: 3}
+  m_Name: "\u80CC\u540E\u8F6E\u5ED3"
+  m_Shader: {fileID: 4800000, guid: 99ca8ffb25a70884b8d2a5901d8e0901, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -36,32 +36,18 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
-        m_Texture: {fileID: 2800000, guid: a0d200296a1fa0a4e83d68b5dad7951e, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CycleSize: 1920
-    - _CycleValue: 0
     - _EnableExternalAlpha: 0
+    - _FlipValue: 1
     m_Colors:
-    - _Color: {r: 0.8867924, g: 0, b: 0, a: 1}
-    - _Offset: {r: 0.22870368, g: 0.006249994, b: 0, a: 0}
+    - _Color: {r: 0, g: 0.682, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

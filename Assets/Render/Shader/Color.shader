@@ -2,8 +2,9 @@ Shader "Unlit/TestColor"
 {
     Properties
     {
-        _BlitTexture("Texture", 2D) = "white" {}
+        _MainTex("Texture", 2D) = "white" {}
         _Color("Color",Color)=(1,1,1,1)
+        _FlipValue("_FlipValue",int)=1
     }
     SubShader
     {
@@ -51,9 +52,11 @@ Shader "Unlit/TestColor"
                 float4 vertex : SV_POSITION;
             };
 
-            TEXTURE2D_X(_BlitTexture);  
+            TEXTURE2D(_MainTex);
+        SAMPLER(sampler_MainTex);
              CBUFFER_START( UnityPerMaterial )
             float4 _Color;
+            int _FlipValue;
             CBUFFER_END
 
             float4 GetDrawProceduralVertexPosition(uint vertexID)
@@ -75,8 +78,9 @@ Shader "Unlit/TestColor"
             { 
                 //return float4(_ScreenSize.xy,0,1);
                 // sample the texture
-                uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
-                float4 col =LOAD_TEXTURE2D_X_LOD(_BlitTexture, pixelCoords, 0);
+                uint2 pixelCoords = uint2(i.uv.xy);
+                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv); 
+                col.xyz=_FlipValue*(1-col.xyz)+(1-_FlipValue)*col.xyz;
                 col=col*_Color;
                 return col;
             }

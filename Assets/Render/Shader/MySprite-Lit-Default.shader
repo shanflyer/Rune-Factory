@@ -11,6 +11,7 @@ Shader "MySprite-Lit-Default"
         _WetValue("WetValue",Range(0,1))=0
         _shadowStep("ShadowStep",int)=0
         _LightBlend("LightBlend",int)=1
+        _BackBlend("BackBlend",int)=1
 
 
         _Water("Water",int)=0
@@ -82,6 +83,7 @@ Shader "MySprite-Lit-Default"
             int _Water;
 
             int _LightBlend;
+            int _BackBlend;
             
             half4 waterColor;
             half _WaterZero;
@@ -108,6 +110,8 @@ Shader "MySprite-Lit-Default"
         SAMPLER(sampler_MaskTex);
         TEXTURE2D(_WaterMaskTex);
         SAMPLER(sampler_WaterMaskTex);
+        TEXTURE2D(_BackMaskTex);
+        SAMPLER(sampler_BackMaskTex);
 
         TEXTURE2D(_WaterNormalMap);
         SAMPLER(sampler_WaterNormalMap);
@@ -150,7 +154,7 @@ Shader "MySprite-Lit-Default"
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
                 half2   lightingUV  : TEXCOORD1; 
-                float3  worldPos : TEXCOORD4;
+                float4  worldPos : TEXCOORD4;
                 half2   fixScreenUV: TEXCOORD3;
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
@@ -268,7 +272,8 @@ Shader "MySprite-Lit-Default"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.worldPos=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos.xyz=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos.w=o.worldPos.z;
                 o.worldPos.z+=o.worldPos.y;
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
@@ -322,6 +327,14 @@ Shader "MySprite-Lit-Default"
                 half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
                 result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
                 
+                if(_BackBlend)
+                {
+                half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
+                half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
+                result.xyz=half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue);
+
+                }
+              
                 //result.xyz=waterColor.xyz; 
 
                 return result;
@@ -684,6 +697,84 @@ Shader "MySprite-Lit-Default"
 
                 return mainTex;
                 
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Tags { "LightMode" = "BackColor" "Queue"="Transparent" "RenderType"="Transparent"}
+
+            HLSLPROGRAM
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+
+            #pragma vertex UnlitVertex
+            #pragma fragment UnlitFragment
+
+            #pragma multi_compile _ SKINNED_SPRITE
+
+            struct Attributes
+            {
+                float3 positionOS   : POSITION;
+                float4 color        : COLOR;
+                float2 uv           : TEXCOORD0;
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS      : SV_POSITION;
+                float4  color           : COLOR;
+                float2  uv              : TEXCOORD0;
+                #if defined(DEBUG_DISPLAY)
+                    float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+            
+            
+
+            Varyings UnlitVertex(Attributes attributes)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(attributes);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(attributes);
+
+                attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                #if defined(DEBUG_DISPLAY)
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
+                o.color = attributes.color * _Color * unity_SpriteColor;
+                return o;
+            }
+
+            float4 UnlitFragment(Varyings i) : SV_Target
+            {
+                float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+
+                #if defined(DEBUG_DISPLAY)
+                    SurfaceData2D surfaceData;
+                    InputData2D inputData;
+                    half4 debugColor = 0;
+
+                    InitializeSurfaceData(mainTex.rgb, mainTex.a, surfaceData);
+                    InitializeInputData(i.uv, inputData);
+                    SETUP_DEBUG_DATA_2D(inputData, i.positionWS);
+
+                    if(CanDebugOverrideOutputColor(surfaceData, inputData, debugColor))
+                    {
+                        return debugColor;
+                    }
+                #endif
+
+                float value=(mainTex.x+mainTex.y+mainTex.z)/3;
+                float stepValue=1-step(0.5,value);
+                return float4(stepValue.xxx,mainTex.a);
             }
             ENDHLSL
         }

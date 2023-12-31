@@ -52,11 +52,12 @@ MonoBehaviour:
   - {fileID: 6183544113875661279}
   - {fileID: 1508528712174735023}
   - {fileID: -898443647823300259}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3
+  - {fileID: 8839455909964680641}
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
-    m_Bits: 3857
+    m_Bits: 3985
   m_TransparencySortMode: 3
   m_TransparencySortAxis: {x: 0, y: 1, z: 1}
   m_HDREmulationScale: 1
@@ -188,4 +189,44 @@ MonoBehaviour:
     textureName: _ShadowTex
     blitToCameraTarget: 0
     clearFlag: 1
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &8839455909964680641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573e83345e5a3524e8d46ac9229de438, type: 3}
+  m_Name: BackMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    renderPassEvent: 350
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    overrideMat: {fileID: 0}
+    PassNames:
+    - BackColor
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _BackMaskTex
+    blitToCameraTarget: 0
+    clearFlag: 0
     clearColor: {r: 0, g: 0, b: 0, a: 1}
