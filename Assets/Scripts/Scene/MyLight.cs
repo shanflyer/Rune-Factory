@@ -76,7 +76,8 @@ public class MyLight : MonoBehaviour
         if (light2D == null)
         {
             light2D = GetComponent<Light2D>();
-            _intensity = light2D.intensity;
+            if(light2D!=null)
+                _intensity = light2D.intensity;
         }
         if (spriteRenderer == null)
         {

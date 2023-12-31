@@ -125,6 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7330737175897722266}
   - component: {fileID: 4634574352857356491}
+  - component: {fileID: 2550547227695486417}
   m_Layer: 0
   m_Name: Light 2D (2)
   m_TagString: Untagged
@@ -177,7 +178,7 @@ MonoBehaviour:
   m_NormalMapDistance: 0
   m_NormalMapQuality: 1
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
@@ -203,6 +204,58 @@ MonoBehaviour:
   - {x: -0.0382998, y: 0.53523207, z: 0}
   - {x: -0.12832832, y: 0.51249313, z: 0}
   - {x: -0.14136839, y: 0.03238201, z: 0}
+--- !u!114 &2550547227695486417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4430515215226146944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light2D: {fileID: 4634574352857356491}
+  spriteRenderer: {fileID: 0}
+  autoLerpValue: 0
+  lerpCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  autoLerpColor: 1
+  lerpColor:
+    serializedVersion: 2
+    key0: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+    key1: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 1}
+    key5: {r: 0, g: 0, b: 0, a: 1}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 15008
+    atime2: 17694
+    atime3: 47775
+    atime4: 50527
+    atime5: 65535
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 6
 --- !u!1 &6159303361646106881
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5318136922554083197}
   - component: {fileID: 7915630978299334421}
+  - component: {fileID: 808241840282110788}
   m_Layer: 0
   m_Name: Light 2D (3)
   m_TagString: Untagged
@@ -366,15 +420,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.041350007, y: 0.38134998, z: 0}
-    m_Extent: {x: 0.68745, y: 0.58945, z: 0}
+    m_Center: {x: -0.0325, y: 0.38095, z: 0}
+    m_Extent: {x: 0.69289994, y: 0.58325, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -400,6 +454,58 @@ MonoBehaviour:
   - {x: -0.110015154, y: 0.41154432, z: 0}
   - {x: -0.18476844, y: 0.4628377, z: 0}
   - {x: -0.22967887, y: 0.41747904, z: 0}
+--- !u!114 &808241840282110788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7793131258110939161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light2D: {fileID: 7915630978299334421}
+  spriteRenderer: {fileID: 0}
+  autoLerpValue: 0
+  lerpCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  autoLerpColor: 1
+  lerpColor:
+    serializedVersion: 2
+    key0: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
+    key1: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 1}
+    key5: {r: 0, g: 0, b: 0, a: 1}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 15008
+    atime2: 17694
+    atime3: 47775
+    atime4: 50527
+    atime5: 65535
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 6
 --- !u!1 &9154508449758645482
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,6 +516,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1994563634250731620}
   - component: {fileID: 6954872905949226665}
+  - component: {fileID: 7932357723732182547}
   m_Layer: 0
   m_Name: Light 2D (1)
   m_TagString: Untagged
@@ -462,15 +569,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.04949999, y: -0.0467, z: 0}
-    m_Extent: {x: 0.7234, y: 0.8015, z: 0}
+    m_Center: {x: -0.047250003, y: -0.050849974, z: 0}
+    m_Extent: {x: 0.72704995, y: 0.79635, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -487,6 +594,58 @@ MonoBehaviour:
   - {x: 0.022240162, y: 0.245852, z: 0}
   - {x: -0.11570001, y: 0.23969364, z: 0}
   - {x: -0.11545038, y: -0.18554163, z: 0}
+--- !u!114 &7932357723732182547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9154508449758645482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light2D: {fileID: 6954872905949226665}
+  spriteRenderer: {fileID: 0}
+  autoLerpValue: 0
+  lerpCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  autoLerpColor: 1
+  lerpColor:
+    serializedVersion: 2
+    key0: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
+    key1: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 1}
+    key5: {r: 0, g: 0, b: 0, a: 1}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 15008
+    atime2: 17694
+    atime3: 47775
+    atime4: 50527
+    atime5: 65535
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 6
 --- !u!1 &9195901553371895519
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,6 +656,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4461013563950478732}
   - component: {fileID: 9032135701012357578}
+  - component: {fileID: 2004754726886835365}
   m_Layer: 0
   m_Name: "\u53CC\u95E8_04 (1)"
   m_TagString: Untagged
@@ -571,3 +731,55 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2004754726886835365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9195901553371895519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light2D: {fileID: 0}
+  spriteRenderer: {fileID: 9032135701012357578}
+  autoLerpValue: 0
+  lerpCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  autoLerpColor: 1
+  lerpColor:
+    serializedVersion: 2
+    key0: {r: 1.9433962, g: 1.8723198, b: 0.76085794, a: 1}
+    key1: {r: 1.9433962, g: 1.8723198, b: 0.76085794, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 1}
+    key5: {r: 0, g: 0, b: 0, a: 1}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 15008
+    atime2: 17694
+    atime3: 47775
+    atime4: 50527
+    atime5: 65535
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 6

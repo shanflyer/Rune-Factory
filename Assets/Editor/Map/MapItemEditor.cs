@@ -146,7 +146,7 @@ public class MapItemEditor : MyEditor
             {
                 GameObject itemObj = (GameObject)PrefabUtility.InstantiatePrefab(selectMapItemDataObj.itemData.itemObj);
                 itemObj.transform.SetParent(itemParent, false);
-                itemObj.transform.localPosition = Vector3.zero;
+                itemObj.transform.localPosition = new Vector3(GameCommon.cellSize,GameCommon.cellSize,0);
                 var mapItemInstanceEditor = itemObj.AddComponent<MapItemInstanceEditor>();
                 mapItemInstanceEditor.InitData(selectMapItemDataObj.itemData,MapEditor.Instance.CreatMapItemInstance(selectMapItemDataObj.itemData.id), Vector2Int.zero);
             }
@@ -168,7 +168,7 @@ public class MapItemEditor : MyEditor
 
         selectItem = new GameObject("NewMapObj");
         selectItem.transform.SetParent(singleItemParent, false);
-        selectItem.transform.localPosition = Vector3.zero;
+        selectItem.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
 
         GameObject Model = new GameObject("Model");
         GameObject Show = new GameObject("Show");
@@ -229,7 +229,7 @@ public class MapItemEditor : MyEditor
 
         selectItem = Instantiate(selectMapItemDataObj.itemData.itemObj);
         selectItem.transform.SetParent(singleItemParent, false);
-        selectItem.transform.localPosition = Vector3.zero;
+        selectItem.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
     }
     private void SaveMapItem()
     {

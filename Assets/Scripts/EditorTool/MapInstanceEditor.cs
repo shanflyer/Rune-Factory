@@ -167,7 +167,7 @@ public class MapInstanceEditor : MonoBehaviour
         { 
             GameObject mapObj = mapRoomData.mapObj ? (GameObject)PrefabUtility.InstantiatePrefab(mapRoomData.mapObj) :
                 Instantiate(defaultGround);  
-            mapObj.transform.SetParent(groundParent, false);
+            mapObj.transform.SetParent(groundParent, false); 
             mapObj.name = mapRoomData.mapObj ? mapRoomData.mapObj.name : mapRoomData.roomName;
 
             foreach (var item in mapRoomData.mapItems)
@@ -179,14 +179,16 @@ public class MapInstanceEditor : MonoBehaviour
                     {
                         GameObject itemObj = (GameObject)PrefabUtility.InstantiatePrefab(itemData.itemObj);
                         Transform itemInstance = new GameObject(itemData.itemName).transform;
-                        itemObj.transform.SetParent(itemInstance, false);
-
+                        itemObj.transform.SetParent(itemInstance, false); 
 
                         GameObject Grid = new GameObject("Grid");
                         Grid.transform.SetParent(transform, false);  
 
                         GameObject ItemTile = new GameObject("ItemTile");
                         ItemTile.transform.SetParent(Grid.transform, false);
+
+                        Grid.transform.localPosition = new Vector3(-GameCommon.cellSize, -GameCommon.cellSize, 0);
+                        Grid.transform.localPosition = new Vector3(-GameCommon.cellSize, -GameCommon.cellSize, 0);
 
                         var grid = Grid.AddComponent<Grid>();
                         var tilemap = ItemTile.AddComponent<Tilemap>();

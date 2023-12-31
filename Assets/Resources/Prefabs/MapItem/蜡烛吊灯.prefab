@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 949517339521567855}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -360,6 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 1141706311026997698}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -515,6 +517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 4376545447382057168}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -670,6 +673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 117118478047441642}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -825,6 +829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 4580952709651574636}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -980,6 +985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 4436982025979199278}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -1136,6 +1142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 3233999435490383539}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -1308,6 +1315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 5772177735977889170}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -1463,6 +1471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   light2D: {fileID: 5366899590115760127}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -1576,7 +1585,7 @@ Transform:
   m_GameObject: {fileID: 8090539501768959403}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: -0.04, z: 0}
+  m_LocalPosition: {x: -0.04, y: -0.04, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1620,7 +1629,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 601031363
+  m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1480574557, guid: 6a334efa69d47b54399183793d2533b0, type: 3}

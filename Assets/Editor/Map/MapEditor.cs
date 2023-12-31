@@ -32,8 +32,8 @@ public class MapEditor : MyEditor
                 }
                 if (_selectMapRoomDataObj != null)
                 {
-                    GameObject mapInstanceObj = new GameObject(_selectMapRoomDataObj.GetName());
-                    mapInstance = mapInstanceObj.AddComponent<MapInstanceEditor>();
+                    GameObject mapInstanceObj = new GameObject(_selectMapRoomDataObj.GetName()); 
+                    mapInstance = mapInstanceObj.AddComponent<MapInstanceEditor>(); 
                     mapInstance.InitData(_selectMapRoomDataObj.mapRoomData,0);
                 }
             }
