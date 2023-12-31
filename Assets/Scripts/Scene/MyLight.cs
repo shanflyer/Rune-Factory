@@ -1,13 +1,15 @@
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 [ExecuteAlways]
-[RequireComponent(typeof(Light2D))]
+//[RequireComponent(typeof(Light2D))]
 public class MyLight : MonoBehaviour
 {
     [SerializeField]
     private Light2D light2D;
-
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
 
     [SerializeField]
     private bool autoLerpValue;
@@ -19,35 +21,68 @@ public class MyLight : MonoBehaviour
     private bool autoLerpColor;
 
     [SerializeField]
+    [GradientUsage(true)]
     private Gradient lerpColor;
+    
 
     [SerializeField]
     private float intensity
     {
-        get => light2D.intensity;
+        get
+        {
+            return _intensity;
+        }
         set
         {
-            light2D.intensity = value;
+            _intensity = value;
+            if (light2D)
+            {
+                light2D.intensity = value;
+            }
         }
+
+         
     }
 
     [SerializeField]
     private Color color
     {
-        get => light2D.color;
+        get
+        {
+            return _color;  
+        }
+
+        
         set
         {
-            light2D.color = value;
+            _color = value;
+            if (light2D)
+            {
+                light2D.color= value;
+            }
+            if (spriteRenderer)
+            {
+                spriteRenderer.color = _color;
+            }
+
         }
     }
+    private Color _color;
+    private float _intensity;
 
     private void OnEnable()
     {
+#if UNITY_EDITOR
         if (light2D == null)
         {
             light2D = GetComponent<Light2D>();
+            _intensity = light2D.intensity;
         }
-
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+#endif 
         if (Application.isPlaying)
             EnvironmentManger.instance.AddMyLight(this);
     }
