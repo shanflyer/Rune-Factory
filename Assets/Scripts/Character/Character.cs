@@ -315,7 +315,7 @@ public partial class Character
     private int2 OldOperaCoordinate = new int2(int.MinValue);
 
     public CharacterData characterData;
-
+    public bool canMove=true;
     public Equip Equip => equip;
     private Equip equip;
     public int characterPackage;

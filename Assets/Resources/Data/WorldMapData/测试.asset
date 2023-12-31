@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMap: 41
   worldMaps:
-  - map: NewRoom0
-    id: 41
+  - map: "\u5367\u5BA4"
+    id: 405
     coordinate:
-      x: 8
-      y: -84
+      x: -178
+      y: 298
       z: 0
     eventId: 0
   - map: "\u6211\u7684\u519C\u573A"
@@ -42,25 +42,25 @@ MonoBehaviour:
       y: 274
       z: 0
     eventId: 0
-  - map: "\u57CE\u95E8"
-    id: 302
-    coordinate:
-      x: 3
-      y: 29
-      z: 0
-    eventId: 0
-  - map: "\u5367\u5BA4"
-    id: 405
-    coordinate:
-      x: -178
-      y: 298
-      z: 0
-    eventId: 0
   - map: "\u4E2D\u592E\u5E7F\u573A"
     id: 512
     coordinate:
       x: 19
       y: 158
+      z: 0
+    eventId: 0
+  - map: NewRoom0
+    id: 41
+    coordinate:
+      x: 8
+      y: -84
+      z: 0
+    eventId: 0
+  - map: "\u57CE\u95E8"
+    id: 302
+    coordinate:
+      x: 3
+      y: 29
       z: 0
     eventId: 0
   - map: NewRoom1
@@ -71,6 +71,108 @@ MonoBehaviour:
       z: 0
     eventId: 0
   mapLines:
+  - map0: 695
+    map1: 547
+    cells0:
+      directions: 00000000
+      cells:
+      - x: 10
+        y: 15
+      - x: 10
+        y: 16
+      - x: 11
+        y: 15
+      - x: 11
+        y: 16
+      - x: 12
+        y: 15
+      - x: 12
+        y: 16
+      - x: 13
+        y: 15
+      - x: 13
+        y: 16
+      - x: 14
+        y: 15
+      - x: 14
+        y: 16
+      targetCell:
+        x: 10
+        y: -26
+        z: 547
+      beforAction: 0
+      afterAction: 0
+    cells1:
+      directions: 02000000
+      cells:
+      - x: 5
+        y: -27
+      - x: 5
+        y: -26
+      - x: 5
+        y: -25
+      - x: 6
+        y: -27
+      - x: 6
+        y: -26
+      - x: 6
+        y: -25
+      - x: 7
+        y: -27
+      - x: 7
+        y: -26
+      - x: 7
+        y: -25
+      - x: 8
+        y: -27
+      - x: 8
+        y: -26
+      - x: 8
+        y: -25
+      - x: 9
+        y: -27
+      - x: 9
+        y: -26
+      - x: 9
+        y: -25
+      - x: 10
+        y: -27
+      - x: 10
+        y: -26
+      - x: 10
+        y: -25
+      - x: 11
+        y: -27
+      - x: 11
+        y: -26
+      - x: 11
+        y: -25
+      - x: 12
+        y: -27
+      - x: 12
+        y: -26
+      - x: 12
+        y: -25
+      - x: 13
+        y: -27
+      - x: 13
+        y: -26
+      - x: 13
+        y: -25
+      - x: 14
+        y: -27
+      - x: 14
+        y: -26
+      - x: 14
+        y: -25
+      targetCell:
+        x: 13
+        y: 15
+        z: 695
+      beforAction: 0
+      afterAction: 0
+    beforeActionId: 0
+    afterActionId: 0
   - map0: 512
     map1: 695
     cells0:
@@ -177,115 +279,23 @@ MonoBehaviour:
       afterAction: 0
     beforeActionId: 0
     afterActionId: 0
-  - map0: 759
-    map1: 547
-    cells0:
-      directions: 02000000
-      cells:
-      - x: -36
-        y: -34
-      - x: -36
-        y: -33
-      - x: -35
-        y: -34
-      - x: -35
-        y: -33
-      - x: -34
-        y: -34
-      - x: -34
-        y: -33
-      - x: -33
-        y: -34
-      - x: -33
-        y: -33
-      - x: -32
-        y: -34
-      - x: -32
-        y: -33
-      - x: -32
-        y: -31
-      - x: -31
-        y: -34
-      - x: -31
-        y: -33
-      - x: -30
-        y: -34
-      - x: -30
-        y: -33
-      - x: -29
-        y: -34
-      - x: -29
-        y: -33
-      targetCell:
-        x: 9
-        y: 15
-        z: 547
-      beforAction: 0
-      afterAction: 0
-    cells1:
-      directions: 00000000
-      cells:
-      - x: 9
-        y: 14
-      - x: 9
-        y: 15
-      - x: 9
-        y: 16
-      - x: 10
-        y: 14
-      - x: 10
-        y: 15
-      - x: 10
-        y: 16
-      - x: 11
-        y: 14
-      - x: 11
-        y: 15
-      - x: 11
-        y: 16
-      - x: 12
-        y: 14
-      - x: 12
-        y: 15
-      - x: 12
-        y: 16
-      - x: 13
-        y: 14
-      - x: 13
-        y: 15
-      - x: 13
-        y: 16
-      targetCell:
-        x: -31
-        y: -31
-        z: 759
-      beforAction: 0
-      afterAction: 0
-    beforeActionId: 0
-    afterActionId: 0
   - map0: 302
     map1: 512
     cells0:
       directions: 00000000
       cells:
       - x: -5
-        y: 51
-      - x: -5
         y: 52
       - x: -5
         y: 53
       - x: -5
         y: 54
       - x: -4
-        y: 51
-      - x: -4
         y: 52
       - x: -4
         y: 53
       - x: -4
         y: 54
-      - x: -3
-        y: 51
       - x: -3
         y: 52
       - x: -3
@@ -293,19 +303,17 @@ MonoBehaviour:
       - x: -3
         y: 54
       - x: -2
-        y: 51
+        y: 52
       - x: -2
         y: 53
       - x: -2
         y: 54
       - x: -1
-        y: 51
+        y: 52
       - x: -1
         y: 53
       - x: -1
         y: 54
-      - x: 0
-        y: 51
       - x: 0
         y: 52
       - x: 0
@@ -313,12 +321,16 @@ MonoBehaviour:
       - x: 0
         y: 54
       - x: 1
-        y: 51
-      - x: 1
         y: 52
       - x: 1
         y: 53
       - x: 1
+        y: 54
+      - x: 2
+        y: 52
+      - x: 2
+        y: 53
+      - x: 2
         y: 54
       targetCell:
         x: -18
@@ -329,6 +341,30 @@ MonoBehaviour:
     cells1:
       directions: 02000000
       cells:
+      - x: -25
+        y: -59
+      - x: -25
+        y: -58
+      - x: -25
+        y: -57
+      - x: -24
+        y: -59
+      - x: -24
+        y: -58
+      - x: -24
+        y: -57
+      - x: -23
+        y: -59
+      - x: -23
+        y: -58
+      - x: -23
+        y: -57
+      - x: -22
+        y: -59
+      - x: -22
+        y: -58
+      - x: -22
+        y: -57
       - x: -21
         y: -59
       - x: -21
@@ -397,6 +433,158 @@ MonoBehaviour:
       afterAction: 0
     beforeActionId: 0
     afterActionId: 0
+  - map0: 405
+    map1: 547
+    cells0:
+      directions: 03000000
+      cells:
+      - x: 0
+        y: -5
+      - x: 0
+        y: -4
+      - x: 0
+        y: -3
+      - x: 0
+        y: -2
+      - x: 1
+        y: -5
+      - x: 1
+        y: -4
+      - x: 1
+        y: -3
+      - x: 2
+        y: -5
+      - x: 2
+        y: -4
+      - x: 2
+        y: -3
+      - x: 3
+        y: -5
+      - x: 3
+        y: -4
+      targetCell:
+        x: -21
+        y: 14
+        z: 547
+      beforAction: 0
+      afterAction: 0
+    cells1:
+      directions: 0100000000000000
+      cells:
+      - x: -23
+        y: 15
+      - x: -23
+        y: 16
+      - x: -23
+        y: 17
+      - x: -23
+        y: 18
+      - x: -22
+        y: 14
+      - x: -22
+        y: 15
+      - x: -22
+        y: 16
+      - x: -22
+        y: 17
+      - x: -21
+        y: 13
+      - x: -21
+        y: 14
+      - x: -21
+        y: 15
+      - x: -21
+        y: 16
+      - x: -20
+        y: 12
+      - x: -20
+        y: 13
+      - x: -20
+        y: 14
+      - x: -20
+        y: 15
+      targetCell:
+        x: 0
+        y: -3
+        z: 405
+      beforAction: 0
+      afterAction: 0
+    beforeActionId: 0
+    afterActionId: 0
+  - map0: 759
+    map1: 547
+    cells0:
+      directions: 02000000
+      cells:
+      - x: -36
+        y: -34
+      - x: -36
+        y: -33
+      - x: -35
+        y: -34
+      - x: -35
+        y: -33
+      - x: -34
+        y: -34
+      - x: -34
+        y: -33
+      - x: -33
+        y: -34
+      - x: -33
+        y: -33
+      - x: -32
+        y: -34
+      - x: -32
+        y: -33
+      - x: -31
+        y: -34
+      - x: -31
+        y: -33
+      - x: -30
+        y: -34
+      - x: -30
+        y: -33
+      - x: -29
+        y: -34
+      - x: -29
+        y: -33
+      targetCell:
+        x: 9
+        y: 15
+        z: 547
+      beforAction: 0
+      afterAction: 0
+    cells1:
+      directions: 00000000
+      cells:
+      - x: 7
+        y: 15
+      - x: 7
+        y: 16
+      - x: 8
+        y: 15
+      - x: 8
+        y: 16
+      - x: 9
+        y: 15
+      - x: 9
+        y: 16
+      - x: 10
+        y: 15
+      - x: 10
+        y: 16
+      - x: 11
+        y: 15
+      - x: 11
+        y: 16
+      targetCell:
+        x: -31
+        y: -31
+        z: 759
+      beforAction: 0
+      afterAction: 0
+    beforeActionId: 0
+    afterActionId: 0
   - map0: 512
     map1: 695
     cells0:
@@ -499,186 +687,6 @@ MonoBehaviour:
         x: -93
         y: 13
         z: 512
-      beforAction: 0
-      afterAction: 0
-    beforeActionId: 0
-    afterActionId: 0
-  - map0: 405
-    map1: 547
-    cells0:
-      directions: 03000000
-      cells:
-      - x: 0
-        y: -5
-      - x: 0
-        y: -4
-      - x: 0
-        y: -3
-      - x: 0
-        y: -2
-      - x: 1
-        y: -5
-      - x: 1
-        y: -4
-      - x: 1
-        y: -3
-      - x: 2
-        y: -5
-      - x: 2
-        y: -4
-      - x: 2
-        y: -3
-      - x: 3
-        y: -5
-      - x: 3
-        y: -4
-      targetCell:
-        x: -21
-        y: 14
-        z: 547
-      beforAction: 0
-      afterAction: 0
-    cells1:
-      directions: 0100000000000000
-      cells:
-      - x: -23
-        y: 15
-      - x: -23
-        y: 16
-      - x: -23
-        y: 17
-      - x: -23
-        y: 18
-      - x: -22
-        y: 15
-      - x: -22
-        y: 16
-      - x: -22
-        y: 17
-      - x: -22
-        y: 18
-      - x: -21
-        y: 14
-      - x: -21
-        y: 15
-      - x: -21
-        y: 16
-      - x: -21
-        y: 17
-      - x: -20
-        y: 13
-      - x: -20
-        y: 14
-      - x: -20
-        y: 15
-      - x: -20
-        y: 16
-      targetCell:
-        x: 0
-        y: -3
-        z: 405
-      beforAction: 0
-      afterAction: 0
-    beforeActionId: 0
-    afterActionId: 0
-  - map0: 695
-    map1: 547
-    cells0:
-      directions: 00000000
-      cells:
-      - x: 10
-        y: 15
-      - x: 10
-        y: 16
-      - x: 11
-        y: 15
-      - x: 11
-        y: 16
-      - x: 12
-        y: 15
-      - x: 12
-        y: 16
-      - x: 13
-        y: 15
-      - x: 13
-        y: 16
-      - x: 14
-        y: 15
-      - x: 14
-        y: 16
-      targetCell:
-        x: 10
-        y: -26
-        z: 547
-      beforAction: 0
-      afterAction: 0
-    cells1:
-      directions: 02000000
-      cells:
-      - x: 7
-        y: -27
-      - x: 7
-        y: -26
-      - x: 7
-        y: -25
-      - x: 8
-        y: -27
-      - x: 8
-        y: -26
-      - x: 8
-        y: -25
-      - x: 9
-        y: -27
-      - x: 9
-        y: -26
-      - x: 9
-        y: -25
-      - x: 10
-        y: -27
-      - x: 10
-        y: -26
-      - x: 10
-        y: -25
-      - x: 11
-        y: -27
-      - x: 11
-        y: -26
-      - x: 11
-        y: -25
-      - x: 12
-        y: -27
-      - x: 12
-        y: -26
-      - x: 12
-        y: -25
-      - x: 13
-        y: -27
-      - x: 13
-        y: -26
-      - x: 13
-        y: -25
-      - x: 14
-        y: -27
-      - x: 14
-        y: -26
-      - x: 14
-        y: -25
-      - x: 15
-        y: -27
-      - x: 15
-        y: -26
-      - x: 15
-        y: -25
-      - x: 16
-        y: -27
-      - x: 16
-        y: -26
-      - x: 16
-        y: -25
-      targetCell:
-        x: 13
-        y: 15
-        z: 695
       beforAction: 0
       afterAction: 0
     beforeActionId: 0

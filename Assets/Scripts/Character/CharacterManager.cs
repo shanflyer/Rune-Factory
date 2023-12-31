@@ -846,6 +846,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (character == controllerCharacter)
                 {
                     character.StopMove();
+                    character.canMove = false;
                     LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
                     {
                         cyclePos = GameCommon.GetMapPos(character.coordinate),
@@ -883,9 +884,9 @@ public class CharacterManager : Singleton<CharacterManager>
                                         dataAction.Action();
                                     }
                                 }
-                            }
 
-
+                                character.canMove = true;
+                            } 
                             GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
                         });
 
@@ -1206,25 +1207,29 @@ public class CharacterManager : Singleton<CharacterManager>
                 () => { return controllerCharacter.moveDirection; },
                 (int2 targetCoordinate, Vector2 targetPos) =>
                 {
-                    float length = Vector2.Distance(targetPos, new Vector2(characterTransform.position.x, characterTransform.position.y));
-                    TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
+                    if (controllerCharacter.canMove)
                     {
-                        characterId = controllerCharacter.instanceId,
-                        length = length
-                    };
-                    GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
-                    characterTransform.position = new Vector3(targetPos.x, targetPos.y, characterTransform.position.z);
-                    if (controllerCharacter.coordinate.x != targetCoordinate.x ||
-                    controllerCharacter.coordinate.y != targetCoordinate.y)
-                    {
-                        CrossMap(targetCoordinate, controllerCharacter, out int3 newMap);
-                        // Debug.Log($"targetCoordinate:{targetCoordinate}");
-                        TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate = new TryTeamLeaderSetCoordinate
+                        float length = Vector2.Distance(targetPos, new Vector2(characterTransform.position.x, characterTransform.position.y));
+                        TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
                         {
-                            characterId = controllerCharacter.instanceId
+                            characterId = controllerCharacter.instanceId,
+                            length = length
                         };
-                        GameActionManager.instance.QueueAction(tryTeamLeaderSetCoordinate, true);
+                        GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
+                        characterTransform.position = new Vector3(targetPos.x, targetPos.y, characterTransform.position.z);
+                        if (controllerCharacter.coordinate.x != targetCoordinate.x ||
+                        controllerCharacter.coordinate.y != targetCoordinate.y)
+                        {
+                            CrossMap(targetCoordinate, controllerCharacter, out int3 newMap);
+                            // Debug.Log($"targetCoordinate:{targetCoordinate}");
+                            TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate = new TryTeamLeaderSetCoordinate
+                            {
+                                characterId = controllerCharacter.instanceId
+                            };
+                            GameActionManager.instance.QueueAction(tryTeamLeaderSetCoordinate, true);
+                        }
                     }
+                    
                 },
                 WorldMapObjManager.instance.displayMap, playerRuntimeObj.linkId, true);
         }
