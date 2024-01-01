@@ -1157,6 +1157,7 @@
             <key type="filename">旗帜_11_normal.png</key>
             <key type="filename">旗帜_12.png</key>
             <key type="filename">旗帜_12_normal.png</key>
+            <key type="filename">木桶堆.png</key>
             <key type="filename">柴堆1.png</key>
             <key type="filename">柴堆1_normal.png</key>
             <key type="filename">柴堆2.png</key>
@@ -1467,6 +1468,22 @@
                 <rect>8,16,16,32</rect>
                 <key>scale9Paddings</key>
                 <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">水井.png</key>
+            <key type="filename">雨棚侧面_04_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,32,32,64</rect>
+                <key>scale9Paddings</key>
+                <rect>16,32,32,64</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -1929,21 +1946,6 @@
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.898438</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>16,32,32,64</rect>
-                <key>scale9Paddings</key>
-                <rect>16,32,32,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">雨棚侧面_04_normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>

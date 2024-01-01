@@ -168,10 +168,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.0787037
+    x: 0
     y: 0
-    width: 0.37552083
-    height: 0.37552086
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -498,7 +498,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1079747113
+--- !u!1 &702418633
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -506,7 +506,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1079747114}
+  - component: {fileID: 702418634}
   m_Layer: 0
   m_Name: ItemParent
   m_TagString: Untagged
@@ -514,13 +514,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1079747114
+--- !u!4 &702418634
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079747113}
+  m_GameObject: {fileID: 702418633}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -835,8 +835,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -1.4962502, y: 2.4625502, z: 0}
-    m_Extent: {x: 8.46805, y: 8.90695, z: 0}
+    m_Center: {x: -1.5002, y: 2.4683, z: 0}
+    m_Extent: {x: 8.4569, y: 8.9041, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -20433,4 +20433,4 @@ SceneRoots:
   - {fileID: 1704119608435530734}
   - {fileID: 1844942969}
   - {fileID: 1419642074}
-  - {fileID: 1079747114}
+  - {fileID: 702418634}

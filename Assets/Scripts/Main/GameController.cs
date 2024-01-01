@@ -74,6 +74,7 @@ public class GameController : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
+        Shader.SetGlobalInt("_backColor", 0);
         SingletonType.instance.ClearAll();
         instance = null;
     }
@@ -125,6 +126,7 @@ public class GameController : MonoBehaviour
     // Start is called beforee the first frame update
     async void Start()
     {
+        Shader.SetGlobalInt("_backColor", 1);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         AudioController.instance.PlayAudio(BGM.Town1);

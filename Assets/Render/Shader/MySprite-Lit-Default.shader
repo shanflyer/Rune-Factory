@@ -74,6 +74,7 @@ Shader "MySprite-Lit-Default"
          half4 GlobalColor; 
          half2 LightDirection;
          half _ShadowValue;
+         int _backColor;
         CBUFFER_START(UnityPerMaterial)
             half4 _MainTex_ST;
             half4 _NormalMap_ST;  // Is this the right way to do this?
@@ -327,7 +328,7 @@ Shader "MySprite-Lit-Default"
                 half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
                 result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
                 
-                if(_BackBlend)
+                if(_BackBlend&&_backColor)
                 {
                 half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
                 half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
