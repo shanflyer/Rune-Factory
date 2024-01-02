@@ -69,7 +69,7 @@ public class InputManager :Singleton<InputManager>
     void ShowPointerEffect(object obj)
     {
         var mouseScreenPos = (Vector2)obj;
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        Vector2 mousePos = CameraManager.instance.uiCamera.ScreenToWorldPoint(mouseScreenPos);
         ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams();
         ep.position = mousePos;
         particleSystem.Emit(ep, 1);
@@ -153,7 +153,7 @@ public class InputManager :Singleton<InputManager>
         
         playerInput.defaultActionMap =PlayerActionMap;
 
-        AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
+       // AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
         AddInputActionDelegate(MyInputNameData.UI_Pointer, ShowPointerEffect);
 
         

@@ -47,7 +47,15 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
     public async void Action(int dataId)
     {
         GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(dataId);
-        gameActionData.Action();
+        if(gameActionData == null)
+        {
+            Debug.LogError($"Error:{dataId}");
+        }
+        else
+        {
+            gameActionData.Action();
+        }
     }
+       
 
 }
