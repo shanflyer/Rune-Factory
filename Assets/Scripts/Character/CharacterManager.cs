@@ -352,11 +352,11 @@ public class CharacterManager : Singleton<CharacterManager>
                     _controllerCharacter.SetController(true);
                 }
             }
-            /*
+            
             UIManager.instance.ShowGamePanel<PlayerTopPanel>();
             UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(
                 ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId)
-                );*/
+                );
         }
         get
         {
