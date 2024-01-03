@@ -387,6 +387,7 @@ public class GameTime
     NewDay newDay;
     public void TimeInit()
     {
+        bool dayRefresh = false;
         if (mySecond >= 20)
         {
             minute += mySecond / 20;
@@ -399,9 +400,10 @@ public class GameTime
         }
         if (hour >= 24)
         {
+            dayRefresh = true;
             date += hour / 24;
             hour = hour % 24;
-            GameActionManager.instance.QueueAction(newDay);
+           
             if (date <= 15)
             {
                 float moonOffSet = date / 15.0f;
@@ -441,8 +443,13 @@ public class GameTime
         week = (Week)x;
         SetLightValue();
         updateGame.hour = hour;
-        updateGame.minute = minute;
+        updateGame.minute = minute; 
         GameActionManager.instance.QueueAction(updateGame);
+
+        if (dayRefresh)
+        {
+            GameActionManager.instance.QueueAction(newDay);
+        }
     }
     UpdateGameTime updateGame;
     public void Sleep()
@@ -597,7 +604,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 });
            
         }
-        LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute, GameCommon.sleepCostTime, WakeUp);
+        LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute, GameCommon.sleepCostTime,true, WakeUp);
     }
 
     private void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)
@@ -682,6 +689,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     {
         if (GameObjectCurveController.instance.UpDataComponent)
         {
+            StopTimeRun();
             TimeRunIEnumerator = TimeRun();
             GameObjectCurveController.instance.UpDataComponent.StartCoroutine(TimeRunIEnumerator);
         }
@@ -700,10 +708,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
         nowGameTime.minute = 0;
         nowGameTime.AddDate();
     }
-    private void LerpGameTime(int targetHour,int targetMinute,float costTime, Action endAction = null)
+    private void LerpGameTime(int targetHour,int targetMinute,float costTime,bool endRun=false, Action endAction = null)
     {
         StopTimeRun();
-        var lerpTimeIEnumerator = LerpTime(targetHour, targetMinute, costTime, endAction);
+        var lerpTimeIEnumerator = LerpTime(targetHour, targetMinute, costTime, endRun, endAction);
         GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
     }
     private void LerpGameTime(LerpGameTime lerpGameTime)
@@ -713,7 +721,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
     }
 
-    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime,Action endAction=null)
+    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime, bool endRun = false, Action endAction=null)
     {
         int startValue = (Hour * 60 + Minute) * 20; 
         if (targetHour < Hour)
@@ -731,6 +739,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
             //Debug.Log($"Time:{timeValue}-hour:{nowGameTime.hour}-minute:{nowGameTime.minute}--second:{nowGameTime.mySecond}");
 
             yield return new WaitForFixedUpdate();
+        }
+        if (endRun)
+        {
+            StartTimeRun();
         }
         if (endAction!=null)
         {

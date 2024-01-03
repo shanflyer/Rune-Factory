@@ -77,6 +77,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
             UIManager.instance.ShowGamePanel<SetPanel>();
         });
 
+        GameActionManager.instance.AddListener<NewDay>(NewDay);
         GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
