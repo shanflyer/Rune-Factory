@@ -94,6 +94,7 @@ namespace UnityEditor.UI
             m_FillOrigin            = serializedObject.FindProperty("m_FillOrigin");
             m_FillClockwise         = serializedObject.FindProperty("m_FillClockwise");
             m_FillAmount            = serializedObject.FindProperty("m_FillAmount");
+            m_NullClear = serializedObject.FindProperty("m_NullClear");
             m_PreserveAspect        = serializedObject.FindProperty("m_PreserveAspect");
             m_UseSpriteMesh         = serializedObject.FindProperty("m_UseSpriteMesh");
             m_PixelsPerUnitMultiplier = serializedObject.FindProperty("m_PixelsPerUnitMultiplier");
