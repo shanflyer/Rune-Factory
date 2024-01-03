@@ -332,7 +332,7 @@ public class CharacterManager : Singleton<CharacterManager>
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
 
-    public Sprite PlayerHead => playerData.head;
+    public Sprite PlayerHead => playerData.head.sprite;
     private Character _controllerCharacter;
 
     public Character controllerCharacter
@@ -860,8 +860,8 @@ public class CharacterManager : Singleton<CharacterManager>
                     GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
                     {
                         WorldMapObjManager.instance.RecycleMap();
-                        await WorldMapObjManager.instance.DisplayMap(targetMap);
                         SetPlayerPos(character);
+                        await WorldMapObjManager.instance.DisplayMap(targetMap); 
 
                         GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                         {

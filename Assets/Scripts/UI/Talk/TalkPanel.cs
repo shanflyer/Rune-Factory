@@ -143,7 +143,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                 else
                 {
                     talkerName = character.name;
-                    talkerIcon = character.characterData.head;
+                    talkerIcon = character.characterData.head.sprite;
                 }
             }
 

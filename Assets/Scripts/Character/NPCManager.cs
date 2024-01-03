@@ -104,7 +104,7 @@ public partial class Character
         characterInformationData.exp = exp;
         characterInformationData.equip = equip;
         characterInformationData.name = name;
-        characterInformationData.head = characterData.head;
+        characterInformationData.head = characterData.head.sprite;
 
         if (NPCManager.instance.GetNPC(instanceId, out var npc))
         {

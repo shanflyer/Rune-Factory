@@ -55,7 +55,7 @@ public struct GameDate : IReferenceData, INativeData
 [System.Serializable]
 public class GameTime
 {
-    public int year;
+    public int year=1;
 
     public Season Season
     {
@@ -70,7 +70,7 @@ public class GameTime
     }
 
     private Season season;
-    public int date;
+    public int date=1;
     public int hour;
     public int minute;
     public int mySecond;
@@ -344,6 +344,7 @@ public class GameTime
         hour = 0;
         minute = 0;
         week = Week.SunDay;
+        newDay = new NewDay();
     }
 
     public int GetTimeKey()
@@ -383,7 +384,7 @@ public class GameTime
         hour = 30;
         TimeInit();
     }
-
+    NewDay newDay;
     public void TimeInit()
     {
         if (mySecond >= 20)
@@ -400,7 +401,7 @@ public class GameTime
         {
             date += hour / 24;
             hour = hour % 24;
-            GameActionManager.instance.QueueAction(new NewDay());
+            GameActionManager.instance.QueueAction(newDay);
             if (date <= 15)
             {
                 float moonOffSet = date / 15.0f;
@@ -439,8 +440,11 @@ public class GameTime
         int x = date % 6;
         week = (Week)x;
         SetLightValue();
+        updateGame.hour = hour;
+        updateGame.minute = minute;
+        GameActionManager.instance.QueueAction(updateGame);
     }
-
+    UpdateGameTime updateGame;
     public void Sleep()
     {
         minute = 0;
@@ -469,6 +473,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime);
     public int Year => nowGameTime.year;
     public Season Season => nowGameTime.Season;
+    public Week Week => nowGameTime.week;
     public int Day => nowGameTime.date;
 
     public int Hour
