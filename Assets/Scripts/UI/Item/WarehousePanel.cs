@@ -150,9 +150,9 @@ public class WarehousePanel : GamePanel<PackageList>
     {
         if (selected)
         {
-            selectPackageData = packageData;
-
+            selectPackageData = packageData; 
             RefreshPackage();
+            ItemInformation.localScale = Vector3.zero;
         } 
     }
     
@@ -200,7 +200,11 @@ public class WarehousePanel : GamePanel<PackageList>
                     otherSelectItemAction.Invoke(item, selectPackageData.instanceId);
                 }
             }
-        } 
+        }
+        else if(SelectItem.instanceId==item.instanceId)
+        {
+            ItemInformation.localScale = Vector3.zero;
+        }
     } 
     void RefreshPackage(RefreshPackage RefreshPackage)
     {
@@ -213,7 +217,19 @@ public class WarehousePanel : GamePanel<PackageList>
         List<Item> items = new List<Item>();
         if (selectPackageData.items != null)
         {
-            items.AddRange(selectPackageData.items);
+            if (packageList.itemMatchData.matchValues == null)
+            {
+                items.AddRange(selectPackageData.items);
+            }
+            else
+            {
+                for (int i = 0; i < selectPackageData.items.Count; i++)
+                {
+                    var item = selectPackageData.items[i];
+                    item.locked = !packageList.itemMatchData.MatchAction(item);
+                    items.Add(item);
+                } 
+            } 
         }
         
         for (int i = items.Count; i < selectPackageData.caseCount; i++)

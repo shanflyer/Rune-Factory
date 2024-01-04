@@ -201,7 +201,8 @@ public class PackageManager : Singleton<PackageManager>
     {
         PackageList packageList = new PackageList
         {
-            packageDatas = new List<PackageData>()
+            packageDatas = new List<PackageData>(),
+            itemMatchData=openPackage.itemMatchData
         };
         int packageId = openPackage.packageId;
         if (openPackage.packageId == -1)
@@ -675,6 +676,7 @@ public class PackageManager : Singleton<PackageManager>
                             dataId = itemData.id,
                             value=instanceId,
                             isFresh=itemData.isFresh,
+                            itemType=itemData.type,
                             count = 0
                         };
                         if (items.Count <= index)
@@ -731,6 +733,7 @@ public class PackageManager : Singleton<PackageManager>
                             dataId = itemData.id,
                             value = instanceId,
                             isFresh = itemData.isFresh,
+                            itemType = itemData.type,
                             count = 0
                         };
 
@@ -763,6 +766,7 @@ public class PackageManager : Singleton<PackageManager>
                             dataId = itemData.id,
                             value = instanceId,
                             isFresh = itemData.isFresh,
+                            itemType = itemData.type,
                             count = 1
                         };
                         int index = items.Count;
@@ -944,8 +948,40 @@ public class PackageManager : Singleton<PackageManager>
 public struct PackageList : IReferenceData
 {
     public List<PackageData> packageDatas;
+    public ItemMatchData itemMatchData;
 }
 
+public enum ItemMatchType
+{
+    Null=0,ItemType=1,IsFresh=2
+}
+public struct ItemMatchData
+{ 
+    public ItemMatchType itemMatchType;
+    public HashSet<int> matchValues;
+    public bool MatchAction(Item item)
+    {
+        switch (itemMatchType)
+        {
+            case ItemMatchType.ItemType:
+                return matchValues.Contains((int)item.itemType);
+            case ItemMatchType.IsFresh:
+                return matchValues.Contains(item.isFresh ? 1 : 0);
+        }
+        return true;
+    }
+    public bool MatchAction(ItemData itemData)
+    {
+        switch (itemMatchType)
+        { 
+            case ItemMatchType.ItemType:
+                return matchValues.Contains((int)itemData.type);
+            case ItemMatchType.IsFresh:
+                return matchValues.Contains(itemData.isFresh?1:0);
+        }
+        return true;
+    }
+}
 public struct PackageData : IReferenceData
 {
     public string name;

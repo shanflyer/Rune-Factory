@@ -1,49 +1,57 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class CharacterInformationPanel : GamePanel<CharacterInformationData>
+{ 
+    [SerializeField]
+    private Image characterHead;
 
-public class CharacterInformationPanel :GamePanel<CharacterInformationData>
-{
     [SerializeField]
-    Image characterHead;
-    [SerializeField]
-    Image Attribute;
-    [SerializeField]
-    TextMeshProUGUI CharacterName;
-    [SerializeField]
-    TextMeshProUGUI State;
-    [SerializeField]
-    Image HPSliderValue,RPSliderValue,EXPSliderValue;
-    [SerializeField]
-    TextMeshProUGUI HPValue, RPValue, EXPValue;
-    [SerializeField]
-    TextMeshProUGUI AttackValue, DefenseValue;
-    [SerializeField]
-    TextMeshProUGUI LevelValue;
-    [SerializeField]
-    TextMeshProUGUI AttackUp, AttackDown, DefenseUp, DefenseDown;
-    [SerializeField]
-    EquipBoxReference WeaponBox, ClothesBox;
-    [SerializeField]
-    Button visitButton, closeButton;
+    private Image Attribute;
 
-    void SelectEquipReference(Equipment equipment,bool selected=false)
+    [SerializeField]
+    private TextMeshProUGUI CharacterName;
+
+    [SerializeField]
+    private TextMeshProUGUI State;
+
+    [SerializeField]
+    private Image HPSliderValue, RPSliderValue, EXPSliderValue;
+
+    [SerializeField]
+    private TextMeshProUGUI HPValue, RPValue, EXPValue;
+
+    [SerializeField]
+    private TextMeshProUGUI AttackValue, DefenseValue;
+
+    [SerializeField]
+    private TextMeshProUGUI LevelValue;
+
+    [SerializeField]
+    private TextMeshProUGUI AttackUp, AttackDown, DefenseUp, DefenseDown;
+
+    [SerializeField]
+    private EquipBoxReference WeaponBox, ClothesBox;
+
+    [SerializeField]
+    private Button visitButton, closeButton;
+
+    private void SelectEquipReference(Equipment equipment, bool selected = false)
     {
         bool isController = equipment.characterId == CharacterManager.instance.controllerCharacter.instanceId;
 
         if (equipment.dataId != 0)
-        { 
+        {
             ItemInfo itemInfo = new ItemInfo
             {
-                otherValue=equipment.characterId,
+                otherValue = equipment.characterId,
                 itemId = equipment.dataId,
-                itemValue=equipment.itemValue,
-                dataId=(int)equipment.ItemType,
+                itemValue = equipment.itemValue,
+                dataId = (int)equipment.ItemType,
                 ActionName = isController ? "Ð¶ÏÂ" : null,
-                action= SelectAction
+                action = SelectAction
             };
             void SelectAction(ItemInfo item, bool selected = true)
             {
@@ -59,20 +67,26 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
             }
             UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         }
-        else if(isController)
+        else if (isController)
         {
             OpenPackage openPackage = new OpenPackage
             {
                 packageId = -1,
                 selectActionName = "×°±¸",
                 targetObj = equipment.characterId,
-                selectItemTypes=new List<ItemType>(),
-                selectAction= ChangeEquip
+                itemMatchData=new ItemMatchData(),
+                selectAction = ChangeEquip
                 //selectActionId = GameCommon.selectEquipBoxAction
             };
-            openPackage.selectItemTypes.Add(equipment.ItemType);
-            GameActionManager.instance.QueueAction(openPackage);
             
+            openPackage.itemMatchData.itemMatchType = ItemMatchType.ItemType;
+            openPackage.itemMatchData.matchValues = new HashSet<int>
+            {
+                (int)equipment.ItemType
+            };
+
+            GameActionManager.instance.QueueAction(openPackage);
+
             async void ChangeEquip(Item item, int packageId)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
@@ -88,24 +102,26 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
                 };
                 GameActionManager.instance.QueueAction(changeEquip);
             }
-           
+
             GameActionManager.instance.QueueAction(openPackage);
         }
-       
     }
-    void RefreshCharacterProperty(CharacterPropertyTrigger refreshCharacterProperty)
+
+    private void RefreshCharacterProperty(CharacterPropertyTrigger refreshCharacterProperty)
     {
-        if(characterId==refreshCharacterProperty.characterId)
+        if (characterId == refreshCharacterProperty.characterId)
         {
             DisplayProperty(refreshCharacterProperty.characterProperty);
         }
     }
+
     public override void OnEnable()
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshEquip>(RefreshEquip);
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
@@ -113,7 +129,7 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
         GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
     }
 
-    void RefreshEquip(RefreshEquip refreshEquip)
+    private void RefreshEquip(RefreshEquip refreshEquip)
     {
         if (refreshEquip.characterId == characterId)
         {
@@ -121,6 +137,7 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
             InitReferenceData(character.GetInformation());
         }
     }
+
     protected override void Awake()
     {
         base.Awake();
@@ -134,13 +151,14 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
             };
             GameActionManager.instance.QueueAction(visitNPC);
         });
-        
     }
+
     public override void Close()
     {
         base.Close();
         UIManager.instance.CloseGamePanel<TeamPanel>();
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -166,15 +184,15 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
         ClothesBox = FindChildGameObject<EquipBoxReference>("Clothes");
         visitButton = FindChildGameObject<Button>("Visit");
         closeButton = FindChildGameObject<Button>("Close");
-          
     }
-    int characterId;
 
-    void DisplayProperty(CharacterProperty characterProperty)
+    private int characterId;
+
+    private void DisplayProperty(CharacterProperty characterProperty)
     {
         int maxHP = characterProperty.MaxHP;
         int maxRP = characterProperty.MaxPower;
-        int HP =characterProperty.HP;
+        int HP = characterProperty.HP;
         int RP = characterProperty.Power;
 
         HPSliderValue.fillAmount = HP / (float)maxHP;
@@ -184,7 +202,7 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
 
         AttackValue.text = characterProperty.AT.ToString();
         DefenseValue.text = characterProperty.DF.ToString();
-         
+
         AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled = false;
         if (data.characterProperty.AT > characterProperty.AT)
             AttackUp.enabled = true;
@@ -196,7 +214,8 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
             DefenseDown.enabled = true;
     }
 
-    CharacterInformationData data;
+    private CharacterInformationData data;
+
     public override void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
@@ -230,9 +249,9 @@ public class CharacterInformationPanel :GamePanel<CharacterInformationData>
         {
             characterId = characterId,
             dataId = v.equip.weapon.x,
-            itemValue=v.equip.weapon.y/100.0f,
-            ItemType=ItemType.ÎäÆ÷
-        }, SelectEquipReference);;
+            itemValue = v.equip.weapon.y / 100.0f,
+            ItemType = ItemType.ÎäÆ÷
+        }, SelectEquipReference); ;
         ClothesBox.InitData(new Equipment
         {
             characterId = characterId,

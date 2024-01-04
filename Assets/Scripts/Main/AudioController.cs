@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -96,9 +97,17 @@ public class AudioController : Singleton<AudioController>
 
     void PlaySE(AudioClip audioClip,bool loop=false)
     {
-        AudioClipPlayable audioClipPlayable=AudioClipPlayable.Create(seGraph, audioClip, loop);
-        seOut.SetSourcePlayable(audioClipPlayable);
-        seGraph.Play();
+        try
+        {
+            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(seGraph, audioClip, loop);
+            seOut.SetSourcePlayable(audioClipPlayable);
+            seGraph.Play();
+        }
+        catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+       
     }
     public void StopSE()
     {

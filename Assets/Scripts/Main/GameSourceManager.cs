@@ -102,7 +102,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
             return obj;
         }
         obj =await ExtensionsResources.LoadResourceAsync<GameObject>(path);
-        prefabs.Add(path, obj);
+        prefabs[path]=obj;
         return obj;
     }
 

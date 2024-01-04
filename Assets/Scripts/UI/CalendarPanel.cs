@@ -23,7 +23,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
     private int date;
     private int year;
     private Season season;
-
+    private DisplayList<DateReference, GameDate> dateReferences;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -38,6 +38,8 @@ public class CalendarPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
+
+        dateReferences = new DisplayList<DateReference, GameDate>(dateReference, DatesParent.transform);
         returnButton.onClick.AddListener(() =>
         {
             AudioController.instance.PlayAudio(SE.Return);
@@ -127,58 +129,35 @@ public class CalendarPanel : GamePanel<IReferenceData>
                 Destroy(DatesParent.transform.GetChild(i).gameObject);
             }
         }
-        
-        for(int i=0;i<gameDates.Count;i++)
-        {
-            if (DatesParent.transform.childCount > i)
-            {
-                DateReference dateReference=DatesParent.transform.GetChild(i).GetComponent<DateReference>();
-                dateReference.InitData(gameDates[i]);
-                dateReference.enabled = true;
-                dateReference.transform.localScale = Vector3.one;
-            }
-            else
-            {
-                DateReference dateReference =Instantiate(this.dateReference, DatesParent.transform);
-                dateReference.InitData(gameDates[i]);
-                dateReference.enabled = true;
-                dateReference.transform.localScale = Vector3.one;
-                dateReference.SetToggleAction(DatesParent, (bool value) =>
-                {
-                    if (value)
-                    {
-                        DisplayClickDate(gameDates[i]);
-                    }
-                });
-            }
-        }
-        
+        dateReferences.InitListData(gameDates,DisplayClickDate,DatesParent); 
     }
 
 
-    void DisplayClickDate(GameDate _gameDate)
+    void DisplayClickDate(GameDate _gameDate,bool value)
     {
-        
-        date = _gameDate.date;
-        DataTimeText.text = year + LanguageManage.SwitchStr("年") + "  " + LanguageManage.SwitchStr(_gameDate.season + "之月");
-        string festivalStr = "";
-        List<FestivalData> festivalDatas = FestivalManager.instance.FestivalDatas;
-        List<FestivalData> customFestivalDatas = FestivalManager.instance.customFestivalDatas;
-        foreach (var festivalId in _gameDate.FestivaList)
+        if (value)
         {
-            FestivalData festivalData = festivalDatas.Find(f => f.id == festivalId);
-            festivalStr += "·" + festivalData.name+"\n";
-        }
-        if (year == GameTimeManager.instance.Year)
-        {
-            foreach (var festivalId in _gameDate.CustomFestival)
+            date = _gameDate.date;
+            DataTimeText.text = year + LanguageManage.SwitchStr("年") + "  " + LanguageManage.SwitchStr(_gameDate.season + "之月");
+            string festivalStr = "";
+            List<FestivalData> festivalDatas = FestivalManager.instance.FestivalDatas;
+            List<FestivalData> customFestivalDatas = FestivalManager.instance.customFestivalDatas;
+            foreach (var festivalId in _gameDate.FestivaList)
             {
-                FestivalData festivalData = customFestivalDatas.Find(f => f.id == festivalId);
+                FestivalData festivalData = festivalDatas.Find(f => f.id == festivalId);
                 festivalStr += "·" + festivalData.name + "\n";
             }
-        }
-        
-        festivaltext.text = festivalStr;
+            if (year == GameTimeManager.instance.Year)
+            {
+                foreach (var festivalId in _gameDate.CustomFestival)
+                {
+                    FestivalData festivalData = customFestivalDatas.Find(f => f.id == festivalId);
+                    festivalStr += "·" + festivalData.name + "\n";
+                }
+            }
+
+            festivaltext.text = festivalStr;
+        } 
     }
 	
 }

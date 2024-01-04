@@ -36,7 +36,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                 OpenPackage openPackage = new OpenPackage
                 {
                     packageId = CharacterManager.instance.controllerCharacter.characterPackage,
-                    selectItemTypes = new List<ItemType> { ItemType.Default },
+                   // selectItemTypes = new List<ItemType> { ItemType.Default },
                     targetObj = CharacterManager.instance.controllerCharacter.instanceId,
                     selectActionName = "สนำร",
                     selectAction = TryUsedItem,

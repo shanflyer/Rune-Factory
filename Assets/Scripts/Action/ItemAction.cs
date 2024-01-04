@@ -60,7 +60,7 @@ public struct OpenPackage : GameAction
     public string selectActionName;
     public int selectActionId;
     public int targetObj;
-    public List<ItemType> selectItemTypes;
+    public ItemMatchData itemMatchData;
     public PackageItemAction selectAction;
     public SetPanelReference setPanel;
 

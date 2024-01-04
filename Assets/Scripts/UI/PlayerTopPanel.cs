@@ -9,7 +9,6 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private TextMeshProUGUI goldValue, crystalValue;
-
     [SerializeField]
     private Button goldAdd, crystalAdd;
     [SerializeField]
@@ -24,22 +23,22 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     private Image weather;
     [SerializeField]
     private Button calendar, SetButton;
-
     [SerializeField]
     private Image PlayerHead;
-
     [SerializeField]
     private TextMeshProUGUI PlayerName;
-
     [SerializeField]
     private Image HPSlider, RPSlider;
-
     [SerializeField]
     private TextMeshProUGUI HPValue, RPValue;
+    [SerializeField]
+    private Button playerButton;
 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
+        playerButton = FindChildGameObject<Button>("Player");
+        
         goldValue = FindChildGameObject<TextMeshProUGUI>("GoldValue");
         crystalValue = FindChildGameObject<TextMeshProUGUI>("CrystalValue");
         goldAdd = FindChildGameObject<Button>("Gold");
@@ -64,6 +63,12 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
+        playerButton.onClick.AddListener(() =>
+        {
+            var characterInformation = CharacterManager.instance.controllerCharacter.GetInformation();
+            UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation);
+        });
+
         calendar.onClick.AddListener(() =>
         {
             UIManager.instance.ShowGamePanel<CalendarPanel>(layer: 3);

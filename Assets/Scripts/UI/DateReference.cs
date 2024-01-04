@@ -18,6 +18,16 @@ public class DateReference : UIObjReference<GameDate>
     private Toggle selectToggle;
 
     private GameDate gameDate;
+    private void Awake()
+    {
+        selectToggle.onValueChanged.AddListener((bool value) =>
+        {
+            if (SelectAction != null)
+            {
+                SelectAction(data, value);
+            }
+        });
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -25,19 +35,16 @@ public class DateReference : UIObjReference<GameDate>
         ValueText = FindChildGameObject<TextMeshProUGUI>("Value");
         festivalTips = FindChildGameObject<Image>("festivalTips");
         backGround = FindChildGameObject<Image>("backGround");
-    }
-    public void SetToggleAction(ToggleGroup toggleGroup, UnityAction<bool> toggleAction)
-    {
-        selectToggle.group = toggleGroup;
-        selectToggle.onValueChanged.AddListener(toggleAction);
-    }
- 
-    public override void InitData(GameDate _gameDate, SelectAction<GameDate> SelectAction = null,ToggleGroup toggleGroup=null)
-    {
-        gameDate = _gameDate;
-        ValueText.text = _gameDate.date.ToString();
-        festivalTips.enabled = gameDate.FestivaList.Length > 0;
-        backGround.color= (gameDate.date - 1) % 6 == 0? new Color(1, 0.76f, 0.64f):Color.white;
     } 
-	 
+
+    public override void InitData(GameDate t, SelectAction<GameDate> SelectAction = null, ToggleGroup toggleGroup = null)
+    {
+        base.InitData(t, SelectAction, toggleGroup);
+        selectToggle.group = toggleGroup;
+        ValueText.text = data.date.ToString();
+        festivalTips.enabled = gameDate.FestivaList.Length > 0;
+        backGround.color = (gameDate.date - 1) % 6 == 0 ? new Color(1, 0.76f, 0.64f) : Color.white; 
+
+    }
+
 }

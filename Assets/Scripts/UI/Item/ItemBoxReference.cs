@@ -114,6 +114,7 @@ public class ItemBoxReference : UIObjReference<Item>
             toggle.graphic.enabled = false;
             icon.enabled = false;
             count.enabled = false;
+            LockMask.transform.localScale = Vector3.zero;
         }
     } 
 }

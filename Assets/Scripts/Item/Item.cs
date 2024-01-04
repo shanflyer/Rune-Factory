@@ -12,6 +12,7 @@ public struct Item:IReferenceData
     public int count;
     public float value;
     public bool isFresh;
+    public ItemType itemType;
     public bool locked;
     public Item(int dataId,int count, float value=1)
     {
@@ -19,6 +20,7 @@ public struct Item:IReferenceData
         this.count = count;
         instanceId = 0;
         this.value = value;
+        itemType = ItemType.Default;
         isFresh = false;
         locked = false;
     }
