@@ -12,7 +12,6 @@ public class FieldArea : ScriptableObject, IGameData
     public string FieldName;
     public int id;
     public int mapId;
-    public int linkItem;
     public List<int> fields = new List<int>();
     public bool open = false;
 

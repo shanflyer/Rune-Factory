@@ -11,7 +11,7 @@ public class FarmManager:Singleton<FarmManager>
     MyNativeData<Field> fields=new MyNativeData<Field>();
     MyNativeData<Plant> plants = new MyNativeData<Plant>();
 
-    Dictionary<int2, FieldArea> FieldAreas = new Dictionary<int2, FieldArea>();
+    Dictionary<int,List<FieldArea>> FieldAreas = new Dictionary<int, List<FieldArea>>();
     protected override void Clear()
     {
         base.Clear();
@@ -28,7 +28,12 @@ public class FarmManager:Singleton<FarmManager>
         for(int i = 0; i < allFieldAreas.Count; i++)
         {
             var fieldArea = allFieldAreas[i];
-            FieldAreas.Add(new int2(fieldArea.mapId, fieldArea.linkItem), fieldArea);
+            if(!FieldAreas.TryGetValue(fieldArea.mapId,out var fieldAreas))
+            {
+                fieldAreas = new List<FieldArea>();
+                FieldAreas[fieldArea.mapId] = fieldAreas;
+            }
+            fieldAreas.Add(fieldArea); 
         }
         GameActionManager.instance.AddListener<TryCreatField>(TryCreatField);
         GameActionManager.instance.AddListener<CheckFieldState>(CheckFieldState);
@@ -65,10 +70,28 @@ public class FarmManager:Singleton<FarmManager>
         }
     }
     void TryCreatField(TryCreatField tryCreatField)
-    {
-        int2 key = new int2(tryCreatField.roomId, tryCreatField.itemInstanceId);
-        if(FieldAreas.TryGetValue(key,out var fieldArea))
+    { 
+        
+        if(FieldAreas.TryGetValue(tryCreatField.roomId,out var fieldAreas))
         {
+            for(int i = 0; i < fieldAreas.Count; i++)
+            {
+                if (fieldAreas[i].fields.Contains(tryCreatField.itemInstanceId))
+                {
+                    int2 editorKey = new int2(tryCreatField.roomId, tryCreatField.itemInstanceId);
+                    int instanceId = WorldMapManager.instance.GetInstanceFromEditorId(editorKey);
+                    if (!fields.Contains(instanceId))
+                    {
+                        Field field = new Field
+                        {
+                            instanceId = instanceId,
+                            fieldState = FieldState.待平整
+                        };
+                        fields.SetData(field);
+                    }
+                }
+            }
+            /*
             if(fieldArea.open)
             {
                 for (int i = 0; i < fieldArea.fields.Count; i++)
@@ -85,7 +108,7 @@ public class FarmManager:Singleton<FarmManager>
                         fields.SetData(field);
                     }
                 }
-            }
+            }*/
         }
     }
     void CheckFieldState(CheckFieldState checkFieldState)
@@ -123,6 +146,11 @@ public class FarmManager:Singleton<FarmManager>
             RefreshField refreshField = new RefreshField { fieldId = field.instanceId };
             RefreshField(refreshField);
         }
+        else
+        {
+            TrySmoothField.setResult(false);
+        }
+     
     }
     async void TryCreatPlant(TryCreatPlant creatPlant)
     {
