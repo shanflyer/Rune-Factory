@@ -78,7 +78,21 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         return result;
     }
-   
+    public int2 GetNearestItemCell(int itemInstanceId, int2 cell,CellType cellType)
+    {
+        if(runtimeMapItems.GetData(itemInstanceId,out var runtimeMapItem))
+        {
+            switch (cellType)
+            {
+                case CellType.CommonTrigger:
+                    return MapCellController.instance.GetNearestItemCommonTriggerCell(runtimeMapItem.mapInstanceId, itemInstanceId, cell);
+                case CellType.PlayerTrigger:
+                    return MapCellController.instance.GetNearestItemPlayerTriggerCell(runtimeMapItem.mapInstanceId, itemInstanceId, cell);
+            }
+           
+        }
+        return cell;
+    }
     async void TryCreatRoom(TryCreatRoom creatRoom)
     {
         int instanceId = creatRoom.instance;
@@ -151,6 +165,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 setItemAnimation.setResult(true);
             }
+            runtimeMapItems.SetData(runtimeMapItem);
         }
     }
     public int GetInstanceFromEditorId(int2 editorKey)
@@ -237,10 +252,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
         } 
     }
 
-    private async Task AddMapItem(MapItem mapItem, int mapId)
+    private async Task<int> AddMapItem(MapItem mapItem, int mapId)
     {
         int instanceId = mapItemInstance.CreatInstanceId();
-        editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
+        if (mapItem.instanceId != 0)
+        {
+            editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
+        }
+       
         RuntimeMapItem runtimeMapItem = new RuntimeMapItem
         {
             coordinate = mapItem.coordinate,
@@ -302,6 +321,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
             itemInstanceId = mapItem.instanceId,
         };
         GameActionManager.instance.QueueAction(tryCreatField, true);
+
+        return runtimeMapItem.instanceId;
     }
 
     private async void AddMapItem(AddMapItem addMapItem)
@@ -311,7 +332,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
             return;
         }
 
-        int instanceId = mapItemInstance.CreatInstanceId();
 
         MapItem mapItem = new MapItem
         {
@@ -319,7 +339,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             coordinate = addMapItem.coordinate,
         };
 
-       await AddMapItem(mapItem, addMapItem.mapId);
+       int instanceId= await AddMapItem(mapItem, addMapItem.mapId);
           
         if (addMapItem.setValue != null)
         {

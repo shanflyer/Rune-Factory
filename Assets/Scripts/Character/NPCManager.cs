@@ -95,6 +95,7 @@ public class Player : Character
 
 public partial class Character
 {
+    public int selectItem;
     public CharacterInformationData GetInformation()
     {
         CharacterInformationData characterInformationData = new CharacterInformationData();

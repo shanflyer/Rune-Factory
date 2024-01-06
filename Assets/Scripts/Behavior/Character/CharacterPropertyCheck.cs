@@ -50,7 +50,7 @@ public class CharacterPropertyCheck : Action
 				}
 				break;
 			case CompareType.不大于:
-				if (sourceValue! > targetValue)
+				if (sourceValue<= targetValue)
 				{
 					return TaskStatus.Success;
 				}
@@ -62,7 +62,7 @@ public class CharacterPropertyCheck : Action
 				}
 				break;
 			case CompareType.不小于:
-				if (sourceValue! < targetValue)
+				if (sourceValue>= targetValue)
 				{
 					return TaskStatus.Success;
 				}
@@ -71,7 +71,7 @@ public class CharacterPropertyCheck : Action
 		}
 
 
-		return TaskStatus.Success;
+		return TaskStatus.Failure;
 	}
 }
 

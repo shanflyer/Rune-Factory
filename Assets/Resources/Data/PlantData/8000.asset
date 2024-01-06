@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a1139130a302d8498aaea235f937da1, type: 3}
+  m_Name: 8000
+  m_EditorClassIdentifier: 
+  id: 8000
+  plantName: "\u7389\u7C73"
+  seed: 8000
+  fruit: 1104
+  fruitCount: 2
+  pickTimes: 1
+  cycleStage: 1
+  mapItem: 8000
+  GrowthStageStr: "\u751F\u957F\u72B6\u6001,0,2,0,1|\u7ED3\u679C,1,1,1,2"
+  growthStages:
+  - stageName: "\u751F\u957F\u72B6\u6001"
+    stage: 0
+    growthDay: 2
+    productValue: 0
+    objAnimationStage: 1
+  - stageName: "\u7ED3\u679C"
+    stage: 1
+    growthDay: 1
+    productValue: 1
+    objAnimationStage: 2

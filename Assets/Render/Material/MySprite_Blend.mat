@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MySprite_Blend
+  m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterMaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - EdgeValue: 0.1
+    - _BackBlend: 1
+    - _BlendVertexColor: 1
+    - _Comp: 8
+    - _EnableExternalAlpha: 0
+    - _Fail: 0
+    - _LightBlend: 1
+    - _NoiseAlpha: 1
+    - _NoiseValue: 500
+    - _Pass: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _Water: 0
+    - _WaterBottom: 1
+    - _WaterHigh: 0
+    - _WaterZero: 0
+    - _WaveAngle0: 0
+    - _WaveAngle1: 0
+    - _WaveSpeed0: 0
+    - _WaveSpeed1: 0
+    - _WetValue: 0
+    - _shadowStep: 0
+    - waterNoiseScale: 0
+    - waterValue: 0.2
+    m_Colors:
+    - EdgeColor: {r: 0.990566, g: 0.9765486, b: 0.9765486, a: 0}
+    - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
+    - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - waterColor: {r: 0, g: 0.5, b: 0.5, a: 0.5}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

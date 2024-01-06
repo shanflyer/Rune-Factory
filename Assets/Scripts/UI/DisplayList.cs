@@ -22,6 +22,27 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
             list[i].ClearSelect();
         }
     }
+    public virtual void ClearSelect(V v)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!list[i].t.Equals(v))
+            {
+                list[i].ClearSelect();
+            } 
+        }
+    }
+    public void Select(V v)
+    {
+        for(int i=0;i<list.Count;i++)
+        {
+            
+            if (list[i].t.Equals(v))
+            {
+                list[i].SelectDefault();
+            }
+        }
+    }
     public void SelectDefault()
     {
         if(list.Count>0)

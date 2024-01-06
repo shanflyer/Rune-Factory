@@ -12,6 +12,7 @@ Shader "MySprite-Lit-Default"
         _shadowStep("ShadowStep",int)=0
         _LightBlend("LightBlend",int)=1
         _BackBlend("BackBlend",int)=1
+        _BlendVertexColor("BlendVertexColor",int)=0
 
 
         _Water("Water",int)=0
@@ -85,6 +86,7 @@ Shader "MySprite-Lit-Default"
 
             int _LightBlend;
             int _BackBlend;
+            int _BlendVertexColor;
             
             half4 waterColor;
             half _WaterZero;
@@ -298,11 +300,15 @@ Shader "MySprite-Lit-Default"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                const half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
                 
-                float3 waterColor=main.xyz;
+                
+                float singleValue=(main.x+main.y+main.z)/3;
+                float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
+                float3 waterColor=main.xyz*(1-_BlendVertexColor)+main.xyz*i.color*_BlendVertexColor;
+                waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor;
                 if(_Water==1)
                 {
                     waterColor=WaterFragment(i.uv,i.lightingUV,main);

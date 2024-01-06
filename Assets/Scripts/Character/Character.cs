@@ -233,14 +233,17 @@ public struct CharacterProperty
         {
             case CharacterPropertyType.体力:
                 Power += changeCharacterProperty.changeValue;
+                Power = math.clamp(Power, 0, MaxPower);
                 break;
 
             case CharacterPropertyType.生命:
                 HP += changeCharacterProperty.changeValue;
+                HP = math.clamp(HP, 0, MaxHP);
                 break;
 
             case CharacterPropertyType.法力:
                 MP += changeCharacterProperty.changeValue;
+                MP = math.clamp(MP, 0, MaxMP);
                 break;
 
             case CharacterPropertyType.最大体力:
@@ -521,7 +524,7 @@ public partial class Character
 
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
-                    runtimeObj.SetAnimationDirection(value);
+                    runtimeObj.SetAnimationDirection(GameCommon.GetDirectValue(direction));
                 }
             }
         }
@@ -537,7 +540,8 @@ public partial class Character
         if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj) &&
             CanMoveCrossMap)
         {
-            runtimeObj.SetAnimationDirection(value);
+            direction = GameCommon.GetCharacterDirect(value, direction);
+            runtimeObj.SetAnimationDirection(GameCommon.GetDirectValue(direction));
         }
     }
 

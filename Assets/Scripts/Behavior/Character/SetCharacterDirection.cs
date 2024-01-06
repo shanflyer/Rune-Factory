@@ -7,7 +7,7 @@ using System.Linq;
 [TaskName("设置角色面向目标")]
 public class SetCharacterDirection : Action
 {
-    public SharedInt2 faceTargetCoordinate;
+    public SharedInt3 faceTargetCoordinate;
     private SharedInt characterId;
     public override void OnStart()
     {
@@ -17,7 +17,7 @@ public class SetCharacterDirection : Action
         }
         if (faceTargetCoordinate==null|| faceTargetCoordinate.IsNull())
         {
-            faceTargetCoordinate = (SharedInt2)Owner.GetVariable("FaceTargetCoordinate");
+            faceTargetCoordinate = (SharedInt3)Owner.GetVariable("FaceTargetCoordinate");
         }
     }
 
@@ -32,7 +32,7 @@ public class SetCharacterDirection : Action
             SetTargetDirection SetTargetDirection = new SetTargetDirection
             {
                 characterId = characterId.Value,
-                targetCoordinate = faceTargetCoordinate.Value
+                targetCoordinate = faceTargetCoordinate.Value.xy
             };
             GameActionManager.instance.QueueAction(SetTargetDirection);
         }

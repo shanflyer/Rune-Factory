@@ -126,7 +126,7 @@ public class WarehousePanel : GamePanel<PackageList>
         base.Close();
         if (otherSelectItemAction != null)
         {
-            otherSelectItemAction(default(Item), selectPackageData.instanceId);
+          //  otherSelectItemAction(default(Item), selectPackageData.instanceId);
         }
     }
     async void TryPackageLevelUp()

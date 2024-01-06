@@ -51,7 +51,8 @@ public class FarmManager:Singleton<FarmManager>
         {
             SetItemAnimation setItemAnimation = new SetItemAnimation
             {
-                keyX = (int)plant.plantState,
+                keyX=plant.growthStage,
+                keyY = (int)plant.plantState,
                 id=plant.instaceId
             };
             GameActionManager.instance.QueueAction(setItemAnimation);
@@ -129,7 +130,7 @@ public class FarmManager:Singleton<FarmManager>
                     TrySmoothField.setResult(true);
                     break;
                 case FieldState.已平整:
-                    GameNotificationManager.instance.DisplayTips("", "土地已经平整完毕");
+                   // GameNotificationManager.instance.DisplayTips("", "土地已经平整完毕");
                     TrySmoothField.setResult(false);
                     break;
                 case FieldState.已栽种:
@@ -143,8 +144,8 @@ public class FarmManager:Singleton<FarmManager>
                     break;
             }
             fields.SetData(field);
-            RefreshField refreshField = new RefreshField { fieldId = field.instanceId };
-            RefreshField(refreshField);
+            //RefreshField refreshField = new RefreshField { fieldId = field.instanceId };
+           // RefreshField(refreshField);
         }
         else
         {
@@ -188,8 +189,14 @@ public class FarmManager:Singleton<FarmManager>
                 fields.SetData(field);
                 creatPlant.setResult(true); 
             }
+
+            GameActionManager.instance.QueueAction(addMapItem);
         }
-        creatPlant.setResult(false);
+        else
+        {
+            creatPlant.setResult(false);
+        }
+       
     }
     void SetWaterField(SetWaterField setWaterField)
     {
@@ -238,7 +245,7 @@ public class FarmManager:Singleton<FarmManager>
         {
             var field = data;
             field.isSetWater = false;
-            if (plants.GetData(field.Key, out var plant))
+            if (plants.GetData(field.plantId, out var plant))
             { 
                 switch (plant.plantState)
                 {
@@ -361,7 +368,7 @@ public struct Field : INativeData
 }
 public enum PlantState 
 {
-    正常,干旱,枯死,死亡,成熟
+    正常=0,干旱=1,枯死=2,死亡=3,成熟=4
 }
 public struct Plant:INativeData
 {

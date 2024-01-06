@@ -1,11 +1,26 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public struct SetPackageSelectItem : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int packageId;
+    public int selectItem;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RefreshShortcut : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int packageId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 
 public struct RemoveShortcutItem : GameAction
@@ -81,7 +96,31 @@ public struct OpenPackage : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct RemovePlayerPackageItem : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
+    public int itemDataId;
+    public int itemCount;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 3)
+        {
+            characterId = int.Parse(parameters[0].value);
+            itemDataId = int.Parse(parameters[1].value);
+            itemCount = int.Parse(parameters[2].value);
+        }
+        if (source != 0)
+            characterId = source;
+        if (target != 0)
+            itemDataId = target;
+        if (value > 0)
+            itemCount = value;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RemovePackageItem : GameAction
 {
     public SetValue setValue { get; set; }

@@ -20,10 +20,11 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     [SerializeField]
     Button UseButton;
 
-    private ShortcutItem item;
-    public ShortcutItem Item => item;
-    private SelectAction<ShortcutItem> SelectAction;
-
+    public override void ClearSelect()
+    {
+        base.ClearSelect();
+        toggle.SetIsOnWithoutNotify(false);
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -34,16 +35,24 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         ItemValueBg = FindChildGameObject("ItemValueBg");
         UseButton = FindChildGameObject<Button>("UseButton");
     }
-
+    public override void SelectDefault()
+    {
+        base.SelectDefault();
+        if (SelectAction != null)
+        {
+            SelectAction(data, true);
+        }
+    }
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
         {
+             
             if (SelectAction != null)
             {
-                SelectAction.Invoke(item,value);
+                SelectAction.Invoke(data,value);
             }
-            if (value)
+            if (value&& itemData!=null)
             { 
                 UseButton.transform.localScale = itemData.useEventId.Count > 0 ? Vector3.one : Vector3.zero;
             }
@@ -70,31 +79,30 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     }
     public void ClearData()
     {
-        item = default(ShortcutItem);
+        data = default(ShortcutItem);
         icon.enabled = false;
         count.enabled = false;
     }
     ItemData itemData;
     public override async void InitData(ShortcutItem t, SelectAction<ShortcutItem> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
-        item = t;
+        base.InitData(t, SelectAction, toggleGroup); 
 
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
-        itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.Item.dataId.ToString());
+        itemData = await GameDataManager.instance.GetAsyncData<ItemData>(data.Item.dataId.ToString());
         toggle.enabled = true;
         if (itemData != null)
         {
             icon.sprite = itemData.icon;
-            icon.color = (item.Item.instanceId != -1) ? Color.white : new Color(1, 1, 1, 0.3f);
+            icon.color = (data.Item.instanceId != -1) ? Color.white : new Color(1, 1, 1, 0.3f);
             icon.enabled = true;
             icon.SetNativeSize();
-            count.text = item.Item.count.ToString();
-            count.enabled = item.Item.count > 0;
+            count.text = data.Item.count.ToString();
+            count.enabled = data.Item.count > 0;
             toggle.enabled = true;
             ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-            ItemValue.fillAmount = item.Item.value;
+            ItemValue.fillAmount = data.Item.value;
 
            
         }

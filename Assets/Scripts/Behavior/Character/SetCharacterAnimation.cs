@@ -44,7 +44,7 @@ public class SetCharacterAnimation : Action
 }
 public enum ParameterType
 {
-    BOOL, INT, FLOAT
+    BOOL, INT, FLOAT,TRIGGER
 }
 [System.Serializable]
 public struct AnimationParameter

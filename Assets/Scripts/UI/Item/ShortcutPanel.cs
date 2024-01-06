@@ -4,10 +4,42 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct ShortcutItem: IReferenceData
+public struct ShortcutItem : IReferenceData
 {
     public Item Item;
     public int index;
+    public bool Equals(IReferenceData referenceData)
+    {
+        if(referenceData is ShortcutItem other)
+        {
+            if (index == other.index)
+            {
+                return true;
+            }
+            if (Item.instanceId == other.Item.instanceId)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    public static bool operator ==(ShortcutItem item0, ShortcutItem item1)
+    {
+        if (item0.Item.instanceId == item1.Item.instanceId)
+        {
+            return true;
+        }
+        return false;
+    }
+    public static bool operator !=(ShortcutItem item0, ShortcutItem item1)
+    {
+        if (item0.Item.instanceId != item1.Item.instanceId)
+        {
+            return true;
+        }
+        return false;
+    }
 }
 public class ShortcutPanel : GamePanel<ShortcutPackage>
 {
@@ -76,6 +108,12 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                 };
                 GameActionManager.instance.QueueAction(setShortcutItem);
             }
+            SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
+            {
+                packageId = packageId,
+                selectItem = item.instanceId
+            };
+            GameActionManager.instance.QueueAction(setPackageSelectItem);
         } 
     }
 
@@ -102,51 +140,101 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     {
         base.InitReferenceData(v);
         shortcutPackage = v;
-        itemList.InitListData(v.GetShortcutItems(), SelectShortcutItem, toggleGroup);
+        var items = v.GetShortcutItems();
+
+        itemList.InitListData(items, SelectShortcutItem);
+        if (shortcutItem.Item.instanceId == 0)
+        {
+
+        }
+        else
+        {
+            bool oldSelect=false;
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].Equals(shortcutItem))
+                {
+                    oldSelect=true;
+                    itemList.Select(shortcutItem);
+                    break;
+                }
+            }
+            if (!oldSelect)
+            {
+                shortcutItem = default(ShortcutItem);
+                selectShortIndex = 0;
+            }
+        } 
+       
     }
     int selectShortIndex;
-
+    ShortcutItem shortcutItem;
     void SelectShortcutItem(ShortcutItem item,bool select)
     {
         if(select)
         {
-            if (selectShortIndex != 0 && selectShortIndex != item.index)
+            if (selectPackageItem.instanceId != 0 && item.Item.instanceId != 0)
             {
-                ChangeShortcutItemIndex changeShortcutItemIndex = new ChangeShortcutItemIndex
+                SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
                 {
-                    characterId = shortcutPackage.characterId,
-                    sourceIndex = selectShortIndex,
-                    targetIndex = item.index
+                    packageId = shortcutPackage.packagerId,
+                    selectItem = item.Item.instanceId
                 };
-                GameActionManager.instance.QueueAction(changeShortcutItemIndex);
-                selectShortIndex = item.index;
+                GameActionManager.instance.QueueAction(setPackageSelectItem);
             }
             else
             {
-                selectShortIndex = item.index;
-                if (selectPackageItem.dataId != 0)
+                if (selectShortIndex != 0)
                 {
-                    Item newItem = new Item
+                    if (selectShortIndex != item.index)
                     {
-                        instanceId = selectPackageItem.instanceId,
-                        dataId = selectPackageItem.dataId,
-                        count = PackageManager.instance.GetPackageItemCount(shortcutPackage.packagerId, selectPackageItem.dataId)
-                    }; 
-                    SetShortcutItem setShortcutItem = new SetShortcutItem
+                        ChangeShortcutItemIndex changeShortcutItemIndex = new ChangeShortcutItemIndex
+                        {
+                            characterId = shortcutPackage.characterId,
+                            sourceIndex = selectShortIndex,
+                            targetIndex = item.index
+                        };
+                        GameActionManager.instance.QueueAction(changeShortcutItemIndex);
+                        selectShortIndex = item.index;
+                    }
+                }
+                else
+                {
+                    selectShortIndex = item.index;
+                    if (selectPackageItem.dataId != 0)
                     {
-                        characterId = shortcutPackage.characterId,
-                        index = item.index,
-                        Item = newItem
-                    };
-                    GameActionManager.instance.QueueAction(setShortcutItem);
+                        Item newItem = new Item
+                        {
+                            instanceId = selectPackageItem.instanceId,
+                            dataId = selectPackageItem.dataId,
+                            count = PackageManager.instance.GetPackageItemCount(shortcutPackage.packagerId, selectPackageItem.dataId)
+                        };
+                        SetShortcutItem setShortcutItem = new SetShortcutItem
+                        {
+                            characterId = shortcutPackage.characterId,
+                            index = item.index,
+                            Item = newItem
+                        };
+                        GameActionManager.instance.QueueAction(setShortcutItem);
+                    }
                 }
             }
+            
+
+
+            shortcutItem = item;
+            selectPackageItem = item.Item;
+            itemList.ClearSelect(item);
         }
         else
         {
             if (selectShortIndex == item.index)
             {
                 selectShortIndex=0;
+            }
+            if (shortcutItem == item)
+            {
+                shortcutItem = default(ShortcutItem);
             }
         }
        

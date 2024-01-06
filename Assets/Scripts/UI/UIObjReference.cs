@@ -6,7 +6,10 @@ using UnityEngine.UI;
 
 public interface IReferenceData
 {
-
+    public bool Equals(IReferenceData other)
+    {
+        return true;
+    } 
 }
 public delegate void SelectAction<T>(T t,bool selected=true) where T : IReferenceData;
 public class UIObjReference<T> : BaseReference where T : IReferenceData
@@ -38,6 +41,7 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
         }
         return null;
     }
+    public T t => data;
     protected T data;
     protected SelectAction<T> SelectAction;
 

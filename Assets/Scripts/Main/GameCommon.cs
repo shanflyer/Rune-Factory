@@ -345,6 +345,21 @@ public class GameCommon
         iSeed = guid.GetHashCode();
         return iSeed;
     }
+    public static float2 GetDirectValue(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.UP:
+                return new float2(0, 1);
+            case Direction.LEFT:
+                return new float2(-1, 0);
+            case Direction.RIGHT:
+                return new float2(1, 0);
+            case Direction.DOWN:
+                return new float2(0, -1);
+        }
+        return float2.zero;
+    }
     public static Direction GetDirect(int2 start, int2 target)
     {
         int2 offset = start - target;

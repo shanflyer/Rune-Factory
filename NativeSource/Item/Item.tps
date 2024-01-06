@@ -173,6 +173,8 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">Hammer.png</key>
+            <key type="filename">Hoe.png</key>
             <key type="filename">Icon1.png</key>
             <key type="filename">Icon10.png</key>
             <key type="filename">Icon10_no_effect.png</key>
@@ -251,6 +253,9 @@
             <key type="filename">Icon8_no_effect.png</key>
             <key type="filename">Icon9.png</key>
             <key type="filename">Icon9_no_effect.png</key>
+            <key type="filename">Pick.png</key>
+            <key type="filename">Sickle.png</key>
+            <key type="filename">Waterpot.png</key>
             <key type="filename">apple.png</key>
             <key type="filename">blueberry.png</key>
             <key type="filename">cabbage.png</key>
@@ -259,6 +264,7 @@
             <key type="filename">cherryRadish.png</key>
             <key type="filename">chilli.png</key>
             <key type="filename">corn.png</key>
+            <key type="filename">corn_seed.png</key>
             <key type="filename">cucumber.png</key>
             <key type="filename">daikon.png</key>
             <key type="filename">eggplant.png</key>

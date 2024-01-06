@@ -13,6 +13,7 @@ public enum ItemType
     食材 = 3,
     食物 = 4, 
     收集物 = 5,  
+    工具=6,
     家具 = 10, 
 }
 public enum ShopMoneyType

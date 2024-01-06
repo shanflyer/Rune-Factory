@@ -549,9 +549,15 @@ public class GameTimeManager : Singleton<GameTimeManager>
     }
     void PlayerSleep(PlayerSleep playerSleep)
     {
+        int sleepHour = playerSleep.targetHour - nowGameTime.hour;
+        if (sleepHour < 0)
+        {
+            sleepHour += 24;
+        }
         UIManager.instance.CloseGamePanel<OperateButtonPanel>(); 
         void WakeUp()
         {
+            Character character = CharacterManager.instance.GetCharacter(playerSleep.characterId);
             PlayerWakeUp playerWakeUp = new PlayerWakeUp
             {
                 characterId = playerSleep.characterId
@@ -582,12 +588,19 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 floatValue = -1
             };
             GameActionManager.instance.QueueAction(setCharacterAnimatorDir_Y, true);
-             
+
+            ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
+            {
+                characterId = playerSleep.characterId,
+                propertyType = CharacterPropertyType.体力,
+                changeValue = (int)(character.CharacterProperty.MaxPower * 0.1667f * sleepHour)//六小时睡满体力
+            };
+            GameActionManager.instance.QueueAction(changeCharacterProperty, true);
 
             GameTimerController.instance.DelayAction(1200,
                 () =>
                 {
-                    Character character = CharacterManager.instance.GetCharacter(playerSleep.characterId);
+                   
                     SetCharacterRandomCoordinate setCharacterRandomCoordinate = new SetCharacterRandomCoordinate
                     {
                         characterId = playerSleep.characterId,

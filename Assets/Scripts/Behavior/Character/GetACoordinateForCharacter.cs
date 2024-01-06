@@ -5,12 +5,14 @@ using static MapCellController;
 using System.Collections.Generic;
 using Unity.Mathematics;
 
-[TaskCategory("Game/Character")]
-[TaskName("获取角色周围特定格子")]
+[TaskCategory("Game/Map")]
+[TaskName("获取个体周围特定格子")]
 public class GetACoordinateForCharacter : Action
 {
-    [Header("角色id")]
-    private SharedInt characterId;
+    [Header("个体id")]
+    public SharedInt characterId;
+    [Header("个体类型")]
+    public bool isItemObj;
     [Header("最小范围")]
     public SharedInt minRange;
     [Header("最大范围")]
@@ -43,11 +45,27 @@ public class GetACoordinateForCharacter : Action
 
 	public override TaskStatus OnUpdate()
 	{
-        Character character = CharacterManager.instance.GetCharacter(characterId.Value);
-        RuntimeMapRoom runtimeMapRoom;
-        if (MapCellController.instance.GetRuntimeMapRoom(character.mapInstance, out runtimeMapRoom))
+
+        int2 coordinate;
+        int mapInstance;
+        if (isItemObj)
         {
-            var rangeCoordinates = runtimeMapRoom.roomCellData.GetCoordinates(character.coordinate,
+            WorldMapManager.instance.GetMapItemPos(characterId.Value, out var objCoordinate);
+            coordinate = objCoordinate.xy;
+            mapInstance = objCoordinate.z;
+        }
+        else
+        {
+            Character character = CharacterManager.instance.GetCharacter(characterId.Value);
+            coordinate = character.coordinate;
+            mapInstance = character.mapInstance;
+        }
+
+       
+        RuntimeMapRoom runtimeMapRoom;
+        if (MapCellController.instance.GetRuntimeMapRoom(mapInstance, out runtimeMapRoom))
+        {
+            var rangeCoordinates = runtimeMapRoom.roomCellData.GetCoordinates(coordinate,
                 minRange.Value, maxRange.Value, isWalkable.Value);
             GameRandomData gameRandomData = new GameRandomData
             {
@@ -83,8 +101,8 @@ public class GetACoordinateForCharacter : Action
                 for(int i = 0; i < randomResults.Count; i++)
                 {
                     int index =int.Parse(randomResults[i].result);
-                    int2 coordinate = rangeCoordinates[index];
-                    resultValue.Add(new int3(coordinate,character.mapInstance));
+                    int2 targetCoordinate = rangeCoordinates[index];
+                    resultValue.Add(new int3(targetCoordinate, mapInstance));
                 }
                 results.Value=resultValue;
             }

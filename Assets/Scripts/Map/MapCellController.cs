@@ -105,18 +105,21 @@ public class MapCellController : Singleton<MapCellController>
 
         return cells;
     }
+    [BurstCompile]
     public struct MapTriggerAreas
     {
         public NativeList<TriggerArea> triggerAreas;
         private NativeHashMap<int, int> triggerIndexs;
 
-        public int2[] GetItemTriggerCells(int instanceId)
+        public NativeArray<int2> GetItemTriggerCells(int instanceId)
         {
             if(triggerIndexs.TryGetValue(instanceId,out var index))
             {
-                return triggerAreas[index].cells.ToArray();
+                var cells = triggerAreas[index].cells;
+                return cells.ToNativeArray(Allocator.Temp);
+                 
             }
-            return null;
+            return new NativeArray<int2>(0,Allocator.Temp);
         }
 
         public void InitTriggerData()
@@ -263,7 +266,7 @@ public class MapCellController : Singleton<MapCellController>
         } 
     }
 
-    
+    [BurstCompile]
     public struct RoomCellData
     {
         public readonly void Dispose()
@@ -416,6 +419,53 @@ public class MapCellController : Singleton<MapCellController>
 
     private MyNativeData<RuntimeMapRoom> runtimeMapRooms;
 
+
+    public int2 GetNearestItemPlayerTriggerCell(int roomId,int itemInstanceId,int2 cell)
+    {
+        var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
+        if (cells != null&&cells.Length>0)
+        {
+            int index = 0;
+            int distance = int.MaxValue;
+            for(int i = 0; i < cells.Length; i++)
+            {
+                int dx= cell.x - cells[i].x;
+                int dy= cell.y - cells[i].y;
+                int _distance = dx*dx+dy*dy;
+                if (_distance < distance)
+                {
+                    distance = _distance;
+                    index = i;
+                }
+            }
+            return cells[index];
+        }
+        return cell;
+    }
+
+    public int2 GetNearestItemCommonTriggerCell(int roomId, int itemInstanceId, int2 cell)
+    {
+        var cells = GetItemTriggerCells(itemInstanceId, roomId);
+        if (cells != null && cells.Length > 0)
+        {
+            int index = 0;
+            int distance = int.MaxValue;
+            for (int i = 0; i < cells.Length; i++)
+            {
+                int dx = cell.x - cells[i].x;
+                int dy = cell.y - cells[i].y;
+                int _distance = dx * dx + dy * dy;
+                if (_distance < distance)
+                {
+                    distance = _distance;
+                    index = i;
+                }
+            }
+            return cells[index];
+        }
+        return cell;
+    }
+
     public int2 GetRandomRoomCell(int roomId)
     {
         if(runtimeMapRooms.GetData(roomId,out var runtimeMapRoom))
@@ -430,11 +480,18 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            return runtimeMapRoom.commonTriggerAreas.GetItemTriggerCells(instanceId);
+            return runtimeMapRoom.commonTriggerAreas.GetItemTriggerCells(instanceId).ToArray();
         }
         return null;
     }
-
+    public int2[] GetItemPlayerTriggerCells(int instanceId, int room)
+    {
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            return runtimeMapRoom.playerTriggerAreas.GetItemTriggerCells(instanceId).ToArray();
+        }
+        return null;
+    }
     /// <summary>
     /// ÃÌº”’œ∞≠
     /// </summary>
@@ -502,6 +559,10 @@ public class MapCellController : Singleton<MapCellController>
                 referenceId = linkId,
                 triggerType = triggerType
             };
+            for (int i = 0; i < cells.Length; i++)
+            {
+                triggerArea.cells.Add(cells[i] + offset);
+            }
 
             runtimeMapRoom.commonTriggerAreas.AddTriggerCell(triggerArea);
             runtimeMapRooms.SetData(runtimeMapRoom);
@@ -1030,7 +1091,7 @@ public class MapCellController : Singleton<MapCellController>
 
         return cost;
     }
-
+    [BurstCompile]
     public struct FindPath : IJob
     {
         //[ReadOnly] public int MOVE_STRAIGHT_COST;
@@ -1165,6 +1226,7 @@ public class MapCellController : Singleton<MapCellController>
             }
         }
     }
+    [BurstCompile]
     public struct SingleTriggerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
@@ -1200,6 +1262,7 @@ public class MapCellController : Singleton<MapCellController>
             } 
         }
     }
+    [BurstCompile]
     public struct TriggerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
@@ -1234,6 +1297,7 @@ public class MapCellController : Singleton<MapCellController>
             }
         }
     }
+    [BurstCompile]
     public struct TriggerPlayerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
@@ -1273,7 +1337,7 @@ public class MapCellController : Singleton<MapCellController>
             }
         }
     }
-
+    [BurstCompile]
     public struct SingleTriggerPlayerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
@@ -1310,6 +1374,13 @@ public class MapCellController : Singleton<MapCellController>
            
         }
     }
+    /*
+    public struct CellsDistanceJob : IJobParallelFor
+    {
+        [ReadOnly] public NativeArray<int2> cells;
+        [ReadOnly] public int2 source;
+        [WriteOnly] public NativeArray<int2> distances;
+    }*/
 }
 
 public struct TriggerArea

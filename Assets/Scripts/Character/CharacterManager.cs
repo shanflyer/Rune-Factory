@@ -46,7 +46,7 @@ public struct TeamerEquipAndProperty : IReferenceData
 
 public class CharacterManager : Singleton<CharacterManager>
 {
-    public const float moveSpeed = 4f;
+    public const float moveSpeed = 10f;
     public const float updataMoveSpeed = 1f;
     private MyInstance myInstance;
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
@@ -407,6 +407,9 @@ public class CharacterManager : Singleton<CharacterManager>
 
                 case ParameterType.FLOAT:
                     animator.SetFloat(setCharacterAnimator.parameter, setCharacterAnimator.floatValue);
+                    break;
+                case ParameterType.TRIGGER:
+                    animator.SetTrigger(setCharacterAnimator.parameter);
                     break;
             }
         }

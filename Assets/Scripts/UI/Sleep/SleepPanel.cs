@@ -69,6 +69,7 @@ public class SleepPanel : GamePanel<MyInt>
             int targetMinue = GameTimeManager.instance.Minute + data.minute;
             PlayerSleep playerSleep = new PlayerSleep
             {
+                characterId = CharacterManager.instance.controllerCharacter.instanceId,
                 targetHour = targetHour,
                 targetMinute = targetMinue,
             };

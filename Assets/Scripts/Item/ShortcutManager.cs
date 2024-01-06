@@ -42,7 +42,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
                 if (item.dataId != 0)
                 {
                     int itemCount = PackageManager.instance.GetPackageItemCount(
-                        CharacterManager.instance.controllerCharacter.instanceId, item.dataId);
+                        CharacterManager.instance.controllerCharacter.characterPackage, item.dataId);
                     if (itemCount <= 0)
                     {
                         shortcutPackage.items[i] = default(Item);
@@ -78,6 +78,13 @@ public class ShortcutManager : Singleton<ShortcutManager>
     {
         if (shortcutPackages.GetData(setShortcutItem.characterId, out var shortcutPackage))
         {
+            SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
+            {
+                packageId = shortcutPackage.packagerId,
+                selectItem = setShortcutItem.Item.instanceId
+            };
+            GameActionManager.instance.QueueAction(setPackageSelectItem);
+
             shortcutPackage.SetItemIndex(setShortcutItem.index,setShortcutItem.Item);
             shortcutPackages.SetData(shortcutPackage);
             RefreshDisplayShortcutPackage(shortcutPackage);
