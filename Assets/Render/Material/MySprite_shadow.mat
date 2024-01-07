@@ -60,14 +60,23 @@ Material:
     - EdgeValue: 0.2
     - WaveColorValue: 1.39
     - WaveK: 2.22
+    - _BackBlend: 1
     - _BlendValue: 1
+    - _BlendVertexColor: 0
     - _Comp: 8
     - _Cycle: 0
     - _CycleRange: 0
+    - _Damp: 0
+    - _DampBlend: 1
+    - _DampNoise: 112.9
+    - _DampValue: 1
     - _EdgeOffset: 0.053
     - _EdgeSpeed: 1.22
     - _EnableExternalAlpha: 0
     - _Fail: 0
+    - _HighLighStep: 0
+    - _HighLightNoise: 50
+    - _LightBlend: 1
     - _NoiseAlpha: 1
     - _NoiseValue: 500
     - _Pass: 0
@@ -101,11 +110,15 @@ Material:
     - WaveScale0: {r: 4, g: 6, b: 0, a: 0}
     - WaveScale1: {r: -2, g: -8, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DampColor: {r: 0.6247775, g: 0.9379376, b: 0.9811321, a: 1}
     - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
+    - _HightLightColor: {r: 0.008406067, g: 0.47284126, b: 0.53588676, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _WaterColor: {r: 0.048700586, g: 0.3584906, b: 0.34440923, a: 1}
     - _WaveKSet0: {r: 3, g: 1.8, b: 0, a: 0}
     - _WaveKSet1: {r: 2.1, g: -1.5, b: 0, a: 0}
     - _WaveKSet2: {r: 0, g: 0, b: 0, a: 0}
     - _WaveKSet3: {r: 0, g: 0, b: 0, a: 0}
     - waterColor: {r: 0.056069776, g: 0.20390359, b: 0.26415092, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

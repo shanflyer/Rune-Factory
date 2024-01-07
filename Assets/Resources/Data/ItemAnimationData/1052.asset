@@ -25,12 +25,28 @@ MonoBehaviour:
       y: 0
     clips:
     - {fileID: 7400000, guid: 4b6d349a68357e24b8614a74d5a80aa6, type: 2}
+  - stateName: "\u9ED8\u8BA4\u6D47\u6C34"
+    key:
+      x: 0
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: 25f8626195278184193e1074acd59ab2, type: 2}
+  - stateName: "\u9504\u5730\u6D47\u6C34"
+    key:
+      x: 1
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: 1a96de4f6d141634691b99be2c1b1fca, type: 2}
   animationStateDataDic:
     m_keys:
     - x: 0
       y: 0
     - x: 1
       y: 0
+    - x: 0
+      y: 1
+    - x: 1
+      y: 1
     m_values:
     - stateName: "\u9ED8\u8BA4"
       key:
@@ -44,3 +60,15 @@ MonoBehaviour:
         y: 0
       clips:
       - {fileID: 7400000, guid: 4b6d349a68357e24b8614a74d5a80aa6, type: 2}
+    - stateName: "\u9ED8\u8BA4\u6D47\u6C34"
+      key:
+        x: 0
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: 25f8626195278184193e1074acd59ab2, type: 2}
+    - stateName: "\u9504\u5730\u6D47\u6C34"
+      key:
+        x: 1
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: 1a96de4f6d141634691b99be2c1b1fca, type: 2}

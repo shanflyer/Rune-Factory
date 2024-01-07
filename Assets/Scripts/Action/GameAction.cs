@@ -25,6 +25,27 @@ public delegate void SetInt3Value(int3 value);
 
 public delegate void SetResult(bool value);
 
+public struct PlayCharacterTimeLine : GameAction
+{
+    public SetValue setValue { get; set; } 
+    public SetResult setResult { get; set; }
+    public int characterId;
+    public string playName;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 1)
+        {
+            characterId = int.Parse(parameters[0].value);
+            playName = parameters[1].value;
+        }
+        if (source != 0)
+        {
+            characterId = source;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct SetFixedCamera : GameAction
 {
     public SetValue setValue { get; set; }

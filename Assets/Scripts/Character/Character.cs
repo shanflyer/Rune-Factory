@@ -520,8 +520,12 @@ public partial class Character
             if (bool2.x || bool2.y)
             {
                 _moveDirection = value;
+                if (_moveDirection.Equals(float2.zero))
+                {
+                    return;
+                }
                 direction = GameCommon.GetCharacterDirect(moveDirection, direction);
-
+                //Debug.Log("direction:" + direction);
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
                     runtimeObj.SetAnimationDirection(GameCommon.GetDirectValue(direction));

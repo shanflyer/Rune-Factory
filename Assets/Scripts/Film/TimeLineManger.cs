@@ -15,11 +15,13 @@ public class TimeLineManger : Singleton<TimeLineManger>
     struct RuntimePlayable
     {
         public List<Animator> animators;
+        public List<List<AnimationParameter>> animationParameters;
         public PlayableDirector playableDirector;
         public Action StopEvent;
         public RuntimePlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData, Action StopAction,int source= -1)
         {
             animators = new List<Animator>();
+            animationParameters = new List<List<AnimationParameter>>();
             this.playableDirector = playableDirector;
             this.StopEvent = StopAction;
             BindPlayable(playableDirector, myTimeLineData,skillEstimateData,source); 
@@ -49,6 +51,12 @@ public class TimeLineManger : Singleton<TimeLineManger>
                             case BindType.FightTarget:
                                 animator = FightController.instance.FindFightCharacter(skillEstimateData.target[0][0]);
                                 break;
+                            case BindType.Character:
+                                if (CharacterManager.instance.GetRuntimeCharacterObj(source, out var characterRuntimeObj))
+                                {
+                                    animator = characterRuntimeObj.animator;
+                                }
+                                break;
                             case BindType.Default:
                                 break;
                             
@@ -59,10 +67,41 @@ public class TimeLineManger : Singleton<TimeLineManger>
                             {
                                 animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
                             }
-                            
+                            var parameters = animator.parameters;
+                            List<AnimationParameter> AnimationParameters = new List<AnimationParameter>();
+                            for (int j = 0; j < parameters.Length; j++)
+                            {
+                                AnimationParameter animationParameter = new AnimationParameter
+                                {
+                                    parameter = parameters[j].name,
+
+                                };
+                                switch (parameters[j].type)
+                                {
+                                    case AnimatorControllerParameterType.Float:
+                                        animationParameter.parameterType = ParameterType.FLOAT;
+                                        animationParameter.floatValue = animator.GetFloat(parameters[j].name);
+                                        break;
+                                    case AnimatorControllerParameterType.Int:
+                                        animationParameter.parameterType = ParameterType.INT;
+                                        animationParameter.intValue = animator.GetInteger(parameters[j].name);
+                                        break;
+                                    case AnimatorControllerParameterType.Bool:
+                                        animationParameter.parameterType = ParameterType.BOOL;
+                                        animationParameter.boolValue = animator.GetBool(parameters[j].name);
+                                        break;
+                                    case AnimatorControllerParameterType.Trigger:
+                                        animationParameter.parameterType = ParameterType.TRIGGER;
+                                        break;
+                                }
+                                AnimationParameters.Add(animationParameter);
+                            }
+                            animationParameters.Add(AnimationParameters);
+
                             animators.Add(animator);
-                        }
-                        playableDirector.SetGenericBinding(sourceObject, animator.gameObject);
+                            playableDirector.SetGenericBinding(sourceObject, animator.gameObject);
+                        } 
+                       
                     }
                      
                         i++;
@@ -98,6 +137,12 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                             break;
                                         case BindType.FightTarget:
                                             childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.target[0][0]);
+                                            break;
+                                        case BindType.Character:
+                                            if(CharacterManager.instance.GetRuntimeCharacterObj(source,out var characterRuntimeObj))
+                                            {
+                                                childAnimator = characterRuntimeObj.animator;
+                                            } 
                                             break;
                                     }
                                     if (childAnimator != null)
@@ -152,8 +197,32 @@ public class TimeLineManger : Singleton<TimeLineManger>
                 var animator= animators[i];
                 if (animator&&animator.runtimeAnimatorController!=null)
                 {
+                    
+                   // animator.enabled = false;
+                    //animator.enabled = true;
+                     
                     animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
                     animator.Rebind();
+                    animator.enabled = false;
+                    animator.enabled = true;
+                    var AnimationParameters = animationParameters[i];
+                    for(int j = 0; j < AnimationParameters.Count; j++)
+                    {
+                        AnimationParameter animationParameter = AnimationParameters[j];
+                        switch (animationParameter.parameterType)
+                        {
+                            case ParameterType.BOOL:
+                                animator.SetBool(animationParameter.parameter, animationParameter.boolValue.Value);
+                                break;
+                            case ParameterType.INT:
+                                animator.SetInteger(animationParameter.parameter, animationParameter.intValue.Value);
+                                break;
+                            case ParameterType.FLOAT:
+                                animator.SetFloat(animationParameter.parameter, animationParameter.floatValue.Value);
+                                break; 
+                        }
+                    }
+
                 }
             }
 
@@ -215,8 +284,18 @@ public class TimeLineManger : Singleton<TimeLineManger>
         defaultPlayableDirector.playOnAwake = false;
         defaultPlayableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
 
+        GameActionManager.instance.AddListener<PlayCharacterTimeLine>(PlayCharacterTimeLine);
        
         base.Init();
+    }
+    
+    async void PlayCharacterTimeLine(PlayCharacterTimeLine playCharacterTimeLine)
+    {
+        var myTimeLineData = await GameDataManager.instance.GetAsyncData<MyTimeLineData>(playCharacterTimeLine.playName);
+        if (myTimeLineData)
+        {
+            PlaySkillTimeline(playCharacterTimeLine.characterId, default(SkillEstimateData), myTimeLineData, null);
+        }
     }
     protected override void Clear()
     {

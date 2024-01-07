@@ -34,7 +34,7 @@ public class SetCharacterDirection : Action
                 characterId = characterId.Value,
                 targetCoordinate = faceTargetCoordinate.Value.xy
             };
-            GameActionManager.instance.QueueAction(SetTargetDirection);
+            GameActionManager.instance.QueueAction(SetTargetDirection,true);
         }
 
         return TaskStatus.Success;

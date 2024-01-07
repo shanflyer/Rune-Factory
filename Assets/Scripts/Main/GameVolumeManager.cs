@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 public class GameVolumeManager : Singleton<GameVolumeManager>
 { 
-    Material screenMat;
+    Material screenMat; 
     public override void Init()
     {
         base.Init();

@@ -21,7 +21,7 @@ public class MyTimeLineData : ScriptableObject,IGameData
 [System.Serializable]
 public enum BindType
 {
-   Default,FightSource,FightTarget,Camera
+   Default,FightSource,FightTarget,Camera,Character,MapItem
 }
 [System.Serializable]
 public struct BindData

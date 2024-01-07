@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 472757880}
   - component: {fileID: 472757879}
+  - component: {fileID: 472757881}
   m_Layer: 0
   m_Name: WorldMapController
   m_TagString: Untagged
@@ -171,6 +172,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &472757881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472757878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b528430bdf005d4bb5b74f08c137a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalDatas:
+  - dataName: _DampNoise
+    shaderDataType: 1
+    intValue: 0
+    floatValue: 100
+    vectorValue: {x: 0, y: 0, z: 0, w: 0}
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+  - dataName: _HighLighStep
+    shaderDataType: 1
+    intValue: 0
+    floatValue: 0.37
+    vectorValue: {x: 0, y: 0, z: 0, w: 0}
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+  - dataName: _DampColor
+    shaderDataType: 3
+    intValue: 0
+    floatValue: 0
+    vectorValue: {x: 0, y: 0, z: 0, w: 0}
+    colorValue: {r: 1, g: 1, b: 1, a: 1}
+  - dataName: _DampWaterColor
+    shaderDataType: 3
+    intValue: 0
+    floatValue: 0
+    vectorValue: {x: 0, y: 0, z: 0, w: 0}
+    colorValue: {r: 0.048700586, g: 0.3584906, b: 0.34440923, a: 1}
+  - dataName: _HightLightColor
+    shaderDataType: 3
+    intValue: 0
+    floatValue: 0
+    vectorValue: {x: 0, y: 0, z: 0, w: 0}
+    colorValue: {r: 0.008406067, g: 0.47284126, b: 0.53588676, a: 1}
+  - dataName: _HighLightNoise
+    shaderDataType: 1
+    intValue: 0
+    floatValue: 200
+    vectorValue: {x: 0, y: 0, z: 0, w: 0}
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1274398005
 GameObject:
   m_ObjectHideFlags: 0

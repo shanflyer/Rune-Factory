@@ -65,6 +65,7 @@ public class FarmManager:Singleton<FarmManager>
             SetItemAnimation setItemAnimation = new SetItemAnimation
             {
                 keyX = (int)field.fieldState,
+                keyY=field.isSetWater?1:0,
                 id = refreshField.fieldId, 
             };
             GameActionManager.instance.QueueAction(setItemAnimation);
@@ -211,28 +212,29 @@ public class FarmManager:Singleton<FarmManager>
                     case PlantState.正常:
                     case PlantState.干旱:
                         plant.plantState = PlantState.正常;
-                        setWaterField.setResult(true);
+                        //setWaterField.setResult(true);
                         break;
                     case PlantState.枯死:
-                        GameNotificationManager.instance.DisplayTips("提示", "植物已经死亡，请先铲除!");
-                        setWaterField.setResult(false);
+                       // GameNotificationManager.instance.DisplayTips("提示", "植物已经死亡，请先铲除!");
+                       // setWaterField.setResult(false);
                         break;
                     case PlantState.死亡:
-                        GameNotificationManager.instance.DisplayTips("提示", "请先平整土地!");
-                        setWaterField.setResult(false);
+                        //GameNotificationManager.instance.DisplayTips("提示", "请先平整土地!");
+                       // setWaterField.setResult(false);
                         break;
                     case PlantState.成熟:
-                        setWaterField.setResult(true);
+                        //setWaterField.setResult(true);
                         break; 
                 }
                 plants.SetData(plant);
                 RefreshPlant refreshPlant = new RefreshPlant
                 { plantId = plant.instaceId};
                 RefreshPlant(refreshPlant);
-            } 
+            }
+            setWaterField.setResult(true);
             fields.SetData(field);
-            RefreshField refreshField = new RefreshField { fieldId = field.instanceId};
-            RefreshField(refreshField);
+           // RefreshField refreshField = new RefreshField { fieldId = field.instanceId};
+            //RefreshField(refreshField);
         }
         else
         {

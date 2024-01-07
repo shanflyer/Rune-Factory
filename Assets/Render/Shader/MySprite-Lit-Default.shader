@@ -14,8 +14,10 @@ Shader "MySprite-Lit-Default"
         _BackBlend("BackBlend",int)=1
         _BlendVertexColor("BlendVertexColor",int)=0
 
-
         _Water("Water",int)=0
+
+        _DampBlend("_DampBlend",int)=0 
+        _Damp("_Damp",int)=0
         
         //水面颜色
         [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
@@ -76,7 +78,18 @@ Shader "MySprite-Lit-Default"
          half2 LightDirection;
          half _ShadowValue;
          int _backColor;
+
+         float _DampValue;
+            float _DampNoise;
+            float _HighLighStep;
+		    float4 _DampColor;
+            float4 _DampWaterColor;
+            float4 _HightLightColor;
+            float _HighLightNoise;
         CBUFFER_START(UnityPerMaterial)
+            int _DampBlend;
+            int _Damp;
+ 
             half4 _MainTex_ST;
             half4 _NormalMap_ST;  // Is this the right way to do this?
             half4 _Color;
@@ -121,13 +134,17 @@ Shader "MySprite-Lit-Default"
 
         TEXTURE2D(_ShadowTex);
         SAMPLER(sampler_ShadowTex);
+
+        TEXTURE2D(_NormalMap);
+            SAMPLER(sampler_NormalMap);
         
 
         ENDHLSL
 
+         
         Pass
         {
-            Tags { "LightMode" = "Universal2D" }
+             Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM
             
@@ -266,6 +283,79 @@ Shader "MySprite-Lit-Default"
                 SHAPE_LIGHT(3)
             #endif
 
+            float3 DampColor(float3 col,float2 uv,float2 objUV)
+            {
+                float r=col.r*col.r;
+                float g=col.g*col.g;
+                float b=col.b*col.b;
+                float3 _col=float3(r,g,b);
+                
+                float _DampNoiseValue;	 
+
+                 float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;  
+
+
+				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_DampNoise,_DampNoiseValue);
+                float3 d=float3(_DampNoiseValue,_DampNoiseValue,_DampNoiseValue);    
+
+
+                float3 water=float3(1-_DampNoiseValue,1-_DampNoiseValue,1-_DampNoiseValue);    
+                float waterValue=clamp((_DampValue-0.5),0,0.5)/0.5;      
+
+                 float _HighLightNoiseValue;	
+				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_HighLightNoise,_HighLightNoiseValue);
+                float3 h=float3(_HighLightNoiseValue,_HighLightNoiseValue,_HighLightNoiseValue);
+
+                
+
+                h*=(1-_DampNoiseValue);       
+                             
+                float dValue=1-waterValue;
+                d*=dValue;               
+				d*=d; 
+                d=clamp(d,0,1);
+
+               
+               
+                water*=waterValue;
+                water*=water;  
+                water=clamp(water,0,1);
+                //return water*_WaterColor;
+
+                h*=waterValue;
+                h*=step(_HighLighStep,h);
+                h*=h;
+
+                h=clamp(h,0,1);
+                
+                
+                float c=(col.r+col.g+col.b)/3; 
+
+                d*=_DampColor*c;
+                water*=_DampWaterColor*c;
+                h*=_HightLightColor*c; 
+
+                _col+=d+water+h; 
+
+                half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, objUV);
+                //half3 normalUnpacked = UnpackNormalRGBNoScale(normal);
+                float gv=normal.zzz;
+                //return normal.zzz;
+                //float stepGv=step(0.5,gv);
+                //gv=stepGv+(1-stepGv)*gv; 
+                //return gv.xxx;
+                Unity_Remap_float(gv,float2(0,1),float2(0.2,1),gv);
+
+                float3 result=lerp(col,_col,clamp(_DampValue/0.5,0,1)*gv);
+
+                
+                
+               return result*(1-_Damp)+_col*_Damp; 
+            }
+
             Varyings CombinedShapeLightVertex(Attributes v)
             {
                 Varyings o = (Varyings)0;
@@ -303,12 +393,18 @@ Shader "MySprite-Lit-Default"
                 const half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
-                
+          
                 
                 float singleValue=(main.x+main.y+main.z)/3;
                 float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
                 float3 waterColor=main.xyz*(1-_BlendVertexColor)+main.xyz*i.color*_BlendVertexColor;
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor;
+                if(_DampBlend)
+                {
+                   waterColor=DampColor(waterColor,i.lightingUV,i.uv); 
+                }
+                
+               
                 if(_Water==1)
                 {
                     waterColor=WaterFragment(i.uv,i.lightingUV,main);
@@ -384,8 +480,7 @@ Shader "MySprite-Lit-Default"
                 UNITY_VERTEX_OUTPUT_STEREO
             };
             
-            TEXTURE2D(_NormalMap);
-            SAMPLER(sampler_NormalMap);
+            
 
             /*float3 WaterFragment(float2 uv,float2 screenUV,float3 _MainTexColor)
             {

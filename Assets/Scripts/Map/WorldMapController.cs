@@ -69,6 +69,7 @@ public class WorldMapController : MonoBehaviour
         var festivalManager = FestivalManager.instance;
         var gameTimeEventManager = GameTimeEventManager.instance;
         var gameVolumeMangaer = GameVolumeManager.instance; 
+        var timeLineManager= TimeLineManger.instance;
 
         GameActionManager.instance.QueueAction(new ChangeWorld
         {
