@@ -98,6 +98,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                 {
                     instanceId = selectPackageItem.instanceId,
                     dataId = selectPackageItem.dataId,
+                    value = selectPackageItem.value,
                     count = PackageManager.instance.GetPackageItemCount(shortcutPackage.packagerId, selectPackageItem.dataId)
                 };
                 SetShortcutItem setShortcutItem = new SetShortcutItem
@@ -207,6 +208,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                         {
                             instanceId = selectPackageItem.instanceId,
                             dataId = selectPackageItem.dataId,
+                            value=selectPackageItem.value,
                             count = PackageManager.instance.GetPackageItemCount(shortcutPackage.packagerId, selectPackageItem.dataId)
                         };
                         SetShortcutItem setShortcutItem = new SetShortcutItem

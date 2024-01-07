@@ -20,13 +20,21 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
         }
         else
         {
-            Type type = Type.GetType(typeName);
-            var data = Activator.CreateInstance(type);
-            MethodInfo meth = type.GetMethod("Init");
-            var _Delegate =(ActionInit) meth.CreateDelegate(typeof(ActionInit), data);
+            try
+            {
+                Type type = Type.GetType(typeName);
+                var data = Activator.CreateInstance(type);
+                MethodInfo meth = type.GetMethod("Init");
+                var _Delegate = (ActionInit)meth.CreateDelegate(typeof(ActionInit), data);
+
+                _Delegate.Invoke(parameters, source, target, value, setResult, setValue);
+                gameActionDataDelegates.Add(typeName, _Delegate);
+            }
+            catch (Exception ex) 
+            {
+                Debug.LogError($"{typeName}-{ex}");
+            }
            
-             _Delegate.Invoke(parameters, source, target, value, setResult, setValue);
-             gameActionDataDelegates.Add(typeName, _Delegate);
         }        
 
     }

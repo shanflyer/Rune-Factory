@@ -14,7 +14,7 @@ public struct AddItemValue : GameAction
         {
             characterId = int.Parse(parameters[0].value);
             selectItem = int.Parse(parameters[1].value);
-            value = int.Parse(parameters[2].value);
+            this.value = int.Parse(parameters[2].value);
         }
         
         GameActionManager.instance.QueueAction(this, immediately);
@@ -34,7 +34,7 @@ public struct SetItemValue : GameAction
         {
             characterId = int.Parse(parameters[0].value);
             selectItem = int.Parse(parameters[1].value);
-            value = int.Parse(parameters[2].value);
+            this.value = int.Parse(parameters[2].value);
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }

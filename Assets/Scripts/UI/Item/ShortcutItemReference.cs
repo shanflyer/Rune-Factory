@@ -46,7 +46,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     public override void OnEnable()
     {
         base.OnEnable();
-        GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
+        GameActionManager.instance.AddListener<RefreshItemValue>(RefreshItemValue);
     }
     public override void OnDisable()
     {

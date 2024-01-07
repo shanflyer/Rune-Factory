@@ -109,6 +109,7 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<RemovePlayerPackageItem>(RemovePlayerPackageItem);
         GameActionManager.instance.AddListener<AddItemValue>(AddItemValue);
         GameActionManager.instance.AddListener<SetItemValue>(SetItemValue);
+        GameActionManager.instance.AddListener<CheckCharacterItemValue>(CheckCharacterItemValue);
     }
     public Item GetPackageSelectItem(int packageId)
     {
@@ -221,6 +222,30 @@ public class PackageManager : Singleton<PackageManager>
     {
         bool result = gamePackages.Remove(removePackage.packageDataId);
         removePackage.setResult(result);
+    }
+    private void CheckCharacterItemValue(CheckCharacterItemValue CheckCharacterItemValue)
+    {
+        Character character = CharacterManager.instance.GetCharacter(CheckCharacterItemValue.characterId);
+        if (character != null)
+        {
+            Item item = GetItemFromInstanceId(character.characterPackage, CheckCharacterItemValue.itemId);
+            if (item.instanceId != 0)
+            {
+                if (item.value * 100 >= CheckCharacterItemValue.itemValue)
+                {
+                    if (CheckCharacterItemValue.setResult != null)
+                    {
+                        CheckCharacterItemValue.setResult(true);
+                        return;
+                    }
+                }
+            }
+           
+        }
+        if (CheckCharacterItemValue.setResult != null)
+        {
+            CheckCharacterItemValue.setResult(false); 
+        }
     }
 
     private void CheckItemValue(CheckItemValue checkItemValue)
@@ -868,6 +893,7 @@ public class PackageManager : Singleton<PackageManager>
                             packageId=instanceId,
                             isFresh=itemData.isFresh,
                             itemType=itemData.type,
+                            value=item.value,
                             count = 0
                         };
                         if (items.Count <= index)
@@ -925,6 +951,7 @@ public class PackageManager : Singleton<PackageManager>
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
                             itemType = itemData.type,
+                            value = item.value,
                             count = 0
                         };
 
@@ -958,6 +985,7 @@ public class PackageManager : Singleton<PackageManager>
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
                             itemType = itemData.type,
+                            value = item.value,
                             count = 1
                         };
                         int index = items.Count;

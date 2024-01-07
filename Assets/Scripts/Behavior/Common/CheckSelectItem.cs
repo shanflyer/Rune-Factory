@@ -17,6 +17,7 @@ public class CheckSelectItem : Action
     public SharedInt itemCount;
 
     public SharedInt outSelectItem;
+    public SharedInt outSelectItemInstance;
 
     private ItemData itemData;
     private Character character;
@@ -34,6 +35,7 @@ public class CheckSelectItem : Action
                 Item item = PackageManager.instance.GetPackageSelectItem(package);
                 itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 outSelectItem.SetValue(item.dataId);
+                outSelectItemInstance.SetValue(item.instanceId);
             }
         }
     }
