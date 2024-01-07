@@ -245,12 +245,12 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 SelectCount = item.count;
                 buyCountValue.SetTextWithoutNotify(SelectCount.ToString());
 
-                if (SelectItem.value == packageId0)
+                if (SelectItem.packageId == packageId0)
                 {
                     UPMove.localScale = Vector3.zero;
                     DownMove.localScale = Vector3.one;
                 }
-                if (SelectItem.value == packageId1)
+                if (SelectItem.packageId == packageId1)
                 {
                     UPMove.localScale = Vector3.one;
                     DownMove.localScale = Vector3.zero;
@@ -261,8 +261,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
 
     private void MoveSelectItem()
     {
-        int inPackageId = SelectItem.value == packageId0 ? packageId1 : packageId0;
-        int outPackageId = SelectItem.value == packageId0 ? packageId0 : packageId1;
+        int inPackageId = SelectItem.packageId == packageId0 ? packageId1 : packageId0;
+        int outPackageId = SelectItem.packageId == packageId0 ? packageId0 : packageId1;
         AddPackageItem addPackageItem = new AddPackageItem
         {
             itemDataId = SelectItem.dataId,
@@ -288,14 +288,14 @@ public class MultiPackagePanel : GamePanel<PackageList>
 
     private void SetSelectCount(string value)
     {
-        int count = PackageManager.instance.GetPackageItemCount((int)SelectItem.value, SelectItem.dataId);
+        int count = PackageManager.instance.GetPackageItemCount((int)SelectItem.packageId, SelectItem.dataId);
         SelectCount = math.clamp(int.Parse(value), 1, count);
         buyCountValue.SetTextWithoutNotify(SelectCount.ToString());
     }
 
     private void AddSelectCount()
     {
-        int count = PackageManager.instance.GetPackageItemCount((int)SelectItem.value, SelectItem.dataId);
+        int count = PackageManager.instance.GetPackageItemCount((int)SelectItem.packageId, SelectItem.dataId);
         SelectCount++;
         SelectCount = math.clamp(SelectCount, 1, count);
         buyCountValue.SetTextWithoutNotify(SelectCount.ToString());
@@ -303,7 +303,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
 
     private void ReduceSelectCount()
     {
-        int count = PackageManager.instance.GetPackageItemCount((int)SelectItem.value, SelectItem.dataId);
+        int count = PackageManager.instance.GetPackageItemCount((int)SelectItem.packageId, SelectItem.dataId);
         SelectCount--;
         SelectCount = math.clamp(SelectCount, 1, count);
         buyCountValue.SetTextWithoutNotify(SelectCount.ToString());

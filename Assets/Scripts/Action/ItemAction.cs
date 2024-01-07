@@ -1,6 +1,44 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public struct AddItemValue : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId; 
+    public int selectItem;
+    public int value;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+            selectItem = int.Parse(parameters[1].value);
+            value = int.Parse(parameters[2].value);
+        }
+        
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+public struct SetItemValue : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
+    public int selectItem;
+    public int value;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+
+        if (parameters.Count > 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+            selectItem = int.Parse(parameters[1].value);
+            value = int.Parse(parameters[2].value);
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct SetPackageSelectItem : GameAction
 {
     public SetValue setValue { get; set; }

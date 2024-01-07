@@ -43,6 +43,23 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             SelectAction(data, true);
         }
     }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
+    }
+    void RefreshItemValue(RefreshItemValue refreshItemValue)
+    {
+        if (refreshItemValue.itemId == data.Item.instanceId)
+        {
+            ItemValue.fillAmount = refreshItemValue.itemValue;
+        }
+    }
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
