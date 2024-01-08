@@ -3,6 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+public struct CheckCharacterPackageFull : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId; 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 1)
+        {
+            characterId = int.Parse(parameters[0].value); 
+        }
+        if (source != 0)
+            characterId = source; 
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct CheckCharacterItemValue : GameAction
 {
     public SetValue setValue { get; set; }

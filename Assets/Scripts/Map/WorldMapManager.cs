@@ -55,6 +55,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (GetRuntimeMapItem(AddMapItemOperate.mapItemId, out var runtimeMapItem))
         {
             runtimeMapItem.operateDatas.Add(AddMapItemOperate.addeOperateId);
+            runtimeMapItems.SetData(runtimeMapItem);
         }
     }
     void RemoveMapItemOperate(RemoveMapItemOperate removeMapItemOperate)
@@ -62,6 +63,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if(GetRuntimeMapItem(removeMapItemOperate.mapItemId,out var runtimeMapItem))
         {
             runtimeMapItem.operateDatas.Remove(removeMapItemOperate.removeOperateId);
+            runtimeMapItems.SetData(runtimeMapItem);
         }
     }
     protected override void Clear()

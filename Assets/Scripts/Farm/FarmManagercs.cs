@@ -46,14 +46,34 @@ public class FarmManager:Singleton<FarmManager>
         GameActionManager.instance.AddListener<RefreshPlant>(RefreshPlant);
     }
     void RefreshPlant(RefreshPlant refreshPlant)
-    { 
-        if (plants.GetData(refreshPlant.plantId, out var plant))
+    {
+        RefreshPlant(refreshPlant.plantId);
+    }
+    void RefreshPlant(int plantId)
+    {
+        if (plants.GetData(plantId, out var plant))
         {
+            int keyY = 0;
+            switch (plant.plantState)
+            {
+                case PlantState.正常:
+                case PlantState.成熟:
+                    keyY = 0;
+                    break;
+                case PlantState.干旱:
+                    keyY = 1;
+                    break;
+                case PlantState.枯死:
+                case PlantState.死亡:
+                    keyY = 2;
+                    break;
+            }
+
             SetItemAnimation setItemAnimation = new SetItemAnimation
             {
-                keyX=plant.growthStage,
-                keyY = (int)plant.plantState,
-                id=plant.instaceId
+                keyX = plant.growthStage,
+                keyY = keyY,
+                id = plant.instaceId
             };
             GameActionManager.instance.QueueAction(setItemAnimation);
         }
@@ -69,6 +89,10 @@ public class FarmManager:Singleton<FarmManager>
                 id = refreshField.fieldId, 
             };
             GameActionManager.instance.QueueAction(setItemAnimation);
+            if (field.plantId != 0)
+            {
+               // RefreshPlant(field.plantId);
+            }
         }
     }
     void TryCreatField(TryCreatField tryCreatField)
@@ -137,11 +161,16 @@ public class FarmManager:Singleton<FarmManager>
                 case FieldState.已栽种:
                     GameManager.instance.ShowTwoSelectAction("注意", "土地上已有作物，是否铲除旧作物？", () =>
                     {
+                        GameActionManager.instance.QueueAction(new DeleteMapItem
+                        {
+                            mapItemInstanceId= field.plantId,
+                            triggerClear=true
+                        }); 
                         plants.RemoveData(field.Key);
                         field.plantId = 0;
                         field.fieldState = FieldState.已平整;
                         TrySmoothField.setResult(true);
-                    }, null);
+                    }, () => { TrySmoothField.setResult(false); });
                     break;
             }
             fields.SetData(field);
@@ -181,7 +210,7 @@ public class FarmManager:Singleton<FarmManager>
                 {
                     instaceId = instanceId,
                     mapId= coordinate.z,
-                    dataId = instanceId,
+                    dataId = creatPlant.plantId,
                     field = creatPlant.fieldId,
                     plantState = PlantState.正常,
                     setWater = field.isSetWater
@@ -204,7 +233,7 @@ public class FarmManager:Singleton<FarmManager>
         if (fields.GetData(setWaterField.fieldId, out var field))
         {
             field.isSetWater = true; 
-            if (plants.GetData(setWaterField.fieldId, out var plant))
+            if (plants.GetData(field.plantId, out var plant))
             {
                 plant.setWater= true;
                 switch (plant.plantState)
@@ -241,7 +270,7 @@ public class FarmManager:Singleton<FarmManager>
             setWaterField.setResult(false);
         }
     }
-    void NewDay(NewDay newDay)
+    async void NewDay(NewDay newDay)
     {
         foreach(Field data in fields)
         {
@@ -258,7 +287,7 @@ public class FarmManager:Singleton<FarmManager>
                         }
                         else
                         {
-                            plant.Grow();
+                            plant=await plant.Grow();
                         }
                         break;
                     case PlantState.干旱:
@@ -334,12 +363,15 @@ public class FarmManager:Singleton<FarmManager>
                         plant.plantState = PlantState.正常;
                         plant.growthStage = plantData.cycleStage;
 
-                        RefreshPlant refreshPlant = new RefreshPlant
-                        { plantId = plant.instaceId };
-                        RefreshPlant(refreshPlant);
+                       
                     }
                 }
-                
+
+                plants.SetData(plant);
+
+                RefreshPlant refreshPlant = new RefreshPlant
+                { plantId = plant.instaceId };
+                RefreshPlant(refreshPlant);
 
                 tryGetPlantFruit.setResult(result); 
 
@@ -386,11 +418,11 @@ public struct Plant:INativeData
 
     public int Key => instaceId;
 
-    public async void Grow()
+    public async Task<Plant> Grow()
     {
         if (plantState == PlantState.死亡 || plantState == PlantState.枯死)
         {
-            return;
+            return this;
         }
         growthDay++;
         PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(dataId);
@@ -409,8 +441,15 @@ public struct Plant:INativeData
             if(index== plantData.growthStages.Count - 1)
             {
                 plantState = PlantState.成熟;
+                AddMapItemOperate addMapItemOperate = new AddMapItemOperate
+                {
+                    mapItemId = field,
+                    addeOperateId = 22
+                };
+                GameActionManager.instance.QueueAction(addMapItemOperate);
             }
         }
+        return this;
     }
     public async Task<bool> GetPlantFruit()
     {

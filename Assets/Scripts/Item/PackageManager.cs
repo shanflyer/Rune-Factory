@@ -110,6 +110,18 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<AddItemValue>(AddItemValue);
         GameActionManager.instance.AddListener<SetItemValue>(SetItemValue);
         GameActionManager.instance.AddListener<CheckCharacterItemValue>(CheckCharacterItemValue);
+        GameActionManager.instance.AddListener<CheckCharacterPackageFull>(CheckCharacterPackageFull);
+    }
+    public void CheckCharacterPackageFull(CheckCharacterPackageFull checkCharacterPackageFull)
+    {
+        Character character = CharacterManager.instance.GetCharacter(checkCharacterPackageFull.characterId);
+        if(gamePackages.TryGetValue(character.characterPackage,out var gamePackage))
+        {
+            if (checkCharacterPackageFull.setResult != null)
+            {
+                checkCharacterPackageFull.setResult(gamePackage.itemCount < gamePackage.caseCount);
+            } 
+        }
     }
     public Item GetPackageSelectItem(int packageId)
     {
