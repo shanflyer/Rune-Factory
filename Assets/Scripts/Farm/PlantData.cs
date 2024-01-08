@@ -56,9 +56,24 @@ public class PlantData : ScriptableObject, IGameData
 [Serializable]
 public struct GrowthStage
 {
+    /// <summary>
+    /// 状态名字
+    /// </summary>
     public string stageName;
+    /// <summary>
+    /// 第几个状态
+    /// </summary>
     public int stage;
+    /// <summary>
+    /// 生长周期
+    /// </summary>
     public int growthDay;
+    /// <summary>
+    /// 产出？？
+    /// </summary>
     public int productValue;
+    /// <summary>
+    /// 动画状态
+    /// </summary>
     public int objAnimationStage;
 }

@@ -402,6 +402,9 @@ public struct Plant:INativeData
             {
                 growthStage = index;
                 growthDay = 0;
+            }else if (index >= plantData.growthStages.Count)
+            {
+                growthStage = plantData.cycleStage;
             }
             if(index== plantData.growthStages.Count - 1)
             {
@@ -425,7 +428,7 @@ public struct Plant:INativeData
                 };
 
                
-                if (nowCycle >= plantData.cycleStage)
+                if (nowCycle >= plantData.pickTimes)
                 {
                     plantState = PlantState.死亡;
                 }
