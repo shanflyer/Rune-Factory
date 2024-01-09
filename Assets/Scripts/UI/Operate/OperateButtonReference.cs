@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OperateButtonReference : UIObjReference<OperateData>
+public class OperateButtonReference : UIObjReference<OperateDataReferenceData>
 {
     [SerializeField]
     TextMeshProUGUI nameText;
@@ -15,16 +15,14 @@ public class OperateButtonReference : UIObjReference<OperateData>
     [SerializeField]
     Image Value;
     [SerializeField]
-    Image Icon;
-    OperateData operateData;
-    SelectAction<OperateData> SelectAction;
+    Image Icon;  
     private void Awake()
     {
         button.onClick.AddListener(() =>
         {
             if (SelectAction != null)
             {
-                SelectAction(operateData);
+                SelectAction(data);
             }
         });
     }
@@ -50,22 +48,21 @@ public class OperateButtonReference : UIObjReference<OperateData>
     }
     int linkItemId = 0;
     
-    public override async void InitData(OperateData t, SelectAction<OperateData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(OperateDataReferenceData t, SelectAction<OperateDataReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
-        operateData = t;
-        nameText.text = operateData.operateName;
-        if (operateData.linkItem == 0)
+        base.InitData(t, SelectAction, toggleGroup); 
+        nameText.text = t.operateData.operateName;
+        if (t.operateData.linkItem == 0)
         {
             Icon.enabled = false;
             ValueBg.localScale = Vector3.zero;
         }
         else
         {
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(operateData.linkItem);
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(t.operateData.linkItem);
             if(itemData!= null)
             {
-                linkItemId = operateData.linkItem;
+                linkItemId = t.operateData.linkItem;
                 Icon.enabled = true;
                 Icon.sprite = itemData.icon; 
                 ValueBg.localScale =itemData.itemValue? Vector3.one:Vector3.zero;

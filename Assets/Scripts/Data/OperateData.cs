@@ -6,7 +6,12 @@ using UnityEngine.EventSystems;
 
 public struct OperateDataList: IReferenceData
 {
-    public List<OperateData> OperateDatas;
+    public List<OperateDataReferenceData> OperateDatas;
+}
+public struct OperateDataReferenceData : IReferenceData
+{
+    public int targetItem;
+    public OperateData operateData;
 }
 
 [CreateAssetMenu(menuName ="Data/交互行为数据")]

@@ -12,12 +12,12 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
     [SerializeField]
     OperateButtonReference operateButton;
 
-    DisplayList<OperateButtonReference, OperateData> OperateList0, OperateList1;
+    DisplayList<OperateButtonReference, OperateDataReferenceData> OperateList0, OperateList1;
     protected override void Awake()
     {
         base.Awake();
-        OperateList0 = new DisplayList<OperateButtonReference, OperateData>(operateButton, OperateParent0);
-        OperateList1 = new DisplayList<OperateButtonReference, OperateData>(operateButton, OperateParent1);
+        OperateList0 = new DisplayList<OperateButtonReference, OperateDataReferenceData>(operateButton, OperateParent0);
+        OperateList1 = new DisplayList<OperateButtonReference, OperateDataReferenceData>(operateButton, OperateParent1);
     }
     public override void SetPanelUISerializeObj()
     {
@@ -52,7 +52,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
             {
                 return;
             }
-            List<OperateData> operateDatas = new List<OperateData>();
+            List<OperateDataReferenceData> operateDatas = new List<OperateDataReferenceData>();
 
             for (int i = 3; i < operateDataList.OperateDatas.Count; i++)
             {
@@ -74,14 +74,17 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
         }
         else
         {
-            List<OperateData> operateDatas = new List<OperateData>(); 
+            List<OperateDataReferenceData> operateDatas = new List<OperateDataReferenceData>(); 
 
             for(int i = 0; i < 3; i++)
             {
                 operateDatas.Add(v.OperateDatas[i]);
             }
             OperateData defaultData = await GameDataManager.instance.GetAsyncData<OperateData>(GameCommon.defaultOperateId);
-            operateDatas.Add(defaultData);
+            operateDatas.Add(new OperateDataReferenceData
+            {
+                operateData=defaultData,targetItem=0
+            });
             OperateList0.InitListData(operateDatas, PlayerOperateManager.instance.OperateAction);
         }
     }

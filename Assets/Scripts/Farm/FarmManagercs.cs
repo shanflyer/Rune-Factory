@@ -153,24 +153,43 @@ public class FarmManager:Singleton<FarmManager>
                 case FieldState.待平整:
                     field.fieldState = FieldState.已平整;
                     TrySmoothField.setResult(true);
-                    break;
+                    break; 
                 case FieldState.已平整:
-                   // GameNotificationManager.instance.DisplayTips("", "土地已经平整完毕");
-                    TrySmoothField.setResult(false);
-                    break;
-                case FieldState.已栽种:
-                    GameManager.instance.ShowTwoSelectAction("注意", "土地上已有作物，是否铲除旧作物？", () =>
+                    if (plants.GetData(field.plantId, out var plant))
                     {
-                        GameActionManager.instance.QueueAction(new DeleteMapItem
+                        if (plant.plantState != PlantState.枯死 || plant.plantState != PlantState.死亡)
                         {
-                            mapItemInstanceId= field.plantId,
-                            triggerClear=true
-                        }); 
-                        plants.RemoveData(field.Key);
-                        field.plantId = 0;
+                            GameManager.instance.ShowTwoSelectAction("注意", "土地上已有作物，是否铲除旧作物？", () =>
+                            {
+                                GameActionManager.instance.QueueAction(new DeleteMapItem
+                                {
+                                    mapItemInstanceId = field.plantId,
+                                    triggerClear = true
+                                });
+                                plants.RemoveData(field.Key);
+                                field.plantId = 0;
+                                field.fieldState = FieldState.已平整;
+                                TrySmoothField.setResult(true);
+                            }, () => { TrySmoothField.setResult(false); });
+                        }
+                        else
+                        {
+                            GameActionManager.instance.QueueAction(new DeleteMapItem
+                            {
+                                mapItemInstanceId = field.plantId,
+                                triggerClear = true
+                            });
+                            plants.RemoveData(field.Key);
+                            field.plantId = 0;
+                            field.fieldState = FieldState.已平整;
+                            TrySmoothField.setResult(true);
+                        }
+                    }
+                    else
+                    {
                         field.fieldState = FieldState.已平整;
                         TrySmoothField.setResult(true);
-                    }, () => { TrySmoothField.setResult(false); });
+                    } 
                     break;
             }
             fields.SetData(field);
@@ -215,6 +234,7 @@ public class FarmManager:Singleton<FarmManager>
                     plantState = PlantState.正常,
                     setWater = field.isSetWater
                 };
+                field.fieldState = FieldState.已平整;
                 plants.SetData(plant);
                 fields.SetData(field);
                 creatPlant.setResult(true); 
@@ -346,6 +366,7 @@ public class FarmManager:Singleton<FarmManager>
                     if(plant.nowCycle>= plantData.pickTimes)
                     {
                         plant.plantState = PlantState.死亡;
+                        /*
                         field.fieldState = FieldState.待平整;
                         field.plantId = 0;
 
@@ -355,7 +376,7 @@ public class FarmManager:Singleton<FarmManager>
                             triggerClear = true
                         };
                         GameActionManager.instance.QueueAction(deleteMapItem);
-                        plants.RemoveData(plant.Key);
+                        plants.RemoveData(plant.Key);*/
                     }
                     else
                     {
@@ -386,7 +407,7 @@ public class FarmManager:Singleton<FarmManager>
 }
 public enum FieldState 
 {
-    待平整,已平整,已栽种
+    待平整,已平整
 }
 public struct Field : INativeData
 { 

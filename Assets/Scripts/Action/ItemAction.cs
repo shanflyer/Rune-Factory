@@ -137,7 +137,7 @@ public struct OpenPackage : GameAction
             packageId = int.Parse(parameters[0].value);
             selectActionName = parameters[1].value;
             selectActionId = int.Parse(parameters[2].value);
-            if (parameters.Count >= 3)
+            if (parameters.Count > 3)
             {
                 canSetShortcut = int.Parse(parameters[3].value) != 0;
             }

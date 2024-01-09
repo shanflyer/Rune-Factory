@@ -887,14 +887,15 @@ public partial class Character
                 };
                 GameActionManager.instance.QueueAction(displayMap);*/
             }
-            oldCoordinate = OldOperaCoordinate = new int2(int.MinValue);
+             OldOperaCoordinate = new int2(int.MinValue);
+            oldCoordinate = new int2(int.MinValue);
         }
 
-        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, oldCoordinate, coordinate.xy,
+        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, coordinate.z, oldCoordinate, coordinate.xy,
            TriggerEventAction);
         if (isController)
         {
-            int2 oldOperaCoordinate = objCoordinate.xy;
+            int2 oldOperaCoordinate = oldCoordinate.xy;
             if (OldOperaCoordinate.x != int.MinValue)
             {
                 oldOperaCoordinate = OldOperaCoordinate;
@@ -921,7 +922,7 @@ public partial class Character
             int3 checkCoordinate = coordinate;
             checkCoordinate.xy += offsetCoordinate;
 
-            MapCellController.instance.CheckPlayerTriggerEvent(mapInstance, oldOperaCoordinate, checkCoordinate.xy,
+            MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
            TriggerEventAction, oldOperateItem);
             oldCoordinate = OldOperaCoordinate = checkCoordinate.xy; 
         }

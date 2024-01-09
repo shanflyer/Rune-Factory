@@ -114,14 +114,18 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 int operateDataLength = runtimMapItem.operateDatas.Count;
                 OperateDataList operateDataList = new OperateDataList
                 {
-                    OperateDatas = new List<OperateData>()
+                    OperateDatas = new List<OperateDataReferenceData>()
                 };
                 if (operateDataLength > 0)
                 { 
                     foreach(var id in runtimMapItem.operateDatas)
                     {
                         OperateData operateData = await GameDataManager.instance.GetAsyncData<OperateData>(id);
-                        operateDataList.OperateDatas.Add(operateData);
+                        operateDataList.OperateDatas.Add(new OperateDataReferenceData
+                        {
+                            targetItem=runtimMapItem.instanceId,
+                            operateData=operateData,
+                        });
                     }  
                 }
                 UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
@@ -129,14 +133,14 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         }
     }
 
-    public void OperateAction(OperateData operateData, bool selected = true)
+    public void OperateAction(OperateDataReferenceData operateDataReference, bool selected = true)
     {
         Character controller = CharacterManager.instance.controllerCharacter;
-        if (operateData.gameActionData != null)
+        if (operateDataReference.operateData.gameActionData != null)
         {
-            operateData.gameActionData.Action(controller.instanceId, controller.OperateItem);
+            operateDataReference.operateData.gameActionData.Action(controller.instanceId, controller.OperateItem);
         }
-        if (operateData.gameEventData != null)
+        if (operateDataReference.operateData.gameEventData != null)
         {
             List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
             {
@@ -148,18 +152,18 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 new EventReferenceData
                 {
                   name = "TargetItem",
-                  value = controller.OperateItem
+                  value = operateDataReference.targetItem
                 },
             };
-            if (operateData.eventReferenceDatas!=null&&operateData.eventReferenceDatas.Count > 0)
+            if (operateDataReference.operateData.eventReferenceDatas!=null&& operateDataReference.operateData.eventReferenceDatas.Count > 0)
             {
-                for(int i = 0; i < operateData.eventReferenceDatas.Count; i++)
+                for(int i = 0; i < operateDataReference.operateData.eventReferenceDatas.Count; i++)
                 {
-                    eventReferenceDatas.Add(operateData.eventReferenceDatas[i]);
+                    eventReferenceDatas.Add(operateDataReference.operateData.eventReferenceDatas[i]);
                 }
             }
 
-            GameEventManager.instance.AddGameEvent(operateData.gameEventData, eventReferenceDatas);
+            GameEventManager.instance.AddGameEvent(operateDataReference.operateData.gameEventData, eventReferenceDatas);
         }
     }
 

@@ -17,7 +17,7 @@ public class TwoSelectPanel : GamePanel<TwoSelectData>
 {
     public override bool changeInputModel => false;
     [SerializeField]
-    TextMeshProUGUI TitleText, NoticeText;
+    TextMeshProUGUI TitleText, infoText;
     [SerializeField]
     Button YesButton, NoButton;
 
@@ -26,7 +26,7 @@ public class TwoSelectPanel : GamePanel<TwoSelectData>
     { 
         base.SetPanelUISerializeObj();
         TitleText = FindChildGameObject<TextMeshProUGUI>("Title");
-        NoticeText = FindChildGameObject<TextMeshProUGUI>("Notice");
+        infoText = FindChildGameObject<TextMeshProUGUI>("info");
         YesButton = FindChildGameObject<Button>("YesButton");
         NoButton = FindChildGameObject<Button>("NoButton");
     }
@@ -56,6 +56,6 @@ public class TwoSelectPanel : GamePanel<TwoSelectData>
         base.InitReferenceData(v);
         yesAction=v.yesAction; noAction=v.noAction;
         TitleText.text = v.title;
-        NoticeText.text = v.notice;
+        infoText.text = v.notice;
     } 
 }
