@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Collections; 
+﻿using System.Collections.Generic;
+using Unity.Collections;
 
 public class ShortcutManager : Singleton<ShortcutManager>
 {
-    MyNativeData<ShortcutPackage> shortcutPackages = new MyNativeData<ShortcutPackage>();
+    private MyNativeData<ShortcutPackage> shortcutPackages = new MyNativeData<ShortcutPackage>();
+
     public ShortcutPackage GetShortcutPackage(int characterId)
     {
-        if(!shortcutPackages.GetData(characterId,out var shortcutPackage))
+        if (!shortcutPackages.GetData(characterId, out var shortcutPackage))
         {
             shortcutPackage = ShortcutPackage.CreatShortCutPackage(characterId);
             shortcutPackages.SetData(shortcutPackage);
         }
         return shortcutPackage;
     }
+
     public override void Init()
     {
         base.Init();
@@ -26,17 +24,18 @@ public class ShortcutManager : Singleton<ShortcutManager>
         GameActionManager.instance.AddListener<ChangeShortcutItemIndex>(ChangeShortcutItemIndex);
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
     }
+
     protected override void Clear()
     {
         base.Clear();
     }
 
-    void RefreshShortcut(RefreshShortcut refreshShortcut)
+    private void RefreshShortcut(RefreshShortcut refreshShortcut)
     {
         if (refreshShortcut.packageId == CharacterManager.instance.controllerCharacter.characterPackage)
         {
-            var shortcutPackage = GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId); 
-            for(int i = 0; i < shortcutPackage.items.Length; i++)
+            var shortcutPackage = GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+            for (int i = 0; i < shortcutPackage.items.Length; i++)
             {
                 var item = shortcutPackage.items[i];
                 if (item.dataId != 0)
@@ -56,25 +55,28 @@ public class ShortcutManager : Singleton<ShortcutManager>
             }
             shortcutPackages.SetData(shortcutPackage);
             UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
-        } 
+        }
     }
-    void RefreshDisplayShortcutPackage(ShortcutPackage shortcutPackage)
+
+    private void RefreshDisplayShortcutPackage(ShortcutPackage shortcutPackage)
     {
         if (CharacterManager.instance.controllerCharacter.instanceId == shortcutPackage.characterId)
         {
             UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
         }
     }
-    void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
+
+    private void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
     {
-        if(shortcutPackages.GetData(removeShortcutItem.characterId,out var shortcutPackage))
+        if (shortcutPackages.GetData(removeShortcutItem.characterId, out var shortcutPackage))
         {
             shortcutPackage.RemoveItemIndex(removeShortcutItem.index);
             shortcutPackages.SetData(shortcutPackage);
             RefreshDisplayShortcutPackage(shortcutPackage);
         }
     }
-    void SetShortcutItem(SetShortcutItem setShortcutItem)
+
+    private void SetShortcutItem(SetShortcutItem setShortcutItem)
     {
         if (shortcutPackages.GetData(setShortcutItem.characterId, out var shortcutPackage))
         {
@@ -85,14 +87,15 @@ public class ShortcutManager : Singleton<ShortcutManager>
             };
             GameActionManager.instance.QueueAction(setPackageSelectItem);
 
-            shortcutPackage.SetItemIndex(setShortcutItem.index,setShortcutItem.Item);
+            shortcutPackage.SetItemIndex(setShortcutItem.index, setShortcutItem.Item);
             shortcutPackages.SetData(shortcutPackage);
             RefreshDisplayShortcutPackage(shortcutPackage);
         }
     }
-    void ChangeShortcutItemIndex(ChangeShortcutItemIndex changeShortcutItemIndex)
+
+    private void ChangeShortcutItemIndex(ChangeShortcutItemIndex changeShortcutItemIndex)
     {
-        if(shortcutPackages.GetData(changeShortcutItemIndex.characterId, out var shortcutPackage))
+        if (shortcutPackages.GetData(changeShortcutItemIndex.characterId, out var shortcutPackage))
         {
             shortcutPackage.ChangeItemIndex(changeShortcutItemIndex.sourceIndex, changeShortcutItemIndex.targetIndex);
             shortcutPackages.SetData(shortcutPackage);
@@ -100,6 +103,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
         }
     }
 }
+
 public struct ShortcutPackage : IReferenceData, INativeData
 {
     public static ShortcutPackage CreatShortCutPackage(int characterId)
@@ -129,6 +133,7 @@ public struct ShortcutPackage : IReferenceData, INativeData
             return 0;
         }
     }
+
     public int characterId;
     public NativeArray<Item> items;
 
@@ -141,7 +146,7 @@ public struct ShortcutPackage : IReferenceData, INativeData
         {
             shortcutItems.Add(new ShortcutItem
             {
-                index = i+1,
+                index = i + 1,
                 Item = items[i]
             });
         }
@@ -152,10 +157,11 @@ public struct ShortcutPackage : IReferenceData, INativeData
     {
         if (index <= items.Length)
         {
-            items[index-1] = default(Item);
+            items[index - 1] = default(Item);
         }
     }
-    public void SetItemIndex(int index,Item item)
+
+    public void SetItemIndex(int index, Item item)
     {
         if (index <= items.Length)
         {
@@ -183,15 +189,17 @@ public struct ShortcutPackage : IReferenceData, INativeData
                         }
                     }
                 }
-            } 
+            }
         }
     }
-    public void ChangeItemIndex(int sourceIndex,int targetIndex)
+
+    public void ChangeItemIndex(int sourceIndex, int targetIndex)
     {
-        Item sourceItem = items[sourceIndex-1];
-        items[sourceIndex-1] = items[targetIndex-1];
-        items[targetIndex-1] = sourceItem;
+        Item sourceItem = items[sourceIndex - 1];
+        items[sourceIndex - 1] = items[targetIndex - 1];
+        items[targetIndex - 1] = sourceItem;
     }
+
     public void Dispose()
     {
         items.Dispose();
