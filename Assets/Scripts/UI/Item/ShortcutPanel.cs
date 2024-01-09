@@ -16,10 +16,11 @@ public struct ShortcutItem : IReferenceData
             {
                 return true;
             }
+            /*
             if (Item.instanceId == other.Item.instanceId)
             {
                 return true;
-            }
+            }*/
         }
         
         return false;
@@ -53,6 +54,16 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     ToggleGroup toggleGroup;
     [SerializeField]
     ShortcutItemReference ShortcutItemReference;
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<SelectPackageItemAction>(SelectPackageItemAction);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<SelectPackageItemAction>(SelectPackageItemAction);
+    }
 
     protected override void Awake()
     {
@@ -72,13 +83,15 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                     targetObj = CharacterManager.instance.controllerCharacter.instanceId,
                     selectActionName = "สนำร",
                     selectAction = TryUsedItem,
+                    canSetShortcut=true
+                    /*
                     setPanel=(BaseReference reference) =>
                     {
                         if(reference is WarehousePanel warehousePanel)
                         {
                             warehousePanel.SetOtherSelectAction(SelectPackageItemAction);
                         }
-                    }
+                    }*/
                 };
                 GameActionManager.instance.QueueAction(openPackage,true);  
             }
@@ -87,12 +100,14 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     }
    
     Item selectPackageItem;
-    void SelectPackageItemAction(Item item, int packageId)
+    void SelectPackageItemAction(SelectPackageItemAction selectPackageItemAction)
     {
+        int packageId = selectPackageItemAction.packageId;
+        var item = selectPackageItemAction.item;
         if (packageId == CharacterManager.instance.controllerCharacter.characterPackage)
         {
             selectPackageItem = item;
-            if (selectShortIndex != 0&&selectPackageItem.dataId!=0)
+            if (selectPackageItem.dataId!=0)
             {
                 Item newItem = new Item
                 {
@@ -174,6 +189,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     {
         if(select)
         {
+
             if (selectPackageItem.instanceId != 0 && item.Item.instanceId != 0)
             {
                 SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
@@ -221,9 +237,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                     }
                 }
             }
-            
-
-
+            selectShortIndex = item.index;
             shortcutItem = item;
             selectPackageItem = item.Item;
             itemList.ClearSelect(item);

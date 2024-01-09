@@ -343,7 +343,8 @@ public class PackageManager : Singleton<PackageManager>
         PackageList packageList = new PackageList
         {
             packageDatas = new List<PackageData>(),
-            itemMatchData=openPackage.itemMatchData
+            itemMatchData=openPackage.itemMatchData,
+            canSetShortcut=openPackage.canSetShortcut
         };
         int packageId = openPackage.packageId;
         if (openPackage.packageId == -1)
@@ -1182,6 +1183,7 @@ public struct PackageList : IReferenceData
 {
     public List<PackageData> packageDatas;
     public ItemMatchData itemMatchData;
+    public bool canSetShortcut;
 }
 
 public enum ItemMatchType

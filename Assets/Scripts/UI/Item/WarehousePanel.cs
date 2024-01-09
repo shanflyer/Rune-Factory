@@ -19,7 +19,8 @@ public class WarehousePanel : GamePanel<PackageList>
 
     [SerializeField]
     Transform ItemInformation;
-
+    [SerializeField]
+    Button ShortCutActionButton;
     [SerializeField]
     TextMeshProUGUI Title;
     [SerializeField]
@@ -73,6 +74,19 @@ public class WarehousePanel : GamePanel<PackageList>
 
         packageSelectList = new DisplayList<PackageSelectReference, PackageData>(packageSelect, packageSelectParent);
         packageLevelUp.onClick.AddListener(TryPackageLevelUp);
+
+        ShortCutActionButton.onClick.AddListener(() =>
+        {
+            if (SelectItem.instanceId != 0)
+            {
+                SelectPackageItemAction selectPackageItemAction = new SelectPackageItemAction
+                {
+                    item = SelectItem,
+                    packageId = selectPackageData.instanceId
+                };
+                GameActionManager.instance.QueueAction(selectPackageItemAction);
+            }
+        });
     }
     public override void OnEnable()
     {
@@ -110,12 +124,13 @@ public class WarehousePanel : GamePanel<PackageList>
         packageLevelUp = FindChildGameObject<Button>("LevelUp");
         InfoItemValueBg = FindChildGameObject("InfoItemValueBg");
         InfoItemValue = FindChildGameObject<Image>("InfoItemValue");
+        ShortCutActionButton = FindChildGameObject<Button>("ShortCutAction");
     }
     public override void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
         packageList = v;
-
+        ShortCutActionButton.transform.localScale = v.canSetShortcut ? Vector3.one : Vector3.zero;
         packageSelectList.InitListData(packageList.packageDatas, SelectPackage, packageSelectGroup);
         SelectPackage(packageList.packageDatas[0]);
         //this.RefreshPackage();

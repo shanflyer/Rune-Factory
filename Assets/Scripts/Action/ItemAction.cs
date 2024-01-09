@@ -1,6 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+public struct SelectPackageItemAction : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public Item item;
+    public int packageId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        
 
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct AddItemValue : GameAction
 {
     public SetValue setValue { get; set; }
@@ -113,6 +125,7 @@ public struct OpenPackage : GameAction
     public string selectActionName;
     public int selectActionId;
     public int targetObj;
+    public bool canSetShortcut;
     public ItemMatchData itemMatchData;
     public PackageItemAction selectAction;
     public SetPanelReference setPanel;
@@ -124,10 +137,15 @@ public struct OpenPackage : GameAction
             packageId = int.Parse(parameters[0].value);
             selectActionName = parameters[1].value;
             selectActionId = int.Parse(parameters[2].value);
+            if (parameters.Count >= 3)
+            {
+                canSetShortcut = int.Parse(parameters[3].value) != 0;
+            }
         }
         else {
             packageId = source;
             selectActionId = value;
+            canSetShortcut = target != 0;
         }
         
         targetObj = target;

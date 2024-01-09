@@ -326,21 +326,20 @@ public class FarmManager:Singleton<FarmManager>
                 bool result = await plant.GetPlantFruit();
                 if (result&&plant.plantState==PlantState.死亡)
                 {
-                    field.fieldState = FieldState.待平整;
-                    field.plantId = 0;
+                    /* field.fieldState = FieldState.待平整;
 
-                    DeleteMapItem deleteMapItem = new DeleteMapItem
-                    {
-                        mapItemInstanceId = plant.instaceId,
-                        triggerClear = true
-                    };
-                    GameActionManager.instance.QueueAction(deleteMapItem);
-                   // RefreshPlant refreshPlant = new RefreshPlant
-                   //{ plantId = plant.instaceId };
-                   // RefreshPlant(refreshPlant);
+                  field.plantId = 0;
 
-                    plants.RemoveData(plant.Key);
-                }else
+                  DeleteMapItem deleteMapItem = new DeleteMapItem
+                  {
+                      mapItemInstanceId = plant.instaceId,
+                      triggerClear = true
+                  };
+                  GameActionManager.instance.QueueAction(deleteMapItem); 
+
+                  plants.RemoveData(plant.Key);*/
+                }
+                else
                 {
                     PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(plant.dataId);
                     plant.nowCycle++;

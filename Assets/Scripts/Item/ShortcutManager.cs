@@ -159,17 +159,31 @@ public struct ShortcutPackage : IReferenceData, INativeData
     {
         if (index <= items.Length)
         {
-            items[index-1] = item;
-            for(int i = 0; i < items.Length; i++)
+            if (index <= 0)
             {
-                if (i != index - 1)
+                for (int i = 0; i < items.Length; i++)
                 {
-                    if (items[i].dataId == item.dataId)
+                    if (items[i].instanceId == 0)
                     {
-                        items[i] = default(Item);
+                        items[i] = item;
+                        break;
                     }
                 }
             }
+            else
+            {
+                items[index - 1] = item;
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (i != index - 1)
+                    {
+                        if (items[i].dataId == item.dataId)
+                        {
+                            items[i] = default(Item);
+                        }
+                    }
+                }
+            } 
         }
     }
     public void ChangeItemIndex(int sourceIndex,int targetIndex)
