@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public delegate void MoveEndAction();
 
@@ -46,7 +47,7 @@ public struct TeamerEquipAndProperty : IReferenceData
 
 public class CharacterManager : Singleton<CharacterManager>
 {
-    public const float moveSpeed = 10f;
+    public const float moveSpeed = 15f;
     public const float updataMoveSpeed = 1f;
     private MyInstance myInstance;
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
@@ -328,8 +329,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void InitInputAction(InitInputAction initInputAction)
     {
-        //InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
-        InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
+        InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, MapClickAction);
+        //InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
 
     public Sprite PlayerHead => playerData.head.sprite;
@@ -735,7 +736,7 @@ public class CharacterManager : Singleton<CharacterManager>
             GameCommon.GetMapPos(character.coordinate);
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
 
-        character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
+        character.moveDirection = math.normalizesafe(targetCoordinate - character.coordinate, character.moveDirection);
         float distance = GameCommon.GetCellTrueDistance(targetCoordinate, character.coordinate);
 
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
@@ -785,7 +786,7 @@ public class CharacterManager : Singleton<CharacterManager>
             GameCommon.GetMapPos(character.coordinate);
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
 
-        character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
+        character.moveDirection = math.normalizesafe(targetCoordinate - character.coordinate, character.moveDirection);
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
         if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
         {
@@ -1166,12 +1167,13 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             return;
         }
-
+        controllerCharacter.StopMove();
+        controllerCharacter.canMove = false;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
         int2 startCoordinate = controllerCharacter.coordinate;
         Stack<int2> pathNodes = MapCellController.instance.FindPathNode(startCoordinate, targetCoordinate,
-            controllerCharacter.mapInstance);
+            controllerCharacter.mapInstance,true);
         controllerCharacter.PlayerMove(pathNodes);
     }
 
@@ -1242,7 +1244,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characters.TryGetValue(SetTargetDirection.characterId, out var character))
         {
-            character.moveDirection = math.normalize(SetTargetDirection.targetCoordinate - character.coordinate);
+            character.moveDirection = math.normalizesafe(SetTargetDirection.targetCoordinate - character.coordinate, character.moveDirection);
         }
     }
 

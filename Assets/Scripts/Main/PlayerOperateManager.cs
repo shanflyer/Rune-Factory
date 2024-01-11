@@ -20,7 +20,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
     public override void Init()
     {
         base.Init();
-        InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, ClickObj);
+        //InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, ClickObj);
         GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
         GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
         GameActionManager.instance.AddListener<PlayerTalkItem>(PlayerTalkItem);

@@ -706,6 +706,13 @@ public class GameCommon
 
         return new int2(x, y);
     }
+    public static int2 GetMapCoordinateInt(float2 pos)
+    {
+        int x = Mathf.FloorToInt(pos.x * oneDividCellWidth);
+        int y = Mathf.FloorToInt(pos.y * oneDividCellHigh);
+
+        return new int2(x, y);
+    }
 }
 
 public static class DefaultGameData

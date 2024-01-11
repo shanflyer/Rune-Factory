@@ -525,7 +525,7 @@ public partial class Character
                     return;
                 }
                 direction = GameCommon.GetCharacterDirect(moveDirection, direction);
-                //Debug.Log("direction:" + direction);
+                //Debug.Log($"direction:{moveDirection}--{direction}");
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
                     runtimeObj.SetAnimationDirection(GameCommon.GetDirectValue(direction));
@@ -1024,6 +1024,7 @@ public partial class Character
     public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null, MoveEndAction changeCoordinateAction = null,
         MoveEndAction failedMoveAction = null)
     {
+        canMove = true;
         if (pathNodes.Count > 0)
         {
             CharacterManager.instance.CharacterMoveTarget(this, pathNodes, endAction, changeCoordinateAction, failedMoveAction);

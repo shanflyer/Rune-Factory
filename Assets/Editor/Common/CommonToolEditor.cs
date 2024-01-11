@@ -35,8 +35,22 @@ public class CommonToolEditor:MyEditor
                 AssetDatabase.StopAssetEditing();
             }
         }
-        
-        
+        if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
+        {
+            Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_0");
+        }
+        if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_1"))
+        {
+            Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_1");
+        }
+        if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_2"))
+        {
+            Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_2");
+        }
+        if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_3"))
+        {
+            Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_3");
+        }
     }
 
     void OldMapCellToNew()

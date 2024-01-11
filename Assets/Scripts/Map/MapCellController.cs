@@ -979,6 +979,34 @@ public class MapCellController : Singleton<MapCellController>
         }
     }
 
+    public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId, bool Nearest = false)
+    {
+        Stack<int2> outData = FindPathNode(startPos,targetPos,mapId);
+        if (outData.Count == 0)
+        {
+            float2 direct = math.normalize(startPos - targetPos);
+            int index = 1;
+            int2 offsetCoordinate=int2.zero;
+            int2 _targetPos = targetPos;
+            while (!_targetPos.Equals(startPos))
+            {
+                float2 offsetPos = direct * GameCommon.cellWidth*index;
+                int2 _offsetCoordinate=GameCommon.GetMapCoordinateInt(offsetPos);
+                if (!_offsetCoordinate.Equals(offsetCoordinate))
+                {
+                    offsetCoordinate = _offsetCoordinate;
+                    _targetPos = targetPos + offsetCoordinate;
+                    outData = FindPathNode(startPos, _targetPos, mapId);
+                    if (outData.Count != 0)
+                    {
+                        return outData;
+                    }
+                }
+                index++;
+            }
+        }
+        return outData;
+    }
     public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId)
     {
         Stack<int2> outData = new Stack<int2>();
