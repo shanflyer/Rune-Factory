@@ -1441,7 +1441,7 @@ namespace UnityEngine.Rendering.Universal
                         spotLight.angularFalloff = AngularFalloffType.AnalyticAndInnerAngle;
                         lightData.Init(ref spotLight, ref cookie);
                         break;
-                    case LightType.Rectangle:
+                    case LightType.Area:
                         RectangleLight rectangleLight = new RectangleLight();
                         LightmapperUtils.Extract(light, ref rectangleLight);
                         rectangleLight.mode = LightMode.Baked;

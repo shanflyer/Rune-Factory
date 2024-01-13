@@ -26,8 +26,6 @@ public class WorldMapController : MonoBehaviour
     int mapInstance;
     [SerializeField]
     int2 coordinate;
-    [SerializeField]
-    public int _backColor;
     private void OnEnable()
     {
         instance = this;
@@ -135,11 +133,6 @@ public class WorldMapControllerEditor : Editor
         gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
         gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
         gameController.runTimeMinute = EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
-
-        if (GUILayout.Button("设置"))
-        {
-            Shader.SetGlobalInt("_backColor", gameController._backColor);
-        } 
     }
 }
 #endif

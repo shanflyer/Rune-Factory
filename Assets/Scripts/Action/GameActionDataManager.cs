@@ -20,21 +20,13 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
         }
         else
         {
-            try
-            {
-                Type type = Type.GetType(typeName);
-                var data = Activator.CreateInstance(type);
-                MethodInfo meth = type.GetMethod("Init");
-                var _Delegate = (ActionInit)meth.CreateDelegate(typeof(ActionInit), data);
-
-                _Delegate.Invoke(parameters, source, target, value, setResult, setValue);
-                gameActionDataDelegates.Add(typeName, _Delegate);
-            }
-            catch (Exception ex) 
-            {
-                Debug.LogError($"{typeName}-{ex}");
-            }
+            Type type = Type.GetType(typeName);
+            var data = Activator.CreateInstance(type);
+            MethodInfo meth = type.GetMethod("Init");
+            var _Delegate =(ActionInit) meth.CreateDelegate(typeof(ActionInit), data);
            
+             _Delegate.Invoke(parameters, source, target, value, setResult, setValue);
+             gameActionDataDelegates.Add(typeName, _Delegate);
         }        
 
     }
@@ -55,15 +47,7 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
     public async void Action(int dataId)
     {
         GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(dataId);
-        if(gameActionData == null)
-        {
-            Debug.LogWarning($"Error:{dataId}");
-        }
-        else
-        {
-            gameActionData.Action();
-        }
+        gameActionData.Action();
     }
-       
 
 }
