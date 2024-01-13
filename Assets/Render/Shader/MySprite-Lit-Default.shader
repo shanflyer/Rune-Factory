@@ -393,7 +393,9 @@ Shader "MySprite-Lit-Default"
                 const half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
-          
+
+             
+                half4 result;
                 
                 float singleValue=(main.x+main.y+main.z)/3;
                 float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
@@ -403,7 +405,8 @@ Shader "MySprite-Lit-Default"
                 {
                    waterColor=DampColor(waterColor,i.lightingUV,i.uv); 
                 }
-                
+              
+
                
                 if(_Water==1)
                 {
@@ -415,8 +418,10 @@ Shader "MySprite-Lit-Default"
                 InitializeSurfaceData(waterColor, main.a, mask, surfaceData);
                 InitializeInputData(i.uv, i.lightingUV, inputData);
 
-                half4 result=CombinedShapeLightShared(surfaceData, inputData);
+                 result=CombinedShapeLightShared(surfaceData, inputData);
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor;
+
+                result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor;
 
                 half4 _light=CombinedShapeLightSharedTrueValue(surfaceData, inputData);
                 half _light_value=(_light.x+_light.y+_light.z)/3;
