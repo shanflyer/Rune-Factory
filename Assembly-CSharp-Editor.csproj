@@ -98,6 +98,7 @@
     <Compile Include="Assets\Editor\Common\UnityEditorWindowController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\FX Quest\Editor\FX Quest.dll" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.IOSResolver.dll" />
     <None Include="Assets\codeandweb.com\Editor\SettingsTexturePackerImporter.txt" />
     <None Include="Assets\MobileDependencyResolver\Editor\mobile-dependency-resolver.txt" />
@@ -385,6 +386,9 @@
     </Reference>
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>C:\Program Files\Unity 2023.1.5f1c1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="FX Quest">
+      <HintPath>Assets\FX Quest\Editor\FX Quest.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections@2.1.4\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
