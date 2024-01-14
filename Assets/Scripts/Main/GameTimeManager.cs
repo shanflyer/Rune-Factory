@@ -104,6 +104,7 @@ public class GameTime
     private int duskStart, duskEnd;
 
     private int totalSunMinute, totalMoonMinute;
+    private int totalMinute = 1440;// 24 * 60;
     private bool night = false;
     private float timeValue;
 
@@ -161,7 +162,7 @@ public class GameTime
             return;
         int nowMinute = hour * 60 + minute;
 
-        timeValue = (nowMinute + mySecond * 0.05f) / (totalSunMinute + totalMoonMinute);
+        timeValue = (nowMinute + mySecond * 0.05f) / totalMinute;
         EnvironmentManger.instance.UpDataMyLightTimeValue(timeValue);
 
         if (nowMinute >= dawnStart && nowMinute <= dawnEnd)

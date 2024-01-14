@@ -426,7 +426,7 @@ Shader "MySprite-Lit-Default"
                 half4 _light=CombinedShapeLightSharedTrueValue(surfaceData, inputData);
                 half _light_value=(_light.x+_light.y+_light.z)/3;
                 _light_value=clamp(_light_value,0,1);
-                _light_value=(1-_light_value);
+                _light_value=(1-_light_value*0.5);
 
                 half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
                 shadow.xyz*=_light_value;

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
 public class MapEditor : MyEditor
@@ -84,6 +85,7 @@ public class MapEditor : MyEditor
             Debug.LogError("场景不对或无MapEditor物体！");
             return;
         }
+        
         ground = MapEditor.transform.Find("Ground").GetComponent<Tilemap>();
         collider = MapEditor.transform.Find("Collider").GetComponent<Tilemap>();
         trigger = MapEditor.transform.Find("Trigger").GetComponent<Tilemap>(); 

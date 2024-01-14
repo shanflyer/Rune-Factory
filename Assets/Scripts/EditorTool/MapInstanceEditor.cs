@@ -26,6 +26,7 @@ public class MapInstanceEditor : MonoBehaviour
     private static string defaultGroundPath = "Assets/Resources/Prefabs/Other/DefaultGround.prefab";
 
     private static string prefabPath = "Assets/Resources/Prefabs/Ground/";
+    private static string defaultMaterial = "Assets/Editor/Source/Default.mat";
 
     public static GameObject defaultGround
     {
@@ -40,6 +41,19 @@ public class MapInstanceEditor : MonoBehaviour
     }
 
     private static GameObject _defaultGround;
+
+    private static Material material
+    {
+        get
+        {
+            if (_material == null)
+            {
+                _material = AssetDatabase.LoadAssetAtPath<Material>(defaultMaterial);
+            }
+            return _material;
+        }
+    }
+    private static Material _material;
 
     private static TileBase walkTile
     {
@@ -129,9 +143,10 @@ public class MapInstanceEditor : MonoBehaviour
 
                 var grid = Grid.AddComponent<Grid>();
                 tilemap = MapTile.AddComponent<Tilemap>();
-                var tilemapRenderer = MapTile.AddComponent<TilemapRenderer>(); 
-                tilemapRenderer.sortingOrder = 1;
+                var tilemapRenderer = MapTile.AddComponent<TilemapRenderer>();
+                tilemap.color = new Color(1, 1, 1, 0.5f);
                 tilemapRenderers.Add(tilemapRenderer);
+                tilemapRenderer.sharedMaterial = material;
 
                 grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
                 tilemapRenderer.enabled = !hideTilemap;
@@ -194,11 +209,11 @@ public class MapInstanceEditor : MonoBehaviour
                         var tilemap = ItemTile.AddComponent<Tilemap>();
                         var tilemapRenderer = ItemTile.AddComponent<TilemapRenderer>(); 
                         grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
-
+                        tilemap.color = new Color(1, 1, 1, 0.5f);
                         Grid.transform.SetParent(itemInstance, false);
                         //Grid.transform.localPosition = new Vector3(-GameCommon.cellSize, -GameCommon.cellSize,0);
                         tilemapRenderer.enabled = !hideTilemap;
-                        tilemapRenderer.sortingOrder = 2; 
+                        tilemapRenderer.sharedMaterial = material;
                         tilemapRenderers.Add(tilemapRenderer);
 
                         for (int i=0;i<itemData.colliderCells.Length;i++)

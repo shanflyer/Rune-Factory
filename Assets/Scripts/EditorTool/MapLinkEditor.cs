@@ -75,7 +75,12 @@ public class MapLinkEditor : MonoBehaviour
         mapPos1 = mapInstance1.transform.position;
         directions0 = mapLine.cells0.directions;
         directions1 = mapLine.cells1.directions;
-        
+
+        string linkName = $"{mapLine.map0}-{mapLine.map1}";
+        startPoint.gameObject.name=$"{linkName}:{mapLine.map0}";
+        endPoint.gameObject.name = $"{linkName}:{mapLine.map1}";
+        startPoint.parent.name = linkName;
+
         SetLinePointPos();
     }
     void SetLinePoint()
@@ -123,7 +128,10 @@ public class MapLinkEditor : MonoBehaviour
                 tilemap1.SetTile(new Vector3Int(cell.x, cell.y, 0), linkTile);
             }
         }
-            
+        string linkName = $"{mapLine.map0}-{mapLine.map1}";
+        startPoint.gameObject.name = $"{linkName}:{mapLine.map0}";
+        endPoint.gameObject.name = $"{linkName}:{mapLine.map1}";
+        startPoint.parent.name = linkName;
     }
 
     public void CheckPos()
