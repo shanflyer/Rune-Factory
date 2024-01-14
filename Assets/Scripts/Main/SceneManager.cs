@@ -7,7 +7,18 @@ public class SceneManager : Singleton<SceneManager>
 {
     public override bool NeedUpdata => true;
     string nowSceen;
-    public string Now => nowSceen;
+    public string Now
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(nowSceen))
+            {
+                nowSceen = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            }
+            return nowSceen;
+
+        }
+    } 
     public override void Init()
     {
         base.Init();

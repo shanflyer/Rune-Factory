@@ -31,6 +31,8 @@ public struct WorldMap
 [System.Serializable]
 public struct MapLine
 {
+    public int instanceId;
+    public bool zeroInit;
     public int map0, map1;
     public LinkMapCell cells0, cells1;
     public int beforeActionId,afterActionId;
@@ -55,7 +57,7 @@ public struct LinkMapCell
     public List<Direction> directions;
     public List<int2> cells;
     public int3 targetCell;
-    public int beforAction, afterAction;
+    public int beforAction, afterAction,checkAction;
     public int2 center
     {
         get

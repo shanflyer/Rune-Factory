@@ -179,7 +179,7 @@ public class MapCellController : Singleton<MapCellController>
         /// <summary>
         /// 玩家转换地图前后的事件
         /// </summary>
-        public NativeList<int2> linkActions;
+        public NativeList<int3> linkActions;
 
         public NativeList<int> neighbourMaps;
 
@@ -209,7 +209,7 @@ public class MapCellController : Singleton<MapCellController>
             }
             return false;
         }
-
+         
         public void AddLinkMap(LinkMapCell linkMapCell)
         {
             int directionValue = 0; 
@@ -221,7 +221,7 @@ public class MapCellController : Singleton<MapCellController>
             int4 target = new int4(linkMapCell.targetCell.xyz, directionValue);
             linkMaps.Add(target);
 
-            int2 linkAction = new int2(linkMapCell.beforAction, linkMapCell.afterAction);
+            int3 linkAction = new int3(linkMapCell.beforAction, linkMapCell.afterAction,linkMapCell.checkAction);
             linkActions.Add(linkAction);
 
             for (int i = 0; i < linkMapCell.cells.Count; i++)
@@ -234,10 +234,10 @@ public class MapCellController : Singleton<MapCellController>
                 neighbourMaps.Add(linkMapCell.targetCell.z);
             }
         }
-        public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap,out int2 changeAction)
+        public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap,out int3 changeAction)
         {
             newMap = int3.zero;
-            changeAction = int2.zero;
+            changeAction = int3.zero;
             if (linkMapIndexs.TryGetValue(nowCoordinate, out int index))
             {
                 int4 linkData = linkMaps[index];
@@ -894,7 +894,7 @@ public class MapCellController : Singleton<MapCellController>
             id = roomId,
             linkMapIndexs = new NativeHashMap<int2, int>(16, Allocator.Persistent),
             linkMaps = new NativeList<int4>(16, Allocator.Persistent),
-            linkActions=new NativeList<int2>(16,Allocator.Persistent),
+            linkActions=new NativeList<int3>(16,Allocator.Persistent),
             neighbourMaps = new NativeList<int>(8, Allocator.Persistent),
         };
         runtimeMapRoom.InitTriggerData();
@@ -943,18 +943,39 @@ public class MapCellController : Singleton<MapCellController>
         {
             if (runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap,out var changeAction)) 
             {
-                if (changeAction.x != 0)
+                if (changeAction.z != 0)
                 {
-                    var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(changeAction.x);
-                    actionData.Action(setResult: (bool value) =>
+                    GameActionDataManager.instance.Action(changeAction.z, (bool value) =>
                     {
-                        action.Invoke(newMap,changeAction.y);
-                    });
+                        if (value)
+                        {
+                            ChangeMap();
+                        }
+                    }, true);
                 }
                 else
                 {
-                    action.Invoke(newMap);
+                    ChangeMap();
                 }
+
+
+                async void ChangeMap()
+                {
+                    if (changeAction.x != 0)
+                    {
+                        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(changeAction.x);
+                        actionData.Action(setResult: (bool value) =>
+                        {
+                            action.Invoke(newMap, changeAction.y);
+                        });
+                    }
+                    else
+                    {
+                        action.Invoke(newMap);
+                    }
+                }
+
+                
                
             }
         } 
@@ -965,20 +986,27 @@ public class MapCellController : Singleton<MapCellController>
     {
         foreach (var mapLine in mapLines)
         {
-            if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
-            { 
-                runtimeMapRoom.AddLinkMap(mapLine.cells0);
-                runtimeMapRooms.SetData(runtimeMapRoom);
-            }
-
-            if (runtimeMapRooms.GetData(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
+            if (!mapLine.zeroInit)
             {
-                _runtimeMapRoom.AddLinkMap(mapLine.cells1);
-                runtimeMapRooms.SetData(_runtimeMapRoom);
+                continue;
             }
+            InitLinkMap(mapLine);
         }
     }
+    public void InitLinkMap(MapLine mapLine)
+    {
+        if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
+        {
+            runtimeMapRoom.AddLinkMap(mapLine.cells0);
+            runtimeMapRooms.SetData(runtimeMapRoom);
+        }
 
+        if (runtimeMapRooms.GetData(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
+        {
+            _runtimeMapRoom.AddLinkMap(mapLine.cells1);
+            runtimeMapRooms.SetData(_runtimeMapRoom);
+        }
+    }
     public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId, bool Nearest = false)
     {
         Stack<int2> outData = FindPathNode(startPos,targetPos,mapId);

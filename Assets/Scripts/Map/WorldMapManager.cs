@@ -48,6 +48,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<MoveMapItem>(MoveMapItem);
         GameActionManager.instance.AddListener<RemoveMapItemOperate>(RemoveMapItemOperate);
         GameActionManager.instance.AddListener<AddMapItemOperate>(AddMapItemOperate);
+        GameActionManager.instance.AddListener<InitMapLink>(InitMapLink);
     }
     void AddMapItemOperate(AddMapItemOperate AddMapItemOperate)
     {
@@ -438,11 +439,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return true;
     }
      
-
+    void InitMapLink(InitMapLink initMapLink)
+    {
+        int index = worldMapData.mapLines.FindIndex(m => m.instanceId == initMapLink.linkInstanceId);
+        if (index>=0)
+        {
+            MapCellController.instance.InitLinkMap(worldMapData.mapLines[index]);
+        }
+    }
+    WorldMapData worldMapData;
     //初始化世界数据
     async Task InitWorldData(string worldName,int displayMap=0)
     {
-        var worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>(worldName);
+        worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>(worldName);
         MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
 
         roomMapDatas.Clear();

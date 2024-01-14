@@ -546,7 +546,35 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameActionManager.instance.AddListener<SetMapOverrideEnvironment>(SetMapOverrideEnvironment);
         GameActionManager.instance.AddListener<ClearOverrideEnvironment>(ClearOverrideEnvironment);
         GameActionManager.instance.AddListener<PlayerSleep>(PlayerSleep);
+        GameActionManager.instance.AddListener<CheckGameTimeDate>(CheckGameTimeDate);
         // CreatData();
+    }
+    void CheckGameTimeDate(CheckGameTimeDate checkGameTimeDate)
+    {
+        bool result = false;
+        if (checkGameTimeDate.year < Year)
+        {
+            result = true;
+        }
+        else if (checkGameTimeDate.year == Year)
+        {
+            if (checkGameTimeDate.momth < (int)Season)
+            {
+                result = true;
+                
+            }
+            else if(checkGameTimeDate.momth == (int)Season) 
+            {
+                if (checkGameTimeDate.day < Day)
+                {
+                    result = true;
+                }
+            }
+        }
+        if (checkGameTimeDate.setResult!=null)
+        {
+            checkGameTimeDate.setResult(result);
+        }
     }
     void PlayerSleep(PlayerSleep playerSleep)
     {

@@ -2,6 +2,26 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 
+public struct InitMapLink : GameAction
+{
+    public int linkInstanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1, 
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            linkInstanceId = int.Parse(parameters[0].value);
+        }
+        if (source != int.MinValue&& source !=0)
+        {
+            linkInstanceId = source;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RemoveMapItemCollider : GameAction
 {
     public int mapItemInstanceId;

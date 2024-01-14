@@ -562,11 +562,11 @@ public struct SimpleTalk : GameAction
         {
             characterId = int.Parse(parameters[1].value);
         }
-        if (target != 0)
+        if (target != int.MinValue)
         {
             talkId = target;
         }
-        if (source != 0)
+        if (source != int.MinValue)
         {
             characterId = source;
         }

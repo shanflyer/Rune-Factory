@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
 public delegate void InputActionDelegate(object value);
@@ -69,11 +70,17 @@ public class InputManager :Singleton<InputManager>
     void ShowPointerEffect(object obj)
     {
         var mouseScreenPos = (Vector2)obj;
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        Vector2 mousePos = CameraManager.instance.uiCamera.ScreenToWorldPoint(mouseScreenPos);
         ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams();
         ep.position = mousePos;
         particleSystem.Emit(ep, 1);
     }
+
+    public void SetControllerValue()
+    {
+       
+    }
+
     EventSystem eventSystem;
     public override async void Init()
     {
@@ -131,7 +138,7 @@ public class InputManager :Singleton<InputManager>
                     }
                 };
                 action.performed += PerformedDelegate;
-                 
+                
 
                 void CanceledDelegate(CallbackContext callbackContext)
                 {
@@ -141,12 +148,13 @@ public class InputManager :Singleton<InputManager>
                     }
                     if (cancelDelegates.TryGetValue(action.name, out var del))
                     {
-                        del.Invoke(callbackContext.ReadValueAsObject());
+                       // Debug.Log("Canceled");
+                        del.Invoke(null);
                     }
                 };
                 action.canceled += CanceledDelegate;
 
-                InputActions[action.name] = action;
+                InputActions[action.name] = action; 
             }
         }
 

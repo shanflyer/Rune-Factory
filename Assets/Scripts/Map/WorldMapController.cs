@@ -97,6 +97,9 @@ public class WorldMapController : MonoBehaviour
                 controller = true
             });
             await UIManager.instance.ShowGamePanel<MainPanel>();
+
+           
+            UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         }
     }
     // Use this for initialization

@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.TextCore.Text;
+using UnityEngine; 
 
 public delegate void MoveEndAction();
 
@@ -352,12 +351,13 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     _controllerCharacter.SetController(true);
                 }
-            }
-            
-            UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-            UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(
-                ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId)
-                );
+                if (SceneManager.instance.Now == "World")
+                {
+                    UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+                    UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(
+                    ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId));
+                } 
+            } 
         }
         get
         {
@@ -529,10 +529,19 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void MoveAction(object obj)
     {
-        //Debug.Log(obj);
-        var moveValue = (Vector2)obj;
+        if (obj != null)
+        {
+            //Debug.Log("MoveA:" + obj);
+            var moveValue = (Vector2)obj;
 
-        SetControllerCharacterMoveDirection(moveValue);
+            SetControllerCharacterMoveDirection(moveValue);
+        }
+        else
+        { 
+
+            SetControllerCharacterMoveDirection(Vector2.zero);
+        }
+        
     }
 
     public bool GetRuntimeCharacterObj(int instanceId, out CharacterRuntimeObj characterRuntimeObj)
@@ -1008,7 +1017,7 @@ public class CharacterManager : Singleton<CharacterManager>
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
             RefreshNpcRuntimeObj(character);
 
-            if (mapNpcData.externalBehavior)
+            if (mapNpcData.externalBehavior&& mapNpcData.beginMap>0)
             {
                 CharacterBehaviorManager.instance.AddBehavior(npc.characterId, mapNpcData.externalBehavior);
             }

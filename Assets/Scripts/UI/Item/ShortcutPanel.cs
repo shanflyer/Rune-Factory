@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,6 +68,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
 
     protected override void Awake()
     {
+        base.Awake();
         itemList = new DisplayList<ShortcutItemReference, ShortcutItem>(ShortcutItemReference, itemParent);
         bagButton.onClick.AddListener(async () =>
         {
@@ -152,6 +154,12 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         ShortcutItemReference = FindChildGameObject<ShortcutItemReference>("ItemBoxReference");
     }
     ShortcutPackage shortcutPackage;
+    public override Task InitData(string dataKey)
+    {
+        var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+        InitReferenceData(shortcutPackage);
+        return base.InitData(dataKey);
+    }
     public override void InitReferenceData(ShortcutPackage v)
     {
         base.InitReferenceData(v);

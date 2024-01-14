@@ -80,14 +80,24 @@ public class MultiPackagePanel : GamePanel<PackageList>
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
+       
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
+       
     }
 
+    public override void Close()
+    {
+        base.Close();
+        GameActionManager.instance.QueueAction(new OpenPanelAction
+        {
+            type = typeof(ShortcutPanel)
+        });
+    }
     private void RefreshShortcut(RefreshShortcut refreshShortcut)
     {
         if (refreshShortcut.packageId == packageId0)
@@ -313,6 +323,12 @@ public class MultiPackagePanel : GamePanel<PackageList>
     public override async void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
+
+        GameActionManager.instance.QueueAction(new ClosePanelAction
+        {
+            type = typeof(ShortcutPanel)
+        });
+
         var packageData0 = v.packageDatas[0];
         var packageData1 = v.packageDatas[1];
         PackageCaseCount0 = packageData0.caseCount;

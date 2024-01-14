@@ -227,6 +227,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics\Raycast.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetRange.cs" />
     <Compile Include="Assets\Scripts\Fishing\FishingManager.cs" />
+    <Compile Include="Assets\ControlMaps\GamepadControls.cs" />
     <Compile Include="Assets\Scripts\Behavior\Round\CheckNowFightCharacterActionEnd.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
     <Compile Include="Assets\Scripts\Behavior\Other\CharacterTalk.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Assets\Scripts\Environment\SkyEnviromentMono.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerTopPanel.cs" />
     <Compile Include="Assets\Scripts\UI\FuncReference.cs" />
+    <Compile Include="Assets\Scripts\UI\ScreenControllerPanel\MyJoyStick.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\DeleteMapItemEvent.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetGravityWeight.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\StopRecording.cs" />
@@ -258,8 +260,8 @@
     <Compile Include="Assets\Scripts\CharactorTitleAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedTransformList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\GetPropertyValue.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetDirection.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\SetXYZ.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetDirection.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedInt.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\ExternalBehaviorTree.cs" />
     <Compile Include="Assets\Scripts\UI\ManufacturePanel.cs" />
@@ -580,6 +582,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IntAbs.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetSlopeLimit.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetSpeed.cs" />
+    <Compile Include="Assets\Scripts\UI\TouchArea.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetRotation.cs" />
     <Compile Include="Assets\Scripts\Film\MyGameMarker.cs" />
     <Compile Include="Assets\Scripts\UI\SelectLoadPanel.cs" />
@@ -604,6 +607,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
     <Compile Include="Assets\Scripts\EditorTool\MapLinkEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetIsKinematic.cs" />
+    <Compile Include="Assets\ControlMaps\PointerControls.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetDirection.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\VFX Library\ParticleEffectsLibrary.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\PlayQueued.cs" />
@@ -641,6 +645,7 @@
     <Compile Include="Assets\Scripts\Film\FightEventAsset.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\LerpAngle.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetIntensity.cs" />
+    <Compile Include="Assets\Scripts\UI\ScreenControllerPanel\ScreenControllerPanel.cs" />
     <Compile Include="Assets\Scripts\Action\FishingAction.cs" />
     <Compile Include="Assets\Scripts\UI\FightCharacterReference.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedQueneInt.cs" />
@@ -1675,14 +1680,23 @@
     <Reference Include="Purchasing.Common">
       <HintPath>Library\ScriptAssemblies\Purchasing.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Serialization">
       <HintPath>Library\ScriptAssemblies\Unity.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.CacheServer">
       <HintPath>Library\ScriptAssemblies\UnityEditor.CacheServer.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Purchasing.SecurityStub">
       <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityStub.dll</HintPath>
@@ -1818,6 +1832,9 @@
     </Reference>
     <Reference Include="Cinemachine">
       <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
     </Reference>
     <Reference Include="Analytics">
       <HintPath>Library\ScriptAssemblies\Analytics.dll</HintPath>
