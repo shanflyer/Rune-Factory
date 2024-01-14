@@ -399,14 +399,14 @@ Shader "MySprite-Lit-Default"
                 
                 float singleValue=(main.x+main.y+main.z)/3;
                 float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
-                float3 waterColor=main.xyz*(1-_BlendVertexColor)+main.xyz*i.color*_BlendVertexColor;
+                float3 waterColor=main.xyz*i.color;
+               
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor;
+ 
                 if(_DampBlend)
                 {
                    waterColor=DampColor(waterColor,i.lightingUV,i.uv); 
-                }
-              
-
+                } 
                
                 if(_Water==1)
                 {
@@ -419,9 +419,8 @@ Shader "MySprite-Lit-Default"
                 InitializeInputData(i.uv, i.lightingUV, inputData);
 
                  result=CombinedShapeLightShared(surfaceData, inputData);
-                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor;
-
-                result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor;
+                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor; 
+                result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor; 
 
                 half4 _light=CombinedShapeLightSharedTrueValue(surfaceData, inputData);
                 half _light_value=(_light.x+_light.y+_light.z)/3;
