@@ -9,6 +9,7 @@ using Unity.Entities.UniversalDelegates;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
 public class MapCellController : Singleton<MapCellController>
@@ -16,9 +17,41 @@ public class MapCellController : Singleton<MapCellController>
     public delegate void TriggerEvent(int eventId, int reference, bool enter,bool controller);
 
     private Dictionary<int3, HashSet<int>> characterCells = new Dictionary<int3, HashSet<int>>();
+
+    public static int2[] characterRanges = new int2[21]
+    {
+        new int2(-2,1),new int2(-2,0),new int2(-2,-1),
+        new int2(-1,2),new int2(-1,1),new int2(-1,0),new int2(-1,-1),new int2(-1,-2),
+        new int2(0,2),new int2(0,1),new int2(0,0),new int2(0,-1),new int2(0,-2),
+        new int2(1,2),new int2(1,1),new int2(1,0),new int2(1,-1),new int2(1,-2),
+        new int2(2,1),new int2(2,0),new int2(2,-1)
+    };
     public void SetCharacterCoordinate(int3 oldCoordinate,int3 newCoordinate,int characterId)
     {
-        if(characterCells.TryGetValue(oldCoordinate,out var ints))
+        HashSet<int3> oldCells = new HashSet<int3>();
+        HashSet<int3> newCells=new HashSet<int3>();
+        for(int i = 0; i < characterRanges.Length; i++)
+        {
+            int3 oldCell = oldCoordinate;
+            oldCell.xy += characterRanges[i].xy;
+            oldCells.Add(oldCell);
+
+            int3 newCell = newCoordinate;
+            newCell.xy += characterRanges[i].xy;
+            newCells.Add(newCell);
+        }
+        var removeCells=oldCells.Except(newCells);
+        var addCells = newCells.Except(oldCells);
+        foreach(var cell in removeCells)
+        {
+            RemoveCellCharacter(cell, characterId);
+        }
+        foreach (var cell in addCells)
+        {
+            AddCellCharacter(cell, characterId);
+        }
+        /*
+        if (characterCells.TryGetValue(oldCoordinate,out var ints))
         {
             ints.Remove(characterId);
             if (ints.Count == 0)
@@ -31,7 +64,27 @@ public class MapCellController : Singleton<MapCellController>
             ids = new HashSet<int>();
             characterCells[newCoordinate] = ids;
         }
+        ids.Add(characterId);*/
+    }
+    void AddCellCharacter(int3 cell,int characterId)
+    {
+        if (!characterCells.TryGetValue(cell, out var ids))
+        {
+            ids = new HashSet<int>();
+            characterCells[cell] = ids;
+        }
         ids.Add(characterId);
+    }
+    void RemoveCellCharacter(int3 cell, int characterId)
+    {
+        if (characterCells.TryGetValue(cell, out var ints))
+        {
+            ints.Remove(characterId);
+            if (ints.Count == 0)
+            {
+                characterCells.Remove(cell);
+            }
+        }
     }
     public void RemoveCharacterCoordinate(int3 coordinate,int characterId)
     {
