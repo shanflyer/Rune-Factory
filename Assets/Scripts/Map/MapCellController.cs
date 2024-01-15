@@ -18,13 +18,15 @@ public class MapCellController : Singleton<MapCellController>
 
     private Dictionary<int3, HashSet<int>> characterCells = new Dictionary<int3, HashSet<int>>();
 
-    public static int2[] characterRanges = new int2[21]
+    public static int2[] characterRanges = new int2[35]
     {
-        new int2(-2,1),new int2(-2,0),new int2(-2,-1),
+        new int2(-3,2),new int2(-3,1),new int2(-3,0),new int2(-3,-1),new int2(-3,-2),
+        new int2(-2,2),new int2(-2,1),new int2(-2,0),new int2(-2,-1),new int2(-2,-2),
         new int2(-1,2),new int2(-1,1),new int2(-1,0),new int2(-1,-1),new int2(-1,-2),
         new int2(0,2),new int2(0,1),new int2(0,0),new int2(0,-1),new int2(0,-2),
         new int2(1,2),new int2(1,1),new int2(1,0),new int2(1,-1),new int2(1,-2),
-        new int2(2,1),new int2(2,0),new int2(2,-1)
+        new int2(2,2),new int2(2,1),new int2(2,0),new int2(2,-1),new int2(2,-2),
+        new int2(3,2),new int2(3,1),new int2(3,0),new int2(3,-1),new int2(3,-2)
     };
     public void SetCharacterCoordinate(int3 oldCoordinate,int3 newCoordinate,int characterId)
     {

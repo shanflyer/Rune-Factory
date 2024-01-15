@@ -18,7 +18,7 @@ public class CharacterData : ScriptableObject, IGameData
     public GameObject obj;
     public int profession;
     public int level;
-    public int behavior;
+    public string behavior;
     public int packageId; 
     public AttributeType attributeType;
     public int playerOperateEventId;

@@ -30,10 +30,10 @@ public class TalkManager : Singleton<TalkManager>
     
     void Talk(Talk talk)
     {
-        Talk(talk.talkId, talk.characterId,talk.displayFunction,talk.endAction);
+        Talk(talk.talkId, talk.characterId,talk.displayFunction,talk.endAction,talk.nextTalkEventId);
     }
     public async void Talk(int talkId,int characterId=-1,
-        bool displayFunction=false,Action endAction=null)
+        bool displayFunction=false,Action endAction=null,int nextTalkEventId=0)
     {
         TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkId);
         NPCTalkOperateData NPCTalkOperateData = new NPCTalkOperateData
@@ -42,6 +42,7 @@ public class TalkManager : Singleton<TalkManager>
             defaultTalk = talkData,
             displayFunction=displayFunction,
             npcFunctionDatas = new List<NPCFunctionData>(),
+            nextTalkEventId=nextTalkEventId,
             endAction=endAction
         };
         CharacterData characterData = CharacterManager.instance.GetCharacterDataFromInstance(characterId);

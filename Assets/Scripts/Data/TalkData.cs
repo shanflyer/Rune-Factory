@@ -7,11 +7,15 @@ public enum TalkerDir
 {
     左,右,无
 }
+public enum TalkSource
+{
+    Player=1,Fixed=2, Dynamic=3
+}
 [CreateAssetMenu(menuName ="Data/对话数据")]
 public class TalkData : ScriptableObject, IGameData,IReferenceData
 {
     public int id;
-    public bool myTalk;
+    public TalkSource talkSource;
     public string talkerName;
     public string talkerIconPath;
     public Sprite talkerIcon;

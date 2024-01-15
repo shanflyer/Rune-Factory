@@ -25,6 +25,15 @@ public class CharacterTalk : Action
         };
         GameActionManager.instance.QueueAction(startCharacterMove);
     }
+    void RemoveEvent()
+    {
+        var ID=  (SharedInt)Owner.GetVariable("ID");
+        RemoveGameEvent RemoveGameEvent = new RemoveGameEvent
+        {
+            eventId=ID.Value
+        };
+        GameActionManager.instance.QueueAction(RemoveGameEvent,true);
+    }
     public override void OnStart()
     {
         if (characterId == null || characterId.IsNull())
@@ -40,7 +49,7 @@ public class CharacterTalk : Action
             nextTalkEventId = (SharedInt)Owner.GetVariable("NextTalkEventId");
         }
 
-        if (faceTarget.Value)
+        if (faceTarget.Value&& TargetCharacter!=null)
         {
             Character character = CharacterManager.instance.GetCharacter(TargetCharacter.Value);
             if (character != null)
@@ -80,7 +89,12 @@ public class CharacterTalk : Action
                 talkId = talkId.Value,
                 displayFunction = displayFunction.Value,
                 nextTalkEventId = nextTalkEventId.Value,
-                endAction = isStopMove.Value ? CharacterStartMoveAction : null
+                endAction = isStopMove.Value ?()=> 
+                { 
+                    CharacterStartMoveAction();
+                    RemoveEvent();
+                }  :
+                ()=> { RemoveEvent(); }
             };
             GameActionManager.instance.QueueAction(talk);
         }

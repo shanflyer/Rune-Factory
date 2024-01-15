@@ -173,7 +173,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             SetCharacterRandomPos.setResult(false);
         }
-    }
+    } 
     void SetCharacterTempPos(SetCharacterTempPos setCharacterTempPos)
     {
         if(characters.TryGetValue(setCharacterTempPos.characterId,out var character))

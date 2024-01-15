@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.TextCore.Text;
 
 public struct CharacterEquipAndPropertyData
@@ -570,7 +571,7 @@ public partial class Character
         }
     }
 
-    public int behavior;
+    public string behavior;
 
     public int moveEnumeratorId;
     private CharacterProperty nowProperty;
@@ -627,6 +628,10 @@ public partial class Character
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
         objCoordinate = coordinate;
+        if (CharacterManager.instance.controllerCharacter == this)
+        {
+            CheckNeighborhood();
+        }
        // Debug.Log($"setCoordinate0:{coordinate}");
         if (SetCoordianteDele != null)
         {
@@ -639,6 +644,12 @@ public partial class Character
         int3 newCoordinate = new int3(coordinate, mapInstance);
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, newCoordinate, instanceId);
         objCoordinate = newCoordinate;
+
+        if (CharacterManager.instance.controllerCharacter == this)
+        {
+            CheckNeighborhood();
+        }
+
         //Debug.Log($"setCoordinate:{newCoordinate}");
         if (SetCoordianteDele != null)
         {
@@ -646,6 +657,40 @@ public partial class Character
         }
     }
 
+    int NeighborhoodCharacter;
+    void CheckNeighborhood()
+    {
+        int clickCharacter = MapCellController.instance.GetClickCharacter(objCoordinate);
+        if (clickCharacter != -1 && clickCharacter != instanceId&&clickCharacter!= NeighborhoodCharacter)
+        { 
+            Character character = CharacterManager.instance.GetCharacter(clickCharacter);
+            if (character != null)
+            {
+                EventReferenceData eventReferenceData = new EventReferenceData
+                {
+                    name = "CharacterId",
+                    value = clickCharacter
+                };
+                EventReferenceData targetReferenceData = new EventReferenceData
+                {
+                    name = "TargetCharacter",
+                    value = CharacterManager.instance.controllerCharacter.instanceId
+                };
+                EventReferenceData NextTalkReferenceData = new EventReferenceData
+                {
+                    name = "NextTalkEventId",
+                    value = character.characterData.nextTalkEventId
+                };
+                bool temp = character is TempCharacter;
+                GameEventManager.instance.AddGameEvent(
+                temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+                {
+                    eventReferenceData,targetReferenceData,NextTalkReferenceData
+                });
+            }
+        }
+        NeighborhoodCharacter = clickCharacter;
+    }
     public void StopMove()
     {
         GameObjectCurveController.instance.StopObjectMove(instanceId);

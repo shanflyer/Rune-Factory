@@ -107,7 +107,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
     }
 
     private bool runNextTalkEvent = false;
-
+    private int talkId;
     private async void InitData()
     {
         if (talkData == null)
@@ -115,7 +115,17 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             if (!runNextTalkEvent)
             {
                 runNextTalkEvent = true;
-                bool nextEvent = await GameEventManager.instance.AddGameEvent(NPCTalkOperateData.nextTalkEventId);
+                List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
+                EventReferenceData eventReferenceData1 = new EventReferenceData
+                {
+                    name= "withOutSource",
+                    valueType = ReferenceValueType.IntList,
+                    valeList = new List<int>()
+                };
+                eventReferenceData1.valeList.Add(talkId);
+                eventReferenceDatas.Add(eventReferenceData1);
+                bool nextEvent = await GameEventManager.instance.AddGameEvent(NPCTalkOperateData.nextTalkEventId,
+                    eventReferenceDatas,true);
                 if (!nextEvent)
                 {
                     Close(); 
@@ -129,24 +139,32 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         }else
         {
             close.localScale= talkData.DisplayClose? Vector3.one : Vector3.zero;  
-            talkValue.text = talkData.text; 
+            talkValue.text = talkData.text;
+            talkId = talkData.id;
             var talkerName = talkData.talkerName;
             Sprite talkerIcon = talkData.talkerIcon;
-            if (talkData.myTalk)
+            switch (talkData.talkSource)
             {
-                Character character = CharacterManager.instance.GetCharacter(NPCTalkOperateData.characterId);
-                if (character == null)
-                {
+                case TalkSource.Player:
                     talkerName = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
                     talkerIcon = CharacterManager.instance.PlayerHead;
-                }
-                else
-                {
-                    talkerName = character.name;
-                    talkerIcon = character.characterData.head.sprite;
-                }
-            }
-
+                    break;
+                case TalkSource.Dynamic:
+                    Character character = CharacterManager.instance.GetCharacter(NPCTalkOperateData.characterId);
+                    if (character == null)
+                    {
+                        talkerName = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
+                        talkerIcon = CharacterManager.instance.PlayerHead;
+                    }
+                    else
+                    {
+                        talkerName = character.name;
+                        talkerIcon = character.characterData.head.sprite;
+                    }
+                    break;
+                case TalkSource.Fixed:
+                    break;
+            } 
             switch (talkData.talkerDir)
             {
                 case TalkerDir.左:
@@ -183,7 +201,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     break;
             }
 
-            NPCFunctionParent.localScale = !talkData.clearTalkIcon ? Vector3.one : Vector3.zero;
+            NPCFunctionParent.localScale = NPCTalkOperateData.displayFunction ? Vector3.one : Vector3.zero;
         } 
     }
 
