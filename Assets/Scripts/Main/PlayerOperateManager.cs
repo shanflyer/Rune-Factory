@@ -20,7 +20,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
     public override void Init()
     {
         base.Init();
-        //InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, ClickObj);
+        InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, ClickObj);
         GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
         GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
         GameActionManager.instance.AddListener<PlayerTalkItem>(PlayerTalkItem);
@@ -67,7 +67,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
         Character controller = CharacterManager.instance.controllerCharacter;
 
-        controller.SetPlayerOperate(targetCoordinate);
+       // controller.SetPlayerOperate(targetCoordinate);
         int clickCharacter = MapCellController.instance.GetClickCharacter(
             new int3(targetCoordinate, WorldMapObjManager.instance.displayMap));
         if (clickCharacter != -1 && clickCharacter != controller.instanceId)

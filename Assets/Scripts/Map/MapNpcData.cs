@@ -1,11 +1,16 @@
 ﻿using BehaviorDesigner.Runtime;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
+
+#if UNITY_EDITOR
+
 using UnityEditor;
+
+#endif
+
 using UnityEngine;
-[CreateAssetMenu(menuName ="Data/地图NPC")]
-public class MapNpcData : ScriptableObject,IGameData
+
+[CreateAssetMenu(menuName = "Data/地图NPC")]
+public class MapNpcData : ScriptableObject, IGameData
 {
     public string npcName;
     public int id;
@@ -16,19 +21,21 @@ public class MapNpcData : ScriptableObject,IGameData
     public string behaviorName;
     public ExternalBehaviorTree externalBehavior;
 #if UNITY_EDITOR
+
     public void SetReferenceData()
     {
-        externalBehavior=AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>($"{EditorDataPath.npcBehaviorPath}{behaviorName}.asset");
+        externalBehavior = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>($"{EditorDataPath.npcBehaviorPath}{behaviorName}.asset");
     }
+
 #endif
+
     public override string ToString()
     {
         return GetKey();
     }
+
     public string GetKey()
     {
         return id.ToString();
     }
 }
-
- 
