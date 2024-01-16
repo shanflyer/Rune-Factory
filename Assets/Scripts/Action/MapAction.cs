@@ -2,6 +2,35 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 
+public struct SetMapItemLinkCharacter : GameAction
+{
+    public int mapItemInstanceId;
+    public int linkInstanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            mapItemInstanceId = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            linkInstanceId = int.Parse(parameters[1].value);
+        }
+        if (source != int.MinValue && source != 0)
+        {
+            mapItemInstanceId = source;
+        }
+        if (target != int.MinValue && target != 0)
+        {
+            linkInstanceId = target;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct InitMapLink : GameAction
 {
     public int linkInstanceId;

@@ -674,7 +674,7 @@ public partial class Character
                 EventReferenceData targetReferenceData = new EventReferenceData
                 {
                     name = "TargetCharacter",
-                    value = CharacterManager.instance.controllerCharacter.instanceId
+                    value = instanceId
                 };
                 EventReferenceData NextTalkReferenceData = new EventReferenceData
                 {
@@ -690,6 +690,73 @@ public partial class Character
             }
         }
         NeighborhoodCharacter = clickCharacter;
+    }
+    public void SetNeighborhood(int characterId)
+    {
+        Character character = CharacterManager.instance.GetCharacter(characterId);
+        if (character != null)
+        {
+            EventReferenceData eventReferenceData = new EventReferenceData
+            {
+                name = "CharacterId",
+                value = character.instanceId
+            };
+            EventReferenceData targetReferenceData = new EventReferenceData
+            {
+                name = "TargetCharacter",
+                value = instanceId
+            };
+            EventReferenceData NextTalkReferenceData = new EventReferenceData
+            {
+                name = "NextTalkEventId",
+                value = character.characterData.nextTalkEventId
+            };
+            bool temp = character is TempCharacter;
+            GameEventManager.instance.AddGameEvent(
+            temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+            {
+                    eventReferenceData,targetReferenceData,NextTalkReferenceData
+            });
+
+            NeighborhoodCharacter = character.instanceId;
+        }
+        else
+        {
+            NeighborhoodCharacter = 0;
+        }
+    }
+    public void SetNeighborhood(Character character)
+    { 
+        if (character != null)
+        {
+            EventReferenceData eventReferenceData = new EventReferenceData
+            {
+                name = "CharacterId",
+                value = character.instanceId
+            };
+            EventReferenceData targetReferenceData = new EventReferenceData
+            {
+                name = "TargetCharacter",
+                value = instanceId
+            };
+            EventReferenceData NextTalkReferenceData = new EventReferenceData
+            {
+                name = "NextTalkEventId",
+                value = character.characterData.nextTalkEventId
+            };
+            bool temp = character is TempCharacter;
+            GameEventManager.instance.AddGameEvent(
+            temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+            {
+                    eventReferenceData,targetReferenceData,NextTalkReferenceData
+            });
+
+            NeighborhoodCharacter = character.instanceId;
+        }
+        else
+        {
+            NeighborhoodCharacter = 0;
+        }
     }
     public void StopMove()
     {

@@ -49,6 +49,15 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<RemoveMapItemOperate>(RemoveMapItemOperate);
         GameActionManager.instance.AddListener<AddMapItemOperate>(AddMapItemOperate);
         GameActionManager.instance.AddListener<InitMapLink>(InitMapLink);
+        GameActionManager.instance.AddListener<SetMapItemLinkCharacter>(SetMapItemLinkCharacter);
+    }
+    void SetMapItemLinkCharacter(SetMapItemLinkCharacter SetMapItemLinkCharacter)
+    {
+        if (GetRuntimeMapItem(SetMapItemLinkCharacter.mapItemInstanceId, out var runtimeMapItem))
+        {
+            runtimeMapItem.linkCharacter = SetMapItemLinkCharacter.linkInstanceId;
+            runtimeMapItems.SetData(runtimeMapItem);
+        }
     }
     void AddMapItemOperate(AddMapItemOperate AddMapItemOperate)
     {
@@ -517,6 +526,7 @@ public struct RuntimeMapItem : INativeData
     public int mapInstanceId;
     public int2 coordinate;
     public int2 animationKey;
+    public int linkCharacter;
     public NativeHashSet<int> operateDatas;
     public int Key => instanceId;
     public void Dispose()

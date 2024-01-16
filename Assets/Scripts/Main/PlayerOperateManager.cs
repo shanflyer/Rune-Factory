@@ -111,6 +111,13 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         {
             if (WorldMapManager.instance.GetRuntimeMapItem(ShowMapObjTips.id, out var runtimMapItem))
             {
+                //触发物体链接角色事件
+                if (runtimMapItem.linkCharacter != 0)
+                {
+                    CharacterManager.instance.controllerCharacter.SetNeighborhood(runtimMapItem.linkCharacter);
+                }
+
+                //物体交互
                 int operateDataLength = runtimMapItem.operateDatas.Count;
                 OperateDataList operateDataList = new OperateDataList
                 {

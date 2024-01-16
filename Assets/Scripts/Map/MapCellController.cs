@@ -1178,6 +1178,12 @@ public class MapCellController : Singleton<MapCellController>
     public override void Init()
     {
         base.Init();
+        GameActionManager.instance.AddListener<RemoveCellCharacter>(RemoveCellCharacter);
+    }
+
+    void RemoveCellCharacter(RemoveCellCharacter removeCellCharacter)
+    {
+        RemoveCellCharacter(removeCellCharacter.cell, removeCellCharacter.characterId);
     }
 
     protected override void Clear()
