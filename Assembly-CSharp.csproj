@@ -93,6 +93,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\CompareTag.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\SetWrapMode.cs" />
     <Compile Include="Assets\Scripts\Main\GameNotificationManager.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX3_Demo_Translate.cs" />
     <Compile Include="Assets\Scripts\UI\HomeEquip\HomeEquipReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayDelayed.cs" />
     <Compile Include="Assets\Scripts\Fishing\FishData.cs" />
@@ -157,10 +158,12 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\SetString.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedTransformList.cs" />
     <Compile Include="Assets\Scripts\Main\FestivalManager.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX3_AutoStopLoopedEffect.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetIsKinematic.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\SetCharacterDirection.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetCookieSize.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedRandomResults.cs" />
+    <Compile Include="Assets\Scripts\Action\GameEventAction.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopItemReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\GetCenter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetParent.cs" />
@@ -188,6 +191,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalPosition.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedInt.cs" />
     <Compile Include="Assets\Scripts\Map\MapItemData.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_AutodestructWhenNoChildren.cs" />
     <Compile Include="Assets\Scripts\Map\MapNpcData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\SelectorEvaluator.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetPosition.cs" />
@@ -313,6 +317,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\GetSize.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayScheduled.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX3_Demo.cs" />
     <Compile Include="Assets\Scripts\UI\CharacterInformationPanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\GameRuntimeItemCreat.cs" />
     <Compile Include="Assets\Scripts\Item\PackageManager.cs" />
@@ -365,6 +370,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\Sleep.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedColor.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_AutoDestructShuriken.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedLayerMask.cs" />
     <Compile Include="Assets\Epic Toon FX\Demo\Scripts\ETFXLoopScript.cs" />
     <Compile Include="Assets\Scripts\Scene\DropItem.cs" />
@@ -390,6 +396,7 @@
     <Compile Include="Assets\Scripts\Action\HomeEquipAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForce.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Spawn System\CFX_SpawnSystem.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\MapObjTipsPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetFieldValue.cs" />
@@ -638,6 +645,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetMass.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Pause.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\RunGameActions.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Variables\SharedIntList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetFreezeRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetApplyRootMotion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\UntilSuccess.cs" />
@@ -726,7 +734,9 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Collider\SetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventEnd.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_RotateCamera.cs" />
     <Compile Include="Assets\Scripts\Main\ShopManager.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\FightTypeSelect.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedSkillEstimateData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetStepOffset.cs" />
@@ -746,6 +756,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetRadius.cs" />
     <Compile Include="Assets\Scripts\ErroAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Log.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Scripts\CFX_ShurikenThreadFix.cs" />
     <Compile Include="Assets\Scripts\Main\ExtensionsResources.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\StackedConditional.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\MoveTowards.cs" />
@@ -946,6 +957,7 @@
     <None Include="Assets\Epic Toon FX\Prefabs\Environment\Environment FX.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Render\Shader\MyShadow.shader" />
+    <None Include="Assets\JMO Assets\Cartoon FX\Shaders\CFX3 Multiply Color.shader" />
     <None Include="Assets\Render\Shader\Sky.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\Epic Toon FX\Prefabs\Combat\Combat FX.txt" />
@@ -953,7 +965,9 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Render\Shader\Damp.shader" />
+    <None Include="Assets\JMO Assets\Cartoon FX\CartoonFX3 Readme.txt" />
     <None Include="Assets\Render\Shader\MySprite-Lit-Default.shader" />
+    <None Include="Assets\JMO Assets\Cartoon FX Easy Editor\CartoonFX Easy Editor Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\Render\Shader\MyShadowMask.shader" />
@@ -977,11 +991,14 @@
     <None Include="Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\DLL\Excel\Excel.dll" />
+    <None Include="Assets\JMO Assets\Cartoon FX\Shaders (Mobile)\CFXM_MobileParticleAdd_Alpha8.shader" />
+    <None Include="Assets\JMO Assets\Cartoon FX\Shaders\CFX3 Invert.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\codeandweb.com\Readme.txt" />
     <None Include="Assets\DLL\LitJson.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\JMO Assets\!JMO Assets Readme.txt" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\Render\Shader\ScreenCycle.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />

@@ -74,6 +74,7 @@
     <Compile Include="Assets\Editor\Map\MapEditor.cs" />
     <Compile Include="Assets\Editor\Common\MeshRendererEditor.cs" />
     <Compile Include="Assets\codeandweb.com\Editor\UIImageSetSizeAndPivot.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX Easy Editor\Editor\CFXEasyEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\ExternalBehaviorTreeInspector.cs" />
     <Compile Include="Assets\Editor\Common\CommonItem.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
     <Compile Include="Assets\Editor\Map\MapItemEditor.cs" />
     <Compile Include="Assets\SerializableDictionary\Example\Editor\UserSerializableDictionaryPropertyDrawers.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX\Editor\CFX_SpawnSystemEditor.cs" />
     <Compile Include="Assets\Editor\ExcelRead\ExcelDataEditor.cs" />
     <Compile Include="Assets\Editor\Tool\UIEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\BehaviorTreeInspector.cs" />
@@ -107,6 +109,7 @@
     <None Include="Assets\MobileDependencyResolver\Editor\Google.VersionHandler.dll" />
     <None Include="Assets\Editor\MediationAdapterDependencies.xml" />
     <None Include="Assets\codeandweb.com\Editor\TexturePackerImporter.dll" />
+    <None Include="Assets\JMO Assets\Editor\JMOAssets.dll" />
     <None Include="Assets\Behavior Designer\Editor\BehaviorDesigner.Editor.dll" />
     <None Include="Assets\Behavior Designer\Editor\GridShader.shader" />
   </ItemGroup>
@@ -458,6 +461,9 @@
     </Reference>
     <Reference Include="TexturePackerImporter">
       <HintPath>Assets\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
+    </Reference>
+    <Reference Include="JMOAssets">
+      <HintPath>Assets\JMO Assets\Editor\JMOAssets.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
