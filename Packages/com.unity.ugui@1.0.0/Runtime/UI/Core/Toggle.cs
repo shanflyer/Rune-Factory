@@ -262,43 +262,27 @@ namespace UnityEngine.UI
             if (m_IsOn == value)
                 return;
 
+            // if we are in a group and set to true, do group logic
             m_IsOn = value;
             if (m_Group != null && m_Group.isActiveAndEnabled && IsActive())
             {
                 if (m_IsOn || (!m_Group.AnyTogglesOn() && !m_Group.allowSwitchOff))
                 {
                     m_IsOn = true;
-
-                    if (sendCallback)
-                    {
-                        UISystemProfilerApi.AddMarker("Toggle.value", this);
-                        onValueChanged.Invoke(m_IsOn);
-                    }
                     m_Group.NotifyToggleOn(this, sendCallback);
                 }
             }
-            else
-            {
-                if (sendCallback)
-                {
-                    UISystemProfilerApi.AddMarker("Toggle.value", this);
-                    onValueChanged.Invoke(m_IsOn);
-                }
-            }
-
-
-           
-            
 
             // Always send event when toggle is clicked, even if value didn't change
             // due to already active toggle in a toggle group being clicked.
             // Controls like Dropdown rely on this.
             // It's up to the user to ignore a selection being set to the same value it already was, if desired.
             PlayEffect(toggleTransition == ToggleTransition.None);
-           
-
-            // if we are in a group and set to true, do group logic
-             
+            if (sendCallback)
+            {
+                UISystemProfilerApi.AddMarker("Toggle.value", this);
+                onValueChanged.Invoke(m_IsOn);
+            }
         }
 
         /// <summary>
