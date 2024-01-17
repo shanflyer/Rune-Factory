@@ -23,7 +23,7 @@ public class GetEntityCoordinate : Action
     // Start is called before the first frame update
     public override void OnStart()
     {
-        if (entityId==null|| entityId.IsNull())
+        if ((entityId==null|| entityId.IsNull())&& (itemEditorKey == null || itemEditorKey.IsNull()))
         {
             getSuccess = false;
             return;

@@ -596,7 +596,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             {
                 characterId = playerSleep.characterId
             };
-            GameActionManager.instance.QueueAction(playerWakeUp);
+            GameActionManager.instance.QueueAction(playerWakeUp, true);
             SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
             {
                 characterId = playerSleep.characterId,
@@ -604,7 +604,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 parameterType = ParameterType.INT,
                 intValue = 0
             };
-            GameActionManager.instance.QueueAction(setCharacterAnimator);
+            GameActionManager.instance.QueueAction(setCharacterAnimator,true);
 
             SetCharacterAnimator setCharacterAnimatorDir_X = new SetCharacterAnimator
             {
@@ -639,7 +639,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     {
                         characterId = playerSleep.characterId,
                         Coordinate = character.coordinate,
-                        range = 3
+                        range = 6
                     };
                     GameActionManager.instance.QueueAction(setCharacterRandomCoordinate);
 
@@ -688,6 +688,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 if (GameCommon.CompareGameTime(updateGameTime.year,updateGameTime.season,updateGameTime.day,
                     updateGameTime.hour,updateGameTime.minute,year,season,day,hour,minute))
                 {
+                    WakeUp();
                     GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
                 }
             }

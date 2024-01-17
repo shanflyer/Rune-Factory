@@ -131,12 +131,8 @@ public class CharacterManager : Singleton<CharacterManager>
                 setCharacterRandomCoordinate.range);
 
             character.RemoveMove();
-            if (character != null)
-            {
-                character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
-
-                RefreshNpcRuntimeObj(character);
-            }
+            character.SetCoordinate(new int3(targetCoordinate, character.mapInstance)); 
+            RefreshNpcRuntimeObj(character);
 
             if (setCharacterRandomCoordinate.setResult != null)
             {

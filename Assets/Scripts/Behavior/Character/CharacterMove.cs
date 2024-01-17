@@ -13,11 +13,13 @@ public class CharacterMove : Action
     public SharedInt2 offset;
     public bool smartMove;
     // Use this for initialization
+    [SerializeField]
     TaskStatus taskStatus;
     
     void MoveEndAction()
     {
-        taskStatus = TaskStatus.Success; 
+        taskStatus = TaskStatus.Success;
+        //Debug.Log($"end:{taskStatus}");
     }
     public override void OnAwake()
     {
@@ -78,7 +80,7 @@ public class CharacterMove : Action
             { 
                 if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, MoveEndAction))
                 { 
-                    taskStatus = TaskStatus.Failure;
+                   // taskStatus = TaskStatus.Failure;
                 }
             }
         }
@@ -108,7 +110,7 @@ public class CharacterMove : Action
         }
     }
     public override TaskStatus OnUpdate()
-    {
+    { 
         return taskStatus;
     }
 }

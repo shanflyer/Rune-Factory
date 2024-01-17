@@ -194,7 +194,7 @@
             <key type="filename">Desert-Interior_C_123.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.46875,0.364583</point_f>
+                <point_f>0.5,0.760417</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -803,7 +803,7 @@
             <key type="filename">Fantasy_Inside_C_81.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.3125</point_f>
+                <point_f>0.5,0.8125</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>

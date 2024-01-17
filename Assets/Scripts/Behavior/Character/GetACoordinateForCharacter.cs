@@ -14,7 +14,7 @@ public class GetACoordinateForCharacter : Action
 
     public SharedInt2 itemEditorKey;
     [Header("个体类型")]
-    public bool isItemObj;
+    public EntityType entityType;
     [Header("最小范围")]
     public SharedInt minRange;
     [Header("最大范围")]
@@ -50,24 +50,24 @@ public class GetACoordinateForCharacter : Action
 	public override TaskStatus OnUpdate()
 	{
 
-        int2 coordinate;
-        int mapInstance;
-        if (isItemObj)
+        int2 coordinate=int2.zero;
+        int mapInstance=0;
+        switch (entityType)
         {
-            if (!WorldMapManager.instance.GetMapItemPos(characterId.Value, out var objCoordinate))
-            {
-                WorldMapManager.instance.GetMapItemPos(itemEditorKey.Value, out objCoordinate);
-            } 
-            coordinate = objCoordinate.xy;
-            mapInstance = objCoordinate.z;
-        }
-        else
-        {
-            Character character = CharacterManager.instance.GetCharacter(characterId.Value);
-            coordinate = character.coordinate;
-            mapInstance = character.mapInstance;
-        }
-
+            case EntityType.地图道具:
+                if (!WorldMapManager.instance.GetMapItemPos(characterId.Value, out var objCoordinate))
+                {
+                    WorldMapManager.instance.GetMapItemPos(itemEditorKey.Value, out objCoordinate);
+                }
+                coordinate = objCoordinate.xy;
+                mapInstance = objCoordinate.z;
+                break;
+            case EntityType.角色:
+                Character character = CharacterManager.instance.GetCharacter(characterId.Value);
+                coordinate = character.coordinate;
+                mapInstance = character.mapInstance;
+                break;
+        } 
        
         RuntimeMapRoom runtimeMapRoom;
         if (MapCellController.instance.GetRuntimeMapRoom(mapInstance, out runtimeMapRoom))
