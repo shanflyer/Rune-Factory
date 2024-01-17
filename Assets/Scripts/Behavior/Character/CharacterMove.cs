@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks; 
+using BehaviorDesigner.Runtime.Tasks;
+using Unity.Mathematics;
 
 [TaskCategory("Game/Character")]
 [TaskName("角色移动")]
@@ -9,6 +10,7 @@ public class CharacterMove : Action
 {
     private SharedInt characterId;
     public SharedInt3 target;
+    public SharedInt2 offset;
     public bool smartMove;
     // Use this for initialization
     TaskStatus taskStatus;
@@ -35,6 +37,8 @@ public class CharacterMove : Action
         GameActionManager.instance.RemoveListener<CharacterMoveFailed>(FailedMoveAction);
         addAction = false;
     }
+
+    int2 offsetCoordinate = int2.zero;
     public override void OnStart()
     {
         if (!addAction)
@@ -57,17 +61,22 @@ public class CharacterMove : Action
                 return;
             }
         }
+        if (offset != null && !offset.IsNull())
+        {
+            offsetCoordinate = offset.Value;
+        }
+        var targetCoordinate = new int3(target.Value.x+ offsetCoordinate.x, target.Value.y+ offsetCoordinate.y, target.Value.z);
         var character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
         {
-            if (character.mapInstance == target.Value.z &&
-                    character.coordinate.x == target.Value.x && character.coordinate.y == target.Value.y)
+            if (character.mapInstance == targetCoordinate.z &&
+                    character.coordinate.x == targetCoordinate.x && character.coordinate.y == targetCoordinate.y)
             {
                 taskStatus = TaskStatus.Success;
             }
             else
             { 
-                if (!character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
+                if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, MoveEndAction))
                 { 
                     taskStatus = TaskStatus.Failure;
                 }

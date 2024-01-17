@@ -443,6 +443,9 @@ public class GameTime
         int x = date % 6;
         week = (Week)x;
         SetLightValue();
+        updateGame.year = year;
+        updateGame.season =(int)season;
+        updateGame.day = date;
         updateGame.hour = hour;
         updateGame.minute = minute; 
         GameActionManager.instance.QueueAction(updateGame);
@@ -583,7 +586,9 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             sleepHour += 24;
         }
-        UIManager.instance.CloseGamePanel<OperateButtonPanel>(); 
+        bool isController = CharacterManager.instance.controllerCharacter.instanceId == playerSleep.characterId;
+
+       
         void WakeUp()
         {
             Character character = CharacterManager.instance.GetCharacter(playerSleep.characterId);
@@ -638,15 +643,57 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     };
                     GameActionManager.instance.QueueAction(setCharacterRandomCoordinate);
 
-                    OpenOrCloseInputMap openOrCloseInputMap = new OpenOrCloseInputMap
+                    if (isController)
                     {
-                        open = true,
-                    };
-                    GameActionManager.instance.QueueAction(openOrCloseInputMap);
+                        OpenOrCloseInputMap openOrCloseInputMap = new OpenOrCloseInputMap
+                        {
+                            open = true,
+                        };
+                        GameActionManager.instance.QueueAction(openOrCloseInputMap);
+                    }
+                  
                 });
            
         }
-        LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute, GameCommon.sleepCostTime,true, WakeUp);
+        if (isController)
+        {
+            UIManager.instance.CloseGamePanel<OperateButtonPanel>();
+            LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute, GameCommon.sleepCostTime, true, WakeUp);
+        }
+        else
+        {
+            int year = nowGameTime.year;
+            int season = (int)nowGameTime.Season;
+            int day = nowGameTime.date;
+            int hour = playerSleep.targetHour;
+            if (hour < nowGameTime.hour)
+            {
+                day++;
+                if (day > 30)
+                {
+                    day = 1;
+                    season++;
+                    if (season > 4)
+                    {
+                        season = 1;
+                        year++;
+                    }
+                }
+            }
+            int minute = playerSleep.targetMinute;
+            GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
+
+            void UpdateGameTime(UpdateGameTime updateGameTime)
+            {
+                if (GameCommon.CompareGameTime(updateGameTime.year,updateGameTime.season,updateGameTime.day,
+                    updateGameTime.hour,updateGameTime.minute,year,season,day,hour,minute))
+                {
+                    GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
+                }
+            }
+
+        }
+            
     }
 
     private void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)

@@ -15,6 +15,8 @@ public class GetEntityCoordinate : Action
     [Header("个体id")]
     public SharedInt entityId;
 
+    public SharedInt2 itemEditorKey;
+
     public EntityType entityType;
 
     private bool getSuccess;
@@ -31,7 +33,15 @@ public class GetEntityCoordinate : Action
         switch (entityType)
         {
             case EntityType.地图道具:
-                getSuccess = WorldMapManager.instance.GetMapItemPos(entityId.Value, out coordinate);
+                if (itemEditorKey.IsNull())
+                {
+                    getSuccess = WorldMapManager.instance.GetMapItemPos(entityId.Value, out coordinate);
+                }
+                else
+                {
+                    getSuccess = WorldMapManager.instance.GetMapItemPos(itemEditorKey.Value, out coordinate);
+                }
+                
                 break;
             case EntityType.角色:
                 getSuccess = CharacterManager.instance.GetCharacterCoordiante(entityId.Value, out coordinate);

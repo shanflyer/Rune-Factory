@@ -15,7 +15,7 @@ public struct RemoveCellCharacter : GameAction
     {
         if (parameters.Count > 1)
             cell = GameCommon.StringToInt3(parameters[0].value);
-        if (parameters.Count > 1)
+        if (parameters.Count > 2)
             characterId = int.Parse(parameters[1].value);
         if (source != 0)
             characterId = source;

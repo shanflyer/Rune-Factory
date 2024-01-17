@@ -9,7 +9,7 @@ using BehaviorDesigner.Runtime.Tasks;
 public class SetCharacterMoveTarget : Action
 {
     [Header("获取的结果")]
-    private SharedInt3List results;
+    public SharedInt3List results;
     public SharedInt3 targetCoordinate;
     public override void OnStart()
     {

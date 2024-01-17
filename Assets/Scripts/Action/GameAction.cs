@@ -219,6 +219,7 @@ public struct ShowCoin : GameAction
 
 public struct UpdateGameTime : GameAction
 {
+    public int year, season,day;
     public int hour, minute;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }

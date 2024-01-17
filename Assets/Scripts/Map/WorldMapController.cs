@@ -87,6 +87,7 @@ public class WorldMapController : MonoBehaviour
 
         if (GameController.instance == null)
         {
+            GameTimeManager.instance.StartTimeRun();
             GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
             GameActionManager.instance.QueueAction(new CreatCharacter
             {

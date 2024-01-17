@@ -59,7 +59,7 @@ public class CharacterTalk : Action
                     characterId = characterId.Value,
                     targetCoordinate = character.coordinate
                 };
-                GameActionManager.instance.QueueAction(setTargetDirection);
+                GameActionManager.instance.QueueAction(setTargetDirection, true);
             }
         }
 
@@ -69,7 +69,7 @@ public class CharacterTalk : Action
             {
                 characterId = characterId.Value
             };
-            GameActionManager.instance.QueueAction(stopCharacterMove);
+            GameActionManager.instance.QueueAction(stopCharacterMove, true);
         }
         if (isSimpleTalk.Value)
         {
@@ -96,7 +96,7 @@ public class CharacterTalk : Action
                 }  :
                 ()=> { RemoveEvent(); }
             };
-            GameActionManager.instance.QueueAction(talk);
+            GameActionManager.instance.QueueAction(talk,true);
         }
        
 

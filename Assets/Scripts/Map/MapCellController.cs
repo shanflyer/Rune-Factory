@@ -1183,7 +1183,17 @@ public class MapCellController : Singleton<MapCellController>
 
     void RemoveCellCharacter(RemoveCellCharacter removeCellCharacter)
     {
-        RemoveCellCharacter(removeCellCharacter.cell, removeCellCharacter.characterId);
+        if (removeCellCharacter.cell.Equals(int3.zero))
+        {
+            Character character = CharacterManager.instance.GetCharacter(removeCellCharacter.characterId); 
+            RemoveCellCharacter(character.ObjCoordinate, removeCellCharacter.characterId);
+
+        }
+        else
+        {
+            RemoveCellCharacter(removeCellCharacter.cell, removeCellCharacter.characterId);
+        }
+       
     }
 
     protected override void Clear()

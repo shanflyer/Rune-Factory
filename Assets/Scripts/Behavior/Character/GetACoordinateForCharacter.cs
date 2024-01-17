@@ -11,6 +11,8 @@ public class GetACoordinateForCharacter : Action
 {
     [Header("个体id")]
     public SharedInt characterId;
+
+    public SharedInt2 itemEditorKey;
     [Header("个体类型")]
     public bool isItemObj;
     [Header("最小范围")]
@@ -24,7 +26,9 @@ public class GetACoordinateForCharacter : Action
     [Header("是否可行走")]
     public SharedBool isWalkable;
 	[Header("获取的结果")]
-	private SharedInt3List results;
+    public SharedInt3List results;
+
+
 	public override void OnStart()
 	{
         if (characterId==null|| characterId.IsNull())
@@ -50,7 +54,10 @@ public class GetACoordinateForCharacter : Action
         int mapInstance;
         if (isItemObj)
         {
-            WorldMapManager.instance.GetMapItemPos(characterId.Value, out var objCoordinate);
+            if (!WorldMapManager.instance.GetMapItemPos(characterId.Value, out var objCoordinate))
+            {
+                WorldMapManager.instance.GetMapItemPos(itemEditorKey.Value, out objCoordinate);
+            } 
             coordinate = objCoordinate.xy;
             mapInstance = objCoordinate.z;
         }

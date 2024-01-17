@@ -713,6 +713,48 @@ public class GameCommon
 
         return new int2(x, y);
     }
+
+    public static bool CompareGameTime(int year,int season,int day,int hour,int minute,int targetYear,int targetSeason,int 
+        targetDay,int targetHour,int targetMinute)
+    {
+        if (targetYear > 0)
+        {
+            if (targetYear < year)
+                return true;
+            if (targetYear > year)
+                return false;
+        }
+        if (targetSeason > 0)
+        {
+            if (targetSeason < season)
+                return true;
+            if (targetSeason > season)
+                return false;
+        }
+        if (targetDay > 0)
+        {
+            if (targetDay < day)
+                return true;
+            if (targetDay > day)
+                return false;
+        }
+        if (targetHour > 0)
+        {
+            if (targetHour < hour)
+                return true;
+            if (targetHour > hour)
+                return false;
+        }
+        if (targetMinute > 0)
+        {
+            if (targetMinute <= minute)
+                return true;
+            if (targetMinute > minute)
+                return false;
+        } 
+
+        return true;
+    }
 }
 
 public static class DefaultGameData

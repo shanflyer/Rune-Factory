@@ -50,6 +50,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<AddMapItemOperate>(AddMapItemOperate);
         GameActionManager.instance.AddListener<InitMapLink>(InitMapLink);
         GameActionManager.instance.AddListener<SetMapItemLinkCharacter>(SetMapItemLinkCharacter);
+        GameActionManager.instance.AddListener<SetMapEditorItemLinkCharacter>(SetMapEditorItemLinkCharacter);
+    }
+    void SetMapEditorItemLinkCharacter(SetMapEditorItemLinkCharacter SetMapEditorItemLinkCharacter)
+    {
+        if (editorItemRemapInstanceIds.TryGetValue(new int2(SetMapEditorItemLinkCharacter.mapId, SetMapEditorItemLinkCharacter.mapItemEditorId),
+               out var instanceId))
+        {
+            if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
+            {
+                runtimeMapItem.linkCharacter = SetMapEditorItemLinkCharacter.linkInstanceId;
+                runtimeMapItems.SetData(runtimeMapItem);
+            }
+        }
     }
     void SetMapItemLinkCharacter(SetMapItemLinkCharacter SetMapItemLinkCharacter)
     {
@@ -57,7 +70,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             runtimeMapItem.linkCharacter = SetMapItemLinkCharacter.linkInstanceId;
             runtimeMapItems.SetData(runtimeMapItem);
-        }
+        } 
     }
     void AddMapItemOperate(AddMapItemOperate AddMapItemOperate)
     {
@@ -171,7 +184,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (runtimeMapItems.GetData(instanceid, out RuntimeMapItem runtimeMapItem))
         {
             runtimeMapItem.animationKey = new int2(setItemAnimation.keyX, setItemAnimation.keyY);
-
+            
             WorldMapObjManager.instance.SetItemAnimation(runtimeMapItem);
             if (setItemAnimation.setResult!=null)
             {
@@ -221,10 +234,23 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             objCoordinate=new int3(mapItem.coordinate, mapItem.mapInstanceId);
             return true;
-        }
+        } 
         return false;
-    } 
-
+    }
+    public bool GetMapItemPos(int2 key, out int3 objCoordinate)
+    {
+        objCoordinate = int3.zero;
+        if (editorItemRemapInstanceIds.TryGetValue(key, out var instance))
+        {
+            if (runtimeMapItems.GetData(instance, out var mapItem))
+            {
+                objCoordinate = new int3(mapItem.coordinate, mapItem.mapInstanceId);
+                return true;
+            }
+        }
+         
+        return false;
+    }
     private async void RemoveMapItemCollider(RemoveMapItemCollider removeMapItemCollider)
     {
         if (runtimeMapItems.GetData(removeMapItemCollider.mapItemInstanceId, out var runtimeMapItem))

@@ -1,7 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
+public struct SetMapEditorItemLinkCharacter : GameAction
+{
+    public int mapId;
+    public int mapItemEditorId;
+    public int linkInstanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = int.MinValue,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            mapId = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            mapItemEditorId = int.Parse(parameters[1].value);
+        }
+        if (parameters.Count > 2)
+        {
+            linkInstanceId = int.Parse(parameters[2].value);
+        }
+        if (source != int.MinValue && source != 0)
+        {
+            mapId = source;
+        }
+        if (target != int.MinValue && target != 0)
+        {
+            mapItemEditorId = target;
+        }
+        if (value != int.MinValue && value != 0)
+        {
+            linkInstanceId = value;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct SetMapItemLinkCharacter : GameAction
 {
     public int mapItemInstanceId;
