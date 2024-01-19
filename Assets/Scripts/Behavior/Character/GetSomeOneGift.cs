@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using BehaviorDesigner.Runtime;
+﻿using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("Game/Character")]
@@ -7,18 +6,20 @@ using BehaviorDesigner.Runtime.Tasks;
 public class GetSomeOneGift : Action
 {
     private SharedInt characterId;
-    TaskStatus taskStatus;
+    private TaskStatus taskStatus;
     private bool addAction = false;
+
     public override void OnAwake()
     {
         base.OnAwake();
         taskStatus = TaskStatus.Failure;
     }
+
     public override void OnStart()
-    { 
+    {
         if (characterId == null || characterId.IsNull())
         {
-            characterId = Owner.GetVariable("CharacterId") as SharedInt; 
+            characterId = Owner.GetVariable("CharacterId") as SharedInt;
         }
         if (!addAction)
         {
@@ -26,7 +27,8 @@ public class GetSomeOneGift : Action
             addAction = true;
         }
     }
-    void GiveGift(GiveGift giveGift)
+
+    private void GiveGift(GiveGift giveGift)
     {
         if (giveGift.receiveCharacter == characterId.Value)
         {
@@ -49,6 +51,7 @@ public class GetSomeOneGift : Action
             taskStatus = TaskStatus.Success;
         }
     }
+
     public override void OnReset()
     {
         addAction = false;
@@ -57,7 +60,7 @@ public class GetSomeOneGift : Action
         GameActionManager.instance.RemoveListener<GiveGift>(GiveGift);
         base.OnReset();
     }
-   
+
     public override TaskStatus OnUpdate()
     {
         return taskStatus;

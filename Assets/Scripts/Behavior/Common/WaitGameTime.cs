@@ -15,9 +15,10 @@ public class WaitGameTime : Action
     private int year, season, day, hour, minute;
 
     [SerializeField]
-    int waitMinute;
+    private int waitMinute;
+
     [SerializeField]
-    int total;
+    private int total;
 
     private void UpdateGameTime(UpdateGameTime updateGameTime)
     {
@@ -58,7 +59,7 @@ public class WaitGameTime : Action
         GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
         addAction = false;
     }
-  
+
     public override void OnStart()
     {
         taskStatus = TaskStatus.Running;

@@ -55,7 +55,7 @@ public struct GameDate : IReferenceData, INativeData
 [System.Serializable]
 public class GameTime
 {
-    public int year=1;
+    public int year = 1;
 
     public Season Season
     {
@@ -70,7 +70,7 @@ public class GameTime
     }
 
     private Season season;
-    public int date=1;
+    public int date = 1;
     public int hour;
     public int minute;
     public int mySecond;
@@ -108,7 +108,8 @@ public class GameTime
     private bool night = false;
     private float timeValue;
 
-    public float TimeValue=>timeValue;
+    public float TimeValue => timeValue;
+
     public void SetTime(int hour, int minute)
     {
         if (hour > 0)
@@ -385,14 +386,16 @@ public class GameTime
         hour = 30;
         TimeInit();
     }
-    NewDay newDay;
+
+    private NewDay newDay;
+
     public void TimeInit()
     {
         bool dayRefresh = false;
         if (mySecond >= 20)
         {
             minute += mySecond / 20;
-            mySecond = mySecond % 20; 
+            mySecond = mySecond % 20;
         }
         if (minute >= 60)
         {
@@ -404,7 +407,7 @@ public class GameTime
             dayRefresh = true;
             date += hour / 24;
             hour = hour % 24;
-           
+
             if (date <= 15)
             {
                 float moonOffSet = date / 15.0f;
@@ -444,10 +447,10 @@ public class GameTime
         week = (Week)x;
         SetLightValue();
         updateGame.year = year;
-        updateGame.season =(int)season;
+        updateGame.season = (int)season;
         updateGame.day = date;
         updateGame.hour = hour;
-        updateGame.minute = minute; 
+        updateGame.minute = minute;
         GameActionManager.instance.QueueAction(updateGame);
 
         if (dayRefresh)
@@ -455,7 +458,9 @@ public class GameTime
             GameActionManager.instance.QueueAction(newDay);
         }
     }
-    UpdateGameTime updateGame;
+
+    private UpdateGameTime updateGame;
+
     public void Sleep()
     {
         minute = 0;
@@ -552,7 +557,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameActionManager.instance.AddListener<CheckGameTimeDate>(CheckGameTimeDate);
         // CreatData();
     }
-    void CheckGameTimeDate(CheckGameTimeDate checkGameTimeDate)
+
+    private void CheckGameTimeDate(CheckGameTimeDate checkGameTimeDate)
     {
         bool result = false;
         if (checkGameTimeDate.year < Year)
@@ -564,9 +570,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
             if (checkGameTimeDate.momth < (int)Season)
             {
                 result = true;
-                
             }
-            else if(checkGameTimeDate.momth == (int)Season) 
+            else if (checkGameTimeDate.momth == (int)Season)
             {
                 if (checkGameTimeDate.day < Day)
                 {
@@ -574,12 +579,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 }
             }
         }
-        if (checkGameTimeDate.setResult!=null)
+        if (checkGameTimeDate.setResult != null)
         {
             checkGameTimeDate.setResult(result);
         }
     }
-    void PlayerSleep(PlayerSleep playerSleep)
+
+    private void PlayerSleep(PlayerSleep playerSleep)
     {
         int sleepHour = playerSleep.targetHour - nowGameTime.hour;
         if (sleepHour < 0)
@@ -588,7 +594,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == playerSleep.characterId;
 
-       
         void WakeUp()
         {
             Character character = CharacterManager.instance.GetCharacter(playerSleep.characterId);
@@ -604,7 +609,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 parameterType = ParameterType.INT,
                 intValue = 0
             };
-            GameActionManager.instance.QueueAction(setCharacterAnimator,true);
+            GameActionManager.instance.QueueAction(setCharacterAnimator, true);
 
             SetCharacterAnimator setCharacterAnimatorDir_X = new SetCharacterAnimator
             {
@@ -634,7 +639,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
             GameTimerController.instance.DelayAction(1200,
                 () =>
                 {
-                   
                     SetCharacterRandomCoordinate setCharacterRandomCoordinate = new SetCharacterRandomCoordinate
                     {
                         characterId = playerSleep.characterId,
@@ -651,9 +655,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         };
                         GameActionManager.instance.QueueAction(openOrCloseInputMap);
                     }
-                  
                 });
-           
         }
         if (isController)
         {
@@ -685,16 +687,14 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
             void UpdateGameTime(UpdateGameTime updateGameTime)
             {
-                if (GameCommon.CompareGameTime(updateGameTime.year,updateGameTime.season,updateGameTime.day,
-                    updateGameTime.hour,updateGameTime.minute,year,season,day,hour,minute))
+                if (GameCommon.CompareGameTime(updateGameTime.year, updateGameTime.season, updateGameTime.day,
+                    updateGameTime.hour, updateGameTime.minute, year, season, day, hour, minute))
                 {
                     WakeUp();
                     GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
                 }
             }
-
         }
-            
     }
 
     private void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)
@@ -798,12 +798,14 @@ public class GameTimeManager : Singleton<GameTimeManager>
         nowGameTime.minute = 0;
         nowGameTime.AddDate();
     }
-    private void LerpGameTime(int targetHour,int targetMinute,float costTime,bool endRun=false, Action endAction = null)
+
+    private void LerpGameTime(int targetHour, int targetMinute, float costTime, bool endRun = false, Action endAction = null)
     {
         StopTimeRun();
         var lerpTimeIEnumerator = LerpTime(targetHour, targetMinute, costTime, endRun, endAction);
         GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
     }
+
     private void LerpGameTime(LerpGameTime lerpGameTime)
     {
         StopTimeRun();
@@ -811,9 +813,9 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameObjectCurveController.instance.UpDataComponent.StartCoroutine(lerpTimeIEnumerator);
     }
 
-    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime, bool endRun = false, Action endAction=null)
+    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime, bool endRun = false, Action endAction = null)
     {
-        int startValue = (Hour * 60 + Minute) * 20; 
+        int startValue = (Hour * 60 + Minute) * 20;
         if (targetHour < Hour)
         {
             targetHour += 24;
@@ -834,7 +836,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             StartTimeRun();
         }
-        if (endAction!=null)
+        if (endAction != null)
         {
             endAction.Invoke();
         }

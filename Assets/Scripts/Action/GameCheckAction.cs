@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 public struct CheckGameTimeDate : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int year,momth,day;
+    public int year, momth, day;
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
@@ -28,25 +26,28 @@ public struct CheckGameTimeDate : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct CheckCharacterPackageFull : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int characterId; 
+    public int characterId;
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
         {
-            characterId = int.Parse(parameters[0].value); 
+            characterId = int.Parse(parameters[0].value);
         }
         if (source != 0)
-            characterId = source; 
+            characterId = source;
 
         this.setResult = setResult;
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct CheckCharacterItemValue : GameAction
 {
     public SetValue setValue { get; set; }
@@ -54,6 +55,7 @@ public struct CheckCharacterItemValue : GameAction
     public int characterId;
     public int itemId;
     public int itemValue;
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 3)
@@ -74,13 +76,16 @@ public struct CheckCharacterItemValue : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct CheckItemValue : GameAction
 {
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
     public int packageId;
-    public int itemDataId; 
-    public int itemValue; 
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    public int itemDataId;
+    public int itemValue;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 3)
         {
@@ -103,8 +108,10 @@ public struct CheckItemValue : GameAction
 
 public struct GameCheckAction : GameAction
 {
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -113,8 +120,10 @@ public struct GameCheckAction : GameAction
 public struct CheckCharacterTemp : GameAction
 {
     public int characterId;
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
-    public void Init(List<Parameter> parameters,int source=0,int target=0,int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
     }

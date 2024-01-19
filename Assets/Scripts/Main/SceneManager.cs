@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections; 
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneManager : Singleton<SceneManager>
 {
     public override bool NeedUpdata => true;
-    string nowSceen;
+    private string nowSceen;
+
     public string Now
     {
         get
@@ -16,24 +16,27 @@ public class SceneManager : Singleton<SceneManager>
                 nowSceen = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             }
             return nowSceen;
-
         }
-    } 
+    }
+
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<SwitchScene>(SwitchScene); 
+        GameActionManager.instance.AddListener<SwitchScene>(SwitchScene);
     }
-     
-    async void SwitchScene(SwitchScene switchScene)
+
+    private async void SwitchScene(SwitchScene switchScene)
     {
         GameActionData beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(switchScene.beforeLoadActionId);
         GameActionData afterActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(switchScene.afterLoadActionId);
 
-        SwitchScene(switchScene.sceneName, beforeActionData != null ? ()=> { beforeActionData.Action(0, 0); } : null, 
-            afterActionData != null ? ()=> { afterActionData.Action(0, 0); } : null);
+        SwitchScene(switchScene.sceneName, beforeActionData != null ? () => { beforeActionData.Action(0, 0); }
+        : null,
+            afterActionData != null ? () => { afterActionData.Action(0, 0); }
+        : null);
     }
-    public async void SwitchScene(string sceneName,Action beforeLoadSceneAction=null,Action afterSceneAction=null)
+
+    public async void SwitchScene(string sceneName, Action beforeLoadSceneAction = null, Action afterSceneAction = null)
     {
         this.loadSceneAction = afterSceneAction;
 
@@ -42,25 +45,24 @@ public class SceneManager : Singleton<SceneManager>
             beforeLoadSceneAction.Invoke();
         }
         if (!string.IsNullOrEmpty(nowSceen))
-        { 
+        {
             //UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
             nowSceen = null;
         }
-       
-        this.AsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-         //loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
-        nowSceen = sceneName;
 
-    } 
+        this.AsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        //loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
+        nowSceen = sceneName;
+    }
+
     public void UnloadNowScene()
     {
         UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
         nowSceen = null;
     }
 
-    AsyncOperation AsyncOperation;
-    Action loadSceneAction;
-
+    private AsyncOperation AsyncOperation;
+    private Action loadSceneAction;
 
     protected override void UpData()
     {
@@ -69,8 +71,8 @@ public class SceneManager : Singleton<SceneManager>
         {
             return;
         }
-       // if (loadingPanel != null)
-       //     loadingPanel.RefreshLoadValue(AsyncOperation.progress);
+        // if (loadingPanel != null)
+        //     loadingPanel.RefreshLoadValue(AsyncOperation.progress);
         if (AsyncOperation.progress >= 1)
         {
             if (loadSceneAction != null)
@@ -78,14 +80,13 @@ public class SceneManager : Singleton<SceneManager>
                 loadSceneAction.Invoke();
             }
             loadSceneAction = null;
-           // if (loadingPanel != null)
+            // if (loadingPanel != null)
             {
-            //    loadingPanel.Close();
+                //    loadingPanel.Close();
             }
-                
+
             //loadingPanel = null;
             AsyncOperation = null;
         }
     }
-     
 }

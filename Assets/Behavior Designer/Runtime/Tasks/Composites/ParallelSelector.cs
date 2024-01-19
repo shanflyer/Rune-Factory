@@ -9,6 +9,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     {
         // The index of the child that is currently running or is about to run.
         private int currentChildIndex;
+
         // The task status of every child task.
         private TaskStatus[] executionStatus;
 
@@ -52,7 +53,8 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             // Start from the beginning on an abort
             currentChildIndex = 0;
-            for (int i = 0; i < executionStatus.Length; ++i) {
+            for (int i = 0; i < executionStatus.Length; ++i)
+            {
                 executionStatus[i] = TaskStatus.Inactive;
             }
         }
@@ -64,10 +66,14 @@ namespace BehaviorDesigner.Runtime.Tasks
             // If a task succeeded then return success. The Behavior Manager will stop all of the children tasks. If no child task is running or has succeeded then the parallel selector
             // task failed and it will return failure.
             bool childrenComplete = true;
-            for (int i = 0; i < executionStatus.Length; ++i) {
-                if (executionStatus[i] == TaskStatus.Running) {
+            for (int i = 0; i < executionStatus.Length; ++i)
+            {
+                if (executionStatus[i] == TaskStatus.Running)
+                {
                     childrenComplete = false;
-                } else if (executionStatus[i] == TaskStatus.Success) {
+                }
+                else if (executionStatus[i] == TaskStatus.Success)
+                {
                     return TaskStatus.Success;
                 }
             }
@@ -77,7 +83,8 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnEnd()
         {
             // Reset the execution status and the child index back to their starting values.
-            for (int i = 0; i < executionStatus.Length; ++i) {
+            for (int i = 0; i < executionStatus.Length; ++i)
+            {
                 executionStatus[i] = TaskStatus.Inactive;
             }
             currentChildIndex = 0;

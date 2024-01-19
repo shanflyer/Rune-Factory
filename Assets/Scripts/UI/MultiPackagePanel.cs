@@ -80,14 +80,12 @@ public class MultiPackagePanel : GamePanel<PackageList>
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
-       
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
-       
     }
 
     public override void Close()
@@ -98,6 +96,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
             type = typeof(ShortcutPanel)
         });
     }
+
     private void RefreshShortcut(RefreshShortcut refreshShortcut)
     {
         if (refreshShortcut.packageId == packageId0)
@@ -115,7 +114,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
             {
                 items0.Add(defaultItem);
             }
-           
+
             Title0.text = packageSetData0.packageName;
             itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
             caseCount0.text = $"{packageData.items.Count}/{packageData.caseCount}";
@@ -205,11 +204,13 @@ public class MultiPackagePanel : GamePanel<PackageList>
 
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
     }
+
     private int packageId0, packageId1;
-    PackageSetData packageSetData0, packageSetData1;
-    int PackageCaseCount0, PackageCaseCount1;
-    void TryPackageLevelUp(PackageSetData packageSetData, int packageCaseCount,int packageId)
-    { 
+    private PackageSetData packageSetData0, packageSetData1;
+    private int PackageCaseCount0, PackageCaseCount1;
+
+    private void TryPackageLevelUp(PackageSetData packageSetData, int packageCaseCount, int packageId)
+    {
         if (packageSetData && packageSetData.canLevelUp)
         {
             int cost = packageSetData.levelUpCost * packageCaseCount;
@@ -220,10 +221,10 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 {
                     PackageManager.instance.AddPackageUpLevel(packageId);
                 }
-
             });
         }
     }
+
     private async void SelectPackageItem(Item item, bool selected = true)
     {
         if (selected)
@@ -319,7 +320,6 @@ public class MultiPackagePanel : GamePanel<PackageList>
         buyCountValue.SetTextWithoutNotify(SelectCount.ToString());
     }
 
-   
     public override async void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
@@ -336,24 +336,24 @@ public class MultiPackagePanel : GamePanel<PackageList>
         PackageCaseCount1 = packageData1.caseCount;
         packageSetData1 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData1.dataId);
 
-        Item defaultItem = default(Item); 
+        Item defaultItem = default(Item);
         List<Item> items0 = new List<Item>();
         int itemCaseCount0 = 0;
         if (packageData0.items != null)
         {
-            for(int i = 0; i < packageData0.items.Count; i++)
+            for (int i = 0; i < packageData0.items.Count; i++)
             {
                 Item item = packageData0.items[i];
-                if (packageSetData1.packageType == PackageType.鲜活&&!item.isFresh)
+                if (packageSetData1.packageType == PackageType.鲜活 && !item.isFresh)
                 {
                     item.locked = true;
                 }
-                if (packageSetData1.packageType == PackageType.非鲜活&& item.isFresh)
+                if (packageSetData1.packageType == PackageType.非鲜活 && item.isFresh)
                 {
                     item.locked = true;
                 }
                 items0.Add(item);
-            } 
+            }
             itemCaseCount0 = packageData0.items.Count;
         }
         for (int i = items0.Count; i < packageData0.caseCount; i++)
@@ -361,15 +361,12 @@ public class MultiPackagePanel : GamePanel<PackageList>
             items0.Add(defaultItem);
         }
 
-       
-
         Title0.text = packageSetData0.packageName;
         itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
         caseCount0.text = $"{itemCaseCount0}/{packageData0.caseCount}";
         packageLevelUp0.transform.localScale = packageSetData0.canLevelUp ? Vector3.one : Vector3.zero;
         packageId0 = packageData0.instanceId;
 
-       
         List<Item> items1 = new List<Item>();
         int itemCaseCount1 = 0;
         if (packageData1.items != null)
@@ -387,15 +384,13 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 }
                 items1.Add(item);
             }
-             
+
             itemCaseCount1 = packageData1.items.Count;
         }
         for (int i = items1.Count; i < packageData1.caseCount; i++)
         {
             items1.Add(defaultItem);
         }
-
-       
 
         Title1.text = packageSetData1.packageName;
         itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);

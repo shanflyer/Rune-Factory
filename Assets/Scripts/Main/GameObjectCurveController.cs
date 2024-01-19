@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.Mathematics;
-using System;
+using UnityEngine;
 
 public struct CurveMoveData
 {
@@ -13,20 +12,22 @@ public struct CurveMoveData
     public Vector2 targetPos;
     public Vector2 middlePos;
     public GameObjectCurveController.CurveEndAction CurveEndAction;
-
 }
-public class GameObjectCurveController:Singleton<GameObjectCurveController>
-{ 
+
+public class GameObjectCurveController : Singleton<GameObjectCurveController>
+{
     public delegate Vector2 GetCurvePos(float timeValue);
+
     public delegate void SetCurvePosCurveMoveData(float timeValue, CurveMoveData curveMoveData);
 
     public delegate void CurveAction(Vector2 pos);
+
     public delegate void CurveEndAction();
+
     private Dictionary<int, IEnumerator> objectMoveIEnumerator = new Dictionary<int, IEnumerator>();
     private Dictionary<int, IEnumerator> runIEnumerator = new Dictionary<int, IEnumerator>();
     private Dictionary<int, IEnumerator> pauseEnumerator = new Dictionary<int, IEnumerator>();
     private MyInstance myInstance;
-
 
     public MonoBehaviour UpDataComponent;
 
@@ -35,13 +36,14 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         if (runIEnumerator.TryGetValue(instanceId, out var enumerator))
         {
             UpDataComponent.StopCoroutine(enumerator);
-            runIEnumerator.Remove(instanceId); 
-        } 
-        if(pauseEnumerator.TryGetValue(instanceId,out  enumerator))
+            runIEnumerator.Remove(instanceId);
+        }
+        if (pauseEnumerator.TryGetValue(instanceId, out enumerator))
         {
             pauseEnumerator.Remove(instanceId);
         }
     }
+
     public bool StopLineMove(int instanceId)
     {
         if (!pauseEnumerator.ContainsKey(instanceId) && runIEnumerator.TryGetValue(instanceId, out var enumerator))
@@ -53,6 +55,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         }
         return false;
     }
+
     public bool StartLineMove(int instanceId)
     {
         if (!runIEnumerator.ContainsKey(instanceId) && pauseEnumerator.TryGetValue(instanceId, out var enumerator))
@@ -68,40 +71,43 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
 
     public void SetUpDataComponent(MonoBehaviour UpDataComponent)
     {
-        this.UpDataComponent=UpDataComponent; 
+        this.UpDataComponent = UpDataComponent;
     }
+
     protected override void Clear()
     {
         base.Clear();
         myInstance.Clear();
     }
+
     public override void Init()
     {
         base.Init();
         myInstance = new MyInstance();
     }
 
-
-    void SetCurvePosCurveMoveDataAction(float timeValue, CurveMoveData curveMoveData)
+    private void SetCurvePosCurveMoveDataAction(float timeValue, CurveMoveData curveMoveData)
     {
         float oneMinusTime = 1 - timeValue;
 
         Vector2 pos = oneMinusTime * oneMinusTime * curveMoveData.startPos + 2 * timeValue * oneMinusTime * curveMoveData.middlePos
         + timeValue * timeValue * curveMoveData.targetPos;
-        curveMoveData.transform.position=pos;
-    }
-    void SetLinePosCurveMoveDataAction(float timeValue, CurveMoveData curveMoveData)
-    { 
-        Vector2 pos = curveMoveData.startPos +(curveMoveData.targetPos-curveMoveData.startPos)*timeValue;
         curveMoveData.transform.position = pos;
     }
+
+    private void SetLinePosCurveMoveDataAction(float timeValue, CurveMoveData curveMoveData)
+    {
+        Vector2 pos = curveMoveData.startPos + (curveMoveData.targetPos - curveMoveData.startPos) * timeValue;
+        curveMoveData.transform.position = pos;
+    }
+
     private IEnumerator CurveAddTimeList(List<CurveMoveData> curveMoveDatas, SetCurvePosCurveMoveData SetCurvePos,
         CurveEndAction curveEndAction)
     {
         float timeValue = 0;
         float deltaValue = Time.fixedDeltaTime;
         int endCount = 0;
-        while (endCount<curveMoveDatas.Count)
+        while (endCount < curveMoveDatas.Count)
         {
             timeValue += deltaValue;
             endCount = 0;
@@ -130,14 +136,15 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
                 {
                     endCount++;
                 }
-            }   
-            yield return new WaitForFixedUpdate(); 
+            }
+            yield return new WaitForFixedUpdate();
         }
         if (curveEndAction != null)
         {
             curveEndAction();
-        } 
+        }
     }
+
     public IEnumerator CurveList(List<CurveMoveData> curveMoveDatas, CurveEndAction curveEndAction)
     {
         IEnumerator enumerator = CurveAddTimeList(curveMoveDatas, SetCurvePosCurveMoveDataAction, curveEndAction);
@@ -145,6 +152,7 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         UpDataComponent.StartCoroutine(enumerator);
         return enumerator;
     }
+
     public IEnumerator LineList(List<CurveMoveData> curveMoveDatas, CurveEndAction curveEndAction)
     {
         IEnumerator enumerator = CurveAddTimeList(curveMoveDatas, SetLinePosCurveMoveDataAction, curveEndAction);
@@ -152,8 +160,6 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         UpDataComponent.StartCoroutine(enumerator);
         return enumerator;
     }
-
-
 
     private IEnumerator CurveAddTime(float speed, CurveAction curveAction, GetCurvePos getCurvePos,
          CurveEndAction curveEndAction)
@@ -170,16 +176,16 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         {
             curveEndAction();
         }
-
     }
-    public IEnumerator Curve(float speed,Vector2 startPos,Vector2 targetPos,Vector2 middlePos, CurveAction curveAction, CurveEndAction curveEndAction)
+
+    public IEnumerator Curve(float speed, Vector2 startPos, Vector2 targetPos, Vector2 middlePos, CurveAction curveAction, CurveEndAction curveEndAction)
     {
-        IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) => {
+        IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) =>
+        {
+            float oneMinusTime = 1 - timeValue;
 
-            float oneMinusTime = 1- timeValue;
-
-            Vector2 pos = oneMinusTime* oneMinusTime* startPos+2*timeValue*oneMinusTime* middlePos
-            + timeValue*timeValue*targetPos;
+            Vector2 pos = oneMinusTime * oneMinusTime * startPos + 2 * timeValue * oneMinusTime * middlePos
+            + timeValue * timeValue * targetPos;
             return pos;
         }, curveEndAction);
 
@@ -187,11 +193,11 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         return enumerator;
     }
 
-    public int Line(float speed, Vector2 startPos,Vector2 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
+    public int Line(float speed, Vector2 startPos, Vector2 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
     {
         int instanceId = myInstance.CreatInstanceId();
-        IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) => {
-
+        IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) =>
+        {
             Vector2 pos = startPos + (targetPos - startPos) * timeValue;
             return pos;
         }, EnnAction);
@@ -210,8 +216,9 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
         UpDataComponent.StartCoroutine(enumerator);
         runIEnumerator.Add(instanceId, enumerator);
 
-        return instanceId ;
+        return instanceId;
     }
+
     public void StopObjectMove(int instanceId)
     {
         if (objectMoveIEnumerator.TryGetValue(instanceId, out IEnumerator enumerator))
@@ -219,16 +226,15 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
             UpDataComponent.StopCoroutine(enumerator);
             objectMoveIEnumerator.Remove(instanceId);
             enumerator = null;
-           
         }
     }
-    
-    public void ObjectMove(GetMoveVector GetObjectPos,GetMoveVector GetMoveDirction,SetMoveTarge SetMoveTarge,
+
+    public void ObjectMove(GetMoveVector GetObjectPos, GetMoveVector GetMoveDirction, SetMoveTarge SetMoveTarge,
         int mapId, int instanceId, bool checkWalk)
     {
-        if(!objectMoveIEnumerator.TryGetValue(instanceId, out IEnumerator enumerator))
+        if (!objectMoveIEnumerator.TryGetValue(instanceId, out IEnumerator enumerator))
         {
-            enumerator = ObjectFreedomMoving(GetObjectPos,GetMoveDirction,SetMoveTarge,mapId,instanceId,checkWalk);
+            enumerator = ObjectFreedomMoving(GetObjectPos, GetMoveDirction, SetMoveTarge, mapId, instanceId, checkWalk);
             UpDataComponent.StartCoroutine(enumerator);
             objectMoveIEnumerator.Add(instanceId, enumerator);
         }
@@ -245,18 +251,20 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
 
             if (checkWalk)
             {
-                if (WorldMapManager.instance.InitSmoothMove(ref direction, nowPos, mapId))
+                int2 target = int2.zero;
+                Vector2 targetPos = nowPos;
+
+                float distance = CharacterManager.updataMoveSpeed * Time.deltaTime;
+
+                if (WorldMapManager.instance.InitSmoothMove(ref direction, nowPos, mapId, distance, ref target, ref targetPos))
                 {
-                    Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.deltaTime;
-                    int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
-                    SetMoveTarge(targetCoordinate, targetPos);
+                    SetMoveTarge(target, targetPos);
                 }
                 else
                 {
                     _continue = false;
                     StopObjectMove(instanceId);
                 }
-
             }
             else
             {
@@ -268,5 +276,4 @@ public class GameObjectCurveController:Singleton<GameObjectCurveController>
             yield return 0;
         }
     }
-
 }

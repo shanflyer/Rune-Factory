@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using BehaviorDesigner.Runtime;
+﻿using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+
 [TaskCategory("NewGame/Common")]
 [TaskName("时间满足条件")]
 public class GameTimeCheckRun : Action
@@ -17,11 +17,14 @@ public class GameTimeCheckRun : Action
     public SharedInt hour1;
     public SharedInt minute1;
     public bool Equals = true;
+
     public override void OnAwake()
     {
         base.OnAwake();
     }
-    bool addAction = false;
+
+    private bool addAction = false;
+
     public override void OnBehaviorComplete()
     {
         base.OnBehaviorComplete();
@@ -34,7 +37,8 @@ public class GameTimeCheckRun : Action
         base.OnEnd();
         GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
         addAction = false;
-    } 
+    }
+
     public override void OnStart()
     {
         taskStatus = TaskStatus.Running;
@@ -42,9 +46,10 @@ public class GameTimeCheckRun : Action
         {
             GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
             addAction = true;
-        } 
+        }
     }
-    void UpdateGameTime(UpdateGameTime updateGameTime)
+
+    private void UpdateGameTime(UpdateGameTime updateGameTime)
     {
         bool result = true;
         if (year0.Value > 0 && year1.Value >= year0.Value)
@@ -157,7 +162,8 @@ public class GameTimeCheckRun : Action
             SetResult(true);
         }
     }
-    void SetResult(bool result)
+
+    private void SetResult(bool result)
     {
         if (result)
         {
@@ -168,7 +174,9 @@ public class GameTimeCheckRun : Action
             taskStatus = TaskStatus.Failure;
         }
     }
-    TaskStatus taskStatus;
+
+    private TaskStatus taskStatus;
+
     public override TaskStatus OnUpdate()
     {
         return taskStatus;

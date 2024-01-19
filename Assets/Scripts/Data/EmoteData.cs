@@ -13,6 +13,7 @@ public class EmoteData : ScriptableObject, IGameData, IReferenceData
     {
         return id.ToString();
     }
+
     public string GetKey()
     {
         return id.ToString();

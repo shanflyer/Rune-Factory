@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using UnityEngine;
-using BehaviorDesigner.Runtime;
+﻿using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
+using UnityEngine;
 
 [TaskCategory("Game/Character")]
 [TaskName("角色移动")]
@@ -12,20 +11,24 @@ public class CharacterMove : Action
     public SharedInt3 target;
     public SharedInt2 offset;
     public bool smartMove;
+
     // Use this for initialization
     [SerializeField]
-    TaskStatus taskStatus;
-    
-    void MoveEndAction()
+    private TaskStatus taskStatus;
+
+    private void MoveEndAction()
     {
         taskStatus = TaskStatus.Success;
         //Debug.Log($"end:{taskStatus}");
     }
+
     public override void OnAwake()
     {
         base.OnAwake();
     }
+
     private bool addAction;
+
     public override void OnBehaviorComplete()
     {
         base.OnBehaviorComplete();
@@ -40,7 +43,8 @@ public class CharacterMove : Action
         addAction = false;
     }
 
-    int2 offsetCoordinate = int2.zero;
+    private int2 offsetCoordinate = int2.zero;
+
     public override void OnStart()
     {
         if (!addAction)
@@ -50,14 +54,14 @@ public class CharacterMove : Action
         }
 
         taskStatus = TaskStatus.Running;
-        if (characterId==null|| characterId.IsNull())
+        if (characterId == null || characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        if (target==null|| target.IsNull())
+        if (target == null || target.IsNull())
         {
             target = (SharedInt3)Owner.GetVariable("TargetCoordinate");
-            if (target==null|| target.IsNull())
+            if (target == null || target.IsNull())
             {
                 taskStatus = TaskStatus.Failure;
                 return;
@@ -67,7 +71,7 @@ public class CharacterMove : Action
         {
             offsetCoordinate = offset.Value;
         }
-        var targetCoordinate = new int3(target.Value.x+ offsetCoordinate.x, target.Value.y+ offsetCoordinate.y, target.Value.z);
+        var targetCoordinate = new int3(target.Value.x + offsetCoordinate.x, target.Value.y + offsetCoordinate.y, target.Value.z);
         var character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
         {
@@ -77,10 +81,10 @@ public class CharacterMove : Action
                 taskStatus = TaskStatus.Success;
             }
             else
-            { 
+            {
                 if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, MoveEndAction))
-                { 
-                   // taskStatus = TaskStatus.Failure;
+                {
+                    // taskStatus = TaskStatus.Failure;
                 }
             }
         }
@@ -90,7 +94,7 @@ public class CharacterMove : Action
         }
     }
 
-    void FailedMoveAction(CharacterMoveFailed characterMoveFailed)
+    private void FailedMoveAction(CharacterMoveFailed characterMoveFailed)
     {
         if (characterMoveFailed.characterId == characterId.Value)
         {
@@ -106,11 +110,11 @@ public class CharacterMove : Action
             {
                 taskStatus = TaskStatus.Failure;
             }
-            
         }
     }
+
     public override TaskStatus OnUpdate()
-    { 
+    {
         return taskStatus;
     }
 }

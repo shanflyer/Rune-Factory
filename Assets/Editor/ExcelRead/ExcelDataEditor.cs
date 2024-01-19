@@ -1,10 +1,8 @@
-﻿using Excel; 
-using OldName;
+﻿using Excel;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Unity.Mathematics;
 using UnityEditor;
@@ -13,7 +11,6 @@ using UnityEngine;
 public class ExcelDataEditor : MyEditor
 {
     public static ExcelDataEditor Instance;
-
 
     [MenuItem("工具/Excel数据管理")]
     public static void WindowShow()
@@ -99,7 +96,7 @@ public class ExcelDataEditor : MyEditor
 
                 Type type = null;
                 Type dataType = null;
-                 
+
                 var dataName = result.Tables[0].Rows[0][0].ToString();
 
                 var fieldName = result.Tables[0].Rows[0][1].ToString();
@@ -121,8 +118,8 @@ public class ExcelDataEditor : MyEditor
                 }
 
                 Dictionary<string, FieldInfo> keyFields = new Dictionary<string, FieldInfo>();
-                
-                Dictionary<string, Dictionary<string,FieldInfo>> keyChildFields = new Dictionary<string, Dictionary<string, FieldInfo>>();
+
+                Dictionary<string, Dictionary<string, FieldInfo>> keyChildFields = new Dictionary<string, Dictionary<string, FieldInfo>>();
 
                 foreach (var field in fields)
                 {
@@ -133,7 +130,7 @@ public class ExcelDataEditor : MyEditor
                 Dictionary<string, List<FieldInfo>> childFieldDatas = new Dictionary<string, List<FieldInfo>>();
                 for (int i = 0; i < columnCount; i++)
                 {
-                    var fieldTypeValue= result.Tables[0].Rows[1][i].ToString();
+                    var fieldTypeValue = result.Tables[0].Rows[1][i].ToString();
                     var strs = fieldTypeValue.Split(':');
                     if (strs.Length == 1)
                     {
@@ -144,19 +141,19 @@ public class ExcelDataEditor : MyEditor
                         }
                     }
                     else
-                    { 
+                    {
                         if (keyFields.TryGetValue(strs[0], out FieldInfo fieldInfo))
                         {
-                            if (!keyChildFields.TryGetValue(strs[0],out Dictionary<string, FieldInfo> childFields))
+                            if (!keyChildFields.TryGetValue(strs[0], out Dictionary<string, FieldInfo> childFields))
                             {
                                 childFields = new Dictionary<string, FieldInfo>();
-                                var childType =fieldInfo.FieldType;
+                                var childType = fieldInfo.FieldType;
                                 var childFieldArray = childType.GetFields();
                                 foreach (var childField in childFieldArray)
                                 {
                                     childFields.Add(childField.Name, childField);
                                 }
-                                keyChildFields.Add(strs[0], childFields); 
+                                keyChildFields.Add(strs[0], childFields);
                                 childFieldDatas.Add(strs[0], new List<FieldInfo>());
                             }
 
@@ -166,12 +163,11 @@ public class ExcelDataEditor : MyEditor
                             {
                                 childFieldDatas[strs[0]].Add(childFieldInfo);
                             }
-
-                        } 
-                    } 
+                        }
+                    }
                 }
-                string outPath = $"{EditorDataPath.outDataPath}{result.Tables[0].TableName}"; 
-               // string outPath = dataType != null? $"{EditorDataPath.outDataPath}{dataName}": $"{EditorDataPath.outDataPath}{listStr}";
+                string outPath = $"{EditorDataPath.outDataPath}{result.Tables[0].TableName}";
+                // string outPath = dataType != null? $"{EditorDataPath.outDataPath}{dataName}": $"{EditorDataPath.outDataPath}{listStr}";
                 if (Directory.Exists(outPath))
                 {
                     Directory.Delete(outPath, true);
@@ -179,8 +175,8 @@ public class ExcelDataEditor : MyEditor
                 Directory.CreateDirectory(outPath);
 
                 object listData = null;
-                
-                Array array=null;
+
+                Array array = null;
                 if (dataType != null)
                 {
                     array = Array.CreateInstance(dataType, rowCount - 3);
@@ -197,9 +193,7 @@ public class ExcelDataEditor : MyEditor
 
                         var value = result.Tables[0].Rows[i][j];
                         LinkDataFieldValue(data, fieldInfo, value, childFieldDatas, childDatas);
-                        
                     }
-                    
 
                     if (dataType != null)
                     {
@@ -253,7 +247,6 @@ public class ExcelDataEditor : MyEditor
                     }
                 }
 
-
                 MethodInfo meth1 = type.GetMethod("Clear");
                 if (meth1 != null)
                 {
@@ -267,9 +260,9 @@ public class ExcelDataEditor : MyEditor
         }
     }
 
-    void LinkDataFieldValue(object data,FieldInfo fieldInfo,object value, 
-        Dictionary<string, List<FieldInfo>> childFieldDatas=null,
-         Dictionary<string, object> childDatas=null)
+    private void LinkDataFieldValue(object data, FieldInfo fieldInfo, object value,
+        Dictionary<string, List<FieldInfo>> childFieldDatas = null,
+         Dictionary<string, object> childDatas = null)
     {
         if (fieldInfo.FieldType.BaseType == typeof(Enum))
         {
@@ -292,7 +285,7 @@ public class ExcelDataEditor : MyEditor
                 fieldInfo.SetValue(data, value);
             }
         }
-        else if(fieldInfo.FieldType == typeof(List<int2>))
+        else if (fieldInfo.FieldType == typeof(List<int2>))
         {
             var valueStr = value.ToString();
             if (!string.IsNullOrEmpty(valueStr))
@@ -309,7 +302,8 @@ public class ExcelDataEditor : MyEditor
                 value = _value;
                 fieldInfo.SetValue(data, value);
             }
-        }else if (fieldInfo.FieldType == typeof(List<int3>))
+        }
+        else if (fieldInfo.FieldType == typeof(List<int3>))
         {
             var valueStr = value.ToString();
             if (!string.IsNullOrEmpty(valueStr))
@@ -357,7 +351,7 @@ public class ExcelDataEditor : MyEditor
                 fieldInfo.SetValue(data, value);
             }
         }
-        else if (childFieldDatas!=null&&childFieldDatas.TryGetValue(fieldInfo.Name, out var childFileds))
+        else if (childFieldDatas != null && childFieldDatas.TryGetValue(fieldInfo.Name, out var childFileds))
         {
             if (!childDatas.TryGetValue(fieldInfo.Name, out var childData))
             {
@@ -367,7 +361,7 @@ public class ExcelDataEditor : MyEditor
             for (int childFieldIndex = 0; childFieldIndex < childFileds.Count; childFieldIndex++)
             {
                 FieldInfo childFieldInfo = childFileds[childFieldIndex];
-                LinkDataFieldValue(childData, childFieldInfo, value); 
+                LinkDataFieldValue(childData, childFieldInfo, value);
             }
             fieldInfo.SetValue(data, childData);
         }
@@ -382,7 +376,6 @@ public class ExcelDataEditor : MyEditor
             {
                 Debug.LogError($"{fieldInfo.Name}-{value.ToString()}");
             }
-           
         }
     }
 

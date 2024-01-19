@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace BehaviorDesigner.Runtime.Tasks
 {
     [TaskDescription("Restarts a behavior tree, returns success after it has been restarted.")]
@@ -8,6 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     {
         [Tooltip("The GameObject of the behavior tree that should be restarted. If null use the current behavior")]
         public SharedGameObject behaviorGameObject;
+
         [Tooltip("The group of the behavior tree that should be restarted")]
         public SharedInt group;
 
@@ -15,7 +14,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnAwake()
         {
-            if(behaviorGameObject==null||behaviorGameObject.Value==null)
+            if (behaviorGameObject == null || behaviorGameObject.Value == null)
             {
                 behavior = Owner;
             }
@@ -43,12 +42,12 @@ namespace BehaviorDesigner.Runtime.Tasks
                     }
                 }
             }
-           
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (behavior == null) {
+            if (behavior == null)
+            {
                 return TaskStatus.Failure;
             }
 

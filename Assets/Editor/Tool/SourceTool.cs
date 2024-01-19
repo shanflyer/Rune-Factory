@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 using Object = UnityEngine.Object;
 
 public enum sxx
-{ 
-
+{
 }
+
 public class SourceTool : MonoBehaviour
 {
     [MenuItem("Assets/音效工具/刷新音效资源数据")]
@@ -26,16 +22,16 @@ public class SourceTool : MonoBehaviour
             {
                 var path = AssetDatabase.GetAssetPath(obj);
                 if (obj is AudioClip)
-                { 
+                {
                     var strs = path.Split('/');
                     var title = strs[strs.Length - 2];
 
-                    if(!sources.TryGetValue(title,out List<string> list))
+                    if (!sources.TryGetValue(title, out List<string> list))
                     {
                         list = new List<string>();
                         sources[title] = list;
                     }
-                    list.Add(strs[strs.Length - 1].Split('.')[0]); 
+                    list.Add(strs[strs.Length - 1].Split('.')[0]);
                 }
 
                 if (string.IsNullOrEmpty(path))
@@ -61,7 +57,7 @@ public class SourceTool : MonoBehaviour
             foreach (var f in files)
             {
                 try
-                { 
+                {
                     var title = directoryInfo.Name;
 
                     if (!sources.TryGetValue(title, out List<string> list))
@@ -73,9 +69,7 @@ public class SourceTool : MonoBehaviour
                 }
                 catch
                 {
-
                 }
-
             }
             foreach (var d in _dirs)
             {
@@ -100,7 +94,6 @@ public class SourceTool : MonoBehaviour
 
         AssetDatabase.ImportAsset("Assets/Scripts/Audio/AudioSource.cs");
     }
-    
 
     [MenuItem("Assets/数据/引用数据刷新")]
     public static void SetGameDataSerializeObj()
@@ -117,11 +110,9 @@ public class SourceTool : MonoBehaviour
                 IGameData gameData = selection[i] as IGameData;
                 if (gameData != null)
                 {
-
                     gameData.SetReferenceData();
                     EditorUtility.SetDirty(selection[i]);
                     AssetDatabase.SaveAssets();
-
                 }
             }
         }
@@ -134,7 +125,6 @@ public class SourceTool : MonoBehaviour
     [MenuItem("Assets/输出精灵资源")]
     public static void OutSpriteSource()
     {
-
         foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
         {
             var path = AssetDatabase.GetAssetPath(obj);
@@ -148,14 +138,13 @@ public class SourceTool : MonoBehaviour
             }
 
             if (string.IsNullOrEmpty(path))
-                continue; 
+                continue;
         }
     }
 
     [MenuItem("Assets/输出精灵资源X2")]
     public static void OutSpriteSource2()
     {
-
         foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
         {
             var path = AssetDatabase.GetAssetPath(obj);
@@ -164,7 +153,7 @@ public class SourceTool : MonoBehaviour
                 var strs = path.Split('.');
                 if (strs[strs.Length - 1] == "png")
                 {
-                    OutSprite(path,2);
+                    OutSprite(path, 2);
                 }
             }
 
@@ -172,7 +161,8 @@ public class SourceTool : MonoBehaviour
                 continue;
         }
     }
-    static void OutSprite(string path,int scale=1)
+
+    private static void OutSprite(string path, int scale = 1)
     {
         var sources = AssetDatabase.LoadAllAssetsAtPath(path);
         foreach (var source in sources)
@@ -180,18 +170,16 @@ public class SourceTool : MonoBehaviour
             if (source.GetType().Name == "Sprite")
             {
                 Sprite sprite = (Sprite)source;
-                SaveTexture(sprite,scale); 
+                SaveTexture(sprite, scale);
             }
         }
     }
 
-    static void SaveTexture(Sprite sprite, int scale = 1)
+    private static void SaveTexture(Sprite sprite, int scale = 1)
     {
-        int width = Mathf.RoundToInt(sprite.rect.width*2);
+        int width = Mathf.RoundToInt(sprite.rect.width * 2);
         int height = Mathf.RoundToInt(sprite.rect.height * 2);
         Texture2D texture2D = new Texture2D(width, height);
-        
-
 
         int x0 = 0;
         int y0 = 0;
@@ -209,32 +197,30 @@ public class SourceTool : MonoBehaviour
             Mathf.RoundToInt(sprite.rect.width), Mathf.RoundToInt(sprite.rect.height));
         //Color[] SpriteColors = sprite.texture.GetPixels(4, 4, 18, 52);
 
-        Color[] outColor=new Color[SpriteColors.Length*scale*scale];
-        
-        for(int i = 0; i < SpriteColors.Length; i++)
-        {
-            int raw = i % Mathf.RoundToInt(sprite.rect.width)*scale;
-            int col=i/ Mathf.RoundToInt(sprite.rect.width)*scale;
-            
+        Color[] outColor = new Color[SpriteColors.Length * scale * scale];
 
-            for(int j = 0; j < scale; j++)
+        for (int i = 0; i < SpriteColors.Length; i++)
+        {
+            int raw = i % Mathf.RoundToInt(sprite.rect.width) * scale;
+            int col = i / Mathf.RoundToInt(sprite.rect.width) * scale;
+
+            for (int j = 0; j < scale; j++)
             {
-                int index=col*width+j+raw;
+                int index = col * width + j + raw;
                 outColor[index] = SpriteColors[i];
-                int index1=col*width+width+j+raw;
+                int index1 = col * width + width + j + raw;
                 outColor[index1] = SpriteColors[i];
             }
         }
-         
+
         texture2D.SetPixels(x0, y0, width, height, outColor.ToArray());
 
         string dir = "OutTexture";
 
-
         SaveFileTexture(dir, texture2D, sprite.name);
     }
 
-    static async void SaveFileTexture(string outPath, Texture2D texture, string name)
+    private static async void SaveFileTexture(string outPath, Texture2D texture, string name)
     {
         byte[] dataBytes = texture.EncodeToPNG();
         if (!Directory.Exists(outPath))
@@ -251,6 +237,5 @@ public class SourceTool : MonoBehaviour
             fs.Seek(0, SeekOrigin.End);
             await fs.WriteAsync(dataBytes, 0, dataBytes.Length);
         }
-
     }
 }

@@ -1,13 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
 
-public delegate void Int3Action(int3 value,int action=0);
+public delegate void Int3Action(int3 value, int action = 0);
+
 public delegate Vector2 GetMoveVector();
+
 public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
+
 [System.Serializable]
 public enum AttributeType
 {
@@ -22,10 +24,11 @@ public enum AttributeType
 [System.Serializable]
 public enum Gender
 {
-    animal=0,
+    animal = 0,
     male = 1,
     female = 2
 }
+
 [System.Serializable]
 public enum ValueType
 {
@@ -39,42 +42,50 @@ public enum ValueType
     Crit = 8,
     Dodge = 9,
 }
+
 [System.Serializable]
 public enum CompareType
 {
     等于, 不等于, 大于, 不大于, 小于, 不小于
 }
+
 [System.Serializable]
 public enum CharacterPropertyType
 {
-    自定义值=-1, 体力,生命,法力,攻击,防御,暴击,闪避,饱食,
-    最大体力,最大生命,最大法力
+    自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 暴击, 闪避, 饱食,
+    最大体力, 最大生命, 最大法力
 }
+
 public enum Direction
 {
-    Default = -1, UP =0, LEFT = 1, DOWN = 2, RIGHT =3,
+    Default = -1, UP = 0, LEFT = 1, DOWN = 2, RIGHT = 3,
 }
+
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER,STOREITEM,EMOTE
+    MAPGROUND, MAPITEM, CHARACTER, STOREITEM, EMOTE
 }
+
 public enum FightRuntimeObjType
 {
-    PLAYER, FIGHTMAP, FIGHTITEM,MONSTRT, PLAYABLEDIRECTOR,OTHER
-} 
+    PLAYER, FIGHTMAP, FIGHTITEM, MONSTRT, PLAYABLEDIRECTOR, OTHER
+}
+
 public static class CharacterAnimatorParameter
 {
-    public static int Speed=Animator.StringToHash("Speed");
+    public static int Speed = Animator.StringToHash("Speed");
     public static int Dir_X = Animator.StringToHash("Dir_X");
     public static int Dir_Y = Animator.StringToHash("Dir_Y");
 }
+
 public enum EntityType
 {
-   All=1, 地图道具=2, 角色=15,玩家=3,NPC=5
+    All = 1, 地图道具 = 2, 角色 = 15, 玩家 = 3, NPC = 5
 }
+
 public class GameCommon
 {
-    public const int zeroGameYear=1300;
+    public const int zeroGameYear = 1300;
     public const Season zeroSeasom = Season.春;
     public const int zeroDay = 1;
     public const float sleepCostTime = 8.0f;
@@ -86,6 +97,7 @@ public class GameCommon
     public const int defaultPerRPCost = 5;
     public const int storeCoinTime = 1000;
     public const float HurtUtlility = 0.6f;
+
     public static List<int> zeroNPC = new List<int>
     {
         1001,2001
@@ -95,31 +107,29 @@ public class GameCommon
     public static int defaultPlayerTalkTime = 2000;
 
     public static float2 dropWaitTime = new float2(0.4f, 0.8f);
-    public static float4 dropArea = new float4(-0.6f,-0.3f, 0.6f, 0.3f);
+    public static float4 dropArea = new float4(-0.6f, -0.3f, 0.6f, 0.3f);
     public const float dropItemFlyerSpeed = 3f;
     public const int SeasonDays = 30;
     public const float fightMapMovingSpeed = 0.2f;
 
     public const int DefaultOutItemId = -1;
-    public const float PromptTime= 2.0f;
+    public const float PromptTime = 2.0f;
     public const float cellWidth = 0.08f, cellHigh = 0.08f;
     public const float cellSize = 0.04f;
-    public const float oneDividCellWidth = 12.5f, oneDividCellHigh =12.5f;
+    public const float oneDividCellWidth = 12.5f, oneDividCellHigh = 12.5f;
     public const float slantValue = 0.707f;
-
 
     public const int randomInnerGroupMax = 5;
 
     public const int worldMapSizeX = 80;
     public const int worldMapSizeY = 45;
     public const float worldMapTileSize = 0.08f;
-    
 
     public const float hightMin = -0.5f;
     public const float hightMax = 1;
 
     public const float waterPerlinMin = 4;
-    public const float waterPerlinMax =6;
+    public const float waterPerlinMax = 6;
 
     public const float hightPerlinMin = 8;
     public const float hightPerlinMax = 10;
@@ -143,6 +153,7 @@ public class GameCommon
     /// 生成水面的噪声时对结果的重映射
     /// </summary>
     public const float waterLerpValueMin_Min = 0.5f;
+
     public const float waterLerpValueMin_Max = 1f;
     public const float waterLerpValueMax_Min = 1f;
     public const float waterLerpValueMax_Max = 2.0f;
@@ -156,6 +167,7 @@ public class GameCommon
     public const string triggerRenferenceName = "Reference";
 
     public const string PlayerBoxId = "PlayerBoxId";
+
     public static Vector2 GetScreenResolution()
     {
         Vector2 gameViewSize;
@@ -171,7 +183,8 @@ public class GameCommon
     }
 
 #if UNITY_EDITOR
-    static Vector2 GameViewSize()
+
+    private static Vector2 GameViewSize()
     {
         var mouseOverWindow = UnityEditor.EditorWindow.mouseOverWindow;
         System.Reflection.Assembly assembly = typeof(UnityEditor.EditorWindow).Assembly;
@@ -186,7 +199,8 @@ public class GameCommon
         return size;
     }
 
-#endif 
+#endif
+
     /// <summary>
     /// 转换方向为值
     /// </summary>
@@ -198,10 +212,10 @@ public class GameCommon
         for (int i = 0; i < (int)direction; i++)
         {
             value *= 2;
-        } 
+        }
         return value;
-         
     }
+
     /// <summary>
     /// 检查方向值
     /// </summary>
@@ -220,9 +234,8 @@ public class GameCommon
         {
             return false;
         }
-        
-        
     }
+
     public static int2 StringToInt2(string str)
     {
         int2 result = new int2();
@@ -233,14 +246,14 @@ public class GameCommon
                 str = str.Substring(4, str.Length - 4);
                 var strs = str.Split(',');
                 result.x = int.Parse(strs[0]);
-                result.y = int.Parse(strs[1]); 
+                result.y = int.Parse(strs[1]);
             }
         }
         catch { }
 
-
         return result;
     }
+
     public static Vector3 StringToVector3(string str)
     {
         Vector3 vector3 = new Vector3();
@@ -256,10 +269,10 @@ public class GameCommon
             }
         }
         catch { }
-        
 
         return vector3;
     }
+
     public static int3 StringToInt3(string str)
     {
         int3 int3 = new int3();
@@ -274,23 +287,22 @@ public class GameCommon
                 int3.z = int.Parse(strs[2]);
             }
         }
-        catch(Exception e) 
+        catch (Exception e)
         {
             Debug.Log(e);
         }
 
-
         return int3;
     }
 
-    public static Vector2 SetImageSize(Sprite sprite,Vector2 size)
+    public static Vector2 SetImageSize(Sprite sprite, Vector2 size)
     {
         Vector2 spriteSize = sprite.rect.size;
         if (spriteSize.x > spriteSize.y)
         {
             float value = size.x / spriteSize.x;
-            float y=spriteSize.y*value;
-            return new Vector2(size.x,y);
+            float y = spriteSize.y * value;
+            return new Vector2(size.x, y);
         }
         else
         {
@@ -298,39 +310,42 @@ public class GameCommon
             float x = spriteSize.x * value;
             return new Vector2(x, size.y);
         }
-         
     }
+
     public static float GetCellTrueDistance(int2 coordinate0, int2 coordinate1)
     {
         int2 result = coordinate0 - coordinate1;
-        return math.length(new float2(result.x * cellWidth, result.y * cellHigh)); 
+        return math.length(new float2(result.x * cellWidth, result.y * cellHigh));
     }
-    public static int GetCellDistance(int2 coordinate0,int2 coordinate1)
+
+    public static int GetCellDistance(int2 coordinate0, int2 coordinate1)
     {
         int2 result = coordinate0 - coordinate1;
-        return math.abs(result.x)+math.abs(result.y);
+        return math.abs(result.x) + math.abs(result.y);
     }
-    public static string AddString(string s0,string s1)
-    { 
-        var span = s1.AsSpan(); 
+
+    public static string AddString(string s0, string s1)
+    {
+        var span = s1.AsSpan();
         var builder = new StringBuilder(s0);
-        builder.Append(span); 
+        builder.Append(span);
         return builder.ToString();
     }
 
-    public static void SetEnable(GameObject gameObject,bool enable,bool compontEnable)
+    public static void SetEnable(GameObject gameObject, bool enable, bool compontEnable)
     {
-        gameObject.transform.localScale = enable?Vector3.one:Vector3.zero;
+        gameObject.transform.localScale = enable ? Vector3.one : Vector3.zero;
     }
+
     public static int NextRandom(int numSeeds, int length)
     {
-        // Create a byte array to hold the random value.    
+        // Create a byte array to hold the random value.
         byte[] randomNumber = new byte[length];
-        // Create a new instance of the RNGCryptoServiceProvider.    
+        // Create a new instance of the RNGCryptoServiceProvider.
         System.Security.Cryptography.RNGCryptoServiceProvider rng = new System.Security.Cryptography.RNGCryptoServiceProvider();
-        // Fill the array with a random value.    
+        // Fill the array with a random value.
         rng.GetBytes(randomNumber);
-        // Convert the byte to an uint value to make the modulus operation easier.    
+        // Convert the byte to an uint value to make the modulus operation easier.
         uint randomResult = 0x0;
         for (int i = 0; i < length; i++)
         {
@@ -338,6 +353,7 @@ public class GameCommon
         }
         return (int)(randomResult % numSeeds) + 1;
     }
+
     public static int CreateRandSeed()
     {
         var iSeed = 0;
@@ -345,21 +361,26 @@ public class GameCommon
         iSeed = guid.GetHashCode();
         return iSeed;
     }
+
     public static float2 GetDirectValue(Direction direction)
     {
         switch (direction)
         {
             case Direction.UP:
                 return new float2(0, 1);
+
             case Direction.LEFT:
                 return new float2(-1, 0);
+
             case Direction.RIGHT:
                 return new float2(1, 0);
+
             case Direction.DOWN:
                 return new float2(0, -1);
         }
         return float2.zero;
     }
+
     public static Direction GetDirect(int2 start, int2 target)
     {
         int2 offset = start - target;
@@ -386,8 +407,8 @@ public class GameCommon
                 return Direction.DOWN;
             }
         }
-
     }
+
     public static Direction GetDirect(Vector2Int start, Vector2Int target)
     {
         Vector2Int offset = start - target;
@@ -413,8 +434,9 @@ public class GameCommon
             {
                 return Direction.DOWN;
             }
-        } 
+        }
     }
+
     public static Direction GetCharacterDirect(float2 offset, Direction oldDirection = Direction.Default)
     {
         if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
@@ -494,6 +516,7 @@ public class GameCommon
         }
         return oldDirection;
     }
+
     public static Direction GetCharacterDirect(int2 start, int2 target, Direction oldDirection = Direction.Default)
     {
         int2 offset = start - target;
@@ -575,6 +598,7 @@ public class GameCommon
         }
         return oldDirection;
     }
+
     public static Direction GetCharacterDirect(Vector2Int start, Vector2Int target, Direction oldDirection = Direction.Default)
     {
         Vector2Int offset = start - target;
@@ -656,41 +680,49 @@ public class GameCommon
         }
         return oldDirection;
     }
+
     public static float2 WorldCoordinateToPos(float2 coordinate)
     {
         float2 pos = new float2(coordinate.x * worldMapTileSize + worldMapTileSize * 0.5f, coordinate.y * worldMapTileSize + worldMapTileSize * 0.5f);
         return pos;
     }
+
     public static Vector2 GetMapPos(int x, int y)
     {
         Vector2 pos = new Vector2(cellWidth * x + cellWidth * 0.5f, cellHigh * y + cellHigh * 0.5f);
         return pos;
     }
+
     public static Vector2 GetMapPos(int2 coordinate)
     {
         Vector2 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
         return pos;
     }
+
     public static Vector2 GetMapPos(Vector2Int coordinate)
     {
         Vector2 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
         return pos;
     }
+
     public static Vector2 GetMapPos(Vector2 coordinate)
     {
         Vector2 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
         return pos;
     }
+
     public static Vector2 GetZeroMapPos(Vector2Int coordinate)
     {
         Vector2 pos = new Vector2(cellWidth * coordinate.x, cellHigh * coordinate.y);
         return pos;
     }
+
     public static Vector2 GetZeroMapPos(int2 coordinate)
     {
         Vector2 pos = new Vector2(cellWidth * coordinate.x, cellHigh * coordinate.y);
         return pos;
     }
+
     public static Vector2Int GetMapCoordinate(Vector2 pos)
     {
         int x = Mathf.FloorToInt(pos.x * oneDividCellWidth);
@@ -706,6 +738,7 @@ public class GameCommon
 
         return new int2(x, y);
     }
+
     public static int2 GetMapCoordinateInt(float2 pos)
     {
         int x = Mathf.FloorToInt(pos.x * oneDividCellWidth);
@@ -714,8 +747,8 @@ public class GameCommon
         return new int2(x, y);
     }
 
-    public static bool CompareGameTime(int year,int season,int day,int hour,int minute,int targetYear,int targetSeason,int 
-        targetDay,int targetHour,int targetMinute)
+    public static bool CompareGameTime(int year, int season, int day, int hour, int minute, int targetYear, int targetSeason, int
+        targetDay, int targetHour, int targetMinute)
     {
         if (targetYear > 0)
         {
@@ -751,18 +784,18 @@ public class GameCommon
                 return true;
             if (targetMinute > minute)
                 return false;
-        } 
+        }
 
         return true;
     }
 }
 
 public static class DefaultGameData
-{ 
+{
     public const int defaultDay = 1;
     public const int defaultHour = 8;
-    
 }
+
 public static class EditorDataPath
 {
     public const string itemIconPath = "Item/";
@@ -777,22 +810,21 @@ public static class EditorDataPath
     public const string worldMapDataPath = "Assets/Resources/Data/WorldMapData/";
 
     public const string mapItemSourcePath = "Assets/Texture/Map/Item/";
-    public const string mapItemPrefabPath = "Assets/Resources/Prefabs/MapItem/"; 
+    public const string mapItemPrefabPath = "Assets/Resources/Prefabs/MapItem/";
     public const string mapGroundPath = "Assets/Resources/Prefabs/Ground/";
 
     public const string colliderTile = "Assets/TileMap/Tiles/Event/0.asset";
-    public const string triggerTile= "Assets/TileMap/Tiles/Event/e.asset";
+    public const string triggerTile = "Assets/TileMap/Tiles/Event/e.asset";
     public const string playerTriggerTile = "Assets/TileMap/Tiles/Event/e.asset";
 
     public const string mapItemStructDataPath = "Assets/Editor/Data/MapItemStruct.json";
-    public const string mapItemAnimationPath = "Assets/Animation/MapItem/"; 
+    public const string mapItemAnimationPath = "Assets/Animation/MapItem/";
     public const string gameEventDataPath = "Assets/Resources/Behavior/";
     public const string tempCharacterBehaviorPath = "Assets/Resources/Behavior/TempCharacter/";
-
 }
+
 public static class DataPath
 {
-
     public static Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
         {typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" },
@@ -848,7 +880,7 @@ public static class DataPath
 
     public static string GetDataPath(Type type)
     {
-        if(dataPathDic.TryGetValue(type, out string path))
+        if (dataPathDic.TryGetValue(type, out string path))
         {
             return path;
         }
@@ -867,7 +899,7 @@ public static class DataPath
     public const string DropItemPrefabPath = "Prefabs/Other/DropItem";
     public const string MonsterDeathPath = "Data/TimeLineData/怪物死亡";
     public const string BehaviorPath = "Behavior/";
-    public const string sceneInfoPath= "Prefabs/Other/SceneInfo";
+    public const string sceneInfoPath = "Prefabs/Other/SceneInfo";
 
     public const string BGMPath = "Audio/BGM/";
     public const string BGSPath = "Audio/BGS/";
@@ -877,9 +909,9 @@ public static class DataPath
     public const string titlePath = "ScriptableObject/Sprites/Title";
     public const string filmDataPath = "Prefabs/FilmObj/";
 
-    public static string gameSaveDataPath = Application.persistentDataPath; 
+    public static string gameSaveDataPath = Application.persistentDataPath;
 
     public const string characterPrefabPath = "Prefab/Character";
-    public const string monsterPrefabPath= "Prefab/Monster/";
+    public const string monsterPrefabPath = "Prefab/Monster/";
     public const string UIPath = "Prefabs/UI/";
 }

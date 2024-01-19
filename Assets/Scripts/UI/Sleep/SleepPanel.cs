@@ -1,26 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SleepPanel : GamePanel<MyInt>
 {
     [SerializeField]
-    Transform sleepParent;
+    private Transform sleepParent;
+
     [SerializeField]
-    SleepReference sleepReference;
+    private SleepReference sleepReference;
+
     [SerializeField]
-    Button returnButton;
-    DisplayList<SleepReference, SleepSetData> sleepSetList;
+    private Button returnButton;
+
+    private DisplayList<SleepReference, SleepSetData> sleepSetList;
+
     protected override void Awake()
     {
         base.Awake();
-        returnButton.onClick.AddListener(Close); 
+        returnButton.onClick.AddListener(Close);
         sleepSetList = new DisplayList<SleepReference, SleepSetData>(sleepReference, sleepParent);
-        
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -28,6 +29,7 @@ public class SleepPanel : GamePanel<MyInt>
         sleepReference = FindChildGameObject<SleepReference>("Sleep");
         returnButton = FindChildGameObject<Button>("ReturnButton");
     }
+
     public override async Task InitData(string dataKey)
     {
         mapItemInstance = int.Parse(dataKey);
@@ -36,8 +38,9 @@ public class SleepPanel : GamePanel<MyInt>
         sleepSetList.InitListData(SleepList, SelectAction);
     }
 
-    int mapItemInstance = 0;
-    async void SelectAction(SleepSetData data, bool value)
+    private int mapItemInstance = 0;
+
+    private async void SelectAction(SleepSetData data, bool value)
     {
         CloseMapObjTips closeMapObjTips = new CloseMapObjTips
         {
@@ -57,7 +60,7 @@ public class SleepPanel : GamePanel<MyInt>
             int targetMinue = data.minute;
             PlayerSleep playerSleep = new PlayerSleep
             {
-                characterId=CharacterManager.instance.controllerCharacter.instanceId,
+                characterId = CharacterManager.instance.controllerCharacter.instanceId,
                 targetHour = targetHour,
                 targetMinute = targetMinue,
             };
@@ -75,7 +78,7 @@ public class SleepPanel : GamePanel<MyInt>
             };
             GameActionManager.instance.QueueAction(playerSleep);
         }
-        if(WorldMapManager.instance.GetRuntimeMapItem(mapItemInstance,out var mapItem))
+        if (WorldMapManager.instance.GetRuntimeMapItem(mapItemInstance, out var mapItem))
         {
             var coordinate = mapItem.coordinate;
             SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
@@ -97,9 +100,9 @@ public class SleepPanel : GamePanel<MyInt>
 
         Close();
     }
+
     public override async void InitReferenceData(MyInt v)
     {
         base.InitReferenceData(v);
-        
     }
 }

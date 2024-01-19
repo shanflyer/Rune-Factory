@@ -8,11 +8,13 @@ public struct DynamicData
 {
     public SharedInt source, target, value;
 }
+
 [System.Serializable]
 public struct DynamicParameterData
 {
     public List<SharedVariable> Parameters;
 }
+
 [TaskCategory("NewGame/Common")]
 [TaskName("执行GameAction")]
 public class RunGameActions : Action
@@ -20,6 +22,7 @@ public class RunGameActions : Action
     public bool immediately;
     public SharedInt source, target;
     public SharedInt sharedSetIntValue;
+
     [Header("动态填充数据")]
     public List<DynamicData> otherDatas;
 
@@ -28,15 +31,17 @@ public class RunGameActions : Action
     public List<GameActionData> gameActionDatas;
     public bool waitResult;
 
-    TaskStatus taskStatus = TaskStatus.Running;
-    void SetValue(int value)
+    private TaskStatus taskStatus = TaskStatus.Running;
+
+    private void SetValue(int value)
     {
         if (sharedSetIntValue != null)
         {
             sharedSetIntValue.Value = value;
         }
     }
-    void SetActionResult(bool result)
+
+    private void SetActionResult(bool result)
     {
         if (result)
         {
@@ -47,9 +52,10 @@ public class RunGameActions : Action
             taskStatus = TaskStatus.Failure;
         }
     }
+
     public override void OnStart()
     {
-        if(waitResult)
+        if (waitResult)
         {
             taskStatus = TaskStatus.Running;
         }
@@ -64,7 +70,7 @@ public class RunGameActions : Action
                 var dynamicParameterData = dynamicParameterDatas[i];
                 var gameActionData = gameActionDatas[i];
                 List<Parameter> _parameters = new List<Parameter>();
-                for(int j = 0; j < dynamicParameterData.Parameters.Count; j++)
+                for (int j = 0; j < dynamicParameterData.Parameters.Count; j++)
                 {
                     Parameter parameter = new Parameter
                     {
@@ -72,14 +78,14 @@ public class RunGameActions : Action
                     };
                     _parameters.Add(parameter);
                 }
-                gameActionData._parameters= _parameters;
-             }
+                gameActionData._parameters = _parameters;
+            }
 
             if (otherDatas != null && i < otherDatas.Count)
             {
                 DynamicData otherData = otherDatas[i];
                 gameActionDatas[i].Action(otherData.source.Value, otherData.target.Value, otherData.value.Value,
-                   setResult:waitResult? SetActionResult:null,setValue: SetValue, immediately: immediately);
+                   setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
             }
             else
             {

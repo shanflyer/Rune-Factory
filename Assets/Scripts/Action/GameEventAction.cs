@@ -19,6 +19,7 @@ public struct ResetGameEvent : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct RemoveGameEvent : GameAction
 {
     public SetValue setValue { get; set; }

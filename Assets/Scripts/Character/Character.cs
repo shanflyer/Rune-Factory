@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.TextCore.Text;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -319,7 +317,7 @@ public partial class Character
     private int2 OldOperaCoordinate = new int2(int.MinValue);
 
     public CharacterData characterData;
-    public bool canMove=true;
+    public bool canMove = true;
     public Equip Equip => equip;
     private Equip equip;
     public int characterPackage;
@@ -467,7 +465,7 @@ public partial class Character
 
     private int level;
 
-    public Exp exp; 
+    public Exp exp;
 
     public string name;
     private int3 objCoordinate;
@@ -632,7 +630,7 @@ public partial class Character
         {
             CheckNeighborhood();
         }
-       // Debug.Log($"setCoordinate0:{coordinate}");
+        // Debug.Log($"setCoordinate0:{coordinate}");
         if (SetCoordianteDele != null)
         {
             SetCoordianteDele.Invoke(coordinate);
@@ -657,12 +655,13 @@ public partial class Character
         }
     }
 
-    int NeighborhoodCharacter;
-    void CheckNeighborhood()
+    private int NeighborhoodCharacter;
+
+    private void CheckNeighborhood()
     {
         int clickCharacter = MapCellController.instance.GetClickCharacter(objCoordinate);
-        if (clickCharacter != -1 && clickCharacter != instanceId&&clickCharacter!= NeighborhoodCharacter)
-        { 
+        if (clickCharacter != -1 && clickCharacter != instanceId && clickCharacter != NeighborhoodCharacter)
+        {
             Character character = CharacterManager.instance.GetCharacter(clickCharacter);
             if (character != null)
             {
@@ -691,6 +690,7 @@ public partial class Character
         }
         NeighborhoodCharacter = clickCharacter;
     }
+
     public void SetNeighborhood(int characterId)
     {
         Character character = CharacterManager.instance.GetCharacter(characterId);
@@ -725,8 +725,9 @@ public partial class Character
             NeighborhoodCharacter = 0;
         }
     }
+
     public void SetNeighborhood(Character character)
-    { 
+    {
         if (character != null)
         {
             EventReferenceData eventReferenceData = new EventReferenceData
@@ -758,6 +759,7 @@ public partial class Character
             NeighborhoodCharacter = 0;
         }
     }
+
     public void StopMove()
     {
         GameObjectCurveController.instance.StopObjectMove(instanceId);
@@ -898,7 +900,7 @@ public partial class Character
     private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
         if (eventid == 0 && reference == 0)
-        { 
+        {
             return;
         }
 
@@ -993,13 +995,13 @@ public partial class Character
                 MapCellController.instance.CheckPlayerTriggerEvent(
                 objCoordinate.z, oldCoordinate, true, TriggerEventAction, oldOperateItem);
 
-               /* DisplayMap displayMap = new DisplayMap
-                {
-                    displayMap = coordinate.z
-                };
-                GameActionManager.instance.QueueAction(displayMap);*/
+                /* DisplayMap displayMap = new DisplayMap
+                 {
+                     displayMap = coordinate.z
+                 };
+                 GameActionManager.instance.QueueAction(displayMap);*/
             }
-             OldOperaCoordinate = new int2(int.MinValue);
+            OldOperaCoordinate = new int2(int.MinValue);
             oldCoordinate = new int2(int.MinValue);
         }
 
@@ -1036,7 +1038,7 @@ public partial class Character
 
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
            TriggerEventAction, oldOperateItem);
-            oldCoordinate = OldOperaCoordinate = checkCoordinate.xy; 
+            oldCoordinate = OldOperaCoordinate = checkCoordinate.xy;
         }
         SetObjCoordinate(coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger

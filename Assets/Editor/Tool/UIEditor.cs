@@ -1,11 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.IO;
-using System.Collections.Generic;
 
-public class UIToolEditor  
+public class UIToolEditor
 {
-
     [MenuItem("Assets/UI填充")]
     public static void SetPanelUISerializeObj()
     {
@@ -36,7 +33,5 @@ public class UIToolEditor
         {
             AssetDatabase.StopAssetEditing();
         }
-
-       
     }
 }

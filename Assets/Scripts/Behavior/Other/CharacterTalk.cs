@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using BehaviorDesigner.Runtime;
+﻿using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-using Unity.Mathematics;
 
 [TaskCategory("Game/Character")]
 [TaskName("角色说话")]
@@ -17,7 +14,7 @@ public class CharacterTalk : Action
     public SharedBool isStopMove;
     public SharedBool faceTarget;
 
-    void CharacterStartMoveAction()
+    private void CharacterStartMoveAction()
     {
         StartCharacterMove startCharacterMove = new StartCharacterMove
         {
@@ -25,31 +22,33 @@ public class CharacterTalk : Action
         };
         GameActionManager.instance.QueueAction(startCharacterMove);
     }
-    void RemoveEvent()
+
+    private void RemoveEvent()
     {
-        var ID=  (SharedInt)Owner.GetVariable("ID");
+        var ID = (SharedInt)Owner.GetVariable("ID");
         RemoveGameEvent RemoveGameEvent = new RemoveGameEvent
         {
-            eventId=ID.Value
+            eventId = ID.Value
         };
-        GameActionManager.instance.QueueAction(RemoveGameEvent,true);
+        GameActionManager.instance.QueueAction(RemoveGameEvent, true);
     }
+
     public override void OnStart()
     {
         if (characterId == null || characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        if (TargetCharacter == null|| TargetCharacter.IsNull())
+        if (TargetCharacter == null || TargetCharacter.IsNull())
         {
-            TargetCharacter= (SharedInt)Owner.GetVariable("TargetCharacter");
+            TargetCharacter = (SharedInt)Owner.GetVariable("TargetCharacter");
         }
         if (nextTalkEventId == null || nextTalkEventId.IsNull())
         {
             nextTalkEventId = (SharedInt)Owner.GetVariable("NextTalkEventId");
         }
 
-        if (faceTarget.Value&& TargetCharacter!=null)
+        if (faceTarget.Value && TargetCharacter != null)
         {
             Character character = CharacterManager.instance.GetCharacter(TargetCharacter.Value);
             if (character != null)
@@ -77,7 +76,7 @@ public class CharacterTalk : Action
             {
                 characterId = characterId.Value,
                 talkId = talkId.Value,
-                endAction=isStopMove.Value? CharacterStartMoveAction:null
+                endAction = isStopMove.Value ? CharacterStartMoveAction : null
             };
             GameActionManager.instance.QueueAction(simpleTalk);
         }
@@ -89,22 +88,22 @@ public class CharacterTalk : Action
                 talkId = talkId.Value,
                 displayFunction = displayFunction.Value,
                 nextTalkEventId = nextTalkEventId.Value,
-                endAction = isStopMove.Value ?()=> 
-                { 
+                endAction = isStopMove.Value ? () =>
+                {
                     CharacterStartMoveAction();
                     RemoveEvent();
-                }  :
-                ()=> { RemoveEvent(); }
+                }
+                :
+                () => { RemoveEvent(); }
             };
-            GameActionManager.instance.QueueAction(talk,true);
+            GameActionManager.instance.QueueAction(talk, true);
         }
-       
 
         taskStatus = TaskStatus.Success;
     }
-   
 
-    TaskStatus taskStatus;
+    private TaskStatus taskStatus;
+
     public override TaskStatus OnUpdate()
     {
         return taskStatus;

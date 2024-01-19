@@ -9,28 +9,40 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private TextMeshProUGUI goldValue, crystalValue;
+
     [SerializeField]
     private Button goldAdd, crystalAdd;
+
     [SerializeField]
     private TextMeshProUGUI season;
+
     [SerializeField]
     private TextMeshProUGUI week;
+
     [SerializeField]
     private TextMeshProUGUI day;
+
     [SerializeField]
     private TextMeshProUGUI time;
+
     [SerializeField]
     private Image weather;
+
     [SerializeField]
     private Button calendar, SetButton;
+
     [SerializeField]
     private Image PlayerHead;
+
     [SerializeField]
     private TextMeshProUGUI PlayerName;
+
     [SerializeField]
     private Image HPSlider, RPSlider;
+
     [SerializeField]
     private TextMeshProUGUI HPValue, RPValue;
+
     [SerializeField]
     private Button playerButton;
 
@@ -38,7 +50,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     {
         base.SetPanelUISerializeObj();
         playerButton = FindChildGameObject<Button>("Player");
-        
+
         goldValue = FindChildGameObject<TextMeshProUGUI>("GoldValue");
         crystalValue = FindChildGameObject<TextMeshProUGUI>("CrystalValue");
         goldAdd = FindChildGameObject<Button>("Gold");
@@ -138,6 +150,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         goldValue.text = PayManager.instance.NowGold.ToString();
         crystalValue.text = PayManager.instance.NowDiamond.ToString();
     }
+
     private void NewDay(NewDay newDay)
     {
         day.text = GameTimeManager.instance.Day.ToString();
@@ -145,8 +158,9 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         week.text = GameTimeManager.instance.Week.ToString();
         time.text = $"{GameTimeManager.instance.Hour.ToString("00")}:{GameTimeManager.instance.Minute.ToString("00")}";
     }
+
     private void UpdateGameTime(UpdateGameTime updateGameTime)
-    { 
+    {
         time.text = $"{GameTimeManager.instance.Hour.ToString("00")}:{GameTimeManager.instance.Minute.ToString("00")}";
     }
 }

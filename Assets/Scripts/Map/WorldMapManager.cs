@@ -444,27 +444,26 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
        
     }
-
-    public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId)
+    public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance)
     {
         if (direction == Vector2.zero)
         {
             return false;
         }
 
-        Vector2 checkTargetPos = nowPos + direction * GameCommon.cellSize;
-        Vector2Int checkTargetCoordinate = GameCommon.GetMapCoordinate(checkTargetPos);
+        Vector2 checkTargetPos = nowPos + direction * distance;
+        int2 checkTargetCoordinate = GameCommon.GetMapCoordinateInt(checkTargetPos);
         if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
         {
             Vector2 direction1 = new Vector2(0, direction.y);
-            Vector2 checkTargetPos1 = nowPos + direction1 * GameCommon.cellSize;
-            Vector2Int checkTargetCoordinate1 = GameCommon.GetMapCoordinate(checkTargetPos1);
+            Vector2 checkTargetPos1 = nowPos + direction1 * distance;
+            int2 checkTargetCoordinate1 = GameCommon.GetMapCoordinateInt(checkTargetPos1);
 
             if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate1, mapId))
             {
                 Vector2 direction2 = new Vector2(direction.x, 0);
-                Vector2 checkTargetPos2 = nowPos + direction2 * GameCommon.cellSize;
-                Vector2Int checkTargetCoordinate2 = GameCommon.GetMapCoordinate(checkTargetPos2);
+                Vector2 checkTargetPos2 = nowPos + direction2 * distance;
+                int2 checkTargetCoordinate2 = GameCommon.GetMapCoordinateInt(checkTargetPos2);
 
                 if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate2, mapId))
                 {
@@ -476,6 +475,46 @@ public class WorldMapManager : Singleton<WorldMapManager>
             direction = direction1;
             return true;
         }
+        return true;
+    }
+    public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId,float distance,ref int2 target,ref Vector2 targetPos)
+    {
+        if (direction == Vector2.zero)
+        {
+            return false;
+        }
+
+        Vector2 checkTargetPos = nowPos + direction * distance;
+        int2 checkTargetCoordinate = GameCommon.GetMapCoordinateInt(checkTargetPos);
+        if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
+        {
+            Vector2 direction1 = new Vector2(0, direction.y);
+            Vector2 checkTargetPos1 = nowPos + direction1 * distance;
+            int2 checkTargetCoordinate1 = GameCommon.GetMapCoordinateInt(checkTargetPos1);
+
+            if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate1, mapId))
+            {
+                Vector2 direction2 = new Vector2(direction.x, 0);
+                Vector2 checkTargetPos2 = nowPos + direction2 * distance;
+                int2 checkTargetCoordinate2 = GameCommon.GetMapCoordinateInt(checkTargetPos2);
+
+                if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate2, mapId))
+                {
+                    return false;
+                }
+                direction = direction2;
+                target = checkTargetCoordinate2;
+                targetPos = checkTargetPos2;
+                return true;
+            }
+            target = checkTargetCoordinate1;
+            targetPos = checkTargetPos1;
+            direction = direction1;
+            return true;
+        }
+
+        target = checkTargetCoordinate;
+        targetPos = checkTargetPos;
         return true;
     }
      

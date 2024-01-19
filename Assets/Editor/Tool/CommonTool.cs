@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,7 +25,6 @@ public class CommonTool : MonoBehaviour
                         }
                         catch
                         {
-
                         }
                         //OutPSBFile(path);
                     }
@@ -47,10 +44,9 @@ public class CommonTool : MonoBehaviour
         {
             AssetDatabase.StopAssetEditing();
         }
-
     }
 
-    static void OpenDirectoryInfo(DirectoryInfo directoryInfo, string parentPath)
+    private static void OpenDirectoryInfo(DirectoryInfo directoryInfo, string parentPath)
     {
         var _dirs = directoryInfo.GetDirectories();
         var files = directoryInfo.GetFiles("*.png");
@@ -64,9 +60,7 @@ public class CommonTool : MonoBehaviour
             }
             catch
             {
-
             }
-
         }
         foreach (var d in _dirs)
         {
@@ -74,7 +68,8 @@ public class CommonTool : MonoBehaviour
             OpenDirectoryInfo(d, path);
         }
     }
-    async static void SaveTexture(Texture2D texture2D)
+
+    private static async void SaveTexture(Texture2D texture2D)
     {
         int width = texture2D.width;
         int height = texture2D.height;
@@ -87,7 +82,6 @@ public class CommonTool : MonoBehaviour
             height += 4 - hd;
             string strSaveFile = AssetDatabase.GetAssetPath(texture2D);
 
-
             Texture2D texture = new Texture2D(width, height, texture2D.format, false);
             int startW = (4 - wd) / 2;
             int startH = (4 - hd) / 2;
@@ -99,16 +93,11 @@ public class CommonTool : MonoBehaviour
 
             byte[] dataBytes = texture.EncodeToPNG();
 
-
-
             using (FileStream fs = File.Open(strSaveFile, FileMode.Create))
             {
                 fs.Seek(0, SeekOrigin.End);
                 await fs.WriteAsync(dataBytes, 0, dataBytes.Length);
-
-
             }
-
         }
     }
 
@@ -133,7 +122,6 @@ public class CommonTool : MonoBehaviour
                         }
                         catch
                         {
-
                         }
                         //OutPSBFile(path);
                     }
@@ -153,10 +141,9 @@ public class CommonTool : MonoBehaviour
         {
             AssetDatabase.StopAssetEditing();
         }
-
     }
 
-    static void OpenDirectoryInfo1(DirectoryInfo directoryInfo, string parentPath)
+    private static void OpenDirectoryInfo1(DirectoryInfo directoryInfo, string parentPath)
     {
         var _dirs = directoryInfo.GetDirectories();
         var files = directoryInfo.GetFiles("*.png");
@@ -170,9 +157,7 @@ public class CommonTool : MonoBehaviour
             }
             catch
             {
-
             }
-
         }
         foreach (var d in _dirs)
         {
@@ -181,7 +166,7 @@ public class CommonTool : MonoBehaviour
         }
     }
 
-    async static void SaveReable(Texture2D texture2D)
+    private static async void SaveReable(Texture2D texture2D)
     {
         int width = texture2D.width;
         int height = texture2D.height;
@@ -200,12 +185,8 @@ public class CommonTool : MonoBehaviour
                 textureImporter.SaveAndReimport();
                 AssetDatabase.SaveAssets();
             }
-
-
-
         }
     }
-
 
     [MenuItem("Assets/图片资源工具/设置不可读写")]
     public static void CheckAndSetUnReadTexture()
@@ -228,7 +209,6 @@ public class CommonTool : MonoBehaviour
                         }
                         catch
                         {
-
                         }
                         //OutPSBFile(path);
                     }
@@ -248,10 +228,9 @@ public class CommonTool : MonoBehaviour
         {
             AssetDatabase.StopAssetEditing();
         }
-
     }
 
-    static void OpenDirectoryInfo2(DirectoryInfo directoryInfo, string parentPath)
+    private static void OpenDirectoryInfo2(DirectoryInfo directoryInfo, string parentPath)
     {
         var _dirs = directoryInfo.GetDirectories();
         var files = directoryInfo.GetFiles("*.png");
@@ -265,9 +244,7 @@ public class CommonTool : MonoBehaviour
             }
             catch
             {
-
             }
-
         }
         foreach (var d in _dirs)
         {
@@ -275,7 +252,8 @@ public class CommonTool : MonoBehaviour
             OpenDirectoryInfo2(d, path);
         }
     }
-    async static void SaveUnReable(Texture2D texture2D)
+
+    private static async void SaveUnReable(Texture2D texture2D)
     {
         string strSaveFile = AssetDatabase.GetAssetPath(texture2D);
         TextureImporter textureImporter = TextureImporter.GetAtPath(strSaveFile) as TextureImporter;
@@ -285,5 +263,4 @@ public class CommonTool : MonoBehaviour
         textureImporter.SaveAndReimport();
         AssetDatabase.SaveAssets();
     }
-
 }

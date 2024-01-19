@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using TMPro;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TalkPanel : GamePanel<NPCTalkOperateData>
 {
     [SerializeField]
-    Image rightHead, leftHead; 
+    private Image rightHead, leftHead;
 
     [SerializeField]
     private Transform leftNameBg, rightNameBg;
@@ -29,8 +28,10 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     [SerializeField]
     private Transform NPCFunctionParent;
+
     [SerializeField]
-    Transform close;
+    private Transform close;
+
     [SerializeField]
     private Button closeButton;
 
@@ -93,7 +94,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         runNextTalkEvent = false;
         NPCTalkOperateData = v;
         talkData = v.defaultTalk;
-       
+
         if (v.displayFunction)
         {
             NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData);
@@ -108,6 +109,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private bool runNextTalkEvent = false;
     private int talkId;
+
     private async void InitData()
     {
         if (talkData == null)
@@ -118,27 +120,27 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                 List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
                 EventReferenceData eventReferenceData1 = new EventReferenceData
                 {
-                    name= "withOutSource",
+                    name = "withOutSource",
                     valueType = ReferenceValueType.IntList,
                     valeList = new List<int>()
                 };
                 eventReferenceData1.valeList.Add(talkId);
                 eventReferenceDatas.Add(eventReferenceData1);
                 bool nextEvent = await GameEventManager.instance.AddGameEvent(NPCTalkOperateData.nextTalkEventId,
-                    eventReferenceDatas,true);
+                    eventReferenceDatas, true);
                 if (!nextEvent)
                 {
-                    Close(); 
+                    Close();
                 }
             }
             else
             {
-                Close(); 
+                Close();
             }
-           
-        }else
+        }
+        else
         {
-            close.localScale= talkData.DisplayClose? Vector3.one : Vector3.zero;  
+            close.localScale = talkData.DisplayClose ? Vector3.one : Vector3.zero;
             talkValue.text = talkData.text;
             talkId = talkData.id;
             var talkerName = talkData.talkerName;
@@ -149,6 +151,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     talkerName = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
                     talkerIcon = CharacterManager.instance.PlayerHead;
                     break;
+
                 case TalkSource.Dynamic:
                     Character character = CharacterManager.instance.GetCharacter(NPCTalkOperateData.characterId);
                     if (character == null)
@@ -162,9 +165,10 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                         talkerIcon = character.characterData.head.sprite;
                     }
                     break;
+
                 case TalkSource.Fixed:
                     break;
-            } 
+            }
             switch (talkData.talkerDir)
             {
                 case TalkerDir.左:
@@ -176,7 +180,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     leftHead.SetNativeSize();
                     rightHead.color = new Color(0.5f, 0.5f, 0.5f);
                     leftHead.enabled = true;
-                    rightHead.enabled= !talkData.clearTalkIcon;
+                    rightHead.enabled = !talkData.clearTalkIcon;
                     break;
 
                 case TalkerDir.右:
@@ -202,7 +206,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             }
 
             NPCFunctionParent.localScale = NPCTalkOperateData.displayFunction ? Vector3.one : Vector3.zero;
-        } 
+        }
     }
 
     public override void SetPanelUISerializeObj()

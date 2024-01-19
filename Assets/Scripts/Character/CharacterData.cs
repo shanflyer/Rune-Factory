@@ -1,12 +1,11 @@
-using OldName;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
+
 public class CharacterData : ScriptableObject, IGameData
-{ 
+{
     public string characterName;
     public int id;
     public Gender gender;
@@ -19,14 +18,13 @@ public class CharacterData : ScriptableObject, IGameData
     public int profession;
     public int level;
     public string behavior;
-    public int packageId; 
+    public int packageId;
     public AttributeType attributeType;
     public int playerOperateEventId;
     public int nextTalkEventId;
     public int tempTalkEventId;
     public string shopName;
     public List<int> functionIds;
-
 
     public string GetKey()
     {
@@ -37,15 +35,17 @@ public class CharacterData : ScriptableObject, IGameData
     {
         return GetKey();
     }
+
 #if UNITY_EDITOR
-    static Dictionary<string, SpriteResourceRenference> headDatas = new Dictionary<string, SpriteResourceRenference>();
-    static Dictionary<string, Sprite> iconDatas = new Dictionary<string, Sprite>();
+    private static Dictionary<string, SpriteResourceRenference> headDatas = new Dictionary<string, SpriteResourceRenference>();
+    private static Dictionary<string, Sprite> iconDatas = new Dictionary<string, Sprite>();
+
     public void SetReferenceData()
     {
         if (headDatas.Count == 0)
         {
             var sprites = Resources.LoadAll<SpriteResourceRenference>(headName.Split('/')[0]);
-            for(int i = 0; i < sprites.Length; i++)
+            for (int i = 0; i < sprites.Length; i++)
             {
                 headDatas.Add(sprites[i].name, sprites[i]);
             }
@@ -66,10 +66,9 @@ public class CharacterData : ScriptableObject, IGameData
         {
             iconDatas.TryGetValue(iconName.Split('/')[1], out icon);
         }
-       
 
-       
         obj = Resources.Load<GameObject>(objName);
     }
+
 #endif
 }

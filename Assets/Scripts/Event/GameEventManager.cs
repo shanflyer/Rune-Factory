@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using BehaviorDesigner;
 using BehaviorDesigner.Runtime;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Mathematics; 
+using Unity.Mathematics;
+using UnityEngine;
 
 [System.Serializable]
 public struct EventReferenceData
@@ -16,12 +14,14 @@ public struct EventReferenceData
     public int3 int3Value;
     public List<int> valeList;
 }
+
 public enum ReferenceValueType
 {
-    Int,Float,Int3,Vector3,IntList
+    Int, Float, Int3, Vector3, IntList
 }
-public class GameEventManager:Singleton<GameEventManager>
-{ 
+
+public class GameEventManager : Singleton<GameEventManager>
+{
     public override void Init()
     {
         base.Init();
@@ -35,14 +35,15 @@ public class GameEventManager:Singleton<GameEventManager>
         GameActionManager.instance.AddListener<RemoveGameEvent>(RemoveGameEvent);
     }
 
-    private GameObject obj; 
-    Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
+    private GameObject obj;
+    private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
 
-    void RemoveGameEvent(RemoveGameEvent removeGameEvent)
+    private void RemoveGameEvent(RemoveGameEvent removeGameEvent)
     {
         RemoveGameEvent(removeGameEvent.eventId);
     }
-    void ResetGameEvent(ResetGameEvent resetGameEvent)
+
+    private void ResetGameEvent(ResetGameEvent resetGameEvent)
     {
         if (behaviorTrees.TryGetValue(resetGameEvent.eventId, out BehaviorTree behaviorTree))
         {
@@ -51,36 +52,36 @@ public class GameEventManager:Singleton<GameEventManager>
         }
     }
 
-    public async Task<bool> AddGameEvent(int eventId,List<EventReferenceData> eventReferenceDatas=null,bool restEvent=false)
+    public async Task<bool> AddGameEvent(int eventId, List<EventReferenceData> eventReferenceDatas = null, bool restEvent = false)
     {
         if (restEvent)
         {
             if (behaviorTrees.TryGetValue(eventId, out BehaviorTree behaviorTree))
             {
-
                 if (eventReferenceDatas != null)
                 {
                     SetBehaviorTreeReference(behaviorTree, eventReferenceDatas);
-                } 
+                }
                 behaviorTree.enabled = false;
                 behaviorTree.enabled = true;
                 return true;
             }
         }
-        GameEventData gameEventData =await GameDataManager.instance.GetAsyncData<GameEventData>(eventId);
-        if(gameEventData== null)
+        GameEventData gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(eventId);
+        if (gameEventData == null)
         {
             return false;
         }
         AddGameEvent(gameEventData, eventReferenceDatas);
         return true;
     }
-    void SetBehaviorTreeReference(BehaviorTree behaviorTree, List<EventReferenceData> eventReferenceDatas)
+
+    private void SetBehaviorTreeReference(BehaviorTree behaviorTree, List<EventReferenceData> eventReferenceDatas)
     {
         for (int i = 0; i < eventReferenceDatas.Count; i++)
         {
             var referenceName = eventReferenceDatas[i].name;
-             
+
             if (!string.IsNullOrEmpty(referenceName))
             {
                 var shared = behaviorTree.GetVariable(referenceName);
@@ -102,6 +103,7 @@ public class GameEventManager:Singleton<GameEventManager>
                             }
                         }
                         break;
+
                     case ReferenceValueType.Int:
                         {
                             var intReferenceId = eventReferenceDatas[i].value;
@@ -118,6 +120,7 @@ public class GameEventManager:Singleton<GameEventManager>
                             }
                         }
                         break;
+
                     case ReferenceValueType.Float:
                         {
                             var intReferenceId = eventReferenceDatas[i].value;
@@ -134,6 +137,7 @@ public class GameEventManager:Singleton<GameEventManager>
                             }
                         }
                         break;
+
                     case ReferenceValueType.Int3:
                         {
                             var intReferenceId = eventReferenceDatas[i].int3Value;
@@ -150,6 +154,7 @@ public class GameEventManager:Singleton<GameEventManager>
                             }
                         }
                         break;
+
                     case ReferenceValueType.Vector3:
                         {
                             var intReferenceId = eventReferenceDatas[i].vectorValue;
@@ -166,18 +171,19 @@ public class GameEventManager:Singleton<GameEventManager>
                             }
                         }
                         break;
-                } 
+                }
             }
         }
     }
-    public void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas=null)
+
+    public void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas = null)
     {
         BehaviorTree behaviorTree = obj.AddComponent<BehaviorTree>();
         SharedInt idShared = new SharedInt();
         idShared.Name = "ID";
         idShared.SetValue(gameEventData.id);
         behaviorTree.SetVariable("ID", idShared);
-          
+
         behaviorTree.ExternalBehavior = gameEventData.behaviorTree;
         if (gameEventData.eventReferenceDatas != null)
         {
@@ -190,26 +196,25 @@ public class GameEventManager:Singleton<GameEventManager>
                 eventReferenceDatas = gameEventData.eventReferenceDatas;
             }
         }
-      
 
         if (eventReferenceDatas != null)
         {
             SetBehaviorTreeReference(behaviorTree, eventReferenceDatas);
         }
-        
 
         behaviorTree.enabled = gameEventData.defaultAwake;
         behaviorTrees[gameEventData.id] = behaviorTree;
     }
-    
+
     public void RemoveGameEvent(int id)
     {
-        if(behaviorTrees.TryGetValue(id,out BehaviorTree behaviorTree))
+        if (behaviorTrees.TryGetValue(id, out BehaviorTree behaviorTree))
         {
             GameObject.Destroy(behaviorTree);
         }
     }
-    public void SetGameEventAwake(int id,bool awake, bool pause)
+
+    public void SetGameEventAwake(int id, bool awake, bool pause)
     {
         if (behaviorTrees.TryGetValue(id, out BehaviorTree behaviorTree))
         {
@@ -217,6 +222,4 @@ public class GameEventManager:Singleton<GameEventManager>
             behaviorTree.enabled = awake;
         }
     }
-  
-
 }
