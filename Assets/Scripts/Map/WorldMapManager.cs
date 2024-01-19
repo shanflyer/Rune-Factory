@@ -28,6 +28,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
     
     private MyInstance mapItemInstance;
     private MyInstance mapRoomInstance;
+
+    public int GetInstanceFromItem()
+    {
+        return mapItemInstance.CreatInstanceId();
+    }
     public override void Init()
     {
         base.Init();

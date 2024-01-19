@@ -15,7 +15,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnAwake()
         {
-            if(behaviorGameObject.Value==null)
+            if(behaviorGameObject==null||behaviorGameObject.Value==null)
             {
                 behavior = Owner;
             }

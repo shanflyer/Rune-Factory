@@ -35,6 +35,79 @@ public class CommonToolEditor:MyEditor
                 AssetDatabase.StopAssetEditing();
             }
         }
+        sourcePath=EditorGUILayout.TextField("源路径",sourcePath);
+        animationPath= EditorGUILayout.TextField("输出路径", animationPath);
+        if (GUILayout.Button("生成表情动画"))
+        {
+            try
+            {
+                AssetDatabase.StartAssetEditing();
+                var assets = AssetDatabase.LoadAllAssetsAtPath(sourcePath);
+
+                int index = 0;
+                List<List<Sprite>> clipSprites = new List<List<Sprite>>();
+                for (int i = 0; i < assets.Length; i++)
+                {
+                    if (assets[i] is Sprite sprite)
+                    {
+                        int d = index % 3;
+                        if (d == 0)
+                        {
+                            List<Sprite> sprites = new List<Sprite>();
+                            clipSprites.Add(sprites);
+                        }
+                        clipSprites[clipSprites.Count - 1].Add(sprite);
+                        index++;
+                    }
+                }
+                for (int i = 0; i < clipSprites.Count; i++)
+                {
+                    var sprites = clipSprites[i];
+                    AnimationClip animationClip = new AnimationClip();
+                    animationClip.frameRate = 4;
+                    animationClip.legacy = true;
+                    animationClip.name = i.ToString();
+                    ObjectReferenceKeyframe[] objectReferenceKeyframes = new ObjectReferenceKeyframe[3]
+                    {
+                    new ObjectReferenceKeyframe
+                    {
+                        time=0,
+                        value=sprites[0]
+                    },
+                    new ObjectReferenceKeyframe
+                    {
+                        time=0.25f,
+                        value=sprites[1]
+                    },
+                    new ObjectReferenceKeyframe
+                    {
+                        time=0.5f,
+                        value=sprites[2]
+                    }
+                    };
+                    EditorCurveBinding binding = new EditorCurveBinding
+                    {
+                        type = typeof(SpriteRenderer),
+                        propertyName = "m_Sprite"
+                    };
+                    AnimationUtility.SetObjectReferenceCurve(animationClip, binding, objectReferenceKeyframes);
+
+                    AnimationClipSettings animationClipSettings = new AnimationClipSettings
+                    {
+                        startTime = 0,
+                        stopTime = 0.75f
+                    };
+                    AnimationUtility.SetAnimationClipSettings(animationClip, animationClipSettings);
+                    AssetDatabase.CreateAsset(animationClip, $"{animationPath}{animationClip.name}.anim");
+                }
+            }
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
+            }
+           
+        }
+        /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
             Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_0");
@@ -50,8 +123,11 @@ public class CommonToolEditor:MyEditor
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_3"))
         {
             Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_3");
-        }
+        }*/
     }
+
+    public string sourcePath;
+    public string animationPath;
 
     void OldMapCellToNew()
     {

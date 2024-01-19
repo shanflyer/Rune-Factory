@@ -56,7 +56,7 @@ public enum Direction
 }
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER,STOREITEM
+    MAPGROUND, MAPITEM, CHARACTER,STOREITEM,EMOTE
 }
 public enum FightRuntimeObjType
 {
@@ -842,7 +842,8 @@ public static class DataPath
         {typeof(EnvironmentData),"Data/EnvironmentDataList" },
         {typeof(SleepSetData),"Data/SleepSetData/SleepSetDataList" },
         {typeof(SleepSetDataList),"Data/SleepSetData" },
-        {typeof(GameTimeEventData),"Data/GameTimeEventData" }
+        {typeof(GameTimeEventData),"Data/GameTimeEventData" },
+        {typeof(EmoteData),"Data/EmoteData" }
     };
 
     public static string GetDataPath(Type type)

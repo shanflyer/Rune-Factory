@@ -6,6 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}WaitIcon.png")]
     public class Wait : Action
     {
+        public SharedInt waitTimeInt = 0;
         [Tooltip("The amount of time to wait")]
         public SharedFloat waitTime = 1;
         [Tooltip("Should the wait be randomized?")]
@@ -29,7 +30,15 @@ namespace BehaviorDesigner.Runtime.Tasks
             if (randomWait.Value) {
                 waitDuration = Random.Range(randomWaitMin.Value, randomWaitMax.Value);
             } else {
-                waitDuration = waitTime.Value;
+                if (waitTimeInt.Value > 0)
+                {
+                    waitDuration = waitTimeInt.Value*0.001f;
+                }
+                else
+                {
+                    waitDuration = waitTime.Value;
+                }
+               
             }
         }
 

@@ -9,8 +9,8 @@ using Unity.Mathematics;
 public class MyAnimationController :Singleton<MyAnimationController>
 {
     private MyNativeData<AnimationStruct> animationStructData;
-
-
+     
+    
     public void AddItemAnimation(int id,Animator animator,string name)
     {
         AnimationStruct animationStruct = new AnimationStruct();
@@ -59,6 +59,7 @@ public class MyAnimationController :Singleton<MyAnimationController>
         public AnimationPlayableOutput playableOutput;
         public void Dispose()
         {
+            playableGraph.Destroy(); 
         }
         public int Key => id;
 

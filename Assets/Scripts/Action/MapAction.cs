@@ -575,3 +575,44 @@ public struct GetMapItemPos : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct ShowEmote : GameAction
+{
+    public int id;
+    public EntityType entityType;
+    public int emoteId;
+    public int showTime;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 1)
+        {
+            id = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count >= 2)
+        {
+            entityType = (EntityType)int.Parse(parameters[1].value);
+        }
+        if (parameters.Count >= 3)
+        {
+           emoteId = int.Parse(parameters[2].value);
+        }
+        if (parameters.Count >= 4)
+        {
+            showTime = int.Parse(parameters[3].value);
+        }
+ 
+
+        if (setResult != null)
+        {
+            this.setResult = setResult;
+        }
+        if (setValue != null)
+        {
+            this.setValue = setValue;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+
+}
