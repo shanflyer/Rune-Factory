@@ -40,13 +40,13 @@ public class NPCReference : UIObjReference<NPC>
     {
         if (refreshFriendShip.characterId == data.characterId)
         {
-            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.characterId).ToString();
+            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.dataId).ToString();
         }
     }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        Icon = FindChildGameObject<Image>("Icon");
+        Icon = FindChildGameObject<Image>("NPCImage");
         NPCName = FindChildGameObject<TextMeshProUGUI>("NPCName");
         StateValue = FindChildGameObject<TextMeshProUGUI>("StateValue");
         FriendValue = FindChildGameObject<TextMeshProUGUI>("FriendValue");
@@ -67,11 +67,12 @@ public class NPCReference : UIObjReference<NPC>
         StateValue.text = data.npcState.ToString();
         if (data.npcState == NPCState.修养中)
         {
-            StateValue.color = new Color(0.5f, 1, 1);
+            StateValue.color = new Color(1, 0, 0);
         }
         else
         {
-            StateValue.color = new Color(1, 0.5f, 1);
+            StateValue.color = new Color(0.5f, 0, 0);
+            
         }
     }
 }

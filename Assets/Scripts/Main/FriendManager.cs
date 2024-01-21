@@ -105,7 +105,7 @@ public class FriendManager:Singleton<FriendManager>
         {
             return friendShip.friendLevel;
         }
-        return -1;
+        return 0;
     }
     void AddFriendShipValue(AddFriendShipValue addFriendShipValue)
     {

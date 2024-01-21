@@ -10,7 +10,7 @@ using TMPro;
 public class SleepReference : UIObjReference<SleepSetData>
 {
     [SerializeField]
-    Image icon;
+    Image Icon;
     [SerializeField]
     TextMeshProUGUI sleepText;
     [SerializeField]
@@ -20,7 +20,7 @@ public class SleepReference : UIObjReference<SleepSetData>
         base.SetPanelUISerializeObj();
         sleepButton = FindChildGameObject<Button>("Sleep");
         sleepText = FindChildGameObject<TextMeshProUGUI>("Name");
-        icon = FindChildGameObject<Image>("Icon");
+        Icon = FindChildGameObject<Image>("Icon"); 
     }
     void Awake() 
     {
@@ -31,5 +31,6 @@ public class SleepReference : UIObjReference<SleepSetData>
     {
         base.InitData(t, SelectAction, toggleGroup);
         sleepText.text = data.text;
+        Icon.sprite = t.icon;
     }
 }

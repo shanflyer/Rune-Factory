@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [CreateAssetMenu(menuName = "Datas/ÀØ√ﬂ…Ë÷√ ˝æ›")]
 public class SleepSetDataList : ScriptableObject, IGameData, IDataArray<SleepSetData>
@@ -45,10 +48,17 @@ public class SleepSetDataList : ScriptableObject, IGameData, IDataArray<SleepSet
         }
         return nowSleepSetDatas;
     }
+#if UNITY_EDITOR
     public void SetReferenceData()
     {
-         
+        for(int i = 0; i < DataList.Length; i++)
+        {
+            string referencePath = $"Assets/Resources/Reference/{DataList[i].iconName}.asset";
+            DataList[i].icon = AssetDatabase.LoadAssetAtPath<SpriteResourceRenference>(referencePath).sprite;
+        }
     }
+#endif
+
 }
 [Serializable]
 public struct SleepSetData : IReferenceData, IGameData
@@ -57,17 +67,20 @@ public struct SleepSetData : IReferenceData, IGameData
     public bool SleepToTime;
     public int hour;
     public int minute; 
-    public string icon;
+    public string iconName;
+    public Sprite icon;
     public int startHour, endHour;
     public string GetKey()
     {
         return text;
     }
-
+#if UNITY_EDITOR
     public void SetReferenceData()
     {
-       
+
     }
+#endif
+
     public override string ToString()
     {
         return text;

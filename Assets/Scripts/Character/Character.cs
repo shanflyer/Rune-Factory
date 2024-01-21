@@ -682,7 +682,7 @@ public partial class Character
                 };
                 bool temp = character is TempCharacter;
                 GameEventManager.instance.AddGameEvent(
-                temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+                temp ? character.characterData.tempTalkEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });

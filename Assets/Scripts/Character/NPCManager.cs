@@ -15,7 +15,7 @@ public struct CharacterInformationDataList : IReferenceData
 public struct CharacterInformationData : IReferenceData
 {
     public string name;
-    public Sprite head;
+    public SpriteResourceRenference head;
     public int characterId;
     public bool isNpc;
     public NPCState NPCState;
@@ -106,7 +106,7 @@ public partial class Character
         characterInformationData.exp = exp;
         characterInformationData.equip = equip;
         characterInformationData.name = name;
-        characterInformationData.head = characterData.head.sprite;
+        characterInformationData.head = characterData.head;
 
         if (NPCManager.instance.GetNPC(instanceId, out var npc))
         {
@@ -146,6 +146,7 @@ public struct NPC : INativeData, IReferenceData
     public NPCState npcState;
     public int dataId;
     public int characterId;
+    public bool hide;
 
     public async Task<CharacterData> GetCharacterData()
     {
@@ -193,6 +194,22 @@ public class NPCManager : Singleton<NPCManager>
         return npcs.GetData(id, out npc);
     }
 
+    public NPCList GetNPCList()
+    {
+        NPCList nPCList = new NPCList
+        {
+            npcs = new List<NPC>(),
+        };
+        foreach(NPC npc in npcs)
+        {
+            if (!npc.hide)
+            {
+                nPCList.npcs.Add(npc);
+            }
+           
+        }
+        return nPCList;
+    }
     public async void CreatZeroNPC()
     {
         var NPCDatas = await GameDataManager.instance.GetAllAsyncData<NPCData>();
@@ -206,7 +223,8 @@ public class NPCManager : Singleton<NPCManager>
                 {
                     characterId = instanceId,
                     npcState = NPCState.正常,
-                    dataId = NPCData.id
+                    dataId = NPCData.id,
+                    hide=NPCData.hide
                 };
                 npcs.SetData(npc);
             }

@@ -18,6 +18,7 @@ Shader "MySprite-Lit-Default"
 
         _DampBlend("_DampBlend",int)=0 
         _Damp("_Damp",int)=0
+        _SnowBlend("_SnowBlen",int)=1
         
         //水面颜色
         [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
@@ -79,17 +80,23 @@ Shader "MySprite-Lit-Default"
          half _ShadowValue;
          int _backColor;
 
+        float _SnowValue;
+        
          float _DampValue;
-            float _DampNoise;
-            float _HighLighStep;
-		    float4 _DampColor;
-            float4 _DampWaterColor;
-            float4 _HightLightColor;
-            float _HighLightNoise;
+        float _DampNoise;
+        float _HighLighStep;
+        float4 _DampColor;
+        float4 _DampWaterColor;
+        float4 _HightLightColor;
+        float _HighLightNoise;
+
+        float4 _GlobalColor;
         CBUFFER_START(UnityPerMaterial)
             int _DampBlend;
             int _Damp;
- 
+            int _SnowBlend;
+            
+            half4 _MainTex_TexelSize;
             half4 _MainTex_ST;
             half4 _NormalMap_ST;  // Is this the right way to do this?
             half4 _Color;
@@ -283,7 +290,77 @@ Shader "MySprite-Lit-Default"
                 SHAPE_LIGHT(3)
             #endif
 
-            float3 DampColor(float3 col,float2 uv,float2 objUV)
+            float3 SnowColor(float3 col,float2 uv,float2 objUV)
+            { 
+                
+                float _DampNoiseValue;	 
+
+                float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;  
+
+                uv+=objUV;
+
+
+				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_DampNoise,_DampNoiseValue);
+                float3 d=float3(_DampNoiseValue,_DampNoiseValue,_DampNoiseValue);    
+                
+
+
+                float3 water=float3(1-_DampNoiseValue,1-_DampNoiseValue,1-_DampNoiseValue);    
+      
+
+                 float _HighLightNoiseValue;	
+				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_HighLightNoise,_HighLightNoiseValue);
+                float3 h=float3(_HighLightNoiseValue,_HighLightNoiseValue,_HighLightNoiseValue); 
+
+               // h*=(1-_DampNoiseValue);       
+                
+                             
+                float dValue=1-waterValue;
+                d*=dValue;               
+				//d*=d; 
+               // d*=2;
+                d=clamp(d,0,1); 
+ 
+              
+            
+               // water*=waterValue;
+                //water*=water;  
+                //water=clamp(water,0,1);
+                //return water*_WaterColor;
+
+               // h*=waterValue;
+                //h*=step(_HighLighStep,h);
+                //h*=h*2;
+               // h=clamp(h,0,1);
+       
+                float snowV=d.x+h.x;  
+                snowV=clamp(snowV,0,1);
+                snowV*=snowV;
+                Unity_Remap_float(snowV,float2(0,1),float2(0.8,1),snowV);
+                 
+ 
+                half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, objUV);
+                //half3 normalUnpacked = UnpackNormalRGBNoScale(normal);
+                float gv=normal.z*2; 
+                gv=clamp(gv,0,1);
+               // Unity_Remap_float(gv,float2(0,1),float2(0.2,1),gv); 
+                
+                float3 snowColor=float3(snowV,snowV,1)*gv*_SnowBlend*0.8;
+                gv=gv*_SnowBlend;
+              //  float stepGv=step(0.5,gv);
+                // gv=stepGv+(1-stepGv)*gv; 
+                 //return snowColor;
+
+                float3 result=col*(1-gv)+snowColor;
+
+
+                return result;
+            }
+
+             float3 DampColor(float3 col,float2 uv,float2 objUV)
             {
                 float r=col.r*col.r;
                 float g=col.g*col.g;
@@ -394,6 +471,8 @@ Shader "MySprite-Lit-Default"
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
 
+                 
+
              
                 half4 result;
                 
@@ -412,20 +491,34 @@ Shader "MySprite-Lit-Default"
                 {
                     waterColor=WaterFragment(i.uv,i.lightingUV,main);
                 }
+                if(_SnowValue>0){
+                       float3 snowValue=SnowColor(waterColor.xyz,i.lightingUV,i.uv);
+                waterColor.xyz=snowValue;
+                }
+             
+
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 
                 InitializeSurfaceData(waterColor, main.a, mask, surfaceData);
-                InitializeInputData(i.uv, i.lightingUV, inputData);
+                InitializeInputData(i.uv, i.lightingUV, inputData); 
 
-                 result=CombinedShapeLightShared(surfaceData, inputData);
+                result=CombinedShapeLightShared(surfaceData, inputData);
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor; 
                 result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor; 
 
                 half4 _light=CombinedShapeLightSharedTrueValue(surfaceData, inputData);
                 half _light_value=(_light.x+_light.y+_light.z)/3;
+                float globalValue=(_GlobalColor.x+_GlobalColor.y+_GlobalColor.z)/3;
+                
+                
+                _light_value-=globalValue*_ShadowValue; 
                 _light_value=clamp(_light_value,0,1);
                 _light_value=(1-_light_value*0.5);
+
+                
+               // result.xyz=result.xyz*(1-snowValue.x)+snowValue;
+
 
                 half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
                 shadow.xyz*=_light_value;
@@ -441,7 +534,7 @@ Shader "MySprite-Lit-Default"
                 result.xyz=half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue);
 
                 }
-              
+                
                 //result.xyz=waterColor.xyz; 
 
                 return result;

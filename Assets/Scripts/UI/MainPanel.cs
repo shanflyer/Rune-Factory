@@ -7,23 +7,18 @@ public class MainPanel : GamePanel<IReferenceData>
 {
     public override bool changeInputModel => false;
     [SerializeField]
-    Button teamButton;
+    Button InfoButton;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        teamButton = FindChildGameObject<Button>("TeamInfo");
+        InfoButton = FindChildGameObject<Button>("Info");
     }
     protected override void Awake()
     {
         base.Awake();
-        teamButton.onClick.AddListener(() =>
+        InfoButton.onClick.AddListener(() =>
         {
-            Team team = TeamManager.instance.playerTeam;
-            if (team != null)
-            {
-                var characterInfoDataList = team.GetTeamCharacterInfo();
-                UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(characterInfoDataList);
-            }
+            UIManager.instance.ShowGamePanel<BookPanel>();
         });
     }
 }

@@ -9,6 +9,7 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public int zeroFriendShipLevel;
     public int overridePackage;
     public NPCState zeroState;
+    public bool hide;
 
     public override string ToString()
     {

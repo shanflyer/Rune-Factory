@@ -220,7 +220,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     {
         base.InitReferenceData(v);
         data = v;
-        characterHead.sprite = v.head;
+        v.head.SetImageSprite(characterHead); 
         characterId = v.characterId;
         CharacterName.text = v.name;
         State.text = v.NPCState.ToString();

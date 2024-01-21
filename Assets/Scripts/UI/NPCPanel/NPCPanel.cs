@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class NPCPanel : GamePanel<NPCList>
 {
-    [SerializeField]
-    private TextMeshProUGUI Title;
+   // [SerializeField]
+  //  private TextMeshProUGUI Title;
 
     [SerializeField]
     private Button CloseButton, VisitButton, DetailsButton;
@@ -34,7 +34,7 @@ public class NPCPanel : GamePanel<NPCList>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        Title = FindChildGameObject<TextMeshProUGUI>("Title");
+        //Title = FindChildGameObject<TextMeshProUGUI>("Title");
         CloseButton = FindChildGameObject<Button>("Close");
         VisitButton = FindChildGameObject<Button>("Visit");
         DetailsButton = FindChildGameObject<Button>("Details");

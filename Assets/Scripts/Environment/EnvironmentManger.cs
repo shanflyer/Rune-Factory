@@ -97,6 +97,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             globalLight.color = natureLightData.globalColor;
             globalLight.intensity = natureLightData.globalIntensity;
 
+            Shader.SetGlobalColor("_GlobalColor", globalLight.color * globalLight.intensity);
+
             directionLight.Direction = natureLightData.direction;
             directionLight.color = natureLightData.color;
             directionLight.intensity = natureLightData.intensity;
@@ -118,6 +120,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         {
             globalLight.color = environmentLight.globalColor;
             globalLight.intensity = environmentLight.globalIntensity;
+            Shader.SetGlobalColor("_GlobalColor", globalLight.color * globalLight.intensity);
         }
         if (OverrideEnvironmentLight.overSkyAndSun)
         {
@@ -150,6 +153,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         {
             globalLight.color = natureLightData.globalColor;
             globalLight.intensity = natureLightData.globalIntensity;
+
+            Shader.SetGlobalColor("_GlobalColor", globalLight.color * globalLight.intensity);
         }
         Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue);
 
