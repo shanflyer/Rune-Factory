@@ -51,6 +51,7 @@ public class NPCPanel : GamePanel<NPCList>
             targetId = selectNpc.characterId
         };
         GameActionManager.instance.QueueAction(visitNPC);
+        Close();
     }
 
     private void DetailAction()

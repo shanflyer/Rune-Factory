@@ -53,8 +53,7 @@ MonoBehaviour:
   - {fileID: 1508528712174735023}
   - {fileID: -898443647823300259}
   - {fileID: 8839455909964680641}
-  - {fileID: 1309279185574993860}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7ac49f02807b7e2b12
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
@@ -111,23 +110,6 @@ MonoBehaviour:
     type: 2}
   m_DefaultMaskMaterial: {fileID: 2100000, guid: 15d0c3709176029428a0da2f8cecf0b5,
     type: 2}
---- !u!114 &1309279185574993860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
-  m_Name: Damp
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  passMaterial: {fileID: 2100000, guid: fdb5af44c03ce724686f0eec6fd3c4e0, type: 2}
-  injectionPoint: 550
-  requirements: 4
-  passIndex: 0
 --- !u!114 &1508528712174735023
 MonoBehaviour:
   m_ObjectHideFlags: 0

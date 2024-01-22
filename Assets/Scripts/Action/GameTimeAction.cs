@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public struct PlayerWakeUp : GameAction
 {
@@ -35,6 +36,7 @@ public struct PlayerSleep : GameAction
             targetHour = int.Parse(parameters[1].value);
         if (parameters.Count > 2)
             targetMinute = int.Parse(parameters[2].value);
+         
         if (source != 0 && source != int.MinValue)
         {
             characterId = source;
@@ -46,7 +48,7 @@ public struct PlayerSleep : GameAction
         if (value != int.MinValue)
         {
             targetMinute = value;
-        }
+        } 
         GameActionManager.instance.QueueAction(this, immediately);
     }
 

@@ -121,6 +121,19 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterTempPos>(SetCharacterTempPos);
         GameActionManager.instance.AddListener<SetCharacterRandomPos>(SetCharacterRandomPos);
         GameActionManager.instance.AddListener<SetCharacterRandomCoordinate>(SetCharacterRandomCoordinate);
+
+        GameActionManager.instance.AddListener<VisitNPC>(VisitNPC);
+    }
+
+
+    public void VisitNPC(VisitNPC visitNPC)
+    {
+        Character sourceCharacter = GetCharacter(visitNPC.sourceId);
+        Character targetCharacter = GetCharacter(visitNPC.targetId);
+        if (sourceCharacter != null && targetCharacter != null)
+        {
+            sourceCharacter.MoveCrossMap(targetCharacter.mapInstance, targetCharacter.coordinate);
+        }
     }
 
     private void SetCharacterRandomCoordinate(SetCharacterRandomCoordinate setCharacterRandomCoordinate)

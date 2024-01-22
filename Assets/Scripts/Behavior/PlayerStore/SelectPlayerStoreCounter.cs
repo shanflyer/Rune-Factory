@@ -11,7 +11,7 @@ public class SelectPlayerStoreCounter : Action
     public SharedInt selectStoreCounterId;
 	public override void OnStart()
 	{
-        if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
+        if (selectStoreCounterId==null)
         {
             selectStoreCounterId = (SharedInt)Owner.GetVariable("SelectStoreCounterId");
             if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
@@ -50,7 +50,7 @@ public class SelectPlayerStoreCounter : Action
 		if (canSelectNullStoreCounter&&NoGoodStoreCounters.Count > 0)
 		{
             int index = GameRandom.RandomInt(0, NoGoodStoreCounters.Count);
-            selectStoreCounterId = NoGoodStoreCounters[index].instanceId;
+            selectStoreCounterId.Value = NoGoodStoreCounters[index].instanceId;
             taskStatus = TaskStatus.Success;
             return;
         }

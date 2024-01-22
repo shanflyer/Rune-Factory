@@ -234,7 +234,6 @@ public class MapCellController : Singleton<MapCellController>
 
         public NativeHashMap<int2, int> linkMapIndexs;
         public NativeList<int4> linkMaps;
-
         /// <summary>
         /// 玩家转换地图前后的事件
         /// </summary>
@@ -256,16 +255,18 @@ public class MapCellController : Singleton<MapCellController>
         public bool GetLinkMapInCoordinate(int linkMap, ref int2 inCoordinate)
         {
             NativeList<int2> coordinates = new NativeList<int2>(4, Allocator.Temp);
-            foreach (var linkMapData in linkMaps)
+
+            foreach(var linkIndex in linkMapIndexs)
             {
-                if (linkMapData.w == linkMap)
+                if (linkMaps[linkIndex.Value].z == linkMap)
                 {
-                    coordinates.Add(inCoordinate);
+                    coordinates.Add(linkIndex.Key);
                 }
             }
+ 
             if (coordinates.Length > 0)
             {
-                inCoordinate = GameRandom.RandomInt(0, coordinates.Length);
+                inCoordinate = coordinates[GameRandom.RandomInt(0, coordinates.Length)];
                 return true;
             }
             return false;
@@ -1146,34 +1147,72 @@ public class MapCellController : Singleton<MapCellController>
         return false;
     }
 
-    public Queue<int> FindRoomList(int sourceId, int targetId, Queue<int> roomList, ref bool result)
+
+    NativeList<int>  GetRoomNeighbours(int roomId)
+    {
+        if (runtimeMapRooms.GetData(roomId, out RuntimeMapRoom sourceRoom))
+        {
+            return sourceRoom.neighbourMaps;
+        }
+        return default(NativeList<int>);
+    }
+    public Queue<int> FindRoomList(int sourceId, int targetId, ref bool result)
     {
         if (sourceId == targetId)
         {
             result = true;
             return new Queue<int>();
         }
-        if (runtimeMapRooms.GetData(sourceId, out RuntimeMapRoom sourceRoom) &&
-            runtimeMapRooms.Contains(targetId))
+        
+        Queue<int> roomList=new Queue<int>();
+        Dictionary<int, int> links = new Dictionary<int, int>();
+        List<int> nowList = new List<int>();
+        HashSet<int> checkRoom = new HashSet<int>();
+        checkRoom.Add(targetId);
+        nowList.Add(targetId); 
+
+        for (int i = 0; i < nowList.Count; i++)
         {
-            foreach (var id in sourceRoom.neighbourMaps)
+            int checkId = nowList[i];
+            var Neighbours = GetRoomNeighbours(checkId);
+             
+            for (int j = 0; j < Neighbours.Length; j++)
             {
-                roomList.Enqueue(id);
-                if (id == targetId)
+                int neighbour = Neighbours[i];
+                if (!checkRoom.Contains(neighbour))
                 {
-                    result = true;
-                    return roomList;
-                }
-                else
-                {
-                    var resultList = FindRoomList(id, targetId, roomList, ref result);
-                    if (result)
+                    links[neighbour] = targetId;
+                    checkRoom.Add(neighbour);
+                    nowList.Add(neighbour);
+                    if (sourceId == neighbour)
                     {
-                        return resultList;
+                        result = true;
+                        break ;
                     }
                 }
             }
+            if (result)
+            {
+                break;
+            }
         }
+
+        if (result)
+        {
+            int _roomId = sourceId;
+            //roomList.Enqueue(_roomId);
+            while (true)
+            {
+                if(links.TryGetValue(_roomId,out _roomId))
+                {
+                    roomList.Enqueue(_roomId);
+                }
+                if (_roomId == targetId)
+                {
+                    return roomList; 
+                }
+            }
+        } 
         return null;
     }
 

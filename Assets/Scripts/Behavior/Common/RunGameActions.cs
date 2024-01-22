@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct DynamicData
+public class DynamicData
 {
     public SharedInt source, target, value;
 }
@@ -24,8 +24,7 @@ public class RunGameActions : Action
     public SharedInt sharedSetIntValue;
 
     [Header("动态填充数据")]
-    public List<DynamicData> otherDatas;
-
+    public List<DynamicData> otherDatas; 
     public List<DynamicParameterData> dynamicParameterDatas;
 
     public List<GameActionData> gameActionDatas;
@@ -65,6 +64,7 @@ public class RunGameActions : Action
         }
         for (int i = 0; i < gameActionDatas.Count; i++)
         {
+           
             if (dynamicParameterDatas != null && i < dynamicParameterDatas.Count)
             {
                 var dynamicParameterData = dynamicParameterDatas[i];

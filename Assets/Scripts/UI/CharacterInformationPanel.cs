@@ -150,6 +150,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 targetId = characterId
             };
             GameActionManager.instance.QueueAction(visitNPC);
+            Close();
         });
     }
 
@@ -168,10 +169,10 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         State = FindChildGameObject<TextMeshProUGUI>("State");
         RPSliderValue = FindChildGameObject<Image>("HPSliderValue");
         HPSliderValue = FindChildGameObject<Image>("RPSliderValue");
-        EXPSliderValue = FindChildGameObject<Image>("RPSliderValue");
+        EXPSliderValue = FindChildGameObject<Image>("EXPSliderValue");
         HPValue = FindChildGameObject<TextMeshProUGUI>("HPValue");
         RPValue = FindChildGameObject<TextMeshProUGUI>("RPValue");
-        EXPValue = FindChildGameObject<TextMeshProUGUI>("RPValue");
+        EXPValue = FindChildGameObject<TextMeshProUGUI>("EXPValue");
         AttackValue = FindChildGameObject<TextMeshProUGUI>("AttackValue");
         DefenseValue = FindChildGameObject<TextMeshProUGUI>("DefenseValue");
         LevelValue = FindChildGameObject<TextMeshProUGUI>("Level");

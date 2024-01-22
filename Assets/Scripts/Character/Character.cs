@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -1075,16 +1076,18 @@ public partial class Character
         coordinate.xy += offsetCoordinate;
     }
 
+
+
+
     public bool MoveCrossMap(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null)
     {
         if (!CanMoveCrossMap)
         {
             return false;
         }
-
-        Queue<int> moveRoomList = new Queue<int>();
+         
         bool result = false;
-        Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, moveRoomList, ref result);
+        Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, ref result);
         if (result)
         {
             void FailedMoveAction()
@@ -1118,7 +1121,19 @@ public partial class Character
 
                 PlayerMove(pathNodes, () =>
                 {
-                    MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                    if (this == CharacterManager.instance.controllerCharacter)
+                    {
+                        canMove = false; 
+                        GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                        {
+                            MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                        });
+                    }
+                    else
+                    {
+                        MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                    }
+                    
                 }, changeCoordinateAction, failedMoveAction);
             }
         }

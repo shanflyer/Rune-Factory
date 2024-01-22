@@ -592,11 +592,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             sleepHour += 24;
         }
-        bool isController = CharacterManager.instance.controllerCharacter.instanceId == playerSleep.characterId;
+        int characterId = playerSleep.characterId;
+        bool isController = CharacterManager.instance.controllerCharacter.instanceId == characterId;
 
         void WakeUp()
         {
-            Character character = CharacterManager.instance.GetCharacter(playerSleep.characterId);
+            Debug.Log($"characterId:{characterId}");
+            Character character = CharacterManager.instance.GetCharacter(characterId);
             PlayerWakeUp playerWakeUp = new PlayerWakeUp
             {
                 characterId = playerSleep.characterId

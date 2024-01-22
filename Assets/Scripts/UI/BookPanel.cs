@@ -31,6 +31,7 @@ public class BookPanel : GamePanel<IReferenceData>
         characterButton.onClick.AddListener(() =>
         {
             UIManager.instance.ShowGamePanel<NPCPanel,NPCList>(NPCManager.instance.GetNPCList());
+            Close();
         });
     }
 }
