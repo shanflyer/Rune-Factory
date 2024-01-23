@@ -126,6 +126,7 @@ public struct OpenPackage : GameAction
     public int selectActionId;
     public int targetObj;
     public bool canSetShortcut;
+    public bool eventAction;
     public ItemMatchData itemMatchData;
     public PackageItemAction selectAction;
     public SetPanelReference setPanel;
@@ -140,6 +141,10 @@ public struct OpenPackage : GameAction
             if (parameters.Count > 3)
             {
                 canSetShortcut = int.Parse(parameters[3].value) != 0;
+            }
+            if (parameters.Count > 4)
+            {
+                eventAction = int.Parse(parameters[4].value) != 0;
             }
         }
         else {
