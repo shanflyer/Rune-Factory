@@ -8,7 +8,7 @@ using System.Linq;
 public class SetCharacterDirection : Action
 {
     public SharedInt3 faceTargetCoordinate;
-    private SharedInt characterId;
+    public SharedInt characterId;
     public override void OnStart()
     {
         if (characterId==null|| characterId.IsNull())

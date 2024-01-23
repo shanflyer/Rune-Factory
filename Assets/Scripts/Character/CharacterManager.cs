@@ -12,7 +12,7 @@ public struct CharacterRuntimeObj
     public Animator animator;
     public Transform model;
     public MyShadowPolygon myShadow;
-
+    public SpriteRenderer equipRenderer;
     public void SetAnimationDirection(float2 direction)
     {
         if (direction.x == float.NaN || direction.y == float.NaN)
@@ -123,10 +123,31 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterRandomCoordinate>(SetCharacterRandomCoordinate);
 
         GameActionManager.instance.AddListener<VisitNPC>(VisitNPC);
+        GameActionManager.instance.AddListener<DisplayCharacterItemRenderer>(DisplayCharacterItemRenderer);
+    }
+    async void DisplayCharacterItemRenderer(DisplayCharacterItemRenderer displayCharacterItemRenderer)
+    {
+        Character character = GetCharacter(displayCharacterItemRenderer.characterId);
+        if (character != null)
+        {
+            if(characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
+            {
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(displayCharacterItemRenderer.itemId);
+                if (itemData != null)
+                {
+                    characterRuntimeObj.equipRenderer.sprite = itemData.icon;
+                    characterRuntimeObj.equipRenderer.enabled = true;
+                }
+                else
+                {
+                    characterRuntimeObj.equipRenderer.sprite = null;
+                    characterRuntimeObj.equipRenderer.enabled = false;
+                } 
+            } 
+        }
     }
 
-
-    public void VisitNPC(VisitNPC visitNPC)
+    private void VisitNPC(VisitNPC visitNPC)
     {
         Character sourceCharacter = GetCharacter(visitNPC.sourceId);
         Character targetCharacter = GetCharacter(visitNPC.targetId);
@@ -238,6 +259,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     {
                         runtimeObj = runtimeObj,
                         animator = transform.GetComponentInChildren<Animator>(),
+                        equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
                         model = transform.Find("Body")
                     };
                     characterRuntionObjs.Add(character, characterRuntimeObj);
@@ -682,6 +704,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 runtimeObj = runtimeObj,
                 animator = transform.GetComponentInChildren<Animator>(),
+                equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
                 model = transform.Find("Body")
             };
             characterRuntionObjs.Add(character, characterRuntimeObj);
@@ -1104,6 +1127,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     runtimeObj = runtimeObj,
                     animator = transform.GetComponentInChildren<Animator>(),
+                    equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
                     model = transform.Find("Body"),
                     // myShadow=transform.GetComponentInChildren<MyShadowPolygon>(),
                 };
@@ -1144,6 +1168,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         {
                             runtimeObj = runtimeObj,
                             animator = transform.GetComponentInChildren<Animator>(),
+                            equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
                             model = transform.Find("Body")
                         };
                         characterRuntionObjs.Add(character, characterRuntimeObj);

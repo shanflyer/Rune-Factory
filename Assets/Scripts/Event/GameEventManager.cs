@@ -203,15 +203,21 @@ public class GameEventManager : Singleton<GameEventManager>
         }
 
         behaviorTree.enabled = gameEventData.defaultAwake;
-        behaviorTrees[gameEventData.id] = behaviorTree;
+        if (gameEventData.bindEvent)
+        {
+            behaviorTrees[gameEventData.id] = behaviorTree;
+        }
+       
     }
 
     public void RemoveGameEvent(int id)
     {
+        behaviorTrees.Remove(id);
+        /*
         if (behaviorTrees.TryGetValue(id, out BehaviorTree behaviorTree))
         {
             GameObject.Destroy(behaviorTree);
-        }
+        }*/
     }
 
     public void SetGameEventAwake(int id, bool awake, bool pause)

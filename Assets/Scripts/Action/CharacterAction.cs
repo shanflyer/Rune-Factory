@@ -789,6 +789,28 @@ public struct ClearEquip : GameAction
     }
 }
 
+public struct DisplayCharacterItemRenderer : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId; 
+    public int itemId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            itemId = int.Parse(parameters[1].value); 
+
+        if (source != 0&&source!=int.MinValue)
+            characterId = source;
+        if (target != 0 && target != int.MinValue)
+            itemId = target; 
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct ChangeEquip : GameAction
 {
     public SetValue setValue { get; set; }

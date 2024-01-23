@@ -60,6 +60,31 @@ public class FriendManager:Singleton<FriendManager>
 
         GameActionManager.instance.AddListener<AddFriendShipValue>(AddFriendShipValue);
         GameActionManager.instance.AddListener<TryGiveGiftOpenPackage>(TryGiveGiftOpenPackage);
+        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+    }
+    void GiveGift(GiveGift giveGift)
+    {
+        
+        EventReferenceData eventReferenceData = new EventReferenceData
+        {
+            name = "目标人物",
+            value = giveGift.receiveCharacter
+        };
+        EventReferenceData eventReferenceData1 = new EventReferenceData
+        {
+            name = "CharacterId",
+            value = giveGift.giveCharacter
+        };
+        EventReferenceData eventReferenceData2 = new EventReferenceData
+        {
+            name = "礼物Id",
+            value = giveGift.giftId
+        };
+        List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
+        {
+            eventReferenceData,eventReferenceData1,eventReferenceData2,
+        };
+        GameEventManager.instance.AddGameEvent(GameCommon.giftEventId, eventReferenceDatas);
     }
     async void TryGiveGiftOpenPackage(TryGiveGiftOpenPackage tryGiveGiftOpenPackage)
     {
@@ -82,6 +107,7 @@ public class FriendManager:Singleton<FriendManager>
                 int count = PackageManager.instance.GetPackageItemCount(packageId, item.dataId);
                 if (count >= 1)
                 {
+                    UIManager.instance.CloseGamePanel<WarehousePanel>();
                     GiveGift giveGift = new GiveGift
                     {
                         giftId = item.dataId,

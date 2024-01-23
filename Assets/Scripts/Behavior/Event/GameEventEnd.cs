@@ -15,6 +15,7 @@ public class GameEventEnd : Action
         }
 		 
 		GameEventManager.instance.RemoveGameEvent(gameEventId.Value);
+		GameObject.Destroy(Owner);
 	}
 
 	public override TaskStatus OnUpdate()

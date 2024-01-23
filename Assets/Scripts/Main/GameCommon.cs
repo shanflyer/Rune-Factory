@@ -85,6 +85,7 @@ public enum EntityType
 
 public class GameCommon
 {
+    public const int giftEventId = 412;
     public const int zeroGameYear = 1300;
     public const Season zeroSeasom = Season.´º;
     public const int zeroDay = 1;
