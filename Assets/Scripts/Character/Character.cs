@@ -682,6 +682,19 @@ public partial class Character
                     value = character.characterData.nextTalkEventId
                 };
                 bool temp = character is TempCharacter;
+
+                if (!temp)
+                {
+                    AddFriendShipValue addFriendShipValue = new AddFriendShipValue
+                    { 
+                        characterId=character.instanceId,
+                        friendAddType=FriendAddType.¶Ô»°,
+                        value=1
+                    };
+                    GameActionManager.instance.QueueAction(addFriendShipValue);
+                }
+
+
                 GameEventManager.instance.AddGameEvent(
                 temp ? character.characterData.tempTalkEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
                 {

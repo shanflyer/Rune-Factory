@@ -1,9 +1,5 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Unity.Mathematics;
 
 public struct FriendShip
 {
@@ -26,7 +22,6 @@ public struct FriendShip
         }
         else
         {
-
             while (totalVaue > 0)
             {
                 FriendShipData friendShipData = await GameDataManager.instance.GetAsyncData<FriendShipData>(friendLevel);
@@ -40,9 +35,15 @@ public struct FriendShip
         }
     }
 }
-public class FriendManager:Singleton<FriendManager>
+
+public enum FriendAddType
 {
-    public override async void  Init()
+    对话=1,礼物=2,邀请=3,其他=4
+}
+public class FriendManager : Singleton<FriendManager>
+{
+    
+    public override async void Init()
     {
         base.Init();
         NPCFriendShips.Clear();
@@ -56,15 +57,23 @@ public class FriendManager:Singleton<FriendManager>
                 friendLevel = npc.zeroFriendShipLevel,
             };
             NPCFriendShips[npc.id] = friendShip;
+            friendAdd[npc.id] = GameCommon.friendAddCount;
         }
 
         GameActionManager.instance.AddListener<AddFriendShipValue>(AddFriendShipValue);
         GameActionManager.instance.AddListener<TryGiveGiftOpenPackage>(TryGiveGiftOpenPackage);
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+        GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
-    void GiveGift(GiveGift giveGift)
+    private void NewDay(NewDay newDay)
     {
-        
+        foreach(var key in friendAdd.Keys)
+        {
+            friendAdd[key] = GameCommon.friendAddCount;
+        }
+    }
+    private void GiveGift(GiveGift giveGift)
+    {
         EventReferenceData eventReferenceData = new EventReferenceData
         {
             name = "目标人物",
@@ -86,19 +95,20 @@ public class FriendManager:Singleton<FriendManager>
         };
         GameEventManager.instance.AddGameEvent(GameCommon.giftEventId, eventReferenceDatas);
     }
-    async void TryGiveGiftOpenPackage(TryGiveGiftOpenPackage tryGiveGiftOpenPackage)
+
+    private async void TryGiveGiftOpenPackage(TryGiveGiftOpenPackage tryGiveGiftOpenPackage)
     {
         PackageList packageList = new PackageList
         {
             packageDatas = new List<PackageData>()
         };
         Character character = CharacterManager.instance.GetCharacter(tryGiveGiftOpenPackage.fromCharacterId);
-        if(character!=null )
+        if (character != null)
         {
             var packageData = PackageManager.instance.GetPackageData(character.characterPackage);
             packageList.packageDatas.Add(packageData);
 
-            var warehousePanel=await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+            var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
             warehousePanel.SetSelectItemAction(SelectAction, "赠送");
 
             void SelectAction(Item item, int packageId)
@@ -118,13 +128,11 @@ public class FriendManager:Singleton<FriendManager>
                 }
             }
         }
-        
-       
     }
 
+    private Dictionary<int, FriendShip> NPCFriendShips = new Dictionary<int, FriendShip>();
 
-    Dictionary<int, FriendShip> NPCFriendShips = new Dictionary<int, FriendShip>();
- 
+    private Dictionary<int, int3> friendAdd = new Dictionary<int, int3>();
     public int GetFriendShipLevel(int characterId)
     {
         if (NPCFriendShips.TryGetValue(characterId, out var friendShip))
@@ -133,19 +141,51 @@ public class FriendManager:Singleton<FriendManager>
         }
         return 0;
     }
-    void AddFriendShipValue(AddFriendShipValue addFriendShipValue)
+
+    private void AddFriendShipValue(AddFriendShipValue addFriendShipValue)
     {
-        if (NPCFriendShips.TryGetValue(addFriendShipValue.characterId, out var friendShip))
+        bool canAddFriendShip = true;
+        if (addFriendShipValue.value > 0)
         {
-            friendShip.AddValue(addFriendShipValue.value);
-            NPCFriendShips[addFriendShipValue.characterId] = friendShip;
-            RefreshFriendShip refreshFriendShip = new RefreshFriendShip
+            canAddFriendShip = false;
+            if (friendAdd.TryGetValue(addFriendShipValue.characterId, out var int3))
             {
-                characterId = addFriendShipValue.characterId
-            };
-            GameActionManager.instance.QueueAction(refreshFriendShip);
+                switch (addFriendShipValue.friendAddType)
+                {
+                    case FriendAddType.对话:
+                        int3.x--;
+                        canAddFriendShip = int3.x > 0;
+                        break;
+                    case FriendAddType.礼物:
+                        int3.y--;
+                        canAddFriendShip = int3.y > 0;
+                        break;
+                    case FriendAddType.邀请:
+                        int3.z--;
+                        canAddFriendShip = int3.z > 0;
+                        break;
+                    default:
+                        break;
+                }
+                int3 = math.clamp(int3.zero, int3, int3);
+                friendAdd[addFriendShipValue.characterId] = int3;
+            }
+        }
+        if (canAddFriendShip)
+        {
+            if (NPCFriendShips.TryGetValue(addFriendShipValue.characterId, out var friendShip))
+            {
+                friendShip.AddValue(addFriendShipValue.value);
+                NPCFriendShips[addFriendShipValue.characterId] = friendShip;
+                RefreshFriendShip refreshFriendShip = new RefreshFriendShip
+                {
+                    characterId = addFriendShipValue.characterId
+                };
+                GameActionManager.instance.QueueAction(refreshFriendShip);
+            }
         }
     }
+
     public void AddFriendShip(int characterId, int value)
     {
         if (NPCFriendShips.TryGetValue(characterId, out var friendShip))

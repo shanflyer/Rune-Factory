@@ -30,7 +30,7 @@ MonoBehaviour:
       fillItemIndex: 0
   - text: "\u6389\u843D\u6D4B\u8BD5"
     id: 20000
-    weightRandom: 1
+    weightRandom: 0
     randomItems:
     - text: "\u5377\u5FC3\u83DC"
       itemId: 1001
@@ -151,6 +151,39 @@ MonoBehaviour:
       randomValue: 5000
       maxCount: 2
       minCount: 1
+    barrels: []
+  - text: "\u559C\u6B22\u793C\u7269"
+    id: 30000
+    weightRandom: 1
+    randomItems:
+    - text: 
+      itemId: 6000
+      isGroup: 0
+      itemValue: 6000
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 6001
+      isGroup: 0
+      itemValue: 6001
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 6002
+      isGroup: 0
+      itemValue: 6002
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 6003
+      isGroup: 0
+      itemValue: 6003
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
     barrels:
     - itemIndex: 0
       baseWeight: 10000
@@ -164,42 +197,178 @@ MonoBehaviour:
     - itemIndex: 3
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 4
+  - text: "\u4E0D\u559C\u6B22\u793C\u7269"
+    id: 30001
+    weightRandom: 1
+    randomItems:
+    - text: 
+      itemId: 6004
+      isGroup: 0
+      itemValue: 6004
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 6005
+      isGroup: 0
+      itemValue: 6005
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 6006
+      isGroup: 0
+      itemValue: 6006
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    barrels:
+    - itemIndex: 0
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 5
+    - itemIndex: 1
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 6
+    - itemIndex: 2
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 7
+  - text: "\u559C\u6B22\u793C\u7269\u8868\u60C5"
+    id: 30002
+    weightRandom: 1
+    randomItems:
+    - text: 
+      itemId: 30
+      isGroup: 0
+      itemValue: 30
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 8
+      isGroup: 0
+      itemValue: 8
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 5
+      isGroup: 0
+      itemValue: 5
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 12
+      isGroup: 0
+      itemValue: 12
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    barrels:
+    - itemIndex: 0
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 8
+    - itemIndex: 1
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 9
+    - itemIndex: 2
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 10
+    - itemIndex: 3
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 11
+  - text: "\u4E0D\u559C\u6B22\u793C\u7269\u8868\u60C5"
+    id: 30003
+    weightRandom: 1
+    randomItems:
+    - text: 
+      itemId: 24
+      isGroup: 0
+      itemValue: 24
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 25
+      isGroup: 0
+      itemValue: 25
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 2
+      isGroup: 0
+      itemValue: 2
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 19
+      isGroup: 0
+      itemValue: 19
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    barrels:
+    - itemIndex: 0
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 12
+    - itemIndex: 1
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 13
+    - itemIndex: 2
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 14
+    - itemIndex: 3
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 15
+  - text: "\u9ED8\u8BA4\u793C\u7269\u5BF9\u8BDD"
+    id: 30004
+    weightRandom: 1
+    randomItems:
+    - text: 
+      itemId: 6007
+      isGroup: 0
+      itemValue: 6007
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    barrels:
+    - itemIndex: 0
       baseWeight: 10000
       fillItemIndex: 0
-    - itemIndex: 16
+  - text: "\u9ED8\u8BA4\u793C\u7269\u8868\u60C5"
+    id: 30005
+    weightRandom: 1
+    randomItems:
+    - text: 
+      itemId: 4
+      isGroup: 0
+      itemValue: 4
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 1
+      isGroup: 0
+      itemValue: 1
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    - text: 
+      itemId: 17
+      isGroup: 0
+      itemValue: 17
+      randomValue: 5000
+      maxCount: 1
+      minCount: 1
+    barrels:
+    - itemIndex: 0
+      baseWeight: 10000
+      fillItemIndex: 0
+    - itemIndex: 1
+      baseWeight: 10000
+      fillItemIndex: 0
+    - itemIndex: 2
       baseWeight: 10000
       fillItemIndex: 0

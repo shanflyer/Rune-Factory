@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class NPCData : ScriptableObject, IReferenceData, IGameData
 {
@@ -10,6 +11,10 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public int overridePackage;
     public NPCState zeroState;
     public bool hide;
+    public List<int> likeItems=new List<int>();
+    public List<int> unLikeItems = new List<int>();
+    public int likeTalk, unlikeTalk, likeEmote, unlikeEmote,defaultTalk,defaultEmote;
+
 
     public override string ToString()
     {

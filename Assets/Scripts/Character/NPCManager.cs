@@ -171,12 +171,90 @@ public class NPCManager : Singleton<NPCManager>
     {
         base.Init();
         npcs.Init(16); CreatZeroNPC();
+        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
     }
 
     protected override void Clear()
     {
         base.Clear();
         npcs.Dispose();
+    }
+
+
+    async void GiveGift(GiveGift giveGift)
+    {  
+        if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
+        {
+            Character receiver = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter);
+
+            int likeState = 0;
+            NPCData nPCData = await GameDataManager.instance.GetAsyncData<NPCData>(npc.dataId);
+            if (nPCData.likeItems.Contains(giveGift.giftId))
+            {
+                likeState = 1;
+            }else if (nPCData.unLikeItems.Contains(giveGift.giftId))
+            {
+                likeState = -1;
+            }
+            int talkId = 0;
+            int emoteId = 0;
+            int friendValue = 0;
+            List<RandomResult> talkRandomResults = new List<RandomResult>();
+            List<RandomResult> emoteRandomResults = new List<RandomResult>();
+            switch (likeState)
+            {
+                case 1:
+                    friendValue = 4;
+                    talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.likeTalk);
+                    emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.likeEmote);
+                    break;
+                case 0:
+                    friendValue = 2;
+                    talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.defaultTalk);
+                    emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.defaultEmote);
+                    break;
+                case -1:
+                    talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.unlikeTalk);
+                    emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.unlikeEmote);
+                    break;
+            }
+            talkId =int.Parse(talkRandomResults[0].result);
+            emoteId = int.Parse(emoteRandomResults[0].result);
+
+            GameTimerController.instance.DelayAction(1000, () =>
+            {
+                if (CharacterManager.instance.controllerCharacter.instanceId == giveGift.giveCharacter)
+                {
+                    Talk talk = new Talk
+                    {
+                        characterId = giveGift.receiveCharacter,
+                        talkId = talkId,
+                        displayFunction = false,
+                        endAction = () =>
+                        {
+                            CharacterManager.instance.controllerCharacter.SetNeighborhood(giveGift.receiveCharacter);
+                        } 
+                    };
+                    GameActionManager.instance.QueueAction(talk);
+
+                    AddFriendShipValue addFriendShipValue = new AddFriendShipValue
+                    {
+                        characterId = giveGift.receiveCharacter,
+                        friendAddType = FriendAddType.礼物,
+                        value = friendValue
+                    };
+                    GameActionManager.instance.QueueAction(addFriendShipValue);
+
+                }
+                ShowEmote showEmote = new ShowEmote
+                {
+                    emoteId = emoteId,
+                    entityType = EntityType.角色,
+                    id = giveGift.receiveCharacter
+                };
+                GameActionManager.instance.QueueAction(showEmote);
+            }); 
+        } 
     }
 
     public bool GetNPCFormInstance(int instanceId, out NPC npc)
@@ -227,6 +305,7 @@ public class NPCManager : Singleton<NPCManager>
                     hide=NPCData.hide
                 };
                 npcs.SetData(npc);
+                instanceDatas[instanceId] = NPCData.id;
             }
         }
     }

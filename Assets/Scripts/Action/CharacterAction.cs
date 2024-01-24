@@ -727,17 +727,27 @@ public struct AddFriendShipValue : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterId;
+    public FriendAddType friendAddType;
     public int value;
+
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count > 0)
             characterId = int.Parse(parameters[0].value);
         if (parameters.Count > 1)
-            this.value = int.Parse(parameters[1].value);
+            friendAddType = (FriendAddType)Enum.Parse(typeof(FriendAddType), parameters[1].value);
+        if (parameters.Count > 2)
+        {
+                this.value = int.Parse(parameters[2].value);
+        }
         if (source != 0)
         {
             characterId = source;
+        }
+        if (target > 0)
+        {
+            friendAddType = (FriendAddType)target;
         }
         if (value != -1)
         {

@@ -99,6 +99,8 @@ public class GameCommon
     public const int storeCoinTime = 1000;
     public const float HurtUtlility = 0.6f;
 
+    public static int3 friendAddCount=new int3(3,3,2);
+
     public static List<int> zeroNPC = new List<int>
     {
         1001,2001
