@@ -844,7 +844,7 @@ public static class DataPath
         {typeof(WorldMapData),"Data/WorldMapData" },
         {typeof(CharacterData),"Data/CharacterData" },
         {typeof(CharacterGroupData),"Data/CharacterGroupData" },
-        {typeof(FightMapData),"Data/FightMapDataList" },
+        {typeof(FightMapData),"Data/FightMapData/FightMapDataList" },
         {typeof(MonsterDeploy),"Data/MonsterDeloyList" },
         {typeof(GameActionData),"Data/GameActionData" },
         {typeof(TalkData),"Data/TalkData" },
@@ -878,7 +878,7 @@ public static class DataPath
         {typeof(SleepSetData),"Data/SleepSetData/SleepSetDataList" },
         {typeof(SleepSetDataList),"Data/SleepSetData" },
         {typeof(GameTimeEventData),"Data/GameTimeEventData" },
-        {typeof(EmoteData),"Data/EmoteData" }
+        {typeof(EmoteData),"Data/EmoteData" }, 
     };
 
     public static string GetDataPath(Type type)

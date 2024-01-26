@@ -6,9 +6,9 @@ using UnityEngine;
 public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapData>
 {
     [SerializeField]
-    FightMapData[] FightMapDatas;
+    public FightMapData[] fightMapDatas;
 
-    public FightMapData[] DataList => FightMapDatas;
+    public FightMapData[] DataList => fightMapDatas;
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
@@ -16,27 +16,28 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
 #endif
     public string GetKey()
     {
-        return name;
+        return "FightMapDataList";
+    }
+    public override string ToString()
+    {
+        return "FightMapDataList";
     }
 }
 
 [System.Serializable]
 public struct FightMapData : IGameData
-{
-    public int id;
+{ 
     public string mapName;
-     
-    public string iconName;
-    public string backGroundName;
+    public int id;
+
     public string fightMapObjName;
     public string exploreBGMName, fightBGMName;
 
-
+    public Season season;
     public float offsetY;
-    public float cycleSize; 
-    public Sprite Icon; 
-    public Sprite Background; 
+    public float cycleSize;   
     public GameObject fightMapObj;
+    public List<int> items;
     public List<int> monsterDeploys;
     public List<int> endMonsterEvents;
     public AudioClip exploreBGM,fightBGM;
@@ -52,6 +53,10 @@ public struct FightMapData : IGameData
     }
 #endif
     public string GetKey()
+    {
+        return id.ToString();
+    }
+    public override string ToString()
     {
         return id.ToString();
     }

@@ -9,14 +9,19 @@ using UnityEngine.SceneManagement;
 public struct FightChapter:IReferenceData,INativeData
 {
     public int mapId;
+    public FixedString128Bytes mapName;
     public int completeValue;
     public NativeList<int> findItems;
+    public NativeList<int> haveItems;
     public int failureEventId;
     public int successEventId;
     public int nowStep;
     public bool open;
     public void Dispose()
     {
+        findItems.Dispose();
+        haveItems.Dispose();
+        mapName.Clear();
     }
     public int Key => mapId; 
 }
@@ -47,12 +52,18 @@ public class ExploreManager : Singleton<ExploreManager>
             FightChapter fightChapter = new FightChapter
             {
                 mapId = chapterData.id,
+                mapName = chapterData.mapName,
                 open = chapterData.isOpen, 
                 failureEventId=chapterData.failureEventId,
                 successEventId=chapterData.successEventId
             };
+            fightChapter.haveItems = new NativeList<int>(Allocator.Persistent);
+            fightChapter.findItems = new NativeList<int>(Allocator.Persistent);
 
-            fightChapter.findItems = new NativeList<int>(Allocator.TempJob);
+            for(int j = 0; j < chapterData.items.Count; j++)
+            {
+                fightChapter.haveItems.Add(chapterData.items[i]);
+            }
 
             fightChapters.AddData(fightChapter);
         }
