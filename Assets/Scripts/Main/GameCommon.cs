@@ -440,6 +440,71 @@ public class GameCommon
         }
     }
 
+    static float tansMin = math.tan(math.radians(22.5f));
+    static float tansMax = math.tan(math.radians(67.5f));
+
+    static float2 Left=new float2(-1, 0);
+    static float2 Right = new float2(1, 0);
+    static float2 Up = new float2(0, 1);
+    static float2 Down = new float2(0, -1);
+
+    static float2 LeftUp = new float2(-1, 1);
+    static float2 RightUp = new float2(1, 1);
+    static float2 LeftDown = new float2(-1, -1);
+    static float2 RightDown = new float2(1, -1);
+    public static float2 InitMoveDirect(float2 movedirect)
+    {
+        if (movedirect.x==0&&movedirect.y==0)
+        {
+            return movedirect;
+        }
+        float value =math.abs( movedirect.y / movedirect.x);
+        if(value< tansMin)
+        {
+            if (movedirect.x < 0)
+            {
+                return Left;
+            }
+            else
+            {
+                return Right;
+            }
+        }else if (value > tansMax)
+        {
+
+            if (movedirect.y < 0)
+            {
+                return Down;
+            }
+            else
+            {
+                return Up;
+            }
+        }
+        else if(movedirect.x<0)
+        {
+            if (movedirect.y < 0)
+            {
+                return LeftDown;
+            }
+            else
+            {
+                return LeftUp;
+            }
+        }
+        else
+        {
+            if (movedirect.y < 0)
+            {
+                return RightDown;
+            }
+            else
+            {
+                return RightUp;
+            }
+        }
+    }
+
     public static Direction GetCharacterDirect(float2 offset, Direction oldDirection = Direction.Default)
     {
         if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))

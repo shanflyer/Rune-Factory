@@ -25,6 +25,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         if (behaviorTrees.TryGetValue(stopCharacterBehavior.characterId, out BehaviorTree behaviorTree))
         {
             behaviorTree.StopAllTaskCoroutines();
+            behaviorTree.enabled = false;
         }
     }
 
@@ -32,6 +33,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     {
         if (behaviorTrees.TryGetValue(startCharacterBehavior.characterId, out BehaviorTree behaviorTree))
         {
+            behaviorTree.enabled = true;
             behaviorTree.Start();
         }
     }

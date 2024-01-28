@@ -41,7 +41,23 @@ public struct TryTeamLeaderMove : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct TryTeamLeaderStop : GameAction
+{
+    public int characterId; 
 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null,
+        SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TryTeamLeaderSetCoordinate : GameAction
 {
     public int characterId;

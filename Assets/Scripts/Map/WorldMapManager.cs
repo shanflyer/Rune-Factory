@@ -444,6 +444,43 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
        
     }
+
+    public bool InitNewSmoothMove(ref float2 direction, int2 coordinate, int mapId,out int2 targetCoordinate)
+    {
+        if (direction.x==0&&direction.y==0)
+        {
+            targetCoordinate = coordinate;
+            return false;
+        }
+         
+        int2 offsetCoordinate =(int2)direction;
+
+        int2 checkTargetCoordinate = coordinate + offsetCoordinate;
+        targetCoordinate = checkTargetCoordinate;
+        if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
+        { 
+            offsetCoordinate =new int2(0,(int)direction.y);
+            checkTargetCoordinate = coordinate + offsetCoordinate;
+            targetCoordinate = checkTargetCoordinate;
+            if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
+            {
+                offsetCoordinate = new int2((int)direction.x,0);
+                checkTargetCoordinate = coordinate + offsetCoordinate;
+                if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
+                {
+                    targetCoordinate = checkTargetCoordinate;
+                    return false;
+                }
+                direction = new float2(direction.x,0);
+                return true;
+            }
+            direction = new float2(0, direction.y);
+            return true;
+        }
+        return true;  
+    }
+
+
     public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance)
     {
         if (direction == Vector2.zero)

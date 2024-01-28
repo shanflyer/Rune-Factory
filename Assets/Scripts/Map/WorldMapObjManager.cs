@@ -342,7 +342,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
 
             await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
         }
-    }
+    } 
     public async Task ChangeMapItemDisplay(int mapItemId,int newId,int2 animationKey, RuntimeMapItem runtimeMapItem)
     {
         if (nowRuntimeMapItemObjs.TryGetValue(mapItemId, out MapItemRuntimeObj runtimeObj))

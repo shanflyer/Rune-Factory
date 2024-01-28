@@ -66,16 +66,24 @@ public class ZeroPanel : GamePanel<IReferenceData>
         titleIcon.sprite = sprite;
     }
     async void StartGame()
-    { 
-        AudioController.instance.PlayAudio(SE.click); 
+    {
+        AudioController.instance.PlayAudio(SE.click);
         Close();
-        PlayFilm playFilm = new PlayFilm
+        if (GameController.instance.startPlay)
         {
-            filmName = "角色选择",
-            assetName= "Default"
-        };
-        GameActionManager.instance.QueueAction(playFilm,true);
-        await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+            SceneManager.instance.SwitchScene("World"); 
+        }
+        else  
+        { 
+            PlayFilm playFilm = new PlayFilm
+            {
+                filmName = "角色选择",
+                assetName = "Default"
+            };
+            GameActionManager.instance.QueueAction(playFilm, true);
+            await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+        }
+      
     }
     public override Task InitData(string dataKay)
     {

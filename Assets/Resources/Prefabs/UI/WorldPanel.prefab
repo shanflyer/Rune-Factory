@@ -7483,7 +7483,7 @@ MonoBehaviour:
   m_Content: {fileID: 3579141296451636382}
   m_Horizontal: 1
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -10100,6 +10100,8 @@ GameObject:
   - component: {fileID: 463544169069544527}
   - component: {fileID: 5827330837619883078}
   - component: {fileID: 7492503858856124369}
+  - component: {fileID: 1113347161930001298}
+  - component: {fileID: 5061618300123869393}
   m_Layer: 5
   m_Name: WorldPanel
   m_TagString: Untagged
@@ -10155,7 +10157,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &463544169069544527
 MonoBehaviour:
@@ -10224,6 +10226,45 @@ MonoBehaviour:
   exploreValue: {fileID: 7834152870770375220}
   exploreButton: {fileID: 1970829139118226269}
   closeButton: {fileID: 6070647262832210614}
+--- !u!222 &1113347161930001298
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240210467520058143}
+  m_CullTransparentMesh: 1
+--- !u!114 &5061618300123869393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8240210467520058143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.4}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+  m_NullClear: 0
 --- !u!1 &8312931105317026400
 GameObject:
   m_ObjectHideFlags: 0

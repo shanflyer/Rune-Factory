@@ -1135,7 +1135,16 @@ public class MapCellController : Singleton<MapCellController>
         }
         return false;
     }
+    public bool CheckIsWalk(int3 coordinate)
+    {
+        if (runtimeMapRooms.GetData(coordinate.z, out RuntimeMapRoom runtimeMapRoom))
+        {
+            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
 
+            return roomCellData.CheckWalkable(coordinate.xy);
+        }
+        return false;
+    }
     public bool CheckIsWalk(int2 coordinate, int mapId)
     {
         if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))

@@ -10,31 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8acf37fc04ede7419cc297c465e29ba, type: 3}
-  m_Name: 1076
+  m_Name: 1077
   m_EditorClassIdentifier: 
-  id: 1076
-  itemName: "\u6625\u6218\u573A"
+  id: 1077
+  itemName: "\u79CB\u6218\u573A"
   objName: 
-  itemObj: {fileID: 965295078087353590, guid: e116eb369b60ddd41a726568b98d9252, type: 3}
+  itemObj: {fileID: 6489553518281403743, guid: dfb9c8a3a2706bb4f917fdbb531756d7, type: 3}
   colliderCells: []
   triggerCells: []
   playerTriggerCells:
-  - x: -5
-    y: -1
-  - x: -5
-    y: 0
-  - x: -5
-    y: 1
-  - x: -4
-    y: -2
-  - x: -4
-    y: -1
-  - x: -4
-    y: 0
-  - x: -4
-    y: 1
-  - x: -4
-    y: 2
   - x: -3
     y: -3
   - x: -3
@@ -50,6 +34,8 @@ MonoBehaviour:
   - x: -3
     y: 3
   - x: -2
+    y: -4
+  - x: -2
     y: -3
   - x: -2
     y: -2
@@ -63,6 +49,10 @@ MonoBehaviour:
     y: 2
   - x: -2
     y: 3
+  - x: -2
+    y: 4
+  - x: -1
+    y: -4
   - x: -1
     y: -3
   - x: -1
@@ -70,11 +60,17 @@ MonoBehaviour:
   - x: -1
     y: -1
   - x: -1
+    y: 0
+  - x: -1
     y: 1
   - x: -1
     y: 2
   - x: -1
     y: 3
+  - x: -1
+    y: 4
+  - x: 0
+    y: -4
   - x: 0
     y: -3
   - x: 0
@@ -89,6 +85,10 @@ MonoBehaviour:
     y: 2
   - x: 0
     y: 3
+  - x: 0
+    y: 4
+  - x: 1
+    y: -4
   - x: 1
     y: -3
   - x: 1
@@ -103,6 +103,8 @@ MonoBehaviour:
     y: 2
   - x: 1
     y: 3
+  - x: 1
+    y: 4
   - x: 2
     y: -3
   - x: 2
@@ -117,23 +119,7 @@ MonoBehaviour:
     y: 2
   - x: 2
     y: 3
-  - x: 3
-    y: -2
-  - x: 3
-    y: -1
-  - x: 3
-    y: 0
-  - x: 3
-    y: 1
-  - x: 3
-    y: 2
-  - x: 4
-    y: -1
-  - x: 4
-    y: 0
-  - x: 4
-    y: 1
-  playerTriggerEvent: 413
+  playerTriggerEvent: 0
   operateIds: 
   defaultExit: 0
   defaultEnter: 0

@@ -1,31 +1,36 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WorldPanel : GamePanel<MyInt>
-{ 
+{
     [SerializeField]
-    List<FightChapterReference> seasonFightChapterList;
-    [SerializeField]
-    List<Season> seasons;
-    [SerializeField]
-    Transform itemParent;
-    [SerializeField]
-    FightMapItemReference itemReference;
-    [SerializeField]
-    TextMeshProUGUI exploreValue;
-    [SerializeField]
-    Button exploreButton;
-    [SerializeField]
-    Button closeButton;
+    private List<FightChapterReference> seasonFightChapterList;
 
-    DisplayList<FightMapItemReference, MapItemReferenceData> fightMapItems;
+    [SerializeField]
+    private List<Season> seasons;
+
+    [SerializeField]
+    private Transform itemParent;
+
+    [SerializeField]
+    private FightMapItemReference itemReference;
+
+    [SerializeField]
+    private TextMeshProUGUI exploreValue;
+
+    [SerializeField]
+    private Button exploreButton;
+
+    [SerializeField]
+    private Button closeButton;
+
+    private DisplayList<FightMapItemReference, MapItemReferenceData> fightMapItems;
+
     protected override void Awake()
     {
         base.Awake();
@@ -33,6 +38,7 @@ public class WorldPanel : GamePanel<MyInt>
         exploreButton.onClick.AddListener(ExploreMap);
         closeButton.onClick.AddListener(Close);
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -52,7 +58,7 @@ public class WorldPanel : GamePanel<MyInt>
             {
                 Season season = (Season)s;
                 Transform child = FindChildGameObject(season.ToString());
-                foreach(Transform _child in child)
+                foreach (Transform _child in child)
                 {
                     FightChapterReference fightChapterReference = _child.GetComponent<FightChapterReference>();
                     seasonFightChapterList.Add(fightChapterReference);
@@ -61,19 +67,21 @@ public class WorldPanel : GamePanel<MyInt>
                 //seasonWorlds.Add(child);
             }
         }
-       
     }
-    int selectFightChapterId;
 
-    void ExploreMap()
-    {
+    private int selectFightChapterId;
+
+    private void ExploreMap()
+    { 
         EnterChapter enterChapter = new EnterChapter
         {
             id = selectFightChapterId
         };
         GameActionManager.instance.QueueAction(enterChapter);
+        Close();
     }
-    async void SelectFightChapter(UIFightChapterData uIFightChapterData,bool selected)
+
+    private async void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
     {
         if (selected)
         {
@@ -106,29 +114,27 @@ public class WorldPanel : GamePanel<MyInt>
             fightMapItems.ClearAll();
             exploreValue.text = $"Ì½Ë÷¶È:--%";
             exploreButton.interactable = false;
-        }  
+        }
     }
-   
-    public override async void InitReferenceData(MyInt v)
-    {
-        base.InitReferenceData(v);
 
-        var fightMapDatas=await GameDataManager.instance.GetAllAsyncData<FightMapData>();
+    private async void RefreshUI(Season selectSeason)
+    {
+        var fightMapDatas = await GameDataManager.instance.GetAllAsyncData<FightMapData>();
 
         Dictionary<Season, Queue<int>> seasonQueue = new Dictionary<Season, Queue<int>>();
         Queue<int> seasonIndex = new Queue<int>();
         for (int i = 0; i < seasons.Count; i++)
         {
             Season season = seasons[i];
-            if(!seasonQueue.TryGetValue(season,out seasonIndex))
+            if (!seasonQueue.TryGetValue(season, out seasonIndex))
             {
                 seasonIndex = new Queue<int>();
-                seasonQueue.Add(season,seasonIndex);
+                seasonQueue.Add(season, seasonIndex);
             }
             seasonIndex.Enqueue(i);
         }
-
-        for(int i = 0; i < fightMapDatas.Count; i++)
+         
+        for (int i = 0; i < fightMapDatas.Count; i++)
         {
             var fightMapData = fightMapDatas[i];
             if (fightMapData.season != Season.Default)
@@ -136,24 +142,42 @@ public class WorldPanel : GamePanel<MyInt>
                 if (seasonQueue.TryGetValue(fightMapData.season, out var ints))
                 {
                     int index = ints.Dequeue();
-                    seasonFightChapterList[i].InitData(new UIFightChapterData
+                    var data = new UIFightChapterData
                     {
                         fightChapterId = fightMapData.id,
-                        season = fightMapData.season == (Season)v.value
-                    }, SelectFightChapter) ;
+                        season = fightMapData.season == selectSeason
+                    };
+                    seasonFightChapterList[index].InitData(data, SelectFightChapter);
+
+                    if (fightMapData.season == selectSeason && fightMapData.isOpen)
+                    {
+                        SelectFightChapter(data, true);
+                    }
                 }
             }
         }
 
-        for(int i = 0; i < seasons.Count; i++)
+        for (int i = 0; i < seasons.Count; i++)
         {
             Season season = seasons[i];
             FightChapterReference fightChapterReference = seasonFightChapterList[i];
-
         }
     }
+
+    public override async void InitReferenceData(MyInt v)
+    {
+        base.InitReferenceData(v);
+        RefreshUI((Season)v.value);
+    }
+
     public override Task InitData(string dataKey)
     {
+        try
+        {
+            int index = int.Parse(dataKey);
+            RefreshUI((Season)index);
+        }
+        catch { }
         return base.InitData(dataKey);
     }
 }

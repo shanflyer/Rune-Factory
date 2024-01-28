@@ -345,7 +345,23 @@ public partial class Character
         SetLevel(1, true);
         CreatCharacterPackage(overridePackage);
     }
-
+    public void SetCellOffset(Vector2 offset)
+    {
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
+        {
+            characterRuntimeObj.animator.transform.Translate(offset);
+        }
+    }
+    public Vector2 GetCellOffset()
+    {
+      
+        if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
+        {
+            Vector3 pos = GameCommon.GetMapPos(coordinate);
+            return characterRuntimeObj.animator.transform.position - pos;
+        }
+        return Vector2.zero;
+    }
     protected virtual async Task CreatCharacterPackage(int overridePackage = 0)
     {
         characterPackage = await PackageManager.instance.CreatGamePackage(overridePackage == 0 ?
@@ -560,6 +576,16 @@ public partial class Character
                 _nowSpeed = value;
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
+                    if (_nowSpeed == 0)
+                    {
+                        TryTeamLeaderStop tryTeamLeaderStop = new TryTeamLeaderStop
+                        {
+                            characterId =instanceId
+                        };
+                        GameActionManager.instance.QueueAction(tryTeamLeaderStop);
+                    }
+
+
                     runtimeObj.SetAnimationSpeed(value);
                 }
             }
@@ -780,7 +806,7 @@ public partial class Character
         if (GameObjectCurveController.instance.StopLineMove(moveEnumeratorId))
         {
             CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
-        }
+        };
     }
 
     public void RemoveMove()
@@ -1064,7 +1090,23 @@ public partial class Character
 
         // ForwardTrigger(coordinate, direction);
     }
+    public void SetCoordinate(int2 coordinate)
+    {
+        int2 oldCoordinate = objCoordinate.xy;
+        int3 checkCoordinate = new int3(coordinate.xy, mapInstance);
+        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, oldCoordinate, coordinate.xy,
+           TriggerEventAction);
+    
+        SetObjCoordinate(checkCoordinate);
+        CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
+        {
+            characterId = instanceId,
+            coordinate = checkCoordinate
+        };
+        GameActionManager.instance.QueueAction(characterCoordinateTrigger);
 
+        // ForwardTrigger(coordinate, direction);
+    }
     private void ForwardTrigger(int3 coordinate, Direction direction)
     {
         int2 offsetCoordinate = int2.zero;

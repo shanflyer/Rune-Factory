@@ -12,8 +12,8 @@ using UnityEditor;
 
 public class GameController : MonoBehaviour
 {
-
-#if UNITY_EDITOR
+    public bool startPlay = true;
+#if UNITY_EDITOR 
     public bool runTime { get => GameTimeManager.instance.runTime; set => GameTimeManager.instance.runTime = value; }
    
     public int runTimeHour { 

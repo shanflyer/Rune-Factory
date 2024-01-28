@@ -11,7 +11,7 @@ public struct FightChapter:IReferenceData,INativeData
     public int mapId;
     public FixedString128Bytes mapName;
     public int completeValue;
-    public NativeList<int> findItems;
+    public NativeHashSet<int> findItems;
     public NativeList<int> haveItems;
     public int failureEventId;
     public int successEventId;
@@ -58,12 +58,17 @@ public class ExploreManager : Singleton<ExploreManager>
                 successEventId=chapterData.successEventId
             };
             fightChapter.haveItems = new NativeList<int>(Allocator.Persistent);
-            fightChapter.findItems = new NativeList<int>(Allocator.Persistent);
+            fightChapter.findItems = new NativeHashSet<int>(8,Allocator.Persistent);
 
-            for(int j = 0; j < chapterData.items.Count; j++)
+            if (chapterData.items != null && chapterData.items.Count > 0)
             {
-                fightChapter.haveItems.Add(chapterData.items[i]);
+                for (int j = 0; j < chapterData.items.Count; j++)
+                {
+                    fightChapter.haveItems.Add(chapterData.items[j]);
+                }
+
             }
+            
 
             fightChapters.AddData(fightChapter);
         }
@@ -110,6 +115,7 @@ public class ExploreManager : Singleton<ExploreManager>
         } ,
         () =>
         {
+            WorldMapObjManager.instance.RecycleMap();
             FightController.instance.CreatFightMap(nowFightMapData);
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM,true);
             if(nowFightMapData.isZeroTeam)

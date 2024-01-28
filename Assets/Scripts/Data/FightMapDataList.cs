@@ -12,6 +12,13 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
+
+        for(int i = 0; i < DataList.Length; i++)
+        {
+            var data = DataList[i];
+            data.SetReferenceData();
+            DataList[i] = data;
+        } 
     }
 #endif
     public string GetKey()
@@ -50,6 +57,7 @@ public struct FightMapData : IGameData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
+        fightMapObj = Resources.Load<GameObject>($"Prefabs/FightMap/{fightMapObjName}");
     }
 #endif
     public string GetKey()

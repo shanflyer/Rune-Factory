@@ -46,8 +46,12 @@ public struct TeamerEquipAndProperty : IReferenceData
 
 public class CharacterManager : Singleton<CharacterManager>
 {
+
+    public override bool NeedUpdata => true;
+
     public const float moveSpeed = 15f;
     public const float updataMoveSpeed = 1f;
+  
     private MyInstance myInstance;
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
     private Dictionary<int, List<int>> characterInstances = new Dictionary<int, List<int>>();
@@ -55,7 +59,6 @@ public class CharacterManager : Singleton<CharacterManager>
     private List<int> npcInstances = new List<int>();
 
     public Player player;
-    private CharacterData playerData;
     public List<Character> teamPlayers = new List<Character>();
     //private Vector2 playerMoveDirction;
 
@@ -367,7 +370,7 @@ public class CharacterManager : Singleton<CharacterManager>
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
 
-    public Sprite PlayerHead => playerData.head.sprite;
+    public Sprite PlayerHead => controllerCharacter.characterData.head.sprite;
     private Character _controllerCharacter;
 
     public Character controllerCharacter
@@ -467,7 +470,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public async void CreatPlayer(int id, int bag)
     {
-        playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
+        var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         int instanceId = myInstance.CreatInstanceId();
         player = new Player(playerData, instanceId);
         controllerCharacter = player;
@@ -575,6 +578,7 @@ public class CharacterManager : Singleton<CharacterManager>
         else
         {
             SetControllerCharacterMoveDirection(Vector2.zero);
+            
         }
     }
 
@@ -710,9 +714,20 @@ public class CharacterManager : Singleton<CharacterManager>
             characterRuntionObjs.Add(character, characterRuntimeObj);
         }
     }
-
-    public void MoveCharacterObj(Character character, float2 moveValue)
+    
+    public void SetCharacterObjPos(Character character, Vector2 pos)
     {
+        if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+        {
+            //SetCharacterAnimationSpeed(0, characterRuntimeObj);
+            var transform = characterRuntimeObj.runtimeObj.obj as Transform;
+            Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
+            transform.position = targetPos;
+            SetCharacterAnimationSpeed(1, characterRuntimeObj);
+        }
+    }
+    public void MoveCharacterObj(Character character, float2 moveValue,ref int2 coordinate)
+    { 
         if (moveValue.x == float.NaN || moveValue.y == float.NaN)
         {
             return;
@@ -731,6 +746,9 @@ public class CharacterManager : Singleton<CharacterManager>
                     var transform = characterRuntimeObj.runtimeObj.obj as Transform;
                     Vector3 TranslateValue = new Vector3(moveValue.x, moveValue.y, 0);
                     transform.Translate(TranslateValue);
+
+                    var nowCoordinate = GameCommon.GetMapCoordinate(transform.position);
+                    coordinate = new int2(nowCoordinate.x, nowCoordinate.y);
                 }
             }
         }
@@ -1218,7 +1236,42 @@ public class CharacterManager : Singleton<CharacterManager>
             controllerCharacter.mapInstance, true);
         controllerCharacter.PlayerMove(pathNodes);
     }
-
+    /*
+    protected override void UpData()
+    {
+        base.UpData();
+        if (controllerCharacter == null)
+        {
+            return;
+        }
+        if (controllerCharacter.canMove&& !controllerCharacter.moveDirection.Equals(float2.zero))
+        {
+            var playerRuntimeObj = characterRuntionObjs[controllerCharacter].runtimeObj; 
+            Transform characterTransform = playerRuntimeObj.obj as Transform;
+            float distance = updataMoveSpeed * Time.deltaTime; 
+            TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
+            {
+                characterId = controllerCharacter.instanceId,
+                length = distance
+            };
+            GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
+            Vector2 directValue = controllerCharacter.moveDirection;
+            characterTransform.Translate(directValue * distance);
+            int2 targetCoordinate = GameCommon.GetMapCoordinateInt(characterTransform.position);
+             
+            if (controllerCharacter.coordinate.x != targetCoordinate.x ||
+            controllerCharacter.coordinate.y != targetCoordinate.y)
+            {
+                CrossMap(targetCoordinate, controllerCharacter, out int3 newMap);
+                // Debug.Log($"targetCoordinate:{targetCoordinate}");
+                TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate = new TryTeamLeaderSetCoordinate
+                {
+                    characterId = controllerCharacter.instanceId
+                };
+                GameActionManager.instance.QueueAction(tryTeamLeaderSetCoordinate, true);
+            }
+        }
+    }*/
     //设置可操控的角色移动方向
     public void SetControllerCharacterMoveDirection(Vector2 moveDirection)
     {
@@ -1226,8 +1279,10 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             return;
         }
+         
         float speed = moveDirection.magnitude;
         controllerCharacter.nowSpeed = speed;
+        
 
         controllerCharacter.moveDirection = moveDirection;
         var playerRuntimeObj = characterRuntionObjs[controllerCharacter].runtimeObj;
@@ -1251,6 +1306,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
+            
             GameObjectCurveController.instance.ObjectMove(
                 () => { return characterTransform.position; },
                 () => { return controllerCharacter.moveDirection; },
@@ -1262,7 +1318,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
                         {
                             characterId = controllerCharacter.instanceId,
-                            length = length
+                            length = distance
                         };
                         GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
                         characterTransform.position = new Vector3(targetPos.x, targetPos.y, characterTransform.position.z);
@@ -1280,6 +1336,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     }
                 },
                 WorldMapObjManager.instance.displayMap, playerRuntimeObj.linkId, true);
+            
         }
     }
 
