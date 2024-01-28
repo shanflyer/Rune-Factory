@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -1279,65 +1280,66 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             return;
         }
-         
-        float speed = moveDirection.magnitude;
-        controllerCharacter.nowSpeed = speed;
-        
-
-        controllerCharacter.moveDirection = moveDirection;
-        var playerRuntimeObj = characterRuntionObjs[controllerCharacter].runtimeObj;
-
-        Transform characterTransform = playerRuntimeObj.obj as Transform;
-
-        Vector2 _playerMoveDirction = moveDirection;
-        Vector2 targetPos = characterTransform.position;
-        float distance = updataMoveSpeed * Time.deltaTime;
-        if (!WorldMapManager.instance.InitSmoothMove(ref _playerMoveDirction, characterTransform.position,
-            controllerCharacter.mapInstance, distance))
+        if(characterRuntionObjs.TryGetValue(controllerCharacter,out var playerRuntimeObj))
         {
-            TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
+            float speed = moveDirection.magnitude;
+            controllerCharacter.nowSpeed = speed;
+
+
+            controllerCharacter.moveDirection = moveDirection; 
+
+            Transform characterTransform = playerRuntimeObj.animator.transform;
+
+            Vector2 _playerMoveDirction = moveDirection;
+            Vector2 targetPos = characterTransform.position;
+            float distance = updataMoveSpeed * Time.deltaTime;
+            if (!WorldMapManager.instance.InitSmoothMove(ref _playerMoveDirction, characterTransform.position,
+                controllerCharacter.mapInstance, distance))
             {
-                characterId = controllerCharacter.instanceId,
-                length = 0
-            };
-            GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
-
-            GameObjectCurveController.instance.StopObjectMove(playerRuntimeObj.linkId);
-        }
-        else
-        {
-            
-            GameObjectCurveController.instance.ObjectMove(
-                () => { return characterTransform.position; },
-                () => { return controllerCharacter.moveDirection; },
-                (int2 targetCoordinate, Vector2 targetPos) =>
+                TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
                 {
-                    if (controllerCharacter.canMove)
+                    characterId = controllerCharacter.instanceId,
+                    length = 0
+                };
+                GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
+
+                GameObjectCurveController.instance.StopObjectMove(playerRuntimeObj.runtimeObj.linkId);
+            }
+            else
+            {
+
+                GameObjectCurveController.instance.ObjectMove(
+                    () => { return characterTransform.position; },
+                    () => { return controllerCharacter.moveDirection; },
+                    (int2 targetCoordinate, Vector2 targetPos) =>
                     {
-                        float length = Vector2.Distance(targetPos, new Vector2(characterTransform.position.x, characterTransform.position.y));
-                        TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
+                        if (controllerCharacter.canMove)
                         {
-                            characterId = controllerCharacter.instanceId,
-                            length = distance
-                        };
-                        GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
-                        characterTransform.position = new Vector3(targetPos.x, targetPos.y, characterTransform.position.z);
-                        if (controllerCharacter.coordinate.x != targetCoordinate.x ||
-                        controllerCharacter.coordinate.y != targetCoordinate.y)
-                        {
-                            CrossMap(targetCoordinate, controllerCharacter, out int3 newMap);
-                            // Debug.Log($"targetCoordinate:{targetCoordinate}");
-                            TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate = new TryTeamLeaderSetCoordinate
+                            float length = Vector2.Distance(targetPos, new Vector2(characterTransform.position.x, characterTransform.position.y));
+                            TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
                             {
-                                characterId = controllerCharacter.instanceId
+                                characterId = controllerCharacter.instanceId,
+                                length = distance
                             };
-                            GameActionManager.instance.QueueAction(tryTeamLeaderSetCoordinate, true);
+                            GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
+                            characterTransform.position = new Vector3(targetPos.x, targetPos.y, characterTransform.position.z);
+                            if (controllerCharacter.coordinate.x != targetCoordinate.x ||
+                            controllerCharacter.coordinate.y != targetCoordinate.y)
+                            {
+                                CrossMap(targetCoordinate, controllerCharacter, out int3 newMap);
+                                // Debug.Log($"targetCoordinate:{targetCoordinate}");
+                                TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate = new TryTeamLeaderSetCoordinate
+                                {
+                                    characterId = controllerCharacter.instanceId
+                                };
+                                GameActionManager.instance.QueueAction(tryTeamLeaderSetCoordinate, true);
+                            }
                         }
-                    }
-                },
-                WorldMapObjManager.instance.displayMap, playerRuntimeObj.linkId, true);
-            
-        }
+                    },
+                    WorldMapObjManager.instance.displayMap, playerRuntimeObj.runtimeObj.linkId, true);
+
+            }
+        } 
     }
 
     private void SetTargetDirection(SetTargetDirection SetTargetDirection)

@@ -467,7 +467,7 @@ public class Team
             { 
                 for (int i = 0; i < Teamers.Count; i++)
                 {
-                    Teamers[i].SetNewMapCoordinate(leader.coordinate, leader.moveDirection);
+                    Teamers[i].SetNewMapCoordinate(leader.ObjCoordinate,leader.moveDirection);
                 } 
             }
             else
@@ -546,15 +546,17 @@ public class Teamer
         }
         
     }
-    public void SetNewMapCoordinate(float2 coordinate, float2 directionValue)
+    public void SetNewMapCoordinate(int3 coordinate, float2 directionValue)
     {
-        nowCoordinate =(int2)coordinate;
+        nowCoordinate =coordinate.xy;
         queueCoordinate.Clear();
         float4 targetCoordinate = new float4(coordinate.xy, directionValue.xy);
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 3; i++)
         {
             queueCoordinate.Enqueue(targetCoordinate);
         }
+        character.SetCoordinate(coordinate);
+        CharacterManager.instance.RefreshNpcRuntimeObj(character);
         canMove = true;
     }
 
