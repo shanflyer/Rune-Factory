@@ -650,7 +650,7 @@ public partial class Character
     }
 
     private void SetObjCoordinate(int3 coordinate)
-    {
+    { 
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
         objCoordinate = coordinate;
         if (CharacterManager.instance.controllerCharacter == this)
@@ -690,6 +690,10 @@ public partial class Character
         if (clickCharacter != -1 && clickCharacter != instanceId && clickCharacter != NeighborhoodCharacter)
         {
             Character character = CharacterManager.instance.GetCharacter(clickCharacter);
+            if (character.isInTeam)
+            {
+                return;
+            }
             if (character != null)
             {
                 EventReferenceData eventReferenceData = new EventReferenceData
@@ -939,6 +943,10 @@ public partial class Character
     /// <param name="enter">是否进入事件</param>
     private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
+        if (isInTeam)
+        {
+            return;
+        }
         if (eventid == 0 && reference == 0)
         {
             return;

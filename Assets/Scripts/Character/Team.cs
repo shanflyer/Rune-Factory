@@ -172,16 +172,16 @@ public class TeamManager : Singleton<TeamManager>
 
 public class Team
 {
-    public Character leader => characters[0].character;
-    private List<Teamer> characters = new List<Teamer>();
+    public Character leader => Teamers[0].character;
+    private List<Teamer> Teamers = new List<Teamer>();
     private HashSet<int> characterInstances = new HashSet<int>();
     private int3 lastCoordinate
     {
         get
         {
-            if (characters.Count > 1)
+            if (Teamers.Count > 1)
             {
-                return characters[characters.Count - 1].character.ObjCoordinate;
+                return Teamers[Teamers.Count - 1].character.ObjCoordinate;
             }
             else
             {
@@ -195,18 +195,18 @@ public class Team
         {
             characterInformationDatas = new List<CharacterInformationData>()
         };
-        for (int i = 0; i < characters.Count; i++)
+        for (int i = 0; i < Teamers.Count; i++)
         {
-            characterInformationDataList.characterInformationDatas.Add(characters[i].character.GetInformation());
+            characterInformationDataList.characterInformationDatas.Add(Teamers[i].character.GetInformation());
         }
         return characterInformationDataList;
     }
 
     public Team(Character leader)
     {
-        this.characters.Clear();
+        this.Teamers.Clear();
         Teamer teamer = new Teamer(leader); 
-        characters.Add(teamer);
+        Teamers.Add(teamer);
         StopCharacterBehavior(leader.instanceId);  
     }
 
@@ -243,14 +243,13 @@ public class Team
     {
         if (characterInstances.Add(characterId))
         {
-            Character character = CharacterManager.instance.GetCharacter(characterId);
-
+            Character character = CharacterManager.instance.GetCharacter(characterId);  
             Teamer teamer = new Teamer(character);  
-            if (characters.Count > 0)
+            if (Teamers.Count > 0)
             {
-                characters[characters.Count - 1].nextTeamer = teamer;
+                Teamers[Teamers.Count - 1].nextTeamer = teamer;
 
-                Character forwardCharacter = characters[characters.Count - 1].character;
+                Character forwardCharacter = Teamers[Teamers.Count - 1].character;
                 List<float4> coordinates;
                 float4 targetCoordinate = SetLastCoordianteAndDircet(forwardCharacter, out coordinates);
                 teamer.SetNowCoordinate(targetCoordinate.xy,targetCoordinate.zw);
@@ -270,13 +269,13 @@ public class Team
                 {
                     teamer.queueCoordinate.Enqueue(coordinate);
                 }*/
-                characters.Add(teamer);
+                Teamers.Add(teamer);
 
                 teamer.SetTeamCoordinate();
             }
             StopCharacterBehavior(characterId);
 
-            teamer.index = characters.Count - 1;
+            teamer.index = Teamers.Count - 1;
             return true;
         }
         return false;
@@ -405,75 +404,76 @@ public class Team
         int oldCharacterId = leader.instanceId;
         if (characterInstances.Remove(characterid))
         {
-            int index = characters.FindIndex(c => c.character.instanceId == characterid);
+            int index = Teamers.FindIndex(c => c.character.instanceId == characterid);
             if (index >= 0)
             {
                 if (index > 0)
                 {
-                    characters[index - 1].nextTeamer = null;
-                    if (index < characters.Count - 1)
+                    Teamers[index - 1].nextTeamer = null;
+                    if (index < Teamers.Count - 1)
                     {
-                        characters[index - 1].nextTeamer = characters[index + 1].nextTeamer;
+                        Teamers[index - 1].nextTeamer = Teamers[index + 1].nextTeamer;
                     }
                 }
                  
-                if (index < characters.Count - 1)
+                if (index < Teamers.Count - 1)
                 {
-                    for (int i = characters.Count - 1; i > index; i--)
+                    for (int i = Teamers.Count - 1; i > index; i--)
                     {
-                        var nextCharacter = characters[i];
+                        var nextCharacter = Teamers[i];
                         nextCharacter.index--;
-                        var forwardCharacter = characters[i - 1]; 
+                        var forwardCharacter = Teamers[i - 1]; 
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
                         nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
                         CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character);
                     }
                 }
-                characters.RemoveAt(index); 
+                Teamers[index].character.isInTeam = false;
+                Teamers.RemoveAt(index); 
             }
             ReStartCharacterBehavior(characterid);
         }
         if (isLeader)
         { 
-            TeamManager.instance.ChangeTeamLeader(oldCharacterId, characters.Count > 0 ? leader.instanceId : 0);
+            TeamManager.instance.ChangeTeamLeader(oldCharacterId, Teamers.Count > 0 ? leader.instanceId : 0);
         }
     }
     public void TeamLeaderStop()
     {
-        if (characters.Count > 1)
+        if (Teamers.Count > 1)
         {
-            for (int i = 1; i < characters.Count; i++)
+            for (int i = 1; i < Teamers.Count; i++)
             {
-                CharacterManager.instance.SetCharacterAnimationSpeed(0, characters[i].character); 
+                CharacterManager.instance.SetCharacterAnimationSpeed(0, Teamers[i].character); 
             }
         }
     }
     public void TeamLeaderMove(float length)
     {
-        if (characters.Count > 1)
+        if (Teamers.Count > 1)
         {
-            for (int i = 1; i < characters.Count; i++)
+            for (int i = 1; i < Teamers.Count; i++)
             {
-                characters[i].Move(length);
+                Teamers[i].Move(length);
             }
         }
     }
 
     public void TeamLeaderSetCoordinate()
     {
-        if (characters.Count > 1)
+        if (Teamers.Count > 1)
         { 
             if (lastCoordinate.z != leader.mapInstance)
             { 
-                for (int i = 0; i < characters.Count; i++)
+                for (int i = 0; i < Teamers.Count; i++)
                 {
-                    characters[i].SetNewMapCoordinate(leader.coordinate, leader.moveDirection);
+                    Teamers[i].SetNewMapCoordinate(leader.coordinate, leader.moveDirection);
                 } 
             }
             else
             { 
-                var character = characters[1];
-                var forwardCharacter = characters[0];
+                var character = Teamers[1];
+                var forwardCharacter = Teamers[0];
                 character.AddQueueCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
             }
         }
@@ -505,6 +505,7 @@ public class Teamer
     public Teamer(Character character)
     {
         this.character = character;
+        character.isInTeam = true;
         nowCoordinate = character.coordinate; 
     }
     public void AddQueueCoordinate(float2 coordinate, float2 direction)

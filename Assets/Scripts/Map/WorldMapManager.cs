@@ -69,6 +69,41 @@ public class WorldMapManager : Singleton<WorldMapManager>
             }
         }
     }
+    public bool IsCheckRuntimeMapItemLink(int2 editorKey, int linkCharacterId = -1)
+    {
+        if (editorItemRemapInstanceIds.TryGetValue(editorKey,
+              out var instanceId))
+        {
+            if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
+            {
+                if (linkCharacterId == -1 && runtimeMapItem.linkCharacter != 0)
+                {
+                    return true;
+                }
+                if (linkCharacterId != -1 && runtimeMapItem.linkCharacter == linkCharacterId)
+                {
+                    return true;
+                }
+            }
+        } 
+        return false;
+    }
+
+    public bool IsCheckRuntimeMapItemLink(int instanceId,int linkCharacterId=-1)
+    {
+        if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
+        {
+            if (linkCharacterId == -1&&runtimeMapItem.linkCharacter!=0)
+            {
+                return true;
+            }
+            if (linkCharacterId != -1 && runtimeMapItem.linkCharacter == linkCharacterId)
+            {
+                return true;
+            }
+        }
+        return false; 
+    }
     void SetMapItemLinkCharacter(SetMapItemLinkCharacter SetMapItemLinkCharacter)
     {
         if (GetRuntimeMapItem(SetMapItemLinkCharacter.mapItemInstanceId, out var runtimeMapItem))
