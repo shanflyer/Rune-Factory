@@ -32,7 +32,8 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
     public override void InitData(CharacterInformationData t, SelectAction<CharacterInformationData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
-        data.head.SetImageSprite(NPCImage); 
+        NPCImage.sprite = data.icon;
+       // data.head.SetImageSprite(NPCImage); 
         NPCName.text = data.name;
         toggle.group = toggleGroup;
     }

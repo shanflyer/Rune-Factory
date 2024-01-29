@@ -73,7 +73,31 @@ public struct TryTeamLeaderSetCoordinate : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct RefreshTeam : GameAction
+{ 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    { 
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+public struct LeaveTeam : GameAction
+{ 
+    public int teamCharacterId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            teamCharacterId = int.Parse(parameters[0].value); 
+        if (source != 0)
+            teamCharacterId = source; 
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct JoinTeam : GameAction
 {
     public int characterId;

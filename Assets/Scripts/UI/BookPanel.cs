@@ -33,5 +33,10 @@ public class BookPanel : GamePanel<IReferenceData>
             UIManager.instance.ShowGamePanel<NPCPanel,NPCList>(NPCManager.instance.GetNPCList());
             Close();
         });
+        teamButton.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
+            Close();
+        });
     }
 }

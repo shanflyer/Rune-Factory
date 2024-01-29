@@ -15,6 +15,7 @@ public struct CharacterInformationDataList : IReferenceData
 public struct CharacterInformationData : IReferenceData
 {
     public string name;
+    public Sprite icon;
     public SpriteResourceRenference head;
     public int characterId;
     public bool isNpc;
@@ -110,6 +111,7 @@ public partial class Character
         characterInformationData.equip = equip;
         characterInformationData.name = name;
         characterInformationData.head = characterData.head;
+        characterInformationData.icon = characterData.icon;
 
         if (NPCManager.instance.GetNPC(instanceId, out var npc))
         {

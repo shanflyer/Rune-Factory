@@ -10,16 +10,37 @@ public class TeamManager : Singleton<TeamManager>
     {
         get
         {
-            if (teams.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId, out var team))
+            try
             {
-                return team;
+                if (teams.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId, out var team))
+                {
+                    return team;
+                }
             }
+            catch
+            {
+
+            }
+            
             return null;
         }
     }
 
     private Dictionary<int, Team> teams = new Dictionary<int, Team>();
 
+    public CharacterInformationDataList GetMyTeamCharacterInfo()
+    {
+        if (CharacterManager.instance.controllerCharacter == null)
+        {
+            return default(CharacterInformationDataList);
+        }
+        if(teams.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId,out var team))
+        {
+            return team.GetTeamCharacterInfo();
+        }
+
+        return default(CharacterInformationDataList);
+    }
     public Team GetTeam(Character character)
     {
         if (teams.TryGetValue(character.instanceId, out var team))
@@ -35,7 +56,8 @@ public class TeamManager : Singleton<TeamManager>
         }
         return null;
     }
-
+    RefreshTeam refreshTeam=default(RefreshTeam);
+   
     public void ChangeTeamLeader(int oldLeaderId, int newLeaderId)
     {
         if (teams.TryGetValue(oldLeaderId, out var team))
@@ -45,7 +67,9 @@ public class TeamManager : Singleton<TeamManager>
             {
                 teams.Add(newLeaderId, team);
             }
+            GameActionManager.instance.QueueAction(refreshTeam);
         }
+       
     }
 
     public bool LeaveTeam(int characterId)
@@ -66,7 +90,10 @@ public class TeamManager : Singleton<TeamManager>
         }
         if (team != null)
         {
-            team.RemoveCharacter(characterId);
+            if (team.RemoveCharacter(characterId))
+            {
+
+            } 
             return true;
         }
         return false;
@@ -101,8 +128,13 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.AddListener<TryTeamLeaderMove>(TryTeamLeaderMove);
         GameActionManager.instance.AddListener<TryTeamLeaderSetCoordinate>(TryTeamLeaderSetCoordinate);
         GameActionManager.instance.AddListener<TryTeamLeaderStop>(TryTeamLeaderStop);
+        GameActionManager.instance.AddListener<LeaveTeam>(LeaveTeam);
     }
 
+    void LeaveTeam(LeaveTeam leaveTeam)
+    {
+        LeaveTeam(leaveTeam.teamCharacterId);
+    }
     private void TryTeamLeaderSetCoordinate(TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate)
     {
         if (teams.TryGetValue(tryTeamLeaderSetCoordinate.characterId, out var team))
@@ -173,7 +205,7 @@ public class TeamManager : Singleton<TeamManager>
 public class Team
 {
     public Character leader => Teamers[0].character;
-    private List<Teamer> Teamers = new List<Teamer>();
+    public List<Teamer> Teamers = new List<Teamer>();
     private HashSet<int> characterInstances = new HashSet<int>();
     private int3 lastCoordinate
     {
@@ -274,7 +306,7 @@ public class Team
                 teamer.SetTeamCoordinate();
             }
             StopCharacterBehavior(characterId);
-
+            GameActionManager.instance.QueueAction(default(RefreshTeam));
             teamer.index = Teamers.Count - 1;
             return true;
         }
@@ -398,7 +430,7 @@ public class Team
       //  CharacterManager.instance.RefreshNpcRuntimeObj(nowCharacter);
     }
 
-    public void RemoveCharacter(int characterid)
+    public bool RemoveCharacter(int characterid)
     {
         bool isLeader = leader.instanceId == characterid;
         int oldCharacterId = leader.instanceId;
@@ -437,6 +469,8 @@ public class Team
         { 
             TeamManager.instance.ChangeTeamLeader(oldCharacterId, Teamers.Count > 0 ? leader.instanceId : 0);
         }
+        GameActionManager.instance.QueueAction(default(RefreshTeam));
+        return Teamers.Count > 0;
     }
     public void TeamLeaderStop()
     {
@@ -498,9 +532,7 @@ public class Teamer
         character.SetCoordinate(this.nowCoordinate);
         CharacterManager.instance.RefreshNpcRuntimeObj(character);
         character.moveDirection = directionValue;
-        direction = directionValue;
-         
-
+        direction = directionValue; 
     }
     public Teamer(Character character)
     {

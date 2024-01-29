@@ -19,6 +19,8 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
 {
     public string operateName;
     public int id;
+    public string iconName;
+    public Sprite icon;
     public int actionId;
     public int linkItem; 
     public GameActionData gameActionData;
