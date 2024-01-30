@@ -943,7 +943,7 @@ public partial class Character
     /// <param name="enter">是否进入事件</param>
     private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
-        if (isInTeam)
+        if (isInTeam&&this!=CharacterManager.instance.controllerCharacter)
         {
             return;
         }

@@ -407,28 +407,27 @@ public class FightManager :Singleton<FightManager>
         fightPlayers.Add(fightPlayer.instanceId); 
         FightController.instance.CreatFightPlayer(player.dataId, player.instanceId, 0);
 
-        var teamPlayers = CharacterManager.instance.teamPlayers;
-        if (teamPlayers != null && teamPlayers.Count > 0)
+        var playerTeam = TeamManager.instance.playerTeam;
+        if (playerTeam != null)
         {
-            for(int i = 0; i < teamPlayers.Count; i++)
+            for(int i = 0; i < playerTeam.Teamers.Count; i++)
             {
+                var character = playerTeam.Teamers[i].character;
                 FightPlayer fightTeamPlayer = new FightPlayer
                 {
-                    instanceId = teamPlayers[i].instanceId,
-                    dataId = teamPlayers[i].dataId,
+                    instanceId = character.instanceId,
+                    dataId = character.dataId,
                 }; 
 
                 fightCharacters.Add(fightTeamPlayer.instanceId, fightTeamPlayer);
                 fightPlayers.Add(fightTeamPlayer.instanceId);
 
-                FightController.instance.CreatFightPlayer(teamPlayers[i].dataId, teamPlayers[i].instanceId, i+1);
+                FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i+1);
             }
         } 
         await  UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(),layer:2);
         RefreshFightPlayerInfo();
     }
-
-    
     public async void CreatFightMonster(MonsterDeploy monsterDeploy)
     {
         var beforeAction =await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.beforeActionId);

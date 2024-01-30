@@ -121,7 +121,11 @@ public class ExploreManager : Singleton<ExploreManager>
             if(nowFightMapData.isZeroTeam)
             {
                 FightManager.instance.CreatFightPlayer();
-            } 
+            }
+            else
+            {
+
+            }
             if (afterActionData != null)
             {
                 afterActionData.Action();

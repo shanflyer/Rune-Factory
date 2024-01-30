@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using OldName;
+using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
 public class TeamManager : Singleton<TeamManager>
@@ -23,6 +25,29 @@ public class TeamManager : Singleton<TeamManager>
             }
             
             return null;
+        }
+    }
+
+    public TeamerEquipAndProperty TeamerEquipAndProperty
+    {
+        get
+        {
+            TeamerEquipAndProperty teamer = new TeamerEquipAndProperty();
+            if (playerTeam != null)
+            {
+                teamer.characterEquipAndPropertyDatas = new CharacterEquipAndPropertyData[playerTeam.Teamers.Count];
+
+                for (int i = 0; i < playerTeam.Teamers.Count; i++)
+                {
+                    teamer.characterEquipAndPropertyDatas[i] = playerTeam.Teamers[i].character.CharacterEquipAndPropertyData;
+                }
+            }
+            else
+            {
+                teamer.characterEquipAndPropertyDatas = new CharacterEquipAndPropertyData[1];
+                teamer.characterEquipAndPropertyDatas[0] = CharacterManager.instance.controllerCharacter.CharacterEquipAndPropertyData; 
+            }            
+            return teamer;
         }
     }
 
@@ -129,6 +154,7 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.AddListener<TryTeamLeaderSetCoordinate>(TryTeamLeaderSetCoordinate);
         GameActionManager.instance.AddListener<TryTeamLeaderStop>(TryTeamLeaderStop);
         GameActionManager.instance.AddListener<LeaveTeam>(LeaveTeam);
+        GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
     }
 
     void LeaveTeam(LeaveTeam leaveTeam)
@@ -156,7 +182,25 @@ public class TeamManager : Singleton<TeamManager>
             team.TeamLeaderMove(tryTeamLeaderMove.length);
         }
     }
+    private void CreatTeam(CreatTeamPlayer creatTeamPlayer)
+    {
 
+        for (int i = 0; i < creatTeamPlayer.players.Count; i++)
+        {
+            int id = creatTeamPlayer.players[i];
+            if(id== CharacterManager.instance.controllerCharacter.instanceId)
+            {
+                continue;
+            }
+            JoinTeam joinTeam = new JoinTeam
+            {
+                characterId = id,
+                teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId
+            };
+            GameActionManager.instance.QueueAction(joinTeam,true);
+             
+        }
+    }
     private void JoinTeam(JoinTeam joinTeam)
     {
         if (teams.TryGetValue(joinTeam.teamCharacterId, out var team))

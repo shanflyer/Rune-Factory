@@ -249,7 +249,7 @@ public class FightController : MonoBehaviour
                 behaviorTree = transform.GetComponent<BehaviorTree>()
             };
             transform.gameObject.SetActive(true);
-            var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.behavior}");
+            var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.fightBehavior}");
             fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
             fightPlayerRuntimes[instanceId] = fightPlayerRuntime;
             fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", instanceId);

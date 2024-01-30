@@ -60,7 +60,6 @@ public class CharacterManager : Singleton<CharacterManager>
     private List<int> npcInstances = new List<int>();
 
     public Player player;
-    public List<Character> teamPlayers = new List<Character>();
     //private Vector2 playerMoveDirction;
 
     public int GetCharacterInstance()
@@ -76,21 +75,7 @@ public class CharacterManager : Singleton<CharacterManager>
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
 
-    public TeamerEquipAndProperty TeamerEquipAndProperty
-    {
-        get
-        {
-            TeamerEquipAndProperty teamer = new TeamerEquipAndProperty
-            {
-                characterEquipAndPropertyDatas = new CharacterEquipAndPropertyData[teamPlayers.Count]
-            };
-            for (int i = 0; i < teamPlayers.Count; i++)
-            {
-                teamer.characterEquipAndPropertyDatas[i] = teamPlayers[i].CharacterEquipAndPropertyData;
-            }
-            return teamer;
-        }
-    }
+   
 
     public override void Init()
     {
@@ -100,7 +85,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
         GameActionManager.instance.AddListener<ChangeCharacterProperty>(ChangeCharacterValue);
         GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordiante);
-        GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
+       
         GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
         GameActionManager.instance.AddListener<CreatTempCharacter>(CreatTempCharacter);
         GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
@@ -456,18 +441,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private void CreatTeam(CreatTeamPlayer creatTeamPlayer)
-    {
-        teamPlayers.Clear();
-        for (int i = 0; i < creatTeamPlayer.players.Count; i++)
-        {
-            int id = creatTeamPlayer.players[i];
-            if (characters.TryGetValue(id, out var character))
-            {
-                teamPlayers.Add(character);
-            }
-        }
-    }
+
 
     public async void CreatPlayer(int id, int bag)
     {
