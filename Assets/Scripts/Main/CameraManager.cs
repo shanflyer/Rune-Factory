@@ -52,14 +52,18 @@ public class CameraManager : Singleton<CameraManager>
             mixingCamera.SetWeight(1, 1);
             if (setFixedCamera.fixedPos.x != float.MinValue)
             {
+                Vector3 localPos = fixedCamera.transform.position;
+                setFixedCamera.fixedPos.z = localPos.z;
                 fixedCamera.transform.position = setFixedCamera.fixedPos;
             }
+            confiner2D.enabled = false;
         }
         else
         {
             mixingCamera.SetWeight(0, 1);
             mixingCamera.SetWeight(1, 0);
             followCamera.Follow = CharacterManager.instance.controllerTransform;
+            confiner2D.enabled = true;
         }
     }
 }

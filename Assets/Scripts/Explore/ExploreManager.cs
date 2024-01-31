@@ -116,16 +116,17 @@ public class ExploreManager : Singleton<ExploreManager>
         () =>
         {
             WorldMapObjManager.instance.RecycleMap();
+
+            SetFixedCamera setFixedCamera = new SetFixedCamera
+            {
+                fixedCamera = true,
+                fixedPos = Vector3.zero
+            };
+            GameActionManager.instance.QueueAction(setFixedCamera);
+
             FightController.instance.CreatFightMap(nowFightMapData);
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM,true);
-            if(nowFightMapData.isZeroTeam)
-            {
-                FightManager.instance.CreatFightPlayer();
-            }
-            else
-            {
-
-            }
+            FightManager.instance.CreatFightPlayer();
             if (afterActionData != null)
             {
                 afterActionData.Action();

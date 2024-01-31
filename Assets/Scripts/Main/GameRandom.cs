@@ -129,8 +129,8 @@ public class GameRandom:Singleton<GameRandom>
                     int randomValue = random.NextInt(0, 10000); 
                     if (randomValue < randomItem.randomValue)
                     {
-                        Random random2 = new Random();
-                        int count = random2.NextInt(randomItem.minCount, randomItem.maxCount + 1);
+                       // Random random2 = new Random();
+                        int count = random.NextInt(randomItem.minCount, randomItem.maxCount + 1);
 
                         RandomJobResult randomResult = new RandomJobResult
                         {

@@ -18,6 +18,8 @@ public class TeamManager : Singleton<TeamManager>
                 {
                     return team;
                 }
+                CreatTeam(CharacterManager.instance.controllerCharacter);
+                return teams[CharacterManager.instance.controllerCharacter.instanceId];
             }
             catch
             {

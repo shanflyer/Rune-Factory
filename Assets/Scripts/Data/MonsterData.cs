@@ -27,4 +27,8 @@ public class MonsterData : ScriptableObject, IGameData
     {
         return id.ToString() ;
     }
+    public override string ToString()
+    {
+        return id.ToString();
+    }
 }

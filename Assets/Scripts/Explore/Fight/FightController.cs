@@ -218,6 +218,12 @@ public class FightController : MonoBehaviour
             var transform1 = fightMapRuntime1.obj as Transform;
             transform.localPosition = zeroPos;
             transform1.localPosition = cyclePos;
+
+            DisplaySky displaySky = new DisplaySky
+            {
+                display = fightMapData.skyDisplay
+            };
+            GameActionManager.instance.QueueAction(displaySky);
         }
         else
         {
@@ -336,7 +342,8 @@ public class FightController : MonoBehaviour
     {
         if (fightMapRuntime0.use && fightMapRuntime1.use)
         {
-            StartCoroutine(MapMoving());
+            StopCoroutine("MapMoving");
+            StartCoroutine("MapMoving");
         }
         
     }

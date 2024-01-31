@@ -397,6 +397,7 @@ public class FightManager :Singleton<FightManager>
     }
     public async void CreatFightPlayer()
     {
+        /*
         var player = CharacterManager.instance.player;
         FightPlayer fightPlayer = new FightPlayer
         {
@@ -405,7 +406,7 @@ public class FightManager :Singleton<FightManager>
         };
         fightCharacters.Add(fightPlayer.instanceId, fightPlayer);
         fightPlayers.Add(fightPlayer.instanceId); 
-        FightController.instance.CreatFightPlayer(player.dataId, player.instanceId, 0);
+        FightController.instance.CreatFightPlayer(player.dataId, player.instanceId, 0);*/
 
         var playerTeam = TeamManager.instance.playerTeam;
         if (playerTeam != null)
@@ -424,7 +425,12 @@ public class FightManager :Singleton<FightManager>
 
                 FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i+1);
             }
-        } 
+        }
+        UIManager.instance.CloseGamePanel<PlayerTopPanel>();
+        UIManager.instance.CloseGamePanel<MainPanel>();
+        UIManager.instance.CloseGamePanel<ShortcutPanel>();
+        UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
+
         await  UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(),layer:2);
         RefreshFightPlayerInfo();
     }
