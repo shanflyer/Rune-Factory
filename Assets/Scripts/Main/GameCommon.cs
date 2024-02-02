@@ -85,6 +85,7 @@ public enum EntityType
 
 public class GameCommon
 {
+    public static int2 fightWalkTime=new int2(4000,7000);
     public const int giftEventId = 412;
     public const int zeroGameYear = 1300;
     public const Season zeroSeasom = Season.´º;
@@ -113,7 +114,7 @@ public class GameCommon
     public static float4 dropArea = new float4(-0.6f, -0.3f, 0.6f, 0.3f);
     public const float dropItemFlyerSpeed = 3f;
     public const int SeasonDays = 30;
-    public const float fightMapMovingSpeed = 0.015f;
+    public const float fightMapMovingSpeed = 0.013f;
 
     public const int DefaultOutItemId = -1;
     public const float PromptTime = 2.0f;

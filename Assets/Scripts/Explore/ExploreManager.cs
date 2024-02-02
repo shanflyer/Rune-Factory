@@ -116,6 +116,7 @@ public class ExploreManager : Singleton<ExploreManager>
         () =>
         {
             WorldMapObjManager.instance.RecycleMap();
+            CharacterManager.instance.RecycleCharacter();
 
             SetFixedCamera setFixedCamera = new SetFixedCamera
             {
@@ -160,6 +161,12 @@ public class ExploreManager : Singleton<ExploreManager>
                 FightManager.instance.CreatFightMonster(mosterDeploy); 
             }
         }
+
+        SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
+        {
+            fight = true
+        };
+        GameActionManager.instance.QueueAction(switchFunctionButton);
     }
     public void FightFail()
     {

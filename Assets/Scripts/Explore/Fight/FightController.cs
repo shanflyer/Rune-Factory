@@ -16,8 +16,11 @@ public struct FightPlayerRuntime
 }
 public class FightController : MonoBehaviour
 {
-    public static FightController instance; 
+    public static FightController instance;
+    [SerializeField]
     private BehaviorTree controllerBehavior;
+    [SerializeField]
+    private BehaviorTree manualFightBehavior;
       
     RuntimeObj fightMapRuntime0, fightMapRuntime1;
     [SerializeField]
@@ -41,9 +44,49 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<StartRoundFight>(EndFightRound);
         GameActionManager.instance.AddListener<DisplayHurt>(DisplayHurt);
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
+        GameActionManager.instance.AddListener<SetFightCharacterAnimator>(SetFightCharacterAnimator);
+        GameActionManager.instance.AddListener<PlayerFight>(PlayerFight);
+        GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
 
-        controllerBehavior = GetComponent<BehaviorTree>(); 
+        var behaviorTrees = GetComponents<BehaviorTree>();
+        for(int i = 0; i < behaviorTrees.Length; i++)
+        {
+            var behaviorTree = behaviorTrees[i];
+            if (behaviorTree.BehaviorName == "回合制战斗")
+            {
+                controllerBehavior = behaviorTree;
+            }
+            else
+            {
+                manualFightBehavior=behaviorTree;
+            }
+        }
+       // controllerBehavior = GetComponent<BehaviorTree>(); 
         var sceneInfoManager = SceneInfoManager.instance;
+    }
+
+    public void SetFightAuto()
+    {
+        autoFight = !autoFight;
+        if (autoFight)
+        {
+            if (controllerBehavior.ExecutionStatus == BehaviorDesigner.Runtime.Tasks.TaskStatus.Inactive)
+            {
+                controllerBehavior.EnableBehavior();
+            }
+        }
+        else
+        {
+
+        }
+    }
+
+    void PlayerFight(PlayerFight playerFight)
+    {
+        foreach(var fightPlayer in fightPlayerRuntimes)
+        {
+            RunFightCharacter(fightPlayer.Key);
+        }
     }
     void DisplayFightScene(DisplayFightScene displayFightScene)
     {
@@ -59,13 +102,11 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.RemoveListener<DisplayFightScene>(DisplayFightScene);
         GameActionManager.instance.RemoveListener<StartRoundFight>(EndFightRound);
         GameActionManager.instance.RemoveListener<DisplayHurt>(DisplayHurt);
-        GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd);
+        GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd); 
         UIManager.instance.CloseGamePanel<FightPanel>();
         SceneManager.instance.UnloadNowScene();
     }
-
-
-
+     
     public void RemoveFightPlayerRuntime(int characterId)
     {
         if (!fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayerRuntime))
@@ -180,16 +221,34 @@ public class FightController : MonoBehaviour
     {
         instance = null;
     }
+
+    public bool AutoFight => autoFight;
+    bool autoFight = false;
+
     void EndFightRound(StartRoundFight startRoundFight)
     {
-        if (controllerBehavior.ExecutionStatus == BehaviorDesigner.Runtime.Tasks.TaskStatus.Inactive)
+        if (autoFight)
         {
-            controllerBehavior.EnableBehavior();
+            if (controllerBehavior.ExecutionStatus == BehaviorDesigner.Runtime.Tasks.TaskStatus.Inactive)
+            {
+                controllerBehavior.EnableBehavior();
+            }
+            else
+            {
+                // BehaviorManager.instance.RestartBehavior(controllerBehavior);
+            }
+
         }
         else
         {
-           // BehaviorManager.instance.RestartBehavior(controllerBehavior);
+            controllerBehavior.DisableBehavior();
+            EndPlayerRound endPlayerRound = new EndPlayerRound();
+            GameActionManager.instance.QueueAction(endPlayerRound);
+
+
+
         }
+      
 
         Debug.Log("回合结束...."); 
     }
@@ -237,6 +296,42 @@ public class FightController : MonoBehaviour
             }
         }
     }
+
+     async void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
+    {
+        for (int i = 0; i < creatFightPlayer.players.Count; i++)
+        {
+            int index = i;
+            int dataId = creatFightPlayer.players[i];
+
+            index = math.clamp(index, 0, 2);
+
+            Character character = CharacterManager.instance.GetCharacterForDataId(dataId);
+            CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(dataId);
+            if (characterData != null)
+            {
+                var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
+                    characterData.objName, characterData.obj.transform, character.instanceId, isActive: false);
+                var transform = characterRuntime.obj as Transform;
+                transform.position = playerPos[index].position;
+                FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime
+                {
+                    playerObj = characterRuntime,
+                    animator = transform.GetComponentInChildren<Animator>(),
+                    playableDirector = transform.GetComponentInChildren<PlayableDirector>(),
+                    behaviorTree = transform.GetComponent<BehaviorTree>()
+                };
+                transform.gameObject.SetActive(true);
+                var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.fightBehavior}");
+                fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
+                fightPlayerRuntimes[character.instanceId] = fightPlayerRuntime;
+                fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", character.instanceId);
+            }
+        }
+
+            
+    }
+    /*
     public async void CreatFightPlayer(int dataId,int instanceId,int index)
     {
         index = math.clamp(index, 0, 2);
@@ -260,7 +355,7 @@ public class FightController : MonoBehaviour
             fightPlayerRuntimes[instanceId] = fightPlayerRuntime;
             fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", instanceId);
         }
-    }
+    }*/
     public async void CreatFightMonster(int dataId, int instanceId, int index)
     {
         MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(dataId);
@@ -338,18 +433,61 @@ public class FightController : MonoBehaviour
         }
 
     } 
+
+    void SetFightCharacterAnimator(SetFightCharacterAnimator SetFightCharacterAnimator)
+    {
+        if (SetFightCharacterAnimator.characterId == -1)
+        {
+            foreach(var fightCharacterobj in fightPlayerRuntimes)
+            {
+                Animator animator = fightCharacterobj.Value.animator;
+                SetFightCharacterAnimator.SetAnimator(animator);
+            }
+        }
+        else if(fightPlayerRuntimes.TryGetValue(SetFightCharacterAnimator.characterId,out var fightPlayerRuntime))
+        {
+            Animator animator = fightPlayerRuntime.animator;
+            SetFightCharacterAnimator.SetAnimator(animator);
+        } 
+    }
+
+    public bool chapterMoving = false;
     public void StartWalk()
     {
         if (fightMapRuntime0.use && fightMapRuntime1.use)
         {
+            SetFightCharacterAnimator(new global::SetFightCharacterAnimator
+            {
+                characterId = -1,
+                parameter = "Speed",
+                parameterType = ParameterType.FLOAT,
+                floatValue = 1
+            }) ;
             StopCoroutine("MapMoving");
             StartCoroutine("MapMoving");
+            chapterMoving = true;
+
+            int waitTime = GameRandom.RandomInt(GameCommon.fightWalkTime.x, GameCommon.fightWalkTime.y);
+            GameTimerController.instance.DeleyActionMain(waitTime, () =>
+            {
+                StopWalk();
+                ChapterStepAction chapterStepAction = new ChapterStepAction();
+                GameActionManager.instance.QueueAction(chapterStepAction);
+            });
         }
         
     }
     public void StopWalk()
     {
-        StopAllCoroutines();
+        StopCoroutine("MapMoving");
+        SetFightCharacterAnimator(new global::SetFightCharacterAnimator
+        {
+            characterId = -1,
+            parameter = "Speed",
+            parameterType = ParameterType.FLOAT,
+            floatValue = 0
+        });
+        chapterMoving = false;
     }
     IEnumerator MapMoving()
     {

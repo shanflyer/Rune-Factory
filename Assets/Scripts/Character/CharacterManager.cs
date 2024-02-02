@@ -419,25 +419,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (GetRuntimeCharacterObj(setCharacterAnimator.characterId, out CharacterRuntimeObj characterRuntimeObj))
         {
             Animator animator = characterRuntimeObj.animator;
-            if (animator == null) { return; }
-            switch (setCharacterAnimator.parameterType)
-            {
-                case ParameterType.BOOL:
-                    animator.SetBool(setCharacterAnimator.parameter, setCharacterAnimator.boolValue);
-                    break;
-
-                case ParameterType.INT:
-                    animator.SetInteger(setCharacterAnimator.parameter, setCharacterAnimator.intValue);
-                    break;
-
-                case ParameterType.FLOAT:
-                    animator.SetFloat(setCharacterAnimator.parameter, setCharacterAnimator.floatValue);
-                    break;
-
-                case ParameterType.TRIGGER:
-                    animator.SetTrigger(setCharacterAnimator.parameter);
-                    break;
-            }
+            setCharacterAnimator.SetAnimator(animator); 
         }
     }
 
@@ -1137,7 +1119,14 @@ public class CharacterManager : Singleton<CharacterManager>
             }
         }
     }
-
+    public void RecycleCharacter()
+    {
+        foreach(var characterRuntime in characterRuntionObjs)
+        {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntime.Value.runtimeObj); 
+        }
+        characterRuntionObjs.Clear();
+    }
     public async Task RefreshNpcRuntimeObj()
     {
         using (var e = characters.GetEnumerator())

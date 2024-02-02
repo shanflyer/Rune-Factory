@@ -44,6 +44,13 @@ public class AdventureResultPanel: GamePanel<FightResult>
         waitAction.Init(new List<Parameter> {parameter});
         //GameActionManager.instance.QueueAction(new ExploreEnd());
         Close();
+
+        DisplayMap displayMap = new DisplayMap
+        {
+            displayMap = CharacterManager.instance.controllerCharacter.mapInstance
+        };
+        GameActionManager.instance.QueueAction(displayMap);
+       // UIManager.instance.
     }
  
     public override void InitReferenceData(FightResult fightResult)

@@ -234,6 +234,32 @@ public class FightManager :Singleton<FightManager>
     public FightResult FightResult { get { return fightResult; } }
     FightResult fightResult;
 
+
+    void CheckPlayerFightEndAndAction()
+    {
+        bool result = true;
+        for (int i = 0; i < fightPlayers.Count; i++)
+        {
+            int key = fightPlayers[i];
+            if (fightCharacters.TryGetValue(key, out var fightCharacter))
+            {
+                if (fightCharacter.fightStatus == FightStatus.准备)
+                {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        if (result)
+        {
+            for (int i = 0; i < fightMonsters.Count; i++)
+            {
+                int key = fightMonsters[i];
+                
+            }
+        }
+    }
+
     void ExploreEnd(ExploreEnd exploreEnd)
     {
         myInstance.Clear();
@@ -353,7 +379,7 @@ public class FightManager :Singleton<FightManager>
 
         return results;
     }
-    public void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
+    void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
     { 
         for (int i = 0; i < creatFightPlayer.players.Count; i++)
         {
@@ -367,7 +393,7 @@ public class FightManager :Singleton<FightManager>
             fightPlayer.CreatSkillRuntime();
             fightCharacters.Add(fightPlayer.instanceId, fightPlayer);
             fightPlayers.Add(fightPlayer.instanceId);
-            FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i);
+            //FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i);
 
             FighterResult fighterResult = new FighterResult
             {
@@ -411,20 +437,17 @@ public class FightManager :Singleton<FightManager>
         var playerTeam = TeamManager.instance.playerTeam;
         if (playerTeam != null)
         {
+            List<int> players = new List<int>();
             for(int i = 0; i < playerTeam.Teamers.Count; i++)
             {
                 var character = playerTeam.Teamers[i].character;
-                FightPlayer fightTeamPlayer = new FightPlayer
-                {
-                    instanceId = character.instanceId,
-                    dataId = character.dataId,
-                }; 
-
-                fightCharacters.Add(fightTeamPlayer.instanceId, fightTeamPlayer);
-                fightPlayers.Add(fightTeamPlayer.instanceId);
-
-                FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i+1);
+                players.Add(character.dataId);
             }
+            CreatFightPlayer CreatFightPlayer = new CreatFightPlayer
+            {
+                players = players
+            };
+            GameActionManager.instance.QueueAction(CreatFightPlayer);
         }
         UIManager.instance.CloseGamePanel<PlayerTopPanel>();
         UIManager.instance.CloseGamePanel<MainPanel>();

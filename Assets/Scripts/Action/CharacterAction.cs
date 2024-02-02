@@ -328,6 +328,102 @@ public struct SetCharacterAnimator : GameAction
 
         GameActionManager.instance.QueueAction(this, immediately);
     }
+
+    public void SetAnimator(Animator animator)
+    {
+        if (animator == null) { return; }
+        switch (parameterType)
+        {
+            case ParameterType.BOOL:
+                animator.SetBool(parameter, boolValue);
+                break;
+
+            case ParameterType.INT:
+                animator.SetInteger(parameter, intValue);
+                break;
+
+            case ParameterType.FLOAT:
+                animator.SetFloat(parameter, floatValue);
+                break;
+
+            case ParameterType.TRIGGER:
+                animator.SetTrigger(parameter);
+                break;
+        }
+    }
+}
+/// <summary>
+/// 设置角色动画
+/// </summary>
+public struct SetFightCharacterAnimator : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
+    public string parameter;
+    public ParameterType parameterType;
+    public bool boolValue;
+    public int intValue;
+    public float floatValue;
+
+    public void Init(List<Parameter> parameters, int source = 1, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            parameter = parameters[1].value;
+        if (parameters.Count > 2)
+            parameterType = (ParameterType)int.Parse(parameters[2].value);
+
+        if (parameters.Count > 3)
+        {
+            switch (parameterType)
+            {
+                case ParameterType.BOOL:
+                    boolValue = bool.Parse(parameters[3].value);
+                    break;
+
+                case ParameterType.INT:
+                    intValue = int.Parse(parameters[3].value);
+                    break;
+
+                case ParameterType.FLOAT:
+                    floatValue = float.Parse(parameters[3].value);
+                    break;
+            }
+        }
+        if (source != 0)
+        {
+            characterId = source;
+        }
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+
+
+    public void SetAnimator(Animator animator)
+    {
+        if (animator == null) { return; }
+        switch (parameterType)
+        {
+            case ParameterType.BOOL:
+                animator.SetBool(parameter, boolValue);
+                break;
+
+            case ParameterType.INT:
+                animator.SetInteger(parameter, intValue);
+                break;
+
+            case ParameterType.FLOAT:
+                animator.SetFloat(parameter, floatValue);
+                break;
+
+            case ParameterType.TRIGGER:
+                animator.SetTrigger(parameter);
+                break;
+        }
+    }
+
 }
 
 //创建默认地图Npc
