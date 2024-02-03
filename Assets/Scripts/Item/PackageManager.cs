@@ -2,6 +2,7 @@
 using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 public class PackageManager : Singleton<PackageManager>
@@ -16,6 +17,38 @@ public class PackageManager : Singleton<PackageManager>
         {
             playerPackages.Add(id);
         }
+    }
+    public async void ShowPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    {
+        Character character = CharacterManager.instance.controllerCharacter;
+        PackageList packageList = new PackageList
+        {
+            packageDatas = new List<PackageData>(),
+            itemMatchData=itemMatchData
+        };
+        if (gamePackages.TryGetValue(character.characterPackage, out GamePackage gamePackage))
+        {
+            packageList.packageDatas.Add(gamePackage.OutGamePackageData());
+        }
+        var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+        warehousePanel.SetSelectItemAction((Item item, int packageId)=> 
+        {
+            UsingAction(item, packageId);
+            if (close)
+            {
+                UIManager.instance.CloseGamePanel<WarehousePanel>();
+            }
+        }, "使用");
+    }
+    void UsingAction(Item item, int packageId)
+    {
+        ItemUseAction itemUseAction = new ItemUseAction
+        {
+            itemId=item.dataId,
+            itemCount=1,
+            packageId=packageId
+        };
+        GameActionManager.instance.QueueAction(itemUseAction, true);
     }
 
     public async void ShowAllPlayerPackage(PackageItemAction selectItemAction, string actionName)

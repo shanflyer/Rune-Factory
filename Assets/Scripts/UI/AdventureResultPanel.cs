@@ -50,7 +50,13 @@ public class AdventureResultPanel: GamePanel<FightResult>
             displayMap = CharacterManager.instance.controllerCharacter.mapInstance
         };
         GameActionManager.instance.QueueAction(displayMap);
-       // UIManager.instance.
+
+        UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+        UIManager.instance.ShowGamePanel<MainPanel>();
+        UIManager.instance.ShowGamePanel<ShortcutPanel>();
+        UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+        SceneManager.instance.UnloadNowScene();
+        // UIManager.instance.
     }
  
     public override void InitReferenceData(FightResult fightResult)
@@ -60,6 +66,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
 
         itemList.InitListData(fightResult.getItems);
         teamerList.InitListData(fightResult.fighterResults);
+        UIManager.instance.CloseGamePanel<FightPanel>();
     }
     
     public override void SetPanelUISerializeObj()

@@ -137,6 +137,7 @@ public class ExploreManager : Singleton<ExploreManager>
     
     async void ChapterStepAction(ChapterStepAction chapterStepAction)
     {
+        UIManager.instance.CloseGamePanel<WarehousePanel>();
         if (fightChapter.mapId != nowChapter)
         {
             if (!fightChapters.GetData(nowChapter, out fightChapter))
@@ -164,7 +165,8 @@ public class ExploreManager : Singleton<ExploreManager>
 
         SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
         {
-            fight = true
+            fight = true,
+            auto=FightController.instance.AutoFight
         };
         GameActionManager.instance.QueueAction(switchFunctionButton);
     }
@@ -175,16 +177,43 @@ public class ExploreManager : Singleton<ExploreManager>
     public bool StepFightSucceed()
     {
         fightChapter.nowStep++;
+        float value = fightChapter.nowStep / (float)nowFightMapData.monsterDeploys.Count;
+
+        fightChapter.completeValue = (int)(value * 100);
+        fightChapters.SetData(fightChapter);
+
         if (fightChapter.nowStep >= nowFightMapData.monsterDeploys.Count)
-        {
+        { 
             ExploreSuccessful();
             return true;
         }
         else
         {
+            RefreshFightChapter refreshFightChapter = new RefreshFightChapter
+            {
+                id = nowChapter
+            };
+            SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
+            {
+                fight = false,
+                 auto = FightController.instance.AutoExplore
+            };
+            GameTimerController.instance.DelayAction(1000, () => 
+            {
+                GameActionManager.instance.QueueAction(switchFunctionButton);
+                GameActionManager.instance.QueueAction(refreshFightChapter);
+                if (FightController.instance.AutoExplore)
+                {
+                    FightController.instance.StartWalk();
+                }
+            }
+            );
             return false;
         }
+       
     }
+
+
     async void ExploreFailed()
     {
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);

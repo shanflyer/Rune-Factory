@@ -47,6 +47,8 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<SetFightCharacterAnimator>(SetFightCharacterAnimator);
         GameActionManager.instance.AddListener<PlayerFight>(PlayerFight);
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
+        GameActionManager.instance.AddListener<SetAutoExplore>(SetAutoExplore);
+        GameActionManager.instance.AddListener<SwitchAutoExplore>(SwitchAutoExplore);
 
         var behaviorTrees = GetComponents<BehaviorTree>();
         for(int i = 0; i < behaviorTrees.Length; i++)
@@ -64,29 +66,65 @@ public class FightController : MonoBehaviour
        // controllerBehavior = GetComponent<BehaviorTree>(); 
         var sceneInfoManager = SceneInfoManager.instance;
     }
-
-    public void SetFightAuto()
+    void SwitchAutoExplore(SwitchAutoExplore switchAutoExplore)
     {
-        autoFight = !autoFight;
-        if (autoFight)
+        if (switchAutoExplore.explore)
         {
-            if (controllerBehavior.ExecutionStatus == BehaviorDesigner.Runtime.Tasks.TaskStatus.Inactive)
+            autoExplore = !autoExplore;
+            autoFight = autoExplore;
+            if (switchAutoExplore.setResult!=null)
             {
-                controllerBehavior.EnableBehavior();
+                switchAutoExplore.setResult(autoExplore);
+            }
+            if (autoExplore)
+            {
+                StartWalk();
+            }
+            else
+            {
+                StopWalk();
             }
         }
         else
         {
+            autoFight = !autoFight;
+            if (autoFight)
+            {
+                if (controllerBehavior.ExecutionStatus == BehaviorDesigner.Runtime.Tasks.TaskStatus.Inactive)
+                {
+                    controllerBehavior.EnableBehavior();
+                }
+            }
 
+            if (switchAutoExplore.setResult != null)
+            {
+                switchAutoExplore.setResult(autoFight);
+            }
         }
     }
-
+  
+    void SetAutoExplore(SetAutoExplore setAutoExplore)
+    {
+        autoExplore = setAutoExplore.auto;
+        autoFight=setAutoExplore.auto;
+        if (autoExplore)
+        {
+            StartWalk();
+        }
+        else
+        {
+            StopWalk();
+        }
+    }
     void PlayerFight(PlayerFight playerFight)
     {
+        controllerBehavior.DisableBehavior();
+        manualFightBehavior.EnableBehavior();
+        /*
         foreach(var fightPlayer in fightPlayerRuntimes)
         {
             RunFightCharacter(fightPlayer.Key);
-        }
+        }*/
     }
     void DisplayFightScene(DisplayFightScene displayFightScene)
     {
@@ -225,8 +263,10 @@ public class FightController : MonoBehaviour
     public bool AutoFight => autoFight;
     bool autoFight = false;
 
+    public bool AutoExplore => autoExplore;
+    bool autoExplore = false;
     void EndFightRound(StartRoundFight startRoundFight)
-    {
+    {  
         if (autoFight)
         {
             if (controllerBehavior.ExecutionStatus == BehaviorDesigner.Runtime.Tasks.TaskStatus.Inactive)
@@ -237,18 +277,18 @@ public class FightController : MonoBehaviour
             {
                 // BehaviorManager.instance.RestartBehavior(controllerBehavior);
             }
+            EndPlayerRound endPlayerRound = new EndPlayerRound();
+            GameActionManager.instance.QueueAction(endPlayerRound);
 
         }
         else
         {
             controllerBehavior.DisableBehavior();
-            EndPlayerRound endPlayerRound = new EndPlayerRound();
-            GameActionManager.instance.QueueAction(endPlayerRound);
-
-
+            StopAutoFight stopAutoFight = new StopAutoFight();
+            GameActionManager.instance.QueueAction(stopAutoFight);
 
         }
-      
+       
 
         Debug.Log("»ØºÏ½áÊø...."); 
     }
@@ -452,6 +492,8 @@ public class FightController : MonoBehaviour
     }
 
     public bool chapterMoving = false;
+    float waitTime;
+    float nowTime;
     public void StartWalk()
     {
         if (fightMapRuntime0.use && fightMapRuntime1.use)
@@ -463,17 +505,14 @@ public class FightController : MonoBehaviour
                 parameterType = ParameterType.FLOAT,
                 floatValue = 1
             }) ;
+          
+            chapterMoving = true;
+            if (nowTime == 0)
+            {
+                waitTime = GameRandom.RandomInt(GameCommon.fightWalkTime.x, GameCommon.fightWalkTime.y) * 0.001f;
+            }
             StopCoroutine("MapMoving");
             StartCoroutine("MapMoving");
-            chapterMoving = true;
-
-            int waitTime = GameRandom.RandomInt(GameCommon.fightWalkTime.x, GameCommon.fightWalkTime.y);
-            GameTimerController.instance.DeleyActionMain(waitTime, () =>
-            {
-                StopWalk();
-                ChapterStepAction chapterStepAction = new ChapterStepAction();
-                GameActionManager.instance.QueueAction(chapterStepAction);
-            });
         }
         
     }
@@ -495,8 +534,9 @@ public class FightController : MonoBehaviour
         Vector3 late = new Vector3(-GameCommon.fightMapMovingSpeed, 0, 0);
         var transform0 = fightMapRuntime0.obj as Transform;
         var transform1 = fightMapRuntime1.obj as Transform;
-        while (true)
+        while (nowTime<waitTime)
         {
+            nowTime += Time.fixedDeltaTime;
             transform0.Translate(late);
             transform1.Translate(late);
             if (transform0.localPosition.x <= -cycleSize)
@@ -509,6 +549,11 @@ public class FightController : MonoBehaviour
             }
             yield return wait;
         }
+        nowTime = 0;
+        waitTime = 0;
+        StopWalk();
+        ChapterStepAction chapterStepAction = new ChapterStepAction();
+        GameActionManager.instance.QueueAction(chapterStepAction);
     }
 
 

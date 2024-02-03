@@ -9,6 +9,7 @@ public class CheckFightVictory : Action
 {
     [Header("对比的结果，是否胜利")]
     public bool isVictory;
+    [SerializeField]
     SharedBool FightResult;
     // Use this for initialization
     public override void OnStart()
