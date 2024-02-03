@@ -793,6 +793,27 @@ public struct PauseFilm : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct TryStartAutoExplore : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { set; get; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+public struct TryStartAutoBehavior : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { set; get; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    { 
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+
 public struct SwitchAutoExplore : GameAction
 {
     public bool explore;

@@ -169,6 +169,10 @@ public class ExploreManager : Singleton<ExploreManager>
             auto=FightController.instance.AutoFight
         };
         GameActionManager.instance.QueueAction(switchFunctionButton);
+
+        TryStartAutoBehavior tryStartAutoBehavior = new TryStartAutoBehavior();
+        GameActionManager.instance.QueueAction(tryStartAutoBehavior);
+
     }
     public void FightFail()
     {
@@ -198,14 +202,13 @@ public class ExploreManager : Singleton<ExploreManager>
                 fight = false,
                  auto = FightController.instance.AutoExplore
             };
+            TryStartAutoExplore tryStartAutoExplore = new TryStartAutoExplore();
+
             GameTimerController.instance.DelayAction(1000, () => 
             {
                 GameActionManager.instance.QueueAction(switchFunctionButton);
                 GameActionManager.instance.QueueAction(refreshFightChapter);
-                if (FightController.instance.AutoExplore)
-                {
-                    FightController.instance.StartWalk();
-                }
+                GameActionManager.instance.QueueAction(tryStartAutoExplore); 
             }
             );
             return false;

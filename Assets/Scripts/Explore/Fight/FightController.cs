@@ -49,6 +49,8 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
         GameActionManager.instance.AddListener<SetAutoExplore>(SetAutoExplore);
         GameActionManager.instance.AddListener<SwitchAutoExplore>(SwitchAutoExplore);
+        GameActionManager.instance.AddListener<TryStartAutoBehavior>(TryStartAutoBehavior);
+        GameActionManager.instance.AddListener<TryStartAutoExplore>(TryStartAutoExplore);
 
         var behaviorTrees = GetComponents<BehaviorTree>();
         for(int i = 0; i < behaviorTrees.Length; i++)
@@ -66,6 +68,23 @@ public class FightController : MonoBehaviour
        // controllerBehavior = GetComponent<BehaviorTree>(); 
         var sceneInfoManager = SceneInfoManager.instance;
     }
+    void TryStartAutoBehavior(TryStartAutoBehavior tryStartAutoBehavior)
+    {
+        if (autoFight)
+        {
+            controllerBehavior.EnableBehavior();
+        }
+    }
+    void TryStartAutoExplore(TryStartAutoExplore tryStartAutoExplore)
+    {
+        if (autoExplore)
+        {
+            StartWalk();
+            //controllerBehavior.EnableBehavior();
+        }
+    }
+
+
     void SwitchAutoExplore(SwitchAutoExplore switchAutoExplore)
     {
         if (switchAutoExplore.explore)
