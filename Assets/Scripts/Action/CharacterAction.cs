@@ -745,9 +745,8 @@ public struct CharacterPropertyTrigger : GameAction
                     MaxPower = int.Parse(parameter.parameters[5].value),
                     AT = int.Parse(parameter.parameters[6].value),
                     DF = int.Parse(parameter.parameters[7].value),
-                    Crit = int.Parse(parameter.parameters[8].value),
-                    Dodge = int.Parse(parameter.parameters[9].value),
-                    Other = int.Parse(parameter.parameters[10].value),
+                    Lucky = int.Parse(parameter.parameters[8].value), 
+                    Other = int.Parse(parameter.parameters[9].value),
                 };
             }
             finally { }

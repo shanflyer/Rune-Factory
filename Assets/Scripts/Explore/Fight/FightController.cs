@@ -51,6 +51,7 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<SwitchAutoExplore>(SwitchAutoExplore);
         GameActionManager.instance.AddListener<TryStartAutoBehavior>(TryStartAutoBehavior);
         GameActionManager.instance.AddListener<TryStartAutoExplore>(TryStartAutoExplore);
+        GameActionManager.instance.AddListener<FightCharacterMove>(FightCharacterMove);
 
         var behaviorTrees = GetComponents<BehaviorTree>();
         for(int i = 0; i < behaviorTrees.Length; i++)
@@ -67,6 +68,14 @@ public class FightController : MonoBehaviour
         }
        // controllerBehavior = GetComponent<BehaviorTree>(); 
         var sceneInfoManager = SceneInfoManager.instance;
+    }
+    void FightCharacterMove(FightCharacterMove fightCharacterMove)
+    {
+        if(fightPlayerRuntimes.TryGetValue(fightCharacterMove.characterId,out var fightPlayerRuntime))
+        {
+            Vector3 targetPos = playerPos[fightCharacterMove.newIndex].position;
+            StartCoroutine(FightCharacterMoving(fightPlayerRuntime.animator.transform, targetPos));
+        }
     }
     void TryStartAutoBehavior(TryStartAutoBehavior tryStartAutoBehavior)
     {
@@ -159,7 +168,8 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.RemoveListener<DisplayFightScene>(DisplayFightScene);
         GameActionManager.instance.RemoveListener<StartRoundFight>(EndFightRound);
         GameActionManager.instance.RemoveListener<DisplayHurt>(DisplayHurt);
-        GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd); 
+        GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd);
+        GameActionManager.instance.RemoveListener<FightCharacterMove>(FightCharacterMove);
         UIManager.instance.CloseGamePanel<FightPanel>();
         SceneManager.instance.UnloadNowScene();
     }
@@ -547,6 +557,19 @@ public class FightController : MonoBehaviour
         });
         chapterMoving = false;
     }
+
+    IEnumerator FightCharacterMoving(Transform characterTransform,Vector3 targetPos)
+    {
+        Vector3 startPos = characterTransform.position;
+        float timeValue = 0;
+        while (timeValue>GameCommon.fightCharacterMoveTime)
+        {
+            timeValue += Time.deltaTime;
+            characterTransform.position = (targetPos - startPos) * timeValue / GameCommon.fightCharacterMoveTime + startPos;
+            yield return 0;
+        }
+        characterTransform.position = targetPos;
+    }
     IEnumerator MapMoving()
     {
         var wait = new WaitForFixedUpdate();
@@ -575,5 +598,6 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.QueueAction(chapterStepAction);
     }
 
+    
 
 }

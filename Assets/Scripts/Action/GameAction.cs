@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -444,6 +445,28 @@ public struct PlayerFight : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
+public struct FightCharacterMove: GameAction
+{
+    public int characterId;
+    public int newIndex;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            characterId = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            newIndex = int.Parse(parameters[1].value);
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+
 public struct StartRoundFight : GameAction
 {
     public SetValue setValue { get; set; }

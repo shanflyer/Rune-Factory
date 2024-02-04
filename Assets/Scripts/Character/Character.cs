@@ -17,7 +17,7 @@ public struct CharacterEquipAndPropertyData
 [System.Serializable]
 public struct CharacterProperty
 {
-    public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Crit, Dodge;
+    public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky;
     public int Other;
 
     public override string ToString()
@@ -63,16 +63,11 @@ public struct CharacterProperty
             string operatorStr = DF > 0 ? "+" : "-";
             result = $"{CharacterPropertyType.防御}{operatorStr}{DF}  ";
         }
-        if (Crit != 0)
+        if (Lucky != 0)
         {
-            string operatorStr = Crit > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.暴击}{operatorStr}{Crit}  ";
-        }
-        if (Dodge != 0)
-        {
-            string operatorStr = Dodge > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.闪避}{operatorStr}{Dodge}  ";
-        }
+            string operatorStr = Lucky > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.幸运}{operatorStr}{Lucky}  ";
+        } 
         return result;
     }
 
@@ -88,8 +83,7 @@ public struct CharacterProperty
             MaxHP = property0.MaxHP - property1.MaxHP,
             MaxMP = property0.MaxMP - property1.MaxMP,
             MaxPower = property0.MaxPower - property1.MaxPower,
-            Crit = property0.Crit - property1.Crit,
-            Dodge = property0.Dodge - property1.Dodge,
+            Lucky = property0.Lucky - property1.Lucky, 
             Other = property0.Other - property1.Other
         };
         return CharacterProperty;
@@ -107,8 +101,7 @@ public struct CharacterProperty
             MaxHP = property0.MaxHP + property1.MaxHP,
             MaxMP = property0.MaxMP + property1.MaxMP,
             MaxPower = property0.MaxPower + property1.MaxPower,
-            Crit = property0.Crit + property1.Crit,
-            Dodge = property0.Dodge + property1.Dodge,
+            Lucky = property0.Lucky + property1.Lucky, 
             Other = property0.Other + property1.Other
         };
         return CharacterProperty;
@@ -126,8 +119,7 @@ public struct CharacterProperty
             MaxHP = (int)(property0.MaxHP * value),
             MaxMP = (int)(property0.MaxMP * value),
             MaxPower = (int)(property0.MaxPower * value),
-            Crit = (int)(property0.Crit * value),
-            Dodge = (int)(property0.Dodge * value),
+            Lucky = (int)(property0.Lucky * value), 
             Other = (int)(property0.Other * value)
         };
         return CharacterProperty;
@@ -152,12 +144,8 @@ public struct CharacterProperty
             case CharacterPropertyType.防御:
                 return DF;
 
-            case CharacterPropertyType.暴击:
-                return Crit;
-
-            case CharacterPropertyType.闪避:
-                return Dodge;
-
+            case CharacterPropertyType.幸运:
+                return Lucky;
             case CharacterPropertyType.最大体力:
                 return MaxPower;
 
@@ -213,13 +201,9 @@ public struct CharacterProperty
                 DF = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.闪避:
-                Crit = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.暴击:
-                Dodge = setCharacterProperty.Value;
-                break;
+            case CharacterPropertyType.幸运:
+                Lucky = setCharacterProperty.Value;
+                break; 
 
             case CharacterPropertyType.自定义值:
                 Other = setCharacterProperty.Value;
@@ -266,13 +250,10 @@ public struct CharacterProperty
                 DF += changeCharacterProperty.changeValue;
                 break;
 
-            case CharacterPropertyType.闪避:
-                Crit += changeCharacterProperty.changeValue;
+            case CharacterPropertyType.幸运:
+                Lucky += changeCharacterProperty.changeValue;
                 break;
-
-            case CharacterPropertyType.暴击:
-                Dodge += changeCharacterProperty.changeValue;
-                break;
+                 
 
             case CharacterPropertyType.自定义值:
                 Other += changeCharacterProperty.changeValue;
@@ -882,7 +863,7 @@ public partial class Character
         }
     }
 
-    public void SetProperty(int HP = -1, int MP = -1, int Power = -1, int MaxHP = -1, int MaxMP = -1, int MaxPower = -1, int AT = -1, int DF = -1, int Crit = -1, int Dodge = -1
+    public void SetProperty(int HP = -1, int MP = -1, int Power = -1, int MaxHP = -1, int MaxMP = -1, int MaxPower = -1, int AT = -1, int DF = -1, int Lucky = -1
         , int Other = -1)
     {
         if (HP >= 0)
@@ -901,10 +882,6 @@ public partial class Character
             characterProperty.AT = AT;
         if (DF >= 0)
             characterProperty.DF = DF;
-        if (Crit >= 0)
-            characterProperty.Crit = Crit;
-        if (Dodge >= 0)
-            characterProperty.Dodge = Dodge;
         if (Other >= 0)
             characterProperty.Other = Other;
 
@@ -914,12 +891,22 @@ public partial class Character
     public void SetProperty(SetCharacterProperty setCharacterProperty)
     {
         characterProperty.SetProperty(setCharacterProperty);
+        RefreshCharacter refreshCharacter = new RefreshCharacter
+        {
+            id = instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshCharacter, true);
     }
 
     public void AddProperty(ChangeCharacterProperty changeCharacterProperty)
     {
         characterProperty.ChangeProperty(changeCharacterProperty);
         CharacterPropertyTrigger();
+        RefreshCharacter refreshCharacter = new RefreshCharacter
+        {
+            id = instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshCharacter, true);
     }
 
     public void SetPlayerOperate(int2 targetCoordinate)

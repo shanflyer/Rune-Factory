@@ -605,6 +605,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             fightCharacter.SetCharacterValue(setCharacterProperty);
         }
+       
     }
 
     private void ChangeCharacterValue(ChangeCharacterProperty changeCharacterProperty)

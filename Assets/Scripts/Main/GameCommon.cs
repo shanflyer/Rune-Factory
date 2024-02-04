@@ -52,7 +52,7 @@ public enum CompareType
 [System.Serializable]
 public enum CharacterPropertyType
 {
-    自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 暴击, 闪避, 饱食,
+    自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 幸运,  饱食,
     最大体力, 最大生命, 最大法力
 }
 
@@ -85,6 +85,7 @@ public enum EntityType
 
 public class GameCommon
 {
+    public const float fightCharacterMoveTime = 0.25f;
     public static int2 fightWalkTime=new int2(4000,7000);
     public const int giftEventId = 412;
     public const int zeroGameYear = 1300;

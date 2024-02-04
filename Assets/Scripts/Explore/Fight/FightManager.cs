@@ -182,8 +182,7 @@ public class FightMonster : FightCharacter
         _characterProperty.HP = monsterData.HP;
         _characterProperty.AT = monsterData.AT;
         _characterProperty.DF = monsterData.DF;
-        _characterProperty.Crit = monsterData.Crit;
-        _characterProperty.Dodge = monsterData.Dodge;
+        _characterProperty.Lucky = monsterData.Crit; 
     }
 
     public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
@@ -438,7 +437,7 @@ public class FightManager :Singleton<FightManager>
         if (playerTeam != null)
         {
             List<int> players = new List<int>();
-            for(int i = 0; i < playerTeam.Teamers.Count; i++)
+            for(int i = playerTeam.Teamers.Count-1; i >= 0; i--)
             {
                 var character = playerTeam.Teamers[i].character;
                 players.Add(character.dataId);
@@ -584,7 +583,7 @@ public class FightManager :Singleton<FightManager>
                                 int t = SkillEstimateData.target[x][y];
                                 FightCharacter tagetFighter = fightCharacters[t];
                                 int hurt = HurtValue(fightCharacter.characterProperty.AT, tagetFighter.characterProperty.DF,
-                                    fightCharacter.characterProperty.Crit, fightCharacter.characterProperty.Dodge,
+                                    fightCharacter.characterProperty.Lucky, fightCharacter.characterProperty.Lucky,
                                     tagetFighter.characterProperty.DF, out var hurtResultType);
                                 float _hurtValue = (hurt / tagetFighter.characterProperty.HP) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
                                 _hurtValue = math.clamp(_hurtValue, 0, 1);
@@ -710,7 +709,7 @@ public class FightManager :Singleton<FightManager>
             case SkillActionType.伤害:
 
                 int hurt = HurtValue(source.characterProperty.AT, target.characterProperty.DF,
-                    source.characterProperty.Crit, source.characterProperty.Dodge,
+                    source.characterProperty.Lucky, source.characterProperty.Lucky,
                     target.characterProperty.DF, out var hurtResultType);
                 int hp = target.characterProperty.HP - hurt;
                 hp = math.clamp(hp, 0, hp);
@@ -830,6 +829,31 @@ public class FightManager :Singleton<FightManager>
         }
         
         return result;
+    }
+
+    public void RoundPlayer()
+    {
+
+        List<int> newFightPlayers = new List<int>();
+        if (fightCharacters.Count > 1)
+        {
+            for (int i = 1; i < fightPlayers.Count; i++)
+            {
+                newFightPlayers.Add(fightPlayers[i]);
+            }
+            newFightPlayers.Add(fightPlayers[0]);
+            fightPlayers = newFightPlayers;
+
+            for(int i = 0; i < fightPlayers.Count; i++)
+            {
+                FightCharacterMove fightCharacterMove = new FightCharacterMove
+                {
+                    characterId = fightPlayers[i],
+                    newIndex = i
+                };
+                GameActionManager.instance.QueueAction(fightCharacterMove, true);
+            }
+        }       
     }
 }
 
