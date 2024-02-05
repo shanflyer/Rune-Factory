@@ -233,32 +233,6 @@ public class FightManager :Singleton<FightManager>
     public FightResult FightResult { get { return fightResult; } }
     FightResult fightResult;
 
-
-    void CheckPlayerFightEndAndAction()
-    {
-        bool result = true;
-        for (int i = 0; i < fightPlayers.Count; i++)
-        {
-            int key = fightPlayers[i];
-            if (fightCharacters.TryGetValue(key, out var fightCharacter))
-            {
-                if (fightCharacter.fightStatus == FightStatus.准备)
-                {
-                    result = false;
-                    break;
-                }
-            }
-        }
-        if (result)
-        {
-            for (int i = 0; i < fightMonsters.Count; i++)
-            {
-                int key = fightMonsters[i];
-                
-            }
-        }
-    }
-
     void ExploreEnd(ExploreEnd exploreEnd)
     {
         myInstance.Clear();
@@ -854,6 +828,48 @@ public class FightManager :Singleton<FightManager>
                 GameActionManager.instance.QueueAction(fightCharacterMove, true);
             }
         }       
+    }
+
+    public void EscapeAction()
+    {
+
+        int playerValue = 0;
+        int monsterValue = 0;
+
+        foreach(var fightCharacter in fightCharacters)
+        {
+            if (fightPlayers.Contains(fightCharacter.Key))
+            {
+                playerValue += fightCharacter.Value.characterProperty.Lucky;
+            }
+            else
+            {
+                monsterValue += fightCharacter.Value.characterProperty.Lucky;
+            }
+        }
+        playerValue/=fightPlayers.Count;
+        monsterValue /= fightMonsters.Count;
+        var totalValue = 50 + playerValue - monsterValue;
+        if (GameRandom.RandomInt(0, 100) < totalValue)
+        {
+            InformationController.instance.AddInformation("逃离成功!", true, true);
+            for (int i = 0; i < fightMonsters.Count; i++)
+            {
+                int characterId = fightMonsters[i];
+                fightCharacters.Remove(characterId);
+                FightController.instance.RemoveFightPlayerRuntime(characterId);
+            }
+            fightMonsters.Clear();
+
+            ExploreManager.instance.StepFightSucceed();
+        }
+        else
+        {
+            InformationController.instance.AddInformation("逃离失败!", true, true);
+            nowFightRound = FightRoundType.Player;
+            PlayerFight playerFight = new PlayerFight(); 
+            GameActionManager.instance.QueueAction(playerFight);
+        } 
     }
 }
 

@@ -195,7 +195,9 @@ public class FightPanel : GamePanel<IReferenceData>
     }
     void EscapeFightAction()
     {
-
+        FightButton.interactable = false;
+        EscapeFightButton.interactable = false; 
+        FightManager.instance.EscapeAction();
     }
     void DisplayAutoFight(bool auto)
     {

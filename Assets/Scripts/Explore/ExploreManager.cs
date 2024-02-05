@@ -179,7 +179,7 @@ public class ExploreManager : Singleton<ExploreManager>
         ExploreFailed();
     }
     public bool StepFightSucceed()
-    {
+    { 
         fightChapter.nowStep++;
         float value = fightChapter.nowStep / (float)nowFightMapData.monsterDeploys.Count;
 
