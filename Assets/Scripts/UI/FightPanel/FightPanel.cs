@@ -121,8 +121,7 @@ public class FightPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        FightButtons.gameObject.SetActive(false);
-        ExploreButtons.gameObject.SetActive(true);
+       
 
         EscapeFightButton.onClick.AddListener(EscapeFightAction);
 
@@ -266,6 +265,18 @@ public class FightPanel : GamePanel<IReferenceData>
     bool up = false;
     public override async Task InitData(string dataKey)
     {
+        FightButtons.gameObject.SetActive(false);
+        ExploreButtons.gameObject.SetActive(true);
+
+        FightButton.interactable = true; ItemButtom.interactable = true; AutoFightButton.interactable = true; EscapeFightButton.interactable = true; 
+        GoingButton.interactable = true; UsingButton.interactable = true; AutoButton.interactable = true; RetreatButton.interactable = true; SwitchButton.interactable = true;
+        going = true;
+        goingText.text = "Ç°½ø";
+        up = false;
+        animator.SetBool("Up", up);
+        operateIcon.transform.localScale = up ? new Vector3(1, -1, 1) : new Vector3(1, 1, 1);
+
+
         dataId = int.Parse(dataKey);
         FightChapter fightChapter = ExploreManager.instance.GetFigehtChapter(dataId);
         if (fightChapter.mapId == dataId)

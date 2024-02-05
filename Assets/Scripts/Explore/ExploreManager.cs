@@ -1,12 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.Mathematics;
+﻿using Unity.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public struct FightChapter:IReferenceData,INativeData
+public struct FightChapter : IReferenceData, INativeData
 {
     public int mapId;
     public FixedString128Bytes mapName;
@@ -14,33 +9,37 @@ public struct FightChapter:IReferenceData,INativeData
     public NativeHashSet<int> findItems;
     public NativeList<int> haveItems;
     public int failureEventId;
-    public int successEventId;
-    public int nowStep;
+    public int successEventId; 
     public bool open;
+
     public void Dispose()
     {
         findItems.Dispose();
         haveItems.Dispose();
         mapName.Clear();
     }
-    public int Key => mapId; 
+
+    public int Key => mapId;
 }
+
 public class ExploreManager : Singleton<ExploreManager>
 {
-    MyNativeData<FightChapter> fightChapters = new MyNativeData<FightChapter>();
+    private MyNativeData<FightChapter> fightChapters = new MyNativeData<FightChapter>();
 
     public int NowCharpter => nowChapter;
 
-    int nowChapter;
-    FightMapData nowFightMapData;
-    FightChapter fightChapter;
+    private int nowChapter;
+    private FightMapData nowFightMapData;
+    private FightChapter fightChapter;
+    private int nowStep;
     public FightChapter GetFigehtChapter(int id)
     {
-        fightChapter=default(FightChapter);
+        fightChapter = default(FightChapter);
 
         fightChapters.GetData(id, out fightChapter);
         return fightChapter;
     }
+
     public override async void Init()
     {
         base.Init();
@@ -53,12 +52,12 @@ public class ExploreManager : Singleton<ExploreManager>
             {
                 mapId = chapterData.id,
                 mapName = chapterData.mapName,
-                open = chapterData.isOpen, 
-                failureEventId=chapterData.failureEventId,
-                successEventId=chapterData.successEventId
+                open = chapterData.isOpen,
+                failureEventId = chapterData.failureEventId,
+                successEventId = chapterData.successEventId
             };
             fightChapter.haveItems = new NativeList<int>(Allocator.Persistent);
-            fightChapter.findItems = new NativeHashSet<int>(8,Allocator.Persistent);
+            fightChapter.findItems = new NativeHashSet<int>(8, Allocator.Persistent);
 
             if (chapterData.items != null && chapterData.items.Count > 0)
             {
@@ -66,20 +65,18 @@ public class ExploreManager : Singleton<ExploreManager>
                 {
                     fightChapter.haveItems.Add(chapterData.items[j]);
                 }
-
             }
-            
 
             fightChapters.AddData(fightChapter);
         }
-        if (GameDataSaveManager.instance.UserGameSaveData.chapters != null&&
+        if (GameDataSaveManager.instance.UserGameSaveData.chapters != null &&
             GameDataSaveManager.instance.UserGameSaveData.chapters.Count > 0)
         {
             var chapters = GameDataSaveManager.instance.UserGameSaveData.chapters;
-            for(int i = 0; i < chapters.Count; i++)
+            for (int i = 0; i < chapters.Count; i++)
             {
                 FightChapter fightChapter;
-                if (fightChapters.GetData(chapters[i].mapId,out fightChapter))
+                if (fightChapters.GetData(chapters[i].mapId, out fightChapter))
                 {
                     fightChapter.completeValue = chapters[i].completeValue;
                     fightChapter.open = chapters[i].open;
@@ -88,31 +85,41 @@ public class ExploreManager : Singleton<ExploreManager>
                     {
                         fightChapter.findItems.Add(chapters[i].findItems[j]);
                     }
-                } 
+                }
                 this.fightChapters.SetData(fightChapter);
             }
         }
 
         GameActionManager.instance.AddListener<EnterChapter>(EnterChapter);
         GameActionManager.instance.AddListener<ChapterStepAction>(ChapterStepAction);
+        GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
     }
-    void EnterChapter(EnterChapter enterChapter)
+
+    void ExploreEnd(ExploreEnd exploreEnd)
+    {
+        fightChapter = default(FightChapter);
+        nowFightMapData=default(FightMapData);
+        nowChapter = 0;
+        nowStep = 0;
+    }
+    private void EnterChapter(EnterChapter enterChapter)
     {
         EnterChapter(enterChapter.id);
     }
+
     public async void EnterChapter(int id)
     {
         nowChapter = id;
         nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(id.ToString());
-        var beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(nowFightMapData.beforeActionId); 
+        var beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(nowFightMapData.beforeActionId);
         var afterActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(nowFightMapData.afterActionId);
-        SceneManager.instance.SwitchScene("Fight", () => {
-           
+        SceneManager.instance.SwitchScene("Fight", () =>
+        {
             if (beforeActionData != null)
             {
                 beforeActionData.Action();
-            } 
-        } ,
+            }
+        },
         () =>
         {
             WorldMapObjManager.instance.RecycleMap();
@@ -126,16 +133,16 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(setFixedCamera);
 
             FightController.instance.CreatFightMap(nowFightMapData);
-            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM,true);
+            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, true);
             FightManager.instance.CreatFightPlayer();
             if (afterActionData != null)
             {
                 afterActionData.Action();
             }
-        }); 
+        });
     }
-    
-    async void ChapterStepAction(ChapterStepAction chapterStepAction)
+
+    private async void ChapterStepAction(ChapterStepAction chapterStepAction)
     {
         UIManager.instance.CloseGamePanel<WarehousePanel>();
         if (fightChapter.mapId != nowChapter)
@@ -150,44 +157,45 @@ public class ExploreManager : Singleton<ExploreManager>
             nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
             AudioController.instance.PlayBGM(nowFightMapData.fightBGM, true);
         }
-        if (nowFightMapData.monsterDeploys.Count > fightChapter.nowStep)
+        if (nowFightMapData.monsterDeploys.Count > nowStep)
         {
             //当前阶段
-            int deployId = nowFightMapData.monsterDeploys[fightChapter.nowStep];
+            int deployId = nowFightMapData.monsterDeploys[nowStep];
             //怪物分布
             var mosterDeploy = await GameDataManager.instance.GetAsyncData<MonsterDeploy>(deployId);
-            if(mosterDeploy.id== deployId)
+            if (mosterDeploy.id == deployId)
             {
                 //创建怪物
-                FightManager.instance.CreatFightMonster(mosterDeploy); 
+                FightManager.instance.CreatFightMonster(mosterDeploy);
             }
         }
 
         SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
         {
             fight = true,
-            auto=FightController.instance.AutoFight
+            auto = FightController.instance.AutoFight
         };
         GameActionManager.instance.QueueAction(switchFunctionButton);
 
         TryStartAutoBehavior tryStartAutoBehavior = new TryStartAutoBehavior();
         GameActionManager.instance.QueueAction(tryStartAutoBehavior);
-
     }
+
     public void FightFail()
     {
         ExploreFailed();
     }
+
     public bool StepFightSucceed()
-    { 
-        fightChapter.nowStep++;
-        float value = fightChapter.nowStep / (float)nowFightMapData.monsterDeploys.Count;
+    {
+        nowStep++;
+        float value = nowStep / (float)nowFightMapData.monsterDeploys.Count;
 
         fightChapter.completeValue = (int)(value * 100);
         fightChapters.SetData(fightChapter);
 
-        if (fightChapter.nowStep >= nowFightMapData.monsterDeploys.Count)
-        { 
+        if (nowStep >= nowFightMapData.monsterDeploys.Count)
+        {
             ExploreSuccessful();
             return true;
         }
@@ -200,24 +208,22 @@ public class ExploreManager : Singleton<ExploreManager>
             SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
             {
                 fight = false,
-                 auto = FightController.instance.AutoExplore
+                auto = FightController.instance.AutoExplore
             };
             TryStartAutoExplore tryStartAutoExplore = new TryStartAutoExplore();
 
-            GameTimerController.instance.DelayAction(1000, () => 
+            GameTimerController.instance.DelayAction(1000, () =>
             {
                 GameActionManager.instance.QueueAction(switchFunctionButton);
                 GameActionManager.instance.QueueAction(refreshFightChapter);
-                GameActionManager.instance.QueueAction(tryStartAutoExplore); 
+                GameActionManager.instance.QueueAction(tryStartAutoExplore);
             }
             );
             return false;
         }
-       
     }
 
-
-    async void ExploreFailed()
+    private async void ExploreFailed()
     {
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);
 
@@ -233,15 +239,16 @@ public class ExploreManager : Singleton<ExploreManager>
             GameEventManager.instance.AddGameEvent(gameEventData, null);
         }
     }
-    async void ExploreSuccessful()
+
+    private async void ExploreSuccessful()
     {
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.successEventId);
 
-        if (gameEventData==null)
+        if (gameEventData == null)
         {
             var FightResult = FightManager.instance.FightResult;
             FightResult.victory = true;
-            UIManager.instance.ShowGamePanel<AdventureResultPanel,FightResult>(FightResult, layer: 2);
+            UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
             Debug.Log("章节探索成功");
         }
         else
@@ -249,7 +256,7 @@ public class ExploreManager : Singleton<ExploreManager>
             GameEventManager.instance.AddGameEvent(gameEventData, null);
         }
     }
-  
+
     protected override void Clear()
     {
         fightChapters.Dispose();

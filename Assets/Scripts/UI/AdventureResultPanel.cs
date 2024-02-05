@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class AdventureResultPanel: GamePanel<FightResult>
 {
@@ -51,11 +52,16 @@ public class AdventureResultPanel: GamePanel<FightResult>
         };
         GameActionManager.instance.QueueAction(displayMap);
 
+        GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
+
+        ExploreEnd exploreEnd = new ExploreEnd();
+        GameActionManager.instance.QueueAction(exploreEnd);
+
         UIManager.instance.ShowGamePanel<PlayerTopPanel>();
         UIManager.instance.ShowGamePanel<MainPanel>();
         UIManager.instance.ShowGamePanel<ShortcutPanel>();
         UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
-        SceneManager.instance.UnloadNowScene();
+       // SceneManager.instance.UnloadNowScene();
         // UIManager.instance.
     }
  

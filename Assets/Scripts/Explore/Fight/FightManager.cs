@@ -240,6 +240,8 @@ public class FightManager :Singleton<FightManager>
         fightPlayers.Clear();
         fightMonsters.Clear();
         GetItemIndexs.Clear();
+        fightResult.fighterResults.Clear();
+        fightResult.getItems.Clear();
     }
     protected override void Clear()
     {

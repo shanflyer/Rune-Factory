@@ -162,6 +162,7 @@ public class FightController : MonoBehaviour
     {
         GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), true);
     }
+ 
     void ExploreEnd(ExploreEnd exploreEnd)
     {
         GameActionManager.instance.RemoveListener<HideFightScene>(HideFightScene);
@@ -169,7 +170,16 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.RemoveListener<StartRoundFight>(EndFightRound);
         GameActionManager.instance.RemoveListener<DisplayHurt>(DisplayHurt);
         GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd);
+        GameActionManager.instance.RemoveListener<SetFightCharacterAnimator>(SetFightCharacterAnimator);
+        GameActionManager.instance.RemoveListener<PlayerFight>(PlayerFight);
+        GameActionManager.instance.RemoveListener<CreatFightPlayer>(CreatFightPlayer);
+        GameActionManager.instance.RemoveListener<SetAutoExplore>(SetAutoExplore);
+        GameActionManager.instance.RemoveListener<SwitchAutoExplore>(SwitchAutoExplore);
+        GameActionManager.instance.RemoveListener<TryStartAutoBehavior>(TryStartAutoBehavior);
+        GameActionManager.instance.RemoveListener<TryStartAutoExplore>(TryStartAutoExplore);
         GameActionManager.instance.RemoveListener<FightCharacterMove>(FightCharacterMove);
+
+         
         UIManager.instance.CloseGamePanel<FightPanel>();
         SceneManager.instance.UnloadNowScene();
     }
@@ -320,11 +330,11 @@ public class FightController : MonoBehaviour
        
 
         Debug.Log("»ØºÏ½áÊø...."); 
-    }
-   
+    } 
 
     private void OnDestroy()
     {
+        instance = null;
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
     }
     float cycleSize;

@@ -21,6 +21,8 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         {
             string runtimeObjType = type.ToString(); 
             unusedRuntimeObjs.Remove(runtimeObjType);
+
+            objParents.Remove(runtimeObjType);
         } 
     }
     public void CreatParent<T>(Transform parent )where T:Enum
