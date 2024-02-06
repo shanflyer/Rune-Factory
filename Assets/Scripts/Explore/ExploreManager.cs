@@ -1,4 +1,6 @@
-﻿using Unity.Collections;
+﻿using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public struct FightChapter : IReferenceData, INativeData
@@ -170,28 +172,40 @@ public class ExploreManager : Singleton<ExploreManager>
             }
         }
 
+        
         SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
         {
             fight = true,
             auto = FightController.instance.AutoFight
         };
         GameActionManager.instance.QueueAction(switchFunctionButton);
-
-        TryStartAutoBehavior tryStartAutoBehavior = new TryStartAutoBehavior();
-        GameActionManager.instance.QueueAction(tryStartAutoBehavior);
+        GameTimerController.instance.DelayAction(100, () =>
+        {
+            TryStartAutoBehavior tryStartAutoBehavior = new TryStartAutoBehavior();
+            GameActionManager.instance.QueueAction(tryStartAutoBehavior);
+        });
+      
     }
 
     public void FightFail()
     {
         ExploreFailed();
     }
-
+    public void SetChapterFindItem(List<int2> items)
+    {
+        for(int i=0;i<items.Count; i++)
+        {
+            fightChapter.findItems.Add(items[i].x);
+        }
+        fightChapters.SetData(fightChapter);
+    }
     public bool StepFightSucceed()
     {
         nowStep++;
         float value = nowStep / (float)nowFightMapData.monsterDeploys.Count;
+        float itemValue = fightChapter.findItems.Count / (float)fightChapter.haveItems.Length;
 
-        fightChapter.completeValue = (int)(value * 100);
+        fightChapter.completeValue = (int)(value * 50)+ (int)(itemValue * 50);
         fightChapters.SetData(fightChapter);
 
         if (nowStep >= nowFightMapData.monsterDeploys.Count)

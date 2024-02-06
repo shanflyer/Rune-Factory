@@ -321,6 +321,8 @@ public class FightManager :Singleton<FightManager>
                     fightResult.getItems.Add(item);
                     GetItemIndexs.Add(itemId, fightResult.getItems.Count - 1);
                 }
+
+                
   
                 AddPackageItem addPackageItem = new AddPackageItem
                 {
@@ -331,7 +333,7 @@ public class FightManager :Singleton<FightManager>
                 GameActionManager.instance.QueueAction(addPackageItem);
             } 
             FightController.instance.DisplayDropItem(items, characterId);
-
+            ExploreManager.instance.SetChapterFindItem(items);
             //获得经验
             int exp = monsterData.exp;
             for(int i = 0; i < fightPlayers.Count; i++)
