@@ -1,3 +1,4 @@
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -579,6 +580,13 @@ public class CharacterManager : Singleton<CharacterManager>
         else
         {
             characters.TryGetValue(characterId, out character);
+        }
+        if (character == null)
+        {
+            if(characterInstances.TryGetValue(characterId,out var ints))
+            {
+                characters.TryGetValue(ints[0], out character);
+            } 
         }
         return character;
     }

@@ -382,11 +382,20 @@ public class FightController : MonoBehaviour
         {
             int index = i;
             int dataId = creatFightPlayer.players[i];
+            Character character;
+            if (dataId == 0)
+            {
+                character = CharacterManager.instance.controllerCharacter;
+            }
+            else
+            {
+                character = CharacterManager.instance.GetCharacterForDataId(dataId);
+            }
 
             index = math.clamp(index, 0, 2);
 
-            Character character = CharacterManager.instance.GetCharacterForDataId(dataId);
-            CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(dataId);
+            
+            CharacterData characterData =character.characterData;
             if (characterData != null)
             {
                 var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),

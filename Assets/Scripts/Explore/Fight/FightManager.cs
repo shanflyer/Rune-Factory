@@ -425,13 +425,7 @@ public class FightManager :Singleton<FightManager>
                 players = players
             };
             GameActionManager.instance.QueueAction(CreatFightPlayer);
-        }
-        UIManager.instance.CloseGamePanel<PlayerTopPanel>();
-        UIManager.instance.CloseGamePanel<MainPanel>();
-        UIManager.instance.CloseGamePanel<ShortcutPanel>();
-        UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
-
-        await  UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(),layer:2);
+        } 
         RefreshFightPlayerInfo();
     }
     public async void CreatFightMonster(MonsterDeploy monsterDeploy)

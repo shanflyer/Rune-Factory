@@ -131,7 +131,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 beforeActionData.Action();
             }
         },
-        () =>
+        async () =>
         {
             WorldMapObjManager.instance.RecycleMap();
             CharacterManager.instance.RecycleCharacter();
@@ -145,11 +145,21 @@ public class ExploreManager : Singleton<ExploreManager>
 
             FightController.instance.CreatFightMap(nowFightMapData);
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, true);
-            FightManager.instance.CreatFightPlayer();
+            //if(!nowFightMapData.isZeroTeam)
+            {
+                FightManager.instance.CreatFightPlayer(); 
+
+                await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(), layer: 2);
+            }
+            UIManager.instance.CloseGamePanel<PlayerTopPanel>();
+            UIManager.instance.CloseGamePanel<MainPanel>();
+            UIManager.instance.CloseGamePanel<ShortcutPanel>();
+            UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
             if (afterActionData != null)
             {
                 afterActionData.Action();
             }
+
         });
 
         

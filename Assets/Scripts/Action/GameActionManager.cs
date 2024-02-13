@@ -112,7 +112,11 @@ public class GameActionManager : Singleton<GameActionManager>
         if (ActionQueue.Count > 0)
         {
             var gameAction = ActionQueue.Dequeue();
-            gameAction();
+            if (gameAction != null)
+            {
+                gameAction();
+            }
+            
         }
     }
 }

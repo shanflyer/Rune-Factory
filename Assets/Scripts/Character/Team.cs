@@ -190,7 +190,7 @@ public class TeamManager : Singleton<TeamManager>
         for (int i = 0; i < creatTeamPlayer.players.Count; i++)
         {
             int id = creatTeamPlayer.players[i];
-            if(id== CharacterManager.instance.controllerCharacter.instanceId)
+            if(id== CharacterManager.instance.controllerCharacter.instanceId||id==0)
             {
                 continue;
             }
