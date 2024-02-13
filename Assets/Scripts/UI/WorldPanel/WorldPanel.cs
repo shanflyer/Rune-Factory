@@ -72,7 +72,13 @@ public class WorldPanel : GamePanel<MyInt>
     private int selectFightChapterId;
 
     private void ExploreMap()
-    { 
+    {
+        if (CharacterManager.instance.controllerCharacter.CharacterProperty.Power < GameCommon.exploreCostPower)
+        {
+            InformationController.instance.AddInformation("体力不足，无法进行探索！", true, true);
+            return;
+        } 
+
         EnterChapter enterChapter = new EnterChapter
         {
             id = selectFightChapterId

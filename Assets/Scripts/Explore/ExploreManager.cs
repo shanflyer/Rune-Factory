@@ -95,8 +95,17 @@ public class ExploreManager : Singleton<ExploreManager>
         GameActionManager.instance.AddListener<EnterChapter>(EnterChapter);
         GameActionManager.instance.AddListener<ChapterStepAction>(ChapterStepAction);
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
+        GameActionManager.instance.AddListener<OpenChapter>(OpenChapter);
     }
 
+    void OpenChapter(OpenChapter openChapter)
+    {
+        if(fightChapters.GetData(openChapter.id,out var fightChapter))
+        {
+            fightChapter.open = true;
+            fightChapters.SetData(fightChapter);
+        }
+    }
     void ExploreEnd(ExploreEnd exploreEnd)
     {
         fightChapter = default(FightChapter);
@@ -142,6 +151,8 @@ public class ExploreManager : Singleton<ExploreManager>
                 afterActionData.Action();
             }
         });
+
+        
     }
 
     private async void ChapterStepAction(ChapterStepAction chapterStepAction)
@@ -185,6 +196,32 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(tryStartAutoBehavior);
         });
       
+    }
+
+    public void LerpExploreTime(float waitTime)
+    {
+        int perMinute = GameCommon.explorCostMinute / nowFightMapData.monsterDeploys.Count;
+        int hour = GameTimeManager.instance.Hour;
+        int minute = GameTimeManager.instance.Minute;
+
+        minute += perMinute;
+        if (minute >= 60)
+        {
+            hour+= minute / 60;
+            minute = minute % 60;
+            if (hour > 24)
+            {
+                hour -= 24;
+            }
+        }
+
+        LerpGameTime lerpGameTime = new LerpGameTime
+        {
+            totalTime = waitTime,
+            targetHour = hour,
+            targetMinute = minute
+        };
+        GameActionManager.instance.QueueAction(lerpGameTime,true);
     }
 
     public void FightFail()
@@ -240,35 +277,27 @@ public class ExploreManager : Singleton<ExploreManager>
     private async void ExploreFailed()
     {
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);
-
-        if (gameEventData == null)
-        {
-            var FightResult = FightManager.instance.FightResult;
-            FightResult.victory = false;
-            UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
-            Debug.Log("章节探索失败");
-        }
-        else
+        var FightResult = FightManager.instance.FightResult;
+        FightResult.victory = false;
+        UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+        Debug.Log("章节探索失败");
+        if (gameEventData != null)
         {
             GameEventManager.instance.AddGameEvent(gameEventData, null);
-        }
+        } 
     }
 
     private async void ExploreSuccessful()
     {
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.successEventId);
-
-        if (gameEventData == null)
-        {
-            var FightResult = FightManager.instance.FightResult;
-            FightResult.victory = true;
-            UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
-            Debug.Log("章节探索成功");
-        }
-        else
+        var FightResult = FightManager.instance.FightResult;
+        FightResult.victory = true;
+        UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+        Debug.Log("章节探索成功");
+        if (gameEventData != null)
         {
             GameEventManager.instance.AddGameEvent(gameEventData, null);
-        }
+        } 
     }
 
     protected override void Clear()

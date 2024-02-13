@@ -85,6 +85,8 @@ public enum EntityType
 
 public class GameCommon
 {
+    public const int explorCostMinute = 120;
+    public const int exploreCostPower = 4;
     public const float fightCharacterMoveTime = 0.25f;
     public static int2 fightWalkTime=new int2(4000,7000);
     public const int giftEventId = 412;

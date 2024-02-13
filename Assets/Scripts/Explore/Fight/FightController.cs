@@ -552,6 +552,8 @@ public class FightController : MonoBehaviour
             }
             StopCoroutine("MapMoving");
             StartCoroutine("MapMoving");
+
+            ExploreManager.instance.LerpExploreTime(waitTime);
         }
         
     }
@@ -566,6 +568,7 @@ public class FightController : MonoBehaviour
             floatValue = 0
         });
         chapterMoving = false;
+        GameTimeManager.instance.StopTimeRun();
     }
 
     IEnumerator FightCharacterMoving(Transform characterTransform,Vector3 targetPos)
@@ -585,7 +588,7 @@ public class FightController : MonoBehaviour
         var wait = new WaitForFixedUpdate();
         Vector3 late = new Vector3(-GameCommon.fightMapMovingSpeed, 0, 0);
         var transform0 = fightMapRuntime0.obj as Transform;
-        var transform1 = fightMapRuntime1.obj as Transform;
+        var transform1 = fightMapRuntime1.obj as Transform; 
         while (nowTime<waitTime)
         {
             nowTime += Time.fixedDeltaTime;
