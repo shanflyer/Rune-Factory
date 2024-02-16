@@ -63,7 +63,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         {
             var _skyEnviromentMono = Resources.Load<SkyEnviromentMono>("Prefabs/Environment");
             skyEnviromentMono = GameObject.Instantiate(_skyEnviromentMono);
-            GameObject.DontDestroyOnLoad(skyEnviromentMono.gameObject);
+           // GameObject.DontDestroyOnLoad(skyEnviromentMono.gameObject);
         }
          
         GameActionManager.instance.AddListener<SetEnvironmentLight>(SetEnvironmentLight);

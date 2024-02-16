@@ -14,7 +14,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
         GameActionManager.instance.AddListener<StopCharacterBehavior>(StopCharacterBehavior);
         GameActionManager.instance.AddListener<StartCharacterBehavior>(StartCharacterBehavior);
-        Object.DontDestroyOnLoad(obj);
+       // Object.DontDestroyOnLoad(obj);
     }
 
     private GameObject obj;

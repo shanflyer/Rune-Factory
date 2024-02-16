@@ -109,7 +109,7 @@ public class WorldPanel : GamePanel<MyInt>
                 list.Add(mapItemReferenceData);
             }
             fightMapItems.InitListData(list);
-            exploreButton.interactable = chapterData.open;
+            exploreButton.interactable = GameController.instance.test?true: chapterData.open;
         }
         else
         {
@@ -151,10 +151,16 @@ public class WorldPanel : GamePanel<MyInt>
                     var data = new UIFightChapterData
                     {
                         fightChapterId = fightMapData.id,
-                        season = fightMapData.season == selectSeason
+                        season = GameController.instance.test ?true: fightMapData.season == selectSeason
                     };
                     seasonFightChapterList[index].InitData(data, SelectFightChapter);
 
+                    if (GameController.instance.test)
+                    {
+                        SelectFightChapter(data, true);
+
+                    }
+                    else 
                     if (fightMapData.season == selectSeason && fightMapData.isOpen)
                     {
                         SelectFightChapter(data, true);
@@ -182,6 +188,7 @@ public class WorldPanel : GamePanel<MyInt>
         {
             int index = int.Parse(dataKey);
             RefreshUI((Season)index);
+
         }
         catch { }
         return base.InitData(dataKey);

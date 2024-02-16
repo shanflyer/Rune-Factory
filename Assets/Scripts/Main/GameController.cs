@@ -12,8 +12,10 @@ using UnityEditor;
 
 public class GameController : MonoBehaviour
 {
+  
     public bool startPlay = true;
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
+    public bool test = false;
     public bool runTime { get => GameTimeManager.instance.runTime; set => GameTimeManager.instance.runTime = value; }
    
     public int runTimeHour { 
@@ -81,7 +83,7 @@ public class GameController : MonoBehaviour
     private async void OnEnable()
     {  
         instance = this;
-        GameObject.DontDestroyOnLoad(gameObject);
+        //GameObject.DontDestroyOnLoad(gameObject);
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController");
         GameObjectCurveController.instance.SetUpDataComponent(this);
@@ -91,7 +93,7 @@ public class GameController : MonoBehaviour
             if (cameraPrefab != null)
             {
                 var cameraObj = Instantiate(cameraPrefab);
-                GameObject.DontDestroyOnLoad(cameraObj);
+              //  GameObject.DontDestroyOnLoad(cameraObj);
             }
         }
         var environmentManger = EnvironmentManger.instance;

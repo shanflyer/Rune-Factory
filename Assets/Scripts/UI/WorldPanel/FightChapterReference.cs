@@ -41,7 +41,7 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
         {
             activeObj.localScale = Vector3.one;
             unActiveObj.localScale = Vector3.zero; 
-            if (!fightChapter.open)
+            if (!GameController.instance.test&&!fightChapter.open)
             {
                 activeObj.localScale = Vector3.zero;
                 unActiveObj.localScale = Vector3.one;

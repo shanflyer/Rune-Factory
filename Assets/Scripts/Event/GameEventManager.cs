@@ -30,7 +30,7 @@ public class GameEventManager : Singleton<GameEventManager>
         {
             obj = new GameObject("GameEventManager");
         }
-        Object.DontDestroyOnLoad(obj);
+       // Object.DontDestroyOnLoad(obj);
         GameActionManager.instance.AddListener<ResetGameEvent>(ResetGameEvent);
         GameActionManager.instance.AddListener<RemoveGameEvent>(RemoveGameEvent);
     }
