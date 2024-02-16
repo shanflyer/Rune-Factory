@@ -14,6 +14,89 @@ public struct FightPlayerRuntime
     public Animator animator;
     public BehaviorTree behaviorTree;
 }
+public struct FightMapRuntime
+{
+    public RuntimeObj runtimeObj;
+    private Transform backScene, middleScene, forwardScene;
+
+    private float cyclePos;
+    public FightMapRuntime(RuntimeObj runtimeObj,float cyclePos)
+    {
+        this.runtimeObj = runtimeObj;
+        this.cyclePos = cyclePos;
+        if(runtimeObj.obj is Transform obj)
+        {
+            forwardScene = obj.Find("00");
+            middleScene = obj.Find("02");
+            backScene = obj.Find("03");
+        }
+        else
+        {
+            backScene = null;
+            middleScene = null;
+            forwardScene = null;
+        }
+        InitScene(backScene);
+        InitScene(middleScene);
+        InitScene(forwardScene);
+    }
+
+    void InitScene(Transform sceneTrans)
+    {
+        if (sceneTrans)
+        {
+            Vector3 pos = sceneTrans.localPosition;
+            pos.x = 0;
+            sceneTrans.localPosition = pos;
+        }
+    }
+
+    public void SceneMove()
+    {
+        if (backScene)
+        {
+            backScene.Translate(Vector2.left * GameCommon.fightMapMovingSpeed * 0.5f*Time.deltaTime);
+            if (backScene.localPosition.x <= cyclePos)
+            {
+                Vector3 localPos = backScene.localPosition;
+                localPos.x = 0;
+                backScene.localPosition= localPos;
+            }
+        }
+            
+        if (middleScene)
+        {
+            middleScene.Translate(Vector2.left * GameCommon.fightMapMovingSpeed * Time.deltaTime);
+            if (middleScene.localPosition.x <= cyclePos)
+            {
+                Vector3 localPos = middleScene.localPosition;
+                localPos.x = 0;
+                middleScene.localPosition = localPos;
+            }
+        }
+           
+        if (forwardScene)
+        {
+            forwardScene.Translate(Vector2.left * GameCommon.fightMapMovingSpeed * 1.5f * Time.deltaTime);
+            if (forwardScene.localPosition.x <= cyclePos)
+            {
+                Vector3 localPos = forwardScene.localPosition;
+                localPos.x = 0;
+                forwardScene.localPosition = localPos;
+            }
+        }
+            
+    }
+
+    public void Recycle()
+    {
+        backScene = null;
+        middleScene = null;
+        forwardScene = null;
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+    }
+
+}
 public class FightController : MonoBehaviour
 {
     public static FightController instance;
@@ -21,8 +104,8 @@ public class FightController : MonoBehaviour
     private BehaviorTree controllerBehavior;
     [SerializeField]
     private BehaviorTree manualFightBehavior;
-      
-    RuntimeObj fightMapRuntime0, fightMapRuntime1;
+
+    FightMapRuntime fightMapRuntime;
     [SerializeField]
     List<Transform> playerPos=new List<Transform>();
     [SerializeField]
@@ -335,27 +418,17 @@ public class FightController : MonoBehaviour
     private void OnDestroy()
     {
         instance = null;
+        fightMapRuntime.Recycle();
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
-    }
-    float cycleSize;
-    Vector3 cyclePos;
+    } 
     public void CreatFightMap(FightMapData fightMapData)
     {
         if (fightMapData.fightMapObj != null)
         {
-            fightMapRuntime0 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
+           var mapRuntimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
            fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 0);
-            fightMapRuntime1 = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
-                fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 1);
 
-            Vector3 zeroPos = new Vector3(0, fightMapData.offsetY, 0);
-            cyclePos = new Vector3(fightMapData.cycleSize, fightMapData.offsetY, 0);
-
-            cycleSize = fightMapData.cycleSize;
-            var transform = fightMapRuntime0.obj as Transform;
-            var transform1 = fightMapRuntime1.obj as Transform;
-            transform.localPosition = zeroPos;
-            transform1.localPosition = cyclePos;
+            fightMapRuntime = new FightMapRuntime(mapRuntimeObj, fightMapData.cycleSize);  
 
             DisplaySky displaySky = new DisplaySky
             {
@@ -363,17 +436,7 @@ public class FightController : MonoBehaviour
             };
             GameActionManager.instance.QueueAction(displaySky);
         }
-        else
-        {
-            if (fightMapRuntime0.use)
-            {
-                GameRuntimeObjManager.instance.RecycleRuntimeObj(fightMapRuntime0);
-            }
-            if (fightMapRuntime1.use)
-            {
-                GameRuntimeObjManager.instance.RecycleRuntimeObj(fightMapRuntime1);
-            }
-        }
+         
     }
 
      async void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
@@ -544,7 +607,7 @@ public class FightController : MonoBehaviour
     float nowTime;
     public void StartWalk()
     {
-        if (fightMapRuntime0.use && fightMapRuntime1.use)
+        if (fightMapRuntime.runtimeObj.use)
         {
             SetFightCharacterAnimator(new global::SetFightCharacterAnimator
             {
@@ -559,6 +622,7 @@ public class FightController : MonoBehaviour
             {
                 waitTime = GameRandom.RandomInt(GameCommon.fightWalkTime.x, GameCommon.fightWalkTime.y) * 0.001f;
             }
+            waitTime = 10;
             StopCoroutine("MapMoving");
             StartCoroutine("MapMoving");
 
@@ -593,25 +657,12 @@ public class FightController : MonoBehaviour
         characterTransform.position = targetPos;
     }
     IEnumerator MapMoving()
-    {
-        var wait = new WaitForFixedUpdate();
-        Vector3 late = new Vector3(-GameCommon.fightMapMovingSpeed, 0, 0);
-        var transform0 = fightMapRuntime0.obj as Transform;
-        var transform1 = fightMapRuntime1.obj as Transform; 
+    {  
         while (nowTime<waitTime)
         {
-            nowTime += Time.fixedDeltaTime;
-            transform0.Translate(late);
-            transform1.Translate(late);
-            if (transform0.localPosition.x <= -cycleSize)
-            {
-                transform0.localPosition = cyclePos;
-            }
-            if (transform1.localPosition.x <= -cycleSize)
-            {
-                transform1.localPosition = cyclePos;
-            }
-            yield return wait;
+            nowTime += Time.deltaTime;
+            fightMapRuntime.SceneMove();
+            yield return 1;
         }
         nowTime = 0;
         waitTime = 0;

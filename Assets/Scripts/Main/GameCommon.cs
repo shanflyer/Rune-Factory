@@ -117,7 +117,7 @@ public class GameCommon
     public static float4 dropArea = new float4(-0.6f, -0.3f, 0.6f, 0.3f);
     public const float dropItemFlyerSpeed = 3f;
     public const int SeasonDays = 30;
-    public const float fightMapMovingSpeed = 0.013f;
+    public const float fightMapMovingSpeed = 1f;
 
     public const int DefaultOutItemId = -1;
     public const float PromptTime = 2.0f;

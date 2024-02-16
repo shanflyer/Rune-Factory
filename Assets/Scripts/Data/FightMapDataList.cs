@@ -40,8 +40,7 @@ public struct FightMapData : IGameData
     public string fightMapObjName;
     public string exploreBGMName, fightBGMName;
 
-    public Season season;
-    public float offsetY;
+    public Season season; 
     public float cycleSize;   
     public GameObject fightMapObj;
     public List<int> items;
