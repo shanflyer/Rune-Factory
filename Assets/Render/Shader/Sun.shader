@@ -22,7 +22,7 @@ Shader "Sun"
     {
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
 
-       Blend OneMinusDstColor One 
+        Blend OneMinusDstColor One 
         Cull Off
         ZWrite Off
 
@@ -150,14 +150,19 @@ Shader "Sun"
                      moonMask1=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv+float2(-_moonOffSet,-_moonOffSet)); 
                 }
                 
-
-                half3 moonColor=moonMask.xyz*(moonMask.a-moonMask1.a);
-                moonColor+=moonMask.xyz*(1-moonMask.a+moonMask1.a)*0.3;
+                float d_a=moonMask.a-moonMask1.a;
+                d_a=clamp(d_a,0,1); 
+                
+                half3 moonColor=moonMask.xyz*d_a;  
+                moonColor+=moonMask.xyz*(1-moonMask.a+moonMask1.a)*0.1;
                 moonMask.xyz=moonColor*moonMask.a;
-
-                maskR=(1-step(1,maskR))*maskR;
+                maskR=clamp(maskR,0,1);
+                //maskR=(1-step(1,maskR))*maskR; 
                 moonMask.xyz=moonMask.xyz*(1-maskR)+maskR*i.color.a;
+               
+                  // return float4(moonMask.xyz,1); 
                 moonMask.xyz*=i.color;
+                
                 moonMask.xyz+=maskR.xxx*0*(1-moonMask.a);
                 moonMask.a+=maskR;
                 moonMask.a=clamp(moonMask.a,0,1);

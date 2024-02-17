@@ -10,7 +10,7 @@ Shader "MySprite-Lit-Default"
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WetValue("WetValue",Range(0,1))=0
         _shadowStep("ShadowStep",int)=0
-        _LightBlend("LightBlend",int)=1
+        _LightBlend("LightBlend",float)=1
         _BackBlend("BackBlend",int)=1
         _BlendVertexColor("BlendVertexColor",int)=0
 
@@ -104,7 +104,7 @@ Shader "MySprite-Lit-Default"
             int _shadowStep;
             int _Water;
 
-            int _LightBlend;
+            float _LightBlend;
             int _BackBlend;
             int _BlendVertexColor;
             

@@ -984,6 +984,7 @@ public static class DataPath
     public static string gameSaveDataPath = Application.persistentDataPath;
 
     public const string characterPrefabPath = "Prefabs/Character";
-    public const string monsterPrefabPath = "Prefabs/Monster/";
+    public const string monsterPrefabPath = "Prefabs/Monster";
+    //public const string monsterSpritePath = "Prefabs/Monster/";
     public const string UIPath = "Prefabs/UI/";
 }

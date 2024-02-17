@@ -139,6 +139,10 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
     async void SetMapOverrideEnvirmentData(string roomName)
     {
         MapRoomData mapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(roomName);
+        if (mapRoomData == null)
+        {
+            return;
+        }
         DisplaySky displaySky = new DisplaySky
         {
             display = mapRoomData.displaySky

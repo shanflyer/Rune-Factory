@@ -145,6 +145,17 @@ public class ExploreManager : Singleton<ExploreManager>
 
             FightController.instance.CreatFightMap(nowFightMapData);
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, true);
+
+            SetMapOverrideEnvironment setMapOverrideEnvironment = new SetMapOverrideEnvironment
+            {
+                dawnEnvironmentDataName = nowFightMapData.dawnEnvironmentDataName,
+                dayEnvironmentDataName = nowFightMapData.dayEnvironmentDataName,
+                duskEnvironmentDataName = nowFightMapData.duskEnvironmentDataName,
+                nightEnvironmentDataName = nowFightMapData.nightEnvironmentDataName
+            };
+            GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true);
+
+
             //if(!nowFightMapData.isZeroTeam)
             {
                 FightManager.instance.CreatFightPlayer(); 
