@@ -425,7 +425,8 @@ public partial class Character
                 id = instanceId,
                 name = name,
                 characterProperty = characterProperty,
-                equip = equip
+                equip = equip,
+                attributeType=AttributeType
             };
         }
     }
@@ -467,6 +468,9 @@ public partial class Character
 
     public string name;
     private int3 objCoordinate;
+
+    private AttributeType attributeType;
+    public AttributeType AttributeType => attributeType;
 
     public int3 ObjCoordinate => objCoordinate;
     public int2 coordinate => objCoordinate.xy;
@@ -831,6 +835,7 @@ public partial class Character
         if (level != this.level)
         {
             var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
+            attributeType=profressionData.attributeType;
             if (profressionData.id == professionId)
             {
                 if (zero)

@@ -8,7 +8,8 @@ public class MonsterData : ScriptableObject, IGameData
 {
     public int id;
     public string monsterName;
-    public int HP, AT, DF, Crit, Dodge;
+    public int HP, AT, DF, Lucky;
+    public AttributeType attributeType;
     public string monsterDescription;
     public string SpriteName; 
     public Sprite monsterSprite;

@@ -12,6 +12,7 @@ public enum FightStatus
 public class FightCharacter
 {
     public FightStatus fightStatus = FightStatus.准备;
+    public virtual AttributeType AttributeType { get; }
     public virtual CharacterProperty characterProperty { get; }
     public int instanceId { get; set; } 
     public int behaviorId { get; set; }
@@ -55,7 +56,7 @@ public class FightPlayer : FightCharacter
         }
     }
     private Character _character;
-     
+    public override AttributeType AttributeType => character.AttributeType;
 
     public int dataId;
 
@@ -176,13 +177,15 @@ public class FightMonster : FightCharacter
         }
     }
     private CharacterProperty _characterProperty;
-
+    public override AttributeType AttributeType => attributeType;
+    private AttributeType attributeType;
     public void InitCharacterProperty(MonsterData monsterData)
     {
         _characterProperty.HP = monsterData.HP;
         _characterProperty.AT = monsterData.AT;
         _characterProperty.DF = monsterData.DF;
-        _characterProperty.Lucky = monsterData.Crit; 
+        _characterProperty.Lucky = monsterData.Lucky;
+        attributeType = monsterData.attributeType;
     }
 
     public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
@@ -475,25 +478,53 @@ public class FightManager :Singleton<FightManager>
             afterAction.Action();
         }
     }
-    public int HurtValue(int AT,int DF,int Crit, int Dodge0, int Dodge1,out HurtResultType hurtResultType)
+
+    float GetAttributeTypeValue(AttributeType attributeType0, AttributeType attributeType1)
+    {
+        if (attributeType0 == AttributeType.无 || attributeType1 == AttributeType.无)
+        {
+            return 1.0f;
+        }
+        int value=(int)attributeType0-(int)attributeType1;
+        if (math.abs(value) == 1)
+        {
+            if (value < 0)
+            {
+                return 1.25f;
+            }
+            return 0.75f;
+        }
+        if (math.abs(value) == 4)
+        {
+            if (value < 0)
+            {
+                return 0.75f;
+            }
+            return 1.25f;
+        }
+        return 1.0f;
+    }
+    public int HurtValue(int AT,int DF,int Lucky0, int Lucky1, out HurtResultType hurtResultType)
     {
         int hurt = AT - DF;
         hurt = math.clamp(hurt, 1, hurt);
 
-        int dodgeValue = Dodge0 - Dodge1;
+        int LuckyValue = (Lucky0 - Lucky1)*2;
         hurtResultType = HurtResultType.Default;
-        if (dodgeValue < 0)
+        if (LuckyValue < 0)
         {
-            int trueDodge =math.clamp( dodgeValue * 2,0,Dodge1);
-            if (GameRandom.RandomInt(0, 100) < trueDodge)
+            int trueLucky =math.clamp( -LuckyValue,0,Lucky1);
+            if (GameRandom.RandomInt(0, 100) < trueLucky)
             {
                 hurtResultType = HurtResultType.Miss;
                 return 0;
             }
             else
             {
-                int trueCrit =  Crit- dodgeValue*2;
-                if (GameRandom.RandomInt(0, 100) < trueCrit)
+                float value = -LuckyValue * 1.0f / Lucky0;
+                value=1-math.clamp(value, 0, 1);
+               // int trueCrit = Lucky0 + LuckyValue*2;
+                if (GameRandom.RandomFloat(0, 1.0f) < 0.05f*value)
                 {
                     hurtResultType = HurtResultType.暴击;
                     return (int)(hurt * GameRandom.RandomFloat(1.5f, 2.0f));
@@ -502,22 +533,23 @@ public class FightManager :Singleton<FightManager>
         }
         else
         {
-            int trueDodge = math.clamp(math.abs(dodgeValue /2), 0, Dodge1);
-            if (GameRandom.RandomInt(0, 100) < trueDodge)
+            int trueLucky = math.clamp(LuckyValue, 0, Lucky0);
+            if (GameRandom.RandomInt(0, 100) < trueLucky)
             {
-                hurtResultType = HurtResultType.Miss;
-                return 0;
+                hurtResultType = HurtResultType.暴击;
+                return (int)(hurt * GameRandom.RandomFloat(1.5f, 2.0f));
             }
             else
             {
-                int trueCrit = math.abs(dodgeValue / 2)+Crit;
-                if (GameRandom.RandomInt(0, 100) < trueCrit)
+                float value = LuckyValue * 1.0f / Lucky1;
+                value = 1 - math.clamp(value, 0, 1);
+                if (GameRandom.RandomFloat(0, 1.0f) < 0.05f * value)
                 {
-                    hurtResultType = HurtResultType.暴击;
-                    return (int)(hurt * GameRandom.RandomFloat(1.5f, 2.0f));
+                    hurtResultType = HurtResultType.Miss;
+                    return 0;
                 }
-
             }
+             
         }
         return hurt;
     }
@@ -555,8 +587,8 @@ public class FightManager :Singleton<FightManager>
                                 int t = SkillEstimateData.target[x][y];
                                 FightCharacter tagetFighter = fightCharacters[t];
                                 int hurt = HurtValue(fightCharacter.characterProperty.AT, tagetFighter.characterProperty.DF,
-                                    fightCharacter.characterProperty.Lucky, fightCharacter.characterProperty.Lucky,
-                                    tagetFighter.characterProperty.DF, out var hurtResultType);
+                                    fightCharacter.characterProperty.Lucky, tagetFighter.characterProperty.Lucky,  out var hurtResultType);
+                                hurt = (int)(hurt * GetAttributeTypeValue(fightCharacter.AttributeType, tagetFighter.AttributeType));
                                 float _hurtValue = (hurt / tagetFighter.characterProperty.HP) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
                                 _hurtValue = math.clamp(_hurtValue, 0, 1);
                                 hurtValue += _hurtValue;
@@ -681,8 +713,9 @@ public class FightManager :Singleton<FightManager>
             case SkillActionType.伤害:
 
                 int hurt = HurtValue(source.characterProperty.AT, target.characterProperty.DF,
-                    source.characterProperty.Lucky, source.characterProperty.Lucky,
-                    target.characterProperty.DF, out var hurtResultType);
+                    source.characterProperty.Lucky, target.characterProperty.Lucky,  out var hurtResultType);
+
+                hurt = (int)(hurt * GetAttributeTypeValue(source.AttributeType, target.AttributeType));
                 int hp = target.characterProperty.HP - hurt;
                 hp = math.clamp(hp, 0, hp);
                 SetCharacterProperty setCharacterProperty = new SetCharacterProperty

@@ -14,11 +14,11 @@ public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
 public enum AttributeType
 {
     无 = 0,
-    火 = 1,
-    光 = 2,
-    暗 = 3,
+    水 = 1,
+    火 = 2,
+    冰 = 3,
     风 = 4,
-    冰 = 5
+    土 = 5
 }
 
 [System.Serializable]

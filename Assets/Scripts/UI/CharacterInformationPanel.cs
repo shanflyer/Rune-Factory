@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -217,7 +218,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     private CharacterInformationData data;
 
-    public override void InitReferenceData(CharacterInformationData v)
+    public override async void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
         data = v;
@@ -245,7 +246,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled = false;
 
         LevelValue.text = v.level.ToString();
-
+        var spriteRenference  = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>($"Reference/AttributeType{(int)v.attributeType}");
+        Attribute.sprite = spriteRenference.sprite;
         WeaponBox.InitData(new Equipment
         {
             characterId = characterId,

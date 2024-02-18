@@ -9,6 +9,7 @@ public class ProfessionData : ScriptableObject,IGameData
     public string professionName;
     public int maxLevel;
     public int ZeroExp, FinalExp;
+    public AttributeType attributeType;
     public CharacterProperty ZeroProperty; 
     public CharacterProperty FinalProperty;
     public int propertyGrowModel;
