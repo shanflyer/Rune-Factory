@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.0.0</string>
+        <string>7.1.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Polygon</enum>
+            <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -173,341 +173,694 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">新建文件夹/images/crops_01_01.png</key>
-            <key type="filename">新建文件夹/images/crops_01_02.png</key>
-            <key type="filename">新建文件夹/images/crops_01_03.png</key>
-            <key type="filename">新建文件夹/images/crops_01_04.png</key>
-            <key type="filename">新建文件夹/images/crops_01_05.png</key>
-            <key type="filename">新建文件夹/images/crops_02_01.png</key>
-            <key type="filename">新建文件夹/images/crops_02_02.png</key>
-            <key type="filename">新建文件夹/images/crops_02_03.png</key>
-            <key type="filename">新建文件夹/images/crops_02_04.png</key>
-            <key type="filename">新建文件夹/images/crops_02_05.png</key>
-            <key type="filename">新建文件夹/images/crops_03_01.png</key>
-            <key type="filename">新建文件夹/images/crops_03_02.png</key>
-            <key type="filename">新建文件夹/images/crops_03_03.png</key>
-            <key type="filename">新建文件夹/images/crops_03_04.png</key>
-            <key type="filename">新建文件夹/images/crops_03_05.png</key>
-            <key type="filename">新建文件夹/images/crops_04_01.png</key>
-            <key type="filename">新建文件夹/images/crops_04_02.png</key>
-            <key type="filename">新建文件夹/images/crops_04_03.png</key>
-            <key type="filename">新建文件夹/images/crops_04_04.png</key>
-            <key type="filename">新建文件夹/images/crops_04_05.png</key>
-            <key type="filename">新建文件夹/images/crops_05_01.png</key>
-            <key type="filename">新建文件夹/images/crops_05_02.png</key>
-            <key type="filename">新建文件夹/images/crops_05_03.png</key>
-            <key type="filename">新建文件夹/images/crops_05_04.png</key>
-            <key type="filename">新建文件夹/images/crops_05_05.png</key>
-            <key type="filename">新建文件夹/images/crops_06_01.png</key>
-            <key type="filename">新建文件夹/images/crops_06_02.png</key>
-            <key type="filename">新建文件夹/images/crops_06_03.png</key>
-            <key type="filename">新建文件夹/images/crops_06_04.png</key>
-            <key type="filename">新建文件夹/images/crops_06_05.png</key>
-            <key type="filename">新建文件夹/images/crops_07_01.png</key>
-            <key type="filename">新建文件夹/images/crops_07_02.png</key>
-            <key type="filename">新建文件夹/images/crops_07_03.png</key>
-            <key type="filename">新建文件夹/images/crops_07_04.png</key>
-            <key type="filename">新建文件夹/images/crops_07_05.png</key>
-            <key type="filename">新建文件夹/images/crops_08_01.png</key>
-            <key type="filename">新建文件夹/images/crops_08_02.png</key>
-            <key type="filename">新建文件夹/images/crops_08_03.png</key>
-            <key type="filename">新建文件夹/images/crops_08_04.png</key>
-            <key type="filename">新建文件夹/images/crops_08_05.png</key>
-            <key type="filename">新建文件夹/images/crops_09_01.png</key>
-            <key type="filename">新建文件夹/images/crops_09_02.png</key>
-            <key type="filename">新建文件夹/images/crops_09_03.png</key>
-            <key type="filename">新建文件夹/images/crops_09_04.png</key>
-            <key type="filename">新建文件夹/images/crops_09_05.png</key>
-            <key type="filename">新建文件夹/images/crops_10_01.png</key>
-            <key type="filename">新建文件夹/images/crops_10_02.png</key>
-            <key type="filename">新建文件夹/images/crops_10_03.png</key>
-            <key type="filename">新建文件夹/images/crops_10_04.png</key>
-            <key type="filename">新建文件夹/images/crops_10_05.png</key>
-            <key type="filename">新建文件夹/images/crops_11_01.png</key>
-            <key type="filename">新建文件夹/images/crops_11_02.png</key>
-            <key type="filename">新建文件夹/images/crops_11_03.png</key>
-            <key type="filename">新建文件夹/images/crops_11_04.png</key>
-            <key type="filename">新建文件夹/images/crops_11_05.png</key>
-            <key type="filename">新建文件夹/images/crops_12_01.png</key>
-            <key type="filename">新建文件夹/images/crops_12_02.png</key>
-            <key type="filename">新建文件夹/images/crops_12_03.png</key>
-            <key type="filename">新建文件夹/images/crops_12_04.png</key>
-            <key type="filename">新建文件夹/images/crops_12_05.png</key>
-            <key type="filename">新建文件夹/images/crops_13_01.png</key>
-            <key type="filename">新建文件夹/images/crops_13_02.png</key>
-            <key type="filename">新建文件夹/images/crops_13_03.png</key>
-            <key type="filename">新建文件夹/images/crops_13_04.png</key>
-            <key type="filename">新建文件夹/images/crops_13_05.png</key>
-            <key type="filename">新建文件夹/images/crops_14_01.png</key>
-            <key type="filename">新建文件夹/images/crops_14_02.png</key>
-            <key type="filename">新建文件夹/images/crops_14_03.png</key>
-            <key type="filename">新建文件夹/images/crops_14_04.png</key>
-            <key type="filename">新建文件夹/images/crops_14_05.png</key>
-            <key type="filename">新建文件夹/images/crops_15_01.png</key>
-            <key type="filename">新建文件夹/images/crops_15_02.png</key>
-            <key type="filename">新建文件夹/images/crops_15_03.png</key>
-            <key type="filename">新建文件夹/images/crops_15_04.png</key>
-            <key type="filename">新建文件夹/images/crops_15_05.png</key>
-            <key type="filename">新建文件夹/images/crops_16_01.png</key>
-            <key type="filename">新建文件夹/images/crops_16_02.png</key>
-            <key type="filename">新建文件夹/images/crops_16_03.png</key>
-            <key type="filename">新建文件夹/images/crops_16_04.png</key>
-            <key type="filename">新建文件夹/images/crops_16_05.png</key>
-            <key type="filename">新建文件夹/images/crops_17_01.png</key>
-            <key type="filename">新建文件夹/images/crops_17_02.png</key>
-            <key type="filename">新建文件夹/images/crops_17_03.png</key>
-            <key type="filename">新建文件夹/images/crops_17_04.png</key>
-            <key type="filename">新建文件夹/images/crops_17_05.png</key>
-            <key type="filename">新建文件夹/images/crops_18_01.png</key>
-            <key type="filename">新建文件夹/images/crops_18_02.png</key>
-            <key type="filename">新建文件夹/images/crops_18_03.png</key>
-            <key type="filename">新建文件夹/images/crops_18_04.png</key>
-            <key type="filename">新建文件夹/images/crops_18_05.png</key>
-            <key type="filename">新建文件夹/images/crops_19_01.png</key>
-            <key type="filename">新建文件夹/images/crops_19_02.png</key>
-            <key type="filename">新建文件夹/images/crops_19_03.png</key>
-            <key type="filename">新建文件夹/images/crops_19_04.png</key>
-            <key type="filename">新建文件夹/images/crops_19_05.png</key>
-            <key type="filename">新建文件夹/images/crops_20_01.png</key>
-            <key type="filename">新建文件夹/images/crops_20_02.png</key>
-            <key type="filename">新建文件夹/images/crops_20_03.png</key>
-            <key type="filename">新建文件夹/images/crops_20_04.png</key>
-            <key type="filename">新建文件夹/images/crops_20_05.png</key>
-            <key type="filename">新建文件夹/images/crops_21_01.png</key>
-            <key type="filename">新建文件夹/images/crops_21_02.png</key>
-            <key type="filename">新建文件夹/images/crops_21_03.png</key>
-            <key type="filename">新建文件夹/images/crops_21_04.png</key>
-            <key type="filename">新建文件夹/images/crops_21_05.png</key>
-            <key type="filename">新建文件夹/images/crops_22_01.png</key>
-            <key type="filename">新建文件夹/images/crops_22_02.png</key>
-            <key type="filename">新建文件夹/images/crops_22_03.png</key>
-            <key type="filename">新建文件夹/images/crops_22_04.png</key>
-            <key type="filename">新建文件夹/images/crops_22_05.png</key>
-            <key type="filename">新建文件夹/images/crops_23_01.png</key>
-            <key type="filename">新建文件夹/images/crops_23_02.png</key>
-            <key type="filename">新建文件夹/images/crops_23_03.png</key>
-            <key type="filename">新建文件夹/images/crops_23_04.png</key>
-            <key type="filename">新建文件夹/images/crops_23_05.png</key>
-            <key type="filename">新建文件夹/images/crops_24_01.png</key>
-            <key type="filename">新建文件夹/images/crops_24_02.png</key>
-            <key type="filename">新建文件夹/images/crops_24_03.png</key>
-            <key type="filename">新建文件夹/images/crops_24_04.png</key>
-            <key type="filename">新建文件夹/images/crops_24_05.png</key>
-            <key type="filename">新建文件夹/images/crops_25_01.png</key>
-            <key type="filename">新建文件夹/images/crops_25_02.png</key>
-            <key type="filename">新建文件夹/images/crops_25_03.png</key>
-            <key type="filename">新建文件夹/images/crops_25_04.png</key>
-            <key type="filename">新建文件夹/images/crops_25_05.png</key>
-            <key type="filename">新建文件夹/images/crops_26_01.png</key>
-            <key type="filename">新建文件夹/images/crops_26_02.png</key>
-            <key type="filename">新建文件夹/images/crops_26_03.png</key>
-            <key type="filename">新建文件夹/images/crops_26_04.png</key>
-            <key type="filename">新建文件夹/images/crops_26_05.png</key>
-            <key type="filename">新建文件夹/images/crops_27_01.png</key>
-            <key type="filename">新建文件夹/images/crops_27_02.png</key>
-            <key type="filename">新建文件夹/images/crops_27_03.png</key>
-            <key type="filename">新建文件夹/images/crops_27_04.png</key>
-            <key type="filename">新建文件夹/images/crops_27_05.png</key>
-            <key type="filename">新建文件夹/images/crops_28_01.png</key>
-            <key type="filename">新建文件夹/images/crops_28_02.png</key>
-            <key type="filename">新建文件夹/images/crops_28_03.png</key>
-            <key type="filename">新建文件夹/images/crops_28_04.png</key>
-            <key type="filename">新建文件夹/images/crops_28_05.png</key>
-            <key type="filename">新建文件夹/images/crops_29_01.png</key>
-            <key type="filename">新建文件夹/images/crops_29_02.png</key>
-            <key type="filename">新建文件夹/images/crops_29_03.png</key>
-            <key type="filename">新建文件夹/images/crops_29_04.png</key>
-            <key type="filename">新建文件夹/images/crops_29_05.png</key>
-            <key type="filename">新建文件夹/images/crops_30_01.png</key>
-            <key type="filename">新建文件夹/images/crops_30_02.png</key>
-            <key type="filename">新建文件夹/images/crops_30_03.png</key>
-            <key type="filename">新建文件夹/images/crops_30_04.png</key>
-            <key type="filename">新建文件夹/images/crops_30_05.png</key>
-            <key type="filename">新建文件夹/images/crops_31_01.png</key>
-            <key type="filename">新建文件夹/images/crops_31_02.png</key>
-            <key type="filename">新建文件夹/images/crops_31_03.png</key>
-            <key type="filename">新建文件夹/images/crops_31_04.png</key>
-            <key type="filename">新建文件夹/images/crops_31_05.png</key>
-            <key type="filename">新建文件夹/images/crops_32_01.png</key>
-            <key type="filename">新建文件夹/images/crops_32_02.png</key>
-            <key type="filename">新建文件夹/images/crops_32_03.png</key>
-            <key type="filename">新建文件夹/images/crops_32_04.png</key>
-            <key type="filename">新建文件夹/images/crops_32_05.png</key>
-            <key type="filename">新建文件夹/images/crops_33_01.png</key>
-            <key type="filename">新建文件夹/images/crops_33_02.png</key>
-            <key type="filename">新建文件夹/images/crops_33_03.png</key>
-            <key type="filename">新建文件夹/images/crops_33_04.png</key>
-            <key type="filename">新建文件夹/images/crops_33_05.png</key>
-            <key type="filename">新建文件夹/images/crops_34_01.png</key>
-            <key type="filename">新建文件夹/images/crops_34_02.png</key>
-            <key type="filename">新建文件夹/images/crops_34_03.png</key>
-            <key type="filename">新建文件夹/images/crops_34_04.png</key>
-            <key type="filename">新建文件夹/images/crops_34_05.png</key>
-            <key type="filename">新建文件夹/images/crops_35_01.png</key>
-            <key type="filename">新建文件夹/images/crops_35_02.png</key>
-            <key type="filename">新建文件夹/images/crops_35_03.png</key>
-            <key type="filename">新建文件夹/images/crops_35_04.png</key>
-            <key type="filename">新建文件夹/images/crops_35_05.png</key>
-            <key type="filename">新建文件夹/images/crops_36_01.png</key>
-            <key type="filename">新建文件夹/images/crops_36_02.png</key>
-            <key type="filename">新建文件夹/images/crops_36_03.png</key>
-            <key type="filename">新建文件夹/images/crops_36_04.png</key>
-            <key type="filename">新建文件夹/images/crops_36_05.png</key>
-            <key type="filename">新建文件夹/images/crops_37_01.png</key>
-            <key type="filename">新建文件夹/images/crops_37_02.png</key>
-            <key type="filename">新建文件夹/images/crops_37_03.png</key>
-            <key type="filename">新建文件夹/images/crops_37_04.png</key>
-            <key type="filename">新建文件夹/images/crops_37_05.png</key>
-            <key type="filename">新建文件夹/images/crops_38_01.png</key>
-            <key type="filename">新建文件夹/images/crops_38_02.png</key>
-            <key type="filename">新建文件夹/images/crops_38_03.png</key>
-            <key type="filename">新建文件夹/images/crops_38_04.png</key>
-            <key type="filename">新建文件夹/images/crops_38_05.png</key>
-            <key type="filename">新建文件夹/images/crops_39_01.png</key>
-            <key type="filename">新建文件夹/images/crops_39_02.png</key>
-            <key type="filename">新建文件夹/images/crops_39_03.png</key>
-            <key type="filename">新建文件夹/images/crops_39_04.png</key>
-            <key type="filename">新建文件夹/images/crops_39_05.png</key>
-            <key type="filename">新建文件夹/images/crops_40_01.png</key>
-            <key type="filename">新建文件夹/images/crops_40_02.png</key>
-            <key type="filename">新建文件夹/images/crops_40_03.png</key>
-            <key type="filename">新建文件夹/images/crops_40_04.png</key>
-            <key type="filename">新建文件夹/images/crops_40_05.png</key>
-            <key type="filename">新建文件夹/images/crops_41_01.png</key>
-            <key type="filename">新建文件夹/images/crops_41_02.png</key>
-            <key type="filename">新建文件夹/images/crops_41_03.png</key>
-            <key type="filename">新建文件夹/images/crops_41_04.png</key>
-            <key type="filename">新建文件夹/images/crops_41_05.png</key>
-            <key type="filename">新建文件夹/images/crops_42_01.png</key>
-            <key type="filename">新建文件夹/images/crops_42_02.png</key>
-            <key type="filename">新建文件夹/images/crops_42_03.png</key>
-            <key type="filename">新建文件夹/images/crops_42_04.png</key>
-            <key type="filename">新建文件夹/images/crops_42_05.png</key>
-            <key type="filename">新建文件夹/images/crops_43_01.png</key>
-            <key type="filename">新建文件夹/images/crops_43_02.png</key>
-            <key type="filename">新建文件夹/images/crops_43_03.png</key>
-            <key type="filename">新建文件夹/images/crops_43_04.png</key>
-            <key type="filename">新建文件夹/images/crops_43_05.png</key>
-            <key type="filename">新建文件夹/images/crops_44_01.png</key>
-            <key type="filename">新建文件夹/images/crops_44_02.png</key>
-            <key type="filename">新建文件夹/images/crops_44_03.png</key>
-            <key type="filename">新建文件夹/images/crops_44_04.png</key>
-            <key type="filename">新建文件夹/images/crops_44_05.png</key>
-            <key type="filename">新建文件夹/images/crops_45_01.png</key>
-            <key type="filename">新建文件夹/images/crops_45_02.png</key>
-            <key type="filename">新建文件夹/images/crops_45_03.png</key>
-            <key type="filename">新建文件夹/images/crops_45_04.png</key>
-            <key type="filename">新建文件夹/images/crops_45_05.png</key>
-            <key type="filename">新建文件夹/images/crops_46_01.png</key>
-            <key type="filename">新建文件夹/images/crops_46_02.png</key>
-            <key type="filename">新建文件夹/images/crops_46_03.png</key>
-            <key type="filename">新建文件夹/images/crops_46_04.png</key>
-            <key type="filename">新建文件夹/images/crops_46_05.png</key>
-            <key type="filename">新建文件夹/images/crops_47_01.png</key>
-            <key type="filename">新建文件夹/images/crops_47_02.png</key>
-            <key type="filename">新建文件夹/images/crops_47_03.png</key>
-            <key type="filename">新建文件夹/images/crops_47_04.png</key>
-            <key type="filename">新建文件夹/images/crops_47_05.png</key>
-            <key type="filename">新建文件夹/images/crops_48_01.png</key>
-            <key type="filename">新建文件夹/images/crops_48_02.png</key>
-            <key type="filename">新建文件夹/images/crops_48_03.png</key>
-            <key type="filename">新建文件夹/images/crops_48_04.png</key>
-            <key type="filename">新建文件夹/images/crops_48_05.png</key>
-            <key type="filename">新建文件夹/images/crops_49_01.png</key>
-            <key type="filename">新建文件夹/images/crops_49_02.png</key>
-            <key type="filename">新建文件夹/images/crops_49_03.png</key>
-            <key type="filename">新建文件夹/images/crops_49_04.png</key>
-            <key type="filename">新建文件夹/images/crops_49_05.png</key>
-            <key type="filename">新建文件夹/images/crops_50_01.png</key>
-            <key type="filename">新建文件夹/images/crops_50_02.png</key>
-            <key type="filename">新建文件夹/images/crops_50_03.png</key>
-            <key type="filename">新建文件夹/images/crops_50_04.png</key>
-            <key type="filename">新建文件夹/images/crops_50_05.png</key>
-            <key type="filename">新建文件夹/images/crops_51_01.png</key>
-            <key type="filename">新建文件夹/images/crops_51_02.png</key>
-            <key type="filename">新建文件夹/images/crops_51_03.png</key>
-            <key type="filename">新建文件夹/images/crops_51_04.png</key>
-            <key type="filename">新建文件夹/images/crops_51_05.png</key>
-            <key type="filename">新建文件夹/images/crops_52_01.png</key>
-            <key type="filename">新建文件夹/images/crops_52_02.png</key>
-            <key type="filename">新建文件夹/images/crops_52_03.png</key>
-            <key type="filename">新建文件夹/images/crops_52_04.png</key>
-            <key type="filename">新建文件夹/images/crops_52_05.png</key>
-            <key type="filename">新建文件夹/images/crops_53_01.png</key>
-            <key type="filename">新建文件夹/images/crops_53_02.png</key>
-            <key type="filename">新建文件夹/images/crops_53_03.png</key>
-            <key type="filename">新建文件夹/images/crops_53_04.png</key>
-            <key type="filename">新建文件夹/images/crops_53_05.png</key>
-            <key type="filename">新建文件夹/images/crops_54_01.png</key>
-            <key type="filename">新建文件夹/images/crops_54_02.png</key>
-            <key type="filename">新建文件夹/images/crops_54_03.png</key>
-            <key type="filename">新建文件夹/images/crops_54_04.png</key>
-            <key type="filename">新建文件夹/images/crops_54_05.png</key>
-            <key type="filename">新建文件夹/images/crops_55_01.png</key>
-            <key type="filename">新建文件夹/images/crops_55_02.png</key>
-            <key type="filename">新建文件夹/images/crops_55_03.png</key>
-            <key type="filename">新建文件夹/images/crops_55_04.png</key>
-            <key type="filename">新建文件夹/images/crops_55_05.png</key>
-            <key type="filename">新建文件夹/images/crops_56_01.png</key>
-            <key type="filename">新建文件夹/images/crops_56_02.png</key>
-            <key type="filename">新建文件夹/images/crops_56_03.png</key>
-            <key type="filename">新建文件夹/images/crops_56_04.png</key>
-            <key type="filename">新建文件夹/images/crops_56_05.png</key>
-            <key type="filename">新建文件夹/images/crops_57_01.png</key>
-            <key type="filename">新建文件夹/images/crops_57_02.png</key>
-            <key type="filename">新建文件夹/images/crops_57_03.png</key>
-            <key type="filename">新建文件夹/images/crops_57_04.png</key>
-            <key type="filename">新建文件夹/images/crops_57_05.png</key>
-            <key type="filename">新建文件夹/images/crops_58_01.png</key>
-            <key type="filename">新建文件夹/images/crops_58_02.png</key>
-            <key type="filename">新建文件夹/images/crops_58_03.png</key>
-            <key type="filename">新建文件夹/images/crops_58_04.png</key>
-            <key type="filename">新建文件夹/images/crops_58_05.png</key>
-            <key type="filename">新建文件夹/images/crops_59_01.png</key>
-            <key type="filename">新建文件夹/images/crops_59_02.png</key>
-            <key type="filename">新建文件夹/images/crops_59_03.png</key>
-            <key type="filename">新建文件夹/images/crops_59_04.png</key>
-            <key type="filename">新建文件夹/images/crops_59_05.png</key>
-            <key type="filename">新建文件夹/images/crops_60_01.png</key>
-            <key type="filename">新建文件夹/images/crops_60_02.png</key>
-            <key type="filename">新建文件夹/images/crops_60_03.png</key>
-            <key type="filename">新建文件夹/images/crops_60_04.png</key>
-            <key type="filename">新建文件夹/images/crops_60_05.png</key>
-            <key type="filename">新建文件夹/images/crops_61_01.png</key>
-            <key type="filename">新建文件夹/images/crops_61_02.png</key>
-            <key type="filename">新建文件夹/images/crops_61_03.png</key>
-            <key type="filename">新建文件夹/images/crops_61_04.png</key>
-            <key type="filename">新建文件夹/images/crops_61_05.png</key>
-            <key type="filename">新建文件夹/images/crops_62_01.png</key>
-            <key type="filename">新建文件夹/images/crops_62_02.png</key>
-            <key type="filename">新建文件夹/images/crops_62_03.png</key>
-            <key type="filename">新建文件夹/images/crops_62_04.png</key>
-            <key type="filename">新建文件夹/images/crops_62_05.png</key>
-            <key type="filename">新建文件夹/images/crops_63_01.png</key>
-            <key type="filename">新建文件夹/images/crops_63_02.png</key>
-            <key type="filename">新建文件夹/images/crops_63_03.png</key>
-            <key type="filename">新建文件夹/images/crops_63_04.png</key>
-            <key type="filename">新建文件夹/images/crops_63_05.png</key>
-            <key type="filename">新建文件夹/images/crops_64_01.png</key>
-            <key type="filename">新建文件夹/images/crops_64_02.png</key>
-            <key type="filename">新建文件夹/images/crops_64_03.png</key>
-            <key type="filename">新建文件夹/images/crops_64_04.png</key>
-            <key type="filename">新建文件夹/images/crops_64_05.png</key>
-            <key type="filename">新建文件夹/images/crops_94_01.png</key>
-            <key type="filename">新建文件夹/images/crops_94_02.png</key>
-            <key type="filename">新建文件夹/images/crops_94_03.png</key>
-            <key type="filename">新建文件夹/images/crops_94_04.png</key>
-            <key type="filename">新建文件夹/images/crops_94_05.png</key>
-            <key type="filename">新建文件夹/images/crops_95_01.png</key>
-            <key type="filename">新建文件夹/images/crops_95_02.png</key>
-            <key type="filename">新建文件夹/images/crops_95_03.png</key>
-            <key type="filename">新建文件夹/images/crops_95_04.png</key>
-            <key type="filename">新建文件夹/images/crops_95_05.png</key>
-            <key type="filename">新建文件夹/images/crops_96_01.png</key>
-            <key type="filename">新建文件夹/images/crops_96_02.png</key>
-            <key type="filename">新建文件夹/images/crops_96_03.png</key>
-            <key type="filename">新建文件夹/images/crops_96_04.png</key>
-            <key type="filename">新建文件夹/images/crops_96_05.png</key>
+            <key type="filename">Plant/冰山生菜_01.png</key>
+            <key type="filename">Plant/冰山生菜_02.png</key>
+            <key type="filename">Plant/冰山生菜_03.png</key>
+            <key type="filename">Plant/冰山生菜_04.png</key>
+            <key type="filename">Plant/冰山生菜_05.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.85</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/冰山生菜_01_normal.png</key>
+            <key type="filename">Plant/冰山生菜_02_normal.png</key>
+            <key type="filename">Plant/冰山生菜_03_normal.png</key>
+            <key type="filename">Plant/冰山生菜_04_normal.png</key>
+            <key type="filename">Plant/冰山生菜_05_normal.png</key>
+            <key type="filename">Plant/南瓜_01_normal.png</key>
+            <key type="filename">Plant/南瓜_02_normal.png</key>
+            <key type="filename">Plant/南瓜_03_normal.png</key>
+            <key type="filename">Plant/南瓜_04_normal.png</key>
+            <key type="filename">Plant/南瓜_05_normal.png</key>
+            <key type="filename">Plant/咖啡_01_normal.png</key>
+            <key type="filename">Plant/咖啡_02_normal.png</key>
+            <key type="filename">Plant/咖啡_03_normal.png</key>
+            <key type="filename">Plant/咖啡_04_normal.png</key>
+            <key type="filename">Plant/咖啡_05_normal.png</key>
+            <key type="filename">Plant/哈密瓜_01_normal.png</key>
+            <key type="filename">Plant/哈密瓜_02_normal.png</key>
+            <key type="filename">Plant/哈密瓜_03_normal.png</key>
+            <key type="filename">Plant/哈密瓜_04_normal.png</key>
+            <key type="filename">Plant/哈密瓜_05_normal.png</key>
+            <key type="filename">Plant/啤酒花_01_normal.png</key>
+            <key type="filename">Plant/啤酒花_02_normal.png</key>
+            <key type="filename">Plant/啤酒花_03_normal.png</key>
+            <key type="filename">Plant/啤酒花_04_normal.png</key>
+            <key type="filename">Plant/啤酒花_05_normal.png</key>
+            <key type="filename">Plant/大番茄_01_normal.png</key>
+            <key type="filename">Plant/大番茄_02_normal.png</key>
+            <key type="filename">Plant/大番茄_03_normal.png</key>
+            <key type="filename">Plant/大番茄_04_normal.png</key>
+            <key type="filename">Plant/大番茄_05_normal.png</key>
+            <key type="filename">Plant/大萝卜_01_normal.png</key>
+            <key type="filename">Plant/大萝卜_02_normal.png</key>
+            <key type="filename">Plant/大萝卜_03_normal.png</key>
+            <key type="filename">Plant/大萝卜_04_normal.png</key>
+            <key type="filename">Plant/大萝卜_05_normal.png</key>
+            <key type="filename">Plant/大葱_01_normal.png</key>
+            <key type="filename">Plant/大葱_02_normal.png</key>
+            <key type="filename">Plant/大葱_03_normal.png</key>
+            <key type="filename">Plant/大葱_04_normal.png</key>
+            <key type="filename">Plant/大葱_05_normal.png</key>
+            <key type="filename">Plant/大蒜_01_normal.png</key>
+            <key type="filename">Plant/大蒜_02_normal.png</key>
+            <key type="filename">Plant/大蒜_03_normal.png</key>
+            <key type="filename">Plant/大蒜_04_normal.png</key>
+            <key type="filename">Plant/大蒜_05_normal.png</key>
+            <key type="filename">Plant/大黄_01_normal.png</key>
+            <key type="filename">Plant/大黄_02_normal.png</key>
+            <key type="filename">Plant/大黄_03_normal.png</key>
+            <key type="filename">Plant/大黄_04_normal.png</key>
+            <key type="filename">Plant/大黄_05_normal.png</key>
+            <key type="filename">Plant/奶油南瓜_01_normal.png</key>
+            <key type="filename">Plant/奶油南瓜_02_normal.png</key>
+            <key type="filename">Plant/奶油南瓜_03_normal.png</key>
+            <key type="filename">Plant/奶油南瓜_04_normal.png</key>
+            <key type="filename">Plant/奶油南瓜_05_normal.png</key>
+            <key type="filename">Plant/小白菜_01_normal.png</key>
+            <key type="filename">Plant/小白菜_02_normal.png</key>
+            <key type="filename">Plant/小白菜_03_normal.png</key>
+            <key type="filename">Plant/小白菜_04_normal.png</key>
+            <key type="filename">Plant/小白菜_05_normal.png</key>
+            <key type="filename">Plant/小萝卜_01_normal.png</key>
+            <key type="filename">Plant/小萝卜_02_normal.png</key>
+            <key type="filename">Plant/小萝卜_03_normal.png</key>
+            <key type="filename">Plant/小萝卜_04_normal.png</key>
+            <key type="filename">Plant/小萝卜_05_normal.png</key>
+            <key type="filename">Plant/抱子甘蓝_01_normal.png</key>
+            <key type="filename">Plant/抱子甘蓝_02_normal.png</key>
+            <key type="filename">Plant/抱子甘蓝_03_normal.png</key>
+            <key type="filename">Plant/抱子甘蓝_04_normal.png</key>
+            <key type="filename">Plant/抱子甘蓝_05_normal.png</key>
+            <key type="filename">Plant/普通土豆_01_normal.png</key>
+            <key type="filename">Plant/普通土豆_02_normal.png</key>
+            <key type="filename">Plant/普通土豆_03_normal.png</key>
+            <key type="filename">Plant/普通土豆_04_normal.png</key>
+            <key type="filename">Plant/普通土豆_05_normal.png</key>
+            <key type="filename">Plant/曲颈瓜_01_normal.png</key>
+            <key type="filename">Plant/曲颈瓜_02_normal.png</key>
+            <key type="filename">Plant/曲颈瓜_03_normal.png</key>
+            <key type="filename">Plant/曲颈瓜_04_normal.png</key>
+            <key type="filename">Plant/曲颈瓜_05_normal.png</key>
+            <key type="filename">Plant/朝鲜蓟_01_normal.png</key>
+            <key type="filename">Plant/朝鲜蓟_02_normal.png</key>
+            <key type="filename">Plant/朝鲜蓟_03_normal.png</key>
+            <key type="filename">Plant/朝鲜蓟_04_normal.png</key>
+            <key type="filename">Plant/朝鲜蓟_05_normal.png</key>
+            <key type="filename">Plant/木薯_01_normal.png</key>
+            <key type="filename">Plant/木薯_02_normal.png</key>
+            <key type="filename">Plant/木薯_03_normal.png</key>
+            <key type="filename">Plant/木薯_04_normal.png</key>
+            <key type="filename">Plant/木薯_05_normal.png</key>
+            <key type="filename">Plant/树莓_01_normal.png</key>
+            <key type="filename">Plant/树莓_02_normal.png</key>
+            <key type="filename">Plant/树莓_03_normal.png</key>
+            <key type="filename">Plant/树莓_04_normal.png</key>
+            <key type="filename">Plant/树莓_05_normal.png</key>
+            <key type="filename">Plant/樱桃番茄_01_normal.png</key>
+            <key type="filename">Plant/樱桃番茄_02_normal.png</key>
+            <key type="filename">Plant/樱桃番茄_03_normal.png</key>
+            <key type="filename">Plant/樱桃番茄_04_normal.png</key>
+            <key type="filename">Plant/樱桃番茄_05_normal.png</key>
+            <key type="filename">Plant/橙色甜椒_01_normal.png</key>
+            <key type="filename">Plant/橙色甜椒_02_normal.png</key>
+            <key type="filename">Plant/橙色甜椒_03_normal.png</key>
+            <key type="filename">Plant/橙色甜椒_04_normal.png</key>
+            <key type="filename">Plant/橙色甜椒_05_normal.png</key>
+            <key type="filename">Plant/橡子南瓜_01_normal.png</key>
+            <key type="filename">Plant/橡子南瓜_02_normal.png</key>
+            <key type="filename">Plant/橡子南瓜_03_normal.png</key>
+            <key type="filename">Plant/橡子南瓜_04_normal.png</key>
+            <key type="filename">Plant/橡子南瓜_05_normal.png</key>
+            <key type="filename">Plant/欧洲萝卜_01_normal.png</key>
+            <key type="filename">Plant/欧洲萝卜_02_normal.png</key>
+            <key type="filename">Plant/欧洲萝卜_03_normal.png</key>
+            <key type="filename">Plant/欧洲萝卜_04_normal.png</key>
+            <key type="filename">Plant/欧洲萝卜_05_normal.png</key>
+            <key type="filename">Plant/猕猴桃_01_normal.png</key>
+            <key type="filename">Plant/猕猴桃_02_normal.png</key>
+            <key type="filename">Plant/猕猴桃_03_normal.png</key>
+            <key type="filename">Plant/猕猴桃_04_normal.png</key>
+            <key type="filename">Plant/猕猴桃_05_normal.png</key>
+            <key type="filename">Plant/玉米_00_normal.png</key>
+            <key type="filename">Plant/玉米_01_normal.png</key>
+            <key type="filename">Plant/玉米_02_normal.png</key>
+            <key type="filename">Plant/玉米_03_normal.png</key>
+            <key type="filename">Plant/玉米_04_normal.png</key>
+            <key type="filename">Plant/玉米_05_normal.png</key>
+            <key type="filename">Plant/玉米茂盛_01_normal.png</key>
+            <key type="filename">Plant/玉米茂盛_02_normal.png</key>
+            <key type="filename">Plant/玉米茂盛_03_normal.png</key>
+            <key type="filename">Plant/玉米茂盛_04_normal.png</key>
+            <key type="filename">Plant/玉米茂盛_05_normal.png</key>
+            <key type="filename">Plant/球茎甘蓝_01_normal.png</key>
+            <key type="filename">Plant/球茎甘蓝_02_normal.png</key>
+            <key type="filename">Plant/球茎甘蓝_03_normal.png</key>
+            <key type="filename">Plant/球茎甘蓝_04_normal.png</key>
+            <key type="filename">Plant/球茎甘蓝_05_normal.png</key>
+            <key type="filename">Plant/球茎茴香_01_normal.png</key>
+            <key type="filename">Plant/球茎茴香_02_normal.png</key>
+            <key type="filename">Plant/球茎茴香_03_normal.png</key>
+            <key type="filename">Plant/球茎茴香_04_normal.png</key>
+            <key type="filename">Plant/球茎茴香_05_normal.png</key>
+            <key type="filename">Plant/甜菜_01_normal.png</key>
+            <key type="filename">Plant/甜菜_02_normal.png</key>
+            <key type="filename">Plant/甜菜_03_normal.png</key>
+            <key type="filename">Plant/甜菜_04_normal.png</key>
+            <key type="filename">Plant/甜菜_05_normal.png</key>
+            <key type="filename">Plant/番茄_01_normal.png</key>
+            <key type="filename">Plant/番茄_02_normal.png</key>
+            <key type="filename">Plant/番茄_03_normal.png</key>
+            <key type="filename">Plant/番茄_04_normal.png</key>
+            <key type="filename">Plant/番茄_05_normal.png</key>
+            <key type="filename">Plant/白洋葱_01_normal.png</key>
+            <key type="filename">Plant/白洋葱_02_normal.png</key>
+            <key type="filename">Plant/白洋葱_03_normal.png</key>
+            <key type="filename">Plant/白洋葱_04_normal.png</key>
+            <key type="filename">Plant/白洋葱_05_normal.png</key>
+            <key type="filename">Plant/紫土豆_01_normal.png</key>
+            <key type="filename">Plant/紫土豆_02_normal.png</key>
+            <key type="filename">Plant/紫土豆_03_normal.png</key>
+            <key type="filename">Plant/紫土豆_04_normal.png</key>
+            <key type="filename">Plant/紫土豆_05_normal.png</key>
+            <key type="filename">Plant/紫甘蓝_01_normal.png</key>
+            <key type="filename">Plant/紫甘蓝_02_normal.png</key>
+            <key type="filename">Plant/紫甘蓝_03_normal.png</key>
+            <key type="filename">Plant/紫甘蓝_04_normal.png</key>
+            <key type="filename">Plant/紫甘蓝_05_normal.png</key>
+            <key type="filename">Plant/红洋葱_01_normal.png</key>
+            <key type="filename">Plant/红洋葱_02_normal.png</key>
+            <key type="filename">Plant/红洋葱_03_normal.png</key>
+            <key type="filename">Plant/红洋葱_04_normal.png</key>
+            <key type="filename">Plant/红洋葱_05_normal.png</key>
+            <key type="filename">Plant/红甜椒_01_normal.png</key>
+            <key type="filename">Plant/红甜椒_02_normal.png</key>
+            <key type="filename">Plant/红甜椒_03_normal.png</key>
+            <key type="filename">Plant/红甜椒_04_normal.png</key>
+            <key type="filename">Plant/红甜椒_05_normal.png</key>
+            <key type="filename">Plant/红葡萄_01_normal.png</key>
+            <key type="filename">Plant/红葡萄_02_normal.png</key>
+            <key type="filename">Plant/红葡萄_03_normal.png</key>
+            <key type="filename">Plant/红葡萄_04_normal.png</key>
+            <key type="filename">Plant/红葡萄_05_normal.png</key>
+            <key type="filename">Plant/红薯_01_normal.png</key>
+            <key type="filename">Plant/红薯_02_normal.png</key>
+            <key type="filename">Plant/红薯_03_normal.png</key>
+            <key type="filename">Plant/红薯_04_normal.png</key>
+            <key type="filename">Plant/红薯_05_normal.png</key>
+            <key type="filename">Plant/红辣椒_01_normal.png</key>
+            <key type="filename">Plant/红辣椒_02_normal.png</key>
+            <key type="filename">Plant/红辣椒_03_normal.png</key>
+            <key type="filename">Plant/红辣椒_04_normal.png</key>
+            <key type="filename">Plant/红辣椒_05_normal.png</key>
+            <key type="filename">Plant/绿豆_01_normal.png</key>
+            <key type="filename">Plant/绿豆_02_normal.png</key>
+            <key type="filename">Plant/绿豆_03_normal.png</key>
+            <key type="filename">Plant/绿豆_04_normal.png</key>
+            <key type="filename">Plant/绿豆_05_normal.png</key>
+            <key type="filename">Plant/罗马生菜_01_normal.png</key>
+            <key type="filename">Plant/罗马生菜_02_normal.png</key>
+            <key type="filename">Plant/罗马生菜_03_normal.png</key>
+            <key type="filename">Plant/罗马生菜_04_normal.png</key>
+            <key type="filename">Plant/罗马生菜_05_normal.png</key>
+            <key type="filename">Plant/羽衣甘蓝_01_normal.png</key>
+            <key type="filename">Plant/羽衣甘蓝_02_normal.png</key>
+            <key type="filename">Plant/羽衣甘蓝_03_normal.png</key>
+            <key type="filename">Plant/羽衣甘蓝_04_normal.png</key>
+            <key type="filename">Plant/羽衣甘蓝_05_normal.png</key>
+            <key type="filename">Plant/胡萝卜_01_normal.png</key>
+            <key type="filename">Plant/胡萝卜_02_normal.png</key>
+            <key type="filename">Plant/胡萝卜_03_normal.png</key>
+            <key type="filename">Plant/胡萝卜_04_normal.png</key>
+            <key type="filename">Plant/胡萝卜_05_normal.png</key>
+            <key type="filename">Plant/芜菁 _01_normal.png</key>
+            <key type="filename">Plant/芜菁 _02_normal.png</key>
+            <key type="filename">Plant/芜菁 _03_normal.png</key>
+            <key type="filename">Plant/芜菁 _04_normal.png</key>
+            <key type="filename">Plant/芜菁 _05_normal.png</key>
+            <key type="filename">Plant/芜菁甘蓝_01_normal.png</key>
+            <key type="filename">Plant/芜菁甘蓝_02_normal.png</key>
+            <key type="filename">Plant/芜菁甘蓝_03_normal.png</key>
+            <key type="filename">Plant/芜菁甘蓝_04_normal.png</key>
+            <key type="filename">Plant/芜菁甘蓝_05_normal.png</key>
+            <key type="filename">Plant/芦笋_01_normal.png</key>
+            <key type="filename">Plant/芦笋_02_normal.png</key>
+            <key type="filename">Plant/芦笋_03_normal.png</key>
+            <key type="filename">Plant/芦笋_04_normal.png</key>
+            <key type="filename">Plant/芦笋_05_normal.png</key>
+            <key type="filename">Plant/花椰菜_01_normal.png</key>
+            <key type="filename">Plant/花椰菜_02_normal.png</key>
+            <key type="filename">Plant/花椰菜_03_normal.png</key>
+            <key type="filename">Plant/花椰菜_04_normal.png</key>
+            <key type="filename">Plant/花椰菜_05_normal.png</key>
+            <key type="filename">Plant/芹菜_01_normal.png</key>
+            <key type="filename">Plant/芹菜_02_normal.png</key>
+            <key type="filename">Plant/芹菜_03_normal.png</key>
+            <key type="filename">Plant/芹菜_04_normal.png</key>
+            <key type="filename">Plant/芹菜_05_normal.png</key>
+            <key type="filename">Plant/茄子_01_normal.png</key>
+            <key type="filename">Plant/茄子_02_normal.png</key>
+            <key type="filename">Plant/茄子_03_normal.png</key>
+            <key type="filename">Plant/茄子_04_normal.png</key>
+            <key type="filename">Plant/茄子_05_normal.png</key>
+            <key type="filename">Plant/草莓_01_normal.png</key>
+            <key type="filename">Plant/草莓_02_normal.png</key>
+            <key type="filename">Plant/草莓_03_normal.png</key>
+            <key type="filename">Plant/草莓_04_normal.png</key>
+            <key type="filename">Plant/草莓_05_normal.png</key>
+            <key type="filename">Plant/菠萝_01_normal.png</key>
+            <key type="filename">Plant/菠萝_02_normal.png</key>
+            <key type="filename">Plant/菠萝_03_normal.png</key>
+            <key type="filename">Plant/菠萝_04_normal.png</key>
+            <key type="filename">Plant/菠萝_05_normal.png</key>
+            <key type="filename">Plant/蓝莓_01_normal.png</key>
+            <key type="filename">Plant/蓝莓_02_normal.png</key>
+            <key type="filename">Plant/蓝莓_03_normal.png</key>
+            <key type="filename">Plant/蓝莓_04_normal.png</key>
+            <key type="filename">Plant/蓝莓_05_normal.png</key>
+            <key type="filename">Plant/蜜瓜_01_normal.png</key>
+            <key type="filename">Plant/蜜瓜_02_normal.png</key>
+            <key type="filename">Plant/蜜瓜_03_normal.png</key>
+            <key type="filename">Plant/蜜瓜_04_normal.png</key>
+            <key type="filename">Plant/蜜瓜_05_normal.png</key>
+            <key type="filename">Plant/西兰花_01_normal.png</key>
+            <key type="filename">Plant/西兰花_02_normal.png</key>
+            <key type="filename">Plant/西兰花_03_normal.png</key>
+            <key type="filename">Plant/西兰花_04_normal.png</key>
+            <key type="filename">Plant/西兰花_05_normal.png</key>
+            <key type="filename">Plant/西瓜_01_normal.png</key>
+            <key type="filename">Plant/西瓜_02_normal.png</key>
+            <key type="filename">Plant/西瓜_03_normal.png</key>
+            <key type="filename">Plant/西瓜_04_normal.png</key>
+            <key type="filename">Plant/西瓜_05_normal.png</key>
+            <key type="filename">Plant/西葫芦_01_normal.png</key>
+            <key type="filename">Plant/西葫芦_02_normal.png</key>
+            <key type="filename">Plant/西葫芦_03_normal.png</key>
+            <key type="filename">Plant/西葫芦_04_normal.png</key>
+            <key type="filename">Plant/西葫芦_05_normal.png</key>
+            <key type="filename">Plant/豌豆_01_normal.png</key>
+            <key type="filename">Plant/豌豆_02_normal.png</key>
+            <key type="filename">Plant/豌豆_03_normal.png</key>
+            <key type="filename">Plant/豌豆_04_normal.png</key>
+            <key type="filename">Plant/豌豆_05_normal.png</key>
+            <key type="filename">Plant/辣椒_01_normal.png</key>
+            <key type="filename">Plant/辣椒_02_normal.png</key>
+            <key type="filename">Plant/辣椒_03_normal.png</key>
+            <key type="filename">Plant/辣椒_04_normal.png</key>
+            <key type="filename">Plant/辣椒_05_normal.png</key>
+            <key type="filename">Plant/金土豆_01_normal.png</key>
+            <key type="filename">Plant/金土豆_02_normal.png</key>
+            <key type="filename">Plant/金土豆_03_normal.png</key>
+            <key type="filename">Plant/金土豆_04_normal.png</key>
+            <key type="filename">Plant/金土豆_05_normal.png</key>
+            <key type="filename">Plant/青椒_01_normal.png</key>
+            <key type="filename">Plant/青椒_02_normal.png</key>
+            <key type="filename">Plant/青椒_03_normal.png</key>
+            <key type="filename">Plant/青椒_04_normal.png</key>
+            <key type="filename">Plant/青椒_05_normal.png</key>
+            <key type="filename">Plant/青甘蓝_01_normal.png</key>
+            <key type="filename">Plant/青甘蓝_02_normal.png</key>
+            <key type="filename">Plant/青甘蓝_03_normal.png</key>
+            <key type="filename">Plant/青甘蓝_04_normal.png</key>
+            <key type="filename">Plant/青甘蓝_05_normal.png</key>
+            <key type="filename">Plant/青葡萄_01_normal.png</key>
+            <key type="filename">Plant/青葡萄_02_normal.png</key>
+            <key type="filename">Plant/青葡萄_03_normal.png</key>
+            <key type="filename">Plant/青葡萄_04_normal.png</key>
+            <key type="filename">Plant/青葡萄_05_normal.png</key>
+            <key type="filename">Plant/韭菜_01_normal.png</key>
+            <key type="filename">Plant/韭菜_02_normal.png</key>
+            <key type="filename">Plant/韭菜_03_normal.png</key>
+            <key type="filename">Plant/韭菜_04_normal.png</key>
+            <key type="filename">Plant/韭菜_05_normal.png</key>
+            <key type="filename">Plant/黄南瓜_01_normal.png</key>
+            <key type="filename">Plant/黄南瓜_02_normal.png</key>
+            <key type="filename">Plant/黄南瓜_03_normal.png</key>
+            <key type="filename">Plant/黄南瓜_04_normal.png</key>
+            <key type="filename">Plant/黄南瓜_05_normal.png</key>
+            <key type="filename">Plant/黄洋葱_01_normal.png</key>
+            <key type="filename">Plant/黄洋葱_02_normal.png</key>
+            <key type="filename">Plant/黄洋葱_03_normal.png</key>
+            <key type="filename">Plant/黄洋葱_04_normal.png</key>
+            <key type="filename">Plant/黄洋葱_05_normal.png</key>
+            <key type="filename">Plant/黄灯笼椒 _01_normal.png</key>
+            <key type="filename">Plant/黄灯笼椒 _02_normal.png</key>
+            <key type="filename">Plant/黄灯笼椒 _03_normal.png</key>
+            <key type="filename">Plant/黄灯笼椒 _04_normal.png</key>
+            <key type="filename">Plant/黄灯笼椒 _05_normal.png</key>
+            <key type="filename">Plant/黄瓜_01_normal.png</key>
+            <key type="filename">Plant/黄瓜_02_normal.png</key>
+            <key type="filename">Plant/黄瓜_03_normal.png</key>
+            <key type="filename">Plant/黄瓜_04_normal.png</key>
+            <key type="filename">Plant/黄瓜_05_normal.png</key>
+            <key type="filename">Plant/黑莓_01_normal.png</key>
+            <key type="filename">Plant/黑莓_02_normal.png</key>
+            <key type="filename">Plant/黑莓_03_normal.png</key>
+            <key type="filename">Plant/黑莓_04_normal.png</key>
+            <key type="filename">Plant/黑莓_05_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/南瓜_01.png</key>
+            <key type="filename">Plant/南瓜_02.png</key>
+            <key type="filename">Plant/南瓜_03.png</key>
+            <key type="filename">Plant/南瓜_04.png</key>
+            <key type="filename">Plant/南瓜_05.png</key>
+            <key type="filename">Plant/大萝卜_01.png</key>
+            <key type="filename">Plant/大萝卜_02.png</key>
+            <key type="filename">Plant/大萝卜_03.png</key>
+            <key type="filename">Plant/大萝卜_04.png</key>
+            <key type="filename">Plant/大萝卜_05.png</key>
+            <key type="filename">Plant/奶油南瓜_01.png</key>
+            <key type="filename">Plant/奶油南瓜_02.png</key>
+            <key type="filename">Plant/奶油南瓜_03.png</key>
+            <key type="filename">Plant/奶油南瓜_04.png</key>
+            <key type="filename">Plant/奶油南瓜_05.png</key>
+            <key type="filename">Plant/小白菜_01.png</key>
+            <key type="filename">Plant/小白菜_02.png</key>
+            <key type="filename">Plant/小白菜_03.png</key>
+            <key type="filename">Plant/小白菜_04.png</key>
+            <key type="filename">Plant/小白菜_05.png</key>
+            <key type="filename">Plant/小萝卜_01.png</key>
+            <key type="filename">Plant/小萝卜_02.png</key>
+            <key type="filename">Plant/小萝卜_03.png</key>
+            <key type="filename">Plant/小萝卜_04.png</key>
+            <key type="filename">Plant/小萝卜_05.png</key>
+            <key type="filename">Plant/抱子甘蓝_01.png</key>
+            <key type="filename">Plant/抱子甘蓝_02.png</key>
+            <key type="filename">Plant/抱子甘蓝_03.png</key>
+            <key type="filename">Plant/抱子甘蓝_04.png</key>
+            <key type="filename">Plant/抱子甘蓝_05.png</key>
+            <key type="filename">Plant/普通土豆_01.png</key>
+            <key type="filename">Plant/普通土豆_02.png</key>
+            <key type="filename">Plant/普通土豆_03.png</key>
+            <key type="filename">Plant/普通土豆_04.png</key>
+            <key type="filename">Plant/普通土豆_05.png</key>
+            <key type="filename">Plant/曲颈瓜_01.png</key>
+            <key type="filename">Plant/曲颈瓜_02.png</key>
+            <key type="filename">Plant/曲颈瓜_03.png</key>
+            <key type="filename">Plant/曲颈瓜_04.png</key>
+            <key type="filename">Plant/曲颈瓜_05.png</key>
+            <key type="filename">Plant/木薯_01.png</key>
+            <key type="filename">Plant/木薯_02.png</key>
+            <key type="filename">Plant/木薯_03.png</key>
+            <key type="filename">Plant/木薯_04.png</key>
+            <key type="filename">Plant/木薯_05.png</key>
+            <key type="filename">Plant/橡子南瓜_01.png</key>
+            <key type="filename">Plant/橡子南瓜_02.png</key>
+            <key type="filename">Plant/橡子南瓜_03.png</key>
+            <key type="filename">Plant/橡子南瓜_04.png</key>
+            <key type="filename">Plant/橡子南瓜_05.png</key>
+            <key type="filename">Plant/欧洲萝卜_01.png</key>
+            <key type="filename">Plant/欧洲萝卜_02.png</key>
+            <key type="filename">Plant/欧洲萝卜_03.png</key>
+            <key type="filename">Plant/欧洲萝卜_04.png</key>
+            <key type="filename">Plant/欧洲萝卜_05.png</key>
+            <key type="filename">Plant/球茎甘蓝_01.png</key>
+            <key type="filename">Plant/球茎甘蓝_02.png</key>
+            <key type="filename">Plant/球茎甘蓝_03.png</key>
+            <key type="filename">Plant/球茎甘蓝_04.png</key>
+            <key type="filename">Plant/球茎甘蓝_05.png</key>
+            <key type="filename">Plant/球茎茴香_01.png</key>
+            <key type="filename">Plant/球茎茴香_02.png</key>
+            <key type="filename">Plant/球茎茴香_03.png</key>
+            <key type="filename">Plant/球茎茴香_04.png</key>
+            <key type="filename">Plant/球茎茴香_05.png</key>
+            <key type="filename">Plant/甜菜_01.png</key>
+            <key type="filename">Plant/甜菜_02.png</key>
+            <key type="filename">Plant/甜菜_03.png</key>
+            <key type="filename">Plant/甜菜_04.png</key>
+            <key type="filename">Plant/甜菜_05.png</key>
+            <key type="filename">Plant/白洋葱_01.png</key>
+            <key type="filename">Plant/白洋葱_02.png</key>
+            <key type="filename">Plant/白洋葱_03.png</key>
+            <key type="filename">Plant/白洋葱_04.png</key>
+            <key type="filename">Plant/白洋葱_05.png</key>
+            <key type="filename">Plant/红薯_01.png</key>
+            <key type="filename">Plant/红薯_02.png</key>
+            <key type="filename">Plant/红薯_03.png</key>
+            <key type="filename">Plant/红薯_04.png</key>
+            <key type="filename">Plant/红薯_05.png</key>
+            <key type="filename">Plant/罗马生菜_01.png</key>
+            <key type="filename">Plant/罗马生菜_02.png</key>
+            <key type="filename">Plant/罗马生菜_03.png</key>
+            <key type="filename">Plant/罗马生菜_04.png</key>
+            <key type="filename">Plant/罗马生菜_05.png</key>
+            <key type="filename">Plant/羽衣甘蓝_01.png</key>
+            <key type="filename">Plant/羽衣甘蓝_02.png</key>
+            <key type="filename">Plant/羽衣甘蓝_03.png</key>
+            <key type="filename">Plant/羽衣甘蓝_04.png</key>
+            <key type="filename">Plant/羽衣甘蓝_05.png</key>
+            <key type="filename">Plant/胡萝卜_01.png</key>
+            <key type="filename">Plant/胡萝卜_02.png</key>
+            <key type="filename">Plant/胡萝卜_03.png</key>
+            <key type="filename">Plant/胡萝卜_04.png</key>
+            <key type="filename">Plant/胡萝卜_05.png</key>
+            <key type="filename">Plant/芜菁 _01.png</key>
+            <key type="filename">Plant/芜菁 _02.png</key>
+            <key type="filename">Plant/芜菁 _03.png</key>
+            <key type="filename">Plant/芜菁 _04.png</key>
+            <key type="filename">Plant/芜菁 _05.png</key>
+            <key type="filename">Plant/芜菁甘蓝_01.png</key>
+            <key type="filename">Plant/芜菁甘蓝_02.png</key>
+            <key type="filename">Plant/芜菁甘蓝_03.png</key>
+            <key type="filename">Plant/芜菁甘蓝_04.png</key>
+            <key type="filename">Plant/芜菁甘蓝_05.png</key>
+            <key type="filename">Plant/芦笋_01.png</key>
+            <key type="filename">Plant/芦笋_02.png</key>
+            <key type="filename">Plant/芦笋_03.png</key>
+            <key type="filename">Plant/芦笋_04.png</key>
+            <key type="filename">Plant/芦笋_05.png</key>
+            <key type="filename">Plant/芹菜_01.png</key>
+            <key type="filename">Plant/芹菜_02.png</key>
+            <key type="filename">Plant/芹菜_03.png</key>
+            <key type="filename">Plant/芹菜_04.png</key>
+            <key type="filename">Plant/芹菜_05.png</key>
+            <key type="filename">Plant/蜜瓜_01.png</key>
+            <key type="filename">Plant/蜜瓜_02.png</key>
+            <key type="filename">Plant/蜜瓜_03.png</key>
+            <key type="filename">Plant/蜜瓜_04.png</key>
+            <key type="filename">Plant/蜜瓜_05.png</key>
+            <key type="filename">Plant/金土豆_01.png</key>
+            <key type="filename">Plant/金土豆_02.png</key>
+            <key type="filename">Plant/金土豆_03.png</key>
+            <key type="filename">Plant/金土豆_04.png</key>
+            <key type="filename">Plant/金土豆_05.png</key>
+            <key type="filename">Plant/韭菜_01.png</key>
+            <key type="filename">Plant/韭菜_02.png</key>
+            <key type="filename">Plant/韭菜_03.png</key>
+            <key type="filename">Plant/韭菜_04.png</key>
+            <key type="filename">Plant/韭菜_05.png</key>
+            <key type="filename">Plant/黄洋葱_01.png</key>
+            <key type="filename">Plant/黄洋葱_02.png</key>
+            <key type="filename">Plant/黄洋葱_03.png</key>
+            <key type="filename">Plant/黄洋葱_04.png</key>
+            <key type="filename">Plant/黄洋葱_05.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.796875</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/咖啡_01.png</key>
+            <key type="filename">Plant/咖啡_02.png</key>
+            <key type="filename">Plant/咖啡_03.png</key>
+            <key type="filename">Plant/咖啡_04.png</key>
+            <key type="filename">Plant/咖啡_05.png</key>
+            <key type="filename">Plant/哈密瓜_01.png</key>
+            <key type="filename">Plant/哈密瓜_02.png</key>
+            <key type="filename">Plant/哈密瓜_03.png</key>
+            <key type="filename">Plant/哈密瓜_04.png</key>
+            <key type="filename">Plant/哈密瓜_05.png</key>
+            <key type="filename">Plant/大番茄_01.png</key>
+            <key type="filename">Plant/大番茄_02.png</key>
+            <key type="filename">Plant/大番茄_03.png</key>
+            <key type="filename">Plant/大番茄_04.png</key>
+            <key type="filename">Plant/大番茄_05.png</key>
+            <key type="filename">Plant/大葱_01.png</key>
+            <key type="filename">Plant/大葱_02.png</key>
+            <key type="filename">Plant/大葱_03.png</key>
+            <key type="filename">Plant/大葱_04.png</key>
+            <key type="filename">Plant/大葱_05.png</key>
+            <key type="filename">Plant/大蒜_01.png</key>
+            <key type="filename">Plant/大蒜_02.png</key>
+            <key type="filename">Plant/大蒜_03.png</key>
+            <key type="filename">Plant/大蒜_04.png</key>
+            <key type="filename">Plant/大蒜_05.png</key>
+            <key type="filename">Plant/大黄_01.png</key>
+            <key type="filename">Plant/大黄_02.png</key>
+            <key type="filename">Plant/大黄_03.png</key>
+            <key type="filename">Plant/大黄_04.png</key>
+            <key type="filename">Plant/大黄_05.png</key>
+            <key type="filename">Plant/朝鲜蓟_01.png</key>
+            <key type="filename">Plant/朝鲜蓟_02.png</key>
+            <key type="filename">Plant/朝鲜蓟_03.png</key>
+            <key type="filename">Plant/朝鲜蓟_04.png</key>
+            <key type="filename">Plant/朝鲜蓟_05.png</key>
+            <key type="filename">Plant/树莓_01.png</key>
+            <key type="filename">Plant/树莓_02.png</key>
+            <key type="filename">Plant/树莓_03.png</key>
+            <key type="filename">Plant/树莓_04.png</key>
+            <key type="filename">Plant/树莓_05.png</key>
+            <key type="filename">Plant/樱桃番茄_01.png</key>
+            <key type="filename">Plant/樱桃番茄_02.png</key>
+            <key type="filename">Plant/樱桃番茄_03.png</key>
+            <key type="filename">Plant/樱桃番茄_04.png</key>
+            <key type="filename">Plant/樱桃番茄_05.png</key>
+            <key type="filename">Plant/橙色甜椒_01.png</key>
+            <key type="filename">Plant/橙色甜椒_02.png</key>
+            <key type="filename">Plant/橙色甜椒_03.png</key>
+            <key type="filename">Plant/橙色甜椒_04.png</key>
+            <key type="filename">Plant/橙色甜椒_05.png</key>
+            <key type="filename">Plant/玉米_01.png</key>
+            <key type="filename">Plant/玉米_02.png</key>
+            <key type="filename">Plant/玉米_03.png</key>
+            <key type="filename">Plant/玉米_04.png</key>
+            <key type="filename">Plant/玉米_05.png</key>
+            <key type="filename">Plant/玉米茂盛_01.png</key>
+            <key type="filename">Plant/玉米茂盛_02.png</key>
+            <key type="filename">Plant/玉米茂盛_03.png</key>
+            <key type="filename">Plant/玉米茂盛_04.png</key>
+            <key type="filename">Plant/玉米茂盛_05.png</key>
+            <key type="filename">Plant/番茄_01.png</key>
+            <key type="filename">Plant/番茄_02.png</key>
+            <key type="filename">Plant/番茄_03.png</key>
+            <key type="filename">Plant/番茄_04.png</key>
+            <key type="filename">Plant/番茄_05.png</key>
+            <key type="filename">Plant/紫土豆_01.png</key>
+            <key type="filename">Plant/紫土豆_02.png</key>
+            <key type="filename">Plant/紫土豆_03.png</key>
+            <key type="filename">Plant/紫土豆_04.png</key>
+            <key type="filename">Plant/紫土豆_05.png</key>
+            <key type="filename">Plant/紫甘蓝_01.png</key>
+            <key type="filename">Plant/紫甘蓝_02.png</key>
+            <key type="filename">Plant/紫甘蓝_03.png</key>
+            <key type="filename">Plant/紫甘蓝_04.png</key>
+            <key type="filename">Plant/紫甘蓝_05.png</key>
+            <key type="filename">Plant/红洋葱_01.png</key>
+            <key type="filename">Plant/红洋葱_02.png</key>
+            <key type="filename">Plant/红洋葱_03.png</key>
+            <key type="filename">Plant/红洋葱_04.png</key>
+            <key type="filename">Plant/红洋葱_05.png</key>
+            <key type="filename">Plant/红甜椒_01.png</key>
+            <key type="filename">Plant/红甜椒_02.png</key>
+            <key type="filename">Plant/红甜椒_03.png</key>
+            <key type="filename">Plant/红甜椒_04.png</key>
+            <key type="filename">Plant/红甜椒_05.png</key>
+            <key type="filename">Plant/红辣椒_01.png</key>
+            <key type="filename">Plant/红辣椒_02.png</key>
+            <key type="filename">Plant/红辣椒_03.png</key>
+            <key type="filename">Plant/红辣椒_04.png</key>
+            <key type="filename">Plant/红辣椒_05.png</key>
+            <key type="filename">Plant/绿豆_01.png</key>
+            <key type="filename">Plant/绿豆_02.png</key>
+            <key type="filename">Plant/绿豆_03.png</key>
+            <key type="filename">Plant/绿豆_04.png</key>
+            <key type="filename">Plant/绿豆_05.png</key>
+            <key type="filename">Plant/花椰菜_01.png</key>
+            <key type="filename">Plant/花椰菜_02.png</key>
+            <key type="filename">Plant/花椰菜_03.png</key>
+            <key type="filename">Plant/花椰菜_04.png</key>
+            <key type="filename">Plant/花椰菜_05.png</key>
+            <key type="filename">Plant/茄子_01.png</key>
+            <key type="filename">Plant/茄子_02.png</key>
+            <key type="filename">Plant/茄子_03.png</key>
+            <key type="filename">Plant/茄子_04.png</key>
+            <key type="filename">Plant/茄子_05.png</key>
+            <key type="filename">Plant/草莓_01.png</key>
+            <key type="filename">Plant/草莓_02.png</key>
+            <key type="filename">Plant/草莓_03.png</key>
+            <key type="filename">Plant/草莓_04.png</key>
+            <key type="filename">Plant/草莓_05.png</key>
+            <key type="filename">Plant/菠萝_01.png</key>
+            <key type="filename">Plant/菠萝_02.png</key>
+            <key type="filename">Plant/菠萝_03.png</key>
+            <key type="filename">Plant/菠萝_04.png</key>
+            <key type="filename">Plant/菠萝_05.png</key>
+            <key type="filename">Plant/蓝莓_01.png</key>
+            <key type="filename">Plant/蓝莓_02.png</key>
+            <key type="filename">Plant/蓝莓_03.png</key>
+            <key type="filename">Plant/蓝莓_04.png</key>
+            <key type="filename">Plant/蓝莓_05.png</key>
+            <key type="filename">Plant/西兰花_01.png</key>
+            <key type="filename">Plant/西兰花_02.png</key>
+            <key type="filename">Plant/西兰花_03.png</key>
+            <key type="filename">Plant/西兰花_04.png</key>
+            <key type="filename">Plant/西兰花_05.png</key>
+            <key type="filename">Plant/西瓜_01.png</key>
+            <key type="filename">Plant/西瓜_02.png</key>
+            <key type="filename">Plant/西瓜_03.png</key>
+            <key type="filename">Plant/西瓜_04.png</key>
+            <key type="filename">Plant/西瓜_05.png</key>
+            <key type="filename">Plant/西葫芦_01.png</key>
+            <key type="filename">Plant/西葫芦_02.png</key>
+            <key type="filename">Plant/西葫芦_03.png</key>
+            <key type="filename">Plant/西葫芦_04.png</key>
+            <key type="filename">Plant/西葫芦_05.png</key>
+            <key type="filename">Plant/豌豆_01.png</key>
+            <key type="filename">Plant/豌豆_02.png</key>
+            <key type="filename">Plant/豌豆_03.png</key>
+            <key type="filename">Plant/豌豆_04.png</key>
+            <key type="filename">Plant/豌豆_05.png</key>
+            <key type="filename">Plant/青椒_01.png</key>
+            <key type="filename">Plant/青椒_02.png</key>
+            <key type="filename">Plant/青椒_03.png</key>
+            <key type="filename">Plant/青椒_04.png</key>
+            <key type="filename">Plant/青椒_05.png</key>
+            <key type="filename">Plant/青甘蓝_01.png</key>
+            <key type="filename">Plant/青甘蓝_02.png</key>
+            <key type="filename">Plant/青甘蓝_03.png</key>
+            <key type="filename">Plant/青甘蓝_04.png</key>
+            <key type="filename">Plant/青甘蓝_05.png</key>
+            <key type="filename">Plant/黄南瓜_01.png</key>
+            <key type="filename">Plant/黄南瓜_02.png</key>
+            <key type="filename">Plant/黄南瓜_03.png</key>
+            <key type="filename">Plant/黄南瓜_04.png</key>
+            <key type="filename">Plant/黄南瓜_05.png</key>
+            <key type="filename">Plant/黄灯笼椒 _01.png</key>
+            <key type="filename">Plant/黄灯笼椒 _02.png</key>
+            <key type="filename">Plant/黄灯笼椒 _03.png</key>
+            <key type="filename">Plant/黄灯笼椒 _04.png</key>
+            <key type="filename">Plant/黄灯笼椒 _05.png</key>
+            <key type="filename">Plant/黄瓜_01.png</key>
+            <key type="filename">Plant/黄瓜_02.png</key>
+            <key type="filename">Plant/黄瓜_03.png</key>
+            <key type="filename">Plant/黄瓜_04.png</key>
+            <key type="filename">Plant/黄瓜_05.png</key>
+            <key type="filename">Plant/黑莓_01.png</key>
+            <key type="filename">Plant/黑莓_02.png</key>
+            <key type="filename">Plant/黑莓_03.png</key>
+            <key type="filename">Plant/黑莓_04.png</key>
+            <key type="filename">Plant/黑莓_05.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.90625</point_f>
@@ -522,10 +875,48 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">新建文件夹/images/crops_31_00.png</key>
+            <key type="filename">Plant/啤酒花_01.png</key>
+            <key type="filename">Plant/啤酒花_02.png</key>
+            <key type="filename">Plant/啤酒花_03.png</key>
+            <key type="filename">Plant/啤酒花_04.png</key>
+            <key type="filename">Plant/啤酒花_05.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0.5,0.98</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/猕猴桃_01.png</key>
+            <key type="filename">Plant/猕猴桃_02.png</key>
+            <key type="filename">Plant/猕猴桃_03.png</key>
+            <key type="filename">Plant/猕猴桃_04.png</key>
+            <key type="filename">Plant/猕猴桃_05.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.97</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/玉米_00.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.90625</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -537,6 +928,49 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">Plant/红葡萄_01.png</key>
+            <key type="filename">Plant/红葡萄_02.png</key>
+            <key type="filename">Plant/红葡萄_03.png</key>
+            <key type="filename">Plant/红葡萄_04.png</key>
+            <key type="filename">Plant/红葡萄_05.png</key>
+            <key type="filename">Plant/青葡萄_01.png</key>
+            <key type="filename">Plant/青葡萄_02.png</key>
+            <key type="filename">Plant/青葡萄_03.png</key>
+            <key type="filename">Plant/青葡萄_04.png</key>
+            <key type="filename">Plant/青葡萄_05.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/辣椒_01.png</key>
+            <key type="filename">Plant/辣椒_02.png</key>
+            <key type="filename">Plant/辣椒_03.png</key>
+            <key type="filename">Plant/辣椒_04.png</key>
+            <key type="filename">Plant/辣椒_05.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.9</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
         </map>
         <key>fileLists</key>
         <map type="SpriteSheetMap">
@@ -544,7 +978,7 @@
             <struct type="SpriteSheet">
                 <key>files</key>
                 <array>
-                    <filename>新建文件夹/images</filename>
+                    <filename>Plant</filename>
                 </array>
             </struct>
         </map>
@@ -559,13 +993,13 @@
         <key>commonDivisorY</key>
         <uint>1</uint>
         <key>packNormalMaps</key>
-        <false/>
-        <key>autodetectNormalMaps</key>
         <true/>
+        <key>autodetectNormalMaps</key>
+        <false/>
         <key>normalMapFilter</key>
         <string></string>
         <key>normalMapSuffix</key>
-        <string></string>
+        <string>_normal</string>
         <key>normalMapSheetFileName</key>
         <filename></filename>
         <key>exporterProperties</key>
