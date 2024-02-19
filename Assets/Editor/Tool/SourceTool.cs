@@ -177,8 +177,8 @@ public class SourceTool : MonoBehaviour
 
     private static void SaveTexture(Sprite sprite, int scale = 1)
     {
-        int width = Mathf.RoundToInt(sprite.rect.width * 2);
-        int height = Mathf.RoundToInt(sprite.rect.height * 2);
+        int width = Mathf.RoundToInt(sprite.rect.width * scale);
+        int height = Mathf.RoundToInt(sprite.rect.height * scale);
         Texture2D texture2D = new Texture2D(width, height);
 
         int x0 = 0;
@@ -199,23 +199,109 @@ public class SourceTool : MonoBehaviour
 
         Color[] outColor = new Color[SpriteColors.Length * scale * scale];
 
-        for (int i = 0; i < SpriteColors.Length; i++)
+        if (scale > 1)
         {
-            int raw = i % Mathf.RoundToInt(sprite.rect.width) * scale;
-            int col = i / Mathf.RoundToInt(sprite.rect.width) * scale;
-
-            for (int j = 0; j < scale; j++)
+            for (int i = 0; i < SpriteColors.Length; i++)
             {
-                int index = col * width + j + raw;
-                outColor[index] = SpriteColors[i];
-                int index1 = col * width + width + j + raw;
-                outColor[index1] = SpriteColors[i];
+                int raw = i % Mathf.RoundToInt(sprite.rect.width) * scale;
+                int col = i / Mathf.RoundToInt(sprite.rect.width) * scale;
+
+                for (int j = 0; j < scale; j++)
+                {
+                    int index = col * width + j + raw;
+                    outColor[index] = SpriteColors[i];
+                    int index1 = col * width + width + j + raw;
+                    outColor[index1] = SpriteColors[i];
+
+                }
             }
         }
+        else
+        {
+            outColor = SpriteColors;
+        }
+       
 
         texture2D.SetPixels(x0, y0, width, height, outColor.ToArray());
 
         string dir = "OutTexture";
+
+        SaveFileTexture(dir, texture2D, sprite.name);
+    }
+
+    [MenuItem("Assets/输出植物精灵资源")]
+    public static void OutFarmSpriteSource()
+    {
+        foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+        {
+            var path = AssetDatabase.GetAssetPath(obj);
+            if (obj)
+            {
+                var strs = path.Split('.');
+                if (strs[strs.Length - 1] == "png")
+                {
+                    OutFarmSprite(path);
+                }
+            }
+
+            if (string.IsNullOrEmpty(path))
+                continue;
+        }
+    }
+    private static void OutFarmSprite(string path)
+    {
+        var sources = AssetDatabase.LoadAllAssetsAtPath(path);
+        foreach (var source in sources)
+        {
+            if (source.GetType().Name == "Sprite")
+            {
+                Sprite sprite = (Sprite)source;
+                SaveSpriteTexture(sprite);
+            }
+        }
+    }
+    static void SaveSpriteTexture(Sprite sprite, int sizeX=32,int sizeY=64)
+    {
+        Texture2D texture2D = new Texture2D(sizeX, sizeY);
+        Vector2Int pivot = Vector2Int.RoundToInt(sprite.pivot);
+
+
+        int x0 = sizeX / 2 - pivot.x;
+        int y0 = 0;
+        int x1 = sizeX / 2 + Mathf.RoundToInt(sprite.rect.width) - pivot.x;
+        int y1 =  Mathf.RoundToInt(sprite.rect.height);
+
+        List<Color> defaultColors = new List<Color>();
+        for (int i = 0; i < sizeX * sizeY; i++)
+        {
+            defaultColors.Add(new Color(0, 0, 0, 0));
+        }
+        texture2D.SetPixels(defaultColors.ToArray());
+
+        Color[] SpriteColors = sprite.texture.GetPixels(Mathf.RoundToInt(sprite.rect.x), Mathf.RoundToInt(sprite.rect.y),
+            Mathf.RoundToInt(sprite.rect.width), Mathf.RoundToInt(sprite.rect.height));
+        //Color[] SpriteColors = sprite.texture.GetPixels(4, 4, 18, 52);
+
+        List<Color> colors = new List<Color>();
+        for (int y = 0; y < sizeY; y++)
+        {
+            for (int x = 0; x < sizeX; x++)
+            {
+                if (x >= x0 - 1 && x <= x1 - 1 && y >= y0 - 1 && y <= y1 - 1)
+                {
+
+                }
+                else
+                {
+                    colors.Add(new Color(0, 0, 0, 0));
+                }
+            }
+        }
+        texture2D.SetPixels(x0, y0, (int)sprite.rect.width, (int)sprite.rect.height, SpriteColors);
+         
+
+        string dir = "OutTexture";
+
 
         SaveFileTexture(dir, texture2D, sprite.name);
     }
