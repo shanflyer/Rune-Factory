@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.0.0</string>
+        <string>7.1.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -537,6 +537,10 @@
             <key type="filename">土地0_normal.png</key>
             <key type="filename">土地1.png</key>
             <key type="filename">土地1_normal.png</key>
+            <key type="filename">土地2_0.png</key>
+            <key type="filename">土地2_0_normal.png</key>
+            <key type="filename">土地2_1.png</key>
+            <key type="filename">土地2_1_normal.png</key>
             <key type="filename">外窗_30.png</key>
             <key type="filename">外窗_30_normal.png</key>
             <key type="filename">外窗_31.png</key>
