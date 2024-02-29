@@ -94,7 +94,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Polygon</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Crop</enum>
+            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -212,6 +212,12 @@
             <key type="filename">地毯_67.png</key>
             <key type="filename">地毯_71.png</key>
             <key type="filename">地毯_72.png</key>
+            <key type="filename">地毯_80.png</key>
+            <key type="filename">地毯_81.png</key>
+            <key type="filename">地毯_82.png</key>
+            <key type="filename">地毯_83.png</key>
+            <key type="filename">地毯_84.png</key>
+            <key type="filename">地毯_85.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
