@@ -45,7 +45,8 @@ Shader "MySprite-Lit-Default"
         //噪声运动速度2
         _WaveSpeed1("_WaveSpeed1",  Range(0, 0.2)) = 0
         //噪声碎片大小2
-        WaveScale1("WaveScale1", Vector) = (1, 1, 0, 0)
+        WaveScale1("WaveScale1", Vector) = (1, 1, 0, 0) 
+
         
 
         [Title(water,Edge)] 
@@ -53,7 +54,10 @@ Shader "MySprite-Lit-Default"
         [HDR]EdgeColor("EdgeColor", Color) = (0.990566, 0.9765486, 0.9765486, 0)
         //边缘宽度
         EdgeValue("EdgeValue",  Range(0, 0.2))=0.1
-        
+        //边缘速度
+        _EdgeWaveSpeed("EdgeWaveSpeed",Range(0,4))=0
+        //边缘偏移
+        _EdgeWaveOffset("EdgeWaveOffset",Range(0,0.5))=0
         
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
@@ -114,9 +118,7 @@ Shader "MySprite-Lit-Default"
             half _WaveAngle0;
             half _WaveSpeed0;
             half _WaveAngle1;
-            half _WaveSpeed1; 
-            half _EdgeSpeed;
-            half _EdgeOffset;  
+            half _WaveSpeed1;  
             half WaveColorValue;   
             half waterNoiseScale;
             half waterValue;   
@@ -125,6 +127,9 @@ Shader "MySprite-Lit-Default"
             half4 EdgeColor;
             half EdgeValue;  
             half _WaterHigh;  
+
+            half _EdgeWaveSpeed;
+            half _EdgeWaveOffset;
                       
         CBUFFER_END 
         TEXTURE2D(_MainTex);
@@ -196,6 +201,12 @@ Shader "MySprite-Lit-Default"
                 float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
                 //水域范围
                 float stepMask=step(0.06,_WaterMask.r); 
+
+                half edgeOffsetValue=_SinTime.w*_EdgeWaveSpeed; 
+                edgeOffsetValue=abs(edgeOffsetValue); 
+                 edgeOffsetValue=clamp(edgeOffsetValue,0,1);
+                _WaterHigh=_WaterHigh+_EdgeWaveOffset*edgeOffsetValue;
+                 //return _EdgeWaveOffset*edgeOffsetValue;
 
                 
                 float svalue =_ScreenParams.y/ 1920;
