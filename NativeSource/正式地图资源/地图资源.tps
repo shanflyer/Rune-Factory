@@ -192,6 +192,7 @@
                 <false/>
             </struct>
             <key type="filename">D.png</key>
+            <key type="filename">D_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -207,6 +208,7 @@
                 <false/>
             </struct>
             <key type="filename">D1.png</key>
+            <key type="filename">D1_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -222,27 +224,47 @@
                 <false/>
             </struct>
             <key type="filename">Desert-Interior_02.png</key>
+            <key type="filename">Desert-Interior_02_normal.png</key>
             <key type="filename">Desert-Interior_06.png</key>
+            <key type="filename">Desert-Interior_06_normal.png</key>
             <key type="filename">Desert-Interior_09.png</key>
+            <key type="filename">Desert-Interior_09_normal.png</key>
             <key type="filename">Desert-Interior_102.png</key>
+            <key type="filename">Desert-Interior_102_normal.png</key>
             <key type="filename">Desert-Interior_16.png</key>
+            <key type="filename">Desert-Interior_16_normal.png</key>
             <key type="filename">Desert-Interior_18.png</key>
+            <key type="filename">Desert-Interior_18_normal.png</key>
             <key type="filename">Desert-Interior_20.png</key>
+            <key type="filename">Desert-Interior_20_normal.png</key>
             <key type="filename">Desert-Interior_28.png</key>
+            <key type="filename">Desert-Interior_28_normal.png</key>
             <key type="filename">Desert-Interior_41.png</key>
+            <key type="filename">Desert-Interior_41_normal.png</key>
+            <key type="filename">Desert-Interior_C_08_normal.png</key>
+            <key type="filename">Desert-Interior_C_18_normal.png</key>
             <key type="filename">Desert-Interior_C_46_normal.png</key>
+            <key type="filename">Desert-Interior_C_47_normal.png</key>
+            <key type="filename">Desert-Interior_C_75_normal.png</key>
             <key type="filename">Desert-Interior_C_78.png</key>
+            <key type="filename">Desert-Interior_C_78_normal.png</key>
             <key type="filename">DesertInside2_D_112_normal.png</key>
             <key type="filename">DesertInside2_D_113_normal.png</key>
             <key type="filename">DesertInside2_D_116.png</key>
+            <key type="filename">DesertInside2_D_116_normal.png</key>
             <key type="filename">DesertInside2_D_126.png</key>
+            <key type="filename">DesertInside2_D_126_normal.png</key>
             <key type="filename">DesertInside2_D_136_normal.png</key>
+            <key type="filename">DesertInside2_D_61_normal.png</key>
             <key type="filename">Fantasy_Inside_C_18.png</key>
+            <key type="filename">Fantasy_Inside_C_18_normal.png</key>
             <key type="filename">Fantasy_Inside_C_20.png</key>
+            <key type="filename">Fantasy_Inside_C_20_normal.png</key>
             <key type="filename">Fantasy_Inside_C_26_normal.png</key>
             <key type="filename">Fantasy_Inside_C_27_normal.png</key>
             <key type="filename">Fantasy_Inside_C_39_normal.png</key>
             <key type="filename">Fantasy_Inside_C_70.png</key>
+            <key type="filename">Fantasy_Inside_C_70_normal.png</key>
             <key type="filename">Fantasy_Inside_D_22.png</key>
             <key type="filename">Fantasy_Inside_D_22_normal.png</key>
             <key type="filename">Fantasy_Inside_D_23.png</key>
@@ -259,11 +281,22 @@
             <key type="filename">Fantasy_Inside_D_47.png</key>
             <key type="filename">Fantasy_Inside_D_47_normal.png</key>
             <key type="filename">Fantasy_Inside_D_60.png</key>
+            <key type="filename">Fantasy_Inside_D_60_normal.png</key>
             <key type="filename">Fantasy_Inside_D_61.png</key>
+            <key type="filename">Fantasy_Inside_D_61_normal.png</key>
             <key type="filename">Fantasy_Inside_D_62.png</key>
+            <key type="filename">Fantasy_Inside_D_62_normal.png</key>
+            <key type="filename">Inside_Shops_106_normal.png</key>
+            <key type="filename">Inside_Shops_107_normal.png</key>
+            <key type="filename">Inside_Shops_108_normal.png</key>
+            <key type="filename">Inside_Shops_109_normal.png</key>
+            <key type="filename">Inside_Shops_110_normal.png</key>
+            <key type="filename">Inside_Shops_82_normal.png</key>
+            <key type="filename">Inside_Shops_84_normal.png</key>
             <key type="filename">Outside_C_06_normal.png</key>
             <key type="filename">Outside_C_07_normal.png</key>
             <key type="filename">Outside_C_17.png</key>
+            <key type="filename">Outside_C_17_normal.png</key>
             <key type="filename">Outside_C_18_normal.png</key>
             <key type="filename">Outside_C_36_normal.png</key>
             <key type="filename">Outside_C_37_normal.png</key>
@@ -276,24 +309,32 @@
             <key type="filename">characters_05.png</key>
             <key type="filename">characters_05_normal.png</key>
             <key type="filename">characters_09.png</key>
+            <key type="filename">characters_09_normal.png</key>
             <key type="filename">characters_103.png</key>
             <key type="filename">characters_103_normal.png</key>
             <key type="filename">characters_107.png</key>
             <key type="filename">characters_107_normal.png</key>
             <key type="filename">characters_108.png</key>
+            <key type="filename">characters_108_normal.png</key>
             <key type="filename">characters_23.png</key>
+            <key type="filename">characters_23_normal.png</key>
             <key type="filename">characters_25.png</key>
+            <key type="filename">characters_25_normal.png</key>
             <key type="filename">characters_40.png</key>
             <key type="filename">characters_48.png</key>
             <key type="filename">characters_48_normal.png</key>
             <key type="filename">characters_49.png</key>
             <key type="filename">characters_49_normal.png</key>
             <key type="filename">characters_55.png</key>
+            <key type="filename">characters_55_normal.png</key>
             <key type="filename">characters_68.png</key>
+            <key type="filename">characters_68_normal.png</key>
             <key type="filename">characters_82.png</key>
+            <key type="filename">characters_82_normal.png</key>
             <key type="filename">characters_84.png</key>
             <key type="filename">characters_84_normal.png</key>
             <key type="filename">characters_86.png</key>
+            <key type="filename">characters_86_normal.png</key>
             <key type="filename">characters_90.png</key>
             <key type="filename">characters_90_normal.png</key>
             <key type="filename">characters_95.png</key>
@@ -301,19 +342,51 @@
             <key type="filename">flower_10_normal.png</key>
             <key type="filename">flower_80_normal.png</key>
             <key type="filename">flower_82_normal.png</key>
+            <key type="filename">huo_01_normal.png</key>
             <key type="filename">huo_02_normal.png</key>
             <key type="filename">huo_03_normal.png</key>
             <key type="filename">huo_04_normal.png</key>
             <key type="filename">huo_05_normal.png</key>
+            <key type="filename">in_14_normal.png</key>
+            <key type="filename">in_15_normal.png</key>
+            <key type="filename">in_17_normal.png</key>
+            <key type="filename">in_18_normal.png</key>
+            <key type="filename">in_19_normal.png</key>
+            <key type="filename">in_20_normal.png</key>
+            <key type="filename">in_21_normal.png</key>
+            <key type="filename">in_40_normal.png</key>
+            <key type="filename">in_41_normal.png</key>
+            <key type="filename">in_42_normal.png</key>
+            <key type="filename">in_43_normal.png</key>
+            <key type="filename">in_44_normal.png</key>
+            <key type="filename">in_45_normal.png</key>
+            <key type="filename">in_46_normal.png</key>
+            <key type="filename">in_47_normal.png</key>
+            <key type="filename">in_48_normal.png</key>
+            <key type="filename">in_49_normal.png</key>
+            <key type="filename">in_50_normal.png</key>
+            <key type="filename">in_51_normal.png</key>
+            <key type="filename">in_52_normal.png</key>
+            <key type="filename">in_53_normal.png</key>
             <key type="filename">in_54.png</key>
+            <key type="filename">in_54_normal.png</key>
+            <key type="filename">in_55_normal.png</key>
             <key type="filename">nei_01.png</key>
+            <key type="filename">nei_01_normal.png</key>
             <key type="filename">nei_02.png</key>
+            <key type="filename">nei_02_normal.png</key>
             <key type="filename">nei_03.png</key>
+            <key type="filename">nei_03_normal.png</key>
             <key type="filename">nei_04.png</key>
+            <key type="filename">nei_04_normal.png</key>
             <key type="filename">nei_05.png</key>
+            <key type="filename">nei_05_normal.png</key>
             <key type="filename">nei_06.png</key>
+            <key type="filename">nei_06_normal.png</key>
             <key type="filename">qizhi.png</key>
+            <key type="filename">qizhi_normal.png</key>
             <key type="filename">书架_normal.png</key>
+            <key type="filename">圆凳_normal.png</key>
             <key type="filename">圆桌_normal.png</key>
             <key type="filename">壁画2.png</key>
             <key type="filename">壁画2_normal.png</key>
@@ -364,34 +437,64 @@
             <key type="filename">外窗补_51.png</key>
             <key type="filename">外窗补_51_normal.png</key>
             <key type="filename">家具_100.png</key>
+            <key type="filename">家具_100_normal.png</key>
+            <key type="filename">家具_101_normal.png</key>
+            <key type="filename">家具_102_normal.png</key>
             <key type="filename">家具_104.png</key>
             <key type="filename">家具_105.png</key>
             <key type="filename">家具_106.png</key>
+            <key type="filename">家具_106_normal.png</key>
             <key type="filename">家具_107.png</key>
+            <key type="filename">家具_107_normal.png</key>
+            <key type="filename">家具_108_normal.png</key>
+            <key type="filename">家具_109_normal.png</key>
+            <key type="filename">家具_14_normal.png</key>
+            <key type="filename">家具_29_normal.png</key>
             <key type="filename">家具_30.png</key>
+            <key type="filename">家具_30_normal.png</key>
             <key type="filename">家具_31.png</key>
+            <key type="filename">家具_32_normal.png</key>
+            <key type="filename">家具_33_normal.png</key>
             <key type="filename">家具_39.png</key>
             <key type="filename">家具_47.png</key>
             <key type="filename">家具_48.png</key>
+            <key type="filename">家具_48_normal.png</key>
             <key type="filename">家具_49.png</key>
+            <key type="filename">家具_49_normal.png</key>
+            <key type="filename">家具_50_normal.png</key>
+            <key type="filename">家具_51_normal.png</key>
             <key type="filename">家具_67.png</key>
             <key type="filename">家具_69.png</key>
+            <key type="filename">家具_69_normal.png</key>
+            <key type="filename">家具_71_normal.png</key>
             <key type="filename">家具_78.png</key>
             <key type="filename">家具_79.png</key>
             <key type="filename">家具_80.png</key>
+            <key type="filename">家具_80_normal.png</key>
             <key type="filename">家具_81.png</key>
+            <key type="filename">家具_81_normal.png</key>
+            <key type="filename">家具_82_normal.png</key>
             <key type="filename">家具_83.png</key>
+            <key type="filename">家具_83_normal.png</key>
             <key type="filename">家具_84.png</key>
+            <key type="filename">家具_85_normal.png</key>
+            <key type="filename">家具_86_normal.png</key>
             <key type="filename">家具_87.png</key>
             <key type="filename">家具_88.png</key>
+            <key type="filename">家具_89_normal.png</key>
             <key type="filename">家具_90.png</key>
+            <key type="filename">家具_90_normal.png</key>
             <key type="filename">家具_91.png</key>
+            <key type="filename">家具_92_normal.png</key>
+            <key type="filename">家具_93_normal.png</key>
             <key type="filename">家具_97.png</key>
             <key type="filename">家具_98.png</key>
             <key type="filename">家具_99.png</key>
+            <key type="filename">家具_99_normal.png</key>
             <key type="filename">提灯.png</key>
             <key type="filename">提灯_normal.png</key>
             <key type="filename">教堂建筑_42.png</key>
+            <key type="filename">教堂建筑_42_normal.png</key>
             <key type="filename">服饰架.png</key>
             <key type="filename">服饰架_normal.png</key>
             <key type="filename">木桶_01_normal.png</key>
@@ -420,12 +523,14 @@
             <key type="filename">椅子5_normal.png</key>
             <key type="filename">椅子6_normal.png</key>
             <key type="filename">椅子7.png</key>
+            <key type="filename">椅子7_normal.png</key>
             <key type="filename">椅子8_normal.png</key>
             <key type="filename">椅子9_normal.png</key>
             <key type="filename">武器架_normal.png</key>
             <key type="filename">武器柜右_normal.png</key>
             <key type="filename">油画_normal.png</key>
             <key type="filename">矮柜_normal.png</key>
+            <key type="filename">矮桌_normal.png</key>
             <key type="filename">窗户1_normal.png</key>
             <key type="filename">箱子_01_normal.png</key>
             <key type="filename">箱子_02_normal.png</key>
@@ -464,9 +569,16 @@
             <key type="filename">箱子_34.png</key>
             <key type="filename">箱子_34_normal.png</key>
             <key type="filename">箱子_35_normal.png</key>
+            <key type="filename">绿植0_normal.png</key>
             <key type="filename">绿植1_normal.png</key>
+            <key type="filename">绿植2_normal.png</key>
+            <key type="filename">绿植3_normal.png</key>
+            <key type="filename">绿植4_normal.png</key>
             <key type="filename">绿植5_normal.png</key>
+            <key type="filename">蜡烛_05_normal.png</key>
+            <key type="filename">蜡烛_06_normal.png</key>
             <key type="filename">赌_17.png</key>
+            <key type="filename">赌_17_normal.png</key>
             <key type="filename">门_01_normal.png</key>
             <key type="filename">门_02_normal.png</key>
             <key type="filename">门_03_normal.png</key>
@@ -504,59 +616,99 @@
             </struct>
             <key type="filename">Desert-Interior_10.png</key>
             <key type="filename">Desert-Interior_103.png</key>
+            <key type="filename">Desert-Interior_103_normal.png</key>
             <key type="filename">Desert-Interior_104.png</key>
+            <key type="filename">Desert-Interior_104_normal.png</key>
             <key type="filename">Desert-Interior_105.png</key>
+            <key type="filename">Desert-Interior_105_normal.png</key>
+            <key type="filename">Desert-Interior_10_normal.png</key>
             <key type="filename">Desert-Interior_53.png</key>
+            <key type="filename">Desert-Interior_53_normal.png</key>
             <key type="filename">Desert-Interior_55.png</key>
+            <key type="filename">Desert-Interior_55_normal.png</key>
             <key type="filename">Desert-Interior_96.png</key>
+            <key type="filename">Desert-Interior_96_normal.png</key>
+            <key type="filename">Desert-Interior_C_05_normal.png</key>
+            <key type="filename">Desert-Interior_C_20_normal.png</key>
+            <key type="filename">Desert-Interior_C_54_normal.png</key>
             <key type="filename">Desert-Interior_C_77_normal.png</key>
+            <key type="filename">Desert-Interior_C_91_normal.png</key>
+            <key type="filename">Desert-Interior_C_98_normal.png</key>
+            <key type="filename">DesertInside2_D_33_normal.png</key>
             <key type="filename">Fantasy_Inside_C_21.png</key>
+            <key type="filename">Fantasy_Inside_C_21_normal.png</key>
             <key type="filename">Fantasy_Inside_C_35.png</key>
+            <key type="filename">Fantasy_Inside_C_35_normal.png</key>
             <key type="filename">Fantasy_Inside_C_53_normal.png</key>
             <key type="filename">Fantasy_Inside_C_54.png</key>
+            <key type="filename">Fantasy_Inside_C_54_normal.png</key>
             <key type="filename">Fantasy_Inside_C_84.png</key>
             <key type="filename">Fantasy_Inside_C_84_normal.png</key>
             <key type="filename">Fantasy_Inside_D_113.png</key>
+            <key type="filename">Fantasy_Inside_D_113_normal.png</key>
             <key type="filename">Fantasy_Inside_D_139.png</key>
+            <key type="filename">Fantasy_Inside_D_139_normal.png</key>
             <key type="filename">Fantasy_Inside_D_164.png</key>
+            <key type="filename">Fantasy_Inside_D_164_normal.png</key>
             <key type="filename">Fantasy_Inside_D_21.png</key>
+            <key type="filename">Fantasy_Inside_D_21_normal.png</key>
+            <key type="filename">Fridge_normal.png</key>
             <key type="filename">Outside_C_103_normal.png</key>
             <key type="filename">Outside_C_25.png</key>
+            <key type="filename">Outside_C_25_normal.png</key>
             <key type="filename">Outside_C_35_normal.png</key>
             <key type="filename">Outside_C_92_normal.png</key>
             <key type="filename">SF_Outside_C_pnssed_01_normal.png</key>
             <key type="filename">flower_08_normal.png</key>
             <key type="filename">flower_32_normal.png</key>
             <key type="filename">flower_33_normal.png</key>
+            <key type="filename">in_32_normal.png</key>
             <key type="filename">地毯.png</key>
             <key type="filename">地毯1.png</key>
             <key type="filename">地毯1_normal.png</key>
             <key type="filename">地毯3.png</key>
+            <key type="filename">地毯3_normal.png</key>
             <key type="filename">地毯_normal.png</key>
             <key type="filename">外窗补_11.png</key>
             <key type="filename">外窗补_11_normal.png</key>
             <key type="filename">家具_10.png</key>
             <key type="filename">家具_103.png</key>
+            <key type="filename">家具_105_normal.png</key>
+            <key type="filename">家具_13_normal.png</key>
             <key type="filename">家具_29.png</key>
+            <key type="filename">家具_31_normal.png</key>
             <key type="filename">家具_38.png</key>
+            <key type="filename">家具_47_normal.png</key>
             <key type="filename">家具_66.png</key>
             <key type="filename">家具_68.png</key>
+            <key type="filename">家具_68_normal.png</key>
+            <key type="filename">家具_70_normal.png</key>
             <key type="filename">家具_82.png</key>
+            <key type="filename">家具_84_normal.png</key>
             <key type="filename">家具_89.png</key>
+            <key type="filename">家具_91_normal.png</key>
             <key type="filename">家具_96.png</key>
+            <key type="filename">家具_98_normal.png</key>
             <key type="filename">教堂建筑_07.png</key>
+            <key type="filename">教堂建筑_07_normal.png</key>
             <key type="filename">教堂建筑_46.png</key>
+            <key type="filename">教堂建筑_46_normal.png</key>
             <key type="filename">柜子2_normal.png</key>
             <key type="filename">桌子_normal.png</key>
             <key type="filename">武器柜横_normal.png</key>
             <key type="filename">窗3.png</key>
+            <key type="filename">窗3_normal.png</key>
             <key type="filename">窗_04.png</key>
             <key type="filename">窗_04_normal.png</key>
             <key type="filename">窗帘.png</key>
             <key type="filename">窗帘_normal.png</key>
             <key type="filename">赌_19.png</key>
+            <key type="filename">赌_19_normal.png</key>
             <key type="filename">赌_84.png</key>
+            <key type="filename">赌_84_normal.png</key>
             <key type="filename">赌_85.png</key>
+            <key type="filename">赌_85_normal.png</key>
+            <key type="filename">长柜_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -572,15 +724,21 @@
                 <false/>
             </struct>
             <key type="filename">Desert-Interior_82.png</key>
+            <key type="filename">Desert-Interior_82_normal.png</key>
             <key type="filename">Desert-Interior_84.png</key>
+            <key type="filename">Desert-Interior_84_normal.png</key>
             <key type="filename">Desert-Interior_C_37.png</key>
+            <key type="filename">Desert-Interior_C_37_normal.png</key>
             <key type="filename">Fantasy_Inside_C_76.png</key>
+            <key type="filename">Fantasy_Inside_C_76_normal.png</key>
             <key type="filename">书堆_normal.png</key>
             <key type="filename">外窗_61.png</key>
             <key type="filename">外窗_61_normal.png</key>
             <key type="filename">收获篮_03.png</key>
+            <key type="filename">收获篮_03_normal.png</key>
             <key type="filename">楼梯_normal.png</key>
             <key type="filename">楼梯下2.png</key>
+            <key type="filename">楼梯下2_normal.png</key>
             <key type="filename">长椅_01_normal.png</key>
             <key type="filename">长椅_02.png</key>
             <key type="filename">长椅_02_normal.png</key>
@@ -653,6 +811,71 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">Desert-Interior_C_117_normal.png</key>
+            <key type="filename">Desert-Interior_C_120_normal.png</key>
+            <key type="filename">Desert-Interior_C_123_normal.png</key>
+            <key type="filename">Desert-Interior_C_49_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_03_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_45_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_50.png</key>
+            <key type="filename">Fantasy_Inside_C_50_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_79.png</key>
+            <key type="filename">Fantasy_Inside_C_79_normal.png</key>
+            <key type="filename">Interior-_Inside_B_78_normal.png</key>
+            <key type="filename">Outside_C_24.png</key>
+            <key type="filename">Outside_C_24_normal.png</key>
+            <key type="filename">in_08_normal.png</key>
+            <key type="filename">in_09_normal.png</key>
+            <key type="filename">in_31_normal.png</key>
+            <key type="filename">书架1_normal.png</key>
+            <key type="filename">井0.png</key>
+            <key type="filename">井0_normal.png</key>
+            <key type="filename">家具_06.png</key>
+            <key type="filename">家具_07.png</key>
+            <key type="filename">家具_07_normal.png</key>
+            <key type="filename">家具_08_normal.png</key>
+            <key type="filename">家具_58.png</key>
+            <key type="filename">家具_59.png</key>
+            <key type="filename">家具_60_normal.png</key>
+            <key type="filename">家具_61_normal.png</key>
+            <key type="filename">家具_62.png</key>
+            <key type="filename">家具_63.png</key>
+            <key type="filename">家具_64_normal.png</key>
+            <key type="filename">家具_65_normal.png</key>
+            <key type="filename">床红.png</key>
+            <key type="filename">床红_normal.png</key>
+            <key type="filename">床绿.png</key>
+            <key type="filename">床绿_normal.png</key>
+            <key type="filename">教堂建筑_08.png</key>
+            <key type="filename">教堂建筑_08_normal.png</key>
+            <key type="filename">教堂建筑_09.png</key>
+            <key type="filename">教堂建筑_09_normal.png</key>
+            <key type="filename">教堂建筑_30.png</key>
+            <key type="filename">教堂建筑_30_normal.png</key>
+            <key type="filename">梯子.png</key>
+            <key type="filename">梯子_normal.png</key>
+            <key type="filename">赌_03.png</key>
+            <key type="filename">赌_03_normal.png</key>
+            <key type="filename">长椅_03_normal.png</key>
+            <key type="filename">长椅_04_normal.png</key>
+            <key type="filename">雕像_02.png</key>
+            <key type="filename">雕像_02_normal.png</key>
+            <key type="filename">雕像_09.png</key>
+            <key type="filename">雕像_09_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,24,16,48</rect>
+                <key>scale9Paddings</key>
+                <rect>8,24,16,48</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">Desert-Interior_C_123.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -668,53 +891,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">Desert-Interior_C_123_normal.png</key>
-            <key type="filename">Desert-Interior_C_49_normal.png</key>
-            <key type="filename">Fantasy_Inside_C_03_normal.png</key>
-            <key type="filename">Fantasy_Inside_C_45_normal.png</key>
-            <key type="filename">Fantasy_Inside_C_50.png</key>
-            <key type="filename">Fantasy_Inside_C_79.png</key>
-            <key type="filename">Outside_C_24.png</key>
-            <key type="filename">井0.png</key>
-            <key type="filename">井0_normal.png</key>
-            <key type="filename">家具_06.png</key>
-            <key type="filename">家具_07.png</key>
-            <key type="filename">家具_58.png</key>
-            <key type="filename">家具_59.png</key>
-            <key type="filename">家具_62.png</key>
-            <key type="filename">家具_63.png</key>
-            <key type="filename">床红.png</key>
-            <key type="filename">床红_normal.png</key>
-            <key type="filename">床绿.png</key>
-            <key type="filename">床绿_normal.png</key>
-            <key type="filename">教堂建筑_08.png</key>
-            <key type="filename">教堂建筑_09.png</key>
-            <key type="filename">教堂建筑_30.png</key>
-            <key type="filename">梯子.png</key>
-            <key type="filename">赌_03.png</key>
-            <key type="filename">长椅_03_normal.png</key>
-            <key type="filename">长椅_04_normal.png</key>
-            <key type="filename">雕像_02.png</key>
-            <key type="filename">雕像_09.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,24,16,48</rect>
-                <key>scale9Paddings</key>
-                <rect>8,24,16,48</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">Desert-Interior_C_124.png</key>
+            <key type="filename">Desert-Interior_C_124_normal.png</key>
             <key type="filename">Fantasy_Inside_C_34_normal.png</key>
             <key type="filename">Fantasy_Inside_C_42.png</key>
+            <key type="filename">Fantasy_Inside_C_42_normal.png</key>
             <key type="filename">Fantasy_Inside_C_44.png</key>
+            <key type="filename">Fantasy_Inside_C_44_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_46_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_62_normal.png</key>
             <key type="filename">Fantasy_Inside_D_152.png</key>
+            <key type="filename">Fantasy_Inside_D_152_normal.png</key>
+            <key type="filename">Inside_Shops_54_normal.png</key>
+            <key type="filename">in_04_normal.png</key>
+            <key type="filename">in_06_normal.png</key>
+            <key type="filename">in_13_normal.png</key>
+            <key type="filename">in_24_normal.png</key>
             <key type="filename">外窗补2_01.png</key>
             <key type="filename">外窗补2_01_normal.png</key>
             <key type="filename">外窗补2_03.png</key>
@@ -726,10 +918,13 @@
             <key type="filename">外窗补2_10.png</key>
             <key type="filename">外窗补2_10_normal.png</key>
             <key type="filename">楼梯1.png</key>
+            <key type="filename">楼梯1_normal.png</key>
             <key type="filename">楼梯长.png</key>
             <key type="filename">楼梯长_normal.png</key>
             <key type="filename">赌_04.png</key>
+            <key type="filename">赌_04_normal.png</key>
             <key type="filename">赌_23.png</key>
+            <key type="filename">赌_23_normal.png</key>
             <key type="filename">雨棚侧面_02_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -862,6 +1057,251 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">Desert-Interior_C_56_normal.png</key>
+            <key type="filename">DesertInside2_D_10.png</key>
+            <key type="filename">DesertInside2_D_10_normal.png</key>
+            <key type="filename">DesertInside2_D_12.png</key>
+            <key type="filename">DesertInside2_D_12_normal.png</key>
+            <key type="filename">DesertInside2_D_141.png</key>
+            <key type="filename">DesertInside2_D_141_normal.png</key>
+            <key type="filename">DesertInside2_D_35.png</key>
+            <key type="filename">DesertInside2_D_35_normal.png</key>
+            <key type="filename">DesertInside2_D_47.png</key>
+            <key type="filename">DesertInside2_D_47_normal.png</key>
+            <key type="filename">DesertInside2_D_59_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_51.png</key>
+            <key type="filename">Fantasy_Inside_C_51_normal.png</key>
+            <key type="filename">Fantasy_Inside_C_60.png</key>
+            <key type="filename">Fantasy_Inside_C_60_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_01.png</key>
+            <key type="filename">Fantasy_Inside_D_01_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_02.png</key>
+            <key type="filename">Fantasy_Inside_D_02_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_121.png</key>
+            <key type="filename">Fantasy_Inside_D_121_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_122.png</key>
+            <key type="filename">Fantasy_Inside_D_122_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_131.png</key>
+            <key type="filename">Fantasy_Inside_D_131_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_132.png</key>
+            <key type="filename">Fantasy_Inside_D_132_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_133.png</key>
+            <key type="filename">Fantasy_Inside_D_133_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_134.png</key>
+            <key type="filename">Fantasy_Inside_D_134_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_135.png</key>
+            <key type="filename">Fantasy_Inside_D_136.png</key>
+            <key type="filename">Fantasy_Inside_D_136_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_142.png</key>
+            <key type="filename">Fantasy_Inside_D_142_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_143.png</key>
+            <key type="filename">Fantasy_Inside_D_143_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_144.png</key>
+            <key type="filename">Fantasy_Inside_D_144_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_145.png</key>
+            <key type="filename">Fantasy_Inside_D_145_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_146.png</key>
+            <key type="filename">Fantasy_Inside_D_146_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_147.png</key>
+            <key type="filename">Fantasy_Inside_D_147_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_148.png</key>
+            <key type="filename">Fantasy_Inside_D_148_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_149.png</key>
+            <key type="filename">Fantasy_Inside_D_149_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_156.png</key>
+            <key type="filename">Fantasy_Inside_D_156_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_157.png</key>
+            <key type="filename">Fantasy_Inside_D_157_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_158.png</key>
+            <key type="filename">Fantasy_Inside_D_158_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_159.png</key>
+            <key type="filename">Fantasy_Inside_D_159_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_160.png</key>
+            <key type="filename">Fantasy_Inside_D_160_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_161.png</key>
+            <key type="filename">Fantasy_Inside_D_161_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_162.png</key>
+            <key type="filename">Fantasy_Inside_D_162_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_166.png</key>
+            <key type="filename">Fantasy_Inside_D_166_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_167.png</key>
+            <key type="filename">Fantasy_Inside_D_167_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_168.png</key>
+            <key type="filename">Fantasy_Inside_D_168_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_91.png</key>
+            <key type="filename">Fantasy_Inside_D_91_normal.png</key>
+            <key type="filename">Fantasy_Inside_D_92.png</key>
+            <key type="filename">Fantasy_Inside_D_92_normal.png</key>
+            <key type="filename">Outside_C_41.png</key>
+            <key type="filename">Outside_C_41_normal.png</key>
+            <key type="filename">Outside_C_48_normal.png</key>
+            <key type="filename">characters_31.png</key>
+            <key type="filename">characters_31_normal.png</key>
+            <key type="filename">characters_57.png</key>
+            <key type="filename">characters_57_normal.png</key>
+            <key type="filename">characters_58.png</key>
+            <key type="filename">characters_58_normal.png</key>
+            <key type="filename">characters_59.png</key>
+            <key type="filename">characters_59_normal.png</key>
+            <key type="filename">characters_60.png</key>
+            <key type="filename">characters_60_normal.png</key>
+            <key type="filename">flower_109_normal.png</key>
+            <key type="filename">flower_25_normal.png</key>
+            <key type="filename">flower_26_normal.png</key>
+            <key type="filename">flower_27_normal.png</key>
+            <key type="filename">flower_29_normal.png</key>
+            <key type="filename">flower_30_normal.png</key>
+            <key type="filename">flower_40_normal.png</key>
+            <key type="filename">flower_42_normal.png</key>
+            <key type="filename">flower_43_normal.png</key>
+            <key type="filename">flower_61_normal.png</key>
+            <key type="filename">flower_64_normal.png</key>
+            <key type="filename">flower_65_normal.png</key>
+            <key type="filename">flower_71_normal.png</key>
+            <key type="filename">flower_93_normal.png</key>
+            <key type="filename">圆凳1_normal.png</key>
+            <key type="filename">土地0.png</key>
+            <key type="filename">土地0_normal.png</key>
+            <key type="filename">土地1.png</key>
+            <key type="filename">土地1_normal.png</key>
+            <key type="filename">土地2_0.png</key>
+            <key type="filename">土地2_0_normal.png</key>
+            <key type="filename">土地2_1.png</key>
+            <key type="filename">土地2_1_normal.png</key>
+            <key type="filename">外窗_30.png</key>
+            <key type="filename">外窗_30_normal.png</key>
+            <key type="filename">外窗_31.png</key>
+            <key type="filename">外窗_31_normal.png</key>
+            <key type="filename">外窗_32.png</key>
+            <key type="filename">外窗_32_normal.png</key>
+            <key type="filename">外窗_38.png</key>
+            <key type="filename">外窗_38_normal.png</key>
+            <key type="filename">外窗_51.png</key>
+            <key type="filename">外窗_51_normal.png</key>
+            <key type="filename">外窗补_35.png</key>
+            <key type="filename">外窗补_35_normal.png</key>
+            <key type="filename">外窗补_36.png</key>
+            <key type="filename">外窗补_36_normal.png</key>
+            <key type="filename">外窗补_37.png</key>
+            <key type="filename">外窗补_37_normal.png</key>
+            <key type="filename">外窗补_41.png</key>
+            <key type="filename">外窗补_41_normal.png</key>
+            <key type="filename">外窗补_42.png</key>
+            <key type="filename">外窗补_42_normal.png</key>
+            <key type="filename">家具_101.png</key>
+            <key type="filename">家具_102.png</key>
+            <key type="filename">家具_103_normal.png</key>
+            <key type="filename">家具_104_normal.png</key>
+            <key type="filename">家具_108.png</key>
+            <key type="filename">家具_109.png</key>
+            <key type="filename">家具_110.png</key>
+            <key type="filename">家具_110_normal.png</key>
+            <key type="filename">家具_111.png</key>
+            <key type="filename">家具_111_normal.png</key>
+            <key type="filename">家具_112.png</key>
+            <key type="filename">家具_112_normal.png</key>
+            <key type="filename">家具_113.png</key>
+            <key type="filename">家具_113_normal.png</key>
+            <key type="filename">家具_114.png</key>
+            <key type="filename">家具_114_normal.png</key>
+            <key type="filename">家具_115.png</key>
+            <key type="filename">家具_115_normal.png</key>
+            <key type="filename">家具_13.png</key>
+            <key type="filename">家具_14.png</key>
+            <key type="filename">家具_19.png</key>
+            <key type="filename">家具_19_normal.png</key>
+            <key type="filename">家具_20.png</key>
+            <key type="filename">家具_20_normal.png</key>
+            <key type="filename">家具_21.png</key>
+            <key type="filename">家具_21_normal.png</key>
+            <key type="filename">家具_32.png</key>
+            <key type="filename">家具_33.png</key>
+            <key type="filename">家具_34.png</key>
+            <key type="filename">家具_34_normal.png</key>
+            <key type="filename">家具_35.png</key>
+            <key type="filename">家具_35_normal.png</key>
+            <key type="filename">家具_38_normal.png</key>
+            <key type="filename">家具_39_normal.png</key>
+            <key type="filename">家具_50.png</key>
+            <key type="filename">家具_51.png</key>
+            <key type="filename">家具_52.png</key>
+            <key type="filename">家具_52_normal.png</key>
+            <key type="filename">家具_53.png</key>
+            <key type="filename">家具_53_normal.png</key>
+            <key type="filename">家具_56_normal.png</key>
+            <key type="filename">家具_57_normal.png</key>
+            <key type="filename">家具_70.png</key>
+            <key type="filename">家具_71.png</key>
+            <key type="filename">家具_72.png</key>
+            <key type="filename">家具_72_normal.png</key>
+            <key type="filename">家具_73.png</key>
+            <key type="filename">家具_73_normal.png</key>
+            <key type="filename">家具_74.png</key>
+            <key type="filename">家具_74_normal.png</key>
+            <key type="filename">家具_76.png</key>
+            <key type="filename">家具_76_normal.png</key>
+            <key type="filename">家具_77.png</key>
+            <key type="filename">家具_77_normal.png</key>
+            <key type="filename">家具_78_normal.png</key>
+            <key type="filename">家具_79_normal.png</key>
+            <key type="filename">家具_85.png</key>
+            <key type="filename">家具_86.png</key>
+            <key type="filename">家具_87_normal.png</key>
+            <key type="filename">家具_88_normal.png</key>
+            <key type="filename">家具_92.png</key>
+            <key type="filename">家具_93.png</key>
+            <key type="filename">家具_94.png</key>
+            <key type="filename">家具_94_normal.png</key>
+            <key type="filename">家具_95.png</key>
+            <key type="filename">家具_95_normal.png</key>
+            <key type="filename">家具_96_normal.png</key>
+            <key type="filename">家具_97_normal.png</key>
+            <key type="filename">收获篮_01.png</key>
+            <key type="filename">收获篮_01_normal.png</key>
+            <key type="filename">收获篮_02.png</key>
+            <key type="filename">收获篮_02_normal.png</key>
+            <key type="filename">教堂建筑_28.png</key>
+            <key type="filename">教堂建筑_28_normal.png</key>
+            <key type="filename">教堂建筑_37.png</key>
+            <key type="filename">教堂建筑_37_normal.png</key>
+            <key type="filename">柴堆0.png</key>
+            <key type="filename">柴堆0_normal.png</key>
+            <key type="filename">树墩.png</key>
+            <key type="filename">树墩_normal.png</key>
+            <key type="filename">楼梯3.png</key>
+            <key type="filename">楼梯3_normal.png</key>
+            <key type="filename">楼梯下4.png</key>
+            <key type="filename">楼梯下4_normal.png</key>
+            <key type="filename">火把0.png</key>
+            <key type="filename">火把0_normal.png</key>
+            <key type="filename">火把1.png</key>
+            <key type="filename">火把1_normal.png</key>
+            <key type="filename">火把_normal.png</key>
+            <key type="filename">花台_02.png</key>
+            <key type="filename">花台_02_normal.png</key>
+            <key type="filename">花台_03.png</key>
+            <key type="filename">花台_03_normal.png</key>
+            <key type="filename">花台_04.png</key>
+            <key type="filename">花台_04_normal.png</key>
+            <key type="filename">蜡烛_02_normal.png</key>
+            <key type="filename">蜡烛_03_normal.png</key>
+            <key type="filename">蜡烛_07_normal.png</key>
+            <key type="filename">蜡烛_08_normal.png</key>
+            <key type="filename">蜡烛_09_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">Desert-Interior_C_75.png</key>
             <key type="filename">Inside_Shops_106.png</key>
             <key type="filename">Inside_Shops_107.png</key>
@@ -930,169 +1370,6 @@
                 <rect>16,16,32,32</rect>
                 <key>scale9Paddings</key>
                 <rect>16,16,32,32</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">DesertInside2_D_10.png</key>
-            <key type="filename">DesertInside2_D_12.png</key>
-            <key type="filename">DesertInside2_D_141.png</key>
-            <key type="filename">DesertInside2_D_141_normal.png</key>
-            <key type="filename">DesertInside2_D_35.png</key>
-            <key type="filename">DesertInside2_D_35_normal.png</key>
-            <key type="filename">DesertInside2_D_47.png</key>
-            <key type="filename">Fantasy_Inside_C_51.png</key>
-            <key type="filename">Fantasy_Inside_C_60.png</key>
-            <key type="filename">Fantasy_Inside_D_01.png</key>
-            <key type="filename">Fantasy_Inside_D_02.png</key>
-            <key type="filename">Fantasy_Inside_D_02_normal.png</key>
-            <key type="filename">Fantasy_Inside_D_121.png</key>
-            <key type="filename">Fantasy_Inside_D_122.png</key>
-            <key type="filename">Fantasy_Inside_D_131.png</key>
-            <key type="filename">Fantasy_Inside_D_132.png</key>
-            <key type="filename">Fantasy_Inside_D_133.png</key>
-            <key type="filename">Fantasy_Inside_D_134.png</key>
-            <key type="filename">Fantasy_Inside_D_135.png</key>
-            <key type="filename">Fantasy_Inside_D_136.png</key>
-            <key type="filename">Fantasy_Inside_D_142.png</key>
-            <key type="filename">Fantasy_Inside_D_143.png</key>
-            <key type="filename">Fantasy_Inside_D_144.png</key>
-            <key type="filename">Fantasy_Inside_D_145.png</key>
-            <key type="filename">Fantasy_Inside_D_146.png</key>
-            <key type="filename">Fantasy_Inside_D_147.png</key>
-            <key type="filename">Fantasy_Inside_D_148.png</key>
-            <key type="filename">Fantasy_Inside_D_149.png</key>
-            <key type="filename">Fantasy_Inside_D_156.png</key>
-            <key type="filename">Fantasy_Inside_D_157.png</key>
-            <key type="filename">Fantasy_Inside_D_158.png</key>
-            <key type="filename">Fantasy_Inside_D_159.png</key>
-            <key type="filename">Fantasy_Inside_D_160.png</key>
-            <key type="filename">Fantasy_Inside_D_161.png</key>
-            <key type="filename">Fantasy_Inside_D_162.png</key>
-            <key type="filename">Fantasy_Inside_D_166.png</key>
-            <key type="filename">Fantasy_Inside_D_167.png</key>
-            <key type="filename">Fantasy_Inside_D_168.png</key>
-            <key type="filename">Fantasy_Inside_D_91.png</key>
-            <key type="filename">Fantasy_Inside_D_92.png</key>
-            <key type="filename">Outside_C_41.png</key>
-            <key type="filename">Outside_C_48_normal.png</key>
-            <key type="filename">characters_31.png</key>
-            <key type="filename">characters_31_normal.png</key>
-            <key type="filename">characters_57.png</key>
-            <key type="filename">characters_58.png</key>
-            <key type="filename">characters_59.png</key>
-            <key type="filename">characters_60.png</key>
-            <key type="filename">flower_109_normal.png</key>
-            <key type="filename">flower_25_normal.png</key>
-            <key type="filename">flower_26_normal.png</key>
-            <key type="filename">flower_27_normal.png</key>
-            <key type="filename">flower_29_normal.png</key>
-            <key type="filename">flower_30_normal.png</key>
-            <key type="filename">flower_40_normal.png</key>
-            <key type="filename">flower_42_normal.png</key>
-            <key type="filename">flower_43_normal.png</key>
-            <key type="filename">flower_61_normal.png</key>
-            <key type="filename">flower_64_normal.png</key>
-            <key type="filename">flower_65_normal.png</key>
-            <key type="filename">flower_71_normal.png</key>
-            <key type="filename">flower_93_normal.png</key>
-            <key type="filename">圆凳1_normal.png</key>
-            <key type="filename">土地0.png</key>
-            <key type="filename">土地0_normal.png</key>
-            <key type="filename">土地1.png</key>
-            <key type="filename">土地1_normal.png</key>
-            <key type="filename">土地2_0.png</key>
-            <key type="filename">土地2_0_normal.png</key>
-            <key type="filename">土地2_1.png</key>
-            <key type="filename">土地2_1_normal.png</key>
-            <key type="filename">外窗_30.png</key>
-            <key type="filename">外窗_30_normal.png</key>
-            <key type="filename">外窗_31.png</key>
-            <key type="filename">外窗_31_normal.png</key>
-            <key type="filename">外窗_32.png</key>
-            <key type="filename">外窗_32_normal.png</key>
-            <key type="filename">外窗_38.png</key>
-            <key type="filename">外窗_38_normal.png</key>
-            <key type="filename">外窗_51.png</key>
-            <key type="filename">外窗_51_normal.png</key>
-            <key type="filename">外窗补_35.png</key>
-            <key type="filename">外窗补_35_normal.png</key>
-            <key type="filename">外窗补_36.png</key>
-            <key type="filename">外窗补_36_normal.png</key>
-            <key type="filename">外窗补_37.png</key>
-            <key type="filename">外窗补_37_normal.png</key>
-            <key type="filename">外窗补_41.png</key>
-            <key type="filename">外窗补_41_normal.png</key>
-            <key type="filename">外窗补_42.png</key>
-            <key type="filename">外窗补_42_normal.png</key>
-            <key type="filename">家具_101.png</key>
-            <key type="filename">家具_102.png</key>
-            <key type="filename">家具_108.png</key>
-            <key type="filename">家具_109.png</key>
-            <key type="filename">家具_110.png</key>
-            <key type="filename">家具_111.png</key>
-            <key type="filename">家具_112.png</key>
-            <key type="filename">家具_113.png</key>
-            <key type="filename">家具_114.png</key>
-            <key type="filename">家具_115.png</key>
-            <key type="filename">家具_13.png</key>
-            <key type="filename">家具_14.png</key>
-            <key type="filename">家具_19.png</key>
-            <key type="filename">家具_20.png</key>
-            <key type="filename">家具_21.png</key>
-            <key type="filename">家具_32.png</key>
-            <key type="filename">家具_33.png</key>
-            <key type="filename">家具_34.png</key>
-            <key type="filename">家具_35.png</key>
-            <key type="filename">家具_50.png</key>
-            <key type="filename">家具_51.png</key>
-            <key type="filename">家具_52.png</key>
-            <key type="filename">家具_53.png</key>
-            <key type="filename">家具_70.png</key>
-            <key type="filename">家具_71.png</key>
-            <key type="filename">家具_72.png</key>
-            <key type="filename">家具_73.png</key>
-            <key type="filename">家具_74.png</key>
-            <key type="filename">家具_76.png</key>
-            <key type="filename">家具_77.png</key>
-            <key type="filename">家具_85.png</key>
-            <key type="filename">家具_86.png</key>
-            <key type="filename">家具_92.png</key>
-            <key type="filename">家具_93.png</key>
-            <key type="filename">家具_94.png</key>
-            <key type="filename">家具_95.png</key>
-            <key type="filename">收获篮_01.png</key>
-            <key type="filename">收获篮_02.png</key>
-            <key type="filename">教堂建筑_28.png</key>
-            <key type="filename">教堂建筑_37.png</key>
-            <key type="filename">柴堆0.png</key>
-            <key type="filename">柴堆0_normal.png</key>
-            <key type="filename">树墩.png</key>
-            <key type="filename">树墩_normal.png</key>
-            <key type="filename">楼梯3.png</key>
-            <key type="filename">楼梯下4.png</key>
-            <key type="filename">火把0.png</key>
-            <key type="filename">火把1.png</key>
-            <key type="filename">花台_02.png</key>
-            <key type="filename">花台_02_normal.png</key>
-            <key type="filename">花台_03.png</key>
-            <key type="filename">花台_03_normal.png</key>
-            <key type="filename">花台_04.png</key>
-            <key type="filename">花台_04_normal.png</key>
-            <key type="filename">蜡烛_02_normal.png</key>
-            <key type="filename">蜡烛_07_normal.png</key>
-            <key type="filename">蜡烛_08_normal.png</key>
-            <key type="filename">蜡烛_09_normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,8,16,16</rect>
-                <key>scale9Paddings</key>
-                <rect>8,8,16,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -1219,9 +1496,13 @@
                 <false/>
             </struct>
             <key type="filename">Fantasy_Inside_C_47.png</key>
+            <key type="filename">Fantasy_Inside_C_47_normal.png</key>
             <key type="filename">Fantasy_Inside_C_52.png</key>
+            <key type="filename">Fantasy_Inside_C_52_normal.png</key>
             <key type="filename">教堂建筑_11.png</key>
+            <key type="filename">教堂建筑_11_normal.png</key>
             <key type="filename">教堂建筑_23.png</key>
+            <key type="filename">教堂建筑_23_normal.png</key>
             <key type="filename">旗帜_01.png</key>
             <key type="filename">旗帜_01_normal.png</key>
             <key type="filename">旗帜_02.png</key>
@@ -1251,16 +1532,22 @@
             <key type="filename">柴堆1.png</key>
             <key type="filename">柴堆1_normal.png</key>
             <key type="filename">柴堆2.png</key>
+            <key type="filename">柴堆2_normal.png</key>
             <key type="filename">柴堆3.png</key>
             <key type="filename">柴堆3_normal.png</key>
             <key type="filename">柴棚.png</key>
             <key type="filename">柴棚_normal.png</key>
             <key type="filename">横长桌_normal.png</key>
             <key type="filename">赌_123.png</key>
+            <key type="filename">赌_123_normal.png</key>
             <key type="filename">赌_24.png</key>
+            <key type="filename">赌_24_normal.png</key>
             <key type="filename">赌_46.png</key>
+            <key type="filename">赌_46_normal.png</key>
             <key type="filename">赌_75.png</key>
+            <key type="filename">赌_75_normal.png</key>
             <key type="filename">赌_96.png</key>
+            <key type="filename">赌_96_normal.png</key>
             <key type="filename">长桌_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -1368,6 +1655,7 @@
                 <false/>
             </struct>
             <key type="filename">Fantasy_Inside_D_163.png</key>
+            <key type="filename">Fantasy_Inside_D_163_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1420,6 +1708,21 @@
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,1</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,31</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,31</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Inside_Shops_53_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -1897,10 +2200,40 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">in_57_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,20,32,40</rect>
+                <key>scale9Paddings</key>
+                <rect>16,20,32,40</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">luzi.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.888889</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>7,9,14,18</rect>
+                <key>scale9Paddings</key>
+                <rect>7,9,14,18</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">luzi_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -1927,10 +2260,40 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">other_03_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,10,19,20</rect>
+                <key>scale9Paddings</key>
+                <rect>9,10,19,20</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">other_04.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.52,0.8</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,10,13,20</rect>
+                <key>scale9Paddings</key>
+                <rect>6,10,13,20</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">other_04_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -1957,7 +2320,23 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">other_15_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,15,16</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,15,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">other_18.png</key>
+            <key type="filename">other_18_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1973,6 +2352,7 @@
                 <false/>
             </struct>
             <key type="filename">other_23.png</key>
+            <key type="filename">other_23_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2002,6 +2382,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">other_26_normal.png</key>
+            <key type="filename">other_27_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>7,8,13,17</rect>
+                <key>scale9Paddings</key>
+                <rect>7,8,13,17</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">other_27.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -2018,6 +2414,7 @@
                 <false/>
             </struct>
             <key type="filename">other_30.png</key>
+            <key type="filename">other_30_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2033,6 +2430,7 @@
                 <false/>
             </struct>
             <key type="filename">other_34.png</key>
+            <key type="filename">other_34_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2048,6 +2446,7 @@
                 <false/>
             </struct>
             <key type="filename">other_36.png</key>
+            <key type="filename">other_36_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2063,6 +2462,7 @@
                 <false/>
             </struct>
             <key type="filename">other_40.png</key>
+            <key type="filename">other_40_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2078,6 +2478,7 @@
                 <false/>
             </struct>
             <key type="filename">other_43.png</key>
+            <key type="filename">other_43_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2107,10 +2508,42 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">table 02_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,9,23,17</rect>
+                <key>scale9Paddings</key>
+                <rect>12,9,23,17</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">yant.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.981132</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,13,16,27</rect>
+                <key>scale9Paddings</key>
+                <rect>8,13,16,27</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">yant_normal.png</key>
+            <key type="filename">入楼梯.png</key>
+            <key type="filename">入楼梯_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -2149,39 +2582,6 @@
                 <rect>8,24,16,48</rect>
                 <key>scale9Paddings</key>
                 <rect>8,24,16,48</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">人偶_01.png</key>
-            <key type="filename">人偶_02.png</key>
-            <key type="filename">人偶_03.png</key>
-            <key type="filename">人偶_04.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,13,16,25</rect>
-                <key>scale9Paddings</key>
-                <rect>8,13,16,25</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">入楼梯.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,13,16,27</rect>
-                <key>scale9Paddings</key>
-                <rect>8,13,16,27</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -2261,9 +2661,13 @@
             <key type="filename">吊灯蜡烛.png</key>
             <key type="filename">吊灯蜡烛_normal.png</key>
             <key type="filename">壁炉2.png</key>
+            <key type="filename">壁炉2_normal.png</key>
             <key type="filename">壁炉_normal.png</key>
+            <key type="filename">家具_05_normal.png</key>
             <key type="filename">家具_56.png</key>
+            <key type="filename">家具_58_normal.png</key>
             <key type="filename">家具_60.png</key>
+            <key type="filename">家具_62_normal.png</key>
             <key type="filename">草料0_normal.png</key>
             <key type="filename">草料1_normal.png</key>
             <key type="filename">草料2_normal.png</key>
@@ -2299,6 +2703,7 @@
                 <false/>
             </struct>
             <key type="filename">圆窗.png</key>
+            <key type="filename">圆窗_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2333,6 +2738,7 @@
                 <false/>
             </struct>
             <key type="filename">壁炉3.png</key>
+            <key type="filename">壁炉3_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2348,6 +2754,7 @@
                 <false/>
             </struct>
             <key type="filename">壁炉4.png</key>
+            <key type="filename">壁炉4_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2363,6 +2770,7 @@
                 <false/>
             </struct>
             <key type="filename">壁炉5.png</key>
+            <key type="filename">壁炉5_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2400,6 +2808,7 @@
             <key type="filename">外窗_24.png</key>
             <key type="filename">外窗_24_normal.png</key>
             <key type="filename">外窗_34.png</key>
+            <key type="filename">外窗_34_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2465,6 +2874,7 @@
                 <false/>
             </struct>
             <key type="filename">头.png</key>
+            <key type="filename">头_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2480,11 +2890,17 @@
                 <false/>
             </struct>
             <key type="filename">家具_05.png</key>
+            <key type="filename">家具_06_normal.png</key>
             <key type="filename">家具_08.png</key>
+            <key type="filename">家具_10_normal.png</key>
             <key type="filename">家具_57.png</key>
+            <key type="filename">家具_59_normal.png</key>
             <key type="filename">家具_61.png</key>
+            <key type="filename">家具_63_normal.png</key>
             <key type="filename">家具_64.png</key>
             <key type="filename">家具_65.png</key>
+            <key type="filename">家具_66_normal.png</key>
+            <key type="filename">家具_67_normal.png</key>
             <key type="filename">桥1_normal.png</key>
             <key type="filename">桥栏杆2_normal.png</key>
             <key type="filename">桥栏杆3_normal.png</key>
@@ -2539,6 +2955,7 @@
                 <false/>
             </struct>
             <key type="filename">干草.png</key>
+            <key type="filename">干草_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2557,6 +2974,21 @@
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.603448</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>20,15,40,29</rect>
+                <key>scale9Paddings</key>
+                <rect>20,15,40,29</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">干草堆_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -2599,7 +3031,9 @@
                 <false/>
             </struct>
             <key type="filename">教堂建筑_01.png</key>
+            <key type="filename">教堂建筑_01_normal.png</key>
             <key type="filename">教堂建筑_02.png</key>
+            <key type="filename">教堂建筑_02_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2615,6 +3049,7 @@
                 <false/>
             </struct>
             <key type="filename">教堂建筑_10.png</key>
+            <key type="filename">教堂建筑_10_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2630,6 +3065,7 @@
                 <false/>
             </struct>
             <key type="filename">教堂建筑_22.png</key>
+            <key type="filename">教堂建筑_22_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2645,6 +3081,7 @@
                 <false/>
             </struct>
             <key type="filename">教堂建筑_40.png</key>
+            <key type="filename">教堂建筑_40_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2660,6 +3097,7 @@
                 <false/>
             </struct>
             <key type="filename">旗帜9.png</key>
+            <key type="filename">旗帜9_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2690,6 +3128,7 @@
                 <false/>
             </struct>
             <key type="filename">柱子.png</key>
+            <key type="filename">柱子_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2705,6 +3144,7 @@
                 <false/>
             </struct>
             <key type="filename">柱子石.png</key>
+            <key type="filename">柱子石_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2784,6 +3224,7 @@
                 <false/>
             </struct>
             <key type="filename">梯子下.png</key>
+            <key type="filename">梯子下_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2910,6 +3351,7 @@
                 <false/>
             </struct>
             <key type="filename">横梁.png</key>
+            <key type="filename">横梁_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2971,6 +3413,7 @@
                 <false/>
             </struct>
             <key type="filename">灯.png</key>
+            <key type="filename">灯_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2989,6 +3432,21 @@
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.512195,0.592593</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,14,21,27</rect>
+                <key>scale9Paddings</key>
+                <rect>10,14,21,27</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">灶台_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -3045,7 +3503,23 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">烤炉_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,27,27,53</rect>
+                <key>scale9Paddings</key>
+                <rect>13,27,27,53</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">盾.png</key>
+            <key type="filename">盾_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3061,6 +3535,7 @@
                 <false/>
             </struct>
             <key type="filename">盾2.png</key>
+            <key type="filename">盾2_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3223,10 +3698,43 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">纺织机_01_normal.png</key>
+            <key type="filename">纺织机_02_normal.png</key>
+            <key type="filename">纺织机_03_normal.png</key>
+            <key type="filename">纺织机_04_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>18,16,36,32</rect>
+                <key>scale9Paddings</key>
+                <rect>18,16,36,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">绘写台.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.6</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>17,15,33,30</rect>
+                <key>scale9Paddings</key>
+                <rect>17,15,33,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">绘写台_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -3381,6 +3889,7 @@
                 <false/>
             </struct>
             <key type="filename">赌_16.png</key>
+            <key type="filename">赌_16_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3396,6 +3905,7 @@
                 <false/>
             </struct>
             <key type="filename">赌_25.png</key>
+            <key type="filename">赌_25_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3455,7 +3965,23 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">酿造桶_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>24,18,47,35</rect>
+                <key>scale9Paddings</key>
+                <rect>24,18,47,35</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">铁链.png</key>
+            <key type="filename">铁链_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3490,6 +4016,28 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">铸造炉0_normal.png</key>
+            <key type="filename">铸造炉_01_normal.png</key>
+            <key type="filename">铸造炉_02_normal.png</key>
+            <key type="filename">铸造炉_03_normal.png</key>
+            <key type="filename">铸造炉_04_normal.png</key>
+            <key type="filename">铸造炉_05_normal.png</key>
+            <key type="filename">铸造炉_06_normal.png</key>
+            <key type="filename">铸造炉_08_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>20,17,39,33</rect>
+                <key>scale9Paddings</key>
+                <rect>20,17,39,33</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">铸造炉_02.png</key>
             <key type="filename">铸造炉_04.png</key>
             <struct type="IndividualSpriteSettings">
@@ -3510,6 +4058,21 @@
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.891892</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,9,18,19</rect>
+                <key>scale9Paddings</key>
+                <rect>9,9,18,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">锅_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -3583,6 +4146,24 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">门_21_normal.png</key>
+            <key type="filename">门_22_normal.png</key>
+            <key type="filename">门_23_normal.png</key>
+            <key type="filename">门_24_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,12,12,24</rect>
+                <key>scale9Paddings</key>
+                <rect>6,12,12,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">门_22.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -3612,6 +4193,28 @@
                 <rect>8,15,15,30</rect>
                 <key>scale9Paddings</key>
                 <rect>8,15,15,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">门_31_normal.png</key>
+            <key type="filename">门_32_normal.png</key>
+            <key type="filename">门_33_normal.png</key>
+            <key type="filename">门_34_normal.png</key>
+            <key type="filename">门_41_normal.png</key>
+            <key type="filename">门_42_normal.png</key>
+            <key type="filename">门_43_normal.png</key>
+            <key type="filename">门_44_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,12,11,24</rect>
+                <key>scale9Paddings</key>
+                <rect>6,12,11,24</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -3693,6 +4296,7 @@
                 <false/>
             </struct>
             <key type="filename">鹿首.png</key>
+            <key type="filename">鹿首_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
