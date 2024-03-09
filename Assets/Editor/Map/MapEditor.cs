@@ -54,8 +54,8 @@ public class MapEditor : MyEditor
     public static void WindowShow()
     {
         Instance = EditorWindow.CreateWindow<MapEditor>("地图编辑");
-        Instance.minSize = new Vector2(240, 360);
-        Instance.maxSize = new Vector2(240, 360);
+        Instance.minSize = new Vector2(240, 480);
+        Instance.maxSize = new Vector2(240, 480);
         Instance.ShowAuxWindow();
     }
 
@@ -97,7 +97,7 @@ public class MapEditor : MyEditor
 
     private void DrawRoomDataPanel()
     {
-        roomDataPanel.DisplayCommonObjList<MapRoomDataObj>(240, 320, mapRoomDataObjs, 2, false, false, true, false, true);
+        roomDataPanel.DisplayCommonObjList<MapRoomDataObj>(240, 460, mapRoomDataObjs, 2, false, false, true, false, true);
         if (selectMapRoomDataObj != null)
         {
             DrawTextField(selectMapRoomDataObj.mapRoomData.roomName, "地图名字", SetMapRoomName, 60, 100);
