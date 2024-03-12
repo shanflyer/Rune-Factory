@@ -5,6 +5,7 @@ Shader "Sun"
         _MainTex("Diffuse", 2D) = "white" {}
         _MaskTex("Mask", 2D) = "black" {}
         _MoonMask("MoonMask", 2D) = "white" {}
+        _HightOffset("HightOffset",float)=0
 
        // _moonOffSet("MoonOffSet",float)=0
    
@@ -40,6 +41,7 @@ Shader "Sun"
             half _ScaleValue;
             half4 _MainTex_ST;
             half4 _Color; 
+            half _HightOffset;
         CBUFFER_END 
         TEXTURE2D(_MainTex);
 
@@ -48,8 +50,7 @@ Shader "Sun"
         SAMPLER(sampler_MoonMask);
 
         TEXTURE2D(_MaskTex);
-        SAMPLER(sampler_MaskTex); 
-        
+        SAMPLER(sampler_MaskTex);  
 
         ENDHLSL
 
@@ -102,9 +103,137 @@ Shader "Sun"
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
                 o.worldPos=UNITY_MATRIX_M._m03_m13_m23;
-                o.worldPos.z+=o.worldPos.y;
+                o.worldPos.z+=o.worldPos.y; 
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex); 
+                
+
+                o.color = v.color  * unity_SpriteColor*_SunColor;
+                return o;
+            }
+
+            
+ 
+
+            half4 CombinedShapeLightFragment(Varyings i) : SV_Target
+            {
+                //const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+
+                Unity_Remap_float(_moonOffSet,float2(0,0.7),float2(0,1),_moonOffSet);
+                if(_Sun==1){
+                     _moonOffSet=1;
+                }
+               
+                const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
+                half maskR=mask.r;
+                Unity_Remap_float(maskR,float2(_RemapMinValue,_RemapMaxValue),float2(0,1),maskR);
+                maskR=clamp(maskR,0,1);
+
+                half4 mask1 = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv+float2(-_moonOffSet,-_moonOffSet));
+                half maskR1=mask1.r;
+                Unity_Remap_float(maskR1,float2(_RemapMinValue,_RemapMaxValue),float2(0,1),maskR1);
+                maskR1=clamp(maskR1,0,1); 
+                maskR-=maskR1;
+
+                 
+                Unity_Remap_float(i.uv.x,float2(1-_ScaleValue,_ScaleValue),float2(0,1),i.uv.x);
+                Unity_Remap_float(i.uv.y,float2(1-_ScaleValue,_ScaleValue),float2(0,1),i.uv.y);  
+
+                half4 moonMask,moonMask1;
+
+                if(_Sun==1){
+                     moonMask=SAMPLE_TEXTURE2D(_MainTex, sampler_MoonMask, i.uv);  
+                     moonMask1=SAMPLE_TEXTURE2D(_MainTex, sampler_MoonMask, i.uv+float2(-_moonOffSet,-_moonOffSet));                      
+                }else{
+                     moonMask=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv);  
+                     moonMask1=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv+float2(-_moonOffSet,-_moonOffSet)); 
+                }
+                
+                float d_a=moonMask.a-moonMask1.a;
+                d_a=clamp(d_a,0,1); 
+                
+                half3 moonColor=moonMask.xyz*d_a;  
+                moonColor+=moonMask.xyz*(1-moonMask.a+moonMask1.a)*0.1;
+                moonMask.xyz=moonColor*moonMask.a;
+                maskR=clamp(maskR,0,1);
+                //maskR=(1-step(1,maskR))*maskR; 
+                moonMask.xyz=moonMask.xyz*(1-maskR)+maskR*i.color.a;
+               
+                  // return float4(moonMask.xyz,1); 
+                moonMask.xyz*=i.color;
+                
+                moonMask.xyz+=maskR.xxx*0*(1-moonMask.a);
+                moonMask.a+=maskR;
+                moonMask.a=clamp(moonMask.a,0,1);
+                return moonMask;
+
+               // 
+                //moonMask.a*=stepValue;
+                
+   
+            }
+            ENDHLSL
+        }
+
+         Pass
+        {
+            
+            Tags { "LightMode" = "Mirror" }
+
+            HLSLPROGRAM
+            
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+
+            #pragma vertex CombinedShapeLightVertex
+            #pragma fragment CombinedShapeLightFragment
+
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_0 __
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_1 __
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_2 __
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
+            #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+
+            struct Attributes
+            {
+                float3 positionOS   : POSITION;
+                float4 color        : COLOR;
+                float2 uv           : TEXCOORD0; 
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS  : SV_POSITION;
+                half4   color       : COLOR;
+                float2  uv          : TEXCOORD0;
+                float3  worldPos : TEXCOORD4;
+                #if defined(DEBUG_DISPLAY)
+                    float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+
+            Varyings CombinedShapeLightVertex(Attributes v)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(v);
+
+                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy); 
+                o.worldPos=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos.z+=o.worldPos.y;
+                float3 worldPos=TransformObjectToWorld(v.positionOS);
+                worldPos.y=-worldPos.y*0.75; 
+                worldPos.y+=_HightOffset;
+
+                o.positionCS=TransformWorldToHClip(worldPos);
+                #if defined(DEBUG_DISPLAY)
+                    o.positionWS = worldPos;
                 #endif
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex); 
                 

@@ -15,6 +15,9 @@ public class SkyEnviromentMono : MonoBehaviour
     [SerializeField]
     private Light2D globalLight;
 
+    [SerializeField]
+    SpriteRenderer bg;
+
     public Transform Sun
     {
         get

@@ -57,7 +57,7 @@ MonoBehaviour:
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
-    m_Bits: 3985
+    m_Bits: 8081
   m_TransparencySortMode: 3
   m_TransparencySortAxis: {x: 0, y: 1, z: 1}
   m_HDREmulationScale: 1
@@ -120,9 +120,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 573e83345e5a3524e8d46ac9229de438, type: 3}
-  m_Name: MyDepth
+  m_Name: Mirror
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
@@ -140,13 +140,13 @@ MonoBehaviour:
     renderPassEvent: 300
     layerMask:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 4096
     overrideMat: {fileID: 0}
     PassNames:
-    - MyDepth
+    - Mirror
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
-    textureName: _MyDepthTex
+    textureName: _MirrorTex
     blitToCameraTarget: 0
     clearFlag: -1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
