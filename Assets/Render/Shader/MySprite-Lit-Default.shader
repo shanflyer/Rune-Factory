@@ -14,7 +14,7 @@ Shader "MySprite-Lit-Default"
         _BackBlend("BackBlend",int)=1
         _BlendVertexColor("BlendVertexColor",int)=0
 
-        _Water("Water",int)=0
+        _Water("Water",int)=0 
 
         _DampBlend("_DampBlend",int)=0 
         _Damp("_Damp",int)=0
@@ -95,6 +95,7 @@ Shader "MySprite-Lit-Default"
         float _HighLightNoise;
 
         float4 _GlobalColor;
+        half4 _SunColor;
         CBUFFER_START(UnityPerMaterial)
             int _DampBlend;
             int _Damp;
@@ -265,14 +266,14 @@ Shader "MySprite-Lit-Default"
                 float3 endWaveColor=edge*EdgeColor*waveBlendCol+waveBlendCol*_WaterMask1.rrr;
                 endWaveColor=clamp(endWaveColor,0,1);
                 
-                
+                half sunValue=(_SunColor.x+_SunColor.y+_SunColor.z)/3;
 
                 //主颜色
                 float3 _MainColor=waterColor.xyz*waterColor.a;	 
                 _MainColor+=(1-waterColor.a)*_MainTexColor.xyz;
                 _MainColor.xyz*=_WaterMask.r;
 
-              
+              endWaveColor=endWaveColor.xyz*_SunColor.xyz/sunValue;
 
                 float3 outWater=endWaveColor+_MainColor; 
                 outWater=clamp(outWater,0,1);   

@@ -335,6 +335,20 @@ public class ExcelDataEditor : MyEditor
                 fieldInfo.SetValue(data, value);
             }
         }
+        else if (fieldInfo.FieldType == typeof(Vector2))
+        {
+            var valueStr = value.ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var strs = value.ToString().Split(',');
+
+                Vector2 _value = Vector2.zero;
+                _value.x = float.Parse(strs[0]);
+                _value.y = float.Parse(strs[1]);
+                value = _value;
+                fieldInfo.SetValue(data, value);
+            }
+        }
         else if (fieldInfo.FieldType == typeof(List<string>))
         {
             var valueStr = value.ToString();

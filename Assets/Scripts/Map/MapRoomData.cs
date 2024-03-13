@@ -28,6 +28,7 @@ public class MapRoomData : ScriptableObject,IGameData
     public bool displaySky=true;
     public bool fixedCamera;
     public Vector3 fixedCameraPos;
+    public int skyBackGroundId;
     public bool CheckBoundary(int2 coordinate)
     {
         if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoordinate.x

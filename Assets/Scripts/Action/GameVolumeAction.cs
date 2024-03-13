@@ -9,12 +9,18 @@ using UnityEngine.TextCore.Text;
 public struct DisplaySky : GameAction
 {
     public bool display;
+    public int skyId;
+    public Vector2 startPos, endPos;
      public SetValue setValue { get; set; } public SetResult setResult { get; set; }
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 1)
         {
-            display = bool.Parse(parameters[0].value); 
+            display = bool.Parse(parameters[0].value);
+        }
+        if (parameters.Count >= 2)
+        {
+            skyId = int.Parse(parameters[1].value);
         }
 
         GameActionManager.instance.QueueAction(this, immediately);

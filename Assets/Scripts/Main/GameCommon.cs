@@ -897,7 +897,7 @@ public static class EditorDataPath
 
 public static class DataPath
 {
-    public static Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
+    public readonly static Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
         {typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" },
         {typeof(FunctionData),"Data/FunctionDataList" },
@@ -947,7 +947,8 @@ public static class DataPath
         {typeof(SleepSetData),"Data/SleepSetData/SleepSetDataList" },
         {typeof(SleepSetDataList),"Data/SleepSetData" },
         {typeof(GameTimeEventData),"Data/GameTimeEventData" },
-        {typeof(EmoteData),"Data/EmoteData" }, 
+        {typeof(EmoteData),"Data/EmoteData" },
+        {typeof(SkyBackGroundData),"Data/SkyBackGroundData"}
     };
 
     public static string GetDataPath(Type type)

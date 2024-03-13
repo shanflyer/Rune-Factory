@@ -143,9 +143,19 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         {
             return;
         }
+
+        int2 mapStartCoordinate = mapRoomData.startCoordinate;
+        int2 mapEndCoordinate = mapRoomData.endCoordinate; 
+
+        var mapStartPos = GameCommon.GetMapPos(mapStartCoordinate);
+        var mapEndPos = GameCommon.GetMapPos(mapEndCoordinate);
+
         DisplaySky displaySky = new DisplaySky
         {
-            display = mapRoomData.displaySky
+            display = mapRoomData.displaySky,
+            skyId=mapRoomData.skyBackGroundId,
+            startPos=mapStartPos,
+            endPos=mapEndPos
         };
         GameActionManager.instance.QueueAction(displaySky,true);
 

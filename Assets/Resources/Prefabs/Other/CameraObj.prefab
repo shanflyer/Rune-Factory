@@ -374,8 +374,8 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
+    x: -0.28796294
+    y: -0.36822918
     width: 1
     height: 1
   near clip plane: 0.3
@@ -545,6 +545,7 @@ GameObject:
   - component: {fileID: 920221438803824266}
   - component: {fileID: 3747097015352710110}
   - component: {fileID: 5593945021396338171}
+  - component: {fileID: 2072855165649579343}
   m_Layer: 0
   m_Name: Follow
   m_TagString: Untagged
@@ -619,6 +620,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2072855165649579343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5989837519474829423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Offset: {x: 0, y: 0, z: 0}
+  m_ApplyAfter: 1
+  m_PreserveComposition: 0
 --- !u!1 &6031844795011582953
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,12 +731,12 @@ MonoBehaviour:
   m_ScreenX: 0.5
   m_ScreenY: 0.5
   m_CameraDistance: 500
-  m_DeadZoneWidth: 0.15
-  m_DeadZoneHeight: 0.1
+  m_DeadZoneWidth: 0.1
+  m_DeadZoneHeight: 0.05
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
-  m_SoftZoneWidth: 0.3
-  m_SoftZoneHeight: 0.2
+  m_SoftZoneWidth: 0.2
+  m_SoftZoneHeight: 0.1
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1

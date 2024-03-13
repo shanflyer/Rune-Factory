@@ -226,10 +226,15 @@ Shader "Sun"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy); 
                 o.worldPos=UNITY_MATRIX_M._m03_m13_m23;
+                 
                 o.worldPos.z+=o.worldPos.y;
                 float3 worldPos=TransformObjectToWorld(v.positionOS);
-                worldPos.y=-worldPos.y*0.75; 
-                worldPos.y+=_HightOffset;
+                float offsetY=worldPos.y-_WorldSpaceCameraPos.y;
+
+                worldPos.y=-offsetY*0.75+_WorldSpaceCameraPos.y+2*_HightOffset;
+
+                //worldPos.y=-worldPos.y*0.75; 
+                //worldPos.y+=_HightOffset;
 
                 o.positionCS=TransformWorldToHClip(worldPos);
                 #if defined(DEBUG_DISPLAY)

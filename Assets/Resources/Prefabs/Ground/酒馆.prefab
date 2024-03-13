@@ -6518,6 +6518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 219965774306088407}
   - component: {fileID: 8084489620216456468}
+  - component: {fileID: 5842561859731293060}
   m_Layer: 0
   m_Name: "\u9152\u9986"
   m_TagString: Untagged
@@ -6671,6 +6672,57 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!60 &5842561859731293060
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2285555482549617879}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 3.1979425, y: 4.8115697}
+      - {x: -3.842185, y: 4.8168178}
+      - {x: -3.8186507, y: -3.1643429}
+      - {x: 3.1767468, y: -3.1573377}
+  m_UseDelaunayMesh: 0
 --- !u!1 &2327701551448055793
 GameObject:
   m_ObjectHideFlags: 0
@@ -28043,22 +28095,22 @@ PrefabInstance:
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.x
-      value: -0.0007499978
+      value: -0.0041999966
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.y
-      value: 0.040649995
+      value: 0.04135
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.x
-      value: 0.21384999
+      value: 0.2199
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.y
-      value: 0.22094999
+      value: 0.22314999
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28453,22 +28505,22 @@ PrefabInstance:
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.x
-      value: -0.00035000592
+      value: -0.0044
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.y
-      value: 0.03745
+      value: 0.043849997
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.x
-      value: 0.21925
+      value: 0.2216
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.y
-      value: 0.21615
+      value: 0.21364999
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28883,22 +28935,22 @@ PrefabInstance:
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.x
-      value: -0.00045000017
+      value: -0.0051000044
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.y
-      value: 0.03805001
+      value: 0.03645
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.x
-      value: 0.21685
+      value: 0.2134
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.y
-      value: 0.21545
+      value: 0.21325
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28977,22 +29029,22 @@ PrefabInstance:
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.x
-      value: -0.00705
+      value: 0.0021000057
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.y
-      value: 0.041050002
+      value: 0.037250005
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.x
-      value: 0.22084999
+      value: 0.2175
       objectReference: {fileID: 0}
     - target: {fileID: 5636080375296254736, guid: ccc6040f2d5f78e4ba97dcf14ca6827b,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.y
-      value: 0.22085
+      value: 0.21945
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -153,6 +153,7 @@ Shader "Sky"
 
             float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
             { 
+                float2 sunUV=screenUV;
                 float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
                 //水域范围
                 float stepMask=step(0.06,_WaterMask.r); 
@@ -168,22 +169,22 @@ Shader "Sky"
                 svalue=floor(svalue);
                 svalue=clamp(svalue,1,svalue);
                 svalue/=2;
-                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
-                screenUV+=offsetUv;
+               // float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
+               // screenUV+=offsetUv;
                 
                 //波纹1
                 float angle0=radians(_WaveAngle0);//转换角度为弧度
                 float2 waveValue0=float2(cos(angle0),sin(angle0))*_WaveSpeed0;  
 
                 float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
-                float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
+                float2 _TilingAndOffset0=uv*WaveScale0+_WaveT0;
                 float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
                 _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
                 //波纹2
                 float angle1=radians(_WaveAngle1);
                 float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
                 float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
-                float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
+                float2 _TilingAndOffset1=uv*WaveScale1+_WaveT2; 
                 float4 _WaveCol1= SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset1);
                 _WaveCol1.rgb = UnpackNormal(_WaveCol1);
                 
@@ -196,7 +197,7 @@ Shader "Sky"
                 waveBlendCol*=waterValue;
                 //噪声
                 float _waterNoise;
-                Unity_SimpleNoise_float(screenUV.xy, waterNoiseScale, _waterNoise);  
+                Unity_SimpleNoise_float(uv.xy, waterNoiseScale, _waterNoise);  
                 waveBlendCol*=_waterNoise;
                 
 
@@ -233,8 +234,8 @@ Shader "Sky"
                 //return float4(halfValue.xxx,1); 
                 
                  
-                float2 sunUV=float2(screenUV.x+water_valueX*halfStep.x-water_valueX*(1-halfStep.x),
-                                    screenUV.y-water_valueY);           
+                sunUV=float2(sunUV.x+water_valueX*halfStep.x-water_valueX*(1-halfStep.x),
+                                    sunUV.y-water_valueY);           
                 
                 float3 MirrorTexColor= SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, sunUV).xyz;  
                 float MirrorValue=(MirrorTexColor.x+MirrorTexColor.y+MirrorTexColor.z)/3;
@@ -267,6 +268,8 @@ Shader "Sky"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
+
+                
                 float colorValue0=0;
                 Unity_Remap_float(i.uv.y,float2(0,_SkyHalfValue),float2(0,0.5),colorValue0);
                 float colorValue1=0;

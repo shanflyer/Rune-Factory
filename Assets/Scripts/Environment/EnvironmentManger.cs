@@ -56,13 +56,21 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         }
     }
 
+    public void SetCameraPos(Vector2 pos)
+    {
+        skyEnviromentMono.SetBgPos(pos);
+    }
     public override void Init()
     {
         base.Init(); 
         if (skyEnviromentMono == null)
         {
             var _skyEnviromentMono = Resources.Load<SkyEnviromentMono>("Prefabs/Environment");
-            skyEnviromentMono = GameObject.Instantiate(_skyEnviromentMono);
+            skyEnviromentMono = GameObject.Instantiate(_skyEnviromentMono,CameraManager.instance.mainCamera.transform);
+            var skyPos = skyEnviromentMono.transform.position;
+            var skyLocalPos = skyEnviromentMono.transform.localPosition;
+            skyLocalPos.z-=skyPos.z;
+            skyEnviromentMono.transform.localPosition = skyLocalPos;
            // GameObject.DontDestroyOnLoad(skyEnviromentMono.gameObject);
         }
          
