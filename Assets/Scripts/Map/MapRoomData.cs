@@ -26,6 +26,7 @@ public class MapRoomData : ScriptableObject,IGameData
     public GameObject mapObj;
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
     public bool displaySky=true;
+    public bool displaySunlight=false;
     public bool fixedCamera;
     public Vector3 fixedCameraPos;
     public int skyBackGroundId;

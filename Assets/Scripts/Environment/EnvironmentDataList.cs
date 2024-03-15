@@ -35,6 +35,8 @@ public struct EnvironmentData : IGameData
     public AnimationCurve shadowValue;
     public AnimationCurve directionXValue, directionYValue, directionZValue, intensity;
     public AnimationCurve sunXValue, sunYValue,sunScaleValue;
+    public Gradient flareColor;
+    [GradientUsageAttribute(hdr:true)]
     public Gradient sunColor;
     public AnimationCurve sunColorValue;
     public bool overrideDirection;

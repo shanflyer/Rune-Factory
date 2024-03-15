@@ -1,5 +1,212 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-609489162657286210
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48c981ee17d53ea42b3cb31ca0b891a4, type: 3}
+  m_Name: MKGlow
+  m_EditorClassIdentifier: 
+  active: 0
+  <displayName>k__BackingField: 
+  showEditorMainBehavior:
+    m_OverrideState: 0
+    m_Value: 1
+  showEditorBloomBehavior:
+    m_OverrideState: 0
+    m_Value: 1
+  showEditorLensSurfaceBehavior:
+    m_OverrideState: 0
+    m_Value: 1
+  showEditorLensFlareBehavior:
+    m_OverrideState: 0
+    m_Value: 1
+  showEditorGlareBehavior:
+    m_OverrideState: 0
+    m_Value: 1
+  isInitialized:
+    m_OverrideState: 1
+    m_Value: 1
+  allowGeometryShaders:
+    m_OverrideState: 0
+    m_Value: 1
+  allowComputeShaders:
+    m_OverrideState: 0
+    m_Value: 1
+  renderPriority:
+    m_OverrideState: 0
+    m_Value: 1
+  debugView:
+    m_OverrideState: 0
+    m_Value: 5
+  quality:
+    m_OverrideState: 1
+    m_Value: 2
+  antiFlickerMode:
+    m_OverrideState: 0
+    m_Value: 1
+  workflow:
+    m_OverrideState: 0
+    m_Value: 0
+  selectiveRenderLayerMask:
+    m_OverrideState: 0
+    m_Value:
+      m_Bits: 4294967295
+  anamorphicRatio:
+    m_OverrideState: 0
+    m_Value: 0.41
+  lumaScale:
+    m_OverrideState: 0
+    m_Value: 0.038
+  blooming:
+    m_OverrideState: 0
+    m_Value: 0.367
+  bloomThreshold:
+    m_OverrideState: 0
+    m_Value:
+      minValue: 1.5
+      maxValue: 10
+  bloomScattering:
+    m_OverrideState: 1
+    m_Value: 5.79
+  bloomIntensity:
+    m_OverrideState: 1
+    m_Value: 0.2
+  allowLensSurface:
+    m_OverrideState: 1
+    m_Value: 0
+  lensSurfaceDirtTexture:
+    m_OverrideState: 1
+    m_Value: {fileID: 2800000, guid: a8780935c28bed1469eeba0ef8c7aa4b, type: 3}
+  lensSurfaceDirtIntensity:
+    m_OverrideState: 1
+    m_Value: 2
+  lensSurfaceDiffractionTexture:
+    m_OverrideState: 1
+    m_Value: {fileID: 2800000, guid: 93f104cfbc087c54995658ed0219eda5, type: 3}
+  lensSurfaceDiffractionIntensity:
+    m_OverrideState: 1
+    m_Value: 0
+  allowLensFlare:
+    m_OverrideState: 1
+    m_Value: 0
+  lensFlareStyle:
+    m_OverrideState: 1
+    m_Value: 0
+  lensFlareGhostFade:
+    m_OverrideState: 0
+    m_Value: 0
+  lensFlareGhostIntensity:
+    m_OverrideState: 0
+    m_Value: 0
+  lensFlareThreshold:
+    m_OverrideState: 1
+    m_Value:
+      minValue: 2
+      maxValue: 9.999999
+  lensFlareScattering:
+    m_OverrideState: 1
+    m_Value: 6.76
+  lensFlareColorRamp:
+    m_OverrideState: 1
+    m_Value: {fileID: 2800000, guid: 72d44b00078bfc44d82b0eddc168e675, type: 3}
+  lensFlareChromaticAberration:
+    m_OverrideState: 1
+    m_Value: 100
+  lensFlareGhostCount:
+    m_OverrideState: 0
+    m_Value: 0
+  lensFlareGhostDispersal:
+    m_OverrideState: 1
+    m_Value: -1
+  lensFlareHaloFade:
+    m_OverrideState: 1
+    m_Value: 0
+  lensFlareHaloIntensity:
+    m_OverrideState: 1
+    m_Value: 2.06
+  lensFlareHaloSize:
+    m_OverrideState: 1
+    m_Value: 0
+  allowGlare:
+    m_OverrideState: 1
+    m_Value: 0
+  glareBlend:
+    m_OverrideState: 1
+    m_Value: 0.841
+  glareIntensity:
+    m_OverrideState: 1
+    m_Value: 6.23
+  glareAngle:
+    m_OverrideState: 1
+    m_Value: 112
+  glareThreshold:
+    m_OverrideState: 1
+    m_Value:
+      minValue: 0.6
+      maxValue: 10
+  glareStreaks:
+    m_OverrideState: 0
+    m_Value: 4
+  glareScattering:
+    m_OverrideState: 1
+    m_Value: 1.31
+  glareStyle:
+    m_OverrideState: 1
+    m_Value: 2
+  glareSample0Scattering:
+    m_OverrideState: 1
+    m_Value: 10
+  glareSample0Angle:
+    m_OverrideState: 1
+    m_Value: 234
+  glareSample0Intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  glareSample0Offset:
+    m_OverrideState: 1
+    m_Value: 8.46
+  glareSample1Scattering:
+    m_OverrideState: 1
+    m_Value: 10
+  glareSample1Angle:
+    m_OverrideState: 1
+    m_Value: 253
+  glareSample1Intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  glareSample1Offset:
+    m_OverrideState: 1
+    m_Value: 10
+  glareSample2Scattering:
+    m_OverrideState: 1
+    m_Value: 10
+  glareSample2Angle:
+    m_OverrideState: 1
+    m_Value: 273
+  glareSample2Intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  glareSample2Offset:
+    m_OverrideState: 1
+    m_Value: 10
+  glareSample3Scattering:
+    m_OverrideState: 0
+    m_Value: 5
+  glareSample3Angle:
+    m_OverrideState: 0
+    m_Value: 135
+  glareSample3Intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  glareSample3Offset:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12,52 +219,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
   m_Name: Main Camera Profile
   m_EditorClassIdentifier: 
-  components:
-  - {fileID: 2708982747936877976}
---- !u!114 &2708982747936877976
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
-  m_Name: Bloom
-  m_EditorClassIdentifier: 
-  active: 1
-  skipIterations:
-    m_OverrideState: 0
-    m_Value: 1
-  threshold:
-    m_OverrideState: 1
-    m_Value: 0.9
-  intensity:
-    m_OverrideState: 1
-    m_Value: 1.73
-  scatter:
-    m_OverrideState: 1
-    m_Value: 0.35
-  clamp:
-    m_OverrideState: 0
-    m_Value: 65472
-  tint:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  highQualityFiltering:
-    m_OverrideState: 0
-    m_Value: 0
-  downscale:
-    m_OverrideState: 0
-    m_Value: 0
-  maxIterations:
-    m_OverrideState: 0
-    m_Value: 6
-  dirtTexture:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
-    dimension: 1
-  dirtIntensity:
-    m_OverrideState: 0
-    m_Value: 0
+  components: []

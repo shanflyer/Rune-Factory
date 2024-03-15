@@ -71,21 +71,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\Common\SpriteRendererEditor.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\FlareEditorHelper.cs" />
     <Compile Include="Assets\Editor\Map\MapEditor.cs" />
     <Compile Include="Assets\Editor\Common\MeshRendererEditor.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareBatchInspector.cs" />
     <Compile Include="Assets\codeandweb.com\Editor\UIImageSetSizeAndPivot.cs" />
-    <Compile Include="Assets\JMO Assets\Cartoon FX Easy Editor\Editor\CFXEasyEditor.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\FlareJson.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\ExternalBehaviorTreeInspector.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareExporter.cs" />
     <Compile Include="Assets\Editor\Common\CommonItem.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
     <Compile Include="Assets\Editor\Map\WorldMapEditor.cs" />
     <Compile Include="Assets\Editor\Map\EditorCoordinate.cs" />
+    <Compile Include="Assets\Effect\JMO Assets\Cartoon FX\Editor\CFX_SpawnSystemEditor.cs" />
     <Compile Include="Assets\Editor\Common\CommonObjData.cs" />
     <Compile Include="Assets\SerializableDictionary\Editor\SerializableDictionaryPropertyDrawer.cs" />
     <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
     <Compile Include="Assets\Editor\Map\MapItemEditor.cs" />
     <Compile Include="Assets\SerializableDictionary\Example\Editor\UserSerializableDictionaryPropertyDrawers.cs" />
-    <Compile Include="Assets\JMO Assets\Cartoon FX\Editor\CFX_SpawnSystemEditor.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareInspector.cs" />
     <Compile Include="Assets\Editor\ExcelRead\ExcelDataEditor.cs" />
     <Compile Include="Assets\Editor\Tool\UIEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\BehaviorTreeInspector.cs" />
@@ -95,12 +99,14 @@
     <Compile Include="Assets\Editor\Common\CommonToolEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\FloatSliderDrawer.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\IntSliderDrawer.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareAtlasInspector.cs" />
     <Compile Include="Assets\Editor\Common\ExportAssetBundles.cs" />
+    <Compile Include="Assets\Effect\JMO Assets\Cartoon FX Easy Editor\Editor\CFXEasyEditor.cs" />
     <Compile Include="Assets\Editor\Common\MyEditor.cs" />
     <Compile Include="Assets\Editor\Common\UnityEditorWindowController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\FX Quest\Editor\FX Quest.dll" />
+    <None Include="Assets\Effect\FX Quest\Editor\FX Quest.dll" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.IOSResolver.dll" />
     <None Include="Assets\codeandweb.com\Editor\SettingsTexturePackerImporter.txt" />
     <None Include="Assets\MobileDependencyResolver\Editor\mobile-dependency-resolver.txt" />
@@ -109,7 +115,7 @@
     <None Include="Assets\MobileDependencyResolver\Editor\Google.VersionHandler.dll" />
     <None Include="Assets\Editor\MediationAdapterDependencies.xml" />
     <None Include="Assets\codeandweb.com\Editor\TexturePackerImporter.dll" />
-    <None Include="Assets\JMO Assets\Editor\JMOAssets.dll" />
+    <None Include="Assets\Effect\JMO Assets\Editor\JMOAssets.dll" />
     <None Include="Assets\Behavior Designer\Editor\BehaviorDesigner.Editor.dll" />
     <None Include="Assets\Behavior Designer\Editor\GridShader.shader" />
   </ItemGroup>
@@ -391,7 +397,7 @@
       <HintPath>C:\Program Files\Unity 2023.1.5f1c1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="FX Quest">
-      <HintPath>Assets\FX Quest\Editor\FX Quest.dll</HintPath>
+      <HintPath>Assets\Effect\FX Quest\Editor\FX Quest.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections@2.1.4\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
@@ -463,7 +469,7 @@
       <HintPath>Assets\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
     </Reference>
     <Reference Include="JMOAssets">
-      <HintPath>Assets\JMO Assets\Editor\JMOAssets.dll</HintPath>
+      <HintPath>Assets\Effect\JMO Assets\Editor\JMOAssets.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>

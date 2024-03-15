@@ -186,7 +186,7 @@ public class GameTime
             environmentLightData.skyBottomColor = DawnEnvironmentData.SkyBottomColor.Evaluate(lightValue);
             Color sunColor = DawnEnvironmentData.sunColor.Evaluate(lightValue);
             float a = sunColor.a;
-            sunColor *= DawnEnvironmentData.sunColorValue.Evaluate(lightValue);
+             sunColor *= DawnEnvironmentData.sunColorValue.Evaluate(lightValue);
             sunColor.a = a;
             environmentLightData.sunColor = sunColor;
             environmentLightData.sunScale = DawnEnvironmentData.sunScaleValue.Evaluate(lightValue);
@@ -194,6 +194,7 @@ public class GameTime
                 DawnEnvironmentData.sunYValue.Evaluate(lightValue));
             environmentLightData.cloudColor = DawnEnvironmentData.CloudColor.Evaluate(lightValue);
             environmentLightData.sunValue = 1;
+            environmentLightData.flareColor=DawnEnvironmentData.flareColor.Evaluate(lightValue);
 
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
@@ -230,7 +231,8 @@ public class GameTime
                     sunScale = DayEnvironmentData.sunScaleValue.Evaluate(sunValue),
                     sunPos = new Vector2(DayEnvironmentData.sunXValue.Evaluate(sunValue),
                       DayEnvironmentData.sunYValue.Evaluate(sunValue)),
-                    sunValue = 1
+                    sunValue = 1,
+                    flareColor = DayEnvironmentData.flareColor.Evaluate(sunValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -264,7 +266,8 @@ public class GameTime
                     sunScale = DuskEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(DuskEnvironmentData.sunXValue.Evaluate(lightValue),
                       DuskEnvironmentData.sunYValue.Evaluate(lightValue)),
-                    sunValue = 1
+                    sunValue = 1,
+                    flareColor=DuskEnvironmentData.flareColor.Evaluate(lightValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -299,7 +302,8 @@ public class GameTime
                     sunScale = NightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
                       NightEnvironmentData.sunYValue.Evaluate(lightValue)),
-                    sunValue = 0
+                    sunValue = 0,
+                    flareColor=NightEnvironmentData.flareColor.Evaluate(lightValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -334,7 +338,8 @@ public class GameTime
                     sunScale = NightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                     sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
                       NightEnvironmentData.sunYValue.Evaluate(lightValue)),
-                    sunValue = 0
+                    sunValue = 0,
+                    flareColor=NightEnvironmentData.flareColor.Evaluate(lightValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);

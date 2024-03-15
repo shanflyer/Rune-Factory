@@ -9,6 +9,7 @@ using UnityEngine.TextCore.Text;
 public struct DisplaySky : GameAction
 {
     public bool display;
+    public bool displaySunlight;
     public int skyId;
     public Vector2 startPos, endPos;
      public SetValue setValue { get; set; } public SetResult setResult { get; set; }
@@ -20,9 +21,12 @@ public struct DisplaySky : GameAction
         }
         if (parameters.Count >= 2)
         {
-            skyId = int.Parse(parameters[1].value);
+            displaySunlight = bool.Parse(parameters[1].value);
         }
-
+        if (parameters.Count >= 3)
+        {
+            skyId = int.Parse(parameters[2].value);
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

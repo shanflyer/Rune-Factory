@@ -481,7 +481,8 @@ public class FightController : MonoBehaviour
 
             DisplaySky displaySky = new DisplaySky
             {
-                display = fightMapData.skyDisplay
+                display = fightMapData.skyDisplay,
+                displaySunlight = fightMapData.displaySunlight,
             };
             GameActionManager.instance.QueueAction(displaySky); 
         }

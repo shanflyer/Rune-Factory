@@ -658,7 +658,8 @@ Shader "MySprite-Lit-Default"
                 o.uv = TRANSFORM_TEX(attributes.uv, _NormalMap);
                 o.color = attributes.color;
                 o.normalWS = -GetViewForwardDir();
-                o.tangentWS = TransformObjectToWorldDir(attributes.tangent.xyz);
+                //o.tangentWS = TransformObjectToWorldDir(attributes.tangent.xyz);
+                o.tangentWS = attributes.tangent.xyz;
                 o.bitangentWS = cross(o.normalWS, o.tangentWS) * attributes.tangent.w;
                 return o;
             }

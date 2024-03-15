@@ -153,6 +153,7 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         DisplaySky displaySky = new DisplaySky
         {
             display = mapRoomData.displaySky,
+            displaySunlight=mapRoomData.displaySunlight,
             skyId=mapRoomData.skyBackGroundId,
             startPos=mapStartPos,
             endPos=mapEndPos

@@ -16,12 +16,14 @@ public struct EnvironmentLightData
     public Vector2 sunPos;
     public float sunScale;
     public Color sunColor;
+    public Color flareColor;
     public int sunValue;
 }
 
 public class EnvironmentManger : Singleton<EnvironmentManger>
 {
     SkyEnviromentMono skyEnviromentMono;
+    ProFlare flare => skyEnviromentMono.ProFlare;
     Transform sunTransform => skyEnviromentMono.Sun;
     Light2D globalLight=> skyEnviromentMono.GlobalLight;
     Light2D directionLight => skyEnviromentMono.DirectionLight;
@@ -99,8 +101,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             {
                 sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
                 sunTransform.localPosition = natureLightData.sunPos;
-            }
-            
+            } 
+            flare.GlobalTintColor = natureLightData.flareColor;  
 
             globalLight.color = natureLightData.globalColor;
             globalLight.intensity = natureLightData.globalIntensity;
@@ -143,7 +145,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 sunTransform.localScale = new Vector3(environmentLight.sunScale, environmentLight.sunScale, 1);
                 sunTransform.localPosition = environmentLight.sunPos;
             }
-                
+            flare.GlobalTintColor = environmentLight.flareColor;
         }
         Shader.SetGlobalFloat("_ShadowValue", environmentLight.shadowValue);
     }

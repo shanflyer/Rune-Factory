@@ -6,7 +6,13 @@ using UnityEngine.Rendering.Universal;
 public class SkyEnviromentMono : MonoBehaviour
 {
     [SerializeField]
+    ProFlare proFlare;
+    [SerializeField]
+    ProFlareBatch proFlareBatch;
+    [SerializeField]
     SpriteRenderer sun;
+    [SerializeField]
+    Collider2D sunClollider;
     [SerializeField]
     SpriteRenderer sky; 
     [SerializeField]
@@ -18,7 +24,20 @@ public class SkyEnviromentMono : MonoBehaviour
     SpriteRenderer bg,sea;
     [SerializeField]
     ParticleSystemRenderer cloud;
-
+    public ProFlare ProFlare
+    {
+        get
+        {
+            return proFlare;
+        }
+    }
+    public ProFlareBatch ProFlareBatch
+    {
+        get
+        {
+            return proFlareBatch;
+        }
+    }
     public Transform Sun
     {
         get
@@ -50,6 +69,9 @@ public class SkyEnviromentMono : MonoBehaviour
             bg.enabled = true;
             sea.enabled = true;
             cloud.enabled = true; 
+            sun.gameObject.SetActive(true);
+            sunClollider.enabled = true;
+            ProFlareBatch.gameObject.SetActive(true);
         }
         else
         {
@@ -58,6 +80,17 @@ public class SkyEnviromentMono : MonoBehaviour
             bg.enabled = false;
             sea.enabled = false;
             cloud.enabled=false;
+            sun.gameObject.SetActive(false);
+            sunClollider.enabled = false;
+            if (displaySky.displaySunlight)
+            {
+                ProFlareBatch.gameObject.SetActive(true);
+                ProFlareBatch.SetTrigger2DGameObject(true);
+            }
+            else
+            {
+                ProFlareBatch.gameObject.SetActive(false);
+            }
         }
 
         var skyBackGroundData = await GameDataManager.instance.GetAsyncData<SkyBackGroundData>(displaySky.skyId);
