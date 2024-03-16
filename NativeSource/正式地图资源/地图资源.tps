@@ -1876,6 +1876,78 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">Flag_0.png</key>
+            <key type="filename">Flag_1.png</key>
+            <key type="filename">Flag_2.png</key>
+            <key type="filename">Flag_3.png</key>
+            <key type="filename">Flag_4.png</key>
+            <key type="filename">Flag_5.png</key>
+            <key type="filename">Flag_6.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.98</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,10,17,19</rect>
+                <key>scale9Paddings</key>
+                <rect>9,10,17,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Flag_0_normal.png</key>
+            <key type="filename">Flag_1_normal.png</key>
+            <key type="filename">Flag_2_normal.png</key>
+            <key type="filename">Flag_3_normal.png</key>
+            <key type="filename">Flag_4_normal.png</key>
+            <key type="filename">Flag_5_normal.png</key>
+            <key type="filename">Flag_6_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,10,17,19</rect>
+                <key>scale9Paddings</key>
+                <rect>9,10,17,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Flag_7.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.53125,0.98</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,10,16,19</rect>
+                <key>scale9Paddings</key>
+                <rect>8,10,16,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Flag_7_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,10,16,19</rect>
+                <key>scale9Paddings</key>
+                <rect>8,10,16,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">Fridge.png</key>
             <key type="filename">in_32.png</key>
             <key type="filename">赌_19.png</key>
