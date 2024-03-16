@@ -27257,27 +27257,27 @@ MonoBehaviour:
   - coordinate:
       x: 57
       y: 1
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 57
       y: 2
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 57
       y: 3
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 57
       y: 4
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 57
       y: 5
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 57
       y: 6
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 57
       y: 7
@@ -27569,27 +27569,27 @@ MonoBehaviour:
   - coordinate:
       x: 58
       y: 1
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 58
       y: 2
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 58
       y: 3
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 58
       y: 4
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 58
       y: 5
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 58
       y: 6
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 58
       y: 7
@@ -27881,15 +27881,15 @@ MonoBehaviour:
   - coordinate:
       x: 59
       y: 1
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 59
       y: 2
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 59
       y: 3
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 59
       y: 4
@@ -27901,7 +27901,7 @@ MonoBehaviour:
   - coordinate:
       x: 59
       y: 6
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 59
       y: 7
@@ -28193,11 +28193,11 @@ MonoBehaviour:
   - coordinate:
       x: 60
       y: 1
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 60
       y: 2
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 60
       y: 3
@@ -28213,7 +28213,7 @@ MonoBehaviour:
   - coordinate:
       x: 60
       y: 6
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 60
       y: 7
@@ -28505,27 +28505,27 @@ MonoBehaviour:
   - coordinate:
       x: 61
       y: 1
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 61
       y: 2
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 61
       y: 3
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 61
       y: 4
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 61
       y: 5
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 61
       y: 6
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 61
       y: 7
@@ -28817,27 +28817,27 @@ MonoBehaviour:
   - coordinate:
       x: 62
       y: 1
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 62
       y: 2
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 62
       y: 3
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 62
       y: 4
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 62
       y: 5
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 62
       y: 6
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 62
       y: 7
@@ -30591,17 +30591,17 @@ MonoBehaviour:
       y: 54
     isWalkable: 0
   mapItems:
-  - id: 1030
-    instanceId: 1030697
-    coordinate:
-      x: -15
-      y: 3
-    animationKey: 0
   - id: 1084
     instanceId: 1084343
     coordinate:
       x: -20
       y: 24
+    animationKey: 0
+  - id: 1030
+    instanceId: 1030697
+    coordinate:
+      x: -15
+      y: 3
     animationKey: 0
   startCoordinate:
     x: -30
@@ -30615,5 +30615,7 @@ MonoBehaviour:
   dawnEnvironmentDataName: "\u5BA4\u5185\u9ECE\u660E"
   nightEnvironmentDataName: "\u5BA4\u5185\u665A\u4E0A"
   displaySky: 0
+  displaySunlight: 0
   fixedCamera: 0
   fixedCameraPos: {x: 0, y: 0, z: 0}
+  skyBackGroundId: 0

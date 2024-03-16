@@ -194,7 +194,8 @@ public class MapInstanceEditor : MonoBehaviour
                     {
                         GameObject itemObj = (GameObject)PrefabUtility.InstantiatePrefab(itemData.itemObj);
                         Transform itemInstance = new GameObject(itemData.itemName).transform;
-                        itemObj.transform.SetParent(itemInstance, false); 
+                        itemObj.transform.SetParent(itemInstance, false);
+                        itemObj.transform.localPosition = Vector3.zero;
 
                         GameObject Grid = new GameObject("Grid");
                         Grid.transform.SetParent(transform, false);  

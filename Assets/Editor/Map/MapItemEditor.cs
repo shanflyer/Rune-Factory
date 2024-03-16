@@ -146,7 +146,7 @@ public class MapItemEditor : MyEditor
             {
                 GameObject itemObj = (GameObject)PrefabUtility.InstantiatePrefab(selectMapItemDataObj.itemData.itemObj);
                 itemObj.transform.SetParent(itemParent, false);
-                itemObj.transform.localPosition = new Vector3(GameCommon.cellSize,GameCommon.cellSize,0);
+                itemObj.transform.localPosition = Vector3.zero;
                 var mapItemInstanceEditor = itemObj.AddComponent<MapItemInstanceEditor>();
                 mapItemInstanceEditor.InitData(selectMapItemDataObj.itemData,MapEditor.Instance.CreatMapItemInstance(selectMapItemDataObj.itemData.id), Vector2Int.zero);
             }

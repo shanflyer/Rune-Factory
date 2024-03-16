@@ -7673,11 +7673,11 @@ MonoBehaviour:
   - coordinate:
       x: -1
       y: 14
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: -1
       y: 15
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: -1
       y: 16
@@ -7857,19 +7857,19 @@ MonoBehaviour:
   - coordinate:
       x: 0
       y: 16
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 0
       y: 17
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 0
       y: 18
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 0
       y: 19
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 0
       y: 20
@@ -8033,19 +8033,19 @@ MonoBehaviour:
   - coordinate:
       x: 1
       y: 16
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 1
       y: 17
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 1
       y: 18
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 1
       y: 19
-    isWalkable: 0
+    isWalkable: 1
   - coordinate:
       x: 1
       y: 20
@@ -8201,11 +8201,11 @@ MonoBehaviour:
   - coordinate:
       x: 2
       y: 14
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 2
       y: 15
-    isWalkable: 1
+    isWalkable: 0
   - coordinate:
       x: 2
       y: 16
@@ -11819,5 +11819,7 @@ MonoBehaviour:
   dawnEnvironmentDataName: "\u5BA4\u5185\u9ECE\u660E"
   nightEnvironmentDataName: "\u5BA4\u5185\u665A\u4E0A"
   displaySky: 0
+  displaySunlight: 0
   fixedCamera: 0
   fixedCameraPos: {x: 0, y: 0, z: 0}
+  skyBackGroundId: 0
