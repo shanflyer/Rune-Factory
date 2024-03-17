@@ -163,7 +163,8 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         SetFixedCamera setFixedCamera = new SetFixedCamera
         {
             fixedCamera = mapRoomData.fixedCamera,
-            fixedPos=mapRoomData.fixedCameraPos
+            fixedPos=mapRoomData.fixedCameraPos,
+            flowCameraType=mapRoomData.flowCameraType
         };
         GameActionManager.instance.QueueAction(setFixedCamera);
 

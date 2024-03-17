@@ -1520,6 +1520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4844156912718315542}
   - component: {fileID: 7133120328292100090}
+  - component: {fileID: 6153252746208338126}
   m_Layer: 0
   m_Name: "\u5854\u697C"
   m_TagString: Untagged
@@ -1568,6 +1569,57 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!60 &6153252746208338126
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8519896394844737335}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.5821508, y: 2.5646687}
+      - {x: -1.5804205, y: 2.5904613}
+      - {x: -1.5930192, y: -1.2548165}
+      - {x: 1.5755371, y: -1.2722986}
+  m_UseDelaunayMesh: 0
 --- !u!1 &9182410008798591529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2141,22 +2193,22 @@ PrefabInstance:
     - target: {fileID: 1927838141694657438, guid: 7f9726d5153a6cc4db45dd17d1463f64,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.x
-      value: -0.0010499954
+      value: -0.00039999932
       objectReference: {fileID: 0}
     - target: {fileID: 1927838141694657438, guid: 7f9726d5153a6cc4db45dd17d1463f64,
         type: 3}
       propertyPath: m_LocalBounds.m_Center.y
-      value: 0.0833
+      value: 0.07734999
       objectReference: {fileID: 0}
     - target: {fileID: 1927838141694657438, guid: 7f9726d5153a6cc4db45dd17d1463f64,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.x
-      value: 0.19685
+      value: 0.19800001
       objectReference: {fileID: 0}
     - target: {fileID: 1927838141694657438, guid: 7f9726d5153a6cc4db45dd17d1463f64,
         type: 3}
       propertyPath: m_LocalBounds.m_Extent.y
-      value: 0.2116
+      value: 0.21675
       objectReference: {fileID: 0}
     - target: {fileID: 7040444778629693765, guid: 7f9726d5153a6cc4db45dd17d1463f64,
         type: 3}

@@ -1,21 +1,24 @@
-﻿using System.Collections;
+﻿using Cinemachine;
 using UnityEngine;
-using Cinemachine;
 using UnityEngine.Experimental.Rendering.Universal;
 
 public class CameraManager : Singleton<CameraManager>
 {
     public Camera mainCamera;
     public Camera uiCamera;
+
     [SerializeField]
     private PixelPerfectCamera pixelPerfectCamera;
 
     private CinemachineMixingCamera mixingCamera;
-    private CinemachineVirtualCamera followCamera, fixedCamera;
+    private CinemachineVirtualCamera fixedCamera;
+    private CinemachineVirtualCamera[] followCameras;
     private CinemachineConfiner2D confiner2D;
 
-    private CinemachineCameraOffset CinemachineCameraOffset;
+    private CinemachineCameraOffset[] CinemachineCameraOffsets;
+    CinemachineFramingTransposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
+
     public override void Init()
     {
         base.Init();
@@ -24,42 +27,68 @@ public class CameraManager : Singleton<CameraManager>
 
         pixelPerfectCamera = mainCamera.GetComponent<PixelPerfectCamera>();
         mixingCamera = mainCamera.transform.parent.GetComponentInChildren<CinemachineMixingCamera>();
-        followCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[0];
-        fixedCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[1];
+        followCameras = new CinemachineVirtualCamera[3]
+        {
+            (CinemachineVirtualCamera)mixingCamera.ChildCameras[0],
+            (CinemachineVirtualCamera)mixingCamera.ChildCameras[1],
+            (CinemachineVirtualCamera)mixingCamera.ChildCameras[2]
+        };
+        fixedCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[3];
         confiner2D = mixingCamera.GetComponentInChildren<CinemachineConfiner2D>();
-        CinemachineCameraOffset=followCamera.GetComponent<CinemachineCameraOffset>(); 
+        CinemachineCameraOffsets = new CinemachineCameraOffset[3]
+        {
+            mixingCamera.ChildCameras[0].GetComponent<CinemachineCameraOffset>(),
+            mixingCamera.ChildCameras[1].GetComponent<CinemachineCameraOffset>(),
+            mixingCamera.ChildCameras[2].GetComponent<CinemachineCameraOffset>()
+        };
+
+        cinemachineFramingTransposers = new CinemachineFramingTransposer[3]
+        {
+             followCameras[0].GetCinemachineComponent<CinemachineFramingTransposer>(),
+             followCameras[1].GetCinemachineComponent<CinemachineFramingTransposer>(),
+             followCameras[2].GetCinemachineComponent<CinemachineFramingTransposer>()
+        };
 
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
     }
+
     public void SetConfiner2DCollider(PolygonCollider2D polygonCollider2D)
     {
         confiner2D.enabled = false;
-        confiner2D.m_BoundingShape2D= polygonCollider2D;
+        confiner2D.m_BoundingShape2D = polygonCollider2D;
         confiner2D.enabled = true;
         GameTimerController.instance.DeleyActionMain(100, () =>
         {
             confiner2D.InvalidateCache();
         });
-        
     }
-    
+
     public void SetCameraOffset(Vector2 offset)
     {
-        CinemachineCameraOffset.m_Offset= offset;
+        for (int i = 0; i < CinemachineCameraOffsets.Length; i++)
+        {
+            CinemachineCameraOffsets[i].m_Offset = offset;
+        }
     }
+
     public void SetFollowTarget(Transform target)
     {
-        followCamera.Follow = target;
-        followCamera.m_Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
+        for (int i = 0; i < followCameras.Length; i++)
+        {
+            followCameras[i].Follow = target;
+            followCameras[i].m_Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
+        }
     }
-    
-    void SetFixedCamera(SetFixedCamera setFixedCamera)
+
+    private void SetFixedCamera(SetFixedCamera setFixedCamera)
     {
         if (setFixedCamera.fixedCamera)
         {
             fixedView = true;
             mixingCamera.SetWeight(0, 0);
-            mixingCamera.SetWeight(1, 1);
+            mixingCamera.SetWeight(1, 0);
+            mixingCamera.SetWeight(2, 0);
+            mixingCamera.SetWeight(3, 1);
             if (setFixedCamera.fixedPos.x != float.MinValue)
             {
                 Vector3 localPos = fixedCamera.transform.position;
@@ -71,20 +100,44 @@ public class CameraManager : Singleton<CameraManager>
         else
         {
             fixedView = false;
-            mixingCamera.SetWeight(0, 1);
-            mixingCamera.SetWeight(1, 0);
-            followCamera.Follow = CharacterManager.instance.controllerTransform;
+            int flowCameraIndex = (int)setFixedCamera.flowCameraType;
+            followCameras[flowCameraIndex].Follow = null;
+            if (flowCameraIndex == 0)
+            {
+                mixingCamera.SetWeight(0, 1);
+                mixingCamera.SetWeight(1, 0);
+                mixingCamera.SetWeight(2, 0);
+                mixingCamera.SetWeight(3, 0);
+                followCameras[flowCameraIndex].Follow = CharacterManager.instance.controllerTransform;
+            }
+            else
+            {
+                mixingCamera.SetWeight(0, 0);
+                mixingCamera.SetWeight(1, 0);
+                mixingCamera.SetWeight(2, 0);
+                mixingCamera.SetWeight(3, 1);
+                
+                GameTimerController.instance.DeleyActionMain(100, () =>
+                {
+                    
+                    followCameras[flowCameraIndex].Follow = CharacterManager.instance.controllerTransform;
+                    mixingCamera.SetWeight((int)setFixedCamera.flowCameraType, 1);
+                    mixingCamera.SetWeight(3, 0);
+                });
+            }
             confiner2D.enabled = true;
+            confiner2D.InvalidateCache();
         }
     }
-    bool fixedView = false;
-    Vector3 oldCameraPos;
+
+    private bool fixedView = false;
+    private Vector3 oldCameraPos;
+
     protected override void UpData()
     {
         base.UpData();
         if (oldCameraPos != mainCamera.transform.position)
         {
-
             oldCameraPos = mainCamera.transform.position;
             EnvironmentManger.instance.SetCameraPos(oldCameraPos);
         }
