@@ -675,12 +675,13 @@ public partial class Character
         if (clickCharacter != -1 && clickCharacter != instanceId && clickCharacter != NeighborhoodCharacter)
         {
             Character character = CharacterManager.instance.GetCharacter(clickCharacter);
-            if (character.isInTeam)
-            {
-                return;
-            }
+           
             if (character != null)
             {
+                if (character.isInTeam)
+                {
+                    return;
+                }
                 EventReferenceData eventReferenceData = new EventReferenceData
                 {
                     name = "CharacterId",

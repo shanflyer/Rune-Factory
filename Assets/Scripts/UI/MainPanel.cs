@@ -10,12 +10,13 @@ public class MainPanel : GamePanel<IReferenceData>
     [SerializeField]
     Button InfoButton;
     [SerializeField]
-    Button TeamButton;
+    Button TeamButton, HomeEquipmentButton;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         InfoButton = FindChildGameObject<Button>("Info");
         TeamButton = FindChildGameObject<Button>("Team");
+        HomeEquipmentButton = FindChildGameObject<Button>("HomeEquipment");
     }
     public override void OnEnable()
     {
@@ -50,6 +51,11 @@ public class MainPanel : GamePanel<IReferenceData>
         TeamButton.onClick.AddListener(() =>
         {
             UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
+        });
+        HomeEquipmentButton.onClick.AddListener(() =>
+        {
+            var homeEquipList= HomeEquipManager.instance.GetHomeEquipList(CharacterManager.instance.controllerCharacter.instanceId);
+            UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel,HomeEquipList>(homeEquipList);
         });
     }
     public override Task InitData(string dataKey)

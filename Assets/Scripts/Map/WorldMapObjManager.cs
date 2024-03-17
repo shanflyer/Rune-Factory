@@ -60,27 +60,30 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             }
         }
     }
-    bool CreatTempMapObjItem(TempMapItem tempMapItem)
+    async void CreatTempMapObjItem(TempMapItem tempMapItem)
     {
-        if(nowRuntimeMapItemObjs.TryGetValue(tempMapItem.instanceId,out var mapItemRuntimeObj))
+        Transform overrideParent = null;
+        if (CharacterManager.instance.GetRuntimeCharacterObj(tempMapItem.characterId, out var characterRuntimeObj))
         {
-            Transform overrideParent = null;
-            if(CharacterManager.instance.GetRuntimeCharacterObj(tempMapItem.characterId, out var characterRuntimeObj))
-            {
-                overrideParent = characterRuntimeObj.animator.transform;
-            }
-
-            var itemObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
-                 tempMapItem.dataId.ToString(), mapItemRuntimeObj.transform, -1, overrideParent);
-            MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj);
-            tempMapItemObj.SetCoordinate(tempMapItem.coordinate);
-            tempRuntimeMapItemObjs.Add(tempMapItem.instanceId, tempMapItemObj);
-
-            mapItemRuntimeObj.SetColor(new Color(1, 1, 1, 0.5f)); ;
-            tempMapItemObj.SetColor(tempMapItem.CanSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f));
-            return true;
+            overrideParent = characterRuntimeObj.animator.transform;
         }
-        return false;
+        Transform ProfabTransform;
+        if (nowRuntimeMapItemObjs.TryGetValue(tempMapItem.instanceId,out var mapItemRuntimeObj))
+        {
+            ProfabTransform = mapItemRuntimeObj.transform;
+            mapItemRuntimeObj.SetColor(new Color(1, 1, 1, 0.5f));
+        }
+        else
+        {
+            MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(tempMapItem.dataId);
+            ProfabTransform = mapItemData.itemObj.transform;
+        }
+        var itemObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
+                tempMapItem.dataId.ToString(), ProfabTransform, -1, overrideParent);
+        MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj);
+        tempMapItemObj.SetCoordinate(tempMapItem.coordinate);
+        tempRuntimeMapItemObjs.Add(tempMapItem.instanceId, tempMapItemObj); 
+        tempMapItemObj.SetColor(tempMapItem.CanSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f)); 
     }
 
     public void RefreshTempMapItemColor(TempMapItem tempMapItem)

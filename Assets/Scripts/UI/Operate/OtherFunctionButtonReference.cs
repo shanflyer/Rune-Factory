@@ -29,6 +29,7 @@ public class OtherFunctionButtonReference : UIObjReference<FunctionButton>
         base.InitData(t, SelectAction, toggleGroup);
         Name.text = data.name;
         Icon.sprite=data.sprite;
+        Icon.rectTransform.sizeDelta = GameCommon.SetImageSize(data.sprite, new Vector2(32, 32));
         button.onClick.AddListener(()=> { data.action(); });
     }
     public override void SetPanelUISerializeObj()

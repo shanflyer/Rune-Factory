@@ -26,6 +26,21 @@ public class OtherFuntionPanel : GamePanel<FunctionButtonList>
     {
         base.InitReferenceData(v);
         buttonList.InitListData(v.buttons);
+        HidePanel hidePanel = new HidePanel
+        {
+            hide = true,
+            type = typeof(OperateButtonPanel)
+        };
+        GameActionManager.instance.QueueAction(hidePanel);
     }
-
+    public override void Close()
+    {
+        base.Close();
+        HidePanel hidePanel = new HidePanel
+        {
+            hide = false,
+            type = typeof(OperateButtonPanel)
+        };
+        GameActionManager.instance.QueueAction(hidePanel);
+    }
 }

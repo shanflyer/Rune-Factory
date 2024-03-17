@@ -11,6 +11,8 @@ public struct EditorShopItemData
     public string shopName;
     public string shopGroup;
     public int item;
+    public ShopItemType shopItemType;
+    public PayType payType;
     public int priceValue;
     public bool open;
     public bool buyLimitOne;
@@ -38,6 +40,7 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
             int _groupIndex = shopGroups.FindIndex(s => s.name == shopItemData.shopGroup);
             if (_groupIndex != groupIndex)
             {
+                shopIndex = -2;
                 if (groupIndex >= 0)
                 {
                     shopGroups[groupIndex] = shopGroup;
@@ -88,6 +91,8 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
                 new ShopItemData
                 {
                     item=shopItemData.item,
+                    type=shopItemData.shopItemType,
+                    payType=shopItemData.payType,
                     priceValue=shopItemData.priceValue,
                     open=shopItemData.open
                 }

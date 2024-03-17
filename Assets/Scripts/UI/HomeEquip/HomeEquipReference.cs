@@ -47,7 +47,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         base.InitData(t, SelectAction, toggleGroup); 
 
         toggle.group = toggleGroup; 
-        ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(data.dataId);
+        ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(data.itemDataId);
         toggle.enabled = true;
         if (homeEquipData != null)
         {

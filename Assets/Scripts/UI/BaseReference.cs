@@ -8,12 +8,17 @@ public class BaseReference : MonoBehaviour
 {
     public static LayerMask UILayer;
     public static LayerMask HideLayer;
+
+    [SerializeField]
+    public Canvas canvas;
     public virtual bool pluralUI { get; }
     public virtual bool changeInputModel { get=>true; }
     public virtual void SetPanelUISerializeObj()
-    { 
+    {
+        gameObject.TryGetComponent(out canvas);
     }
     public virtual void Show(int layer = -1) { }
     public virtual void Close() { } 
     public virtual async Task InitData(string dataKey) { }
+   
 }

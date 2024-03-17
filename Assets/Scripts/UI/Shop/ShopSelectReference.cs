@@ -22,7 +22,11 @@ public class ShopSelectReference : UIObjReference<ShopData>
             }
         });
     }
-
+    public override void ClearSelect()
+    {
+        base.ClearSelect();
+        toggle.SetIsOnWithoutNotify(false);
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();

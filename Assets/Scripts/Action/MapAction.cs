@@ -151,7 +151,26 @@ public struct TrySetTempMapItem : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct StopSetTempMapItem : GameAction
+{
+    public int instanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            instanceId = int.Parse(parameters[0].value);
+        }
+        if (target != 0)
+        {
+            instanceId = target;
+        }
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct CheckTempMapItemSet : GameAction
 {
     public SetValue setValue { get; set; }

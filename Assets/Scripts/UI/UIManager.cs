@@ -30,7 +30,7 @@ public class UIManager:Singleton<UIManager>
        // canvas = UnityEngine.Object.FindAnyObjectByType<Canvas>();
         GameActionManager.instance.AddListener<ClosePanelAction>(ClosePanel);
         GameActionManager.instance.AddListener<OpenPanelAction>(OpenPanel);
-        //GameActionManager.instance.AddListener<ShowPanel>(ShowPanel);
+        GameActionManager.instance.AddListener<HidePanel>(HidePanel);
     }
     
     public bool GamePanelIsShow<T>() where T : BaseReference
@@ -51,6 +51,15 @@ public class UIManager:Singleton<UIManager>
         {
           return await ShowGamePanel<T>();
         }
+        return null;
+    }
+    BaseReference GetGamePanel(Type t)
+    {
+        if (gamePanels.TryGetValue(t, out var gamePanel) && gamePanel != null)
+        {
+            return gamePanel;
+        }
+        
         return null;
     }
     public async Task<T> ShowGamePanel<T>(string dataKey = null,int layer=-1, Transform parent = null) where T : BaseReference
@@ -104,7 +113,18 @@ public class UIManager:Singleton<UIManager>
             return gamePanel;
         } 
     }
-
+    void HidePanel(HidePanel hidePanel)
+    {
+        var gamePanel = GetGamePanel(hidePanel.type);
+        if (gamePanel == null)
+        {
+            return;
+        }
+        if (gamePanel.canvas)
+        {
+            gamePanel.canvas.enabled=!hidePanel.hide;
+        } 
+    }
 
     private async void OpenPanel(OpenPanelAction openPanelEvent)
     {

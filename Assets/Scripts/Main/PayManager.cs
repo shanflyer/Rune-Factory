@@ -61,7 +61,7 @@ public class PayManager : Singleton<PayManager>
             payType = payType,
             afterAction = afterAction
         };
-        UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData, 3);
+        UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData);
     }
 
 
@@ -103,7 +103,10 @@ public class PayManager : Singleton<PayManager>
     }
     public void TryCreatMoney()
     {
-
+#if UNITY_EDITOR
+        nowDiamond += 200;
+        GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+#endif
     }
 }
 public enum ShopItemType

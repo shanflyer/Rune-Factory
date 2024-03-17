@@ -77,9 +77,10 @@ public struct OpenPanelAction : GameAction
     }
 }
 
-public struct ShowPanel : GameAction
+public struct HidePanel : GameAction
 {
-    public bool show;
+    public bool hide;
+    public Type type;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
@@ -87,7 +88,7 @@ public struct ShowPanel : GameAction
     {
         if (parameters.Count >= 1)
         {
-            show = bool.Parse(parameters[0].value);
+            hide = bool.Parse(parameters[0].value);
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }

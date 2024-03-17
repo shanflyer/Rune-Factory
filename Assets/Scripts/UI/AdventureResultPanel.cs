@@ -67,6 +67,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
  
     public override void InitReferenceData(FightResult fightResult)
     {
+        base.InitReferenceData(fightResult);
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
 
@@ -77,15 +78,14 @@ public class AdventureResultPanel: GamePanel<FightResult>
     
     public override void SetPanelUISerializeObj()
     {
+        base.SetPanelUISerializeObj();
         SuccessTitle = FindChildGameObject("SuccessTitle");
         FailureTitle = FindChildGameObject("FailureTitle");
         ItemsContent = FindChildGameObject("ItemsContent");
         itemReference = FindChildGameObject<ItemReference>("ItemBoxReference");
         Team = FindChildGameObject("Team");
         teamerRenference = FindChildGameObject<AdventureTeamerRenference>("AdventureTeamer");
-        OkButton = FindChildGameObject<Button>("OkButton");
-
-        base.SetPanelUISerializeObj();
+        OkButton = FindChildGameObject<Button>("OkButton"); 
     }
 
 }

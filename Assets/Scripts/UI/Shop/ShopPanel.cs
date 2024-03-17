@@ -75,6 +75,14 @@ public class ShopPanel : GamePanel<ShopGroup>
     ShopItemData selectShopItemData;
     int buyCount=1;
 
+    public override void Close()
+    {
+        base.Close();
+        ShopGroup.enabled = false;
+        ItemGroup.enabled = false;
+        shopItems.ClearSelect();
+        shops.ClearSelect();
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -179,7 +187,7 @@ public class ShopPanel : GamePanel<ShopGroup>
             selectItemInfo.text = itemData.info;
             selectItemProperty.text = itemData.property.ToString();
             selectItemIcon.sprite = itemData.icon;
-            selectItemIcon.SetNativeSize();
+            selectItemIcon.rectTransform.sizeDelta=GameCommon.SetImageSize(itemData.icon,new Vector2(32,32));
             selectMoneyValue.text = (itemData.shopPrice * shopItemData.priceValue / 100.0f).ToString("0");
             selectMoneyIcon.sprite = PayManager.instance.GetPayMoneySprite(shopItemData.payType);
         }
@@ -188,20 +196,24 @@ public class ShopPanel : GamePanel<ShopGroup>
         RefreshBuyCount();
         SelectInformation.transform.localScale = Vector3.one;
     } 
+    void SelecShopData(ShopData shopData, bool selected)
+    {
+        if (selected)
+        {
+            List<ShopItemData> shopItemDatas = shopData.shopItem.FindAll(s => s.open);
+            shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup);
+        }
+
+    }
     public override void InitReferenceData(ShopGroup v)
     {
         base.InitReferenceData(v);
         Title.text = v.name;
-        shops.InitListData(v.shopDatas,
-            (ShopData shopData, bool selected) =>
-            {
-                if (selected)
-                {
-                    List<ShopItemData> shopItemDatas = shopData.shopItem.FindAll(s => s.open);
-                    shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup);
-                }
-               
-            },ShopGroup);
+        ShopGroup.enabled = true;
+        ItemGroup.enabled = true;
+        shops.InitListData(v.shopDatas,SelecShopData, ShopGroup);
+        shops.SelectDefault();
+        SelecShopData(v.shopDatas[0], true);
         buyCount = 1;
         RefreshBuyCount();
     }

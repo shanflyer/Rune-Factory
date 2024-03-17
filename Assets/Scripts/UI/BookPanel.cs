@@ -8,9 +8,7 @@ public class BookPanel : GamePanel<IReferenceData>
     [SerializeField]
     Button bookButton;
     [SerializeField]
-    Button helpButton;
-    [SerializeField]
-    Button teamButton;
+    Button helpButton; 
     [SerializeField]
     Button characterButton;
     [SerializeField]
@@ -19,8 +17,7 @@ public class BookPanel : GamePanel<IReferenceData>
     {
         base.SetPanelUISerializeObj();
         bookButton = FindChildGameObject<Button>("Book");
-        helpButton = FindChildGameObject<Button>("Help");
-        teamButton = FindChildGameObject<Button>("Team");
+        helpButton = FindChildGameObject<Button>("Help"); 
         characterButton = FindChildGameObject<Button>("Character");
         closeButton = FindChildGameObject<Button>("ReturnButton");
     }
@@ -33,10 +30,6 @@ public class BookPanel : GamePanel<IReferenceData>
             UIManager.instance.ShowGamePanel<NPCPanel,NPCList>(NPCManager.instance.GetNPCList());
             Close();
         });
-        teamButton.onClick.AddListener(() =>
-        {
-            UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
-            Close();
-        });
+        
     }
 }

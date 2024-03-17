@@ -30,13 +30,23 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
      
     HomeEquip SelectHomeEquip;
     private Vector2 defaultInfoIconSize;
-    void SelectAction()
+    async void SelectAction()
     {
-        if (SelectHomeEquip.dataId != 0)
+        if (SelectHomeEquip.itemDataId != 0)
         {
             if (SelectHomeEquip.mapInstance == 0)
             {
-
+                HomeEquipmentData homeEquipmentData=await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
+                if (homeEquipmentData.canSetMaps==null||homeEquipmentData.canSetMaps.Count==0||
+                    homeEquipmentData.canSetMaps.Contains(CharacterManager.instance.controllerCharacter.mapInstance))
+                {
+                    CreatTempMapItem creatTempMapItem = new CreatTempMapItem
+                    {
+                        characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                        instanceId = homeEquipmentData.mapItemDataId
+                    };
+                    GameActionManager.instance.QueueAction(creatTempMapItem);
+                }
             }
             else
             {
@@ -90,7 +100,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     {
         if (selected)
         {
-            if (HomeEquip.dataId == 0)
+            if (HomeEquip.itemDataId == 0)
             {
                 ItemInformation.localScale = Vector3.zero; 
             }
@@ -98,7 +108,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             {
                 ItemInformation.localScale = Vector3.one;
                 SelectHomeEquip = HomeEquip;
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(HomeEquip.dataId);
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(HomeEquip.itemDataId);
                 ItemIcon.sprite = itemData.icon;
                 ItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(ItemIcon.sprite, defaultInfoIconSize);
                 ItemIcon.enabled = true; 

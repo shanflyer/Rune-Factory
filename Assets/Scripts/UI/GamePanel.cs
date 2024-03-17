@@ -7,10 +7,7 @@ using UnityEngine.UI;
 
 public class GamePanel<V> : BaseReference where V:IReferenceData
 {
-    Canvas canvas;
     GraphicRaycaster graphicRaycaster;
-
-    
 
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     public virtual void OnEnable()
@@ -63,6 +60,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     }
     public override void SetPanelUISerializeObj()
     {
+        base.SetPanelUISerializeObj();
         InitChildObjData();
         var uiObjReferences = gameObject.GetComponentsInChildren<BaseReference>(true);
         foreach(var uiObj in uiObjReferences)
@@ -84,7 +82,10 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         
     }
    
-    public virtual void InitReferenceData(V v) { } 
+    public virtual void InitReferenceData(V v) 
+    {
+
+    } 
     public override void Show(int layer = -1)
     {
         if (changeInputModel) 
@@ -109,10 +110,10 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         if (changeInputModel)
         {
             InputManager.instance.SwitchInputMap(false);
-        }
+        } 
         if (pluralUI)
         {
-            if (gameObject)
+            if (gameObject!=null)
             {
                 Destroy(gameObject);
             }

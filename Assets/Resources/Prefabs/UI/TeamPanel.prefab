@@ -158,12 +158,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78cbb755f841632438c736390a32ee2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 7643882501554658228}
   teamerparent: {fileID: 7752383022905080816}
   TeamerReference: {fileID: 5406090616878431725}
   toggleGroup: {fileID: 2975085719778117457}
-  leaveButton: {fileID: 0}
-  talkButton: {fileID: 0}
-  operatePanel: {fileID: 0}
+  leaveButton: {fileID: 935498746948356491}
+  talkButton: {fileID: 2400519990833368643}
+  operatePanel: {fileID: 8365418672927841235}
 --- !u!1 &1190028475949569219
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,6 +901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa4f746ff49cb88499a4c442d3e900ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
   NPCImage: {fileID: 6542242217032343918}
   NPCName: {fileID: 3840595716060507743}
   toggle: {fileID: 8886598548898962733}

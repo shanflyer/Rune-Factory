@@ -208,6 +208,31 @@ public class GameCommon
 
 #endif
 
+
+    public static int2 GetDirectionInt2(Direction direction)
+    {
+        int2 value=int2.zero;
+        switch (direction)
+        {
+            case Direction.UP:
+                value = new int2(0, 1);
+                break;
+
+            case Direction.LEFT:
+                value = new int2(-1, 0);
+                break;
+
+            case Direction.DOWN:
+                value = new int2(0, -1);
+                break;
+
+            case Direction.RIGHT:
+                value = new int2(1, 0);
+                break;
+        }
+        return value;
+    }
+
     /// <summary>
     /// 转换方向为值
     /// </summary>
@@ -948,7 +973,8 @@ public static class DataPath
         {typeof(SleepSetDataList),"Data/SleepSetData" },
         {typeof(GameTimeEventData),"Data/GameTimeEventData" },
         {typeof(EmoteData),"Data/EmoteData" },
-        {typeof(SkyBackGroundData),"Data/SkyBackGroundData"}
+        {typeof(SkyBackGroundData),"Data/SkyBackGroundData"},
+        {typeof(HomeEquipmentData),"Data/HomeEquipmentData" }
     };
 
     public static string GetDataPath(Type type)

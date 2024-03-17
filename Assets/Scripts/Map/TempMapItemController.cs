@@ -16,6 +16,7 @@ public class TempMapItemController:Singleton<TempMapItemController>
     {
         base.Init();
         tempMapItems.Init(4);
+        GameActionManager.instance.AddListener<StopSetTempMapItem>(StopSetTempMapItem);
         GameActionManager.instance.AddListener<TrySetTempMapItem>(TrySetTempMapItem);
         GameActionManager.instance.AddListener<CheckTempMapItemSet>(CheckTempMapItemSet);
         GameActionManager.instance.AddListener<RefreshTempMapItemCoordinate>(RefreshTempMapItemCoordinate);
@@ -56,6 +57,17 @@ public class TempMapItemController:Singleton<TempMapItemController>
         }
         return list;
     }
+    void StopSetTempMapItem(StopSetTempMapItem StopSetTempMapItem)
+    {
+        if (tempMapItems.GetData(StopSetTempMapItem.instanceId, out var tempMapItem))
+        {
+            DestoryTempMapItem DestoryTempMapItem = new DestoryTempMapItem
+            {
+                instanceId = StopSetTempMapItem.instanceId,
+            };
+            GameActionManager.instance.QueueAction(DestoryTempMapItem, true); 
+        } 
+    }
     void TrySetTempMapItem(TrySetTempMapItem TrySetTempMapItem)
     {
         if (tempMapItems.GetData(TrySetTempMapItem.instanceId, out var tempMapItem))
@@ -75,10 +87,12 @@ public class TempMapItemController:Singleton<TempMapItemController>
                     instanceId=TrySetTempMapItem.instanceId,
                 };
                 GameActionManager.instance.QueueAction(DestoryTempMapItem, true);
+
+                if (TrySetTempMapItem.setResult != null)
+                    TrySetTempMapItem.setResult(true);
+                return;
             }
-            if (TrySetTempMapItem.setResult != null)
-                TrySetTempMapItem.setResult(true);
-            return;
+           
         }
         if (TrySetTempMapItem.setResult != null)
             TrySetTempMapItem.setResult(false);
@@ -107,10 +121,7 @@ public class TempMapItemController:Singleton<TempMapItemController>
             WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
         }
 
-    }
-
-    
-
+    } 
     void DestoryTempMapItem(DestoryTempMapItem destoryTempMapItem)
     {
         if(tempMapItems.GetData(destoryTempMapItem.instanceId,out var tempMapItem))
@@ -141,52 +152,61 @@ public class TempMapItemController:Singleton<TempMapItemController>
                 creatTempMapItem.setResult(false);
             return;
         }
-        if(WorldMapManager.instance.GetRuntimeMapItem(creatTempMapItem.instanceId,out var runtimeMapItem))
+
+        int mapItemInstanceId;
+        int mapItemDataId;
+        int2 mapItemCoordiante;
+
+        Character character = CharacterManager.instance.GetCharacter(creatTempMapItem.characterId);
+        if (character == null)
         {
-            Character character = CharacterManager.instance.GetCharacter(creatTempMapItem.characterId);
-            if (character!=null)
-            {
-                TempMapItem tempMapItem = new TempMapItem
-                {
-                    characterId = character.instanceId,
-                    instanceId = runtimeMapItem.instanceId,
-                    dataId = runtimeMapItem.dataId,
-                    roomId = runtimeMapItem.mapInstanceId,
-                    colliderCells=new NativeList<int2>(8,Allocator.TempJob)
-                };
-
-                MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
-                for(int i = 0; i < mapItemData.colliderCells.Length; i++)
-                {
-                    tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
-                }
-
-
-                tempMapItem.offsetCoordinate = runtimeMapItem.coordinate - character.coordinate; 
-                tempMapItem.coordinate = runtimeMapItem.coordinate; 
-                tempMapItems.SetData(tempMapItem);
-
-                characterTempMapItems[creatTempMapItem.characterId] = tempMapItem.instanceId; 
-
-                character.CanMoveCrossMap = false;
-                WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
-                SetCoordinate setCoordinate = async (int3 coordinate) =>
-                {
-                    tempMapItem.InitCoordinate();
-                    tempMapItems.SetData(tempMapItem);
-                    WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
-                };
-
-                character.AddSetCoordinateDele(setCoordinate);
-                characterSetCoordinates.Add(character.instanceId, setCoordinate);
-
-                if (creatTempMapItem.setResult != null)
-                    creatTempMapItem.setResult(true);
-                return;
-            }
+            if (creatTempMapItem.setResult != null)
+                creatTempMapItem.setResult(false);
+            return;
         }
+
+        if (WorldMapManager.instance.GetRuntimeMapItem(creatTempMapItem.instanceId, out var runtimeMapItem))
+        {
+            mapItemDataId = runtimeMapItem.dataId;
+            mapItemInstanceId = runtimeMapItem.instanceId;
+            mapItemCoordiante = runtimeMapItem.coordinate;
+        }
+        else
+        {
+            mapItemDataId = creatTempMapItem.instanceId;
+            mapItemInstanceId = WorldMapManager.instance.GetInstanceFromItem();
+            mapItemCoordiante = character.coordinate+GameCommon.GetDirectionInt2(character.direction)*4;
+        } 
+        TempMapItem tempMapItem = new TempMapItem
+        {
+            characterId = character.instanceId,
+            instanceId = mapItemInstanceId,
+            dataId = mapItemDataId,
+            roomId = character.mapInstance,
+            colliderCells = new NativeList<int2>(8, Allocator.TempJob)
+        }; 
+        MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItemDataId);
+        for (int i = 0; i < mapItemData.colliderCells.Length; i++)
+        {
+            tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
+        } 
+        tempMapItem.offsetCoordinate = mapItemCoordiante- character.coordinate;
+        tempMapItem.coordinate = mapItemCoordiante;
+        tempMapItems.SetData(tempMapItem); 
+        characterTempMapItems[creatTempMapItem.characterId] = tempMapItem.instanceId; 
+        character.CanMoveCrossMap = false;
+        WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
+        SetCoordinate setCoordinate = async (int3 coordinate) =>
+        {
+            tempMapItem.InitCoordinate();
+            tempMapItems.SetData(tempMapItem);
+            WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
+        }; 
+        character.AddSetCoordinateDele(setCoordinate);
+        characterSetCoordinates.Add(character.instanceId, setCoordinate);
+
         if (creatTempMapItem.setResult != null)
-            creatTempMapItem.setResult(false);
+            creatTempMapItem.setResult(true); 
     }
 }
 public struct TempMapItem:INativeData

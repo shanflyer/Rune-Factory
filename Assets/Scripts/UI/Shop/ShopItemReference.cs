@@ -41,6 +41,7 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         this.SelectAction = SelectAction;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(ShopItemData.item);
         itemIcon.sprite = itemData.icon;
+        itemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(itemData.icon, new Vector2(32, 32));
         moneyValue.text = (itemData.shopPrice * ShopItemData.priceValue * 0.01f).ToString("0");
         moneyIcon.sprite = PayManager.instance.GetPayMoneySprite(ShopItemData.payType); 
     }

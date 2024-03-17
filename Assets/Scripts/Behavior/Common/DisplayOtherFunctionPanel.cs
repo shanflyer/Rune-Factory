@@ -5,7 +5,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 
 [TaskCategory("NewGame/Common")]
-[TaskName("显示中间其他功能界面")]
+[TaskName("显示其他功能界面")]
 public class DisplayOtherFunctionPanel : Action
 {
     public SharedSharedInt3List actionParameters;
