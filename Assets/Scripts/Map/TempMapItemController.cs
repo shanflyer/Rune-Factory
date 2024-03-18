@@ -73,12 +73,13 @@ public class TempMapItemController:Singleton<TempMapItemController>
         if (tempMapItems.GetData(TrySetTempMapItem.instanceId, out var tempMapItem))
         {
             if (tempMapItem.CanSet)
-            {
+            { 
                 MoveMapItem moveMapItem = new MoveMapItem
                 {
                     mapItemInstanceId = TrySetTempMapItem.instanceId,
                     mapInstance = tempMapItem.roomId,
-                    coordinate = tempMapItem.coordinate
+                    coordinate = tempMapItem.coordinate,
+                    dataId= tempMapItem.dataId,
                 };
                 GameActionManager.instance.QueueAction(moveMapItem,true);
 
@@ -173,8 +174,8 @@ public class TempMapItemController:Singleton<TempMapItemController>
         }
         else
         {
-            mapItemDataId = creatTempMapItem.instanceId;
-            mapItemInstanceId = WorldMapManager.instance.GetInstanceFromItem();
+            mapItemDataId = creatTempMapItem.dataId;
+            mapItemInstanceId = creatTempMapItem.instanceId;
             mapItemCoordiante = character.coordinate+GameCommon.GetDirectionInt2(character.direction)*4;
         } 
         TempMapItem tempMapItem = new TempMapItem

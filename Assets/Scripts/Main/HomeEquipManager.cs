@@ -9,13 +9,11 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     private NativeHashMap<int, int> itemEquips = new NativeHashMap<int, int>(4, Allocator.TempJob);
 
     private Dictionary<int, List<int>> characterHomeEquips = new Dictionary<int, List<int>>();
-    private Dictionary<int, Dictionary<int, int>> characterHomeEquipCountData = new Dictionary<int, Dictionary<int, int>>();
-    private MyInstance myInstance;
+    private Dictionary<int, Dictionary<int, int>> characterHomeEquipCountData = new Dictionary<int, Dictionary<int, int>>(); 
 
     public override void Init()
     {
-        base.Init();
-        myInstance = new MyInstance();
+        base.Init(); 
         homeEquips.Init(8);
         GameActionManager.instance.AddListener<CreatHomeEquip>(CreatHomeEquip);
         GameActionManager.instance.AddListener<RemoveHomeEquip>(RemoveHomeEquip);
@@ -56,7 +54,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
     private void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
     {
-        int instanceId = myInstance.CreatInstanceId();
+        int instanceId = WorldMapManager.instance.GetInstanceFromItem();
 
         HomeEquip homeEquip = new HomeEquip
         {

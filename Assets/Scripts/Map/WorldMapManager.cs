@@ -408,9 +408,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (!MapCellController.instance.ContainsRoom(addMapItem.mapId))
         {
             return;
-        }
-
-
+        } 
         MapItem mapItem = new MapItem
         {
             id = addMapItem.dataId,
@@ -476,6 +474,23 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
                 runtimeMapItems.SetData(runtimeMapItem);
             }
+        }
+        else //if(moveMapItem.noneTryAdd)
+        {
+            AddMapItem addMapItem = new AddMapItem
+            {
+                dataId = moveMapItem.dataId,
+                mapId = moveMapItem.mapInstance,
+                coordinate = moveMapItem.coordinate
+            };
+            AddMapItem(addMapItem);
+            SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
+            {
+                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                equipInstanceId = moveMapItem.mapItemInstanceId
+            };
+            GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
+
         }
        
     }

@@ -26,7 +26,10 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     Transform EquipParent;
     [SerializeField]
     ToggleGroup EquipSelectGroup;
-    DisplayList<HomeEquipReference, HomeEquip> EquipBoxs; 
+    DisplayList<HomeEquipReference, HomeEquip> EquipBoxs;
+
+    [SerializeField]
+    GameEventData setEventData;
      
     HomeEquip SelectHomeEquip;
     private Vector2 defaultInfoIconSize;
@@ -40,12 +43,26 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 if (homeEquipmentData.canSetMaps==null||homeEquipmentData.canSetMaps.Count==0||
                     homeEquipmentData.canSetMaps.Contains(CharacterManager.instance.controllerCharacter.mapInstance))
                 {
-                    CreatTempMapItem creatTempMapItem = new CreatTempMapItem
+                    List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData> 
                     {
-                        characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                        instanceId = homeEquipmentData.mapItemDataId
+                        new EventReferenceData
+                        {
+                            name="CharacterId",
+                            value=CharacterManager.instance.controllerCharacter.instanceId,
+                        },
+                        new EventReferenceData
+                        {
+                            name="TargetItem",
+                            value=SelectHomeEquip.instanceId,
+                        },
+                        new EventReferenceData
+                        {
+                            name="TargetValue",
+                            value=homeEquipmentData.mapItemDataId,
+                        },
                     };
-                    GameActionManager.instance.QueueAction(creatTempMapItem);
+
+                    GameEventManager.instance.AddGameEvent(setEventData, eventReferenceDatas);
                 }
             }
             else

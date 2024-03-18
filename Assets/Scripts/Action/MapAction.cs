@@ -133,7 +133,7 @@ public struct ZeroWorld : GameAction
 
 public struct TrySetTempMapItem : GameAction
 {
-    public int instanceId;
+    public int instanceId; 
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
@@ -143,10 +143,10 @@ public struct TrySetTempMapItem : GameAction
         {
             instanceId = int.Parse(parameters[0].value);
         }
-        if (target != 0)
+        if (target != 0&&target!=int.MinValue)
         {
             instanceId = target;
-        }
+        } 
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -163,7 +163,7 @@ public struct StopSetTempMapItem : GameAction
         {
             instanceId = int.Parse(parameters[0].value);
         }
-        if (target != 0)
+        if (target != 0 && target != int.MinValue)
         {
             instanceId = target;
         }
@@ -182,6 +182,7 @@ public struct CreatTempMapItem : GameAction
 {
     public int characterId;
     public int instanceId;
+    public int dataId;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
@@ -195,13 +196,17 @@ public struct CreatTempMapItem : GameAction
         {
             instanceId = int.Parse(parameters[1].value);
         }
-        if (source != 0)
+        if (source != 0 && source != int.MinValue)
         {
             characterId = source;
         }
-        if (target != 0)
+        if (target != 0&& target != int.MinValue)
         {
             instanceId = target;
+        }
+        if (value != 0 && value != int.MinValue)
+        {
+            dataId = value;
         }
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
@@ -242,7 +247,7 @@ public struct TryDeleteRoom : GameAction
         {
             roomId = int.Parse(parameters[0].value);
         }
-        if (source != 0)
+        if (source != 0 && source != int.MinValue)
         {
             roomId = source;
         }
@@ -265,7 +270,7 @@ public struct TryCreatRoom : GameAction
         {
             roomId = int.Parse(parameters[0].value);
         }
-        if (source != 0)
+        if (source != 0 && source != int.MinValue)
         {
             roomId = source;
         }
@@ -388,11 +393,11 @@ public struct DisplayMap : GameAction
         {
             actionId = int.Parse(parameters[1].value);
         }
-        if (source != 0)
+        if (source != 0 && source != int.MinValue)
         {
             displayMap = source;
         }
-        if (target != 0)
+        if (target != 0 && target != int.MinValue)
         {
             actionId = target;
         }
@@ -561,6 +566,8 @@ public struct MoveMapItem : GameAction
     public int mapItemInstanceId;
     public int mapInstance;
     public int2 coordinate;
+    public bool noneTryAdd;
+    public int dataId;
 }
 
 public struct AttachMapItemData : GameAction
