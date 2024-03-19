@@ -1,11 +1,18 @@
 ﻿using Unity.Mathematics;
 
+public struct UnSetHomeEquip : GameAction
+{
+    public int instanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+}
 public struct CreatHomeEquip : GameAction
 {
     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
     public int characterId;
     public int itemDataId;
     public int equipDataId;
+    public int instanceId;
 }
 public struct RemoveHomeEquip : GameAction
 {

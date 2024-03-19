@@ -8,13 +8,17 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
     [SerializeField]
     private Toggle toggle; 
     [SerializeField]
-    private Image icon; 
+    private Image icon;
+    [SerializeField]
+    private Transform setTips, unSetTips;
      
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         toggle = GetComponent<Toggle>();
-        icon = FindChildGameObject<Image>("Icon"); 
+        icon = FindChildGameObject<Image>("Icon");
+        setTips = FindChildGameObject("SetTips");
+        unSetTips = FindChildGameObject("UnSetTips");
     }
 
     private void Awake()
@@ -49,6 +53,9 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         toggle.group = toggleGroup; 
         ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(data.itemDataId);
         toggle.enabled = true;
+        setTips.gameObject.SetActive(data.mapInstance > 0);
+        unSetTips.gameObject.SetActive(data.mapInstance <= 0);
+       
         if (homeEquipData != null)
         {
             icon.sprite = homeEquipData.icon;

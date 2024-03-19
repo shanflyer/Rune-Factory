@@ -295,6 +295,7 @@ public class GameDataManager : Singleton<GameDataManager>
 public interface IGameData 
 { 
     public string GetKey();
+    public string GetName() { return ToString(); }
 #if UNITY_EDITOR
     public void SetReferenceData();
 #endif 
@@ -312,6 +313,11 @@ public struct ShowData : IGameData
     {
         return id.ToString();
     }
+
+    public string GetName()
+    {
+        return filmName;
+    }
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
@@ -324,7 +330,10 @@ public struct ShowData : IGameData
 public struct LangLanguageSwitch : IGameData
 { 
     public string cn, jp, en, ko;
-
+    public string GetName()
+    {
+        return ToString();
+    }
 #if UNITY_EDITOR
     public void SetReferenceData()
     {

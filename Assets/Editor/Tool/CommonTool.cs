@@ -4,6 +4,38 @@ using UnityEngine;
 
 public class CommonTool : MonoBehaviour
 {
+    [MenuItem("Assets/数据/刷新DataDic")]
+    public static void InitDataDic()
+    {
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            var activeObject=Selection.activeObject;
+            if (activeObject)
+            {
+
+                MyDataDIc myDataDIc = ScriptableObject.CreateInstance<MyDataDIc>();
+
+                var path = AssetDatabase.GetAssetPath(activeObject);
+
+                DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                var files=directoryInfo.GetFiles("*.asset");
+                foreach(var file in files)
+                {
+                    var data = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path + "/" + file.Name);
+                    IGameData gameData=data as IGameData;
+                    myDataDIc.daraDic.Add(gameData.GetKey(), gameData.GetName());
+                }
+                AssetDatabase.CreateAsset(myDataDIc, $"Assets/Editor/DataDic/{activeObject.name}.asset");
+            }
+            
+            
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+    }
     [MenuItem("Assets/图片资源工具/检测并重新保存图片")]
     public static void CheckAndResaveTexture()
     {

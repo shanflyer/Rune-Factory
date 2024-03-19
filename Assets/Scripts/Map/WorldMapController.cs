@@ -69,6 +69,7 @@ public class WorldMapController : MonoBehaviour
         var gameVolumeMangaer = GameVolumeManager.instance; 
         var timeLineManager= TimeLineManger.instance;
         var emote= EmoteManager.instance;
+        var homeEquipManager= HomeEquipManager.instance;
 
         GameActionManager.instance.QueueAction(new ChangeWorld
         {

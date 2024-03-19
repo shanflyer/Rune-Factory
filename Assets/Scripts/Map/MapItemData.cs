@@ -23,6 +23,10 @@ public class MapItemData:ScriptableObject,IGameData
     public int defaultExit, defaultEnter;
     public bool displayTips=true;
     public string playerOperateInfo;
+    public string GetName()
+    {
+        return itemName;
+    }
     public override string ToString()
     {
         return id.ToString();

@@ -50,6 +50,16 @@ public class DisplayList<T,V> where T:UIObjReference<V> where V:IReferenceData
             list[0].SelectDefault();
         }
     }
+    public void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i].t.Equals(v))
+            {
+                list[i].InitData(v, SelectAction,toggleGroup);
+            }
+        }
+    }
     public void InitListData(List<V> componentData,SelectAction<V> SelectAction = null,ToggleGroup toggleGroup=null) 
     {
         if (componentData == null)

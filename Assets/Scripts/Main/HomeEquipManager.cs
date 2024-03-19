@@ -25,6 +25,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         {
             UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel, HomeEquipList>(GetHomeEquipList(DisplayHomeEquipPanel.characterId));
         });
+        GameActionManager.instance.AddListener<UnSetHomeEquip>(UnSetHomeEquip);
     }
 
     protected override void Clear()
@@ -51,17 +52,27 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
         return homeEquipList;
     }
-
-    private void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
+    private void UnSetHomeEquip(UnSetHomeEquip unSetHomeEquip)
     {
-        int instanceId = WorldMapManager.instance.GetInstanceFromItem();
+        if(homeEquips.GetData(unSetHomeEquip.instanceId, out var homeEquip))
+        {
+            homeEquip.mapInstance = 0;
+            homeEquip.coordinate = int2.zero;
+            homeEquips.SetData(homeEquip);
+            RefreshHomeEquip(homeEquip);
+            unSetHomeEquip.setResult(true);
+        }
+    }
+    private void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
+    { 
 
         HomeEquip homeEquip = new HomeEquip
         {
-            instanceId = instanceId,
-            itemDataId = creatHomeEquip.equipDataId,
+            instanceId = creatHomeEquip.instanceId==0? WorldMapManager.instance.GetInstanceFromItem():  creatHomeEquip.instanceId,
+            itemDataId = creatHomeEquip.itemDataId,
             equipDataId = creatHomeEquip.equipDataId,
             characterId = creatHomeEquip.characterId,
+            mapItemInstance=creatHomeEquip.instanceId
         };
         homeEquips.SetData(homeEquip);
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
@@ -69,7 +80,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             ints = new List<int>();
             characterHomeEquips.Add(creatHomeEquip.characterId, ints);
         }
-        ints.Add(instanceId);
+        ints.Add(homeEquip.instanceId);
 
         int count = 1; 
         if (!characterHomeEquipCountData.TryGetValue(creatHomeEquip.characterId, out var equipCountData))
@@ -199,63 +210,72 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     homeEquip.mapInstance = setHomeEquipCoordinate.mapInstanceId;
                     homeEquip.coordinate = setHomeEquipCoordinate.coordinate;
                     homeEquips.SetData(homeEquip);
-                    setHomeEquipCoordinate.setResult(true);
+                    if (setHomeEquipCoordinate.setResult != null)
+                    {
+                        setHomeEquipCoordinate.setResult(true);
+                    }
+                   
                 }
             }
             return;
         }
-        setHomeEquipCoordinate.setResult(false);
+        if (setHomeEquipCoordinate.setResult != null)
+            setHomeEquipCoordinate.setResult(false);
     }
 
-    private async void RefreshHomeEquip(RefreshHomeEquip refreshHomeEquip)
+    void RefreshHomeEquip(HomeEquip homeEquip)
     {
-        if (homeEquips.GetData(refreshHomeEquip.equipInstanceId, out var homeEquip))
+        if (homeEquip.mapItemInstance != 0)
         {
-            if (homeEquip.mapItemId != 0)
+            if (homeEquip.mapInstance == 0)
             {
-                if (homeEquip.mapInstance == 0)
+                DeleteMapItem deleteMapItem = new DeleteMapItem
                 {
-                    DeleteMapItem deleteMapItem = new DeleteMapItem
-                    {
-                        mapItemInstanceId = homeEquip.mapItemId,
-                        triggerClear = true
-                    };
-                    GameActionManager.instance.QueueAction(deleteMapItem, true);
-                }
-                else
-                {
-                    MoveMapItem moveMapItem = new MoveMapItem
-                    {
-                        mapItemInstanceId = homeEquip.mapItemId,
-                        mapInstance = homeEquip.mapInstance,
-                        coordinate = homeEquip.coordinate
-                    };
-                    GameActionManager.instance.QueueAction(moveMapItem, true);
-                }
+                    mapItemInstanceId = homeEquip.mapItemInstance,
+                    triggerClear = true
+                };
+                GameActionManager.instance.QueueAction(deleteMapItem, true);
             }
             else
             {
-                if (homeEquip.mapInstance != 0)
+                MoveMapItem moveMapItem = new MoveMapItem
                 {
-                    // ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(homeEquip.dataId);
-                    //if (homeEquipData != null)
+                    mapItemInstanceId = homeEquip.mapItemInstance,
+                    mapInstance = homeEquip.mapInstance,
+                    coordinate = homeEquip.coordinate
+                };
+                GameActionManager.instance.QueueAction(moveMapItem, true);
+            }
+        }
+        else
+        {
+            if (homeEquip.mapInstance != 0)
+            {
+                // ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(homeEquip.dataId);
+                //if (homeEquipData != null)
+                {
+                    AddMapItem addMapItem = new AddMapItem
                     {
-                        AddMapItem addMapItem = new AddMapItem
-                        {
-                            mapId = homeEquip.mapInstance,
-                            coordinate = homeEquip.coordinate,
-                            dataId = homeEquip.mapItemId,
-                            setValue = SetMapItem
-                        };
-                        void SetMapItem(int itemInstance)
-                        {
-                            homeEquip.mapItemId = itemInstance;
-                            homeEquips.SetData(homeEquip);
-                        }
-                        GameActionManager.instance.QueueAction(addMapItem, true);
+                        mapId = homeEquip.mapInstance,
+                        coordinate = homeEquip.coordinate,
+                        dataId = homeEquip.mapItemInstance,
+                        setValue = SetMapItem
+                    };
+                    void SetMapItem(int itemInstance)
+                    {
+                        homeEquip.mapItemInstance = itemInstance;
+                        homeEquips.SetData(homeEquip);
                     }
+                    GameActionManager.instance.QueueAction(addMapItem, true);
                 }
             }
+        }
+    }
+    private  void RefreshHomeEquip(RefreshHomeEquip refreshHomeEquip)
+    {
+        if (homeEquips.GetData(refreshHomeEquip.equipInstanceId, out var homeEquip))
+        {
+            RefreshHomeEquip(homeEquip);
         }
     }
 
@@ -318,14 +338,26 @@ public struct HomeEquipList : IReferenceData
 public struct HomeEquip : INativeData, IReferenceData
 {
     public int instanceId;
-    public int mapItemId;
+    public int mapItemInstance;
     public int itemDataId;
     public int equipDataId;
     public int2 coordinate;
     public int mapInstance;
     public int characterId;
     public int Key => instanceId;
-
+   
+    public bool Equals(IReferenceData other)
+    { 
+        if (other is HomeEquip homeEquip)
+        {
+            return homeEquip.instanceId == instanceId;
+        }
+        return false;
+    }
+    public override int GetHashCode()
+    { 
+        return instanceId;
+    }
     public void Dispose()
     {
     }

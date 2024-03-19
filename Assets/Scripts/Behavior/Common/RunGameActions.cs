@@ -89,7 +89,7 @@ public class RunGameActions : Action
             }
             else
             {
-                gameActionDatas[i].Action(source.Value, target.Value, setResult: waitResult ? SetActionResult : null,
+                gameActionDatas[i].Action(source.Value, target.Value,sharedSetIntValue.Value, setResult: waitResult ? SetActionResult : null,
                     setValue: SetValue, immediately: immediately);
             }
         }

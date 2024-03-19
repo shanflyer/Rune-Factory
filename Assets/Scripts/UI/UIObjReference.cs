@@ -56,7 +56,11 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
     public virtual void InitData(T t, SelectAction<T> SelectAction = null,ToggleGroup toggleGroup=null)
     {
         data = t;
-        this.SelectAction = SelectAction;
+        if (SelectAction != null)
+        {
+            this.SelectAction = SelectAction;
+        }
+       
     }
     public virtual void InitChildObjData()
     {

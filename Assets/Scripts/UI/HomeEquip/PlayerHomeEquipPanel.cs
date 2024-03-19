@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,15 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     Transform EquipParent;
     [SerializeField]
     ToggleGroup EquipSelectGroup;
+    [SerializeField]
+    TextMeshProUGUI EquipType;
+    [SerializeField]
+    TextMeshProUGUI RoomeValue;
+    [SerializeField]
+    Sprite setSprite, unSetSprite;
+    [SerializeField]
+    Image ActionImage;
+
     DisplayList<HomeEquipReference, HomeEquip> EquipBoxs;
 
     [SerializeField]
@@ -63,12 +73,27 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     };
 
                     GameEventManager.instance.AddGameEvent(setEventData, eventReferenceDatas);
+                    Close();
                 }
             }
             else
             {
-
+                UnSetHomeEquip unSetHomeEquip = new UnSetHomeEquip
+                {
+                    instanceId = SelectHomeEquip.instanceId,
+                    setResult= UnSetHomeEquip
+                };
+                GameActionManager.instance.QueueAction(unSetHomeEquip);
             }
+        }
+    }
+    void UnSetHomeEquip(bool value)
+    {
+        if (value)
+        {
+            SelectHomeEquip.coordinate = int2.zero;
+            SelectHomeEquip.mapInstance = 0;
+            EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
         }
     }
     protected override void Awake()
@@ -101,7 +126,10 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         EquipParent = FindChildGameObject("HomeEquipParent");
         EquipSelectGroup = FindChildGameObject<ToggleGroup>("HomeEquipParent");
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
-        ItemInformation = FindChildGameObject("InformationObj"); 
+        ItemInformation = FindChildGameObject("InformationObj");
+        EquipType = FindChildGameObject<TextMeshProUGUI>("EquipType");
+        RoomeValue = FindChildGameObject<TextMeshProUGUI>("RoomValue");
+        ActionImage = ActionButton.GetComponent<Image>();
     }
     public override void InitReferenceData(HomeEquipList v)
     {
@@ -132,7 +160,31 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 ItemName.text = $"+ {itemData.itemName} +"; 
                 Info.text = itemData.info;
                 ActionName.text = HomeEquip.mapInstance == 0 ? "布置" : "收回";
+                ActionImage.sprite=HomeEquip.mapInstance == 0 ? setSprite : unSetSprite;
+
+                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
+                EquipType.text = homeEquipmentData.homeEquipType.ToString();
+                string roomValueText = "所有地方";
+                if(homeEquipmentData.canSetMaps != null && homeEquipmentData.canSetMaps.Count > 0)
+                {
+                    roomValueText = "";
+                    for (int i = 0; i < homeEquipmentData.canSetMaps.Count; i++)
+                    {
+                        int roomId = homeEquipmentData.canSetMaps[i];
+                        roomValueText += WorldMapManager.instance.GerMapDataName(roomId); 
+                        if (i < homeEquipmentData.canSetMaps.Count - 1)
+                        {
+                            roomValueText += ",";
+                        }
+                    }
+                }
+                RoomeValue.text = roomValueText;
+
             }
+        }
+        else if(HomeEquip.instanceId==SelectHomeEquip.instanceId)
+        {
+            ItemInformation.localScale = Vector3.zero;
         }
     }
     

@@ -537,7 +537,7 @@ public struct AddMapItem : GameAction
     public int mapId;
     public int dataId;
     public int2 coordinate;
-
+    public int instanceId;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 

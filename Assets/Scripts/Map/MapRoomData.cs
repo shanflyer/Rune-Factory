@@ -9,6 +9,7 @@ public struct MapItem
     public int instanceId;
     public int2 coordinate;
     public int animationKey;
+    public int blindHomeEquipment;
 }
 [System.Serializable]
 public struct MapCellData

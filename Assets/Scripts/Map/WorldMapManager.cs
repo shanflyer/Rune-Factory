@@ -332,7 +332,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private async Task<int> AddMapItem(MapItem mapItem, int mapId)
     {
-        int instanceId = mapItemInstance.CreatInstanceId();
+        int instanceId =  mapItemInstance.CreatInstanceId();
         if (mapItem.instanceId != 0)
         {
             editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
@@ -356,6 +356,27 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         items.Add(instanceId);
       
+        if(mapItem.blindHomeEquipment!=0)
+        {
+            CreatHomeEquip creatHomeEquip = new CreatHomeEquip
+            {
+                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                equipDataId = mapItem.blindHomeEquipment,
+                instanceId=instanceId,
+                itemDataId = 0,
+            };
+            GameActionManager.instance.QueueAction(creatHomeEquip, true);
+
+            SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
+            {
+                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                equipInstanceId = instanceId,
+                mapInstanceId=mapId,
+                coordinate=mapItem.coordinate,
+            };
+            GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
+        }
+
         //尝试创建柜台
         TryCreatStoreCounter tryCreatStoreCounter = new TryCreatStoreCounter
         {
@@ -413,6 +434,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             id = addMapItem.dataId,
             coordinate = addMapItem.coordinate,
+            instanceId=addMapItem.instanceId
         };
 
        int instanceId= await AddMapItem(mapItem, addMapItem.mapId);
@@ -469,9 +491,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     if (moveMapItem.mapInstance == WorldMapObjManager.instance.displayMap)
                     {
                         WorldMapObjManager.instance.DisplayMapItem(runtimeMapItem);
-                    }
-                }
-
+                    } 
+                } 
                 runtimeMapItems.SetData(runtimeMapItem);
             }
         }
@@ -481,18 +502,17 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 dataId = moveMapItem.dataId,
                 mapId = moveMapItem.mapInstance,
-                coordinate = moveMapItem.coordinate
+                coordinate = moveMapItem.coordinate,
+                instanceId=moveMapItem.mapItemInstanceId
             };
-            AddMapItem(addMapItem);
-            SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
-            {
-                characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                equipInstanceId = moveMapItem.mapItemInstanceId
-            };
-            GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
-
+            AddMapItem(addMapItem); 
         }
-       
+        SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
+        {
+            characterId = CharacterManager.instance.controllerCharacter.instanceId,
+            equipInstanceId = moveMapItem.mapItemInstanceId
+        };
+        GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
     }
 
     public bool InitNewSmoothMove(ref float2 direction, int2 coordinate, int mapId,out int2 targetCoordinate)
