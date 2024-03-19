@@ -974,7 +974,8 @@ public static class DataPath
         {typeof(GameTimeEventData),"Data/GameTimeEventData" },
         {typeof(EmoteData),"Data/EmoteData" },
         {typeof(SkyBackGroundData),"Data/SkyBackGroundData"},
-        {typeof(HomeEquipmentData),"Data/HomeEquipmentData" }
+        {typeof(HomeEquipmentData),"Data/HomeEquipmentData" },
+        {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"}
     };
 
     public static string GetDataPath(Type type)

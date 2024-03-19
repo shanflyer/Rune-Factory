@@ -68,12 +68,20 @@ public class SellItem : GamePanel<Item>
     {
         base.InitReferenceData(v);
         item = v;
-        ItemData itemData=await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
-        if (itemData != null)
+        ShopItemDisplayData shopItemDisplayData=await GameDataManager.instance.GetAsyncData<ShopItemDisplayData>(item.dataId);
+        if (shopItemDisplayData== null)
         {
-            icon.sprite = itemData.icon;
-            count.text = item.count.ToString(); 
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+            if (itemData != null)
+            {
+                icon.sprite = itemData.icon; 
+            }
         }
+        else
+        {
+            icon.sprite=shopItemDisplayData.GetItemSprie(item.count);
+        }
+        count.text = item.count.ToString();
 
         RefreshDisplay();
     }
