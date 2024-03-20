@@ -63,7 +63,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             unSetHomeEquip.setResult(true);
         }
     }
-    private void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
+    private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
     { 
 
         HomeEquip homeEquip = new HomeEquip
@@ -96,6 +96,18 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             }
         }
         equipCountData[creatHomeEquip.equipDataId] = count;
+
+        HomeEquipmentData homeEquipmentData=await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
+        if(homeEquipmentData.manufatureId!=0)
+        {
+            CreatManufature creatManufature = new CreatManufature
+            {
+                instanceId = homeEquip.instanceId,
+                manufatureId = homeEquipmentData.manufatureId
+            };
+            GameActionManager.instance.QueueAction(creatManufature);
+        }
+         
     }
 
     private void RemoveHomeEquip(RemoveHomeEquip removeHomeEquip)

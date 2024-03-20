@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public enum FormulaType
+public enum FormulaType 
 {
     装备 = 0,
     衣物=1,
@@ -20,7 +20,6 @@ public class FormulaData : ScriptableObject, IGameData, IReferenceData
     public List<int> Stuffs;
     public int Product;
     public int PowerCost;
-    public bool isOpen;
     public string GetKey()
     {
         return id.ToString();

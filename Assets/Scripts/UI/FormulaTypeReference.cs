@@ -9,7 +9,9 @@ public struct FormulaTypeData:IReferenceData
 }
 public class FormulaTypeReference : UIObjReference<FormulaTypeData>
 {
+    [SerializeField]
     Toggle toggle;
+    [SerializeField]
     TextMeshProUGUI typeName;
 
     private void Awake()
@@ -33,5 +35,10 @@ public class FormulaTypeReference : UIObjReference<FormulaTypeData>
     {
         base.InitData(t, SelectAction, toggleGroup);
         typeName.text = data.formulaType.ToString();
+    }
+    public override void ClearSelect()
+    {
+        base.ClearSelect();
+        toggle.SetIsOnWithoutNotify(true);
     }
 }
