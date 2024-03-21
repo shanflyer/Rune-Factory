@@ -79,6 +79,7 @@ public struct MyNativeData<T>where T : unmanaged, INativeData
         }
         return false;
     }
+  
     public bool GetData(int id, out T t)
     {
         t = nullData;

@@ -18,6 +18,11 @@ public class ManufatureManager:Singleton<ManufatureManager>
         base.Clear();
         Manufatures.Dispose();
     }
+    public Manufature GetManufature(int instanceId)
+    {
+        Manufatures.GetData(instanceId, out Manufature manufature);
+        return manufature;
+    }
     async void CreatManufature(CreatManufature creatManufature)
     {
         var manufatureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(creatManufature.manufatureId);

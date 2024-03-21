@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static TMPro.TMP_Dropdown;
+using System.Threading.Tasks;
 
 public class FormulaOptionData: OptionData
 { 
@@ -469,43 +470,60 @@ public class ManufacturePanel : GamePanel<Manufature>
         ClearFormulaItemBoxReferences();
     }
     Manufature manufature;
-    public override async void InitReferenceData(Manufature v)
+    public override Task InitData(string dataKey)
+    {
+
+        Manufature manufature = ManufatureManager.instance.GetManufature(int.Parse(dataKey));
+        if (manufature.instanceId != 0)
+        {
+            InitData(manufature);
+        }
+
+        return base.InitData(dataKey);
+    }
+
+    public override void InitReferenceData(Manufature v)
     {
         base.InitReferenceData(v);
+        InitData(v);
+    }
+
+    async void InitData(Manufature v)
+    {
         manufature = v;
         manufactureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(v.dataId);
-        title.text = manufactureData.manufactureName; 
+        title.text = manufactureData.manufactureName;
 
         List<FormulaTypeData> formulaTypeDatas = new List<FormulaTypeData>();
         HashSet<FormulaType> formulaTypes = new HashSet<FormulaType>();
 
 
         List<int> typeFormulas = new List<int>();
-        var formulas=ManufatureManager.instance.GetManufatureAllFormulas(manufactureData.id);
-        for(int i = 0; i < formulas.Count; i++)
+        var formulas = ManufatureManager.instance.GetManufatureAllFormulas(manufactureData.id);
+        for (int i = 0; i < formulas.Count; i++)
         {
             var formaula = formulas[i];
             var formanulaData = await GameDataManager.instance.GetAsyncData<FormulaData>(formaula.id);
             formulaTypes.Add(formanulaData.formulaType);
-            if(allFormulaDatas.TryGetValue(formanulaData.formulaType,out var ints))
+            if (allFormulaDatas.TryGetValue(formanulaData.formulaType, out var ints))
             {
                 ints.Add(formanulaData);
             }
             else
             {
-                allFormulaDatas.Add(formanulaData.formulaType, new List<FormulaData> { formanulaData});
+                allFormulaDatas.Add(formanulaData.formulaType, new List<FormulaData> { formanulaData });
             }
         }
 
-        foreach(var formulaType in formulaTypes)
+        foreach (var formulaType in formulaTypes)
         {
             formulaTypeDatas.Add(new FormulaTypeData { formulaType = formulaType });
             nowSelectFormulaTypes.Add(formulaType);
-        } 
+        }
         this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData);
         this.formulaTypes.ClearAll();
 
-        RefreshFormulaSelect(); 
+        RefreshFormulaSelect();
         InitDisplay();
     }
     void SelectFormulaTypeData(FormulaTypeData formulaTypeData,bool seleted)

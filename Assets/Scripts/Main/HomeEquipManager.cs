@@ -4,9 +4,7 @@ using Unity.Mathematics;
 
 public class HomeEquipManager : Singleton<HomeEquipManager>
 {
-    private MyNativeData<HomeEquip> homeEquips = new MyNativeData<HomeEquip>();
-
-    private NativeHashMap<int, int> itemEquips = new NativeHashMap<int, int>(4, Allocator.TempJob);
+    private MyNativeData<HomeEquip> homeEquips = new MyNativeData<HomeEquip>(); 
 
     private Dictionary<int, List<int>> characterHomeEquips = new Dictionary<int, List<int>>();
     private Dictionary<int, Dictionary<int, int>> characterHomeEquipCountData = new Dictionary<int, Dictionary<int, int>>(); 
@@ -31,10 +29,18 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     protected override void Clear()
     {
         base.Clear();
-        homeEquips.Dispose();
-        itemEquips.Dispose();
+        homeEquips.Dispose(); 
     }
 
+
+    public HomeEquip GetHomeEquip(int instanceId)
+    {
+        if(homeEquips.GetData(instanceId,out var homeEquip))
+        {
+            return homeEquip;
+        }
+        return default(HomeEquip);
+    }
     public HomeEquipList GetHomeEquipList(int characterId)
     {
         HomeEquipList homeEquipList = new HomeEquipList();
@@ -72,9 +78,9 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             itemDataId = creatHomeEquip.itemDataId,
             equipDataId = creatHomeEquip.equipDataId,
             characterId = creatHomeEquip.characterId,
-            mapItemInstance=creatHomeEquip.instanceId
+            mapItemInstance=creatHomeEquip.instanceId, 
         };
-        homeEquips.SetData(homeEquip);
+       
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
         {
             ints = new List<int>();
@@ -107,7 +113,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             };
             GameActionManager.instance.QueueAction(creatManufature);
         }
-         
+        homeEquip.linkManufature = homeEquipmentData.manufatureId;
+        homeEquips.SetData(homeEquip); 
     }
 
     private void RemoveHomeEquip(RemoveHomeEquip removeHomeEquip)
@@ -356,6 +363,7 @@ public struct HomeEquip : INativeData, IReferenceData
     public int2 coordinate;
     public int mapInstance;
     public int characterId;
+    public int linkManufature;
     public int Key => instanceId;
    
     public bool Equals(IReferenceData other)

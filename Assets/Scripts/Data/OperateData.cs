@@ -31,6 +31,14 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
     {
         return id.ToString();
     }
+    public override string ToString()
+    {
+        return id.ToString();
+    }
+    public string GetName()
+    {
+        return operateName;
+    }
 #if UNITY_EDITOR
     public void SetReferenceData()
     {

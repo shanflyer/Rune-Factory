@@ -20,6 +20,10 @@ public class GameEventData : ScriptableObject,IGameData
     {
         return id.ToString();
     }
+    public string GetName()
+    {
+        return eventName;
+    }
 
 #if UNITY_EDITOR
     public void SetReferenceData()
