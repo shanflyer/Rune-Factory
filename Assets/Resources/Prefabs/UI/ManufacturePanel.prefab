@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 6472570426607399200}
   - component: {fileID: 4489171054134588443}
   m_Layer: 5
-  m_Name: ItemBoxReference (1)
+  m_Name: ItemBoxReference2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7fe2d9d77c3cbee478ff2a4e673f2766, type: 2}
   m_sharedMaterial: {fileID: 5700984821837086658, guid: 7fe2d9d77c3cbee478ff2a4e673f2766,
@@ -2160,7 +2160,7 @@ GameObject:
   - component: {fileID: 3725489465473076351}
   - component: {fileID: 4422274223455438929}
   m_Layer: 5
-  m_Name: ItemBoxReference
+  m_Name: ItemBoxReference1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2805,7 +2805,7 @@ RectTransform:
   m_GameObject: {fileID: 2684082796972195156}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2442802867475890278}
@@ -3104,7 +3104,7 @@ GameObject:
   - component: {fileID: 7328868840888048736}
   - component: {fileID: 8231012477754622544}
   m_Layer: 5
-  m_Name: Title
+  m_Name: MaterialTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3899,7 +3899,7 @@ GameObject:
   - component: {fileID: 3406371905705213143}
   - component: {fileID: 4946471973706944968}
   m_Layer: 5
-  m_Name: ItemBoxReference (2)
+  m_Name: ItemBoxReference3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5289,16 +5289,16 @@ RectTransform:
   m_GameObject: {fileID: 5482903272130398534}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5867316397583893561}
   - {fileID: 481437876770981162}
   m_Father: {fileID: 6283376771802889555}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 48.84015, y: -15.8986}
   m_SizeDelta: {x: 97.6803, y: 31.7972}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2076594270755885913
@@ -5692,7 +5692,7 @@ GameObject:
   - component: {fileID: 3395285912577295398}
   - component: {fileID: 3966767977448521067}
   m_Layer: 5
-  m_Name: Tite
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6659,7 +6659,7 @@ GameObject:
   - component: {fileID: 220509630314666843}
   - component: {fileID: 7487754349024656185}
   m_Layer: 5
-  m_Name: Title
+  m_Name: outputItemTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7196,17 +7196,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 3555515651486793594}
-  title: {fileID: 4931578220805219092}
+  title: {fileID: 3966767977448521067}
   ReturnButton: {fileID: 32657700838723696}
   FormulaDropdown: {fileID: 8843604069858071529}
   formulaTypeReference: {fileID: 6346717814458580970}
   formulaTypeParent: {fileID: 6283376771802889555}
   FormulaItemBoxGroup: {fileID: 3573426141405756423}
   FormulaItemBoxReferences:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4422274223455438929}
+  - {fileID: 4489171054134588443}
+  - {fileID: 4946471973706944968}
+  - {fileID: 3442743428651005351}
   OutItemBoxReference: {fileID: 213678081043699346}
   ReduceButton: {fileID: 5390577766229547670}
   AddButton: {fileID: 2224232992068060691}
@@ -7500,7 +7500,7 @@ GameObject:
   - component: {fileID: 19037962576554431}
   - component: {fileID: 3442743428651005351}
   m_Layer: 5
-  m_Name: ItemBoxReference (3)
+  m_Name: ItemBoxReference4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8302,7 +8302,7 @@ GameObject:
   - component: {fileID: 2516187738649977881}
   - component: {fileID: 4931578220805219092}
   m_Layer: 5
-  m_Name: Title
+  m_Name: FormulaTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

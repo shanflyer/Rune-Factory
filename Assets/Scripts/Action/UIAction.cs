@@ -73,6 +73,12 @@ public struct OpenPanelAction : GameAction
                 dataId = source.ToString();
             }
         }
+        if(target!= 0&&target!=int.MinValue)
+        {
+            dataId = target.ToString();
+        }
+
+
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

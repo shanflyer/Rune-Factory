@@ -93,9 +93,9 @@ public class ItemBoxReference : UIObjReference<Item>
         if (itemData != null)
         { 
             icon.sprite = itemData.icon;
-            icon.color =(item.instanceId!=-1)? Color.white:new Color(1,1,1,0.3f);
+            icon.color =(item.instanceId!=-1)? Color.white:new Color(1,1,1,0.6f);
             icon.enabled = true;
-            icon.SetNativeSize();
+            icon.rectTransform.sizeDelta= GameCommon.SetImageSize(icon.sprite, new Vector2(32, 32)); 
             count.text = item.count.ToString();
             count.enabled = item.count>0;
             toggle.enabled = true;

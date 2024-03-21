@@ -12,6 +12,7 @@ public class ManufatureManager:Singleton<ManufatureManager>
     {
         base.Init();
         GameActionManager.instance.AddListener<CreatManufature>(CreatManufature);
+        Manufatures.Init(8);
     }
     protected override void Clear()
     {
