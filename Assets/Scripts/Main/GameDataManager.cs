@@ -1,36 +1,32 @@
-﻿
+﻿using LitJson;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using LitJson;
-using Mono.Cecil;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
-public class GameDataManager : Singleton<GameDataManager> 
-{ 
+public class GameDataManager : Singleton<GameDataManager>
+{
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
+
     public override async void Init()
     {
         base.Init();
-        var gameDataSaveManager= GameDataSaveManager.instance;
+        var gameDataSaveManager = GameDataSaveManager.instance;
         //初始加载
         await LoadAllAsyncData<GameActionData>();
         await LoadAllAsyncData<GrowModelData>();
-        await LoadAllAsyncData<ProfessionData>(); 
+        await LoadAllAsyncData<ProfessionData>();
         await LoadAllAsyncData<FunctionData>();
-
     }
-    async Task LoadAllAsyncData<T>() where T:IGameData
+
+    private async Task LoadAllAsyncData<T>() where T : IGameData
     {
         Type type = typeof(T);
         var _results = ExtensionsResources.LoadAllIGameData<T>(DataPath.GetDataPath(type));
         if (_results != null && _results.Count != 0)
         {
-           var  dataDic = new Dictionary<string, IGameData>(); 
+            var dataDic = new Dictionary<string, IGameData>();
             for (int i = 0; i < _results.Count; i++)
             {
                 var data = _results[i];
@@ -45,8 +41,8 @@ public class GameDataManager : Singleton<GameDataManager>
         var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
         if (dataAsset != null && dataAsset is IDataArray<T> dataArray)
         {
-           var  dataDic = new Dictionary<string, IGameData>();
-           try
+            var dataDic = new Dictionary<string, IGameData>();
+            try
             {
                 var results = dataArray.DataList;
                 for (int i = 0; i < results.Length; i++)
@@ -62,9 +58,8 @@ public class GameDataManager : Singleton<GameDataManager>
             {
                 Debug.LogWarning(e);
             }
-           
-        } 
-        if (dataAsset != null&& dataAsset is TextAsset)
+        }
+        if (dataAsset != null && dataAsset is TextAsset)
         {
             var textAsset = dataAsset as TextAsset;
             var dataDic = new Dictionary<string, IGameData>();
@@ -86,26 +81,26 @@ public class GameDataManager : Singleton<GameDataManager>
             allGameStaticDatas[type] = dataDic;
         }
     }
-     
-    public async Task<List<T>> GetAllAsyncData<T>() where T :  IGameData
+
+    public async Task<List<T>> GetAllAsyncData<T>() where T : IGameData
     {
         List<T> results = new List<T>(); ;
         Type type = typeof(T);
         if (allGameStaticDatas.TryGetValue(type, out var dataDic))
-        {  
+        {
             using (var e = dataDic.GetEnumerator())
             {
                 while (e.MoveNext())
                 {
                     var data = e.Current.Value;
-                    results.Add((T)data); 
+                    results.Add((T)data);
                 }
             }
         }
         else
         {
             var _results = ExtensionsResources.LoadAllIGameData<T>(DataPath.GetDataPath(type));
-            if (_results != null&& _results.Count != 0)
+            if (_results != null && _results.Count != 0)
             {
                 dataDic = new Dictionary<string, IGameData>();
                 results = _results.ToList();
@@ -141,7 +136,7 @@ public class GameDataManager : Singleton<GameDataManager>
                 allGameStaticDatas[type] = dataDic;
             }
         }
-        if (results.Count==0)
+        if (results.Count == 0)
         {
             var dataAsset = await ExtensionsResources.LoadResourceAsync<TextAsset>(DataPath.GetDataPath(type));
 
@@ -165,11 +160,9 @@ public class GameDataManager : Singleton<GameDataManager>
                 }
                 allGameStaticDatas[type] = dataDic;
             }
-
         }
         return results;
     }
-
 
     public T GetData<T>(string key) where T : IGameData
     {
@@ -204,27 +197,27 @@ public class GameDataManager : Singleton<GameDataManager>
                 }
                 allGameStaticDatas[type] = dataDic;
             }
-
         }
         return default(T);
-    } 
-    public async Task<T> GetAsyncData<T>(int key) where T :  IGameData
+    }
+
+    public async Task<T> GetAsyncData<T>(int key) where T : IGameData
     {
         return await GetAsyncData<T>(key.ToString());
-    } 
-    public async Task<T> GetAsyncData<T>(string key="") where T : IGameData
+    }
+
+    public async Task<T> GetAsyncData<T>(string key = "") where T : IGameData
     {
         Type type = typeof(T);
         string dataPath = $"{DataPath.GetDataPath(type)}/{key}";
-        if (allGameStaticDatas.TryGetValue(type,out var dataDic))
+        if (allGameStaticDatas.TryGetValue(type, out var dataDic))
         {
-            if (dataDic.TryGetValue(key,out var data))
+            if (dataDic.TryGetValue(key, out var data))
             {
                 return (T)data;
             }
             else
             {
-                
                 data = await ExtensionsResources.LoadResourceIGameData<T>(dataPath);
                 if (data != null)
                 {
@@ -235,9 +228,9 @@ public class GameDataManager : Singleton<GameDataManager>
                 }
             }
         }
-         
+
         var _data = await ExtensionsResources.LoadResourceIGameData<T>(dataPath);
-        if (_data!=null&&_data.GetKey() ==key)
+        if (_data != null && _data.GetKey() == key)
         {
             _data.Init();
             if (!string.IsNullOrEmpty(_data.GetKey()))
@@ -245,8 +238,8 @@ public class GameDataManager : Singleton<GameDataManager>
                 dataDic = new Dictionary<string, IGameData>();
                 dataDic[_data.GetKey()] = _data;
                 allGameStaticDatas[type] = dataDic;
-            } 
-           
+            }
+
             return _data;
         }
 
@@ -265,13 +258,12 @@ public class GameDataManager : Singleton<GameDataManager>
             {
                 return (T)data1;
             }
-
         }
 
-        var textAsset = dataAsset as TextAsset;  
+        var textAsset = dataAsset as TextAsset;
         if (textAsset != null)
         {
-            dataDic = new Dictionary<string, IGameData>(); 
+            dataDic = new Dictionary<string, IGameData>();
             try
             {
                 var datas = JsonMapper.ToObject<List<T>>(textAsset.text);
@@ -292,13 +284,18 @@ public class GameDataManager : Singleton<GameDataManager>
     }
 }
 
-public interface IGameData 
-{ 
+public interface IGameData
+{
     public string GetKey();
+
     public string GetName() { return ToString(); }
+
 #if UNITY_EDITOR
+
     public void SetReferenceData();
-#endif 
+
+#endif
+
     public async void Init() { }
 
     public void Clear() { }
@@ -309,6 +306,7 @@ public struct ShowData : IGameData
     public int id;
     public string name;
     public string filmName;
+
     public string GetKey()
     {
         return id.ToString();
@@ -318,27 +316,34 @@ public struct ShowData : IGameData
     {
         return filmName;
     }
+
 #if UNITY_EDITOR
+
     public void SetReferenceData()
     {
     }
-#endif
 
+#endif
 }
 
 [System.Serializable]
 public struct LangLanguageSwitch : IGameData
-{ 
+{
     public string cn, jp, en, ko;
+
     public string GetName()
     {
         return ToString();
     }
+
 #if UNITY_EDITOR
+
     public void SetReferenceData()
     {
     }
+
 #endif
+
     public string GetKey()
     {
         return cn;
@@ -346,14 +351,17 @@ public struct LangLanguageSwitch : IGameData
 
     public string GetValue(SystemLanguage systemLanguage)
     {
-        switch(systemLanguage)
+        switch (systemLanguage)
         {
             case SystemLanguage.Chinese:
                 return cn;
+
             case SystemLanguage.Japanese:
                 return jp;
+
             case SystemLanguage.Korean:
                 return ko;
+
             default:
                 return en;
         }

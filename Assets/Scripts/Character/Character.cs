@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -67,7 +66,7 @@ public struct CharacterProperty
         {
             string operatorStr = Lucky > 0 ? "+" : "-";
             result = $"{CharacterPropertyType.幸运}{operatorStr}{Lucky}  ";
-        } 
+        }
         return result;
     }
 
@@ -83,7 +82,7 @@ public struct CharacterProperty
             MaxHP = property0.MaxHP - property1.MaxHP,
             MaxMP = property0.MaxMP - property1.MaxMP,
             MaxPower = property0.MaxPower - property1.MaxPower,
-            Lucky = property0.Lucky - property1.Lucky, 
+            Lucky = property0.Lucky - property1.Lucky,
             Other = property0.Other - property1.Other
         };
         return CharacterProperty;
@@ -101,7 +100,7 @@ public struct CharacterProperty
             MaxHP = property0.MaxHP + property1.MaxHP,
             MaxMP = property0.MaxMP + property1.MaxMP,
             MaxPower = property0.MaxPower + property1.MaxPower,
-            Lucky = property0.Lucky + property1.Lucky, 
+            Lucky = property0.Lucky + property1.Lucky,
             Other = property0.Other + property1.Other
         };
         return CharacterProperty;
@@ -119,7 +118,7 @@ public struct CharacterProperty
             MaxHP = (int)(property0.MaxHP * value),
             MaxMP = (int)(property0.MaxMP * value),
             MaxPower = (int)(property0.MaxPower * value),
-            Lucky = (int)(property0.Lucky * value), 
+            Lucky = (int)(property0.Lucky * value),
             Other = (int)(property0.Other * value)
         };
         return CharacterProperty;
@@ -146,6 +145,7 @@ public struct CharacterProperty
 
             case CharacterPropertyType.幸运:
                 return Lucky;
+
             case CharacterPropertyType.最大体力:
                 return MaxPower;
 
@@ -203,7 +203,7 @@ public struct CharacterProperty
 
             case CharacterPropertyType.幸运:
                 Lucky = setCharacterProperty.Value;
-                break; 
+                break;
 
             case CharacterPropertyType.自定义值:
                 Other = setCharacterProperty.Value;
@@ -253,7 +253,6 @@ public struct CharacterProperty
             case CharacterPropertyType.幸运:
                 Lucky += changeCharacterProperty.changeValue;
                 break;
-                 
 
             case CharacterPropertyType.自定义值:
                 Other += changeCharacterProperty.changeValue;
@@ -326,6 +325,7 @@ public partial class Character
         SetLevel(1, true);
         CreatCharacterPackage(overridePackage);
     }
+
     public void SetCellOffset(Vector2 offset)
     {
         if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
@@ -333,16 +333,17 @@ public partial class Character
             characterRuntimeObj.animator.transform.Translate(offset);
         }
     }
+
     public Vector2 GetCellOffset()
     {
-      
-        if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
         {
             Vector3 pos = GameCommon.GetMapPos(coordinate);
             return characterRuntimeObj.animator.transform.position - pos;
         }
         return Vector2.zero;
     }
+
     protected virtual async Task CreatCharacterPackage(int overridePackage = 0)
     {
         characterPackage = await PackageManager.instance.CreatGamePackage(overridePackage == 0 ?
@@ -426,7 +427,7 @@ public partial class Character
                 name = name,
                 characterProperty = characterProperty,
                 equip = equip,
-                attributeType=AttributeType
+                attributeType = AttributeType
             };
         }
     }
@@ -565,11 +566,10 @@ public partial class Character
                     {
                         TryTeamLeaderStop tryTeamLeaderStop = new TryTeamLeaderStop
                         {
-                            characterId =instanceId
+                            characterId = instanceId
                         };
                         GameActionManager.instance.QueueAction(tryTeamLeaderStop);
                     }
-
 
                     runtimeObj.SetAnimationSpeed(value);
                 }
@@ -635,7 +635,7 @@ public partial class Character
     }
 
     private void SetObjCoordinate(int3 coordinate)
-    { 
+    {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
         objCoordinate = coordinate;
         if (CharacterManager.instance.controllerCharacter == this)
@@ -675,7 +675,7 @@ public partial class Character
         if (clickCharacter != -1 && clickCharacter != instanceId && clickCharacter != NeighborhoodCharacter)
         {
             Character character = CharacterManager.instance.GetCharacter(clickCharacter);
-           
+
             if (character != null)
             {
                 if (character.isInTeam)
@@ -702,14 +702,13 @@ public partial class Character
                 if (!temp)
                 {
                     AddFriendShipValue addFriendShipValue = new AddFriendShipValue
-                    { 
-                        characterId=character.instanceId,
-                        friendAddType=FriendAddType.对话,
-                        value=1
+                    {
+                        characterId = character.instanceId,
+                        friendAddType = FriendAddType.对话,
+                        value = 1
                     };
                     GameActionManager.instance.QueueAction(addFriendShipValue);
                 }
-
 
                 GameEventManager.instance.AddGameEvent(
                 temp ? character.characterData.tempTalkEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
@@ -836,7 +835,7 @@ public partial class Character
         if (level != this.level)
         {
             var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
-            attributeType=profressionData.attributeType;
+            attributeType = profressionData.attributeType;
             if (profressionData.id == professionId)
             {
                 if (zero)
@@ -936,7 +935,7 @@ public partial class Character
     /// <param name="enter">是否进入事件</param>
     private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
-        if (isInTeam&&this!=CharacterManager.instance.controllerCharacter)
+        if (isInTeam && this != CharacterManager.instance.controllerCharacter)
         {
             return;
         }
@@ -1091,13 +1090,14 @@ public partial class Character
 
         // ForwardTrigger(coordinate, direction);
     }
+
     public void SetCoordinate(int2 coordinate)
     {
         int2 oldCoordinate = objCoordinate.xy;
         int3 checkCoordinate = new int3(coordinate.xy, mapInstance);
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, mapInstance, oldCoordinate, coordinate.xy,
            TriggerEventAction);
-    
+
         SetObjCoordinate(checkCoordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
         {
@@ -1108,6 +1108,7 @@ public partial class Character
 
         // ForwardTrigger(coordinate, direction);
     }
+
     private void ForwardTrigger(int3 coordinate, Direction direction)
     {
         int2 offsetCoordinate = int2.zero;
@@ -1132,16 +1133,13 @@ public partial class Character
         coordinate.xy += offsetCoordinate;
     }
 
-
-
-
     public bool MoveCrossMap(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null)
     {
         if (!CanMoveCrossMap)
         {
             return false;
         }
-         
+
         bool result = false;
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, ref result);
         if (result)
@@ -1179,7 +1177,7 @@ public partial class Character
                 {
                     if (this == CharacterManager.instance.controllerCharacter)
                     {
-                        canMove = false; 
+                        canMove = false;
                         GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                         {
                             MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
@@ -1189,7 +1187,6 @@ public partial class Character
                     {
                         MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
                     }
-                    
                 }, changeCoordinateAction, failedMoveAction);
             }
         }

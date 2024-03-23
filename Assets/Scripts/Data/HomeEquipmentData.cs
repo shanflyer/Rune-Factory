@@ -3,8 +3,9 @@ using UnityEngine;
 
 public enum HomeEquipType
 {
-    生产设施,生活设施
+    生产设施, 生活设施
 }
+
 public class HomeEquipmentData : ScriptableObject, IGameData, IReferenceData
 {
     public int id;
@@ -18,6 +19,7 @@ public class HomeEquipmentData : ScriptableObject, IGameData, IReferenceData
     {
         return equipmentName;
     }
+
     public string GetKey()
     {
         return id.ToString();

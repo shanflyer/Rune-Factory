@@ -133,7 +133,7 @@ public struct ZeroWorld : GameAction
 
 public struct TrySetTempMapItem : GameAction
 {
-    public int instanceId; 
+    public int instanceId;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
@@ -143,14 +143,15 @@ public struct TrySetTempMapItem : GameAction
         {
             instanceId = int.Parse(parameters[0].value);
         }
-        if (target != 0&&target!=int.MinValue)
+        if (target != 0 && target != int.MinValue)
         {
             instanceId = target;
-        } 
+        }
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct StopSetTempMapItem : GameAction
 {
     public int instanceId;
@@ -171,6 +172,7 @@ public struct StopSetTempMapItem : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct CheckTempMapItemSet : GameAction
 {
     public SetValue setValue { get; set; }
@@ -200,7 +202,7 @@ public struct CreatTempMapItem : GameAction
         {
             characterId = source;
         }
-        if (target != 0&& target != int.MinValue)
+        if (target != 0 && target != int.MinValue)
         {
             instanceId = target;
         }

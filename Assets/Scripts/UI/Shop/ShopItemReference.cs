@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,13 +6,17 @@ using UnityEngine.UI;
 public class ShopItemReference : UIObjReference<ShopItemData>
 {
     [SerializeField]
-    Image itemIcon;
+    private Image itemIcon;
+
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
+
     [SerializeField]
-    Image moneyIcon;
+    private Image moneyIcon;
+
     [SerializeField]
-    TextMeshProUGUI moneyValue;
+    private TextMeshProUGUI moneyValue;
+
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
@@ -23,6 +27,7 @@ public class ShopItemReference : UIObjReference<ShopItemData>
             }
         });
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -31,11 +36,13 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         moneyIcon = FindChildGameObject<Image>("MoneyIcon");
         moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
     }
-    SelectAction<ShopItemData> SelectAction;
-    ShopItemData ShopItemData;
-    public override async void InitData(ShopItemData t, SelectAction<ShopItemData> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    private SelectAction<ShopItemData> SelectAction;
+    private ShopItemData ShopItemData;
+
+    public override async Task InitData(ShopItemData t, SelectAction<ShopItemData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup); 
+        base.InitData(t, SelectAction, toggleGroup);
         ShopItemData = t;
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
@@ -43,6 +50,6 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         itemIcon.sprite = itemData.icon;
         itemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(itemData.icon, new Vector2(32, 32));
         moneyValue.text = (itemData.shopPrice * ShopItemData.priceValue * 0.01f).ToString("0");
-        moneyIcon.sprite = PayManager.instance.GetPayMoneySprite(ShopItemData.payType); 
+        moneyIcon.sprite = PayManager.instance.GetPayMoneySprite(ShopItemData.payType);
     }
 }

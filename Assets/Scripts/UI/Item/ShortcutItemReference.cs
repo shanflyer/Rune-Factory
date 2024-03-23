@@ -101,7 +101,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         count.enabled = false;
     }
     ItemData itemData;
-    public override async void InitData(ShortcutItem t, SelectAction<ShortcutItem> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(ShortcutItem t, SelectAction<ShortcutItem> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup); 
 

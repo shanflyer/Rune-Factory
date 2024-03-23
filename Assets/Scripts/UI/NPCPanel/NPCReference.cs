@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,15 +6,19 @@ using UnityEngine.UI;
 public class NPCReference : UIObjReference<NPC>
 {
     [SerializeField]
-    Image Icon;
+    private Image Icon;
+
     [SerializeField]
-    TextMeshProUGUI NPCName;
+    private TextMeshProUGUI NPCName;
+
     [SerializeField]
-    TextMeshProUGUI StateValue;
+    private TextMeshProUGUI StateValue;
+
     [SerializeField]
-    TextMeshProUGUI FriendValue;
+    private TextMeshProUGUI FriendValue;
+
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
 
     private void Awake()
     {
@@ -26,23 +30,27 @@ public class NPCReference : UIObjReference<NPC>
             }
         });
     }
+
     public override void OnEnable()
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshFriendShip>(RefreshFriendShip);
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshFriendShip>(RefreshFriendShip);
     }
-    void RefreshFriendShip(RefreshFriendShip refreshFriendShip)
+
+    private void RefreshFriendShip(RefreshFriendShip refreshFriendShip)
     {
         if (refreshFriendShip.characterId == data.characterId)
         {
             FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.dataId).ToString();
         }
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -50,19 +58,19 @@ public class NPCReference : UIObjReference<NPC>
         NPCName = FindChildGameObject<TextMeshProUGUI>("NPCName");
         StateValue = FindChildGameObject<TextMeshProUGUI>("StateValue");
         FriendValue = FindChildGameObject<TextMeshProUGUI>("FriendValue");
-        toggle=GetComponent<Toggle>();
+        toggle = GetComponent<Toggle>();
     }
-  
-    public override async void InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override async Task InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
 
-        CharacterData characterData =await data.GetCharacterData();
+        CharacterData characterData = await data.GetCharacterData();
         Icon.sprite = characterData.icon;
         Icon.SetNativeSize();
         NPCName.text = $"+ {characterData.characterName} +";
-        
+
         FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.characterId).ToString();
         StateValue.text = data.npcState.ToString();
         if (data.npcState == NPCState.修养中)
@@ -72,7 +80,6 @@ public class NPCReference : UIObjReference<NPC>
         else
         {
             StateValue.color = new Color(0.5f, 0, 0);
-            
         }
     }
 }

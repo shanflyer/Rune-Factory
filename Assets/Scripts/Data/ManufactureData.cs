@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -10,16 +9,20 @@ public class ManufactureData : ScriptableObject, IGameData, IReferenceData
     public int openItem;
     public List<int2> linkFormulas;
     public int defaultProduct;
+    public int defaultProduceTime;
+
     public string GetKey()
     {
         return id.ToString();
     }
+
     public string GetName()
     {
         return manufactureName;
     }
+
     public void SetReferenceData()
-    { 
+    {
     }
 
     public override string ToString()

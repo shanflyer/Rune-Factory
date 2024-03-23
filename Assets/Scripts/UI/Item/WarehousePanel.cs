@@ -1,72 +1,90 @@
-using BehaviorDesigner.Runtime.Tasks;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro; 
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public delegate void PackageItemAction(Item item, int packageId);
+
 public class WarehousePanel : GamePanel<PackageList>
-{ 
+{
     [SerializeField]
-    PackageSelectReference packageSelect;
-    [SerializeField]
-    Transform packageSelectParent;
-    [SerializeField]
-    ToggleGroup packageSelectGroup;
-    [SerializeField]
-    Button packageLevelUp;
+    private PackageSelectReference packageSelect;
 
     [SerializeField]
-    Transform ItemInformation;
-    [SerializeField]
-    Button ShortCutActionButton;
-    [SerializeField]
-    TextMeshProUGUI Title;
-    [SerializeField]
-    TextMeshProUGUI caseCount;
-    [SerializeField]
-    Image ItemIcon;
-    [SerializeField]
-    TextMeshProUGUI ItemName;
-    [SerializeField]
-    TextMeshProUGUI Price;
-    [SerializeField]
-    TextMeshProUGUI Type, Property, Info;
-    [SerializeField]
-    Button ActionButton,ReturnButton;
-    [SerializeField]
-    TextMeshProUGUI ActionName;
-    [SerializeField]
-    Transform InfoItemValueBg;
-    [SerializeField]
-    Image InfoItemValue;
-    [SerializeField]
-    ItemBoxReference itemBoxReference;
-    [SerializeField]
-    Transform itemParent;
-    [SerializeField]
-    ToggleGroup itemSelectGroup;
-    DisplayList<ItemBoxReference, Item> itemBoxs;
-    DisplayList<PackageSelectReference, PackageData> packageSelectList;
+    private Transform packageSelectParent;
 
-    PackageList packageList;
-    PackageData selectPackageData;
-    Item SelectItem;
-    PackageItemAction selectItemAction;
+    [SerializeField]
+    private ToggleGroup packageSelectGroup;
+
+    [SerializeField]
+    private Button packageLevelUp;
+
+    [SerializeField]
+    private Transform ItemInformation;
+
+    [SerializeField]
+    private Button ShortCutActionButton;
+
+    [SerializeField]
+    private TextMeshProUGUI Title;
+
+    [SerializeField]
+    private TextMeshProUGUI caseCount;
+
+    [SerializeField]
+    private Image ItemIcon;
+
+    [SerializeField]
+    private TextMeshProUGUI ItemName;
+
+    [SerializeField]
+    private TextMeshProUGUI Price;
+
+    [SerializeField]
+    private TextMeshProUGUI Type, Property, Info;
+
+    [SerializeField]
+    private Button ActionButton, ReturnButton;
+
+    [SerializeField]
+    private TextMeshProUGUI ActionName;
+
+    [SerializeField]
+    private Transform InfoItemValueBg;
+
+    [SerializeField]
+    private Image InfoItemValue;
+
+    [SerializeField]
+    private ItemBoxReference itemBoxReference;
+
+    [SerializeField]
+    private Transform itemParent;
+
+    [SerializeField]
+    private ToggleGroup itemSelectGroup;
+
+    private DisplayList<ItemBoxReference, Item> itemBoxs;
+    private DisplayList<PackageSelectReference, PackageData> packageSelectList;
+
+    private PackageList packageList;
+    private PackageData selectPackageData;
+    private Item SelectItem;
+    private PackageItemAction selectItemAction;
+
     protected override void Awake()
     {
         base.Awake();
         var packageDatas = packageList.packageDatas;
-       
-        ReturnButton.onClick.AddListener(Close); 
-        itemBoxs=new DisplayList<ItemBoxReference,Item>(itemBoxReference,itemParent);
+
+        ReturnButton.onClick.AddListener(Close);
+        itemBoxs = new DisplayList<ItemBoxReference, Item>(itemBoxReference, itemParent);
 
         ActionButton.onClick.AddListener(() =>
         {
-            if(selectItemAction != null)
+            if (selectItemAction != null)
             {
-                selectItemAction(SelectItem,selectPackageData.instanceId);
+                selectItemAction(SelectItem, selectPackageData.instanceId);
             }
         });
 
@@ -88,19 +106,22 @@ public class WarehousePanel : GamePanel<PackageList>
             }
         });
     }
+
     public override void OnEnable()
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshPackage>(RefreshPackage);
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
     }
+
     public override void SetPanelUISerializeObj()
     {
-        base.SetPanelUISerializeObj(); 
+        base.SetPanelUISerializeObj();
         packageSelect = FindChildGameObject<PackageSelectReference>("PackageSelect");
         packageSelectParent = FindChildGameObject("PackageSelectParent");
 
@@ -112,7 +133,7 @@ public class WarehousePanel : GamePanel<PackageList>
         Type = FindChildGameObject<TextMeshProUGUI>("Type");
         Property = FindChildGameObject<TextMeshProUGUI>("Property");
         Info = FindChildGameObject<TextMeshProUGUI>("Info");
-        ActionButton = FindChildGameObject<Button>("ActionButton"); 
+        ActionButton = FindChildGameObject<Button>("ActionButton");
         ActionName = FindChildGameObject<TextMeshProUGUI>("ActionName");
         itemBoxReference = FindChildGameObject<ItemBoxReference>("ItemBoxReference");
         itemParent = FindChildGameObject("ItemParent");
@@ -126,6 +147,7 @@ public class WarehousePanel : GamePanel<PackageList>
         InfoItemValue = FindChildGameObject<Image>("InfoItemValue");
         ShortCutActionButton = FindChildGameObject<Button>("ShortCutAction");
     }
+
     public override void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
@@ -136,15 +158,17 @@ public class WarehousePanel : GamePanel<PackageList>
         //this.RefreshPackage();
         //RefreshPackage();
     }
+
     public override void Close()
     {
         base.Close();
         if (otherSelectItemAction != null)
         {
-          //  otherSelectItemAction(default(Item), selectPackageData.instanceId);
+            //  otherSelectItemAction(default(Item), selectPackageData.instanceId);
         }
     }
-    async void TryPackageLevelUp()
+
+    private async void TryPackageLevelUp()
     {
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
         if (packageSetData && packageSetData.canLevelUp)
@@ -157,32 +181,34 @@ public class WarehousePanel : GamePanel<PackageList>
                 {
                     PackageManager.instance.AddPackageUpLevel(selectPackageData.instanceId);
                 }
-                
             });
         }
     }
-    void SelectPackage(PackageData packageData, bool selected = true)
+
+    private void SelectPackage(PackageData packageData, bool selected = true)
     {
         if (selected)
         {
-            selectPackageData = packageData; 
+            selectPackageData = packageData;
             RefreshPackage();
             ItemInformation.localScale = Vector3.zero;
-        } 
+        }
     }
-    
-    public void SetSelectItemAction(PackageItemAction selectItemAction,string actionName)
+
+    public void SetSelectItemAction(PackageItemAction selectItemAction, string actionName)
     {
         ActionName.text = actionName;
         this.selectItemAction = selectItemAction;
     }
-    
+
     public void SetOtherSelectAction(PackageItemAction selectItemAction)
     {
         otherSelectItemAction = selectItemAction;
     }
-    PackageItemAction otherSelectItemAction;
-    async void SelectPackageItem(Item item,bool selected= true)
+
+    private PackageItemAction otherSelectItemAction;
+
+    private async void SelectPackageItem(Item item, bool selected = true)
     {
         if (selected)
         {
@@ -216,16 +242,18 @@ public class WarehousePanel : GamePanel<PackageList>
                 }
             }
         }
-        else if(SelectItem.instanceId==item.instanceId)
+        else if (SelectItem.instanceId == item.instanceId)
         {
             ItemInformation.localScale = Vector3.zero;
         }
-    } 
-    void RefreshPackage(RefreshPackage RefreshPackage)
+    }
+
+    private void RefreshPackage(RefreshPackage RefreshPackage)
     {
         this.RefreshPackage();
     }
-    async void RefreshPackage()
+
+    private async void RefreshPackage()
     {
         //selectPackageData = packageList.packageDatas[selectIndex];
 
@@ -243,26 +271,22 @@ public class WarehousePanel : GamePanel<PackageList>
                     var item = selectPackageData.items[i];
                     item.locked = !packageList.itemMatchData.MatchAction(item);
                     items.Add(item);
-                } 
-            } 
+                }
+            }
         }
-        
+
         for (int i = items.Count; i < selectPackageData.caseCount; i++)
         {
             items.Add(default(Item));
         }
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
         Title.text = packageSetData.packageName;
-        
-        itemBoxs.InitListData(items, SelectPackageItem,toggleGroup: itemSelectGroup);
-        // if(items.Count>0) { SelectPackageItem(items[0]); }
-        if(selectPackageData.items.Count > 0)
-        {
-            itemBoxs.SelectDefault();
-            SelectPackageItem(items[0]);
-        }
-        
-        caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
 
+        itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
+        // if(items.Count>0) { SelectPackageItem(items[0]); }
+        itemBoxs.ClearSelect();
+        ItemInformation.localScale = Vector3.zero;
+
+        caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
     }
 }

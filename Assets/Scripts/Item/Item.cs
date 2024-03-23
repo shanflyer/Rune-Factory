@@ -1,22 +1,20 @@
-using NUnit.Framework.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Mathematics;
-using UnityEngine;
+
 [System.Serializable]
-public struct Item:IReferenceData
+public struct Item : IReferenceData
 {
     public int instanceId;
     public int packageId;
-    public int dataId; 
+    public int dataId;
     public int count;
     public float value;
     public bool isFresh;
     public ItemType itemType;
     public bool locked;
-    public Item(int dataId,int count, float value=1, int packageId=0)
+
+    public Item(int dataId, int count, float value = 1, int packageId = 0)
     {
         this.dataId = dataId;
         this.count = count;
@@ -29,13 +27,14 @@ public struct Item:IReferenceData
     }
 }
 
-public struct Equipment: IReferenceData
+public struct Equipment : IReferenceData
 {
     public int characterId;
     public int dataId;
     public float itemValue;
     public ItemType ItemType;
 }
+
 public class ItemManager
 {
     public static ItemManager instance
@@ -49,9 +48,11 @@ public class ItemManager
             return _instance;
         }
     }
+
     private static ItemManager _instance;
 
     private HashSet<int> IntanceIds = new HashSet<int>();
+
     public Item CreatItem(ItemData data, int count)
     {
         Item item = new Item
@@ -62,7 +63,8 @@ public class ItemManager
         };
         return item;
     }
-    public Item CreatItem(int dataId,int count)
+
+    public Item CreatItem(int dataId, int count)
     {
         Item item = new Item
         {
@@ -72,9 +74,10 @@ public class ItemManager
         };
         return item;
     }
+
     public int CreatIntance()
     {
-        var guid = Guid.NewGuid(); 
+        var guid = Guid.NewGuid();
         int intanceId = guid.GetHashCode();
         while (IntanceIds.Contains(intanceId))
         {
@@ -131,5 +134,4 @@ public class ItemManager
             });
         }
     }
-
 }

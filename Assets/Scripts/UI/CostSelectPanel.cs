@@ -1,36 +1,43 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CostSelectPanel : GamePanel<CostEventData> 
+public class CostSelectPanel : GamePanel<CostEventData>
 {
     [SerializeField]
     private TextMeshProUGUI TitleText;
+
     [SerializeField]
     private TextMeshProUGUI CostValueText;
+
     [SerializeField]
     private Image MoneyImage0, MoneyImage1, TotalMonet0, TotalMonet1;
+
     [SerializeField]
     private TextMeshProUGUI noticeText;
+
     [SerializeField]
     private TextMeshProUGUI TotalText;
+
     [SerializeField]
-    Button yesButton, noButton;
+    private Button yesButton, noButton;
 
-    CostEventData CostEventData;
+    private CostEventData CostEventData;
 
-    public override bool pluralUI => true; 
+    public override bool pluralUI => true;
+
     public override void OnEnable()
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshPlayerGold>(RefreshPlayerGold);
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -41,16 +48,18 @@ public class CostSelectPanel : GamePanel<CostEventData>
         MoneyImage0 = FindChildGameObject<Image>("money0");
         MoneyImage1 = FindChildGameObject<Image>("money1");
         TotalMonet0 = FindChildGameObject<Image>("TotalMoney0");
-        TotalMonet1= FindChildGameObject<Image>("TotalMoney1");
+        TotalMonet1 = FindChildGameObject<Image>("TotalMoney1");
 
         yesButton = FindChildGameObject<Button>("YesButton");
         noButton = FindChildGameObject<Button>("NoButton");
     }
-    void RefreshPlayerGold(RefreshPlayerGold refreshPlayerGold)
+
+    private void RefreshPlayerGold(RefreshPlayerGold refreshPlayerGold)
     {
         Display();
     }
-    void Display()
+
+    private void Display()
     {
         TitleText.text = CostEventData.title;
         noticeText.text = CostEventData.notice;
@@ -64,6 +73,7 @@ public class CostSelectPanel : GamePanel<CostEventData>
                 TotalMonet1.enabled = false;
                 TotalText.text = PayManager.instance.NowGold.ToString();
                 break;
+
             case PayType.钻石:
                 MoneyImage1.enabled = true;
                 MoneyImage0.enabled = false;
@@ -73,29 +83,30 @@ public class CostSelectPanel : GamePanel<CostEventData>
                 break;
         }
     }
+
     protected override void Awake()
     {
         base.Awake();
 
         yesButton.onClick.AddListener(() =>
         {
-            bool costSuccess = PayManager.instance.TryCost(CostEventData.payType,CostEventData.costValue);
+            bool costSuccess = PayManager.instance.TryCost(CostEventData.payType, CostEventData.costValue);
             if (CostEventData.afterAction != null)
             {
-                CostEventData.afterAction(costSuccess); 
+                CostEventData.afterAction(costSuccess);
             }
             Close();
         });
-        noButton.onClick.AddListener(()=> {
-
+        noButton.onClick.AddListener(() =>
+        {
             if (CostEventData.afterAction != null)
             {
                 CostEventData.afterAction(false);
             }
             Close();
         });
-
     }
+
     public override void InitReferenceData(CostEventData v)
     {
         base.InitReferenceData(v);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -67,7 +66,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
         Character controller = CharacterManager.instance.controllerCharacter;
 
-       // controller.SetPlayerOperate(targetCoordinate);
+        // controller.SetPlayerOperate(targetCoordinate);
         int clickCharacter = MapCellController.instance.GetClickCharacter(
             new int3(targetCoordinate, WorldMapObjManager.instance.displayMap));
         if (clickCharacter != -1 && clickCharacter != controller.instanceId)
@@ -124,16 +123,16 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                     OperateDatas = new List<OperateDataReferenceData>()
                 };
                 if (operateDataLength > 0)
-                { 
-                    foreach(var id in runtimMapItem.operateDatas)
+                {
+                    foreach (var id in runtimMapItem.operateDatas)
                     {
                         OperateData operateData = await GameDataManager.instance.GetAsyncData<OperateData>(id);
                         operateDataList.OperateDatas.Add(new OperateDataReferenceData
                         {
-                            targetItem=runtimMapItem.instanceId,
-                            operateData=operateData,
+                            targetItem = runtimMapItem.instanceId,
+                            operateData = operateData,
                         });
-                    }  
+                    }
                 }
                 UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
             }
@@ -162,9 +161,9 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                   value = operateDataReference.targetItem
                 },
             };
-            if (operateDataReference.operateData.eventReferenceDatas!=null&& operateDataReference.operateData.eventReferenceDatas.Count > 0)
+            if (operateDataReference.operateData.eventReferenceDatas != null && operateDataReference.operateData.eventReferenceDatas.Count > 0)
             {
-                for(int i = 0; i < operateDataReference.operateData.eventReferenceDatas.Count; i++)
+                for (int i = 0; i < operateDataReference.operateData.eventReferenceDatas.Count; i++)
                 {
                     eventReferenceDatas.Add(operateDataReference.operateData.eventReferenceDatas[i]);
                 }

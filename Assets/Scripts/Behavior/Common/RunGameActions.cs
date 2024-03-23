@@ -24,7 +24,8 @@ public class RunGameActions : Action
     public SharedInt sharedSetIntValue;
 
     [Header("动态填充数据")]
-    public List<DynamicData> otherDatas; 
+    public List<DynamicData> otherDatas;
+
     public List<DynamicParameterData> dynamicParameterDatas;
 
     public List<GameActionData> gameActionDatas;
@@ -64,7 +65,6 @@ public class RunGameActions : Action
         }
         for (int i = 0; i < gameActionDatas.Count; i++)
         {
-           
             if (dynamicParameterDatas != null && i < dynamicParameterDatas.Count)
             {
                 var dynamicParameterData = dynamicParameterDatas[i];
@@ -89,7 +89,7 @@ public class RunGameActions : Action
             }
             else
             {
-                gameActionDatas[i].Action(source.Value, target.Value,sharedSetIntValue.Value, setResult: waitResult ? SetActionResult : null,
+                gameActionDatas[i].Action(source.Value, target.Value, sharedSetIntValue.Value, setResult: waitResult ? SetActionResult : null,
                     setValue: SetValue, immediately: immediately);
             }
         }

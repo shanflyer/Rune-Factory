@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+
 public struct OpenOrCloseInputMap : GameAction
 {
     public bool open;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
         {
@@ -19,13 +20,14 @@ public struct OpenOrCloseInputMap : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct SwitchInputMap : GameAction
 {
     public bool UI;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
         {
@@ -41,7 +43,7 @@ public struct ClosePanelAction : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
         {
@@ -58,7 +60,7 @@ public struct OpenPanelAction : GameAction
     public Type type;
     public string dataId;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 2)
         {
@@ -73,11 +75,10 @@ public struct OpenPanelAction : GameAction
                 dataId = source.ToString();
             }
         }
-        if(target!= 0&&target!=int.MinValue)
+        if (target != 0 && target != int.MinValue)
         {
             dataId = target.ToString();
         }
-
 
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -90,7 +91,7 @@ public struct HidePanel : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
         {
@@ -99,6 +100,7 @@ public struct HidePanel : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct ShowMultiPackagePanel : GameAction
 {
     public int packageId0, packageId1;
@@ -106,7 +108,7 @@ public struct ShowMultiPackagePanel : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 2)
         {
@@ -115,7 +117,7 @@ public struct ShowMultiPackagePanel : GameAction
         }
         if (packageId0 == 0)
         {
-            if(source == 0)
+            if (source == 0)
             {
                 packageId0 = CharacterManager.instance.controllerCharacter.characterPackage;
             }

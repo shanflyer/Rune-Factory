@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,13 +6,17 @@ using UnityEngine.UI;
 public class PermissionReference : UIObjReference<Permission>
 {
     [SerializeField]
-    TextMeshProUGUI Name;
+    private TextMeshProUGUI Name;
+
     [SerializeField]
-    TextMeshProUGUI ConditionValue;
+    private TextMeshProUGUI ConditionValue;
+
     [SerializeField]
-    TextMeshProUGUI RewardValue;
+    private TextMeshProUGUI RewardValue;
+
     [SerializeField]
-    Transform GetTips;
+    private Transform GetTips;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -25,7 +25,8 @@ public class PermissionReference : UIObjReference<Permission>
         RewardValue = FindChildGameObject<TextMeshProUGUI>("RewardValue");
         GetTips = FindChildGameObject("GetTips");
     }
-    public override void InitData(Permission t, SelectAction<Permission> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override async Task InitData(Permission t, SelectAction<Permission> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         Name.text = data.permissionData.permissionName;

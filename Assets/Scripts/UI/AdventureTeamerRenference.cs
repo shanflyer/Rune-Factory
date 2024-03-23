@@ -1,24 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Threading.Tasks;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
-
-public class AdventureTeamerRenference: UIObjReference<FighterResult>
+public class AdventureTeamerRenference : UIObjReference<FighterResult>
 {
     [SerializeField]
-    Image Icon;
+    private Image Icon;
+
     [SerializeField]
-    Transform LevelUp;
+    private Transform LevelUp;
+
     [SerializeField]
-    Transform SkillUp;
+    private Transform SkillUp;
+
     [SerializeField]
-    TextMeshProUGUI Name;
+    private TextMeshProUGUI Name;
+
     [SerializeField]
-    TextMeshProUGUI Level;
-     
+    private TextMeshProUGUI Level;
+
     public override void SetPanelUISerializeObj()
     {
         Icon = FindChildGameObject<Image>("NPCImage");
@@ -29,7 +30,8 @@ public class AdventureTeamerRenference: UIObjReference<FighterResult>
 
         base.SetPanelUISerializeObj();
     }
-    public override void InitData(FighterResult t, SelectAction<FighterResult> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override async Task InitData(FighterResult t, SelectAction<FighterResult> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
 
@@ -40,5 +42,4 @@ public class AdventureTeamerRenference: UIObjReference<FighterResult>
         Name.text = data.Character.name;
         Level.text = $"Lv.{data.Character.Level}";
     }
-    
 }

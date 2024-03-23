@@ -1,15 +1,18 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PackageSelectReference : UIObjReference<PackageData>
 {
     [SerializeField]
-    Image background;
+    private Image background;
+
     [SerializeField]
-    Image check;
+    private Image check;
+
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -17,6 +20,7 @@ public class PackageSelectReference : UIObjReference<PackageData>
         check = FindChildGameObject<Image>("Checkmark");
         toggle = GetComponent<Toggle>();
     }
+
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
@@ -26,20 +30,20 @@ public class PackageSelectReference : UIObjReference<PackageData>
                 SelectAction(PackageData);
             }
         });
-        
     }
-    PackageData PackageData;
-    SelectAction<PackageData> SelectAction;
-    public override async void InitData(PackageData t, SelectAction<PackageData> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    private PackageData PackageData;
+    private SelectAction<PackageData> SelectAction;
+
+    public override async Task InitData(PackageData t, SelectAction<PackageData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         this.SelectAction = SelectAction;
-        PackageData= t;
-        PackageSetData  packageSetData= await GameDataManager.instance.GetAsyncData<PackageSetData>(PackageData.dataId);
+        PackageData = t;
+        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(PackageData.dataId);
         toggle.group = toggleGroup;
-        background.sprite= check.sprite = packageSetData.icon.sprite;
+        background.sprite = check.sprite = packageSetData.icon.sprite;
         background.SetNativeSize();
         check.SetNativeSize();
     }
-
 }

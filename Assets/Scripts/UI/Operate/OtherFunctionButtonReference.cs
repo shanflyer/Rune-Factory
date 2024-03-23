@@ -1,7 +1,6 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,28 +9,34 @@ public struct FunctionButtonList : IReferenceData
 {
     public List<FunctionButton> buttons;
 }
+
 public struct FunctionButton : IReferenceData
 {
     public Sprite sprite;
     public string name;
     public Action action;
 }
+
 public class OtherFunctionButtonReference : UIObjReference<FunctionButton>
 {
     [SerializeField]
-    Button button;
+    private Button button;
+
     [SerializeField]
-    Image Icon;
+    private Image Icon;
+
     [SerializeField]
-    TextMeshProUGUI Name;
-    public override void InitData(FunctionButton t, SelectAction<FunctionButton> SelectAction = null, ToggleGroup toggleGroup = null)
+    private TextMeshProUGUI Name;
+
+    public override async Task InitData(FunctionButton t, SelectAction<FunctionButton> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         Name.text = data.name;
-        Icon.sprite=data.sprite;
+        Icon.sprite = data.sprite;
         Icon.rectTransform.sizeDelta = GameCommon.SetImageSize(data.sprite, new Vector2(32, 32));
-        button.onClick.AddListener(()=> { data.action(); });
+        button.onClick.AddListener(() => { data.action(); });
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -39,5 +44,4 @@ public class OtherFunctionButtonReference : UIObjReference<FunctionButton>
         Name = FindChildGameObject<TextMeshProUGUI>("Name");
         Icon = FindChildGameObject<Image>("Icon");
     }
-     
 }

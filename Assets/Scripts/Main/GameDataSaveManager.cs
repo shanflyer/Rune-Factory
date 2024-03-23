@@ -2,21 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class GameDataSaveManager:Singleton<GameDataSaveManager>
+public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
     private string userName = "User";
     private UserGameSaveDataList userGameSaveDataList;
+
     public UserGameSaveDataList UserGameSaveDataList
     {
         get => userGameSaveDataList;
     }
-    private int selectSaveIndex; 
+
+    private int selectSaveIndex;
 
     public UserGameSaveData UserGameSaveData
     {
@@ -29,6 +30,7 @@ public class GameDataSaveManager:Singleton<GameDataSaveManager>
             return userGameSaveDataList.userGameSaveDatas[selectSaveIndex];
         }
     }
+
     public bool IsZeroGameSave
     {
         get
@@ -36,10 +38,12 @@ public class GameDataSaveManager:Singleton<GameDataSaveManager>
             return UserGameSaveData.saveTime == "1989";
         }
     }
+
     private async void InitUserSaveData()
     {
         userGameSaveDataList = await LoadUserGameSaveData(userName);
     }
+
     public async Task<UserGameSaveDataList> LoadUserGameSaveData(string userName)
     {
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
@@ -57,7 +61,6 @@ public class GameDataSaveManager:Singleton<GameDataSaveManager>
                 UserGameSaveDataList userGameSaveDataList = JsonMapper.ToObject<UserGameSaveDataList>(dataStr);
                 return userGameSaveDataList;
             }
-          
         }
         else
         {
@@ -70,6 +73,7 @@ public class GameDataSaveManager:Singleton<GameDataSaveManager>
             return userGameSaveDataList;
         }
     }
+
     public void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
     {
         if (UserGameSaveDataList.userGameSaveDatas.Count > selectSaveIndex)
@@ -92,17 +96,15 @@ public class GameDataSaveManager:Singleton<GameDataSaveManager>
             UserGameSaveDataList.userGameSaveDatas.Add(userGameSaveData);
         }
 
-
-       
         //NPCManager.instance.CreatZeroNPC();
         CharacterManager.instance.CreatPlayer((int)gender, 0);
     }
 
-    void SaveUserGameSaveData()
+    private void SaveUserGameSaveData()
     {
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
 
-        if (selectSaveIndex<0)
+        if (selectSaveIndex < 0)
         {
             userGameSaveDataList.nowSaveData.packageSaveDatas = packageSaveDatas;
         }
@@ -118,17 +120,17 @@ public class GameDataSaveManager:Singleton<GameDataSaveManager>
         File.WriteAllText(saveDataPath, strs);
     }
 
-
-
     public override void Init()
     {
         base.Init();
         InitUserSaveData();
     }
+
     protected override void Clear()
     {
         base.Clear();
-    } 
+    }
+
     public bool SaveData(UserGameSaveData userGameSaveData)
     {
         selectSaveIndex = userGameSaveData.index;
@@ -139,26 +141,29 @@ public class GameDataSaveManager:Singleton<GameDataSaveManager>
         //userGameSaveDataList.userGameSaveDatas[userGameSaveData.index] = userGameSaveData;
         SaveUserGameSaveData();
         return true;
-    }  
-    public void DeletaSaveData(UserGameSaveData userGameSaveData) { }
+    }
+
+    public void DeletaSaveData(UserGameSaveData userGameSaveData)
+    { }
+
     public bool CopySaveData(UserGameSaveData userGameSaveData)
     {
         return false;
     }
 
-
     private static string Mykey = "i1jI0Ooz";
     private static byte[] Keys = { 0x00, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
 
-
     public static string EncryptDES(string encryptString)
     {
-      return  EncryptDES(encryptString, Mykey);
+        return EncryptDES(encryptString, Mykey);
     }
+
     public static string DecryptDES(string decryptString)
     {
         return DecryptDES(decryptString, Mykey);
     }
+
     /// <summary>
     /// DES加密字符串
     /// </summary>

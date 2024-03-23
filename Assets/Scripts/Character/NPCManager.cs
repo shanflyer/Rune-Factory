@@ -97,8 +97,7 @@ public class Player : Character
 
 public partial class Character
 {
-
-    public bool isInTeam=false;
+    public bool isInTeam = false;
 
     public int selectItem;
 
@@ -113,7 +112,7 @@ public partial class Character
         characterInformationData.name = name;
         characterInformationData.head = characterData.head;
         characterInformationData.icon = characterData.icon;
-        characterInformationData.attributeType=attributeType;
+        characterInformationData.attributeType = attributeType;
 
         if (NPCManager.instance.GetNPC(instanceId, out var npc))
         {
@@ -187,9 +186,8 @@ public class NPCManager : Singleton<NPCManager>
         npcs.Dispose();
     }
 
-
-    async void GiveGift(GiveGift giveGift)
-    {  
+    private async void GiveGift(GiveGift giveGift)
+    {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
         {
             Character receiver = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter);
@@ -199,7 +197,8 @@ public class NPCManager : Singleton<NPCManager>
             if (nPCData.likeItems.Contains(giveGift.giftId))
             {
                 likeState = 1;
-            }else if (nPCData.unLikeItems.Contains(giveGift.giftId))
+            }
+            else if (nPCData.unLikeItems.Contains(giveGift.giftId))
             {
                 likeState = -1;
             }
@@ -215,17 +214,19 @@ public class NPCManager : Singleton<NPCManager>
                     talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.likeTalk);
                     emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.likeEmote);
                     break;
+
                 case 0:
                     friendValue = 2;
                     talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.defaultTalk);
                     emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.defaultEmote);
                     break;
+
                 case -1:
                     talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.unlikeTalk);
                     emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.unlikeEmote);
                     break;
             }
-            talkId =int.Parse(talkRandomResults[0].result);
+            talkId = int.Parse(talkRandomResults[0].result);
             emoteId = int.Parse(emoteRandomResults[0].result);
 
             GameTimerController.instance.DelayAction(1000, () =>
@@ -240,7 +241,7 @@ public class NPCManager : Singleton<NPCManager>
                         endAction = () =>
                         {
                             CharacterManager.instance.controllerCharacter.SetNeighborhood(giveGift.receiveCharacter);
-                        } 
+                        }
                     };
                     GameActionManager.instance.QueueAction(talk);
 
@@ -251,7 +252,6 @@ public class NPCManager : Singleton<NPCManager>
                         value = friendValue
                     };
                     GameActionManager.instance.QueueAction(addFriendShipValue);
-
                 }
                 ShowEmote showEmote = new ShowEmote
                 {
@@ -260,8 +260,8 @@ public class NPCManager : Singleton<NPCManager>
                     id = giveGift.receiveCharacter
                 };
                 GameActionManager.instance.QueueAction(showEmote);
-            }); 
-        } 
+            });
+        }
     }
 
     public bool GetNPCFormInstance(int instanceId, out NPC npc)
@@ -285,16 +285,16 @@ public class NPCManager : Singleton<NPCManager>
         {
             npcs = new List<NPC>(),
         };
-        foreach(NPC npc in npcs)
+        foreach (NPC npc in npcs)
         {
             if (!npc.hide)
             {
                 nPCList.npcs.Add(npc);
             }
-           
         }
         return nPCList;
     }
+
     public async void CreatZeroNPC()
     {
         var NPCDatas = await GameDataManager.instance.GetAllAsyncData<NPCData>();
@@ -309,7 +309,7 @@ public class NPCManager : Singleton<NPCManager>
                     characterId = instanceId,
                     npcState = NPCState.正常,
                     dataId = NPCData.id,
-                    hide=NPCData.hide
+                    hide = NPCData.hide
                 };
                 npcs.SetData(npc);
                 instanceDatas[instanceId] = NPCData.id;

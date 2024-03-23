@@ -52,7 +52,7 @@ public enum CompareType
 [System.Serializable]
 public enum CharacterPropertyType
 {
-    自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 幸运,  饱食,
+    自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 幸运, 饱食,
     最大体力, 最大生命, 最大法力
 }
 
@@ -89,7 +89,7 @@ public class GameCommon
     public const int explorCostMinute = 120;
     public const int exploreCostPower = 4;
     public const float fightCharacterMoveTime = 0.25f;
-    public static int2 fightWalkTime=new int2(4000,7000);
+    public static int2 fightWalkTime = new int2(4000, 7000);
     public const int giftEventId = 412;
     public const int zeroGameYear = 1300;
     public const Season zeroSeasom = Season.春;
@@ -104,7 +104,7 @@ public class GameCommon
     public const int storeCoinTime = 1000;
     public const float HurtUtlility = 0.6f;
 
-    public static int3 friendAddCount=new int3(3,3,2);
+    public static int3 friendAddCount = new int3(3, 3, 2);
 
     public static List<int> zeroNPC = new List<int>
     {
@@ -209,10 +209,9 @@ public class GameCommon
 
 #endif
 
-
     public static int2 GetDirectionInt2(Direction direction)
     {
-        int2 value=int2.zero;
+        int2 value = int2.zero;
         switch (direction)
         {
             case Direction.UP:
@@ -470,26 +469,27 @@ public class GameCommon
         }
     }
 
-    static float tansMin = math.tan(math.radians(22.5f));
-    static float tansMax = math.tan(math.radians(67.5f));
+    private static float tansMin = math.tan(math.radians(22.5f));
+    private static float tansMax = math.tan(math.radians(67.5f));
 
-    static float2 Left=new float2(-1, 0);
-    static float2 Right = new float2(1, 0);
-    static float2 Up = new float2(0, 1);
-    static float2 Down = new float2(0, -1);
+    private static float2 Left = new float2(-1, 0);
+    private static float2 Right = new float2(1, 0);
+    private static float2 Up = new float2(0, 1);
+    private static float2 Down = new float2(0, -1);
 
-    static float2 LeftUp = new float2(-1, 1);
-    static float2 RightUp = new float2(1, 1);
-    static float2 LeftDown = new float2(-1, -1);
-    static float2 RightDown = new float2(1, -1);
+    private static float2 LeftUp = new float2(-1, 1);
+    private static float2 RightUp = new float2(1, 1);
+    private static float2 LeftDown = new float2(-1, -1);
+    private static float2 RightDown = new float2(1, -1);
+
     public static float2 InitMoveDirect(float2 movedirect)
     {
-        if (movedirect.x==0&&movedirect.y==0)
+        if (movedirect.x == 0 && movedirect.y == 0)
         {
             return movedirect;
         }
-        float value =math.abs( movedirect.y / movedirect.x);
-        if(value< tansMin)
+        float value = math.abs(movedirect.y / movedirect.x);
+        if (value < tansMin)
         {
             if (movedirect.x < 0)
             {
@@ -499,9 +499,9 @@ public class GameCommon
             {
                 return Right;
             }
-        }else if (value > tansMax)
+        }
+        else if (value > tansMax)
         {
-
             if (movedirect.y < 0)
             {
                 return Down;
@@ -511,7 +511,7 @@ public class GameCommon
                 return Up;
             }
         }
-        else if(movedirect.x<0)
+        else if (movedirect.x < 0)
         {
             if (movedirect.y < 0)
             {
@@ -923,7 +923,7 @@ public static class EditorDataPath
 
 public static class DataPath
 {
-    public readonly static Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
+    public static readonly Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
         {typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" },
         {typeof(FunctionData),"Data/FunctionDataList" },
@@ -1014,6 +1014,7 @@ public static class DataPath
 
     public const string characterPrefabPath = "Prefabs/Character";
     public const string monsterPrefabPath = "Prefabs/Monster";
+
     //public const string monsterSpritePath = "Prefabs/Monster/";
     public const string UIPath = "Prefabs/UI/";
 }

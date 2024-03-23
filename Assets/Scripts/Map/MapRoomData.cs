@@ -11,17 +11,20 @@ public struct MapItem
     public int animationKey;
     public int blindHomeEquipment;
 }
+
 [System.Serializable]
 public struct MapCellData
 {
     public int2 coordinate;
     public bool isWalkable;
 }
+
 public enum FlowCameraType
 {
-    Default,FlowX,FlowY
+    Default, FlowX, FlowY
 }
-public class MapRoomData : ScriptableObject,IGameData
+
+public class MapRoomData : ScriptableObject, IGameData
 {
     public string roomName;
     public List<MapCellData> mapCells = new List<MapCellData>();
@@ -29,26 +32,31 @@ public class MapRoomData : ScriptableObject,IGameData
     public int2 startCoordinate, endCoordinate;
     public GameObject mapObj;
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
-    public bool displaySky=true;
-    public bool displaySunlight=false;
-    public bool fixedCamera; 
+    public bool displaySky = true;
+    public bool displaySunlight = false;
+    public bool fixedCamera;
     public FlowCameraType flowCameraType;
     public Vector3 fixedCameraPos;
     public int skyBackGroundId;
+
     public bool CheckBoundary(int2 coordinate)
     {
         if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoordinate.x
-            &&coordinate.y<= endCoordinate.y && coordinate.y >= startCoordinate.y)
+            && coordinate.y <= endCoordinate.y && coordinate.y >= startCoordinate.y)
         {
             return true;
         }
         return false;
     }
+
 #if UNITY_EDITOR
+
     public void SetReferenceData()
     {
     }
+
 #endif
+
     public string GetKey()
     {
         return roomName;

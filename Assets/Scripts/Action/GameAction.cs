@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -416,6 +415,7 @@ public struct InitInputAction : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct EndPlayerRound : GameAction
 {
     public SetValue setValue { get; set; }
@@ -426,6 +426,7 @@ public struct EndPlayerRound : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct StopAutoFight : GameAction
 {
     public SetValue setValue { get; set; }
@@ -436,6 +437,7 @@ public struct StopAutoFight : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct PlayerFight : GameAction
 {
     public SetValue setValue { get; set; }
@@ -447,7 +449,7 @@ public struct PlayerFight : GameAction
     }
 }
 
-public struct FightCharacterMove: GameAction
+public struct FightCharacterMove : GameAction
 {
     public int characterId;
     public int newIndex;
@@ -704,6 +706,7 @@ public struct ChapterStepAction : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct OpenChapter : GameAction
 {
     public SetValue setValue { get; set; }
@@ -837,6 +840,7 @@ public struct PauseFilm : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct TryStartAutoExplore : GameAction
 {
     public SetValue setValue { get; set; }
@@ -847,13 +851,14 @@ public struct TryStartAutoExplore : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct TryStartAutoBehavior : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { set; get; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    { 
+    {
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -866,11 +871,10 @@ public struct SwitchAutoExplore : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-       
-
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct SetAutoExplore : GameAction
 {
     public bool auto;
@@ -887,6 +891,7 @@ public struct SetAutoExplore : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct SwitchFunctionButton : GameAction
 {
     public bool fight;

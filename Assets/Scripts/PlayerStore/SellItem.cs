@@ -1,30 +1,33 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class SellItem : GamePanel<Item>
 {
     [SerializeField]
-    SpriteRenderer icon;
+    private SpriteRenderer icon;
+
     [SerializeField]
-    TextMeshPro count;
+    private TextMeshPro count;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        icon=GetComponent<SpriteRenderer>();
+        icon = GetComponent<SpriteRenderer>();
         count = FindChildGameObject<TextMeshPro>("Count");
-
     }
+
     public override void Close()
     {
         //base.Close();
     }
+
     public override void OnEnable()
     {
         base.OnEnable();
         icon.enabled = item.count > 0;
         count.enabled = item.count > 0;
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
@@ -38,17 +41,20 @@ public class SellItem : GamePanel<Item>
         count.enabled = false;
     }
 
-    Item item;
+    private Item item;
+
     public void AddItemCount(int count)
     {
         item.count += count;
         RefreshDisplay();
     }
+
     public void SetItemCount(int count)
     {
         item.count = count;
         RefreshDisplay();
     }
+
     public void RefreshDisplay()
     {
         count.text = item.count.ToString();
@@ -60,7 +66,7 @@ public class SellItem : GamePanel<Item>
         else
         {
             icon.enabled = false;
-            count.enabled =false;
+            count.enabled = false;
         }
     }
 
@@ -68,18 +74,18 @@ public class SellItem : GamePanel<Item>
     {
         base.InitReferenceData(v);
         item = v;
-        ShopItemDisplayData shopItemDisplayData=await GameDataManager.instance.GetAsyncData<ShopItemDisplayData>(item.dataId);
-        if (shopItemDisplayData== null)
+        ShopItemDisplayData shopItemDisplayData = await GameDataManager.instance.GetAsyncData<ShopItemDisplayData>(item.dataId);
+        if (shopItemDisplayData == null)
         {
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
             if (itemData != null)
             {
-                icon.sprite = itemData.icon; 
+                icon.sprite = itemData.icon;
             }
         }
         else
         {
-            icon.sprite=shopItemDisplayData.GetItemSprie(item.count);
+            icon.sprite = shopItemDisplayData.GetItemSprie(item.count);
         }
         count.text = item.count.ToString();
 

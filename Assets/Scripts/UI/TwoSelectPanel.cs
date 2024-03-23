@@ -1,35 +1,36 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct TwoSelectData:IReferenceData
+public struct TwoSelectData : IReferenceData
 {
     public string title;
     public string notice;
     public Action yesAction, noAction;
 }
+
 public class TwoSelectPanel : GamePanel<TwoSelectData>
 {
     public override bool changeInputModel => false;
-    [SerializeField]
-    TextMeshProUGUI TitleText, infoText;
-    [SerializeField]
-    Button YesButton, NoButton;
 
-    Action yesAction, noAction;
+    [SerializeField]
+    private TextMeshProUGUI TitleText, infoText;
+
+    [SerializeField]
+    private Button YesButton, NoButton;
+
+    private Action yesAction, noAction;
+
     public override void SetPanelUISerializeObj()
-    { 
+    {
         base.SetPanelUISerializeObj();
         TitleText = FindChildGameObject<TextMeshProUGUI>("Title");
         infoText = FindChildGameObject<TextMeshProUGUI>("info");
         YesButton = FindChildGameObject<Button>("YesButton");
         NoButton = FindChildGameObject<Button>("NoButton");
     }
+
     protected override void Awake()
     {
         base.Awake();
@@ -54,8 +55,8 @@ public class TwoSelectPanel : GamePanel<TwoSelectData>
     public override void InitReferenceData(TwoSelectData v)
     {
         base.InitReferenceData(v);
-        yesAction=v.yesAction; noAction=v.noAction;
+        yesAction = v.yesAction; noAction = v.noAction;
         TitleText.text = v.title;
         infoText.text = v.notice;
-    } 
+    }
 }

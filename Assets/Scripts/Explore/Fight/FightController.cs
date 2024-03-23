@@ -15,14 +15,16 @@ public struct FightPlayerRuntime
         animator = transform.GetComponent<Animator>();
         behaviorTree = transform.GetComponent<BehaviorTree>();
 
-        renderer = transform.gameObject.GetComponentInChildren<SpriteRenderer>(); 
+        renderer = transform.gameObject.GetComponentInChildren<SpriteRenderer>();
         material = renderer.sharedMaterial;
         material.SetFloat("_LightBlend", 0.5f);
     }
+
     public void InitMonsterSprite(Sprite sprite)
     {
-        renderer.sprite = sprite;  
+        renderer.sprite = sprite;
     }
+
     public void Recycle()
     {
         material.SetFloat("_LightBlend", 1);
@@ -32,7 +34,8 @@ public struct FightPlayerRuntime
         behaviorTree = null;
         GameRuntimeObjManager.instance.RecycleRuntimeObj(playerObj);
     }
-    SpriteRenderer renderer;
+
+    private SpriteRenderer renderer;
     private Material material;
     private RuntimeObj playerObj;
     public PlayableDirector playableDirector;
@@ -145,6 +148,7 @@ public class FightController : MonoBehaviour
     private Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
 
     private Transform monsterObj;
+
     private void Awake()
     {
         if (instance == null)
@@ -301,7 +305,7 @@ public class FightController : MonoBehaviour
 
         UIManager.instance.CloseGamePanel<FightPanel>();
         SceneManager.instance.UnloadNowScene();
-         
+
         int characterMap = CharacterManager.instance.controllerCharacter.mapInstance;
         if (characterMap > 0)
         {
@@ -315,7 +319,6 @@ public class FightController : MonoBehaviour
             };
             GameActionManager.instance.QueueAction(displayMap);
         }
-      
     }
 
     public void RemoveFightPlayerRuntime(int characterId)
@@ -484,7 +487,7 @@ public class FightController : MonoBehaviour
                 display = fightMapData.skyDisplay,
                 displaySunlight = fightMapData.displaySunlight,
             };
-            GameActionManager.instance.QueueAction(displaySky); 
+            GameActionManager.instance.QueueAction(displaySky);
         }
     }
 

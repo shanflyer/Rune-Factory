@@ -1,8 +1,5 @@
-﻿
-using BehaviorDesigner.Runtime;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 public class PackageManager : Singleton<PackageManager>
@@ -12,26 +9,26 @@ public class PackageManager : Singleton<PackageManager>
 
     public void AddPlayerPackage(int id)
     {
-        
         if (!playerPackages.Contains(id))
         {
             playerPackages.Add(id);
         }
     }
+
     public async void ShowPlayerBagUse(bool close, ItemMatchData itemMatchData)
     {
         Character character = CharacterManager.instance.controllerCharacter;
         PackageList packageList = new PackageList
         {
             packageDatas = new List<PackageData>(),
-            itemMatchData=itemMatchData
+            itemMatchData = itemMatchData
         };
         if (gamePackages.TryGetValue(character.characterPackage, out GamePackage gamePackage))
         {
             packageList.packageDatas.Add(gamePackage.OutGamePackageData());
         }
         var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction((Item item, int packageId)=> 
+        warehousePanel.SetSelectItemAction((Item item, int packageId) =>
         {
             UsingAction(item, packageId);
             if (close)
@@ -40,13 +37,14 @@ public class PackageManager : Singleton<PackageManager>
             }
         }, "使用");
     }
-    void UsingAction(Item item, int packageId)
+
+    private void UsingAction(Item item, int packageId)
     {
         ItemUseAction itemUseAction = new ItemUseAction
         {
-            itemId=item.dataId,
-            itemCount=1,
-            packageId=packageId
+            itemId = item.dataId,
+            itemCount = 1,
+            packageId = packageId
         };
         GameActionManager.instance.QueueAction(itemUseAction, true);
     }
@@ -101,9 +99,8 @@ public class PackageManager : Singleton<PackageManager>
 
     public async Task<bool> SetPlayerPackageItem(int itemDataId, int count)
     {
-         
         for (int i = 0; i < playerPackages.Count; i++)
-        { 
+        {
             int packageId = playerPackages[i];
             if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
             {
@@ -122,7 +119,7 @@ public class PackageManager : Singleton<PackageManager>
                 return true;
             }
         }
-     
+
         return false;
     }
 
@@ -148,27 +145,29 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<CheckCharacterItemValue>(CheckCharacterItemValue);
         GameActionManager.instance.AddListener<CheckCharacterPackageFull>(CheckCharacterPackageFull);
     }
+
     public void CheckCharacterPackageFull(CheckCharacterPackageFull checkCharacterPackageFull)
     {
         Character character = CharacterManager.instance.GetCharacter(checkCharacterPackageFull.characterId);
-        if(gamePackages.TryGetValue(character.characterPackage,out var gamePackage))
+        if (gamePackages.TryGetValue(character.characterPackage, out var gamePackage))
         {
             if (checkCharacterPackageFull.setResult != null)
             {
                 checkCharacterPackageFull.setResult(gamePackage.itemCount < gamePackage.caseCount);
-            } 
+            }
         }
     }
+
     public Item GetPackageSelectItem(int packageId)
     {
-        if(gamePackages.TryGetValue(packageId,out var gamePackage))
+        if (gamePackages.TryGetValue(packageId, out var gamePackage))
         {
             return GetItemFromInstanceId(packageId, gamePackage.SelectItem);
         }
         return default(Item);
     }
 
-    void AddItemValue(AddItemValue addItemValue)
+    private void AddItemValue(AddItemValue addItemValue)
     {
         Character character = CharacterManager.instance.GetCharacter(addItemValue.characterId);
         if (character != null)
@@ -180,9 +179,9 @@ public class PackageManager : Singleton<PackageManager>
                 {
                     GameActionManager.instance.QueueAction(new RefreshItemValue
                     {
-                        characterId=addItemValue.characterId,
-                        itemId=addItemValue.selectItem,
-                        itemValue=value
+                        characterId = addItemValue.characterId,
+                        itemId = addItemValue.selectItem,
+                        itemValue = value
                     });
                     if (addItemValue.setResult != null)
                     {
@@ -191,7 +190,6 @@ public class PackageManager : Singleton<PackageManager>
                     }
                 }
             }
-            
         }
         if (addItemValue.setResult != null)
         {
@@ -199,7 +197,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    void SetItemValue(SetItemValue setItemValue)
+    private void SetItemValue(SetItemValue setItemValue)
     {
         Character character = CharacterManager.instance.GetCharacter(setItemValue.characterId);
         if (character != null)
@@ -222,22 +220,23 @@ public class PackageManager : Singleton<PackageManager>
                     }
                 }
             }
-
         }
         if (setItemValue.setResult != null)
         {
             setItemValue.setResult(false);
         }
     }
-    void SetPackageSelectItem(SetPackageSelectItem setPackageSelectItem)
+
+    private void SetPackageSelectItem(SetPackageSelectItem setPackageSelectItem)
     {
-        if(gamePackages.TryGetValue(setPackageSelectItem.packageId,out var gamePackage))
+        if (gamePackages.TryGetValue(setPackageSelectItem.packageId, out var gamePackage))
         {
             gamePackage.SelectItem = setPackageSelectItem.selectItem;
             gamePackages[setPackageSelectItem.packageId] = gamePackage;
         }
     }
-    void ShowMultiPackagePanel(ShowMultiPackagePanel showMultiPackagePanel)
+
+    private void ShowMultiPackagePanel(ShowMultiPackagePanel showMultiPackagePanel)
     {
         PackageData packageData0 = GetPackageData(showMultiPackagePanel.packageId0);
         PackageData packageData1 = GetPackageData(showMultiPackagePanel.packageId1);
@@ -271,6 +270,7 @@ public class PackageManager : Singleton<PackageManager>
         bool result = gamePackages.Remove(removePackage.packageDataId);
         removePackage.setResult(result);
     }
+
     private void CheckCharacterItemValue(CheckCharacterItemValue CheckCharacterItemValue)
     {
         Character character = CharacterManager.instance.GetCharacter(CheckCharacterItemValue.characterId);
@@ -288,11 +288,10 @@ public class PackageManager : Singleton<PackageManager>
                     }
                 }
             }
-           
         }
         if (CheckCharacterItemValue.setResult != null)
         {
-            CheckCharacterItemValue.setResult(false); 
+            CheckCharacterItemValue.setResult(false);
         }
     }
 
@@ -343,8 +342,6 @@ public class PackageManager : Singleton<PackageManager>
                     }
                 }
             }
-
-            
         }
     }
 
@@ -379,8 +376,8 @@ public class PackageManager : Singleton<PackageManager>
         PackageList packageList = new PackageList
         {
             packageDatas = new List<PackageData>(),
-            itemMatchData=openPackage.itemMatchData,
-            canSetShortcut=openPackage.canSetShortcut
+            itemMatchData = openPackage.itemMatchData,
+            canSetShortcut = openPackage.canSetShortcut
         };
         int packageId = openPackage.packageId;
         if (openPackage.packageId == -1)
@@ -521,6 +518,7 @@ public class PackageManager : Singleton<PackageManager>
             gamePackages[packageId] = gamePackage;
         }
     }
+
     private void RemovePlayerPackageItem(RemovePlayerPackageItem removePlayerPackageItem)
     {
         Character character = CharacterManager.instance.GetCharacter(removePlayerPackageItem.characterId);
@@ -548,11 +546,12 @@ public class PackageManager : Singleton<PackageManager>
             }
         }
     }
+
     private void RemovePackageItemAction(RemovePackageItem removePackageItem)
     {
         if (gamePackages.TryGetValue(removePackageItem.packageId, out GamePackage gamePackage))
         {
-            bool result= gamePackage.GetItemOutPackage(removePackageItem.itemDataId, removePackageItem.itemCount); 
+            bool result = gamePackage.GetItemOutPackage(removePackageItem.itemDataId, removePackageItem.itemCount);
             gamePackages[removePackageItem.packageId] = gamePackage;
             if (removePackageItem.setResult != null)
             {
@@ -570,7 +569,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
         {
             int intanceId = ItemManager.instance.CreatIntance();
-            int count= await gamePackage.SetItemInPackage(new Item
+            int count = await gamePackage.SetItemInPackage(new Item
             {
                 instanceId = intanceId,
                 dataId = addPackageItem.itemDataId,
@@ -774,7 +773,6 @@ public class PackageManager : Singleton<PackageManager>
 
         public int SelectItem;
 
-        
         public Item GetItemFromInstanceId(int itemInstanceId)
         {
             return items.Find(item => item.instanceId == itemInstanceId);
@@ -811,9 +809,10 @@ public class PackageManager : Singleton<PackageManager>
             nullItems = new Queue<int>();
             SelectItem = 0;
         }
-        public float SetItemValue(int instanceId,float value)
+
+        public float SetItemValue(int instanceId, float value)
         {
-            int index= items.FindIndex(item => item.instanceId == instanceId);
+            int index = items.FindIndex(item => item.instanceId == instanceId);
             if (index >= 0)
             {
                 var item = items[index];
@@ -824,8 +823,9 @@ public class PackageManager : Singleton<PackageManager>
             else
             {
                 return -1;
-            } 
+            }
         }
+
         public float AddItemValue(int instanceId, float value)
         {
             int index = items.FindIndex(item => item.instanceId == instanceId);
@@ -845,14 +845,15 @@ public class PackageManager : Singleton<PackageManager>
                 return -1;
             }
         }
-        void RefreshSelectItem() 
+
+        private void RefreshSelectItem()
         {
             if (SelectItem == 0)
             {
                 return;
             }
             bool isHavelSelectItem = false;
-            for(int i=0;i<items.Count;i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 if (!nullItems.Contains(i))
                 {
@@ -868,6 +869,7 @@ public class PackageManager : Singleton<PackageManager>
                 SelectItem = 0;
             }
         }
+
         public List<Item> GetItems()
         {
             List<Item> results = new List<Item>();
@@ -939,10 +941,10 @@ public class PackageManager : Singleton<PackageManager>
                         {
                             instanceId = ItemManager.instance.CreatIntance(),
                             dataId = itemData.id,
-                            packageId=instanceId,
-                            isFresh=itemData.isFresh,
-                            itemType=itemData.type,
-                            value=item.value,
+                            packageId = instanceId,
+                            isFresh = itemData.isFresh,
+                            itemType = itemData.type,
+                            value = item.value,
                             count = 0
                         };
                         if (items.Count <= index)
@@ -1051,7 +1053,7 @@ public class PackageManager : Singleton<PackageManager>
                         indexDatas.Add(index);
                         itemCount++;
                     }
-                   // packageItemIndexDatas.Add(itemData.id, indexDatas);
+                    // packageItemIndexDatas.Add(itemData.id, indexDatas);
                     if (addCount > 0)
                     {
                         packageItemCounts.TryGetValue(itemData.id, out int count);
@@ -1224,35 +1226,41 @@ public struct PackageList : IReferenceData
 
 public enum ItemMatchType
 {
-    Null=0,ItemType=1,IsFresh=2
+    Null = 0, ItemType = 1, IsFresh = 2
 }
+
 public struct ItemMatchData
-{ 
+{
     public ItemMatchType itemMatchType;
     public HashSet<int> matchValues;
+
     public bool MatchAction(Item item)
     {
         switch (itemMatchType)
         {
             case ItemMatchType.ItemType:
                 return matchValues.Contains((int)item.itemType);
+
             case ItemMatchType.IsFresh:
                 return matchValues.Contains(item.isFresh ? 1 : 0);
         }
         return true;
     }
+
     public bool MatchAction(ItemData itemData)
     {
         switch (itemMatchType)
-        { 
+        {
             case ItemMatchType.ItemType:
                 return matchValues.Contains((int)itemData.type);
+
             case ItemMatchType.IsFresh:
-                return matchValues.Contains(itemData.isFresh?1:0);
+                return matchValues.Contains(itemData.isFresh ? 1 : 0);
         }
         return true;
     }
 }
+
 public struct PackageData : IReferenceData
 {
     public string name;

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,12 +8,16 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
 {
     [SerializeField]
     private Transform activeObj;
+
     [SerializeField]
     private Transform unActiveObj;
+
     [SerializeField]
-    TextMeshProUGUI chapterNameText0, chapterNameText1;
+    private TextMeshProUGUI chapterNameText0, chapterNameText1;
+
     [SerializeField]
-    Toggle selected;
+    private Toggle selected;
+
     private void Awake()
     {
         selected.onValueChanged.AddListener((bool value) =>
@@ -23,6 +28,7 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
             }
         });
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -33,15 +39,15 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
         selected = FindChildGameObject<Toggle>("Active");
     }
 
-    public override void InitData(UIFightChapterData t, SelectAction<UIFightChapterData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(UIFightChapterData t, SelectAction<UIFightChapterData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         FightChapter fightChapter = ExploreManager.instance.GetFigehtChapter(data.fightChapterId);
         if (data.season)
         {
             activeObj.localScale = Vector3.one;
-            unActiveObj.localScale = Vector3.zero; 
-            if (!GameController.instance.test&&!fightChapter.open)
+            unActiveObj.localScale = Vector3.zero;
+            if (!GameController.instance.test && !fightChapter.open)
             {
                 activeObj.localScale = Vector3.zero;
                 unActiveObj.localScale = Vector3.one;
@@ -51,8 +57,8 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
         {
             activeObj.localScale = Vector3.zero;
             unActiveObj.localScale = Vector3.one;
-        } 
-        chapterNameText0.text = chapterNameText1.text = fightChapter.mapName.ToString(); 
+        }
+        chapterNameText0.text = chapterNameText1.text = fightChapter.mapName.ToString();
     }
 }
 

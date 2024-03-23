@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +6,14 @@ using UnityEngine.UI;
 public class TeamerReference : UIObjReference<CharacterInformationData>
 {
     [SerializeField]
-    Image NPCImage;
+    private Image NPCImage;
+
     [SerializeField]
-    TextMeshProUGUI NPCName;
+    private TextMeshProUGUI NPCName;
+
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
+
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
@@ -22,6 +24,7 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
             }
         });
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -29,11 +32,12 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
         toggle = GetComponent<Toggle>();
         NPCName = FindChildGameObject<TextMeshProUGUI>("NPCName");
     }
-    public override void InitData(CharacterInformationData t, SelectAction<CharacterInformationData> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override async Task InitData(CharacterInformationData t, SelectAction<CharacterInformationData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         NPCImage.sprite = data.icon;
-       // data.head.SetImageSprite(NPCImage); 
+        // data.head.SetImageSprite(NPCImage);
         NPCName.text = data.name;
         toggle.group = toggleGroup;
     }

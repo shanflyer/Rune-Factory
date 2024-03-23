@@ -18,10 +18,12 @@ public class GameTimeEventData : ScriptableObject, IGameData
     public int triggerValue;
     public int actionValue;
     public int actionCount;
+
     public string GetName()
     {
         return text;
     }
+
     public override string ToString()
     {
         return id.ToString();

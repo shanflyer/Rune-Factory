@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,9 +22,10 @@ public class FightCharacterReference : UIObjReference<MyInt>
 
     [SerializeField]
     private TextMeshProUGUI LuckyText;
+
     [SerializeField]
-    Transform Info, Null;
- 
+    private Transform Info, Null;
+
     public override void OnEnable()
     {
         base.OnEnable();
@@ -56,7 +58,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
         Null = FindChildGameObject("Null");
     }
 
-    public override void InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         InitData(t.value);
@@ -91,7 +93,8 @@ public class FightCharacterReference : UIObjReference<MyInt>
 
             HPSlider.fillAmount = (float)characterProperty.HP / characterProperty.MaxHP;
             MPSlider.fillAmount = (float)characterProperty.MP / characterProperty.MaxMP;
-        }else
+        }
+        else
         {
             Info.gameObject.SetActive(false);
             Null.gameObject.SetActive(true);

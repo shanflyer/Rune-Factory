@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-using UnityEngine.Playables;
-using UnityEngine.Animations;
-using static UnityEngine.Rendering.BoolParameter;
 using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.Playables;
+using UnityEngine.UI;
 
-public struct CharacterResponseData:IReferenceData
+public struct CharacterResponseData : IReferenceData
 {
     public string talkValue;
     public Sprite icon;
@@ -16,25 +13,30 @@ public struct CharacterResponseData:IReferenceData
     public int displayTime;
     public Action endAction;
 }
+
 public class CharacterResponsePanel : GamePanel<CharacterResponseData>
 {
     public override bool pluralUI => true;
 
     [SerializeField]
-    TextMeshProUGUI TalkValue;
-    [SerializeField]
-    Image Icon;
-    [SerializeField]
-    Animator Animator;
+    private TextMeshProUGUI TalkValue;
 
-    PlayableGraph graph;
-    AnimationPlayableOutput animationPlayableOutput;
+    [SerializeField]
+    private Image Icon;
+
+    [SerializeField]
+    private Animator Animator;
+
+    private PlayableGraph graph;
+    private AnimationPlayableOutput animationPlayableOutput;
+
     protected override void Awake()
     {
         base.Awake();
         graph = PlayableGraph.Create("ResponseGraph");
         animationPlayableOutput = AnimationPlayableOutput.Create(graph, "AnimationOutput", Animator);
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -42,7 +44,9 @@ public class CharacterResponsePanel : GamePanel<CharacterResponseData>
         Icon = FindChildGameObject<Image>("Icon");
         Animator = FindChildGameObject<Animator>("Icon");
     }
-    CharacterResponseData characterResponseData;
+
+    private CharacterResponseData characterResponseData;
+
     public override void InitReferenceData(CharacterResponseData v)
     {
         base.InitReferenceData(v);
@@ -50,18 +54,18 @@ public class CharacterResponsePanel : GamePanel<CharacterResponseData>
         TalkValue.text = characterResponseData.talkValue;
         Icon.sprite = characterResponseData.icon;
         Icon.SetNativeSize();
-        var clipPlayable= AnimationClipPlayable.Create(graph, characterResponseData.clip);
+        var clipPlayable = AnimationClipPlayable.Create(graph, characterResponseData.clip);
         animationPlayableOutput.SetSourcePlayable(clipPlayable);
         graph.Play();
- 
-        GameTimerController.instance.DeleyActionMain(characterResponseData.displayTime==0? GameCommon.defaultPlayerTalkTime: characterResponseData.displayTime,
-            ()=> {
-                if (characterResponseData.endAction!=null)
+
+        GameTimerController.instance.DeleyActionMain(characterResponseData.displayTime == 0 ? GameCommon.defaultPlayerTalkTime : characterResponseData.displayTime,
+            () =>
+            {
+                if (characterResponseData.endAction != null)
                 {
                     characterResponseData.endAction();
                 }
                 Close();
             });
     }
-    
 }

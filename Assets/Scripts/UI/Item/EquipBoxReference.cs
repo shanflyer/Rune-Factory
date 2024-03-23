@@ -41,7 +41,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
         itemValueBg = FindChildGameObject("ItemValueBg");
         itemValue = FindChildGameObject<Image>("ItemValue");
     }
-    public override async void InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         typeText.text = data.ItemType.ToString();

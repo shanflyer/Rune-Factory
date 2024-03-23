@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HomeEquipReference : UIObjReference<HomeEquip>
 {
     [SerializeField]
-    private Toggle toggle; 
+    private Toggle toggle;
+
     [SerializeField]
     private Image icon;
+
     [SerializeField]
     private Transform setTips, unSetTips;
-     
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -22,7 +23,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
     }
 
     private void Awake()
-    { 
+    {
         toggle.onValueChanged.AddListener((bool value) =>
         {
             if (!icon.enabled)
@@ -36,39 +37,42 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
             }
         });
     }
+
     public void ClearData()
     {
         data = default(HomeEquip);
-        icon.enabled = false; 
+        icon.enabled = false;
     }
+
     public override void SelectDefault()
     {
         base.SelectDefault();
         toggle.isOn = true;
-    } 
-    public override async void InitData(HomeEquip t, SelectAction<HomeEquip> SelectAction = null, ToggleGroup toggleGroup = null)
-    {
-        base.InitData(t, SelectAction, toggleGroup); 
+    }
 
-        toggle.group = toggleGroup; 
+    public override async Task InitData(HomeEquip t, SelectAction<HomeEquip> SelectAction = null, ToggleGroup toggleGroup = null)
+    {
+        base.InitData(t, SelectAction, toggleGroup);
+
+        toggle.group = toggleGroup;
         ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(data.itemDataId);
         toggle.enabled = true;
         setTips.gameObject.SetActive(data.mapInstance > 0);
         unSetTips.gameObject.SetActive(data.mapInstance <= 0);
-       
+
         if (homeEquipData != null)
         {
             icon.sprite = homeEquipData.icon;
-            icon.color = data.mapInstance==0? Color.white : new Color(1,1,1, 0.5f);
+            icon.color = data.mapInstance == 0 ? Color.white : new Color(1, 1, 1, 0.5f);
             icon.enabled = true;
             icon.SetNativeSize();
-            toggle.enabled = true; 
+            toggle.enabled = true;
         }
         else
-        { 
+        {
             toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = false;
-            icon.enabled = false; 
+            icon.enabled = false;
         }
     }
 }

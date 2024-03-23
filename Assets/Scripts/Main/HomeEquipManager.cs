@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
-using Unity.Collections;
 using Unity.Mathematics;
 
 public class HomeEquipManager : Singleton<HomeEquipManager>
 {
-    private MyNativeData<HomeEquip> homeEquips = new MyNativeData<HomeEquip>(); 
+    private MyNativeData<HomeEquip> homeEquips = new MyNativeData<HomeEquip>();
 
     private Dictionary<int, List<int>> characterHomeEquips = new Dictionary<int, List<int>>();
-    private Dictionary<int, Dictionary<int, int>> characterHomeEquipCountData = new Dictionary<int, Dictionary<int, int>>(); 
+    private Dictionary<int, Dictionary<int, int>> characterHomeEquipCountData = new Dictionary<int, Dictionary<int, int>>();
 
     public override void Init()
     {
-        base.Init(); 
+        base.Init();
         homeEquips.Init(8);
         GameActionManager.instance.AddListener<CreatHomeEquip>(CreatHomeEquip);
         GameActionManager.instance.AddListener<RemoveHomeEquip>(RemoveHomeEquip);
@@ -29,18 +28,18 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     protected override void Clear()
     {
         base.Clear();
-        homeEquips.Dispose(); 
+        homeEquips.Dispose();
     }
-
 
     public HomeEquip GetHomeEquip(int instanceId)
     {
-        if(homeEquips.GetData(instanceId,out var homeEquip))
+        if (homeEquips.GetData(instanceId, out var homeEquip))
         {
             return homeEquip;
         }
         return default(HomeEquip);
     }
+
     public HomeEquipList GetHomeEquipList(int characterId)
     {
         HomeEquipList homeEquipList = new HomeEquipList();
@@ -58,9 +57,10 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
         return homeEquipList;
     }
+
     private void UnSetHomeEquip(UnSetHomeEquip unSetHomeEquip)
     {
-        if(homeEquips.GetData(unSetHomeEquip.instanceId, out var homeEquip))
+        if (homeEquips.GetData(unSetHomeEquip.instanceId, out var homeEquip))
         {
             homeEquip.mapInstance = 0;
             homeEquip.coordinate = int2.zero;
@@ -69,18 +69,18 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             unSetHomeEquip.setResult(true);
         }
     }
-    private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
-    { 
 
+    private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
+    {
         HomeEquip homeEquip = new HomeEquip
         {
-            instanceId = creatHomeEquip.instanceId==0? WorldMapManager.instance.GetInstanceFromItem():  creatHomeEquip.instanceId,
+            instanceId = creatHomeEquip.instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : creatHomeEquip.instanceId,
             itemDataId = creatHomeEquip.itemDataId,
             equipDataId = creatHomeEquip.equipDataId,
             characterId = creatHomeEquip.characterId,
-            mapItemInstance=creatHomeEquip.instanceId, 
+            mapItemInstance = creatHomeEquip.instanceId,
         };
-       
+
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
         {
             ints = new List<int>();
@@ -88,7 +88,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
         ints.Add(homeEquip.instanceId);
 
-        int count = 1; 
+        int count = 1;
         if (!characterHomeEquipCountData.TryGetValue(creatHomeEquip.characterId, out var equipCountData))
         {
             equipCountData = new Dictionary<int, int>();
@@ -103,8 +103,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
         equipCountData[creatHomeEquip.equipDataId] = count;
 
-        HomeEquipmentData homeEquipmentData=await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
-        if(homeEquipmentData.manufatureId!=0)
+        HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
+        if (homeEquipmentData.manufatureId != 0)
         {
             CreatManufature creatManufature = new CreatManufature
             {
@@ -114,7 +114,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             GameActionManager.instance.QueueAction(creatManufature);
         }
         homeEquip.linkManufature = homeEquipmentData.manufatureId;
-        homeEquips.SetData(homeEquip); 
+        homeEquips.SetData(homeEquip);
     }
 
     private void RemoveHomeEquip(RemoveHomeEquip removeHomeEquip)
@@ -233,7 +233,6 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     {
                         setHomeEquipCoordinate.setResult(true);
                     }
-                   
                 }
             }
             return;
@@ -242,7 +241,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             setHomeEquipCoordinate.setResult(false);
     }
 
-    void RefreshHomeEquip(HomeEquip homeEquip)
+    private void RefreshHomeEquip(HomeEquip homeEquip)
     {
         if (homeEquip.mapItemInstance != 0)
         {
@@ -290,7 +289,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             }
         }
     }
-    private  void RefreshHomeEquip(RefreshHomeEquip refreshHomeEquip)
+
+    private void RefreshHomeEquip(RefreshHomeEquip refreshHomeEquip)
     {
         if (homeEquips.GetData(refreshHomeEquip.equipInstanceId, out var homeEquip))
         {
@@ -305,7 +305,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         {
             return;
         }
-        if (characterHomeEquipCountData.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId, out var equipCountData)&&
+        if (characterHomeEquipCountData.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId, out var equipCountData) &&
             equipCountData.TryGetValue(selectShopItemData.item, out var count))
         {
             GameManager.instance.ShowTwoSelectAction("家具", $"已经拥有{count}个{itemData.itemName},是否确定购买", BuyHomeEquip, null);
@@ -329,7 +329,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 {
                     characterId = CharacterManager.instance.controllerCharacter.instanceId,
                     itemDataId = selectShopItemData.item,
-                    equipDataId=itemData.typeValue
+                    equipDataId = itemData.typeValue
                 };
                 GameActionManager.instance.QueueAction(CreatHomeEquip);
 
@@ -365,19 +365,21 @@ public struct HomeEquip : INativeData, IReferenceData
     public int characterId;
     public int linkManufature;
     public int Key => instanceId;
-   
+
     public bool Equals(IReferenceData other)
-    { 
+    {
         if (other is HomeEquip homeEquip)
         {
             return homeEquip.instanceId == instanceId;
         }
         return false;
     }
+
     public override int GetHashCode()
-    { 
+    {
         return instanceId;
     }
+
     public void Dispose()
     {
     }

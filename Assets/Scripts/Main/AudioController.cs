@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
 
-public class AudioController : Singleton<AudioController> 
+public class AudioController : Singleton<AudioController>
 {
     public override async void Init()
     {
         base.Init();
-        audioMixer =await ExtensionsResources.LoadResourceAsync<AudioMixer>("AudioMixer");
+        audioMixer = await ExtensionsResources.LoadResourceAsync<AudioMixer>("AudioMixer");
     }
+
     protected override void Clear()
     {
         base.Clear();
@@ -24,10 +23,11 @@ public class AudioController : Singleton<AudioController>
         seGraph.Destroy();
         meGraph.Destroy();
     }
+
     public void SetAudioSource(GameObject audioObj)
     {
         var BGM = audioObj.transform.Find("BGM");
-        var BGS= audioObj.transform.Find("BGS");
+        var BGS = audioObj.transform.Find("BGS");
         var ME = audioObj.transform.Find("ME");
         var SE = audioObj.transform.Find("SE");
 
@@ -35,7 +35,7 @@ public class AudioController : Singleton<AudioController>
         {
             var bgmAudioSource = BGM.GetComponent<AudioSource>();
             bgmGraph = PlayableGraph.Create("BGM");
-            bgmOut = AudioPlayableOutput.Create(bgmGraph, "BGM", bgmAudioSource); 
+            bgmOut = AudioPlayableOutput.Create(bgmGraph, "BGM", bgmAudioSource);
         }
         if (BGS)
         {
@@ -56,38 +56,39 @@ public class AudioController : Singleton<AudioController>
             seGraph = PlayableGraph.Create("SE");
             seOut = AudioPlayableOutput.Create(seGraph, "SE", seAudioSource);
         }
-
-            
     }
-    AudioMixer audioMixer;
 
-    PlayableGraph bgmGraph, bgsGraph, meGraph, seGraph;
-    AudioPlayableOutput bgmOut, bgsOut, meOut, seOut;
+    private AudioMixer audioMixer;
 
-    
+    private PlayableGraph bgmGraph, bgsGraph, meGraph, seGraph;
+    private AudioPlayableOutput bgmOut, bgsOut, meOut, seOut;
 
     public async void PlayAudio(SE se, bool loop = false)
     {
-        AudioClip audioClip =await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
+        AudioClip audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
         PlaySE(audioClip, loop);
     }
+
     public async void PlayAudio(ME me, bool loop = false)
     {
         AudioClip audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.MEPath, me.ToString()));
         PlayME(audioClip, loop);
     }
+
     public async void PlayAudio(BGM bgm, bool loop = true)
     {
-        AudioClip audioClip = await 
+        AudioClip audioClip = await
             GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, bgm.ToString()));
         PlayBGM(audioClip, loop);
     }
+
     public async void PlayAudio(string bgm, bool loop = true)
     {
         AudioClip audioClip = await
             GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, bgm));
         PlayBGM(audioClip, loop);
     }
+
     public async void PlayAudio(BGS bgs, bool loop = true)
     {
         AudioClip audioClip = await
@@ -95,7 +96,7 @@ public class AudioController : Singleton<AudioController>
         PlayBGS(audioClip, loop);
     }
 
-    void PlaySE(AudioClip audioClip,bool loop=false)
+    private void PlaySE(AudioClip audioClip, bool loop = false)
     {
         try
         {
@@ -103,23 +104,24 @@ public class AudioController : Singleton<AudioController>
             seOut.SetSourcePlayable(audioClipPlayable);
             seGraph.Play();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.LogException(e);
         }
-       
     }
+
     public void StopSE()
     {
         seGraph.Stop();
     }
 
-   void PlayME(AudioClip audioClip, bool loop = false)
+    private void PlayME(AudioClip audioClip, bool loop = false)
     {
         AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(meGraph, audioClip, loop);
         meOut.SetSourcePlayable(audioClipPlayable);
         meGraph.Play();
     }
+
     public void StopME()
     {
         meGraph.Stop();
@@ -131,27 +133,27 @@ public class AudioController : Singleton<AudioController>
         bgmOut.SetSourcePlayable(audioClipPlayable);
         bgmGraph.Play();
     }
+
     public void StopBgm()
     {
         bgmGraph.Stop();
     }
 
-    void PlayBGS(AudioClip audioClip, bool loop = true)
+    private void PlayBGS(AudioClip audioClip, bool loop = true)
     {
         AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(bgsGraph, audioClip, loop);
         bgsOut.SetSourcePlayable(audioClipPlayable);
         bgsGraph.Play();
     }
+
     public void StopBGS()
     {
         bgsGraph.Stop();
     }
 
-
     public void SetMasterVolume(float volume)    // 控制主音量的函数
     {
-        
-        audioMixer.SetFloat("MasterVolume",-20+40*volume);
+        audioMixer.SetFloat("MasterVolume", -20 + 40 * volume);
     }
 
     public void SetBGMVolume(float volume)    // 控制背景音乐音量的函数
@@ -163,5 +165,4 @@ public class AudioController : Singleton<AudioController>
     {
         audioMixer.SetFloat("SEVolume", -20 + 40 * volume);
     }
-   
 }

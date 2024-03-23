@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,11 +23,13 @@ public class ShopSelectReference : UIObjReference<ShopData>
             }
         });
     }
+
     public override void ClearSelect()
     {
         base.ClearSelect();
         toggle.SetIsOnWithoutNotify(false);
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -35,7 +38,7 @@ public class ShopSelectReference : UIObjReference<ShopData>
         shopName1 = FindChildGameObject<TextMeshProUGUI>("ShopName1");
     }
 
-    public override void InitData(ShopData t, SelectAction<ShopData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(ShopData t, SelectAction<ShopData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;

@@ -1,18 +1,20 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct FormulaTypeData:IReferenceData
+public struct FormulaTypeData : IReferenceData
 {
     public FormulaType formulaType;
 }
+
 public class FormulaTypeReference : UIObjReference<FormulaTypeData>
 {
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
+
     [SerializeField]
-    TextMeshProUGUI typeName;
+    private TextMeshProUGUI typeName;
 
     private void Awake()
     {
@@ -20,22 +22,25 @@ public class FormulaTypeReference : UIObjReference<FormulaTypeData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data,value);
+                SelectAction(data, value);
             }
         });
         toggle.isOn = true;
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         toggle = GetComponent<Toggle>();
         typeName = FindChildGameObject<TextMeshProUGUI>("TypeName");
-    } 
-    public override void InitData(FormulaTypeData t, SelectAction<FormulaTypeData> SelectAction = null, ToggleGroup toggleGroup = null)
+    }
+
+    public override async Task InitData(FormulaTypeData t, SelectAction<FormulaTypeData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         typeName.text = data.formulaType.ToString();
     }
+
     public override void ClearSelect()
     {
         base.ClearSelect();

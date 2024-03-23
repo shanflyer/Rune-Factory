@@ -1,6 +1,4 @@
-using OldName;
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,40 +6,47 @@ using UnityEngine.UI;
 public class SaveReference : UIObjReference<UserGameSaveData>
 {
     [SerializeField]
-    Toggle SelectToggle;
+    private Toggle SelectToggle;
+
     [SerializeField]
-    Image Icon;
+    private Image Icon;
+
     [SerializeField]
-    TextMeshProUGUI Name;
+    private TextMeshProUGUI Name;
+
     [SerializeField]
-    TextMeshProUGUI Level;
+    private TextMeshProUGUI Level;
+
     [SerializeField]
-    TextMeshProUGUI Money; 
+    private TextMeshProUGUI Money;
+
     [SerializeField]
-    TextMeshProUGUI Time;
+    private TextMeshProUGUI Time;
+
     [SerializeField]
-    TextMeshProUGUI SaveTime;
-      
+    private TextMeshProUGUI SaveTime;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
 
         SelectToggle = GetComponent<Toggle>();
-        Icon = FindChildGameObject<Image>("NPCImage"); 
+        Icon = FindChildGameObject<Image>("NPCImage");
         Name = FindChildGameObject<TextMeshProUGUI>("Name");
         Level = FindChildGameObject<TextMeshProUGUI>("Level");
-        Money = FindChildGameObject< TextMeshProUGUI>("Money");
+        Money = FindChildGameObject<TextMeshProUGUI>("Money");
         Time = FindChildGameObject<TextMeshProUGUI>("Time");
         SaveTime = FindChildGameObject<TextMeshProUGUI>("SaveTime");
     }
-    public override async void InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override async Task InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
         if (string.IsNullOrEmpty(data.saveTime))
         {
             Icon.enabled = true;
-            CharacterData characterData=await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.characterId);
+            CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.characterId);
             Icon.sprite = characterData.icon;
             Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
             Name.text = data.playerData.name;
@@ -66,8 +71,8 @@ public class SaveReference : UIObjReference<UserGameSaveData>
             }
         });
     }
-     
+
     public void Awake()
-    { 
+    {
     }
 }

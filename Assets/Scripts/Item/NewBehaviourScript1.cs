@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+
 public class Emote : MonoBehaviour
 {
     [SerializeField]
-    Animator animator;
-    [SerializeField]
-    AnimationClip animationClip;
+    private Animator animator;
 
+    [SerializeField]
+    private AnimationClip animationClip;
 }
