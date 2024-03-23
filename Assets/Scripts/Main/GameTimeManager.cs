@@ -117,6 +117,7 @@ public class GameTime
         if (minute > 0)
             this.minute = minute;
         TimeInit();
+        UpDataGameTimeAction();
     }
 
     public async void SetMapOverrideEnvironment(string dayEnvironmentDataName,
@@ -372,6 +373,7 @@ public class GameTime
         hour = _hour;
         minute = _minute;
         TimeInit();
+        UpDataGameTimeAction();
     }
 
     public void TimeRun()
@@ -384,21 +386,22 @@ public class GameTime
 #endif
         mySecond++;
         TimeInit();
+        if (minuteRefresh)
+        {
+            UpDataGameTimeAction();
+        }
     }
 
-    public void AddDate()
-    {
-        hour = 30;
-        TimeInit();
-    }
 
     private NewDay newDay;
 
+    private bool minuteRefresh = false;
     public void TimeInit()
     {
         bool dayRefresh = false;
         if (mySecond >= 20)
         {
+            minuteRefresh = true;
             minute += mySecond / 20;
             mySecond = mySecond % 20;
         }
@@ -451,37 +454,28 @@ public class GameTime
         int x = date % 6;
         week = (Week)x;
         SetLightValue();
-        updateGame.year = year;
-        updateGame.season = (int)season;
-        updateGame.day = date;
-        updateGame.hour = hour;
-        updateGame.minute = minute;
-        GameActionManager.instance.QueueAction(updateGame);
+       
 
         if (dayRefresh)
         {
             GameActionManager.instance.QueueAction(newDay);
         }
     }
-
+    void UpDataGameTimeAction()
+    {
+        updateGame.year = year;
+        updateGame.season = (int)season;
+        updateGame.day = date;
+        updateGame.hour = hour;
+        updateGame.minute = minute;
+        updateGame.totalMinute = minuteTime;
+        GameActionManager.instance.QueueAction(updateGame);
+    }
     private UpdateGameTime updateGame;
 
-    public void Sleep()
-    {
-        minute = 0;
-        hour = 6;
-        date++;
-        TimeInit();
-    }
+    public int minuteTime=> (((year * 4 + (int)season) * 30 + date) * 24 + hour) * 60 + minute;
 
-    public void RestToNight()
-    {
-        if (hour < 18)
-        {
-            minute = 0;
-            hour = 18;
-        }
-    }
+
 }
 
 public class GameTimeManager : Singleton<GameTimeManager>
@@ -520,6 +514,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             return 0;
         }
     }
+    public int totalMinute => nowGameTime.minuteTime;
 
     public void SetTime(int hour = -1, int minute = -1)
     {
@@ -800,11 +795,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
     }
 
-    public void NextDate()
-    {
-        nowGameTime.minute = 0;
-        nowGameTime.AddDate();
-    }
+
 
     private void LerpGameTime(int targetHour, int targetMinute, float costTime, bool endRun = false, Action endAction = null)
     {

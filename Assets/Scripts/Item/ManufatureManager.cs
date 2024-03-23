@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine.Rendering;
 
 public class ManufatureManager : Singleton<ManufatureManager>
 {
@@ -10,6 +11,9 @@ public class ManufatureManager : Singleton<ManufatureManager>
     {
         base.Init();
         GameActionManager.instance.AddListener<CreatManufature>(CreatManufature);
+        GameActionManager.instance.AddListener<ClearManufature>(ClearManufature);
+        GameActionManager.instance.AddListener<OpenFormula>(OpenFormula);
+        GameActionManager.instance.AddListener<SetManufature>(SetManufature);
         Manufatures.Init(8);
     }
 
@@ -19,12 +23,42 @@ public class ManufatureManager : Singleton<ManufatureManager>
         Manufatures.Dispose();
     }
 
+    void SetManufature(SetManufature setManufature)
+    {
+        Manufatures.SetData(setManufature.manufature);
+    }
     public Manufature GetManufature(int instanceId)
     {
         Manufatures.GetData(instanceId, out Manufature manufature);
         return manufature;
     }
 
+    void OpenFormula(OpenFormula openFormula)
+    {
+        foreach(Manufature item in Manufatures)
+        {
+            Manufature manufature = item;
+            if (manufature.formulas.TryGetValue(openFormula.formulaId,out var formula))
+            {
+                formula.isOpen = true;
+                manufature.formulas[openFormula.formulaId] = formula;
+                Manufatures.SetData(manufature);
+            }
+        }
+    }
+    void ClearManufature(ClearManufature clearManufature)
+    {
+        if(Manufatures.GetData(clearManufature.manufatureId,out var manufature))
+        {
+            manufature.ClearProduct();
+            Manufatures.SetData(manufature);
+            RefreshManufature refreshManufature = new RefreshManufature
+            {
+                manufature = manufature
+            };
+            GameActionManager.instance.QueueAction(refreshManufature);
+        }
+    }
     private async void CreatManufature(CreatManufature creatManufature)
     {
         var manufatureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(creatManufature.manufatureId);
@@ -34,6 +68,7 @@ public class ManufatureManager : Singleton<ManufatureManager>
             instanceId = creatManufature.instanceId,
             dataId = creatManufature.manufatureId,
             formulas = new NativeHashMap<int, Formula>(8, Allocator.Persistent),
+            materials=new NativeArray<int2>(4,Allocator.Persistent),
             open = false
         };
         for (int i = 0; i < manufatureData.linkFormulas.Count; i++)
@@ -68,6 +103,7 @@ public class ManufatureManager : Singleton<ManufatureManager>
             Manufatures.SetData(manufature);
         }
     }
+   
 }
 
 public struct Formula
@@ -82,14 +118,28 @@ public struct Manufature : INativeData, IReferenceData
     public int dataId;
     public bool open;
     public NativeArray<int2> materials;
-    public int2 product;
+    public int3 product;
     public int waitTime;
+    public int startTime;
+    public int matchFormula;
     public NativeHashMap<int, Formula> formulas;
     public int Key => instanceId;
+
+
+
 
     public override string ToString()
     {
         return instanceId.ToString();
+    }
+    public void ClearProduct()
+    {
+        waitTime = 0;
+        product = 0;
+        for(int i = 0; i < materials.Length; i++)
+        {
+            materials[i] = int2.zero;
+        }
     }
 
     public bool Equals(IReferenceData other)

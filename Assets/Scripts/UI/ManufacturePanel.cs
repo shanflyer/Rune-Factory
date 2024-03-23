@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 using static TMPro.TMP_Dropdown;
@@ -48,6 +50,8 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     [SerializeField]
     private Button CreatButton;
+    [SerializeField]
+    private TextMeshProUGUI creatButtonName;
 
     [SerializeField]
     private Button AutoSelect;
@@ -111,6 +115,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         AddButton = FindChildGameObject<Button>("AddButton");
         ItemCountValue = FindChildGameObject<TextMeshProUGUI>("ItemCountValue");
         CreatButton = FindChildGameObject<Button>("CreatButton");
+        creatButtonName = CreatButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true);
         AutoSelect = FindChildGameObject<Button>("AutoSelect");
         RPCost = FindChildGameObject<TextMeshProUGUI>("RPCost");
 
@@ -137,7 +142,18 @@ public class ManufacturePanel : GamePanel<Manufature>
         timeValue = FindChildGameObject<TextMeshProUGUI>("TimeValue");
         outEffect = FindChildGameObject<ParticleSystem>("OutEffect");
     }
-
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
+        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshManufature>(RefreshManufature);
+        GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -224,6 +240,21 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void CreatItem()
     {
+        if(manufature.waitTime>0)
+        {
+            string noticeStr = "是否确定中止生产,消耗的物体将消失？";
+            GameManager.instance.ShowTwoSelectAction("", noticeStr, () =>
+            {
+                ClearManufature clearManufature = new ClearManufature
+                {
+                    manufatureId = manufature.instanceId
+                };
+                GameActionManager.instance.QueueAction(clearManufature,true);
+            }, null);
+            return;
+        }  
+
+
         int totalCost = formulaCost * produceCount;
         int nowPower = CharacterManager.instance.player.CharacterProperty.Power;
         if (totalCost >= nowPower)
@@ -252,25 +283,37 @@ public class ManufacturePanel : GamePanel<Manufature>
 
             async void CreatAction()
             {
+                manufature.startTime = GameTimeManager.instance.totalMinute;
                 int productId = outItem.dataId;
-
                 if (productId == GameCommon.defaultProduct)
                 {
                     if (matchFormula != null)
                     {
+                        manufature.matchFormula = matchFormula.id;
                         productId = matchFormula.Product;
-                        if (manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
+                        if (manufature.formulas.TryGetValue(matchFormula.id, out var formula))
                         {
-                            ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
-                            GameNotificationManager.instance.DisplayTips("新配方获得!", $"发现了制作 {matchFormula.formulaName} 的配方");
+                            if (!formula.isOpen)
+                            {
+                                manufature.product.z = GameCommon.defaultProduct;
+                            }  
                         }
+                        manufature.waitTime = GameTimeManager.instance.totalMinute + manufature.waitTime;
                     }
                     else
                     {
+                        manufature.product.z = GameCommon.defaultProduct;
+                        manufature.waitTime = manufactureData.defaultProduceTime;
                         productId = manufactureData.defaultProduct;
-                    }
+                    } 
                 }
-
+                if (matchFormula != null)
+                {
+                    manufature.matchFormula = matchFormula.id;
+                }
+                manufature.product.x = productId;
+                manufature.product.y = produceCount;
+                
                 ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
                 {
                     changeValue = -totalCost,
@@ -286,6 +329,15 @@ public class ManufacturePanel : GamePanel<Manufature>
                         PackageManager.instance.RemovePlayerPackageItem(item.dataId, produceCount);
                     }
                 }
+
+                SetManufature setManufature = new SetManufature
+                {
+                    manufature = manufature
+                };
+                GameActionManager.instance.QueueAction(setManufature, true);
+
+
+
                 bool allSet = await PackageManager.instance.SetPlayerPackageItem(productId, produceCount);
                 if (!allSet)
                 {
@@ -431,7 +483,29 @@ public class ManufacturePanel : GamePanel<Manufature>
         OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
         OutItemBoxReference.SelectUIAction = DisplayItem;
         RefreshCost();
-        CreatButton.interactable = instanceId == 0;
+        creatButtonName.text = "制作";
+        if (instanceId == 0)
+        {
+            CreatButton.interactable = true;
+
+            if (manufature.product.x != 0)
+            {
+                if (manufature.waitTime <= GameTimeManager.instance.totalMinute)
+                {
+                    CreatButton.interactable = false;
+                }
+                else
+                {
+                    creatButtonName.text = "中止";
+                }
+              
+            }
+
+        }
+        else
+        { 
+            CreatButton.interactable = false;
+        } 
     }
 
     private void RefreshCost()
@@ -555,13 +629,39 @@ public class ManufacturePanel : GamePanel<Manufature>
     private void InitDisplay()
     {
         Item defaultItem = default(Item);
-        defaultItem.instanceId = -1;
-        for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
+        defaultItem.instanceId = -1; 
+        for(int i = 0; i < manufature.materials.Length; i++)
         {
-            FormulaItemBoxReferences[i].InitData(defaultItem, null, FormulaItemBoxGroup);
+            if (manufature.materials[i].x==0)
+            {
+                FormulaItemBoxReferences[i].InitData(defaultItem, null, FormulaItemBoxGroup);
+              
+            }
+            else
+            {
+                Item item = new Item
+                {
+                    dataId = manufature.materials[i].x,  
+                };
+                FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup); 
+            }
             FormulaItemBoxReferences[i].SelectUIAction = DisplayItem;
         }
-        OutItemBoxReference.ClearData();
+        if (manufature.product.x == 0)
+        {
+            OutItemBoxReference.ClearData();
+        }
+        else
+        {
+            Item item = new Item
+            {
+                dataId = manufature.product.z==0? manufature.product.x:GameCommon.defaultProduct,
+                count=manufature.product.y, 
+            };
+            OutItemBoxReference.InitData(item, null, FormulaItemBoxGroup);
+            OutItemBoxReference.SelectUIAction = DisplayItem;
+        }
+       
         FormulaDropdown.value = 0;
         formulaCost = 0;
         produceCount = 1;
@@ -582,6 +682,54 @@ public class ManufacturePanel : GamePanel<Manufature>
         return base.InitData(dataKey);
     }
 
+    void UpdateGameTime(UpdateGameTime updateGameTime)
+    {
+        int timeValue = manufature.waitTime - updateGameTime.totalMinute;
+        if (timeValue<=0)
+        {
+            timeSlider.fillAmount = 1;
+            this.timeValue.text = "0:0:0"; 
+        }
+        else
+        {
+           
+            timeValue = math.clamp(timeValue, 0, timeValue);
+            int totalTime = manufature.waitTime - manufature.startTime;
+
+            timeSlider.fillAmount = (totalTime- timeValue) / (float)totalTime;
+            int hour = timeValue / 60;
+            int minute = timeValue - hour * 60;
+            int data = hour / 24;
+            hour = hour - data * 24;
+            this.timeValue.text = $"{data}:{hour}:{minute}";
+
+            if (timeValue == 0)
+            { 
+                CreatProduct();
+            }
+            
+        } 
+    }
+
+
+    void CreatProduct()
+    {
+        if (manufature.waitTime == 0)
+        {
+            OutItemBoxReference.InitData(new Item { dataId = manufature.product.x, count = manufature.product.y, instanceId = -1 }, null, FormulaItemBoxGroup);
+            outEffect.Play();
+        }
+    }
+
+
+    void RefreshManufature(RefreshManufature refreshManufature)
+    {
+        if (manufature.instanceId == refreshManufature.manufature.instanceId)
+        {
+            InitData(refreshManufature.manufature);
+        }
+    }
+
     public override void InitReferenceData(Manufature v)
     {
         base.InitReferenceData(v);
@@ -593,11 +741,12 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private async void InitData(Manufature v)
     {
+        outEffect.Stop();
         manufature = v;
         manufactureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(v.dataId);
         title.text = manufactureData.manufactureName;
         CreatButton.interactable = false;
-        AutoSelect.interactable = false;
+        AutoSelect.interactable = false; 
 
         List<FormulaTypeData> formulaTypeDatas = new List<FormulaTypeData>();
         HashSet<FormulaType> formulaTypes = new HashSet<FormulaType>();
@@ -708,9 +857,37 @@ public class ManufacturePanel : GamePanel<Manufature>
                     ItemIcon.enabled = false;
                 }
 
-                if (item.instanceId == 0)
+                if (manufature.waitTime>0&&manufature.waitTime>GameTimeManager.instance.totalMinute)
                 {
-                    selectActionButton.transform.localScale = Vector3.zero;
+                    selectActionButton.transform.localScale = Vector3.zero; 
+                }
+                else if (SelectItemBoxRefrence == OutItemBoxReference)
+                {
+                    selectActionButton.transform.localScale = Vector3.one;
+                    selectActionButtonName.text = "取出";
+                    selectActionButton.onClick.RemoveAllListeners();
+                    selectActionButton.onClick.AddListener(async () =>
+                    {
+                        bool allSet = await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage,manufature.product.x, manufature.product.y);
+                        if (!allSet)
+                        {
+                            InformationController.instance.AddInformation(LanguageManage.SwitchStr("背包空间不足!"));
+                        }
+                        else
+                        {
+
+                            if (manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
+                            { 
+                                ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
+                                GameNotificationManager.instance.DisplayTips("新配方获得!", $"发现了制作 {matchFormula.formulaName} 的配方");
+                            }
+
+                            await PackageManager.instance.SetItemInPackage(new Item { dataId = manufature.product.x, count = manufature.product.y }, CharacterManager.instance.controllerCharacter.characterPackage);
+                            InformationController.instance.AddInformation(LanguageManage.SwitchStr("产物已经放到背包!"));
+                            ClearManufature clearManufature = new ClearManufature { manufatureId = manufature.instanceId };
+                            GameActionManager.instance.QueueAction(clearManufature);
+                        }
+                    });
                 }
                 else
                 {

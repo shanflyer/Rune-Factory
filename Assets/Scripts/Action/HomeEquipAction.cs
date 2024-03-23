@@ -72,6 +72,12 @@ public struct DisplayHomeEquipPanel : GameAction
     public SetResult setResult { get; set; }
     public int characterId;
 }
+public struct SetManufature : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public Manufature manufature;
+}
 
 public struct CreatManufature : GameAction
 {
@@ -90,4 +96,48 @@ public struct CreatManufature : GameAction
 
         GameActionManager.instance.QueueAction(this, immediately);
     }
+}
+public struct ClearManufature : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int manufatureId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 1)
+        {
+            manufatureId = int.Parse(parameters[0].value); 
+        }
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+public struct OpenFormula : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int formulaId;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 1)
+        {
+            formulaId = int.Parse(parameters[0].value);
+        }
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+public struct RefreshManufature : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public Manufature manufature;
+   
+}
+public struct UpdataManufature : GameAction
+{
+    public int manufatureId;
+    public int waitTime;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 }
