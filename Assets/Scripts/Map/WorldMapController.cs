@@ -98,7 +98,8 @@ public class WorldMapController : MonoBehaviour
                 mapInstance = mapInstance,
                 coordinateX = coordinate.x,
                 coordinateY = coordinate.y,
-                controller = true
+                controller = true,
+                isPlayer=true,
             });
             await UIManager.instance.ShowGamePanel<MainPanel>();
 

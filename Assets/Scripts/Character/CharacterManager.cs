@@ -426,7 +426,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
 
 
-    public async void CreatPlayer(int id, int bag)
+    public async Task CreatPlayer(int id, int bag)
     {
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         int instanceId = myInstance.CreatInstanceId();
@@ -486,9 +486,20 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private async void CreatCharacter(CreatCharacter creatCharacter)
     {
-        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
-        Character character = new Character(characterData, myInstance.CreatInstanceId());
-        AddCharacter(character);
+
+        Character character;
+        if (creatCharacter.isPlayer)
+        {
+            await CreatPlayer(creatCharacter.characterId, 0);
+            character = player;
+        }
+        else
+        {
+            var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
+            character = new Character(characterData, myInstance.CreatInstanceId());
+            AddCharacter(character);
+        }
+      
         character.SetObjCoordinate(creatCharacter.mapInstance,
             new int2(creatCharacter.coordinateX, creatCharacter.coordinateY));
         RefreshNpcRuntimeObj(character, creatCharacter.controller);

@@ -101,12 +101,9 @@ public class PackageManager : Singleton<PackageManager>
 
     public async Task<bool> SetPlayerPackageItem(int itemDataId, int count)
     {
+         
         for (int i = 0; i < playerPackages.Count; i++)
-        {
-            if (count <= 0)
-            {
-                return true;
-            }
+        { 
             int packageId = playerPackages[i];
             if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
             {
@@ -119,7 +116,13 @@ public class PackageManager : Singleton<PackageManager>
                 count = await gamePackage.SetItemInPackage(item);
                 gamePackages[packageId] = gamePackage;
             }
+
+            if (count <= 0)
+            {
+                return true;
+            }
         }
+     
         return false;
     }
 

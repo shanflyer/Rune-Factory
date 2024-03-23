@@ -511,6 +511,7 @@ public struct CreatCharacter : GameAction
     public int coordinateX;
     public int coordinateY;
     public bool controller;
+    public bool isPlayer;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {

@@ -123,7 +123,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 Item item = FormulaItemBoxReferences[i].Item;
                 if (item.instanceId != 0)
                 {
-                    int nowCount = PackageManager.instance.GetPackageCaseCount(item.dataId);
+                    int nowCount = PackageManager.instance.GetPlayerItemCount(item.dataId);
                     if (nowCount < produceCount)
                     {
                         canAdd = false;
@@ -170,6 +170,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     private ManufactureData manufactureData;
     private FormulaData matchFormula;
     private int formulaCost = 0;
+    private Item outItem;
     private int produceCount
     {
         get
@@ -201,29 +202,41 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             string noticeStr = "";
             AudioController.instance.PlayAudio(SE.Return);
-
-            if (manufature.formulas.TryGetValue(matchFormula.id, out var formula) && formula.isOpen)
+            if (outItem.dataId == GameCommon.defaultProduct)
             {
-                noticeStr += LanguageManage.SwitchStr("是否确定按配方开始制作？");
+                noticeStr = LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");
+            }else if (outItem.dataId == selectFormulaData.Product)
+            {
+                noticeStr = LanguageManage.SwitchStr("是否确定按配方开始制作？");
             }
             else
             {
-                noticeStr += LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");
+                noticeStr = LanguageManage.SwitchStr("是否确定开始制作？");
             }
+
+ 
 
             async void CreatAction()
             {
-                int productId = OutItemBoxReference.Item.dataId;
-                if (matchFormula.id !=0)
-                {
-                    productId = manufactureData.defaultProduct;
-                }else if (manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
-                {
-                    ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
-                    GameNotificationManager.instance.DisplayTips("新配方获得!", $"发现了制作 {matchFormula.formulaName} 的配方");
-                }
-                 
+                int productId = outItem.dataId;
 
+                if (productId == GameCommon.defaultProduct)
+                {
+                    if (matchFormula != null)
+                    {
+                        productId = matchFormula.Product;
+                        if (manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
+                        {
+                            ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
+                            GameNotificationManager.instance.DisplayTips("新配方获得!", $"发现了制作 {matchFormula.formulaName} 的配方");
+                        }
+                    }
+                    else
+                    {
+                        productId = manufactureData.defaultProduct;
+                    } 
+                }
+                  
                 ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
                 {
                     changeValue = -totalCost,
@@ -239,7 +252,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                         PackageManager.instance.RemovePlayerPackageItem(item.dataId, produceCount);
                     }
                 }
-                bool allSet = await PackageManager.instance.SetPlayerPackageItem(matchFormula.Product, produceCount);
+                bool allSet = await PackageManager.instance.SetPlayerPackageItem(productId, produceCount);
                 if (!allSet)
                 {
                     InformationController.instance.AddInformation(LanguageManage.SwitchStr("空间不足，部分物体没有获得"));
@@ -327,14 +340,12 @@ public class ManufacturePanel : GamePanel<Manufature>
                 {
                     instanceId = 0; 
                 }
-                Item item = new Item
+                outItem = new Item
                 {
                     instanceId = instanceId,
                     dataId = product,
                     count = produceCount
-                };
-                SetOutItemBoxReference(item);
-               
+                }; 
             }
         }       
         else
@@ -377,16 +388,14 @@ public class ManufacturePanel : GamePanel<Manufature>
                 instanceId = 0;
             }
              
-
-            Item item = new Item
+            outItem = new Item
             {
                 instanceId = instanceId,
                 dataId = product,
                 count = produceCount
-            };
-            SetOutItemBoxReference(item);
-
+            }; 
         }
+        OutItemBoxReference.InitData(outItem, DisplayItem, FormulaItemBoxGroup);
         RefreshCost();
         CreatButton.interactable=instanceId==0;
         
@@ -473,21 +482,18 @@ public class ManufacturePanel : GamePanel<Manufature>
                 instanceId = -1; 
                 InformationController.instance.AddInformation("原料不足!",true,true);
             }
-            Item outItem = new Item
+            outItem = new Item
             {
                 instanceId = instanceId,
                 dataId = selectFormulaData.Product,
                 count = 1
             };
-            SetOutItemBoxReference(outItem);
+            OutItemBoxReference.InitData(outItem, DisplayItem, FormulaItemBoxGroup);
             RefreshRPCostAndOut();
         }
     }
 
-    private void SetOutItemBoxReference(Item item)
-    {
-        OutItemBoxReference.InitData(item,DisplayItem,FormulaItemBoxGroup);
-    }
+ 
  
     private FormulaData CheckFormula()
     {
@@ -584,15 +590,13 @@ public class ManufacturePanel : GamePanel<Manufature>
             formulaTypeDatas.Add(new FormulaTypeData { formulaType = formulaType });
             nowSelectFormulaTypes.Add(formulaType);
         }
-        this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData);
-        this.formulaTypes.ClearAll();
-
+        this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData); 
         RefreshFormulaSelect();
         InitDisplay();
     }
     void SelectFormulaTypeData(FormulaTypeData formulaTypeData,bool seleted)
     {
-        if (seleted)
+        if (!seleted)
         {
             nowSelectFormulaTypes.Remove(formulaTypeData.formulaType);
         }
