@@ -53,6 +53,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     if (CharacterManager.instance.GetRuntimeCharacterObj(showEmote.id, out var characterRuntimeObj))
                     {
                         runtimeObj = GetEmote(showEmote.emoteId, characterRuntimeObj.model);
+                        characterEmoteRuntimes[showEmote.id] = runtimeObj;
                     }
                 } 
                 break;
@@ -64,6 +65,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     if (WorldMapObjManager.instance.GetRuntimeMapItemObj(showEmote.id, out var itemRuntimeObj))
                     {
                         runtimeObj = GetEmote(showEmote.emoteId, itemRuntimeObj.transform);
+                        itemEmoteRuntimes[showEmote.id] = runtimeObj;
                     }
                 }
                 break;

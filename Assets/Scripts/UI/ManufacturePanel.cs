@@ -768,6 +768,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         OutItemBoxReference.InitData(new Item { dataId = manufature.product.x, count = manufature.product.y, instanceId = 1 }, null, FormulaItemBoxGroup);
         outEffect.Play(); 
         creatButtonName.text = "È¡³ö";
+        CreatButton.interactable = true;
     }
 
 
