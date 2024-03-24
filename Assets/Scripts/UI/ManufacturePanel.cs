@@ -172,7 +172,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
             {
                 Item item = FormulaItemBoxReferences[i].Item;
-                if (item.instanceId != 0)
+                if (item.dataId!=0)
                 {
                     int nowCount = PackageManager.instance.GetPlayerItemCount(item.dataId);
                     if (nowCount < produceCount)
@@ -250,10 +250,25 @@ public class ManufacturePanel : GamePanel<Manufature>
                     manufatureId = manufature.instanceId
                 };
                 GameActionManager.instance.QueueAction(clearManufature,true);
+
+                AutoSelect.interactable = true; 
+                AddButton.interactable = true;
+                ReduceButton.interactable = true;
+                FormulaDropdown.interactable = true;
+                FormulaDropdown.value = 0;
+                formulaTypeParent.transform.localScale = Vector3.one;
+                creatButtonName.text = "制作";
+                InformationObj.transform.localScale = Vector3.zero;
+
             }, null);
             return;
-        }  
+        }
 
+        if (manufature.product.x > 0 && manufature.waitTime < GameTimeManager.instance.totalMinute)
+        {
+            GetOutProduct();
+            return;
+        }
 
         int totalCost = formulaCost * produceCount;
         int nowPower = CharacterManager.instance.player.CharacterProperty.Power;
@@ -298,14 +313,17 @@ public class ManufacturePanel : GamePanel<Manufature>
                                 manufature.product.z = GameCommon.defaultProduct;
                             }  
                         }
-                        manufature.waitTime = GameTimeManager.instance.totalMinute + manufature.waitTime;
                     }
                     else
                     {
                         manufature.product.z = GameCommon.defaultProduct;
-                        manufature.waitTime = manufactureData.defaultProduceTime;
                         productId = manufactureData.defaultProduct;
-                    } 
+                    }
+                    manufature.waitTime = GameTimeManager.instance.totalMinute + manufactureData.defaultProduceTime;
+                }
+                else
+                {
+                    manufature.waitTime = GameTimeManager.instance.totalMinute + matchFormula.produceTime;
                 }
                 if (matchFormula != null)
                 {
@@ -317,7 +335,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
                 {
                     changeValue = -totalCost,
-                    characterId = 0,
+                    characterId =CharacterManager.instance.controllerCharacter.instanceId,
                     propertyType = CharacterPropertyType.体力
                 };
                 GameActionManager.instance.QueueAction(changeCharacterProperty, true);
@@ -327,6 +345,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     if (item.instanceId != 0)
                     {
                         PackageManager.instance.RemovePlayerPackageItem(item.dataId, produceCount);
+                        manufature.materials[i] = new int2(item.dataId,item.instanceId);
                     }
                 }
 
@@ -337,13 +356,21 @@ public class ManufacturePanel : GamePanel<Manufature>
                 GameActionManager.instance.QueueAction(setManufature, true);
 
 
-
+                /*
                 bool allSet = await PackageManager.instance.SetPlayerPackageItem(productId, produceCount);
                 if (!allSet)
                 {
                     InformationController.instance.AddInformation(LanguageManage.SwitchStr("空间不足，部分物体没有获得"));
-                }
+                }*/
                 InitDisplay();
+
+                AutoSelect.interactable = false;
+                selectActionButton.transform.localScale = Vector3.zero;
+                AddButton.interactable = false;
+                ReduceButton.interactable = false;
+                FormulaDropdown.interactable = false;
+                formulaTypeParent.transform.localScale = Vector3.zero;
+                creatButtonName.text = "中止";
             }
             GameManager.instance.ShowTwoSelectAction("", noticeStr, CreatAction, null);
         }
@@ -368,11 +395,15 @@ public class ManufacturePanel : GamePanel<Manufature>
                 {
                     FormulaData formulaData = formulaDatas[i];
                     Formula formula = manufature.formulas[formulaData.id];
+                    if (!formula.isOpen)
+                    {
+                        continue;
+                    }
                     FormulaOptionData formulaOptionData = new FormulaOptionData
                     {
                         formulaId = formula.id,
                         open = formula.isOpen,
-                        text = formula.isOpen ? formulaData.formulaName : "???"
+                        text =  formulaData.formulaName
                     };
                     formulaOptionDatas.Add(formulaOptionData);
                 }
@@ -381,7 +412,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         FormulaDropdown.options = formulaOptionDatas;
     }
 
-    private void ClearFormulaItemBoxReferences()
+    private async void ClearFormulaItemBoxReferences(bool clearOutBox=true)
     {
         Item defaultItem = default(Item);
         defaultItem.instanceId = -1;
@@ -390,7 +421,11 @@ public class ManufacturePanel : GamePanel<Manufature>
             FormulaItemBoxReferences[i].InitData(defaultItem, null, FormulaItemBoxGroup);
             FormulaItemBoxReferences[i].SelectUIAction = DisplayItem;
         }
-        OutItemBoxReference.ClearData();
+        if (clearOutBox)
+        {
+            OutItemBoxReference.ClearData();
+        }
+       
     }
 
     private void RefreshRPCostAndOut()
@@ -401,31 +436,29 @@ public class ManufacturePanel : GamePanel<Manufature>
         int formulaCount = 0;
 
         int product = GameCommon.defaultProduct;
-        int instanceId = 0;
+      
         for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
         {
             var referene = FormulaItemBoxReferences[i];
-            if (referene.Item.instanceId != 0)
-            {
+            if (referene.Item.instanceId != 0&& referene.Item.instanceId != -1)
+            { 
                 formulaCount++;
                 formulaCost += GameCommon.defaultPerRPCost;
             }
         }
 
+        int instanceId = 1;
         if (matchFormula != null)
         {
             if (manufature.formulas.TryGetValue(matchFormula.id, out var formula))
             {
                 if (formula.isOpen)
                 {
-                    instanceId = formulaCount >= matchFormula.Stuffs.Count ? 0 : -1;
+                    instanceId = formulaCount >= matchFormula.Stuffs.Count ? 1 : -1;
                     product = matchFormula.Product;
                     formulaCost = matchFormula.PowerCost;
                 }
-                else
-                {
-                    instanceId = 0;
-                }
+              
                 outItem = new Item
                 {
                     instanceId = instanceId,
@@ -463,14 +496,14 @@ public class ManufacturePanel : GamePanel<Manufature>
                 }
                 else if (!isSetMatch)
                 {
-                    instanceId = -1;
+                   instanceId = -1;
                 }
 
                 formulaCost = selectFormulaData.PowerCost;
             }
-            else if (FormulaItemBoxReferences.Exists(f => f.Item.instanceId != -1 && f.Item.instanceId != 0))
+            else if (!FormulaItemBoxReferences.Exists(f => f.Item.instanceId != -1 && f.Item.instanceId != 0))
             {
-                instanceId = 0;
+                instanceId = -1;
             }
 
             outItem = new Item
@@ -480,31 +513,33 @@ public class ManufacturePanel : GamePanel<Manufature>
                 count = produceCount
             };
         }
+        if (formulaCount == 0)
+        {
+            outItem.dataId = 0;
+        }
+        if(manufature.waitTime <= GameTimeManager.instance.totalMinute && manufature.product.x != 0)
+        {
+            outItem.dataId = manufature.product.x;
+        }
         OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
         OutItemBoxReference.SelectUIAction = DisplayItem;
         RefreshCost();
         creatButtonName.text = "制作";
-        if (instanceId == 0)
+
+        if(manufature.product.x != 0)
         {
             CreatButton.interactable = true;
-
-            if (manufature.product.x != 0)
+            if (manufature.waitTime <= GameTimeManager.instance.totalMinute)
             {
-                if (manufature.waitTime <= GameTimeManager.instance.totalMinute)
-                {
-                    CreatButton.interactable = false;
-                }
-                else
-                {
-                    creatButtonName.text = "中止";
-                }
-              
+                creatButtonName.text = "取出";
             }
-
-        }
-        else
-        { 
-            CreatButton.interactable = false;
+            else
+            {
+                creatButtonName.text = "中止";
+            }
+        }else
+        {
+            CreatButton.interactable = formulaCount > 0;
         } 
     }
 
@@ -522,7 +557,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
     }
 
-    private void DisplayFormula()
+    private async void DisplayFormula()
     {
         ClearFormulaItemBoxReferences();
         produceCount = 1;
@@ -541,7 +576,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     dataId = itemDataId,
                     count = 1
                 };
-                FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup);
+              await  FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup);
             }
             //SetOutItemBoxReference(outItem);
             RefreshRPCostAndOut();
@@ -549,7 +584,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
 
     //自动选择材料
-    private void AutoSelectMaterials()
+    private async void AutoSelectMaterials()
     {
         if (selectFormulaData != null)
         {
@@ -569,7 +604,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                         dataId = itemDataId,
                         count = 1
                     };
-                    FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup);
+                    await  FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup);
                 }
                 else
                 {
@@ -579,11 +614,11 @@ public class ManufacturePanel : GamePanel<Manufature>
                         dataId = itemDataId,
                         count = 1
                     };
-                    FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup);
-                    successSelect = false;
+                   await FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup);
+                   successSelect = false;
                 }
             }
-            int instanceId = 0;
+            int instanceId = 1;
             if (!successSelect)
             {
                 instanceId = -1;
@@ -595,7 +630,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 dataId = selectFormulaData.Product,
                 count = 1
             };
-            OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
+            await  OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
             RefreshRPCostAndOut();
         }
     }
@@ -626,7 +661,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         return null;
     }
 
-    private void InitDisplay()
+    private async void InitDisplay()
     {
         Item defaultItem = default(Item);
         defaultItem.instanceId = -1; 
@@ -634,16 +669,17 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             if (manufature.materials[i].x==0)
             {
-                FormulaItemBoxReferences[i].InitData(defaultItem, null, FormulaItemBoxGroup);
+              await  FormulaItemBoxReferences[i].InitData(defaultItem, null, FormulaItemBoxGroup);
               
             }
             else
             {
                 Item item = new Item
                 {
-                    dataId = manufature.materials[i].x,  
+                    dataId = manufature.materials[i].x,
+                    instanceId = manufature.materials[i].y
                 };
-                FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup); 
+             await   FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup); 
             }
             FormulaItemBoxReferences[i].SelectUIAction = DisplayItem;
         }
@@ -655,18 +691,19 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             Item item = new Item
             {
-                dataId = manufature.product.z==0? manufature.product.x:GameCommon.defaultProduct,
-                count=manufature.product.y, 
+                dataId = manufature.product.z == 0 ? manufature.product.x : GameCommon.defaultProduct,
+                count = manufature.product.y,
+                instanceId = 1
             };
             OutItemBoxReference.InitData(item, null, FormulaItemBoxGroup);
             OutItemBoxReference.SelectUIAction = DisplayItem;
         }
-       
-        FormulaDropdown.value = 0;
+       //FormulaDropdown.SetValueWithoutNotify()
+        //FormulaDropdown.value = 0;
         formulaCost = 0;
         produceCount = 1;
 
-        ClearFormulaItemBoxReferences();
+      
     }
 
     private Manufature manufature;
@@ -677,8 +714,14 @@ public class ManufacturePanel : GamePanel<Manufature>
         if (manufature.instanceId != 0)
         {
             InitData(manufature);
+           // ClearFormulaItemBoxReferences();
         }
-
+        if (SelectItemBoxRefrence != null)
+        {
+            SelectItemBoxRefrence.ClearSelect();
+            InformationObj.transform.localScale = Vector3.zero;
+        }
+        RefreshRPCostAndOut();
         return base.InitData(dataKey);
     }
 
@@ -688,7 +731,20 @@ public class ManufacturePanel : GamePanel<Manufature>
         if (timeValue<=0)
         {
             timeSlider.fillAmount = 1;
-            this.timeValue.text = "0:0:0"; 
+            
+            if (manufature.product.x!=0)
+            {
+                this.timeValue.text = "制作完成！";
+                if (manufature.waitTime > 0)
+                {
+                    CreatProduct();
+                } 
+               
+            }
+            else
+            {
+                this.timeValue.text = "等待制作";
+            }
         }
         else
         {
@@ -701,24 +757,17 @@ public class ManufacturePanel : GamePanel<Manufature>
             int minute = timeValue - hour * 60;
             int data = hour / 24;
             hour = hour - data * 24;
-            this.timeValue.text = $"{data}:{hour}:{minute}";
-
-            if (timeValue == 0)
-            { 
-                CreatProduct();
-            }
-            
+            this.timeValue.text = $"{data}:{hour}:{minute}"; 
         } 
     }
 
 
     void CreatProduct()
     {
-        if (manufature.waitTime == 0)
-        {
-            OutItemBoxReference.InitData(new Item { dataId = manufature.product.x, count = manufature.product.y, instanceId = -1 }, null, FormulaItemBoxGroup);
-            outEffect.Play();
-        }
+        manufature.waitTime = 0;
+        OutItemBoxReference.InitData(new Item { dataId = manufature.product.x, count = manufature.product.y, instanceId = 1 }, null, FormulaItemBoxGroup);
+        outEffect.Play(); 
+        creatButtonName.text = "取出";
     }
 
 
@@ -776,8 +825,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData);
         RefreshFormulaSelect();
-        InitDisplay();
-
+        InitDisplay(); 
         if (WorldMapObjManager.instance.GetRuntimeMapItemObj(v.instanceId, out var runtimeObj))
         {
             Vector2 pos = runtimeObj.transform.position + cameraOffset;
@@ -817,6 +865,44 @@ public class ManufacturePanel : GamePanel<Manufature>
     private HashSet<FormulaType> nowSelectFormulaTypes = new HashSet<FormulaType>();
     private ItemBoxReference SelectItemBoxRefrence;
 
+    async void GetOutProduct()
+    {
+        bool allSet = await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, manufature.product.x, manufature.product.y);
+        if (!allSet)
+        {
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("背包空间不足!"));
+        }
+        else
+        {
+
+            if (matchFormula!=null&& manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
+            {
+                ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
+                GameNotificationManager.instance.DisplayTips("新配方获得!", $"发现了制作<color=blue>{matchFormula.formulaName}</color>的配方");
+                RefreshFormulaSelect();
+            }
+
+            await PackageManager.instance.SetItemInPackage(new Item { dataId = manufature.product.x, count = manufature.product.y }, CharacterManager.instance.controllerCharacter.characterPackage);
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("产物已经放到背包!"));
+            ClearManufature clearManufature = new ClearManufature { manufatureId = manufature.instanceId };
+            GameActionManager.instance.QueueAction(clearManufature);
+
+            AutoSelect.interactable = true;
+            AddButton.interactable = true;
+            ReduceButton.interactable = true;
+            FormulaDropdown.interactable = true;
+            FormulaDropdown.value = 0;
+            formulaTypeParent.transform.localScale = Vector3.one;
+            creatButtonName.text = "制作";
+
+            if (SelectItemBoxRefrence != null)
+            {
+                SelectItemBoxRefrence.ClearSelect();
+                InformationObj.transform.localScale = Vector3.zero;
+            }
+            ClearFormulaItemBoxReferences(true);
+        }
+    }
     private async void DisplayItem(ItemBoxReference itemBoxReference, bool selected = true)
     {
         if (selected)
@@ -857,41 +943,24 @@ public class ManufacturePanel : GamePanel<Manufature>
                     ItemIcon.enabled = false;
                 }
 
-                if (manufature.waitTime>0&&manufature.waitTime>GameTimeManager.instance.totalMinute)
+                if (manufature.waitTime>GameTimeManager.instance.totalMinute)
                 {
                     selectActionButton.transform.localScale = Vector3.zero; 
                 }
                 else if (SelectItemBoxRefrence == OutItemBoxReference)
                 {
-                    selectActionButton.transform.localScale = Vector3.one;
-                    selectActionButtonName.text = "取出";
-                    selectActionButton.onClick.RemoveAllListeners();
-                    selectActionButton.onClick.AddListener(async () =>
+                    selectActionButton.transform.localScale = Vector3.zero;
+                    if (manufature.product.x != 0)
                     {
-                        bool allSet = await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage,manufature.product.x, manufature.product.y);
-                        if (!allSet)
-                        {
-                            InformationController.instance.AddInformation(LanguageManage.SwitchStr("背包空间不足!"));
-                        }
-                        else
-                        {
-
-                            if (manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
-                            { 
-                                ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
-                                GameNotificationManager.instance.DisplayTips("新配方获得!", $"发现了制作 {matchFormula.formulaName} 的配方");
-                            }
-
-                            await PackageManager.instance.SetItemInPackage(new Item { dataId = manufature.product.x, count = manufature.product.y }, CharacterManager.instance.controllerCharacter.characterPackage);
-                            InformationController.instance.AddInformation(LanguageManage.SwitchStr("产物已经放到背包!"));
-                            ClearManufature clearManufature = new ClearManufature { manufatureId = manufature.instanceId };
-                            GameActionManager.instance.QueueAction(clearManufature);
-                        }
-                    });
+                        selectActionButton.transform.localScale = Vector3.one;
+                        selectActionButtonName.text = "取出";
+                        selectActionButton.onClick.RemoveAllListeners();
+                        selectActionButton.onClick.AddListener(GetOutProduct);
+                    } 
                 }
                 else
                 {
-                    selectActionButton.transform.localScale = Vector3.one;
+                    selectActionButton.transform.localScale =manufature.product.x==0? Vector3.one: Vector3.zero;
                     if (item.instanceId == -1)
                     {
                         selectActionButtonName.text = "放入";
@@ -918,6 +987,8 @@ public class ManufacturePanel : GamePanel<Manufature>
                         selectActionButton.onClick.AddListener(ClearFormulaItem);
                         UIManager.instance.CloseGamePanel<WarehousePanel>();
                         SelectItemBoxRefrence.SelectDefault();
+                        DisplayItem(SelectItemBoxRefrence, true);
+                        RefreshRPCostAndOut();
                     }
                     async void ClearFormulaItem()
                     {
@@ -933,6 +1004,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                         await SelectItemBoxRefrence.InitData(defaultItem, null, FormulaItemBoxGroup);
                         // DisplayItem(SelectItemBoxRefrence, true);
                         SelectItemBoxRefrence.SelectDefault();
+                        RefreshRPCostAndOut();
                     }
                 }
             }

@@ -38,6 +38,7 @@ public class FormulaData : ScriptableObject, IGameData, IReferenceData
 
     public bool Check(List<int> items)
     {
+        items.RemoveAll(item => item == 0);
         if (Stuffs.Count == items.Count)
         {
             List<int> stuffs = Stuffs.GetRange(0, Stuffs.Count);

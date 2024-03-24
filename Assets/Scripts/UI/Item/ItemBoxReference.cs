@@ -83,12 +83,16 @@ public class ItemBoxReference : UIObjReference<Item>
 
     public override async Task InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         item = t;
 
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
-        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
+        ItemData itemData = null;
+        if (item.dataId != 0)
+        {
+            itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
+        } 
         toggle.enabled = true;
 
         if (t.locked && LockMask)
