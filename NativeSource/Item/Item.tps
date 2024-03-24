@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.0.0</string>
+        <string>7.1.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -175,99 +175,10 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">Hammer.png</key>
             <key type="filename">Hoe.png</key>
-            <key type="filename">Icon1.png</key>
-            <key type="filename">Icon10.png</key>
-            <key type="filename">Icon10_no_effect.png</key>
-            <key type="filename">Icon11.png</key>
-            <key type="filename">Icon11_no_effect.png</key>
-            <key type="filename">Icon12.png</key>
-            <key type="filename">Icon13.png</key>
-            <key type="filename">Icon14.png</key>
-            <key type="filename">Icon14_no_effect.png</key>
-            <key type="filename">Icon15.png</key>
-            <key type="filename">Icon16.png</key>
-            <key type="filename">Icon17.png</key>
-            <key type="filename">Icon17_no_effect.png</key>
-            <key type="filename">Icon18.png</key>
-            <key type="filename">Icon18_no_effect.png</key>
-            <key type="filename">Icon19.png</key>
-            <key type="filename">Icon2.png</key>
-            <key type="filename">Icon20.png</key>
-            <key type="filename">Icon21.png</key>
-            <key type="filename">Icon22.png</key>
-            <key type="filename">Icon22_no_effect.png</key>
-            <key type="filename">Icon23.png</key>
-            <key type="filename">Icon23_no_effect.png</key>
-            <key type="filename">Icon24.png</key>
-            <key type="filename">Icon25.png</key>
-            <key type="filename">Icon26.png</key>
-            <key type="filename">Icon27.png</key>
-            <key type="filename">Icon27_no_effect.png</key>
-            <key type="filename">Icon28.png</key>
-            <key type="filename">Icon28_no_effect.png</key>
-            <key type="filename">Icon29.png</key>
-            <key type="filename">Icon29_no_effect.png</key>
-            <key type="filename">Icon2_no_effect.png</key>
-            <key type="filename">Icon3.png</key>
-            <key type="filename">Icon30.png</key>
-            <key type="filename">Icon30_no_effect.png</key>
-            <key type="filename">Icon31.png</key>
-            <key type="filename">Icon31_no_effect.png</key>
-            <key type="filename">Icon32.png</key>
-            <key type="filename">Icon33.png</key>
-            <key type="filename">Icon34.png</key>
-            <key type="filename">Icon34_no_effect.png</key>
-            <key type="filename">Icon35.png</key>
-            <key type="filename">Icon35_no_effect.png</key>
-            <key type="filename">Icon36.png</key>
-            <key type="filename">Icon36_no_effect.png</key>
-            <key type="filename">Icon37.png</key>
-            <key type="filename">Icon38.png</key>
-            <key type="filename">Icon38_no_effect.png</key>
-            <key type="filename">Icon39.png</key>
-            <key type="filename">Icon39_no_effect.png</key>
-            <key type="filename">Icon3_no_effect.png</key>
-            <key type="filename">Icon4.png</key>
-            <key type="filename">Icon40.png</key>
-            <key type="filename">Icon40_no_effect.png</key>
-            <key type="filename">Icon41.png</key>
-            <key type="filename">Icon42.png</key>
-            <key type="filename">Icon42_no_effect.png</key>
-            <key type="filename">Icon43.png</key>
-            <key type="filename">Icon43_no_effect.png</key>
-            <key type="filename">Icon44.png</key>
-            <key type="filename">Icon45.png</key>
-            <key type="filename">Icon46.png</key>
-            <key type="filename">Icon46_no_effect.png</key>
-            <key type="filename">Icon47.png</key>
-            <key type="filename">Icon47_no_effect.png</key>
-            <key type="filename">Icon48.png</key>
-            <key type="filename">Icon48_no_effect.png</key>
-            <key type="filename">Icon4_no_effect.png</key>
-            <key type="filename">Icon5.png</key>
-            <key type="filename">Icon6.png</key>
-            <key type="filename">Icon6_no_effect.png</key>
-            <key type="filename">Icon7.png</key>
-            <key type="filename">Icon7_no_effect.png</key>
-            <key type="filename">Icon8.png</key>
-            <key type="filename">Icon8_no_effect.png</key>
-            <key type="filename">Icon9.png</key>
-            <key type="filename">Icon9_no_effect.png</key>
             <key type="filename">Pick.png</key>
             <key type="filename">Sickle.png</key>
             <key type="filename">Waterpot.png</key>
-            <key type="filename">apple.png</key>
-            <key type="filename">blueberry.png</key>
-            <key type="filename">cabbage.png</key>
-            <key type="filename">carrot.png</key>
-            <key type="filename">cherry.png</key>
-            <key type="filename">cherryRadish.png</key>
-            <key type="filename">chilli.png</key>
-            <key type="filename">corn.png</key>
-            <key type="filename">corn_seed.png</key>
-            <key type="filename">cucumber.png</key>
-            <key type="filename">daikon.png</key>
-            <key type="filename">eggplant.png</key>
+            <key type="filename">default.png</key>
             <key type="filename">fish/fish1.png</key>
             <key type="filename">fish/fish10.png</key>
             <key type="filename">fish/fish11.png</key>
@@ -298,15 +209,7 @@
             <key type="filename">fish/鱿鱼.png</key>
             <key type="filename">fish/鹦鹉螺.png</key>
             <key type="filename">fish/龙虾.png</key>
-            <key type="filename">garlic.png</key>
-            <key type="filename">grape.png</key>
-            <key type="filename">leek.png</key>
-            <key type="filename">potato.png</key>
-            <key type="filename">pumpkin.png</key>
-            <key type="filename">redCabbage.png</key>
-            <key type="filename">strawberry.png</key>
-            <key type="filename">tomato.png</key>
-            <key type="filename">turnip.png</key>
+            <key type="filename">food0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
