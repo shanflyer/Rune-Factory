@@ -287,7 +287,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             {
                 noticeStr = LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");
             }
-            else if (outItem.dataId == selectFormulaData.Product)
+            else if (selectFormulaData!=null&&outItem.dataId == selectFormulaData.Product)
             {
                 noticeStr = LanguageManage.SwitchStr("是否确定按配方开始制作？");
             }

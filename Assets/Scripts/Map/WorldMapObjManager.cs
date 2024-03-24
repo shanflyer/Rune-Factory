@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEditor.Purchasing;
 using UnityEngine;
 
 public class WorldMapObjManager:Singleton<WorldMapObjManager>
@@ -18,6 +19,8 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
         GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
         GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
+        GameActionManager.instance.AddListener<UpdateGameTime>(UpDateGameTime);
+        GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
     }
     protected override void Clear()
     {
@@ -217,22 +220,8 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             for (int i = 0; i < mapItems.Count; i++)
             { 
                 if (WorldMapManager.instance.GetRuntimeMapItem(mapItems[i], out RuntimeMapItem mapItem))
-                {
-                    if (!nowRuntimeMapItemObjs.ContainsKey(mapItem.instanceId))
-                    {
-                        var itemObj = await CreatMapItemRuntime(mapItem.dataId, mapItem.instanceId, mapItem.coordinate);
-                        nowRuntimeMapItemObjs.Add(mapItems[i],new MapItemRuntimeObj(itemObj));
-
-                        DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
-                        {
-                            display = true,
-                            itemInstanceId = mapItem.instanceId,
-                            transform = itemObj.obj as Transform
-                        };
-                        GameActionManager.instance.QueueAction(displayStoreCounter);
-
-                        await RuntimeMapItemPlay(mapItem, itemObj);
-                    }
+                { 
+                  await  DisplayMapItem(mapItem); 
                 }
             }
 
@@ -287,7 +276,9 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
                 itemInstanceId = runTimeMapItemData.Key,
             };
             GameActionManager.instance.QueueAction(displayStoreCounter, true);
-            runTimeMapItemData.Value.Recycle(); 
+            runTimeMapItemData.Value.Recycle();
+            EmoteManager.instance.TryRecycleItemEmote(runTimeMapItemData.Key);
+            manufatureObjs.Remove(runTimeMapItemData.Key);
         }
         var temps = tempRuntimeMapItemObjs.Keys.ToArray();
         
@@ -337,6 +328,8 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
         {
             RuntimeObj.Recycle();
             nowRuntimeMapItemObjs.Remove(deleteMapItem.mapItemInstanceId);
+            EmoteManager.instance.TryRecycleItemEmote(deleteMapItem.mapItemInstanceId);
+            manufatureObjs.Remove(deleteMapItem.mapItemInstanceId);
 
             RemoveRuntimePackage removeRuntimePackage = new RemoveRuntimePackage
             {
@@ -347,6 +340,68 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             MyAnimationController.instance.RemoveItemAnimation(deleteMapItem.mapItemInstanceId);
         }
     }
+    void RefreshManufature(RefreshManufature refreshManufature)
+    {
+        if (manufatureObjs.ContainsKey(refreshManufature.manufature.instanceId))
+        {
+            if (refreshManufature.manufature.product.x == 0)
+            {
+                EmoteManager.instance.TryRecycleItemEmote(refreshManufature.manufature.instanceId);
+            }
+            manufatureObjs[refreshManufature.manufature.instanceId] = refreshManufature.manufature;
+        }else if (nowRuntimeMapItemObjs.ContainsKey(refreshManufature.manufature.instanceId))
+        {
+            manufatureObjs[refreshManufature.manufature.instanceId] = refreshManufature.manufature;
+            if (refreshManufature.manufature.waitTime > GameTimeManager.instance.totalMinute)
+            {
+                ShowEmote showEmote = new ShowEmote
+                {
+                    emoteId = 72,
+                    entityType = EntityType.地图道具,
+                    id = refreshManufature.manufature.instanceId,
+                };
+                GameActionManager.instance.QueueAction(showEmote);
+            }
+            else if (refreshManufature.manufature.product.x > 0)
+            {
+                refreshManufature.manufature.waitTime = 0;
+                ShowEmote showEmote = new ShowEmote
+                {
+                    emoteId = 14,
+                    entityType = EntityType.地图道具,
+                    id = refreshManufature.manufature.instanceId,
+                };
+                GameActionManager.instance.QueueAction(showEmote);
+
+            }
+        }
+    }
+    void UpDateGameTime(UpdateGameTime updateGameTime)
+    {
+        foreach(var m in manufatureObjs)
+        {
+            Manufature manufature = m.Value;
+            if (m.Value.product.x > 0&& manufature.waitTime>0)
+            { 
+                if (m.Value.waitTime < updateGameTime.totalMinute)
+                {
+                    manufature.waitTime = 0;
+                    ShowEmote showEmote = new ShowEmote
+                    {
+                        emoteId = 14,
+                        entityType = EntityType.地图道具,
+                        id = m.Key,
+                    };
+                    GameActionManager.instance.QueueAction(showEmote);
+                }
+            }        
+        }
+    }
+
+    Dictionary<int, Manufature> manufatureObjs = new Dictionary<int, Manufature>();
+
+    
+
     public async Task DisplayMapItem(RuntimeMapItem runtimeMapItem)
     {
         if (!nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
@@ -356,9 +411,47 @@ public class WorldMapObjManager:Singleton<WorldMapObjManager>
             MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
 
+
+            DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
+            {
+                display = true,
+                itemInstanceId = runtimeMapItem.instanceId,
+                transform = runtimeObj.obj as Transform
+            };
+            GameActionManager.instance.QueueAction(displayStoreCounter);
+             
             await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
+
+            var manufature= ManufatureManager.instance.GetManufature(runtimeMapItem.instanceId);
+            if (manufature.instanceId == runtimeMapItem.instanceId)
+            {
+                if (manufature.waitTime > GameTimeManager.instance.totalMinute)
+                {
+                    ShowEmote showEmote = new ShowEmote
+                    {
+                        emoteId = 72,
+                        entityType = EntityType.地图道具,
+                        id = runtimeMapItem.instanceId,
+                    };
+                    GameActionManager.instance.QueueAction(showEmote);
+                }
+                else if(manufature.product.x>0)
+                {
+                    manufature.waitTime = 0;
+                    ShowEmote showEmote = new ShowEmote
+                    {
+                        emoteId = 14,
+                        entityType = EntityType.地图道具,
+                        id = runtimeMapItem.instanceId,
+                    };
+                    GameActionManager.instance.QueueAction(showEmote);
+
+                }
+                manufatureObjs[runtimeMapItem.instanceId] = manufature;
+            }
         }
     } 
+   
     public async Task ChangeMapItemDisplay(int mapItemId,int newId,int2 animationKey, RuntimeMapItem runtimeMapItem)
     {
         if (nowRuntimeMapItemObjs.TryGetValue(mapItemId, out MapItemRuntimeObj runtimeObj))

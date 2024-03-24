@@ -93,6 +93,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         }
         else
         {
+
             runtimeObj.use = false;
             var component = runtimeObj.obj as Component;
 

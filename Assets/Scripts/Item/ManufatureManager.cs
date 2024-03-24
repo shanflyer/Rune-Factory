@@ -26,6 +26,11 @@ public class ManufatureManager : Singleton<ManufatureManager>
     void SetManufature(SetManufature setManufature)
     {
         Manufatures.SetData(setManufature.manufature);
+        RefreshManufature refreshManufature = new RefreshManufature
+        {
+            manufature = setManufature.manufature
+        };
+        GameActionManager.instance.QueueAction(refreshManufature);
     }
     public Manufature GetManufature(int instanceId)
     {

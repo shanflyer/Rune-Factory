@@ -238,6 +238,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+                    EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
                     characterRuntionObjs.Remove(character);
 
                     RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
@@ -453,6 +454,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+            EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
             characterRuntionObjs.Remove(character);
         }
         MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId);
@@ -653,6 +655,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
+                EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                 characterRuntionObjs.Remove(character);
             }
@@ -1090,6 +1093,7 @@ public class CharacterManager : Singleton<CharacterManager>
             if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+                EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
                 characterRuntionObjs.Remove(character);
             }
             else
@@ -1152,6 +1156,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (character.mapInstance != WorldMapObjManager.instance.displayMap
                     && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
+                    EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                     characterRuntionObjs.Remove(character);
                 }
