@@ -828,7 +828,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6439f723f6a061e438aeba842f909e28, type: 3}
---- !u!1 &1761453170
+--- !u!1 &1712162150
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -836,7 +836,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1761453171}
+  - component: {fileID: 1712162151}
   m_Layer: 0
   m_Name: ItemParent
   m_TagString: Untagged
@@ -844,13 +844,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1761453171
+--- !u!4 &1712162151
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761453170}
+  m_GameObject: {fileID: 1712162150}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -913,8 +913,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -1.5076499, y: 2.46995, z: 0}
-    m_Extent: {x: 8.466249, y: 8.89935, z: 0}
+    m_Center: {x: -1.4930999, y: 2.4712, z: 0}
+    m_Extent: {x: 8.4626, y: 8.9123, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -20422,4 +20422,4 @@ SceneRoots:
   - {fileID: 1844942969}
   - {fileID: 1419642074}
   - {fileID: 1711564057}
-  - {fileID: 1761453171}
+  - {fileID: 1712162151}

@@ -4,25 +4,19 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Game/Map")]
 [TaskName("创建地图道具")]
 public class GameRuntimeItemCreat : Action
-{
-	public SharedInt mapId;
+{ 
 	public SharedInt dataId;
-	public SharedVector2Int coordinate;
+	public SharedInt3 coordinate;
 	[Header("记录物体id的共享变量")]
 	public SharedInt shardId;
 	public override void OnStart()
-	{
-		int trueMapId = mapId.Value;
-        if (mapId==null|| mapId.IsNull() ||mapId.Value == -1)
-        {
-			trueMapId = WorldMapObjManager.instance.displayMap;
-        }
+	{ 
 
 		AddMapItem addMapItem = new AddMapItem
 		{
-			mapId = trueMapId,
+			mapId = coordinate.Value.z,
 			dataId = dataId.Value,
-			coordinate =new Unity.Mathematics.int2(coordinate.Value.x, coordinate.Value.y), 
+			coordinate = coordinate.Value.xy, 
 		};
         if (shardId != null)
         {

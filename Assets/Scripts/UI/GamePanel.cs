@@ -113,7 +113,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         } 
         if (pluralUI)
         {
-            if (gameObject!=null)
+            if (this!=null&&gameObject!=null)
             {
                 Destroy(gameObject);
             }

@@ -46,7 +46,11 @@ public class ItemData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
-#if UNITY_EDITOR 
+    public string GetName()
+    {
+        return itemName;
+    }
+#if UNITY_EDITOR
     static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>();
     public void SetReferenceData()
     {
