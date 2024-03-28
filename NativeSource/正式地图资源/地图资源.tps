@@ -1203,6 +1203,13 @@
             <key type="filename">火把1.png</key>
             <key type="filename">火把1_normal.png</key>
             <key type="filename">火把_normal.png</key>
+            <key type="filename">火炬补充_01.png</key>
+            <key type="filename">火炬补充_02.png</key>
+            <key type="filename">火炬补充_02_normal.png</key>
+            <key type="filename">火炬补充_03.png</key>
+            <key type="filename">火炬补充_04.png</key>
+            <key type="filename">火炬补充_05.png</key>
+            <key type="filename">火炬补充_05_normal.png</key>
             <key type="filename">花台_02.png</key>
             <key type="filename">花台_02_normal.png</key>
             <key type="filename">花台_03.png</key>
@@ -4763,6 +4770,21 @@
                 <rect>24,18,47,35</rect>
                 <key>scale9Paddings</key>
                 <rect>24,18,47,35</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">钢琴.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,19,32,37</rect>
+                <key>scale9Paddings</key>
+                <rect>16,19,32,37</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
