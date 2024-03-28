@@ -254,10 +254,15 @@ public class PackageManager : Singleton<PackageManager>
     private async void CreatPackage(CreatPackage creatPackage)
     {
         int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level);
-        creatPackage.setValue(instanceId);
+       
         if (GameManager.instance.GetPlayerBoxId() == instanceId)
         {
             AddPlayerPackage(instanceId);
+        }
+        
+        if (creatPackage.setValue != null)
+        {
+            creatPackage.setValue(instanceId);
         }
         if (creatPackage.setResult != null)
         {

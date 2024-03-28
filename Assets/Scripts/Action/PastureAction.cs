@@ -1,18 +1,6 @@
 ﻿using System.Collections.Generic;
 using Unity.Mathematics;
 
-public struct GetPastureNextLevelCost : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int pastureId;
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-
 public struct GetPastureLevel : GameAction
 {
     public SetValue setValue { get; set; }
@@ -271,7 +259,7 @@ public struct TryCreatPasture : GameAction
 {
     public int roomId;
     public int itemInstanceId;
-    public int linkItemDataId;
+    public int dataId;
     public string pastureName;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
@@ -300,7 +288,7 @@ public struct TryCreatPasture : GameAction
         }
         if (value != 0)
         {
-            linkItemDataId = value;
+            dataId = value;
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }

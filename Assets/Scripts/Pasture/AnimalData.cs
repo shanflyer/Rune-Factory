@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic; 
 using UnityEngine;
 
 public class AnimalData : ScriptableObject, IGameData
@@ -16,6 +13,10 @@ public class AnimalData : ScriptableObject, IGameData
     public int produceCycle;
     public int product;
     public int cycleStage;
+
+#if UNITY_EDITOR
+    public string GrowthStageStr;
+#endif
     public List<GrowthStage> growthStages = new List<GrowthStage>();
     public string GetKey()
     {
@@ -25,7 +26,27 @@ public class AnimalData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
+#if UNITY_EDITOR
     public void SetReferenceData()
     {
+        var strs = GrowthStageStr.Split('|');
+        for (int i = 0; i < strs.Length; i++)
+        {
+            var dataStr = strs[i].Split(',');
+
+            if (dataStr.Length >= 5)
+            {
+                GrowthStage growthStage = new GrowthStage
+                {
+                    stageName = dataStr[0],
+                    stage = int.Parse(dataStr[1]),
+                    growthDay = int.Parse(dataStr[2]),
+                    productValue = int.Parse(dataStr[3]),
+                    objAnimationStage = int.Parse(dataStr[4]),
+                };
+                growthStages.Add(growthStage);
+            }
+        }
     }
+#endif
 }
