@@ -115,13 +115,17 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 {
                     CharacterManager.instance.controllerCharacter.SetNeighborhood(runtimMapItem.linkCharacter);
                 }
-
+                
                 //物体交互
                 int operateDataLength = runtimMapItem.operateDatas.Count;
                 OperateDataList operateDataList = new OperateDataList
                 {
-                    OperateDatas = new List<OperateDataReferenceData>()
+                    OperateDatas = new List<OperateDataReferenceData>(),
+                    eventReferenceDatas=new List<EventReferenceData>()
                 };
+                MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimMapItem.dataId);
+                operateDataList.eventReferenceDatas.AddRange(mapItemData.eventReferenceDatas);
+
                 if (operateDataLength > 0)
                 {
                     foreach (var id in runtimMapItem.operateDatas)
@@ -139,7 +143,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         }
     }
 
-    public void OperateAction(OperateDataReferenceData operateDataReference, bool selected = true)
+    public void OperateAction(OperateDataReferenceData operateDataReference, List<EventReferenceData> _eventReferenceDatas)
     {
         Character controller = CharacterManager.instance.controllerCharacter;
         if (operateDataReference.operateData.gameActionData != null)
@@ -161,6 +165,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                   value = operateDataReference.targetItem
                 },
             };
+            eventReferenceDatas.AddRange(_eventReferenceDatas);
             if (operateDataReference.operateData.eventReferenceDatas != null && operateDataReference.operateData.eventReferenceDatas.Count > 0)
             {
                 for (int i = 0; i < operateDataReference.operateData.eventReferenceDatas.Count; i++)

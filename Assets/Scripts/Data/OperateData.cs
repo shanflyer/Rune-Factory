@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public struct OperateDataList: IReferenceData
 {
     public List<OperateDataReferenceData> OperateDatas;
+    public List<EventReferenceData> eventReferenceDatas;
 }
 public struct OperateDataReferenceData : IReferenceData
 {

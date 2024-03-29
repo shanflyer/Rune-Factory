@@ -62,8 +62,12 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
             {
                 operateDatas.Add(operateDataList.OperateDatas[i]);
             }
-            OperateList1.InitListData(operateDatas, PlayerOperateManager.instance.OperateAction);
+            OperateList1.InitListData(operateDatas, SelectAction);
         }
+    }
+    void SelectAction(OperateDataReferenceData operateData,bool select)
+    {
+        PlayerOperateManager.instance.OperateAction(operateData, operateDataList.eventReferenceDatas);
     }
 
     public override async void InitReferenceData(OperateDataList v)
@@ -74,7 +78,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
         otherListShow = false;
         if (v.OperateDatas.Count <= 4)
         {
-            OperateList0.InitListData(v.OperateDatas, PlayerOperateManager.instance.OperateAction);
+            OperateList0.InitListData(v.OperateDatas, SelectAction);
         }
         else
         {
@@ -90,7 +94,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
                 operateData = defaultData,
                 targetItem = 0
             });
-            OperateList0.InitListData(operateDatas, PlayerOperateManager.instance.OperateAction);
+            OperateList0.InitListData(operateDatas, SelectAction);
         }
     }
 }

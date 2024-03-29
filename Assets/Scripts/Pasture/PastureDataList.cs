@@ -67,6 +67,7 @@ public struct PastureLevelData
     public int creatMoney;
     public List<int2> creatItems;
     public int animalCase;
+    public int successTalk;
 }
 public struct PastureData : IReferenceData, IGameData
 {
@@ -75,6 +76,7 @@ public struct PastureData : IReferenceData, IGameData
     public int productPackage;
     public int foodPackage;
     public int waterPackage;
+    
     public List<PastureLevelData> levelDatas;
 
     public string GetKey()

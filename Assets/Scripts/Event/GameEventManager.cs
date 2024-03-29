@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
+
 [System.Serializable]
 public struct EventReferenceData
 {
@@ -14,6 +15,7 @@ public struct EventReferenceData
     public int3 int3Value;
     public List<int> valeList;
 }
+
 
 public enum ReferenceValueType
 {
