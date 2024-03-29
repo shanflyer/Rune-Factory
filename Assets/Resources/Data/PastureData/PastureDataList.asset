@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d232edfcc146804ba77903e6f957423, type: 3}
+  m_Name: PastureDataList
+  m_EditorClassIdentifier: 
+  pastureDatas:
+  - id: 3000
+    pastureName: "\u52A8\u7269\u68DA"
+    productPackage: 12
+    foodPackage: 10
+    waterPackage: 11
+    levelDatas:
+    - id: 3000
+      pastureName: "\u52A8\u7269\u68DA"
+      productPackage: 12
+      foodPackage: 10
+      waterPackage: 11
+      level: 1
+      linkItem: 1093
+      creatMoney: 100
+      creatItems:
+      - x: 1001
+        y: 2
+      - x: 1002
+        y: 2
+      animalCase: 2
+      successTalk: 3014
+    - id: 3000
+      pastureName: "\u52A8\u7269\u68DA"
+      productPackage: 12
+      foodPackage: 10
+      waterPackage: 11
+      level: 2
+      linkItem: 1058
+      creatMoney: 200
+      creatItems:
+      - x: 1003
+        y: 2
+      - x: 1004
+        y: 2
+      animalCase: 4
+      successTalk: 3014
+  pastureLevelDatas:
+  - id: 3000
+    pastureName: "\u52A8\u7269\u68DA"
+    productPackage: 12
+    foodPackage: 10
+    waterPackage: 11
+    level: 1
+    linkItem: 1093
+    creatMoney: 100
+    creatItems:
+    - x: 1001
+      y: 2
+    - x: 1002
+      y: 2
+    animalCase: 2
+    successTalk: 3014
+  - id: 3000
+    pastureName: "\u52A8\u7269\u68DA"
+    productPackage: 12
+    foodPackage: 10
+    waterPackage: 11
+    level: 2
+    linkItem: 1058
+    creatMoney: 200
+    creatItems:
+    - x: 1003
+      y: 2
+    - x: 1004
+      y: 2
+    animalCase: 4
+    successTalk: 3014

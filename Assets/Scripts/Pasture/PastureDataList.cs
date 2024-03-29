@@ -2,6 +2,7 @@
 using System.Collections.Generic; 
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Purchasing;
 
 public class PastureDataList : ScriptableObject, IGameData,IDataArray<PastureData>
 {
@@ -18,6 +19,7 @@ public class PastureDataList : ScriptableObject, IGameData,IDataArray<PastureDat
         return "PastureDataList";
     }
 #if UNITY_EDITOR
+    [HideInInspector]
     public PastureLevelData[] pastureLevelDatas;
     public void SetReferenceData()
     {
@@ -26,7 +28,7 @@ public class PastureDataList : ScriptableObject, IGameData,IDataArray<PastureDat
         for(int i = 0; i < pastureLevelDatas.Length; i++)
         {
             var pastureLevelData = pastureLevelDatas[i];
-
+            pastureId = pastureLevelData.id;
             PastureData pastureData;
             int pastureIndex=pastureDataList.FindIndex(p=>p.id == pastureId);
             if (pastureIndex <0)
@@ -34,6 +36,9 @@ public class PastureDataList : ScriptableObject, IGameData,IDataArray<PastureDat
                 pastureData = new PastureData
                 {
                     id = pastureId,
+                    productPackage=pastureLevelData.productPackage,
+                    foodPackage=pastureLevelData.foodPackage,
+                    waterPackage=pastureLevelData.waterPackage,
                     pastureName = pastureLevelData.pastureName,
                     levelDatas = new List<PastureLevelData>
                     {
@@ -53,13 +58,19 @@ public class PastureDataList : ScriptableObject, IGameData,IDataArray<PastureDat
     }
 #endif 
 }
+[Serializable]
 public struct PastureLevelData
 {
 #if UNITY_EDITOR
+    [HideInInspector]
     public int id;
+    [HideInInspector]
     public string pastureName;
+    [HideInInspector]
     public int productPackage;
+    [HideInInspector]
     public int foodPackage;
+    [HideInInspector]
     public int waterPackage;
 #endif 
     public int level;
@@ -69,6 +80,7 @@ public struct PastureLevelData
     public int animalCase;
     public int successTalk;
 }
+[Serializable]
 public struct PastureData : IReferenceData, IGameData
 {
     public int id;

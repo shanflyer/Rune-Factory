@@ -123,8 +123,16 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                     OperateDatas = new List<OperateDataReferenceData>(),
                     eventReferenceDatas=new List<EventReferenceData>()
                 };
-                MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimMapItem.dataId);
-                operateDataList.eventReferenceDatas.AddRange(mapItemData.eventReferenceDatas);
+               foreach(var data in runtimMapItem.EventReferenceData)
+                {
+                    EventReferenceData EventReferenceData = new EventReferenceData
+                    {
+                        name = data.Key.ToString(),
+                        value = data.Value,
+                        valueType = ReferenceValueType.Int
+                    };
+                    operateDataList.eventReferenceDatas.Add(EventReferenceData);
+                } 
 
                 if (operateDataLength > 0)
                 {

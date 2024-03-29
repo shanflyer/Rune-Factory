@@ -60,8 +60,13 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
 
             for (int i = 3; i < operateDataList.OperateDatas.Count; i++)
             {
-                operateDatas.Add(operateDataList.OperateDatas[i]);
-            }
+                var operateData = operateDataList.OperateDatas[i];
+                if (operateData.operateData != null)
+                {
+                    operateDatas.Add(operateDataList.OperateDatas[i]);
+                }
+               
+            } 
             OperateList1.InitListData(operateDatas, SelectAction);
         }
     }
@@ -73,6 +78,13 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
     public override async void InitReferenceData(OperateDataList v)
     {
         base.InitReferenceData(v);
+
+        v.OperateDatas.RemoveAll(d => d.operateData == null);
+        if (v.OperateDatas.Count == 0)
+        {
+            Close(); return;
+        }
+
         operateDataList = v;
         OperateList1.ClearAll();
         otherListShow = false;

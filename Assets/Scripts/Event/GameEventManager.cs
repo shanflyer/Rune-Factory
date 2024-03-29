@@ -2,6 +2,7 @@ using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using Unity.Collections;
 using UnityEngine;
 
 
@@ -16,6 +17,12 @@ public struct EventReferenceData
     public List<int> valeList;
 }
 
+[System.Serializable]
+public struct MapItemEventReferenceData
+{
+    public string name;
+    public int value;  
+}
 
 public enum ReferenceValueType
 {

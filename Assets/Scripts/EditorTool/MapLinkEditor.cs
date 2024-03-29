@@ -66,7 +66,12 @@ public class MapLinkEditor : MonoBehaviour
         return mapLine.map0 == mapId || mapLine.map1 == mapId;
     }
     public void InitLinkData(MapLine mapLine)
-    {
+    { 
+        if (mapLine.instanceId == 0)
+        {
+            string id = $"{mapLine.map0}{mapLine.map1}";
+            mapLine.instanceId = int.Parse(id);
+        }
         this.mapLine = mapLine;
         mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map0];
         mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1];
@@ -174,6 +179,8 @@ public class MapLinkEditor : MonoBehaviour
 
             DestroyImmediate(gameObject);
         }
+        string id = $"{mapLine.map0}{mapLine.map1}";
+        mapLine.instanceId = int.Parse(id); 
     }
     // Update is called once per frame
     void Update1()

@@ -962,7 +962,7 @@ public static class DataPath
         {typeof(FriendShipData),"Data/FriendShipData" },
         {typeof(PlantData),"Data/PlantData" },
         {typeof(FieldArea),"Data/FieldArea" },
-        {typeof(PastureData),"Data/PastureData" },
+        {typeof(PastureData),"Data/PastureData/PastureDataList" },
         {typeof(AnimalData),"Data/AnimalData" },
         {typeof(FishData),"Data/FishData" },
         {typeof(FishPondData),"Data/FishPondData" },
@@ -976,7 +976,7 @@ public static class DataPath
         {typeof(EmoteData),"Data/EmoteData" },
         {typeof(SkyBackGroundData),"Data/SkyBackGroundData"},
         {typeof(HomeEquipmentData),"Data/HomeEquipmentData" },
-        {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"}
+        {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"}, 
     };
 
     public static string GetDataPath(Type type)

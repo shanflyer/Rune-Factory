@@ -290,6 +290,8 @@ public struct TryCreatPasture : GameAction
         {
             dataId = value;
         }
+        this.setResult = setResult;
+        this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

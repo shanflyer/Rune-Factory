@@ -358,7 +358,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
             editorInstanceId = mapItem.instanceId,
             animationKey = mapItem.animationKey,
             mapInstanceId = mapId,
-            operateDatas = new NativeHashSet<int>(8, Allocator.Persistent)
+            operateDatas = new NativeHashSet<int>(8, Allocator.Persistent),
+            EventReferenceData=new NativeHashMap<FixedString128Bytes, int>(2,Allocator.Persistent),
         };
         runtimeMapItems.AddData(runtimeMapItem);
         if (!itemInMapDatas.TryGetValue(mapId, out List<int> items))
@@ -399,10 +400,22 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
 
-        for (int i = 0; i < mapItemData.operateIds.Count; i++)
+        if (mapItemData.operateIds != null)
         {
-            runtimeMapItem.operateDatas.Add(mapItemData.operateIds[i]);
+            for (int i = 0; i < mapItemData.operateIds.Count; i++)
+            {
+                runtimeMapItem.operateDatas.Add(mapItemData.operateIds[i]);
+            }
         }
+        if (mapItem.eventReferenceDatas != null)
+        {
+            for (int i = 0; i < mapItem.eventReferenceDatas.Count; i++)
+            {
+                var data = mapItem.eventReferenceDatas[i];
+                runtimeMapItem.EventReferenceData.Add(data.name, data.value);
+            }
+        }
+       
 
         if (mapItemData.triggerCells.Length > 0)
         {
@@ -714,10 +727,12 @@ public struct RuntimeMapItem : INativeData
     public int2 animationKey;
     public int linkCharacter;
     public NativeHashSet<int> operateDatas;
+    public NativeHashMap<FixedString128Bytes, int> EventReferenceData;
     public int Key => instanceId;
 
     public void Dispose()
     {
         operateDatas.Dispose();
+        EventReferenceData.Dispose();
     }
 }

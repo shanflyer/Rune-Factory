@@ -10,6 +10,8 @@ public struct MapItem
     public int2 coordinate;
     public int animationKey;
     public int blindHomeEquipment;
+
+    public List<MapItemEventReferenceData> eventReferenceDatas;
 }
 
 [System.Serializable]
