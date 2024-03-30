@@ -1,5 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
+using System.Collections.Generic;
 
 [ExecuteAlways]
 public class MapItemInstanceEditor : MonoBehaviour
@@ -9,12 +10,13 @@ public class MapItemInstanceEditor : MonoBehaviour
 
     private Vector3 oldPos;
 
-    public void InitData(MapItemData mapItemData, int intanceId, int2 coordinate)
+    public void InitData(MapItemData mapItemData, int intanceId, int2 coordinate,List<MapItemEventReferenceData> mapItemEventReferenceDatas)
     {
         this.itemData = mapItemData;
         mapItem.coordinate = coordinate;
         mapItem.id = itemData.id;
         mapItem.instanceId = intanceId;
+        mapItem.eventReferenceDatas = mapItemEventReferenceDatas;
         InitPos();
     }
 

@@ -31,6 +31,10 @@ public class GameRandomEvent : Action
                     sources.Remove(withOuts[i]);
                 }
             }
+            if (sources.Count == 0)
+            {
+                sources.AddRange(randomSources.Value);
+            }
             int index = GameRandom.RandomInt(0, sources.Count);
             result.Value = sources[index];
         }

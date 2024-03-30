@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
@@ -8,21 +9,17 @@ public class PastureManager : Singleton<PastureManager>
 {
     private MyNativeData<Pasture> pastures = new MyNativeData<Pasture>();
     private MyNativeData<Animal> animals = new MyNativeData<Animal>();
-
-    private Dictionary<int, int> pastureLinkItems= new Dictionary<int, int>();
+    
+    private Dictionary<int, int> pastureLinkItems = new Dictionary<int, int>();
     MyInstance myInstance = new MyInstance();
     protected override void Clear()
     {
-        base.Clear();
-        foreach (Pasture pasture in pastures)
-        {
-            pasture.Dispose();
-        }
+        base.Clear(); 
         pastures.Dispose();
         animals.Dispose();
     }
 
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
         pastures.Init(16);
@@ -40,6 +37,8 @@ public class PastureManager : Singleton<PastureManager>
         GameActionManager.instance.AddListener<GetPastureLevel>(GetPastureLevel);
         GameActionManager.instance.AddListener<TryUpPastureLevel>(TryUpPastureLevel);
         GameActionManager.instance.AddListener<SetAnimalToPasture>(SetAnimalToPasture);
+        GameActionManager.instance.AddListener<SetPastureIndex>(SetPastureIndex);
+        GameActionManager.instance.AddListener<RefreshAnimalPos>(RefreshAnimalPos);
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
@@ -51,6 +50,27 @@ public class PastureManager : Singleton<PastureManager>
             animal.Grow();
         }
     }
+    public bool GetPasture(int instanceId,out Pasture pasture)
+    {
+        return pastures.GetData(instanceId, out pasture);
+    }
+    public List<Pasture> GetAllPasture()
+    {
+        List<Pasture> outResult = new List<Pasture>();
+        foreach (Pasture pasture in pastures)
+        {
+            outResult.Add(pasture);
+        }
+        return outResult;
+    }
+    public bool CheckAnimal(int id)
+    {
+        return animals.Contains(id);
+    }
+    public bool GetAnimal(int id,out Animal animal)
+    {
+        return animals.GetData(id, out animal);
+    }
 
     private async void TryUpPastureLevel(TryUpPastureLevel tryUpPastureLevel)
     {
@@ -60,7 +80,7 @@ public class PastureManager : Singleton<PastureManager>
             int nextlevel = pasture.level + 1;
             if (pastureData.levelDatas.Count >= nextlevel)
             {
-                var pastureLevelData = pastureData.levelDatas[nextlevel-1];
+                var pastureLevelData = pastureData.levelDatas[nextlevel - 1];
                 List<MyInt3> items = new List<MyInt3>();
                 for (int i = 0; i < pastureLevelData.creatItems.Count; i++)
                 {
@@ -71,7 +91,7 @@ public class PastureManager : Singleton<PastureManager>
                         value = new int3(costItem.xy, totalCount)
                     });
                 }
-                 
+
                 ItemCostEventData itemCostEventData = new ItemCostEventData
                 {
                     title = "牧场",
@@ -79,10 +99,10 @@ public class PastureManager : Singleton<PastureManager>
                     costValue = pastureLevelData.creatMoney,
                     payType = PayType.金币,
                     items = items,
-                    afterAction = UpPastureLevel, 
+                    afterAction = UpPastureLevel,
                 };
                 UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
-                  
+
                 void UpPastureLevel(bool result)
                 {
                     if (result)
@@ -90,29 +110,36 @@ public class PastureManager : Singleton<PastureManager>
                         pasture.level = nextlevel;
                         pasture.animalCase = pastureLevelData.animalCase;
 
-                        if(WorldMapManager.instance.GetMapItemPos(pasture.instanceId,out var objCoordinate))
+                        if (WorldMapManager.instance.GetMapItemPos(pasture.instanceId, out var objCoordinate))
                         {
                             AddMapItem addMapItem = new AddMapItem
                             {
                                 coordinate = objCoordinate.xy,
                                 mapId = objCoordinate.z,
                                 dataId = pastureLevelData.linkItem,
-                                setValue=(int instanceId) =>
+                                setValue = (int instanceId) =>
                                 {
                                     pastureLinkItems.Remove(pasture.linkItem);
                                     pasture.linkItem = instanceId;
                                     pastures.SetData(pasture);
-                                    pastureLinkItems[pasture.linkItem] =pasture.instanceId;
+                                    pastureLinkItems[pasture.linkItem] = pasture.instanceId;
                                 }
                             };
                             GameActionManager.instance.QueueAction(addMapItem);
                         }
                         DeleteMapItem deleteMapItem = new DeleteMapItem
                         {
-                            mapItemInstanceId = pasture.linkItem, 
+                            mapItemInstanceId = pasture.linkItem,
                         };
                         GameActionManager.instance.QueueAction(deleteMapItem, true);
 
+                        pastures.SetData(pasture);
+
+                        RefreshPasture refreshPasture = new RefreshPasture
+                        {
+                            instanceId = pasture.instanceId
+                        };
+                        GameActionManager.instance.QueueAction(refreshPasture);
 
                         tryUpPastureLevel.setValue(nextlevel);
                     }
@@ -138,6 +165,30 @@ public class PastureManager : Singleton<PastureManager>
         getPastureLevel.setValue(0);
     }
 
+    private void RefreshAnimalPos(RefreshAnimalPos RefreshAnimalPos)
+    {
+        if(animals.GetData(RefreshAnimalPos.animalId,out var animal))
+        {
+            if(pastures.GetData(animal.pasture, out var pasture))
+            {
+                int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
+                if (nextCoordinate.x == int.MinValue)
+                {
+                    SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+                    {
+                        characterId = animal.instaceId,
+                        coordinate = new int3(pasture.linkRoom,
+                       nextCoordinate.xy)
+                    };
+                    GameActionManager.instance.QueueAction(setCharacterCoordinate, true);
+                }
+            }
+            else
+            {
+                TryDeleteAnimal(new TryDeleteAnimal { animalId=animal.instaceId});
+            } 
+        }
+    }
 
     private void SetAnimalToPasture(SetAnimalToPasture SetAnimalToPasture)
     {
@@ -150,26 +201,30 @@ public class PastureManager : Singleton<PastureManager>
             }
             else
             {
-                int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.instanceId);
-                if (nextCoordinate.x == int.MinValue)
+                if (SetAnimalToPasture.refreshPos)
                 {
-                    SetAnimalToPasture.setResult(false);
-                }
-                else
-                {
-                    pasture.animals.Add(SetAnimalToPasture.animalId);
-                    animal.pasture = pasture.instanceId;
-                    animal.mapId = pasture.instanceId;
-
-                    SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+                    int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
+                    if (nextCoordinate.x == int.MinValue)
                     {
-                        characterId = animal.instaceId,
-                        coordinate = new int3(pasture.instanceId,
-                        nextCoordinate.xy)
-                    };
-                    GameActionManager.instance.QueueAction(setCharacterCoordinate, true);
-                    SetAnimalToPasture.setResult(true);
+                        SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+                        {
+                            characterId = animal.instaceId,
+                            coordinate = new int3(pasture.linkRoom,
+                           nextCoordinate.xy)
+                        };
+                        GameActionManager.instance.QueueAction(setCharacterCoordinate, true);
+                    }
                 }
+
+                pasture.animals.Add(SetAnimalToPasture.animalId);
+                animal.pasture = pasture.instanceId;
+                pastures.SetData(pasture);
+                RefreshPasture refreshPasture = new RefreshPasture
+                {
+                    instanceId = pasture.instanceId
+                };
+                GameActionManager.instance.QueueAction(refreshPasture);
+                SetAnimalToPasture.setResult(true);
             }
             return;
         }
@@ -177,21 +232,29 @@ public class PastureManager : Singleton<PastureManager>
     }
 
     private async void AnimalCostFood(AnimalCostFood animalCostFood)
-    {
+    { 
         if (pastures.GetData(animalCostFood.pastureId, out var pasture))
         {
+            RefreshPasture refreshPasture = new RefreshPasture
+            {
+                instanceId = pasture.instanceId
+            };
             var animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(animalCostFood.animalDataId);
             for (int i = 0; i < animalData.foods.Count; i++)
             {
                 bool result = PackageManager.instance.GetOutItenFromPackage(pasture.foodPackage, animalData.foods[i], 1);
-                if (result)
+                if (!result)
                 {
-                    animalCostFood.setResult(result);
+                    
+                    GameActionManager.instance.QueueAction(refreshPasture);
+                    animalCostFood.setResult(false);
                     return;
                 }
             }
-        }
-        animalCostFood.setResult(false);
+
+            GameActionManager.instance.QueueAction(refreshPasture);
+            animalCostFood.setResult(true);
+        } 
     }
 
     private void TryGetAnimalFoodFromPasture(TryGetAnimalFoodFromPasture tryGetAnimalFoodFromPasture)
@@ -202,6 +265,12 @@ public class PastureManager : Singleton<PastureManager>
             bool result = PackageManager.instance.RemovePlayerPackageItem(tryGetAnimalFoodFromPasture.item.dataId,
                 tryGetAnimalFoodFromPasture.item.count);
             tryGetAnimalFoodFromPasture.setResult(result);
+
+            RefreshPasture refreshPasture = new RefreshPasture
+            {
+                instanceId = pasture.instanceId
+            };
+            GameActionManager.instance.QueueAction(refreshPasture);
         }
     }
 
@@ -214,9 +283,22 @@ public class PastureManager : Singleton<PastureManager>
             int count = await PackageManager.instance.SetItemInPackage(trySetAnimalFoodToPasture.item,
                 foodPackage);
             trySetAnimalFoodToPasture.setValue(count);
+
+            RefreshPasture refreshPasture = new RefreshPasture
+            {
+                instanceId = pasture.instanceId
+            };
+            GameActionManager.instance.QueueAction(refreshPasture);
         }
     }
-
+    void SetPastureIndex(SetPastureIndex setPastureIndex)
+    {
+        if(pastures.GetData(setPastureIndex.pastureId,out var pasture))
+        {
+            pasture.index = setPastureIndex.index;
+            pastures.SetData(pasture);
+        }
+    }
     private async void TryCreatPasture(TryCreatPasture tryCreatPasture)
     {
 
@@ -320,7 +402,11 @@ public class PastureManager : Singleton<PastureManager>
                                     };
                                     pastures.SetData(pasture);
                                     pastureLinkItems.Add(instanceId, pasture.instanceId);
-
+                                    RefreshPasture refreshPasture = new RefreshPasture
+                                    {
+                                        instanceId = pasture.instanceId
+                                    };
+                                    GameActionManager.instance.QueueAction(refreshPasture);
 
                                     SimpleTalk simpleTalk = new SimpleTalk
                                     {
@@ -329,6 +415,15 @@ public class PastureManager : Singleton<PastureManager>
                                     };
                                     GameActionManager.instance.QueueAction(simpleTalk);
 
+                                    if (tryCreatPasture.setValue != null)
+                                    {
+                                        tryCreatPasture.setValue(pasture.instanceId);
+                                    }
+
+                                    if (tryCreatPasture.setResult != null)
+                                    {
+                                        tryCreatPasture.setResult(true);
+                                    }
                                 }
                             }
                         };
@@ -339,10 +434,6 @@ public class PastureManager : Singleton<PastureManager>
                 };
                 GameActionManager.instance.QueueAction(creatFoodPackage, true);
 
-                if (tryCreatPasture.setResult != null)
-                {
-                    tryCreatPasture.setResult(true);
-                }
                 
             }
         }
@@ -381,14 +472,13 @@ public class PastureManager : Singleton<PastureManager>
         Animal animal = new Animal
         {
             animalState = AnimalState.正常,
-            dataId = tryCreatAnimal.dataId,
-            mapId = tryCreatAnimal.roomId,
+            dataId = tryCreatAnimal.dataId, 
             linkCharacterData = animalData.linkCharacter
         };
 
         if (pastures.GetData(tryCreatAnimal.roomId, out var pasture))
         {
-            animal.pasture = pasture.instanceId;
+            animal.pasture = pasture.instanceId; 
         }
 
         CreatCharacter creatCharacter = new CreatCharacter
@@ -409,6 +499,12 @@ public class PastureManager : Singleton<PastureManager>
                 {
                     pasture.animals.Add(animal.instaceId);
                     pastures.SetData(pasture);
+
+                    RefreshPasture refreshPasture = new RefreshPasture
+                    {
+                        instanceId = pasture.instanceId
+                    };
+                    GameActionManager.instance.QueueAction(refreshPasture);
                 }
             }
             tryCreatAnimal.setValue(value);
@@ -425,6 +521,12 @@ public class PastureManager : Singleton<PastureManager>
             {
                 pasture.animals.Remove(animal.instaceId);
                 pastures.SetData(pasture);
+
+                RefreshPasture refreshPasture = new RefreshPasture
+                {
+                    instanceId = pasture.instanceId
+                };
+                GameActionManager.instance.QueueAction(refreshPasture);
             }
 
             DestoryCharacter destoryCharacter = new DestoryCharacter
@@ -461,7 +563,7 @@ public enum PastureState
     平常, 损毁,
 }
 
-public struct Pasture : INativeData
+public struct Pasture : INativeData,IReferenceData
 {
     public int instanceId;
     public int linkItem;
@@ -473,6 +575,7 @@ public struct Pasture : INativeData
     public int waterPackage;
     public int productPackage;
     public int level;
+    public int index;
     public int animalCase;
     public int linkRoom;
     public int Key => instanceId;
@@ -484,8 +587,7 @@ public struct Pasture : INativeData
 }
 
 public struct Animal : INativeData
-{
-    public int mapId;
+{ 
     public int instaceId;
     public int pasture;
     public int dataId;

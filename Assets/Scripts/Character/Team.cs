@@ -162,8 +162,13 @@ public class TeamManager : Singleton<TeamManager>
     void LeaveTeam(LeaveTeam leaveTeam)
     {
         bool result = LeaveTeam(leaveTeam.teamCharacterId);
-        if (leaveTeam.setResult != null)
+        RefreshAnimalPos refreshAnimalPos = new RefreshAnimalPos
         {
+            animalId = leaveTeam.teamCharacterId
+        };
+        GameActionManager.instance.QueueAction(refreshAnimalPos);
+        if (leaveTeam.setResult != null)
+        { 
             leaveTeam.setResult(result);
         }
     }
