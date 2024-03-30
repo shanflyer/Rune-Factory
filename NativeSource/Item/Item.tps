@@ -210,6 +210,7 @@
             <key type="filename">fish/鹦鹉螺.png</key>
             <key type="filename">fish/龙虾.png</key>
             <key type="filename">food0.png</key>
+            <key type="filename">鸡.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

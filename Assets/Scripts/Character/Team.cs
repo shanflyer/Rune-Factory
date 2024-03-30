@@ -161,7 +161,11 @@ public class TeamManager : Singleton<TeamManager>
 
     void LeaveTeam(LeaveTeam leaveTeam)
     {
-        LeaveTeam(leaveTeam.teamCharacterId);
+        bool result = LeaveTeam(leaveTeam.teamCharacterId);
+        if (leaveTeam.setResult != null)
+        {
+            leaveTeam.setResult(result);
+        }
     }
     private void TryTeamLeaderSetCoordinate(TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate)
     {

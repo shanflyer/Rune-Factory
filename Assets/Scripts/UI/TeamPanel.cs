@@ -68,9 +68,19 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     {
         LeaveTeam leaveTeam = new LeaveTeam
         {
-            teamCharacterId = SelectCharacterId
+            teamCharacterId = SelectCharacterId,
+            setResult= SetResult
         };
         GameActionManager.instance.QueueAction(leaveTeam);
+
+        void SetResult(bool result)
+        {
+            if (result)
+            {
+                var myTeamInfo = TeamManager.instance.GetMyTeamCharacterInfo();
+                InitReferenceData(myTeamInfo);
+            }
+        }
     }
     int SelectCharacterId = 0;
     void SelectAction(CharacterInformationData characterInformationData,bool select)
@@ -78,11 +88,11 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         SelectCharacterId = characterInformationData.characterId;
         if (characterInformationData.characterId == CharacterManager.instance.controllerCharacter.instanceId)
         {
-            operatePanel.localScale = Vector3.zero;
+            operatePanel.gameObject.SetActive(false);
         }
         else
         {
-            operatePanel.localScale = Vector3.one;
+            operatePanel.gameObject.SetActive(true);
         }
         UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
     }

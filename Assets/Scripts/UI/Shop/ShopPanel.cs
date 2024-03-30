@@ -157,8 +157,8 @@ public class ShopPanel : GamePanel<ShopGroup>
                 {
                     JoinTeam joinTeam = new JoinTeam
                     {
-                        characterId = controllerCharacter.instanceId,
-                        teamCharacterId = animalInstanceId
+                        teamCharacterId = controllerCharacter.instanceId,
+                         characterId= animalInstanceId
                     };
                     GameActionManager.instance.QueueAction(joinTeam);
                 }

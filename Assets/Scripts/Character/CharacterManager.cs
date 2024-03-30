@@ -509,6 +509,14 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         ints.Add(character.instanceId);
         characterInstances[creatCharacter.characterId] = ints;
+        if (creatCharacter.setResult != null)
+        {
+            creatCharacter.setResult(true);
+        }
+        if (creatCharacter.setValue != null)
+        {
+            creatCharacter.setValue(character.instanceId);
+        }
     }
 
     private void AddCharacter(Character character)

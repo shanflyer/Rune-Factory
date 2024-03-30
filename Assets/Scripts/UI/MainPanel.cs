@@ -34,11 +34,11 @@ public class MainPanel : GamePanel<IReferenceData>
         var playerTeam = TeamManager.instance.playerTeam;
         if (playerTeam != null && playerTeam.Teamers.Count > 1)
         {
-            TeamButton.transform.localScale = Vector3.one;
+            TeamButton.gameObject.SetActive(true);
         }
         else
         {
-            TeamButton.transform.localScale = Vector3.zero;
+            TeamButton.gameObject.SetActive(false);
         }
     }
     protected override void Awake()
@@ -63,11 +63,11 @@ public class MainPanel : GamePanel<IReferenceData>
         var playerTeam = TeamManager.instance.playerTeam;
         if (playerTeam != null && playerTeam.Teamers.Count > 1)
         {
-            TeamButton.transform.localScale = Vector3.one;
+            TeamButton.gameObject.SetActive(true);
         }
         else
         {
-            TeamButton.transform.localScale = Vector3.zero;
+            TeamButton.gameObject.SetActive(false);
         }
         return base.InitData(dataKey); 
     }

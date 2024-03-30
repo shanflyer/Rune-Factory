@@ -222,7 +222,16 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     {
         base.InitReferenceData(v);
         data = v;
-        v.head.SetImageSprite(characterHead); 
+        if (v.head)
+        {
+            v.head.SetImageSprite(characterHead);
+        }
+        else
+        {
+            characterHead.sprite = v.icon;
+            characterHead.SetNativeSize();
+        }
+      
         characterId = v.characterId;
         CharacterName.text = v.name;
         State.text = v.NPCState.ToString();
@@ -247,7 +256,15 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         LevelValue.text = v.level.ToString();
         var spriteRenference  = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>($"Reference/AttributeType{(int)v.attributeType}");
-        Attribute.sprite = spriteRenference.sprite;
+        if (spriteRenference == null)
+        {
+            Attribute.sprite = null;
+        }
+        else
+        {
+            Attribute.sprite = spriteRenference.sprite;
+        }
+       
         WeaponBox.InitData(new Equipment
         {
             characterId = characterId,

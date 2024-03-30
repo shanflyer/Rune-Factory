@@ -1,7 +1,9 @@
 
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 [System.Serializable]
 public enum ItemType
@@ -15,6 +17,7 @@ public enum ItemType
     收集物 = 5,  
     工具=6,
     家具 = 10, 
+    动物=11
 }
 public enum ShopMoneyType
 {
