@@ -39,6 +39,7 @@ public class PastureManager : Singleton<PastureManager>
         GameActionManager.instance.AddListener<SetAnimalToPasture>(SetAnimalToPasture);
         GameActionManager.instance.AddListener<SetPastureIndex>(SetPastureIndex);
         GameActionManager.instance.AddListener<RefreshAnimalPos>(RefreshAnimalPos);
+        GameActionManager.instance.AddListener<LinkPasturePackage>(LinkPasturePackage);
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
@@ -297,6 +298,36 @@ public class PastureManager : Singleton<PastureManager>
         if(pastures.GetData(setPastureIndex.pastureId,out var pasture))
         {
             pasture.index = setPastureIndex.index;
+            pastures.SetData(pasture);
+        }
+    }
+    void LinkPasturePackage(LinkPasturePackage linkPasturePackage)
+    {
+        if(pastures.GetData(linkPasturePackage.pastureInstance,out var pasture))
+        {
+            ChangePackageInnstance changeFood = new ChangePackageInnstance
+            {
+                oldInstanceId = pasture.foodPackage,
+                newInstanceId = linkPasturePackage.foodPackage
+            };
+            GameActionManager.instance.QueueAction(changeFood, true);
+
+            ChangePackageInnstance changeWaterPackage = new ChangePackageInnstance
+            {
+                oldInstanceId = pasture.waterPackage,
+                newInstanceId = linkPasturePackage.waterPackage
+            };
+            GameActionManager.instance.QueueAction(changeWaterPackage, true);
+
+            ChangePackageInnstance changeProduct = new ChangePackageInnstance
+            {
+                oldInstanceId = pasture.productPackage,
+                newInstanceId = linkPasturePackage.productPackage
+            };
+            GameActionManager.instance.QueueAction(changeProduct, true);
+            pasture.waterPackage = linkPasturePackage.waterPackage;
+            pasture.foodPackage = linkPasturePackage.foodPackage;
+            pasture.productPackage = linkPasturePackage.productPackage;
             pastures.SetData(pasture);
         }
     }

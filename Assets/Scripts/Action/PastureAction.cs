@@ -303,6 +303,37 @@ public struct SetPastureIndex : GameAction
     }
 }
 
+public struct LinkPasturePackage : GameAction
+{
+    public int pastureInstance;
+    public int foodPackage, waterPackage, productPackage;
+    
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            pastureInstance = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count > 1)
+        {
+            foodPackage = int.Parse(parameters[1].value);
+        }
+        if (parameters.Count > 2)
+        {
+            waterPackage = int.Parse(parameters[2].value);
+        }
+        if (parameters.Count > 3)
+        {
+            productPackage = int.Parse(parameters[3].value);
+        }
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TryCreatPasture : GameAction
 {
     public int roomId;

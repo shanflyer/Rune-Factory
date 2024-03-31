@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class PackageManager : Singleton<PackageManager>
-{
-    private MyInstance myInstance;
+{ 
     private List<int> playerPackages = new List<int>();
 
     public void AddPlayerPackage(int id)
@@ -125,8 +124,7 @@ public class PackageManager : Singleton<PackageManager>
 
     public override void Init()
     {
-        base.Init();
-        myInstance = new MyInstance();
+        base.Init(); 
         GameActionManager.instance.AddListener<ItemUseAction>(UsetItem);
         GameActionManager.instance.AddListener<CreatRuntimePackage>(CreatRuntimePackage);
         GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
@@ -144,6 +142,17 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<SetItemValue>(SetItemValue);
         GameActionManager.instance.AddListener<CheckCharacterItemValue>(CheckCharacterItemValue);
         GameActionManager.instance.AddListener<CheckCharacterPackageFull>(CheckCharacterPackageFull);
+        GameActionManager.instance.AddListener<ChangePackageInnstance>(ChangePackageInnstance);
+    }
+
+    void ChangePackageInnstance(ChangePackageInnstance changePackageInnstance)
+    {
+        if(gamePackages.TryGetValue(changePackageInnstance.oldInstanceId,out var gamePackage))
+        {
+            gamePackage.instanceId = changePackageInnstance.newInstanceId;
+            gamePackages.Remove(changePackageInnstance.oldInstanceId);
+            gamePackages.Add(gamePackage.instanceId, gamePackage);
+        }
     }
 
     public void CheckCharacterPackageFull(CheckCharacterPackageFull checkCharacterPackageFull)
@@ -253,7 +262,7 @@ public class PackageManager : Singleton<PackageManager>
 
     private async void CreatPackage(CreatPackage creatPackage)
     {
-        int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level);
+        int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level,creatPackage.instanceId);
        
         if (GameManager.instance.GetPlayerBoxId() == instanceId)
         {
@@ -628,10 +637,10 @@ public class PackageManager : Singleton<PackageManager>
         runtimePackageRuntimes.Add(creatRuntimePackage.key, creatRuntimePackage.instanceId);
     }
 
-    public async Task<int> CreatGamePackage(int dataId, int level)
+    public async Task<int> CreatGamePackage(int dataId, int level,int instanceId=0)
     {
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId);
-        int packageInstaceId = myInstance.CreatInstanceId();
+        int packageInstaceId =instanceId==0? WorldMapManager.instance.GetInstanceFromItem():instanceId;
         int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
         GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstaceId,
              level, packageSetData.id, packageSetData.packageType, packageSetData.singleCase);
@@ -651,7 +660,7 @@ public class PackageManager : Singleton<PackageManager>
 
     public int CreatGamePackage(int caseCount, string name = null, PackageType packageType = PackageType.全部)
     {
-        int packageInstaceId = myInstance.CreatInstanceId();
+        int packageInstaceId = WorldMapManager.instance.GetInstanceFromItem();
         GamePackage gamePackage = new GamePackage(caseCount, name, packageInstaceId, packageType: packageType);
 
         gamePackages.Add(packageInstaceId, gamePackage);

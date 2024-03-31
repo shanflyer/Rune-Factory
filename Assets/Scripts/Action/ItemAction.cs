@@ -201,6 +201,32 @@ public struct RemovePackageItem : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct ChangePackageInnstance : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int oldInstanceId;
+    public int newInstanceId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 2)
+        {
+            oldInstanceId = int.Parse(parameters[0].value);
+            newInstanceId = int.Parse(parameters[1].value); 
+        }
+        if (source != 0 && source != int.MinValue)
+        {
+            oldInstanceId = source;
+        }
+        if (target != 0 && target != int.MinValue)
+        {
+            newInstanceId = target;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+
+}
 
 public struct AddPackageItem : GameAction
 {
@@ -228,6 +254,7 @@ public struct CreatPackage : GameAction
     public SetResult setResult { get; set; }
     public int packageDataId;
     public int level;
+    public int instanceId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -236,6 +263,10 @@ public struct CreatPackage : GameAction
         {
             packageDataId =int.Parse(parameters[0].value);
             level = int.Parse(parameters[1].value);
+        }
+        if (parameters.Count >= 3)
+        {
+            instanceId = int.Parse(parameters[2].value);
         }
         this.setValue = setValue;
         this.setResult = setResult;
