@@ -86,6 +86,11 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         eventReferenceDatas.Add(targetReferenceData);
         var GameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(NPCFunctionData.OperateAction);
         GameEventManager.instance.AddGameEvent(GameEventData, eventReferenceDatas);
+        if (NPCFunctionData.closeTalk)
+        {
+            UIManager.instance.CloseGamePanel<TalkPanel>();
+            UIManager.instance.CloseGamePanel<Team>();
+        }
     }
 
     public override void InitReferenceData(NPCTalkOperateData v)

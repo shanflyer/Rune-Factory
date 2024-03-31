@@ -13,6 +13,7 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     public string npcFunctionName;
     public string iconName;
     public Sprite icon;
+    public bool closeTalk;
     public int checkAction;
     public int OperateAction;
     public string GetKey()

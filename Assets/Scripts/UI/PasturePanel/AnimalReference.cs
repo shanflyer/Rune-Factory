@@ -34,12 +34,12 @@ public class AnimalReference : UIObjReference<MyInt>
             }
         });
     }
-    public override Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
     {
+        base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         Character character = CharacterManager.instance.GetCharacter(data.value);
         icon.sprite = character.characterData.icon;
-        icon.rectTransform.sizeDelta= GameCommon.SetImageSize(icon.sprite, new Vector2(48, 48));
-        return base.InitData(t, SelectAction, toggleGroup);
+        icon.rectTransform.sizeDelta= GameCommon.SetImageSize(icon.sprite, new Vector2(48, 48)); 
     }
 }

@@ -36,6 +36,16 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         leaveButton = FindChildGameObject<Button>("Leave");
         operatePanel = FindChildGameObject("Operate");
     }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<RefreshTeam>(RefreshTeam);
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
+    }
     void TalkAction()
     {
         Character character = CharacterManager.instance.GetCharacter(SelectCharacterId);
@@ -72,8 +82,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
             { 
                 LeaveTeam leaveTeam = new LeaveTeam
                 {
-                    teamCharacterId = SelectCharacterId,
-                    setResult = SetResult
+                    teamCharacterId = SelectCharacterId, 
                 };
                 GameActionManager.instance.QueueAction(leaveTeam);
             },null);
@@ -83,20 +92,30 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
 
             LeaveTeam leaveTeam = new LeaveTeam
             {
-                teamCharacterId = SelectCharacterId,
-                setResult = SetResult
+                teamCharacterId = SelectCharacterId, 
             };
             GameActionManager.instance.QueueAction(leaveTeam);
         } 
-        void SetResult(bool result)
+        
+    }
+    public override void Close()
+    {
+        UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
+        base.Close();
+    }
+    void RefreshTeam(RefreshTeam refreshTeam)
+    {
+        var myTeamInfo = TeamManager.instance.GetMyTeamCharacterInfo();
+        if (myTeamInfo.characterInformationDatas.Count <= 1)
         {
-            if (result)
-            {
-                var myTeamInfo = TeamManager.instance.GetMyTeamCharacterInfo();
-                InitReferenceData(myTeamInfo); 
-            }
+            Close();
+        }
+        else
+        {
+            InitReferenceData(myTeamInfo);
         }
     }
+
     int SelectCharacterId = 0;
     void SelectAction(CharacterInformationData characterInformationData,bool select)
     {

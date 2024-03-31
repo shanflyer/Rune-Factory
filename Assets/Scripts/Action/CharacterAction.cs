@@ -41,7 +41,6 @@ public struct TryTeamLeaderMove : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-
 public struct TryTeamLeaderStop : GameAction
 {
     public int characterId;
@@ -86,7 +85,7 @@ public struct RefreshTeam : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-
+ 
 public struct LeaveTeam : GameAction
 {
     public int teamCharacterId;

@@ -172,13 +172,12 @@ public class PastureManager : Singleton<PastureManager>
             if(pastures.GetData(animal.pasture, out var pasture))
             {
                 int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
-                if (nextCoordinate.x == int.MinValue)
+                if (nextCoordinate.x != int.MinValue)
                 {
                     SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
                     {
                         characterId = animal.instaceId,
-                        coordinate = new int3(pasture.linkRoom,
-                       nextCoordinate.xy)
+                        coordinate = new int3(nextCoordinate.xy, pasture.linkRoom)
                     };
                     GameActionManager.instance.QueueAction(setCharacterCoordinate, true);
                 }
@@ -204,13 +203,12 @@ public class PastureManager : Singleton<PastureManager>
                 if (SetAnimalToPasture.refreshPos)
                 {
                     int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
-                    if (nextCoordinate.x == int.MinValue)
+                    if (nextCoordinate.x != int.MinValue)
                     {
                         SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
                         {
                             characterId = animal.instaceId,
-                            coordinate = new int3(pasture.linkRoom,
-                           nextCoordinate.xy)
+                            coordinate = new int3(nextCoordinate.xy, pasture.linkRoom)
                         };
                         GameActionManager.instance.QueueAction(setCharacterCoordinate, true);
                     }
@@ -218,6 +216,7 @@ public class PastureManager : Singleton<PastureManager>
 
                 pasture.animals.Add(SetAnimalToPasture.animalId);
                 animal.pasture = pasture.instanceId;
+                animals.SetData(animal);
                 pastures.SetData(pasture);
                 RefreshPasture refreshPasture = new RefreshPasture
                 {

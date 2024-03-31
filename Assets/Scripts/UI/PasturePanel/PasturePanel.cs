@@ -73,6 +73,8 @@ public class PasturePanel : GamePanel<MyListInt>
                 teamCharacterId = animalId
             };
             GameActionManager.instance.QueueAction(leaveTeam);
+            animalList.intList.Remove(animalId);
+            RefreshAnimalList();
         } 
     }
 
@@ -230,7 +232,7 @@ public class PasturePanel : GamePanel<MyListInt>
             var p = allPastures[i];
             if (p.index != 0)
             {
-                pastureInfos[i].InitData(p, SelectPasture); 
+                pastureInfos[p.index].InitData(p, SelectPasture); 
             }
         }  
         pastureInfos[0].SelectDefault();

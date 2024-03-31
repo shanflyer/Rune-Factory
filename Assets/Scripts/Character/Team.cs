@@ -171,6 +171,7 @@ public class TeamManager : Singleton<TeamManager>
         { 
             leaveTeam.setResult(result);
         }
+        GameActionManager.instance.QueueAction(refreshTeam);
     }
     private void TryTeamLeaderSetCoordinate(TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate)
     {
