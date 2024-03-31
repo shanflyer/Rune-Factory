@@ -1,5 +1,10 @@
-﻿using System;
-using System.Collections.Generic; 
+﻿using BehaviorDesigner.Runtime;
+using System;
+using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 using UnityEngine;
 
 public class AnimalData : ScriptableObject, IGameData
@@ -13,6 +18,8 @@ public class AnimalData : ScriptableObject, IGameData
     public int produceCycle;
     public int product;
     public int cycleStage;
+    public string behavior;
+    public ExternalBehaviorTree externalBehavior;
 
 #if UNITY_EDITOR
     public string GrowthStageStr;
@@ -47,6 +54,8 @@ public class AnimalData : ScriptableObject, IGameData
                 growthStages.Add(growthStage);
             }
         }
+
+        externalBehavior= AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>($"{EditorDataPath.npcBehaviorPath}{behavior}.asset");
     }
 #endif
 }

@@ -88,6 +88,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     } 
     public override void Show(int layer = -1)
     {
+        base.Show();
         if (changeInputModel) 
         {
             InputManager.instance.SwitchInputMap(true);
@@ -107,6 +108,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     }
     public override void Close()
     {
+        base.Close();
         if (changeInputModel)
         {
             InputManager.instance.SwitchInputMap(false);

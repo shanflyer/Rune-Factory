@@ -62,6 +62,16 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
                     }
                 }
             }
+            if (costSuccess)
+            {
+                for (int i = 0; i < itemCostEventData.items.Count; i++)
+                {
+                    int3 costValue = itemCostEventData.items[i].value;
+                    int itemId = costValue.x;
+                    int costCount = costValue.y;
+                    PackageManager.instance.RemovePlayerPackageItem(itemId, costCount); 
+                }
+            }
             
             if (itemCostEventData.afterAction != null)
             {

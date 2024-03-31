@@ -183,7 +183,11 @@ public class UIManager : Singleton<UIManager>
                 gamePanels.Remove(type);
                 return;
             }
-            gamePanel.Close();
+            if (gamePanel.show)
+            {
+                gamePanel.Close();
+            }
+           
         }
     }
 

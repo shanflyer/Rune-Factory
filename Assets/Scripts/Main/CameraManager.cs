@@ -57,7 +57,15 @@ public class CameraManager : Singleton<CameraManager>
         confiner2D.enabled = false;
         confiner2D.m_BoundingShape2D = polygonCollider2D;
         confiner2D.enabled = true;
+        confiner2D.InvalidateCache();
         GameTimerController.instance.DeleyActionMain(100, () =>
+        {
+            confiner2D.enabled = true;
+            confiner2D.InvalidateCache();
+            confiner2D.enabled = false;
+            confiner2D.enabled = true;
+        });
+        GameTimerController.instance.DeleyActionMain(200, () =>
         {
             confiner2D.InvalidateCache();
         });

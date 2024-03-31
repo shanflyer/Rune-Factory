@@ -347,12 +347,20 @@ public class MapCellController : Singleton<MapCellController>
         {
             if (mapObjBarriers.Count < cellValue.Length)
             {
-                HashSet<int> tempCells = cellValue.ToHashSet();
-                HashSet<int> barrierCells = mapObjBarriers.GetKeyArray(Allocator.Temp).ToHashSet();
-                tempCells.ExceptWith(barrierCells);
-                var cells = tempCells.ToArray();
-                int index = GameRandom.RandomInt(0, cells.Length);
-                int cell = cells[index];
+                var tempCells = cellValue.ToList(); 
+
+                List<int> walkCells = new List<int>();
+                for(int i = tempCells.Count-1; i >= 0; i--)
+                {
+                    if (tempCells[i] == 1&& !mapObjBarriers.ContainsKey(i))
+                    {
+                        walkCells.Add(i);
+                    }
+                }
+
+                 
+                int index = GameRandom.RandomInt(0, walkCells.Count);
+                int cell = walkCells[index];
                 return GetCoordinate(cell);
             }
 
@@ -413,7 +421,7 @@ public class MapCellController : Singleton<MapCellController>
         public int2 GetCoordinate(int index)
         {
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
-            return new int2(index / perRowGridCount, index % perRowGridCount);
+            return new int2(index / perRowGridCount+startCoordinate.x, index % perRowGridCount+startCoordinate.y);
         }
 
         public int GetCoordinateIndex(int x, int y)

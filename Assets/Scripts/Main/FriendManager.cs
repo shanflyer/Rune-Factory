@@ -67,10 +67,14 @@ public class FriendManager : Singleton<FriendManager>
     }
     private void NewDay(NewDay newDay)
     {
-        foreach(var key in friendAdd.Keys)
+        if (friendAdd.Count > 0)
         {
-            friendAdd[key] = GameCommon.friendAddCount;
+            foreach (var key in friendAdd.Keys)
+            {
+                friendAdd[key] = GameCommon.friendAddCount;
+            }
         }
+       
     }
     private void GiveGift(GiveGift giveGift)
     {

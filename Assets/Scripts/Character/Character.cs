@@ -321,7 +321,7 @@ public partial class Character
         dataId = characterData.id;
         professionId = characterData.profession;
         name = characterData.characterName;
-        behavior = characterData.behavior;
+        //behavior = characterData.behavior;
         SetLevel(1, true);
         CreatCharacterPackage(overridePackage);
     }
@@ -581,7 +581,7 @@ public partial class Character
         }
     }
 
-    public string behavior;
+    //public string behavior;
 
     public int moveEnumeratorId;
     private CharacterProperty nowProperty;

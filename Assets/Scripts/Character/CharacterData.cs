@@ -17,7 +17,6 @@ public class CharacterData : ScriptableObject, IGameData
     public GameObject obj;
     public int profession;
     public int level;
-    public string behavior;
     public string fightBehavior;
     public int packageId;
     public AttributeType attributeType;

@@ -175,7 +175,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             fixedPos = mapRoomData.fixedCameraPos,
             flowCameraType = mapRoomData.flowCameraType
         };
-        GameActionManager.instance.QueueAction(setFixedCamera);
+        GameActionManager.instance.QueueAction(setFixedCamera,true);
 
         if (!string.IsNullOrEmpty(mapRoomData.dawnEnvironmentDataName))
         {

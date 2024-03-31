@@ -51,6 +51,7 @@ public class InformationController : Singleton<InformationController>
                 InformationShowPanel =await UIManager.instance.GetGamePanel<InformationShowPanel>(true);
             }
             InformationShowPanel.SetInfo(information);
+            InformationShowPanel.Show();
         }
         else
         {
@@ -81,6 +82,7 @@ public class InformationController : Singleton<InformationController>
         }
         if (PromptShow&& PromptPanel!=null)
         {
+            PromptPanel.Show();
             PromptPanel.InitData(information);
             GameTimerController.instance.DeleyActionMain((int)(GameCommon.PromptTime*1000), ClosePromptPanel);
         }

@@ -737,6 +737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 7159650092544701198}
+  show: 0
   TitleText: {fileID: 7783655350293885924}
   MoneyImage0: {fileID: 3436799698566175703}
   MoneyImage1: {fileID: 919012641062905210}
@@ -1142,8 +1143,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 26.858, y: 1.071}
-  m_SizeDelta: {x: 240.8346, y: 28.059}
+  m_AnchoredPosition: {x: 22.642988, y: -2.7}
+  m_SizeDelta: {x: 249.2646, y: 28.059}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &373941868119124694
 CanvasRenderer:
@@ -1175,16 +1176,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1223456789/123456789
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7fe2d9d77c3cbee478ff2a4e673f2766, type: 2}
-  m_sharedMaterial: {fileID: 5700984821837086658, guid: 7fe2d9d77c3cbee478ff2a4e673f2766,
+  m_fontAsset: {fileID: 11400000, guid: be5f2ca715dc20644930e1204db37478, type: 2}
+  m_sharedMaterial: {fileID: 5700984821837086658, guid: be5f2ca715dc20644930e1204db37478,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279656481
-  m_fontColor: {r: 0.1306723, g: 0.3773585, b: 0.087219656, a: 1}
+    rgba: 4278255398
+  m_fontColor: {r: 0.14864874, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1570,6 +1571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   icon: {fileID: 6927835865306702065}
   countText: {fileID: 2791639600569112526}
 --- !u!1 &8345454489159912262
@@ -1683,7 +1685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000050545, y: -130}
+  m_AnchoredPosition: {x: -13.8, y: -130}
   m_SizeDelta: {x: 294.55, y: 30.201}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8877139874631224644

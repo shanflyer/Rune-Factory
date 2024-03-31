@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro; 
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class PasturePanel : GamePanel<MyListInt>
@@ -74,7 +75,7 @@ public class PasturePanel : GamePanel<MyListInt>
             };
             GameActionManager.instance.QueueAction(leaveTeam);
             animalList.intList.Remove(animalId);
-            RefreshAnimalList();
+            RefreshAnimalList(); 
         } 
     }
 

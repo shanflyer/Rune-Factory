@@ -702,8 +702,9 @@
             <key type="filename">书堆_normal.png</key>
             <key type="filename">外窗_61.png</key>
             <key type="filename">外窗_61_normal.png</key>
-            <key type="filename">收获篮_03.png</key>
-            <key type="filename">收获篮_03_normal.png</key>
+            <key type="filename">收获篮_03_0_normal.png</key>
+            <key type="filename">收获篮_03_1.png</key>
+            <key type="filename">收获篮_03_1_normal.png</key>
             <key type="filename">楼梯_normal.png</key>
             <key type="filename">楼梯下2.png</key>
             <key type="filename">楼梯下2_normal.png</key>
@@ -1184,10 +1185,12 @@
             <key type="filename">家具_95_normal.png</key>
             <key type="filename">家具_96_normal.png</key>
             <key type="filename">家具_97_normal.png</key>
-            <key type="filename">收获篮_01.png</key>
-            <key type="filename">收获篮_01_normal.png</key>
-            <key type="filename">收获篮_02.png</key>
-            <key type="filename">收获篮_02_normal.png</key>
+            <key type="filename">收获篮_01_0_normal.png</key>
+            <key type="filename">收获篮_01_1.png</key>
+            <key type="filename">收获篮_01_1_normal.png</key>
+            <key type="filename">收获篮_02_0_normal.png</key>
+            <key type="filename">收获篮_02_1.png</key>
+            <key type="filename">收获篮_02_1_normal.png</key>
             <key type="filename">教堂建筑_28_normal.png</key>
             <key type="filename">教堂建筑_37_normal.png</key>
             <key type="filename">柴堆0.png</key>
@@ -2318,6 +2321,8 @@
             <key type="filename">flower_43.png</key>
             <key type="filename">flower_65.png</key>
             <key type="filename">圆凳1.png</key>
+            <key type="filename">收获篮_01_0.png</key>
+            <key type="filename">收获篮_02_0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.90625</point_f>
@@ -3663,6 +3668,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">收获篮_03_0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.90625</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,8,32,16</rect>
+                <key>scale9Paddings</key>
+                <rect>16,8,32,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">教堂建筑_01.png</key>
             <key type="filename">教堂建筑_01_normal.png</key>
             <key type="filename">教堂建筑_02.png</key>
@@ -4113,22 +4133,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">槽.png</key>
-            <key type="filename">槽_normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,14,12,28</rect>
-                <key>scale9Paddings</key>
-                <rect>6,14,12,28</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">横梁.png</key>
             <key type="filename">横梁_normal.png</key>
             <struct type="IndividualSpriteSettings">
@@ -4172,22 +4176,6 @@
                 <rect>8,16,16,32</rect>
                 <key>scale9Paddings</key>
                 <rect>8,16,16,32</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">水槽.png</key>
-            <key type="filename">水槽_normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>14,6,28,13</rect>
-                <key>scale9Paddings</key>
-                <rect>14,6,28,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

@@ -51,8 +51,16 @@ public class TalkManager : Singleton<TalkManager>
             for (int i = 0; i < characterData.functionIds.Count; i++)
             {
                 int funtionId = characterData.functionIds[i];
-                NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
-                NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                if (funtionId == GameCommon.setTeamerFunctionId&&TeamManager.instance.playerTeam.CheckCharacter(characterId))
+                {
+
+                }
+                else
+                {
+                    NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
+                    NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                }
+                
             }
         }
 

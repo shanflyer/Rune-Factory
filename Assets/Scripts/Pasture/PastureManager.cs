@@ -224,6 +224,8 @@ public class PastureManager : Singleton<PastureManager>
                 };
                 GameActionManager.instance.QueueAction(refreshPasture);
                 SetAnimalToPasture.setResult(true);
+
+                InformationController.instance.AddInformation($"+{animal.name}+已经分配到对应牧场~", PromptShow: true);
             }
             return;
         }
@@ -470,6 +472,7 @@ public class PastureManager : Singleton<PastureManager>
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(tryCreatAnimal.dataId);
         Animal animal = new Animal
         {
+            name=animalData.animalName,
             animalState = AnimalState.正常,
             dataId = tryCreatAnimal.dataId, 
             linkCharacterData = animalData.linkCharacter
@@ -505,6 +508,11 @@ public class PastureManager : Singleton<PastureManager>
                     };
                     GameActionManager.instance.QueueAction(refreshPasture);
                 }
+
+                if (animalData.externalBehavior!=null)
+                {
+                    CharacterBehaviorManager.instance.AddBehavior(animal.instaceId, animalData.externalBehavior);
+                }
             }
             tryCreatAnimal.setValue(value);
         }
@@ -527,6 +535,8 @@ public class PastureManager : Singleton<PastureManager>
                 };
                 GameActionManager.instance.QueueAction(refreshPasture);
             }
+
+            InformationController.instance.AddInformation($"+{animal.name}+已经回归到大自然", true, true);
 
             DestoryCharacter destoryCharacter = new DestoryCharacter
             {
@@ -588,6 +598,7 @@ public struct Pasture : INativeData,IReferenceData
 public struct Animal : INativeData
 { 
     public int instaceId;
+    public FixedString128Bytes name;
     public int pasture;
     public int dataId;
     public int growthStage;

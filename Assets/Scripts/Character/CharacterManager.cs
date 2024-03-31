@@ -516,7 +516,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (creatCharacter.setValue != null)
         {
             creatCharacter.setValue(character.instanceId);
-        }
+        } 
     }
 
     private void AddCharacter(Character character)
