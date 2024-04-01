@@ -115,7 +115,7 @@ public struct ShowMultiPackagePanel : GameAction
             packageId0 = int.Parse(parameters[0].value);
             packageId1 = int.Parse(parameters[1].value);
         }
-        if (packageId0 == 0)
+        if (packageId0 == 0&&packageId0!=int.MinValue)
         {
             if (source == 0)
             {
@@ -126,7 +126,7 @@ public struct ShowMultiPackagePanel : GameAction
                 packageId0 = source;
             }
         }
-        if (packageId1 == 0)
+        if (packageId1 == 0 && packageId1 != int.MinValue)
         {
             if (target == 0)
             {

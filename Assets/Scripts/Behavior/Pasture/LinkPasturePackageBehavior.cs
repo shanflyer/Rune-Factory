@@ -7,7 +7,7 @@ using Unity.Mathematics;
 public class LinkPasturePackageBehavior : Action
 {
     [SerializeField]
-    private SharedInt pastureId;
+    private SharedInt pastureInstance;
     [SerializeField]
     private SharedInt roomId;
     [SerializeField]
@@ -26,7 +26,7 @@ public class LinkPasturePackageBehavior : Action
         }
         LinkPasturePackage linkPasturePackage = new LinkPasturePackage
         {
-            pastureInstance = pastureId.Value,
+            pastureInstance = pastureInstance.Value,
             foodPackage = foodPackageId,
             waterPackage = waterPackageId,
             productPackage = productPackageId

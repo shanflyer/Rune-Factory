@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: "\u6253\u5F00\u8054\u88C5\u80CC\u5305"
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(-9537.413,-0.2881794)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(0,160)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GetCharacterPackageBehavior","NodeData":{"Offset":"(-155.953125,177.668671)"},"ID":2,"Name":"\u83b7\u53d6\u89d2\u8272\u80cc\u5305","Instant":true,"SharedIntcharacterId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"SharedIntpackageId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"PackageId","IsShared":true,"Int32mValue":-2147483648}},{"Type":"RunGameActions","NodeData":{"Offset":"(-7.300762,258.749756)"},"ID":3,"Name":"\u6253\u5f00\u754c\u9762","Instant":true,"Booleanimmediately":false,"SharedIntsource":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"PackageId","IsShared":true,"Int32mValue":-2147483648},"SharedInttarget":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"TargetItem","IsShared":true,"Int32mValue":-2147483648},"SharedIntsharedSetIntValue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"List`1otherDatas":[],"List`1dynamicParameterDatas":[],"List`1gameActionDatas":[0],"BooleanwaitResult":false},{"Type":"GameEventEnd","NodeData":{"Offset":"(180,160)"},"ID":4,"Name":"\u4e8b\u4ef6\u7ed3\u675f\u79fb\u9664","Instant":true,"SharedIntgameEventId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648}}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"TargetItem","IsShared":true,"Int32mValue":-2147483648},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"PackageId","IsShared":true,"Int32mValue":-2147483648}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects:
+        - {fileID: 11400000, guid: 0e5503edfbac83744ba224682df2412d, type: 2}
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.7

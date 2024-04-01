@@ -305,6 +305,7 @@ public class PastureManager : Singleton<PastureManager>
     {
         if(pastures.GetData(linkPasturePackage.pastureInstance,out var pasture))
         {
+           
             ChangePackageInnstance changeFood = new ChangePackageInnstance
             {
                 oldInstanceId = pasture.foodPackage,
