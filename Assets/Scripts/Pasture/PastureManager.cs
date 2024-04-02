@@ -40,6 +40,7 @@ public class PastureManager : Singleton<PastureManager>
         GameActionManager.instance.AddListener<SetPastureIndex>(SetPastureIndex);
         GameActionManager.instance.AddListener<RefreshAnimalPos>(RefreshAnimalPos);
         GameActionManager.instance.AddListener<LinkPasturePackage>(LinkPasturePackage);
+        GameActionManager.instance.AddListener<TrySetItemToPastureBox>(TrySetItemToPastureBox);
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
@@ -190,6 +191,7 @@ public class PastureManager : Singleton<PastureManager>
         }
     }
 
+   
     private void SetAnimalToPasture(SetAnimalToPasture SetAnimalToPasture)
     {
         if (pastures.GetData(SetAnimalToPasture.pastureId, out var pasture) &&
@@ -233,6 +235,19 @@ public class PastureManager : Singleton<PastureManager>
         SetAnimalToPasture.setResult(false);
     }
 
+    void TrySetItemToPastureBox(TrySetItemToPastureBox trySetItemToPastureBox)
+    {
+        if(pastures.GetData(trySetItemToPastureBox.pastureId,out var pasture))
+        {
+            AddPackageItem addPackageItem = new AddPackageItem
+            {
+                itemDataId = trySetItemToPastureBox.itemId,
+                itemCount = trySetItemToPastureBox.itemCount,
+                packageId = pasture.productPackage
+            };
+            GameActionManager.instance.QueueAction(addPackageItem);
+        }
+    }
     private async void AnimalCostFood(AnimalCostFood animalCostFood)
     { 
         if (pastures.GetData(animalCostFood.pastureId, out var pasture))
@@ -313,12 +328,7 @@ public class PastureManager : Singleton<PastureManager>
             };
             GameActionManager.instance.QueueAction(changeFood, true);
 
-            ChangePackageInnstance changeWaterPackage = new ChangePackageInnstance
-            {
-                oldInstanceId = pasture.waterPackage,
-                newInstanceId = linkPasturePackage.waterPackage
-            };
-            GameActionManager.instance.QueueAction(changeWaterPackage, true);
+          
 
             ChangePackageInnstance changeProduct = new ChangePackageInnstance
             {
@@ -654,6 +664,7 @@ public struct Animal : INativeData
             if (animalState == AnimalState.饥饿)
             {
                 animalState = AnimalState.死亡;
+                InformationController.instance.AddInformation($"+{name}+已死亡!");
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {
                     animalId = instaceId,
@@ -688,6 +699,7 @@ public struct Animal : INativeData
             else
             {
                 animalState = AnimalState.死亡;
+                InformationController.instance.AddInformation($"+{name}+已死亡!");
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {
                     animalId = instaceId,
@@ -703,21 +715,14 @@ public struct Animal : INativeData
             }
             if (animalState != AnimalState.饥饿)
             {
-                Item item = new Item
-                {
-                    dataId = animalData.product,
-                    count = 1
-                };
+                 
                 TrySetItemToPastureBox trySetItemToPastureBox = new TrySetItemToPastureBox
                 {
-                    item = item,
-                    pastureId = pasture,
-                    setResult = SetResult
+                    itemId=animalData.product,
+                    itemCount=animalData.productCount,
+                    pastureId = pasture, 
                 };
-                GameActionManager.instance.QueueAction(trySetItemToPastureBox);
-                void SetResult(bool result)
-                {
-                }
+                GameActionManager.instance.QueueAction(trySetItemToPastureBox); 
             }
 
             AnimalCostFood animalCostFood = new AnimalCostFood

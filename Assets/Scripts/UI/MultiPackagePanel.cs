@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -108,7 +109,21 @@ public class MultiPackagePanel : GamePanel<PackageList>
             List<Item> items0 = new List<Item>();
             if (packageData.items != null)
             {
-                items0.AddRange(packageData.items);
+                for (int i = 0; i < packageData.items.Count; i++)
+                {
+                    Item item = packageData.items[i];
+                    if (packageSetData1.moveItemType == MoveItemType.OnlyGet || !CheckPackageItem(packageSetData1, item.dataId)
+                        || (packageSetData1.packageType == PackageType.鲜活 && !item.isFresh) ||
+                        (packageSetData1.packageType == PackageType.非鲜活 && item.isFresh))
+                    {
+                        item.locked = true;
+                    }
+                    else
+                    {
+                        item.locked = false;
+                    }
+                    items0.Add(item);
+                }
             }
             for (int i = items0.Count; i < packageData.caseCount; i++)
             {
@@ -129,7 +144,21 @@ public class MultiPackagePanel : GamePanel<PackageList>
             List<Item> items1 = new List<Item>();
             if (packageData.items != null)
             {
-                items1.AddRange(packageData.items);
+                for (int i = 0; i < packageData.items.Count; i++)
+                {
+                    Item item = packageData.items[i];
+                    if (packageSetData0.moveItemType == MoveItemType.OnlyGet || !CheckPackageItem(packageSetData0, item.dataId)
+                        || (packageSetData0.packageType == PackageType.鲜活 && !item.isFresh) ||
+                        (packageSetData0.packageType == PackageType.非鲜活 && item.isFresh))
+                    {
+                        item.locked = true;
+                    }
+                    else
+                    {
+                        item.locked = false;
+                    }
+                    items1.Add(item);
+                } 
             }
             for (int i = items1.Count; i < packageData.caseCount; i++)
             {
@@ -260,14 +289,66 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 {
                     UPMove.localScale = Vector3.zero;
                     DownMove.localScale = Vector3.one;
+                    if (packageSetData0.moveItemType==MoveItemType.OnlyGet)
+                    {
+                       // DownMove.localScale = Vector3.zero;
+                        ActionButton.interactable = false;
+                    }
+                    else
+                    {
+                        if (CheckPackageItem(packageSetData1, SelectItem.dataId))
+                        {
+                           // DownMove.localScale = Vector3.one;
+                            ActionButton.interactable = true;
+                        }
+                        else
+                        {
+                          //  DownMove.localScale = Vector3.zero;
+                            ActionButton.interactable = false;
+                        }
+                        
+                    } 
+                  
                 }
                 if (SelectItem.packageId == packageId1)
                 {
+
+                    if (packageSetData1.moveItemType == MoveItemType.OnlyGet)
+                    {
+                       // UPMove.localScale = Vector3.zero;
+                        ActionButton.interactable = false;
+                    }
+                    else
+                    {
+                        if (CheckPackageItem(packageSetData0,SelectItem.dataId))
+                        {
+                            //UPMove.localScale = Vector3.one;
+                            ActionButton.interactable = true;
+                        }
+                        else
+                        {
+                           // UPMove.localScale = Vector3.zero;
+                            ActionButton.interactable = false;
+                        }
+                            
+                    }
                     UPMove.localScale = Vector3.one;
                     DownMove.localScale = Vector3.zero;
                 }
             }
         }
+    }
+    bool CheckPackageItem(PackageSetData packageSetData,int itemDataId)
+    {
+        if (packageSetData.moveItemType == MoveItemType.OnlyGet)
+        {
+            return false;
+        }
+        if (packageSetData.limitItems != null && packageSetData.limitItems.Count > 0)
+        {
+            return packageSetData.limitItems.Contains(itemDataId);
+        }
+        return true;
     }
 
     private void MoveSelectItem()
@@ -344,13 +425,15 @@ public class MultiPackagePanel : GamePanel<PackageList>
             for (int i = 0; i < packageData0.items.Count; i++)
             {
                 Item item = packageData0.items[i];
-                if (packageSetData1.packageType == PackageType.鲜活 && !item.isFresh)
+                if (packageSetData1.moveItemType == MoveItemType.OnlyGet|| !CheckPackageItem(packageSetData1, item.dataId)
+                    || (packageSetData1.packageType == PackageType.鲜活 && !item.isFresh)
+                    || (packageSetData1.packageType == PackageType.非鲜活 && item.isFresh))
                 {
                     item.locked = true;
                 }
-                if (packageSetData1.packageType == PackageType.非鲜活 && item.isFresh)
+                else
                 {
-                    item.locked = true;
+                    item.locked = false;
                 }
                 items0.Add(item);
             }
@@ -374,13 +457,15 @@ public class MultiPackagePanel : GamePanel<PackageList>
             for (int i = 0; i < packageData1.items.Count; i++)
             {
                 Item item = packageData1.items[i];
-                if (packageSetData0.packageType == PackageType.鲜活 && !item.isFresh)
+                if (packageSetData0.moveItemType == MoveItemType.OnlyGet || !CheckPackageItem(packageSetData0, item.dataId)
+                    || (packageSetData0.packageType == PackageType.鲜活 && !item.isFresh)||
+                    (packageSetData0.packageType == PackageType.非鲜活 && item.isFresh))
                 {
                     item.locked = true;
                 }
-                if (packageSetData0.packageType == PackageType.非鲜活 && item.isFresh)
+                else
                 {
-                    item.locked = true;
+                    item.locked = false;
                 }
                 items1.Add(item);
             }

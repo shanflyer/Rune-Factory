@@ -238,7 +238,8 @@ public struct TryGetItemFromPastureBox : GameAction
 public struct TrySetItemToPastureBox : GameAction
 {
     public int pastureId;
-    public Item item;
+    public int itemId;
+    public int itemCount;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
@@ -250,11 +251,11 @@ public struct TrySetItemToPastureBox : GameAction
         }
         if (parameters.Count > 1)
         {
-            item.value = int.Parse(parameters[1].value);
+           itemId= int.Parse(parameters[1].value);
         }
         if (parameters.Count > 2)
         {
-            item.count = int.Parse(parameters[2].value);
+            itemCount= int.Parse(parameters[2].value);
         }
         if (source != 0)
         {
@@ -262,11 +263,11 @@ public struct TrySetItemToPastureBox : GameAction
         }
         if (target != 0)
         {
-            item.value = target;
+            itemId = target;
         }
         if (value != 0)
         {
-            item.count = value;
+            itemCount = value;
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }

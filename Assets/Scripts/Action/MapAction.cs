@@ -69,6 +69,55 @@ public struct SetMapItemLinkCharacter : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct ChangeMapRoom : GameAction
+{
+    public int oldRoom,newRoom;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            oldRoom = int.Parse(parameters[0].value);
+        }
+        if (source != int.MinValue && source != 0)
+        {
+            oldRoom = source;
+        }
+        if (parameters.Count > 1)
+        {
+            newRoom = int.Parse(parameters[1].value);
+        }
+        if (target != int.MinValue && target != 0)
+        {
+            newRoom = source;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+
+public struct RefreshMapPackageItemRender : GameAction
+{
+    public int linkInstanceId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            linkInstanceId = int.Parse(parameters[0].value);
+        }
+        if (source != int.MinValue && source != 0)
+        {
+            linkInstanceId = source;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 
 public struct InitMapLink : GameAction
 {

@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class WorldMapObjManager : Singleton<WorldMapObjManager>
 {
-    private Dictionary<int, MapItemRuntimeObj> nowRuntimeMapItemObjs = new Dictionary<int, MapItemRuntimeObj>();
+    private Dictionary<int, MapItemRuntimeObj> nowRuntimeMapItemObjs = new Dictionary<int, MapItemRuntimeObj>(); 
     private Dictionary<int, MapItemRuntimeObj> tempRuntimeMapItemObjs = new Dictionary<int, MapItemRuntimeObj>();
 
     private RuntimeObj nowMapRoomObj;
-
+    private Dictionary<int, SpriteRenderer[]> mapPackageItemRenders = new Dictionary<int, SpriteRenderer[]>();
     public override void Init()
     {
         base.Init();
@@ -20,12 +20,64 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpDateGameTime);
         GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
+        GameActionManager.instance.AddListener<RefreshMapPackageItemRender>(RefreshMapPackageItemRender);
     }
 
     protected override void Clear()
     {
         base.Clear();
         nowRuntimeMapItemObjs.Clear();
+        tempRuntimeMapItemObjs.Clear();
+        mapPackageItemRenders.Clear();
+    }
+
+    void TryAddMapPackageItemRender(Transform obj,int id)
+    {
+        if(!mapPackageItemRenders.TryGetValue(id,out var spriteRenderers))
+        {
+            var PackageItem = obj.GetChild(obj.childCount - 1);
+            if(PackageItem.name== "PackageItem")
+            {
+                spriteRenderers = PackageItem.gameObject.GetComponentsInChildren<SpriteRenderer>(true);
+                mapPackageItemRenders[id] = spriteRenderers;
+                RefreshMapPackageItemRender(id);
+            }  
+        }
+    }
+    async void RefreshMapPackageItemRender(int id)
+    {
+        if(mapPackageItemRenders.TryGetValue(id,out var spriteRenderers))
+        {
+            if(PackageManager.instance.GetPackageItemCounts(id,out var items))
+            {
+                
+                if (items.Count <= spriteRenderers.Length)
+                {
+                    for(int i = 0; i < items.Count; i++)
+                    {
+                        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
+                        spriteRenderers[i].sprite = itemData.icon;
+                    }
+                }
+                else
+                {
+                    for(int i = 0; i < spriteRenderers.Length; i++)
+                    {
+                        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
+                        spriteRenderers[i].sprite = itemData.icon;
+                    }
+                }
+            }
+        }
+    }
+    void DeleteMapPackageItemRender(int id)
+    {
+        mapPackageItemRenders.Remove(id);
+    }
+
+    void RefreshMapPackageItemRender(RefreshMapPackageItemRender refreshMapPackageItemRender)
+    {
+        RefreshMapPackageItemRender(refreshMapPackageItemRender.linkInstanceId);
     }
 
     public void RefreshTempMapItem(TempMapItem tempMapItem)
@@ -275,6 +327,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 display = false,
                 itemInstanceId = runTimeMapItemData.Key,
             };
+
+            DeleteMapPackageItemRender(runTimeMapItemData.Key);
             GameActionManager.instance.QueueAction(displayStoreCounter, true);
             runTimeMapItemData.Value.Recycle();
             EmoteManager.instance.TryRecycleItemEmote(runTimeMapItemData.Key);
@@ -337,7 +391,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 key = new Vector2Int(WorldMapObjManager.instance.displayMap, deleteMapItem.mapItemInstanceId)
             };
             GameActionManager.instance.QueueAction(removeRuntimePackage);
-
+            DeleteMapPackageItemRender(deleteMapItem.mapItemInstanceId);
             MyAnimationController.instance.RemoveItemAnimation(deleteMapItem.mapItemInstanceId);
         }
     }
@@ -417,6 +471,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
             MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
+           
 
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
             {
@@ -454,6 +509,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 }
                 manufatureObjs[runtimeMapItem.instanceId] = manufature;
             }
+
+            TryAddMapPackageItemRender(runtimeObj.obj as Transform, runtimeMapItem.instanceId);
         }
     }
 
@@ -487,6 +544,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 MyAnimationController.instance.AddItemAnimation(mapItemId, animator, newId.ToString());
                 await SetItemAimation(animationKey, newId, mapItemId);
             }
+
+            TryAddMapPackageItemRender(runtimeObj.animator.transform, runtimeMapItem.instanceId);
         }
     }
 }

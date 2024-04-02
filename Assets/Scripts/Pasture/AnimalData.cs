@@ -17,6 +17,7 @@ public class AnimalData : ScriptableObject, IGameData
     public List<int> foods=new List<int>();
     public int produceCycle;
     public int product;
+    public int productCount;
     public int cycleStage;
     public string behavior;
     public ExternalBehaviorTree externalBehavior;

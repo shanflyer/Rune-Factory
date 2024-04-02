@@ -1,10 +1,10 @@
-using System.Collections;
+锘縰sing System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
-[CreateAssetMenu(menuName ="Data/物体动画数据")]
+[CreateAssetMenu(menuName ="Data/鐗╀綋鍔ㄧ敾鏁版嵁")]
 public class ItemAnimationData : ScriptableObject,IGameData
 { 
     public List<AnimationStateData> animationStateDatas = new List<AnimationStateData>();
