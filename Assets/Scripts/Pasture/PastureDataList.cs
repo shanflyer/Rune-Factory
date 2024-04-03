@@ -74,7 +74,7 @@ public struct PastureLevelData
     public int waterPackage;
 #endif 
     public int level;
-    public int linkItem;
+    public int2 animationKey;
     public int creatMoney;
     public List<int2> creatItems;
     public int animalCase;

@@ -109,9 +109,9 @@ public class PasturePanel : GamePanel<MyListInt>
                 int foodCount = PackageManager.instance.GetPackageItems(pasture.foodPackage).Count;
                 foodCaseText.text = $"{foodCount}/{foodCase}";
 
-                int waterCase = PackageManager.instance.GetPackageCaseCount(pasture.waterPackage);
-                int waterCount = PackageManager.instance.GetPackageItems(pasture.waterPackage).Count;
-                waterCaseText.text = $"{waterCount}/{waterCase}";
+               // int waterCase = PackageManager.instance.GetPackageCaseCount(pasture.waterPackage);
+                //int waterCount = PackageManager.instance.GetPackageItems(pasture.waterPackage).Count;
+                //waterCaseText.text = $"{waterCount}/{waterCase}";
 
                 int productCase = PackageManager.instance.GetPackageCaseCount(pasture.productPackage);
                 int productCount = PackageManager.instance.GetPackageItems(pasture.productPackage).Count;

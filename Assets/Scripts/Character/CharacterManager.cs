@@ -107,11 +107,39 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterTempPos>(SetCharacterTempPos);
         GameActionManager.instance.AddListener<SetCharacterRandomPos>(SetCharacterRandomPos);
         GameActionManager.instance.AddListener<SetCharacterRandomCoordinate>(SetCharacterRandomCoordinate);
+        GameActionManager.instance.AddListener<ChangeCharacterNewMap>(ChangeCharacterNewMap);
 
         GameActionManager.instance.AddListener<VisitNPC>(VisitNPC);
         GameActionManager.instance.AddListener<DisplayCharacterItemRenderer>(DisplayCharacterItemRenderer);
     }
+    void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
+    {
+        Character character = GetCharacter(ChangeCharacterNewMap.characterInstance);
+        if (character != null)
+        {
+            int2 coordinate = character.coordinate;
+            int3 newCoordiante = new int3(coordinate, ChangeCharacterNewMap.newMap);
+            if (!MapCellController.instance.CheckIsWalk(newCoordiante))
+            {
+                int2 randomCoordinate = MapCellController.instance.GetRandomRoomCell(ChangeCharacterNewMap.newMap);
+                newCoordiante = new int3(randomCoordinate, ChangeCharacterNewMap.newMap);
+            } 
 
+            character.RemoveMove();
+            character.SetCoordinate(newCoordiante);
+            ReStartCharacterBehavior reStartCharacterBehavior = new ReStartCharacterBehavior
+            {
+                characterId = character.instanceId
+            };
+            GameActionManager.instance.QueueAction(reStartCharacterBehavior);
+            RefreshNpcRuntimeObj(character);
+
+            if (ChangeCharacterNewMap.setResult != null)
+            {
+                ChangeCharacterNewMap.setResult(true);
+            }
+        }
+    }
     private async void DisplayCharacterItemRenderer(DisplayCharacterItemRenderer displayCharacterItemRenderer)
     {
         Character character = GetCharacter(displayCharacterItemRenderer.characterId);

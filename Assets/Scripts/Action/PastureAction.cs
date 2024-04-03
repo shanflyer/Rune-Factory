@@ -18,9 +18,37 @@ public struct TryUpPastureLevel : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int pastureId;
+    public int itemInstance;
+    public int roomId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
+        if (parameters.Count > 0)
+        {
+            pastureId = int.Parse(parameters[0].value);
+        }
+        if (source != 0 && source != int.MinValue)
+        {
+            pastureId = source;
+        }
+        if (parameters.Count > 1)
+        {
+            itemInstance = int.Parse(parameters[1].value);
+        }
+        if (target != 0 && target != int.MinValue)
+        {
+            itemInstance = target;
+        }
+        if (parameters.Count > 2)
+        {
+            roomId = int.Parse(parameters[2].value);
+        }
+        if (value != 0 && value != int.MinValue)
+        {
+            roomId = value;
+        }
+        this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

@@ -138,7 +138,21 @@ public struct StopCharacterBehavior : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct ReStartCharacterBehavior : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct StartCharacterBehavior : GameAction
 {
     public SetValue setValue { get; set; }
@@ -154,7 +168,33 @@ public struct StartCharacterBehavior : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct ChangeCharacterNewMap : GameAction
+{
+    public int characterInstance;
+    public int newMap; 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; } 
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            characterInstance = int.Parse(parameters[0].value);
+        if (source != 0&&source!=int.MinValue)
+            characterInstance = source;
+
+        if (parameters.Count >= 2)
+        {
+            newMap = int.Parse(parameters[0].value);
+        }
+        if (target != 0 && target != int.MinValue)
+            newMap = target;
+
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct SetCharacterRandomCoordinate : GameAction
 {
     public SetValue setValue { get; set; }

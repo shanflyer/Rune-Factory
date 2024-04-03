@@ -144,7 +144,7 @@ public class MapCellController : Singleton<MapCellController>
         int index = GameRandom.RandomInt(0, cells.Count);
         return cells[index];
     }
-
+    
     public List<int2> GetWalkableCells(int3 centerCoordinate, int range)
     {
         List<int2> cells = new List<int2>();
@@ -239,7 +239,7 @@ public class MapCellController : Singleton<MapCellController>
         /// </summary>
         public NativeList<int3> linkActions;
 
-        public NativeList<int> neighbourMaps;
+        public NativeHashMap<int,int> neighbourMaps;
 
         public MapTriggerAreas commonTriggerAreas;
         public MapTriggerAreas playerTriggerAreas;
@@ -271,8 +271,39 @@ public class MapCellController : Singleton<MapCellController>
             }
             return false;
         }
+        public RuntimeMapRoom DeleteLinkMap(LinkMapCell linkMapCell)
+        {
+            int directionValue = 0;
+            for (int i = 0; i < linkMapCell.directions.Count; i++)
+            {
+                directionValue += GameCommon.GetDirectionValue(linkMapCell.directions[i]);
+            }
 
-        public void AddLinkMap(LinkMapCell linkMapCell)
+            int4 target = new int4(linkMapCell.targetCell.xyz, directionValue);
+            for(int i = linkMaps.Length - 1; i >= 0; i--)
+            {
+                if (linkMaps[i].Equals(target))
+                {
+                    linkMaps.RemoveAt(i);
+                    linkActions.RemoveAt(i);
+                    break;
+                }
+            }
+            for (int i = 0; i < linkMapCell.cells.Count; i++)
+            {
+                linkMapIndexs.Remove(linkMapCell.cells[i]);
+            }
+            if(neighbourMaps.TryGetValue(linkMapCell.targetCell.z, out var num))
+            {
+                num--;
+                if (num == 0)
+                {
+                    neighbourMaps.Remove(linkMapCell.targetCell.z);
+                }
+            }
+            return this;
+        }
+        public RuntimeMapRoom AddLinkMap(LinkMapCell linkMapCell)
         {
             int directionValue = 0;
             for (int i = 0; i < linkMapCell.directions.Count; i++)
@@ -290,11 +321,10 @@ public class MapCellController : Singleton<MapCellController>
             {
                 linkMapIndexs.Add(linkMapCell.cells[i], linkMaps.Length - 1);
             }
-
-            if (!neighbourMaps.Contains(linkMapCell.targetCell.z))
-            {
-                neighbourMaps.Add(linkMapCell.targetCell.z);
-            }
+            neighbourMaps.TryGetValue(linkMapCell.targetCell.z, out var num);
+            num++;
+            neighbourMaps[linkMapCell.targetCell.z] = num;
+            return this;
         }
 
         public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap, out int3 changeAction)
@@ -967,7 +997,7 @@ public class MapCellController : Singleton<MapCellController>
             linkMapIndexs = new NativeHashMap<int2, int>(16, Allocator.Persistent),
             linkMaps = new NativeList<int4>(16, Allocator.Persistent),
             linkActions = new NativeList<int3>(16, Allocator.Persistent),
-            neighbourMaps = new NativeList<int>(8, Allocator.Persistent),
+            neighbourMaps = new NativeHashMap<int,int>(8, Allocator.Persistent),
         };
         runtimeMapRoom.InitTriggerData();
         runtimeMapRooms.AddData(runtimeMapRoom);
@@ -1060,7 +1090,20 @@ public class MapCellController : Singleton<MapCellController>
             InitLinkMap(mapLine);
         }
     }
+    public void DeleteMapLink(MapLine mapLine)
+    {
+        if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
+        {
+            runtimeMapRoom= runtimeMapRoom.DeleteLinkMap(mapLine.cells0);
+            runtimeMapRooms.SetData(runtimeMapRoom);
+        }
 
+        if (runtimeMapRooms.GetData(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
+        {
+            _runtimeMapRoom=_runtimeMapRoom.DeleteLinkMap(mapLine.cells1);
+            runtimeMapRooms.SetData(_runtimeMapRoom);
+        }
+    }
     public void InitLinkMap(MapLine mapLine)
     {
         if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
@@ -1165,13 +1208,13 @@ public class MapCellController : Singleton<MapCellController>
     }
 
 
-    NativeList<int>  GetRoomNeighbours(int roomId)
+    NativeHashMap<int,int>  GetRoomNeighbours(int roomId)
     {
         if (runtimeMapRooms.GetData(roomId, out RuntimeMapRoom sourceRoom))
         {
             return sourceRoom.neighbourMaps;
         }
-        return default(NativeList<int>);
+        return default(NativeHashMap<int,int>);
     }
     public Queue<int> FindRoomList(int sourceId, int targetId, ref bool result)
     {
@@ -1193,21 +1236,21 @@ public class MapCellController : Singleton<MapCellController>
             int checkId = nowList[i];
             var Neighbours = GetRoomNeighbours(checkId);
              
-            for (int j = 0; j < Neighbours.Length; j++)
-            {
-                int neighbour = Neighbours[i];
-                if (!checkRoom.Contains(neighbour))
+            foreach(var neighbour in Neighbours)
+            { 
+                if (!checkRoom.Contains(neighbour.Key))
                 {
-                    links[neighbour] = targetId;
-                    checkRoom.Add(neighbour);
-                    nowList.Add(neighbour);
-                    if (sourceId == neighbour)
+                    links[neighbour.Key] = targetId;
+                    checkRoom.Add(neighbour.Key);
+                    nowList.Add(neighbour.Key);
+                    if (sourceId == neighbour.Key)
                     {
                         result = true;
-                        break ;
+                        break;
                     }
                 }
             }
+           
             if (result)
             {
                 break;

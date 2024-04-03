@@ -14,12 +14,24 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
         GameActionManager.instance.AddListener<StopCharacterBehavior>(StopCharacterBehavior);
         GameActionManager.instance.AddListener<StartCharacterBehavior>(StartCharacterBehavior);
+        GameActionManager.instance.AddListener<ReStartCharacterBehavior>(ReStartCharacterBehavior);
        // Object.DontDestroyOnLoad(obj);
     }
 
     private GameObject obj;
     private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
 
+    void ReStartCharacterBehavior(ReStartCharacterBehavior reStartCharacterBehavior)
+    {
+        if (behaviorTrees.TryGetValue(reStartCharacterBehavior.characterId, out BehaviorTree behaviorTree))
+        {
+            behaviorTree.StopAllTaskCoroutines();
+            // Stop the behavior tree
+            behaviorTree.DisableBehavior();
+            // Start the behavior tree back up
+            behaviorTree.EnableBehavior();
+        }
+    }
     private void StopCharacterBehavior(StopCharacterBehavior stopCharacterBehavior)
     {
         if (behaviorTrees.TryGetValue(stopCharacterBehavior.characterId, out BehaviorTree behaviorTree))

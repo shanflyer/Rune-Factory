@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1012
   itemName: "\u7BB1\u5B50"
+  objName: "\u7BB1\u5B50"
   itemObj: {fileID: 5430793153651470313, guid: 9ed088c2a1e706a47b971ace72d249c2, type: 3}
   colliderCells:
   - x: -2
@@ -320,9 +321,9 @@ MonoBehaviour:
     y: 4
   playerTriggerEvent: 0
   operateIds: 0200000006000000
-  operateDatas:
-  - {fileID: 11400000, guid: 054e2d8d5601b9540beb92c7a3d52b41, type: 2}
-  - {fileID: 11400000, guid: 6a30f3d3434075041af89b7f8c0a81aa, type: 2}
+  operateList:
+  - operates: 0200000006000000
   defaultExit: 0
   defaultEnter: 0
+  displayTips: 1
   playerOperateInfo: 

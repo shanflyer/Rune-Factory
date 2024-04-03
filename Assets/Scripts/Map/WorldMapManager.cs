@@ -55,6 +55,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<InitMapLink>(InitMapLink);
         GameActionManager.instance.AddListener<SetMapItemLinkCharacter>(SetMapItemLinkCharacter);
         GameActionManager.instance.AddListener<SetMapEditorItemLinkCharacter>(SetMapEditorItemLinkCharacter);
+        GameActionManager.instance.AddListener<DeleteMapLink>(DeleteMapLink);
     }
 
     
@@ -401,6 +402,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
 
+        
         if (mapItemData.operateIds != null)
         {
             for (int i = 0; i < mapItemData.operateIds.Count; i++)
@@ -648,6 +650,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return true;
     }
 
+    private void DeleteMapLink(DeleteMapLink DeleteMapLink)
+    {
+        int index = worldMapData.mapLines.FindIndex(m => m.instanceId == DeleteMapLink.linkInstanceId);
+        if (index >= 0)
+        {
+            MapCellController.instance.DeleteMapLink(worldMapData.mapLines[index]);
+        }
+    }
     private void InitMapLink(InitMapLink initMapLink)
     {
         int index = worldMapData.mapLines.FindIndex(m => m.instanceId == initMapLink.linkInstanceId);
@@ -727,7 +737,7 @@ public struct RuntimeMapItem : INativeData
     public int2 coordinate;
     public int2 animationKey;
     public int linkCharacter;
-    public NativeHashSet<int> operateDatas;
+    public NativeHashSet<int> operateDatas; 
     public NativeHashMap<FixedString128Bytes, int> EventReferenceData;
     public int Key => instanceId;
 
