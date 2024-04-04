@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public delegate void MoveEndAction();
 
@@ -903,6 +904,69 @@ public class CharacterManager : Singleton<CharacterManager>
              );
     }
 
+    public void FixedTransMap(Character character, int3 coordinate)
+    {
+        ChangeMapAction(character, coordinate, 0);
+    }
+
+    void ChangeMapAction(Character character,int3 newMap, int afterAction)
+    {
+        int targetMap = newMap.z;
+        var targetCoordinate = new int2(newMap.x, newMap.y);
+
+        if (character == controllerCharacter)
+        {
+            character.StopMove();
+            character.canMove = false;
+            LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
+            {
+                cyclePos = GameCommon.GetMapPos(character.coordinate),
+                minCycleValue = 0,
+                maxCycleValue = 1,
+                lerpTime = GameCommon.mapChangeLerpTime
+            };
+            GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
+            character.SetCoordinate(new int3(targetCoordinate, targetMap));
+
+            GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
+            {
+                WorldMapObjManager.instance.RecycleMap();
+                SetPlayerPos(character);
+                await WorldMapObjManager.instance.DisplayMap(targetMap);
+
+                GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                {
+                    LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
+                    {
+                        cyclePos = GameCommon.GetMapPos(character.coordinate),
+                        minCycleValue = 1,
+                        maxCycleValue = 0,
+                        lerpTime = GameCommon.mapChangeLerpTime,
+                        setResult = AfterLerpScreenCycle
+                    };
+
+                    async void AfterLerpScreenCycle(bool value)
+                    {
+                        if (afterAction != 0)
+                        {
+                            var dataAction = await GameDataManager.instance.GetAsyncData<GameActionData>();
+                            if (dataAction)
+                            {
+                                dataAction.Action();
+                            }
+                        }
+
+                        character.canMove = true;
+                    }
+                    GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
+                });
+            });
+        }
+        else
+        {
+            SetPlayerPos(character);
+        }
+    }
     public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null)
     {
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
@@ -914,61 +978,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
             void ChangeMapAction(int3 newMap, int afterAction)
             {
-                int targetMap = newMap.z;
-                targetCoordinate = new int2(newMap.x, newMap.y);
-
-                if (character == controllerCharacter)
-                {
-                    character.StopMove();
-                    character.canMove = false;
-                    LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
-                    {
-                        cyclePos = GameCommon.GetMapPos(character.coordinate),
-                        minCycleValue = 0,
-                        maxCycleValue = 1,
-                        lerpTime = GameCommon.mapChangeLerpTime
-                    };
-                    GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
-                    character.SetCoordinate(new int3(targetCoordinate, targetMap));
-
-                    GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
-                    {
-                        WorldMapObjManager.instance.RecycleMap();
-                        SetPlayerPos(character);
-                        await WorldMapObjManager.instance.DisplayMap(targetMap);
-
-                        GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
-                        {
-                            LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
-                            {
-                                cyclePos = GameCommon.GetMapPos(character.coordinate),
-                                minCycleValue = 1,
-                                maxCycleValue = 0,
-                                lerpTime = GameCommon.mapChangeLerpTime,
-                                setResult = AfterLerpScreenCycle
-                            };
-
-                            async void AfterLerpScreenCycle(bool value)
-                            {
-                                if (afterAction != 0)
-                                {
-                                    var dataAction = await GameDataManager.instance.GetAsyncData<GameActionData>();
-                                    if (dataAction)
-                                    {
-                                        dataAction.Action();
-                                    }
-                                }
-
-                                character.canMove = true;
-                            }
-                            GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
-                        });
-                    });
-                }
-                else
-                {
-                    SetPlayerPos(character);
-                }
+                this.ChangeMapAction(character, newMap, afterAction);
             }
         }
         /*

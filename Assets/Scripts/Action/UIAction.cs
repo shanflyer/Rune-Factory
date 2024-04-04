@@ -138,5 +138,7 @@ public struct ShowMultiPackagePanel : GameAction
             }
         }
         GameActionManager.instance.QueueAction(this, immediately);
+        packageId0 = 0;
+        packageId1 = 0;
     }
 }

@@ -20,10 +20,11 @@ MonoBehaviour:
   foods: 4d040000
   produceCycle: 2
   product: 1001
+  productCount: 1
   cycleStage: 1
   behavior: "\u9E21"
   externalBehavior: {fileID: 11400000, guid: 784277b561517f44e861c50e5ddf4293, type: 2}
-  GrowthStageStr: "\u5C0F\u9E21,0,1,0,0|\u6BCD\u9E21,1,1,0,1"
+  GrowthStageStr: "\u5C0F\u9E21,0,1,0,0|\u6BCD\u9E21,1,1,0,1|\u6BCD\u9E21,2,100,0,0"
   growthStages:
   - stageName: "\u5C0F\u9E21"
     stage: 0
@@ -35,3 +36,8 @@ MonoBehaviour:
     growthDay: 1
     productValue: 0
     objAnimationStage: 1
+  - stageName: "\u6BCD\u9E21"
+    stage: 2
+    growthDay: 100
+    productValue: 0
+    objAnimationStage: 0

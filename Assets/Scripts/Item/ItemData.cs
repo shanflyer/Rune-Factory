@@ -1,4 +1,4 @@
-
+ï»¿
 using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
@@ -9,20 +9,20 @@ using UnityEngine;
 public enum ItemType
 {
     Default=-1,
-    ÖÖ×Ó = 0,
-    ÎäÆ÷ = 1,
-    ·À¾ß = 2,
-    Ê³²Ä = 3,
-    Ê³Îï = 4, 
-    ÊÕ¼¯Îï = 5,  
-    ¹¤¾ß=6,
-    ¼Ò¾ß = 10, 
-    ¶¯Îï=11
+    ç§å­ = 0,
+    æ­¦å™¨ = 1,
+    é˜²å…· = 2,
+    é£Ÿæ = 3,
+    é£Ÿç‰© = 4, 
+    æ”¶é›†ç‰© = 5,  
+    å·¥å…·=6,
+    å®¶å…· = 10, 
+    åŠ¨ç‰©=11
 }
 public enum ShopMoneyType
 {
-    ½ğ±Ò = 1,
-    ºì¾§ = 2
+    é‡‘å¸ = 1,
+    çº¢æ™¶ = 2
 }
 public class ItemData : ScriptableObject, IGameData
 {

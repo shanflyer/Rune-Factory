@@ -146,7 +146,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     {
         ItemUseAction itemUseAction = new ItemUseAction
         {
-            itemId = item.instanceId,
+            itemId = item.dataId,
             itemCount = 1,
             packageId = packageId
         };

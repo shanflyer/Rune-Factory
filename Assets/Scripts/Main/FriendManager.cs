@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 
 public struct FriendShip
@@ -69,7 +70,8 @@ public class FriendManager : Singleton<FriendManager>
     {
         if (friendAdd.Count > 0)
         {
-            foreach (var key in friendAdd.Keys)
+            var keys = friendAdd.Keys.ToList();
+            foreach (var key in keys)
             {
                 friendAdd[key] = GameCommon.friendAddCount;
             }

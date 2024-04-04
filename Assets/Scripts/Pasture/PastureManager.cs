@@ -149,7 +149,7 @@ public class PastureManager : Singleton<PastureManager>
                        
 
 
-                        tryUpPastureLevel.setValue(nextlevel);
+                        tryUpPastureLevel.setValue(pasture.instanceId);
                         if (tryUpPastureLevel.setResult != null)
                         {
                             tryUpPastureLevel.setResult(true);
@@ -158,7 +158,7 @@ public class PastureManager : Singleton<PastureManager>
                     }
                     else
                     {
-                        tryUpPastureLevel.setValue(0);
+                        tryUpPastureLevel.setValue(pasture.instanceId);
                         if (tryUpPastureLevel.setResult != null)
                         {
                             tryUpPastureLevel.setResult(false);
@@ -170,7 +170,7 @@ public class PastureManager : Singleton<PastureManager>
                 return;
             }
         }
-        tryUpPastureLevel.setValue(0);
+        tryUpPastureLevel.setValue(pasture.instanceId);
         if (tryUpPastureLevel.setResult != null)
         {
             tryUpPastureLevel.setResult(false);
