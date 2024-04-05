@@ -232,7 +232,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         if (runtimeMapItems.GetData(instanceid, out RuntimeMapItem runtimeMapItem))
         {
-            runtimeMapItem.animationKey = new int2(setItemAnimation.keyX, setItemAnimation.keyY);
+            int2 oldKey = runtimeMapItem.animationKey;
+             
+            runtimeMapItem.animationKey = new int2(setItemAnimation.keyX!=int.MinValue? setItemAnimation.keyX:oldKey.x,
+                setItemAnimation.keyY!=int.MinValue?setItemAnimation.keyY:oldKey.y);
 
             WorldMapObjManager.instance.SetItemAnimation(runtimeMapItem);
             if (setItemAnimation.setResult != null)

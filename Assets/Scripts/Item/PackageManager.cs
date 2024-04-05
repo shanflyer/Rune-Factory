@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class PackageManager : Singleton<PackageManager>
 { 
@@ -495,6 +496,20 @@ public class PackageManager : Singleton<PackageManager>
                 gamePackage.caseCount += packageSetData.levelUpAddCount;
                 gamePackages[id] = gamePackage;
                 GameActionManager.instance.QueueAction(default(RefreshPackage));
+
+                SetItemAnimation setItemAnimation = new SetItemAnimation
+                {
+                    id = gamePackage.instanceId,
+                    keyX = int.MinValue,
+                    keyY = gamePackage.level
+                };
+                GameActionManager.instance.QueueAction(setItemAnimation);
+
+                RefreshShortcut refreshShortcut = new RefreshShortcut
+                {
+                    packageId = gamePackage.instanceId
+                };
+                GameActionManager.instance.QueueAction(refreshShortcut);
             }
         }
     }
@@ -706,7 +721,13 @@ public class PackageManager : Singleton<PackageManager>
                     new Item(packageSetData.initItems[i].x, packageSetData.initItems[i].y));
             }
         }
-
+        SetItemAnimation setItemAnimation = new SetItemAnimation
+        {
+            id = gamePackage.instanceId,
+            keyX = int.MinValue,
+            keyY = level
+        };
+        GameActionManager.instance.QueueAction(setItemAnimation);
         return packageInstaceId;
     }
 
@@ -855,6 +876,7 @@ public class PackageManager : Singleton<PackageManager>
                 instanceId = instanceId,
                 dataId = dataId,
                 name = name,
+                level=level,
                 items = GetItems(),
             };
             return packageData;
@@ -1332,6 +1354,7 @@ public struct PackageData : IReferenceData
     public int instanceId;
     public int dataId;
     public int caseCount;
+    public int level;
 
     public PackageType packageType;
     public List<Item> items;

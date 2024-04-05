@@ -13,30 +13,78 @@ MonoBehaviour:
   m_Name: 1094
   m_EditorClassIdentifier: 
   animationStateDatas:
-  - stateName: "\u7A7A"
+  - stateName: "\u4E00\u7EA7\u7A7A"
     key:
       x: 0
       y: 0
     clips:
     - {fileID: 7400000, guid: 194ba4f26b7564c49a565fdba2cf31ba, type: 2}
-  - stateName: 1/3
+  - stateName: "\u4E00\u7EA71/3"
     key:
       x: 1
       y: 0
     clips:
     - {fileID: 7400000, guid: 67ea44aaa16dfc644826af19d73e351d, type: 2}
-  - stateName: 2/3
+  - stateName: "\u4E00\u7EA72/3"
     key:
       x: 2
       y: 0
     clips:
     - {fileID: 7400000, guid: ac60bf3bd3473b64f90da1c8c7278353, type: 2}
-  - stateName: "\u6EE1"
+  - stateName: "\u4E00\u7EA7\u6EE1"
     key:
       x: 3
       y: 0
     clips:
     - {fileID: 7400000, guid: 10586ed3bf7369c48b693a3ccae8121a, type: 2}
+  - stateName: "\u4E8C\u7EA7\u7A7A"
+    key:
+      x: 0
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: f71475b22fdc77b48bf199e3fec7ac71, type: 2}
+  - stateName: "\u4E8C\u7EA71/3"
+    key:
+      x: 1
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: 3e44ec9f76bebd44fa8e39fbd0c75024, type: 2}
+  - stateName: "\u4E8C\u7EA72/3"
+    key:
+      x: 2
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: cff45622b6dad0c45aceaa35ecd8ece7, type: 2}
+  - stateName: "\u4E8C\u7EA7\u6EE1"
+    key:
+      x: 3
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: a787193996054ac4b8a6e769ef25a069, type: 2}
+  - stateName: "\u4E09\u7EA7\u7A7A"
+    key:
+      x: 0
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: a643da92e576405409f20bb87beb54ad, type: 2}
+  - stateName: "\u4E09\u7EA71/3"
+    key:
+      x: 1
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: 642a9c846dc34cc47996ed8e6a926aad, type: 2}
+  - stateName: "\u4E09\u7EA72/3"
+    key:
+      x: 2
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: 3c63177846188754eaabdf8baa1785f4, type: 2}
+  - stateName: "\u4E09\u7EA7\u6EE1"
+    key:
+      x: 3
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: f4296925369bdb742a7aff02a74603e8, type: 2}
   animationStateDataDic:
     m_keys:
     - x: 0
@@ -47,28 +95,92 @@ MonoBehaviour:
       y: 0
     - x: 3
       y: 0
+    - x: 0
+      y: 1
+    - x: 1
+      y: 1
+    - x: 2
+      y: 1
+    - x: 3
+      y: 1
+    - x: 0
+      y: 2
+    - x: 1
+      y: 2
+    - x: 2
+      y: 2
+    - x: 3
+      y: 2
     m_values:
-    - stateName: "\u7A7A"
+    - stateName: "\u4E00\u7EA7\u7A7A"
       key:
         x: 0
         y: 0
       clips:
       - {fileID: 7400000, guid: 194ba4f26b7564c49a565fdba2cf31ba, type: 2}
-    - stateName: 1/3
+    - stateName: "\u4E00\u7EA71/3"
       key:
         x: 1
         y: 0
       clips:
       - {fileID: 7400000, guid: 67ea44aaa16dfc644826af19d73e351d, type: 2}
-    - stateName: 2/3
+    - stateName: "\u4E00\u7EA72/3"
       key:
         x: 2
         y: 0
       clips:
       - {fileID: 7400000, guid: ac60bf3bd3473b64f90da1c8c7278353, type: 2}
-    - stateName: "\u6EE1"
+    - stateName: "\u4E00\u7EA7\u6EE1"
       key:
         x: 3
         y: 0
       clips:
       - {fileID: 7400000, guid: 10586ed3bf7369c48b693a3ccae8121a, type: 2}
+    - stateName: "\u4E8C\u7EA7\u7A7A"
+      key:
+        x: 0
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: f71475b22fdc77b48bf199e3fec7ac71, type: 2}
+    - stateName: "\u4E8C\u7EA71/3"
+      key:
+        x: 1
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: 3e44ec9f76bebd44fa8e39fbd0c75024, type: 2}
+    - stateName: "\u4E8C\u7EA72/3"
+      key:
+        x: 2
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: cff45622b6dad0c45aceaa35ecd8ece7, type: 2}
+    - stateName: "\u4E8C\u7EA7\u6EE1"
+      key:
+        x: 3
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: a787193996054ac4b8a6e769ef25a069, type: 2}
+    - stateName: "\u4E09\u7EA7\u7A7A"
+      key:
+        x: 0
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: a643da92e576405409f20bb87beb54ad, type: 2}
+    - stateName: "\u4E09\u7EA71/3"
+      key:
+        x: 1
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: 642a9c846dc34cc47996ed8e6a926aad, type: 2}
+    - stateName: "\u4E09\u7EA72/3"
+      key:
+        x: 2
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: 3c63177846188754eaabdf8baa1785f4, type: 2}
+    - stateName: "\u4E09\u7EA7\u6EE1"
+      key:
+        x: 3
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: f4296925369bdb742a7aff02a74603e8, type: 2}

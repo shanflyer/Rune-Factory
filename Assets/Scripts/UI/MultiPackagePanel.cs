@@ -104,6 +104,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
         {
             var packageData = PackageManager.instance.GetPackageData(packageId0);
             PackageCaseCount0 = packageData.caseCount;
+            packageLevel0 = packageData.level;
 
             Item defaultItem = default(Item);
             List<Item> items0 = new List<Item>();
@@ -133,12 +134,14 @@ public class MultiPackagePanel : GamePanel<PackageList>
             Title0.text = packageSetData0.packageName;
             itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
             caseCount0.text = $"{packageData.items.Count}/{packageData.caseCount}";
-            packageLevelUp0.transform.localScale = packageSetData0.canLevelUp ? Vector3.one : Vector3.zero;
+            bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
+            packageLevelUp0.transform.localScale = canLevelUp ? Vector3.one : Vector3.zero;
         }
         if (refreshShortcut.packageId == packageId1)
         {
             var packageData = PackageManager.instance.GetPackageData(packageId1);
             PackageCaseCount1 = packageData.caseCount;
+            packageLevel1 = packageData.level;
 
             Item defaultItem = default(Item);
             List<Item> items1 = new List<Item>();
@@ -167,7 +170,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
             Title1.text = packageSetData1.packageName;
             itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
             caseCount1.text = $"{packageData.items.Count}/{packageData.caseCount}";
-            packageLevelUp1.transform.localScale = packageSetData1.canLevelUp ? Vector3.one : Vector3.zero;
+            bool canLevelUp = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel - 1 :false;
+            packageLevelUp1.transform.localScale = canLevelUp ? Vector3.one : Vector3.zero;
         }
         itemBoxs0.ClearSelect();
         itemBoxs1.ClearSelect();
@@ -237,6 +241,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
     private int packageId0, packageId1;
     private PackageSetData packageSetData0, packageSetData1;
     private int PackageCaseCount0, PackageCaseCount1;
+    private int packageLevel0, packageLevel1;
 
     private void TryPackageLevelUp(PackageSetData packageSetData, int packageCaseCount, int packageId)
     {
@@ -412,6 +417,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
 
         var packageData0 = v.packageDatas[0];
         var packageData1 = v.packageDatas[1];
+        packageLevel0 = packageData0.level;
+        packageLevel1 = packageData1.level;
         PackageCaseCount0 = packageData0.caseCount;
         packageSetData0 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData0.dataId);
         PackageCaseCount1 = packageData1.caseCount;
@@ -447,7 +454,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
         Title0.text = packageSetData0.packageName;
         itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
         caseCount0.text = $"{itemCaseCount0}/{packageData0.caseCount}";
-        packageLevelUp0.transform.localScale = packageSetData0.canLevelUp ? Vector3.one : Vector3.zero;
+        bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
+        packageLevelUp0.transform.localScale = canLevelUp? Vector3.one : Vector3.zero;
         packageId0 = packageData0.instanceId;
 
         List<Item> items1 = new List<Item>();
@@ -480,7 +488,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
         Title1.text = packageSetData1.packageName;
         itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
         caseCount1.text = $"{itemCaseCount1}/{packageData1.caseCount}";
-        packageLevelUp1.transform.localScale = packageSetData1.canLevelUp ? Vector3.one : Vector3.zero;
+        bool canLevelUp1 = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel-1 : false;
+        packageLevelUp1.transform.localScale = canLevelUp1 ? Vector3.one : Vector3.zero;
         packageId1 = packageData1.instanceId;
 
         itemBoxs0.ClearSelect();

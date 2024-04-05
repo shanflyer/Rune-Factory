@@ -111,12 +111,14 @@ public class WarehousePanel : GamePanel<PackageList>
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshPackage>(RefreshPackage);
+        GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
+        GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
     }
 
     public override void SetPanelUISerializeObj()
@@ -252,7 +254,15 @@ public class WarehousePanel : GamePanel<PackageList>
     {
         this.RefreshPackage();
     }
-
+    private void RefreshShortcut(RefreshShortcut refreshShortcut)
+    {
+        if (refreshShortcut.packageId == selectPackageData.instanceId)
+        {
+            selectPackageData = PackageManager.instance.GetPackageData(selectPackageData.dataId);
+            RefreshPackage();
+        }
+          
+    }
     private async void RefreshPackage()
     {
         //selectPackageData = packageList.packageDatas[selectIndex];
@@ -288,5 +298,8 @@ public class WarehousePanel : GamePanel<PackageList>
         ItemInformation.localScale = Vector3.zero;
 
         caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";
+
+        bool canLevelUp = packageSetData.canLevelUp ? selectPackageData.level < packageSetData.maxLevel-1 : false;
+        packageLevelUp.transform.localScale = canLevelUp ? Vector3.one : Vector3.zero;
     }
 }

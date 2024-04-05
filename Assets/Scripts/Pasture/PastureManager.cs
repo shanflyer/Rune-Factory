@@ -423,19 +423,19 @@ public class PastureManager : Singleton<PastureManager>
 
                 CreatPackage creatFoodPackage = new CreatPackage
                 {
-                    level = 1,
+                    level = 0,
                     packageDataId = pastureData.foodPackage,
                     setValue = (int foodPackageId) =>
                     {
                         CreatPackage creatWaterPackage = new CreatPackage
                         {
-                            level = 1,
+                            level = 0,
                             packageDataId = pastureData.waterPackage,
                             setValue = (int waterPackageId) =>
                             {
                                 CreatPackage creatProductPackage = new CreatPackage
                                 {
-                                    level = 1,
+                                    level = 0,
                                     packageDataId = pastureData.productPackage,
                                     setValue = SetPackageInstanceId
                                 };
