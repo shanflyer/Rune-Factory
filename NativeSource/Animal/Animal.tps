@@ -94,7 +94,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">Polygon</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Crop</enum>
+            <enum type="SpriteSettings::TrimMode">Polygon</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -573,159 +573,42 @@
             <key type="filename">animals4_70$Normal.png</key>
             <key type="filename">animals4_71$Normal.png</key>
             <key type="filename">animals4_72$Normal.png</key>
-            <key type="filename">birds1_01$Normal.png</key>
-            <key type="filename">birds1_02$Normal.png</key>
-            <key type="filename">birds1_03$Normal.png</key>
-            <key type="filename">birds1_04$Normal.png</key>
-            <key type="filename">birds1_05$Normal.png</key>
-            <key type="filename">birds1_06$Normal.png</key>
-            <key type="filename">birds1_07$Normal.png</key>
-            <key type="filename">birds1_08$Normal.png</key>
-            <key type="filename">birds1_09$Normal.png</key>
-            <key type="filename">birds1_10$Normal.png</key>
-            <key type="filename">birds1_11$Normal.png</key>
-            <key type="filename">birds1_12$Normal.png</key>
-            <key type="filename">birds1_13$Normal.png</key>
-            <key type="filename">birds1_14$Normal.png</key>
-            <key type="filename">birds1_15$Normal.png</key>
-            <key type="filename">birds1_16$Normal.png</key>
-            <key type="filename">birds1_17$Normal.png</key>
-            <key type="filename">birds1_18$Normal.png</key>
-            <key type="filename">birds1_19$Normal.png</key>
-            <key type="filename">birds1_20$Normal.png</key>
-            <key type="filename">birds1_21$Normal.png</key>
-            <key type="filename">birds1_22$Normal.png</key>
-            <key type="filename">birds1_23$Normal.png</key>
-            <key type="filename">birds1_24$Normal.png</key>
-            <key type="filename">birds1_34$Normal.png</key>
-            <key type="filename">birds1_35$Normal.png</key>
-            <key type="filename">birds1_36$Normal.png</key>
-            <key type="filename">birds1_37$Normal.png</key>
-            <key type="filename">birds1_38$Normal.png</key>
-            <key type="filename">birds1_39$Normal.png</key>
-            <key type="filename">birds1_40$Normal.png</key>
-            <key type="filename">birds1_41$Normal.png</key>
-            <key type="filename">birds1_42$Normal.png</key>
-            <key type="filename">birds1_43$Normal.png</key>
-            <key type="filename">birds1_44$Normal.png</key>
-            <key type="filename">birds1_45$Normal.png</key>
-            <key type="filename">birds1_46$Normal.png</key>
-            <key type="filename">birds1_47$Normal.png</key>
-            <key type="filename">birds1_48$Normal.png</key>
-            <key type="filename">birds1_49$Normal.png</key>
-            <key type="filename">birds1_50$Normal.png</key>
-            <key type="filename">birds1_51$Normal.png</key>
-            <key type="filename">birds1_52$Normal.png</key>
-            <key type="filename">birds1_53$Normal.png</key>
-            <key type="filename">birds1_54$Normal.png</key>
-            <key type="filename">birds1_55$Normal.png</key>
-            <key type="filename">birds1_56$Normal.png</key>
-            <key type="filename">birds1_57$Normal.png</key>
-            <key type="filename">birds1_58$Normal.png</key>
-            <key type="filename">birds1_59$Normal.png</key>
-            <key type="filename">birds1_60$Normal.png</key>
-            <key type="filename">birds2_01$Normal.png</key>
-            <key type="filename">birds2_02$Normal.png</key>
-            <key type="filename">birds2_03$Normal.png</key>
-            <key type="filename">birds2_04$Normal.png</key>
-            <key type="filename">birds2_05$Normal.png</key>
-            <key type="filename">birds2_06$Normal.png</key>
-            <key type="filename">birds2_07$Normal.png</key>
-            <key type="filename">birds2_08$Normal.png</key>
-            <key type="filename">birds2_09$Normal.png</key>
-            <key type="filename">birds2_10$Normal.png</key>
-            <key type="filename">birds2_11$Normal.png</key>
-            <key type="filename">birds2_12$Normal.png</key>
-            <key type="filename">birds2_13$Normal.png</key>
-            <key type="filename">birds2_14$Normal.png</key>
-            <key type="filename">birds2_15$Normal.png</key>
-            <key type="filename">birds2_16$Normal.png</key>
-            <key type="filename">birds2_17$Normal.png</key>
-            <key type="filename">birds2_18$Normal.png</key>
-            <key type="filename">birds2_19$Normal.png</key>
-            <key type="filename">birds2_20$Normal.png</key>
-            <key type="filename">birds2_21$Normal.png</key>
-            <key type="filename">birds2_22$Normal.png</key>
-            <key type="filename">birds2_23$Normal.png</key>
-            <key type="filename">birds2_24$Normal.png</key>
-            <key type="filename">birds2_25$Normal.png</key>
-            <key type="filename">birds2_26$Normal.png</key>
-            <key type="filename">birds2_27$Normal.png</key>
-            <key type="filename">birds2_28$Normal.png</key>
-            <key type="filename">birds2_29$Normal.png</key>
-            <key type="filename">birds2_30$Normal.png</key>
-            <key type="filename">birds2_31$Normal.png</key>
-            <key type="filename">birds2_32$Normal.png</key>
-            <key type="filename">birds2_33$Normal.png</key>
-            <key type="filename">birds2_34$Normal.png</key>
-            <key type="filename">birds2_35$Normal.png</key>
-            <key type="filename">birds2_36$Normal.png</key>
-            <key type="filename">birds2_37$Normal.png</key>
-            <key type="filename">birds2_38$Normal.png</key>
-            <key type="filename">birds2_39$Normal.png</key>
-            <key type="filename">birds2_40$Normal.png</key>
-            <key type="filename">birds2_41$Normal.png</key>
-            <key type="filename">birds2_42$Normal.png</key>
-            <key type="filename">birds2_43$Normal.png</key>
-            <key type="filename">birds2_44$Normal.png</key>
-            <key type="filename">birds2_45$Normal.png</key>
-            <key type="filename">birds2_46$Normal.png</key>
-            <key type="filename">birds2_47$Normal.png</key>
-            <key type="filename">birds2_48$Normal.png</key>
-            <key type="filename">birds2_49$Normal.png</key>
-            <key type="filename">birds2_50$Normal.png</key>
-            <key type="filename">birds2_51$Normal.png</key>
-            <key type="filename">birds2_52$Normal.png</key>
-            <key type="filename">birds2_53$Normal.png</key>
-            <key type="filename">birds2_54$Normal.png</key>
-            <key type="filename">birds2_55$Normal.png</key>
-            <key type="filename">birds2_56$Normal.png</key>
-            <key type="filename">birds2_57$Normal.png</key>
-            <key type="filename">birds2_58$Normal.png</key>
-            <key type="filename">birds2_59$Normal.png</key>
-            <key type="filename">birds2_60$Normal.png</key>
-            <key type="filename">birds2_61$Normal.png</key>
-            <key type="filename">birds2_62$Normal.png</key>
-            <key type="filename">birds2_63$Normal.png</key>
-            <key type="filename">birds2_64$Normal.png</key>
-            <key type="filename">birds2_65$Normal.png</key>
-            <key type="filename">birds2_66$Normal.png</key>
-            <key type="filename">birds2_67$Normal.png</key>
-            <key type="filename">birds2_68$Normal.png</key>
-            <key type="filename">birds2_69$Normal.png</key>
-            <key type="filename">birds2_70$Normal.png</key>
-            <key type="filename">birds2_71$Normal.png</key>
-            <key type="filename">birds2_72$Normal.png</key>
-            <key type="filename">crab_01$Normal.png</key>
-            <key type="filename">crab_02$Normal.png</key>
-            <key type="filename">crab_03$Normal.png</key>
-            <key type="filename">crab_04$Normal.png</key>
-            <key type="filename">crab_05$Normal.png</key>
-            <key type="filename">crab_06$Normal.png</key>
-            <key type="filename">crab_07$Normal.png</key>
-            <key type="filename">crab_08$Normal.png</key>
-            <key type="filename">crab_09$Normal.png</key>
-            <key type="filename">crab_10$Normal.png</key>
-            <key type="filename">crab_11$Normal.png</key>
-            <key type="filename">crab_12$Normal.png</key>
-            <key type="filename">gorilla_01$Normal.png</key>
-            <key type="filename">gorilla_02$Normal.png</key>
-            <key type="filename">gorilla_03$Normal.png</key>
-            <key type="filename">gorilla_07$Normal.png</key>
-            <key type="filename">gorilla_08$Normal.png</key>
-            <key type="filename">gorilla_09$Normal.png</key>
-            <key type="filename">gorilla_10$Normal.png</key>
-            <key type="filename">gorilla_11$Normal.png</key>
-            <key type="filename">gorilla_12$Normal.png</key>
-            <key type="filename">horseshoe_crab_01$Normal.png</key>
-            <key type="filename">horseshoe_crab_02$Normal.png</key>
-            <key type="filename">horseshoe_crab_03$Normal.png</key>
-            <key type="filename">horseshoe_crab_07$Normal.png</key>
-            <key type="filename">horseshoe_crab_08$Normal.png</key>
-            <key type="filename">horseshoe_crab_09$Normal.png</key>
-            <key type="filename">horseshoe_crab_10$Normal.png</key>
-            <key type="filename">horseshoe_crab_11$Normal.png</key>
-            <key type="filename">horseshoe_crab_12$Normal.png</key>
+            <key type="filename">penguin_01$Normal.png</key>
+            <key type="filename">penguin_02$Normal.png</key>
+            <key type="filename">penguin_03$Normal.png</key>
+            <key type="filename">penguin_04$Normal.png</key>
+            <key type="filename">penguin_05$Normal.png</key>
+            <key type="filename">penguin_06$Normal.png</key>
+            <key type="filename">penguin_07$Normal.png</key>
+            <key type="filename">penguin_08$Normal.png</key>
+            <key type="filename">penguin_09$Normal.png</key>
+            <key type="filename">penguin_baby_01$Normal.png</key>
+            <key type="filename">penguin_baby_02$Normal.png</key>
+            <key type="filename">penguin_baby_03$Normal.png</key>
+            <key type="filename">penguin_baby_04$Normal.png</key>
+            <key type="filename">penguin_baby_05$Normal.png</key>
+            <key type="filename">penguin_baby_06$Normal.png</key>
+            <key type="filename">penguin_baby_07$Normal.png</key>
+            <key type="filename">penguin_baby_08$Normal.png</key>
+            <key type="filename">penguin_baby_09$Normal.png</key>
+            <key type="filename">小鸡右0$Normal.png</key>
+            <key type="filename">小鸡右1$Normal.png</key>
+            <key type="filename">小鸡右2$Normal.png</key>
+            <key type="filename">小鸭右0$Normal.png</key>
+            <key type="filename">小鸭右1$Normal.png</key>
+            <key type="filename">小鸭右2$Normal.png</key>
+            <key type="filename">火烈鸟上0$Normal.png</key>
+            <key type="filename">火烈鸟上1$Normal.png</key>
+            <key type="filename">火烈鸟上2$Normal.png</key>
+            <key type="filename">火烈鸟下0$Normal.png</key>
+            <key type="filename">火烈鸟下1$Normal.png</key>
+            <key type="filename">火烈鸟下2$Normal.png</key>
+            <key type="filename">火烈鸟右0$Normal.png</key>
+            <key type="filename">火烈鸟右1$Normal.png</key>
+            <key type="filename">火烈鸟右2$Normal.png</key>
+            <key type="filename">鸭子右0$Normal.png</key>
+            <key type="filename">鸭子右1$Normal.png</key>
+            <key type="filename">鸭子右2$Normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -812,15 +695,6 @@
             <key type="filename">animals2_70.png</key>
             <key type="filename">animals2_71.png</key>
             <key type="filename">animals2_72.png</key>
-            <key type="filename">gorilla_01.png</key>
-            <key type="filename">gorilla_02.png</key>
-            <key type="filename">gorilla_03.png</key>
-            <key type="filename">gorilla_07.png</key>
-            <key type="filename">gorilla_08.png</key>
-            <key type="filename">gorilla_09.png</key>
-            <key type="filename">gorilla_10.png</key>
-            <key type="filename">gorilla_11.png</key>
-            <key type="filename">gorilla_12.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.93</point_f>
@@ -979,27 +853,15 @@
             <key type="filename">animals4_70.png</key>
             <key type="filename">animals4_71.png</key>
             <key type="filename">animals4_72.png</key>
-            <key type="filename">crab_01.png</key>
-            <key type="filename">crab_02.png</key>
-            <key type="filename">crab_03.png</key>
-            <key type="filename">crab_04.png</key>
-            <key type="filename">crab_05.png</key>
-            <key type="filename">crab_06.png</key>
-            <key type="filename">crab_07.png</key>
-            <key type="filename">crab_08.png</key>
-            <key type="filename">crab_09.png</key>
-            <key type="filename">crab_10.png</key>
-            <key type="filename">crab_11.png</key>
-            <key type="filename">crab_12.png</key>
-            <key type="filename">horseshoe_crab_01.png</key>
-            <key type="filename">horseshoe_crab_02.png</key>
-            <key type="filename">horseshoe_crab_03.png</key>
-            <key type="filename">horseshoe_crab_07.png</key>
-            <key type="filename">horseshoe_crab_08.png</key>
-            <key type="filename">horseshoe_crab_09.png</key>
-            <key type="filename">horseshoe_crab_10.png</key>
-            <key type="filename">horseshoe_crab_11.png</key>
-            <key type="filename">horseshoe_crab_12.png</key>
+            <key type="filename">火烈鸟上0.png</key>
+            <key type="filename">火烈鸟上1.png</key>
+            <key type="filename">火烈鸟上2.png</key>
+            <key type="filename">火烈鸟下0.png</key>
+            <key type="filename">火烈鸟下1.png</key>
+            <key type="filename">火烈鸟下2.png</key>
+            <key type="filename">火烈鸟右0.png</key>
+            <key type="filename">火烈鸟右1.png</key>
+            <key type="filename">火烈鸟右2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.888889</point_f>
@@ -1050,42 +912,6 @@
             <key type="filename">animals5_34$Normal.png</key>
             <key type="filename">animals5_35$Normal.png</key>
             <key type="filename">animals5_36$Normal.png</key>
-            <key type="filename">animals5_37$Normal.png</key>
-            <key type="filename">animals5_38$Normal.png</key>
-            <key type="filename">animals5_39$Normal.png</key>
-            <key type="filename">animals5_40$Normal.png</key>
-            <key type="filename">animals5_41$Normal.png</key>
-            <key type="filename">animals5_42$Normal.png</key>
-            <key type="filename">animals5_43$Normal.png</key>
-            <key type="filename">animals5_44$Normal.png</key>
-            <key type="filename">animals5_45$Normal.png</key>
-            <key type="filename">animals5_46$Normal.png</key>
-            <key type="filename">animals5_47$Normal.png</key>
-            <key type="filename">animals5_48$Normal.png</key>
-            <key type="filename">animals5_49$Normal.png</key>
-            <key type="filename">animals5_50$Normal.png</key>
-            <key type="filename">animals5_51$Normal.png</key>
-            <key type="filename">animals5_52$Normal.png</key>
-            <key type="filename">animals5_53$Normal.png</key>
-            <key type="filename">animals5_54$Normal.png</key>
-            <key type="filename">animals5_55$Normal.png</key>
-            <key type="filename">animals5_56$Normal.png</key>
-            <key type="filename">animals5_57$Normal.png</key>
-            <key type="filename">animals5_58$Normal.png</key>
-            <key type="filename">animals5_59$Normal.png</key>
-            <key type="filename">animals5_60$Normal.png</key>
-            <key type="filename">animals5_61$Normal.png</key>
-            <key type="filename">animals5_62$Normal.png</key>
-            <key type="filename">animals5_63$Normal.png</key>
-            <key type="filename">animals5_64$Normal.png</key>
-            <key type="filename">animals5_65$Normal.png</key>
-            <key type="filename">animals5_66$Normal.png</key>
-            <key type="filename">animals5_67$Normal.png</key>
-            <key type="filename">animals5_68$Normal.png</key>
-            <key type="filename">animals5_69$Normal.png</key>
-            <key type="filename">animals5_70$Normal.png</key>
-            <key type="filename">animals5_71$Normal.png</key>
-            <key type="filename">animals5_72$Normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1136,42 +962,6 @@
             <key type="filename">animals5_34.png</key>
             <key type="filename">animals5_35.png</key>
             <key type="filename">animals5_36.png</key>
-            <key type="filename">animals5_37.png</key>
-            <key type="filename">animals5_38.png</key>
-            <key type="filename">animals5_39.png</key>
-            <key type="filename">animals5_40.png</key>
-            <key type="filename">animals5_41.png</key>
-            <key type="filename">animals5_42.png</key>
-            <key type="filename">animals5_43.png</key>
-            <key type="filename">animals5_44.png</key>
-            <key type="filename">animals5_45.png</key>
-            <key type="filename">animals5_46.png</key>
-            <key type="filename">animals5_47.png</key>
-            <key type="filename">animals5_48.png</key>
-            <key type="filename">animals5_49.png</key>
-            <key type="filename">animals5_50.png</key>
-            <key type="filename">animals5_51.png</key>
-            <key type="filename">animals5_52.png</key>
-            <key type="filename">animals5_53.png</key>
-            <key type="filename">animals5_54.png</key>
-            <key type="filename">animals5_55.png</key>
-            <key type="filename">animals5_56.png</key>
-            <key type="filename">animals5_57.png</key>
-            <key type="filename">animals5_58.png</key>
-            <key type="filename">animals5_59.png</key>
-            <key type="filename">animals5_60.png</key>
-            <key type="filename">animals5_61.png</key>
-            <key type="filename">animals5_62.png</key>
-            <key type="filename">animals5_63.png</key>
-            <key type="filename">animals5_64.png</key>
-            <key type="filename">animals5_65.png</key>
-            <key type="filename">animals5_66.png</key>
-            <key type="filename">animals5_67.png</key>
-            <key type="filename">animals5_68.png</key>
-            <key type="filename">animals5_69.png</key>
-            <key type="filename">animals5_70.png</key>
-            <key type="filename">animals5_71.png</key>
-            <key type="filename">animals5_72.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.891304</point_f>
@@ -1209,143 +999,6 @@
                 <rect>7,9,13,18</rect>
                 <key>scale9Paddings</key>
                 <rect>7,9,13,18</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">birds1_01.png</key>
-            <key type="filename">birds1_02.png</key>
-            <key type="filename">birds1_03.png</key>
-            <key type="filename">birds1_04.png</key>
-            <key type="filename">birds1_05.png</key>
-            <key type="filename">birds1_06.png</key>
-            <key type="filename">birds1_07.png</key>
-            <key type="filename">birds1_08.png</key>
-            <key type="filename">birds1_09.png</key>
-            <key type="filename">birds1_10.png</key>
-            <key type="filename">birds1_11.png</key>
-            <key type="filename">birds1_12.png</key>
-            <key type="filename">birds1_13.png</key>
-            <key type="filename">birds1_14.png</key>
-            <key type="filename">birds1_15.png</key>
-            <key type="filename">birds1_16.png</key>
-            <key type="filename">birds1_17.png</key>
-            <key type="filename">birds1_18.png</key>
-            <key type="filename">birds1_19.png</key>
-            <key type="filename">birds1_20.png</key>
-            <key type="filename">birds1_21.png</key>
-            <key type="filename">birds1_22.png</key>
-            <key type="filename">birds1_23.png</key>
-            <key type="filename">birds1_24.png</key>
-            <key type="filename">birds1_34.png</key>
-            <key type="filename">birds1_35.png</key>
-            <key type="filename">birds1_36.png</key>
-            <key type="filename">birds1_37.png</key>
-            <key type="filename">birds1_38.png</key>
-            <key type="filename">birds1_39.png</key>
-            <key type="filename">birds1_40.png</key>
-            <key type="filename">birds1_41.png</key>
-            <key type="filename">birds1_42.png</key>
-            <key type="filename">birds1_43.png</key>
-            <key type="filename">birds1_44.png</key>
-            <key type="filename">birds1_45.png</key>
-            <key type="filename">birds1_46.png</key>
-            <key type="filename">birds1_47.png</key>
-            <key type="filename">birds1_48.png</key>
-            <key type="filename">birds1_49.png</key>
-            <key type="filename">birds1_50.png</key>
-            <key type="filename">birds1_51.png</key>
-            <key type="filename">birds1_52.png</key>
-            <key type="filename">birds1_53.png</key>
-            <key type="filename">birds1_54.png</key>
-            <key type="filename">birds1_55.png</key>
-            <key type="filename">birds1_56.png</key>
-            <key type="filename">birds1_57.png</key>
-            <key type="filename">birds1_58.png</key>
-            <key type="filename">birds1_59.png</key>
-            <key type="filename">birds1_60.png</key>
-            <key type="filename">birds2_01.png</key>
-            <key type="filename">birds2_02.png</key>
-            <key type="filename">birds2_03.png</key>
-            <key type="filename">birds2_04.png</key>
-            <key type="filename">birds2_05.png</key>
-            <key type="filename">birds2_06.png</key>
-            <key type="filename">birds2_07.png</key>
-            <key type="filename">birds2_08.png</key>
-            <key type="filename">birds2_09.png</key>
-            <key type="filename">birds2_10.png</key>
-            <key type="filename">birds2_11.png</key>
-            <key type="filename">birds2_12.png</key>
-            <key type="filename">birds2_13.png</key>
-            <key type="filename">birds2_14.png</key>
-            <key type="filename">birds2_15.png</key>
-            <key type="filename">birds2_16.png</key>
-            <key type="filename">birds2_17.png</key>
-            <key type="filename">birds2_18.png</key>
-            <key type="filename">birds2_19.png</key>
-            <key type="filename">birds2_20.png</key>
-            <key type="filename">birds2_21.png</key>
-            <key type="filename">birds2_22.png</key>
-            <key type="filename">birds2_23.png</key>
-            <key type="filename">birds2_24.png</key>
-            <key type="filename">birds2_25.png</key>
-            <key type="filename">birds2_26.png</key>
-            <key type="filename">birds2_27.png</key>
-            <key type="filename">birds2_28.png</key>
-            <key type="filename">birds2_29.png</key>
-            <key type="filename">birds2_30.png</key>
-            <key type="filename">birds2_31.png</key>
-            <key type="filename">birds2_32.png</key>
-            <key type="filename">birds2_33.png</key>
-            <key type="filename">birds2_34.png</key>
-            <key type="filename">birds2_35.png</key>
-            <key type="filename">birds2_36.png</key>
-            <key type="filename">birds2_37.png</key>
-            <key type="filename">birds2_38.png</key>
-            <key type="filename">birds2_39.png</key>
-            <key type="filename">birds2_40.png</key>
-            <key type="filename">birds2_41.png</key>
-            <key type="filename">birds2_42.png</key>
-            <key type="filename">birds2_43.png</key>
-            <key type="filename">birds2_44.png</key>
-            <key type="filename">birds2_45.png</key>
-            <key type="filename">birds2_46.png</key>
-            <key type="filename">birds2_47.png</key>
-            <key type="filename">birds2_48.png</key>
-            <key type="filename">birds2_49.png</key>
-            <key type="filename">birds2_50.png</key>
-            <key type="filename">birds2_51.png</key>
-            <key type="filename">birds2_52.png</key>
-            <key type="filename">birds2_53.png</key>
-            <key type="filename">birds2_54.png</key>
-            <key type="filename">birds2_55.png</key>
-            <key type="filename">birds2_56.png</key>
-            <key type="filename">birds2_57.png</key>
-            <key type="filename">birds2_58.png</key>
-            <key type="filename">birds2_59.png</key>
-            <key type="filename">birds2_60.png</key>
-            <key type="filename">birds2_61.png</key>
-            <key type="filename">birds2_62.png</key>
-            <key type="filename">birds2_63.png</key>
-            <key type="filename">birds2_64.png</key>
-            <key type="filename">birds2_65.png</key>
-            <key type="filename">birds2_66.png</key>
-            <key type="filename">birds2_67.png</key>
-            <key type="filename">birds2_68.png</key>
-            <key type="filename">birds2_69.png</key>
-            <key type="filename">birds2_70.png</key>
-            <key type="filename">birds2_71.png</key>
-            <key type="filename">birds2_72.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.95</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>11,9,21,18</rect>
-                <key>scale9Paddings</key>
-                <rect>11,9,21,18</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -1421,24 +1074,24 @@
             <key type="filename">elephant_baby_10$Normal.png</key>
             <key type="filename">elephant_baby_11$Normal.png</key>
             <key type="filename">elephant_baby_12$Normal.png</key>
-            <key type="filename">hippo_01$Normal.png</key>
-            <key type="filename">hippo_02$Normal.png</key>
-            <key type="filename">hippo_03$Normal.png</key>
-            <key type="filename">hippo_07$Normal.png</key>
-            <key type="filename">hippo_08$Normal.png</key>
-            <key type="filename">hippo_09$Normal.png</key>
-            <key type="filename">hippo_10$Normal.png</key>
-            <key type="filename">hippo_11$Normal.png</key>
-            <key type="filename">hippo_12$Normal.png</key>
-            <key type="filename">hippo_water_01$Normal.png</key>
-            <key type="filename">hippo_water_02$Normal.png</key>
-            <key type="filename">hippo_water_03$Normal.png</key>
-            <key type="filename">hippo_water_07$Normal.png</key>
-            <key type="filename">hippo_water_08$Normal.png</key>
-            <key type="filename">hippo_water_09$Normal.png</key>
-            <key type="filename">hippo_water_10$Normal.png</key>
-            <key type="filename">hippo_water_11$Normal.png</key>
-            <key type="filename">hippo_water_12$Normal.png</key>
+            <key type="filename">kangaroo_01$Normal.png</key>
+            <key type="filename">kangaroo_01.png</key>
+            <key type="filename">kangaroo_02$Normal.png</key>
+            <key type="filename">kangaroo_02.png</key>
+            <key type="filename">kangaroo_03$Normal.png</key>
+            <key type="filename">kangaroo_03.png</key>
+            <key type="filename">kangaroo_04$Normal.png</key>
+            <key type="filename">kangaroo_04.png</key>
+            <key type="filename">kangaroo_05$Normal.png</key>
+            <key type="filename">kangaroo_05.png</key>
+            <key type="filename">kangaroo_06$Normal.png</key>
+            <key type="filename">kangaroo_06.png</key>
+            <key type="filename">kangaroo_07$Normal.png</key>
+            <key type="filename">kangaroo_07.png</key>
+            <key type="filename">kangaroo_08$Normal.png</key>
+            <key type="filename">kangaroo_08.png</key>
+            <key type="filename">kangaroo_09$Normal.png</key>
+            <key type="filename">kangaroo_09.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1525,515 +1178,9 @@
             <key type="filename">elephant_baby_10.png</key>
             <key type="filename">elephant_baby_11.png</key>
             <key type="filename">elephant_baby_12.png</key>
-            <key type="filename">hippo_01.png</key>
-            <key type="filename">hippo_02.png</key>
-            <key type="filename">hippo_03.png</key>
-            <key type="filename">hippo_07.png</key>
-            <key type="filename">hippo_08.png</key>
-            <key type="filename">hippo_09.png</key>
-            <key type="filename">hippo_10.png</key>
-            <key type="filename">hippo_11.png</key>
-            <key type="filename">hippo_12.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.90566</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>13,13,26,27</rect>
-                <key>scale9Paddings</key>
-                <rect>13,13,26,27</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">bugs_8sheet_01$Normal.png</key>
-            <key type="filename">bugs_8sheet_02$Normal.png</key>
-            <key type="filename">bugs_8sheet_03$Normal.png</key>
-            <key type="filename">bugs_8sheet_04$Normal.png</key>
-            <key type="filename">bugs_8sheet_05$Normal.png</key>
-            <key type="filename">bugs_8sheet_06$Normal.png</key>
-            <key type="filename">bugs_8sheet_07$Normal.png</key>
-            <key type="filename">bugs_8sheet_08$Normal.png</key>
-            <key type="filename">bugs_8sheet_09$Normal.png</key>
-            <key type="filename">bugs_8sheet_10$Normal.png</key>
-            <key type="filename">bugs_8sheet_11$Normal.png</key>
-            <key type="filename">bugs_8sheet_12$Normal.png</key>
-            <key type="filename">bugs_8sheet_13$Normal.png</key>
-            <key type="filename">bugs_8sheet_14$Normal.png</key>
-            <key type="filename">bugs_8sheet_15$Normal.png</key>
-            <key type="filename">bugs_8sheet_16$Normal.png</key>
-            <key type="filename">bugs_8sheet_17$Normal.png</key>
-            <key type="filename">bugs_8sheet_18$Normal.png</key>
-            <key type="filename">bugs_8sheet_19$Normal.png</key>
-            <key type="filename">bugs_8sheet_20$Normal.png</key>
-            <key type="filename">bugs_8sheet_21$Normal.png</key>
-            <key type="filename">bugs_8sheet_22$Normal.png</key>
-            <key type="filename">bugs_8sheet_23$Normal.png</key>
-            <key type="filename">bugs_8sheet_24$Normal.png</key>
-            <key type="filename">bugs_8sheet_25$Normal.png</key>
-            <key type="filename">bugs_8sheet_26$Normal.png</key>
-            <key type="filename">bugs_8sheet_27$Normal.png</key>
-            <key type="filename">bugs_8sheet_28$Normal.png</key>
-            <key type="filename">bugs_8sheet_29$Normal.png</key>
-            <key type="filename">bugs_8sheet_30$Normal.png</key>
-            <key type="filename">bugs_8sheet_31$Normal.png</key>
-            <key type="filename">bugs_8sheet_32$Normal.png</key>
-            <key type="filename">bugs_8sheet_33$Normal.png</key>
-            <key type="filename">bugs_8sheet_34$Normal.png</key>
-            <key type="filename">bugs_8sheet_35$Normal.png</key>
-            <key type="filename">bugs_8sheet_36$Normal.png</key>
-            <key type="filename">bugs_8sheet_37$Normal.png</key>
-            <key type="filename">bugs_8sheet_38$Normal.png</key>
-            <key type="filename">bugs_8sheet_39$Normal.png</key>
-            <key type="filename">bugs_8sheet_40$Normal.png</key>
-            <key type="filename">bugs_8sheet_41$Normal.png</key>
-            <key type="filename">bugs_8sheet_42$Normal.png</key>
-            <key type="filename">bugs_8sheet_43$Normal.png</key>
-            <key type="filename">bugs_8sheet_44$Normal.png</key>
-            <key type="filename">bugs_8sheet_45$Normal.png</key>
-            <key type="filename">bugs_8sheet_46$Normal.png</key>
-            <key type="filename">bugs_8sheet_47$Normal.png</key>
-            <key type="filename">bugs_8sheet_48$Normal.png</key>
-            <key type="filename">bugs_8sheet_49$Normal.png</key>
-            <key type="filename">bugs_8sheet_50$Normal.png</key>
-            <key type="filename">bugs_8sheet_51$Normal.png</key>
-            <key type="filename">bugs_8sheet_52$Normal.png</key>
-            <key type="filename">bugs_8sheet_53$Normal.png</key>
-            <key type="filename">bugs_8sheet_54$Normal.png</key>
-            <key type="filename">bugs_8sheet_55$Normal.png</key>
-            <key type="filename">bugs_8sheet_56$Normal.png</key>
-            <key type="filename">bugs_8sheet_57$Normal.png</key>
-            <key type="filename">bugs_8sheet_58$Normal.png</key>
-            <key type="filename">bugs_8sheet_59$Normal.png</key>
-            <key type="filename">bugs_8sheet_60$Normal.png</key>
-            <key type="filename">bugs_8sheet_61$Normal.png</key>
-            <key type="filename">bugs_8sheet_62$Normal.png</key>
-            <key type="filename">bugs_8sheet_63$Normal.png</key>
-            <key type="filename">bugs_8sheet_64$Normal.png</key>
-            <key type="filename">bugs_8sheet_65$Normal.png</key>
-            <key type="filename">bugs_8sheet_66$Normal.png</key>
-            <key type="filename">bugs_8sheet_67$Normal.png</key>
-            <key type="filename">bugs_8sheet_68$Normal.png</key>
-            <key type="filename">bugs_8sheet_69$Normal.png</key>
-            <key type="filename">bugs_8sheet_70$Normal.png</key>
-            <key type="filename">bugs_8sheet_71$Normal.png</key>
-            <key type="filename">bugs_8sheet_72$Normal.png</key>
-            <key type="filename">bugs_8sheet_73$Normal.png</key>
-            <key type="filename">bugs_8sheet_74$Normal.png</key>
-            <key type="filename">bugs_8sheet_75$Normal.png</key>
-            <key type="filename">bugs_8sheet_76$Normal.png</key>
-            <key type="filename">bugs_8sheet_77$Normal.png</key>
-            <key type="filename">bugs_8sheet_78$Normal.png</key>
-            <key type="filename">bugs_8sheet_79$Normal.png</key>
-            <key type="filename">bugs_8sheet_80$Normal.png</key>
-            <key type="filename">bugs_8sheet_81$Normal.png</key>
-            <key type="filename">bugs_8sheet_82$Normal.png</key>
-            <key type="filename">bugs_8sheet_83$Normal.png</key>
-            <key type="filename">bugs_8sheet_84$Normal.png</key>
-            <key type="filename">bugs_8sheet_85$Normal.png</key>
-            <key type="filename">bugs_8sheet_86$Normal.png</key>
-            <key type="filename">bugs_8sheet_87$Normal.png</key>
-            <key type="filename">bugs_8sheet_88$Normal.png</key>
-            <key type="filename">bugs_8sheet_89$Normal.png</key>
-            <key type="filename">bugs_8sheet_90$Normal.png</key>
-            <key type="filename">bugs_8sheet_91$Normal.png</key>
-            <key type="filename">bugs_8sheet_92$Normal.png</key>
-            <key type="filename">bugs_8sheet_93$Normal.png</key>
-            <key type="filename">bugs_8sheet_94$Normal.png</key>
-            <key type="filename">bugs_8sheet_95$Normal.png</key>
-            <key type="filename">bugs_8sheet_96$Normal.png</key>
-            <key type="filename">fish_8sheet_01$Normal.png</key>
-            <key type="filename">fish_8sheet_01.png</key>
-            <key type="filename">fish_8sheet_02$Normal.png</key>
-            <key type="filename">fish_8sheet_02.png</key>
-            <key type="filename">fish_8sheet_03$Normal.png</key>
-            <key type="filename">fish_8sheet_03.png</key>
-            <key type="filename">fish_8sheet_04$Normal.png</key>
-            <key type="filename">fish_8sheet_04.png</key>
-            <key type="filename">fish_8sheet_05$Normal.png</key>
-            <key type="filename">fish_8sheet_05.png</key>
-            <key type="filename">fish_8sheet_06$Normal.png</key>
-            <key type="filename">fish_8sheet_06.png</key>
-            <key type="filename">fish_8sheet_07$Normal.png</key>
-            <key type="filename">fish_8sheet_07.png</key>
-            <key type="filename">fish_8sheet_08$Normal.png</key>
-            <key type="filename">fish_8sheet_08.png</key>
-            <key type="filename">fish_8sheet_09$Normal.png</key>
-            <key type="filename">fish_8sheet_09.png</key>
-            <key type="filename">fish_8sheet_10$Normal.png</key>
-            <key type="filename">fish_8sheet_10.png</key>
-            <key type="filename">fish_8sheet_11$Normal.png</key>
-            <key type="filename">fish_8sheet_11.png</key>
-            <key type="filename">fish_8sheet_12$Normal.png</key>
-            <key type="filename">fish_8sheet_12.png</key>
-            <key type="filename">fish_8sheet_25$Normal.png</key>
-            <key type="filename">fish_8sheet_25.png</key>
-            <key type="filename">fish_8sheet_26$Normal.png</key>
-            <key type="filename">fish_8sheet_26.png</key>
-            <key type="filename">fish_8sheet_27$Normal.png</key>
-            <key type="filename">fish_8sheet_27.png</key>
-            <key type="filename">fish_8sheet_28$Normal.png</key>
-            <key type="filename">fish_8sheet_28.png</key>
-            <key type="filename">fish_8sheet_29$Normal.png</key>
-            <key type="filename">fish_8sheet_29.png</key>
-            <key type="filename">fish_8sheet_30$Normal.png</key>
-            <key type="filename">fish_8sheet_30.png</key>
-            <key type="filename">fish_8sheet_31$Normal.png</key>
-            <key type="filename">fish_8sheet_31.png</key>
-            <key type="filename">fish_8sheet_32$Normal.png</key>
-            <key type="filename">fish_8sheet_32.png</key>
-            <key type="filename">fish_8sheet_33$Normal.png</key>
-            <key type="filename">fish_8sheet_33.png</key>
-            <key type="filename">fish_8sheet_34$Normal.png</key>
-            <key type="filename">fish_8sheet_34.png</key>
-            <key type="filename">fish_8sheet_35$Normal.png</key>
-            <key type="filename">fish_8sheet_35.png</key>
-            <key type="filename">fish_8sheet_36$Normal.png</key>
-            <key type="filename">fish_8sheet_36.png</key>
-            <key type="filename">fish_8sheet_37$Normal.png</key>
-            <key type="filename">fish_8sheet_37.png</key>
-            <key type="filename">fish_8sheet_38$Normal.png</key>
-            <key type="filename">fish_8sheet_38.png</key>
-            <key type="filename">fish_8sheet_39$Normal.png</key>
-            <key type="filename">fish_8sheet_39.png</key>
-            <key type="filename">fish_8sheet_40$Normal.png</key>
-            <key type="filename">fish_8sheet_40.png</key>
-            <key type="filename">fish_8sheet_41$Normal.png</key>
-            <key type="filename">fish_8sheet_41.png</key>
-            <key type="filename">fish_8sheet_42$Normal.png</key>
-            <key type="filename">fish_8sheet_42.png</key>
-            <key type="filename">fish_8sheet_43$Normal.png</key>
-            <key type="filename">fish_8sheet_43.png</key>
-            <key type="filename">fish_8sheet_44$Normal.png</key>
-            <key type="filename">fish_8sheet_44.png</key>
-            <key type="filename">fish_8sheet_45$Normal.png</key>
-            <key type="filename">fish_8sheet_45.png</key>
-            <key type="filename">fish_8sheet_46$Normal.png</key>
-            <key type="filename">fish_8sheet_46.png</key>
-            <key type="filename">fish_8sheet_47$Normal.png</key>
-            <key type="filename">fish_8sheet_47.png</key>
-            <key type="filename">fish_8sheet_48$Normal.png</key>
-            <key type="filename">fish_8sheet_48.png</key>
-            <key type="filename">fish_8sheet_49$Normal.png</key>
-            <key type="filename">fish_8sheet_49.png</key>
-            <key type="filename">fish_8sheet_50$Normal.png</key>
-            <key type="filename">fish_8sheet_50.png</key>
-            <key type="filename">fish_8sheet_51$Normal.png</key>
-            <key type="filename">fish_8sheet_51.png</key>
-            <key type="filename">fish_8sheet_52$Normal.png</key>
-            <key type="filename">fish_8sheet_52.png</key>
-            <key type="filename">fish_8sheet_53$Normal.png</key>
-            <key type="filename">fish_8sheet_53.png</key>
-            <key type="filename">fish_8sheet_54$Normal.png</key>
-            <key type="filename">fish_8sheet_54.png</key>
-            <key type="filename">fish_8sheet_55$Normal.png</key>
-            <key type="filename">fish_8sheet_55.png</key>
-            <key type="filename">fish_8sheet_56$Normal.png</key>
-            <key type="filename">fish_8sheet_56.png</key>
-            <key type="filename">fish_8sheet_57$Normal.png</key>
-            <key type="filename">fish_8sheet_57.png</key>
-            <key type="filename">fish_8sheet_58$Normal.png</key>
-            <key type="filename">fish_8sheet_58.png</key>
-            <key type="filename">fish_8sheet_59$Normal.png</key>
-            <key type="filename">fish_8sheet_59.png</key>
-            <key type="filename">fish_8sheet_60$Normal.png</key>
-            <key type="filename">fish_8sheet_60.png</key>
-            <key type="filename">fish_8sheet_73$Normal.png</key>
-            <key type="filename">fish_8sheet_73.png</key>
-            <key type="filename">fish_8sheet_74$Normal.png</key>
-            <key type="filename">fish_8sheet_74.png</key>
-            <key type="filename">fish_8sheet_75$Normal.png</key>
-            <key type="filename">fish_8sheet_75.png</key>
-            <key type="filename">fish_8sheet_76$Normal.png</key>
-            <key type="filename">fish_8sheet_76.png</key>
-            <key type="filename">fish_8sheet_77$Normal.png</key>
-            <key type="filename">fish_8sheet_77.png</key>
-            <key type="filename">fish_8sheet_78$Normal.png</key>
-            <key type="filename">fish_8sheet_78.png</key>
-            <key type="filename">fish_8sheet_79$Normal.png</key>
-            <key type="filename">fish_8sheet_79.png</key>
-            <key type="filename">fish_8sheet_80$Normal.png</key>
-            <key type="filename">fish_8sheet_80.png</key>
-            <key type="filename">fish_8sheet_81$Normal.png</key>
-            <key type="filename">fish_8sheet_81.png</key>
-            <key type="filename">fish_8sheet_82$Normal.png</key>
-            <key type="filename">fish_8sheet_82.png</key>
-            <key type="filename">fish_8sheet_83$Normal.png</key>
-            <key type="filename">fish_8sheet_83.png</key>
-            <key type="filename">fish_8sheet_84$Normal.png</key>
-            <key type="filename">fish_8sheet_84.png</key>
-            <key type="filename">fish_8sheet_85$Normal.png</key>
-            <key type="filename">fish_8sheet_85.png</key>
-            <key type="filename">fish_8sheet_86$Normal.png</key>
-            <key type="filename">fish_8sheet_86.png</key>
-            <key type="filename">fish_8sheet_87$Normal.png</key>
-            <key type="filename">fish_8sheet_87.png</key>
-            <key type="filename">fish_8sheet_88$Normal.png</key>
-            <key type="filename">fish_8sheet_88.png</key>
-            <key type="filename">fish_8sheet_89$Normal.png</key>
-            <key type="filename">fish_8sheet_89.png</key>
-            <key type="filename">fish_8sheet_90$Normal.png</key>
-            <key type="filename">fish_8sheet_90.png</key>
-            <key type="filename">fish_8sheet_91$Normal.png</key>
-            <key type="filename">fish_8sheet_91.png</key>
-            <key type="filename">fish_8sheet_92$Normal.png</key>
-            <key type="filename">fish_8sheet_92.png</key>
-            <key type="filename">fish_8sheet_93$Normal.png</key>
-            <key type="filename">fish_8sheet_93.png</key>
-            <key type="filename">fish_8sheet_94$Normal.png</key>
-            <key type="filename">fish_8sheet_94.png</key>
-            <key type="filename">fish_8sheet_95$Normal.png</key>
-            <key type="filename">fish_8sheet_95.png</key>
-            <key type="filename">fish_8sheet_96$Normal.png</key>
-            <key type="filename">fish_8sheet_96.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">bugs_8sheet_01.png</key>
-            <key type="filename">bugs_8sheet_02.png</key>
-            <key type="filename">bugs_8sheet_03.png</key>
-            <key type="filename">bugs_8sheet_04.png</key>
-            <key type="filename">bugs_8sheet_05.png</key>
-            <key type="filename">bugs_8sheet_06.png</key>
-            <key type="filename">bugs_8sheet_07.png</key>
-            <key type="filename">bugs_8sheet_08.png</key>
-            <key type="filename">bugs_8sheet_09.png</key>
-            <key type="filename">bugs_8sheet_10.png</key>
-            <key type="filename">bugs_8sheet_11.png</key>
-            <key type="filename">bugs_8sheet_12.png</key>
-            <key type="filename">bugs_8sheet_13.png</key>
-            <key type="filename">bugs_8sheet_14.png</key>
-            <key type="filename">bugs_8sheet_15.png</key>
-            <key type="filename">bugs_8sheet_16.png</key>
-            <key type="filename">bugs_8sheet_17.png</key>
-            <key type="filename">bugs_8sheet_18.png</key>
-            <key type="filename">bugs_8sheet_19.png</key>
-            <key type="filename">bugs_8sheet_20.png</key>
-            <key type="filename">bugs_8sheet_21.png</key>
-            <key type="filename">bugs_8sheet_22.png</key>
-            <key type="filename">bugs_8sheet_23.png</key>
-            <key type="filename">bugs_8sheet_24.png</key>
-            <key type="filename">bugs_8sheet_25.png</key>
-            <key type="filename">bugs_8sheet_26.png</key>
-            <key type="filename">bugs_8sheet_27.png</key>
-            <key type="filename">bugs_8sheet_28.png</key>
-            <key type="filename">bugs_8sheet_29.png</key>
-            <key type="filename">bugs_8sheet_30.png</key>
-            <key type="filename">bugs_8sheet_31.png</key>
-            <key type="filename">bugs_8sheet_32.png</key>
-            <key type="filename">bugs_8sheet_33.png</key>
-            <key type="filename">bugs_8sheet_34.png</key>
-            <key type="filename">bugs_8sheet_35.png</key>
-            <key type="filename">bugs_8sheet_36.png</key>
-            <key type="filename">bugs_8sheet_37.png</key>
-            <key type="filename">bugs_8sheet_38.png</key>
-            <key type="filename">bugs_8sheet_39.png</key>
-            <key type="filename">bugs_8sheet_40.png</key>
-            <key type="filename">bugs_8sheet_41.png</key>
-            <key type="filename">bugs_8sheet_42.png</key>
-            <key type="filename">bugs_8sheet_43.png</key>
-            <key type="filename">bugs_8sheet_44.png</key>
-            <key type="filename">bugs_8sheet_45.png</key>
-            <key type="filename">bugs_8sheet_46.png</key>
-            <key type="filename">bugs_8sheet_47.png</key>
-            <key type="filename">bugs_8sheet_48.png</key>
-            <key type="filename">bugs_8sheet_49.png</key>
-            <key type="filename">bugs_8sheet_50.png</key>
-            <key type="filename">bugs_8sheet_51.png</key>
-            <key type="filename">bugs_8sheet_52.png</key>
-            <key type="filename">bugs_8sheet_53.png</key>
-            <key type="filename">bugs_8sheet_54.png</key>
-            <key type="filename">bugs_8sheet_55.png</key>
-            <key type="filename">bugs_8sheet_56.png</key>
-            <key type="filename">bugs_8sheet_57.png</key>
-            <key type="filename">bugs_8sheet_58.png</key>
-            <key type="filename">bugs_8sheet_59.png</key>
-            <key type="filename">bugs_8sheet_60.png</key>
-            <key type="filename">bugs_8sheet_61.png</key>
-            <key type="filename">bugs_8sheet_62.png</key>
-            <key type="filename">bugs_8sheet_63.png</key>
-            <key type="filename">bugs_8sheet_64.png</key>
-            <key type="filename">bugs_8sheet_65.png</key>
-            <key type="filename">bugs_8sheet_66.png</key>
-            <key type="filename">bugs_8sheet_67.png</key>
-            <key type="filename">bugs_8sheet_68.png</key>
-            <key type="filename">bugs_8sheet_69.png</key>
-            <key type="filename">bugs_8sheet_70.png</key>
-            <key type="filename">bugs_8sheet_71.png</key>
-            <key type="filename">bugs_8sheet_72.png</key>
-            <key type="filename">bugs_8sheet_73.png</key>
-            <key type="filename">bugs_8sheet_74.png</key>
-            <key type="filename">bugs_8sheet_75.png</key>
-            <key type="filename">bugs_8sheet_76.png</key>
-            <key type="filename">bugs_8sheet_77.png</key>
-            <key type="filename">bugs_8sheet_78.png</key>
-            <key type="filename">bugs_8sheet_79.png</key>
-            <key type="filename">bugs_8sheet_80.png</key>
-            <key type="filename">bugs_8sheet_81.png</key>
-            <key type="filename">bugs_8sheet_82.png</key>
-            <key type="filename">bugs_8sheet_83.png</key>
-            <key type="filename">bugs_8sheet_84.png</key>
-            <key type="filename">bugs_8sheet_85.png</key>
-            <key type="filename">bugs_8sheet_86.png</key>
-            <key type="filename">bugs_8sheet_87.png</key>
-            <key type="filename">bugs_8sheet_88.png</key>
-            <key type="filename">bugs_8sheet_89.png</key>
-            <key type="filename">bugs_8sheet_90.png</key>
-            <key type="filename">bugs_8sheet_91.png</key>
-            <key type="filename">bugs_8sheet_92.png</key>
-            <key type="filename">bugs_8sheet_93.png</key>
-            <key type="filename">bugs_8sheet_94.png</key>
-            <key type="filename">bugs_8sheet_95.png</key>
-            <key type="filename">bugs_8sheet_96.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,1</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">crocodile_01$Normal.png</key>
-            <key type="filename">crocodile_02$Normal.png</key>
-            <key type="filename">crocodile_03$Normal.png</key>
-            <key type="filename">crocodile_07$Normal.png</key>
-            <key type="filename">crocodile_08$Normal.png</key>
-            <key type="filename">crocodile_09$Normal.png</key>
-            <key type="filename">crocodile_10$Normal.png</key>
-            <key type="filename">crocodile_11$Normal.png</key>
-            <key type="filename">crocodile_12$Normal.png</key>
-            <key type="filename">crocodile_water_01$Normal.png</key>
-            <key type="filename">crocodile_water_02$Normal.png</key>
-            <key type="filename">crocodile_water_03$Normal.png</key>
-            <key type="filename">crocodile_water_07$Normal.png</key>
-            <key type="filename">crocodile_water_08$Normal.png</key>
-            <key type="filename">crocodile_water_09$Normal.png</key>
-            <key type="filename">crocodile_water_10$Normal.png</key>
-            <key type="filename">crocodile_water_11$Normal.png</key>
-            <key type="filename">crocodile_water_12$Normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>19,13,38,27</rect>
-                <key>scale9Paddings</key>
-                <rect>19,13,38,27</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">crocodile_01.png</key>
-            <key type="filename">crocodile_02.png</key>
-            <key type="filename">crocodile_03.png</key>
-            <key type="filename">crocodile_07.png</key>
-            <key type="filename">crocodile_08.png</key>
-            <key type="filename">crocodile_09.png</key>
-            <key type="filename">crocodile_10.png</key>
-            <key type="filename">crocodile_11.png</key>
-            <key type="filename">crocodile_12.png</key>
-            <key type="filename">crocodile_water_01.png</key>
-            <key type="filename">crocodile_water_02.png</key>
-            <key type="filename">crocodile_water_03.png</key>
-            <key type="filename">crocodile_water_07.png</key>
-            <key type="filename">crocodile_water_08.png</key>
-            <key type="filename">crocodile_water_09.png</key>
-            <key type="filename">crocodile_water_10.png</key>
-            <key type="filename">crocodile_water_11.png</key>
-            <key type="filename">crocodile_water_12.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.90566</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>19,13,38,27</rect>
-                <key>scale9Paddings</key>
-                <rect>19,13,38,27</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">frog_01$Normal.png</key>
-            <key type="filename">frog_02$Normal.png</key>
-            <key type="filename">frog_03$Normal.png</key>
-            <key type="filename">frog_04$Normal.png</key>
-            <key type="filename">frog_05$Normal.png</key>
-            <key type="filename">frog_06$Normal.png</key>
-            <key type="filename">frog_10$Normal.png</key>
-            <key type="filename">frog_11$Normal.png</key>
-            <key type="filename">frog_12$Normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">frog_01.png</key>
-            <key type="filename">frog_02.png</key>
-            <key type="filename">frog_03.png</key>
-            <key type="filename">frog_04.png</key>
-            <key type="filename">frog_05.png</key>
-            <key type="filename">frog_06.png</key>
-            <key type="filename">frog_10.png</key>
-            <key type="filename">frog_11.png</key>
-            <key type="filename">frog_12.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.9</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9Paddings</key>
-                <rect>5,5,10,10</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">hippo_water_01.png</key>
-            <key type="filename">hippo_water_02.png</key>
-            <key type="filename">hippo_water_03.png</key>
-            <key type="filename">hippo_water_07.png</key>
-            <key type="filename">hippo_water_08.png</key>
-            <key type="filename">hippo_water_09.png</key>
-            <key type="filename">hippo_water_10.png</key>
-            <key type="filename">hippo_water_11.png</key>
-            <key type="filename">hippo_water_12.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.792453</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -2217,45 +1364,146 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">公鸡22$Normal.png</key>
-            <key type="filename">公鸡22.png</key>
-            <key type="filename">公鸡23$Normal.png</key>
-            <key type="filename">公鸡23.png</key>
-            <key type="filename">公鸡24$Normal.png</key>
-            <key type="filename">公鸡24.png</key>
-            <key type="filename">公鸡29$Normal.png</key>
-            <key type="filename">公鸡29.png</key>
-            <key type="filename">公鸡30$Normal.png</key>
-            <key type="filename">公鸡30.png</key>
-            <key type="filename">公鸡31$Normal.png</key>
-            <key type="filename">公鸡31.png</key>
-            <key type="filename">公鸡51$Normal.png</key>
-            <key type="filename">公鸡51.png</key>
-            <key type="filename">公鸡52$Normal.png</key>
-            <key type="filename">公鸡52.png</key>
-            <key type="filename">公鸡53$Normal.png</key>
-            <key type="filename">公鸡53.png</key>
-            <key type="filename">白鸡19$Normal.png</key>
-            <key type="filename">白鸡19.png</key>
-            <key type="filename">白鸡20$Normal.png</key>
-            <key type="filename">白鸡20.png</key>
-            <key type="filename">白鸡21$Normal.png</key>
-            <key type="filename">白鸡21.png</key>
-            <key type="filename">白鸡26$Normal.png</key>
-            <key type="filename">白鸡26.png</key>
-            <key type="filename">白鸡27$Normal.png</key>
-            <key type="filename">白鸡27.png</key>
-            <key type="filename">白鸡28$Normal.png</key>
-            <key type="filename">白鸡28.png</key>
-            <key type="filename">白鸡48$Normal.png</key>
-            <key type="filename">白鸡48.png</key>
-            <key type="filename">白鸡49$Normal.png</key>
-            <key type="filename">白鸡49.png</key>
-            <key type="filename">白鸡50$Normal.png</key>
-            <key type="filename">白鸡50.png</key>
+            <key type="filename">penguin_01.png</key>
+            <key type="filename">penguin_02.png</key>
+            <key type="filename">penguin_03.png</key>
+            <key type="filename">penguin_04.png</key>
+            <key type="filename">penguin_05.png</key>
+            <key type="filename">penguin_06.png</key>
+            <key type="filename">penguin_07.png</key>
+            <key type="filename">penguin_08.png</key>
+            <key type="filename">penguin_09.png</key>
+            <key type="filename">penguin_baby_01.png</key>
+            <key type="filename">penguin_baby_02.png</key>
+            <key type="filename">penguin_baby_03.png</key>
+            <key type="filename">penguin_baby_04.png</key>
+            <key type="filename">penguin_baby_05.png</key>
+            <key type="filename">penguin_baby_06.png</key>
+            <key type="filename">penguin_baby_07.png</key>
+            <key type="filename">penguin_baby_08.png</key>
+            <key type="filename">penguin_baby_09.png</key>
+            <key type="filename">小鸡右0.png</key>
+            <key type="filename">小鸡右1.png</key>
+            <key type="filename">小鸡右2.png</key>
+            <key type="filename">小鸭右0.png</key>
+            <key type="filename">小鸭右1.png</key>
+            <key type="filename">小鸭右2.png</key>
+            <key type="filename">鸭子右0.png</key>
+            <key type="filename">鸭子右1.png</key>
+            <key type="filename">鸭子右2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>11,9,21,18</rect>
+                <key>scale9Paddings</key>
+                <rect>11,9,21,18</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">小鸡上0$Normal.png</key>
+            <key type="filename">小鸡上1$Normal.png</key>
+            <key type="filename">小鸡上2$Normal.png</key>
+            <key type="filename">小鸡下0$Normal.png</key>
+            <key type="filename">小鸡下1$Normal.png</key>
+            <key type="filename">小鸡下2$Normal.png</key>
+            <key type="filename">小鸭上0$Normal.png</key>
+            <key type="filename">小鸭上1$Normal.png</key>
+            <key type="filename">小鸭上2$Normal.png</key>
+            <key type="filename">小鸭下0$Normal.png</key>
+            <key type="filename">小鸭下1$Normal.png</key>
+            <key type="filename">小鸭下2$Normal.png</key>
+            <key type="filename">鸭子上0$Normal.png</key>
+            <key type="filename">鸭子上1$Normal.png</key>
+            <key type="filename">鸭子上2$Normal.png</key>
+            <key type="filename">鸭子下0$Normal.png</key>
+            <key type="filename">鸭子下1$Normal.png</key>
+            <key type="filename">鸭子下2$Normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9Paddings</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">小鸡上0.png</key>
+            <key type="filename">小鸡上1.png</key>
+            <key type="filename">小鸡上2.png</key>
+            <key type="filename">小鸡下0.png</key>
+            <key type="filename">小鸡下1.png</key>
+            <key type="filename">小鸡下2.png</key>
+            <key type="filename">小鸭上0.png</key>
+            <key type="filename">小鸭上1.png</key>
+            <key type="filename">小鸭上2.png</key>
+            <key type="filename">小鸭下0.png</key>
+            <key type="filename">小鸭下1.png</key>
+            <key type="filename">小鸭下2.png</key>
+            <key type="filename">鸭子上0.png</key>
+            <key type="filename">鸭子上1.png</key>
+            <key type="filename">鸭子上2.png</key>
+            <key type="filename">鸭子下0.png</key>
+            <key type="filename">鸭子下1.png</key>
+            <key type="filename">鸭子下2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.875</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9Paddings</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">白鸡19$Normal.png</key>
+            <key type="filename">白鸡20$Normal.png</key>
+            <key type="filename">白鸡21$Normal.png</key>
+            <key type="filename">白鸡26$Normal.png</key>
+            <key type="filename">白鸡27$Normal.png</key>
+            <key type="filename">白鸡28$Normal.png</key>
+            <key type="filename">白鸡48$Normal.png</key>
+            <key type="filename">白鸡49$Normal.png</key>
+            <key type="filename">白鸡50$Normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">白鸡19.png</key>
+            <key type="filename">白鸡20.png</key>
+            <key type="filename">白鸡21.png</key>
+            <key type="filename">白鸡26.png</key>
+            <key type="filename">白鸡27.png</key>
+            <key type="filename">白鸡28.png</key>
+            <key type="filename">白鸡48.png</key>
+            <key type="filename">白鸡49.png</key>
+            <key type="filename">白鸡50.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.875</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
