@@ -41,7 +41,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 spriteRenderers = PackageItem.gameObject.GetComponentsInChildren<SpriteRenderer>(true);
                 mapPackageItemRenders[id] = spriteRenderers;
                 RefreshMapPackageItemRender(id);
-            }  
+            }
+        }
+        else
+        {
+            mapPackageItemRenders[id] = spriteRenderers;
+            RefreshMapPackageItemRender(id);
         }
     }
     async void RefreshMapPackageItemRender(int id)
@@ -50,13 +55,17 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             if(PackageManager.instance.GetPackageItemCounts(id,out var items))
             {
-                
+                for(int i = 0; i < spriteRenderers.Length; i++)
+                {
+                    spriteRenderers[i].enabled = false;
+                }
                 if (items.Count <= spriteRenderers.Length)
                 {
                     for(int i = 0; i < items.Count; i++)
                     {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
                         spriteRenderers[i].sprite = itemData.icon;
+                        spriteRenderers[i].enabled = true;
                     }
                 }
                 else
@@ -65,6 +74,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
                         spriteRenderers[i].sprite = itemData.icon;
+                        spriteRenderers[i].enabled = true;
                     }
                 }
             }

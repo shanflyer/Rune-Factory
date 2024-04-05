@@ -50,7 +50,7 @@ public class AnimalData : ScriptableObject, IGameData
                     stage = int.Parse(dataStr[1]),
                     growthDay = int.Parse(dataStr[2]),
                     productValue = int.Parse(dataStr[3]),
-                    objAnimationStage = int.Parse(dataStr[4]),
+                    stageObj = int.Parse(dataStr[4]),
                 };
                 growthStages.Add(growthStage);
             }

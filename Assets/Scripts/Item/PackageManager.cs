@@ -183,6 +183,12 @@ public class PackageManager : Singleton<PackageManager>
             keyX = index,
         };
         GameActionManager.instance.QueueAction(setItemAnimation);
+
+        RefreshMapPackageItemRender RefreshMapPackageItemRender = new RefreshMapPackageItemRender
+        {
+            linkInstanceId = packageId,
+        };
+        GameActionManager.instance.QueueAction(RefreshMapPackageItemRender);
     }
 
     void ChangePackageInnstance(ChangePackageInnstance changePackageInnstance)

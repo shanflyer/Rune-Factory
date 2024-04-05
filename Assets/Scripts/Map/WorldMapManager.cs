@@ -661,7 +661,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private void InitMapLink(InitMapLink initMapLink)
     {
         int index = worldMapData.mapLines.FindIndex(m => m.instanceId == initMapLink.linkInstanceId);
-        if (index >= 0)
+        if (index >= 0 && !worldMapData.mapLines[index].zeroInit)
         {
             MapCellController.instance.InitLinkMap(worldMapData.mapLines[index]);
         }

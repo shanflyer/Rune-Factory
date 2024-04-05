@@ -17,27 +17,27 @@ MonoBehaviour:
   goodId: 0
   linkCharacter: 3000
   age: 1
-  foods: 4d040000
+  foods: 64000000
   produceCycle: 2
   product: 1001
   productCount: 1
   cycleStage: 1
   behavior: "\u9E21"
   externalBehavior: {fileID: 11400000, guid: 784277b561517f44e861c50e5ddf4293, type: 2}
-  GrowthStageStr: "\u5C0F\u9E21,0,1,0,0|\u6BCD\u9E21,1,1,0,1|\u6BCD\u9E21,2,100,0,0"
+  GrowthStageStr: "\u5C0F\u9E21,0,1,0,3000|\u6BCD\u9E21,1,1,0,3001|\u6BCD\u9E21,2,100,0,3001"
   growthStages:
   - stageName: "\u5C0F\u9E21"
     stage: 0
     growthDay: 1
     productValue: 0
-    objAnimationStage: 0
+    stageObj: 3000
   - stageName: "\u6BCD\u9E21"
     stage: 1
     growthDay: 1
     productValue: 0
-    objAnimationStage: 1
+    stageObj: 3001
   - stageName: "\u6BCD\u9E21"
     stage: 2
     growthDay: 100
     productValue: 0
-    objAnimationStage: 0
+    stageObj: 3001

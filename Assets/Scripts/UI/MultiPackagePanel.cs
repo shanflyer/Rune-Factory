@@ -289,7 +289,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 {
                     UPMove.localScale = Vector3.zero;
                     DownMove.localScale = Vector3.one;
-                    if (packageSetData0.moveItemType==MoveItemType.OnlyGet)
+                    if (packageSetData0.moveItemType==MoveItemType.OnlyPut)
                     {
                        // DownMove.localScale = Vector3.zero;
                         ActionButton.interactable = false;
@@ -313,7 +313,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 if (SelectItem.packageId == packageId1)
                 {
 
-                    if (packageSetData1.moveItemType == MoveItemType.OnlyGet)
+                    if (packageSetData1.moveItemType == MoveItemType.OnlyPut)
                     {
                        // UPMove.localScale = Vector3.zero;
                         ActionButton.interactable = false;
