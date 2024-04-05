@@ -234,8 +234,17 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
       
         characterId = v.characterId;
         CharacterName.text = v.name;
-        State.text = v.NPCState.ToString();
-        State.color = NPC.GetStateColor(v.NPCState);
+        if (v.isNpc)
+        {
+            State.text = v.NPCState.ToString();
+            State.color = NPC.GetStateColor(v.NPCState);
+        }
+        else
+        {
+            State.text = v.animalState.ToString();
+            State.color = Animal.GetStateColor(v.animalState);
+        }
+    
 
         int maxHP = v.characterProperty.MaxHP;
         int maxRP = v.characterProperty.MaxPower;
@@ -283,6 +292,9 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         if (v.isNpc)
         {
             visitButton.transform.localScale = Vector3.one;
+            State.transform.localScale = Vector3.one;
+        }else if (v.isAnimal)
+        {
             State.transform.localScale = Vector3.one;
         }
         else

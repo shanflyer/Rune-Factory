@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.TextCore.Text;
 
 public class PastureManager : Singleton<PastureManager>
@@ -44,9 +45,28 @@ public class PastureManager : Singleton<PastureManager>
         GameActionManager.instance.AddListener<LinkPasturePackage>(LinkPasturePackage);
         GameActionManager.instance.AddListener<TrySetItemToPastureBox>(TrySetItemToPastureBox);
 
+        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+
         GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
 
+    private async void GiveGift(GiveGift giveGift)
+    {
+        if (animals.GetData(giveGift.receiveCharacter, out var animal))
+        {
+            AnimalData animalData =await GameDataManager.instance.GetAsyncData<AnimalData>(animal.dataId);
+            GameTimerController.instance.DelayAction(1000, () =>
+            { 
+                ShowEmote showEmote = new ShowEmote
+                {
+                    emoteId =animalData.getFoodEmote,
+                    entityType = EntityType.角色,
+                    id = giveGift.receiveCharacter
+                };
+                GameActionManager.instance.QueueAction(showEmote);
+            });
+        }
+    }
     private async void NewDay(NewDay newDay)
     {
         foreach (Animal animal in animals)
@@ -669,6 +689,15 @@ public struct Animal : INativeData
     public int linkCharacterData;
     public int Key => instaceId;
 
+    public static Color GetStateColor(AnimalState animalState)
+    {
+        if (animalState == AnimalState.正常)
+        {
+            return new Color(0, 0.5f, 0, 1);
+        }
+        return new Color(0.5f, 0, 0, 1);
+    }
+
     public async Task<Animal> Grow()
     {
         if (animalState == AnimalState.死亡)
@@ -694,25 +723,53 @@ public struct Animal : INativeData
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(dataId);
         if (animalState != AnimalState.死亡)
         {
+            Team team = TeamManager.instance.GetTeam(instaceId);
             if (animalState != AnimalState.饥饿)
-            {
-
-                TrySetItemToPastureBox trySetItemToPastureBox = new TrySetItemToPastureBox
+            { 
+                if (team!=null)
                 {
-                    itemId = animalData.product,
-                    itemCount = animalData.productCount,
-                    pastureId = pasture,
-                };
-                GameActionManager.instance.QueueAction(trySetItemToPastureBox);
-            }
+                    AddPackageItem addPackageItem = new AddPackageItem
+                    {
+                        packageId = team.leader.characterPackage,
+                        itemDataId = animalData.product,
+                        itemCount = animalData.productCount
+                    };
+                    GameActionManager.instance.QueueAction(addPackageItem);
+                }
+                else
+                {
+                    TrySetItemToPastureBox trySetItemToPastureBox = new TrySetItemToPastureBox
+                    {
+                        itemId = animalData.product,
+                        itemCount = animalData.productCount,
+                        pastureId = pasture,
+                    };
+                    GameActionManager.instance.QueueAction(trySetItemToPastureBox);
+                }
 
-            AnimalCostFood animalCostFood = new AnimalCostFood
+                ShowEmote showEmote = new ShowEmote
+                {
+                    emoteId = animalData.productEmote,
+                    entityType = EntityType.角色,
+                    id = instaceId
+                };
+                GameActionManager.instance.QueueAction(showEmote);
+            }
+            if (team != null)
             {
-                animalDataId = dataId,
-                pastureId = pasture,
-                setResult = CostFoodResult
-            };
-            GameActionManager.instance.QueueAction(animalCostFood, true);
+                CostFoodResult(false);
+            }
+            else
+            {
+                AnimalCostFood animalCostFood = new AnimalCostFood
+                {
+                    animalDataId = dataId,
+                    pastureId = pasture,
+                    setResult = CostFoodResult
+                };
+                GameActionManager.instance.QueueAction(animalCostFood, true);
+            }
+           
         } 
         growthDay++; 
         var growthStateData = animalData.growthStages[growthStage];

@@ -22,9 +22,12 @@ MonoBehaviour:
   product: 1001
   productCount: 1
   cycleStage: 1
+  getFoodEmote: 8
+  hungerEmote: 24
+  productEmote: 14
   behavior: "\u9E21"
   externalBehavior: {fileID: 11400000, guid: 784277b561517f44e861c50e5ddf4293, type: 2}
-  GrowthStageStr: "\u5C0F\u9E21,0,1,0,3000|\u6BCD\u9E21,1,1,0,3001|\u6BCD\u9E21,2,100,0,3001"
+  GrowthStageStr: "\u5C0F\u9E21,0,1,0,3000|\u6BCD\u9E21,1,100,0,3001|\u6BCD\u9E21,2,100,0,3001"
   growthStages:
   - stageName: "\u5C0F\u9E21"
     stage: 0
@@ -33,7 +36,7 @@ MonoBehaviour:
     stageObj: 3000
   - stageName: "\u6BCD\u9E21"
     stage: 1
-    growthDay: 1
+    growthDay: 100
     productValue: 0
     stageObj: 3001
   - stageName: "\u6BCD\u9E21"

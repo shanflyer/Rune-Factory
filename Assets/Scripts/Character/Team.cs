@@ -68,6 +68,21 @@ public class TeamManager : Singleton<TeamManager>
 
         return default(CharacterInformationDataList);
     }
+    public Team GetTeam(int characterId)
+    {
+        if (teams.TryGetValue(characterId, out var team))
+        {
+            return team;
+        }
+        foreach (var t in teams)
+        {
+            if (t.Value.CheckCharacter(characterId))
+            {
+                return t.Value;
+            }
+        }
+        return null;
+    }
     public Team GetTeam(Character character)
     {
         if (teams.TryGetValue(character.instanceId, out var team))

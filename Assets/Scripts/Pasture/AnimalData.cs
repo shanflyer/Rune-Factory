@@ -19,6 +19,9 @@ public class AnimalData : ScriptableObject, IGameData
     public int product;
     public int productCount;
     public int cycleStage;
+    public int getFoodEmote;
+    public int hungerEmote;
+    public int productEmote;
     public string behavior;
     public ExternalBehaviorTree externalBehavior;
 

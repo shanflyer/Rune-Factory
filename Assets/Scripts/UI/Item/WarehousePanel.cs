@@ -266,7 +266,10 @@ public class WarehousePanel : GamePanel<PackageList>
     private async void RefreshPackage()
     {
         //selectPackageData = packageList.packageDatas[selectIndex];
-
+        if (selectPackageData.dataId == 0)
+        {
+            return;
+        }
         List<Item> items = new List<Item>();
         if (selectPackageData.items != null)
         {

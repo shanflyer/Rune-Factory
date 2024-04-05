@@ -108,14 +108,31 @@ public class FriendManager : Singleton<FriendManager>
         {
             packageDatas = new List<PackageData>()
         };
+
+        bool isAnimal = PastureManager.instance.GetAnimal(tryGiveGiftOpenPackage.toCharacterId, out var animal);
+       
+
         Character character = CharacterManager.instance.GetCharacter(tryGiveGiftOpenPackage.fromCharacterId);
         if (character != null)
         {
             var packageData = PackageManager.instance.GetPackageData(character.characterPackage);
+            if (isAnimal)
+            {
+                AnimalData animalData =await GameDataManager.instance.GetAsyncData<AnimalData>(animal.dataId);
+                for(int i = 0; i < packageData.items.Count; i++)
+                {
+                    var item = packageData.items[i];
+                    if (!animalData.foods.Contains(item.dataId))
+                    {
+                        item.locked = false;
+                        packageData.items[i] = item;
+                    }
+                }
+            } 
             packageList.packageDatas.Add(packageData);
 
             var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-            warehousePanel.SetSelectItemAction(SelectAction, "赠送");
+            warehousePanel.SetSelectItemAction(SelectAction, isAnimal?"投喂": "赠送");
 
             void SelectAction(Item item, int packageId)
             {

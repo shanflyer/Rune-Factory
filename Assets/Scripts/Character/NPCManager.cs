@@ -20,6 +20,8 @@ public struct CharacterInformationData : IReferenceData
     public int characterId;
     public bool isNpc;
     public NPCState NPCState;
+    public bool isAnimal;
+    public AnimalState animalState;
     public CharacterProperty characterProperty;
     public int level;
     public Exp exp;
@@ -118,6 +120,11 @@ public partial class Character
         {
             characterInformationData.isNpc = true;
             characterInformationData.NPCState = npc.npcState;
+        }
+        if(PastureManager.instance.GetAnimal(instanceId,out var animal))
+        {
+            characterInformationData.isAnimal = true;
+            characterInformationData.animalState = animal.animalState;
         }
 
         return characterInformationData;
