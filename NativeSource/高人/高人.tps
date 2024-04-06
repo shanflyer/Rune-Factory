@@ -245,18 +245,6 @@
             <key type="filename">Actor1_35.png</key>
             <key type="filename">Actor1_36$Normal.png</key>
             <key type="filename">Actor1_36.png</key>
-            <key type="filename">Actor1_37$Normal.png</key>
-            <key type="filename">Actor1_37.png</key>
-            <key type="filename">Actor1_38$Normal.png</key>
-            <key type="filename">Actor1_38.png</key>
-            <key type="filename">Actor1_39$Normal.png</key>
-            <key type="filename">Actor1_39.png</key>
-            <key type="filename">Actor1_40$Normal.png</key>
-            <key type="filename">Actor1_40.png</key>
-            <key type="filename">Actor1_41$Normal.png</key>
-            <key type="filename">Actor1_41.png</key>
-            <key type="filename">Actor1_42$Normal.png</key>
-            <key type="filename">Actor1_42.png</key>
             <key type="filename">Actor1_43$Normal.png</key>
             <key type="filename">Actor1_43.png</key>
             <key type="filename">Actor1_44$Normal.png</key>
@@ -269,18 +257,6 @@
             <key type="filename">Actor1_47.png</key>
             <key type="filename">Actor1_48$Normal.png</key>
             <key type="filename">Actor1_48.png</key>
-            <key type="filename">Actor1_49$Normal.png</key>
-            <key type="filename">Actor1_49.png</key>
-            <key type="filename">Actor1_50$Normal.png</key>
-            <key type="filename">Actor1_50.png</key>
-            <key type="filename">Actor1_51$Normal.png</key>
-            <key type="filename">Actor1_51.png</key>
-            <key type="filename">Actor1_52$Normal.png</key>
-            <key type="filename">Actor1_52.png</key>
-            <key type="filename">Actor1_53$Normal.png</key>
-            <key type="filename">Actor1_53.png</key>
-            <key type="filename">Actor1_54$Normal.png</key>
-            <key type="filename">Actor1_54.png</key>
             <key type="filename">Actor1_55$Normal.png</key>
             <key type="filename">Actor1_55.png</key>
             <key type="filename">Actor1_56$Normal.png</key>
@@ -293,18 +269,6 @@
             <key type="filename">Actor1_59.png</key>
             <key type="filename">Actor1_60$Normal.png</key>
             <key type="filename">Actor1_60.png</key>
-            <key type="filename">Actor1_61$Normal.png</key>
-            <key type="filename">Actor1_61.png</key>
-            <key type="filename">Actor1_62$Normal.png</key>
-            <key type="filename">Actor1_62.png</key>
-            <key type="filename">Actor1_63$Normal.png</key>
-            <key type="filename">Actor1_63.png</key>
-            <key type="filename">Actor1_64$Normal.png</key>
-            <key type="filename">Actor1_64.png</key>
-            <key type="filename">Actor1_65$Normal.png</key>
-            <key type="filename">Actor1_65.png</key>
-            <key type="filename">Actor1_66$Normal.png</key>
-            <key type="filename">Actor1_66.png</key>
             <key type="filename">Actor1_67$Normal.png</key>
             <key type="filename">Actor1_67.png</key>
             <key type="filename">Actor1_68$Normal.png</key>
@@ -815,12 +779,6 @@
             <key type="filename">Damage1_02.png</key>
             <key type="filename">Damage1_03$Normal.png</key>
             <key type="filename">Damage1_03.png</key>
-            <key type="filename">Damage1_04$Normal.png</key>
-            <key type="filename">Damage1_04.png</key>
-            <key type="filename">Damage1_05$Normal.png</key>
-            <key type="filename">Damage1_05.png</key>
-            <key type="filename">Damage1_06$Normal.png</key>
-            <key type="filename">Damage1_06.png</key>
             <key type="filename">Damage1_07$Normal.png</key>
             <key type="filename">Damage1_07.png</key>
             <key type="filename">Damage1_08$Normal.png</key>
@@ -839,12 +797,6 @@
             <key type="filename">Damage1_14.png</key>
             <key type="filename">Damage1_15$Normal.png</key>
             <key type="filename">Damage1_15.png</key>
-            <key type="filename">Damage1_16$Normal.png</key>
-            <key type="filename">Damage1_16.png</key>
-            <key type="filename">Damage1_17$Normal.png</key>
-            <key type="filename">Damage1_17.png</key>
-            <key type="filename">Damage1_18$Normal.png</key>
-            <key type="filename">Damage1_18.png</key>
             <key type="filename">Damage1_19$Normal.png</key>
             <key type="filename">Damage1_19.png</key>
             <key type="filename">Damage1_20$Normal.png</key>
@@ -1409,6 +1361,60 @@
             <key type="filename">Evil_95.png</key>
             <key type="filename">Evil_96$Normal.png</key>
             <key type="filename">Evil_96.png</key>
+            <key type="filename">主角女_上_4$Normal.png</key>
+            <key type="filename">主角女_上_5$Normal.png</key>
+            <key type="filename">主角女_上_6$Normal.png</key>
+            <key type="filename">主角女_下_0$Normal.png</key>
+            <key type="filename">主角女_下_1$Normal.png</key>
+            <key type="filename">主角女_下_2$Normal.png</key>
+            <key type="filename">主角女_下_坐$Normal.png</key>
+            <key type="filename">主角女_右_2$Normal.png</key>
+            <key type="filename">主角女_右_3$Normal.png</key>
+            <key type="filename">主角女_右_4$Normal.png</key>
+            <key type="filename">主角女_托举_上_6$Normal.png</key>
+            <key type="filename">主角女_托举_上_7$Normal.png</key>
+            <key type="filename">主角女_托举_上_8$Normal.png</key>
+            <key type="filename">主角女_托举_下_4$Normal.png</key>
+            <key type="filename">主角女_托举_下_5$Normal.png</key>
+            <key type="filename">主角女_托举_下_6$Normal.png</key>
+            <key type="filename">主角女_托举_右_0$Normal.png</key>
+            <key type="filename">主角女_托举_右_1$Normal.png</key>
+            <key type="filename">主角女_托举_右_2$Normal.png</key>
+            <key type="filename">主角女坐$Normal.png</key>
+            <key type="filename">主角女坐.png</key>
+            <key type="filename">主角女趴$Normal.png</key>
+            <key type="filename">主角女趴.png</key>
+            <key type="filename">主角女躺$Normal.png</key>
+            <key type="filename">主角女躺.png</key>
+            <key type="filename">主角男_上_1$Normal.png</key>
+            <key type="filename">主角男_上_2$Normal.png</key>
+            <key type="filename">主角男_上_3$Normal.png</key>
+            <key type="filename">主角男_下_7$Normal.png</key>
+            <key type="filename">主角男_下_8$Normal.png</key>
+            <key type="filename">主角男_下_9$Normal.png</key>
+            <key type="filename">主角男_下_坐$Normal.png</key>
+            <key type="filename">主角男_右_49$Normal.png</key>
+            <key type="filename">主角男_右_50$Normal.png</key>
+            <key type="filename">主角男_右_51$Normal.png</key>
+            <key type="filename">主角男_托举_上_3$Normal.png</key>
+            <key type="filename">主角男_托举_上_4$Normal.png</key>
+            <key type="filename">主角男_托举_上_5$Normal.png</key>
+            <key type="filename">主角男_托举_下_1$Normal.png</key>
+            <key type="filename">主角男_托举_下_2$Normal.png</key>
+            <key type="filename">主角男_托举_下_3$Normal.png</key>
+            <key type="filename">主角男_托举_右_7$Normal.png</key>
+            <key type="filename">主角男_托举_右_8$Normal.png</key>
+            <key type="filename">主角男_托举_右_9$Normal.png</key>
+            <key type="filename">主角男_锄地_上_3$Normal.png</key>
+            <key type="filename">主角男_锄地_上_4$Normal.png</key>
+            <key type="filename">主角男_锄地_上_5$Normal.png</key>
+            <key type="filename">主角男_锄地_右_0$Normal.png</key>
+            <key type="filename">主角男坐$Normal.png</key>
+            <key type="filename">主角男坐.png</key>
+            <key type="filename">主角男趴$Normal.png</key>
+            <key type="filename">主角男趴.png</key>
+            <key type="filename">主角男躺$Normal.png</key>
+            <key type="filename">主角男躺.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1420,6 +1426,156 @@
                 <rect>12,18,24,36</rect>
                 <key>scale9Paddings</key>
                 <rect>12,18,24,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">主角女_上_4.png</key>
+            <key type="filename">主角女_上_5.png</key>
+            <key type="filename">主角女_上_6.png</key>
+            <key type="filename">主角女_下_0.png</key>
+            <key type="filename">主角女_下_1.png</key>
+            <key type="filename">主角女_下_2.png</key>
+            <key type="filename">主角女_下_坐.png</key>
+            <key type="filename">主角女_右_2.png</key>
+            <key type="filename">主角女_右_3.png</key>
+            <key type="filename">主角女_右_4.png</key>
+            <key type="filename">主角女_托举_上_6.png</key>
+            <key type="filename">主角女_托举_上_7.png</key>
+            <key type="filename">主角女_托举_上_8.png</key>
+            <key type="filename">主角女_托举_下_4.png</key>
+            <key type="filename">主角女_托举_下_5.png</key>
+            <key type="filename">主角女_托举_下_6.png</key>
+            <key type="filename">主角女_托举_右_0.png</key>
+            <key type="filename">主角女_托举_右_1.png</key>
+            <key type="filename">主角女_托举_右_2.png</key>
+            <key type="filename">主角男_上_1.png</key>
+            <key type="filename">主角男_上_2.png</key>
+            <key type="filename">主角男_上_3.png</key>
+            <key type="filename">主角男_下_7.png</key>
+            <key type="filename">主角男_下_8.png</key>
+            <key type="filename">主角男_下_9.png</key>
+            <key type="filename">主角男_下_坐.png</key>
+            <key type="filename">主角男_右_49.png</key>
+            <key type="filename">主角男_右_50.png</key>
+            <key type="filename">主角男_右_51.png</key>
+            <key type="filename">主角男_托举_上_3.png</key>
+            <key type="filename">主角男_托举_上_4.png</key>
+            <key type="filename">主角男_托举_上_5.png</key>
+            <key type="filename">主角男_托举_下_1.png</key>
+            <key type="filename">主角男_托举_下_2.png</key>
+            <key type="filename">主角男_托举_下_3.png</key>
+            <key type="filename">主角男_托举_右_7.png</key>
+            <key type="filename">主角男_托举_右_8.png</key>
+            <key type="filename">主角男_托举_右_9.png</key>
+            <key type="filename">主角男_锄地_上_3.png</key>
+            <key type="filename">主角男_锄地_上_4.png</key>
+            <key type="filename">主角男_锄地_上_5.png</key>
+            <key type="filename">主角男_锄地_右_0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9Paddings</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">主角男_锄地_下_1$Normal.png</key>
+            <key type="filename">主角男_锄地_下_4$Normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,36,24,72</rect>
+                <key>scale9Paddings</key>
+                <rect>12,36,24,72</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">主角男_锄地_下_1.png</key>
+            <key type="filename">主角男_锄地_下_4.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.48</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,36,24,72</rect>
+                <key>scale9Paddings</key>
+                <rect>12,36,24,72</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">主角男_锄地_下_2$Normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,36,23,72</rect>
+                <key>scale9Paddings</key>
+                <rect>12,36,23,72</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">主角男_锄地_下_2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.48</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,36,23,72</rect>
+                <key>scale9Paddings</key>
+                <rect>12,36,23,72</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">主角男_锄地_右_1$Normal.png</key>
+            <key type="filename">主角男_锄地_右_2$Normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>24,18,48,36</rect>
+                <key>scale9Paddings</key>
+                <rect>24,18,48,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">主角男_锄地_右_1.png</key>
+            <key type="filename">主角男_锄地_右_2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.25,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>24,18,48,36</rect>
+                <key>scale9Paddings</key>
+                <rect>24,18,48,36</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
