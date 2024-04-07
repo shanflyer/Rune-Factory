@@ -26,8 +26,15 @@ public class FishPondData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
-
+#if UNITY_EDITOR
     public void SetReferenceData()
-    { 
+    {
+        seasonRandomValue = new SeasonRandomDictionary();
+        for (int i = 0; i < fishRandomIds.Count; i++)
+        {
+            int2 value = fishRandomIds[i];
+            seasonRandomValue[(Season)value.x] = value.y;
+        }
     }
+#endif
 }

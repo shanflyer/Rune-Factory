@@ -94,13 +94,13 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Polygon</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
             <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
-            <false/>
+            <true/>
             <key>maxRects</key>
             <struct type="AlgorithmMaxRectsSettings">
                 <key>heuristic</key>
@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Polygon</enum>
+            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -173,150 +173,18 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">fish_8sheet_01$Normal.png</key>
-            <key type="filename">fish_8sheet_01.png</key>
-            <key type="filename">fish_8sheet_02$Normal.png</key>
-            <key type="filename">fish_8sheet_02.png</key>
-            <key type="filename">fish_8sheet_03$Normal.png</key>
-            <key type="filename">fish_8sheet_03.png</key>
-            <key type="filename">fish_8sheet_04$Normal.png</key>
-            <key type="filename">fish_8sheet_04.png</key>
-            <key type="filename">fish_8sheet_05$Normal.png</key>
-            <key type="filename">fish_8sheet_05.png</key>
-            <key type="filename">fish_8sheet_06$Normal.png</key>
-            <key type="filename">fish_8sheet_06.png</key>
-            <key type="filename">fish_8sheet_07$Normal.png</key>
-            <key type="filename">fish_8sheet_07.png</key>
-            <key type="filename">fish_8sheet_08$Normal.png</key>
-            <key type="filename">fish_8sheet_08.png</key>
-            <key type="filename">fish_8sheet_09$Normal.png</key>
-            <key type="filename">fish_8sheet_09.png</key>
-            <key type="filename">fish_8sheet_10$Normal.png</key>
-            <key type="filename">fish_8sheet_10.png</key>
-            <key type="filename">fish_8sheet_11$Normal.png</key>
-            <key type="filename">fish_8sheet_11.png</key>
-            <key type="filename">fish_8sheet_12$Normal.png</key>
-            <key type="filename">fish_8sheet_12.png</key>
-            <key type="filename">fish_8sheet_25$Normal.png</key>
-            <key type="filename">fish_8sheet_25.png</key>
-            <key type="filename">fish_8sheet_26$Normal.png</key>
-            <key type="filename">fish_8sheet_26.png</key>
-            <key type="filename">fish_8sheet_27$Normal.png</key>
-            <key type="filename">fish_8sheet_27.png</key>
-            <key type="filename">fish_8sheet_28$Normal.png</key>
-            <key type="filename">fish_8sheet_28.png</key>
-            <key type="filename">fish_8sheet_29$Normal.png</key>
-            <key type="filename">fish_8sheet_29.png</key>
-            <key type="filename">fish_8sheet_30$Normal.png</key>
-            <key type="filename">fish_8sheet_30.png</key>
-            <key type="filename">fish_8sheet_31$Normal.png</key>
-            <key type="filename">fish_8sheet_31.png</key>
-            <key type="filename">fish_8sheet_32$Normal.png</key>
-            <key type="filename">fish_8sheet_32.png</key>
-            <key type="filename">fish_8sheet_33$Normal.png</key>
-            <key type="filename">fish_8sheet_33.png</key>
-            <key type="filename">fish_8sheet_34$Normal.png</key>
-            <key type="filename">fish_8sheet_34.png</key>
-            <key type="filename">fish_8sheet_35$Normal.png</key>
-            <key type="filename">fish_8sheet_35.png</key>
-            <key type="filename">fish_8sheet_36$Normal.png</key>
-            <key type="filename">fish_8sheet_36.png</key>
             <key type="filename">fish_8sheet_37$Normal.png</key>
             <key type="filename">fish_8sheet_37.png</key>
             <key type="filename">fish_8sheet_38$Normal.png</key>
             <key type="filename">fish_8sheet_38.png</key>
             <key type="filename">fish_8sheet_39$Normal.png</key>
             <key type="filename">fish_8sheet_39.png</key>
-            <key type="filename">fish_8sheet_40$Normal.png</key>
-            <key type="filename">fish_8sheet_40.png</key>
-            <key type="filename">fish_8sheet_41$Normal.png</key>
-            <key type="filename">fish_8sheet_41.png</key>
-            <key type="filename">fish_8sheet_42$Normal.png</key>
-            <key type="filename">fish_8sheet_42.png</key>
-            <key type="filename">fish_8sheet_43$Normal.png</key>
-            <key type="filename">fish_8sheet_43.png</key>
-            <key type="filename">fish_8sheet_44$Normal.png</key>
-            <key type="filename">fish_8sheet_44.png</key>
-            <key type="filename">fish_8sheet_45$Normal.png</key>
-            <key type="filename">fish_8sheet_45.png</key>
-            <key type="filename">fish_8sheet_46$Normal.png</key>
-            <key type="filename">fish_8sheet_46.png</key>
-            <key type="filename">fish_8sheet_47$Normal.png</key>
-            <key type="filename">fish_8sheet_47.png</key>
-            <key type="filename">fish_8sheet_48$Normal.png</key>
-            <key type="filename">fish_8sheet_48.png</key>
-            <key type="filename">fish_8sheet_49$Normal.png</key>
-            <key type="filename">fish_8sheet_49.png</key>
-            <key type="filename">fish_8sheet_50$Normal.png</key>
-            <key type="filename">fish_8sheet_50.png</key>
-            <key type="filename">fish_8sheet_51$Normal.png</key>
-            <key type="filename">fish_8sheet_51.png</key>
-            <key type="filename">fish_8sheet_52$Normal.png</key>
-            <key type="filename">fish_8sheet_52.png</key>
-            <key type="filename">fish_8sheet_53$Normal.png</key>
-            <key type="filename">fish_8sheet_53.png</key>
-            <key type="filename">fish_8sheet_54$Normal.png</key>
-            <key type="filename">fish_8sheet_54.png</key>
-            <key type="filename">fish_8sheet_55$Normal.png</key>
-            <key type="filename">fish_8sheet_55.png</key>
-            <key type="filename">fish_8sheet_56$Normal.png</key>
-            <key type="filename">fish_8sheet_56.png</key>
-            <key type="filename">fish_8sheet_57$Normal.png</key>
-            <key type="filename">fish_8sheet_57.png</key>
-            <key type="filename">fish_8sheet_58$Normal.png</key>
-            <key type="filename">fish_8sheet_58.png</key>
-            <key type="filename">fish_8sheet_59$Normal.png</key>
-            <key type="filename">fish_8sheet_59.png</key>
-            <key type="filename">fish_8sheet_60$Normal.png</key>
-            <key type="filename">fish_8sheet_60.png</key>
-            <key type="filename">fish_8sheet_73$Normal.png</key>
-            <key type="filename">fish_8sheet_73.png</key>
-            <key type="filename">fish_8sheet_74$Normal.png</key>
-            <key type="filename">fish_8sheet_74.png</key>
-            <key type="filename">fish_8sheet_75$Normal.png</key>
-            <key type="filename">fish_8sheet_75.png</key>
-            <key type="filename">fish_8sheet_76$Normal.png</key>
-            <key type="filename">fish_8sheet_76.png</key>
-            <key type="filename">fish_8sheet_77$Normal.png</key>
-            <key type="filename">fish_8sheet_77.png</key>
-            <key type="filename">fish_8sheet_78$Normal.png</key>
-            <key type="filename">fish_8sheet_78.png</key>
-            <key type="filename">fish_8sheet_79$Normal.png</key>
-            <key type="filename">fish_8sheet_79.png</key>
-            <key type="filename">fish_8sheet_80$Normal.png</key>
-            <key type="filename">fish_8sheet_80.png</key>
-            <key type="filename">fish_8sheet_81$Normal.png</key>
-            <key type="filename">fish_8sheet_81.png</key>
-            <key type="filename">fish_8sheet_82$Normal.png</key>
-            <key type="filename">fish_8sheet_82.png</key>
-            <key type="filename">fish_8sheet_83$Normal.png</key>
-            <key type="filename">fish_8sheet_83.png</key>
-            <key type="filename">fish_8sheet_84$Normal.png</key>
-            <key type="filename">fish_8sheet_84.png</key>
             <key type="filename">fish_8sheet_85$Normal.png</key>
             <key type="filename">fish_8sheet_85.png</key>
             <key type="filename">fish_8sheet_86$Normal.png</key>
             <key type="filename">fish_8sheet_86.png</key>
             <key type="filename">fish_8sheet_87$Normal.png</key>
             <key type="filename">fish_8sheet_87.png</key>
-            <key type="filename">fish_8sheet_88$Normal.png</key>
-            <key type="filename">fish_8sheet_88.png</key>
-            <key type="filename">fish_8sheet_89$Normal.png</key>
-            <key type="filename">fish_8sheet_89.png</key>
-            <key type="filename">fish_8sheet_90$Normal.png</key>
-            <key type="filename">fish_8sheet_90.png</key>
-            <key type="filename">fish_8sheet_91$Normal.png</key>
-            <key type="filename">fish_8sheet_91.png</key>
-            <key type="filename">fish_8sheet_92$Normal.png</key>
-            <key type="filename">fish_8sheet_92.png</key>
-            <key type="filename">fish_8sheet_93$Normal.png</key>
-            <key type="filename">fish_8sheet_93.png</key>
-            <key type="filename">fish_8sheet_94$Normal.png</key>
-            <key type="filename">fish_8sheet_94.png</key>
-            <key type="filename">fish_8sheet_95$Normal.png</key>
-            <key type="filename">fish_8sheet_95.png</key>
-            <key type="filename">fish_8sheet_96$Normal.png</key>
-            <key type="filename">fish_8sheet_96.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -331,18 +199,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">horseshoe_crab_01$Normal.png</key>
-            <key type="filename">horseshoe_crab_01.png</key>
-            <key type="filename">horseshoe_crab_02$Normal.png</key>
-            <key type="filename">horseshoe_crab_02.png</key>
-            <key type="filename">horseshoe_crab_03$Normal.png</key>
-            <key type="filename">horseshoe_crab_03.png</key>
-            <key type="filename">horseshoe_crab_07$Normal.png</key>
-            <key type="filename">horseshoe_crab_07.png</key>
-            <key type="filename">horseshoe_crab_08$Normal.png</key>
-            <key type="filename">horseshoe_crab_08.png</key>
-            <key type="filename">horseshoe_crab_09$Normal.png</key>
-            <key type="filename">horseshoe_crab_09.png</key>
             <key type="filename">horseshoe_crab_10$Normal.png</key>
             <key type="filename">horseshoe_crab_10.png</key>
             <key type="filename">horseshoe_crab_11$Normal.png</key>

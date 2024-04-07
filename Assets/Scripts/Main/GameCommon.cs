@@ -914,7 +914,7 @@ public static class EditorDataPath
 
     public const string colliderTile = "Assets/TileMap/Tiles/Event/0.asset";
     public const string triggerTile = "Assets/TileMap/Tiles/Event/e.asset";
-    public const string playerTriggerTile = "Assets/TileMap/Tiles/Event/e.asset";
+    public const string playerTriggerTile = "Assets/TileMap/Tiles/Event/1.asset";
 
     public const string mapItemStructDataPath = "Assets/Editor/Data/MapItemStruct.json";
     public const string mapItemAnimationPath = "Assets/Animation/MapItem/";

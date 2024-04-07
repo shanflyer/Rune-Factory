@@ -1,9 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BehaviorDesigner.Runtime; 
 using UnityEngine;
 
 public class FishData:ScriptableObject,IGameData,IReferenceData
@@ -23,7 +18,14 @@ public class FishData:ScriptableObject,IGameData,IReferenceData
     {
         return id.ToString();
     }
+    public string GetName()
+    {
+        return fishName;
+    }
     public void SetReferenceData()
-    { 
+    {
+        string fishObjPath = "Prefabs/Fish/";
+        showObj = Resources.Load<GameObject>($"{fishObjPath}{showObj}");
+        externalBehavior = Resources.Load<ExternalBehaviorTree>($"Behavior/Fish/{behaviorName}");
     }
 }
