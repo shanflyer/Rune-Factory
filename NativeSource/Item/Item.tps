@@ -173,119 +173,233 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">Hammer$Normal.png</key>
             <key type="filename">Hammer.png</key>
+            <key type="filename">Hoe$Normal.png</key>
             <key type="filename">Hoe.png</key>
+            <key type="filename">Pick$Normal.png</key>
             <key type="filename">Pick.png</key>
+            <key type="filename">Sickle$Normal.png</key>
             <key type="filename">Sickle.png</key>
+            <key type="filename">Waterpot$Normal.png</key>
             <key type="filename">Waterpot.png</key>
+            <key type="filename">default$Normal.png</key>
             <key type="filename">default.png</key>
+            <key type="filename">fish/丁鱼$Normal.png</key>
             <key type="filename">fish/丁鱼.png</key>
+            <key type="filename">fish/五彩搏鱼$Normal.png</key>
             <key type="filename">fish/五彩搏鱼.png</key>
+            <key type="filename">fish/兰寿金鱼$Normal.png</key>
             <key type="filename">fish/兰寿金鱼.png</key>
+            <key type="filename">fish/加州金鳟鱼$Normal.png</key>
             <key type="filename">fish/加州金鳟鱼.png</key>
+            <key type="filename">fish/北极红点鲑$Normal.png</key>
             <key type="filename">fish/北极红点鲑.png</key>
+            <key type="filename">fish/双髻鲨$Normal.png</key>
             <key type="filename">fish/双髻鲨.png</key>
+            <key type="filename">fish/唇䱻$Normal.png</key>
             <key type="filename">fish/唇䱻.png</key>
+            <key type="filename">fish/国王刺尾鱼$Normal.png</key>
             <key type="filename">fish/国王刺尾鱼.png</key>
+            <key type="filename">fish/多拉多鱼$Normal.png</key>
             <key type="filename">fish/多拉多鱼.png</key>
+            <key type="filename">fish/大白鲨$Normal.png</key>
             <key type="filename">fish/大白鲨.png</key>
+            <key type="filename">fish/大鲈鱼$Normal.png</key>
             <key type="filename">fish/大鲈鱼.png</key>
+            <key type="filename">fish/天使鱼$Normal.png</key>
             <key type="filename">fish/天使鱼.png</key>
+            <key type="filename">fish/孔雀鱼$Normal.png</key>
             <key type="filename">fish/孔雀鱼.png</key>
+            <key type="filename">fish/小丑鱼$Normal.png</key>
             <key type="filename">fish/小丑鱼.png</key>
+            <key type="filename">fish/小龙虾$Normal.png</key>
             <key type="filename">fish/小龙虾.png</key>
+            <key type="filename">fish/巨型蛇头鱼$Normal.png</key>
             <key type="filename">fish/巨型蛇头鱼.png</key>
+            <key type="filename">fish/巨型鲶鱼$Normal.png</key>
             <key type="filename">fish/巨型鲶鱼.png</key>
+            <key type="filename">fish/巨蟹$Normal.png</key>
             <key type="filename">fish/巨蟹.png</key>
+            <key type="filename">fish/巨骨舌鱼$Normal.png</key>
             <key type="filename">fish/巨骨舌鱼.png</key>
+            <key type="filename">fish/巨鲹$Normal.png</key>
             <key type="filename">fish/巨鲹.png</key>
+            <key type="filename">fish/帝王鲑鱼$Normal.png</key>
             <key type="filename">fish/帝王鲑鱼.png</key>
+            <key type="filename">fish/恩氏多鳍鱼$Normal.png</key>
             <key type="filename">fish/恩氏多鳍鱼.png</key>
+            <key type="filename">fish/扇贝$Normal.png</key>
             <key type="filename">fish/扇贝.png</key>
+            <key type="filename">fish/手套蟹$Normal.png</key>
             <key type="filename">fish/手套蟹.png</key>
+            <key type="filename">fish/斑马狮子鱼$Normal.png</key>
             <key type="filename">fish/斑马狮子鱼.png</key>
+            <key type="filename">fish/日本扁平鲤鱼$Normal.png</key>
             <key type="filename">fish/日本扁平鲤鱼.png</key>
+            <key type="filename">fish/星鲟$Normal.png</key>
             <key type="filename">fish/星鲟.png</key>
+            <key type="filename">fish/条石鲷$Normal.png</key>
             <key type="filename">fish/条石鲷.png</key>
+            <key type="filename">fish/桃花鱼$Normal.png</key>
             <key type="filename">fish/桃花鱼.png</key>
+            <key type="filename">fish/桨鱼$Normal.png</key>
             <key type="filename">fish/桨鱼.png</key>
+            <key type="filename">fish/梭子鱼$Normal.png</key>
             <key type="filename">fish/梭子鱼.png</key>
+            <key type="filename">fish/梭鲈$Normal.png</key>
             <key type="filename">fish/梭鲈.png</key>
+            <key type="filename">fish/樱桃鲑鱼$Normal.png</key>
             <key type="filename">fish/樱桃鲑鱼.png</key>
+            <key type="filename">fish/比目鱼$Normal.png</key>
             <key type="filename">fish/比目鱼.png</key>
+            <key type="filename">fish/水母（红色）$Normal.png</key>
             <key type="filename">fish/水母（红色）.png</key>
+            <key type="filename">fish/水母（蓝色）$Normal.png</key>
             <key type="filename">fish/水母（蓝色）.png</key>
+            <key type="filename">fish/池沼公鱼$Normal.png</key>
             <key type="filename">fish/池沼公鱼.png</key>
+            <key type="filename">fish/沙丁鱼$Normal.png</key>
             <key type="filename">fish/沙丁鱼.png</key>
+            <key type="filename">fish/河豚鱼$Normal.png</key>
             <key type="filename">fish/河豚鱼.png</key>
+            <key type="filename">fish/河鳟$Normal.png</key>
             <key type="filename">fish/河鳟.png</key>
+            <key type="filename">fish/泥鳅$Normal.png</key>
             <key type="filename">fish/泥鳅.png</key>
+            <key type="filename">fish/洞穴天使鱼$Normal.png</key>
             <key type="filename">fish/洞穴天使鱼.png</key>
+            <key type="filename">fish/海马（轻）$Normal.png</key>
             <key type="filename">fish/海马（轻）.png</key>
+            <key type="filename">fish/海马（金）$Normal.png</key>
             <key type="filename">fish/海马（金）.png</key>
+            <key type="filename">fish/海鲈鱼$Normal.png</key>
             <key type="filename">fish/海鲈鱼.png</key>
+            <key type="filename">fish/海鳗$Normal.png</key>
             <key type="filename">fish/海鳗.png</key>
+            <key type="filename">fish/淡水虾虎鱼$Normal.png</key>
             <key type="filename">fish/淡水虾虎鱼.png</key>
+            <key type="filename">fish/淡水金鱼$Normal.png</key>
             <key type="filename">fish/淡水金鱼.png</key>
+            <key type="filename">fish/淡水鳗鱼$Normal.png</key>
             <key type="filename">fish/淡水鳗鱼.png</key>
+            <key type="filename">fish/淡红墨头鱼$Normal.png</key>
             <key type="filename">fish/淡红墨头鱼.png</key>
+            <key type="filename">fish/湖鲟鱼$Normal.png</key>
             <key type="filename">fish/湖鲟鱼.png</key>
+            <key type="filename">fish/溪鳟鱼$Normal.png</key>
             <key type="filename">fish/溪鳟鱼.png</key>
+            <key type="filename">fish/爆眼金鱼$Normal.png</key>
             <key type="filename">fish/爆眼金鱼.png</key>
+            <key type="filename">fish/牡蛎$Normal.png</key>
             <key type="filename">fish/牡蛎.png</key>
+            <key type="filename">fish/白鲟$Normal.png</key>
             <key type="filename">fish/白鲟.png</key>
+            <key type="filename">fish/章鱼$Normal.png</key>
             <key type="filename">fish/章鱼.png</key>
+            <key type="filename">fish/竹荚鱼$Normal.png</key>
             <key type="filename">fish/竹荚鱼.png</key>
+            <key type="filename">fish/管眼鱼$Normal.png</key>
             <key type="filename">fish/管眼鱼.png</key>
+            <key type="filename">fish/红鲷鱼$Normal.png</key>
             <key type="filename">fish/红鲷鱼.png</key>
+            <key type="filename">fish/线鱼$Normal.png</key>
             <key type="filename">fish/线鱼.png</key>
+            <key type="filename">fish/罗非鱼$Normal.png</key>
             <key type="filename">fish/罗非鱼.png</key>
+            <key type="filename">fish/翻车鱼$Normal.png</key>
             <key type="filename">fish/翻车鱼.png</key>
+            <key type="filename">fish/腔棘鱼$Normal.png</key>
             <key type="filename">fish/腔棘鱼.png</key>
+            <key type="filename">fish/苦鱼$Normal.png</key>
             <key type="filename">fish/苦鱼.png</key>
+            <key type="filename">fish/蓝枪鱼$Normal.png</key>
             <key type="filename">fish/蓝枪鱼.png</key>
+            <key type="filename">fish/蓝蟹$Normal.png</key>
             <key type="filename">fish/蓝蟹.png</key>
+            <key type="filename">fish/蓝鳃鱼$Normal.png</key>
             <key type="filename">fish/蓝鳃鱼.png</key>
+            <key type="filename">fish/虹鳟鱼$Normal.png</key>
             <key type="filename">fish/虹鳟鱼.png</key>
+            <key type="filename">fish/蛤蜊$Normal.png</key>
             <key type="filename">fish/蛤蜊.png</key>
+            <key type="filename">fish/蝌蚪$Normal.png</key>
             <key type="filename">fish/蝌蚪.png</key>
+            <key type="filename">fish/蝠鲼$Normal.png</key>
             <key type="filename">fish/蝠鲼.png</key>
+            <key type="filename">fish/蝴蝶鱼$Normal.png</key>
             <key type="filename">fish/蝴蝶鱼.png</key>
+            <key type="filename">fish/蝾螈$Normal.png</key>
             <key type="filename">fish/蝾螈.png</key>
+            <key type="filename">fish/蟾蜍$Normal.png</key>
             <key type="filename">fish/蟾蜍.png</key>
+            <key type="filename">fish/越洋公鱼$Normal.png</key>
             <key type="filename">fish/越洋公鱼.png</key>
+            <key type="filename">fish/软壳龟（棕色）$Normal.png</key>
             <key type="filename">fish/软壳龟（棕色）.png</key>
+            <key type="filename">fish/软壳龟（绿色$Normal.png</key>
             <key type="filename">fish/软壳龟（绿色.png</key>
+            <key type="filename">fish/软壳龟（黑色）$Normal.png</key>
             <key type="filename">fish/软壳龟（黑色）.png</key>
+            <key type="filename">fish/金枪鱼$Normal.png</key>
             <key type="filename">fish/金枪鱼.png</key>
+            <key type="filename">fish/钻石鲟鱼$Normal.png</key>
             <key type="filename">fish/钻石鲟鱼.png</key>
+            <key type="filename">fish/银龙鱼$Normal.png</key>
             <key type="filename">fish/银龙鱼.png</key>
+            <key type="filename">fish/锦鲤$Normal.png</key>
             <key type="filename">fish/锦鲤.png</key>
+            <key type="filename">fish/锯鳐鱼$Normal.png</key>
             <key type="filename">fish/锯鳐鱼.png</key>
+            <key type="filename">fish/雀鳝鱼$Normal.png</key>
             <key type="filename">fish/雀鳝鱼.png</key>
+            <key type="filename">fish/霓虹脂鲤$Normal.png</key>
             <key type="filename">fish/霓虹脂鲤.png</key>
+            <key type="filename">fish/青蛙$Normal.png</key>
             <key type="filename">fish/青蛙.png</key>
+            <key type="filename">fish/食人鱼$Normal.png</key>
             <key type="filename">fish/食人鱼.png</key>
+            <key type="filename">fish/香鱼$Normal.png</key>
             <key type="filename">fish/香鱼.png</key>
+            <key type="filename">fish/鮣鱼$Normal.png</key>
             <key type="filename">fish/鮣鱼.png</key>
+            <key type="filename">fish/鱿鱼（深色）$Normal.png</key>
             <key type="filename">fish/鱿鱼（深色）.png</key>
+            <key type="filename">fish/鱿鱼（红色）$Normal.png</key>
             <key type="filename">fish/鱿鱼（红色）.png</key>
+            <key type="filename">fish/鱿鱼（黄色）$Normal.png</key>
             <key type="filename">fish/鱿鱼（黄色）.png</key>
+            <key type="filename">fish/鲑鱼$Normal.png</key>
             <key type="filename">fish/鲑鱼.png</key>
+            <key type="filename">fish/鲤鱼$Normal.png</key>
             <key type="filename">fish/鲤鱼.png</key>
+            <key type="filename">fish/鲫鱼$Normal.png</key>
             <key type="filename">fish/鲫鱼.png</key>
+            <key type="filename">fish/鲮鱼$Normal.png</key>
             <key type="filename">fish/鲮鱼.png</key>
+            <key type="filename">fish/鲯鳅鱼$Normal.png</key>
             <key type="filename">fish/鲯鳅鱼.png</key>
+            <key type="filename">fish/鲶鱼$Normal.png</key>
             <key type="filename">fish/鲶鱼.png</key>
+            <key type="filename">fish/鲷鱼$Normal.png</key>
             <key type="filename">fish/鲷鱼.png</key>
+            <key type="filename">fish/鲸鲨$Normal.png</key>
             <key type="filename">fish/鲸鲨.png</key>
+            <key type="filename">fish/鳄龟$Normal.png</key>
             <key type="filename">fish/鳄龟.png</key>
+            <key type="filename">fish/鳉鱼$Normal.png</key>
             <key type="filename">fish/鳉鱼.png</key>
+            <key type="filename">fish/黄鲈鱼$Normal.png</key>
             <key type="filename">fish/黄鲈鱼.png</key>
+            <key type="filename">fish/黑鲈鱼$Normal.png</key>
             <key type="filename">fish/黑鲈鱼.png</key>
+            <key type="filename">fish/龙虾$Normal.png</key>
             <key type="filename">fish/龙虾.png</key>
+            <key type="filename">fish/𩽾𩾌$Normal.png</key>
             <key type="filename">fish/𩽾𩾌.png</key>
+            <key type="filename">food0$Normal.png</key>
             <key type="filename">food0.png</key>
+            <key type="filename">卷轴$Normal.png</key>
             <key type="filename">卷轴.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -301,6 +415,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">牧草$Normal.png</key>
             <key type="filename">牧草.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -338,13 +453,13 @@
         <key>commonDivisorY</key>
         <uint>1</uint>
         <key>packNormalMaps</key>
-        <false/>
-        <key>autodetectNormalMaps</key>
         <true/>
+        <key>autodetectNormalMaps</key>
+        <false/>
         <key>normalMapFilter</key>
         <string></string>
         <key>normalMapSuffix</key>
-        <string></string>
+        <string>$Normal</string>
         <key>normalMapSheetFileName</key>
         <filename></filename>
         <key>exporterProperties</key>

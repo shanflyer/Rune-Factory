@@ -38,7 +38,7 @@ public class AdventureTeamerRenference : UIObjReference<FighterResult>
         this.LevelUp.localScale = data.levelUp ? Vector3.one : Vector3.zero;
         this.SkillUp.localScale = data.skillUp ? Vector3.one : Vector3.zero;
 
-        Icon.sprite = data.Character.characterData.icon;
+        Icon.sprite = data.Character.characterData.icon.sprite;
         Name.text = data.Character.name;
         Level.text = $"Lv.{data.Character.Level}";
     }

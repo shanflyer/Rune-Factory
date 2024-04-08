@@ -13,7 +13,7 @@ public class CharacterData : ScriptableObject, IGameData
     public string objName;
     public string headName;
     public SpriteResourceRenference head;
-    public Sprite icon;
+    public SpriteResourceRenference icon;
     public GameObject obj;
     public int profession;
     public int level;
@@ -38,7 +38,7 @@ public class CharacterData : ScriptableObject, IGameData
 
 #if UNITY_EDITOR
     private static Dictionary<string, SpriteResourceRenference> headDatas = new Dictionary<string, SpriteResourceRenference>();
-    private static Dictionary<string, Sprite> iconDatas = new Dictionary<string, Sprite>();
+    private static Dictionary<string, SpriteResourceRenference> iconDatas = new Dictionary<string, SpriteResourceRenference>();
 
     public void SetReferenceData()
     {
@@ -52,7 +52,7 @@ public class CharacterData : ScriptableObject, IGameData
         }
         if (iconDatas.Count == 0)
         {
-            var sprites = Resources.LoadAll<Sprite>(iconName.Split('/')[0]);
+            var sprites = Resources.LoadAll<SpriteResourceRenference>(iconName.Split('/')[0]);
             for (int i = 0; i < sprites.Length; i++)
             {
                 iconDatas.Add(sprites[i].name, sprites[i]);

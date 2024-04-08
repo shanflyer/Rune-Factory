@@ -1112,7 +1112,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public async Task<Sprite> GetCharacterIcon(int id)
     {
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
-        return characterData.icon;
+        return characterData.icon.sprite;
     }
 
     private async Task<RuntimeObj> CreatCharacterRuntimeObj(int characterDataId, int instacneId, int2 coordiante)

@@ -39,7 +39,7 @@ public class AnimalReference : UIObjReference<MyInt>
         base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         Character character = CharacterManager.instance.GetCharacter(data.value);
-        icon.sprite = character.characterData.icon;
+        icon.sprite = character.characterData.icon.sprite;
         icon.rectTransform.sizeDelta= GameCommon.SetImageSize(icon.sprite, new Vector2(48, 48)); 
     }
 }

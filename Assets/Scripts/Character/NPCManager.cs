@@ -113,7 +113,7 @@ public partial class Character
         characterInformationData.equip = equip;
         characterInformationData.name = name;
         characterInformationData.head = characterData.head;
-        characterInformationData.icon = characterData.icon;
+        characterInformationData.icon = characterData.icon.sprite;
         characterInformationData.attributeType = attributeType;
 
         if (NPCManager.instance.GetNPC(instanceId, out var npc))

@@ -67,7 +67,7 @@ public class NPCReference : UIObjReference<NPC>
         toggle.group = toggleGroup;
 
         CharacterData characterData = await data.GetCharacterData();
-        Icon.sprite = characterData.icon;
+        Icon.sprite = characterData.icon.sprite;
         Icon.SetNativeSize();
         NPCName.text = $"+ {characterData.characterName} +";
 

@@ -55,6 +55,7 @@ public class ItemData : ScriptableObject, IGameData
     }
 #if UNITY_EDITOR
     static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>();
+    static Dictionary<string, SpriteResourceRenference> iconDatas = new Dictionary<string, SpriteResourceRenference>();
     public void SetReferenceData()
     {
         if (allSprites.Count == 0)
@@ -65,7 +66,22 @@ public class ItemData : ScriptableObject, IGameData
                 allSprites.Add(sprites[i].name, sprites[i]);
             }
         }
-        allSprites.TryGetValue(iconName, out icon);
+      
+        if (!allSprites.TryGetValue(iconName, out icon))
+        {
+            if (iconDatas.Count == 0)
+            {
+                var sprites = Resources.LoadAll<SpriteResourceRenference>("Refernece/");
+                for (int i = 0; i < sprites.Length; i++)
+                {
+                    iconDatas.Add(sprites[i].name, sprites[i]);
+                } 
+            }
+            if(iconDatas.TryGetValue(iconName, out SpriteResourceRenference spriteResourceRenference))
+            {
+                icon = spriteResourceRenference.sprite;
+            }
+        }
     }
 #endif
     public string GetKey()
