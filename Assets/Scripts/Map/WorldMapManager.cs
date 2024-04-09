@@ -343,6 +343,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells, runtimeMapItem.mapInstanceId, deleteMapItem.mapItemInstanceId);
                     MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
                 }
+
+                TryDeleteFishPond tryDeleteFishPond = new TryDeleteFishPond
+                {
+                    instanceId = deleteMapItem.mapItemInstanceId
+                };
+                GameActionManager.instance.QueueAction(tryDeleteFishPond);
             }
         }
     }
@@ -450,6 +456,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
         };
         GameActionManager.instance.QueueAction(tryCreatField, true);
 
+        TryCreatFishPond tryCreatFishPond = new TryCreatFishPond
+        {
+            room = mapId,
+            instanceId = mapItem.instanceId
+        };
+        GameActionManager.instance.QueueAction(tryCreatFishPond);
         return runtimeMapItem.instanceId;
     }
 

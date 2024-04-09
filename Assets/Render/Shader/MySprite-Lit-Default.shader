@@ -667,14 +667,15 @@ Shader "MySprite-Lit-Default"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/NormalsRenderingShared.hlsl"
 
             half4 NormalsRenderingFragment(Varyings i) : SV_Target
-            {
-                const half4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+            { 
+                const half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 half3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv));
 
                 // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
                 half4 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
                 result.x=unity_SpriteProps.x*result.x+(1-unity_SpriteProps.x)*(1-result.x);
-                result.z=0;
+                result.z=0; 
+                result=result*i.color; 
                 return result;
             }
             ENDHLSL

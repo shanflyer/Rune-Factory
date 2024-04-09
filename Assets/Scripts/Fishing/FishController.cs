@@ -29,11 +29,20 @@ public class FishController:Singleton<FishController>
         GameActionManager.instance.AddListener<RemoveFish>(RemoveFish);
         GameActionManager.instance.AddListener<RefreshFishPondObj>(RefreshFishPondObj);
         GameActionManager.instance.AddListener<DestoryFishPond>(DestoryFishPond);
+        GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
     }
     protected override void Clear()
     {
         base.Clear();
         myInstance.Clear();
+    }
+
+    void DisplayMap(DisplayMap displayMap)
+    {
+        foreach(FishRuntime fishRuntime in fishRuntimes)
+        {
+            RefreshFish(fishRuntime.intanceId, displayMap.displayMap,  fishRuntime.pondId);
+        }
     }
     void CreatFish(CreatFish creatFish)
     {
@@ -244,6 +253,17 @@ public class FishController:Singleton<FishController>
         {
             tryGetFish.setResult(false);
         }
+    }
+
+    public Transform GetFishTransform(int id,out Animator animator)
+    {
+        animator = null;
+        if(fishRuntimeObjs.TryGetValue(id,out var fishRuntimeObj))
+        {
+            animator = fishRuntimeObj.animator;
+            return fishRuntimeObj.model;
+        }
+        return null;
     }
 }
  

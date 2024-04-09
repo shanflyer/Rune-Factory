@@ -70,10 +70,10 @@ public struct TryCreatFishPond : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int dataId;
-    public int fishId;
+
     public int itemId;
     public int room;
+    public int instanceId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -83,8 +83,7 @@ public struct TryCreatFishPond : GameAction
 
 public struct TryDeleteFishPond : GameAction
 {
-    public int instanceId;
-    public int itemId;
+    public int instanceId; 
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 

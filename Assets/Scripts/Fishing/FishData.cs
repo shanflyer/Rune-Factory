@@ -25,7 +25,7 @@ public class FishData:ScriptableObject,IGameData,IReferenceData
     public void SetReferenceData()
     {
         string fishObjPath = "Prefabs/Fish/";
-        showObj = Resources.Load<GameObject>($"{fishObjPath}{showObj}");
-        externalBehavior = Resources.Load<ExternalBehaviorTree>($"Behavior/Fish/{behaviorName}");
+        showObj = Resources.Load<GameObject>($"{fishObjPath}{showObjName}");
+        externalBehavior = Resources.Load<ExternalBehaviorTree>($"Behavior/NPC/{behaviorName}");
     }
 }

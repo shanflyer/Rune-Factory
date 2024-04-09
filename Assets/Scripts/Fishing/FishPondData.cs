@@ -18,6 +18,7 @@ public class FishPondData : ScriptableObject, IGameData
     public int maxFishCount;
     public int produceCD;
     public SeasonRandomDictionary seasonRandomValue;
+    public int2 linkMapItem;
     public string GetKey()
     {
         return id.ToString();

@@ -8,6 +8,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using static MapCellController;
 
 public class MapCellController : Singleton<MapCellController>
 {
@@ -1147,7 +1148,41 @@ public class MapCellController : Singleton<MapCellController>
         }
         return outData;
     }
+    public Stack<int2> FindSamplePathNode(int2 startPos, int2 targetPos, int mapId, int2[] cells)
+    {
+        Stack<int2> outData = new Stack<int2>();
+        if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
+        {
+            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
+            NativeList<int2> pathCells = new NativeList<int2>(16, Allocator.TempJob);
+            NativeHashSet<int2> cellSets = new NativeHashSet<int2>(16, Allocator.TempJob);
+            for(int i = 0; i < cells.Length; i++)
+            {
+                cellSets.Add(cells[i]);
+            }
 
+            SampleFindPath findPath = new SampleFindPath
+            {
+                roomCellData = roomCellData,
+                startPos = new int2(startPos.x, startPos.y),
+                targetPos = new int2(targetPos.x, targetPos.y),
+                pathCells = pathCells,
+                cells = cellSets
+            
+            };
+
+            findPath.Schedule().Complete();
+            //findPath.Run();
+
+            for (int i = 0; i < findPath.pathCells.Length; i++)
+            {
+                outData.Push(findPath.pathCells[i]);
+            }
+
+            pathCells.Dispose();
+        }
+        return outData;
+    }
     public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId)
     {
         Stack<int2> outData = new Stack<int2>();
@@ -1322,7 +1357,136 @@ public class MapCellController : Singleton<MapCellController>
 
         return cost;
     }
+    [BurstCompile]
+    public struct SampleFindPath : IJob
+    {
+        //[ReadOnly] public int MOVE_STRAIGHT_COST;
+        // [ReadOnly] public int MOVE_DIAGONAL_COST;
+        [ReadOnly] public RoomCellData roomCellData;
 
+        [ReadOnly] public NativeHashSet<int2> cells;
+        [ReadOnly] public int2 startPos, targetPos;
+
+        [WriteOnly] public NativeList<int2> pathCells;
+
+        public void Execute()
+        {
+            GetPath();
+        }
+
+        private void GetPath()
+        { 
+            if (cells.Contains(startPos) && cells.Contains(targetPos))
+            {
+                NativeArray<int2> neighbourOffsetArray = new NativeArray<int2>(8, Allocator.Temp);
+                neighbourOffsetArray[0] = new int2(-1, 0); // Left
+                neighbourOffsetArray[1] = new int2(+1, 0); // Right
+                neighbourOffsetArray[2] = new int2(0, +1); // Up
+                neighbourOffsetArray[3] = new int2(0, -1); // Down
+                neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
+                neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
+                neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
+                neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
+
+                NativeList<int2> openCells = new NativeList<int2>(Allocator.Temp);
+                NativeList<int2> closeCells = new NativeList<int2>(Allocator.Temp);
+                NativeHashMap<int2, int> cellCost = new NativeHashMap<int2, int>(16, Allocator.Temp);
+                NativeHashMap<int2, int> parentCell = new NativeHashMap<int2, int>(16, Allocator.Temp);
+
+                int openCellLength = 0;
+                int closeCellLength = 0;
+
+                openCells.Add(startPos);
+                openCellLength++;
+                // int cost = CalculateDistanceCost(startPos, targetPos) * 5;
+                cellCost[startPos] = 0;
+                while (openCellLength > 0)
+                {
+                    int2 nowCell = openCells[0];
+
+                    openCells.RemoveAt(0);
+                    //openCells.RemoveAtSwapBack(0);
+                    openCellLength--;
+                    closeCells.Add(nowCell);
+                    closeCellLength++;
+                    if (nowCell.x == targetPos.x && nowCell.y == targetPos.y)
+                    {
+                        break;
+                    }
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int2 cell = neighbourOffsetArray[i] + nowCell;
+
+                        if (!cells.Contains(cell))
+                        {
+                            continue;
+                        }
+
+
+                        int cost = CalculateDistanceCost(cell, startPos) +
+                             CalculateDistanceCost(cell, targetPos) * 3;
+                        cellCost[cell] = cost;
+                        parentCell[cell] = closeCellLength - 1;
+
+                        if (cell.x == targetPos.x && cell.y == targetPos.y)
+                        {
+                            openCells.Add(cell);
+                            openCellLength++;
+                            break;
+                        }
+
+                        bool insert = false;
+                        for (int j = 0; j < openCells.Length; j++)
+                        {
+                            if (cellCost.TryGetValue(openCells[j], out int _cost))
+                            {
+                                if (_cost > cost)
+                                {
+                                    openCells.InsertRangeWithBeginEnd(j, j + 1);
+                                    openCells[j] = cell;
+
+                                    insert = true;
+                                    openCellLength++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!insert)
+                        {
+                            openCells.Add(cell);
+                            openCellLength++;
+                        }
+                    }
+                }
+
+                var checkCell = closeCells[closeCellLength - 1];
+                pathCells.Add(checkCell);
+                while (checkCell.x != startPos.x || checkCell.y != startPos.y)
+                {
+                    if (parentCell.TryGetValue(checkCell, out int index))
+                    {
+                        if (closeCellLength <= index)
+                        {
+                            break;
+                        }
+                        checkCell = closeCells[index];
+                        pathCells.Add(checkCell);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                neighbourOffsetArray.Dispose();
+                openCells.Dispose();
+                closeCells.Dispose();
+                cellCost.Dispose();
+                parentCell.Dispose();
+            }
+        }
+    }
     [BurstCompile]
     public struct FindPath : IJob
     {

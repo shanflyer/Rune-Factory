@@ -4,19 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine.InputSystem;
 
 public class FishingManager:Singleton<FishingManager>
 {
-    MyNativeData<FishPond> fishPonds = new MyNativeData<FishPond>();
-    Dictionary<int, int> itemFishPonds = new Dictionary<int, int>();
-
+    MyNativeData<FishPond> fishPonds = new MyNativeData<FishPond>(); 
+    Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>();
     MyInstance myInstance;
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
         myInstance = new MyInstance();
         fishPonds.Init(16);
+
+        fishPondDatas.Clear();
+        var allData=await GameDataManager.instance.GetAllAsyncData<FishPondData>();
+        for(int i = 0; i < allData.Count; i++)
+        {
+            var data = allData[i];
+            fishPondDatas[data.linkMapItem] = data;
+        }
+
+        GameActionManager.instance.AddListener<TryCreatFishPond>(TryCreatFishPond);
+        GameActionManager.instance.AddListener<TryDeleteFishPond>(TryDeleteFishPond);
     }
     protected override void Clear()
     {
@@ -76,39 +87,30 @@ public class FishingManager:Singleton<FishingManager>
         if (tryDeleteFishPond.instanceId != 0)
         {
             bool result = fishPonds.RemoveData(tryDeleteFishPond.instanceId);
-            tryDeleteFishPond.setResult(result);
+            if (tryDeleteFishPond.setResult != null)
+                tryDeleteFishPond.setResult(result);
              
         }
-        else
+        else 
         {
-            if (itemFishPonds.TryGetValue(tryDeleteFishPond.itemId, out int instanceId))
-            {
-                bool result = fishPonds.RemoveData(instanceId);
-                tryDeleteFishPond.setResult(result);
-            }
-            else
-            {
+            if (tryDeleteFishPond.setResult != null)
                 tryDeleteFishPond.setResult(false);
-            } 
         } 
     }
-    async void TryCreatFishPond(TryCreatFishPond tryCreatFishPond)
+    void TryCreatFishPond(TryCreatFishPond tryCreatFishPond)
     {
-        FishPondData fishPondData = await GameDataManager.instance.GetAsyncData<FishPondData>(tryCreatFishPond.dataId);
-        if (fishPondData)
-        {
-            int instanceId = myInstance.CreatInstanceId();
-            if (tryCreatFishPond.itemId != 0)
-            {
-                itemFishPonds[tryCreatFishPond.itemId] = instanceId;
-            }
+        int2 key=new int2(tryCreatFishPond.room,tryCreatFishPond.itemId);
+        if(fishPondDatas.TryGetValue(key,out var fishPondData))
+        { 
+            int instanceId = tryCreatFishPond.instanceId;
+            
             FishPond fishPond = new FishPond
             {
-                dataId = tryCreatFishPond.dataId,
+                dataId = fishPondData.id,
                 instanceId = instanceId,
                 itemInstanceId = tryCreatFishPond.itemId,
                 room = tryCreatFishPond.room,
-                fishs = new NativeHashSet<int>(8,Allocator.TempJob)
+                fishs = new NativeHashSet<int>(8, Allocator.TempJob)
             };
             fishPonds.SetData(fishPond);
             if (tryCreatFishPond.setValue != null)
@@ -117,9 +119,13 @@ public class FishingManager:Singleton<FishingManager>
             }
             GameActionManager.instance.QueueAction(new RefreshFishPondObj
             {
-                pondId=instanceId,
-                room=tryCreatFishPond.room,
+                pondId = instanceId,
+                room = tryCreatFishPond.room,
             });
+        } 
+        if(tryCreatFishPond.setResult!=null)
+        {
+            tryCreatFishPond.setResult(false);
         }
     }
 

@@ -71,7 +71,7 @@ public class ItemData : ScriptableObject, IGameData
         {
             if (iconDatas.Count == 0)
             {
-                var sprites = Resources.LoadAll<SpriteResourceRenference>("Refernece/");
+                var sprites = Resources.LoadAll<SpriteResourceRenference>("Reference/");
                 for (int i = 0; i < sprites.Length; i++)
                 {
                     iconDatas.Add(sprites[i].name, sprites[i]);

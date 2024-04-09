@@ -71,7 +71,9 @@ public class WorldMapController : MonoBehaviour
         var emote= EmoteManager.instance;
         var homeEquipManager= HomeEquipManager.instance;
         var manufatureManager = ManufatureManager.instance;
-        PastureManager pastureManager = PastureManager.instance;
+        var pastureManager = PastureManager.instance;
+        var fisinghManager = FishingManager.instance;
+        var fishController = FishController.instance;
 
         GameActionManager.instance.QueueAction(new ChangeWorld
         {

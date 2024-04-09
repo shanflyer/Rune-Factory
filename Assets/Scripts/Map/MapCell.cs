@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 [System.Serializable]
@@ -165,4 +166,7 @@ public class FindPath
         int remaining = Mathf.Abs(xDistance - yDistance);
         return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
     }
+
+
+   
 }
