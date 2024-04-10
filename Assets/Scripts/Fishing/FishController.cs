@@ -51,27 +51,35 @@ public class FishController:Singleton<FishController>
         {
             return;
         }
-        var cells = MapCellController.instance.GetItemTriggerCells(fishPond.itemInstanceId, fishPond.room);
-        int index = GameRandom.RandomInt(0, cells.Length);
+        try
+        {
+            var cells = MapCellController.instance.GetItemTriggerCells(fishPond.instanceId, fishPond.room);
+            int index = GameRandom.RandomInt(0, cells.Length);
 
-        FishRuntime fishRuntime = new FishRuntime
-        {
-            intanceId=myInstance.CreatInstanceId(),
-            dataId = creatFish.dataId,
-            pondId=creatFish.pondId,
-            room=creatFish.room,
-            value=creatFish.fishValue,
-            cell = cells[index]
-        };
-        fishRuntimes.SetData(fishRuntime);
-        creatFish.setValue(fishRuntime.Key);
-        if(!fishPondFishes.TryGetValue(creatFish.pondId,out var ints))
-        {
-            ints = new List<int>();
-            fishPondFishes.Add(creatFish.pondId,ints);
+            FishRuntime fishRuntime = new FishRuntime
+            {
+                intanceId = myInstance.CreatInstanceId(),
+                dataId = creatFish.dataId,
+                pondId = creatFish.pondId,
+                room = creatFish.room,
+                value = creatFish.fishValue,
+                cell = cells[index]
+            };
+            fishRuntimes.SetData(fishRuntime);
+            creatFish.setValue(fishRuntime.Key);
+            if (!fishPondFishes.TryGetValue(creatFish.pondId, out var ints))
+            {
+                ints = new List<int>();
+                fishPondFishes.Add(creatFish.pondId, ints);
+            }
+            ints.Add(fishRuntime.intanceId);
+            RefreshFish(fishRuntime.intanceId, fishRuntime.room, fishRuntime.room);
         }
-        ints.Add(fishRuntime.intanceId);
-        RefreshFish(fishRuntime.intanceId, fishRuntime.room, fishRuntime.room);
+        catch
+        {
+            Debug.LogError($"CreatFish Error:{fishPond.room}");
+        }
+       
     } 
     void RemoveFish(RemoveFish RemoveFish)
     {
@@ -169,9 +177,11 @@ public class FishController:Singleton<FishController>
             model = runtimeObj.obj as Transform
         };
         fishRuntimeObj.animator = fishRuntimeObj.model.GetComponentInChildren<Animator>();
-        fishRuntimeObjs[runtimeObj.linkId] = fishRuntimeObj;
+        fishRuntimeObjs[instanceId] = fishRuntimeObj;
+        Vector2 pos = GameCommon.GetMapPos(nowCell);
+        fishRuntimeObj.animator.transform.localPosition = pos;
 
-        var cells = MapCellController.instance.GetItemTriggerCells(fishPond.itemInstanceId, fishPond.room);
+        var cells = MapCellController.instance.GetItemTriggerCells(fishPond.instanceId, fishPond.room);
         AddBehavior(instanceId, fishPond.room,nowCell, cells, fishData.externalBehavior);
     }
     void RecycleFishObj(int instanceId)

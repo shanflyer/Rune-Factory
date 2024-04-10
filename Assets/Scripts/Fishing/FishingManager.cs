@@ -36,11 +36,11 @@ public class FishingManager:Singleton<FishingManager>
         fishPonds.Dispose();
     }
 
-    async void CreatFish(int pondId)
+    void CreatFish(int pondId)
     {
         if(fishPonds.GetData(pondId,out var fishPond))
         {
-            FishPondData fishPondData = await GameDataManager.instance.GetAsyncData<FishPondData>(fishPond.Key);
+            FishPondData fishPondData = fishPondDatas[new int2(fishPond.room, fishPond.itemInstanceId)];
             if (fishPond.fishs.Count < fishPondData.maxFishCount)
             {
                 Season season = GameTimeManager.instance.Season;
@@ -57,7 +57,7 @@ public class FishingManager:Singleton<FishingManager>
                         dataId = int.Parse(randomResult.result),
                         fishValue = randomResult.count,
                         pondId = pondId,
-                        room = fishPond.room,
+                        room = fishPond.room, 
                         setValue=SetValue
                     };
 
@@ -107,9 +107,9 @@ public class FishingManager:Singleton<FishingManager>
             FishPond fishPond = new FishPond
             {
                 dataId = fishPondData.id,
-                instanceId = instanceId,
-                itemInstanceId = tryCreatFishPond.itemId,
+                instanceId = instanceId, 
                 room = tryCreatFishPond.room,
+                itemInstanceId=tryCreatFishPond.itemId,
                 fishs = new NativeHashSet<int>(8, Allocator.TempJob)
             };
             fishPonds.SetData(fishPond);
@@ -117,6 +117,9 @@ public class FishingManager:Singleton<FishingManager>
             {
                 tryCreatFishPond.setValue(instanceId);
             }
+            CreatFish(instanceId);
+
+
             GameActionManager.instance.QueueAction(new RefreshFishPondObj
             {
                 pondId = instanceId,
@@ -141,8 +144,8 @@ public class FishingManager:Singleton<FishingManager>
 public struct FishPond:INativeData
 {
     public int instanceId;
-    public int itemInstanceId;
     public int room;
+    public int itemInstanceId;
     public int dataId;
      
     public NativeHashSet<int> fishs;

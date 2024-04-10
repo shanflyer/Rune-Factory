@@ -176,9 +176,9 @@ public class MapCellController : Singleton<MapCellController>
             if (triggerIndexs.TryGetValue(instanceId, out var index))
             {
                 var cells = triggerAreas[index].cells;
-                return cells.ToNativeArray(Allocator.Temp);
+                return cells.ToNativeArray(Allocator.TempJob);
             }
-            return new NativeArray<int2>(0, Allocator.Temp);
+            return new NativeArray<int2>(0, Allocator.TempJob);
         }
 
         public void InitTriggerData()
@@ -582,7 +582,10 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            return runtimeMapRoom.commonTriggerAreas.GetItemTriggerCells(instanceId).ToArray();
+            var cells = runtimeMapRoom.commonTriggerAreas.GetItemTriggerCells(instanceId);
+            int2[] cellArray = cells.ToArray();
+            cells.Dispose();
+            return cellArray;
         }
         return null;
     }
@@ -591,7 +594,10 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            return runtimeMapRoom.playerTriggerAreas.GetItemTriggerCells(instanceId).ToArray();
+            var cells = runtimeMapRoom.playerTriggerAreas.GetItemTriggerCells(instanceId);
+            int2[] cellArray = cells.ToArray();
+            cells.Dispose();
+            return cellArray;
         }
         return null;
     }
@@ -1171,8 +1177,8 @@ public class MapCellController : Singleton<MapCellController>
             
             };
 
-            findPath.Schedule().Complete();
-            //findPath.Run();
+            //findPath.Schedule().Complete();
+            findPath.Run();
 
             for (int i = 0; i < findPath.pathCells.Length; i++)
             {
@@ -1417,7 +1423,10 @@ public class MapCellController : Singleton<MapCellController>
                     for (int i = 0; i < 8; i++)
                     {
                         int2 cell = neighbourOffsetArray[i] + nowCell;
-
+                        if (closeCells.Contains(cell) || openCells.Contains(cell))
+                        {
+                            continue;
+                        }
                         if (!cells.Contains(cell))
                         {
                             continue;

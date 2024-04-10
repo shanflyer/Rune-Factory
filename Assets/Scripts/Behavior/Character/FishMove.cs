@@ -26,7 +26,7 @@ public class FishMove : Action
     public override void OnAwake()
     {
         base.OnAwake();
-        fishTransform = FishController.instance.GetFishTransform(fishId.Value,out fishAnimator);
+       
         
     }
      
@@ -34,6 +34,11 @@ public class FishMove : Action
 
     public override void OnStart()
     {
+        if (fishTransform == null)
+        {
+            fishTransform = FishController.instance.GetFishTransform(fishId.Value, out fishAnimator);
+        }
+        
         taskStatus = TaskStatus.Running;
         if (fishTransform == null)
         {
@@ -68,7 +73,8 @@ public class FishMove : Action
             }
             else
             {
-                transform.position = Vector2.Lerp(P0, P1, t);
+                var postion = Vector2.Lerp(P0, P1, t);
+                transform.position = new Vector3(postion.x, postion.y, 150);
             }
             yield return null;
         }

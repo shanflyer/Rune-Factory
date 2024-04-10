@@ -253,7 +253,7 @@ public class GameRandom:Singleton<GameRandom>
     [BurstCompile]
     NativeList<RandomJobResult> GetRandomJobValue(int id, int innerGroupCount = 0, int randomResultCount = 1)
     {
-        NativeList<RandomJobResult> randomResults = new NativeList<RandomJobResult>(Allocator.Temp);
+        NativeList<RandomJobResult> randomResults = new NativeList<RandomJobResult>(8,Allocator.TempJob);
         if (innerGroupCount > GameCommon.randomInnerGroupMax)
         {
             Debug.LogError("随机嵌套超过5层！");

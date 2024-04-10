@@ -459,7 +459,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         TryCreatFishPond tryCreatFishPond = new TryCreatFishPond
         {
             room = mapId,
-            instanceId = mapItem.instanceId
+            itemId = mapItem.instanceId,
+            instanceId = instanceId
         };
         GameActionManager.instance.QueueAction(tryCreatFishPond);
         return runtimeMapItem.instanceId;
