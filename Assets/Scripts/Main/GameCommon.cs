@@ -63,7 +63,7 @@ public enum Direction
 
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER, STOREITEM, EMOTE
+    MAPGROUND, MAPITEM, CHARACTER, STOREITEM, EMOTE,FISHTOOL
 }
 
 public enum FightRuntimeObjType
@@ -85,6 +85,14 @@ public enum EntityType
 
 public class GameCommon
 {
+
+    public static Dictionary<Direction, Vector2> fishToolOffsets = new Dictionary<Direction, Vector2>
+    {
+        {Direction.LEFT,new Vector2(-0.556f,0.034f)},
+        {Direction.RIGHT,new Vector2(0.556f,0.034f)},
+        {Direction.UP,new Vector2(0,0.6531f)},
+        {Direction.DOWN,new Vector2(0,-0.39f)},
+    };
     public const int setTeamerFunctionId = 4;
     public const int defaultProduct = 1;
     public const int explorCostMinute = 120;
@@ -989,6 +997,7 @@ public static class DataPath
         return null;
     }
 
+    public const string fishToolPrefab = "Prefabs/Other/”„∆Ø";
     public const string StoreCoinPrefab = "Prefabs/Other/Coin";
     public const string StoreCounterPrefab = "Prefabs/Other/SellItem";
     public const string goldSpritePath = "Reference/Gold";

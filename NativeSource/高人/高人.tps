@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
+            <enum type="SpriteSettings::TrimMode">Polygon</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -1433,6 +1433,7 @@
             <key type="filename">People1_92.png</key>
             <key type="filename">People1_93$Normal.png</key>
             <key type="filename">People1_93.png</key>
+            <key type="filename">People1_96$Normal.png</key>
             <key type="filename">People1_96.png</key>
             <key type="filename">People2_01$Normal.png</key>
             <key type="filename">People2_01.png</key>
@@ -1518,6 +1519,7 @@
             <key type="filename">People2_53.png</key>
             <key type="filename">People2_54$Normal.png</key>
             <key type="filename">People2_54.png</key>
+            <key type="filename">People2_58$Normal.png</key>
             <key type="filename">People2_58.png</key>
             <key type="filename">People2_59$Normal.png</key>
             <key type="filename">People2_59.png</key>
@@ -1631,6 +1633,7 @@
             <key type="filename">People3_47.png</key>
             <key type="filename">People3_48$Normal.png</key>
             <key type="filename">People3_48.png</key>
+            <key type="filename">People3_52$Normal.png</key>
             <key type="filename">People3_52.png</key>
             <key type="filename">People3_53$Normal.png</key>
             <key type="filename">People3_53.png</key>
@@ -2046,10 +2049,15 @@
             <key type="filename">主角男_托举_右_7$Normal.png</key>
             <key type="filename">主角男_托举_右_8$Normal.png</key>
             <key type="filename">主角男_托举_右_9$Normal.png</key>
-            <key type="filename">主角男_锄地_上_3$Normal.png</key>
-            <key type="filename">主角男_锄地_上_4$Normal.png</key>
-            <key type="filename">主角男_锄地_上_5$Normal.png</key>
-            <key type="filename">主角男_锄地_右_0$Normal.png</key>
+            <key type="filename">主角男_通用动作上_16$Normal.png</key>
+            <key type="filename">主角男_通用动作上_17$Normal.png</key>
+            <key type="filename">主角男_通用动作上_18$Normal.png</key>
+            <key type="filename">主角男_通用动作下_01$Normal.png</key>
+            <key type="filename">主角男_通用动作下_02$Normal.png</key>
+            <key type="filename">主角男_通用动作下_03$Normal.png</key>
+            <key type="filename">主角男_通用动作右_11$Normal.png</key>
+            <key type="filename">主角男_通用动作右_12$Normal.png</key>
+            <key type="filename">主角男_通用动作右_14$Normal.png</key>
             <key type="filename">主角男坐$Normal.png</key>
             <key type="filename">主角男坐.png</key>
             <key type="filename">主角男趴$Normal.png</key>
@@ -2238,10 +2246,15 @@
             <key type="filename">主角男_托举_右_7.png</key>
             <key type="filename">主角男_托举_右_8.png</key>
             <key type="filename">主角男_托举_右_9.png</key>
-            <key type="filename">主角男_锄地_上_3.png</key>
-            <key type="filename">主角男_锄地_上_4.png</key>
-            <key type="filename">主角男_锄地_上_5.png</key>
-            <key type="filename">主角男_锄地_右_0.png</key>
+            <key type="filename">主角男_通用动作上_16.png</key>
+            <key type="filename">主角男_通用动作上_17.png</key>
+            <key type="filename">主角男_通用动作上_18.png</key>
+            <key type="filename">主角男_通用动作下_01.png</key>
+            <key type="filename">主角男_通用动作下_02.png</key>
+            <key type="filename">主角男_通用动作下_03.png</key>
+            <key type="filename">主角男_通用动作右_11.png</key>
+            <key type="filename">主角男_通用动作右_12.png</key>
+            <key type="filename">主角男_通用动作右_14.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.95</point_f>
@@ -2253,100 +2266,6 @@
                 <rect>12,18,24,36</rect>
                 <key>scale9Paddings</key>
                 <rect>12,18,24,36</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">主角男_锄地_下_1$Normal.png</key>
-            <key type="filename">主角男_锄地_下_4$Normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,36,24,72</rect>
-                <key>scale9Paddings</key>
-                <rect>12,36,24,72</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">主角男_锄地_下_1.png</key>
-            <key type="filename">主角男_锄地_下_4.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.48</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,36,24,72</rect>
-                <key>scale9Paddings</key>
-                <rect>12,36,24,72</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">主角男_锄地_下_2$Normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,36,23,72</rect>
-                <key>scale9Paddings</key>
-                <rect>12,36,23,72</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">主角男_锄地_下_2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.48</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,36,23,72</rect>
-                <key>scale9Paddings</key>
-                <rect>12,36,23,72</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">主角男_锄地_右_1$Normal.png</key>
-            <key type="filename">主角男_锄地_右_2$Normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>24,18,48,36</rect>
-                <key>scale9Paddings</key>
-                <rect>24,18,48,36</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">主角男_锄地_右_1.png</key>
-            <key type="filename">主角男_锄地_右_2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.25,0.95</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>24,18,48,36</rect>
-                <key>scale9Paddings</key>
-                <rect>24,18,48,36</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
