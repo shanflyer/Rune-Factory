@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using Object = UnityEngine.Object;
 
 public class FishController:Singleton<FishController>
@@ -12,7 +13,10 @@ public class FishController:Singleton<FishController>
     Dictionary<int, CharacterRuntimeObj> fishRuntimeObjs = new Dictionary<int, CharacterRuntimeObj>(); 
     Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
     MyInstance myInstance;
+
+    Dictionary<int,List<int>> mapFishers = new Dictionary<int, List<int>>();
     Dictionary<int, Fisher> Fishers = new Dictionary<int, Fisher>();
+    Dictionary<int, List<int>> linkFishes = new Dictionary<int, List<int>>();
     public override bool NeedUpdata => true;
     private GameObject FishBehavior;
     private Transform fishTool;
@@ -34,6 +38,10 @@ public class FishController:Singleton<FishController>
         GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
         GameActionManager.instance.AddListener<CreatFisher>(CreatFisher);
         GameActionManager.instance.AddListener<RecycleFisher>(RecycleFisher);
+        GameActionManager.instance.AddListener<LinkFisher>(LinkFisher);
+        GameActionManager.instance.AddListener<PlayFishWater>(PlayFishWater);
+        GameActionManager.instance.AddListener<UnLinkFisher>(UnLinkFisher);
+        GameActionManager.instance.AddListener<TrueLinkFisher>(TrueLinkFisher);
 
         fishTool = await GameSourceManager.instance.GetComponent<Transform>(DataPath.fishToolPrefab);
     }
@@ -43,35 +51,163 @@ public class FishController:Singleton<FishController>
         myInstance.Clear();
     }
 
+    void PlayFishWater(PlayFishWater playFishWater)
+    {
+        if(Fishers.TryGetValue(playFishWater.fisherId,out var fisher))
+        {
+            if (fisher.waterPs != null)
+            {
+                fisher.waterPs.Play();
+            }
+        }
+    }
+    void UnLinkFisher(UnLinkFisher unLinkFisher)
+    { 
+        if(linkFishes.TryGetValue(unLinkFisher.fisherId,out var ints))
+        {
+            ints.Remove(unLinkFisher.fishId);
+        } 
+    }
+    void TrueLinkFisher(TrueLinkFisher linkFisher)
+    {
+        if (!this.linkFishes.TryGetValue(linkFisher.fisherId, out var fishes))
+        {
+            fishes = new List<int>();
+            linkFishes[linkFisher.fisherId] = fishes;
+        }
+        fishes.Add(linkFisher.fishId);
+    }
+    void LinkFisher(LinkFisher linkFisher)
+    {
+        if(fishRuntimes.GetData(linkFisher.fishId,out var fishRuntime))
+        {
+            if(mapFishers.TryGetValue(fishRuntime.room,out  var fishers))
+            {
+                int index = GameRandom.RandomInt(0, fishers.Count);
+                int fisherId = fishers[index];
+                if (linkFisher.trueLink)
+                {
+                    if (!this.linkFishes.TryGetValue(fisherId, out var fishes))
+                    {
+                        fishes = new List<int>();
+                        linkFishes[fisherId] = fishes;
+                    }
+                    fishes.Add(linkFisher.fishId);
 
+                    if (linkFisher.setValue != null)
+                    {
+                        linkFisher.setValue(fisherId);
+                    }
+                    if (linkFisher.setResult != null)
+                    {
+                        linkFisher.setResult(true);
+                    }
+                }
+               
+            }
+            else
+            {
+                if (linkFisher.setResult != null)
+                {
+                    linkFisher.setResult(false);
+                }
+            }
+        }
+    }
     void CreatFisher(CreatFisher creatFisher)
     {
         if (!Fishers.ContainsKey(creatFisher.characterInstance))
-        { 
-            if(CharacterManager.instance.GetRuntimeCharacterObj(creatFisher.characterInstance,out var characterRuntimeObj))
+        {
+            Character character = CharacterManager.instance.GetCharacter(creatFisher.characterInstance);
+            if (character != null)
             {
-                RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
-                Fisher fisher = new Fisher(runtimeObj, creatFisher.characterInstance);
+                Fisher fisher = new Fisher
+                {
+                    intanceId = character.instanceId,
+                    roomId = character.mapInstance
+                };
+                if (CharacterManager.instance.GetRuntimeCharacterObj(creatFisher.characterInstance, out var characterRuntimeObj))
+                { 
+                    RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
+                    fisher.runtimeObj = runtimeObj;
+                    fisher.waterPs= (runtimeObj.obj as Transform).GetComponentInChildren<ParticleSystem>(true);
+                    Vector3 pos = GameCommon.fishToolOffsets[character.direction];
+                    pos += characterRuntimeObj.animator.transform.position;
+                    fisher.SetToolPos(pos);
+                   
+                }
                 Fishers.Add(creatFisher.characterInstance, fisher);
-
-                Character character = CharacterManager.instance.GetCharacter(creatFisher.characterInstance);
-
-                Vector3 pos = GameCommon.fishToolOffsets[character.direction];
-                pos +=characterRuntimeObj.animator.transform.position;
-                fisher.SetToolPos(pos);
                 Fishers[creatFisher.characterInstance] = fisher;
+
+                if (!mapFishers.TryGetValue(character.mapInstance, out var ints))
+                {
+                    ints = new List<int>();
+                    mapFishers.Add(character.mapInstance, ints);
+                }
+                ints.Add(character.instanceId);
+            }
+        }
+    }
+
+   public void RecycleFisherObj(int fisherId)
+    {
+        if (Fishers.TryGetValue(fisherId, out var fisher))
+        { 
+            fisher.Clear();
+            Fishers[fisherId] = fisher;
+        }
+    }
+    public void DisplayFisherObj(int fisherId)
+    {
+        if (Fishers.TryGetValue(fisherId, out var fisher))
+        {
+            if (CharacterManager.instance.GetRuntimeCharacterObj(fisherId, out var characterRuntimeObj))
+            {
+                Character character = CharacterManager.instance.GetCharacter(fisherId);
+                RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool,
+                    fisherId);
+                fisher.runtimeObj = runtimeObj;
+                fisher.waterPs = (runtimeObj.obj as Transform).GetComponentInChildren<ParticleSystem>(true);
+                Vector3 pos = GameCommon.fishToolOffsets[character.direction];
+                pos += characterRuntimeObj.animator.transform.position;
+                fisher.SetToolPos(pos);
+                Fishers[fisherId] = fisher;
             } 
         }
     }
+
+
     void RecycleFisher(RecycleFisher recycleFisher)
     {
         if(Fishers.TryGetValue(recycleFisher.characterInstance,out var fisher))
         {
             fisher.Clear();
             Fishers.Remove(recycleFisher.characterInstance);
+
+            if(mapFishers.TryGetValue(fisher.roomId,out var ints))
+            {
+                ints.Remove(fisher.intanceId);
+                if (ints.Count == 0)
+                {
+                    mapFishers.Remove(fisher.roomId);
+                }
+            } 
         }
     }
 
+    public bool GetFisherToolCoordinate(int fisherid,out int3 coordinate)
+    {
+        coordinate = int3.zero;
+        if(Fishers.TryGetValue(fisherid,out var fisher))
+        {
+            if (fisher.waterPs != null)
+            {
+                coordinate =new int3(GameCommon.GetMapCoordinateInt(fisher.waterPs.transform.position),fisher.roomId);
+                return true;
+            }
+        }
+        return false;
+    }
     void DisplayMap(DisplayMap displayMap)
     {
         foreach(FishRuntime fishRuntime in fishRuntimes)
@@ -330,21 +466,26 @@ public struct Fisher
 {
     public int intanceId; 
     public ParticleSystem waterPs;
+    public int roomId;
 
     public RuntimeObj runtimeObj;
     public void SetToolPos(Vector3 pos)
     {
         (runtimeObj.obj as Transform).position = pos;
     }
-    public Fisher(RuntimeObj runtimeObj,int characterId)
+    
+   
+    public Fisher(RuntimeObj runtimeObj,int characterId,int roomId)
     {
         intanceId = characterId;
         this.runtimeObj = runtimeObj;
+        this.roomId = roomId;
         waterPs = (runtimeObj.obj as Transform).GetComponentInChildren<ParticleSystem>(true);
     }
     public void Clear()
     {
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+        waterPs = null;
     }
     public void FishMove()
     {

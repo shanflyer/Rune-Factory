@@ -75,6 +75,38 @@ public class CharacterManager : Singleton<CharacterManager>
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
 
+    void RecycleCharacterObj(Character character)
+    {
+        if(characterRuntionObjs.TryGetValue(character,out var characterRuntimeObj))
+        {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
+            characterRuntionObjs.Remove(character); 
+        }
+        EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
+        FishController.instance.RecycleFisherObj(character.instanceId);
+    }
+    async Task CreatCharacterObjAsync(Character character, bool controller = false)
+    {
+        var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
+        Transform transform = runtimeObj.obj as Transform;
+        var characterRuntimeObj = new CharacterRuntimeObj
+        {
+            runtimeObj = runtimeObj,
+            animator = transform.GetComponentInChildren<Animator>(),
+            equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
+            model = transform.Find("Body")
+        };
+        characterRuntionObjs.Add(character, characterRuntimeObj);
+
+        Vector2 pos = GameCommon.GetMapPos(character.coordinate); 
+        transform.position = pos;
+
+        if (controller)
+        {
+            CameraManager.instance.SetFollowTarget(transform);
+        }
+    }
+
     public override void Init()
     {
         base.Init();
@@ -268,18 +300,9 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
                     EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
-                    characterRuntionObjs.Remove(character);
+                    characterRuntionObjs.Remove(character); 
 
-                    RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
-                    Transform transform = runtimeObj.obj as Transform;
-                    characterRuntimeObj = new CharacterRuntimeObj
-                    {
-                        runtimeObj = runtimeObj,
-                        animator = transform.GetComponentInChildren<Animator>(),
-                        equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
-                        model = transform.Find("Body")
-                    };
-                    characterRuntionObjs.Add(character, characterRuntimeObj);
+                    CreatCharacterObjAsync(character); 
                 }
             }
         }
@@ -693,8 +716,7 @@ public class CharacterManager : Singleton<CharacterManager>
             if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
                 EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
-                GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
-                characterRuntionObjs.Remove(character);
+                RecycleCharacterObj(character);
             }
             else
             {
@@ -709,18 +731,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else if (character.mapInstance == WorldMapObjManager.instance.displayMap)
         {
-            var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
-            Vector2 pos = GameCommon.GetMapPos(character.coordinate);
-            var transform = characterRuntimeObj.runtimeObj.obj as Transform;
-            transform.position = pos;
-            characterRuntimeObj = new CharacterRuntimeObj
-            {
-                runtimeObj = runtimeObj,
-                animator = transform.GetComponentInChildren<Animator>(),
-                equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
-                model = transform.Find("Body")
-            };
-            characterRuntionObjs.Add(character, characterRuntimeObj);
+            CreatCharacterObjAsync(character); 
         }
     }
 
@@ -1138,9 +1149,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
-                GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
-                EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
-                characterRuntionObjs.Remove(character);
+                RecycleCharacterObj(character);
             }
             else
             {
@@ -1159,26 +1168,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance == WorldMapObjManager.instance.displayMap)
             {
-                RuntimeObj runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
-                Transform transform = runtimeObj.obj as Transform;
-                characterRuntimeObj = new CharacterRuntimeObj
-                {
-                    runtimeObj = runtimeObj,
-                    animator = transform.GetComponentInChildren<Animator>(),
-                    equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
-                    model = transform.Find("Body"),
-                    // myShadow=transform.GetComponentInChildren<MyShadowPolygon>(),
-                };
-                /*
-                if (characterRuntimeObj.myShadow)
-                {
-                    characterRuntimeObj.myShadow.CreatMesh();
-                }*/
-                characterRuntionObjs.Add(character, characterRuntimeObj);
-                if (controller)
-                {
-                    CameraManager.instance.SetFollowTarget(transform);
-                }
+                 await CreatCharacterObjAsync(character); 
             }
         }
     }
@@ -1188,6 +1178,7 @@ public class CharacterManager : Singleton<CharacterManager>
         foreach (var characterRuntime in characterRuntionObjs)
         {
             GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntime.Value.runtimeObj);
+            FishController.instance.RecycleFisherObj(characterRuntime.Key.instanceId);
         }
         characterRuntionObjs.Clear();
     }
@@ -1202,24 +1193,13 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (character.mapInstance != WorldMapObjManager.instance.displayMap
                     && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
-                    EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
-                    GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
-                    characterRuntionObjs.Remove(character);
+                    RecycleCharacterObj(character);
                 }
                 if (character.mapInstance == WorldMapObjManager.instance.displayMap)
                 {
                     if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
                     {
-                        var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
-                        Transform transform = runtimeObj.obj as Transform;
-                        characterRuntimeObj = new CharacterRuntimeObj
-                        {
-                            runtimeObj = runtimeObj,
-                            animator = transform.GetComponentInChildren<Animator>(),
-                            equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
-                            model = transform.Find("Body")
-                        };
-                        characterRuntionObjs.Add(character, characterRuntimeObj);
+                        CreatCharacterObjAsync(character);
                     }
                     else
                     {

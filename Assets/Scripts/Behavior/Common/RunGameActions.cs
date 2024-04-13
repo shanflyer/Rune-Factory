@@ -21,7 +21,7 @@ public class RunGameActions : Action
 {
     public bool immediately;
     public SharedInt source, target;
-    public SharedInt sharedSetIntValue;
+    public SharedInt sharedSetIntValue; 
 
     [Header("动态填充数据")]
     public List<DynamicData> otherDatas;
