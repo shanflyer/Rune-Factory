@@ -56,8 +56,8 @@ public class FishingManager:Singleton<FishingManager>
                     {
                         dataId = int.Parse(randomResult.result),
                         fishValue = randomResult.count,
-                        pondId = pondId,
-                        room = fishPond.room, 
+                        pondId = pondId, 
+                        room = fishPond.room,  
                         setValue=SetValue
                     };
 

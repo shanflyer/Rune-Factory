@@ -16,7 +16,8 @@ public class FishController:Singleton<FishController>
 
     Dictionary<int,List<int>> mapFishers = new Dictionary<int, List<int>>();
     Dictionary<int, Fisher> Fishers = new Dictionary<int, Fisher>();
-    Dictionary<int, List<int>> linkFishes = new Dictionary<int, List<int>>();
+    Dictionary<int, int> linkFishes = new Dictionary<int, int>();
+    Dictionary<int, int> tempLinkFishes = new Dictionary<int, int>();
     public override bool NeedUpdata => true;
     private GameObject FishBehavior;
     private Transform fishTool;
@@ -42,6 +43,7 @@ public class FishController:Singleton<FishController>
         GameActionManager.instance.AddListener<PlayFishWater>(PlayFishWater);
         GameActionManager.instance.AddListener<UnLinkFisher>(UnLinkFisher);
         GameActionManager.instance.AddListener<TrueLinkFisher>(TrueLinkFisher);
+        GameActionManager.instance.AddListener<TryGetFish>(TryGetFish);
 
         fishTool = await GameSourceManager.instance.GetComponent<Transform>(DataPath.fishToolPrefab);
     }
@@ -62,20 +64,13 @@ public class FishController:Singleton<FishController>
         }
     }
     void UnLinkFisher(UnLinkFisher unLinkFisher)
-    { 
-        if(linkFishes.TryGetValue(unLinkFisher.fisherId,out var ints))
-        {
-            ints.Remove(unLinkFisher.fishId);
-        } 
+    {
+        linkFishes.Remove(unLinkFisher.fisherId);
+        tempLinkFishes.Remove(unLinkFisher.fisherId); 
     }
     void TrueLinkFisher(TrueLinkFisher linkFisher)
     {
-        if (!this.linkFishes.TryGetValue(linkFisher.fisherId, out var fishes))
-        {
-            fishes = new List<int>();
-            linkFishes[linkFisher.fisherId] = fishes;
-        }
-        fishes.Add(linkFisher.fishId);
+        this.linkFishes[linkFisher.fisherId] = linkFisher.fishId; 
     }
     void LinkFisher(LinkFisher linkFisher)
     {
@@ -83,17 +78,23 @@ public class FishController:Singleton<FishController>
         {
             if(mapFishers.TryGetValue(fishRuntime.room,out  var fishers))
             {
-                int index = GameRandom.RandomInt(0, fishers.Count);
-                int fisherId = fishers[index];
-                if (linkFisher.trueLink)
+                List<int> _fishers = new List<int>();
+                for(int i = 0; i < fishers.Count; i++)
                 {
-                    if (!this.linkFishes.TryGetValue(fisherId, out var fishes))
+                    if (!tempLinkFishes.ContainsKey(fishers[i]))
                     {
-                        fishes = new List<int>();
-                        linkFishes[fisherId] = fishes;
+                        _fishers.Add(fishers[i]);
                     }
-                    fishes.Add(linkFisher.fishId);
-
+                }
+                if (_fishers.Count > 0)
+                {
+                    int index = GameRandom.RandomInt(0, _fishers.Count);
+                    int fisherId = _fishers[index];
+                    if (linkFisher.trueLink)
+                    {
+                        this.linkFishes[fisherId] = linkFisher.fishId;
+                        this.tempLinkFishes[fisherId] = linkFisher.fishId; 
+                    }
                     if (linkFisher.setValue != null)
                     {
                         linkFisher.setValue(fisherId);
@@ -103,7 +104,15 @@ public class FishController:Singleton<FishController>
                         linkFisher.setResult(true);
                     }
                 }
-               
+                else
+                {
+                    if (linkFisher.setResult != null)
+                    {
+                        linkFisher.setResult(false);
+                    }
+                }
+
+              
             }
             else
             {
@@ -404,6 +413,88 @@ public class FishController:Singleton<FishController>
 
     async void TryGetFish(TryGetFish tryGetFish)
     {
+        if(linkFishes.TryGetValue(tryGetFish.characterId,out int fishId))
+        {
+            if (fishRuntimes.GetData(fishId, out var fishRuntime))
+            {
+                FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(fishRuntime.dataId);
+                Item item = new Item
+                {
+                    dataId = fishData.itemId,
+                    count = 1,
+                    value = fishRuntime.value
+                };
+                int count = await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage);
+                if (count <= 0)
+                {
+                    if (tryGetFish.setResult != null)
+                        tryGetFish.setResult(true);
+                    ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(fishData.itemId);
+
+                    ItemResultInfo itemResultInfo = new ItemResultInfo
+                    {
+                        icon = itemData.icon,
+                        info0 = $"获得了一条  <color=green>{item.value}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
+                        info1 = ""
+                    };
+
+                    UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+
+                    RemoveFish(new global::RemoveFish { instanceId = fishId });
+                    if (tryGetFish.setResult != null)
+                        tryGetFish.setResult(true);
+                }
+                else
+                {
+                    ItemResultInfo itemResultInfo = new ItemResultInfo
+                    {
+                        icon = null,
+                        info0 = "",
+                        info1 = "$背包空间不足，鱼已放生"
+                    }; 
+                    UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+
+                    if (behaviorTrees.TryGetValue(fishId, out var behaviorTree))
+                    {
+                        behaviorTree.StopAllTaskCoroutines();
+                        behaviorTree.Start();
+                    }
+                    if (tryGetFish.setResult != null)
+                        tryGetFish.setResult(false);
+                }
+
+            }
+            else
+            {
+                if (tryGetFish.setResult != null)
+                    tryGetFish.setResult(false);
+            }
+           
+        }
+        else
+        {
+            ItemResultInfo itemResultInfo = new ItemResultInfo
+            {
+                icon = null,
+                info0 = "",
+                info1 = "本次垂钓一无所获"
+            };
+            UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+
+            if(tempLinkFishes.TryGetValue(tryGetFish.characterId,out fishId))
+            {
+                if(behaviorTrees.TryGetValue(fishId,out var behaviorTree))
+                { 
+                    behaviorTree.StopAllTaskCoroutines();
+                    behaviorTree.Start();
+                }
+            }
+
+        }
+        linkFishes.Remove(tryGetFish.characterId);
+        tempLinkFishes.Remove(tryGetFish.characterId);
+
+        /*
         if(fishRuntimes.GetData(tryGetFish.fishId,out var fishRuntime))
         {
             FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(fishRuntime.dataId);
@@ -433,7 +524,7 @@ public class FishController:Singleton<FishController>
         else
         {
             tryGetFish.setResult(false);
-        }
+        }*/
     }
 
     public Transform GetFishTransform(int id,out Animator animator)

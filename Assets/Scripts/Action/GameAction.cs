@@ -13,6 +13,20 @@ public interface GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 
+    public void SetResult(bool result)
+    {
+        if (setResult != null)
+        {
+            setResult(result);
+        }
+    }
+    public void SetValue(int Value)
+    {
+        if (setValue != null)
+        {
+            setValue(Value);
+        }
+    }
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 }

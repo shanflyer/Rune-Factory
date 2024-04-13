@@ -165,8 +165,7 @@ public struct RemoveFish : GameAction
 }
 
 public struct TryGetFish : GameAction
-{
-    public int fishId;
+{ 
     public int characterId;
 
     public SetValue setValue { get; set; }
@@ -174,6 +173,13 @@ public struct TryGetFish : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
+
+        if (source != 0 && source != int.MinValue)
+        {
+            characterId = source;
+        }
+        this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

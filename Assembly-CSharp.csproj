@@ -844,7 +844,6 @@
     <Compile Include="Assets\Scripts\Event\GameTimeEventManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetColor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetTimeScale.cs" />
-    <Compile Include="Assets\Scripts\UI\SomethingGetPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerPause.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetRange.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\StartBehaviorTree.cs" />
@@ -914,6 +913,7 @@
     <Compile Include="Assets\Scripts\UI\Sleep\SleepReference.cs" />
     <Compile Include="Assets\Scripts\UI\TeamerReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetApplyRootMotion.cs" />
+    <Compile Include="Assets\Scripts\UI\ItemResultPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetLoop.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\ParallelSelector.cs" />
     <Compile Include="Assets\Scripts\test\NativeAppendOnlyList.cs" />
@@ -2036,6 +2036,14 @@
     <ProjectReference Include="Unity.Timeline.Editor.csproj">
       <Project>{7579CFE9-2484-A90A-0515-54B24E97C033}</Project>
       <Name>Unity.Timeline.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="TextMeshProEffect.csproj">
+      <Project>{520C487E-2AE7-9DB9-FF07-ECE2F6E69CDE}</Project>
+      <Name>TextMeshProEffect</Name>
+    </ProjectReference>
+    <ProjectReference Include="TextMeshProEffect.Editor.csproj">
+      <Project>{29894FAA-A0CD-6392-BE47-1B7C19C19DA5}</Project>
+      <Name>TextMeshProEffect.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Editor.csproj">
       <Project>{8E92951B-77C7-628E-ED27-23C891B9CADD}</Project>
