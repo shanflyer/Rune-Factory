@@ -14,6 +14,7 @@ public struct UserGameSaveData:IReferenceData
     public List<CharacterSaveData> characterSaveDatas;
     public List<PackageSaveData> packageSaveDatas;
     public List<ChapterSave> chapters;
+    public List<FishSaveData> fishSaveDatas;
     public string saveTime;
     public int index;
     public static UserGameSaveData CreatSaveData(int index)
@@ -35,8 +36,16 @@ public struct UserGameSaveData:IReferenceData
 
         return userGameSaveData;
     }
+
 }
  
+public struct FishSaveData
+{
+    public int dataId;
+    public int length;
+    public List<int> places;
+}
+
 public struct GameDateSaveData
 {
     public int year;

@@ -120,6 +120,52 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         File.WriteAllText(saveDataPath, strs);
     }
 
+    public bool SetFishSaveData(int fish,int length,int place)
+    {
+        var fishDatas = UserGameSaveData.fishSaveDatas;
+        if (fishDatas == null)
+        {
+            fishDatas = new List<FishSaveData>();
+        }
+        bool newRecord = false;
+        FishSaveData fishSaveData;
+        int index = fishDatas.FindIndex(f => f.dataId == fish);
+        if (index >= 0)
+        {
+            fishSaveData = fishDatas[index];
+            if (fishSaveData.length < length)
+            {
+                fishSaveData.length = length;
+                newRecord = true;
+            }
+            if (!fishSaveData.places.Contains(place))
+            {
+                fishSaveData.places.Add(place); 
+            }
+        }
+        else
+        {
+            fishSaveData.length = length;
+            fishSaveData.dataId = fish;
+            fishSaveData.places = new List<int> { place };
+            fishDatas.Add(fishSaveData);
+            newRecord = true;
+        }
+        return newRecord;
+    }
+    public FishSaveData GetFishDataSave(int id)
+    {
+        FishSaveData fishSaveData=default(FishSaveData);
+        var fishDatas = UserGameSaveData.fishSaveDatas;
+        if (fishDatas != null)
+        {
+            int index = fishDatas.FindIndex(f => f.dataId == id);
+            fishSaveData = fishDatas[index];
+        }
+        return fishSaveData;
+    }
+
+
     public override void Init()
     {
         base.Init();

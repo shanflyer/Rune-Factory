@@ -1,8 +1,10 @@
 ﻿using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Device;
 using UnityEngine.TextCore.Text;
 using Object = UnityEngine.Object;
 
@@ -424,21 +426,28 @@ public class FishController:Singleton<FishController>
                     count = 1,
                     value = fishRuntime.value
                 };
-                int count = await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage);
+                Character character = CharacterManager.instance.GetCharacter(tryGetFish.characterId);
+                int count = await PackageManager.instance.SetItemInPackage(item, character.characterPackage);
                 if (count <= 0)
                 {
                     if (tryGetFish.setResult != null)
                         tryGetFish.setResult(true);
                     ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(fishData.itemId);
 
+                    bool newRecord = false;
+                    if (character == CharacterManager.instance.controllerCharacter)
+                    {
+                        newRecord=GameDataSaveManager.instance.SetFishSaveData(fishData.id, fishRuntime.value, character.mapInstance);
+                    }
+
+
                     ItemResultInfo itemResultInfo = new ItemResultInfo
                     {
                         icon = itemData.icon,
                         info0 = $"获得了一条  <color=green>{item.value}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
-                        info1 = ""
+                        info1 = newRecord ? $"< color = red > 新记录！ </ color > " : ""
                     };
-
-                    UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+                UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
 
                     RemoveFish(new global::RemoveFish { instanceId = fishId });
                     if (tryGetFish.setResult != null)
