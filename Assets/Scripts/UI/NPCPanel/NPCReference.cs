@@ -67,8 +67,8 @@ public class NPCReference : UIObjReference<NPC>
         toggle.group = toggleGroup;
 
         CharacterData characterData = await data.GetCharacterData();
-        Icon.sprite = characterData.icon.sprite;
-        Icon.SetNativeSize();
+        characterData.head.SetImageSprite(Icon);
+         
         NPCName.text = $"+ {characterData.characterName} +";
 
         FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.characterId).ToString();

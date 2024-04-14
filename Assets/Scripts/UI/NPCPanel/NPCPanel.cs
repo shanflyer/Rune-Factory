@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class NPCPanel : GamePanel<NPCList>
 {
@@ -18,7 +19,10 @@ public class NPCPanel : GamePanel<NPCList>
 
     [SerializeField]
     private Transform NPCParent;
-
+    [SerializeField]
+    Button nextButton, frontButton;
+    [SerializeField]
+    Animator BookPaper;
     private DisplayList<NPCReference, NPC> displayList;
 
     protected override void Awake()
@@ -27,6 +31,28 @@ public class NPCPanel : GamePanel<NPCList>
         CloseButton.onClick.AddListener(Close);
         VisitButton.onClick.AddListener(VisitAction);
         DetailsButton.onClick.AddListener(DetailAction);
+
+        nextButton.onClick.AddListener(() =>
+        {
+            displayIndex += 1;
+            if (displayIndex > maxIndex - 1)
+            {
+                displayIndex = maxIndex - 1;
+            }
+            InitButton();
+            DisplayNpc();
+        });
+        frontButton.onClick.AddListener(() =>
+        {
+            displayIndex -= 1;
+            if (displayIndex < 0)
+            {
+                displayIndex = 0;
+            }
+            InitButton();
+            DisplayNpc();
+        });
+
 
         displayList = new DisplayList<NPCReference, NPC>(NPCReference, NPCParent);
     }
@@ -41,6 +67,9 @@ public class NPCPanel : GamePanel<NPCList>
         NPCParent = FindChildGameObject("NPCList");
         NPCReference = FindChildGameObject<NPCReference>("NPCReference");
         toggleGroup = NPCParent.GetComponent<ToggleGroup>();
+        nextButton = FindChildGameObject<Button>("Next");
+        frontButton = FindChildGameObject<Button>("Front");
+        BookPaper = FindChildGameObject<Animator>("Book2p");
     }
 
     private void VisitAction()
@@ -71,11 +100,49 @@ public class NPCPanel : GamePanel<NPCList>
     }
 
     private NPCList NPCList;
+    int displayIndex = 0;
+    int maxIndex = 0;
 
+    void InitButton()
+    {
+        if (displayIndex >= maxIndex - 1)
+        {
+            nextButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            nextButton.gameObject.SetActive(true);
+        }
+        if (displayIndex <= 0)
+        {
+            frontButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            frontButton.gameObject.SetActive(true);
+        }
+    }
+    void DisplayNpc()
+    {
+        var npcs = new List<NPC>();
+        for(int i = 0; i < 10; i++)
+        {
+            int index = i + displayIndex * 10;
+            if (index < NPCList.npcs.Count)
+            {
+                npcs.Add(NPCList.npcs[index]);
+            }
+        }
+        displayList.InitListData(npcs, SelectAction, toggleGroup);
+    }
     public override void InitReferenceData(NPCList v)
     {
+        nextButton.transform.localScale = Vector3.one;
+        frontButton.transform.localScale = Vector3.one;
+        BookPaper.gameObject.SetActive(false);
         base.InitReferenceData(v);
         NPCList = v;
-        displayList.InitListData(NPCList.npcs, SelectAction, toggleGroup);
+        maxIndex = NPCList.npcs.Count / 10 + 1;
+        DisplayNpc();
     }
 }
