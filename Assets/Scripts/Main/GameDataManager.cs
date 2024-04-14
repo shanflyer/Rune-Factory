@@ -86,7 +86,7 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         List<T> results = new List<T>(); ;
         Type type = typeof(T);
-        if (allGameStaticDatas.TryGetValue(type, out var dataDic))
+        /*if (allGameStaticDatas.TryGetValue(type, out var dataDic))
         {
             using (var e = dataDic.GetEnumerator())
             {
@@ -97,7 +97,8 @@ public class GameDataManager : Singleton<GameDataManager>
                 }
             }
         }
-        else
+        else*/
+        var dataDic = new Dictionary<string, IGameData>();
         {
             var _results = ExtensionsResources.LoadAllIGameData<T>(DataPath.GetDataPath(type));
             if (_results != null && _results.Count != 0)

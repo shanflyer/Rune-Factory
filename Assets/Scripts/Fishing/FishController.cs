@@ -445,7 +445,7 @@ public class FishController:Singleton<FishController>
                     {
                         icon = itemData.icon,
                         info0 = $"获得了一条  <color=green>{item.value}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
-                        info1 = newRecord ? $"< color = red > 新记录！ </ color > " : ""
+                        info1 = newRecord ? $"<color=red> 新记录！ </color>": ""
                     };
                 UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
 

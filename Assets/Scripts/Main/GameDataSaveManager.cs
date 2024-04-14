@@ -122,7 +122,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     public bool SetFishSaveData(int fish,int length,int place)
     {
-        var fishDatas = UserGameSaveData.fishSaveDatas;
+        var saveData = UserGameSaveData;
+        var fishDatas = saveData.fishSaveDatas;
         if (fishDatas == null)
         {
             fishDatas = new List<FishSaveData>();
@@ -142,6 +143,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 fishSaveData.places.Add(place); 
             }
+            fishDatas[index] = fishSaveData;
         }
         else
         {
@@ -151,6 +153,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             fishDatas.Add(fishSaveData);
             newRecord = true;
         }
+        saveData.fishSaveDatas = fishDatas;
+        userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = saveData;
         return newRecord;
     }
     public FishSaveData GetFishDataSave(int id)
@@ -160,7 +164,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         if (fishDatas != null)
         {
             int index = fishDatas.FindIndex(f => f.dataId == id);
-            fishSaveData = fishDatas[index];
+            if (index >= 0)
+                fishSaveData = fishDatas[index];
         }
         return fishSaveData;
     }
