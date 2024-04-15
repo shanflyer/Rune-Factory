@@ -1,0 +1,270 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 307d7a19f43be594fbf3febbd1e10676, type: 3}
+  m_Name: 8023
+  m_EditorClassIdentifier: 
+  animationStateDatas:
+  - stateName: 0
+    key:
+      x: 0
+      y: 0
+    clips:
+    - {fileID: 7400000, guid: 68af38ac911456a4d9ca7424994334cb, type: 2}
+  - stateName: 1
+    key:
+      x: 1
+      y: 0
+    clips:
+    - {fileID: 7400000, guid: a2fdd63f06c38074d93bd677b0b64f0a, type: 2}
+  - stateName: 2
+    key:
+      x: 2
+      y: 0
+    clips:
+    - {fileID: 7400000, guid: 06c756ad828b31f44aea54c343f5a270, type: 2}
+  - stateName: 3
+    key:
+      x: 3
+      y: 0
+    clips:
+    - {fileID: 7400000, guid: 409677b2fcdf8c54d852fe0cbe4184fb, type: 2}
+  - stateName: 4
+    key:
+      x: 4
+      y: 0
+    clips:
+    - {fileID: 7400000, guid: 877a56c3fd231a044b8969374b1f165b, type: 2}
+  - stateName: 5
+    key:
+      x: 5
+      y: 0
+    clips:
+    - {fileID: 7400000, guid: ad8be01c01060b94db318b303ce067b6, type: 2}
+  - stateName: "\u5E72\u65F10"
+    key:
+      x: 0
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: 77d5d151bc826604b8c6cbec12afabfe, type: 2}
+  - stateName: "\u5E72\u65F1\u4E00"
+    key:
+      x: 1
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: 46014f170ea4cb7488a321a993f18aff, type: 2}
+  - stateName: "\u5E72\u65F1\u4E8C"
+    key:
+      x: 2
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: 90913a51e4760b5458ff3220f46ae925, type: 2}
+  - stateName: "\u5E72\u65F1\u4E09"
+    key:
+      x: 3
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: 2bd7ba0b95a8c8f4f8940d31d50208c8, type: 2}
+  - stateName: "\u5E72\u65F1\u56DB"
+    key:
+      x: 4
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: dd0eab908498f974cab6965c740f32a1, type: 2}
+  - stateName: "\u5E72\u65F1\u4E94"
+    key:
+      x: 5
+      y: 1
+    clips:
+    - {fileID: 7400000, guid: c202c2a0a6314d04a9fb8e50d19d61d0, type: 2}
+  - stateName: "\u6B7B\u4EA10"
+    key:
+      x: 0
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: 9454c274730deb54ab872ff2243eac08, type: 2}
+  - stateName: "\u6B7B\u4EA1\u4E00"
+    key:
+      x: 1
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: 78cc915400ef6604baf64295d6429c63, type: 2}
+  - stateName: "\u6B7B\u4EA1\u4E8C"
+    key:
+      x: 2
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: b8843fccbc1dec142b5b79d58008b74a, type: 2}
+  - stateName: "\u6B7B\u4EA1\u4E09"
+    key:
+      x: 3
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: d355455809c9fd64abc828b294906a26, type: 2}
+  - stateName: "\u6B7B\u4EA1\u56DB"
+    key:
+      x: 4
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: 7b68176c22bd2d34d9c52a7b24f5162a, type: 2}
+  - stateName: "\u6B7B\u4EA1\u4E94"
+    key:
+      x: 5
+      y: 2
+    clips:
+    - {fileID: 7400000, guid: ecf65cf478d615348aa50c4cc35d8794, type: 2}
+  animationStateDataDic:
+    m_keys:
+    - x: 0
+      y: 0
+    - x: 1
+      y: 0
+    - x: 2
+      y: 0
+    - x: 3
+      y: 0
+    - x: 4
+      y: 0
+    - x: 5
+      y: 0
+    - x: 0
+      y: 1
+    - x: 1
+      y: 1
+    - x: 2
+      y: 1
+    - x: 3
+      y: 1
+    - x: 4
+      y: 1
+    - x: 5
+      y: 1
+    - x: 0
+      y: 2
+    - x: 1
+      y: 2
+    - x: 2
+      y: 2
+    - x: 3
+      y: 2
+    - x: 4
+      y: 2
+    - x: 5
+      y: 2
+    m_values:
+    - stateName: 0
+      key:
+        x: 0
+        y: 0
+      clips:
+      - {fileID: 7400000, guid: 68af38ac911456a4d9ca7424994334cb, type: 2}
+    - stateName: 1
+      key:
+        x: 1
+        y: 0
+      clips:
+      - {fileID: 7400000, guid: a2fdd63f06c38074d93bd677b0b64f0a, type: 2}
+    - stateName: 2
+      key:
+        x: 2
+        y: 0
+      clips:
+      - {fileID: 7400000, guid: 06c756ad828b31f44aea54c343f5a270, type: 2}
+    - stateName: 3
+      key:
+        x: 3
+        y: 0
+      clips:
+      - {fileID: 7400000, guid: 409677b2fcdf8c54d852fe0cbe4184fb, type: 2}
+    - stateName: 4
+      key:
+        x: 4
+        y: 0
+      clips:
+      - {fileID: 7400000, guid: 877a56c3fd231a044b8969374b1f165b, type: 2}
+    - stateName: 5
+      key:
+        x: 5
+        y: 0
+      clips:
+      - {fileID: 7400000, guid: ad8be01c01060b94db318b303ce067b6, type: 2}
+    - stateName: "\u5E72\u65F10"
+      key:
+        x: 0
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: 77d5d151bc826604b8c6cbec12afabfe, type: 2}
+    - stateName: "\u5E72\u65F1\u4E00"
+      key:
+        x: 1
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: 46014f170ea4cb7488a321a993f18aff, type: 2}
+    - stateName: "\u5E72\u65F1\u4E8C"
+      key:
+        x: 2
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: 90913a51e4760b5458ff3220f46ae925, type: 2}
+    - stateName: "\u5E72\u65F1\u4E09"
+      key:
+        x: 3
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: 2bd7ba0b95a8c8f4f8940d31d50208c8, type: 2}
+    - stateName: "\u5E72\u65F1\u56DB"
+      key:
+        x: 4
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: dd0eab908498f974cab6965c740f32a1, type: 2}
+    - stateName: "\u5E72\u65F1\u4E94"
+      key:
+        x: 5
+        y: 1
+      clips:
+      - {fileID: 7400000, guid: c202c2a0a6314d04a9fb8e50d19d61d0, type: 2}
+    - stateName: "\u6B7B\u4EA10"
+      key:
+        x: 0
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: 9454c274730deb54ab872ff2243eac08, type: 2}
+    - stateName: "\u6B7B\u4EA1\u4E00"
+      key:
+        x: 1
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: 78cc915400ef6604baf64295d6429c63, type: 2}
+    - stateName: "\u6B7B\u4EA1\u4E8C"
+      key:
+        x: 2
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: b8843fccbc1dec142b5b79d58008b74a, type: 2}
+    - stateName: "\u6B7B\u4EA1\u4E09"
+      key:
+        x: 3
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: d355455809c9fd64abc828b294906a26, type: 2}
+    - stateName: "\u6B7B\u4EA1\u56DB"
+      key:
+        x: 4
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: 7b68176c22bd2d34d9c52a7b24f5162a, type: 2}
+    - stateName: "\u6B7B\u4EA1\u4E94"
+      key:
+        x: 5
+        y: 2
+      clips:
+      - {fileID: 7400000, guid: ecf65cf478d615348aa50c4cc35d8794, type: 2}

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a1139130a302d8498aaea235f937da1, type: 3}
+  m_Name: 8026
+  m_EditorClassIdentifier: 
+  id: 8026
+  plantName: "\u84DD\u8393"
+  seed: 1126
+  fruit: 1026
+  fruitCount: 2
+  pickTimes: 1
+  cycleStage: 1
+  mapItem: 8026
+  GrowthStageStr: "\u840C\u82BD,0,1,0,0|\u5C0F\u82D7,1,1,0,1|\u5927\u82D7,2,1,0,2|\u7ED3\u679C,3,1,0,3|\u6210\u719F,4,1,0,4|\u5149\u6746,5,1,0,5"
+  growthStages:
+  - stageName: "\u840C\u82BD"
+    stage: 0
+    growthDay: 1
+    productValue: 0
+    stageObj: 0
+  - stageName: "\u5C0F\u82D7"
+    stage: 1
+    growthDay: 1
+    productValue: 0
+    stageObj: 1
+  - stageName: "\u5927\u82D7"
+    stage: 2
+    growthDay: 1
+    productValue: 0
+    stageObj: 2
+  - stageName: "\u7ED3\u679C"
+    stage: 3
+    growthDay: 1
+    productValue: 0
+    stageObj: 3
+  - stageName: "\u6210\u719F"
+    stage: 4
+    growthDay: 1
+    productValue: 0
+    stageObj: 4
+  - stageName: "\u5149\u6746"
+    stage: 5
+    growthDay: 1
+    productValue: 0
+    stageObj: 5

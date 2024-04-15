@@ -178,7 +178,8 @@
             <key type="filename">Plant/冰山生菜_03.png</key>
             <key type="filename">Plant/冰山生菜_04.png</key>
             <key type="filename">Plant/冰山生菜_05.png</key>
-            <key type="filename">Plant/芜菁 _00.png</key>
+            <key type="filename">Plant/芜菁_01.png</key>
+            <key type="filename">Plant/芜菁_02.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.85</point_f>
@@ -203,6 +204,11 @@
             <key type="filename">Plant/南瓜_03_normal.png</key>
             <key type="filename">Plant/南瓜_04_normal.png</key>
             <key type="filename">Plant/南瓜_05_normal.png</key>
+            <key type="filename">Plant/卷心菜_01_normal.png</key>
+            <key type="filename">Plant/卷心菜_02_normal.png</key>
+            <key type="filename">Plant/卷心菜_03_normal.png</key>
+            <key type="filename">Plant/卷心菜_04_normal.png</key>
+            <key type="filename">Plant/卷心菜_05_normal.png</key>
             <key type="filename">Plant/咖啡_01_normal.png</key>
             <key type="filename">Plant/咖啡_02_normal.png</key>
             <key type="filename">Plant/咖啡_03_normal.png</key>
@@ -218,16 +224,16 @@
             <key type="filename">Plant/啤酒花_03_normal.png</key>
             <key type="filename">Plant/啤酒花_04_normal.png</key>
             <key type="filename">Plant/啤酒花_05_normal.png</key>
+            <key type="filename">Plant/土豆_01_normal.png</key>
+            <key type="filename">Plant/土豆_02_normal.png</key>
+            <key type="filename">Plant/土豆_03_normal.png</key>
+            <key type="filename">Plant/土豆_04_normal.png</key>
+            <key type="filename">Plant/土豆_05_normal.png</key>
             <key type="filename">Plant/大番茄_01_normal.png</key>
             <key type="filename">Plant/大番茄_02_normal.png</key>
             <key type="filename">Plant/大番茄_03_normal.png</key>
             <key type="filename">Plant/大番茄_04_normal.png</key>
             <key type="filename">Plant/大番茄_05_normal.png</key>
-            <key type="filename">Plant/大萝卜_01_normal.png</key>
-            <key type="filename">Plant/大萝卜_02_normal.png</key>
-            <key type="filename">Plant/大萝卜_03_normal.png</key>
-            <key type="filename">Plant/大萝卜_04_normal.png</key>
-            <key type="filename">Plant/大萝卜_05_normal.png</key>
             <key type="filename">Plant/大葱_01_normal.png</key>
             <key type="filename">Plant/大葱_02_normal.png</key>
             <key type="filename">Plant/大葱_03_normal.png</key>
@@ -238,15 +244,16 @@
             <key type="filename">Plant/大蒜_03_normal.png</key>
             <key type="filename">Plant/大蒜_04_normal.png</key>
             <key type="filename">Plant/大蒜_05_normal.png</key>
-            <key type="filename">Plant/大麦_01_normal.png</key>
-            <key type="filename">Plant/大麦_02_normal.png</key>
-            <key type="filename">Plant/大麦_03_normal.png</key>
-            <key type="filename">Plant/大麦_04_normal.png</key>
             <key type="filename">Plant/大黄_01_normal.png</key>
             <key type="filename">Plant/大黄_02_normal.png</key>
             <key type="filename">Plant/大黄_03_normal.png</key>
             <key type="filename">Plant/大黄_04_normal.png</key>
             <key type="filename">Plant/大黄_05_normal.png</key>
+            <key type="filename">Plant/奇异果_01_normal.png</key>
+            <key type="filename">Plant/奇异果_02_normal.png</key>
+            <key type="filename">Plant/奇异果_03_normal.png</key>
+            <key type="filename">Plant/奇异果_04_normal.png</key>
+            <key type="filename">Plant/奇异果_05_normal.png</key>
             <key type="filename">Plant/奶油南瓜_01_normal.png</key>
             <key type="filename">Plant/奶油南瓜_02_normal.png</key>
             <key type="filename">Plant/奶油南瓜_03_normal.png</key>
@@ -262,16 +269,15 @@
             <key type="filename">Plant/小萝卜_03_normal.png</key>
             <key type="filename">Plant/小萝卜_04_normal.png</key>
             <key type="filename">Plant/小萝卜_05_normal.png</key>
+            <key type="filename">Plant/小麦_01_normal.png</key>
+            <key type="filename">Plant/小麦_02_normal.png</key>
+            <key type="filename">Plant/小麦_03_normal.png</key>
+            <key type="filename">Plant/小麦_04_normal.png</key>
             <key type="filename">Plant/抱子甘蓝_01_normal.png</key>
             <key type="filename">Plant/抱子甘蓝_02_normal.png</key>
             <key type="filename">Plant/抱子甘蓝_03_normal.png</key>
             <key type="filename">Plant/抱子甘蓝_04_normal.png</key>
             <key type="filename">Plant/抱子甘蓝_05_normal.png</key>
-            <key type="filename">Plant/普通土豆_01_normal.png</key>
-            <key type="filename">Plant/普通土豆_02_normal.png</key>
-            <key type="filename">Plant/普通土豆_03_normal.png</key>
-            <key type="filename">Plant/普通土豆_04_normal.png</key>
-            <key type="filename">Plant/普通土豆_05_normal.png</key>
             <key type="filename">Plant/曲颈瓜_01_normal.png</key>
             <key type="filename">Plant/曲颈瓜_02_normal.png</key>
             <key type="filename">Plant/曲颈瓜_03_normal.png</key>
@@ -312,11 +318,6 @@
             <key type="filename">Plant/欧洲萝卜_03_normal.png</key>
             <key type="filename">Plant/欧洲萝卜_04_normal.png</key>
             <key type="filename">Plant/欧洲萝卜_05_normal.png</key>
-            <key type="filename">Plant/猕猴桃_01_normal.png</key>
-            <key type="filename">Plant/猕猴桃_02_normal.png</key>
-            <key type="filename">Plant/猕猴桃_03_normal.png</key>
-            <key type="filename">Plant/猕猴桃_04_normal.png</key>
-            <key type="filename">Plant/猕猴桃_05_normal.png</key>
             <key type="filename">Plant/玉米_01_normal.png</key>
             <key type="filename">Plant/玉米_02_normal.png</key>
             <key type="filename">Plant/玉米_03_normal.png</key>
@@ -372,11 +373,6 @@
             <key type="filename">Plant/红甜椒_03_normal.png</key>
             <key type="filename">Plant/红甜椒_04_normal.png</key>
             <key type="filename">Plant/红甜椒_05_normal.png</key>
-            <key type="filename">Plant/红葡萄_01_normal.png</key>
-            <key type="filename">Plant/红葡萄_02_normal.png</key>
-            <key type="filename">Plant/红葡萄_03_normal.png</key>
-            <key type="filename">Plant/红葡萄_04_normal.png</key>
-            <key type="filename">Plant/红葡萄_05_normal.png</key>
             <key type="filename">Plant/红薯_01_normal.png</key>
             <key type="filename">Plant/红薯_02_normal.png</key>
             <key type="filename">Plant/红薯_03_normal.png</key>
@@ -407,11 +403,11 @@
             <key type="filename">Plant/胡萝卜_03_normal.png</key>
             <key type="filename">Plant/胡萝卜_04_normal.png</key>
             <key type="filename">Plant/胡萝卜_05_normal.png</key>
-            <key type="filename">Plant/芜菁 _01_normal.png</key>
-            <key type="filename">Plant/芜菁 _02_normal.png</key>
-            <key type="filename">Plant/芜菁 _03_normal.png</key>
-            <key type="filename">Plant/芜菁 _04_normal.png</key>
-            <key type="filename">Plant/芜菁 _05_normal.png</key>
+            <key type="filename">Plant/芜菁_01_normal.png</key>
+            <key type="filename">Plant/芜菁_02_normal.png</key>
+            <key type="filename">Plant/芜菁_03_normal.png</key>
+            <key type="filename">Plant/芜菁_04_normal.png</key>
+            <key type="filename">Plant/芜菁_05_normal.png</key>
             <key type="filename">Plant/芜菁甘蓝_01_normal.png</key>
             <key type="filename">Plant/芜菁甘蓝_02_normal.png</key>
             <key type="filename">Plant/芜菁甘蓝_03_normal.png</key>
@@ -447,6 +443,16 @@
             <key type="filename">Plant/菠萝_03_normal.png</key>
             <key type="filename">Plant/菠萝_04_normal.png</key>
             <key type="filename">Plant/菠萝_05_normal.png</key>
+            <key type="filename">Plant/萝卜_01_normal.png</key>
+            <key type="filename">Plant/萝卜_02_normal.png</key>
+            <key type="filename">Plant/萝卜_03_normal.png</key>
+            <key type="filename">Plant/萝卜_04_normal.png</key>
+            <key type="filename">Plant/萝卜_05_normal.png</key>
+            <key type="filename">Plant/葡萄_01_normal.png</key>
+            <key type="filename">Plant/葡萄_02_normal.png</key>
+            <key type="filename">Plant/葡萄_03_normal.png</key>
+            <key type="filename">Plant/葡萄_04_normal.png</key>
+            <key type="filename">Plant/葡萄_05_normal.png</key>
             <key type="filename">Plant/蓝莓_01_normal.png</key>
             <key type="filename">Plant/蓝莓_02_normal.png</key>
             <key type="filename">Plant/蓝莓_03_normal.png</key>
@@ -492,11 +498,6 @@
             <key type="filename">Plant/青椒_03_normal.png</key>
             <key type="filename">Plant/青椒_04_normal.png</key>
             <key type="filename">Plant/青椒_05_normal.png</key>
-            <key type="filename">Plant/青甘蓝_01_normal.png</key>
-            <key type="filename">Plant/青甘蓝_02_normal.png</key>
-            <key type="filename">Plant/青甘蓝_03_normal.png</key>
-            <key type="filename">Plant/青甘蓝_04_normal.png</key>
-            <key type="filename">Plant/青甘蓝_05_normal.png</key>
             <key type="filename">Plant/青葡萄_01_normal.png</key>
             <key type="filename">Plant/青葡萄_02_normal.png</key>
             <key type="filename">Plant/青葡萄_03_normal.png</key>
@@ -547,6 +548,12 @@
                 <false/>
             </struct>
             <key type="filename">Plant/南瓜_00.png</key>
+            <key type="filename">Plant/卷心菜_00.png</key>
+            <key type="filename">Plant/卷心菜_01.png</key>
+            <key type="filename">Plant/卷心菜_02.png</key>
+            <key type="filename">Plant/卷心菜_03.png</key>
+            <key type="filename">Plant/卷心菜_04.png</key>
+            <key type="filename">Plant/卷心菜_05.png</key>
             <key type="filename">Plant/咖啡_01.png</key>
             <key type="filename">Plant/咖啡_02.png</key>
             <key type="filename">Plant/咖啡_03.png</key>
@@ -557,7 +564,12 @@
             <key type="filename">Plant/哈密瓜_03.png</key>
             <key type="filename">Plant/哈密瓜_04.png</key>
             <key type="filename">Plant/哈密瓜_05.png</key>
-            <key type="filename">Plant/大番茄_00.png</key>
+            <key type="filename">Plant/土豆_00.png</key>
+            <key type="filename">Plant/土豆_01.png</key>
+            <key type="filename">Plant/土豆_02.png</key>
+            <key type="filename">Plant/土豆_03.png</key>
+            <key type="filename">Plant/土豆_04.png</key>
+            <key type="filename">Plant/土豆_05.png</key>
             <key type="filename">Plant/大番茄_01.png</key>
             <key type="filename">Plant/大番茄_02.png</key>
             <key type="filename">Plant/大番茄_03.png</key>
@@ -573,17 +585,16 @@
             <key type="filename">Plant/大蒜_03.png</key>
             <key type="filename">Plant/大蒜_04.png</key>
             <key type="filename">Plant/大蒜_05.png</key>
-            <key type="filename">Plant/大麦_00.png</key>
-            <key type="filename">Plant/大麦_01.png</key>
-            <key type="filename">Plant/大麦_02.png</key>
-            <key type="filename">Plant/大麦_03.png</key>
-            <key type="filename">Plant/大麦_04.png</key>
             <key type="filename">Plant/大黄_01.png</key>
             <key type="filename">Plant/大黄_02.png</key>
             <key type="filename">Plant/大黄_03.png</key>
             <key type="filename">Plant/大黄_04.png</key>
             <key type="filename">Plant/大黄_05.png</key>
-            <key type="filename">Plant/普通土豆_00.png</key>
+            <key type="filename">Plant/小麦_00.png</key>
+            <key type="filename">Plant/小麦_01.png</key>
+            <key type="filename">Plant/小麦_02.png</key>
+            <key type="filename">Plant/小麦_03.png</key>
+            <key type="filename">Plant/小麦_04.png</key>
             <key type="filename">Plant/朝鲜蓟_01.png</key>
             <key type="filename">Plant/朝鲜蓟_02.png</key>
             <key type="filename">Plant/朝鲜蓟_03.png</key>
@@ -673,6 +684,9 @@
             <key type="filename">Plant/菠萝_03.png</key>
             <key type="filename">Plant/菠萝_04.png</key>
             <key type="filename">Plant/菠萝_05.png</key>
+            <key type="filename">Plant/萝卜_01.png</key>
+            <key type="filename">Plant/萝卜_02.png</key>
+            <key type="filename">Plant/萝卜_03.png</key>
             <key type="filename">Plant/蓝莓_01.png</key>
             <key type="filename">Plant/蓝莓_02.png</key>
             <key type="filename">Plant/蓝莓_03.png</key>
@@ -703,12 +717,6 @@
             <key type="filename">Plant/青椒_03.png</key>
             <key type="filename">Plant/青椒_04.png</key>
             <key type="filename">Plant/青椒_05.png</key>
-            <key type="filename">Plant/青甘蓝_00.png</key>
-            <key type="filename">Plant/青甘蓝_01.png</key>
-            <key type="filename">Plant/青甘蓝_02.png</key>
-            <key type="filename">Plant/青甘蓝_03.png</key>
-            <key type="filename">Plant/青甘蓝_04.png</key>
-            <key type="filename">Plant/青甘蓝_05.png</key>
             <key type="filename">Plant/黄南瓜_01.png</key>
             <key type="filename">Plant/黄南瓜_02.png</key>
             <key type="filename">Plant/黄南瓜_03.png</key>
@@ -750,11 +758,6 @@
             <key type="filename">Plant/南瓜_04.png</key>
             <key type="filename">Plant/南瓜_05.png</key>
             <key type="filename">Plant/啤酒花_00.png</key>
-            <key type="filename">Plant/大萝卜_01.png</key>
-            <key type="filename">Plant/大萝卜_02.png</key>
-            <key type="filename">Plant/大萝卜_03.png</key>
-            <key type="filename">Plant/大萝卜_04.png</key>
-            <key type="filename">Plant/大萝卜_05.png</key>
             <key type="filename">Plant/奶油南瓜_01.png</key>
             <key type="filename">Plant/奶油南瓜_02.png</key>
             <key type="filename">Plant/奶油南瓜_03.png</key>
@@ -775,11 +778,6 @@
             <key type="filename">Plant/抱子甘蓝_03.png</key>
             <key type="filename">Plant/抱子甘蓝_04.png</key>
             <key type="filename">Plant/抱子甘蓝_05.png</key>
-            <key type="filename">Plant/普通土豆_01.png</key>
-            <key type="filename">Plant/普通土豆_02.png</key>
-            <key type="filename">Plant/普通土豆_03.png</key>
-            <key type="filename">Plant/普通土豆_04.png</key>
-            <key type="filename">Plant/普通土豆_05.png</key>
             <key type="filename">Plant/曲颈瓜_01.png</key>
             <key type="filename">Plant/曲颈瓜_02.png</key>
             <key type="filename">Plant/曲颈瓜_03.png</key>
@@ -810,8 +808,6 @@
             <key type="filename">Plant/球茎茴香_03.png</key>
             <key type="filename">Plant/球茎茴香_04.png</key>
             <key type="filename">Plant/球茎茴香_05.png</key>
-            <key type="filename">Plant/甜菜_01.png</key>
-            <key type="filename">Plant/甜菜_02.png</key>
             <key type="filename">Plant/甜菜_03.png</key>
             <key type="filename">Plant/甜菜_04.png</key>
             <key type="filename">Plant/甜菜_05.png</key>
@@ -820,11 +816,6 @@
             <key type="filename">Plant/白洋葱_03.png</key>
             <key type="filename">Plant/白洋葱_04.png</key>
             <key type="filename">Plant/白洋葱_05.png</key>
-            <key type="filename">Plant/红薯_01.png</key>
-            <key type="filename">Plant/红薯_02.png</key>
-            <key type="filename">Plant/红薯_03.png</key>
-            <key type="filename">Plant/红薯_04.png</key>
-            <key type="filename">Plant/红薯_05.png</key>
             <key type="filename">Plant/罗马生菜_01.png</key>
             <key type="filename">Plant/罗马生菜_02.png</key>
             <key type="filename">Plant/罗马生菜_03.png</key>
@@ -835,31 +826,24 @@
             <key type="filename">Plant/羽衣甘蓝_03.png</key>
             <key type="filename">Plant/羽衣甘蓝_04.png</key>
             <key type="filename">Plant/羽衣甘蓝_05.png</key>
-            <key type="filename">Plant/胡萝卜_01.png</key>
-            <key type="filename">Plant/胡萝卜_02.png</key>
-            <key type="filename">Plant/胡萝卜_03.png</key>
             <key type="filename">Plant/胡萝卜_04.png</key>
             <key type="filename">Plant/胡萝卜_05.png</key>
-            <key type="filename">Plant/芜菁 _01.png</key>
-            <key type="filename">Plant/芜菁 _02.png</key>
-            <key type="filename">Plant/芜菁 _03.png</key>
-            <key type="filename">Plant/芜菁 _04.png</key>
-            <key type="filename">Plant/芜菁 _05.png</key>
+            <key type="filename">Plant/芜菁_03.png</key>
+            <key type="filename">Plant/芜菁_04.png</key>
+            <key type="filename">Plant/芜菁_05.png</key>
             <key type="filename">Plant/芜菁甘蓝_01.png</key>
             <key type="filename">Plant/芜菁甘蓝_02.png</key>
             <key type="filename">Plant/芜菁甘蓝_03.png</key>
             <key type="filename">Plant/芜菁甘蓝_04.png</key>
             <key type="filename">Plant/芜菁甘蓝_05.png</key>
-            <key type="filename">Plant/芦笋_01.png</key>
-            <key type="filename">Plant/芦笋_02.png</key>
-            <key type="filename">Plant/芦笋_03.png</key>
-            <key type="filename">Plant/芦笋_04.png</key>
             <key type="filename">Plant/芦笋_05.png</key>
             <key type="filename">Plant/芹菜_01.png</key>
             <key type="filename">Plant/芹菜_02.png</key>
             <key type="filename">Plant/芹菜_03.png</key>
             <key type="filename">Plant/芹菜_04.png</key>
             <key type="filename">Plant/芹菜_05.png</key>
+            <key type="filename">Plant/萝卜_04.png</key>
+            <key type="filename">Plant/萝卜_05.png</key>
             <key type="filename">Plant/蜜瓜_01.png</key>
             <key type="filename">Plant/蜜瓜_02.png</key>
             <key type="filename">Plant/蜜瓜_03.png</key>
@@ -895,12 +879,9 @@
                 <false/>
             </struct>
             <key type="filename">Plant/咖啡_00.png</key>
-            <key type="filename">Plant/大萝卜_00.png</key>
             <key type="filename">Plant/大葱_00.png</key>
             <key type="filename">Plant/大蒜_00.png</key>
-            <key type="filename">Plant/猕猴桃_00.png</key>
             <key type="filename">Plant/甜菜_00.png</key>
-            <key type="filename">Plant/红葡萄_00.png</key>
             <key type="filename">Plant/芦笋_00.png</key>
             <key type="filename">Plant/草莓_00.png</key>
             <key type="filename">Plant/菠萝_00.png</key>
@@ -942,14 +923,39 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">Plant/猕猴桃_01.png</key>
-            <key type="filename">Plant/猕猴桃_02.png</key>
-            <key type="filename">Plant/猕猴桃_03.png</key>
-            <key type="filename">Plant/猕猴桃_04.png</key>
-            <key type="filename">Plant/猕猴桃_05.png</key>
+            <key type="filename">Plant/奇异果_00.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.97</point_f>
+                <point_f>0.5,0.78125</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/奇异果_01.png</key>
+            <key type="filename">Plant/奇异果_02.png</key>
+            <key type="filename">Plant/奇异果_03.png</key>
+            <key type="filename">Plant/奇异果_04.png</key>
+            <key type="filename">Plant/奇异果_05.png</key>
+            <key type="filename">Plant/葡萄_01.png</key>
+            <key type="filename">Plant/葡萄_02.png</key>
+            <key type="filename">Plant/葡萄_03.png</key>
+            <key type="filename">Plant/葡萄_04.png</key>
+            <key type="filename">Plant/葡萄_05.png</key>
+            <key type="filename">Plant/青葡萄_01.png</key>
+            <key type="filename">Plant/青葡萄_02.png</key>
+            <key type="filename">Plant/青葡萄_03.png</key>
+            <key type="filename">Plant/青葡萄_04.png</key>
+            <key type="filename">Plant/青葡萄_05.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -976,19 +982,83 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">Plant/红葡萄_01.png</key>
-            <key type="filename">Plant/红葡萄_02.png</key>
-            <key type="filename">Plant/红葡萄_03.png</key>
-            <key type="filename">Plant/红葡萄_04.png</key>
-            <key type="filename">Plant/红葡萄_05.png</key>
-            <key type="filename">Plant/青葡萄_01.png</key>
-            <key type="filename">Plant/青葡萄_02.png</key>
-            <key type="filename">Plant/青葡萄_03.png</key>
-            <key type="filename">Plant/青葡萄_04.png</key>
-            <key type="filename">Plant/青葡萄_05.png</key>
+            <key type="filename">Plant/甜菜_01.png</key>
+            <key type="filename">Plant/甜菜_02.png</key>
+            <key type="filename">Plant/红薯_01.png</key>
+            <key type="filename">Plant/红薯_02.png</key>
+            <key type="filename">Plant/红薯_03.png</key>
+            <key type="filename">Plant/红薯_04.png</key>
+            <key type="filename">Plant/红薯_05.png</key>
+            <key type="filename">Plant/胡萝卜_01.png</key>
+            <key type="filename">Plant/胡萝卜_02.png</key>
+            <key type="filename">Plant/胡萝卜_03.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.95</point_f>
+                <point_f>0.5,0.890625</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/番茄_00.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.875</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/芜菁_00.png</key>
+            <key type="filename">Plant/萝卜_00.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.859375</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/芦笋_01.png</key>
+            <key type="filename">Plant/芦笋_02.png</key>
+            <key type="filename">Plant/芦笋_03.png</key>
+            <key type="filename">Plant/芦笋_04.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.84687</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">Plant/葡萄_00.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.828125</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
