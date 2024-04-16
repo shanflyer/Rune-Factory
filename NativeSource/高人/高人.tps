@@ -2037,6 +2037,8 @@
             <key type="filename">主角男_下_8$Normal.png</key>
             <key type="filename">主角男_下_9$Normal.png</key>
             <key type="filename">主角男_下_坐$Normal.png</key>
+            <key type="filename">主角男_单手_下.png</key>
+            <key type="filename">主角男_单手_右_50.png</key>
             <key type="filename">主角男_右_49$Normal.png</key>
             <key type="filename">主角男_右_50$Normal.png</key>
             <key type="filename">主角男_右_51$Normal.png</key>
