@@ -130,7 +130,11 @@ public class CharacterEditor : MyEditor
             AssetDatabase.StartAssetEditing();
              
             foreach (var data in characterSources)
-            { 
+            {
+                if (data.Key == oldModel)
+                {
+                    continue;
+                }
 
                 string path = $"{outAnimationPath}/{data.Key}";
                 DirectoryInfo directoryInfo = new DirectoryInfo(path);
@@ -220,7 +224,7 @@ public class CharacterEditor : MyEditor
             }
         }
 
-         
+
         try
         {
             AssetDatabase.StartAssetEditing();
@@ -229,20 +233,66 @@ public class CharacterEditor : MyEditor
 
             foreach (var data in characterSources)
             {
-                AnimatorOverrideController animatorOverrideController = new AnimatorOverrideController();
+                if (data.Key == oldModel)
+                {
+                    continue;
+                }
+                string path = $"{outAnimationPath}/{data.Key}";
+
+
+
+                AnimatorOverrideController animatorOverrideController = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>($"{path}/{data.Key}.overrideController");
+
+                if (animatorController == null)
+                {
+                    animatorController = new AnimatorController();
+                } 
                 animatorOverrideController.name = data.Key;
                 animatorOverrideController.runtimeAnimatorController = animatorController;
+                if (!AssetDatabase.Contains(animatorOverrideController))
+                {
+                    AssetDatabase.CreateAsset(animatorOverrideController, $"{path}/{data.Key}.overrideController");
+                }
+                
 
-                string path = $"{outAnimationPath}/{data.Key}";
+               
                 DirectoryInfo directoryInfo = new DirectoryInfo(path);
                 var animaFiles = directoryInfo.GetFiles("*.anim");
 
-            
+               
+                foreach (var animaFile in animaFiles)
+                {
+                    AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path + "/" + animaFile.Name);
+                   
+                    var objBindings = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
+                    foreach (var objBinding in objBindings)
+                    {
+                        var objkeyFrames = AnimationUtility.GetObjectReferenceCurve(animationClip, objBinding);
+                        for (int i = 0; i < objkeyFrames.Length; i++)
+                        { 
+                            var keyFrame = objkeyFrames[i];
+                            if (keyFrame.value == null)
+                            {
+                                continue;
+                            }
+                            var sprite = keyFrame.value as Sprite;
+                            string sourceName = sprite.name.Replace(oldModel, data.Key);
+                            if(data.Value.TryGetValue(sourceName, out sprite))
+                            {
+                                keyFrame.value = sprite;
+                            }
+                           
+                            objkeyFrames[i] = keyFrame;
+                        }
+                        AnimationUtility.SetObjectReferenceCurve(animationClip, objBinding, objkeyFrames);
+                    }
 
+                    AssetDatabase.SaveAssets();
+                }
 
-              
+                 
 
-                AssetDatabase.CreateAsset(animatorOverrideController, $"{path}/{data.Key}.overrideController");
+               
 
                 GameObject obj = GameObject.Instantiate(copyPrefab);
                 obj.name = data.Key;
@@ -311,6 +361,10 @@ public class CharacterEditor : MyEditor
             AssetDatabase.StartAssetEditing(); 
             foreach (var data in characterSources)
             {
+                if (data.Key == oldModel)
+                {
+                    continue;
+                }
                 string path = $"{outAnimationPath}/{data.Key}";
                 if (!Directory.Exists(path))
                 {
@@ -331,72 +385,7 @@ public class CharacterEditor : MyEditor
         {
             AssetDatabase.StopAssetEditing();
         }
-        try
-        {
-            AssetDatabase.StartAssetEditing();
-
-          
-
-            foreach (var data in characterSources)
-            { 
-                AnimatorOverrideController animatorOverrideController = new AnimatorOverrideController();
-                animatorOverrideController.name = data.Key;
-                animatorOverrideController.runtimeAnimatorController = animatorController;
-
-                string path = $"{outAnimationPath}/{data.Key}";
-                DirectoryInfo directoryInfo = new DirectoryInfo(path);
-                var animaFiles = directoryInfo.GetFiles("*.anim");
-
-                List<KeyValuePair<AnimationClip, AnimationClip>> animationClips = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-                foreach (var animaFile in animaFiles)
-                {
-                    AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path + "/" + animaFile.Name);
-                    if(allAnimations.TryGetValue(animationClip.name,out var animationClip1))
-                    {
-                        KeyValuePair<AnimationClip, AnimationClip> keyValuePair = new KeyValuePair<AnimationClip, AnimationClip>(animationClip1, animationClip);
-                       
-                        animationClips.Add(keyValuePair); 
-                    }
-                    var objBindings = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
-                    foreach(var objBinding in objBindings)
-                    {
-                       var objkeyFrames=  AnimationUtility.GetObjectReferenceCurve(animationClip, objBinding);
-                        for(int i = 0; i < objkeyFrames.Length; i++)
-                        {
-                            var keyFrame = objkeyFrames[i];
-                            var sprite = keyFrame.value as Sprite;
-                            string sourceName = sprite.name.Replace(oldModel,data.Key);
-                            data.Value.TryGetValue(sourceName, out sprite);
-                            keyFrame.value = sprite;
-                            objkeyFrames[i] = keyFrame;
-                        }
-                        AnimationUtility.SetObjectReferenceCurve(animationClip, objBinding, objkeyFrames);
-                    }
-                    
-                    AssetDatabase.SaveAssets();
-                }
-
-
-                animatorOverrideController.ApplyOverrides(animationClips);
-
-                AssetDatabase.CreateAsset(animatorOverrideController, $"{path}/{data.Key}.overrideController");
-
-                GameObject obj = GameObject.Instantiate(copyPrefab);
-                obj.name = data.Key;
-                Animator animator = obj.GetComponentInChildren<Animator>();
-                animator.runtimeAnimatorController = animatorOverrideController;
-                SpriteRenderer spriteRenderer = obj.GetComponentInChildren<SpriteRenderer>();
-                spriteRenderer.sprite= data.Value.Values.ToList()[0];
-
-                PrefabUtility.SaveAsPrefabAsset(obj, $"{prefabPath}/{data.Key}.prefab");
-                GameObject.DestroyImmediate(obj);
-                AssetDatabase.Refresh();
-            }
-        }
-        finally
-        {
-            AssetDatabase.StopAssetEditing();
-        }
+       
 
        
 
