@@ -4,6 +4,7 @@ using System.IO;
 using UnityEditor; 
 using UnityEngine;
 using UnityEditor.Animations;
+using System.Linq;
 
 public class CharacterEditor : MyEditor
 {
@@ -24,19 +25,19 @@ public class CharacterEditor : MyEditor
        DrawTextField(sourcePath,"资源路径",(string value) =>
        {
            sourcePath = value;
-       });
+       },100,200);
         DrawTextField(copyAnimationPath, "复制动画路径", (string value) =>
         {
             copyAnimationPath = value;
-        });
+        }, 100, 200);
         DrawTextField(outAnimationPath, "输出动画路径", (string value) =>
         {
             outAnimationPath = value;
-        });
+        }, 100, 200);
         DrawTextField(prefabPath, "预制体路径", (string value) =>
         {
             prefabPath = value;
-        });
+        }, 100, 200);
         copyPrefab=EditorGUILayout.ObjectField("复制的预制体", copyPrefab, typeof(GameObject), true) as GameObject;
         if (GUILayout.Button("复制动画"))
         {
@@ -57,20 +58,41 @@ public class CharacterEditor : MyEditor
             }
             CopyAnimation();
         }
-    }
-    void CopyAnimation()
-    {
-      
+        if (GUILayout.Button("初始化动画"))
+        {
+            if (copyPrefab == null)
+            {
+                Debug.LogError("复制的预制体为空");
+                return;
+            }
+            if (string.IsNullOrEmpty(sourcePath))
+            {
+                Debug.LogError("资源路径为空");
+                return;
+            }
+            if (string.IsNullOrEmpty(copyAnimationPath))
+            {
+                Debug.LogError("输出动画路径为空");
+                return;
+            }
+            InitAnimation();
+        }
+        if (GUILayout.Button("设置controller"))
+        {
 
+            SetOverrideAnimation();
+        }
+    }
+
+    private void SetOverrideAnimation()
+    {
         DirectoryInfo copyDir = new DirectoryInfo(copyAnimationPath);
 
         AnimatorController animatorController = AssetDatabase.LoadAssetAtPath<AnimatorController>($"{copyAnimationPath}/{copyDir.Name}.controller");
-
+        var dirStrs = copyDir.Name.Split("/");
+        oldModel = dirStrs[dirStrs.Length - 1];
 
         var files = copyDir.GetFiles("*.anim");
-        Dictionary<string, AnimationClip> IdleAnimations = new Dictionary<string, AnimationClip>();
-        Dictionary<string, AnimationClip> WalkAnimations = new Dictionary<string, AnimationClip>();
-
         Dictionary<string, AnimationClip> allAnimations = new Dictionary<string, AnimationClip>();
         for (int i = 0; i < files.Length; i++)
         {
@@ -84,20 +106,190 @@ public class CharacterEditor : MyEditor
                 continue;
             }
             allAnimations.Add(animationClip.name, animationClip);
-            var actionName = animationName.Split('_')[0];
-            var directName = animationName.Split('_')[1];
-            if (animationClip.name.Contains("Idle"))
+        }
+
+        Dictionary<string, Dictionary<string, Sprite>> characterSources = new Dictionary<string, Dictionary<string, Sprite>>();
+        var assets = AssetDatabase.LoadAllAssetsAtPath(sourcePath);
+        for (int i = 0; i < assets.Length; i++)
+        {
+            var asset = assets[i];
+            if (asset is Sprite sprite)
             {
-                IdleAnimations[directName] = animationClip;
-            }
-            else
-            {
-                WalkAnimations[directName] = animationClip;
+                var strs = sprite.name.Split('_');
+
+                if (!characterSources.ContainsKey(strs[0]))
+                {
+                    characterSources[strs[0]] = new Dictionary<string, Sprite>();
+                }
+                characterSources[strs[0]][sprite.name] = sprite;
             }
         }
 
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+             
+            foreach (var data in characterSources)
+            { 
 
-        Dictionary<string, Dictionary<string, List<Sprite>>> characterSources = new Dictionary<string, Dictionary<string, List<Sprite>>>();
+                string path = $"{outAnimationPath}/{data.Key}";
+                DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                var animaFiles = directoryInfo.GetFiles("*.anim");
+                AnimatorOverrideController animatorOverrideController = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>($"{path}/{data.Key}.overrideController");
+
+
+                List<KeyValuePair<AnimationClip, AnimationClip>> animationClips = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+                foreach (var animaFile in animaFiles)
+                {
+                    try
+                    {
+                        AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path + "/" + animaFile.Name);
+                        if (allAnimations.TryGetValue(animationClip.name, out var animationClip1))
+                        {
+                            KeyValuePair<AnimationClip, AnimationClip> keyValuePair = new KeyValuePair<AnimationClip, AnimationClip>(animationClip1, animationClip);
+
+                            animationClips.Add(keyValuePair);
+                        }
+
+
+                    }
+                    catch
+                    {
+                        Debug.LogError(animaFile.FullName);
+                    }
+
+                }
+
+
+                animatorOverrideController.ApplyOverrides(animationClips);
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+
+
+      
+    }
+
+
+    string oldModel = "";
+
+    private void InitAnimation()
+    {
+
+        DirectoryInfo copyDir = new DirectoryInfo(copyAnimationPath);
+
+        AnimatorController animatorController = AssetDatabase.LoadAssetAtPath<AnimatorController>($"{copyAnimationPath}/{copyDir.Name}.controller");
+        var dirStrs = copyDir.Name.Split("/");
+        oldModel = dirStrs[dirStrs.Length - 1];
+
+        var files = copyDir.GetFiles("*.anim");
+
+        Dictionary<string, AnimationClip> allAnimations = new Dictionary<string, AnimationClip>();
+        for (int i = 0; i < files.Length; i++)
+        {
+            var file = files[i];
+            var fileName = file.Name;
+            var animationName = fileName.Substring(0, fileName.Length - 5);
+            var animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"{copyAnimationPath}/{fileName}");
+            if (animationClip == null)
+            {
+                Debug.LogError($"动画文件{fileName}不存在");
+                continue;
+            }
+            allAnimations.Add(file.FullName, animationClip);
+        }
+
+        Dictionary<string, Dictionary<string, Sprite>> characterSources = new Dictionary<string, Dictionary<string, Sprite>>();
+        var assets = AssetDatabase.LoadAllAssetsAtPath(sourcePath);
+        for (int i = 0; i < assets.Length; i++)
+        {
+            var asset = assets[i];
+            if (asset is Sprite sprite)
+            {
+                var strs = sprite.name.Split('_');
+
+                if (!characterSources.ContainsKey(strs[0]))
+                {
+                    characterSources[strs[0]] = new Dictionary<string, Sprite>();
+                }
+                characterSources[strs[0]][sprite.name] = sprite;
+            }
+        }
+
+         
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+
+
+
+            foreach (var data in characterSources)
+            {
+                AnimatorOverrideController animatorOverrideController = new AnimatorOverrideController();
+                animatorOverrideController.name = data.Key;
+                animatorOverrideController.runtimeAnimatorController = animatorController;
+
+                string path = $"{outAnimationPath}/{data.Key}";
+                DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                var animaFiles = directoryInfo.GetFiles("*.anim");
+
+            
+
+
+              
+
+                AssetDatabase.CreateAsset(animatorOverrideController, $"{path}/{data.Key}.overrideController");
+
+                GameObject obj = GameObject.Instantiate(copyPrefab);
+                obj.name = data.Key;
+                Animator animator = obj.GetComponentInChildren<Animator>();
+                animator.runtimeAnimatorController = animatorOverrideController;
+                SpriteRenderer spriteRenderer = obj.GetComponentInChildren<SpriteRenderer>();
+                spriteRenderer.sprite = data.Value.Values.ToList()[0];
+
+                PrefabUtility.SaveAsPrefabAsset(obj, $"{prefabPath}/{data.Key}.prefab");
+                GameObject.DestroyImmediate(obj);
+                AssetDatabase.Refresh();
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+    }
+    void CopyAnimation()
+    {
+      
+
+        DirectoryInfo copyDir = new DirectoryInfo(copyAnimationPath);
+
+        AnimatorController animatorController = AssetDatabase.LoadAssetAtPath<AnimatorController>($"{copyAnimationPath}/{copyDir.Name}.controller");
+        var dirStrs = copyDir.Name.Split("/");
+        oldModel = dirStrs[dirStrs.Length - 1];
+
+        var files = copyDir.GetFiles("*.anim"); 
+
+        Dictionary<string, AnimationClip> allAnimations = new Dictionary<string, AnimationClip>();
+        for (int i = 0; i < files.Length; i++)
+        {
+            var file = files[i];
+            var fileName = file.Name;
+            var animationName = fileName.Substring(0, fileName.Length - 5);
+            var animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"{copyAnimationPath}/{fileName}");
+            if (animationClip == null)
+            {
+                Debug.LogError($"动画文件{fileName}不存在");
+                continue;
+            }
+            allAnimations.Add(file.FullName, animationClip);             
+        } 
+
+        Dictionary<string, Dictionary<string, Sprite>> characterSources = new Dictionary<string, Dictionary<string, Sprite>>();
         var assets = AssetDatabase.LoadAllAssetsAtPath(sourcePath);
         for(int i = 0; i < assets.Length; i++)
         {
@@ -105,26 +297,18 @@ public class CharacterEditor : MyEditor
             if(asset is Sprite sprite)
             {
                 var strs = sprite.name.Split('_');
-                if (strs.Length < 3)
+               
+                if(!characterSources.ContainsKey(strs[0]))
                 {
-                    Debug.LogError($"资源{sprite.name}命名不规范");
-                    continue;
+                    characterSources[strs[0]] = new Dictionary<string, Sprite>(); 
                 }
-                 if(!characterSources.ContainsKey(strs[0]))
-                {
-                    characterSources[strs[0]] = new Dictionary<string, List<Sprite>>(); 
-                }
-                 if (!characterSources[strs[0]].ContainsKey(strs[1]))
-                {
-                    characterSources[strs[0]][strs[1]] = new List<Sprite>();
-                }
-                characterSources[strs[0]][strs[1]].Add(sprite);
+                characterSources[strs[0]][sprite.name]= sprite; 
             }
         }
 
         try
         {
-            AssetDatabase.StartAssetEditing();
+            AssetDatabase.StartAssetEditing(); 
             foreach (var data in characterSources)
             {
                 string path = $"{outAnimationPath}/{data.Key}";
@@ -133,30 +317,12 @@ public class CharacterEditor : MyEditor
                     Directory.CreateDirectory(path);
                 }
                 foreach (var copyAnimation in allAnimations)
-                {
-
-                    AnimationClip animationClip = new AnimationClip();
-                    animationClip.name = copyAnimation.Key;
-
-
-                    var objBlind = AnimationUtility.GetObjectReferenceCurveBindings(copyAnimation.Value);
-                    foreach (var blind in objBlind)
+                { 
+                    string newPath = copyAnimation.Key.Replace(oldModel, data.Key);
+                    if (newPath != copyAnimation.Key)
                     {
-                        var objCurves = AnimationUtility.GetObjectReferenceCurve(copyAnimation.Value, blind);
-                        AnimationUtility.SetObjectReferenceCurve(animationClip, blind, objCurves);
-                    }
-                   
-
-                    var curveBlind = AnimationUtility.GetCurveBindings(copyAnimation.Value);
-                    foreach(var curveblind in curveBlind)
-                    {
-                        var curve = AnimationUtility.GetEditorCurve(copyAnimation.Value, curveblind);
-                        AnimationUtility.SetEditorCurve(animationClip, curveblind, curve);
-                    }
-                    AnimationUtility.SetAnimationClipSettings(animationClip, AnimationUtility.GetAnimationClipSettings(copyAnimation.Value));
-
-
-                    AssetDatabase.CreateAsset(animationClip, $"{path}/{copyAnimation.Value.name}.anim");
+                        File.Copy(copyAnimation.Key, newPath, true);
+                    } 
                 } 
             }
             AssetDatabase.Refresh();
@@ -191,38 +357,22 @@ public class CharacterEditor : MyEditor
                        
                         animationClips.Add(keyValuePair); 
                     }
-
-                    animationClip.frameRate = animationClip1.frameRate;
-
-                    var strs = animaFile.Name.Split('.')[0].Split('_');
-                    string directName = strs[1];
-                    if (directName == "左")
+                    var objBindings = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
+                    foreach(var objBinding in objBindings)
                     {
-                        directName = "右";
-                    }
-                    if (data.Value.TryGetValue(directName, out var sprites))
-                    {
-                        var objBlind = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
-                        foreach (var blind in objBlind)
+                       var objkeyFrames=  AnimationUtility.GetObjectReferenceCurve(animationClip, objBinding);
+                        for(int i = 0; i < objkeyFrames.Length; i++)
                         {
-                            var objCurves = AnimationUtility.GetObjectReferenceCurve(animationClip, blind);
-                            if (strs[0].Contains("Idle"))
-                            {
-                                for (int i = 0; i < objCurves.Length; i++)
-                                {
-                                    objCurves[i].value = sprites[1];
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 0; i < objCurves.Length; i++)
-                                {
-                                    objCurves[i].value = i < sprites.Count ? sprites[i] : sprites[1];
-                                }
-                            }
-                            AnimationUtility.SetObjectReferenceCurve(animationClip, blind, objCurves);
+                            var keyFrame = objkeyFrames[i];
+                            var sprite = keyFrame.value as Sprite;
+                            string sourceName = sprite.name.Replace(oldModel,data.Key);
+                            data.Value.TryGetValue(sourceName, out sprite);
+                            keyFrame.value = sprite;
+                            objkeyFrames[i] = keyFrame;
                         }
+                        AnimationUtility.SetObjectReferenceCurve(animationClip, objBinding, objkeyFrames);
                     }
+                    
                     AssetDatabase.SaveAssets();
                 }
 
@@ -236,7 +386,7 @@ public class CharacterEditor : MyEditor
                 Animator animator = obj.GetComponentInChildren<Animator>();
                 animator.runtimeAnimatorController = animatorOverrideController;
                 SpriteRenderer spriteRenderer = obj.GetComponentInChildren<SpriteRenderer>();
-                spriteRenderer.sprite= data.Value["右"][1];
+                spriteRenderer.sprite= data.Value.Values.ToList()[0];
 
                 PrefabUtility.SaveAsPrefabAsset(obj, $"{prefabPath}/{data.Key}.prefab");
                 GameObject.DestroyImmediate(obj);
