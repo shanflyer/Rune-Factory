@@ -243,9 +243,9 @@ public class CharacterEditor : MyEditor
 
                 AnimatorOverrideController animatorOverrideController = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>($"{path}/{data.Key}.overrideController");
 
-                if (animatorController == null)
+                if (animatorOverrideController == null)
                 {
-                    animatorController = new AnimatorController();
+                    animatorOverrideController = new AnimatorOverrideController();
                 } 
                 animatorOverrideController.name = data.Key;
                 animatorOverrideController.runtimeAnimatorController = animatorController;
