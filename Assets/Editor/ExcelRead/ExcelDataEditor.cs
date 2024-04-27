@@ -80,7 +80,7 @@ public class ExcelDataEditor : MyEditor
     private void RefreshAllData(List<ExcelDataObj> selectDatas)
     {
         try
-        {
+        { 
             AssetDatabase.StartAssetEditing();
 
             foreach (var selectData in selectDatas)
