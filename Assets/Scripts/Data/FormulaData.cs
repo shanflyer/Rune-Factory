@@ -4,12 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public enum FormulaType
 {
-    装备 = 0,
-    衣物 = 1,
-    药剂 = 2,
-    酒水 = 3,
-    冷食 = 4,
-    热食 = 5
+    铸造 = 0,纺织 = 1,书写=2, 粉磨 = 10, 徒手 = 11,蒸煮 = 12,烘烤 = 13,酿造 = 14,搅拌=15
 }
 
 public class FormulaData : ScriptableObject, IGameData, IReferenceData
