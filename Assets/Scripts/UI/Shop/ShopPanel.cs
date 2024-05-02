@@ -1,61 +1,75 @@
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using OldName;
-using Unity.Mathematics;
 
 public class ShopPanel : GamePanel<ShopGroup>
 {
     //public override bool changeInputModel => false;
     [SerializeField]
-    TextMeshProUGUI Title;
+    private TextMeshProUGUI Title;
+
     [SerializeField]
-    Button CloseButton;
+    private Button CloseButton;
+
     [SerializeField]
-    Transform ShopItemParent, ShopSelectParent;
+    private Transform ShopItemParent, ShopSelectParent;
+
     [SerializeField]
-    ToggleGroup ItemGroup, ShopGroup;
+    private ToggleGroup ItemGroup, ShopGroup;
+
     [SerializeField]
-    Image selectItemIcon;
+    private Image selectItemIcon;
+
     [SerializeField]
-    TextMeshProUGUI selectItemName;
+    private TextMeshProUGUI selectItemName;
+
     [SerializeField]
-    Image selectMoneyIcon;
+    private Image selectMoneyIcon;
+
     [SerializeField]
-    TextMeshProUGUI selectMoneyValue;
+    private TextMeshProUGUI selectMoneyValue;
+
     [SerializeField]
-    TextMeshProUGUI selectItemInfo;
+    private TextMeshProUGUI selectItemInfo;
+
     [SerializeField]
-    TextMeshProUGUI selectItemProperty;
+    private TextMeshProUGUI selectItemProperty;
+
     [SerializeField]
-    TMP_InputField buyCountValue;
+    private TMP_InputField buyCountValue;
+
     [SerializeField]
-    Button addButton, reduceButton;
+    private Button addButton, reduceButton;
+
     [SerializeField]
-    Button buyButton;
+    private Button buyButton;
+
     [SerializeField]
-    Transform SelectInformation;
+    private Transform SelectInformation;
+
     [SerializeField]
-    ShopItemReference ShopItemReference;
+    private ShopItemReference ShopItemReference;
+
     [SerializeField]
-    ShopSelectReference ShopSelectReference;
-    DisplayList<ShopSelectReference,ShopData> shops;
-    DisplayList<ShopItemReference, ShopItemData> shopItems;
+    private ShopSelectReference ShopSelectReference;
+
+    private DisplayList<ShopSelectReference, ShopData> shops;
+    private DisplayList<ShopItemReference, ShopItemData> shopItems;
 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         Title = FindChildGameObject<TextMeshProUGUI>("Title");
-        CloseButton = FindChildGameObject<Button>("CloseButton"); 
+        CloseButton = FindChildGameObject<Button>("CloseButton");
 
         ShopSelectReference = FindChildGameObject<ShopSelectReference>("ShopSelect");
         ShopItemReference = FindChildGameObject<ShopItemReference>("ShopItem");
         ShopItemParent = FindChildGameObject("ShopItemList");
         ShopSelectParent = FindChildGameObject("ShopSelectList");
         ItemGroup = ShopItemParent.GetComponent<ToggleGroup>();
-        ShopGroup = ShopSelectParent.GetComponent<ToggleGroup>(); 
+        ShopGroup = ShopSelectParent.GetComponent<ToggleGroup>();
 
         selectItemName = FindChildGameObject<TextMeshProUGUI>("SelectItemName");
         selectItemIcon = FindChildGameObject<Image>("SelectIcon");
@@ -66,14 +80,14 @@ public class ShopPanel : GamePanel<ShopGroup>
 
         buyCountValue = FindChildGameObject<TMP_InputField>("BuyCountValue");
         addButton = FindChildGameObject<Button>("AddButton");
-        reduceButton = FindChildGameObject<Button>("ReduceButton"); 
+        reduceButton = FindChildGameObject<Button>("ReduceButton");
         buyButton = FindChildGameObject<Button>("BuyButton");
 
         selectItemProperty = FindChildGameObject<TextMeshProUGUI>("Property");
     }
 
-    ShopItemData selectShopItemData;
-    int buyCount=1;
+    private ShopItemData selectShopItemData;
+    private int buyCount = 1;
 
     public override void Close()
     {
@@ -83,6 +97,7 @@ public class ShopPanel : GamePanel<ShopGroup>
         shopItems.ClearSelect();
         shops.ClearSelect();
     }
+
     protected override void Awake()
     {
         base.Awake();
@@ -109,28 +124,32 @@ public class ShopPanel : GamePanel<ShopGroup>
         });
         buyButton.onClick.AddListener(BuyAction);
     }
-    void RefreshBuyCount()
+
+    private void RefreshBuyCount()
     {
         buyCount = math.clamp(buyCount, 1, 999);
         buyCountValue.SetTextWithoutNotify(buyCount.ToString());
     }
-    void BuyAction()
+
+    private void BuyAction()
     {
         switch (selectShopItemData.type)
         {
             case ShopItemType.道具:
                 ItemManager.instance.BuyActionAsync(selectShopItemData, buyCount);
                 break;
+
             case ShopItemType.动物:
                 BuyAnimal();
                 break;
+
             case ShopItemType.家具:
                 HomeEquipManager.instance.BuyAction(selectShopItemData);
                 break;
-        } 
+        }
     }
 
-    async void BuyAnimal()
+    private async void BuyAnimal()
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectShopItemData.item);
         if (itemData != null)
@@ -143,7 +162,7 @@ public class ShopPanel : GamePanel<ShopGroup>
                     return;
                 }
 
-                var controllerCharacter= CharacterManager.instance.controllerCharacter;
+                var controllerCharacter = CharacterManager.instance.controllerCharacter;
                 TryCreatAnimal tryCreatAnimal = new TryCreatAnimal
                 {
                     dataId = itemData.typeValue,
@@ -151,18 +170,18 @@ public class ShopPanel : GamePanel<ShopGroup>
                     roomId = controllerCharacter.mapInstance,
                     setValue = CreatAnimalEnd
                 };
-                GameActionManager.instance.QueueAction(tryCreatAnimal,true);
+                GameActionManager.instance.QueueAction(tryCreatAnimal, true);
 
                 void CreatAnimalEnd(int animalInstanceId)
                 {
                     JoinTeam joinTeam = new JoinTeam
                     {
                         teamCharacterId = controllerCharacter.instanceId,
-                         characterId= animalInstanceId
+                        characterId = animalInstanceId
                     };
                     GameActionManager.instance.QueueAction(joinTeam);
                 }
-                 
+
                 InformationController.instance.AddInformation($"成功购买{buyCount}个+ {itemData.itemName} +");
                 if (selectShopItemData.buyAction != 0)
                 {
@@ -177,41 +196,43 @@ public class ShopPanel : GamePanel<ShopGroup>
             });
         }
     }
-    async void SeletShopItem(ShopItemData shopItemData, bool selected=true)
+
+    private async void SeletShopItem(ShopItemData shopItemData, bool selected = true)
     {
         selectShopItemData = shopItemData;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemData.item);
         if (itemData != null)
         {
-            selectItemName.text =$"+ {itemData.itemName} +";
+            selectItemName.text = $"+ {itemData.itemName} +";
             selectItemInfo.text = itemData.info;
             selectItemProperty.text = itemData.property.ToString();
             selectItemIcon.sprite = itemData.icon;
-            selectItemIcon.rectTransform.sizeDelta=GameCommon.SetImageSize(itemData.icon,new Vector2(32,32));
+            selectItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(itemData.icon, new Vector2(32, 32));
             selectMoneyValue.text = (itemData.shopPrice * shopItemData.priceValue / 100.0f).ToString("0");
             selectMoneyIcon.sprite = PayManager.instance.GetPayMoneySprite(shopItemData.payType);
         }
-        buyCountValue.interactable= addButton.interactable = reduceButton.interactable = !shopItemData.buyLimitOne;
+        buyCountValue.interactable = addButton.interactable = reduceButton.interactable = !shopItemData.buyLimitOne;
         buyCount = 1;
         RefreshBuyCount();
         SelectInformation.transform.localScale = Vector3.one;
-    } 
-    void SelecShopData(ShopData shopData, bool selected)
+    }
+
+    private void SelecShopData(ShopData shopData, bool selected)
     {
         if (selected)
         {
             List<ShopItemData> shopItemDatas = shopData.shopItem.FindAll(s => s.open);
             shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup);
         }
-
     }
+
     public override void InitReferenceData(ShopGroup v)
     {
         base.InitReferenceData(v);
         Title.text = v.name;
         ShopGroup.enabled = true;
         ItemGroup.enabled = true;
-        shops.InitListData(v.shopDatas,SelecShopData, ShopGroup);
+        shops.InitListData(v.shopDatas, SelecShopData, ShopGroup);
         shops.SelectDefault();
         SelecShopData(v.shopDatas[0], true);
         buyCount = 1;

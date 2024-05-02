@@ -1,10 +1,6 @@
-﻿using OldName;
-using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
+﻿using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using UnityEngine.UIElements;
 
 public class TeamManager : Singleton<TeamManager>
 {
@@ -23,9 +19,8 @@ public class TeamManager : Singleton<TeamManager>
             }
             catch
             {
-
             }
-            
+
             return null;
         }
     }
@@ -47,8 +42,8 @@ public class TeamManager : Singleton<TeamManager>
             else
             {
                 teamer.characterEquipAndPropertyDatas = new CharacterEquipAndPropertyData[1];
-                teamer.characterEquipAndPropertyDatas[0] = CharacterManager.instance.controllerCharacter.CharacterEquipAndPropertyData; 
-            }            
+                teamer.characterEquipAndPropertyDatas[0] = CharacterManager.instance.controllerCharacter.CharacterEquipAndPropertyData;
+            }
             return teamer;
         }
     }
@@ -61,13 +56,14 @@ public class TeamManager : Singleton<TeamManager>
         {
             return default(CharacterInformationDataList);
         }
-        if(teams.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId,out var team))
+        if (teams.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId, out var team))
         {
             return team.GetTeamCharacterInfo();
         }
 
         return default(CharacterInformationDataList);
     }
+
     public Team GetTeam(int characterId)
     {
         if (teams.TryGetValue(characterId, out var team))
@@ -83,6 +79,7 @@ public class TeamManager : Singleton<TeamManager>
         }
         return null;
     }
+
     public Team GetTeam(Character character)
     {
         if (teams.TryGetValue(character.instanceId, out var team))
@@ -98,8 +95,9 @@ public class TeamManager : Singleton<TeamManager>
         }
         return null;
     }
-    RefreshTeam refreshTeam=default(RefreshTeam);
-   
+
+    private RefreshTeam refreshTeam = default(RefreshTeam);
+
     public void ChangeTeamLeader(int oldLeaderId, int newLeaderId)
     {
         if (teams.TryGetValue(oldLeaderId, out var team))
@@ -111,7 +109,6 @@ public class TeamManager : Singleton<TeamManager>
             }
             GameActionManager.instance.QueueAction(refreshTeam);
         }
-       
     }
 
     public bool LeaveTeam(int characterId)
@@ -134,8 +131,7 @@ public class TeamManager : Singleton<TeamManager>
         {
             if (team.RemoveCharacter(characterId))
             {
-
-            } 
+            }
             return true;
         }
         return false;
@@ -174,7 +170,7 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
     }
 
-    void LeaveTeam(LeaveTeam leaveTeam)
+    private void LeaveTeam(LeaveTeam leaveTeam)
     {
         bool result = LeaveTeam(leaveTeam.teamCharacterId);
         RefreshAnimalPos refreshAnimalPos = new RefreshAnimalPos
@@ -183,11 +179,12 @@ public class TeamManager : Singleton<TeamManager>
         };
         GameActionManager.instance.QueueAction(refreshAnimalPos);
         if (leaveTeam.setResult != null)
-        { 
+        {
             leaveTeam.setResult(result);
         }
         GameActionManager.instance.QueueAction(refreshTeam);
     }
+
     private void TryTeamLeaderSetCoordinate(TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate)
     {
         if (teams.TryGetValue(tryTeamLeaderSetCoordinate.characterId, out var team))
@@ -195,13 +192,15 @@ public class TeamManager : Singleton<TeamManager>
             team.TeamLeaderSetCoordinate();
         }
     }
-    void TryTeamLeaderStop(TryTeamLeaderStop tryTeamLeaderStop)
+
+    private void TryTeamLeaderStop(TryTeamLeaderStop tryTeamLeaderStop)
     {
         if (teams.TryGetValue(tryTeamLeaderStop.characterId, out var team))
         {
             team.TeamLeaderStop();
         }
     }
+
     private void TryTeamLeaderMove(TryTeamLeaderMove tryTeamLeaderMove)
     {
         if (teams.TryGetValue(tryTeamLeaderMove.characterId, out var team))
@@ -209,13 +208,13 @@ public class TeamManager : Singleton<TeamManager>
             team.TeamLeaderMove(tryTeamLeaderMove.length);
         }
     }
+
     private void CreatTeam(CreatTeamPlayer creatTeamPlayer)
     {
-
         for (int i = 0; i < creatTeamPlayer.players.Count; i++)
         {
             int id = creatTeamPlayer.players[i];
-            if(id== CharacterManager.instance.controllerCharacter.instanceId||id==0)
+            if (id == CharacterManager.instance.controllerCharacter.instanceId || id == 0)
             {
                 continue;
             }
@@ -224,10 +223,10 @@ public class TeamManager : Singleton<TeamManager>
                 characterId = id,
                 teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId
             };
-            GameActionManager.instance.QueueAction(joinTeam,true);
-             
+            GameActionManager.instance.QueueAction(joinTeam, true);
         }
     }
+
     private void JoinTeam(JoinTeam joinTeam)
     {
         if (teams.TryGetValue(joinTeam.teamCharacterId, out var team))
@@ -278,6 +277,7 @@ public class Team
     public Character leader => Teamers[0].character;
     public List<Teamer> Teamers = new List<Teamer>();
     private HashSet<int> characterInstances = new HashSet<int>();
+
     private int3 lastCoordinate
     {
         get
@@ -292,6 +292,7 @@ public class Team
             }
         }
     }
+
     public CharacterInformationDataList GetTeamCharacterInfo()
     {
         CharacterInformationDataList characterInformationDataList = new CharacterInformationDataList
@@ -308,9 +309,9 @@ public class Team
     public Team(Character leader)
     {
         this.Teamers.Clear();
-        Teamer teamer = new Teamer(leader); 
+        Teamer teamer = new Teamer(leader);
         Teamers.Add(teamer);
-        StopCharacterBehavior(leader.instanceId);  
+        StopCharacterBehavior(leader.instanceId);
     }
 
     private void ReStartCharacterBehavior(int characterId)
@@ -346,8 +347,8 @@ public class Team
     {
         if (characterInstances.Add(characterId))
         {
-            Character character = CharacterManager.instance.GetCharacter(characterId);  
-            Teamer teamer = new Teamer(character);  
+            Character character = CharacterManager.instance.GetCharacter(characterId);
+            Teamer teamer = new Teamer(character);
             if (Teamers.Count > 0)
             {
                 Teamers[Teamers.Count - 1].nextTeamer = teamer;
@@ -355,14 +356,13 @@ public class Team
                 Character forwardCharacter = Teamers[Teamers.Count - 1].character;
                 List<float4> coordinates;
                 float4 targetCoordinate = SetLastCoordianteAndDircet(forwardCharacter, out coordinates);
-                teamer.SetNowCoordinate(targetCoordinate.xy,targetCoordinate.zw);
-               // teamer.character.SetDirection(direction);
-               // teamer.character.SetCellOffset(forwardCharacter.GetCellOffset());
+                teamer.SetNowCoordinate(targetCoordinate.xy, targetCoordinate.zw);
+                // teamer.character.SetDirection(direction);
+                // teamer.character.SetCellOffset(forwardCharacter.GetCellOffset());
 
+                // var lastTeamer = characters[characters.Count - 1];
 
-               // var lastTeamer = characters[characters.Count - 1];
-              
-                for(int i = 0; i < coordinates.Count; i++)
+                for (int i = 0; i < coordinates.Count; i++)
                 {
                     teamer.queueCoordinate.Enqueue(coordinates[i]);
                 }
@@ -385,15 +385,15 @@ public class Team
     }
 
     private float4 SetLastCoordianteAndDircet(Character forwardCharacter, out List<float4> coordinates)
-    { 
-        int2 lastCoordinate = forwardCharacter.coordinate; 
+    {
+        int2 lastCoordinate = forwardCharacter.coordinate;
         coordinates = new List<float4>();
         float2 moveDirction = float2.zero;
         switch (forwardCharacter.direction)
         {
-            case Direction.UP: 
-                lastCoordinate.y -= 4; 
-                for (int i = 3; i >0; i--)
+            case Direction.UP:
+                lastCoordinate.y -= 4;
+                for (int i = 3; i > 0; i--)
                 {
                     var targetCoordinate = new float4(forwardCharacter.coordinate.x, forwardCharacter.coordinate.y - i, 0, 1);
                     coordinates.Add(targetCoordinate);
@@ -401,27 +401,27 @@ public class Team
                 moveDirction = new float2(0, 1);
                 break;
 
-            case Direction.LEFT: 
+            case Direction.LEFT:
                 lastCoordinate.x += 4;
-                for (int i = 3; i >0; i--)
+                for (int i = 3; i > 0; i--)
                 {
-                    var targetCoordinate = new float4(forwardCharacter.coordinate.x+i, forwardCharacter.coordinate.y, -1, 0);
+                    var targetCoordinate = new float4(forwardCharacter.coordinate.x + i, forwardCharacter.coordinate.y, -1, 0);
                     coordinates.Add(targetCoordinate);
                 }
                 moveDirction = new float2(-1, 0);
                 break;
 
-            case Direction.RIGHT: 
+            case Direction.RIGHT:
                 lastCoordinate.x -= 4;
-                for (int i = 3; i >0; i--)
+                for (int i = 3; i > 0; i--)
                 {
                     var targetCoordinate = new float4(forwardCharacter.coordinate.x - i, forwardCharacter.coordinate.y, 1, 0);
-                    coordinates.Add(targetCoordinate); 
+                    coordinates.Add(targetCoordinate);
                 }
                 moveDirction = new float2(1, 0);
                 break;
 
-            case Direction.DOWN: 
+            case Direction.DOWN:
                 lastCoordinate.y += 4;
 
                 for (int i = 3; i > 0; i--)
@@ -438,13 +438,12 @@ public class Team
             {
                 case Direction.UP:
                 case Direction.DOWN:
-                     
-                    lastCoordinate = forwardCharacter.coordinate+ new int2(-4, 0);
-                    for (int i = 3; i >0; i--)
+
+                    lastCoordinate = forwardCharacter.coordinate + new int2(-4, 0);
+                    for (int i = 3; i > 0; i--)
                     {
                         var targetCoordinate = new float4(forwardCharacter.coordinate.x - i, forwardCharacter.coordinate.y, 1, 0);
                         coordinates.Add(targetCoordinate);
-                         
                     }
                     moveDirction = new float2(1, 0);
                     break;
@@ -452,10 +451,9 @@ public class Team
                 case Direction.LEFT:
                 case Direction.RIGHT:
                     lastCoordinate = forwardCharacter.coordinate + new int2(0, -4);
-                     
-                    for (int i = 3; i >0; i--)
-                    {
 
+                    for (int i = 3; i > 0; i--)
+                    {
                         var targetCoordinate = new float4(forwardCharacter.coordinate.x, forwardCharacter.coordinate.y - i, forwardCharacter.coordinate.y, 1);
                         coordinates.Add(targetCoordinate);
                     }
@@ -469,9 +467,8 @@ public class Team
                     case Direction.UP:
                     case Direction.DOWN:
                         lastCoordinate = forwardCharacter.coordinate + new int2(+4, 0);
-                        for (int i = 3; i >0; i--)
+                        for (int i = 3; i > 0; i--)
                         {
-
                             var targetCoordinate = new float4(forwardCharacter.coordinate.x + i, forwardCharacter.coordinate.y, -1, 0);
                             coordinates.Add(targetCoordinate);
                         }
@@ -481,7 +478,7 @@ public class Team
                     case Direction.LEFT:
                     case Direction.RIGHT:
                         lastCoordinate = forwardCharacter.coordinate + new int2(0, +4);
-                        for (int i = 3; i >0; i--)
+                        for (int i = 3; i > 0; i--)
                         {
                             var targetCoordinate = new float4(forwardCharacter.coordinate.x, forwardCharacter.coordinate.y + i, 0, -1);
                             coordinates.Add(targetCoordinate);
@@ -491,14 +488,14 @@ public class Team
                 }
                 if (!MapCellController.instance.CheckIsWalk(lastCoordinate, forwardCharacter.mapInstance))
                 {
-                    lastCoordinate = forwardCharacter.coordinate;  
+                    lastCoordinate = forwardCharacter.coordinate;
                 }
             }
         }
-        return new float4(lastCoordinate.xy,moveDirction.xy);
-      // nowCharacter.SetObjCoordinate(forwardCharacter.mapInstance, lastCoordinate.xy);
-       // nowCharacter.SetDirection(direction);
-      //  CharacterManager.instance.RefreshNpcRuntimeObj(nowCharacter);
+        return new float4(lastCoordinate.xy, moveDirction.xy);
+        // nowCharacter.SetObjCoordinate(forwardCharacter.mapInstance, lastCoordinate.xy);
+        // nowCharacter.SetDirection(direction);
+        //  CharacterManager.instance.RefreshNpcRuntimeObj(nowCharacter);
     }
 
     public bool RemoveCharacter(int characterid)
@@ -518,41 +515,43 @@ public class Team
                         Teamers[index - 1].nextTeamer = Teamers[index + 1].nextTeamer;
                     }
                 }
-                 
+
                 if (index < Teamers.Count - 1)
                 {
                     for (int i = Teamers.Count - 1; i > index; i--)
                     {
                         var nextCharacter = Teamers[i];
                         nextCharacter.index--;
-                        var forwardCharacter = Teamers[i - 1]; 
+                        var forwardCharacter = Teamers[i - 1];
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
                         nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
                         CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character);
                     }
                 }
                 Teamers[index].character.isInTeam = false;
-                Teamers.RemoveAt(index); 
+                Teamers.RemoveAt(index);
             }
             ReStartCharacterBehavior(characterid);
         }
         if (isLeader)
-        { 
+        {
             TeamManager.instance.ChangeTeamLeader(oldCharacterId, Teamers.Count > 0 ? leader.instanceId : 0);
         }
         GameActionManager.instance.QueueAction(default(RefreshTeam));
         return Teamers.Count > 0;
     }
+
     public void TeamLeaderStop()
     {
         if (Teamers.Count > 1)
         {
             for (int i = 1; i < Teamers.Count; i++)
             {
-                CharacterManager.instance.SetCharacterAnimationSpeed(0, Teamers[i].character); 
+                CharacterManager.instance.SetCharacterAnimationSpeed(0, Teamers[i].character);
             }
         }
     }
+
     public void TeamLeaderMove(float length)
     {
         if (Teamers.Count > 1)
@@ -567,50 +566,49 @@ public class Team
     public void TeamLeaderSetCoordinate()
     {
         if (Teamers.Count > 1)
-        { 
+        {
             if (lastCoordinate.z != leader.mapInstance)
-            { 
+            {
                 for (int i = 0; i < Teamers.Count; i++)
                 {
-                    Teamers[i].SetNewMapCoordinate(leader.ObjCoordinate,leader.moveDirection);
-                } 
+                    Teamers[i].SetNewMapCoordinate(leader.ObjCoordinate, leader.moveDirection);
+                }
             }
             else
-            { 
+            {
                 var character = Teamers[1];
                 var forwardCharacter = Teamers[0];
                 character.AddQueueCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
             }
         }
     }
-
-    
-
 }
 
- 
 public class Teamer
 {
     public int index = 0;
     public int2 nowCoordinate;
     private float2 direction;
-    public Queue<float4> queueCoordinate=new Queue<float4>();
+    public Queue<float4> queueCoordinate = new Queue<float4>();
     public Character character;
     public Teamer nextTeamer;
+
     public void SetNowCoordinate(float2 nowCoordinate, float2 directionValue)
     {
         this.nowCoordinate = (int2)nowCoordinate;
         character.SetCoordinate(this.nowCoordinate);
         CharacterManager.instance.RefreshNpcRuntimeObj(character);
         character.moveDirection = directionValue;
-        direction = directionValue; 
+        direction = directionValue;
     }
+
     public Teamer(Character character)
     {
         this.character = character;
         character.isInTeam = true;
-        nowCoordinate = character.coordinate; 
+        nowCoordinate = character.coordinate;
     }
+
     public void AddQueueCoordinate(float2 coordinate, float2 direction)
     {
         queueCoordinate.Enqueue(new float4(coordinate.xy, direction.xy));
@@ -620,17 +618,18 @@ public class Teamer
         }
     }
 
-    bool canMove = false;
-   public void SetTeamCoordinate()
+    private bool canMove = false;
+
+    public void SetTeamCoordinate()
     {
-        character.SetCoordinate(nowCoordinate); 
-        if(queueCoordinate.Count>3)
+        character.SetCoordinate(nowCoordinate);
+        if (queueCoordinate.Count > 3)
         {
             var targetCoordinate = queueCoordinate.Dequeue();
-            direction = math.normalizesafe(targetCoordinate.xy-nowCoordinate);
+            direction = math.normalizesafe(targetCoordinate.xy - nowCoordinate);
             // Debug.Log($"targetCoordinate：{targetCoordinate}--nowCoordinate:{nowCoordinate}--direction {direction}");
-            startPos = GameCommon.GetMapPos(nowCoordinate); 
-            nowCoordinate = (int2)targetCoordinate.xy; 
+            startPos = GameCommon.GetMapPos(nowCoordinate);
+            nowCoordinate = (int2)targetCoordinate.xy;
             endPos = GameCommon.GetMapPos(nowCoordinate);
             timeValue = 0;
 
@@ -638,23 +637,22 @@ public class Teamer
             {
                 characterId = character.instanceId,
                 direction = targetCoordinate.zw
-            }; 
+            };
             GameActionManager.instance.QueueAction(setDirection, true);
             canMove = true;
-             
         }
         else
         {
             canMove = false;
         }
-        
     }
+
     public void SetNewMapCoordinate(int3 coordinate, float2 directionValue)
     {
-        nowCoordinate =coordinate.xy;
+        nowCoordinate = coordinate.xy;
         queueCoordinate.Clear();
         float4 targetCoordinate = new float4(coordinate.xy, directionValue.xy);
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             queueCoordinate.Enqueue(targetCoordinate);
         }
@@ -663,17 +661,17 @@ public class Teamer
         canMove = true;
     }
 
-    Vector2 startPos, endPos;
-    float timeValue;
+    private Vector2 startPos, endPos;
+    private float timeValue;
 
     public const float perCellTime = GameCommon.cellSize * 2;
-    float timeSpeed = 1/ perCellTime;
+    private float timeSpeed = 1 / perCellTime;
+
     public void Move(float length)
     {
-        
         if (canMove)
         {
-           // int2 coordinate = character.coordinate;
+            // int2 coordinate = character.coordinate;
             float speed = queueCoordinate.Count / (3.0f);
             timeValue += Time.deltaTime * speed * timeSpeed;
             Vector2 pos = (endPos - startPos) * timeValue + startPos;
@@ -690,7 +688,7 @@ public class Teamer
             }
             //if (character.name == "玛德琳")
             {
-               // Debug.Log($"pos:{pos}--endPos:{endPos}--startPos{startPos}--timeValue{timeValue}");
+                // Debug.Log($"pos:{pos}--endPos:{endPos}--startPos{startPos}--timeValue{timeValue}");
             }
 
             CharacterManager.instance.SetCharacterObjPos(character, pos);
@@ -699,10 +697,9 @@ public class Teamer
              CharacterManager.instance.MoveCharacterObj(character, length * direction* speed, ref coordinate);
             if (!coordinate.Equals(character.coordinate))
             {
-                
                 character.SetCoordinate(new int3(coordinate.xy, character.mapInstance));
                 SetTeamCoordinate();
             }*/
-        } 
+        }
     }
 }
