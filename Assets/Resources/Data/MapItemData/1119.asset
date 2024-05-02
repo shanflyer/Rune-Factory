@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8acf37fc04ede7419cc297c465e29ba, type: 3}
+  m_Name: 1119
+  m_EditorClassIdentifier: 
+  id: 1119
+  itemName: "\u6405\u62CC\u5668"
+  objName: 
+  itemObj: {fileID: 5402017328935759987, guid: 9040bb1ace76f0248b105239af62d32f, type: 3}
+  colliderCells:
+  - x: -2
+    y: 0
+  - x: -2
+    y: 1
+  - x: -1
+    y: 0
+  - x: -1
+    y: 1
+  - x: 0
+    y: 0
+  - x: 0
+    y: 1
+  - x: 1
+    y: 0
+  - x: 1
+    y: 1
+  - x: 2
+    y: 0
+  - x: 2
+    y: 1
+  triggerCells: []
+  playerTriggerCells:
+  - x: -2
+    y: -1
+  - x: -1
+    y: -1
+  - x: 0
+    y: -1
+  - x: 1
+    y: -1
+  - x: 2
+    y: -1
+  playerTriggerEvent: 0
+  operateIds: 
+  defaultExit: 0
+  defaultEnter: 0
+  displayTips: 1
+  playerOperateInfo: 

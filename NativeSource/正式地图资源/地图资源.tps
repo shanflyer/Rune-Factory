@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.1.0</string>
+        <string>7.3.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -3665,6 +3665,42 @@
                 <rect>10,16,21,32</rect>
                 <key>scale9Paddings</key>
                 <rect>10,16,21,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">搅拌机.png</key>
+            <key type="filename">搅拌机0.png</key>
+            <key type="filename">搅拌机1.png</key>
+            <key type="filename">搅拌机2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.902778</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,18,32,36</rect>
+                <key>scale9Paddings</key>
+                <rect>16,18,32,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">搅拌机0_normal.png</key>
+            <key type="filename">搅拌机1_normal.png</key>
+            <key type="filename">搅拌机2_normal.png</key>
+            <key type="filename">搅拌机_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,18,32,36</rect>
+                <key>scale9Paddings</key>
+                <rect>16,18,32,36</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
