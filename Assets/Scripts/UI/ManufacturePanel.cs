@@ -356,6 +356,22 @@ public class ManufacturePanel : GamePanel<Manufature>
                 GameActionManager.instance.QueueAction(setManufature, true);
 
 
+                SetCharacterAnimator setCharacterAnimatorValue = new SetCharacterAnimator
+                {
+                    parameterType = ParameterType.FLOAT,
+                    parameter = "CreatState",
+                    floatValue=manufactureData.characterAnimatorState,
+                    characterId = CharacterManager.instance.controllerCharacter.instanceId
+                };
+                GameActionManager.instance.QueueAction(setCharacterAnimatorValue);
+                SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+                {
+                    parameterType = ParameterType.TRIGGER,
+                    parameter = "Creat",
+                    characterId = CharacterManager.instance.controllerCharacter.instanceId
+                };
+                GameActionManager.instance.QueueAction(setCharacterAnimator);
+
                 /*
                 bool allSet = await PackageManager.instance.SetPlayerPackageItem(productId, produceCount);
                 if (!allSet)

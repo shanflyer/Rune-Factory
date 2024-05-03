@@ -10,6 +10,7 @@ public class ManufactureData : ScriptableObject, IGameData, IReferenceData
     public List<int2> linkFormulas;
     public int defaultProduct;
     public int defaultProduceTime;
+    public int characterAnimatorState = -1;
 
     public string GetKey()
     {
