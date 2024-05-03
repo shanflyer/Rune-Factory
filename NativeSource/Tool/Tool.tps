@@ -100,7 +100,7 @@
             <key>sizeConstraints</key>
             <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
-            <false/>
+            <true/>
             <key>maxRects</key>
             <struct type="AlgorithmMaxRectsSettings">
                 <key>heuristic</key>
@@ -209,6 +209,10 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">斧头_上_16.png</key>
+            <key type="filename">斧头_上_17.png</key>
+            <key type="filename">斧头_上_18.png</key>
+            <key type="filename">斧头_上_19.png</key>
             <key type="filename">锄头_上_16.png</key>
             <key type="filename">锄头_上_17.png</key>
             <key type="filename">锄头_上_18.png</key>
@@ -227,6 +231,18 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">斧头_上_16_normal.png</key>
+            <key type="filename">斧头_上_17_normal.png</key>
+            <key type="filename">斧头_上_18_normal.png</key>
+            <key type="filename">斧头_上_19_normal.png</key>
+            <key type="filename">斧头_下_01_normal.png</key>
+            <key type="filename">斧头_下_02_normal.png</key>
+            <key type="filename">斧头_下_03_normal.png</key>
+            <key type="filename">斧头_下_04_normal.png</key>
+            <key type="filename">斧头_右_11_normal.png</key>
+            <key type="filename">斧头_右_12_normal.png</key>
+            <key type="filename">斧头_右_13_normal.png</key>
+            <key type="filename">斧头_右_14_normal.png</key>
             <key type="filename">锄头_上_16_normal.png</key>
             <key type="filename">锄头_上_17_normal.png</key>
             <key type="filename">锄头_上_18_normal.png</key>
@@ -242,6 +258,71 @@
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9Paddings</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">斧头_下_01.png</key>
+            <key type="filename">斧头_下_02.png</key>
+            <key type="filename">斧头_下_03.png</key>
+            <key type="filename">斧头_下_04.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.69444</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9Paddings</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">斧头_右_11.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.79167,0.66667</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9Paddings</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">斧头_右_12.png</key>
+            <key type="filename">锄头_右_12.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.1875,0.625</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9Paddings</key>
+                <rect>12,18,24,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">斧头_右_13.png</key>
+            <key type="filename">斧头_右_14.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.08333,0.73611</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -286,21 +367,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">锄头_右_12.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.1875,0.625</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,18,24,36</rect>
-                <key>scale9Paddings</key>
-                <rect>12,18,24,36</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">锄头_右_13.png</key>
             <key type="filename">锄头_右_14.png</key>
             <struct type="IndividualSpriteSettings">
@@ -314,6 +380,50 @@
                 <rect>12,18,24,36</rect>
                 <key>scale9Paddings</key>
                 <rect>12,18,24,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">镰刀_上_07.png</key>
+            <key type="filename">镰刀_上_07_normal.png</key>
+            <key type="filename">镰刀_上_08.png</key>
+            <key type="filename">镰刀_上_08_normal.png</key>
+            <key type="filename">镰刀_上_09.png</key>
+            <key type="filename">镰刀_上_09_normal.png</key>
+            <key type="filename">镰刀_上_10.png</key>
+            <key type="filename">镰刀_上_10_normal.png</key>
+            <key type="filename">镰刀_上_11.png</key>
+            <key type="filename">镰刀_上_11_normal.png</key>
+            <key type="filename">镰刀_上_12.png</key>
+            <key type="filename">镰刀_上_12_normal.png</key>
+            <key type="filename">镰刀_下_01.png</key>
+            <key type="filename">镰刀_下_01_normal.png</key>
+            <key type="filename">镰刀_下_02.png</key>
+            <key type="filename">镰刀_下_02_normal.png</key>
+            <key type="filename">镰刀_下_03.png</key>
+            <key type="filename">镰刀_下_03_normal.png</key>
+            <key type="filename">镰刀_下_04.png</key>
+            <key type="filename">镰刀_下_04_normal.png</key>
+            <key type="filename">镰刀_右_04.png</key>
+            <key type="filename">镰刀_右_04_normal.png</key>
+            <key type="filename">镰刀_右_05.png</key>
+            <key type="filename">镰刀_右_05_normal.png</key>
+            <key type="filename">镰刀_右_06.png</key>
+            <key type="filename">镰刀_右_06_normal.png</key>
+            <key type="filename">镰刀_右_07.png</key>
+            <key type="filename">镰刀_右_07_normal.png</key>
+            <key type="filename">镰刀_右_08.png</key>
+            <key type="filename">镰刀_右_08_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>24,30,48,60</rect>
+                <key>scale9Paddings</key>
+                <rect>24,30,48,60</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
