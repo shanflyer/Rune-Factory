@@ -233,77 +233,85 @@ public class CharacterEditor : MyEditor
 
             foreach (var data in characterSources)
             {
-                if (data.Key == oldModel)
+                try
                 {
-                    continue;
-                }
-                string path = $"{outAnimationPath}/{data.Key}";
-
-
-
-                AnimatorOverrideController animatorOverrideController = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>($"{path}/{data.Key}.overrideController");
-
-                if (animatorOverrideController == null)
-                {
-                    animatorOverrideController = new AnimatorOverrideController();
-                } 
-                animatorOverrideController.name = data.Key;
-                animatorOverrideController.runtimeAnimatorController = animatorController;
-                if (!AssetDatabase.Contains(animatorOverrideController))
-                {
-                    AssetDatabase.CreateAsset(animatorOverrideController, $"{path}/{data.Key}.overrideController");
-                }
-                
-
-               
-                DirectoryInfo directoryInfo = new DirectoryInfo(path);
-                var animaFiles = directoryInfo.GetFiles("*.anim");
-
-               
-                foreach (var animaFile in animaFiles)
-                {
-                    AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path + "/" + animaFile.Name);
-                   
-                    var objBindings = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
-                    foreach (var objBinding in objBindings)
+                    if (data.Key == oldModel)
                     {
-                        var objkeyFrames = AnimationUtility.GetObjectReferenceCurve(animationClip, objBinding);
-                        for (int i = 0; i < objkeyFrames.Length; i++)
-                        { 
-                            var keyFrame = objkeyFrames[i];
-                            if (keyFrame.value == null)
-                            {
-                                continue;
-                            }
-                            var sprite = keyFrame.value as Sprite;
-                            string sourceName = sprite.name.Replace(oldModel, data.Key);
-                            if(data.Value.TryGetValue(sourceName, out sprite))
-                            {
-                                keyFrame.value = sprite;
-                            }
-                           
-                            objkeyFrames[i] = keyFrame;
-                        }
-                        AnimationUtility.SetObjectReferenceCurve(animationClip, objBinding, objkeyFrames);
+                        continue;
+                    }
+                    string path = $"{outAnimationPath}/{data.Key}";
+
+
+
+                    AnimatorOverrideController animatorOverrideController = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>($"{path}/{data.Key}.overrideController");
+
+                    if (animatorOverrideController == null)
+                    {
+                        animatorOverrideController = new AnimatorOverrideController();
+                    }
+                    animatorOverrideController.name = data.Key;
+                    animatorOverrideController.runtimeAnimatorController = animatorController;
+                    if (!AssetDatabase.Contains(animatorOverrideController))
+                    {
+                        AssetDatabase.CreateAsset(animatorOverrideController, $"{path}/{data.Key}.overrideController");
                     }
 
-                    AssetDatabase.SaveAssets();
+
+
+                    DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                    var animaFiles = directoryInfo.GetFiles("*.anim");
+
+
+                    foreach (var animaFile in animaFiles)
+                    {
+                        AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path + "/" + animaFile.Name);
+
+                        var objBindings = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
+                        foreach (var objBinding in objBindings)
+                        {
+                            var objkeyFrames = AnimationUtility.GetObjectReferenceCurve(animationClip, objBinding);
+                            for (int i = 0; i < objkeyFrames.Length; i++)
+                            {
+                                var keyFrame = objkeyFrames[i];
+                                if (keyFrame.value == null)
+                                {
+                                    continue;
+                                }
+                                var sprite = keyFrame.value as Sprite;
+                                string sourceName = sprite.name.Replace(oldModel, data.Key);
+                                if (data.Value.TryGetValue(sourceName, out sprite))
+                                {
+                                    keyFrame.value = sprite;
+                                }
+
+                                objkeyFrames[i] = keyFrame;
+                            }
+                            AnimationUtility.SetObjectReferenceCurve(animationClip, objBinding, objkeyFrames);
+                        }
+
+                        AssetDatabase.SaveAssets();
+                    }
+
+
+
+
+
+                    GameObject obj = GameObject.Instantiate(copyPrefab);
+                    obj.name = data.Key;
+                    Animator animator = obj.GetComponentInChildren<Animator>();
+                    animator.runtimeAnimatorController = animatorOverrideController;
+                    SpriteRenderer spriteRenderer = obj.GetComponentInChildren<SpriteRenderer>();
+                    spriteRenderer.sprite = data.Value.Values.ToList()[0];
+
+                    PrefabUtility.SaveAsPrefabAsset(obj, $"{prefabPath}/{data.Key}.prefab");
+                    GameObject.DestroyImmediate(obj);
+                    AssetDatabase.Refresh();
                 }
+                catch
+                {
 
-                 
-
-               
-
-                GameObject obj = GameObject.Instantiate(copyPrefab);
-                obj.name = data.Key;
-                Animator animator = obj.GetComponentInChildren<Animator>();
-                animator.runtimeAnimatorController = animatorOverrideController;
-                SpriteRenderer spriteRenderer = obj.GetComponentInChildren<SpriteRenderer>();
-                spriteRenderer.sprite = data.Value.Values.ToList()[0];
-
-                PrefabUtility.SaveAsPrefabAsset(obj, $"{prefabPath}/{data.Key}.prefab");
-                GameObject.DestroyImmediate(obj);
-                AssetDatabase.Refresh();
+                }
+                
             }
         }
         finally
