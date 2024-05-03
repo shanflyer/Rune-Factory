@@ -13,6 +13,7 @@ public class HomeEquipmentData : ScriptableObject, IGameData, IReferenceData
     public int mapItemDataId;
     public HomeEquipType homeEquipType;
     public int manufatureId;
+    public bool hide;
     public List<int> canSetMaps = new List<int>();
 
     public string GetName()

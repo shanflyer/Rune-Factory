@@ -303,6 +303,24 @@ public class ExcelDataEditor : MyEditor
                 fieldInfo.SetValue(data, value);
             }
         }
+        else if (fieldInfo.FieldType == typeof(List<float2>))
+        {
+            var valueStr = value.ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var strs = value.ToString().Split('|');
+
+                List<float2> _value = new List<float2>();
+                foreach (var str in strs)
+                {
+                    var _strs = str.Split(',');
+                    float2 int3Value = new float2(float.Parse(_strs[0]), float.Parse(_strs[1]));
+                    _value.Add(int3Value);
+                }
+                value = _value;
+                fieldInfo.SetValue(data, value);
+            }
+        }
         else if (fieldInfo.FieldType == typeof(List<int3>))
         {
             var valueStr = value.ToString();
@@ -331,6 +349,20 @@ public class ExcelDataEditor : MyEditor
                 int2 _value = int2.zero;
                 _value.x = int.Parse(strs[0]);
                 _value.y = int.Parse(strs[1]);
+                value = _value;
+                fieldInfo.SetValue(data, value);
+            }
+        }
+        else if (fieldInfo.FieldType == typeof(float2))
+        {
+            var valueStr = value.ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var strs = value.ToString().Split(',');
+
+                float2 _value = float2.zero;
+                _value.x = float.Parse(strs[0]);
+                _value.y = float.Parse(strs[1]);
                 value = _value;
                 fieldInfo.SetValue(data, value);
             }

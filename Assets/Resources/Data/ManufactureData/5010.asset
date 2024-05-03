@@ -13,10 +13,20 @@ MonoBehaviour:
   m_Name: 5010
   m_EditorClassIdentifier: 
   id: 5010
-  manufactureName: "\u5288\u67F4\u58A9"
+  manufactureName: "\u67F4\u58A9"
   openItem: 0
   linkFormulas:
-  - x: 4001
+  - x: 2000
+    y: 1
+  - x: 2001
+    y: 1
+  - x: 2002
+    y: 1
+  - x: 2003
     y: 1
   defaultProduct: 10
   defaultProduceTime: 10
+  characterAnimatorState: 1
+  cameraOffset:
+    x: 0.4
+    y: 0.02

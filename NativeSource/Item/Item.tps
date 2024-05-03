@@ -201,6 +201,7 @@
             <key type="filename">北极红点鲑.png</key>
             <key type="filename">卷轴$Normal.png</key>
             <key type="filename">卷轴.png</key>
+            <key type="filename">原木$Normal.png</key>
             <key type="filename">原木.png</key>
             <key type="filename">双莓白兰地$Normal.png</key>
             <key type="filename">双莓白兰地.png</key>
@@ -272,6 +273,7 @@
             <key type="filename">拿铁.png</key>
             <key type="filename">斑马狮子鱼$Normal.png</key>
             <key type="filename">斑马狮子鱼.png</key>
+            <key type="filename">斧头$Normal.png</key>
             <key type="filename">斧头.png</key>
             <key type="filename">日本扁平鲤鱼$Normal.png</key>
             <key type="filename">日本扁平鲤鱼.png</key>
@@ -279,9 +281,11 @@
             <key type="filename">星鲟.png</key>
             <key type="filename">朗姆$Normal.png</key>
             <key type="filename">朗姆.png</key>
+            <key type="filename">木材$Normal.png</key>
             <key type="filename">木材.png</key>
             <key type="filename">木柴$Normal.png</key>
             <key type="filename">木柴.png</key>
+            <key type="filename">木棒$Normal.png</key>
             <key type="filename">木棒.png</key>
             <key type="filename">条石鲷$Normal.png</key>
             <key type="filename">条石鲷.png</key>

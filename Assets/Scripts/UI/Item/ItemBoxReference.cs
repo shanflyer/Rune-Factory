@@ -113,7 +113,21 @@ public class ItemBoxReference : UIObjReference<Item>
         if (itemData != null)
         {
             icon.sprite = itemData.icon;
-            icon.color = (item.instanceId != -1) ? Color.white : new Color(1, 1, 1, 0.6f);
+            if (LockMask)
+            {
+                if (t.locked)
+                {
+                    LockMask.transform.localScale = Vector3.one;
+                }
+                else
+                {
+                    LockMask.transform.localScale = item.instanceId == -1 ? Vector3.one : Vector3.zero; 
+                } 
+            }
+            else
+            {
+                icon.color = (item.instanceId != -1) ? Color.white : new Color(1, 1, 1, 0.6f);
+            } 
             icon.enabled = true;
             icon.rectTransform.sizeDelta = GameCommon.SetImageSize(icon.sprite, new Vector2(32, 32));
             count.text = item.count.ToString();

@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public enum FormulaType
 {
-    铸造 = 0,纺织 = 1,书写=2, 粉磨 = 10, 徒手 = 11,蒸煮 = 12,烘烤 = 13,酿造 = 14,搅拌=15
+    铸造 = 0,纺织 = 1,书写=2,木工=3, 粉磨 = 10, 徒手 = 11,蒸煮 = 12,烘烤 = 13,酿造 = 14,搅拌=15
 }
 
 public class FormulaData : ScriptableObject, IGameData, IReferenceData

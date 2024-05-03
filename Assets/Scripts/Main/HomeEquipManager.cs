@@ -51,6 +51,10 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 int instanceId = ints[i];
                 if (homeEquips.GetData(instanceId, out var homeEquip))
                 {
+                    if (homeEquip.hide)
+                    {
+                        continue;
+                    }
                     homeEquipList.homeEquips.Add(homeEquip);
                 }
             }
@@ -104,6 +108,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         equipCountData[creatHomeEquip.equipDataId] = count;
 
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
+        homeEquip.hide = homeEquipmentData.hide;
         if (homeEquipmentData.manufatureId != 0)
         {
             CreatManufature creatManufature = new CreatManufature
@@ -358,6 +363,7 @@ public struct HomeEquip : INativeData, IReferenceData
 {
     public int instanceId;
     public int mapItemInstance;
+    public bool hide;
     public int itemDataId;
     public int equipDataId;
     public int2 coordinate;

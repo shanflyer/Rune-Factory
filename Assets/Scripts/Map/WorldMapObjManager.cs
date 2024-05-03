@@ -465,6 +465,14 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                         id = m,
                     };
                     GameActionManager.instance.QueueAction(showEmote);
+
+                    SetItemAnimation setItemAnimation = new SetItemAnimation
+                    {
+                        id = manufature.instanceId,
+                        keyX = 0,
+                    };
+                    GameActionManager.instance.QueueAction(setItemAnimation);
+
                     manufatureObjs[m] = manufature;
                 }
             }

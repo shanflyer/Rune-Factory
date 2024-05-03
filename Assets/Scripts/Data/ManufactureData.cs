@@ -11,6 +11,7 @@ public class ManufactureData : ScriptableObject, IGameData, IReferenceData
     public int defaultProduct;
     public int defaultProduceTime;
     public int characterAnimatorState = -1;
+    public float2 cameraOffset;
 
     public string GetKey()
     {
