@@ -2714,6 +2714,8 @@
             </struct>
             <key type="filename">other_30.png</key>
             <key type="filename">other_30_normal.png</key>
+            <key type="filename">原木2.png</key>
+            <key type="filename">原木2_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2896,6 +2898,26 @@
                 <rect>8,24,16,48</rect>
                 <key>scale9Paddings</key>
                 <rect>8,24,16,48</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">原木0.png</key>
+            <key type="filename">原木0_normal.png</key>
+            <key type="filename">原木1.png</key>
+            <key type="filename">原木1_normal.png</key>
+            <key type="filename">原木3.png</key>
+            <key type="filename">原木3_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,18,27,36</rect>
+                <key>scale9Paddings</key>
+                <rect>13,18,27,36</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -3608,22 +3630,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">干草堆.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.603448</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>20,15,40,29</rect>
-                <key>scale9Paddings</key>
-                <rect>20,15,40,29</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">干草堆_normal.png</key>
+            <key type="filename">干草堆0.png</key>
+            <key type="filename">干草堆0_normal.png</key>
+            <key type="filename">干草堆1.png</key>
+            <key type="filename">干草堆1_normal.png</key>
+            <key type="filename">干草堆2.png</key>
+            <key type="filename">干草堆2_normal.png</key>
+            <key type="filename">干草堆3.png</key>
+            <key type="filename">干草堆3_normal.png</key>
+            <key type="filename">牧草堆0.png</key>
+            <key type="filename">牧草堆0_normal.png</key>
+            <key type="filename">牧草堆1.png</key>
+            <key type="filename">牧草堆1_normal.png</key>
+            <key type="filename">牧草堆2.png</key>
+            <key type="filename">牧草堆2_normal.png</key>
+            <key type="filename">牧草堆3.png</key>
+            <key type="filename">牧草堆3_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3904,6 +3926,28 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">木材0.png</key>
+            <key type="filename">木材0_normal.png</key>
+            <key type="filename">木材1.png</key>
+            <key type="filename">木材1_normal.png</key>
+            <key type="filename">木材2.png</key>
+            <key type="filename">木材2_normal.png</key>
+            <key type="filename">木材3.png</key>
+            <key type="filename">木材3_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,14,23,27</rect>
+                <key>scale9Paddings</key>
+                <rect>12,14,23,27</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">柜子2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -3976,22 +4020,6 @@
                 <rect>6,21,13,41</rect>
                 <key>scale9Paddings</key>
                 <rect>6,21,13,41</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">柴堆4.png</key>
-            <key type="filename">柴堆4_normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>27,16,53,32</rect>
-                <key>scale9Paddings</key>
-                <rect>27,16,53,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
