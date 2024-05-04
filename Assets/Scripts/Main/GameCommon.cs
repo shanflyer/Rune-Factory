@@ -985,7 +985,8 @@ public static class DataPath
         {typeof(EmoteData),"Data/EmoteData" },
         {typeof(SkyBackGroundData),"Data/SkyBackGroundData"},
         {typeof(HomeEquipmentData),"Data/HomeEquipmentData" },
-        {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"}, 
+        {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"},
+        {typeof(ObjPackageAnimationData),"Data/ObjPackageAnimationData" }
     };
 
     public static string GetDataPath(Type type)

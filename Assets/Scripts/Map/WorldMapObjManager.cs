@@ -321,8 +321,19 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
         if (animationData != null)
         {
-            AnimationClip animationClip = animationData.GetAnimationClip(key, out int count);
-            MyAnimationController.instance.PlayAnimation(instaceId, animationClip);
+            if (animationData.nativeAnimator)
+            {
+               if(GetRuntimeMapItemObj(instaceId, out MapItemRuntimeObj runtimeObj))
+                {
+                    animationData.PlayAnimator(runtimeObj.animator, key);
+                }
+            }
+            else
+            {
+                AnimationClip animationClip = animationData.GetAnimationClip(key, out int count);
+                MyAnimationController.instance.PlayAnimation(instaceId, animationClip);
+            }
+          
         }
     }
 

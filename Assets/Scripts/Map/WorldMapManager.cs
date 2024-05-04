@@ -427,7 +427,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 runtimeMapItem.EventReferenceData.Add(data.name, data.value);
             }
         }
-       
+        if (mapItemData.creatAction != null)
+        {
+            mapItemData.creatAction.Action(instanceId);
+        }
+
+
 
         if (mapItemData.triggerCells.Length > 0)
         {

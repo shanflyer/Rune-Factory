@@ -6,7 +6,8 @@ using Random = Unity.Mathematics.Random;
 
 [CreateAssetMenu(menuName ="Data/物体动画数据")]
 public class ItemAnimationData : ScriptableObject,IGameData
-{ 
+{
+    public bool nativeAnimator;
     public List<AnimationStateData> animationStateDatas = new List<AnimationStateData>();
     public ItemAnimationDictionary animationStateDataDic=new ItemAnimationDictionary();
    // private Dictionary<int2, AnimationStateData> animationStateDataDic = new Dictionary<int2, AnimationStateData>();
@@ -28,6 +29,13 @@ public class ItemAnimationData : ScriptableObject,IGameData
             }
         }*/
 
+    }
+    public void PlayAnimator(Animator animator,int2 key)
+    {
+        if(animationStateDataDic.TryGetValue(key,out var animationStateData))
+        {
+            animator.SetFloat(animationStateData.parameterName, animationStateData.transitionDuration);
+        }
     }
     public AnimationClip GetAnimationClip(int2 key, out int clipCount)
     {
@@ -66,6 +74,8 @@ public class ItemAnimationData : ScriptableObject,IGameData
 public struct AnimationStateData
 {
     public string stateName;
-    public int2 key;
+    public int2 key; 
+    public string parameterName;
+    public float transitionDuration;
     public List<AnimationClip> clips;
 }

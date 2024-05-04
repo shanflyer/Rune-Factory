@@ -126,6 +126,7 @@ public class PackageManager : Singleton<PackageManager>
     public override void Init()
     {
         base.Init();
+        LoadObjPackageAnimationData();
         GameActionManager.instance.AddListener<ItemUseAction>(UsetItem);
         GameActionManager.instance.AddListener<CreatRuntimePackage>(CreatRuntimePackage);
         GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
@@ -144,6 +145,7 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<CheckCharacterItemValue>(CheckCharacterItemValue);
         GameActionManager.instance.AddListener<CheckCharacterPackageFull>(CheckCharacterPackageFull);
         GameActionManager.instance.AddListener<ChangePackageInnstance>(ChangePackageInnstance);
+        GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
     }
 
     public bool GetPackageItemCounts(int packageId, out List<int2> items)
@@ -424,9 +426,45 @@ public class PackageManager : Singleton<PackageManager>
             GetOutItenFromPackage(giveCharacter.characterPackage, giveGift.giftId, 1);
         }
     }
-
+    private Dictionary<int, ObjPackageAnimationData> objPackageAnimationDatas = new Dictionary<int, ObjPackageAnimationData>(); 
     private Dictionary<int, GamePackage> gamePackages = new Dictionary<int, GamePackage>();
     private Dictionary<Vector2Int, int> runtimePackageRuntimes = new Dictionary<Vector2Int, int>();
+    
+
+    private async void RefreshShortcut(RefreshShortcut refreshShortcut)
+    {
+        if(gamePackages.TryGetValue(refreshShortcut.packageId,out var gamePackage))
+        {
+            var packageSetData=await GameDataManager.instance.GetAsyncData<PackageSetData>(gamePackage.dataId);
+            if (packageSetData.objPackageAnimationDataId != 0)
+            { 
+                var PackageItemCounts = gamePackage.PackageItemCounts;
+                foreach (var item in PackageItemCounts)
+                {
+                    if (objPackageAnimationDatas.TryGetValue(packageSetData.objPackageAnimationDataId, out var objPackageAnimationData))
+                    {
+                        var key = objPackageAnimationData.GetAnimationKey(item.Key, item.Value);
+                        SetItemAnimation setItemAnimation = new SetItemAnimation
+                        {
+                            id = gamePackage.instanceId,
+                            keyX = key.x,
+                            keyY = key.y
+                        };
+                        GameActionManager.instance.QueueAction(setItemAnimation);
+                    }
+                }
+            }
+        }
+    }
+    async void LoadObjPackageAnimationData()
+    {
+        var datas =await GameDataManager.instance.GetAllAsyncData<ObjPackageAnimationData>();
+        objPackageAnimationDatas.Clear();
+        for(int i = 0; i < datas.Count; i++)
+        {
+            objPackageAnimationDatas[datas[i].id] = datas[i];
+        }
+    }
 
     public PackageData GetPackageData(int packageId)
     {
@@ -847,11 +885,11 @@ public class PackageManager : Singleton<PackageManager>
     {
         public string name;
         public int instanceId;
-        public int dataId;
+        public int dataId; 
         public int caseCount;
         public bool singleCase;
         public int level;
-        public bool itemPackage;
+        public bool itemPackage; 
         private List<Item> items;
         public int itemCount => items.Count - nullItems.Count;
         public PackageType packageType;
@@ -960,7 +998,7 @@ public class PackageManager : Singleton<PackageManager>
                 SelectItem = 0;
             }
         }
-
+       
         public List<Item> GetItems()
         {
             List<Item> results = new List<Item>();

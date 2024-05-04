@@ -615,6 +615,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">干草$Normal.png</key>
+            <key type="filename">干草.png</key>
             <key type="filename">牧草$Normal.png</key>
             <key type="filename">牧草.png</key>
             <struct type="IndividualSpriteSettings">

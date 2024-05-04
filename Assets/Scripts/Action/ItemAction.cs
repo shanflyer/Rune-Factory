@@ -254,20 +254,35 @@ public struct CreatPackage : GameAction
     public SetResult setResult { get; set; }
     public int packageDataId;
     public int level;
-    public int instanceId;
+    public int instanceId; 
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
+        if (parameters != null)
+        {
+            if (parameters.Count >= 2)
+            {
+                packageDataId = int.Parse(parameters[0].value);
+                level = int.Parse(parameters[1].value);
+            }
+            if (parameters.Count >= 3)
+            {
+                instanceId = int.Parse(parameters[2].value);
+            }
+            if (source != 0 && source != int.MinValue)
+                instanceId = source;
+            if (target != 0 && target != int.MinValue)
+                packageDataId = target;
+            if (value != 0 && value != int.MinValue)
+                level = value;
+        }
+        else
+        {
+            instanceId = source;
+            packageDataId = target;
+
+        }
         
-        if(parameters.Count >= 2)
-        {
-            packageDataId =int.Parse(parameters[0].value);
-            level = int.Parse(parameters[1].value);
-        }
-        if (parameters.Count >= 3)
-        {
-            instanceId = int.Parse(parameters[2].value);
-        }
         this.setValue = setValue;
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this,true);

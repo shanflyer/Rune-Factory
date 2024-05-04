@@ -23,7 +23,9 @@ public class MapItemData : ScriptableObject, IGameData
     public int2[] playerTriggerCells;
     public int playerTriggerEvent;
     public List<int> operateIds = new List<int>();
-   
+
+    public GameActionData creatAction;
+
     public int defaultExit, defaultEnter;
     public bool displayTips = true;
     public string playerOperateInfo;
