@@ -2251,7 +2251,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000978879}
+  m_AnchoredPosition: {x: 0, y: -0.00095180847}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1910156615222381539
@@ -2923,6 +2923,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab443b14eb8559442a85266f2b53b5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
+  show: 0
   shopName0: {fileID: 8515927143404657740}
   shopName1: {fileID: 824693977814929271}
   toggle: {fileID: 8585018379996878248}
@@ -2992,7 +2994,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: b19ba42858d0bcc41b28bb7df6b6589e, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -3530,7 +3532,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 326837399044310902}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9999978
+  m_Size: 0.9999976
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -9,12 +9,15 @@ public struct ItemInfo:IReferenceData
     public float itemValue;
     public int otherValue;
     public string ActionName;
+    public bool showClose;
     public SelectAction<ItemInfo> action;
 }
 public class ItemInfoPanel : GamePanel<ItemInfo>
 {
     [SerializeField]
     private TextMeshProUGUI Name, type;
+    [SerializeField]
+    private Transform CloseObj;
     [SerializeField]
     private Button ActionButton,CloseButton;
     [SerializeField]
@@ -65,6 +68,8 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
 
         InfoItemValueBg = FindChildGameObject("InfoItemValueBg");
         InfoItemValue = FindChildGameObject<Image>("InfoItemValue");
+
+        CloseObj = FindChildGameObject("CloseObj");
     }
     public void SetAction(SelectAction<ItemInfo> action, string actionName)
     {
@@ -101,6 +106,8 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
             ActionName.text = v.ActionName;
             ActionButton.transform.localScale = Vector3.one;
         }
+
+        CloseObj.localScale = ItemInfo.showClose ? Vector3.one : Vector3.zero;
     }
     
 }

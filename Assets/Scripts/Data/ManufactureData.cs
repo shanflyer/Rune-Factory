@@ -9,6 +9,7 @@ public class ManufactureData : ScriptableObject, IGameData, IReferenceData
     public int openItem;
     public List<int2> linkFormulas;
     public int defaultProduct;
+    public int2 defaultCostItem;
     public int defaultProduceTime;
     public int characterAnimatorState = -1;
     public float2 cameraOffset;

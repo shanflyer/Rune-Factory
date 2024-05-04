@@ -38,7 +38,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     private List<ItemBoxReference> FormulaItemBoxReferences;
 
     [SerializeField]
-    private ItemBoxReference OutItemBoxReference;
+    private ItemBoxReference OutItemBoxReference,CostItemBoxReference;
 
     [SerializeField]
     private Button ReduceButton, AddButton;
@@ -106,6 +106,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
         title = FindChildGameObject<TextMeshProUGUI>("Title");
 
+        CostItemBoxReference = FindChildGameObject<ItemBoxReference>("CostItem");
         OutItemBoxReference = FindChildGameObject<ItemBoxReference>("OutputItemBoxReference");
         ReduceButton = FindChildGameObject<Button>("ReduceButton");
         AddButton = FindChildGameObject<Button>("AddButton");
@@ -131,7 +132,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         itemProperty = FindChildGameObject<TextMeshProUGUI>("Property");
         moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
         ItemIcon = FindChildGameObject<Image>("ItemIcon");
-        InformationObj = FindChildGameObject("ItemInformation");
+        InformationObj = FindChildGameObject("InformationObj");
         selectActionButtonName = FindChildGameObject<TextMeshProUGUI>("ActionName");
 
         timeSlider = FindChildGameObject<Image>("TimeSlider");
@@ -219,7 +220,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     private FormulaData matchFormula;
     private int formulaCost = 0;
     private Item outItem;
-
+    private Item costItem;
     private int produceCount
     {
         get
@@ -237,7 +238,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private int _produceCount = 1;
 
-    private void CreatItem()
+    private async void CreatItem()
     {
         if (manufature.waitTime > 0)
         {
@@ -258,14 +259,6 @@ public class ManufacturePanel : GamePanel<Manufature>
                 formulaTypeParent.transform.localScale = Vector3.one;
                 creatButtonName.text = "制作";
                 InformationObj.transform.localScale = Vector3.zero;
-
-                SetItemAnimation setItemAnimation = new SetItemAnimation
-                {
-                    id = manufature.instanceId,
-                    keyX = 0,
-                };
-                GameActionManager.instance.QueueAction(setItemAnimation);
-
             }, null);
             return;
         }
@@ -276,132 +269,145 @@ public class ManufacturePanel : GamePanel<Manufature>
             return;
         }
 
-        int totalCost = formulaCost * produceCount;
-        int nowPower = CharacterManager.instance.player.CharacterProperty.Power;
-        if (totalCost >= nowPower)
+        bool costItemEnough = true;
+        int nowCostItemCount = 0;
+        if (costItem.dataId != 0)
+        {
+            nowCostItemCount = PackageManager.instance.GetPlayerItemCount(costItem.dataId);
+            costItemEnough = nowCostItemCount >= costItem.count;
+        }
+
+        if (!costItemEnough)
         {
             AudioController.instance.PlayAudio(SE.Return);
-            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("RP消耗过大"),
-              $"{LanguageManage.SwitchStr("需消耗RP:")}{totalCost},{LanguageManage.SwitchStr("超过拥有RP;")}"
-                + LanguageManage.SwitchStr("无法制作！"));
+            ItemData costItemData =await GameDataManager.instance.GetAsyncData<ItemData>(costItem.dataId);
+            GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("消耗物品不足"),
+              $"{LanguageManage.SwitchStr("需消耗:")}{costItemData.name}*{costItem.count},{LanguageManage.SwitchStr("当前拥有;")}{nowCostItemCount}/n{LanguageManage.SwitchStr("无法制作！")}");
         }
         else
         {
-            string noticeStr = "";
-            AudioController.instance.PlayAudio(SE.Return);
-            if (outItem.dataId == GameCommon.defaultProduct)
+            int totalCost = formulaCost * produceCount;
+            int nowPower = CharacterManager.instance.player.CharacterProperty.Power;
+            if (totalCost >= nowPower)
             {
-                noticeStr = LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");
-            }
-            else if (selectFormulaData != null && outItem.dataId == selectFormulaData.Product)
-            {
-                noticeStr = LanguageManage.SwitchStr("是否确定按配方开始制作？");
+                AudioController.instance.PlayAudio(SE.Return);
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("RP消耗过大"),
+                  $"{LanguageManage.SwitchStr("需消耗RP:")}{totalCost},{LanguageManage.SwitchStr("超过拥有RP;")}"
+                    + LanguageManage.SwitchStr("无法制作！"));
             }
             else
             {
-                noticeStr = LanguageManage.SwitchStr("是否确定开始制作？");
-            }
-
-            async void CreatAction()
-            {
-                manufature.startTime = GameTimeManager.instance.totalMinute;
-                int productId = outItem.dataId;
-                if (productId == GameCommon.defaultProduct)
+                string noticeStr = "";
+                AudioController.instance.PlayAudio(SE.Return);
+                if (outItem.dataId == GameCommon.defaultProduct)
                 {
-                    if (matchFormula != null)
-                    {
-                        manufature.matchFormula = matchFormula.id;
-                        productId = matchFormula.Product;
-                        if (manufature.formulas.TryGetValue(matchFormula.id, out var formula))
-                        {
-                            if (!formula.isOpen)
-                            {
-                                manufature.product.z = GameCommon.defaultProduct;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        manufature.product.z = GameCommon.defaultProduct;
-                        productId = manufactureData.defaultProduct;
-                    }
-                    manufature.waitTime = GameTimeManager.instance.totalMinute + manufactureData.defaultProduceTime;
+                    noticeStr = LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");
+                }
+                else if (selectFormulaData != null && outItem.dataId == selectFormulaData.Product)
+                {
+                    noticeStr = LanguageManage.SwitchStr("是否确定按配方开始制作？");
                 }
                 else
                 {
-                    manufature.waitTime = GameTimeManager.instance.totalMinute + matchFormula.produceTime;
+                    noticeStr = LanguageManage.SwitchStr("是否确定开始制作？");
                 }
-                if (matchFormula != null)
-                {
-                    manufature.matchFormula = matchFormula.id;
-                }
-                manufature.product.x = productId;
-                manufature.product.y = produceCount;
 
-                ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
+                async void CreatAction()
                 {
-                    changeValue = -totalCost,
-                    characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                    propertyType = CharacterPropertyType.体力
-                };
-                GameActionManager.instance.QueueAction(changeCharacterProperty, true);
-                for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
-                {
-                    Item item = FormulaItemBoxReferences[i].Item;
-                    if (item.instanceId != 0)
+                    manufature.startTime = GameTimeManager.instance.totalMinute;
+                    int productId = outItem.dataId;
+                    if (productId == GameCommon.defaultProduct)
                     {
-                        PackageManager.instance.RemovePlayerPackageItem(item.dataId, produceCount);
-                        manufature.materials[i] = new int2(item.dataId, item.instanceId);
+                        if (matchFormula != null)
+                        {
+                            manufature.matchFormula = matchFormula.id;
+                            productId = matchFormula.Product;
+                            if (manufature.formulas.TryGetValue(matchFormula.id, out var formula))
+                            {
+                                if (!formula.isOpen)
+                                {
+                                    manufature.product.z = GameCommon.defaultProduct;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            manufature.product.z = GameCommon.defaultProduct;
+                            productId = manufactureData.defaultProduct;
+                        }
+                        manufature.waitTime = GameTimeManager.instance.totalMinute + manufactureData.defaultProduceTime;
                     }
+                    else
+                    {
+                        manufature.waitTime = GameTimeManager.instance.totalMinute + matchFormula.produceTime;
+                    }
+                    if (matchFormula != null)
+                    {
+                        manufature.matchFormula = matchFormula.id;
+                    }
+                    manufature.product.x = productId;
+                    manufature.product.y = produceCount;
+
+                    ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
+                    {
+                        changeValue = -totalCost,
+                        characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                        propertyType = CharacterPropertyType.体力
+                    };
+                    GameActionManager.instance.QueueAction(changeCharacterProperty, true);
+                    for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
+                    {
+                        Item item = FormulaItemBoxReferences[i].Item;
+                        if (item.instanceId != 0)
+                        {
+                            PackageManager.instance.RemovePlayerPackageItem(item.dataId, produceCount);
+                            manufature.materials[i] = new int2(item.dataId, item.instanceId);
+                        }
+                    }
+
+                    SetManufature setManufature = new SetManufature
+                    {
+                        manufature = manufature
+                    };
+                    GameActionManager.instance.QueueAction(setManufature, true);
+
+                    SetCharacterAnimator setCharacterAnimatorValue = new SetCharacterAnimator
+                    {
+                        parameterType = ParameterType.FLOAT,
+                        parameter = "CreatState",
+                        floatValue = manufactureData.characterAnimatorState,
+                        characterId = CharacterManager.instance.controllerCharacter.instanceId
+                    };
+                    GameActionManager.instance.QueueAction(setCharacterAnimatorValue);
+                    SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+                    {
+                        parameterType = ParameterType.TRIGGER,
+                        parameter = "Creat",
+                        characterId = CharacterManager.instance.controllerCharacter.instanceId
+                    };
+                    GameActionManager.instance.QueueAction(setCharacterAnimator);
+
+                    /*
+                    bool allSet = await PackageManager.instance.SetPlayerPackageItem(productId, produceCount);
+                    if (!allSet)
+                    {
+                        InformationController.instance.AddInformation(LanguageManage.SwitchStr("空间不足，部分物体没有获得"));
+                    }*/
+                    InitDisplay();
+                    PackageManager.instance.RemovePlayerPackageItem(costItem.dataId, costItem.count);
+                    
+                    AutoSelect.interactable = false;
+                    selectActionButton.transform.localScale = Vector3.zero;
+                    AddButton.interactable = false;
+                    ReduceButton.interactable = false;
+                    FormulaDropdown.interactable = false;
+                    formulaTypeParent.transform.localScale = Vector3.zero;
+                    creatButtonName.text = "中止";
                 }
-
-                SetManufature setManufature = new SetManufature
-                {
-                    manufature = manufature
-                };
-                GameActionManager.instance.QueueAction(setManufature, true);
-
-                SetCharacterAnimator setCharacterAnimatorValue = new SetCharacterAnimator
-                {
-                    parameterType = ParameterType.FLOAT,
-                    parameter = "CreatState",
-                    floatValue = manufactureData.characterAnimatorState,
-                    characterId = CharacterManager.instance.controllerCharacter.instanceId
-                };
-                GameActionManager.instance.QueueAction(setCharacterAnimatorValue);
-                SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
-                {
-                    parameterType = ParameterType.TRIGGER,
-                    parameter = "Creat",
-                    characterId = CharacterManager.instance.controllerCharacter.instanceId
-                };
-                GameActionManager.instance.QueueAction(setCharacterAnimator);
-
-                SetItemAnimation setItemAnimation = new SetItemAnimation
-                {
-                    id = manufature.instanceId,
-                    keyX = 1,
-                };
-                GameActionManager.instance.QueueAction(setItemAnimation);
-
-                /*
-                bool allSet = await PackageManager.instance.SetPlayerPackageItem(productId, produceCount);
-                if (!allSet)
-                {
-                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("空间不足，部分物体没有获得"));
-                }*/
-                InitDisplay();
-
-                AutoSelect.interactable = false;
-                selectActionButton.transform.localScale = Vector3.zero;
-                AddButton.interactable = false;
-                ReduceButton.interactable = false;
-                FormulaDropdown.interactable = false;
-                formulaTypeParent.transform.localScale = Vector3.zero;
-                creatButtonName.text = "中止";
+                GameManager.instance.ShowTwoSelectAction("", noticeStr, CreatAction, null);
             }
-            GameManager.instance.ShowTwoSelectAction("", noticeStr, CreatAction, null);
-        }
+        } 
+        
     }
 
     private void RefreshFormulaSelect()
@@ -508,7 +514,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 {
                     instanceId = formulaCount >= matchFormula.Stuffs.Count ? 1 : -1;
                     product = matchFormula.Product;
-                    formulaCost = matchFormula.PowerCost;
+                    formulaCost = matchFormula.PowerCost; 
                 }
 
                 outItem = new Item
@@ -564,11 +570,15 @@ public class ManufacturePanel : GamePanel<Manufature>
                 dataId = product,
                 count = produceCount
             };
+
+            if (formulaCount == 0)
+            { 
+                outItem.dataId = 0;
+            }
         }
-        if (formulaCount == 0)
-        {
-            outItem.dataId = 0;
-        }
+
+        //outItem.locked = instanceId < 0;
+       
         if (manufature.waitTime <= GameTimeManager.instance.totalMinute && manufature.product.x != 0)
         {
             outItem.dataId = manufature.product.x;
@@ -593,6 +603,33 @@ public class ManufacturePanel : GamePanel<Manufature>
         else
         {
             CreatButton.interactable = formulaCount > 0;
+        }
+
+        if (manufactureData.defaultCostItem.x != 0)
+        {
+            costItem = new Item
+            {
+                dataId = manufactureData.defaultCostItem.x,
+                count = manufactureData.defaultCostItem.y * produceCount,
+                instanceId = 1
+            };
+            CostItemBoxReference.transform.localScale = Vector3.one;
+            CostItemBoxReference.InitData(costItem, null, FormulaItemBoxGroup);
+            CostItemBoxReference.SelectUIAction= DisplayItem;
+
+            int nowCount = PackageManager.instance.GetPlayerItemCount(costItem.dataId);
+            if (nowCount <= costItem.count)
+            {
+                CostItemBoxReference.SetCountColor(Color.red);
+            }
+            else
+            {
+                CostItemBoxReference.SetCountColor(Color.green);
+            }
+        }
+        else
+        {
+            CostItemBoxReference.transform.localScale = Vector3.zero;
         }
     }
 
@@ -748,7 +785,8 @@ public class ManufacturePanel : GamePanel<Manufature>
                 instanceId = 1
             };
             OutItemBoxReference.InitData(item, null, FormulaItemBoxGroup);
-            OutItemBoxReference.SelectUIAction = DisplayItem;
+            OutItemBoxReference.SelectUIAction = DisplayItem; 
+            
         }
         //FormulaDropdown.SetValueWithoutNotify()
         //FormulaDropdown.value = 0;
@@ -891,7 +929,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 fixedPos = pos,
             };
             GameActionManager.instance.QueueAction(setFixedCamera);
-        }
+        } 
     }
 
     public override void Close()
@@ -965,7 +1003,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             SelectItemBoxRefrence = itemBoxReference;
             var item = itemBoxReference.Item;
-            if (item.instanceId == 0)
+            if (item.dataId == 0)
             {
                 InformationObj.transform.localScale = Vector3.zero;
             }
@@ -1013,6 +1051,9 @@ public class ManufacturePanel : GamePanel<Manufature>
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(GetOutProduct);
                     }
+                }else if (SelectItemBoxRefrence == CostItemBoxReference)
+                {
+                    selectActionButton.transform.localScale = Vector3.zero;
                 }
                 else
                 {

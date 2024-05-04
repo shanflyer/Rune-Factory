@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.24, y: 83.8}
-  m_SizeDelta: {x: 93.52, y: 19.89}
+  m_AnchoredPosition: {x: 3.24, y: 82.04}
+  m_SizeDelta: {x: 93.52, y: 23.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5436347050323791685
 CanvasRenderer:
@@ -67,7 +67,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: ec5f9e2fed9eeff49b645652811d93a3, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &-6492969349745879361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,6 +390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 2259870971581439234}
+  show: 0
   infoText: {fileID: 9093095243308573519}
 --- !u!95 &1618368587957445608
 Animator:

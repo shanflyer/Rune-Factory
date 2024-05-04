@@ -1371,7 +1371,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: b19ba42858d0bcc41b28bb7df6b6589e, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -6957,7 +6957,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9136526089551258688
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19278,6 +19278,7 @@ MonoBehaviour:
   - {fileID: 4946471973706944968}
   - {fileID: 3442743428651005351}
   OutItemBoxReference: {fileID: 213678081043699346}
+  CostItemBoxReference: {fileID: 1675179539945743076}
   ReduceButton: {fileID: 5390577766229547670}
   AddButton: {fileID: 2224232992068060691}
   ItemCountValue: {fileID: 5482979520304696919}
@@ -19286,7 +19287,7 @@ MonoBehaviour:
   AutoSelect: {fileID: 6215337277442221000}
   RPCost: {fileID: 2353171502072119522}
   ItemIcon: {fileID: 3733701634847210286}
-  ItemType: {fileID: 0}
+  ItemType: {fileID: 4465465559899837821}
   selectItemName: {fileID: 892959586867324953}
   moneyValue: {fileID: 7892539360802706478}
   itemInfo: {fileID: 8389402946237127943}
@@ -24357,7 +24358,7 @@ GameObject:
   - component: {fileID: 359226728326668344}
   - component: {fileID: 4465465559899837821}
   m_Layer: 5
-  m_Name: Type
+  m_Name: ItemType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

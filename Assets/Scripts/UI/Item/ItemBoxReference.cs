@@ -80,6 +80,10 @@ public class ItemBoxReference : UIObjReference<Item>
         toggle.isOn = true;
         toggle.SetIsOnWithoutNotify(true);
     }
+    public void SetCountColor(Color color)
+    {
+        count.color = color;
+    }
 
     public override async Task InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
     {

@@ -1472,7 +1472,6 @@ GameObject:
   - component: {fileID: 4410578046819821642}
   - component: {fileID: 8758847924104553850}
   - component: {fileID: 4928360723443231625}
-  - component: {fileID: 8153012181763041930}
   m_Layer: 5
   m_Name: Checkmark
   m_TagString: Untagged
@@ -1527,7 +1526,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e2667fbd5feb75e41a07a3adedeee013, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a8a99bb82eb4b644ea316f8a4cceb33c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1538,21 +1537,6 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   m_NullClear: 0
---- !u!114 &8153012181763041930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2394740330837968257}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.416}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1 &2537778264309026721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1564,7 +1548,6 @@ GameObject:
   - component: {fileID: 613595715351652071}
   - component: {fileID: 5037428797246398486}
   - component: {fileID: 3338736030938436104}
-  - component: {fileID: 1395355553501949782}
   m_Layer: 5
   m_Name: Checkmark
   m_TagString: Untagged
@@ -1619,7 +1602,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e2667fbd5feb75e41a07a3adedeee013, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a8a99bb82eb4b644ea316f8a4cceb33c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1630,21 +1613,6 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   m_NullClear: 0
---- !u!114 &1395355553501949782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2537778264309026721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.191}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!1 &2687377644536796182
 GameObject:
   m_ObjectHideFlags: 0
@@ -2822,6 +2790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 2623888639814622429}
+  show: 0
   SeasonDropdown: {fileID: 2779646543036295108}
   DateDropdown: {fileID: 1955246512487782321}
   NameInputField: {fileID: 168445848146053163}
@@ -3531,8 +3500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2843676928498399534, guid: 0fc3a444278f8614580a19f4ff8a1e7d,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: ec5f9e2fed9eeff49b645652811d93a3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1

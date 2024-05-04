@@ -352,7 +352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0.000015258789}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7051525134978112726
@@ -2937,6 +2937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 4895820499280110397}
+  show: 0
   packageSelect: {fileID: 3696395355514534845}
   packageSelectParent: {fileID: 7331745616320564566}
   packageSelectGroup: {fileID: 797948457583704045}
@@ -3162,7 +3163,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: b19ba42858d0bcc41b28bb7df6b6589e, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -4503,6 +4504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   toggle: {fileID: 1843479165530381557}
   icon: {fileID: 4603686474480022130}
   ItemValueBg: {fileID: 4833177420827301521}
@@ -4608,6 +4610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   background: {fileID: 8303684429070886567}
   check: {fileID: 3163538562901106899}
   toggle: {fileID: 5585418439488017993}
