@@ -815,6 +815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   P0: {fileID: 2845557670394570620}
   P1: {fileID: 3748424437896350972}
   P2: {fileID: 168119393870088158}
@@ -1556,6 +1557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   P0: {fileID: 8126107101409746708}
   P1: {fileID: 3146253286269980064}
   P2: {fileID: 4728898182780367240}
@@ -3250,6 +3252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   toggle: {fileID: 498122943356031769}
   icon: {fileID: 7473916039713094236}
 --- !u!1 &5122813955361256238
@@ -3419,6 +3422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1492491678310906818}
+  show: 0
   pastureInfos:
   - {fileID: 588459594188222610}
   - {fileID: 2482552311793918382}
@@ -4171,6 +4175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   P0: {fileID: 6319880340653734649}
   P1: {fileID: 6220109929683918783}
   P2: {fileID: 2400970634683247639}
@@ -4668,6 +4673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   P0: {fileID: 6839383138616912126}
   P1: {fileID: 2739064008289533980}
   P2: {fileID: 2843525453056828861}
@@ -4891,6 +4897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   P0: {fileID: 5250666969150318857}
   P1: {fileID: 2718706561699058665}
   P2: {fileID: 5288521976817196058}
@@ -5199,8 +5206,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u6211\u7684\u7267\u573A"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7fe2d9d77c3cbee478ff2a4e673f2766, type: 2}
-  m_sharedMaterial: {fileID: 5700984821837086658, guid: 7fe2d9d77c3cbee478ff2a4e673f2766,
+  m_fontAsset: {fileID: 11400000, guid: be5f2ca715dc20644930e1204db37478, type: 2}
+  m_sharedMaterial: {fileID: 5700984821837086658, guid: be5f2ca715dc20644930e1204db37478,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -5364,6 +5371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
+  show: 0
   P0: {fileID: 433709859842675082}
   P1: {fileID: 4647367239982657478}
   P2: {fileID: 6429577624613949572}
@@ -5867,7 +5875,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1116994218298125659}
   - component: {fileID: 2934248318020978122}
-  - component: {fileID: 829290811306767943}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -5903,37 +5910,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8287416733564434657}
   m_CullTransparentMesh: 1
---- !u!114 &829290811306767943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8287416733564434657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.44313726, g: 0.23835953, b: 0.18431374, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 53bdf021117247a41b970d83f058ac4c, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
-  m_NullClear: 0
 --- !u!1 &8395704241469250897
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,8 @@ public class ObjPackageAnimationData : ScriptableObject, IGameData
 {
     public int id;
     public int packageId;
-    public int mapItemId; 
+    public int mapItemId;
+    [Header("道具id,数量上限,动画key.x,动画key.y")]
     public List<int4> itemAnimationDataList=new List<int4>();
     public string GetKey()
     {

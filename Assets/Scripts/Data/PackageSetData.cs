@@ -26,7 +26,7 @@ public class PackageSetData : ScriptableObject, IGameData, IReferenceData
     public bool singleCase;
     public int objPackageAnimationDataId;
     public SpriteResourceRenference icon;
-    public List<int> limitItems=new List<int> ();
+    public List<int> limitItems=new List<int> (); 
     public List<int2> initItems = new List<int2>();
 
     public string GetKey()
