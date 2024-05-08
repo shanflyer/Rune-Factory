@@ -2789,36 +2789,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">table 02.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.914286</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,9,23,17</rect>
-                <key>scale9Paddings</key>
-                <rect>12,9,23,17</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">table 02_normal.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>12,9,23,17</rect>
-                <key>scale9Paddings</key>
-                <rect>12,9,23,17</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">yant.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -2893,6 +2863,22 @@
                 <rect>8,24,16,48</rect>
                 <key>scale9Paddings</key>
                 <rect>8,24,16,48</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">冷餐台.png</key>
+            <key type="filename">冷餐台_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>17,15,33,29</rect>
+                <key>scale9Paddings</key>
+                <rect>17,15,33,29</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -4489,6 +4475,22 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">皮革鞣制机.png</key>
+            <key type="filename">皮革鞣制机_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>22,14,43,28</rect>
+                <key>scale9Paddings</key>
+                <rect>22,14,43,28</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">盾.png</key>
             <key type="filename">盾_normal.png</key>
             <struct type="IndividualSpriteSettings">
@@ -4651,6 +4653,38 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">纺线机.png</key>
+            <key type="filename">纺线机_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>19,22,37,44</rect>
+                <key>scale9Paddings</key>
+                <rect>19,22,37,44</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">纺织机.png</key>
+            <key type="filename">纺织机_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>19,16,39,33</rect>
+                <key>scale9Paddings</key>
+                <rect>19,16,39,33</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">纺织机_01.png</key>
             <key type="filename">纺织机_02.png</key>
             <key type="filename">纺织机_03.png</key>
@@ -4736,6 +4770,21 @@
                 <rect>8,16,16,32</rect>
                 <key>scale9Paddings</key>
                 <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">缝纫机.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>18,21,35,43</rect>
+                <key>scale9Paddings</key>
+                <rect>18,21,35,43</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
