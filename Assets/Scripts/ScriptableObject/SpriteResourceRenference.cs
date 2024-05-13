@@ -19,6 +19,6 @@ public class SpriteResourceRenference : ScriptableObject
     {
         spriteRenderer.sprite = sprite;
         spriteRenderer.drawMode = SpriteDrawMode.Sliced;
-        spriteRenderer.size = sprite.rect.size * scaleValue;
+        spriteRenderer.size = sprite.rect.size*0.01f * scaleValue;
     }
 }

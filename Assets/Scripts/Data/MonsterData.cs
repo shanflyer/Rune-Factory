@@ -13,7 +13,7 @@ public class MonsterData : ScriptableObject, IGameData
     public string monsterDescription;
     public string SpriteName; 
     public SpriteResourceRenference monsterSprite;
-   
+    public float scale;
     public List<int> skills = new List<int>();
     public int dropId;
     public int exp;
@@ -22,27 +22,38 @@ public class MonsterData : ScriptableObject, IGameData
     static Dictionary<string, SpriteResourceRenference> monsterSpriteResourceRenferenceDic = new Dictionary<string, SpriteResourceRenference>();
     public void SetReferenceData()
     {
-        if (monsterSpriteResourceRenferenceDic.Count == 0)
+        try
         {
-            monsterSpriteResourceRenferenceDic.Clear();
-            var sources = AssetDatabase.LoadAllAssetsAtPath("Assets/Texture/Monster/Monster-0.png");
-            foreach (var source in sources)
+            AssetDatabase.StartAssetEditing();
+            if (monsterSpriteResourceRenferenceDic.Count == 0)
             {
-                if (source is Sprite sprite)
+                monsterSpriteResourceRenferenceDic.Clear();
+                var sources = AssetDatabase.LoadAllAssetsAtPath("Assets/Texture/Monster/Monster-0.png");
+                foreach (var source in sources)
                 {
-                    SpriteResourceRenference spriteResourceRenference = new SpriteResourceRenference
+                    if (source is Sprite sprite)
                     {
-                        sprite = sprite,
-                    };
-                    AssetDatabase.CreateAsset(spriteResourceRenference, $"Assets/Resources/MonsterReference/{sprite.name}.asset");
-                    monsterSpriteResourceRenferenceDic[sprite.name] = spriteResourceRenference; 
+                        SpriteResourceRenference spriteResourceRenference = new SpriteResourceRenference
+                        {
+                            sprite = sprite,
+
+                        };
+                        AssetDatabase.CreateAsset(spriteResourceRenference, $"Assets/Resources/MonsterReference/{sprite.name}.asset");
+                        monsterSpriteResourceRenferenceDic[sprite.name] = spriteResourceRenference;
+                    }
                 }
             }
+            if (monsterSpriteResourceRenferenceDic.TryGetValue(SpriteName, out monsterSprite))
+            {
+                monsterSprite.scaleValue = scale;
+                EditorUtility.SetDirty(monsterSprite);
+            }
         }
-        if(monsterSpriteResourceRenferenceDic.TryGetValue(SpriteName,out monsterSprite))
+        finally
         {
-
-        } 
+            AssetDatabase.StopAssetEditing();
+        }
+       
     }
 #endif
     public string GetKey()

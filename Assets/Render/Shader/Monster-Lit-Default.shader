@@ -6,6 +6,7 @@ Shader "MyGame/Monster-Lit-Default"
         _MaskTex("Mask", 2D) = "white" {}
         _MyMaskTex("MyMask", 2D) = "white" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
+        _LightBlend("LightBlend",float)=1
 
         _NoiseValue("NoiseValue",int)=500
         _NoiseAlpha("NoiseAlpha",Range(0,1))=1
@@ -35,6 +36,7 @@ Shader "MyGame/Monster-Lit-Default"
                 int _NoiseValue;
                 half _NoiseAlpha;
                 half4 _ForceColor; 
+                float _LightBlend;
 
                 half4 _MainTex_ST; 
                 half4 _NormalMap_ST;  // Is this the right way to do this?
@@ -137,6 +139,7 @@ Shader "MyGame/Monster-Lit-Default"
                 InitializeInputData(i.uv, i.lightingUV, inputData);
 
                 half4 result=CombinedShapeLightShared(surfaceData, inputData);
+                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*main.xyz; 
                 float noise=1;
                 Unity_SimpleNoise_float(i.lightingUV,_NoiseValue,noise);
                 result.a*=step(noise,_NoiseAlpha);
