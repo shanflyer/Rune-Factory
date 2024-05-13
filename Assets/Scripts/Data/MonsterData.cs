@@ -12,28 +12,34 @@ public class MonsterData : ScriptableObject, IGameData
     public AttributeType attributeType;
     public string monsterDescription;
     public string SpriteName; 
-    public Sprite monsterSprite;
+    public SpriteResourceRenference monsterSprite;
    
     public List<int> skills = new List<int>();
     public int dropId;
     public int exp;
     public int behaviorId;
-#if UNITY_EDITOR
-    static Dictionary<string, Sprite> monsterSpriteDic = new Dictionary<string, Sprite>(); 
+#if UNITY_EDITOR 
+    static Dictionary<string, SpriteResourceRenference> monsterSpriteResourceRenferenceDic = new Dictionary<string, SpriteResourceRenference>();
     public void SetReferenceData()
     {
-        if (monsterSpriteDic.Count == 0)
+        if (monsterSpriteResourceRenferenceDic.Count == 0)
         {
+            monsterSpriteResourceRenferenceDic.Clear();
             var sources = AssetDatabase.LoadAllAssetsAtPath("Assets/Texture/Monster/Monster-0.png");
             foreach (var source in sources)
             {
                 if (source is Sprite sprite)
                 {
-                    monsterSpriteDic[sprite.name] = sprite;
+                    SpriteResourceRenference spriteResourceRenference = new SpriteResourceRenference
+                    {
+                        sprite = sprite,
+                    };
+                    AssetDatabase.CreateAsset(spriteResourceRenference, $"Assets/Resources/MonsterReference/{sprite.name}.asset");
+                    monsterSpriteResourceRenferenceDic[sprite.name] = spriteResourceRenference; 
                 }
             }
         }
-        if(monsterSpriteDic.TryGetValue(SpriteName,out monsterSprite))
+        if(monsterSpriteResourceRenferenceDic.TryGetValue(SpriteName,out monsterSprite))
         {
 
         } 

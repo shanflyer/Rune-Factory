@@ -263,8 +263,8 @@ public class GameRandom:Singleton<GameRandom>
         {
             GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random);
 
-            gameRandomJobData.Run();
-            //gameRandomJobData.Schedule().Complete();
+           // gameRandomJobData.Run();
+             gameRandomJobData.Schedule().Complete();
 
             for (int i = 0; i < gameRandomJobData.randomResults.Length; i++)
             {

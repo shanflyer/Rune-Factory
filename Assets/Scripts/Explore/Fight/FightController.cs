@@ -20,9 +20,9 @@ public struct FightPlayerRuntime
         material.SetFloat("_LightBlend", 0.5f);
     }
 
-    public void InitMonsterSprite(Sprite sprite)
+    public void InitMonsterSprite(SpriteResourceRenference spriteResourceRenference)
     {
-        renderer.sprite = sprite;
+        spriteResourceRenference.SetSprite(renderer); 
     }
 
     public void Recycle()
