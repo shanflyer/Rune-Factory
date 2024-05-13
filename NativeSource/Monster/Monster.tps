@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.1.0</string>
+        <string>7.3.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -98,9 +98,9 @@
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
-            <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
+            <enum type="AlgorithmSettings::SizeConstraints">WordAligned</enum>
             <key>forceSquared</key>
-            <false/>
+            <true/>
             <key>maxRects</key>
             <struct type="AlgorithmMaxRectsSettings">
                 <key>heuristic</key>
@@ -163,7 +163,7 @@
             <key>trimMode</key>
             <enum type="SpriteSettings::TrimMode">Polygon</enum>
             <key>tracerTolerance</key>
-            <int>200</int>
+            <int>10</int>
             <key>heuristicMask</key>
             <false/>
             <key>defaultPivotPoint</key>
@@ -173,76 +173,71 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">Monsters_01$Normal.png</key>
-            <key type="filename">Monsters_02$Normal.png</key>
-            <key type="filename">Monsters_03$Normal.png</key>
-            <key type="filename">Monsters_04$Normal.png</key>
-            <key type="filename">Monsters_05$Normal.png</key>
-            <key type="filename">Monsters_06$Normal.png</key>
-            <key type="filename">Monsters_07$Normal.png</key>
-            <key type="filename">Monsters_08$Normal.png</key>
-            <key type="filename">Monsters_09$Normal.png</key>
-            <key type="filename">Monsters_10$Normal.png</key>
-            <key type="filename">Monsters_101$Normal.png</key>
-            <key type="filename">Monsters_102$Normal.png</key>
-            <key type="filename">Monsters_103$Normal.png</key>
-            <key type="filename">Monsters_104$Normal.png</key>
-            <key type="filename">Monsters_105$Normal.png</key>
-            <key type="filename">Monsters_106$Normal.png</key>
-            <key type="filename">Monsters_107$Normal.png</key>
-            <key type="filename">Monsters_108$Normal.png</key>
-            <key type="filename">Monsters_109$Normal.png</key>
-            <key type="filename">Monsters_110$Normal.png</key>
-            <key type="filename">Monsters_151$Normal.png</key>
-            <key type="filename">Monsters_152$Normal.png</key>
-            <key type="filename">Monsters_153$Normal.png</key>
-            <key type="filename">Monsters_154$Normal.png</key>
-            <key type="filename">Monsters_155$Normal.png</key>
-            <key type="filename">Monsters_156$Normal.png</key>
-            <key type="filename">Monsters_157$Normal.png</key>
-            <key type="filename">Monsters_158$Normal.png</key>
-            <key type="filename">Monsters_159$Normal.png</key>
-            <key type="filename">Monsters_160$Normal.png</key>
-            <key type="filename">Monsters_201$Normal.png</key>
-            <key type="filename">Monsters_202$Normal.png</key>
-            <key type="filename">Monsters_203$Normal.png</key>
-            <key type="filename">Monsters_204$Normal.png</key>
-            <key type="filename">Monsters_205$Normal.png</key>
-            <key type="filename">Monsters_206$Normal.png</key>
-            <key type="filename">Monsters_207$Normal.png</key>
-            <key type="filename">Monsters_208$Normal.png</key>
-            <key type="filename">Monsters_209$Normal.png</key>
-            <key type="filename">Monsters_210$Normal.png</key>
-            <key type="filename">Monsters_251$Normal.png</key>
-            <key type="filename">Monsters_252$Normal.png</key>
-            <key type="filename">Monsters_253$Normal.png</key>
-            <key type="filename">Monsters_254$Normal.png</key>
-            <key type="filename">Monsters_255$Normal.png</key>
-            <key type="filename">Monsters_256$Normal.png</key>
-            <key type="filename">Monsters_257$Normal.png</key>
-            <key type="filename">Monsters_258$Normal.png</key>
-            <key type="filename">Monsters_259$Normal.png</key>
-            <key type="filename">Monsters_260$Normal.png</key>
-            <key type="filename">Monsters_301$Normal.png</key>
-            <key type="filename">Monsters_302$Normal.png</key>
-            <key type="filename">Monsters_303$Normal.png</key>
-            <key type="filename">Monsters_304$Normal.png</key>
-            <key type="filename">Monsters_305$Normal.png</key>
-            <key type="filename">Monsters_306$Normal.png</key>
-            <key type="filename">Monsters_307$Normal.png</key>
-            <key type="filename">Monsters_308$Normal.png</key>
-            <key type="filename">Monsters_309$Normal.png</key>
-            <key type="filename">Monsters_310$Normal.png</key>
-            <key type="filename">Monsters_51$Normal.png</key>
-            <key type="filename">Monsters_52$Normal.png</key>
-            <key type="filename">Monsters_53$Normal.png</key>
-            <key type="filename">Monsters_54$Normal.png</key>
-            <key type="filename">Monsters_55$Normal.png</key>
-            <key type="filename">Monsters_56$Normal.png</key>
-            <key type="filename">Monsters_57$Normal.png</key>
-            <key type="filename">Monsters_58$Normal.png</key>
-            <key type="filename">Monsters_59$Normal.png</key>
-            <key type="filename">Monsters_60$Normal.png</key>
+            <key type="filename">企鹅$Normal.png</key>
+            <key type="filename">冰恶魔$Normal.png</key>
+            <key type="filename">冰牛怪$Normal.png</key>
+            <key type="filename">冰霜史莱姆$Normal.png</key>
+            <key type="filename">刺猬怪$Normal.png</key>
+            <key type="filename">史莱克$Normal.png</key>
+            <key type="filename">史莱姆$Normal.png</key>
+            <key type="filename">哥布林$Normal.png</key>
+            <key type="filename">土龙$Normal.png</key>
+            <key type="filename">地下鱼人$Normal.png</key>
+            <key type="filename">大象$Normal.png</key>
+            <key type="filename">大黄蜂$Normal.png</key>
+            <key type="filename">寄居蟹$Normal.png</key>
+            <key type="filename">寒冬渡鸦$Normal.png</key>
+            <key type="filename">小偷$Normal.png</key>
+            <key type="filename">小毒菇$Normal.png</key>
+            <key type="filename">尖叫仙人掌$Normal.png</key>
+            <key type="filename">岩石怪$Normal.png</key>
+            <key type="filename">岩蚁$Normal.png</key>
+            <key type="filename">幻影猫$Normal.png</key>
+            <key type="filename">幼虎$Normal.png</key>
+            <key type="filename">幽灵$Normal.png</key>
+            <key type="filename">彩虹鸟$Normal.png</key>
+            <key type="filename">忍者龟$Normal.png</key>
+            <key type="filename">恶魔之眼$Normal.png</key>
+            <key type="filename">扭曲僵尸$Normal.png</key>
+            <key type="filename">抱石溪蛙$Normal.png</key>
+            <key type="filename">木乃伊$Normal.png</key>
+            <key type="filename">松鼠$Normal.png</key>
+            <key type="filename">枯树怪$Normal.png</key>
+            <key type="filename">梦魇$Normal.png</key>
+            <key type="filename">毒蛇$Normal.png</key>
+            <key type="filename">水之精灵$Normal.png</key>
+            <key type="filename">水族$Normal.png</key>
+            <key type="filename">水母$Normal.png</key>
+            <key type="filename">沙兀鹫$Normal.png</key>
+            <key type="filename">沙漠巨蝎$Normal.png</key>
+            <key type="filename">海盗鸟$Normal.png</key>
+            <key type="filename">海胆$Normal.png</key>
+            <key type="filename">火烈鸟$Normal.png</key>
+            <key type="filename">灰狼$Normal.png</key>
+            <key type="filename">牛头恶灵$Normal.png</key>
+            <key type="filename">狼蝠$Normal.png</key>
+            <key type="filename">穴居怪$Normal.png</key>
+            <key type="filename">粘液史莱姆$Normal.png</key>
+            <key type="filename">绿毛龟$Normal.png</key>
+            <key type="filename">翼耳兽$Normal.png</key>
+            <key type="filename">蓝鳄$Normal.png</key>
+            <key type="filename">藤蔓怪$Normal.png</key>
+            <key type="filename">蜘蛛怪$Normal.png</key>
+            <key type="filename">蜜蜂$Normal.png</key>
+            <key type="filename">豺狼哥布林$Normal.png</key>
+            <key type="filename">貘$Normal.png</key>
+            <key type="filename">邪法师$Normal.png</key>
+            <key type="filename">邪眼$Normal.png</key>
+            <key type="filename">部落巫医$Normal.png</key>
+            <key type="filename">长颈兽$Normal.png</key>
+            <key type="filename">雪人$Normal.png</key>
+            <key type="filename">雪兔$Normal.png</key>
+            <key type="filename">雪原熊$Normal.png</key>
+            <key type="filename">食人花$Normal.png</key>
+            <key type="filename">骷髅咒师$Normal.png</key>
+            <key type="filename">魅魔$Normal.png</key>
+            <key type="filename">鹿$Normal.png</key>
+            <key type="filename">黄金蚂蚁$Normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -257,370 +252,84 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">Monsters_01.png</key>
-            <key type="filename">Monsters_02.png</key>
-            <key type="filename">Monsters_03.png</key>
-            <key type="filename">Monsters_04.png</key>
-            <key type="filename">Monsters_05.png</key>
-            <key type="filename">Monsters_06.png</key>
-            <key type="filename">Monsters_07.png</key>
-            <key type="filename">Monsters_08.png</key>
-            <key type="filename">Monsters_09.png</key>
-            <key type="filename">Monsters_10.png</key>
-            <key type="filename">Monsters_101.png</key>
-            <key type="filename">Monsters_102.png</key>
-            <key type="filename">Monsters_103.png</key>
-            <key type="filename">Monsters_104.png</key>
-            <key type="filename">Monsters_105.png</key>
-            <key type="filename">Monsters_106.png</key>
-            <key type="filename">Monsters_107.png</key>
-            <key type="filename">Monsters_108.png</key>
-            <key type="filename">Monsters_109.png</key>
-            <key type="filename">Monsters_110.png</key>
-            <key type="filename">Monsters_151.png</key>
-            <key type="filename">Monsters_152.png</key>
-            <key type="filename">Monsters_153.png</key>
-            <key type="filename">Monsters_154.png</key>
-            <key type="filename">Monsters_155.png</key>
-            <key type="filename">Monsters_156.png</key>
-            <key type="filename">Monsters_157.png</key>
-            <key type="filename">Monsters_158.png</key>
-            <key type="filename">Monsters_159.png</key>
-            <key type="filename">Monsters_160.png</key>
-            <key type="filename">Monsters_201.png</key>
-            <key type="filename">Monsters_202.png</key>
-            <key type="filename">Monsters_203.png</key>
-            <key type="filename">Monsters_204.png</key>
-            <key type="filename">Monsters_205.png</key>
-            <key type="filename">Monsters_206.png</key>
-            <key type="filename">Monsters_207.png</key>
-            <key type="filename">Monsters_208.png</key>
-            <key type="filename">Monsters_209.png</key>
-            <key type="filename">Monsters_210.png</key>
-            <key type="filename">Monsters_251.png</key>
-            <key type="filename">Monsters_252.png</key>
-            <key type="filename">Monsters_253.png</key>
-            <key type="filename">Monsters_254.png</key>
-            <key type="filename">Monsters_255.png</key>
-            <key type="filename">Monsters_256.png</key>
-            <key type="filename">Monsters_257.png</key>
-            <key type="filename">Monsters_258.png</key>
-            <key type="filename">Monsters_259.png</key>
-            <key type="filename">Monsters_260.png</key>
-            <key type="filename">Monsters_301.png</key>
-            <key type="filename">Monsters_302.png</key>
-            <key type="filename">Monsters_303.png</key>
-            <key type="filename">Monsters_304.png</key>
-            <key type="filename">Monsters_305.png</key>
-            <key type="filename">Monsters_306.png</key>
-            <key type="filename">Monsters_307.png</key>
-            <key type="filename">Monsters_308.png</key>
-            <key type="filename">Monsters_309.png</key>
-            <key type="filename">Monsters_310.png</key>
-            <key type="filename">Monsters_51.png</key>
-            <key type="filename">Monsters_52.png</key>
-            <key type="filename">Monsters_53.png</key>
-            <key type="filename">Monsters_54.png</key>
-            <key type="filename">Monsters_55.png</key>
-            <key type="filename">Monsters_56.png</key>
-            <key type="filename">Monsters_57.png</key>
-            <key type="filename">Monsters_58.png</key>
-            <key type="filename">Monsters_59.png</key>
-            <key type="filename">Monsters_60.png</key>
+            <key type="filename">企鹅.png</key>
+            <key type="filename">冰恶魔.png</key>
+            <key type="filename">冰牛怪.png</key>
+            <key type="filename">刺猬怪.png</key>
+            <key type="filename">史莱姆.png</key>
+            <key type="filename">哥布林.png</key>
+            <key type="filename">土龙.png</key>
+            <key type="filename">地下鱼人.png</key>
+            <key type="filename">大象.png</key>
+            <key type="filename">大黄蜂.png</key>
+            <key type="filename">小偷.png</key>
+            <key type="filename">彩虹鸟.png</key>
+            <key type="filename">忍者龟.png</key>
+            <key type="filename">扭曲僵尸.png</key>
+            <key type="filename">抱石溪蛙.png</key>
+            <key type="filename">木乃伊.png</key>
+            <key type="filename">松鼠.png</key>
+            <key type="filename">枯树怪.png</key>
+            <key type="filename">梦魇.png</key>
+            <key type="filename">毒蛇.png</key>
+            <key type="filename">水族.png</key>
+            <key type="filename">沙兀鹫.png</key>
+            <key type="filename">沙漠巨蝎.png</key>
+            <key type="filename">海盗鸟.png</key>
+            <key type="filename">海胆.png</key>
+            <key type="filename">灰狼.png</key>
+            <key type="filename">狼蝠.png</key>
+            <key type="filename">翼耳兽.png</key>
+            <key type="filename">藤蔓怪.png</key>
+            <key type="filename">蜜蜂.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,1</point_f>
+                <point_f>0.5,0.90625</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>64,64,128,128</rect>
+                <rect>16,16,32,32</rect>
                 <key>scale9Paddings</key>
-                <rect>64,64,128,128</rect>
+                <rect>16,16,32,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">Monsters_100$Normal.png</key>
-            <key type="filename">Monsters_11$Normal.png</key>
-            <key type="filename">Monsters_111$Normal.png</key>
-            <key type="filename">Monsters_112$Normal.png</key>
-            <key type="filename">Monsters_113$Normal.png</key>
-            <key type="filename">Monsters_114$Normal.png</key>
-            <key type="filename">Monsters_115$Normal.png</key>
-            <key type="filename">Monsters_116$Normal.png</key>
-            <key type="filename">Monsters_117$Normal.png</key>
-            <key type="filename">Monsters_118$Normal.png</key>
-            <key type="filename">Monsters_119$Normal.png</key>
-            <key type="filename">Monsters_12$Normal.png</key>
-            <key type="filename">Monsters_120$Normal.png</key>
-            <key type="filename">Monsters_121$Normal.png</key>
-            <key type="filename">Monsters_122$Normal.png</key>
-            <key type="filename">Monsters_123$Normal.png</key>
-            <key type="filename">Monsters_124$Normal.png</key>
-            <key type="filename">Monsters_125$Normal.png</key>
-            <key type="filename">Monsters_126$Normal.png</key>
-            <key type="filename">Monsters_127$Normal.png</key>
-            <key type="filename">Monsters_128$Normal.png</key>
-            <key type="filename">Monsters_129$Normal.png</key>
-            <key type="filename">Monsters_13$Normal.png</key>
-            <key type="filename">Monsters_130$Normal.png</key>
-            <key type="filename">Monsters_131$Normal.png</key>
-            <key type="filename">Monsters_132$Normal.png</key>
-            <key type="filename">Monsters_133$Normal.png</key>
-            <key type="filename">Monsters_134$Normal.png</key>
-            <key type="filename">Monsters_135$Normal.png</key>
-            <key type="filename">Monsters_136$Normal.png</key>
-            <key type="filename">Monsters_137$Normal.png</key>
-            <key type="filename">Monsters_138$Normal.png</key>
-            <key type="filename">Monsters_139$Normal.png</key>
-            <key type="filename">Monsters_14$Normal.png</key>
-            <key type="filename">Monsters_140$Normal.png</key>
-            <key type="filename">Monsters_141$Normal.png</key>
-            <key type="filename">Monsters_142$Normal.png</key>
-            <key type="filename">Monsters_143$Normal.png</key>
-            <key type="filename">Monsters_144$Normal.png</key>
-            <key type="filename">Monsters_145$Normal.png</key>
-            <key type="filename">Monsters_146$Normal.png</key>
-            <key type="filename">Monsters_147$Normal.png</key>
-            <key type="filename">Monsters_148$Normal.png</key>
-            <key type="filename">Monsters_149$Normal.png</key>
-            <key type="filename">Monsters_15$Normal.png</key>
-            <key type="filename">Monsters_150$Normal.png</key>
-            <key type="filename">Monsters_16$Normal.png</key>
-            <key type="filename">Monsters_161$Normal.png</key>
-            <key type="filename">Monsters_162$Normal.png</key>
-            <key type="filename">Monsters_163$Normal.png</key>
-            <key type="filename">Monsters_164$Normal.png</key>
-            <key type="filename">Monsters_165$Normal.png</key>
-            <key type="filename">Monsters_166$Normal.png</key>
-            <key type="filename">Monsters_167$Normal.png</key>
-            <key type="filename">Monsters_168$Normal.png</key>
-            <key type="filename">Monsters_169$Normal.png</key>
-            <key type="filename">Monsters_17$Normal.png</key>
-            <key type="filename">Monsters_170$Normal.png</key>
-            <key type="filename">Monsters_171$Normal.png</key>
-            <key type="filename">Monsters_172$Normal.png</key>
-            <key type="filename">Monsters_173$Normal.png</key>
-            <key type="filename">Monsters_174$Normal.png</key>
-            <key type="filename">Monsters_175$Normal.png</key>
-            <key type="filename">Monsters_176$Normal.png</key>
-            <key type="filename">Monsters_177$Normal.png</key>
-            <key type="filename">Monsters_178$Normal.png</key>
-            <key type="filename">Monsters_179$Normal.png</key>
-            <key type="filename">Monsters_18$Normal.png</key>
-            <key type="filename">Monsters_180$Normal.png</key>
-            <key type="filename">Monsters_181$Normal.png</key>
-            <key type="filename">Monsters_182$Normal.png</key>
-            <key type="filename">Monsters_183$Normal.png</key>
-            <key type="filename">Monsters_184$Normal.png</key>
-            <key type="filename">Monsters_185$Normal.png</key>
-            <key type="filename">Monsters_186$Normal.png</key>
-            <key type="filename">Monsters_187$Normal.png</key>
-            <key type="filename">Monsters_188$Normal.png</key>
-            <key type="filename">Monsters_189$Normal.png</key>
-            <key type="filename">Monsters_19$Normal.png</key>
-            <key type="filename">Monsters_190$Normal.png</key>
-            <key type="filename">Monsters_191$Normal.png</key>
-            <key type="filename">Monsters_192$Normal.png</key>
-            <key type="filename">Monsters_193$Normal.png</key>
-            <key type="filename">Monsters_194$Normal.png</key>
-            <key type="filename">Monsters_195$Normal.png</key>
-            <key type="filename">Monsters_196$Normal.png</key>
-            <key type="filename">Monsters_197$Normal.png</key>
-            <key type="filename">Monsters_198$Normal.png</key>
-            <key type="filename">Monsters_199$Normal.png</key>
-            <key type="filename">Monsters_20$Normal.png</key>
-            <key type="filename">Monsters_200$Normal.png</key>
-            <key type="filename">Monsters_21$Normal.png</key>
-            <key type="filename">Monsters_211$Normal.png</key>
-            <key type="filename">Monsters_212$Normal.png</key>
-            <key type="filename">Monsters_213$Normal.png</key>
-            <key type="filename">Monsters_214$Normal.png</key>
-            <key type="filename">Monsters_215$Normal.png</key>
-            <key type="filename">Monsters_216$Normal.png</key>
-            <key type="filename">Monsters_217$Normal.png</key>
-            <key type="filename">Monsters_218$Normal.png</key>
-            <key type="filename">Monsters_219$Normal.png</key>
-            <key type="filename">Monsters_22$Normal.png</key>
-            <key type="filename">Monsters_220$Normal.png</key>
-            <key type="filename">Monsters_221$Normal.png</key>
-            <key type="filename">Monsters_222$Normal.png</key>
-            <key type="filename">Monsters_223$Normal.png</key>
-            <key type="filename">Monsters_224$Normal.png</key>
-            <key type="filename">Monsters_225$Normal.png</key>
-            <key type="filename">Monsters_226$Normal.png</key>
-            <key type="filename">Monsters_227$Normal.png</key>
-            <key type="filename">Monsters_228$Normal.png</key>
-            <key type="filename">Monsters_229$Normal.png</key>
-            <key type="filename">Monsters_23$Normal.png</key>
-            <key type="filename">Monsters_230$Normal.png</key>
-            <key type="filename">Monsters_231$Normal.png</key>
-            <key type="filename">Monsters_232$Normal.png</key>
-            <key type="filename">Monsters_233$Normal.png</key>
-            <key type="filename">Monsters_234$Normal.png</key>
-            <key type="filename">Monsters_235$Normal.png</key>
-            <key type="filename">Monsters_236$Normal.png</key>
-            <key type="filename">Monsters_237$Normal.png</key>
-            <key type="filename">Monsters_238$Normal.png</key>
-            <key type="filename">Monsters_239$Normal.png</key>
-            <key type="filename">Monsters_24$Normal.png</key>
-            <key type="filename">Monsters_240$Normal.png</key>
-            <key type="filename">Monsters_241$Normal.png</key>
-            <key type="filename">Monsters_242$Normal.png</key>
-            <key type="filename">Monsters_243$Normal.png</key>
-            <key type="filename">Monsters_244$Normal.png</key>
-            <key type="filename">Monsters_245$Normal.png</key>
-            <key type="filename">Monsters_246$Normal.png</key>
-            <key type="filename">Monsters_247$Normal.png</key>
-            <key type="filename">Monsters_248$Normal.png</key>
-            <key type="filename">Monsters_249$Normal.png</key>
-            <key type="filename">Monsters_25$Normal.png</key>
-            <key type="filename">Monsters_250$Normal.png</key>
-            <key type="filename">Monsters_26$Normal.png</key>
-            <key type="filename">Monsters_261$Normal.png</key>
-            <key type="filename">Monsters_262$Normal.png</key>
-            <key type="filename">Monsters_263$Normal.png</key>
-            <key type="filename">Monsters_264$Normal.png</key>
-            <key type="filename">Monsters_265$Normal.png</key>
-            <key type="filename">Monsters_266$Normal.png</key>
-            <key type="filename">Monsters_267$Normal.png</key>
-            <key type="filename">Monsters_268$Normal.png</key>
-            <key type="filename">Monsters_269$Normal.png</key>
-            <key type="filename">Monsters_27$Normal.png</key>
-            <key type="filename">Monsters_270$Normal.png</key>
-            <key type="filename">Monsters_271$Normal.png</key>
-            <key type="filename">Monsters_272$Normal.png</key>
-            <key type="filename">Monsters_273$Normal.png</key>
-            <key type="filename">Monsters_274$Normal.png</key>
-            <key type="filename">Monsters_275$Normal.png</key>
-            <key type="filename">Monsters_276$Normal.png</key>
-            <key type="filename">Monsters_277$Normal.png</key>
-            <key type="filename">Monsters_278$Normal.png</key>
-            <key type="filename">Monsters_279$Normal.png</key>
-            <key type="filename">Monsters_28$Normal.png</key>
-            <key type="filename">Monsters_280$Normal.png</key>
-            <key type="filename">Monsters_281$Normal.png</key>
-            <key type="filename">Monsters_282$Normal.png</key>
-            <key type="filename">Monsters_283$Normal.png</key>
-            <key type="filename">Monsters_284$Normal.png</key>
-            <key type="filename">Monsters_285$Normal.png</key>
-            <key type="filename">Monsters_286$Normal.png</key>
-            <key type="filename">Monsters_287$Normal.png</key>
-            <key type="filename">Monsters_288$Normal.png</key>
-            <key type="filename">Monsters_289$Normal.png</key>
-            <key type="filename">Monsters_29$Normal.png</key>
-            <key type="filename">Monsters_290$Normal.png</key>
-            <key type="filename">Monsters_291$Normal.png</key>
-            <key type="filename">Monsters_292$Normal.png</key>
-            <key type="filename">Monsters_293$Normal.png</key>
-            <key type="filename">Monsters_294$Normal.png</key>
-            <key type="filename">Monsters_295$Normal.png</key>
-            <key type="filename">Monsters_296$Normal.png</key>
-            <key type="filename">Monsters_297$Normal.png</key>
-            <key type="filename">Monsters_298$Normal.png</key>
-            <key type="filename">Monsters_299$Normal.png</key>
-            <key type="filename">Monsters_30$Normal.png</key>
-            <key type="filename">Monsters_300$Normal.png</key>
-            <key type="filename">Monsters_31$Normal.png</key>
-            <key type="filename">Monsters_311$Normal.png</key>
-            <key type="filename">Monsters_312$Normal.png</key>
-            <key type="filename">Monsters_313$Normal.png</key>
-            <key type="filename">Monsters_314$Normal.png</key>
-            <key type="filename">Monsters_315$Normal.png</key>
-            <key type="filename">Monsters_316$Normal.png</key>
-            <key type="filename">Monsters_317$Normal.png</key>
-            <key type="filename">Monsters_318$Normal.png</key>
-            <key type="filename">Monsters_319$Normal.png</key>
-            <key type="filename">Monsters_32$Normal.png</key>
-            <key type="filename">Monsters_320$Normal.png</key>
-            <key type="filename">Monsters_321$Normal.png</key>
-            <key type="filename">Monsters_322$Normal.png</key>
-            <key type="filename">Monsters_323$Normal.png</key>
-            <key type="filename">Monsters_324$Normal.png</key>
-            <key type="filename">Monsters_325$Normal.png</key>
-            <key type="filename">Monsters_326$Normal.png</key>
-            <key type="filename">Monsters_327$Normal.png</key>
-            <key type="filename">Monsters_328$Normal.png</key>
-            <key type="filename">Monsters_329$Normal.png</key>
-            <key type="filename">Monsters_33$Normal.png</key>
-            <key type="filename">Monsters_330$Normal.png</key>
-            <key type="filename">Monsters_331$Normal.png</key>
-            <key type="filename">Monsters_332$Normal.png</key>
-            <key type="filename">Monsters_333$Normal.png</key>
-            <key type="filename">Monsters_334$Normal.png</key>
-            <key type="filename">Monsters_335$Normal.png</key>
-            <key type="filename">Monsters_336$Normal.png</key>
-            <key type="filename">Monsters_337$Normal.png</key>
-            <key type="filename">Monsters_338$Normal.png</key>
-            <key type="filename">Monsters_339$Normal.png</key>
-            <key type="filename">Monsters_34$Normal.png</key>
-            <key type="filename">Monsters_340$Normal.png</key>
-            <key type="filename">Monsters_341$Normal.png</key>
-            <key type="filename">Monsters_342$Normal.png</key>
-            <key type="filename">Monsters_343$Normal.png</key>
-            <key type="filename">Monsters_344$Normal.png</key>
-            <key type="filename">Monsters_345$Normal.png</key>
-            <key type="filename">Monsters_346$Normal.png</key>
-            <key type="filename">Monsters_347$Normal.png</key>
-            <key type="filename">Monsters_348$Normal.png</key>
-            <key type="filename">Monsters_349$Normal.png</key>
-            <key type="filename">Monsters_35$Normal.png</key>
-            <key type="filename">Monsters_350$Normal.png</key>
-            <key type="filename">Monsters_36$Normal.png</key>
-            <key type="filename">Monsters_37$Normal.png</key>
-            <key type="filename">Monsters_38$Normal.png</key>
-            <key type="filename">Monsters_39$Normal.png</key>
-            <key type="filename">Monsters_40$Normal.png</key>
-            <key type="filename">Monsters_41$Normal.png</key>
-            <key type="filename">Monsters_42$Normal.png</key>
-            <key type="filename">Monsters_43$Normal.png</key>
-            <key type="filename">Monsters_44$Normal.png</key>
-            <key type="filename">Monsters_45$Normal.png</key>
-            <key type="filename">Monsters_46$Normal.png</key>
-            <key type="filename">Monsters_47$Normal.png</key>
-            <key type="filename">Monsters_48$Normal.png</key>
-            <key type="filename">Monsters_49$Normal.png</key>
-            <key type="filename">Monsters_50$Normal.png</key>
-            <key type="filename">Monsters_61$Normal.png</key>
-            <key type="filename">Monsters_62$Normal.png</key>
-            <key type="filename">Monsters_63$Normal.png</key>
-            <key type="filename">Monsters_64$Normal.png</key>
-            <key type="filename">Monsters_65$Normal.png</key>
-            <key type="filename">Monsters_66$Normal.png</key>
-            <key type="filename">Monsters_67$Normal.png</key>
-            <key type="filename">Monsters_68$Normal.png</key>
-            <key type="filename">Monsters_69$Normal.png</key>
-            <key type="filename">Monsters_70$Normal.png</key>
-            <key type="filename">Monsters_71$Normal.png</key>
-            <key type="filename">Monsters_72$Normal.png</key>
-            <key type="filename">Monsters_73$Normal.png</key>
-            <key type="filename">Monsters_74$Normal.png</key>
-            <key type="filename">Monsters_75$Normal.png</key>
-            <key type="filename">Monsters_76$Normal.png</key>
-            <key type="filename">Monsters_77$Normal.png</key>
-            <key type="filename">Monsters_78$Normal.png</key>
-            <key type="filename">Monsters_79$Normal.png</key>
-            <key type="filename">Monsters_80$Normal.png</key>
-            <key type="filename">Monsters_81$Normal.png</key>
-            <key type="filename">Monsters_82$Normal.png</key>
-            <key type="filename">Monsters_83$Normal.png</key>
-            <key type="filename">Monsters_84$Normal.png</key>
-            <key type="filename">Monsters_85$Normal.png</key>
-            <key type="filename">Monsters_86$Normal.png</key>
-            <key type="filename">Monsters_87$Normal.png</key>
-            <key type="filename">Monsters_88$Normal.png</key>
-            <key type="filename">Monsters_89$Normal.png</key>
-            <key type="filename">Monsters_90$Normal.png</key>
-            <key type="filename">Monsters_91$Normal.png</key>
-            <key type="filename">Monsters_92$Normal.png</key>
-            <key type="filename">Monsters_93$Normal.png</key>
-            <key type="filename">Monsters_94$Normal.png</key>
-            <key type="filename">Monsters_95$Normal.png</key>
-            <key type="filename">Monsters_96$Normal.png</key>
-            <key type="filename">Monsters_97$Normal.png</key>
-            <key type="filename">Monsters_98$Normal.png</key>
-            <key type="filename">Monsters_99$Normal.png</key>
+            <key type="filename">冰霜史莱姆.png</key>
+            <key type="filename">史莱克.png</key>
+            <key type="filename">岩蚁.png</key>
+            <key type="filename">幼虎.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.8</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">功夫青蛙$Normal.png</key>
+            <key type="filename">吸血鬼$Normal.png</key>
+            <key type="filename">宝箱恶魔$Normal.png</key>
+            <key type="filename">巨狼$Normal.png</key>
+            <key type="filename">巨齿鲨$Normal.png</key>
+            <key type="filename">异鬼$Normal.png</key>
+            <key type="filename">死神$Normal.png</key>
+            <key type="filename">牛头酋长$Normal.png</key>
+            <key type="filename">狮蛇兽$Normal.png</key>
+            <key type="filename">猪人首领$Normal.png</key>
+            <key type="filename">石巨人$Normal.png</key>
+            <key type="filename">绿皮怪$Normal.png</key>
+            <key type="filename">蚁王$Normal.png</key>
+            <key type="filename">螺巨人$Normal.png</key>
+            <key type="filename">风之精灵$Normal.png</key>
+            <key type="filename">骷髅战士$Normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -629,292 +338,169 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>8,8,16,16</rect>
+                <rect>32,32,64,64</rect>
                 <key>scale9Paddings</key>
-                <rect>8,8,16,16</rect>
+                <rect>32,32,64,64</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">Monsters_100.png</key>
-            <key type="filename">Monsters_11.png</key>
-            <key type="filename">Monsters_111.png</key>
-            <key type="filename">Monsters_112.png</key>
-            <key type="filename">Monsters_113.png</key>
-            <key type="filename">Monsters_114.png</key>
-            <key type="filename">Monsters_115.png</key>
-            <key type="filename">Monsters_116.png</key>
-            <key type="filename">Monsters_117.png</key>
-            <key type="filename">Monsters_118.png</key>
-            <key type="filename">Monsters_119.png</key>
-            <key type="filename">Monsters_12.png</key>
-            <key type="filename">Monsters_120.png</key>
-            <key type="filename">Monsters_121.png</key>
-            <key type="filename">Monsters_122.png</key>
-            <key type="filename">Monsters_123.png</key>
-            <key type="filename">Monsters_124.png</key>
-            <key type="filename">Monsters_125.png</key>
-            <key type="filename">Monsters_126.png</key>
-            <key type="filename">Monsters_127.png</key>
-            <key type="filename">Monsters_128.png</key>
-            <key type="filename">Monsters_129.png</key>
-            <key type="filename">Monsters_13.png</key>
-            <key type="filename">Monsters_130.png</key>
-            <key type="filename">Monsters_131.png</key>
-            <key type="filename">Monsters_132.png</key>
-            <key type="filename">Monsters_133.png</key>
-            <key type="filename">Monsters_134.png</key>
-            <key type="filename">Monsters_135.png</key>
-            <key type="filename">Monsters_136.png</key>
-            <key type="filename">Monsters_137.png</key>
-            <key type="filename">Monsters_138.png</key>
-            <key type="filename">Monsters_139.png</key>
-            <key type="filename">Monsters_14.png</key>
-            <key type="filename">Monsters_140.png</key>
-            <key type="filename">Monsters_141.png</key>
-            <key type="filename">Monsters_142.png</key>
-            <key type="filename">Monsters_143.png</key>
-            <key type="filename">Monsters_144.png</key>
-            <key type="filename">Monsters_145.png</key>
-            <key type="filename">Monsters_146.png</key>
-            <key type="filename">Monsters_147.png</key>
-            <key type="filename">Monsters_148.png</key>
-            <key type="filename">Monsters_149.png</key>
-            <key type="filename">Monsters_15.png</key>
-            <key type="filename">Monsters_150.png</key>
-            <key type="filename">Monsters_16.png</key>
-            <key type="filename">Monsters_161.png</key>
-            <key type="filename">Monsters_162.png</key>
-            <key type="filename">Monsters_163.png</key>
-            <key type="filename">Monsters_164.png</key>
-            <key type="filename">Monsters_165.png</key>
-            <key type="filename">Monsters_166.png</key>
-            <key type="filename">Monsters_167.png</key>
-            <key type="filename">Monsters_168.png</key>
-            <key type="filename">Monsters_169.png</key>
-            <key type="filename">Monsters_17.png</key>
-            <key type="filename">Monsters_170.png</key>
-            <key type="filename">Monsters_171.png</key>
-            <key type="filename">Monsters_172.png</key>
-            <key type="filename">Monsters_173.png</key>
-            <key type="filename">Monsters_174.png</key>
-            <key type="filename">Monsters_175.png</key>
-            <key type="filename">Monsters_176.png</key>
-            <key type="filename">Monsters_177.png</key>
-            <key type="filename">Monsters_178.png</key>
-            <key type="filename">Monsters_179.png</key>
-            <key type="filename">Monsters_18.png</key>
-            <key type="filename">Monsters_180.png</key>
-            <key type="filename">Monsters_181.png</key>
-            <key type="filename">Monsters_182.png</key>
-            <key type="filename">Monsters_183.png</key>
-            <key type="filename">Monsters_184.png</key>
-            <key type="filename">Monsters_185.png</key>
-            <key type="filename">Monsters_186.png</key>
-            <key type="filename">Monsters_187.png</key>
-            <key type="filename">Monsters_188.png</key>
-            <key type="filename">Monsters_189.png</key>
-            <key type="filename">Monsters_19.png</key>
-            <key type="filename">Monsters_190.png</key>
-            <key type="filename">Monsters_191.png</key>
-            <key type="filename">Monsters_192.png</key>
-            <key type="filename">Monsters_193.png</key>
-            <key type="filename">Monsters_194.png</key>
-            <key type="filename">Monsters_195.png</key>
-            <key type="filename">Monsters_196.png</key>
-            <key type="filename">Monsters_197.png</key>
-            <key type="filename">Monsters_198.png</key>
-            <key type="filename">Monsters_199.png</key>
-            <key type="filename">Monsters_20.png</key>
-            <key type="filename">Monsters_200.png</key>
-            <key type="filename">Monsters_21.png</key>
-            <key type="filename">Monsters_211.png</key>
-            <key type="filename">Monsters_212.png</key>
-            <key type="filename">Monsters_213.png</key>
-            <key type="filename">Monsters_214.png</key>
-            <key type="filename">Monsters_215.png</key>
-            <key type="filename">Monsters_216.png</key>
-            <key type="filename">Monsters_217.png</key>
-            <key type="filename">Monsters_218.png</key>
-            <key type="filename">Monsters_219.png</key>
-            <key type="filename">Monsters_22.png</key>
-            <key type="filename">Monsters_220.png</key>
-            <key type="filename">Monsters_221.png</key>
-            <key type="filename">Monsters_222.png</key>
-            <key type="filename">Monsters_223.png</key>
-            <key type="filename">Monsters_224.png</key>
-            <key type="filename">Monsters_225.png</key>
-            <key type="filename">Monsters_226.png</key>
-            <key type="filename">Monsters_227.png</key>
-            <key type="filename">Monsters_228.png</key>
-            <key type="filename">Monsters_229.png</key>
-            <key type="filename">Monsters_23.png</key>
-            <key type="filename">Monsters_230.png</key>
-            <key type="filename">Monsters_231.png</key>
-            <key type="filename">Monsters_232.png</key>
-            <key type="filename">Monsters_233.png</key>
-            <key type="filename">Monsters_234.png</key>
-            <key type="filename">Monsters_235.png</key>
-            <key type="filename">Monsters_236.png</key>
-            <key type="filename">Monsters_237.png</key>
-            <key type="filename">Monsters_238.png</key>
-            <key type="filename">Monsters_239.png</key>
-            <key type="filename">Monsters_24.png</key>
-            <key type="filename">Monsters_240.png</key>
-            <key type="filename">Monsters_241.png</key>
-            <key type="filename">Monsters_242.png</key>
-            <key type="filename">Monsters_243.png</key>
-            <key type="filename">Monsters_244.png</key>
-            <key type="filename">Monsters_245.png</key>
-            <key type="filename">Monsters_246.png</key>
-            <key type="filename">Monsters_247.png</key>
-            <key type="filename">Monsters_248.png</key>
-            <key type="filename">Monsters_249.png</key>
-            <key type="filename">Monsters_25.png</key>
-            <key type="filename">Monsters_250.png</key>
-            <key type="filename">Monsters_26.png</key>
-            <key type="filename">Monsters_261.png</key>
-            <key type="filename">Monsters_262.png</key>
-            <key type="filename">Monsters_263.png</key>
-            <key type="filename">Monsters_264.png</key>
-            <key type="filename">Monsters_265.png</key>
-            <key type="filename">Monsters_266.png</key>
-            <key type="filename">Monsters_267.png</key>
-            <key type="filename">Monsters_268.png</key>
-            <key type="filename">Monsters_269.png</key>
-            <key type="filename">Monsters_27.png</key>
-            <key type="filename">Monsters_270.png</key>
-            <key type="filename">Monsters_271.png</key>
-            <key type="filename">Monsters_272.png</key>
-            <key type="filename">Monsters_273.png</key>
-            <key type="filename">Monsters_274.png</key>
-            <key type="filename">Monsters_275.png</key>
-            <key type="filename">Monsters_276.png</key>
-            <key type="filename">Monsters_277.png</key>
-            <key type="filename">Monsters_278.png</key>
-            <key type="filename">Monsters_279.png</key>
-            <key type="filename">Monsters_28.png</key>
-            <key type="filename">Monsters_280.png</key>
-            <key type="filename">Monsters_281.png</key>
-            <key type="filename">Monsters_282.png</key>
-            <key type="filename">Monsters_283.png</key>
-            <key type="filename">Monsters_284.png</key>
-            <key type="filename">Monsters_285.png</key>
-            <key type="filename">Monsters_286.png</key>
-            <key type="filename">Monsters_287.png</key>
-            <key type="filename">Monsters_288.png</key>
-            <key type="filename">Monsters_289.png</key>
-            <key type="filename">Monsters_29.png</key>
-            <key type="filename">Monsters_290.png</key>
-            <key type="filename">Monsters_291.png</key>
-            <key type="filename">Monsters_292.png</key>
-            <key type="filename">Monsters_293.png</key>
-            <key type="filename">Monsters_294.png</key>
-            <key type="filename">Monsters_295.png</key>
-            <key type="filename">Monsters_296.png</key>
-            <key type="filename">Monsters_297.png</key>
-            <key type="filename">Monsters_298.png</key>
-            <key type="filename">Monsters_299.png</key>
-            <key type="filename">Monsters_30.png</key>
-            <key type="filename">Monsters_300.png</key>
-            <key type="filename">Monsters_31.png</key>
-            <key type="filename">Monsters_311.png</key>
-            <key type="filename">Monsters_312.png</key>
-            <key type="filename">Monsters_313.png</key>
-            <key type="filename">Monsters_314.png</key>
-            <key type="filename">Monsters_315.png</key>
-            <key type="filename">Monsters_316.png</key>
-            <key type="filename">Monsters_317.png</key>
-            <key type="filename">Monsters_318.png</key>
-            <key type="filename">Monsters_319.png</key>
-            <key type="filename">Monsters_32.png</key>
-            <key type="filename">Monsters_320.png</key>
-            <key type="filename">Monsters_321.png</key>
-            <key type="filename">Monsters_322.png</key>
-            <key type="filename">Monsters_323.png</key>
-            <key type="filename">Monsters_324.png</key>
-            <key type="filename">Monsters_325.png</key>
-            <key type="filename">Monsters_326.png</key>
-            <key type="filename">Monsters_327.png</key>
-            <key type="filename">Monsters_328.png</key>
-            <key type="filename">Monsters_329.png</key>
-            <key type="filename">Monsters_33.png</key>
-            <key type="filename">Monsters_330.png</key>
-            <key type="filename">Monsters_331.png</key>
-            <key type="filename">Monsters_332.png</key>
-            <key type="filename">Monsters_333.png</key>
-            <key type="filename">Monsters_334.png</key>
-            <key type="filename">Monsters_335.png</key>
-            <key type="filename">Monsters_336.png</key>
-            <key type="filename">Monsters_337.png</key>
-            <key type="filename">Monsters_338.png</key>
-            <key type="filename">Monsters_339.png</key>
-            <key type="filename">Monsters_34.png</key>
-            <key type="filename">Monsters_340.png</key>
-            <key type="filename">Monsters_341.png</key>
-            <key type="filename">Monsters_342.png</key>
-            <key type="filename">Monsters_343.png</key>
-            <key type="filename">Monsters_344.png</key>
-            <key type="filename">Monsters_345.png</key>
-            <key type="filename">Monsters_346.png</key>
-            <key type="filename">Monsters_347.png</key>
-            <key type="filename">Monsters_348.png</key>
-            <key type="filename">Monsters_349.png</key>
-            <key type="filename">Monsters_35.png</key>
-            <key type="filename">Monsters_350.png</key>
-            <key type="filename">Monsters_36.png</key>
-            <key type="filename">Monsters_37.png</key>
-            <key type="filename">Monsters_38.png</key>
-            <key type="filename">Monsters_39.png</key>
-            <key type="filename">Monsters_40.png</key>
-            <key type="filename">Monsters_41.png</key>
-            <key type="filename">Monsters_42.png</key>
-            <key type="filename">Monsters_43.png</key>
-            <key type="filename">Monsters_44.png</key>
-            <key type="filename">Monsters_45.png</key>
-            <key type="filename">Monsters_46.png</key>
-            <key type="filename">Monsters_47.png</key>
-            <key type="filename">Monsters_48.png</key>
-            <key type="filename">Monsters_49.png</key>
-            <key type="filename">Monsters_50.png</key>
-            <key type="filename">Monsters_61.png</key>
-            <key type="filename">Monsters_62.png</key>
-            <key type="filename">Monsters_63.png</key>
-            <key type="filename">Monsters_64.png</key>
-            <key type="filename">Monsters_65.png</key>
-            <key type="filename">Monsters_66.png</key>
-            <key type="filename">Monsters_67.png</key>
-            <key type="filename">Monsters_68.png</key>
-            <key type="filename">Monsters_69.png</key>
-            <key type="filename">Monsters_70.png</key>
-            <key type="filename">Monsters_71.png</key>
-            <key type="filename">Monsters_72.png</key>
-            <key type="filename">Monsters_73.png</key>
-            <key type="filename">Monsters_74.png</key>
-            <key type="filename">Monsters_75.png</key>
-            <key type="filename">Monsters_76.png</key>
-            <key type="filename">Monsters_77.png</key>
-            <key type="filename">Monsters_78.png</key>
-            <key type="filename">Monsters_79.png</key>
-            <key type="filename">Monsters_80.png</key>
-            <key type="filename">Monsters_81.png</key>
-            <key type="filename">Monsters_82.png</key>
-            <key type="filename">Monsters_83.png</key>
-            <key type="filename">Monsters_84.png</key>
-            <key type="filename">Monsters_85.png</key>
-            <key type="filename">Monsters_86.png</key>
-            <key type="filename">Monsters_87.png</key>
-            <key type="filename">Monsters_88.png</key>
-            <key type="filename">Monsters_89.png</key>
-            <key type="filename">Monsters_90.png</key>
-            <key type="filename">Monsters_91.png</key>
-            <key type="filename">Monsters_92.png</key>
-            <key type="filename">Monsters_93.png</key>
-            <key type="filename">Monsters_94.png</key>
-            <key type="filename">Monsters_95.png</key>
-            <key type="filename">Monsters_96.png</key>
-            <key type="filename">Monsters_97.png</key>
-            <key type="filename">Monsters_98.png</key>
-            <key type="filename">Monsters_99.png</key>
+            <key type="filename">功夫青蛙.png</key>
+            <key type="filename">吸血鬼.png</key>
+            <key type="filename">死神.png</key>
+            <key type="filename">牛头酋长.png</key>
+            <key type="filename">狮蛇兽.png</key>
+            <key type="filename">猪人首领.png</key>
+            <key type="filename">石巨人.png</key>
+            <key type="filename">螺巨人.png</key>
+            <key type="filename">风之精灵.png</key>
+            <key type="filename">骷髅战士.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9Paddings</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">宝箱恶魔.png</key>
+            <key type="filename">异鬼.png</key>
+            <key type="filename">绿皮怪.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.898438</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9Paddings</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">寄居蟹.png</key>
+            <key type="filename">寒冬渡鸦.png</key>
+            <key type="filename">食人花.png</key>
+            <key type="filename">黄金蚂蚁.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.796875</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">小毒菇.png</key>
+            <key type="filename">尖叫仙人掌.png</key>
+            <key type="filename">岩石怪.png</key>
+            <key type="filename">幽灵.png</key>
+            <key type="filename">穴居怪.png</key>
+            <key type="filename">粘液史莱姆.png</key>
+            <key type="filename">豺狼哥布林.png</key>
+            <key type="filename">貘.png</key>
+            <key type="filename">邪法师.png</key>
+            <key type="filename">部落巫医.png</key>
+            <key type="filename">长颈兽.png</key>
+            <key type="filename">雪人.png</key>
+            <key type="filename">雪兔.png</key>
+            <key type="filename">雪原熊.png</key>
+            <key type="filename">鹿.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">巨狼.png</key>
+            <key type="filename">巨齿鲨.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.9</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9Paddings</key>
+                <rect>32,32,64,64</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">幻影猫.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.9</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">恶魔之眼.png</key>
+            <key type="filename">水之精灵.png</key>
+            <key type="filename">水母.png</key>
+            <key type="filename">火烈鸟.png</key>
+            <key type="filename">牛头恶灵.png</key>
+            <key type="filename">蓝鳄.png</key>
+            <key type="filename">骷髅咒师.png</key>
+            <key type="filename">魅魔.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,1</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">绿毛龟.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,1.04688</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">蚁王.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,1</point_f>
@@ -926,6 +512,36 @@
                 <rect>32,32,64,64</rect>
                 <key>scale9Paddings</key>
                 <rect>32,32,64,64</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">蜘蛛怪.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.703125</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">邪眼.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.82</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

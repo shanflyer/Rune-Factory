@@ -195,12 +195,22 @@
             <key type="filename">丝织长袍.png</key>
             <key type="filename">五彩搏鱼$Normal.png</key>
             <key type="filename">五彩搏鱼.png</key>
+            <key type="filename">亡者之土$Normal.png</key>
+            <key type="filename">亡者之土.png</key>
             <key type="filename">伏特加$Normal.png</key>
             <key type="filename">伏特加.png</key>
             <key type="filename">兰寿金鱼$Normal.png</key>
             <key type="filename">兰寿金鱼.png</key>
+            <key type="filename">兽皮$Normal.png</key>
+            <key type="filename">兽皮.png</key>
+            <key type="filename">兽角$Normal.png</key>
+            <key type="filename">兽角.png</key>
             <key type="filename">冰之刃$Normal.png</key>
             <key type="filename">冰之刃.png</key>
+            <key type="filename">冰晶石$Normal.png</key>
+            <key type="filename">冰晶石.png</key>
+            <key type="filename">刀刃$Normal.png</key>
+            <key type="filename">刀刃.png</key>
             <key type="filename">加州金鳟鱼$Normal.png</key>
             <key type="filename">加州金鳟鱼.png</key>
             <key type="filename">北极红点鲑$Normal.png</key>
@@ -225,6 +235,8 @@
             <key type="filename">啤酒.png</key>
             <key type="filename">国王刺尾鱼$Normal.png</key>
             <key type="filename">国王刺尾鱼.png</key>
+            <key type="filename">土晶石$Normal.png</key>
+            <key type="filename">土晶石.png</key>
             <key type="filename">土豆泥$Normal.png</key>
             <key type="filename">土豆泥.png</key>
             <key type="filename">士兵长靴$Normal.png</key>
@@ -261,6 +273,8 @@
             <key type="filename">小丑鱼.png</key>
             <key type="filename">小龙虾$Normal.png</key>
             <key type="filename">小龙虾.png</key>
+            <key type="filename">尖刺$Normal.png</key>
+            <key type="filename">尖刺.png</key>
             <key type="filename">巨型蛇头鱼$Normal.png</key>
             <key type="filename">巨型蛇头鱼.png</key>
             <key type="filename">巨型鲶鱼$Normal.png</key>
@@ -271,12 +285,20 @@
             <key type="filename">巨骨舌鱼.png</key>
             <key type="filename">巨鲹$Normal.png</key>
             <key type="filename">巨鲹.png</key>
+            <key type="filename">布片$Normal.png</key>
+            <key type="filename">布片.png</key>
             <key type="filename">布衣$Normal.png</key>
             <key type="filename">布衣.png</key>
             <key type="filename">布鞋$Normal.png</key>
             <key type="filename">布鞋.png</key>
             <key type="filename">帝王鲑鱼$Normal.png</key>
             <key type="filename">帝王鲑鱼.png</key>
+            <key type="filename">幽魂$Normal.png</key>
+            <key type="filename">幽魂.png</key>
+            <key type="filename">废铁$Normal.png</key>
+            <key type="filename">废铁.png</key>
+            <key type="filename">彩色羽毛$Normal.png</key>
+            <key type="filename">彩色羽毛.png</key>
             <key type="filename">恩氏多鳍鱼$Normal.png</key>
             <key type="filename">恩氏多鳍鱼.png</key>
             <key type="filename">恶魔之斧$Normal.png</key>
@@ -303,6 +325,8 @@
             <key type="filename">星鲟.png</key>
             <key type="filename">暗之袍$Normal.png</key>
             <key type="filename">暗之袍.png</key>
+            <key type="filename">暗晶石$Normal.png</key>
+            <key type="filename">暗晶石.png</key>
             <key type="filename">暴雪斧$Normal.png</key>
             <key type="filename">暴雪斧.png</key>
             <key type="filename">朗姆$Normal.png</key>
@@ -315,6 +339,8 @@
             <key type="filename">木棒.png</key>
             <key type="filename">条石鲷$Normal.png</key>
             <key type="filename">条石鲷.png</key>
+            <key type="filename">松果$Normal.png</key>
+            <key type="filename">松果.png</key>
             <key type="filename">桃花鱼$Normal.png</key>
             <key type="filename">桃花鱼.png</key>
             <key type="filename">桨鱼$Normal.png</key>
@@ -323,6 +349,8 @@
             <key type="filename">梭子鱼.png</key>
             <key type="filename">梭鲈$Normal.png</key>
             <key type="filename">梭鲈.png</key>
+            <key type="filename">植物的藤$Normal.png</key>
+            <key type="filename">植物的藤.png</key>
             <key type="filename">樱桃鲑鱼$Normal.png</key>
             <key type="filename">樱桃鲑鱼.png</key>
             <key type="filename">武道鞋$Normal.png</key>
@@ -333,8 +361,14 @@
             <key type="filename">比目鱼.png</key>
             <key type="filename">毛皮斗篷$Normal.png</key>
             <key type="filename">毛皮斗篷.png</key>
+            <key type="filename">毛线$Normal.png</key>
+            <key type="filename">毛线.png</key>
             <key type="filename">水之羽衣$Normal.png</key>
             <key type="filename">水之羽衣.png</key>
+            <key type="filename">水晶球$Normal.png</key>
+            <key type="filename">水晶球.png</key>
+            <key type="filename">水晶石$Normal.png</key>
+            <key type="filename">水晶石.png</key>
             <key type="filename">水母（红色）$Normal.png</key>
             <key type="filename">水母（红色）.png</key>
             <key type="filename">水母（蓝色）$Normal.png</key>
@@ -383,6 +417,8 @@
             <key type="filename">湖鲟鱼.png</key>
             <key type="filename">溪鳟鱼$Normal.png</key>
             <key type="filename">溪鳟鱼.png</key>
+            <key type="filename">火晶石$Normal.png</key>
+            <key type="filename">火晶石.png</key>
             <key type="filename">炖煮条石鲷$Normal.png</key>
             <key type="filename">炖煮条石鲷.png</key>
             <key type="filename">炖菜$Normal.png</key>
@@ -427,16 +463,22 @@
             <key type="filename">烤鲷鱼.png</key>
             <key type="filename">烤龙虾$Normal.png</key>
             <key type="filename">烤龙虾.png</key>
+            <key type="filename">焦炭$Normal.png</key>
+            <key type="filename">焦炭.png</key>
             <key type="filename">爆眼金鱼$Normal.png</key>
             <key type="filename">爆眼金鱼.png</key>
             <key type="filename">牛奶$Normal.png</key>
             <key type="filename">牛奶.png</key>
             <key type="filename">牡蛎$Normal.png</key>
             <key type="filename">牡蛎.png</key>
+            <key type="filename">狼牙$Normal.png</key>
+            <key type="filename">狼牙.png</key>
             <key type="filename">猪肉$Normal.png</key>
             <key type="filename">猪肉.png</key>
             <key type="filename">玉米汁$Normal.png</key>
             <key type="filename">玉米汁.png</key>
+            <key type="filename">珊瑚$Normal.png</key>
+            <key type="filename">珊瑚.png</key>
             <key type="filename">甜菜汁$Normal.png</key>
             <key type="filename">甜菜汁.png</key>
             <key type="filename">疾风背心$Normal.png</key>
@@ -447,6 +489,8 @@
             <key type="filename">白鲟.png</key>
             <key type="filename">皮铠$Normal.png</key>
             <key type="filename">皮铠.png</key>
+            <key type="filename">皮革$Normal.png</key>
+            <key type="filename">皮革.png</key>
             <key type="filename">皮鞋$Normal.png</key>
             <key type="filename">皮鞋.png</key>
             <key type="filename">盐$Normal.png</key>
@@ -461,6 +505,10 @@
             <key type="filename">盐烤鲑鱼.png</key>
             <key type="filename">盐烤鲮鱼$Normal.png</key>
             <key type="filename">盐烤鲮鱼.png</key>
+            <key type="filename">眼球$Normal.png</key>
+            <key type="filename">眼球.png</key>
+            <key type="filename">石化之眼$Normal.png</key>
+            <key type="filename">石化之眼.png</key>
             <key type="filename">章鱼$Normal.png</key>
             <key type="filename">章鱼.png</key>
             <key type="filename">章鱼小丸子$Normal.png</key>
@@ -487,6 +535,8 @@
             <key type="filename">绯红之吻.png</key>
             <key type="filename">罗非鱼$Normal.png</key>
             <key type="filename">罗非鱼.png</key>
+            <key type="filename">羊毛$Normal.png</key>
+            <key type="filename">羊毛.png</key>
             <key type="filename">翻车鱼$Normal.png</key>
             <key type="filename">翻车鱼.png</key>
             <key type="filename">腌芜菁$Normal.png</key>
@@ -529,16 +579,24 @@
             <key type="filename">虹鳟鱼.png</key>
             <key type="filename">蛇牙鞭$Normal.png</key>
             <key type="filename">蛇牙鞭.png</key>
+            <key type="filename">蛇皮$Normal.png</key>
+            <key type="filename">蛇皮.png</key>
             <key type="filename">蛇皮鞭$Normal.png</key>
             <key type="filename">蛇皮鞭.png</key>
+            <key type="filename">蛛丝$Normal.png</key>
+            <key type="filename">蛛丝.png</key>
             <key type="filename">蛤蜊$Normal.png</key>
             <key type="filename">蛤蜊.png</key>
+            <key type="filename">蜂刺$Normal.png</key>
+            <key type="filename">蜂刺.png</key>
             <key type="filename">蜂蜜$Normal.png</key>
             <key type="filename">蜂蜜.png</key>
             <key type="filename">蜂蜜蛋糕$Normal.png</key>
             <key type="filename">蜂蜜蛋糕.png</key>
             <key type="filename">蝌蚪$Normal.png</key>
             <key type="filename">蝌蚪.png</key>
+            <key type="filename">蝎尾$Normal.png</key>
+            <key type="filename">蝎尾.png</key>
             <key type="filename">蝠鲼$Normal.png</key>
             <key type="filename">蝠鲼.png</key>
             <key type="filename">蝴蝶鱼$Normal.png</key>
@@ -557,6 +615,8 @@
             <key type="filename">诅咒之剑.png</key>
             <key type="filename">豌豆汤$Normal.png</key>
             <key type="filename">豌豆汤.png</key>
+            <key type="filename">象牙$Normal.png</key>
+            <key type="filename">象牙.png</key>
             <key type="filename">贤者之履$Normal.png</key>
             <key type="filename">贤者之履.png</key>
             <key type="filename">贵族长裙$Normal.png</key>
@@ -579,16 +639,24 @@
             <key type="filename">酸味香料.png</key>
             <key type="filename">野蜂拉格$Normal.png</key>
             <key type="filename">野蜂拉格.png</key>
+            <key type="filename">金块$Normal.png</key>
+            <key type="filename">金块.png</key>
             <key type="filename">金枪鱼$Normal.png</key>
             <key type="filename">金枪鱼.png</key>
+            <key type="filename">钢$Normal.png</key>
+            <key type="filename">钢.png</key>
             <key type="filename">钢刃锁甲$Normal.png</key>
             <key type="filename">钢刃锁甲.png</key>
             <key type="filename">钻石鲟鱼$Normal.png</key>
             <key type="filename">钻石鲟鱼.png</key>
+            <key type="filename">铁块$Normal.png</key>
+            <key type="filename">铁块.png</key>
             <key type="filename">铁枪$Normal.png</key>
             <key type="filename">铁枪.png</key>
             <key type="filename">铁铠甲$Normal.png</key>
             <key type="filename">铁铠甲.png</key>
+            <key type="filename">银块$Normal.png</key>
+            <key type="filename">银块.png</key>
             <key type="filename">银龙鱼$Normal.png</key>
             <key type="filename">银龙鱼.png</key>
             <key type="filename">锁子甲$Normal.png</key>
@@ -603,6 +671,8 @@
             <key type="filename">阳光男孩.png</key>
             <key type="filename">雀鳝鱼$Normal.png</key>
             <key type="filename">雀鳝鱼.png</key>
+            <key type="filename">雪球$Normal.png</key>
+            <key type="filename">雪球.png</key>
             <key type="filename">霓虹脂鲤$Normal.png</key>
             <key type="filename">霓虹脂鲤.png</key>
             <key type="filename">青蛙$Normal.png</key>
@@ -611,6 +681,8 @@
             <key type="filename">面包.png</key>
             <key type="filename">面粉$Normal.png</key>
             <key type="filename">面粉.png</key>
+            <key type="filename">风晶石$Normal.png</key>
+            <key type="filename">风晶石.png</key>
             <key type="filename">风神之履$Normal.png</key>
             <key type="filename">风神之履.png</key>
             <key type="filename">食人鱼$Normal.png</key>
@@ -621,16 +693,24 @@
             <key type="filename">饺子.png</key>
             <key type="filename">香鱼$Normal.png</key>
             <key type="filename">香鱼.png</key>
+            <key type="filename">马尾$Normal.png</key>
+            <key type="filename">马尾.png</key>
             <key type="filename">骑士护胫$Normal.png</key>
             <key type="filename">骑士护胫.png</key>
             <key type="filename">骑士长枪$Normal.png</key>
             <key type="filename">骑士长枪.png</key>
+            <key type="filename">魔兽皮毛$Normal.png</key>
+            <key type="filename">魔兽皮毛.png</key>
+            <key type="filename">魔族之血$Normal.png</key>
+            <key type="filename">魔族之血.png</key>
             <key type="filename">魔法铠甲$Normal.png</key>
             <key type="filename">魔法铠甲.png</key>
             <key type="filename">鮣鱼$Normal.png</key>
             <key type="filename">鮣鱼.png</key>
             <key type="filename">鱼竿$Normal.png</key>
             <key type="filename">鱼竿.png</key>
+            <key type="filename">鱼胶$Normal.png</key>
+            <key type="filename">鱼胶.png</key>
             <key type="filename">鱼饵$Normal.png</key>
             <key type="filename">鱼饵.png</key>
             <key type="filename">鱿鱼（深色）$Normal.png</key>
@@ -671,6 +751,10 @@
             <key type="filename">鳞铠.png</key>
             <key type="filename">鸡蛋$Normal.png</key>
             <key type="filename">鸡蛋.png</key>
+            <key type="filename">鸭绒$Normal.png</key>
+            <key type="filename">鸭绒.png</key>
+            <key type="filename">鹿角$Normal.png</key>
+            <key type="filename">鹿角.png</key>
             <key type="filename">黄油$Normal.png</key>
             <key type="filename">黄油.png</key>
             <key type="filename">黄鲈鱼$Normal.png</key>
@@ -696,6 +780,22 @@
                 <rect>8,8,16,16</rect>
                 <key>scale9Paddings</key>
                 <rect>8,8,16,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">奇美拉之翼$Normal.png</key>
+            <key type="filename">奇美拉之翼.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,16,17</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,16,17</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
