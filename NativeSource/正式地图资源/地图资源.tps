@@ -2867,6 +2867,20 @@
                 <false/>
             </struct>
             <key type="filename">冷餐台.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.507463,0.793103</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>17,15,33,29</rect>
+                <key>scale9Paddings</key>
+                <rect>17,15,33,29</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">冷餐台_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -4476,6 +4490,20 @@
                 <false/>
             </struct>
             <key type="filename">皮革鞣制机.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.892857</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>22,14,43,28</rect>
+                <key>scale9Paddings</key>
+                <rect>22,14,43,28</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">皮革鞣制机_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -4654,6 +4682,20 @@
                 <false/>
             </struct>
             <key type="filename">纺线机.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.506667,0.897727</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>19,22,37,44</rect>
+                <key>scale9Paddings</key>
+                <rect>19,22,37,44</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">纺线机_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -4670,10 +4712,9 @@
                 <false/>
             </struct>
             <key type="filename">纺织机.png</key>
-            <key type="filename">纺织机_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0.506494,0.907692</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -4718,6 +4759,21 @@
                 <rect>18,16,36,32</rect>
                 <key>scale9Paddings</key>
                 <rect>18,16,36,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">纺织机_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>19,16,39,33</rect>
+                <key>scale9Paddings</key>
+                <rect>19,16,39,33</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -4776,7 +4832,7 @@
             <key type="filename">缝纫机.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0.5,0.8</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>

@@ -183,8 +183,8 @@
             <key type="filename">沙发.png</key>
             <key type="filename">炖煮锅.png</key>
             <key type="filename">烤炉.png</key>
-            <key type="filename">纺织机.png</key>
             <key type="filename">绘写台.png</key>
+            <key type="filename">缝纫机.png</key>
             <key type="filename">酿造桶.png</key>
             <key type="filename">金箱.png</key>
             <key type="filename">银箱.png</key>
