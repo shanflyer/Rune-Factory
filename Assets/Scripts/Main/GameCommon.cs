@@ -949,7 +949,7 @@ public static class DataPath
         {typeof(CharacterData),"Data/CharacterData" },
         {typeof(CharacterGroupData),"Data/CharacterGroupData" },
         {typeof(FightMapData),"Data/FightMapData/FightMapDataList" },
-        {typeof(MonsterDeploy),"Data/MonsterDeloyList" },
+        {typeof(MonsterDeploy),"Data/MonsterDeploy/MonsterDeloyList" },
         {typeof(GameActionData),"Data/GameActionData" },
         {typeof(TalkData),"Data/TalkData" },
         {typeof(MyTimeLineData),"Data/TimeLineData" },

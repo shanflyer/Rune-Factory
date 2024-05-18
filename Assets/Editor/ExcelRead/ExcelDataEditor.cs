@@ -182,7 +182,7 @@ public class ExcelDataEditor : MyEditor
                     array = Array.CreateInstance(dataType, rowCount - 3);
                     listData = Activator.CreateInstance(type);
                 }
-
+               
                 for (int i = 3; i < rowCount; i++)
                 {
                     var data = Activator.CreateInstance(dataType == null ? type : dataType);

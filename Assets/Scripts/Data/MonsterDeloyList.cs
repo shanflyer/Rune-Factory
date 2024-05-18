@@ -6,15 +6,18 @@ using UnityEngine;
 public class MonsterDeloyList : ScriptableObject, IGameData, IDataArray<MonsterDeploy>
 {
     [SerializeField]
-    MonsterDeploy[] monsterDeploys;
+    public MonsterDeploy[] monsterDeploys;
 
     MonsterDeploy[] IDataArray<MonsterDeploy>.DataList => monsterDeploys;
 
     string IGameData.GetKey()
     {
-        return name;
+        return "MonsterDeloyList";
     }
-
+    public override string ToString()
+    {
+        return "MonsterDeloyList";
+    }
     void IGameData.SetReferenceData()
     { 
     }

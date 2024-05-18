@@ -56,6 +56,11 @@ public class ItemData : ScriptableObject, IGameData
 #if UNITY_EDITOR
     static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>();
     static Dictionary<string, SpriteResourceRenference> iconDatas = new Dictionary<string, SpriteResourceRenference>();
+    public static void Clear()
+    {
+        allSprites.Clear();
+        iconDatas.Clear();
+    }
     public void SetReferenceData()
     {
         if (allSprites.Count == 0)
