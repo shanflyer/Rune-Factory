@@ -107,7 +107,7 @@ public partial class Character
     {
         CharacterInformationData characterInformationData = new CharacterInformationData();
         characterInformationData.characterId = instanceId;
-        characterInformationData.characterProperty = characterProperty;
+        characterInformationData.characterProperty = CharacterProperty;
         characterInformationData.level = level;
         characterInformationData.exp = exp;
         characterInformationData.equip = equip;

@@ -70,6 +70,27 @@ public struct CharacterProperty
         return result;
     }
 
+    public static CharacterProperty One
+    {
+        get
+        {
+            CharacterProperty characterProperty = new CharacterProperty
+            {
+                HP = 1,
+                MP = 1,
+                Power = 1,
+                MaxHP = 1,
+                MaxMP = 1,
+                MaxPower = 1,
+                AT = 1,
+                DF = 1,
+                Lucky = 1,
+                Other = 1
+            };
+            return characterProperty;
+        }
+    }
+    
     public static CharacterProperty operator -(CharacterProperty property0, CharacterProperty property1)
     {
         CharacterProperty CharacterProperty = new CharacterProperty
@@ -105,7 +126,23 @@ public struct CharacterProperty
         };
         return CharacterProperty;
     }
-
+    public static CharacterProperty operator *(CharacterProperty property0, CharacterProperty property1)
+    {
+        CharacterProperty CharacterProperty = new CharacterProperty
+        {
+            HP = property0.HP * property1.HP,
+            MP = property0.MP * property1.MP,
+            AT = property0.AT * property1.AT,
+            DF = property0.DF * property1.DF,
+            Power = property0.Power * property1.Power,
+            MaxHP = property0.MaxHP * property1.MaxHP,
+            MaxMP = property0.MaxMP * property1.MaxMP,
+            MaxPower = property0.MaxPower * property1.MaxPower,
+            Lucky = property0.Lucky * property1.Lucky,
+            Other = property0.Other * property1.Other
+        };
+        return CharacterProperty;
+    }
     public static CharacterProperty operator *(CharacterProperty property0, float value)
     {
         CharacterProperty CharacterProperty = new CharacterProperty
@@ -358,7 +395,7 @@ public partial class Character
                 {
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon.x);
                     if (oldItemData != null)
-                        characterProperty = characterProperty - oldItemData.property;
+                        EquipmentProperty = EquipmentProperty - oldItemData.property;
                 }
                 equip.weapon = 0;
                 break;
@@ -367,7 +404,7 @@ public partial class Character
                 {
                     ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes.x);
                     if (oldItemData != null)
-                        characterProperty = characterProperty - oldItemData.property;
+                        EquipmentProperty = EquipmentProperty - oldItemData.property;
                 }
                 equip.clothes = 0;
                 break;
@@ -388,7 +425,7 @@ public partial class Character
             {
                 item.count = 1;
                 item.dataId = oldItemData.id;
-                characterProperty = characterProperty - oldItemData.property;
+                EquipmentProperty = EquipmentProperty - oldItemData.property;
             }
             equip.weapon = itemData.id;
         }
@@ -399,7 +436,7 @@ public partial class Character
             {
                 item.count = 1;
                 item.dataId = oldItemData.id;
-                CharacterProperty = characterProperty - oldItemData.property;
+                EquipmentProperty = EquipmentProperty - oldItemData.property;
             }
             equip.clothes = itemData.id;
         }
@@ -409,7 +446,7 @@ public partial class Character
         }
         if (itemData != null)
         {
-            CharacterProperty = characterProperty + itemData.property;
+            EquipmentProperty = EquipmentProperty + itemData.property;
         }
         GameActionManager.instance.QueueAction(new RefreshEquip
         {
@@ -425,7 +462,7 @@ public partial class Character
             {
                 id = instanceId,
                 name = name,
-                characterProperty = characterProperty,
+                characterProperty = CharacterProperty,
                 equip = equip,
                 attributeType = AttributeType
             };
@@ -434,12 +471,8 @@ public partial class Character
 
     public CharacterProperty CharacterProperty
     {
-        get => characterProperty;
-        set
-        {
-            characterProperty = value;
-            CharacterPropertyTrigger();
-        }
+        get => (ProfessionProperty+EquipmentProperty+OtherAddProperty)*OtherMulProperty;
+        
     }
 
     private void CharacterPropertyTrigger()
@@ -452,7 +485,59 @@ public partial class Character
         GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
     }
 
-    private CharacterProperty characterProperty;
+    private CharacterProperty ProfessionProperty
+    {
+        get
+        {
+            return professionProperty;
+        }
+        set
+        {
+            professionProperty = value;
+            CharacterPropertyTrigger();
+        }
+    }
+    private CharacterProperty EquipmentProperty
+    {
+        get
+        {
+            return equipmentProperty;
+        }
+        set
+        {
+            equipmentProperty = value;
+            CharacterPropertyTrigger();
+        }
+    }
+    private CharacterProperty OtherAddProperty
+    {
+        get
+        {
+            return otherAddProperty;
+        }
+        set
+        {
+            otherAddProperty = value;
+            CharacterPropertyTrigger();
+        }
+    }
+    private CharacterProperty OtherMulProperty
+    {
+        get
+        {
+            return otherMulProperty;
+        }
+        set
+        {
+            otherMulProperty = value;
+            CharacterPropertyTrigger();
+        }
+    }
+
+    private CharacterProperty professionProperty;
+    private CharacterProperty equipmentProperty;
+    private CharacterProperty otherAddProperty;
+    private CharacterProperty otherMulProperty = CharacterProperty.One;
 
     public int groupId = -1;
     public int professionId;
@@ -841,15 +926,14 @@ public partial class Character
                 if (zero)
                 {
                     skills.Clear();
-                    for (int i = 0; i <= level; i++)
+                    for (int i = 1; i <= level; i++)
                     {
                         int skillId = profressionData.GetLevelSkill(i);
                         if (skillId != -1)
                         {
                             skills.Add(skillId);
-                        }
-                        CharacterProperty = CharacterProperty + profressionData.GetLevelProperty(level);
-                    }
+                        } 
+                    } 
                 }
                 else
                 {
@@ -857,11 +941,9 @@ public partial class Character
                     if (skillId != -1)
                     {
                         skills.Add(skillId);
-                    }
-                    CharacterProperty = CharacterProperty - nowProperty;
-                    nowProperty = profressionData.GetLevelProperty(level);
-                    CharacterProperty = CharacterProperty + nowProperty;
+                    } 
                 }
+                ProfessionProperty =  profressionData.GetLevelProperty(level);
             }
             exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level - 1);
             this.level = level;
@@ -872,30 +954,31 @@ public partial class Character
         , int Other = -1)
     {
         if (HP >= 0)
-            characterProperty.HP = HP;
+            professionProperty.HP = HP;
         if (MP >= 0)
-            characterProperty.MP = MP;
+            professionProperty.MP = MP;
         if (Power >= 0)
-            characterProperty.Power = Power;
+            professionProperty.Power = Power;
         if (MaxHP >= 0)
-            characterProperty.MaxHP = MaxHP;
+            professionProperty.MaxHP = MaxHP;
         if (MaxMP >= 0)
-            characterProperty.MaxMP = MaxMP;
+            professionProperty.MaxMP = MaxMP;
         if (MaxPower >= 0)
-            characterProperty.MaxPower = MaxPower;
+            professionProperty.MaxPower = MaxPower;
         if (AT >= 0)
-            characterProperty.AT = AT;
+            professionProperty.AT = AT;
         if (DF >= 0)
-            characterProperty.DF = DF;
+            professionProperty.DF = DF;
         if (Other >= 0)
-            characterProperty.Other = Other;
+            professionProperty.Other = Other;
 
-        this.characterProperty = characterProperty;
+        this.ProfessionProperty = professionProperty;
     }
 
     public void SetProperty(SetCharacterProperty setCharacterProperty)
     {
-        characterProperty.SetProperty(setCharacterProperty);
+        professionProperty.SetProperty(setCharacterProperty);
+        CharacterPropertyTrigger();
         RefreshCharacter refreshCharacter = new RefreshCharacter
         {
             id = instanceId
@@ -905,7 +988,7 @@ public partial class Character
 
     public void AddProperty(ChangeCharacterProperty changeCharacterProperty)
     {
-        characterProperty.ChangeProperty(changeCharacterProperty);
+        professionProperty.ChangeProperty(changeCharacterProperty);
         CharacterPropertyTrigger();
         RefreshCharacter refreshCharacter = new RefreshCharacter
         {

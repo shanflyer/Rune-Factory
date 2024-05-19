@@ -506,7 +506,15 @@ public class FightManager :Singleton<FightManager>
     }
     public int HurtValue(int AT,int DF,int Lucky0, int Lucky1, out HurtResultType hurtResultType)
     {
-        int hurt = AT - DF;
+        int hurt = 1;
+        int ATValue = AT / 2;
+        int DFValue = DF / 4;
+        if (ATValue > DFValue)
+        {
+            hurt = ATValue - DFValue;
+        }
+        int hurtRandomAdd = hurt/16+1;
+        hurt += GameRandom.RandomInt(-hurtRandomAdd, hurtRandomAdd);
         hurt = math.clamp(hurt, 1, hurt);
 
         int LuckyValue = (Lucky0 - Lucky1)*2;

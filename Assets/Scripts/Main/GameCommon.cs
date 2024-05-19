@@ -944,7 +944,7 @@ public static class DataPath
         {typeof(MapNpcData),"Data/MapNpcData" },
         {typeof(MapRoomData),"Data/MapRoomData" },
         {typeof(MonsterData),"Data/MonsterData" },
-        {typeof(ProfessionData),"Data/ProfessionData" },
+        {typeof(ProfessionData),"Data/ProfessionData/ProfessionDataList" },
         {typeof(WorldMapData),"Data/WorldMapData" },
         {typeof(CharacterData),"Data/CharacterData" },
         {typeof(CharacterGroupData),"Data/CharacterGroupData" },
