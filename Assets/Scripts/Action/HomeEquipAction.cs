@@ -93,6 +93,10 @@ public struct CreatManufature : GameAction
             manufatureId = int.Parse(parameters[0].value);
             instanceId = int.Parse(parameters[1].value);
         }
+        if (source != 0 && source != int.MinValue)
+        {
+            instanceId = source;
+        }
 
         GameActionManager.instance.QueueAction(this, immediately);
     }

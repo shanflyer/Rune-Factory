@@ -190,22 +190,9 @@ public class ManufacturePanel : GamePanel<Manufature>
             }
         });
 
-        FormulaDropdown.onValueChanged.AddListener(async (int index) =>
+        FormulaDropdown.onValueChanged.AddListener((int index) =>
         {
-            FormulaOptionData formulaOptionData = FormulaDropdown.options[index] as FormulaOptionData;
-            int seleciId = formulaOptionData.formulaId;
-            if (seleciId == 0)
-            {
-                selectFormula = default(Formula);
-                selectFormulaData = null;
-            }
-            else
-            {
-                selectFormula = manufature.formulas[seleciId];
-                selectFormulaData = await GameDataManager.instance.GetAsyncData<FormulaData>(seleciId);
-            }
-
-            DisplayFormula();
+            SelectFormulaAsync(index);
         });
 
         AutoSelect.onClick.AddListener(AutoSelectMaterials);
@@ -213,6 +200,23 @@ public class ManufacturePanel : GamePanel<Manufature>
         ReturnButton.onClick.AddListener(Close);
     }
 
+    async Task SelectFormulaAsync(int index)
+    {
+        FormulaOptionData formulaOptionData = FormulaDropdown.options[index] as FormulaOptionData;
+        int seleciId = formulaOptionData.formulaId;
+        if (seleciId == 0)
+        {
+            selectFormula = default(Formula);
+            selectFormulaData = null;
+        }
+        else
+        {
+            selectFormula = manufature.formulas[seleciId];
+            selectFormulaData = await GameDataManager.instance.GetAsyncData<FormulaData>(seleciId);
+        }
+
+        DisplayFormula();
+    }
     private Dictionary<FormulaType, List<FormulaData>> allFormulaDatas;
     private Formula selectFormula;
     private FormulaData selectFormulaData;
@@ -412,14 +416,15 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void RefreshFormulaSelect()
     {
-        List<OptionData> formulaOptionDatas = new List<OptionData>
+        List<OptionData> formulaOptionDatas = new List<OptionData>();
+        if (manufactureData.hideNull)
         {
-           new FormulaOptionData
+            formulaOptionDatas.Add(new FormulaOptionData
             {
-                open=true,
-                text="нч"
-            }
-        };
+                open = true,
+                text = "нч"
+            });
+        } 
         if (this.formulaTypes.dataCount == 0)
         {
             foreach (var formulaDatas in allFormulaDatas)
@@ -469,6 +474,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
 
         FormulaDropdown.options = formulaOptionDatas;
+        SelectFormulaAsync(0);
     }
 
     private async void ClearFormulaItemBoxReferences(bool clearOutBox = true)
