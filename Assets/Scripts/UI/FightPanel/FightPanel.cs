@@ -299,7 +299,7 @@ public class FightPanel : GamePanel<IReferenceData>
             });
         }
 
-        MyInt myInt=default(MyInt);
+        MyInt myInt=new MyInt { value=-1}; 
         for (int i = teamerData.Count; i < 3; i++)
         {
             teamerData.Add(myInt);

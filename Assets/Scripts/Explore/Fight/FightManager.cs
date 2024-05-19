@@ -452,9 +452,9 @@ public class FightManager :Singleton<FightManager>
         }
         for(int i = 0; i < 6; i++)
         {
-            if (monsterIds.Count <= i)
+            if (monsterIds.Count <= i || monsterIds[i]==0)
             {
-                break;
+                continue;
             }
             MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(monsterIds[i]);
             FightMonster fightMonster = new FightMonster

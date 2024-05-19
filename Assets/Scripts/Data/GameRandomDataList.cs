@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Mathematics;
 using Unity.Burst;
 using System.Linq;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,6 +12,7 @@ using UnityEditor;
 public class GameRandomDataList : ScriptableObject
 {
 #if UNITY_EDITOR
+    [NonSerialized]
     public GameRandomDataEditor[] gameRandomDataEditors;
 
     public void SetReferenceData()
