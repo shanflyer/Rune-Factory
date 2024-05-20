@@ -32,7 +32,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
     }
     void OKAction()
     {
-        WaitAction waitAction = new WaitAction();
+        /*WaitAction waitAction = new WaitAction();
         Parameter parameter = new Parameter
         {
             value = "2",
@@ -42,20 +42,21 @@ public class AdventureResultPanel: GamePanel<FightResult>
         {
             value= "ExploreEnd"
         });
-        waitAction.Init(new List<Parameter> {parameter});
+        waitAction.Init(new List<Parameter> {parameter});*/
         //GameActionManager.instance.QueueAction(new ExploreEnd());
         Close();
 
+        /*
         DisplayMap displayMap = new DisplayMap
         {
             displayMap = CharacterManager.instance.controllerCharacter.mapInstance
         };
-        GameActionManager.instance.QueueAction(displayMap);
+        GameActionManager.instance.QueueAction(displayMap,true);*/
 
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
 
         ExploreEnd exploreEnd = new ExploreEnd();
-        GameActionManager.instance.QueueAction(exploreEnd);
+        GameActionManager.instance.QueueAction(exploreEnd, true);
 
         UIManager.instance.ShowGamePanel<PlayerTopPanel>();
         UIManager.instance.ShowGamePanel<MainPanel>();

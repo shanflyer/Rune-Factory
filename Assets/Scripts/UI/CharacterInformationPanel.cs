@@ -222,16 +222,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     {
         base.InitReferenceData(v);
         data = v;
-        if (v.head)
-        {
-            v.head.SetImageSprite(characterHead);
-        }
-        else
-        {
-            characterHead.sprite = v.icon;
-            characterHead.SetNativeSize();
-        }
-      
+        v.head.SetImageSprite(characterHead);
+
         characterId = v.characterId;
         CharacterName.text = v.name;
         if (v.isNpc)

@@ -1115,16 +1115,7 @@ public class CharacterManager : Singleton<CharacterManager>
         //  behaviorTree.startTask.AddChildTask(logTask);
     }
 
-    public async Task<Sprite> GetPlayerIcon()
-    {
-        return await GetCharacterIcon(player.dataId);
-    }
-
-    public async Task<Sprite> GetCharacterIcon(int id)
-    {
-        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
-        return characterData.icon.sprite;
-    }
+   
 
     private async Task<RuntimeObj> CreatCharacterRuntimeObj(int characterDataId, int instacneId, int2 coordiante)
     {

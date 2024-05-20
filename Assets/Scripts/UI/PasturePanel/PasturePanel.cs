@@ -151,7 +151,8 @@ public class PasturePanel : GamePanel<MyListInt>
             if (animalId != 0)
             {
                 Character character = CharacterManager.instance.GetCharacter(animalId);
-                animalIcon.sprite = character.characterData.icon.sprite;
+                character.characterData.head.SetImageSprite(animalIcon);
+                //animalIcon.sprite = character.characterData.icon.sprite;
                 animalNameText.text = character.name;
                 SetButton.transform.localScale = Vector3.one;
                 animalIcon.enabled = true;

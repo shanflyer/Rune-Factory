@@ -303,8 +303,7 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.RemoveListener<TryStartAutoExplore>(TryStartAutoExplore);
         GameActionManager.instance.RemoveListener<FightCharacterMove>(FightCharacterMove);
 
-        UIManager.instance.CloseGamePanel<FightPanel>();
-        SceneManager.instance.UnloadNowScene();
+      
 
         int characterMap = CharacterManager.instance.controllerCharacter.mapInstance;
         if (characterMap > 0)
@@ -317,8 +316,10 @@ public class FightController : MonoBehaviour
             {
                 displayMap = CharacterManager.instance.controllerCharacter.mapInstance
             };
-            GameActionManager.instance.QueueAction(displayMap);
+            GameActionManager.instance.QueueAction(displayMap,true);
         }
+        UIManager.instance.CloseGamePanel<FightPanel>();
+        SceneManager.instance.UnloadNowScene(false);
     }
 
     public void RemoveFightPlayerRuntime(int characterId)

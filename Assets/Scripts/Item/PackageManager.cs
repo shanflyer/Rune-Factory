@@ -686,6 +686,11 @@ public class PackageManager : Singleton<PackageManager>
 
     private async void AddPackageItemAction(AddPackageItem addPackageItem)
     {
+        if (addPackageItem.packageId == 0)
+        {
+            addPackageItem.packageId = CharacterManager.instance.controllerCharacter.characterPackage;
+        }
+        
         if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
         {
             int intanceId = ItemManager.instance.CreatIntance();

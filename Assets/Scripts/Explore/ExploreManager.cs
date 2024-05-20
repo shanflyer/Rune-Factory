@@ -34,6 +34,7 @@ public class ExploreManager : Singleton<ExploreManager>
     private FightMapData nowFightMapData;
     private FightChapter fightChapter;
     private int nowStep;
+    public bool isExplore => NowCharpter != 0;
     public FightChapter GetFigehtChapter(int id)
     {
         fightChapter = default(FightChapter);

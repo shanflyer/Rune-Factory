@@ -47,7 +47,8 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         {
             Icon.enabled = true;
             CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.characterId);
-            Icon.sprite = characterData.icon.sprite;
+            characterData.head.SetImageSprite(Icon);
+            //Icon.sprite = characterData.icon.sprite;
             Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
             Name.text = data.playerData.name;
             Money.text = data.otherSaveData.gold.ToString();

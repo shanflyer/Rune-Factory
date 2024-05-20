@@ -33,10 +33,14 @@ public class ShortcutManager : Singleton<ShortcutManager>
 
     void RefreshShortcut(RefreshShortcut refreshShortcut)
     {
+        if (ExploreManager.instance.isExplore)
+        {
+            return;
+        }
         if (refreshShortcut.packageId == CharacterManager.instance.controllerCharacter.characterPackage)
         {
-            var shortcutPackage = GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId); 
-            for(int i = 0; i < shortcutPackage.items.Length; i++)
+            var shortcutPackage = GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+            for (int i = 0; i < shortcutPackage.items.Length; i++)
             {
                 var item = shortcutPackage.items[i];
                 if (item.dataId != 0)
@@ -56,7 +60,8 @@ public class ShortcutManager : Singleton<ShortcutManager>
             }
             shortcutPackages.SetData(shortcutPackage);
             UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
-        } 
+
+        }
     }
     void RefreshDisplayShortcutPackage(ShortcutPackage shortcutPackage)
     {

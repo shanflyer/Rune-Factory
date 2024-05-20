@@ -9,11 +9,10 @@ public class CharacterData : ScriptableObject, IGameData
     public string characterName;
     public int id;
     public Gender gender;
-    public string iconName;
+    //public string iconName;
     public string objName;
     public string headName;
     public SpriteResourceRenference head;
-    public SpriteResourceRenference icon;
     public GameObject obj;
     public int profession;
     public int level;
@@ -50,22 +49,22 @@ public class CharacterData : ScriptableObject, IGameData
                 headDatas.Add(sprites[i].name, sprites[i]);
             }
         }
-        if (iconDatas.Count == 0)
+        /*if (iconDatas.Count == 0)
         {
             var sprites = Resources.LoadAll<SpriteResourceRenference>(iconName.Split('/')[0]);
             for (int i = 0; i < sprites.Length; i++)
             {
                 iconDatas.Add(sprites[i].name, sprites[i]);
             }
-        }
+        }*/
         if (!string.IsNullOrEmpty(headName))
         {
             headDatas.TryGetValue(headName.Split('/')[1], out head);
         }
-        if (!string.IsNullOrEmpty(iconName))
-        {
-            iconDatas.TryGetValue(iconName.Split('/')[1], out icon);
-        }
+       // if (!string.IsNullOrEmpty(iconName))
+       // {
+       //     iconDatas.TryGetValue(iconName.Split('/')[1], out icon);
+       //}
 
         obj = Resources.Load<GameObject>(objName);
     }

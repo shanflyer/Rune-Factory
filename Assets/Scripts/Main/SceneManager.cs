@@ -55,11 +55,18 @@ public class SceneManager : Singleton<SceneManager>
         nowSceen = sceneName;
     }
 
-    public void UnloadNowScene()
+    public void UnloadNowScene(bool Async=true)
     {
         if (!string.IsNullOrEmpty(nowSceen))
         {
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+            if (Async)
+            {
+                UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+            }
+            else
+            {
+                UnityEngine.SceneManagement.SceneManager.UnloadScene(nowSceen);
+            } 
             nowSceen = null;
         }
     }

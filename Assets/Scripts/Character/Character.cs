@@ -947,6 +947,12 @@ public partial class Character
             }
             exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level - 1);
             this.level = level;
+            CharacterLevelUp characterLevelUp = new CharacterLevelUp
+            {
+                characterId = instanceId,
+                level = level
+            };
+            GameActionManager.instance.QueueAction(characterLevelUp);
         }
     }
 
