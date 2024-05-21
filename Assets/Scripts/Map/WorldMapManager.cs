@@ -386,19 +386,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 characterId = CharacterManager.instance.controllerCharacter.instanceId,
                 equipDataId = mapItem.blindHomeEquipment,
-                instanceId = instanceId,
-                itemDataId = 0,
+                instanceId = instanceId, 
+                setResult=(bool value)=>{
+                    SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
+                    {
+                        characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                        equipInstanceId = instanceId,
+                        mapInstanceId = mapId,
+                        coordinate = mapItem.coordinate,
+                    };
+                    GameActionManager.instance.QueueAction(setHomeEquipCoordinate, true);
+                }
             };
-            GameActionManager.instance.QueueAction(creatHomeEquip, true);
-
-            SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
-            {
-                characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                equipInstanceId = instanceId,
-                mapInstanceId = mapId,
-                coordinate = mapItem.coordinate,
-            };
-            GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
+            GameActionManager.instance.QueueAction(creatHomeEquip, true); 
         }
 
         //尝试创建柜台
@@ -710,7 +710,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
             foreach (var data in MapRoomData.mapItems)
             {
-                await AddMapItem(data, room.id);
+               AddMapItem(data, room.id);
             }
 
             if (room.eventId != 0)

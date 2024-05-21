@@ -94,7 +94,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Polygon</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Polygon</enum>
+            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -179,6 +179,7 @@
             <key type="filename">服饰架.png</key>
             <key type="filename">木箱.png</key>
             <key type="filename">柜台.png</key>
+            <key type="filename">柴墩.png</key>
             <key type="filename">武器柜台.png</key>
             <key type="filename">沙发.png</key>
             <key type="filename">炖煮锅.png</key>
@@ -203,7 +204,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">搅拌机.png</key>
+            <key type="filename">搅拌器.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

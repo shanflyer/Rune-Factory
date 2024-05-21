@@ -55,14 +55,14 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         base.InitData(t, SelectAction, toggleGroup);
 
         toggle.group = toggleGroup;
-        ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(data.itemDataId);
+        HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(data.equipDataId); 
         toggle.enabled = true;
         setTips.gameObject.SetActive(data.mapInstance > 0);
         unSetTips.gameObject.SetActive(data.mapInstance <= 0);
 
-        if (homeEquipData != null)
+        if (homeEquipmentData != null)
         {
-            icon.sprite = homeEquipData.icon;
+            icon.sprite = homeEquipmentData.icon;
             icon.color = data.mapInstance == 0 ? Color.white : new Color(1, 1, 1, 0.5f);
             icon.enabled = true;
             icon.SetNativeSize();

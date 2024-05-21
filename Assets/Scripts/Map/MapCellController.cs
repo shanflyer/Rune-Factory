@@ -976,6 +976,15 @@ public class MapCellController : Singleton<MapCellController>
         return default(RoomCellData);
     }
 
+    public MapTriggerAreas GetPlayerTrigger(int roomId)
+    {
+        if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
+        {
+            return runtimeMapRoom.playerTriggerAreas;
+        }
+        return default(MapTriggerAreas);
+    }
+
     public void InitWorldRoomDatas(int roomCount)
     {
         runtimeMapRooms.Init(roomCount);

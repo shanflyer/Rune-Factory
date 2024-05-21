@@ -17,6 +17,12 @@ MonoBehaviour:
   objName: "\u51B7\u9910\u53F0"
   itemObj: {fileID: 7861878403204486288, guid: c8d51ab74dc91ad44ac65f3fe501b433, type: 3}
   colliderCells:
+  - x: -4
+    y: 0
+  - x: -4
+    y: 1
+  - x: -4
+    y: 2
   - x: -3
     y: 0
   - x: -3
@@ -42,38 +48,38 @@ MonoBehaviour:
   - x: 0
     y: 2
   - x: 1
+    y: -1
+  - x: 1
     y: 0
   - x: 1
     y: 1
   - x: 1
     y: 2
   - x: 2
+    y: -1
+  - x: 2
     y: 0
   - x: 2
     y: 1
   - x: 2
     y: 2
   - x: 3
+    y: -1
+  - x: 3
     y: 0
   - x: 3
     y: 1
   - x: 3
     y: 2
-  triggerCells:
-  - x: -3
+  - x: 4
     y: -1
-  - x: -2
-    y: -1
-  - x: -1
-    y: -1
-  - x: 0
-    y: -1
-  - x: 1
-    y: -1
-  - x: 2
-    y: -1
-  - x: 3
-    y: -1
+  - x: 4
+    y: 0
+  - x: 4
+    y: 1
+  - x: 4
+    y: 2
+  triggerCells: []
   playerTriggerCells:
   - x: -3
     y: -2
@@ -81,46 +87,59 @@ MonoBehaviour:
     y: -1
   - x: -3
     y: 0
+  - x: -3
+    y: 1
   - x: -2
     y: -2
   - x: -2
     y: -1
   - x: -2
     y: 0
+  - x: -2
+    y: 1
   - x: -1
     y: -2
   - x: -1
     y: -1
   - x: -1
     y: 0
+  - x: -1
+    y: 1
   - x: 0
     y: -2
   - x: 0
     y: -1
   - x: 0
     y: 0
+  - x: 0
+    y: 1
   - x: 1
     y: -2
   - x: 1
     y: -1
   - x: 1
     y: 0
+  - x: 1
+    y: 1
   - x: 2
     y: -2
   - x: 2
     y: -1
   - x: 2
     y: 0
+  - x: 2
+    y: 1
   - x: 3
     y: -2
   - x: 3
     y: -1
   - x: 3
     y: 0
+  - x: 3
+    y: 1
   playerTriggerEvent: 0
   operateIds: 0200000017000000
-  operateList:
-  - operates: 0200000017000000
+  creatAction: {fileID: 0}
   defaultExit: 0
   defaultEnter: 0
   displayTips: 1

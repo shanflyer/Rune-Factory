@@ -1042,13 +1042,13 @@ public partial class Character
                 {
                     id = reference
                 };
-                GameActionManager.instance.QueueAction(showMapObjTips);
+                GameActionManager.instance.QueueAction(showMapObjTips, true);
 
                 TriggerEnter triggerEnter = new TriggerEnter
                 {
                     eventId = reference
                 };
-                GameActionManager.instance.QueueAction(triggerEnter);
+                GameActionManager.instance.QueueAction(triggerEnter,true);
             }
             else
             {
@@ -1060,12 +1060,12 @@ public partial class Character
                 {
                     id = reference
                 };
-                GameActionManager.instance.QueueAction(closeMapObjTips);
+                GameActionManager.instance.QueueAction(closeMapObjTips, true);
                 TriggerExit triggerExit = new TriggerExit
                 {
                     eventId = reference
                 };
-                GameActionManager.instance.QueueAction(triggerExit);
+                GameActionManager.instance.QueueAction(triggerExit, true);
             }
         }
         else
@@ -1076,7 +1076,7 @@ public partial class Character
                 {
                     eventId = reference
                 };
-                GameActionManager.instance.QueueAction(triggerEnter);
+                GameActionManager.instance.QueueAction(triggerEnter, true);
             }
             else
             {
@@ -1084,7 +1084,7 @@ public partial class Character
                 {
                     eventId = reference
                 };
-                GameActionManager.instance.QueueAction(triggerExit);
+                GameActionManager.instance.QueueAction(triggerExit, true);
             }
         }
         List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>(2);
@@ -1175,7 +1175,7 @@ public partial class Character
             characterId = instanceId,
             coordinate = coordinate
         };
-        GameActionManager.instance.QueueAction(characterCoordinateTrigger);
+        GameActionManager.instance.QueueAction(characterCoordinateTrigger,true);
 
         // ForwardTrigger(coordinate, direction);
     }

@@ -45,7 +45,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     private Vector2 defaultInfoIconSize;
     async void SelectAction()
     {
-        if (SelectHomeEquip.itemDataId != 0)
+        if (SelectHomeEquip.equipDataId!= 0)
         {
             if (SelectHomeEquip.mapInstance == 0)
             {
@@ -145,7 +145,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     {
         if (selected)
         {
-            if (HomeEquip.itemDataId == 0)
+            if (HomeEquip.equipDataId == 0)
             {
                 ItemInformation.localScale = Vector3.zero; 
             }
@@ -153,16 +153,17 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             {
                 ItemInformation.localScale = Vector3.one;
                 SelectHomeEquip = HomeEquip;
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(HomeEquip.itemDataId);
-                ItemIcon.sprite = itemData.icon;
+                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
+                 
+                ItemIcon.sprite = homeEquipmentData.icon;
                 ItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(ItemIcon.sprite, defaultInfoIconSize);
                 ItemIcon.enabled = true; 
-                ItemName.text = $"+ {itemData.itemName} +"; 
-                Info.text = itemData.info;
+                ItemName.text = $"+ {homeEquipmentData.equipmentName} +"; 
+                Info.text = homeEquipmentData.info;
                 ActionName.text = HomeEquip.mapInstance == 0 ? "布置" : "收回";
                 ActionImage.sprite=HomeEquip.mapInstance == 0 ? setSprite : unSetSprite;
 
-                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
+               
                 EquipType.text = homeEquipmentData.homeEquipType.ToString();
                 string roomValueText = "所有地方";
                 if(homeEquipmentData.canSetMaps != null && homeEquipmentData.canSetMaps.Count > 0)

@@ -225,7 +225,7 @@ public class MapInstanceEditor : MonoBehaviour
                          
                         itemInstance.transform.SetParent(itemParent, false);
                         var mapItemInstanceEditor = itemInstance.gameObject.AddComponent<MapItemInstanceEditor>();
-                        mapItemInstanceEditor.InitData(itemData, item.instanceId, item.coordinate,item.eventReferenceDatas);
+                        mapItemInstanceEditor.InitData(itemData,item.blindHomeEquipment, item.instanceId, item.coordinate,item.eventReferenceDatas);
                     }
                 }
             }

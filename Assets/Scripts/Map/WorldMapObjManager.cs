@@ -510,7 +510,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             };
             GameActionManager.instance.QueueAction(displayStoreCounter);
 
-            await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
+            RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
 
             var manufature = ManufatureManager.instance.GetManufature(runtimeMapItem.instanceId);
             if (manufature.instanceId == runtimeMapItem.instanceId)

@@ -78,8 +78,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         HomeEquip homeEquip = new HomeEquip
         {
-            instanceId = creatHomeEquip.instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : creatHomeEquip.instanceId,
-            itemDataId = creatHomeEquip.itemDataId,
+            instanceId = creatHomeEquip.instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : creatHomeEquip.instanceId, 
             equipDataId = creatHomeEquip.equipDataId,
             characterId = creatHomeEquip.characterId,
             mapItemInstance = creatHomeEquip.instanceId,
@@ -120,6 +119,10 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
         homeEquip.linkManufature = homeEquipmentData.manufatureId;
         homeEquips.SetData(homeEquip);
+        if (creatHomeEquip.setResult != null)
+        {
+            creatHomeEquip.setResult(true);
+        }
     }
 
     private void RemoveHomeEquip(RemoveHomeEquip removeHomeEquip)
@@ -332,8 +335,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
                 CreatHomeEquip CreatHomeEquip = new CreatHomeEquip
                 {
-                    characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                    itemDataId = selectShopItemData.item,
+                    characterId = CharacterManager.instance.controllerCharacter.instanceId, 
                     equipDataId = itemData.typeValue
                 };
                 GameActionManager.instance.QueueAction(CreatHomeEquip);
@@ -363,8 +365,7 @@ public struct HomeEquip : INativeData, IReferenceData
 {
     public int instanceId;
     public int mapItemInstance;
-    public bool hide;
-    public int itemDataId;
+    public bool hide; 
     public int equipDataId;
     public int2 coordinate;
     public int mapInstance;
