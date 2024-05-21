@@ -9,7 +9,10 @@ public enum HomeEquipType
 {
     生产设施, 生活设施
 }
-
+public enum HomeEquipFunc
+{
+    装饰=0,床=1, 箱子=2,柜台=3,生产=4
+}
 public class HomeEquipmentData : ScriptableObject, IGameData, IReferenceData
 {
     public int id;
@@ -21,7 +24,8 @@ public class HomeEquipmentData : ScriptableObject, IGameData, IReferenceData
 
     public Sprite icon;
     public HomeEquipType homeEquipType;
-    public int manufatureId;
+    public HomeEquipFunc homeEquipFunc;
+    public int homeEquipFuncValue;
     public bool hide;
     public List<int> canSetMaps = new List<int>();
     public string info;

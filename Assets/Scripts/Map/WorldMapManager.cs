@@ -400,18 +400,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
             };
             GameActionManager.instance.QueueAction(creatHomeEquip, true); 
         }
-
-        //尝试创建柜台
-        TryCreatStoreCounter tryCreatStoreCounter = new TryCreatStoreCounter
-        {
-            itemDataId = mapItem.id,
-            itemInstanceId = instanceId
-        };
-        GameActionManager.instance.QueueAction(tryCreatStoreCounter, true);
+         
 
         var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
-
-        
         if (mapItemData.operateIds != null)
         {
             for (int i = 0; i < mapItemData.operateIds.Count; i++)
@@ -508,16 +499,15 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
                 MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
 
+                /*
                 WorldMapObjManager.instance.DeleteMapItem(new DeleteMapItem
                 {
                     mapItemInstanceId = runtimeMapItem.instanceId,
-                });
-
+                });*/
                 //设置新位置
                 runtimeMapItem.mapInstanceId = moveMapItem.mapInstance;
                 runtimeMapItem.coordinate = moveMapItem.coordinate;
-
-                if (runtimeMapItem.mapInstanceId != 0)
+                if (moveMapItem.mapItemInstanceId > 0)
                 {
                     if (mapItemData.triggerCells.Length > 0)
                     {
@@ -526,20 +516,17 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     }
                     if (mapItemData.playerTriggerCells != null && mapItemData.playerTriggerCells.Length > 0)
                     {
-                        MapCellController.instance.AddPlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.mapInstanceId, mapItemData.playerTriggerEvent,
+                        MapCellController.instance.AddPlayerTriggerCell(mapItemData.playerTriggerCells, moveMapItem.mapInstance, mapItemData.playerTriggerEvent,
                             runtimeMapItem.instanceId, moveMapItem.coordinate);
                     }
                     if (mapItemData.colliderCells.Length > 0)
                     {
                         MapCellController.instance.AddBarrierCell(mapItemData.colliderCells, moveMapItem.coordinate, moveMapItem.mapInstance);
                     }
-
-                    if (moveMapItem.mapInstance == WorldMapObjManager.instance.displayMap)
-                    {
-                        WorldMapObjManager.instance.DisplayMapItem(runtimeMapItem);
-                    }
                 }
                 runtimeMapItems.SetData(runtimeMapItem);
+                RefreshMapItemDisplay refreshMapItemDisplay = new RefreshMapItemDisplay { runtimeMapItem = runtimeMapItem };
+                GameActionManager.instance.QueueAction(refreshMapItemDisplay);
             }
         }
         else //if(moveMapItem.noneTryAdd)
@@ -556,7 +543,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
         SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
         {
             characterId = CharacterManager.instance.controllerCharacter.instanceId,
-            equipInstanceId = moveMapItem.mapItemInstanceId
+            equipInstanceId = moveMapItem.mapItemInstanceId,
+            mapInstanceId = moveMapItem.mapInstance,
+            coordinate=moveMapItem.coordinate
         };
         GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
     }

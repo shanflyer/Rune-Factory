@@ -66,7 +66,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         if (homeEquips.GetData(unSetHomeEquip.instanceId, out var homeEquip))
         {
-            homeEquip.mapInstance = 0;
+            homeEquip.mapInstance = -1;
             homeEquip.coordinate = int2.zero;
             homeEquips.SetData(homeEquip);
             RefreshHomeEquip(homeEquip);
@@ -108,16 +108,40 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
         homeEquip.hide = homeEquipmentData.hide;
-        if (homeEquipmentData.manufatureId != 0)
+
+        switch (homeEquipmentData.homeEquipFunc)
         {
-            CreatManufature creatManufature = new CreatManufature
-            {
-                instanceId = homeEquip.instanceId,
-                manufatureId = homeEquipmentData.manufatureId
-            };
-            GameActionManager.instance.QueueAction(creatManufature);
+            case HomeEquipFunc.床:
+                break;
+            case HomeEquipFunc.箱子:
+                break;
+            case HomeEquipFunc.柜台:
+                if (homeEquipmentData.homeEquipFuncValue != 0)
+                {
+                    CreatStoreCounter creatStoreCounter = new CreatStoreCounter
+                    {
+                        itemInstanceId = homeEquip.instanceId,
+                        storeDataId = homeEquipmentData.homeEquipFuncValue
+                    };
+                    GameActionManager.instance.QueueAction(creatStoreCounter);
+                }
+                 break;
+            case HomeEquipFunc.生产:
+                if (homeEquipmentData.homeEquipFuncValue != 0)
+                {
+                    CreatManufature creatManufature = new CreatManufature
+                    {
+                        instanceId = homeEquip.instanceId,
+                        manufatureId = homeEquipmentData.homeEquipFuncValue
+                    };
+                    GameActionManager.instance.QueueAction(creatManufature);
+                } 
+                break;
+            case HomeEquipFunc.装饰:
+                break;
         }
-        homeEquip.linkManufature = homeEquipmentData.manufatureId;
+
+        
         homeEquips.SetData(homeEquip);
         if (creatHomeEquip.setResult != null)
         {
@@ -253,48 +277,29 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         if (homeEquip.mapItemInstance != 0)
         {
-            if (homeEquip.mapInstance == 0)
+            MoveMapItem moveMapItem = new MoveMapItem
             {
-                DeleteMapItem deleteMapItem = new DeleteMapItem
-                {
-                    mapItemInstanceId = homeEquip.mapItemInstance,
-                    triggerClear = true
-                };
-                GameActionManager.instance.QueueAction(deleteMapItem, true);
-            }
-            else
-            {
-                MoveMapItem moveMapItem = new MoveMapItem
-                {
-                    mapItemInstanceId = homeEquip.mapItemInstance,
-                    mapInstance = homeEquip.mapInstance,
-                    coordinate = homeEquip.coordinate
-                };
-                GameActionManager.instance.QueueAction(moveMapItem, true);
-            }
+                mapItemInstanceId = homeEquip.mapItemInstance,
+                mapInstance = homeEquip.mapInstance,
+                coordinate = homeEquip.coordinate
+            };
+            GameActionManager.instance.QueueAction(moveMapItem, true);
         }
         else
         {
-            if (homeEquip.mapInstance != 0)
+            AddMapItem addMapItem = new AddMapItem
             {
-                // ItemData homeEquipData = await GameDataManager.instance.GetAsyncData<ItemData>(homeEquip.dataId);
-                //if (homeEquipData != null)
-                {
-                    AddMapItem addMapItem = new AddMapItem
-                    {
-                        mapId = homeEquip.mapInstance,
-                        coordinate = homeEquip.coordinate,
-                        dataId = homeEquip.mapItemInstance,
-                        setValue = SetMapItem
-                    };
-                    void SetMapItem(int itemInstance)
-                    {
-                        homeEquip.mapItemInstance = itemInstance;
-                        homeEquips.SetData(homeEquip);
-                    }
-                    GameActionManager.instance.QueueAction(addMapItem, true);
-                }
+                mapId = homeEquip.mapInstance,
+                coordinate = homeEquip.coordinate,
+                dataId = homeEquip.mapItemInstance,
+                setValue = SetMapItem
+            };
+            void SetMapItem(int itemInstance)
+            {
+                homeEquip.mapItemInstance = itemInstance;
+                homeEquips.SetData(homeEquip);
             }
+            GameActionManager.instance.QueueAction(addMapItem, true);
         }
     }
 
@@ -369,8 +374,7 @@ public struct HomeEquip : INativeData, IReferenceData
     public int equipDataId;
     public int2 coordinate;
     public int mapInstance;
-    public int characterId;
-    public int linkManufature;
+    public int characterId; 
     public int Key => instanceId;
 
     public bool Equals(IReferenceData other)

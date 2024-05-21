@@ -11,8 +11,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     public MyNativeData<RuntimeStoreCounter> RuntimeStoreCounters=>runtimeStoreCounters;
     private MyNativeData<RuntimeStoreCounter> runtimeStoreCounters;
     private Dictionary<int, RuntimeObj> nowRuntimeStoreCounterObjs = new Dictionary<int, RuntimeObj>();
-    
-    Dictionary<int, StoreCounterData> StoreCounterDataForMapItem = new Dictionary<int, StoreCounterData>();
+     
     SellItem sellItem;
     protected override void Clear()
     {
@@ -25,16 +24,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
         var  playerStorePrefab = await GameSourceManager.instance.GetPrefab(DataPath.StoreCounterPrefab);
         sellItem= playerStorePrefab.GetComponent<SellItem>();
-        runtimeStoreCounters.Init(32);
-        StoreCounterDataForMapItem.Clear();
-        var storeCounterDatas = await GameDataManager.instance.GetAllAsyncData<StoreCounterData>();
-        for(int i = 0; i < storeCounterDatas.Count; i++)
-        {
-            var storeCounterData = storeCounterDatas[i];
-            StoreCounterDataForMapItem[storeCounterData.linkItem] = storeCounterData;
-        }
-
-        GameActionManager.instance.AddListener<TryCreatStoreCounter>(TryCreatStoreCounter);
+        runtimeStoreCounters.Init(32); 
+        GameActionManager.instance.AddListener<CreatStoreCounter>(CreatStoreCounter); 
         GameActionManager.instance.AddListener<DisplayStoreCounter>(DisplayStoreCounter);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteStoreCounter);
         GameActionManager.instance.AddListener<StoreCounterSetSelectItemAction>(StoreCounterSetSelectItemAction);
@@ -203,20 +194,24 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             }
         }
     }
-    void TryCreatStoreCounter(TryCreatStoreCounter tryCreatStoreCounter)
-    { 
-        if (!runtimeStoreCounters.Contains(tryCreatStoreCounter.itemInstanceId) &&
-            StoreCounterDataForMapItem.TryGetValue(tryCreatStoreCounter.itemDataId,out var storeCounterData))
+    async void CreatStoreCounter(CreatStoreCounter creatStoreCounter)
+    {
+        if (!runtimeStoreCounters.Contains(creatStoreCounter.itemInstanceId))
         {
-            RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
+            var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(creatStoreCounter.storeDataId);
+            if (storeData.id == creatStoreCounter.storeDataId)
             {
-                instanceId = tryCreatStoreCounter.itemInstanceId,
-                dataId = tryCreatStoreCounter.itemDataId,
-            };
-            runtimeStoreCounters.AddData(runtimeStoreCounter);
+                RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
+                {
+                    instanceId = creatStoreCounter.itemInstanceId,
+                    dataId = storeData.id,
+                };
+                runtimeStoreCounters.AddData(runtimeStoreCounter);
+            }
         }
     }
-    void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
+  
+    async void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
     {
         if (runtimeStoreCounters.GetData(displayStoreCounter.itemInstanceId,out var runtimeStoreCounter))
         {
@@ -226,7 +221,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 {
                     return;
                 }
-                var storeCounterData = StoreCounterDataForMapItem[runtimeStoreCounter.dataId]; 
+
+                var storeCounterData =await GameDataManager.instance.GetAsyncData<StoreCounterData>(runtimeStoreCounter.dataId);
                 if (!nowRuntimeStoreCounterObjs.TryGetValue(displayStoreCounter.itemInstanceId,out var runtimeObj))
                 {
                     runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",

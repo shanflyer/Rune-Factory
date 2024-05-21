@@ -47,7 +47,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     {
         if (SelectHomeEquip.equipDataId!= 0)
         {
-            if (SelectHomeEquip.mapInstance == 0)
+            if (SelectHomeEquip.mapInstance <=0)
             {
                 HomeEquipmentData homeEquipmentData=await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
                 if (homeEquipmentData.canSetMaps==null||homeEquipmentData.canSetMaps.Count==0||
@@ -94,6 +94,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             SelectHomeEquip.coordinate = int2.zero;
             SelectHomeEquip.mapInstance = 0;
             EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
+            ActionName.text = "≤º÷√";
+            ActionImage.sprite = setSprite;
         }
     }
     protected override void Awake()

@@ -98,6 +98,19 @@ public struct ChangeMapRoom : GameAction
     }
 }
 
+public struct RefreshMapItemDisplay : GameAction
+{
+    public RuntimeMapItem runtimeMapItem;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RefreshMapPackageItemRender : GameAction
 {
     public int linkInstanceId;
