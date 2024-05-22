@@ -254,8 +254,8 @@ public struct CreatPackage : GameAction
     public SetResult setResult { get; set; }
     public int packageDataId;
     public int level;
-    public int instanceId; 
-
+    public int instanceId;
+    public bool playerPackage;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters != null)

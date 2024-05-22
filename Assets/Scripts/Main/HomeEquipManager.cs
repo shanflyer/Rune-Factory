@@ -114,6 +114,16 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             case HomeEquipFunc.床:
                 break;
             case HomeEquipFunc.箱子:
+                if (homeEquipmentData.homeEquipFuncValue != 0)
+                {
+                    CreatPackage creatPackage = new CreatPackage
+                    {
+                        packageDataId = homeEquipmentData.homeEquipFuncValue,
+                        level = 0,
+                        instanceId=homeEquip.instanceId
+                    };
+                    GameActionManager.instance.QueueAction(creatPackage);
+                }
                 break;
             case HomeEquipFunc.柜台:
                 if (homeEquipmentData.homeEquipFuncValue != 0)

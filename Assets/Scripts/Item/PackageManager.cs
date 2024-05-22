@@ -318,7 +318,7 @@ public class PackageManager : Singleton<PackageManager>
     {
         int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level, creatPackage.instanceId);
 
-        if (GameManager.instance.GetPlayerBoxId() == instanceId)
+        if (creatPackage.playerPackage||GameManager.instance.GetPlayerBoxId() == instanceId)
         {
             AddPlayerPackage(instanceId);
         }
