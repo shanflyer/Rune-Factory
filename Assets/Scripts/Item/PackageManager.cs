@@ -1367,6 +1367,10 @@ public struct ItemMatchData
 
     public bool MatchAction(Item item)
     {
+        if (matchValues == null || matchValues.Count == 0)
+        {
+            return true;
+        }
         switch (itemMatchType)
         {
             case ItemMatchType.ItemType:

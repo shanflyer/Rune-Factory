@@ -57,7 +57,18 @@ public class UIManager : Singleton<UIManager>
         }
         return null;
     }
-
+    public async Task<T> GetGamePanel<T, V>(V data, bool force = false, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
+    {
+        if (gamePanels.TryGetValue(typeof(T), out var gamePanel) && gamePanel != null)
+        {
+            return (T)gamePanel;
+        }
+        else if (force)
+        {
+            return await ShowGamePanel<T,V>(data,layer,parent);
+        }
+        return null;
+    }
     private BaseReference GetGamePanel(Type t)
     {
         if (gamePanels.TryGetValue(t, out var gamePanel) && gamePanel != null)

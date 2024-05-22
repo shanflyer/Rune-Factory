@@ -268,7 +268,7 @@ public class ExcelDataEditor : MyEditor
         {
             value = Convert.ChangeType(value, typeof(int));
             fieldInfo.SetValue(data, value);
-        }
+        } 
         else if (fieldInfo.FieldType == typeof(List<int>))
         {
             var valueStr = value.ToString();
@@ -377,6 +377,21 @@ public class ExcelDataEditor : MyEditor
                 Vector2 _value = Vector2.zero;
                 _value.x = float.Parse(strs[0]);
                 _value.y = float.Parse(strs[1]);
+                value = _value;
+                fieldInfo.SetValue(data, value);
+            }
+        }
+        else if (fieldInfo.FieldType == typeof(Vector3))
+        {
+            var valueStr = value.ToString();
+            if (!string.IsNullOrEmpty(valueStr))
+            {
+                var strs = value.ToString().Split(',');
+
+                Vector3 _value = Vector3.zero;
+                _value.x = float.Parse(strs[0]);
+                _value.y = float.Parse(strs[1]);
+                _value.z = float.Parse(strs[2]);
                 value = _value;
                 fieldInfo.SetValue(data, value);
             }

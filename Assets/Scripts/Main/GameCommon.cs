@@ -962,7 +962,7 @@ public static class DataPath
         {typeof(ShopGroup),"Data/ShopItemData/ShopDataList" },
         {typeof(TempCharacterCreatData),"Data/TempCharacterCreatData" },
         {typeof(OperateData),"Data/OperateData" },
-        {typeof(StoreCounterData),"Data/StoreCounterDataList" },
+        {typeof(StoreCounterData),"Data/StoreCounterData/StoreCounterDataList" },
         {typeof(FestivalData),"Data/FestivalData/FestivalDataList"},
         {typeof(PermissionData),"Data/PermissionData/PermissionDataList"},
         {typeof(TempCharacterData),"Data/TempCharacterData"},

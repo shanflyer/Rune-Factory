@@ -6,14 +6,17 @@ using UnityEngine;
 public class StoreCounterDataList : ScriptableObject, IGameData, IDataArray<StoreCounterData>
 {
     [SerializeField]
-    StoreCounterData[] storeCounterDatas;
+    public StoreCounterData[] storeCounterDatas;
     public StoreCounterData[] DataList => storeCounterDatas;
 
     public string GetKey()
     {
         return "StoreCounterDataList";
     }
-
+    public override string ToString()
+    {
+        return "StoreCounterDataList";
+    }
     public void SetReferenceData()
     { 
     }
@@ -22,10 +25,9 @@ public class StoreCounterDataList : ScriptableObject, IGameData, IDataArray<Stor
 public struct StoreCounterData :  IGameData
 {
     public string counterName;
-    public int id; 
-    public int linkItem;
+    public int id;  
     public Vector3 offset;
-    public List<ItemType> itemTypes;
+    public List<int> itemTypes;
     public string GetKey()
     {
         return id.ToString();

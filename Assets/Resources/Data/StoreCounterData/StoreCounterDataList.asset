@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: StoreCounterDataList
   m_EditorClassIdentifier: 
   storeCounterDatas:
-  - counterName: "\u67DC\u53F0"
+  - counterName: "\u666E\u901A\u67DC\u53F0"
     id: 300
-    linkItem: 1017
     offset: {x: 0, y: 0.24, z: -0.12}
-    itemTypes: ffffffff
-  - counterName: "\u67DC\u53F0H"
+    itemTypes: 000000000100000003000000040000000500000006000000
+  - counterName: "\u670D\u9970\u67B6"
     id: 301
-    linkItem: 810001
-    offset: {x: 0, y: 0.16, z: -0.16}
-    itemTypes: 00000000
+    offset: {x: 0, y: 0.24, z: -0.12}
+    itemTypes: 02000000
+  - counterName: "\u6B66\u5668\u67B6"
+    id: 302
+    offset: {x: 0, y: 0.24, z: -0.12}
+    itemTypes: 
