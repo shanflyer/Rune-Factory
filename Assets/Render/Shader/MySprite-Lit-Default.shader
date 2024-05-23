@@ -508,7 +508,7 @@ Shader "MySprite-Lit-Default"
                 waterColor.xyz=snowValue;
                 }
              
-                return float4( waterColor.xyz,main.a);
+               // return float4( waterColor.xyz,main.a);
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 

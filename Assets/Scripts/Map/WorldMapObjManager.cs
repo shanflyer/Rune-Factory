@@ -23,6 +23,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
         GameActionManager.instance.AddListener<RefreshMapPackageItemRender>(RefreshMapPackageItemRender);
         GameActionManager.instance.AddListener<RefreshMapItemDisplay>(RefreshMapItemDisplay);
+        GameActionManager.instance.AddListener<ChangeMapItemObjLayer>(ChangeMapItemObjLayer);
     }
 
     protected override void Clear()
@@ -31,6 +32,13 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         nowRuntimeMapItemObjs.Clear();
         tempRuntimeMapItemObjs.Clear();
         mapPackageItemRenders.Clear();
+    }
+    void ChangeMapItemObjLayer(ChangeMapItemObjLayer changeMapItemObjLayer)
+    {
+        if(nowRuntimeMapItemObjs.TryGetValue(changeMapItemObjLayer.mapItemId,out var mapItemRuntimeObj))
+        {
+            mapItemRuntimeObj.SetLayer(changeMapItemObjLayer.layerId);
+        }
     }
 
     private void RefreshMapItemDisplay(RefreshMapItemDisplay refreshMapItemDisplay)
@@ -629,6 +637,23 @@ public struct MapItemRuntimeObj
         }
     }
 
+    public void SetLayer(LayerMask layerMask)
+    {
+        if (spriteRenderers != null)
+        {
+            for (int i = 0; i < spriteRenderers.Length; i++)
+            {
+                spriteRenderers[i].gameObject.layer = layerMask;
+            }
+        } 
+    }
+    public void SetDefaultLayer()
+    { 
+        for (int i = 0; i < spriteRenderers.Length; i++)
+        {
+            spriteRenderers[i].gameObject.layer = 0;
+        }
+    }
     public void SetCoordinate(int2 coordinate)
     {
         this.coordinate = coordinate;
@@ -667,6 +692,7 @@ public struct MapItemRuntimeObj
         if (spriteRenderers != null)
         {
             ResetColor();
+            SetDefaultLayer();
         }
         spriteRenderers = null;
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);

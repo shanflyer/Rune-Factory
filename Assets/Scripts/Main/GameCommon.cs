@@ -85,7 +85,6 @@ public enum EntityType
 
 public class GameCommon
 {
-
     public static Dictionary<Direction, Vector2> fishToolOffsets = new Dictionary<Direction, Vector2>
     {
         {Direction.LEFT,new Vector2(-0.556f,0.034f)},
@@ -93,6 +92,11 @@ public class GameCommon
         {Direction.UP,new Vector2(0,0.6531f)},
         {Direction.DOWN,new Vector2(0,-0.39f)},
     };
+    public const int BlueObjLayer = 13;
+    public const int GreenObjLayer = 14;
+    public const int RedbjLayer = 15;
+
+    public const int PixelCameraDefaultValue = 400;
     public const int setTeamerFunctionId = 4;
     public const int defaultProduct = 1;
     public const int explorCostMinute = 120;

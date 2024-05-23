@@ -18,7 +18,7 @@ public class CameraManager : Singleton<CameraManager>
     private CinemachineCameraOffset[] CinemachineCameraOffsets;
     CinemachineFramingTransposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
-
+    
     public override void Init()
     {
         base.Init();
@@ -90,8 +90,9 @@ public class CameraManager : Singleton<CameraManager>
 
     private void SetFixedCamera(SetFixedCamera setFixedCamera)
     {
+        pixelPerfectCamera.assetsPPU =setFixedCamera.pixelValue==0?GameCommon.PixelCameraDefaultValue:setFixedCamera.pixelValue;
         if (setFixedCamera.fixedCamera)
-        {
+        { 
             fixedView = true;
             mixingCamera.SetWeight(0, 0);
             mixingCamera.SetWeight(1, 0);

@@ -81,10 +81,10 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         canvas.worldCamera = CameraManager.instance.uiCamera;
         
     }
-   
+    protected V data;
     public virtual void InitReferenceData(V v) 
     {
-
+        data = v;
     } 
     public override void Show(int layer = -1)
     {

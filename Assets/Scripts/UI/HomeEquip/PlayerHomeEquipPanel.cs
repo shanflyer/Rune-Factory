@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -156,12 +157,39 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
         ItemName.text = "";
         GameActionManager.instance.QueueAction(hidePanels, true);
+
+        for(int i = 0; i < v.homeEquips.Count; i++)
+        {
+            var homeEquip = v.homeEquips[i];
+            if(homeEquip.mapInstance== WorldMapObjManager.instance.displayMap)
+            {
+                ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
+                {
+                    layerId = GameCommon.BlueObjLayer,
+                    mapItemId = homeEquip.instanceId
+                };
+                GameActionManager.instance.QueueAction(changeMapItemObjLayer, true);
+            }
+        }
     }
     public override void Close()
     {
         base.Close();
         hidePanels.hide = false;
         GameActionManager.instance.QueueAction(hidePanels, true);
+        for (int i = 0; i < data.homeEquips.Count; i++)
+        {
+            var homeEquip = data.homeEquips[i];
+            if (homeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
+            {
+                ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
+                {
+                    layerId = 0,
+                    mapItemId = homeEquip.instanceId
+                };
+                GameActionManager.instance.QueueAction(changeMapItemObjLayer, true);
+            }
+        }
     }  
     async void SelectEquip(HomeEquip HomeEquip, bool selected = true)
     {

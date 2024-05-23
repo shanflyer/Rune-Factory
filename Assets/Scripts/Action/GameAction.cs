@@ -67,6 +67,7 @@ public struct SetFixedCamera : GameAction
     public bool fixedCamera;
     public Vector3 fixedPos;
     public FlowCameraType flowCameraType;
+    public int pixelValue;
     public SetResult setResult { get; set; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
