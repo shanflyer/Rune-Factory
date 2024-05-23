@@ -11,12 +11,15 @@ public class BaseReference : MonoBehaviour
 
     [SerializeField]
     public Canvas canvas;
+    [SerializeField]
+    public GraphicRaycaster raycaster;
     public bool show;
     public virtual bool pluralUI { get; }
     public virtual bool changeInputModel { get=>true; }
     public virtual void SetPanelUISerializeObj()
     {
         gameObject.TryGetComponent(out canvas);
+        gameObject.TryGetComponent(out raycaster);
     }
     public virtual void Show(int layer = -1) { show = true; }
     public virtual void Close() { show = false; } 

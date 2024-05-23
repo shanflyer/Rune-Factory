@@ -11,6 +11,7 @@ public struct ItemInfo:IReferenceData
     public string ActionName;
     public bool showClose;
     public SelectAction<ItemInfo> action;
+    public float OffsetPos;
 }
 public class ItemInfoPanel : GamePanel<ItemInfo>
 {
@@ -26,19 +27,25 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
     private TextMeshProUGUI Property;
     [SerializeField]
     private TextMeshProUGUI Info;
-
-    private Image Icon; 
+    [SerializeField]
+    private Image Icon;
+    [SerializeField]
     private Image MoneyIcon;
+    [SerializeField]
     private TextMeshProUGUI MoneyValue;
+    [SerializeField]
+    private Transform center;
 
     [SerializeField]
     Transform InfoItemValueBg;
     [SerializeField]
     Image InfoItemValue;
+
+    private Vector3 centerPos;
     protected override void Awake()
     {
         base.Awake();
-
+        centerPos = center.transform.localPosition;
         CloseButton.onClick.AddListener(Close);
         
         ActionButton.onClick.AddListener(() =>
@@ -69,12 +76,23 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         InfoItemValueBg = FindChildGameObject("InfoItemValueBg");
         InfoItemValue = FindChildGameObject<Image>("InfoItemValue");
 
+        center = FindChildGameObject("Center");
+
         CloseObj = FindChildGameObject("CloseObj");
+        CloseButton = FindChildGameObject<Button>("Close");
     }
     public void SetAction(SelectAction<ItemInfo> action, string actionName)
     {
         this.action = action;
         ActionName.text = actionName;
+        if (action == null || string.IsNullOrEmpty(actionName))
+        {
+            ActionButton.transform.localScale = Vector3.zero;
+        }
+        else
+        {
+            ActionButton.transform.localScale = Vector3.one;
+        }
     }
 
     private ItemInfo ItemInfo; private SelectAction<ItemInfo> action;
@@ -83,20 +101,54 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
     {
         base.InitReferenceData(v);
         ItemInfo = v;
+        switch (v.otherValue)
+        {
+            case 0:
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(v.dataId);
+                Icon.sprite = itemData.icon;
+                Name.text = itemData.itemName;
+                type.text = $"[{itemData.type}]";
+                MoneyIcon.enabled = true;
+                MoneyValue.text = $"{itemData.sellPrice}";
+                Property.text = itemData.property.ToString();
+                Info.text = itemData.info;
+                InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
+                InfoItemValue.fillAmount = v.itemValue;
+                break;
+            case 1:
+                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(v.dataId);
+                Icon.sprite = homeEquipmentData.icon;
+                Name.text = homeEquipmentData.equipmentName;
+                type.text = homeEquipmentData.homeEquipType.ToString(); 
+                Icon.rectTransform.sizeDelta=GameCommon.SetImageSize(homeEquipmentData.icon, new Vector2(32, 32));
 
-        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(v.dataId);
-        Icon.sprite = itemData.icon;
-        Name.text = itemData.itemName;
-        type.text = $"[{itemData.type}]";
-        MoneyValue.text = $"{itemData.sellPrice}";
-        Property.text = itemData.property.ToString();
-        Info.text = itemData.info;
+                MoneyValue.text = "";
+                MoneyIcon.enabled = false;
+
+                Info.text = homeEquipmentData.info;
+                InfoItemValueBg.localScale = Vector3.zero;
+
+                string roomValueText = "所有地方";
+                if (homeEquipmentData.canSetMaps != null && homeEquipmentData.canSetMaps.Count > 0)
+                {
+                    roomValueText = "";
+                    for (int i = 0; i < homeEquipmentData.canSetMaps.Count; i++)
+                    {
+                        int roomId = homeEquipmentData.canSetMaps[i];
+                        roomValueText += WorldMapManager.instance.GerMapDataName(roomId);
+                        if (i < homeEquipmentData.canSetMaps.Count - 1)
+                        {
+                            roomValueText += ",";
+                        }
+                    }
+                }
+                Property.text = $"可布置地点:{roomValueText}";
+                break;
+        }
+       
         this.action = v.action;
-
-        InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-        InfoItemValue.fillAmount = v.itemValue;
-
-        if (v.ActionName == null)
+         
+        if (string.IsNullOrEmpty(v.ActionName))
         {
             ActionButton.transform.localScale = Vector3.zero;
         }
@@ -106,7 +158,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
             ActionName.text = v.ActionName;
             ActionButton.transform.localScale = Vector3.one;
         }
-
+        center.localPosition = new Vector3(centerPos.x, centerPos.y + v.OffsetPos, centerPos.z);
         CloseObj.localScale = ItemInfo.showClose ? Vector3.one : Vector3.zero;
     }
     

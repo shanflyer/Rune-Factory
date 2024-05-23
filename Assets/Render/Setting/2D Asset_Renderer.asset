@@ -1,5 +1,47 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9033159978113863346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: BlueMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: BlueMask
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 8192
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: 0b7a3dca5a53d544db378afbc087882a, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &-898443647823300259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17,6 +59,48 @@ MonoBehaviour:
   injectionPoint: 550
   requirements: 4
   passIndex: 0
+--- !u!114 &-777346220230445787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: RedMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: RedMask
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 32768
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: 5b104531ee088d84bab33c2a6680306a, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,11 +137,14 @@ MonoBehaviour:
   - {fileID: 1508528712174735023}
   - {fileID: -898443647823300259}
   - {fileID: 8839455909964680641}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a
+  - {fileID: -9033159978113863346}
+  - {fileID: 1450699581313148266}
+  - {fileID: -777346220230445787}
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
-    m_Bits: 8081
+    m_Bits: 65425
   m_TransparencySortMode: 3
   m_TransparencySortAxis: {x: 0, y: 1, z: 1}
   m_HDREmulationScale: 1
@@ -192,6 +279,48 @@ MonoBehaviour:
   glareSample3Angle: 135
   glareSample3Intensity: 1
   glareSample3Offset: 0
+--- !u!114 &1450699581313148266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: GreenMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: GreenMask
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 16384
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: edf0133c2aab50e45a66fee3c9053191, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &1508528712174735023
 MonoBehaviour:
   m_ObjectHideFlags: 0

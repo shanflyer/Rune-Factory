@@ -34,6 +34,7 @@ public class UIManager : Singleton<UIManager>
         GameActionManager.instance.AddListener<ClosePanelAction>(ClosePanel);
         GameActionManager.instance.AddListener<OpenPanelAction>(OpenPanel);
         GameActionManager.instance.AddListener<HidePanel>(HidePanel);
+        GameActionManager.instance.AddListener<HidePanels>(HidePanels);
     }
 
     public bool GamePanelIsShow<T>() where T : BaseReference
@@ -132,7 +133,22 @@ public class UIManager : Singleton<UIManager>
             return gamePanel;
         }
     }
-
+    private void HidePanels(HidePanels hidePanel)
+    {
+        for(int i = 0; i < hidePanel.type.Count; i++)
+        {
+            var type = hidePanel.type[i];
+            var gamePanel = GetGamePanel(type);
+            if (gamePanel == null)
+            {
+                continue;
+            }
+            if (gamePanel.canvas)
+                gamePanel.canvas.enabled = !hidePanel.hide;
+            if (gamePanel.raycaster)
+                gamePanel.raycaster.enabled = !hidePanel.hide;
+        }
+    }
     private void HidePanel(HidePanel hidePanel)
     {
         var gamePanel = GetGamePanel(hidePanel.type);
@@ -141,9 +157,9 @@ public class UIManager : Singleton<UIManager>
             return;
         }
         if (gamePanel.canvas)
-        {
             gamePanel.canvas.enabled = !hidePanel.hide;
-        }
+        if (gamePanel.raycaster)
+            gamePanel.raycaster.enabled = !hidePanel.hide;
     }
 
     private async void OpenPanel(OpenPanelAction openPanelEvent)

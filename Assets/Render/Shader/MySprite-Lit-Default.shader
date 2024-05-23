@@ -479,7 +479,7 @@ Shader "MySprite-Lit-Default"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                const half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
                 //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
 
@@ -490,15 +490,15 @@ Shader "MySprite-Lit-Default"
                 
                 float singleValue=(main.x+main.y+main.z)/3;
                 float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
-                float3 waterColor=main.xyz*i.color;
-               
-                waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor;
+                float3 waterColor=main.xyz*i.color.xyz;
+              
+                waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
  
                 if(_DampBlend)
                 {
                    waterColor=DampColor(waterColor,i.lightingUV,i.uv); 
                 } 
-               
+                 main.xyz*=i.color.xyz;
                 if(_Water==1)
                 {
                     waterColor=WaterFragment(i.uv,i.lightingUV,main);
@@ -508,7 +508,7 @@ Shader "MySprite-Lit-Default"
                 waterColor.xyz=snowValue;
                 }
              
-
+                return float4( waterColor.xyz,main.a);
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 

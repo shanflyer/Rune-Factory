@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,18 +8,12 @@ using UnityEngine.UI;
 
 public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 { 
-    [SerializeField]
-    Transform ItemInformation;
      
-    [SerializeField] 
-    Image ItemIcon;
     [SerializeField]
     TextMeshProUGUI ItemName;
     
     [SerializeField]
-    TextMeshProUGUI Info;
-    [SerializeField]
-    Button ActionButton, ReturnButton;
+    Button ActionButton, ReturnButton,InfoButton;
     [SerializeField]
     TextMeshProUGUI ActionName;  
     [SerializeField]
@@ -26,15 +21,13 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     [SerializeField]
     Transform EquipParent;
     [SerializeField]
-    ToggleGroup EquipSelectGroup;
-    [SerializeField]
-    TextMeshProUGUI EquipType;
-    [SerializeField]
-    TextMeshProUGUI RoomeValue;
+    ToggleGroup EquipSelectGroup; 
     [SerializeField]
     Sprite setSprite, unSetSprite;
     [SerializeField]
     Image ActionImage;
+    [SerializeField]
+    float infoOffsetY = 2;
 
     DisplayList<HomeEquipReference, HomeEquip> EquipBoxs;
 
@@ -83,7 +76,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     instanceId = SelectHomeEquip.instanceId,
                     setResult= UnSetHomeEquip
                 };
-                GameActionManager.instance.QueueAction(unSetHomeEquip);
+                GameActionManager.instance.QueueAction(unSetHomeEquip, true);
             }
         }
     }
@@ -101,12 +94,23 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     protected override void Awake()
     {
         base.Awake();
-        defaultInfoIconSize = ItemIcon.rectTransform.sizeDelta;
         ReturnButton.onClick.AddListener(Close);
         EquipBoxs = new DisplayList<HomeEquipReference, HomeEquip>(homeEquipReference, EquipParent);
          
-        ActionButton.onClick.AddListener(SelectAction); 
-        ItemInformation.localScale = Vector3.zero; 
+        ActionButton.onClick.AddListener(SelectAction);
+        InfoButton.onClick.AddListener(() =>
+        {
+
+            ItemInfo itemInfo = new ItemInfo
+            {
+                itemId = SelectHomeEquip.instanceId,
+                dataId = SelectHomeEquip.equipDataId,
+                showClose = true,
+                OffsetPos = infoOffsetY,
+                otherValue = 1
+            };
+            UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+        });
     }
     public override void OnEnable()
     {
@@ -119,29 +123,45 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj(); 
-        ItemIcon = FindChildGameObject<Image>("ItemIcon");
-        ItemName = FindChildGameObject<TextMeshProUGUI>("ItemName"); 
-        Info = FindChildGameObject<TextMeshProUGUI>("Info");
+        ItemName = FindChildGameObject<TextMeshProUGUI>("SelectName"); 
         ActionButton = FindChildGameObject<Button>("ActionButton");
         ActionName = FindChildGameObject<TextMeshProUGUI>("ActionName");
+        InfoButton = FindChildGameObject<Button>("InfoButton");
         homeEquipReference = FindChildGameObject<HomeEquipReference>("HomeEquipReference");
         EquipParent = FindChildGameObject("HomeEquipParent");
         EquipSelectGroup = FindChildGameObject<ToggleGroup>("HomeEquipParent");
-        ReturnButton = FindChildGameObject<Button>("ReturnButton");
-        ItemInformation = FindChildGameObject("InformationObj");
-        EquipType = FindChildGameObject<TextMeshProUGUI>("EquipType");
-        RoomeValue = FindChildGameObject<TextMeshProUGUI>("RoomValue");
+        ReturnButton = FindChildGameObject<Button>("ReturnButton"); 
         ActionImage = ActionButton.GetComponent<Image>();
     }
+
+    
+    static HidePanels hidePanels = new HidePanels
+    {
+        type = new List<Type>
+    {
+        typeof(ShortcutPanel),
+        typeof(OperateButtonPanel),
+        typeof(OtherFuntionPanel),
+        typeof(ItemInfoPanel),
+        typeof(MainPanel),
+        typeof(PermissionPanel),
+        typeof(ScreenControllerPanel)
+    }
+    };
     public override void InitReferenceData(HomeEquipList v)
     {
         base.InitReferenceData(v); 
         EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup);
-          
+        hidePanels.hide = true;
+        InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
+        ItemName.text = "";
+        GameActionManager.instance.QueueAction(hidePanels, true);
     }
     public override void Close()
     {
-        base.Close(); 
+        base.Close();
+        hidePanels.hide = false;
+        GameActionManager.instance.QueueAction(hidePanels, true);
     }  
     async void SelectEquip(HomeEquip HomeEquip, bool selected = true)
     {
@@ -149,45 +169,23 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         {
             if (HomeEquip.equipDataId == 0)
             {
-                ItemInformation.localScale = Vector3.zero; 
+                UIManager.instance.CloseGamePanel<ItemInfoPanel>(); 
             }
             else
             {
-                ItemInformation.localScale = Vector3.one;
                 SelectHomeEquip = HomeEquip;
-                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
-                 
-                ItemIcon.sprite = homeEquipmentData.icon;
-                ItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(ItemIcon.sprite, defaultInfoIconSize);
-                ItemIcon.enabled = true; 
-                ItemName.text = $"+ {homeEquipmentData.equipmentName} +"; 
-                Info.text = homeEquipmentData.info;
+                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId); 
+                ItemName.text = $"{homeEquipmentData.equipmentName}"; 
                 ActionName.text = HomeEquip.mapInstance == 0 ? "布置" : "收回";
                 ActionImage.sprite=HomeEquip.mapInstance == 0 ? setSprite : unSetSprite;
-
-               
-                EquipType.text = homeEquipmentData.homeEquipType.ToString();
-                string roomValueText = "所有地方";
-                if(homeEquipmentData.canSetMaps != null && homeEquipmentData.canSetMaps.Count > 0)
-                {
-                    roomValueText = "";
-                    for (int i = 0; i < homeEquipmentData.canSetMaps.Count; i++)
-                    {
-                        int roomId = homeEquipmentData.canSetMaps[i];
-                        roomValueText += WorldMapManager.instance.GerMapDataName(roomId); 
-                        if (i < homeEquipmentData.canSetMaps.Count - 1)
-                        {
-                            roomValueText += ",";
-                        }
-                    }
-                }
-                RoomeValue.text = roomValueText;
-
+                InfoButton.transform.localScale = ActionButton.transform.localScale= Vector3.one; 
             }
         }
         else if(HomeEquip.instanceId==SelectHomeEquip.instanceId)
         {
-            ItemInformation.localScale = Vector3.zero;
+            InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
+            ItemName.text = "";
+            UIManager.instance.CloseGamePanel<ItemInfoPanel>();
         }
     }
     
