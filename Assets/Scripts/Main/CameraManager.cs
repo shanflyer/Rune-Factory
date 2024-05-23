@@ -50,6 +50,7 @@ public class CameraManager : Singleton<CameraManager>
         };
 
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
+        GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
     }
 
     public void SetConfiner2DCollider(PolygonCollider2D polygonCollider2D)
@@ -87,7 +88,10 @@ public class CameraManager : Singleton<CameraManager>
             followCameras[i].m_Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
         }
     }
-
+    void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
+    {
+        pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue;
+    }
     private void SetFixedCamera(SetFixedCamera setFixedCamera)
     {
         pixelPerfectCamera.assetsPPU =setFixedCamera.pixelValue==0?GameCommon.PixelCameraDefaultValue:setFixedCamera.pixelValue;
@@ -102,9 +106,17 @@ public class CameraManager : Singleton<CameraManager>
             {
                 Vector3 localPos = fixedCamera.transform.position;
                 setFixedCamera.fixedPos.z = localPos.z;
-                fixedCamera.transform.position = setFixedCamera.fixedPos;
+                if(setFixedCamera.fixedPos.x!= -1000)
+                {
+                    fixedCamera.transform.position = setFixedCamera.fixedPos;
+                }
+                else
+                {
+                    fixedCamera.transform.position = followCameras[0].transform.position;
+                }               
             }
-            confiner2D.enabled = false;
+            confiner2D.enabled = true;
+            confiner2D.InvalidateCache();
         }
         else
         {

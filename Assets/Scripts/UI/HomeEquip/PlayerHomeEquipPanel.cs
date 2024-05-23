@@ -1,53 +1,72 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
-{ 
-     
+{
     [SerializeField]
-    TextMeshProUGUI ItemName;
-    
-    [SerializeField]
-    Button ActionButton, ReturnButton,InfoButton;
-    [SerializeField]
-    TextMeshProUGUI ActionName;  
-    [SerializeField]
-    HomeEquipReference homeEquipReference;
-    [SerializeField]
-    Transform EquipParent;
-    [SerializeField]
-    ToggleGroup EquipSelectGroup; 
-    [SerializeField]
-    Sprite setSprite, unSetSprite;
-    [SerializeField]
-    Image ActionImage;
-    [SerializeField]
-    float infoOffsetY = 2;
-
-    DisplayList<HomeEquipReference, HomeEquip> EquipBoxs;
+    private Animator animator;
 
     [SerializeField]
-    GameEventData setEventData;
-     
-    HomeEquip SelectHomeEquip;
+    private Button TitleButton;
+
+    [SerializeField]
+    private TextMeshProUGUI ItemName;
+
+    [SerializeField]
+    private Button ActionButton, ReturnButton, InfoButton;
+
+    [SerializeField]
+    private TextMeshProUGUI ActionName;
+
+    [SerializeField]
+    private HomeEquipReference homeEquipReference;
+
+    [SerializeField]
+    private Transform EquipParent;
+
+    [SerializeField]
+    private ToggleGroup EquipSelectGroup;
+
+    [SerializeField]
+    private Sprite setSprite, unSetSprite;
+
+    [SerializeField]
+    private Image ActionImage;
+    [SerializeField]
+    private Button cameraChangeButton;
+    [SerializeField]
+    Transform CameraChange;
+    [SerializeField]
+    private TextMeshProUGUI cameraValue;
+
+    [SerializeField]
+    private float infoOffsetY = 2;
+
+    private DisplayList<HomeEquipReference, HomeEquip> EquipBoxs;
+
+    [SerializeField]
+    private GameEventData setEventData;
+
+    private HomeEquip SelectHomeEquip;
     private Vector2 defaultInfoIconSize;
-    async void SelectAction()
+
+    private bool upState=true;
+
+    private async void SelectAction()
     {
-        if (SelectHomeEquip.equipDataId!= 0)
+        if (SelectHomeEquip.equipDataId != 0)
         {
-            if (SelectHomeEquip.mapInstance <=0)
+            if (SelectHomeEquip.mapInstance <= 0)
             {
-                HomeEquipmentData homeEquipmentData=await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
-                if (homeEquipmentData.canSetMaps==null||homeEquipmentData.canSetMaps.Count==0||
+                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
+                if (homeEquipmentData.canSetMaps == null || homeEquipmentData.canSetMaps.Count == 0 ||
                     homeEquipmentData.canSetMaps.Contains(CharacterManager.instance.controllerCharacter.mapInstance))
                 {
-                    List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData> 
+                    List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
                     {
                         new EventReferenceData
                         {
@@ -75,13 +94,14 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 UnSetHomeEquip unSetHomeEquip = new UnSetHomeEquip
                 {
                     instanceId = SelectHomeEquip.instanceId,
-                    setResult= UnSetHomeEquip
+                    setResult = UnSetHomeEquip
                 };
                 GameActionManager.instance.QueueAction(unSetHomeEquip, true);
             }
         }
     }
-    void UnSetHomeEquip(bool value)
+
+    private void UnSetHomeEquip(bool value)
     {
         if (value)
         {
@@ -92,16 +112,16 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             ActionImage.sprite = setSprite;
         }
     }
+
     protected override void Awake()
     {
         base.Awake();
         ReturnButton.onClick.AddListener(Close);
         EquipBoxs = new DisplayList<HomeEquipReference, HomeEquip>(homeEquipReference, EquipParent);
-         
+
         ActionButton.onClick.AddListener(SelectAction);
         InfoButton.onClick.AddListener(() =>
         {
-
             ItemInfo itemInfo = new ItemInfo
             {
                 itemId = SelectHomeEquip.instanceId,
@@ -112,34 +132,58 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             };
             UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         });
+
+        TitleButton.onClick.AddListener(() =>
+        {
+            if (upState)
+            {
+                upState = false;
+                animator.SetTrigger("DOWN");
+            }
+            else
+            {
+                upState = true;
+                animator.SetTrigger("UP");
+            }
+        });
+        cameraChangeButton.onClick.AddListener(ChangeCameraValue);
     }
+
     public override void OnEnable()
     {
-        base.OnEnable(); 
+        base.OnEnable();
     }
+
     public override void OnDisable()
     {
-        base.OnDisable(); 
+        base.OnDisable();
     }
+
     public override void SetPanelUISerializeObj()
     {
-        base.SetPanelUISerializeObj(); 
-        ItemName = FindChildGameObject<TextMeshProUGUI>("SelectName"); 
+        base.SetPanelUISerializeObj();
+        ItemName = FindChildGameObject<TextMeshProUGUI>("SelectName");
         ActionButton = FindChildGameObject<Button>("ActionButton");
         ActionName = FindChildGameObject<TextMeshProUGUI>("ActionName");
         InfoButton = FindChildGameObject<Button>("InfoButton");
         homeEquipReference = FindChildGameObject<HomeEquipReference>("HomeEquipReference");
         EquipParent = FindChildGameObject("HomeEquipParent");
         EquipSelectGroup = FindChildGameObject<ToggleGroup>("HomeEquipParent");
-        ReturnButton = FindChildGameObject<Button>("ReturnButton"); 
+        ReturnButton = FindChildGameObject<Button>("ReturnButton");
         ActionImage = ActionButton.GetComponent<Image>();
+
+        cameraValue = FindChildGameObject<TextMeshProUGUI>("CameraValue");
+
+        animator = GetComponent<Animator>();
+        TitleButton = FindChildGameObject<Button>("DisplayButton");
+        cameraChangeButton = FindChildGameObject<Button>("CameraChangeButton"); 
+        CameraChange = FindChildGameObject("CameraChange");
     }
 
-    
-    static HidePanels hidePanels = new HidePanels
+    private static HidePanels hidePanels = new HidePanels
     {
         type = new List<Type>
-    {
+        {
         typeof(ShortcutPanel),
         typeof(OperateButtonPanel),
         typeof(OtherFuntionPanel),
@@ -147,21 +191,35 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         typeof(MainPanel),
         typeof(PermissionPanel),
         typeof(ScreenControllerPanel)
-    }
+        }
     };
-    public override void InitReferenceData(HomeEquipList v)
+
+    int cameraValueIndex = 1;
+    private void ChangeCameraValue()
     {
-        base.InitReferenceData(v); 
+        cameraValueIndex++;
+        if (cameraValueIndex > 3)
+            cameraValueIndex = 1;
+        cameraValue.text = $"x{(1.0f + (cameraValueIndex - 1) )}";
+        SetCameraPixelValue setCameraPixelValue = new SetCameraPixelValue
+        {
+            pixelValue = 400 - (cameraValueIndex - 1) * 100,
+        };
+        GameActionManager.instance.QueueAction(setCameraPixelValue,true);
+    }
+    public override async void InitReferenceData(HomeEquipList v)
+    {
+        base.InitReferenceData(v);
         EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup);
         hidePanels.hide = true;
         InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
         ItemName.text = "";
         GameActionManager.instance.QueueAction(hidePanels, true);
 
-        for(int i = 0; i < v.homeEquips.Count; i++)
+        for (int i = 0; i < v.homeEquips.Count; i++)
         {
             var homeEquip = v.homeEquips[i];
-            if(homeEquip.mapInstance== WorldMapObjManager.instance.displayMap)
+            if (homeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
             {
                 ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
                 {
@@ -171,7 +229,41 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 GameActionManager.instance.QueueAction(changeMapItemObjLayer, true);
             }
         }
+
+        cameraValue.text = "x1";
+        var mapDataId = WorldMapManager.instance.GerMapDataName(WorldMapObjManager.instance.displayMap);
+        mapData = await GameDataManager.instance.GetAsyncData<MapRoomData>(mapDataId);
+        if (mapData.fixedCamera)
+        {
+            cameraValueIndex = 1;
+            CameraChange.localScale = Vector3.zero;
+            SetFixedCamera setFixedCamera = new SetFixedCamera
+            {
+                fixedCamera = true,
+                fixedPos = mapData.fixedCameraPos,
+            };
+            GameActionManager.instance.QueueAction(setFixedCamera, true);
+        }
+        else
+        {
+            cameraValueIndex = 2;
+            cameraValue.text = "x2";
+            CameraChange.localScale=Vector3.one;
+            SetFixedCamera setFixedCamera = new SetFixedCamera
+            {
+                fixedCamera = true,
+                fixedPos =new Vector3(-1000,-1000,-1000),
+                pixelValue = 300
+            };
+            GameActionManager.instance.QueueAction(setFixedCamera, true);
+        }
+
+        upState = true;
+        animator.SetTrigger("UP");
     }
+
+    private MapRoomData mapData;
+
     public override void Close()
     {
         base.Close();
@@ -190,32 +282,38 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 GameActionManager.instance.QueueAction(changeMapItemObjLayer, true);
             }
         }
-    }  
-    async void SelectEquip(HomeEquip HomeEquip, bool selected = true)
+        SetFixedCamera setFixedCamera = new SetFixedCamera
+        {
+            fixedCamera = mapData.fixedCamera,
+            fixedPos = mapData.fixedCameraPos,
+            flowCameraType = mapData.flowCameraType
+        };
+        GameActionManager.instance.QueueAction(setFixedCamera, true);
+    }
+
+    private async void SelectEquip(HomeEquip HomeEquip, bool selected = true)
     {
         if (selected)
         {
             if (HomeEquip.equipDataId == 0)
             {
-                UIManager.instance.CloseGamePanel<ItemInfoPanel>(); 
+                UIManager.instance.CloseGamePanel<ItemInfoPanel>();
             }
             else
             {
                 SelectHomeEquip = HomeEquip;
-                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId); 
-                ItemName.text = $"{homeEquipmentData.equipmentName}"; 
+                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
+                ItemName.text = $"{homeEquipmentData.equipmentName}";
                 ActionName.text = HomeEquip.mapInstance == 0 ? "≤º÷√" : " ’ªÿ";
-                ActionImage.sprite=HomeEquip.mapInstance == 0 ? setSprite : unSetSprite;
-                InfoButton.transform.localScale = ActionButton.transform.localScale= Vector3.one; 
+                ActionImage.sprite = HomeEquip.mapInstance == 0 ? setSprite : unSetSprite;
+                InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.one;
             }
         }
-        else if(HomeEquip.instanceId==SelectHomeEquip.instanceId)
+        else if (HomeEquip.instanceId == SelectHomeEquip.instanceId)
         {
             InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
             ItemName.text = "";
             UIManager.instance.CloseGamePanel<ItemInfoPanel>();
         }
     }
-    
-    
 }
