@@ -472,7 +472,6 @@
             <key type="filename">提灯.png</key>
             <key type="filename">提灯_normal.png</key>
             <key type="filename">教堂建筑_42_normal.png</key>
-            <key type="filename">服饰架.png</key>
             <key type="filename">服饰架_normal.png</key>
             <key type="filename">木桶_01_normal.png</key>
             <key type="filename">木桶_02_normal.png</key>
@@ -3975,6 +3974,21 @@
                 <rect>8,15,15,30</rect>
                 <key>scale9Paddings</key>
                 <rect>8,15,15,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">服饰架.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.73</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

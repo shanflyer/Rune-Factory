@@ -113,8 +113,12 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         }
     }
 
+
+    RectTransform image;
     protected override void Awake()
     {
+        image = transform.GetChild(0) as RectTransform;
+
         base.Awake();
         ReturnButton.onClick.AddListener(Close);
         EquipBoxs = new DisplayList<HomeEquipReference, HomeEquip>(homeEquipReference, EquipParent);
@@ -260,6 +264,9 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
         upState = true;
         animator.SetTrigger("UP");
+
+        InputManager.instance.AddInputActionDelegate(MyInputNameData.Other_CameraMove, CameraMove);
+        InputManager.instance.AddInputActionDelegate(MyInputNameData.Other_Pointer, MousePos);
     }
 
     private MapRoomData mapData;
@@ -289,8 +296,96 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             flowCameraType = mapData.flowCameraType
         };
         GameActionManager.instance.QueueAction(setFixedCamera, true);
-    }
 
+        InputManager.instance.RemoveInputActionDelegate(MyInputNameData.Other_Pointer, MousePos);
+        InputManager.instance.RemoveInputActionDelegate(MyInputNameData.Other_CameraMove, CameraMove);
+    }
+    bool canMoveCamera = false;
+
+    MapItemRuntimeObj selectMapItemRuntimeObj;
+    TempMapItem TempMapItem;
+    void MousePos(object obj)
+    {
+        if (obj != null)
+        {
+            var mousePos = (Vector2)obj;
+            canMoveCamera = false;
+            CameraManager.ScreenPointToUILocalPoint(image, mousePos, out var localPos);
+            if (localPos.y > image.rect.min.y & localPos.y < image.rect.max.y)
+            {
+              
+            }
+            else
+            { 
+                Vector2 mouseWorldPos = CameraManager.ScreenPointToWorldPoint(mousePos, 0);
+               
+                if(WorldMapObjManager.instance.GetClickMapItemRuntimeObj(mouseWorldPos,out var _selectMapItemRuntimeObj))
+                {
+                    if (selectMapItemRuntimeObj != null)
+                    {
+                        selectMapItemRuntimeObj.SetDefaultLayer();
+                       /* DestoryTempMapItem destoryTempMapItem = new DestoryTempMapItem
+                        {
+                            instanceId = selectMapItemRuntimeObj.instanceId,
+                        };
+                        GameActionManager.instance.QueueAction(destoryTempMapItem, false);*/
+                    } 
+
+                    if (_selectMapItemRuntimeObj == selectMapItemRuntimeObj)
+                    { 
+                        selectMapItemRuntimeObj = null;
+                    }
+                    else
+                    { 
+                        selectMapItemRuntimeObj = _selectMapItemRuntimeObj;
+                        selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
+                        /* CreatControllerTempMapItem creatControllerTempMapItem = new CreatControllerTempMapItem
+                         {
+                             coordinate = selectMapItemRuntimeObj.coordinate,
+                             dataId = selectMapItemRuntimeObj.dataId,
+                             instanceId = selectMapItemRuntimeObj.instanceId, 
+                             setResult=(bool value) =>
+                             {
+                                 TempMapItem = TempMapItemController.instance.GetTempMapItem(selectMapItemRuntimeObj.instanceId);
+                             }
+                         };
+                         GameActionManager.instance.QueueAction(creatControllerTempMapItem, true);*/
+
+                    }
+                }
+                if (selectMapItemRuntimeObj == null)
+                {
+                    canMoveCamera = true;
+                }
+            }
+        }
+    }
+    void CameraMove(object obj)
+    {
+        if (obj != null)
+        {
+            var moveDelta = (Vector2)obj;
+            var movePos = moveDelta/200.0f;
+            Debug.Log($"movePos:{movePos}--moveDelta:{moveDelta}");
+            if (canMoveCamera)
+            {
+               
+               
+                //  Debug.Log($"movePos:{movePos}--moveDelta:{moveDelta}");
+                //CameraManager.instance.MoveFixedCamera(-moveDelta*0.01f);
+            }
+            else
+            {
+                if (selectMapItemRuntimeObj != null)
+                {
+                    selectMapItemRuntimeObj.transform.Translate(movePos);
+                    Vector2 pos = selectMapItemRuntimeObj.transform.position;
+                    int2 coordinate = GameCommon.GetMapCoordinateInt(pos);
+                    selectMapItemRuntimeObj.SetCoordinate(coordinate);
+                }
+            }
+        }
+    }
     private async void SelectEquip(HomeEquip HomeEquip, bool selected = true)
     {
         if (selected)

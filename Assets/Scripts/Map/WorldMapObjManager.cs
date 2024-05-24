@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.Collections;
+using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -182,7 +185,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         var itemObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
                 tempMapItem.dataId.ToString(), ProfabTransform, -1, overrideParent);
-        MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj);
+        MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj,tempMapItem.instanceId,tempMapItem.dataId,tempMapItem.coordinate);
+        tempMapItemObj.SetDefaultLayer();
         tempMapItemObj.SetCoordinate(tempMapItem.coordinate);
         tempRuntimeMapItemObjs.Add(tempMapItem.instanceId, tempMapItemObj);
         tempMapItemObj.SetColor(tempMapItem.CanSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f));
@@ -533,7 +537,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             var runtimeObj = await CreatMapItemRuntime(runtimeMapItem.dataId, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
 
-            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj);
+            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj,runtimeMapItem.instanceId, runtimeMapItem.dataId,runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
 
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
@@ -596,7 +600,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
             runtimeObj.Recycle();
             var newObj = await CreatMapItemRuntime(runtimeMapItem.dataId, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
-            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj);
+            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.dataId,runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[mapItemId] = MapItemRuntimeObj;
 
             MyAnimationController.instance.RemoveItemAnimation(mapItemId);
@@ -611,22 +615,75 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             TryAddMapPackageItemRender(runtimeObj.animator.transform, runtimeMapItem.instanceId);
         }
     }
+
+    public bool GetClickMapItemRuntimeObj(Vector2 clickPos,out MapItemRuntimeObj mapItemRuntimeObj)
+    {
+        foreach(var runtimeMapItem in nowRuntimeMapItemObjs)
+        {
+            if (runtimeMapItem.Value.polygonCollider2D)
+            {
+                if (runtimeMapItem.Value.polygonCollider2D.OverlapPoint(clickPos))
+                {
+                    mapItemRuntimeObj= runtimeMapItem.Value;
+                    return true;
+                }
+            }
+        }
+        mapItemRuntimeObj = default(MapItemRuntimeObj);
+        return false;
+    }
 }
 
-public struct MapItemRuntimeObj
+public struct MapItemRuntimeObjRect
 {
+    public int id;
+    public int2 pos;
+    public int4 rect;
+}
+public struct CheckMapItemRuntomeObjPosJob : IJobParallelFor
+{
+    [ReadOnly]
+    public NativeArray<MapItemRuntimeObjRect> mapItemRuntimeObjRects;
+    [ReadOnly]
+    public int2 clickPos;
+    [WriteOnly]
+    public NativeArray<bool> result;
+    public void Execute(int index)
+    { 
+        var mapItemRuntimeObjRect = mapItemRuntimeObjRects[index];
+        var minX= mapItemRuntimeObjRect.rect.x+mapItemRuntimeObjRect.pos.x;
+        var maxX= mapItemRuntimeObjRect.rect.z+mapItemRuntimeObjRect.pos.x;
+        var minY= mapItemRuntimeObjRect.rect.y+mapItemRuntimeObjRect.pos.y;
+        var maxY= mapItemRuntimeObjRect.rect.w+mapItemRuntimeObjRect.pos.y;
+        if (clickPos.x >= minX && clickPos.x <= maxX && clickPos.y >= minY && clickPos.y <= maxY)
+        {
+            result[index] = true;
+        }
+        else
+        {
+            result[index] = false;
+        }
+    }
+}
+public class MapItemRuntimeObj
+{
+    public int instanceId;
+    public int dataId;
     private SpriteRenderer[] spriteRenderers;
     private Color[] rendererColors;
     public Animator animator;
     public Transform transform;
+    public PolygonCollider2D polygonCollider2D;
     private RuntimeObj runtimeObj;
     public int2 coordinate;
     public string key => runtimeObj.key;
 
-    public MapItemRuntimeObj(RuntimeObj runtimeObj)
+    public MapItemRuntimeObj(RuntimeObj runtimeObj,int instanceId,int dataId,int2 coordinate)
     {
+        this.dataId = dataId;
+        this.instanceId = instanceId;
         this.runtimeObj = runtimeObj;
-        coordinate = int2.zero;
+        this.coordinate = coordinate;
         transform = (runtimeObj.obj as Transform);
         animator = transform.GetComponentInChildren<Animator>();
         spriteRenderers = transform.GetChild(0).GetComponentsInChildren<SpriteRenderer>(true);
@@ -635,6 +692,7 @@ public struct MapItemRuntimeObj
         {
             rendererColors[i] = spriteRenderers[i].color;
         }
+        transform.TryGetComponent(out polygonCollider2D);
     }
 
     public void SetLayer(LayerMask layerMask)
@@ -696,5 +754,10 @@ public struct MapItemRuntimeObj
         }
         spriteRenderers = null;
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+    }
+
+    public void Dispose()
+    {
+         
     }
 }

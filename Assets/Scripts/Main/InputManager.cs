@@ -156,13 +156,15 @@ public class InputManager :Singleton<InputManager>
 
                 InputActions[action.name] = action; 
             }
+
+           actionMap.Enable();
         }
 
         
         playerInput.defaultActionMap =PlayerActionMap;
 
-        AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
-        AddInputActionDelegate(MyInputNameData.UI_Pointer, ShowPointerEffect);
+        //AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
+        AddInputActionDelegate(MyInputNameData.Other_Pointer, ShowPointerEffect);
 
         
     }
@@ -253,13 +255,27 @@ public class InputManager :Singleton<InputManager>
     {
         if (performDelegates.TryGetValue(actionName, out InputActionDelegate nowDelegate))
         {
-            nowDelegate -= inputActionDelegate;
-            performDelegates[actionName] = nowDelegate;
+            nowDelegate -= inputActionDelegate; 
+            if (nowDelegate == null)
+            {
+                performDelegates.Remove(actionName);
+            }
+            else
+            {
+                performDelegates[actionName] = nowDelegate;
+            }
         }
         if ( cancelDelegates.TryGetValue(actionName, out InputActionDelegate cancledDelegate))
         {
             cancledDelegate -= inputActionDelegate;
-            cancelDelegates[actionName] = cancledDelegate;
+            if (cancledDelegate == null)
+            {
+                cancelDelegates.Remove(actionName);
+            }
+            else
+            {
+                cancelDelegates[actionName] = cancledDelegate;
+            } 
         }
     }
  

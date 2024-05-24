@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine.TextCore.Text;
 
 public struct SetMapEditorItemLinkCharacter : GameAction
 {
@@ -273,7 +274,20 @@ public struct CheckTempMapItemSet : GameAction
     public SetResult setResult { get; set; }
     public int instanceId;
 }
-
+public struct CreatControllerTempMapItem : GameAction
+{
+    public int instanceId;
+    public int dataId; 
+    public int2 coordinate;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+         
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct CreatTempMapItem : GameAction
 {
     public int characterId;
@@ -314,6 +328,13 @@ public struct DestoryTempMapItem : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int instanceId;
+}
+public struct SetTempMapItemCoordinate : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int instanceId;
+    public int2 coordinate;
 }
 
 public struct RefreshTempMapItemCoordinate : GameAction

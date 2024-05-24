@@ -124,6 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2129334386806726000}
+  - component: {fileID: 8182698299525371153}
   m_Layer: 0
   m_Name: "\u953B\u9020\u7089"
   m_TagString: Untagged
@@ -148,6 +149,64 @@ Transform:
   - {fileID: 7762283881864787055}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &8182698299525371153
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4120957219676244878}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.25673467, y: 0.034450375}
+      - {x: 0.054594226, y: 0.078027904}
+      - {x: -0.026276574, y: 0.34683913}
+      - {x: -0.23816317, y: 0.33099517}
+      - {x: -0.35420257, y: 0.26397142}
+      - {x: -0.3956121, y: 0.03984859}
+      - {x: -0.3850801, y: -0.14084095}
+      - {x: -0.2568193, y: -0.26846993}
+      - {x: -0.062346138, y: -0.26509}
+      - {x: 0.021107532, y: -0.17753646}
+      - {x: 0.27161902, y: -0.17146906}
+  m_UseDelaunayMesh: 0
 --- !u!1 &7532426067584845117
 GameObject:
   m_ObjectHideFlags: 0

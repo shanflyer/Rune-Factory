@@ -93,8 +93,7 @@ public class WorldMapController : MonoBehaviour
 
         if (GameController.instance == null||GameController.instance.startPlay)
         {
-            GameTimeManager.instance.StartTimeRun();
-            GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
+            GameTimeManager.instance.StartTimeRun(); 
             GameActionManager.instance.QueueAction(new CreatCharacter
             {
                 characterId = characterId,
@@ -104,10 +103,13 @@ public class WorldMapController : MonoBehaviour
                 controller = true,
                 isPlayer=true,
             });
-            await UIManager.instance.ShowGamePanel<MainPanel>();
-
+            await UIManager.instance.ShowGamePanel<MainPanel>(); 
            
             UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+        }
+        if (GameController.instance.startPlay)
+        {
+            GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
         }
     }
     // Use this for initialization

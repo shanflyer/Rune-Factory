@@ -94,15 +94,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Pointer",
-                    "type": "Value",
-                    "id": "fb926ae7-57da-4a44-94a8-640afd4a97ec",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -523,72 +514,6 @@
                     "action": "TrackedDeviceOrientation",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "One Modifier",
-                    "id": "a813cb0f-7d38-43ec-86ca-d6fd8c91acbc",
-                    "path": "OneModifier",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pointer",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "7b0d90cd-11f5-46c8-a3e4-98ec4ad374d1",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Pointer",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "b82fe89d-3615-45ec-8b85-078e585e5c47",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pointer",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "One Modifier",
-                    "id": "e8a8d0db-107b-4aa2-862e-c7efa0e2bb95",
-                    "path": "OneModifier",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pointer",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "0236b548-4c0c-4bf1-b6c8-3ca1a47d0c3d",
-                    "path": "<Touchscreen>/Press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Touch",
-                    "action": "Pointer",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "9e5d9efe-cce2-4e75-a233-46f094d749d8",
-                    "path": "<Touchscreen>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pointer",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         },
@@ -640,15 +565,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Pointer",
-                    "type": "Value",
-                    "id": "86a3e866-9936-4449-abc9-6bfec5b71c82",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -915,10 +831,36 @@
                     "action": "TestSave",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Other",
+            "id": "19516a74-cae6-482c-bdfc-d42a718b7053",
+            "actions": [
+                {
+                    "name": "Pointer",
+                    "type": "Value",
+                    "id": "b9cf0b40-11d1-4ddf-a036-e96e7da301f3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
+                    "name": "CameraMove",
+                    "type": "Button",
+                    "id": "1256276e-497e-4e6f-b224-48869877c711",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
                     "name": "One Modifier",
-                    "id": "a1300114-9cc1-4828-bd45-928e12c1ad39",
+                    "id": "37da7890-fedf-443a-8eef-0a83343bd545",
                     "path": "OneModifier",
                     "interactions": "",
                     "processors": "",
@@ -929,7 +871,7 @@
                 },
                 {
                     "name": "modifier",
-                    "id": "13af97be-a91f-4e67-be20-505e79c67c98",
+                    "id": "940847cb-51d7-4af2-a30e-41888f3bfa74",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -940,7 +882,7 @@
                 },
                 {
                     "name": "binding",
-                    "id": "41ae499e-1d56-4e29-91ea-441cf6c59acd",
+                    "id": "60778db1-8850-4f70-b48c-6d0291e965fc",
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
@@ -951,7 +893,7 @@
                 },
                 {
                     "name": "One Modifier",
-                    "id": "1cd5bac4-62d5-4571-956c-fc46d579993e",
+                    "id": "70b92e31-421c-4b28-9622-85d5cdf315c4",
                     "path": "OneModifier",
                     "interactions": "",
                     "processors": "",
@@ -962,7 +904,7 @@
                 },
                 {
                     "name": "modifier",
-                    "id": "f77e8fd7-280a-4020-b00c-83c204786982",
+                    "id": "153749c6-45f9-48e9-a6b7-d320f79c11f6",
                     "path": "<Touchscreen>/Press",
                     "interactions": "",
                     "processors": "",
@@ -973,12 +915,45 @@
                 },
                 {
                     "name": "binding",
-                    "id": "81991ada-acbf-4e1e-b49a-b5874dded93b",
+                    "id": "9173ece3-ea48-40d2-8051-9fda9972d036",
                     "path": "<Touchscreen>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Pointer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "MouseMove",
+                    "id": "48c75fd4-37bb-4375-9b7b-0e315561761e",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraMove",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "293a5ad3-b8db-4f4d-8f3f-bfdcac262c78",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "CameraMove",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "fbcfd6b0-89e2-4d57-acfc-190de649e856",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

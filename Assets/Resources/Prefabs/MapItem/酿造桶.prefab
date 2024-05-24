@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2211242419389091138}
+  - component: {fileID: 3355260729360001849}
   m_Layer: 0
   m_Name: "\u917F\u9020\u6876"
   m_TagString: Untagged
@@ -33,6 +34,65 @@ Transform:
   - {fileID: 2708686661213383703}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &3355260729360001849
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473807187839656743}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.319357, y: 0.14883336}
+      - {x: 0.30894092, y: 0.35203743}
+      - {x: -0.41910315, y: 0.35352919}
+      - {x: -0.42793006, y: 0.153115}
+      - {x: -0.50656146, y: 0.07249674}
+      - {x: -0.510155, y: -0.20551994}
+      - {x: -0.21553382, y: -0.22095597}
+      - {x: -0.15774786, y: -0.27953413}
+      - {x: 0.033007666, y: -0.2821649}
+      - {x: 0.10441251, y: -0.21552977}
+      - {x: 0.38963497, y: -0.21125707}
+      - {x: 0.38014543, y: 0.056185126}
+  m_UseDelaunayMesh: 0
 --- !u!1 &3989004566995948260
 GameObject:
   m_ObjectHideFlags: 0

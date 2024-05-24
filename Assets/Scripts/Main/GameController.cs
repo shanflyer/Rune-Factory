@@ -136,7 +136,20 @@ public class GameController : MonoBehaviour
         await UIManager.instance.ShowGamePanel<ZeroPanel>();
          
         GameTimeManager.instance.SetTime(12, 0);
+        SwitchInputMap switchInputMap = new SwitchInputMap
+        {
+            UI = true
+        };
+        GameActionManager.instance.QueueAction(switchInputMap, true);
         // GameActionManager.instance.AddListener<ZeroWorld>(ZeroWorld);
+    }
+    void TestMoveAction(object obj)
+    {
+        if (obj != null)
+        {
+           Debug.Log("TestMoveeA:" + obj); 
+             
+        } 
     }
     private void Update()
     {

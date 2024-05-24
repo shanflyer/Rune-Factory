@@ -116,15 +116,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Pointer"",
-                    ""type"": ""Value"",
-                    ""id"": ""fb926ae7-57da-4a44-94a8-640afd4a97ec"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -545,72 +536,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""a813cb0f-7d38-43ec-86ca-d6fd8c91acbc"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pointer"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""7b0d90cd-11f5-46c8-a3e4-98ec4ad374d1"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Pointer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""b82fe89d-3615-45ec-8b85-078e585e5c47"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pointer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""e8a8d0db-107b-4aa2-862e-c7efa0e2bb95"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pointer"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""0236b548-4c0c-4bf1-b6c8-3ca1a47d0c3d"",
-                    ""path"": ""<Touchscreen>/Press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Touch"",
-                    ""action"": ""Pointer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""9e5d9efe-cce2-4e75-a233-46f094d749d8"",
-                    ""path"": ""<Touchscreen>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pointer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -662,15 +587,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Pointer"",
-                    ""type"": ""Value"",
-                    ""id"": ""86a3e866-9936-4449-abc9-6bfec5b71c82"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -937,10 +853,36 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                     ""action"": ""TestSave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Other"",
+            ""id"": ""19516a74-cae6-482c-bdfc-d42a718b7053"",
+            ""actions"": [
+                {
+                    ""name"": ""Pointer"",
+                    ""type"": ""Value"",
+                    ""id"": ""b9cf0b40-11d1-4ddf-a036-e96e7da301f3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""CameraMove"",
+                    ""type"": ""Button"",
+                    ""id"": ""1256276e-497e-4e6f-b224-48869877c711"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": ""One Modifier"",
-                    ""id"": ""a1300114-9cc1-4828-bd45-928e12c1ad39"",
+                    ""id"": ""37da7890-fedf-443a-8eef-0a83343bd545"",
                     ""path"": ""OneModifier"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -951,7 +893,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""modifier"",
-                    ""id"": ""13af97be-a91f-4e67-be20-505e79c67c98"",
+                    ""id"": ""940847cb-51d7-4af2-a30e-41888f3bfa74"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -962,7 +904,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""binding"",
-                    ""id"": ""41ae499e-1d56-4e29-91ea-441cf6c59acd"",
+                    ""id"": ""60778db1-8850-4f70-b48c-6d0291e965fc"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -973,7 +915,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""One Modifier"",
-                    ""id"": ""1cd5bac4-62d5-4571-956c-fc46d579993e"",
+                    ""id"": ""70b92e31-421c-4b28-9622-85d5cdf315c4"",
                     ""path"": ""OneModifier"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -984,7 +926,7 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""modifier"",
-                    ""id"": ""f77e8fd7-280a-4020-b00c-83c204786982"",
+                    ""id"": ""153749c6-45f9-48e9-a6b7-d320f79c11f6"",
                     ""path"": ""<Touchscreen>/Press"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -995,12 +937,45 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""binding"",
-                    ""id"": ""81991ada-acbf-4e1e-b49a-b5874dded93b"",
+                    ""id"": ""9173ece3-ea48-40d2-8051-9fda9972d036"",
                     ""path"": ""<Touchscreen>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""MouseMove"",
+                    ""id"": ""48c75fd4-37bb-4375-9b7b-0e315561761e"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""293a5ad3-b8db-4f4d-8f3f-bfdcac262c78"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CameraMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""fbcfd6b0-89e2-4d57-acfc-190de649e856"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -1082,7 +1057,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-        m_UI_Pointer = m_UI.FindAction("Pointer", throwIfNotFound: true);
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
@@ -1090,7 +1064,10 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_ClickPos = m_Player.FindAction("ClickPos", throwIfNotFound: true);
         m_Player_TestSave = m_Player.FindAction("TestSave", throwIfNotFound: true);
-        m_Player_Pointer = m_Player.FindAction("Pointer", throwIfNotFound: true);
+        // Other
+        m_Other = asset.FindActionMap("Other", throwIfNotFound: true);
+        m_Other_Pointer = m_Other.FindAction("Pointer", throwIfNotFound: true);
+        m_Other_CameraMove = m_Other.FindAction("CameraMove", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1162,7 +1139,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_RightClick;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
-    private readonly InputAction m_UI_Pointer;
     public struct UIActions
     {
         private @MyInput m_Wrapper;
@@ -1177,7 +1153,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
-        public InputAction @Pointer => m_Wrapper.m_UI_Pointer;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1217,9 +1192,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
-            @Pointer.started += instance.OnPointer;
-            @Pointer.performed += instance.OnPointer;
-            @Pointer.canceled += instance.OnPointer;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1254,9 +1226,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
-            @Pointer.started -= instance.OnPointer;
-            @Pointer.performed -= instance.OnPointer;
-            @Pointer.canceled -= instance.OnPointer;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1283,7 +1252,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_ClickPos;
     private readonly InputAction m_Player_TestSave;
-    private readonly InputAction m_Player_Pointer;
     public struct PlayerActions
     {
         private @MyInput m_Wrapper;
@@ -1293,7 +1261,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @ClickPos => m_Wrapper.m_Player_ClickPos;
         public InputAction @TestSave => m_Wrapper.m_Player_TestSave;
-        public InputAction @Pointer => m_Wrapper.m_Player_Pointer;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1318,9 +1285,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TestSave.started += instance.OnTestSave;
             @TestSave.performed += instance.OnTestSave;
             @TestSave.canceled += instance.OnTestSave;
-            @Pointer.started += instance.OnPointer;
-            @Pointer.performed += instance.OnPointer;
-            @Pointer.canceled += instance.OnPointer;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1340,9 +1304,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
             @TestSave.started -= instance.OnTestSave;
             @TestSave.performed -= instance.OnTestSave;
             @TestSave.canceled -= instance.OnTestSave;
-            @Pointer.started -= instance.OnPointer;
-            @Pointer.performed -= instance.OnPointer;
-            @Pointer.canceled -= instance.OnPointer;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1360,6 +1321,60 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Other
+    private readonly InputActionMap m_Other;
+    private List<IOtherActions> m_OtherActionsCallbackInterfaces = new List<IOtherActions>();
+    private readonly InputAction m_Other_Pointer;
+    private readonly InputAction m_Other_CameraMove;
+    public struct OtherActions
+    {
+        private @MyInput m_Wrapper;
+        public OtherActions(@MyInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pointer => m_Wrapper.m_Other_Pointer;
+        public InputAction @CameraMove => m_Wrapper.m_Other_CameraMove;
+        public InputActionMap Get() { return m_Wrapper.m_Other; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(OtherActions set) { return set.Get(); }
+        public void AddCallbacks(IOtherActions instance)
+        {
+            if (instance == null || m_Wrapper.m_OtherActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_OtherActionsCallbackInterfaces.Add(instance);
+            @Pointer.started += instance.OnPointer;
+            @Pointer.performed += instance.OnPointer;
+            @Pointer.canceled += instance.OnPointer;
+            @CameraMove.started += instance.OnCameraMove;
+            @CameraMove.performed += instance.OnCameraMove;
+            @CameraMove.canceled += instance.OnCameraMove;
+        }
+
+        private void UnregisterCallbacks(IOtherActions instance)
+        {
+            @Pointer.started -= instance.OnPointer;
+            @Pointer.performed -= instance.OnPointer;
+            @Pointer.canceled -= instance.OnPointer;
+            @CameraMove.started -= instance.OnCameraMove;
+            @CameraMove.performed -= instance.OnCameraMove;
+            @CameraMove.canceled -= instance.OnCameraMove;
+        }
+
+        public void RemoveCallbacks(IOtherActions instance)
+        {
+            if (m_Wrapper.m_OtherActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IOtherActions instance)
+        {
+            foreach (var item in m_Wrapper.m_OtherActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_OtherActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public OtherActions @Other => new OtherActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1417,7 +1432,6 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-        void OnPointer(InputAction.CallbackContext context);
     }
     public interface IPlayerActions
     {
@@ -1426,6 +1440,10 @@ public partial class @MyInput: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnClickPos(InputAction.CallbackContext context);
         void OnTestSave(InputAction.CallbackContext context);
+    }
+    public interface IOtherActions
+    {
         void OnPointer(InputAction.CallbackContext context);
+        void OnCameraMove(InputAction.CallbackContext context);
     }
 }

@@ -18,10 +18,19 @@ public class TempMapItemController : Singleton<TempMapItemController>
         GameActionManager.instance.AddListener<RefreshTempMapItemCoordinate>(RefreshTempMapItemCoordinate);
         GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
         GameActionManager.instance.AddListener<CreatTempMapItem>(CreatTempMapItem);
-
+        GameActionManager.instance.AddListener<CreatControllerTempMapItem>(CreatControllerTempMapItem);
+        GameActionManager.instance.AddListener<SetTempMapItemCoordinate>(SetTempMapItemCoordinate);
         // InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, Test);
     }
-
+    void SetTempMapItemCoordinate(SetTempMapItemCoordinate setTempMapItemCoordinate)
+    {
+        if (tempMapItems.GetData(setTempMapItemCoordinate.instanceId,out var tempMapItem))
+        {
+            tempMapItem.coordinate = setTempMapItemCoordinate.coordinate;
+            tempMapItems.SetData(tempMapItem);
+            WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
+        }
+    }
     public void Test(object value)
     {
         if (CharacterManager.instance.controllerCharacter != null)
@@ -53,6 +62,13 @@ public class TempMapItemController : Singleton<TempMapItemController>
             }
         }
         return list;
+    }
+
+    public TempMapItem GetTempMapItem(int instanceId)
+    {
+        TempMapItem tempMapItem = default(TempMapItem);
+        tempMapItems.GetData(instanceId, out tempMapItem);
+        return tempMapItem;
     }
 
     private void StopSetTempMapItem(StopSetTempMapItem StopSetTempMapItem)
@@ -107,7 +123,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
         }
     }
 
-    private async void RefreshTempMapItemCoordinate(RefreshTempMapItemCoordinate RefreshTempMapItemCoordinate)
+    private void RefreshTempMapItemCoordinate(RefreshTempMapItemCoordinate RefreshTempMapItemCoordinate)
     {
         int tempId = RefreshTempMapItemCoordinate.instanceId;
         if (tempId == 0)
@@ -128,16 +144,41 @@ public class TempMapItemController : Singleton<TempMapItemController>
         if (tempMapItems.GetData(destoryTempMapItem.instanceId, out var tempMapItem))
         {
             tempMapItems.RemoveData(tempMapItem.instanceId);
-            characterTempMapItems.Remove(tempMapItem.characterId);
-
-            Character character = CharacterManager.instance.GetCharacter(tempMapItem.characterId);
-            if (characterSetCoordinates.TryGetValue(character.instanceId, out var setCoordinate))
+            if (tempMapItem.characterId != 0)
             {
-                character.RemoveSetCoordinateDele(setCoordinate);
-                characterSetCoordinates.Remove(character.instanceId);
+                characterTempMapItems.Remove(tempMapItem.characterId);
+
+                Character character = CharacterManager.instance.GetCharacter(tempMapItem.characterId);
+                if (characterSetCoordinates.TryGetValue(character.instanceId, out var setCoordinate))
+                {
+                    character.RemoveSetCoordinateDele(setCoordinate);
+                    characterSetCoordinates.Remove(character.instanceId);
+                }
+                character.CanMoveCrossMap = true;
             }
-            character.CanMoveCrossMap = true;
         }
+    }
+
+    private async void CreatControllerTempMapItem(CreatControllerTempMapItem creatControllerTempMapItem)
+    {
+        TempMapItem tempMapItem = new TempMapItem
+        {
+            instanceId = creatControllerTempMapItem.instanceId,
+            dataId = creatControllerTempMapItem.dataId,
+            roomId = WorldMapObjManager.instance.displayMap,
+            coordinate = creatControllerTempMapItem.coordinate,
+            characterId = -1,
+            colliderCells = new NativeList<int2>(8, Allocator.TempJob)
+        };
+        MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(tempMapItem.dataId);
+        for (int i = 0; i < mapItemData.colliderCells.Length; i++)
+        {
+            tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
+        }
+        tempMapItems.SetData(tempMapItem);
+        WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
+        if (creatControllerTempMapItem.setResult != null)
+            creatControllerTempMapItem.setResult(true);
     }
 
     private async void CreatTempMapItem(CreatTempMapItem creatTempMapItem)

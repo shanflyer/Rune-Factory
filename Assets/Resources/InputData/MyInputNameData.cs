@@ -9,11 +9,11 @@ public const string UI_MiddleClick= "MiddleClick";
 public const string UI_RightClick= "RightClick";
 public const string UI_TrackedDevicePosition= "TrackedDevicePosition";
 public const string UI_TrackedDeviceOrientation= "TrackedDeviceOrientation";
-public const string UI_Pointer= "Pointer";
 public const string Player_Move= "Move";
 public const string Player_Fire= "Fire";
 public const string Player_Look= "Look";
 public const string Player_ClickPos= "ClickPos";
 public const string Player_TestSave= "TestSave";
-public const string Player_Pointer= "Pointer";
+public const string Other_Pointer= "Pointer";
+public const string Other_CameraMove= "CameraMove";
 }
