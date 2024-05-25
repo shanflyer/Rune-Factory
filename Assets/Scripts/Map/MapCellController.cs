@@ -499,6 +499,23 @@ public class MapCellController : Singleton<MapCellController>
             }
             return false;
         }
+        public int CheckBarrierCount(int2 coordinate)
+        {
+            if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&
+            coordinate.y >= startCoordinate.y && coordinate.y <= endCoordinate.y)
+            {
+                int index = GetCoordinateIndex(coordinate);
+                if (cellValue[index] == 1)
+                {
+                    if (mapObjBarriers.TryGetValue(index,out var count))
+                    {
+                        return count;
+                    }
+                    return 0;
+                }
+            }
+            return 0;
+        }
 
         public bool CheckWalkable(Vector2Int coordinate)
         {
@@ -1243,6 +1260,36 @@ public class MapCellController : Singleton<MapCellController>
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
 
             return roomCellData.CheckWalkable(coordinate.xy);
+        }
+        return false;
+    }
+    public bool CheckFutureIsWalk(int2[] cells,int mapId,HashSet<int2> specialCells)
+    {
+        if(runtimeMapRooms.GetData(mapId,out var runtimeMapRoom))
+        {
+            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
+            for (int i = 0; i < cells.Length; i++)
+            {
+                if (!roomCellData.CheckWalkable(cells[i]))
+                {
+                    if (specialCells != null)
+                    {
+                        if (specialCells.Contains(cells[i]) && roomCellData.CheckBarrierCount(cells[i]) <= 1)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    } 
+                }
+            }
+            return true;
         }
         return false;
     }

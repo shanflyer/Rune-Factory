@@ -68,7 +68,7 @@ Shader "MyColorMask"
  
                 o.positionCS = TransformObjectToHClip(v.positionOS);  
                 o.uv =v.uv;  
-				o.color=_BColor*abs(sin(_Time.y*_Speed));
+				o.color=_BColor;//*abs(sin(_Time.y*_Speed));
  
                 return o;
             }

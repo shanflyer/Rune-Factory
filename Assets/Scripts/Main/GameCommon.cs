@@ -94,7 +94,7 @@ public class GameCommon
     };
     public const int BlueObjLayer = 13;
     public const int GreenObjLayer = 14;
-    public const int RedbjLayer = 15;
+    public const int RedObjLayer = 15;
 
     public const int PixelCameraDefaultValue = 400;
     public const int setTeamerFunctionId = 4;

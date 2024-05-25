@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -56,9 +55,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<SetMapItemLinkCharacter>(SetMapItemLinkCharacter);
         GameActionManager.instance.AddListener<SetMapEditorItemLinkCharacter>(SetMapEditorItemLinkCharacter);
         GameActionManager.instance.AddListener<DeleteMapLink>(DeleteMapLink);
+        GameActionManager.instance.AddListener<TrySetMapItem>(TrySetMapItem);
     }
 
-    
     private void SetMapEditorItemLinkCharacter(SetMapEditorItemLinkCharacter SetMapEditorItemLinkCharacter)
     {
         if (editorItemRemapInstanceIds.TryGetValue(new int2(SetMapEditorItemLinkCharacter.mapId, SetMapEditorItemLinkCharacter.mapItemEditorId),
@@ -233,9 +232,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (runtimeMapItems.GetData(instanceid, out RuntimeMapItem runtimeMapItem))
         {
             int2 oldKey = runtimeMapItem.animationKey;
-             
-            runtimeMapItem.animationKey = new int2(setItemAnimation.keyX!=int.MinValue? setItemAnimation.keyX:oldKey.x,
-                setItemAnimation.keyY!=int.MinValue?setItemAnimation.keyY:oldKey.y);
+
+            runtimeMapItem.animationKey = new int2(setItemAnimation.keyX != int.MinValue ? setItemAnimation.keyX : oldKey.x,
+                setItemAnimation.keyY != int.MinValue ? setItemAnimation.keyY : oldKey.y);
 
             WorldMapObjManager.instance.SetItemAnimation(runtimeMapItem);
             if (setItemAnimation.setResult != null)
@@ -370,7 +369,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             animationKey = mapItem.animationKey,
             mapInstanceId = mapId,
             operateDatas = new NativeHashSet<int>(8, Allocator.Persistent),
-            EventReferenceData=new NativeHashMap<FixedString128Bytes, int>(2,Allocator.Persistent),
+            EventReferenceData = new NativeHashMap<FixedString128Bytes, int>(2, Allocator.Persistent),
         };
         runtimeMapItems.AddData(runtimeMapItem);
         if (!itemInMapDatas.TryGetValue(mapId, out List<int> items))
@@ -386,8 +385,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 characterId = CharacterManager.instance.controllerCharacter.instanceId,
                 equipDataId = mapItem.blindHomeEquipment,
-                instanceId = instanceId, 
-                setResult=(bool value)=>{
+                instanceId = instanceId,
+                setResult = (bool value) =>
+                {
                     SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
                     {
                         characterId = CharacterManager.instance.controllerCharacter.instanceId,
@@ -398,9 +398,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     GameActionManager.instance.QueueAction(setHomeEquipCoordinate, true);
                 }
             };
-            GameActionManager.instance.QueueAction(creatHomeEquip, true); 
+            GameActionManager.instance.QueueAction(creatHomeEquip, true);
         }
-         
 
         var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
         if (mapItemData.operateIds != null)
@@ -422,8 +421,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             mapItemData.creatAction.Action(instanceId);
         }
-
-
 
         if (mapItemData.triggerCells.Length > 0)
         {
@@ -483,6 +480,61 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
     }
 
+    private async void TrySetMapItem(TrySetMapItem TrySetMapItem)
+    {
+        var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(TrySetMapItem.dataId);
+        HashSet<int2> oldColliders = null;
+        int2[] newTriggers = null;
+        bool newItem=false;
+        if (runtimeMapItems.GetData(TrySetMapItem.mapItemInstanceId, out var runtimeMapItem))
+        {
+            if (runtimeMapItem.mapInstanceId == TrySetMapItem.mapItemInstanceId
+                && !runtimeMapItem.coordinate.Equals(TrySetMapItem.coordinate))
+            {
+                oldColliders = new HashSet<int2>();
+                for (int i = 0; i < mapItemData.colliderCells.Length; i++)
+                {
+                    int2 oldCollider = mapItemData.colliderCells[i] + runtimeMapItem.coordinate;
+                    oldColliders.Add(oldCollider);
+                }
+            } 
+        }
+        else
+        {
+            newItem = true;
+        }
+        newTriggers = new int2[mapItemData.triggerCells.Length];
+        for (int i = 0; i < mapItemData.triggerCells.Length; i++)
+        {
+            int2 newTrigger = mapItemData.triggerCells[i] + TrySetMapItem.coordinate;
+            newTriggers[i] = newTrigger;
+        }
+
+        if (MapCellController.instance.CheckFutureIsWalk(newTriggers, TrySetMapItem.mapInstance, oldColliders))
+        {
+            MoveMapItem mapItem = new MoveMapItem
+            {
+                coordinate = TrySetMapItem.coordinate,
+                mapInstance = TrySetMapItem.mapInstance,
+                mapItemInstanceId = TrySetMapItem.mapItemInstanceId,
+                noneTryAdd=newItem,
+                dataId=TrySetMapItem.dataId, 
+            };
+            MoveMapItem(mapItem);
+            if (TrySetMapItem.setResult != null)
+            {
+                TrySetMapItem.setResult(true);
+            }
+        }
+        else
+        {
+            if (TrySetMapItem.setResult != null)
+            {
+                TrySetMapItem.setResult(false);
+            }
+        }
+    }
+
     private async void MoveMapItem(MoveMapItem moveMapItem)
     {
         if (runtimeMapItems.GetData(moveMapItem.mapItemInstanceId, out var runtimeMapItem))
@@ -526,7 +578,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 }
                 runtimeMapItems.SetData(runtimeMapItem);
                 RefreshMapItemDisplay refreshMapItemDisplay = new RefreshMapItemDisplay { runtimeMapItem = runtimeMapItem };
-                GameActionManager.instance.QueueAction(refreshMapItemDisplay);
+                GameActionManager.instance.QueueAction(refreshMapItemDisplay,true);
             }
         }
         else //if(moveMapItem.noneTryAdd)
@@ -545,7 +597,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             characterId = CharacterManager.instance.controllerCharacter.instanceId,
             equipInstanceId = moveMapItem.mapItemInstanceId,
             mapInstanceId = moveMapItem.mapInstance,
-            coordinate=moveMapItem.coordinate
+            coordinate = moveMapItem.coordinate
         };
         GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
     }
@@ -668,6 +720,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             MapCellController.instance.DeleteMapLink(worldMapData.mapLines[index]);
         }
     }
+
     private void InitMapLink(InitMapLink initMapLink)
     {
         int index = worldMapData.mapLines.FindIndex(m => m.instanceId == initMapLink.linkInstanceId);
@@ -699,7 +752,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
             foreach (var data in MapRoomData.mapItems)
             {
-               AddMapItem(data, room.id);
+                AddMapItem(data, room.id);
             }
 
             if (room.eventId != 0)
@@ -747,7 +800,7 @@ public struct RuntimeMapItem : INativeData
     public int2 coordinate;
     public int2 animationKey;
     public int linkCharacter;
-    public NativeHashSet<int> operateDatas; 
+    public NativeHashSet<int> operateDatas;
     public NativeHashMap<FixedString128Bytes, int> EventReferenceData;
     public int Key => instanceId;
 

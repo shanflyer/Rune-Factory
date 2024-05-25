@@ -675,7 +675,15 @@ public struct AddMapItem : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-
+public struct TrySetMapItem : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int mapItemInstanceId;
+    public int mapInstance;
+    public int2 coordinate;
+    public int dataId;
+}
 public struct MoveMapItem : GameAction
 {
     public SetValue setValue { get; set; }

@@ -37,7 +37,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     [SerializeField]
     private Image ActionImage;
     [SerializeField]
-    private Button cameraChangeButton;
+    private Button cameraChangeButton,cancleSelectButton;
     [SerializeField]
     Transform CameraChange;
     [SerializeField]
@@ -53,7 +53,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
     private HomeEquip SelectHomeEquip;
     private Vector2 defaultInfoIconSize;
-
+    private bool waiteSetHomeEquip=false;
     private bool upState=true;
 
     private async void SelectAction()
@@ -62,10 +62,24 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         {
             if (SelectHomeEquip.mapInstance <= 0)
             {
-                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
+              
+                waiteSetHomeEquip = !waiteSetHomeEquip;
+                if (waiteSetHomeEquip)
+                {
+                    ActionName.text = "取消";
+                }
+                else
+                {
+                    ActionName.text = "布置";
+                }
+
+                /* HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
                 if (homeEquipmentData.canSetMaps == null || homeEquipmentData.canSetMaps.Count == 0 ||
                     homeEquipmentData.canSetMaps.Contains(CharacterManager.instance.controllerCharacter.mapInstance))
                 {
+                   
+
+                   
                     List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
                     {
                         new EventReferenceData
@@ -86,8 +100,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     };
 
                     GameEventManager.instance.AddGameEvent(setEventData, eventReferenceDatas);
-                    Close();
-                }
+                    // Close();
+                }*/
             }
             else
             {
@@ -108,6 +122,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             SelectHomeEquip.coordinate = int2.zero;
             SelectHomeEquip.mapInstance = 0;
             EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
+            selectMapItemRuntimeObj = null;
             ActionName.text = "布置";
             ActionImage.sprite = setSprite;
         }
@@ -151,6 +166,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             }
         });
         cameraChangeButton.onClick.AddListener(ChangeCameraValue);
+        cancleSelectButton.onClick.AddListener(CancleSelect);
     }
 
     public override void OnEnable()
@@ -182,6 +198,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         TitleButton = FindChildGameObject<Button>("DisplayButton");
         cameraChangeButton = FindChildGameObject<Button>("CameraChangeButton"); 
         CameraChange = FindChildGameObject("CameraChange");
+
+        cancleSelectButton=FindChildGameObject<Button>("CancleSelectButton");
     }
 
     private static HidePanels hidePanels = new HidePanels
@@ -197,7 +215,15 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         typeof(ScreenControllerPanel)
         }
     };
-
+    void CancleSelect()
+    {
+        if (selectMapItemRuntimeObj != null)
+        {
+            selectMapItemRuntimeObj.SetLayer(GameCommon.BlueObjLayer);
+            selectMapItemRuntimeObj = null;
+            canMoveCamera = true;
+        }
+    }
     int cameraValueIndex = 1;
     private void ChangeCameraValue()
     {
@@ -219,6 +245,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
         ItemName.text = "";
         GameActionManager.instance.QueueAction(hidePanels, true);
+        waiteSetHomeEquip = false;
 
         for (int i = 0; i < v.homeEquips.Count; i++)
         {
@@ -309,54 +336,118 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         if (obj != null)
         {
             var mousePos = (Vector2)obj;
-            canMoveCamera = false;
+           // canMoveCamera = false;
             CameraManager.ScreenPointToUILocalPoint(image, mousePos, out var localPos);
+
             if (localPos.y > image.rect.min.y & localPos.y < image.rect.max.y)
             {
               
             }
             else
             { 
-                Vector2 mouseWorldPos = CameraManager.ScreenPointToWorldPoint(mousePos, 0);
-               
-                if(WorldMapObjManager.instance.GetClickMapItemRuntimeObj(mouseWorldPos,out var _selectMapItemRuntimeObj))
+                Vector2 mouseWorldPos = CameraManager.ScreenPointToWorldPoint(mousePos, 0); 
+                if (waiteSetHomeEquip)
                 {
-                    if (selectMapItemRuntimeObj != null)
+                    int2 coordinate = GameCommon.GetMapCoordinateInt(mouseWorldPos);
+                    TrySetMapItem trySetMapItem = new TrySetMapItem
                     {
-                        selectMapItemRuntimeObj.SetDefaultLayer();
-                       /* DestoryTempMapItem destoryTempMapItem = new DestoryTempMapItem
+                        coordinate = coordinate,
+                        mapInstance = WorldMapObjManager.instance.displayMap,
+                        mapItemInstanceId = SelectHomeEquip.instanceId,
+                        dataId = SelectHomeEquip.mapItemDataId,
+                        setResult = (value) =>
                         {
-                            instanceId = selectMapItemRuntimeObj.instanceId,
-                        };
-                        GameActionManager.instance.QueueAction(destoryTempMapItem, false);*/
-                    } 
+                            if (!value)
+                            {
+                                CreatControllerTempMapItem creatControllerTempMapItem = new CreatControllerTempMapItem
+                                {
+                                    coordinate = coordinate,
+                                    dataId = SelectHomeEquip.mapItemDataId,
+                                    instanceId = SelectHomeEquip.instanceId,
+                                    setResult =(bool value)=>
+                                    {
+                                        if(value&&WorldMapObjManager.instance.GetTempRuntimeMapItemObj(SelectHomeEquip.instanceId,out var mapItemRuntimeObj))
+                                        {
+                                           mapItemRuntimeObj.SetLayer(GameCommon.RedObjLayer);
+                                            GameTimerController.instance.DeleyActionMain(500, () =>
+                                            {
+                                                DestoryTempMapItem destoryTempMapItem = new DestoryTempMapItem
+                                                {
+                                                    instanceId = SelectHomeEquip.instanceId,
+                                                };
+                                                GameActionManager.instance.QueueAction(destoryTempMapItem, true);
+                                            });
+                                        } 
+                                    }
+                                };
 
-                    if (_selectMapItemRuntimeObj == selectMapItemRuntimeObj)
-                    { 
-                        selectMapItemRuntimeObj = null;
-                    }
-                    else
-                    { 
-                        selectMapItemRuntimeObj = _selectMapItemRuntimeObj;
-                        selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
-                        /* CreatControllerTempMapItem creatControllerTempMapItem = new CreatControllerTempMapItem
-                         {
-                             coordinate = selectMapItemRuntimeObj.coordinate,
-                             dataId = selectMapItemRuntimeObj.dataId,
-                             instanceId = selectMapItemRuntimeObj.instanceId, 
-                             setResult=(bool value) =>
-                             {
-                                 TempMapItem = TempMapItemController.instance.GetTempMapItem(selectMapItemRuntimeObj.instanceId);
-                             }
-                         };
-                         GameActionManager.instance.QueueAction(creatControllerTempMapItem, true);*/
+                            }
+                            else
+                            {
+                                if(WorldMapObjManager.instance.GetRuntimeMapItemObj(SelectHomeEquip.instanceId, out var mapItemRuntimeObj))
+                                {
+                                    selectMapItemRuntimeObj= mapItemRuntimeObj;
+                                    selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
+                                }
+                                SelectHomeEquip.mapInstance=WorldMapObjManager.instance.displayMap;
+                                SelectHomeEquip.coordinate=coordinate;
+                                EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
 
-                    }
+                                waiteSetHomeEquip = false;
+                                ActionName.text ="收回";
+                                ActionImage.sprite = unSetSprite;
+                            }
+                        }
+                    };
+                    GameActionManager.instance.QueueAction(trySetMapItem, true);
                 }
-                if (selectMapItemRuntimeObj == null)
+                else
                 {
-                    canMoveCamera = true;
-                }
+                    if (WorldMapObjManager.instance.GetClickMapItemRuntimeObj(mouseWorldPos, out var _selectMapItemRuntimeObj))
+                    {
+                        if (_selectMapItemRuntimeObj != selectMapItemRuntimeObj)
+                        {
+                            if (selectMapItemRuntimeObj != null)
+                            {
+                                selectMapItemRuntimeObj.SetLayer(GameCommon.BlueObjLayer);
+                            }
+                            selectMapItemRuntimeObj = _selectMapItemRuntimeObj;
+                            selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
+                        }
+                    }
+                    else if (selectMapItemRuntimeObj != null)
+                    {
+                        int2 coordinate = GameCommon.GetMapCoordinateInt(mouseWorldPos);
+                        TrySetMapItem trySetMapItem = new TrySetMapItem
+                        {
+                            coordinate = coordinate,
+                            mapInstance = WorldMapObjManager.instance.displayMap,
+                            mapItemInstanceId = selectMapItemRuntimeObj.instanceId,
+                            dataId = selectMapItemRuntimeObj.dataId,
+                            setResult = (value) =>
+                            {
+                                if (!value)
+                                {
+                                    GameTimerController.instance.DeleyActionMain(500, () =>
+                                    {
+                                        int2 oldCoordinate = selectMapItemRuntimeObj.coordinate;
+                                        selectMapItemRuntimeObj.SetCoordinate(coordinate);
+                                        selectMapItemRuntimeObj.SetLayer(GameCommon.RedObjLayer);
+                                        GameTimerController.instance.DeleyActionMain(500, () =>
+                                        {
+                                            selectMapItemRuntimeObj.SetCoordinate(oldCoordinate);
+                                            selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
+                                        });
+                                    }); 
+                                }
+                            }
+                        };
+                        GameActionManager.instance.QueueAction(trySetMapItem, true);
+
+                        //selectMapItemRuntimeObj.SetCoordinate(coordinate);
+                    }
+                    canMoveCamera = selectMapItemRuntimeObj == null;
+                }  
             }
         }
     }
@@ -366,24 +457,13 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         {
             var moveDelta = (Vector2)obj;
             var movePos = moveDelta/200.0f;
-            Debug.Log($"movePos:{movePos}--moveDelta:{moveDelta}");
+            //Debug.Log($"movePos:{movePos}--moveDelta:{moveDelta}");
             if (canMoveCamera)
             {
-               
-               
                 //  Debug.Log($"movePos:{movePos}--moveDelta:{moveDelta}");
-                //CameraManager.instance.MoveFixedCamera(-moveDelta*0.01f);
+                CameraManager.instance.MoveFixedCamera(-moveDelta*0.01f);
             }
-            else
-            {
-                if (selectMapItemRuntimeObj != null)
-                {
-                    selectMapItemRuntimeObj.transform.Translate(movePos);
-                    Vector2 pos = selectMapItemRuntimeObj.transform.position;
-                    int2 coordinate = GameCommon.GetMapCoordinateInt(pos);
-                    selectMapItemRuntimeObj.SetCoordinate(coordinate);
-                }
-            }
+            
         }
     }
     private async void SelectEquip(HomeEquip HomeEquip, bool selected = true)
@@ -396,12 +476,28 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             }
             else
             {
+                waiteSetHomeEquip = false;
                 SelectHomeEquip = HomeEquip;
                 HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
-                ItemName.text = $"{homeEquipmentData.equipmentName}";
+                ItemName.text = $"{homeEquipmentData.equipmentName}"; 
                 ActionName.text = HomeEquip.mapInstance == 0 ? "布置" : "收回";
                 ActionImage.sprite = HomeEquip.mapInstance == 0 ? setSprite : unSetSprite;
                 InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.one;
+
+                if (HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
+                {
+                    ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
+                    {
+                        layerId = GameCommon.GreenObjLayer,
+                        mapItemId = HomeEquip.instanceId
+                    };
+                    GameActionManager.instance.QueueAction(changeMapItemObjLayer, true);
+                }
+                if(selectMapItemRuntimeObj != null&&selectMapItemRuntimeObj.instanceId!=HomeEquip.instanceId)
+                {
+                    selectMapItemRuntimeObj.SetLayer(GameCommon.BlueObjLayer);
+                    selectMapItemRuntimeObj = null;
+                }
             }
         }
         else if (HomeEquip.instanceId == SelectHomeEquip.instanceId)
@@ -409,6 +505,16 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
             ItemName.text = "";
             UIManager.instance.CloseGamePanel<ItemInfoPanel>();
+
+            if (HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
+            {
+                ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
+                {
+                    layerId = GameCommon.BlueObjLayer,
+                    mapItemId = HomeEquip.instanceId
+                };
+                GameActionManager.instance.QueueAction(changeMapItemObjLayer, true);
+            }
         }
     }
 }

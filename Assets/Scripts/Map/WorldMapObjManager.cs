@@ -58,6 +58,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         { 
             if (nowRuntimeMapItemObjs.TryGetValue(refreshMapItemDisplay.runtimeMapItem.instanceId, out var mapItemRuntimeObj))
             {
+                mapItemRuntimeObj.coordinate=refreshMapItemDisplay.runtimeMapItem.coordinate;
                 mapItemRuntimeObj.transform.position = GameCommon.GetMapPos(refreshMapItemDisplay.runtimeMapItem.coordinate);
             }
             else
@@ -423,6 +424,16 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     public bool GetRuntimeMapItemObj(int instanceId, out MapItemRuntimeObj runtimeObj)
     {
         if (nowRuntimeMapItemObjs.TryGetValue(instanceId, out runtimeObj))
+        {
+            return true;
+        }
+        runtimeObj = default(MapItemRuntimeObj);
+
+        return false;
+    }
+    public bool GetTempRuntimeMapItemObj(int instanceId, out MapItemRuntimeObj runtimeObj)
+    {
+        if (tempRuntimeMapItemObjs.TryGetValue(instanceId, out runtimeObj))
         {
             return true;
         }

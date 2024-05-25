@@ -108,6 +108,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
         homeEquip.hide = homeEquipmentData.hide;
+        homeEquip.mapItemDataId = homeEquipmentData.mapItemDataId;
 
         switch (homeEquipmentData.homeEquipFunc)
         {
@@ -382,6 +383,7 @@ public struct HomeEquip : INativeData, IReferenceData
     public int mapItemInstance;
     public bool hide; 
     public int equipDataId;
+    public int mapItemDataId;
     public int2 coordinate;
     public int mapInstance;
     public int characterId; 
