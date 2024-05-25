@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -42,7 +43,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     Transform CameraChange;
     [SerializeField]
     private TextMeshProUGUI cameraValue;
-
+   
     [SerializeField]
     private float infoOffsetY = 2;
 
@@ -67,10 +68,21 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 if (waiteSetHomeEquip)
                 {
                     ActionName.text = "取消";
+                    var renference = EquipBoxs.GetReference(SelectHomeEquip);
+                    if (renference)
+                    {
+                        renference.SetAnimationIcon(true);
+                    }
                 }
                 else
                 {
                     ActionName.text = "布置";
+                   var renference= EquipBoxs.GetReference(SelectHomeEquip);
+                    if (renference)
+                    {
+                        renference.SetAnimationIcon(false);
+                    }
+                    SetActionState();
                 }
 
                 /* HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
@@ -108,23 +120,37 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 UnSetHomeEquip unSetHomeEquip = new UnSetHomeEquip
                 {
                     instanceId = SelectHomeEquip.instanceId,
-                    setResult = UnSetHomeEquip
+                    setResult = UnSetHomeEquipAsync
                 };
                 GameActionManager.instance.QueueAction(unSetHomeEquip, true);
             }
         }
     }
 
-    private void UnSetHomeEquip(bool value)
+    async void SetActionState()
+    {
+        var homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
+        if (SelectHomeEquip.mapInstance <= 0)
+        {
+            ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
+        }
+        else
+        {
+            ActionButton.transform.localScale = Vector3.one;
+        }
+    }
+    private async void UnSetHomeEquipAsync(bool value)
     {
         if (value)
         {
             SelectHomeEquip.coordinate = int2.zero;
-            SelectHomeEquip.mapInstance = 0;
+            SelectHomeEquip.mapInstance = -1;
             EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
             selectMapItemRuntimeObj = null;
             ActionName.text = "布置";
             ActionImage.sprite = setSprite;
+            var homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
+            ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
         }
     }
 
@@ -241,6 +267,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     {
         base.InitReferenceData(v);
         EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup);
+        EquipBoxs.ClearSelect();
         hidePanels.hide = true;
         InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
         ItemName.text = "";
@@ -480,9 +507,9 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 SelectHomeEquip = HomeEquip;
                 HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
                 ItemName.text = $"{homeEquipmentData.equipmentName}"; 
-                ActionName.text = HomeEquip.mapInstance == 0 ? "布置" : "收回";
-                ActionImage.sprite = HomeEquip.mapInstance == 0 ? setSprite : unSetSprite;
-                InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.one;
+                ActionName.text = HomeEquip.mapInstance <= 0 ? "布置" : "收回";
+                ActionImage.sprite = HomeEquip.mapInstance <= 0 ? setSprite : unSetSprite;
+                InfoButton.transform.localScale =  Vector3.one;
 
                 if (HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
                 {
@@ -498,6 +525,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     selectMapItemRuntimeObj.SetLayer(GameCommon.BlueObjLayer);
                     selectMapItemRuntimeObj = null;
                 }
+                SetActionState(); 
             }
         }
         else if (HomeEquip.instanceId == SelectHomeEquip.instanceId)

@@ -54,7 +54,17 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
             list[0].SelectDefault();
         }
     }
-
+    public T GetReference(V v)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i].t.Equals(v))
+            {
+                return list[i];
+            }
+        }
+        return null;
+    }
     public void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         for (int i = 0; i < list.Count; i++)

@@ -12,7 +12,8 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
 
     [SerializeField]
     private Transform setTips, unSetTips;
-
+    [SerializeField]
+    private Image AnimationIcon;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -20,6 +21,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         icon = FindChildGameObject<Image>("Icon");
         setTips = FindChildGameObject("SetTips");
         unSetTips = FindChildGameObject("UnSetTips");
+        AnimationIcon = FindChildGameObject<Image>("AnimationIcon");
     }
 
     private void Awake()
@@ -38,12 +40,20 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         });
     }
 
+    public void SetAnimationIcon(bool isShow)
+    {
+        AnimationIcon.enabled = isShow;
+    }
     public void ClearData()
     {
         data = default(HomeEquip);
         icon.enabled = false;
     }
-
+    public override void ClearSelect()
+    {
+        base.ClearSelect();
+        toggle.SetIsOnWithoutNotify(false);
+    }
     public override void SelectDefault()
     {
         base.SelectDefault();
@@ -59,7 +69,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         toggle.enabled = true;
         setTips.gameObject.SetActive(data.mapInstance > 0);
         unSetTips.gameObject.SetActive(data.mapInstance <= 0);
-
+        AnimationIcon.enabled = false;
         if (homeEquipmentData != null)
         {
             icon.sprite = homeEquipmentData.icon;
