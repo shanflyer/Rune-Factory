@@ -73,7 +73,8 @@ Shader "MySprite-Lit-Default"
 
         Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
         Cull Off
-        ZWrite Off
+        ZWrite off
+		ZTest LEqual
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"

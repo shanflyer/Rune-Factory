@@ -83,7 +83,6 @@
     <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
     <Compile Include="Assets\Editor\Map\WorldMapEditor.cs" />
     <Compile Include="Assets\Editor\Map\EditorCoordinate.cs" />
-    <Compile Include="Assets\Effect\JMO Assets\Cartoon FX\Editor\CFX_SpawnSystemEditor.cs" />
     <Compile Include="Assets\Editor\Common\CommonObjData.cs" />
     <Compile Include="Assets\SerializableDictionary\Editor\SerializableDictionaryPropertyDrawer.cs" />
     <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
@@ -1119,6 +1118,18 @@
       <Project>{80A43991-9602-BAB8-0CF8-66C5B6380DC4}</Project>
       <Name>Assembly-CSharp-Editor-firstpass</Name>
     </ProjectReference>
+    <ProjectReference Include="CFXREditor.csproj">
+      <Project>{F8606263-3A45-4E2A-11A8-F5389032BE2E}</Project>
+      <Name>CFXREditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRRuntime.csproj">
+      <Project>{7DA1328D-DEF2-0209-3EC7-B1E015F7CC4D}</Project>
+      <Name>CFXRRuntime</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRDemo.csproj">
+      <Project>{3307AD9C-B0D0-F38D-5656-486456F588A2}</Project>
+      <Name>CFXRDemo</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Timeline.csproj">
       <Project>{56F4CF0B-27B7-8AF3-9FB3-F8183913F6C9}</Project>
       <Name>Unity.Timeline</Name>
@@ -1126,6 +1137,10 @@
     <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
       <Project>{3D5EF0A0-443A-F107-529B-C74D80455709}</Project>
       <Name>Unity.RenderPipelines.Core.ShaderLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="ToonyColorsPro.Demo.Editor.csproj">
+      <Project>{90D8C5B0-85A7-272C-B543-ABAE2F80C662}</Project>
+      <Name>ToonyColorsPro.Demo.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="PPv2URPConverters.csproj">
       <Project>{0A5A1807-3F08-A240-2B45-A5265DEF7A69}</Project>
@@ -1186,6 +1201,10 @@
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{E63B3365-6AB8-BAF8-B2AE-6AA883D92DF8}</Project>
       <Name>UnityEngine.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="KinoBloom.Runtime.csproj">
+      <Project>{2738D9A9-DF73-68D5-80E5-91D879128F3D}</Project>
+      <Name>KinoBloom.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
       <Project>{300A357D-077F-AF6D-3BC3-0A2BD243A36D}</Project>
