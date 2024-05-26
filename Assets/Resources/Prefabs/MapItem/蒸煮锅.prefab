@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 512469542385560721}
   - component: {fileID: 4175411767473627770}
+  - component: {fileID: 3931317638735030416}
   m_Layer: 0
   m_Name: "\u84B8\u716E\u9505"
   m_TagString: Untagged
@@ -86,6 +87,28 @@ PolygonCollider2D:
       - {x: 0.15663254, y: -0.24871019}
       - {x: 0.16093856, y: 0.25583607}
   m_UseDelaunayMesh: 0
+--- !u!95 &3931317638735030416
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785425198141865645}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1114262396446275679
 GameObject:
   m_ObjectHideFlags: 0
