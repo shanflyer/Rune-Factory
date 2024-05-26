@@ -50,7 +50,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.9
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.990566, g: 0.86722165, b: 0.3224012, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -63,15 +63,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.014799997, y: 0.06040001, z: 0}
-    m_Extent: {x: 0.48619998, y: 0.5331, z: 0}
+    m_Center: {x: -0.010899991, y: 0.06275, z: 0}
+    m_Extent: {x: 0.4969, y: 0.53675, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -98,6 +98,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 1323814413481784071}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -110,8 +118,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
-    key1: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -188,7 +196,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.735
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 0.93
   m_LightVolumeEnabled: 0
@@ -237,6 +245,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 7812076329664622058}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -374,6 +390,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 0}
   spriteRenderer: {fileID: 6607917507248425493}
   autoLerpValue: 0
@@ -498,7 +522,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.735
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 0.93
   m_LightVolumeEnabled: 0
@@ -547,6 +571,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 2736776696839983525}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -637,7 +669,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.735
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 0.93
   m_LightVolumeEnabled: 0
@@ -686,6 +718,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 2159121048850869553}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -808,7 +848,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.9
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.990566, g: 0.86722165, b: 0.3224012, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -821,15 +861,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.0106000155, y: 0.06289999, z: 0}
-    m_Extent: {x: 0.4913, y: 0.5354, z: 0}
+    m_Center: {x: -0.009550005, y: 0.067499995, z: 0}
+    m_Extent: {x: 0.48365, y: 0.5313, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -856,6 +896,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 3402804415552604656}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -868,8 +916,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
-    key1: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -946,7 +994,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.9
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.990566, g: 0.86722165, b: 0.3224012, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -959,15 +1007,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.006000012, y: 0.062949985, z: 0}
-    m_Extent: {x: 0.486, y: 0.52775, z: 0}
+    m_Center: {x: -0.015550002, y: 0.06559999, z: 0}
+    m_Extent: {x: 0.48764998, y: 0.5364, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -994,6 +1042,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 3836505546825053392}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -1006,8 +1062,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
-    key1: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -1165,6 +1221,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 0}
   spriteRenderer: {fileID: 6931725147390665510}
   autoLerpValue: 0
@@ -1255,7 +1319,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.735
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 0.93
   m_LightVolumeEnabled: 0
@@ -1304,6 +1368,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 5437622680021268553}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -1475,6 +1547,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 0}
   spriteRenderer: {fileID: 3216102921108655441}
   autoLerpValue: 0
@@ -1565,7 +1645,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.735
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 0.93
   m_LightVolumeEnabled: 0
@@ -1614,6 +1694,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 8981387603255146067}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -1788,7 +1876,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.9
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.990566, g: 0.86722165, b: 0.3224012, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -1801,15 +1889,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.0082999915, y: 0.0668, z: 0}
-    m_Extent: {x: 0.4821, y: 0.529, z: 0}
+    m_Center: {x: -0.009199992, y: 0.06589998, z: 0}
+    m_Extent: {x: 0.4936, y: 0.5349, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -1836,6 +1924,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 5831474646826410791}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -1848,8 +1944,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
-    key1: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -1960,7 +2056,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.9
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.990566, g: 0.86722165, b: 0.3224012, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -1973,15 +2069,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.011250004, y: 0.06645, z: 0}
-    m_Extent: {x: 0.49315, y: 0.53485, z: 0}
+    m_Center: {x: -0.012500003, y: 0.062099993, z: 0}
+    m_Extent: {x: 0.49150002, y: 0.5291, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -2008,6 +2104,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 2525705963611571687}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -2020,8 +2124,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
-    key1: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -2182,6 +2286,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 0}
   spriteRenderer: {fileID: 2695127333362306255}
   autoLerpValue: 0
@@ -2340,7 +2452,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.735
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 0.93
   m_LightVolumeEnabled: 0
@@ -2389,6 +2501,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 816931234453986910}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -2557,6 +2677,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 0}
   spriteRenderer: {fileID: 8665879662767860806}
   autoLerpValue: 0
@@ -2681,7 +2809,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.9
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.990566, g: 0.86722165, b: 0.3224012, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -2694,15 +2822,15 @@ MonoBehaviour:
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
-  m_ShadowsEnabled: 1
+  m_ShadowsEnabled: 0
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.013300002, y: 0.06500001, z: 0}
-    m_Extent: {x: 0.4921, y: 0.5285, z: 0}
+    m_Center: {x: -0.0104500055, y: 0.06109999, z: 0}
+    m_Extent: {x: 0.48525, y: 0.5275, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -2729,6 +2857,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 1015714907333230145}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -2741,8 +2877,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
-    key1: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -2866,6 +3002,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 0}
   spriteRenderer: {fileID: 1895781842751311896}
   autoLerpValue: 0

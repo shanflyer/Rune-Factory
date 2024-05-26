@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 532436759, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.9822044, g: 1.9822044, b: 0.3428823, a: 1}
+  m_Color: {r: 1.4980394, g: 1.4980394, b: 0.25913128, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -97,6 +97,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 0}
   spriteRenderer: {fileID: 168307210384110686}
   autoLerpValue: 0
@@ -109,8 +117,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1.9433962, g: 1.8723198, b: 0.76085794, a: 1}
-    key1: {r: 1.9433962, g: 1.8723198, b: 0.76085794, a: 1}
+    key0: {r: 1.4980391, g: 1.4432509, b: 0.5864965, a: 1}
+    key1: {r: 1.4980391, g: 1.4432509, b: 0.5864965, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -164,7 +172,7 @@ Transform:
   m_GameObject: {fileID: 886982248966981809}
   serializedVersion: 2
   m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: -0.04211092, y: -0.044157982, z: 0}
+  m_LocalPosition: {x: -0.04211092, y: 0.097, z: 0}
   m_LocalScale: {x: 1.1111112, y: 1.0526316, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -187,7 +195,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.8
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1.5
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -238,6 +246,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 6621629833779076621}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -250,8 +266,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
-    key1: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -328,7 +344,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.8
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.990566, g: 0.86722165, b: 0.3224012, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -348,8 +364,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.036799997, y: 0.28085, z: 0}
-    m_Extent: {x: 0.60249996, y: 0.71895003, z: 0}
+    m_Center: {x: -0.046800017, y: 0.27600002, z: 0}
+    m_Extent: {x: 0.6031, y: 0.7223, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -379,6 +395,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 8765768497340290394}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -391,8 +415,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
-    key1: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}

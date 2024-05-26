@@ -136,7 +136,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 1
   m_FalloffIntensity: 0.748
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 0.9528302, g: 0.8458605, b: 0.17528482, a: 1}
+  m_Color: {r: 0.9529412, g: 0.5505375, b: 0.1764706, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -184,6 +184,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 9016508200847383084}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -196,8 +204,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
-    key1: {r: 0.95294124, g: 0.8470589, b: 0.1764706, a: 1}
+    key0: {r: 0.95294124, g: 0.5505375, b: 0.1764706, a: 1}
+    key1: {r: 0.95294124, g: 0.5505375, b: 0.1764706, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
@@ -274,7 +282,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.8
   m_Direction: {x: 0, y: 0, z: -0.02}
-  m_Color: {r: 1, g: 0.8482751, b: 0.24056602, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 0.2
   m_LightVolumeEnabled: 0
@@ -322,6 +330,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   light2D: {fileID: 6125719807473959930}
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
@@ -334,8 +350,8 @@ MonoBehaviour:
   autoLerpColor: 1
   lerpColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
-    key1: {r: 1, g: 0.8470589, b: 0.2392157, a: 1}
+    key0: {r: 1, g: 0.71979797, b: 0.2392157, a: 1}
+    key1: {r: 1, g: 0.71979797, b: 0.2392157, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 1}
