@@ -53,7 +53,7 @@ public enum CompareType
 public enum CharacterPropertyType
 {
     自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 幸运, 饱食,
-    最大体力, 最大生命, 最大法力
+    最大体力, 最大生命, 最大法力,速度
 }
 
 public enum Direction
@@ -95,6 +95,9 @@ public class GameCommon
     public const int BlueObjLayer = 13;
     public const int GreenObjLayer = 14;
     public const int RedObjLayer = 15;
+
+    public const int ManufatureWorkingEmote = 72;
+    public const int ManufatureWorkendEnote = 14;
 
     public const int PixelCameraDefaultValue = 400;
     public const int setTeamerFunctionId = 4;

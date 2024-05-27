@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
@@ -16,6 +17,7 @@ public enum ItemType
     食物 = 4, 
     收集物 = 5,  
     工具=6,
+    鞋子=7,
     家具 = 10, 
     动物=11
 }
@@ -27,8 +29,12 @@ public enum ShopMoneyType
 public class ItemData : ScriptableObject, IGameData
 {
     public int id;
-    public string itemName; 
+    public string itemName;
+#if UNITY_EDITOR
+    [NonSerialized]
     public string iconName;
+#endif
+
     public Sprite icon;
     public string info;
     public ItemType type;
@@ -43,6 +49,10 @@ public class ItemData : ScriptableObject, IGameData
     public int groupCount;
     public ShopMoneyType shopMoneyType;
     public int shopPrice, sellPrice;
+#if UNITY_EDITOR
+    [NonSerialized]
+    public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky, Speed, Other;
+#endif
     public CharacterProperty property;
 
     public override string ToString()
@@ -87,6 +97,18 @@ public class ItemData : ScriptableObject, IGameData
                 icon = spriteResourceRenference.sprite;
             }
         }
+
+        property.AT = AT;
+        property.DF = DF;
+        property.Power = Power;
+        property.HP = HP;
+        property.MP = MP;
+        property.Speed = Speed;
+        property.Other = Other;
+        property.MaxPower = MaxPower;
+        property.MaxMP = MaxMP;
+        property.MaxHP = MaxHP;
+        property.Lucky = Lucky;
     }
 #endif
     public string GetKey()

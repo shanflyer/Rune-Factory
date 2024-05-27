@@ -45,6 +45,7 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
                     Lucky = data.Lucky,
                     Power=data.Power,
                     MaxPower=data.Power,
+                    Speed=data.Speed
                 };
                 professionData.propertys.Add(characterProperty);
                 professionData.exp.Add(data.exp);
@@ -111,7 +112,7 @@ public struct ProfessionData:IGameData
 #if UNITY_EDITOR
 public struct ProfessionEditorData
 { 
-    public int HP, MP, Power, AT, DF, Lucky;
+    public int HP, MP, Power, AT, DF, Lucky,Speed;
     public int id;
     public int Level;
     public int behaviorId;

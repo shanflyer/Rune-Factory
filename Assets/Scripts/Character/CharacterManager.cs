@@ -318,10 +318,12 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 case ItemType.ÎäÆ÷:
                     itemId = character.Equip.weapon.x;
-                    break;
-
+                    break; 
                 case ItemType.·À¾ß:
                     itemId = character.Equip.clothes.x;
+                    break;
+                case ItemType.Ð¬×Ó:
+                    itemId = character.Equip.shoes.x;
                     break;
             }
             if (itemId != 0 && clearEquip.outPackageId != 0)

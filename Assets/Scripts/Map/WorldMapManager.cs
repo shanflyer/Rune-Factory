@@ -56,6 +56,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<SetMapEditorItemLinkCharacter>(SetMapEditorItemLinkCharacter);
         GameActionManager.instance.AddListener<DeleteMapLink>(DeleteMapLink);
         GameActionManager.instance.AddListener<TrySetMapItem>(TrySetMapItem);
+        GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
     }
 
     private void SetMapEditorItemLinkCharacter(SetMapEditorItemLinkCharacter SetMapEditorItemLinkCharacter)
@@ -217,7 +218,16 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         await InitWorldData(changeWorld.worldName, changeWorld.displayMap);
     }
+    void RefreshManufature(RefreshManufature refreshManufature){
 
+        SetItemAnimation setItemAnimation = default(SetItemAnimation);
+        setItemAnimation.id = refreshManufature.manufature.instanceId;
+        if (refreshManufature.manufature.product.x != 0 && refreshManufature.manufature.waitTime > GameTimeManager.instance.totalMinute)
+        {
+            setItemAnimation.keyX = 1;
+        }
+        SetItemAnimation(setItemAnimation);
+    }
     private void SetItemAnimation(SetItemAnimation setItemAnimation)
     {
         int instanceid = setItemAnimation.id;

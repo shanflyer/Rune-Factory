@@ -316,7 +316,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     noticeStr = LanguageManage.SwitchStr("是否确定开始制作？");
                 }
 
-                async void CreatAction()
+                void CreatAction()
                 {
                     manufature.startTime = GameTimeManager.instance.totalMinute;
                     int productId = outItem.dataId;

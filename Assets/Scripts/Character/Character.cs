@@ -16,7 +16,7 @@ public struct CharacterEquipAndPropertyData
 [System.Serializable]
 public struct CharacterProperty
 {
-    public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky;
+    public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky,Speed;
     public int Other;
 
     public override string ToString()
@@ -67,6 +67,11 @@ public struct CharacterProperty
             string operatorStr = Lucky > 0 ? "+" : "-";
             result = $"{CharacterPropertyType.幸运}{operatorStr}{Lucky}  ";
         }
+        if (Speed != 0)
+        {
+            string operatorStr = Speed > 0 ? "+" : "-";
+            result = $"{CharacterPropertyType.速度}{operatorStr}{Speed}  ";
+        }
         return result;
     }
 
@@ -85,7 +90,8 @@ public struct CharacterProperty
                 AT = 1,
                 DF = 1,
                 Lucky = 1,
-                Other = 1
+                Other = 1,
+                Speed=100
             };
             return characterProperty;
         }
@@ -104,7 +110,8 @@ public struct CharacterProperty
             MaxMP = property0.MaxMP - property1.MaxMP,
             MaxPower = property0.MaxPower - property1.MaxPower,
             Lucky = property0.Lucky - property1.Lucky,
-            Other = property0.Other - property1.Other
+            Other = property0.Other - property1.Other,
+            Speed=property0.Speed-property1.Speed
         };
         return CharacterProperty;
     }
@@ -122,7 +129,8 @@ public struct CharacterProperty
             MaxMP = property0.MaxMP + property1.MaxMP,
             MaxPower = property0.MaxPower + property1.MaxPower,
             Lucky = property0.Lucky + property1.Lucky,
-            Other = property0.Other + property1.Other
+            Other = property0.Other + property1.Other,
+            Speed=property0.Speed+property1.Speed
         };
         return CharacterProperty;
     }
@@ -139,7 +147,8 @@ public struct CharacterProperty
             MaxMP = property0.MaxMP * property1.MaxMP,
             MaxPower = property0.MaxPower * property1.MaxPower,
             Lucky = property0.Lucky * property1.Lucky,
-            Other = property0.Other * property1.Other
+            Other = property0.Other * property1.Other,
+            Speed=property0.Speed*property1.Speed
         };
         return CharacterProperty;
     }
@@ -156,7 +165,8 @@ public struct CharacterProperty
             MaxMP = (int)(property0.MaxMP * value),
             MaxPower = (int)(property0.MaxPower * value),
             Lucky = (int)(property0.Lucky * value),
-            Other = (int)(property0.Other * value)
+            Other = (int)(property0.Other * value),
+            Speed= (int)(property0.Speed * value),
         };
         return CharacterProperty;
     }
@@ -191,7 +201,8 @@ public struct CharacterProperty
 
             case CharacterPropertyType.最大法力:
                 return MaxMP;
-
+            case CharacterPropertyType.速度:
+                return Speed;
             default:
                 return Other;
         }
@@ -241,7 +252,9 @@ public struct CharacterProperty
             case CharacterPropertyType.幸运:
                 Lucky = setCharacterProperty.Value;
                 break;
-
+            case CharacterPropertyType.速度:
+                Speed = setCharacterProperty.Value;
+                break;
             case CharacterPropertyType.自定义值:
                 Other = setCharacterProperty.Value;
                 break;
@@ -290,7 +303,9 @@ public struct CharacterProperty
             case CharacterPropertyType.幸运:
                 Lucky += changeCharacterProperty.changeValue;
                 break;
-
+            case CharacterPropertyType.速度:
+                Speed += changeCharacterProperty.changeValue;
+                break;
             case CharacterPropertyType.自定义值:
                 Other += changeCharacterProperty.changeValue;
                 break;
@@ -322,6 +337,7 @@ public struct Equip
 {
     public int2 weapon;
     public int2 clothes;
+    public int2 shoes;
 }
 
 public delegate void SetCoordinate(int3 coordinate);
@@ -389,57 +405,65 @@ public partial class Character
 
     public async void ClearEquip(ItemType itemType)
     {
+        int oldItemId = 0;
         switch (itemType)
         {
             case ItemType.武器:
-                {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon.x);
-                    if (oldItemData != null)
-                        EquipmentProperty = EquipmentProperty - oldItemData.property;
-                }
+                oldItemId = equip.weapon.x;
                 equip.weapon = 0;
                 break;
-
             case ItemType.防具:
-                {
-                    ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes.x);
-                    if (oldItemData != null)
-                        EquipmentProperty = EquipmentProperty - oldItemData.property;
-                }
+                oldItemId = equip.clothes.x;
                 equip.clothes = 0;
                 break;
+            case ItemType.鞋子:
+                oldItemId = equip.shoes.x;
+                equip.shoes =0;
+                break;
         }
+        ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId);
+        if (oldItemData != null)
+        { 
+            EquipmentProperty = EquipmentProperty - oldItemData.property;
+        }
+        
         GameActionManager.instance.QueueAction(new RefreshEquip
         {
             characterId = instanceId
-        });
+        },true);
     }
 
     public async void ChangeEquip(ItemData itemData, int packageId)
     {
-        Item item = new Item();
-        if (itemData.type == ItemType.武器)
+        Item item = default(Item);
+        int oldItemId = 0;
+        switch (itemData.type)
         {
-            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.weapon.x);
-            if (oldItemData != null)
-            {
-                item.count = 1;
-                item.dataId = oldItemData.id;
-                EquipmentProperty = EquipmentProperty - oldItemData.property;
-            }
-            equip.weapon = itemData.id;
+            case ItemType.武器:
+                oldItemId = equip.weapon.x;
+                equip.weapon.x = itemData.id;
+                equip.weapon.y = 100;
+                break;
+            case ItemType.防具:
+                oldItemId = equip.clothes.x;
+                equip.clothes.x = itemData.id;
+                equip.clothes.y = 100;
+                break;
+            case ItemType.鞋子:
+                oldItemId = equip.shoes.x;
+                equip.shoes.x = itemData.id;
+                equip.shoes.y = 100;
+                break;
         }
-        else if (itemData.type == ItemType.防具)
+        ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId); 
+        if (oldItemData != null)
         {
-            ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes.x);
-            if (oldItemData != null)
-            {
-                item.count = 1;
-                item.dataId = oldItemData.id;
-                EquipmentProperty = EquipmentProperty - oldItemData.property;
-            }
-            equip.clothes = itemData.id;
+            item.count = 1;
+            item.dataId = oldItemData.id;
+            EquipmentProperty = EquipmentProperty - oldItemData.property;
         }
+         
+        
         if (item.dataId != 0)
         {
             PackageManager.instance.SetItemInPackage(item, packageId);
@@ -957,7 +981,7 @@ public partial class Character
     }
 
     public void SetProperty(int HP = -1, int MP = -1, int Power = -1, int MaxHP = -1, int MaxMP = -1, int MaxPower = -1, int AT = -1, int DF = -1, int Lucky = -1
-        , int Other = -1)
+        ,int Speed=-1, int Other = -1)
     {
         if (HP >= 0)
             professionProperty.HP = HP;
@@ -977,6 +1001,8 @@ public partial class Character
             professionProperty.DF = DF;
         if (Other >= 0)
             professionProperty.Other = Other;
+        if (Speed >= 0)
+            professionProperty.Speed = Other;
 
         this.ProfessionProperty = professionProperty;
     }

@@ -26,6 +26,7 @@ public struct CharacterInformationData : IReferenceData
     public int level;
     public Exp exp;
     public Equip equip;
+    public int friendValue;
     public AttributeType attributeType;
 }
 
@@ -114,7 +115,7 @@ public partial class Character
         characterInformationData.name = name;
         characterInformationData.head = characterData.head;
         //characterInformationData.icon = characterData.icon.sprite;
-        characterInformationData.attributeType = attributeType;
+        characterInformationData.attributeType = attributeType; 
 
         if (NPCManager.instance.GetNPC(instanceId, out var npc))
         {

@@ -355,7 +355,13 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             await SetItemAimation(mapItem.animationKey, mapItem.dataId, mapItem.instanceId);
         }
     }
-
+    /// <summary>
+    /// 播放物体动画
+    /// </summary>
+    /// <param name="key">动画key</param>
+    /// <param name="dataId">物体数据id</param>
+    /// <param name="instaceId">物体实例id</param>
+    /// <returns></returns>
     private async Task SetItemAimation(int2 key, int dataId, int instaceId)
     {
         var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
@@ -485,9 +491,17 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             }
             else if (refreshManufature.manufature.waitTime > GameTimeManager.instance.totalMinute)
             {
+                SetItemAnimation SetItemAnimation = new SetItemAnimation
+                {
+                    keyX=1,keyY=0,
+                    id = refreshManufature.manufature.instanceId,
+                };
+                GameActionManager.instance.QueueAction(SetItemAnimation);
+               
+
                 ShowEmote showEmote = new ShowEmote
                 {
-                    emoteId = 72,
+                    emoteId = GameCommon.ManufatureWorkingEmote,
                     entityType = EntityType.地图道具,
                     id = refreshManufature.manufature.instanceId,
                 };
@@ -498,7 +512,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 refreshManufature.manufature.waitTime = 0;
                 ShowEmote showEmote = new ShowEmote
                 {
-                    emoteId = 14,
+                    emoteId = GameCommon.ManufatureWorkendEnote,
                     entityType = EntityType.地图道具,
                     id = refreshManufature.manufature.instanceId,
                 };

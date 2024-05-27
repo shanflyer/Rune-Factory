@@ -26,15 +26,23 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     [SerializeField]
     private TextMeshProUGUI AttackValue, DefenseValue;
+    [SerializeField]
+    private TextMeshProUGUI SpeedValue, LuckValue;
 
     [SerializeField]
     private TextMeshProUGUI LevelValue;
-
+    [SerializeField]
+    private TextMeshProUGUI FriendshipValue;
+    [SerializeField]
+    Transform Friendship;
     [SerializeField]
     private TextMeshProUGUI AttackUp, AttackDown, DefenseUp, DefenseDown;
 
     [SerializeField]
-    private EquipBoxReference WeaponBox, ClothesBox;
+    private TextMeshProUGUI SpeedUp, SpeedDown, LuckUp, LuckDown;
+
+    [SerializeField]
+    private EquipBoxReference WeaponBox, ClothesBox,ShoesBox;
 
     [SerializeField]
     private Button visitButton, closeButton;
@@ -184,8 +192,18 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         WeaponBox = FindChildGameObject<EquipBoxReference>("Weapon");
         ClothesBox = FindChildGameObject<EquipBoxReference>("Clothes");
+        ShoesBox = FindChildGameObject<EquipBoxReference>("Shoes");
         visitButton = FindChildGameObject<Button>("Visit");
         closeButton = FindChildGameObject<Button>("Close");
+
+        Friendship = FindChildGameObject("Friendship");
+        FriendshipValue = FindChildGameObject<TextMeshProUGUI>("FriendshipValue");
+        SpeedValue = FindChildGameObject<TextMeshProUGUI>("SpeedValue");
+        LuckValue = FindChildGameObject<TextMeshProUGUI>("LuckValue");
+        SpeedDown = FindChildGameObject<TextMeshProUGUI>("SpeedDown");
+        SpeedUp = FindChildGameObject<TextMeshProUGUI>("SpeedUp");
+        LuckUp = FindChildGameObject<TextMeshProUGUI>("LuckUp");
+        LuckDown = FindChildGameObject<TextMeshProUGUI>("LuckDown");
     }
 
     private int characterId;
@@ -204,8 +222,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         AttackValue.text = characterProperty.AT.ToString();
         DefenseValue.text = characterProperty.DF.ToString();
+        SpeedValue.text = characterProperty.Speed.ToString();
+        LuckValue.text = characterProperty.Lucky.ToString();
 
-        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled = false;
+        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled 
+            =SpeedDown.enabled=SpeedUp.enabled=LuckUp.enabled=LuckDown.enabled= false;
         if (data.characterProperty.AT > characterProperty.AT)
             AttackUp.enabled = true;
         if (data.characterProperty.DF > characterProperty.DF)
@@ -214,6 +235,14 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             AttackDown.enabled = true;
         if (data.characterProperty.DF < characterProperty.DF)
             DefenseDown.enabled = true;
+        if (data.characterProperty.Lucky < characterProperty.Lucky)
+            LuckDown.enabled = true;
+        if (data.characterProperty.Lucky > characterProperty.Lucky)
+            LuckUp.enabled = true;
+        if (data.characterProperty.Speed > characterProperty.Speed)
+            SpeedUp.enabled = true;
+        if (data.characterProperty.Speed < characterProperty.Speed)
+            SpeedDown.enabled = true;
     }
 
     private CharacterInformationData data;
@@ -236,7 +265,16 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             State.text = v.animalState.ToString();
             State.color = Animal.GetStateColor(v.animalState);
         }
-    
+
+        if (characterId == CharacterManager.instance.controllerCharacter.instanceId)
+        {
+            Friendship.localScale = Vector3.zero;
+        }
+        else
+        {
+            Friendship.localScale = Vector3.one;
+            FriendshipValue.text= FriendManager.instance.GetFriendShipLevel(characterId).ToString();
+        }
 
         int maxHP = v.characterProperty.MaxHP;
         int maxRP = v.characterProperty.MaxPower;
@@ -253,7 +291,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         AttackValue.text = v.characterProperty.AT.ToString();
         DefenseValue.text = v.characterProperty.DF.ToString();
-        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled = false;
+        SpeedValue.text = v.characterProperty.Speed.ToString();
+        LuckValue.text = v.characterProperty.Lucky.ToString();
+
+        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled
+            = SpeedDown.enabled = SpeedUp.enabled = LuckUp.enabled = LuckDown.enabled = false;
 
         LevelValue.text = v.level.ToString();
         var spriteRenference  = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>($"Reference/AttributeType{(int)v.attributeType}");
@@ -280,6 +322,14 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             itemValue = v.equip.clothes.y / 100.0f,
             ItemType = ItemType.╥ю╬ъ
         }, SelectEquipReference);
+
+        ShoesBox.InitData(new Equipment
+        {
+            characterId = characterId,
+            dataId = v.equip.shoes.x,
+            itemValue = v.equip.shoes.y / 100.0f,
+            ItemType = ItemType.п╛вс
+        }, SelectEquipReference); ;
 
         if (v.isNpc)
         {
