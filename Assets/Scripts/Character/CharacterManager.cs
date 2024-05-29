@@ -32,11 +32,15 @@ public struct CharacterRuntimeObj
         }
     }
 
-    public void SetAnimationSpeed(float speed)
+    public void SetAnimationSpeed(float speed,float animationSpeed=1)
     {
         if (animator != null)
         {
             animator.SetFloat(CharacterAnimatorParameter.Speed, speed);
+            if (speed > 0)
+            {
+                animator.speed = animationSpeed;
+            }
         }
     }
 }
@@ -339,7 +343,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             PackageManager.instance.GetOutItenFromPackage(changeEquip.outPackageId, changeEquip.itemId, 1);
             ItemData itemData;
-            if (changeEquip.outPackageId != 0)
+            if (changeEquip.outPackageId == 0)
             {
                 itemData = await GameDataManager.instance.GetAsyncData<ItemData>(changeEquip.itemId);
             }
@@ -828,7 +832,7 @@ public class CharacterManager : Singleton<CharacterManager>
         float lineSpeed = slant ? moveSpeed * GameCommon.slantValue : moveSpeed;
         if (overrideSpeed != 0)
         {
-            character.nowSpeed = updataMoveSpeed * math.length(character.moveDirection) / distance;
+            character.nowSpeed = character.propertySpeed*updataMoveSpeed * math.length(character.moveDirection) / distance;
         }
         Vector2Int offsetCoordinate = Vector2Int.zero;
         character.moveEnumeratorId =
@@ -883,8 +887,11 @@ public class CharacterManager : Singleton<CharacterManager>
         }
 
         Vector2Int offsetCoordinate = Vector2Int.zero;
+
+        var lineSpeed = slant ? moveSpeed * GameCommon.slantValue : moveSpeed;
+        lineSpeed *= character.propertySpeed;
         character.moveEnumeratorId =
-        GameObjectCurveController.instance.Line(slant ? moveSpeed * GameCommon.slantValue : moveSpeed, startPos, targetPos, (Vector2 pos) =>
+        GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector2 pos) =>
              {
                  SetCharacterAnimationSpeed(1, runtimeObj);
 
@@ -1338,7 +1345,7 @@ public class CharacterManager : Singleton<CharacterManager>
                             }
                         }
                     },
-                    WorldMapObjManager.instance.displayMap, playerRuntimeObj.runtimeObj.linkId, true);
+                    WorldMapObjManager.instance.displayMap, playerRuntimeObj.runtimeObj.linkId, true,controllerCharacter.propertySpeed);
             }
         }
     }

@@ -43,9 +43,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     [SerializeField]
     private EquipBoxReference WeaponBox, ClothesBox,ShoesBox;
-
+    [SerializeField]
+    Transform Visit;
     [SerializeField]
     private Button visitButton, closeButton;
+    [SerializeField]
+    private float infoOffsetY =330f;
 
     private void SelectEquipReference(Equipment equipment, bool selected = false)
     {
@@ -55,14 +58,18 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         {
             ItemInfo itemInfo = new ItemInfo
             {
-                otherValue = equipment.characterId,
-                itemId = equipment.dataId,
-                itemValue = equipment.itemValue,
-                dataId = (int)equipment.ItemType,
+                item = new Item
+                {
+                    itemType = equipment.ItemType,
+                    instanceId = equipment.characterId,
+                    dataId = equipment.dataId,
+                    value = equipment.itemValue,  
+                },
                 ActionName = isController ? "Ð¶ÏÂ" : null,
-                action = SelectAction
+                action = SelectAction,
+                OffsetPos=infoOffsetY
             };
-            void SelectAction(ItemInfo item, bool selected = true)
+            void SelectAction(Item item, bool selected = true)
             {
                 Character character = CharacterManager.instance.GetCharacter(equipment.characterId);
 
@@ -72,7 +79,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                     itemType = equipment.ItemType,
                     outPackageId = character.characterPackage
                 };
-                GameActionManager.instance.QueueAction(clearEquip);
+                GameActionManager.instance.QueueAction(clearEquip,true);
             }
             UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         }
@@ -84,7 +91,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 selectActionName = "×°±¸",
                 targetObj = equipment.characterId,
                 itemMatchData=new ItemMatchData(),
-                selectAction = ChangeEquip
+                selectAction = ChangeEquip,
+                isMiniShow=true
                 //selectActionId = GameCommon.selectEquipBoxAction
             };
             
@@ -94,9 +102,9 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 (int)equipment.ItemType
             };
 
-            GameActionManager.instance.QueueAction(openPackage);
+            GameActionManager.instance.QueueAction(openPackage,true);
 
-            async void ChangeEquip(Item item, int packageId)
+            async void ChangeEquip(Item item, bool select)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 if (itemData.type != equipment.ItemType)
@@ -107,12 +115,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 {
                     characterId = equipment.characterId,
                     itemId = item.instanceId,
-                    outPackageId = packageId
+                    outPackageId = item.packageId
                 };
-                GameActionManager.instance.QueueAction(changeEquip);
+                GameActionManager.instance.QueueAction(changeEquip,true);
             }
 
-            GameActionManager.instance.QueueAction(openPackage);
+            GameActionManager.instance.QueueAction(openPackage,true);
         }
     }
 
@@ -167,6 +175,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     {
         base.Close();
         UIManager.instance.CloseGamePanel<TeamPanel>();
+        UIManager.instance.CloseGamePanel<MiniPackagePanel>();
+        UIManager.instance.CloseGamePanel<ItemInfoPanel>();
     }
 
     public override void SetPanelUISerializeObj()
@@ -193,7 +203,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         WeaponBox = FindChildGameObject<EquipBoxReference>("Weapon");
         ClothesBox = FindChildGameObject<EquipBoxReference>("Clothes");
         ShoesBox = FindChildGameObject<EquipBoxReference>("Shoes");
-        visitButton = FindChildGameObject<Button>("Visit");
+        Visit = FindChildGameObject("Visit");
+        visitButton = FindChildGameObject<Button>("VisitButton");
         closeButton = FindChildGameObject<Button>("Close");
 
         Friendship = FindChildGameObject("Friendship");
@@ -333,7 +344,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         if (v.isNpc)
         {
-            visitButton.transform.localScale = Vector3.one;
+           Visit.localScale = Vector3.one;
             State.transform.localScale = Vector3.one;
         }else if (v.isAnimal)
         {
@@ -341,7 +352,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         }
         else
         {
-            visitButton.transform.localScale = Vector3.zero;
+            Visit.localScale = Vector3.zero;
             State.transform.localScale = Vector3.zero;
         }
     }

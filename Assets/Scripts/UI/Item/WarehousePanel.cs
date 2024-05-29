@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-public delegate void PackageItemAction(Item item, int packageId);
+ 
 
 public class WarehousePanel : GamePanel<PackageList>
 {
@@ -70,7 +69,7 @@ public class WarehousePanel : GamePanel<PackageList>
     private PackageList packageList;
     private PackageData selectPackageData;
     private Item SelectItem;
-    private PackageItemAction selectItemAction;
+    private SelectAction<Item> selectItemAction;
 
     protected override void Awake()
     {
@@ -84,7 +83,7 @@ public class WarehousePanel : GamePanel<PackageList>
         {
             if (selectItemAction != null)
             {
-                selectItemAction(SelectItem, selectPackageData.instanceId);
+                selectItemAction(SelectItem);
             }
         });
 
@@ -197,18 +196,18 @@ public class WarehousePanel : GamePanel<PackageList>
         }
     }
 
-    public void SetSelectItemAction(PackageItemAction selectItemAction, string actionName)
+    public void SetSelectItemAction(SelectAction<Item> selectItemAction, string actionName)
     {
         ActionName.text = actionName;
         this.selectItemAction = selectItemAction;
     }
 
-    public void SetOtherSelectAction(PackageItemAction selectItemAction)
+    public void SetOtherSelectAction(SelectAction<Item> selectItemAction)
     {
         otherSelectItemAction = selectItemAction;
     }
 
-    private PackageItemAction otherSelectItemAction;
+    private SelectAction<Item> otherSelectItemAction;
 
     private async void SelectPackageItem(Item item, bool selected = true)
     {
@@ -219,7 +218,7 @@ public class WarehousePanel : GamePanel<PackageList>
                 ItemInformation.localScale = Vector3.zero;
                 if (otherSelectItemAction != null)
                 {
-                    otherSelectItemAction.Invoke(default(Item), selectPackageData.instanceId);
+                    otherSelectItemAction.Invoke(default(Item));
                 }
             }
             else
@@ -240,7 +239,7 @@ public class WarehousePanel : GamePanel<PackageList>
 
                 if (otherSelectItemAction != null)
                 {
-                    otherSelectItemAction.Invoke(item, selectPackageData.instanceId);
+                    otherSelectItemAction.Invoke(item);
                 }
             }
         }

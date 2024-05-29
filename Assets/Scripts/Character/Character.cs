@@ -91,7 +91,7 @@ public struct CharacterProperty
                 DF = 1,
                 Lucky = 1,
                 Other = 1,
-                Speed=100
+                Speed=1
             };
             return characterProperty;
         }
@@ -679,8 +679,12 @@ public partial class Character
                         };
                         GameActionManager.instance.QueueAction(tryTeamLeaderStop);
                     }
-
-                    runtimeObj.SetAnimationSpeed(value);
+                    float animationSpeed = 0;
+                    if (value != 0)
+                    {
+                        animationSpeed = propertySpeed;
+                    }
+                    runtimeObj.SetAnimationSpeed(value, animationSpeed);
                 }
             }
         }
@@ -690,10 +694,20 @@ public partial class Character
         }
     }
 
+    public float propertySpeed => team != null ? team.speed : CharacterProperty.Speed*0.01f;
+    private Team team;
+    public bool isInTeam => team != null;
+    public void JoinTeam(Team team)
+    {
+        this.team = team;
+    }
+    public void LeaveTeam()
+    {
+        team = null;
+    }
     //public string behavior;
 
-    public int moveEnumeratorId;
-    private CharacterProperty nowProperty;
+    public int moveEnumeratorId; 
 
     public bool CanMoveCrossMap = true;
 
@@ -787,7 +801,7 @@ public partial class Character
 
             if (character != null)
             {
-                if (character.isInTeam)
+                if (character.team!=null)
                 {
                     return;
                 }
@@ -1050,7 +1064,7 @@ public partial class Character
     /// <param name="enter">是否进入事件</param>
     private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
-        if (isInTeam && this != CharacterManager.instance.controllerCharacter)
+        if (team!=null && this != CharacterManager.instance.controllerCharacter)
         {
             return;
         }

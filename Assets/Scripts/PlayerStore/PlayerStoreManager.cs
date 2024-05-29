@@ -152,10 +152,10 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             };
              
             WarehousePanel warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel,PackageList>(packageList);
-            warehousePanel.SetSelectItemAction((Item item, int packageId) =>
+            warehousePanel.SetSelectItemAction((Item item, bool select) =>
             {
                 UIManager.instance.CloseGamePanel<WarehousePanel>();
-                OpenSetItemPanel(storeCounterSetSelectItemAction.targetObj, item, packageId);
+                OpenSetItemPanel(storeCounterSetSelectItemAction.targetObj, item);
             }, "选择");
         }
     }
@@ -174,7 +174,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private void OpenSetItemPanel(int storeId, Item item, int packageId)
+    private void OpenSetItemPanel(int storeId, Item item)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {

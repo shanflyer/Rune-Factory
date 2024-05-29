@@ -4,13 +4,10 @@ using TMPro;
 
 public struct ItemInfo:IReferenceData
 {
-    public int itemId;
-    public int dataId;
-    public float itemValue;
-    public int otherValue;
+    public Item item;
     public string ActionName;
     public bool showClose;
-    public SelectAction<ItemInfo> action;
+    public SelectAction<Item> action;
     public float OffsetPos;
 }
 public class ItemInfoPanel : GamePanel<ItemInfo>
@@ -52,7 +49,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         {
             if (action != null)
             {
-                action(ItemInfo);
+                action(ItemInfo.item);
             }
             Close();
         });
@@ -81,7 +78,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         CloseObj = FindChildGameObject("CloseObj");
         CloseButton = FindChildGameObject<Button>("Close");
     }
-    public void SetAction(SelectAction<ItemInfo> action, string actionName)
+    public void SetAction(SelectAction<Item> action, string actionName)
     {
         this.action = action;
         ActionName.text = actionName;
@@ -95,28 +92,17 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         }
     }
 
-    private ItemInfo ItemInfo; private SelectAction<ItemInfo> action;
+    private ItemInfo ItemInfo; private SelectAction<Item> action;
 
     public override async void InitReferenceData(ItemInfo v)
     {
         base.InitReferenceData(v);
         ItemInfo = v;
-        switch (v.otherValue)
+        switch (v.item.itemType)
         {
-            case 0:
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(v.dataId);
-                Icon.sprite = itemData.icon;
-                Name.text = itemData.itemName;
-                type.text = $"[{itemData.type}]";
-                MoneyIcon.enabled = true;
-                MoneyValue.text = $"{itemData.sellPrice}";
-                Property.text = itemData.property.ToString();
-                Info.text = itemData.info;
-                InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-                InfoItemValue.fillAmount = v.itemValue;
-                break;
-            case 1:
-                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(v.dataId);
+           
+            case ItemType.家具:
+                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(v.item.dataId);
                 Icon.sprite = homeEquipmentData.icon;
                 Name.text = homeEquipmentData.equipmentName;
                 type.text = homeEquipmentData.homeEquipType.ToString(); 
@@ -143,6 +129,18 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                     }
                 }
                 Property.text = $"可布置地点:{roomValueText}";
+                break;
+            default:
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(v.item.dataId);
+                Icon.sprite = itemData.icon;
+                Name.text = itemData.itemName;
+                type.text = $"[{itemData.type}]";
+                MoneyIcon.enabled = true;
+                MoneyValue.text = $"{itemData.sellPrice}";
+                Property.text = itemData.property.ToString();
+                Info.text = itemData.info;
+                InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
+                InfoItemValue.fillAmount = v.item.value;
                 break;
         }
        

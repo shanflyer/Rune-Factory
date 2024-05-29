@@ -230,18 +230,18 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
     }
 
     public void ObjectMove(GetMoveVector GetObjectPos, GetMoveVector GetMoveDirction, SetMoveTarge SetMoveTarge,
-        int mapId, int instanceId, bool checkWalk)
+        int mapId, int instanceId, bool checkWalk,float speed=1)
     {
         if (!objectMoveIEnumerator.TryGetValue(instanceId, out IEnumerator enumerator))
         {
-            enumerator = ObjectFreedomMoving(GetObjectPos, GetMoveDirction, SetMoveTarge, mapId, instanceId, checkWalk);
+            enumerator = ObjectFreedomMoving(GetObjectPos, GetMoveDirction, SetMoveTarge, mapId, instanceId, checkWalk, speed);
             UpDataComponent.StartCoroutine(enumerator);
             objectMoveIEnumerator.Add(instanceId, enumerator);
         }
     }
 
     private IEnumerator ObjectFreedomMoving(GetMoveVector GetObjectPos, GetMoveVector GetMoveDirction, SetMoveTarge SetMoveTarge,
-        int mapId, int instanceId, bool checkWalk)
+        int mapId, int instanceId, bool checkWalk,float speed= 1)
     {
         bool _continue = true;
         while (_continue)
@@ -254,7 +254,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
                 int2 target = int2.zero;
                 Vector2 targetPos = nowPos;
 
-                float distance = CharacterManager.updataMoveSpeed * Time.deltaTime;
+                float distance = CharacterManager.updataMoveSpeed * Time.deltaTime* speed;
 
                 if (WorldMapManager.instance.InitSmoothMove(ref direction, nowPos, mapId, distance, ref target, ref targetPos))
                 {
@@ -268,7 +268,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             }
             else
             {
-                Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.deltaTime;
+                Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.deltaTime * speed;
                 int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
                 SetMoveTarge(targetCoordinate, targetPos);
             }

@@ -142,13 +142,13 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         }
     }
 
-    private void TryUsedItem(Item item, int packageId)
+    private void TryUsedItem(Item item,bool select)
     {
         ItemUseAction itemUseAction = new ItemUseAction
         {
             itemId = item.dataId,
             itemCount = 1,
-            packageId = packageId
+            packageId = item.packageId
         };
         GameActionManager.instance.QueueAction(itemUseAction, true);
     }

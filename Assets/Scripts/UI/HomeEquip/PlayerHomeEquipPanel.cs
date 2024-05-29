@@ -169,11 +169,14 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         {
             ItemInfo itemInfo = new ItemInfo
             {
-                itemId = SelectHomeEquip.instanceId,
-                dataId = SelectHomeEquip.equipDataId,
+                item = new Item
+                {
+                    instanceId = SelectHomeEquip.instanceId,
+                    dataId = SelectHomeEquip.equipDataId,
+                    itemType = ItemType.¼Ò¾ß,
+                } ,
                 showClose = true,
-                OffsetPos = infoOffsetY,
-                otherValue = 1
+                OffsetPos = infoOffsetY, 
             };
             UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         });

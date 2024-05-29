@@ -134,10 +134,10 @@ public class FriendManager : Singleton<FriendManager>
             var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
             warehousePanel.SetSelectItemAction(SelectAction, isAnimal?"投喂": "赠送");
 
-            void SelectAction(Item item, int packageId)
+            void SelectAction(Item item,bool select)
             {
                 warehousePanel.Close();
-                int count = PackageManager.instance.GetPackageItemCount(packageId, item.dataId);
+                int count = PackageManager.instance.GetPackageItemCount(item.packageId, item.dataId);
                 if (count >= 1)
                 {
                     UIManager.instance.CloseGamePanel<WarehousePanel>();

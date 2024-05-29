@@ -128,9 +128,9 @@ public struct OpenPackage : GameAction
     public bool canSetShortcut;
     public bool eventAction;
     public ItemMatchData itemMatchData;
-    public PackageItemAction selectAction;
+    public SelectAction<Item> selectAction;
     public SetPanelReference setPanel;
-
+    public bool isMiniShow;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 2)

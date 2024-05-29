@@ -100,7 +100,6 @@ public class Player : Character
 
 public partial class Character
 {
-    public bool isInTeam = false;
 
     public int selectItem;
 

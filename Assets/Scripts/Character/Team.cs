@@ -274,6 +274,7 @@ public class TeamManager : Singleton<TeamManager>
 
 public class Team
 {
+    public float speed => leader.CharacterProperty.Speed *0.01f;
     public Character leader => Teamers[0].character;
     public List<Teamer> Teamers = new List<Teamer>();
     private HashSet<int> characterInstances = new HashSet<int>();
@@ -311,6 +312,7 @@ public class Team
         this.Teamers.Clear();
         Teamer teamer = new Teamer(leader);
         Teamers.Add(teamer);
+        teamer.character.JoinTeam(this);
         StopCharacterBehavior(leader.instanceId);
     }
 
@@ -373,7 +375,7 @@ public class Team
                     teamer.queueCoordinate.Enqueue(coordinate);
                 }*/
                 Teamers.Add(teamer);
-
+                teamer.character.JoinTeam(this);
                 teamer.SetTeamCoordinate();
             }
             StopCharacterBehavior(characterId);
@@ -528,8 +530,8 @@ public class Team
                         CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character);
                     }
                 }
-                Teamers[index].character.isInTeam = false;
-                Teamers.RemoveAt(index);
+                Teamers[index].character.LeaveTeam();
+                Teamers.RemoveAt(index); 
             }
             ReStartCharacterBehavior(characterid);
         }
@@ -604,8 +606,7 @@ public class Teamer
 
     public Teamer(Character character)
     {
-        this.character = character;
-        character.isInTeam = true;
+        this.character = character; 
         nowCoordinate = character.coordinate;
     }
 

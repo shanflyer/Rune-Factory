@@ -1081,7 +1081,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     }
                     RefreshRPCostAndOut();
 
-                    async void SetFormulaItem(Item item, int packageId)
+                    async void SetFormulaItem(Item item,bool select)
                     {
                         item.count = 0;
                         await SelectItemBoxRefrence.InitData(item, null, FormulaItemBoxGroup);

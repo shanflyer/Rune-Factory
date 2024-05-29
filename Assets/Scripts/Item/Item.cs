@@ -24,7 +24,7 @@ public struct Item : IReferenceData
         itemType = ItemType.Default;
         isFresh = false;
         locked = false;
-    }
+    } 
 }
 
 public struct Equipment : IReferenceData
