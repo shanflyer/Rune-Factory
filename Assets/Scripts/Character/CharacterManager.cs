@@ -14,8 +14,7 @@ public class CharacterRuntimeObj
     public Animator animator;
     public Transform model;
     public MyShadowPolygon myShadow;
-    public SpriteRenderer equipRenderer;
-
+    public SpriteRenderer equipRenderer; 
     public void Clear()
     {
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
@@ -115,9 +114,10 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector2 pos = GameCommon.GetMapPos(character.coordinate);
         transform.position = pos;
 
-        if (controller)
+        if (controller||character==controllerCharacter)
         {
             CameraManager.instance.SetFollowTarget(transform);
+            ControllerRuntimeObj = characterRuntimeObj;
         }
     }
 
@@ -447,9 +447,9 @@ public class CharacterManager : Singleton<CharacterManager>
                     UIManager.instance.ShowGamePanel<PlayerTopPanel>();
                     UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(
                     ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId));
-                }
-
-                characterRuntionObjs.TryGetValue(controllerCharacter, out controllerRuntimeObj);
+                } 
+                characterRuntionObjs.TryGetValue(controllerCharacter, out var _ControllerRuntimeObj);
+                ControllerRuntimeObj = _ControllerRuntimeObj;
             }
         }
         get
@@ -458,26 +458,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public Transform controllerTransform
-    {
-        get
-        {
-            if (controllerRuntimeObj == null)
-            {
-                if (controllerCharacter != null)
-                {
-                    characterRuntionObjs.TryGetValue(controllerCharacter, out controllerRuntimeObj);
-                }
-            }
-            if (controllerRuntimeObj != null)
-            {
-                var transform = controllerRuntimeObj.animator.transform;
-                return transform;
-            }
-
-            return null;
-        }
-    }
+    public Transform controllerTransform;
     private CharacterRuntimeObj controllerRuntimeObj;
     public CharacterRuntimeObj ControllerRuntimeObj
     {
@@ -491,6 +472,14 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
             }
             return controllerRuntimeObj;
+        }
+        set
+        {
+            controllerRuntimeObj = value;
+            if (value != null)
+            {
+                controllerTransform = controllerRuntimeObj.animator.transform;
+            } 
         }
     }
 
@@ -1185,6 +1174,10 @@ public class CharacterManager : Singleton<CharacterManager>
             if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
                 RecycleCharacterObj(character);
+                if (character == controllerCharacter)
+                {
+                    ControllerRuntimeObj = null;
+                }
             }
             else
             {
@@ -1203,7 +1196,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance == WorldMapObjManager.instance.displayMap)
             {
-                 await CreatCharacterObjAsync(character); 
+               await CreatCharacterObjAsync(character);  
             }
         }
     }
@@ -1439,7 +1432,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (_moveDirection == Vector2.zero)
         {
             controllerCharacter.moveDirection = _moveDirection;
-            GameObjectCurveController.instance.StopObjectMove(controllerRuntimeObj.runtimeObj.linkId);
+            GameObjectCurveController.instance.StopObjectMove(ControllerRuntimeObj.runtimeObj.linkId);
             return true;
         }  
         return CheckSmoothMove(controllerCharacter.coordinate, ref _moveDirection, controllerTransform.position,
@@ -1487,7 +1480,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         controllerCharacter.moveDirection = _moveDirection;
                     }
                 }
-            }, controllerRuntimeObj.runtimeObj.linkId);
+            }, ControllerRuntimeObj.runtimeObj.linkId);
     }
     //原始输入方向参数
     Vector2 originalMoveDirection;
@@ -1513,7 +1506,7 @@ public class CharacterManager : Singleton<CharacterManager>
             };
             GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
 
-            GameObjectCurveController.instance.StopObjectMove(controllerRuntimeObj.runtimeObj.linkId);
+            GameObjectCurveController.instance.StopObjectMove(ControllerRuntimeObj.runtimeObj.linkId);
         }
         else
         {
