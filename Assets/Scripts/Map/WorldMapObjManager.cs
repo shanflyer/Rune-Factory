@@ -220,7 +220,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             var mapRuntimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), roomName, mapRoomData.mapObj.transform, instanceId);
             return mapRuntimeObj;
         }
-        return default(RuntimeObj);
+        return null;
     }
 
     private async Task<RuntimeObj> CreatMapItemRuntime(int dataId, int instanceId, int2 coordinate)
@@ -244,7 +244,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
             return mapItemRuntime;
         }
-        return default(RuntimeObj);
+        return null;
     }
 
     private async void SetMapOverrideEnvirmentData(string roomName)
@@ -779,6 +779,7 @@ public class MapItemRuntimeObj
         }
         spriteRenderers = null;
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+        runtimeObj = null;
     }
 
     public void Dispose()

@@ -44,7 +44,7 @@ public class EmoteManager : Singleton<EmoteManager>
 
     private async void ShowEmote(ShowEmote showEmote)
     {
-        RuntimeObj runtimeObj = default(RuntimeObj);
+        RuntimeObj runtimeObj = null;
         switch (showEmote.entityType)
         {
             case EntityType.角色:
@@ -70,7 +70,7 @@ public class EmoteManager : Singleton<EmoteManager>
                 }
                 break;
         }
-        if (runtimeObj.obj == null)
+        if (runtimeObj== null)
         {
             return;
         }

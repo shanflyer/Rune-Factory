@@ -571,7 +571,7 @@ public class Team
         {
             if (lastCoordinate.z != leader.mapInstance)
             {
-                for (int i = 0; i < Teamers.Count; i++)
+                for (int i = 1; i < Teamers.Count; i++)
                 {
                     Teamers[i].SetNewMapCoordinate(leader.ObjCoordinate, leader.moveDirection);
                 }

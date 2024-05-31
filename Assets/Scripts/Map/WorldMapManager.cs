@@ -647,6 +647,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return true;
     }
 
+
+   
+
+
     public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance)
     {
         if (direction == Vector2.zero)

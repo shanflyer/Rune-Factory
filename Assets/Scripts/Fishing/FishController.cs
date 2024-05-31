@@ -51,7 +51,7 @@ public class FishController:Singleton<FishController>
     }
     protected override void Clear()
     {
-        base.Clear();
+        base.Clear(); 
         myInstance.Clear();
     }
 
@@ -581,6 +581,7 @@ public struct Fisher
         this.runtimeObj = runtimeObj;
         this.roomId = roomId;
         waterPs = (runtimeObj.obj as Transform).GetComponentInChildren<ParticleSystem>(true);
+        runtimeObj = null;
     }
     public void Clear()
     {

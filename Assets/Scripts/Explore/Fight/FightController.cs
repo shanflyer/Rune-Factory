@@ -32,7 +32,8 @@ public struct FightPlayerRuntime
         playableDirector = null;
         animator = null;
         behaviorTree = null;
-        GameRuntimeObjManager.instance.RecycleRuntimeObj(playerObj);
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(playerObj); 
+        playerObj = null;
     }
 
     private SpriteRenderer renderer;
@@ -123,6 +124,7 @@ public struct FightMapRuntime
         middleScene = null;
         forwardScene = null;
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+        runtimeObj = null;
     }
 }
 

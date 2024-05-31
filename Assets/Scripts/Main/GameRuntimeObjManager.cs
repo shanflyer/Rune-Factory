@@ -54,7 +54,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
 
             } 
         }
-        runtimeObj = new RuntimeObj();
+        runtimeObj = null;
         return false;
     }
  
@@ -69,10 +69,10 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         {
             parent = overrideParent;
         }
-
-        RuntimeObj runtimeObj;
-        if (!GetRuntimeObj(runtimeObjType,key, out runtimeObj))
-        { 
+         
+        if (!GetRuntimeObj(runtimeObjType,key, out var runtimeObj))
+        {
+            runtimeObj = new RuntimeObj();
             runtimeObj.obj = GameObject.Instantiate(objPre, parent);
             runtimeObj.runtimeObjType = runtimeObjType;
             runtimeObj.key = key;
@@ -114,8 +114,15 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
                 runtimeObjs = new Stack<RuntimeObj>();
                 objs[runtimeObj.key] = runtimeObjs;
             }
-
-            runtimeObjs.Push(runtimeObj);
+            if(runtimeObjs.Count <10)
+            {
+                runtimeObjs.Push(runtimeObj);
+            }
+            else
+            {
+                runtimeObj = null;
+            }
+           
         }
         
     }
@@ -129,7 +136,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
     }
 
 }
-public struct RuntimeObj
+public class RuntimeObj
 {
     public Object obj;
     public int linkId;

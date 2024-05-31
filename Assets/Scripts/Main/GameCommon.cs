@@ -113,6 +113,8 @@ public class GameCommon
     public const float sleepCostTime = 8.0f;
     public const int shortcutItemCount = 5;
 
+    public const float freedomMoveValue = 1.2f;
+
     public const int animalDefaultFoodItem = 70;
     public const int selectEquipBoxAction = 90;
     public const int defaultGiftTalk = 8888;
@@ -129,6 +131,7 @@ public class GameCommon
 
     public static int defaultOperateId = 0;
     public static int defaultPlayerTalkTime = 2000;
+    
 
     public static float2 dropWaitTime = new float2(0.4f, 0.8f);
     public static float4 dropArea = new float4(-0.6f, -0.3f, 0.6f, 0.3f);

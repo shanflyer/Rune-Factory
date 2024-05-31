@@ -228,7 +228,15 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             enumerator = null;
         }
     }
-
+    public void ObjectMove(Character character, GetMoveVector GetObjectPos, SetMoveTarge SetMoveTarge, int instanceId)
+    {
+        if (!objectMoveIEnumerator.TryGetValue(instanceId, out IEnumerator enumerator))
+        {
+            enumerator = ObjectMoving(character,GetObjectPos, SetMoveTarge, instanceId);
+            UpDataComponent.StartCoroutine(enumerator);
+            objectMoveIEnumerator.Add(instanceId, enumerator);
+        }
+    }
     public void ObjectMove(GetMoveVector GetObjectPos, GetMoveVector GetMoveDirction, SetMoveTarge SetMoveTarge,
         int mapId, int instanceId, bool checkWalk,float speed=1)
     {
@@ -239,6 +247,44 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             objectMoveIEnumerator.Add(instanceId, enumerator);
         }
     }
+    
+    private IEnumerator ObjectMoving(Character character, GetMoveVector GetObjectPos, SetMoveTarge SetMoveTarge, int instanceId)
+    { 
+        bool _continue = true;
+        while (!character.moveDirection.Equals(float2.zero))
+        {
+            Vector2 direction = character.moveDirection;
+            Vector2 nowPos = GetObjectPos();
+            float speed = character.propertySpeed;
+
+            Vector2 targetPos = nowPos + direction * speed * GameCommon.freedomMoveValue * Time.deltaTime; 
+            int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
+            int2 trueTargetCoordinate = MapCellController.instance.GetTrueFreedomTarget(character.coordinate, targetCoordinate, character.mapInstance);
+            if (direction != Vector2.zero && trueTargetCoordinate.Equals(character.coordinate))
+            {
+
+            }
+
+            if (!trueTargetCoordinate.Equals(targetCoordinate))
+            {
+                if (!trueTargetCoordinate.Equals(character.coordinate))
+                {
+                    targetPos = GameCommon.GetMapPos(trueTargetCoordinate); 
+                }
+                else
+                {
+                    targetPos = nowPos;
+                    // _continue = false;
+                    //StopObjectMove(instanceId);
+                }
+            }
+            SetMoveTarge(trueTargetCoordinate, targetPos);
+
+            yield return 0;
+        }
+        StopObjectMove(instanceId);
+    }
+     
 
     private IEnumerator ObjectFreedomMoving(GetMoveVector GetObjectPos, GetMoveVector GetMoveDirction, SetMoveTarge SetMoveTarge,
         int mapId, int instanceId, bool checkWalk,float speed= 1)
