@@ -593,6 +593,7 @@ public class FightController : MonoBehaviour
         return null;
     }
 
+   
     public void RunFightCharacter(int characterId)
     {
         if (fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayer))
@@ -615,7 +616,7 @@ public class FightController : MonoBehaviour
         FightCharacter fightCharacter;
         if (FightManager.instance.GetFightCharacter(characterId, out fightCharacter))
         {
-            fightCharacter.fightStatus = FightStatus.¹¥»÷;
+            fightCharacter.fightStatus = FightStatus.ÐÐ¶¯;
             if (fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId, out var skillRuntime))
             {
                 var skillData = skillRuntime.skillData;

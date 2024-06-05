@@ -27,12 +27,36 @@ public class SkillManager : Singleton<SkillManager>
         return skillRuntime;
     } 
 }
-public struct SkillRuntime
+public class SkillRuntime
 {
     public int instanceId;
     public SkillData skillData;
     public int skillCd;
     public int cost;
     public FightType fightType=>skillData.fightType;
-   
+     
+    public bool waiteCD=>skillCd>0;
+
+    public void SetSkillCd(float speed)
+    {
+        if (speed < 100)
+        {
+            float value =1+ (100 - speed) *0.01f;
+            skillCd = (int)(skillCd * value);
+        }
+        else
+        {
+            float value = 1/(speed - 100) * 0.01f;
+            skillCd = (int)(skillCd * value);
+        }
+    }
+    public void UpData(int timeValue)
+    {
+        skillCd -= timeValue;
+        if (skillCd < 0)
+        {
+            skillCd = 0;
+        }
+    }
+
 }

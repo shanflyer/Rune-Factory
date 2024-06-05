@@ -891,7 +891,7 @@ public class PackageManager : Singleton<PackageManager>
             for (int i = 0; i < itemData.useEventId.Count; i++)
             {
                 GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(itemData.useEventId[i].ToString());
-                gameActionData.Action();
+                gameActionData.Action(immediately:true);
             }
             return true;
         }

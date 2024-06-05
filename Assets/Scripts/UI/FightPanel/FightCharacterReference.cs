@@ -21,7 +21,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
     private TextMeshProUGUI ExpText;
 
     [SerializeField]
-    private TextMeshProUGUI LuckyText;
+    private TextMeshProUGUI LuckyText,SpeedText;
 
     [SerializeField]
     private Transform Info, Null;
@@ -48,6 +48,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
         LevelText = FindChildGameObject<TextMeshProUGUI>("Level");
         ExpText = FindChildGameObject<TextMeshProUGUI>("Exp");
         LuckyText = FindChildGameObject<TextMeshProUGUI>("Lock");
+        SpeedText = FindChildGameObject<TextMeshProUGUI>("Speed");
         HPText = FindChildGameObject<TextMeshProUGUI>("HPValue");
         MPText = FindChildGameObject<TextMeshProUGUI>("MPValue");
 
@@ -90,6 +91,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
             DFText.text = $"DF.{characterProperty.DF}";
             LuckyText.text = $"{LanguageManage.SwitchStr("пртк")}.{characterProperty.Lucky}";
             ExpText.text = $"Exp.{characterInformationData.exp.nowExp}/{characterInformationData.exp.nowLevelExp}";
+            SpeedText.text = $"{LanguageManage.SwitchStr("цТ╫щ")}.{characterProperty.Speed}";
 
             HPSlider.fillAmount = (float)characterProperty.HP / characterProperty.MaxHP;
             MPSlider.fillAmount = (float)characterProperty.MP / characterProperty.MaxMP;

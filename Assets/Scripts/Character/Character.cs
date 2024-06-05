@@ -70,7 +70,7 @@ public struct CharacterProperty
         if (Speed != 0)
         {
             string operatorStr = Speed > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.速度}{operatorStr}{Speed}  ";
+            result = $"{CharacterPropertyType.敏捷}{operatorStr}{Speed}  ";
         }
         return result;
     }
@@ -201,7 +201,7 @@ public struct CharacterProperty
 
             case CharacterPropertyType.最大法力:
                 return MaxMP;
-            case CharacterPropertyType.速度:
+            case CharacterPropertyType.敏捷:
                 return Speed;
             default:
                 return Other;
@@ -252,7 +252,7 @@ public struct CharacterProperty
             case CharacterPropertyType.幸运:
                 Lucky = setCharacterProperty.Value;
                 break;
-            case CharacterPropertyType.速度:
+            case CharacterPropertyType.敏捷:
                 Speed = setCharacterProperty.Value;
                 break;
             case CharacterPropertyType.自定义值:
@@ -303,7 +303,7 @@ public struct CharacterProperty
             case CharacterPropertyType.幸运:
                 Lucky += changeCharacterProperty.changeValue;
                 break;
-            case CharacterPropertyType.速度:
+            case CharacterPropertyType.敏捷:
                 Speed += changeCharacterProperty.changeValue;
                 break;
             case CharacterPropertyType.自定义值:
@@ -506,7 +506,7 @@ public partial class Character
             characterId = instanceId,
             characterProperty = CharacterProperty
         };
-        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
+        GameActionManager.instance.QueueAction(CharacterPropertyTrigger,true);
     }
 
     private CharacterProperty ProfessionProperty

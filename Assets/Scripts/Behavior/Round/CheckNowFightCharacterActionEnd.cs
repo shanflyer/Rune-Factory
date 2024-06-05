@@ -23,7 +23,7 @@ public class CheckNowFightCharacterActionEnd : Action
         if(FightManager.instance.GetFightCharacter(nowFightCharacter.Value, out fightCharacter))
         {
             Debug.Log($"{fightCharacter.instanceId}--{fightCharacter.fightStatus}");
-            if (fightCharacter.fightStatus == FightStatus.准备)
+            if (fightCharacter.fightStatus == FightStatus.准备||fightCharacter.fightCharacterStaues!=FightCharacterStaues.正常)
             {
                 return TaskStatus.Success;
             }

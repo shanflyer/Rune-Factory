@@ -7,11 +7,16 @@ using UnityEngine.TextCore.Text;
 
 public enum FightStatus
 {
-    准备,攻击,
+    准备,行动,
+}
+public enum FightCharacterStaues
+{
+    正常,死亡,濒死
 }
 public class FightCharacter
 {
     public FightStatus fightStatus = FightStatus.准备;
+    public FightCharacterStaues fightCharacterStaues = FightCharacterStaues.正常;
     public virtual AttributeType AttributeType { get; }
     public virtual CharacterProperty characterProperty { get; }
     public int instanceId { get; set; } 
@@ -22,7 +27,20 @@ public class FightCharacter
     {
 
     }
-
+    public void UpData(int timeValue)
+    {
+        if (fightCharacterStaues == FightCharacterStaues.正常)
+        {
+            foreach (var skillRuntime in skillRuntimes)
+            {
+                if (skillRuntime.Value.skillCd > 0)
+                {
+                    skillRuntime.Value.UpData(timeValue);
+                }
+            }
+        }
+       
+    }
     public virtual void SetCharacterValue(SetCharacterProperty setCharacterProperty)
     { 
     }
@@ -30,6 +48,10 @@ public class FightCharacter
     {
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
         return results;
+    }
+    public virtual void Clear()
+    {
+
     }
 }
 
@@ -63,7 +85,7 @@ public class FightPlayer : FightCharacter
     public override bool CheckAction()
     {
         Character character = CharacterManager.instance.GetCharacter(instanceId);
-        if (character.CharacterProperty.HP > 0)
+        if (character.CharacterProperty.HP > 0&&fightCharacterStaues==FightCharacterStaues.正常&&fightStatus==FightStatus.准备)
         {
             return true;
         }
@@ -108,11 +130,31 @@ public class FightPlayer : FightCharacter
             int skillId = character.skills[i];
             SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
             skillRuntimes.Add(skillRuntime.instanceId,skillRuntime);
+            skillRuntime.SetSkillCd(characterProperty.Speed);
         }
     }
     public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
     {
         character.SetProperty(setCharacterProperty);
+    }
+    public FightPlayer()
+    {
+        GameActionManager.instance.AddListener<CharacterPropertyTrigger>(CharacterPropertyTrigger);
+    }
+    void CharacterPropertyTrigger(CharacterPropertyTrigger characterPropertyTrigger)
+    {
+        if (characterPropertyTrigger.characterId == character.instanceId)
+        {
+            foreach (var skill in skillRuntimes)
+            {
+                skill.Value.SetSkillCd(characterPropertyTrigger.characterProperty.Speed);
+            }
+        } 
+    }
+    public override void Clear()
+    {
+        base.Clear();
+        GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(CharacterPropertyTrigger);
     }
 }
 public class FightMonster : FightCharacter
@@ -147,7 +189,7 @@ public class FightMonster : FightCharacter
     }
     public override bool CheckAction()
     { 
-        if (characterProperty.HP > 0)
+        if (characterProperty.HP > 0 && fightCharacterStaues == FightCharacterStaues.正常 && fightStatus == FightStatus.准备)
         {
             return true;
         }
@@ -165,6 +207,7 @@ public class FightMonster : FightCharacter
                 int skillId = monsterData.skills[i];
                 SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
                 skillRuntimes.Add(skillRuntime.instanceId,skillRuntime);
+                skillRuntime.SetSkillCd(characterProperty.Speed);
             }
         }
     }
@@ -184,8 +227,14 @@ public class FightMonster : FightCharacter
         _characterProperty.HP = monsterData.HP;
         _characterProperty.AT = monsterData.AT;
         _characterProperty.DF = monsterData.DF;
+        _characterProperty.Speed = monsterData.Speed;
         _characterProperty.Lucky = monsterData.Lucky;
         attributeType = monsterData.attributeType;
+
+        foreach(var skill in skillRuntimes)
+        {
+            skill.Value.SetSkillCd(_characterProperty.Speed);
+        }
     }
 
     public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
@@ -196,7 +245,12 @@ public class FightMonster : FightCharacter
             characterId = instanceId,
             characterProperty = _characterProperty
         };
-        GameActionManager.instance.QueueAction(CharacterPropertyTrigger);
+        GameActionManager.instance.QueueAction(CharacterPropertyTrigger,true);
+
+        foreach (var skill in skillRuntimes)
+        {
+            skill.Value.SetSkillCd(_characterProperty.Speed);
+        }
     }
 }
 
@@ -206,8 +260,8 @@ public enum HurtResultType
 }
 public class FightManager :Singleton<FightManager>
 {
-    MyInstance myInstance = new MyInstance(); 
-
+    MyInstance myInstance = new MyInstance();
+    public override bool NeedUpdata => true;
     Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     List<int> fightPlayers = new List<int>();
     List<int> fightMonsters = new List<int>();
@@ -225,6 +279,7 @@ public class FightManager :Singleton<FightManager>
         GameActionManager.instance.AddListener<CharacterDeath>(CharacterDeath);
         GameActionManager.instance.AddListener<CharacterLevelUp>(CharacterLevelUp);
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
+        GameActionManager.instance.AddListener<AllCharacterTryAutoFight>(AllCharacterTryAutoFight);
 
         fightResult = new FightResult
         {
@@ -239,9 +294,7 @@ public class FightManager :Singleton<FightManager>
     void ExploreEnd(ExploreEnd exploreEnd)
     {
         myInstance.Clear();
-        fightCharacters.Clear();
-        fightPlayers.Clear();
-        fightMonsters.Clear();
+        ClearCharacter();
         GetItemIndexs.Clear();
         fightResult.fighterResults.Clear();
         fightResult.getItems.Clear();
@@ -249,11 +302,18 @@ public class FightManager :Singleton<FightManager>
     protected override void Clear()
     {
         myInstance.Clear();
+
+        ClearCharacter();
+        GetItemIndexs.Clear();
+        base.Clear();
+    }
+    void ClearCharacter()
+    {
+
+
         fightCharacters.Clear();
         fightPlayers.Clear();
         fightMonsters.Clear();
-        GetItemIndexs.Clear();
-        base.Clear();
     }
     MyTimeLineData deathTimeLineData;
     void CharacterLevelUp(CharacterLevelUp characterLevelUp)
@@ -269,6 +329,18 @@ public class FightManager :Singleton<FightManager>
             }
         }
     }
+
+    void AllCharacterTryAutoFight(AllCharacterTryAutoFight allCharacterTryAutoFight)
+    {
+        foreach(var fightCharacter in fightCharacters)
+        {
+            if (fightCharacter.Value.CheckAction())
+            {
+                FightController.instance.RunFightCharacter(fightCharacter.Key);
+                fightCharacter.Value.fightStatus = FightStatus.行动;
+            }
+        }
+    }
     void CharacterDeath(CharacterDeath characterDeath)
     {
         //播放死亡效果
@@ -277,13 +349,15 @@ public class FightManager :Singleton<FightManager>
               {
                   if (fightMonsters.Contains(characterDeath.characterId))
                   {
-                      fightMonsters.Remove(characterDeath.characterId); 
-                  }else if (fightPlayers.Contains(characterDeath.characterId))
-                  {
-                      fightPlayers.Remove(characterDeath.characterId);
+                      fightMonsters.Remove(characterDeath.characterId);
+                      fightCharacters.Remove(characterDeath.characterId);
+                      FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
                   }
-                  fightCharacters.Remove(characterDeath.characterId);
-                  FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
+                  else if (fightPlayers.Contains(characterDeath.characterId))
+                  {
+                      //fightPlayers.Remove(characterDeath.characterId);
+                      fightCharacters[characterDeath.characterId].fightCharacterStaues = FightCharacterStaues.濒死;
+                  } 
               });
 
         MonsterDeathDrop(characterDeath.characterId);
@@ -769,7 +843,20 @@ public class FightManager :Singleton<FightManager>
 
     FightRoundType nowFightRound;
     int maxRoundCount;
-  
+
+    public int GetActiveFightCharacterCount()
+    {
+        int ActiveCount = 0;
+        foreach (var fightCharacter in fightCharacters)
+        {
+            if (fightCharacter.Value.fightCharacterStaues == FightCharacterStaues.正常)
+            {
+                ActiveCount++;
+            }
+        }
+        return ActiveCount;
+    }
+
     public Queue<int> InitFightCharacter()
     {
         int roundType = (int)nowFightRound;
@@ -909,6 +996,15 @@ public class FightManager :Singleton<FightManager>
             PlayerFight playerFight = new PlayerFight(); 
             GameActionManager.instance.QueueAction(playerFight);
         } 
+    }
+
+    protected override void UpData()
+    {
+        base.UpData();
+        foreach(var fightCharacter in fightCharacters)
+        {
+            fightCharacter.Value.UpData((int)(Time.deltaTime * 1000));
+        }
     }
 }
 

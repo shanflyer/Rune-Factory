@@ -176,7 +176,7 @@ public class ExploreManager : Singleton<ExploreManager>
 
         
     }
-
+    //探索阶段
     private async void ChapterStepAction(ChapterStepAction chapterStepAction)
     {
         UIManager.instance.CloseGamePanel<WarehousePanel>();

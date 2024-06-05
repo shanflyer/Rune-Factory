@@ -1301,7 +1301,7 @@ public class CharacterManager : Singleton<CharacterManager>
        // Debug.Log($"{startCoordinate}-checkTargetCoordinate{checkTargetCoordinate}");
         if (MapCellController.instance.CheckIsWalk(checkTargetCoordinate,mapId))
         {
-            Debug.Log($"-WALK!!");
+           // Debug.Log($"-WALK!!");
             return true;
         }
        // Debug.Log($"checkTargetCoordinate{false}");
@@ -1313,7 +1313,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 int2 direction1 = new int2(_direction.x < 0 ? -1 : 1, 0);
                 checkTargetCoordinate = startCoordinate + direction1;
-                Debug.Log($"direction1{checkTargetCoordinate}");
+                //Debug.Log($"direction1{checkTargetCoordinate}");
                 if (MapCellController.instance.CheckTryMoveTarget(startCoordinate, checkTargetCoordinate, mapId))
                 {
                     direction.x = direction1.x;
@@ -1323,7 +1323,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
                 int2 direction2 = new int2(0, _direction.y < 0 ? -1 : 1);
                 checkTargetCoordinate = startCoordinate + direction2;
-                Debug.Log($"direction2{checkTargetCoordinate}");
+               // Debug.Log($"direction2{checkTargetCoordinate}");
                 if (MapCellController.instance.CheckTryMoveTarget(startCoordinate, checkTargetCoordinate, mapId))
                 {
                     direction.x = direction2.x;
@@ -1333,7 +1333,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
                 int2 direction3 = new int2(0, _direction.y < 0 ? 1 : -1);
                 checkTargetCoordinate = startCoordinate + direction3;
-                Debug.Log($"direction3{checkTargetCoordinate}");
+               // Debug.Log($"direction3{checkTargetCoordinate}");
                 if (MapCellController.instance.CheckTryMoveTarget(startCoordinate, checkTargetCoordinate, mapId))
                 {
                     direction.x = direction3.x;
@@ -1345,7 +1345,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 int2 direction2 = new int2(0, _direction.y < 0 ? -1 : 1); 
                 checkTargetCoordinate = startCoordinate + direction2;
-                Debug.Log($"directionx1{checkTargetCoordinate}");
+               // Debug.Log($"directionx1{checkTargetCoordinate}");
                 if (MapCellController.instance.CheckTryMoveTarget(startCoordinate, checkTargetCoordinate, mapId))
                 {
                     direction.x = direction2.x;
@@ -1355,7 +1355,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
                 int2 direction1 = new int2(_direction.x < 0 ? -1 : 1, 0);
                 checkTargetCoordinate = startCoordinate + direction1;
-                Debug.Log($"directionx2{checkTargetCoordinate}");
+               // Debug.Log($"directionx2{checkTargetCoordinate}");
                 if (MapCellController.instance.CheckTryMoveTarget(startCoordinate, checkTargetCoordinate, mapId))
                 {
                     direction.x = direction1.x;
@@ -1365,7 +1365,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
                 int2 direction3 = new int2(_direction.x < 0 ? 1 : -1, 0);
                 checkTargetCoordinate = startCoordinate + direction3;
-                Debug.Log($"directionx3{checkTargetCoordinate}");
+              //  Debug.Log($"directionx3{checkTargetCoordinate}");
                 if (MapCellController.instance.CheckTryMoveTarget(startCoordinate, checkTargetCoordinate, mapId))
                 {
                     direction.x = direction3.x;
@@ -1442,7 +1442,7 @@ public class CharacterManager : Singleton<CharacterManager>
     void ControllerMove(Vector2 _moveDirection)
     {
         controllerCharacter.moveDirection = _moveDirection;
-        Debug.Log($" Set_moveDirection{_moveDirection}");
+        //Debug.Log($" Set_moveDirection{_moveDirection}");
         if (_moveDirection == Vector2.zero)
         {
             return;
@@ -1494,10 +1494,10 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         
         Vector2 _moveDirection = moveDirection;
-        Debug.Log($" _moveDirection1{_moveDirection}");
+        //Debug.Log($" _moveDirection1{_moveDirection}");
         if (!CheckNowMoveTarget(out _moveDirection))
         {
-            Debug.Log($"no way!!");
+           // Debug.Log($"no way!!");
             controllerCharacter.moveDirection = Vector2.zero;
             TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
             {

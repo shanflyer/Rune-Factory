@@ -53,7 +53,7 @@ public enum CompareType
 public enum CharacterPropertyType
 {
     自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 幸运, 饱食,
-    最大体力, 最大生命, 最大法力,速度
+    最大体力, 最大生命, 最大法力,敏捷
 }
 
 public enum Direction

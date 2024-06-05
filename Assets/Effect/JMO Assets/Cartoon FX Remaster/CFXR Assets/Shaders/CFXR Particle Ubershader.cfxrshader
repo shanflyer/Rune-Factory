@@ -11,6 +11,8 @@ Shader "Cartoon FX/Remaster/Particle Ubershader"
 	//#
 		[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Blend Source", Float) = 5
 		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Blend Destination", Float) = 10
+		[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend1 ("Blend Source1", Float) = 1
+		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend1 ("Blend Destination1", Float) = 1
 		[KeywordEnumNoPrefix(Alpha Blending, _ALPHABLEND_ON, Alpha Blending Premultiplied, _ALPHAPREMULTIPLY_ON, Multiplicative, _ALPHAMODULATE_ON, Additive, _CFXR_ADDITIVE)] _BlendingType ("Blending Type", Float) = 0
 
 	//# 
@@ -176,7 +178,7 @@ Shader "Cartoon FX/Remaster/Particle Ubershader"
 			"PreviewType"="Plane"
 		}
 
-		Blend [_SrcBlend] [_DstBlend], One One
+		Blend [_SrcBlend] [_DstBlend], [_SrcBlend1] [_DstBlend1]
 		ZWrite [_ZWrite]
 		Cull  Off
 
