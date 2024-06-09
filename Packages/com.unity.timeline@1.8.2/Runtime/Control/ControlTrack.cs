@@ -12,6 +12,7 @@ namespace UnityEngine.Timeline
     [TimelineHelpURL(typeof(ControlTrack))]
     public class ControlTrack : TrackAsset
     {
+        public List<MatchData> matchDatas = new List<MatchData>();
 #if UNITY_EDITOR
         private static readonly HashSet<PlayableDirector> s_ProcessedDirectors = new HashSet<PlayableDirector>();
 

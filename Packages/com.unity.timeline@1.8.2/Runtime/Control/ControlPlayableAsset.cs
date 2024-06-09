@@ -1,17 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq; 
 using UnityEngine.Playables;
 
 namespace UnityEngine.Timeline
 {
+    [Serializable]
+    public struct MatchData
+    {
+        public string key;
+        public string value;
+    }
     /// <summary>
     /// Playable Asset that generates playables for controlling time-related elements on a GameObject.
     /// </summary>
     [Serializable]
     [NotKeyable]
     public class ControlPlayableAsset : PlayableAsset, IPropertyPreview, ITimelineClipAsset
-    {
+    { 
+
         const int k_MaxRandInt = 10000;
         static readonly List<PlayableDirector> k_EmptyDirectorsList = new List<PlayableDirector>(0);
         static readonly List<ParticleSystem> k_EmptyParticlesList = new List<ParticleSystem>(0);
@@ -21,7 +28,13 @@ namespace UnityEngine.Timeline
         /// GameObject in the scene to control, or the parent of the instantiated prefab.
         /// </summary>
         [SerializeField] public ExposedReference<GameObject> sourceGameObject;
+#if UNITY_EDITOR
+        [SerializeField] public ExposedReference<Transform> targetParent;
 
+        private Transform _targetParent;
+#endif  
+        public List<Transform> targets = new List<Transform>();
+        [SerializeField] public bool muliPlayable = false;
         /// <summary>
         /// Prefab object that will be instantiated.
         /// </summary>
@@ -116,6 +129,40 @@ namespace UnityEngine.Timeline
             get { return ClipCaps.ClipIn | ClipCaps.SpeedMultiplier | (m_SupportLoop ? ClipCaps.Looping : ClipCaps.None); }
         }
 
+        public List<Transform> Targets
+        {
+            get
+            {
+                List<Transform> _targets = new List<Transform>();
+                if (!muliPlayable)
+                {
+                    return _targets;
+                }
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                   
+                    if (_targetParent)
+                    {
+                        foreach (Transform child in _targetParent)
+                        {
+                            _targets.Add(child);
+                        }
+                    }
+                    else
+                    {
+                        _targets = targets;
+                    }
+
+                }
+                else
+#endif
+                {
+                    _targets = targets;
+                }
+                return _targets;
+            }
+        }
         /// <summary>
         /// Creates the root of a Playable subgraph to control the contents of the game object.
         /// </summary>
@@ -137,24 +184,49 @@ namespace UnityEngine.Timeline
 
             Playable root = Playable.Null;
             var playables = new List<Playable>();
-
-            GameObject sourceObject = sourceGameObject.Resolve(graph.GetResolver());
+            List<GameObject> objInstances = new List<GameObject>();
+            GameObject sourceObj = sourceGameObject.Resolve(graph.GetResolver());
+            _targetParent= targetParent.Resolve(graph.GetResolver());
             if (prefabGameObject != null)
             {
-                Transform parenTransform = sourceObject != null ? sourceObject.transform : null;
-                var controlPlayable = PrefabControlPlayable.Create(graph, prefabGameObject, parenTransform);
+ 
+                if (Targets.Count == 0)
+                {
+                    Transform parenTransform = sourceObj != null ? sourceObj.transform : null;
+                    var controlPlayable = PrefabControlPlayable.Create(graph, prefabGameObject, parenTransform);
 
-                var controlBehaviour = controlPlayable.GetBehaviour();
-                controlBehaviour.initOffset = initOffset;
-                controlBehaviour.offsetXCurve = offsetXCurve;
-                controlBehaviour.offsetYCurve = offsetYCurve;
-                controlBehaviour.angleZCurve = angleZCurve;
-                controlBehaviour.playableDuration = (float)duration;
-                controlBehaviour.rot = rot;
-                controlBehaviour.rotAngle = rotAngle;
+                    var controlBehaviour = controlPlayable.GetBehaviour();
+                    controlBehaviour.initOffset = initOffset;
+                    controlBehaviour.offsetXCurve = offsetXCurve;
+                    controlBehaviour.offsetYCurve = offsetYCurve;
+                    controlBehaviour.angleZCurve = angleZCurve;
+                    controlBehaviour.playableDuration = (float)duration;
+                    controlBehaviour.rot = rot;
+                    controlBehaviour.rotAngle = rotAngle;
 
-                sourceObject = controlPlayable.GetBehaviour().prefabInstance;
-                playables.Add(controlPlayable);
+                    objInstances.Add(controlPlayable.GetBehaviour().prefabInstance);
+                    playables.Add(controlPlayable);
+                }
+                else
+                {
+                   for(int i = 0; i < Targets.Count; i++)
+                    {
+                        Transform parentTransform = Targets[i];
+                        var controlPlayable = PrefabControlPlayable.Create(graph, prefabGameObject, parentTransform);
+
+                        var controlBehaviour = controlPlayable.GetBehaviour();
+                        controlBehaviour.initOffset = initOffset;
+                        controlBehaviour.offsetXCurve = offsetXCurve;
+                        controlBehaviour.offsetYCurve = offsetYCurve;
+                        controlBehaviour.angleZCurve = angleZCurve;
+                        controlBehaviour.playableDuration = (float)duration;
+                        controlBehaviour.rot = rot;
+                        controlBehaviour.rotAngle = rotAngle;
+
+                        objInstances.Add(controlPlayable.GetBehaviour().prefabInstance);
+                        playables.Add(controlPlayable);
+                    }
+                } 
             }
 
             m_Duration = PlayableBinding.DefaultDuration;
@@ -163,42 +235,49 @@ namespace UnityEngine.Timeline
             controllingParticles = false;
             controllingDirectors = false;
 
-            if (sourceObject != null)
+            for(int i = 0; i < objInstances.Count; i++)
             {
-                var directors = updateDirector ? GetComponent<PlayableDirector>(sourceObject) : k_EmptyDirectorsList;
-                var particleSystems = updateParticle ? GetControllableParticleSystems(sourceObject) : k_EmptyParticlesList;
+                var sourceObject = objInstances[i];
 
-                // update the duration and loop values (used for UI purposes) here
-                // so they are tied to the latest gameObject bound
-                UpdateDurationAndLoopFlag(directors, particleSystems);
-
-                var director = go.GetComponent<PlayableDirector>();
-                if (director != null)
-                    m_ControlDirectorAsset = director.playableAsset;
-
-                if (go == sourceObject && prefabGameObject == null)
+                if (sourceObject != null)
                 {
-                    Debug.LogWarningFormat("Control Playable ({0}) is referencing the same PlayableDirector component than the one in which it is playing.", name);
-                    active = false;
-                    if (!searchHierarchy)
-                        updateDirector = false;
+                    var directors = updateDirector ? GetComponent<PlayableDirector>(sourceObject) : k_EmptyDirectorsList;
+                    var particleSystems = updateParticle ? GetControllableParticleSystems(sourceObject) : k_EmptyParticlesList;
+
+                    // update the duration and loop values (used for UI purposes) here
+                    // so they are tied to the latest gameObject bound
+                    UpdateDurationAndLoopFlag(directors, particleSystems);
+
+                    var director = go.GetComponent<PlayableDirector>();
+                    if (director != null)
+                        m_ControlDirectorAsset = director.playableAsset;
+
+                    if (go == sourceObject && prefabGameObject == null)
+                    {
+                        Debug.LogWarningFormat("Control Playable ({0}) is referencing the same PlayableDirector component than the one in which it is playing.", name);
+                        active = false;
+                        if (!searchHierarchy)
+                            updateDirector = false;
+                    }
+
+                    if (active)
+                        CreateActivationPlayable(sourceObject, graph, playables);
+
+                    if (updateDirector)
+                        SearchHierarchyAndConnectDirector(directors, graph, playables, prefabGameObject != null);
+
+                    if (updateParticle)
+                        SearchHierarchyAndConnectParticleSystem(particleSystems, graph, playables);
+
+                    if (updateITimeControl)
+                        SearchHierarchyAndConnectControlableScripts(GetControlableScripts(sourceObject), graph, playables);
+
+                    // Connect Playables to Generic to Mixer
+                   
                 }
-
-                if (active)
-                    CreateActivationPlayable(sourceObject, graph, playables);
-
-                if (updateDirector)
-                    SearchHierarchyAndConnectDirector(directors, graph, playables, prefabGameObject != null);
-
-                if (updateParticle)
-                    SearchHierarchyAndConnectParticleSystem(particleSystems, graph, playables);
-
-                if (updateITimeControl)
-                    SearchHierarchyAndConnectControlableScripts(GetControlableScripts(sourceObject), graph, playables);
-
-                // Connect Playables to Generic to Mixer
-                root = ConnectPlayablesToMixer(graph, playables);
+               
             }
+            root = ConnectPlayablesToMixer(graph, playables);
 
             if (prefabGameObject != null)
                 s_CreatedPrefabs.Remove(prefabGameObject);

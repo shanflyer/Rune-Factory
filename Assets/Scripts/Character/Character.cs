@@ -403,6 +403,7 @@ public partial class Character
             characterData.packageId : overridePackage, 0);
     }
 
+    public int attackType;
     public async void ClearEquip(ItemType itemType)
     {
         int oldItemId = 0;
@@ -431,6 +432,7 @@ public partial class Character
         {
             characterId = instanceId
         },true);
+        attackType = 0;
     }
 
     public async void ChangeEquip(ItemData itemData, int packageId)
@@ -443,6 +445,7 @@ public partial class Character
                 oldItemId = equip.weapon.x;
                 equip.weapon.x = itemData.id;
                 equip.weapon.y = 100;
+                attackType = itemData.otherType;
                 break;
             case ItemType.·À¾ß:
                 oldItemId = equip.clothes.x;

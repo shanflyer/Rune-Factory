@@ -36,25 +36,38 @@ public class EstimateSkillBehavior : Action
             for(int i = 0; i < skills.Count; i++)
             {
                 var skill = skills[i];
-                SkillEstimateData skillEstimateData = FightManager.instance.EstimateSkill(skill, fightCharacter.Value);
-                float nowValue = skillEstimateData.utlilityValue;
-                nowValue= skillEstimateData.utlilityValue * (1 + GameRandom.RandomFloat(-randomValue, randomValue))+addValue;
-                nowValue *= estimateValue;
-
-
-                if (UtilityValue <= nowValue)
+                float Value=GetSkillUtilityValue(skill);
+                if (Value >= UtilityValue)
                 {
-                    UtilityValue = nowValue;
-                    selectSkill = skillEstimateData;
+                    UtilityValue = Value;
                 }
             }
         }
         return UtilityValue; 
     }
 
+    float GetSkillUtilityValue(int skill)
+    {
+        float UtilityValue = 0;
+        var skillEstimateDatas = FightManager.instance.EstimateSkills(skill, fightCharacter.Value);
+        for (int j = 0; j < skillEstimateDatas.Count; j++)
+        {
+            var skillEstimateData = skillEstimateDatas[j];
+            float nowValue = skillEstimateData.utlilityValue;
+            nowValue = skillEstimateData.utlilityValue * (1 + GameRandom.RandomFloat(-randomValue, randomValue)) + addValue;
+            nowValue *= estimateValue;
+
+            if (UtilityValue <= nowValue)
+            {
+                UtilityValue = nowValue;
+                selectSkill = skillEstimateData;
+            }
+        }
+        return UtilityValue;
+    }
     public override TaskStatus OnUpdate()
 	{
-        if (selectSkill.target==null||selectSkill.target.Count == 0|| selectSkill.target[0].Count==0)
+        if (selectSkill.target==null||selectSkill.target.Count == 0)
         {
             return TaskStatus.Failure;
         }

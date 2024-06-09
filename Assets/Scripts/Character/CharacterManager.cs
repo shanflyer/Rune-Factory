@@ -631,8 +631,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             SetControllerCharacterMoveDirection(Vector2.zero);
         }
-    }
-
+    } 
     public bool GetRuntimeCharacterObj(int instanceId, out CharacterRuntimeObj characterRuntimeObj)
     {
         if (characters.TryGetValue(instanceId, out Character character))

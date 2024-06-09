@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -11,8 +12,11 @@ public class MonsterData : ScriptableObject, IGameData
     public int HP, AT, DF, Lucky,Speed; 
     public AttributeType attributeType;
     public string monsterDescription;
+    [NonSerialized]
+    [HideInInspector]
     public string SpriteName; 
     public SpriteResourceRenference monsterSprite;
+    public int attackType;
     public float scale;
     public List<int> skills = new List<int>();
     public int dropId;

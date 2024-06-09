@@ -27,10 +27,10 @@ public class TimeLineManger : Singleton<TimeLineManger>
             BindPlayable(playableDirector, myTimeLineData,skillEstimateData,source); 
         }
         void BindPlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData,
-            int source = -1)
+           int source = -1)
         {
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
-
+            int attackType = FightManager.instance.GetAttackType(source);
             var bindDatas= myTimeLineData.bindDatas; 
             using(var playBindings = timelineAsset.outputs.GetEnumerator())
             {
@@ -49,7 +49,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                 animator = FightController.instance.FindFightCharacter(source);
                                 break;
                             case BindType.FightTarget:
-                                animator = FightController.instance.FindFightCharacter(skillEstimateData.target[0][0]);
+                                animator = FightController.instance.FindFightCharacter(skillEstimateData.target[0]);
                                 break;
                             case BindType.Character:
                                 if (CharacterManager.instance.GetRuntimeCharacterObj(source, out var characterRuntimeObj))
@@ -110,13 +110,38 @@ public class TimeLineManger : Singleton<TimeLineManger>
              
             using(var tracks = timelineAsset.GetOutputTracks().GetEnumerator())
             {
+
+                List<Transform> targets = new List<Transform>();
+                for(int i = 0; i < skillEstimateData.target.Count; i++)
+                {
+                   var target= FightController.instance.FindFightCharacter(skillEstimateData.target[i]);
+                    if (target != null)
+                    {
+                        targets.Add(target.transform);
+                    }
+                }
+
                 while (tracks.MoveNext())
                 {
                     var current = tracks.Current;
                     Type type = current.GetType();
                     if (type == typeof(ControlTrack))
                     {
-                        ControlTrack controlTrack = (ControlTrack)current; 
+                        ControlTrack controlTrack = (ControlTrack)current;
+                        current.muted = false;
+                        var matchDatas = controlTrack.matchDatas;
+                        if (matchDatas.Count > 0)
+                        {
+                            var matchData = matchDatas.Find(m => m.key == "AttackType");
+                            if (matchData.key == "AttackType")
+                            {
+                                if (matchData.value != attackType.ToString())
+                                {
+                                    current.muted = true;
+                                }
+                            }
+                           
+                        } 
                         var bindData = bindDatas.Find(g => g.outName == current.name);
                         if (bindData.bindChildren != null && bindData.bindChildren.Count > 0)
                         {
@@ -128,30 +153,49 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                 var clipCurrent = clips.Current;
                                 if (i < bindData.bindChildren.Count)
                                 {
-                                    Animator childAnimator=null;
+                                    GameObject childObj=null;
                                     var myTrackAssetBind = bindData.bindChildren[i];
                                     switch (myTrackAssetBind.bindType)
                                     {
                                         case BindType.FightSource:
-                                            childAnimator = FightController.instance.FindFightCharacter(source);
+                                           var childAnimator = FightController.instance.FindFightCharacter(source);
+                                            if (childAnimator)
+                                            {
+                                                childObj = childAnimator.gameObject;
+                                            }
                                             break;
                                         case BindType.FightTarget:
-                                            childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.target[0][0]);
+                                            childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.target[0]);
+                                            if (childAnimator)
+                                            {
+                                                childObj = childAnimator.gameObject;
+                                            }
                                             break;
                                         case BindType.Character:
                                             if(CharacterManager.instance.GetRuntimeCharacterObj(source,out var characterRuntimeObj))
                                             {
                                                 childAnimator = characterRuntimeObj.animator;
+                                                if (childAnimator)
+                                                {
+                                                    childObj = childAnimator.gameObject;
+                                                }
                                             } 
                                             break;
+                                        case BindType.Target:
+                                            childObj = FightController.instance.GetParentObj(source, false);
+                                            break;
+                                        case BindType.Source:
+                                            childObj = FightController.instance.GetParentObj(source, true);
+                                            break;
                                     }
-                                    if (childAnimator != null)
-                                    {
-                                        var asset = (ControlPlayableAsset)clipCurrent.asset;
+                                    var asset = (ControlPlayableAsset)clipCurrent.asset;
+                                    if (childObj != null)
+                                    { 
                                         var parentObj = new ExposedReference<GameObject>();
-                                        parentObj.defaultValue = childAnimator.gameObject;
+                                        parentObj.defaultValue = childObj;
                                         asset.sourceGameObject = parentObj;
-                                    }  
+                                    }
+                                    asset.targets = targets;
                                 }
                                 i++;
                             }

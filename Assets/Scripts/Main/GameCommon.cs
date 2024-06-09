@@ -82,7 +82,37 @@ public enum EntityType
 {
     All = 1, µØÍ¼µÀ¾ß = 2, ½ÇÉ« = 15, Íæ¼Ò = 3, NPC = 5
 }
-
+public static class AttackType
+{
+    /// <summary>
+    /// Ä¬ÈÏ
+    /// </summary>
+    public static int defaultAttack = 0;
+    /// <summary>
+    /// µ¶½£¹¥»÷
+    /// </summary>
+    public static int swordAttack = 1;
+    /// <summary>
+    /// ³¤Ã¬¹¥»÷
+    /// </summary>
+    public static int spearAttack = 2;
+    /// <summary>
+    /// ¸«×Ó¹¥»÷
+    /// </summary>
+    public static int axeAttack = 3;
+    /// <summary>
+    /// Ò§
+    /// </summary>
+    public static int biteAttack = 4;
+    /// <summary>
+    /// ×¦
+    /// </summary>
+    public static int pawAttack = 5;
+    /// <summary>
+    /// ±Þ
+    /// </summary>
+    public static int whipAttack = 6;
+}
 public class GameCommon
 {
     public static Dictionary<Direction, Vector2> fishToolOffsets = new Dictionary<Direction, Vector2>
@@ -121,6 +151,7 @@ public class GameCommon
     public const int defaultPerRPCost = 5;
     public const int storeCoinTime = 1000;
     public const float HurtUtlility = 0.6f;
+    public const float hpUtlility = 0.68f;
 
     public static int3 friendAddCount = new int3(3, 3, 2);
 

@@ -10,14 +10,14 @@ public class FightEventBehavior : PlayableBehaviour
     public SkillEstimateData skillEstimateData;
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {
-        for(int i = 0; i < skillEstimateData.target[index].Count; i++)
+        for(int i = 0; i < skillEstimateData.target.Count; i++)
         {
             ActionSkillEstimate actionSkillEstimate = new ActionSkillEstimate
             {
                 skillId = skillEstimateData.skillId,
                 sourceId = skillEstimateData.source,
                 index = index,
-                targetId = skillEstimateData.target[index][i],
+                targetId = skillEstimateData.target[i],
                 displayHurt = hurtDisplay
             };
             GameActionManager.instance.QueueAction(actionSkillEstimate, true);

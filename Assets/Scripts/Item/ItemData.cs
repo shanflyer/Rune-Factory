@@ -38,6 +38,7 @@ public class ItemData : ScriptableObject, IGameData
     public Sprite icon;
     public string info;
     public ItemType type;
+    public int otherType;
     public int typeValue;
     public bool isFresh;
     public bool itemValue;

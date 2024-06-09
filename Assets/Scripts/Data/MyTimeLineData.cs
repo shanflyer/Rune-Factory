@@ -7,6 +7,7 @@ using UnityEngine.Playables;
 public class MyTimeLineData : ScriptableObject,IGameData
 {
     public PlayableAsset asset;
+    public List<int> targets=new List<int>();
     public List<BindData> bindDatas;
 #if UNITY_EDITOR
     public void SetReferenceData()
@@ -21,7 +22,7 @@ public class MyTimeLineData : ScriptableObject,IGameData
 [System.Serializable]
 public enum BindType
 {
-   Default,FightSource,FightTarget,Camera,Character,MapItem
+   Default,FightSource,FightTarget,Camera,Character,Source,Target,MapItem
 }
 [System.Serializable]
 public struct BindData

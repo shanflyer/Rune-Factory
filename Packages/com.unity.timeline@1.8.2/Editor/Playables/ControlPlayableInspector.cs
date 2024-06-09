@@ -15,6 +15,10 @@ namespace UnityEditor.Timeline
             public static readonly GUIContent activationContent = L10n.TextContent("Control Activation", "When checked the clip will control the active state of the source game object");
             public static readonly GUIContent activationDisabledContent = L10n.TextContent("Control Activation", s_DisabledBecauseOfSelfControlTooltip);
             public static readonly GUIContent prefabContent = L10n.TextContent("Prefab", "A prefab to instantiate as a child object of the source game object");
+            public static readonly GUIContent targetParentContent = L10n.TextContent("targetParent", "测试用目标父节点");
+            public static readonly GUIContent targets = L10n.TextContent("targets", "目标");
+            public static readonly GUIContent muliPlayable = L10n.TextContent("muliPlayable", "是否创建多个特效");
+            public static readonly GUIContent matchDatas = L10n.TextContent("matchDatas", "匹配条件");
             public static readonly GUIContent advancedContent = L10n.TextContent("Advanced");
             public static readonly GUIContent updateParticleSystemsContent = L10n.TextContent("Control Particle Systems", "Synchronize the time between the clip and any particle systems on the game object");
             public static readonly GUIContent updatePlayableDirectorContent = L10n.TextContent("Control Playable Directors", "Synchronize the time between the clip and any playable directors on the game object");
@@ -26,8 +30,12 @@ namespace UnityEditor.Timeline
             public static readonly GUIContent directorActionOnClipEndContent = L10n.TextContent("On Clip End", "The action to apply to the PlayableDirector when the clip ends.");
         }
 
+        SerializedProperty m_matchDatas;
         SerializedProperty m_SourceObject;
         SerializedProperty m_PrefabObject;
+        SerializedProperty m_TargetParent;
+        SerializedProperty m_muliPlayable;
+        SerializedProperty m_targets;
         SerializedProperty m_UpdateParticle;
         SerializedProperty m_UpdateDirector;
         SerializedProperty m_UpdateITimeControl;
@@ -67,6 +75,10 @@ namespace UnityEditor.Timeline
 
             m_SourceObject = serializedObject.FindProperty("sourceGameObject");
             m_PrefabObject = serializedObject.FindProperty("prefabGameObject");
+            m_TargetParent = serializedObject.FindProperty("targetParent");
+            m_targets = serializedObject.FindProperty("targets");
+            m_muliPlayable = serializedObject.FindProperty("muliPlayable");
+            m_matchDatas = serializedObject.FindProperty("matchDatas");
 
             m_UpdateParticle = serializedObject.FindProperty("updateParticle");
             m_UpdateDirector = serializedObject.FindProperty("updateDirector");
@@ -102,6 +114,8 @@ namespace UnityEditor.Timeline
 
             EditorGUI.BeginChangeCheck();
 
+            EditorGUILayout.PropertyField(m_matchDatas, Styles.matchDatas);
+
             using (new GUIMixedValueScope(m_SourceObject.hasMultipleDifferentValues))
                 EditorGUILayout.PropertyField(m_SourceObject, m_SourceObjectLabel);
 
@@ -129,6 +143,8 @@ namespace UnityEditor.Timeline
             EditorGUILayout.PropertyField(m_PrefabObject, Styles.prefabContent);
             EditorGUI.indentLevel--;
 
+            EditorGUILayout.PropertyField(m_TargetParent, Styles.targetParentContent);
+            EditorGUILayout.PropertyField(m_targets, Styles.targets);
             using (new EditorGUI.DisabledScope(selfControlled))
             {
                 EditorGUILayout.PropertyField(m_UseActivation, selfControlled ? Styles.activationDisabledContent : Styles.activationContent);
@@ -175,7 +191,7 @@ namespace UnityEditor.Timeline
 
                 EditorGUI.indentLevel--;
             }
-
+            EditorGUILayout.PropertyField(m_muliPlayable, Styles.muliPlayable);
             initOffset.vector3Value = EditorGUILayout.Vector3Field("初始偏移:", initOffset.vector3Value);
             offsetXCurve.animationCurveValue = EditorGUILayout.CurveField("X偏移轨迹", offsetXCurve.animationCurveValue);
             offsetYCurve.animationCurveValue = EditorGUILayout.CurveField("Y偏移轨迹", offsetYCurve.animationCurveValue);

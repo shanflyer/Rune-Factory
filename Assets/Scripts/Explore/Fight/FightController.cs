@@ -555,20 +555,18 @@ public class FightController : MonoBehaviour
         }
     }*/
 
-    public async void CreatFightMonster(int dataId, int instanceId, int index)
-    {
-        MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(dataId);
-        CreatFightMonster(monsterData, instanceId, index);
-    }
 
-    public async void CreatFightMonster(MonsterData characterData, int instanceId, int index)
+    public async void CreatFightMonster(MonsterData characterData, int instanceId, int2 pos)
     {
+        int index = pos.x * 3 + pos.y + 1;
         index = math.clamp(index, 0, 5);
         if (characterData != null)
         {
             var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.MONSTRT.ToString(),
                 "Monster", monsterObj.transform, instanceId, isActive: false);
             var transform = characterRuntime.obj as Transform;
+
+
             transform.position = monsterPos[index].position;
             transform.gameObject.SetActive(true);
             FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime(characterRuntime);
@@ -579,7 +577,32 @@ public class FightController : MonoBehaviour
             fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", instanceId);
         }
     }
-
+    public GameObject GetParentObj(int instanceId, bool self)
+    {
+        if (fightPlayerRuntimes.ContainsKey(instanceId))
+        {
+            if (self)
+            {
+                return playerPos[0].gameObject;
+            }
+            else
+            {
+                return monsterPos[0].gameObject;
+            }
+        }
+        else
+        {
+            if (!self)
+            {
+                return playerPos[0].gameObject;
+            }
+            else
+            {
+                return monsterPos[0].gameObject;
+            }
+        }
+    }
+   
     public Animator FindFightCharacter(int id)
     {
         if (fightPlayerRuntimes.TryGetValue(id, out var fightPlayer))
