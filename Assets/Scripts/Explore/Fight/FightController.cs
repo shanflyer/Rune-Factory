@@ -616,7 +616,17 @@ public class FightController : MonoBehaviour
         return null;
     }
 
-   
+   public void StopFightCharacter(int characterId)
+    {
+        if (fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayer))
+        {
+            fightPlayer.behaviorTree.DisableBehavior();
+        }
+        else if (fightMonsterRuntimes.TryGetValue(characterId, out var fightMonster))
+        {
+            fightMonster.behaviorTree.DisableBehavior();
+        }
+    }
     public void RunFightCharacter(int characterId)
     {
         if (fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayer))
@@ -648,6 +658,7 @@ public class FightController : MonoBehaviour
                    {
                        fightCharacter.fightStatus = FightStatus.×¼±¸;
                    });
+                skillRuntime.Reset();
             }
         }
     }
@@ -669,7 +680,8 @@ public class FightController : MonoBehaviour
         }
     }
 
-    public bool chapterMoving = false;
+    public bool chapterFight => !chapterMoving;
+    private bool chapterMoving = false;
     private float waitTime;
     private float nowTime;
 

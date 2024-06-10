@@ -26,6 +26,17 @@ public class FightCharacterReference : UIObjReference<MyInt>
     [SerializeField]
     private Transform Info, Null;
 
+    [SerializeField]
+    Transform skillPanel;
+    [SerializeField]
+    Image skillIcon;
+    [SerializeField]
+    TextMeshProUGUI skillName;
+    [SerializeField]
+    Image skillValue;
+    [SerializeField]
+    Button skillButton;
+
     public override void OnEnable()
     {
         base.OnEnable();
@@ -37,7 +48,15 @@ public class FightCharacterReference : UIObjReference<MyInt>
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshCharacter>(RefreshCharacter);
     }
+    private void Awake()
+    {
+        skillButton.onClick.AddListener(ActionSkill);
+    }
 
+    void ActionSkill()
+    {
+
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -57,6 +76,12 @@ public class FightCharacterReference : UIObjReference<MyInt>
 
         Info = FindChildGameObject("Info");
         Null = FindChildGameObject("Null");
+
+        skillPanel = FindChildGameObject("SkillPanel");
+        skillIcon = FindChildGameObject<Image>("SkillIcon");
+        skillButton = FindChildGameObject<Button>("SkillPanel");
+        skillName = FindChildGameObject<TextMeshProUGUI>("SkillName");
+        skillValue = FindChildGameObject<Image>("SkillValue");
     }
 
     public override async Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
@@ -73,6 +98,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
         }
     }
 
+    SkillRuntime playerSkillRuntime;
     private void InitData(int characterId)
     {
         Character character = CharacterManager.instance.GetCharacter(characterId);
@@ -95,11 +121,44 @@ public class FightCharacterReference : UIObjReference<MyInt>
 
             HPSlider.fillAmount = (float)characterProperty.HP / characterProperty.MaxHP;
             MPSlider.fillAmount = (float)characterProperty.MP / characterProperty.MaxMP;
+
+            playerSkillRuntime=FightManager.instance.GetPlayerEquipSkill(characterId);
+            if (playerSkillRuntime != null)
+            {
+                skillPanel.localScale = Vector3.one;
+                SkillData skillData = playerSkillRuntime.skillData;
+                skillIcon.sprite = skillData.icon;
+                skillName.text = skillData.skillName;
+                skillValue.fillAmount =1- playerSkillRuntime.GetTimeValue();
+            }
+            else
+            {
+                skillPanel.localScale = Vector3.zero;
+            }
         }
         else
         {
+            skillPanel.localScale = Vector3.zero;
             Info.gameObject.SetActive(false);
             Null.gameObject.SetActive(true);
+        }
+
+    }
+
+    private void Update()
+    {
+        if (playerSkillRuntime == null)
+            return;
+        float value = playerSkillRuntime.GetTimeValue();
+        value = Mathf.Clamp(value, 0, 1);
+        skillValue.fillAmount = 1 - value;
+        if (value <= 0)
+        {
+            skillButton.interactable = true;
+        }
+        else
+        {
+            skillButton.interactable = false;
         }
     }
 }

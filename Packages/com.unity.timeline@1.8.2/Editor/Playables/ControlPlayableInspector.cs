@@ -29,8 +29,7 @@ namespace UnityEditor.Timeline
             public static readonly GUIContent postPlayableContent = L10n.TextContent("Post Playback", "The active state to the leave the game object when the timeline is finished. \n\nRevert will leave the game object in the state it was prior to the timeline being run");
             public static readonly GUIContent directorActionOnClipEndContent = L10n.TextContent("On Clip End", "The action to apply to the PlayableDirector when the clip ends.");
         }
-
-        SerializedProperty m_matchDatas;
+         
         SerializedProperty m_SourceObject;
         SerializedProperty m_PrefabObject;
         SerializedProperty m_TargetParent;
@@ -77,8 +76,7 @@ namespace UnityEditor.Timeline
             m_PrefabObject = serializedObject.FindProperty("prefabGameObject");
             m_TargetParent = serializedObject.FindProperty("targetParent");
             m_targets = serializedObject.FindProperty("targets");
-            m_muliPlayable = serializedObject.FindProperty("muliPlayable");
-            m_matchDatas = serializedObject.FindProperty("matchDatas");
+            m_muliPlayable = serializedObject.FindProperty("muliPlayable"); 
 
             m_UpdateParticle = serializedObject.FindProperty("updateParticle");
             m_UpdateDirector = serializedObject.FindProperty("updateDirector");
@@ -113,8 +111,7 @@ namespace UnityEditor.Timeline
 
 
             EditorGUI.BeginChangeCheck();
-
-            EditorGUILayout.PropertyField(m_matchDatas, Styles.matchDatas);
+             
 
             using (new GUIMixedValueScope(m_SourceObject.hasMultipleDifferentValues))
                 EditorGUILayout.PropertyField(m_SourceObject, m_SourceObjectLabel);

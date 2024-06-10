@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections; 
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 public enum SkillActionType
 {
@@ -22,6 +23,10 @@ public class SkillData : ScriptableObject, IGameData
     public SkillActionType skillActionType;  
     public int actionValue;
     public int cost;
+    public Sprite icon;
+    [NonSerialized]
+    [HideInInspector]
+    public string iconName;
     // public int continueSkill;
     [NonSerialized]
     [HideInInspector]
@@ -35,9 +40,32 @@ public class SkillData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
-
+#if UNITY_EDITOR
+    static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>(); 
+    public static void Clear()
+    {
+        allSprites.Clear(); 
+    }
+ 
     public void SetReferenceData()
     {
         myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
+        if (allSprites.Count == 0)
+        {
+            var sprites = Resources.LoadAll<Sprite>($"Icon/{iconName}");
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                allSprites.Add(sprites[i].name, sprites[i]);
+            }
+        }
+
+        if (!allSprites.TryGetValue(iconName, out icon))
+        {
+             
+        }
+
+        
     }
+#endif
+  
 }

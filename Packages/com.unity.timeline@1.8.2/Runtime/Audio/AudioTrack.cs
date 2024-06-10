@@ -15,6 +15,7 @@ namespace UnityEngine.Timeline
     [TimelineHelpURL(typeof(AudioTrack))]
     public class AudioTrack : TrackAsset
     {
+        public List<MatchData> matchDatas = new List<MatchData>();
         [SerializeField]
         AudioMixerProperties m_TrackProperties = new AudioMixerProperties();
 

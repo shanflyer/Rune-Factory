@@ -37,6 +37,7 @@ namespace UnityEngine.Timeline
         SerializedProperty m_VolumeProperty;
         SerializedProperty m_StereoPanProperty;
         SerializedProperty m_SpatialBlendProperty;
+        SerializedProperty m_matchDatas;
         PlayableDirector m_Director;
 
         public override void OnEnable()
@@ -49,10 +50,12 @@ namespace UnityEngine.Timeline
             m_VolumeProperty = serializedObject.FindProperty("m_TrackProperties.volume");
             m_StereoPanProperty = serializedObject.FindProperty("m_TrackProperties.stereoPan");
             m_SpatialBlendProperty = serializedObject.FindProperty("m_TrackProperties.spatialBlend");
+            m_matchDatas = serializedObject.FindProperty("matchDatas");
         }
 
         protected override void DrawTrackProperties()
         {
+            EditorGUILayout.PropertyField(m_matchDatas, true);
             // Volume
             GUI.SetNextControlName(Styles.VolumeControl);
             EditorGUILayout.Slider(m_VolumeProperty, 0.0f, 1.0f, AudioSourceInspector.Styles.volumeLabel);

@@ -154,23 +154,22 @@ public class ExploreManager : Singleton<ExploreManager>
                 duskEnvironmentDataName = nowFightMapData.duskEnvironmentDataName,
                 nightEnvironmentDataName = nowFightMapData.nightEnvironmentDataName
             };
-            GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true);
+            GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true); 
+            FightManager.instance.CreatFightPlayer();
 
-
-            //if(!nowFightMapData.isZeroTeam)
+            GameTimerController.instance.DeleyActionMain(100, async () =>
             {
-                FightManager.instance.CreatFightPlayer(); 
-
                 await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(), layer: 2);
-            }
-            UIManager.instance.CloseGamePanel<PlayerTopPanel>();
-            UIManager.instance.CloseGamePanel<MainPanel>();
-            UIManager.instance.CloseGamePanel<ShortcutPanel>();
-            UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
-            if (afterActionData != null)
-            {
-                afterActionData.Action();
-            }
+                UIManager.instance.CloseGamePanel<PlayerTopPanel>();
+                UIManager.instance.CloseGamePanel<MainPanel>();
+                UIManager.instance.CloseGamePanel<ShortcutPanel>();
+                UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
+                if (afterActionData != null)
+                {
+                    afterActionData.Action();
+                }
+            });
+           
 
         });
 

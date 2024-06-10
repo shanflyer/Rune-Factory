@@ -572,7 +572,17 @@ public struct CreatCharacter : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct StopAllCharacterAutoFight : GameAction
+{
 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct AllCharacterTryAutoFight : GameAction
 {
 

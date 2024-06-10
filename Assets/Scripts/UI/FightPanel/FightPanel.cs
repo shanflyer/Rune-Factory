@@ -30,6 +30,8 @@ public class FightPanel : GamePanel<IReferenceData>
     [SerializeField]
     Animator animator;
 
+  
+
 
     DisplayList<FightCharacterReference, MyInt> fightCharacterReferenceList;
 
@@ -67,6 +69,8 @@ public class FightPanel : GamePanel<IReferenceData>
         operateButton = FindChildGameObject<Button>("UpAndDown");
         operateIcon = FindChildGameObject("OperateIcon");
         animator = FindChildGameObject<Animator>("CharacterInfoes");
+
+        
     }
 
     private void SwitchFunctionButton(SwitchFunctionButton switchFunctionButton)
@@ -190,8 +194,11 @@ public class FightPanel : GamePanel<IReferenceData>
             operateIcon.transform.localScale = up ? new Vector3(1,-1,1) : new Vector3(1, 1, 1);
         });
 
+       
+
         fightCharacterReferenceList = new DisplayList<FightCharacterReference, MyInt>(fightCharacterReference, fightCharacterParent);
     }
+
     void EscapeFightAction()
     {
         FightButton.interactable = false;
@@ -263,6 +270,7 @@ public class FightPanel : GamePanel<IReferenceData>
     }
 
     bool up = false;
+
     public override async Task InitData(string dataKey)
     {
         FightButtons.gameObject.SetActive(false);
@@ -308,5 +316,7 @@ public class FightPanel : GamePanel<IReferenceData>
         up = false;
         animator.SetBool("Up", false);
         operateIcon.transform.localScale = up ? new Vector3(1, -1, 1) : new Vector3(1, 1, 1);
+
+       
     }
 }

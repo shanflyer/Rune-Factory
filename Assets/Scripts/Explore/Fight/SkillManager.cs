@@ -17,13 +17,7 @@ public class SkillManager : Singleton<SkillManager>
     public async Task<SkillRuntime> CreatSkillRuntime(int skillId)
     {
         SkillData skillData=await GameDataManager.instance.GetAsyncData<SkillData>(skillId);
-        SkillRuntime skillRuntime = new SkillRuntime
-        {
-            instanceId = myInstance.CreatInstanceId(),
-            skillData = skillData,
-            cost = skillData.cost,
-            skillCd = skillData.cd
-        };
+        SkillRuntime skillRuntime = new SkillRuntime(skillData, myInstance.CreatInstanceId()); 
         return skillRuntime;
     } 
 }
@@ -31,31 +25,52 @@ public class SkillRuntime
 {
     public int instanceId;
     public SkillData skillData;
-    public int skillCd;
-    public int cost;
+    private float speed=100.0f;
+    private int waitTime;
+    private int skillCd;
+
+    public SkillRuntime(SkillData skillData,int instanceId)
+    {
+        this.skillData = skillData;
+        this.instanceId = instanceId;
+        InitCd();
+    }
     public FightType fightType=>skillData.fightType;
      
-    public bool waiteCD=>skillCd>0;
+    public bool waiteCDEnd=> waitTime>=skillCd;
 
+    public float GetTimeValue()
+    {
+        return waitTime/ skillCd;
+    }
     public void SetSkillCd(float speed)
+    {
+        this.speed = speed; 
+        InitCd();
+    }
+   
+    void InitCd()
     {
         if (speed < 100)
         {
-            float value =1+ (100 - speed) *0.01f;
-            skillCd = (int)(skillCd * value);
+            float value = 1 + (100 - speed) * 0.01f;
+            skillCd = (int)(skillData.cd * value);
         }
         else
         {
-            float value = 1/(speed - 100) * 0.01f;
-            skillCd = (int)(skillCd * value);
+            float value = 100.0f / speed;
+            skillCd = (int)(skillData.cd * value);
         }
     }
-    public void UpData(int timeValue)
+    public void Reset()
     {
-        skillCd -= timeValue;
-        if (skillCd < 0)
+        waitTime = 0;
+    }
+    public void UpData(int timeValue)
+    { 
+        if (waitTime<skillCd)
         {
-            skillCd = 0;
+            waitTime += timeValue;
         }
     }
 

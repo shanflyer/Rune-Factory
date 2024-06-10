@@ -22,6 +22,7 @@ public class ItemReference : UIObjReference<Item>
     private Item item;
     private ItemData itemData;
 
+
     private void Awake()
     {
     }

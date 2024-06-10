@@ -26,6 +26,8 @@ public class EstimateSkillBehavior : Action
             sharedSkillList = (SharedSkillList)Owner.GetVariable("ReadySkill");
         if (fightCharacter==null|| fightCharacter.IsNull())
             fightCharacter = (SharedInt)Owner.GetVariable("fightCharacter");
+
+        selectSkill = default(SkillEstimateData);
     }
 
     public override float GetUtility()
