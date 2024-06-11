@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
-using UnityEditor.Rendering.LookDev;
+using TMPro; 
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -168,7 +167,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
     {
         if (refreshShortcut.packageId == selectPackageData.instanceId)
         {
-            selectPackageData = PackageManager.instance.GetPackageData(selectPackageData.dataId);
+            selectPackageData = PackageManager.instance.GetPackageData(selectPackageData.instanceId);
             RefreshPackage();
         }
     }

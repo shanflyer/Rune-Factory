@@ -325,8 +325,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void ClearEquip(ClearEquip clearEquip)
     {
         if (characters.TryGetValue(clearEquip.characterId, out var character))
-        {
-            character.ClearEquip(clearEquip.itemType);
+        { 
             int itemId = 0;
             switch (clearEquip.itemType)
             {
@@ -340,6 +339,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     itemId = character.Equip.shoes.x;
                     break;
             }
+            character.ClearEquip(clearEquip.itemType);
             if (itemId != 0 && clearEquip.outPackageId != 0)
             {
                 PackageManager.instance.SetItemInPackage(new Item(itemId, 1), clearEquip.outPackageId);
@@ -350,8 +350,8 @@ public class CharacterManager : Singleton<CharacterManager>
     private async void ChangeEquip(ChangeEquip changeEquip)
     {
         if (characters.TryGetValue(changeEquip.characterId, out var character))
-        {
-            PackageManager.instance.GetOutItenFromPackage(changeEquip.outPackageId, changeEquip.itemId, 1);
+        { 
+            // PackageManager.instance.GetOutItenFromPackage(changeEquip.outPackageId, changeEquip.itemId, 1);
             ItemData itemData;
             if (changeEquip.outPackageId == 0)
             {
@@ -362,6 +362,14 @@ public class CharacterManager : Singleton<CharacterManager>
                 Item item = PackageManager.instance.GetItemFromInstanceId(changeEquip.outPackageId, changeEquip.itemId);
                 itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
             }
+
+            RemovePackageItemInstance removePackageItemInstance = new RemovePackageItemInstance
+            {
+                itemInstanceId = changeEquip.itemId,
+                packageId = changeEquip.outPackageId
+            };
+            GameActionManager.instance.QueueAction(removePackageItemInstance, true);
+
             if (itemData != null)
             {
                 character.ChangeEquip(itemData, changeEquip.outPackageId);

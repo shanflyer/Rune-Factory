@@ -478,7 +478,7 @@ public partial class Character
         GameActionManager.instance.QueueAction(new RefreshEquip
         {
             characterId = instanceId
-        });
+        },true);
     }
 
     public CharacterEquipAndPropertyData CharacterEquipAndPropertyData

@@ -92,6 +92,10 @@ public struct ProfessionData:IGameData
     }
     public int GetLevelExp(int level)
     {
+        if (level == 0)
+        {
+            return 0;
+        }
         level = math.clamp(level, 1, exp.Count);
         return exp[level - 1];
     }

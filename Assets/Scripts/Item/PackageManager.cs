@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -91,7 +92,7 @@ public class PackageManager : Singleton<PackageManager>
             if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
             {
                 count = gamePackage.TryGetItemOutPackage(itemDataId, count);
-                gamePackages[packageId] = gamePackage;
+                //gamePackages[packageId] = gamePackage;
             }
         }
         return false;
@@ -111,7 +112,7 @@ public class PackageManager : Singleton<PackageManager>
                     count = count
                 };
                 count = await gamePackage.SetItemInPackage(item);
-                gamePackages[packageId] = gamePackage;
+                //gamePackages[packageId] = gamePackage;
             }
 
             if (count <= 0)
@@ -146,6 +147,7 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<CheckCharacterPackageFull>(CheckCharacterPackageFull);
         GameActionManager.instance.AddListener<ChangePackageInnstance>(ChangePackageInnstance);
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
+        GameActionManager.instance.AddListener<RemovePackageItemInstance>(RemovePackageItemInstance);
     }
 
     public bool GetPackageItemCounts(int packageId, out List<int2> items)
@@ -194,7 +196,20 @@ public class PackageManager : Singleton<PackageManager>
         };
         GameActionManager.instance.QueueAction(RefreshMapPackageItemRender);
     }
+    private void RemovePackageItemInstance(RemovePackageItemInstance removePackageItemInstance)
+    {
+        if (gamePackages.TryGetValue(removePackageItemInstance.packageId, out var gamePackage))
+        {
+            gamePackage.GetItemOutPackage(removePackageItemInstance.itemInstanceId);
+            //gamePackages[removePackageItemInstance.packageId] = gamePackage;
+            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
 
+            GameActionManager.instance.QueueAction(new RefreshShortcut
+            {
+                packageId = gamePackage.instanceId
+            },true);
+        }
+    }
     private void ChangePackageInnstance(ChangePackageInnstance changePackageInnstance)
     {
         if (gamePackages.TryGetValue(changePackageInnstance.oldInstanceId, out var gamePackage))
@@ -295,7 +310,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(setPackageSelectItem.packageId, out var gamePackage))
         {
             gamePackage.SelectItem = setPackageSelectItem.selectItem;
-            gamePackages[setPackageSelectItem.packageId] = gamePackage;
+            //amePackages[setPackageSelectItem.packageId] = gamePackage;
         }
     }
 
@@ -554,7 +569,7 @@ public class PackageManager : Singleton<PackageManager>
             {
                 gamePackage.level += 1;
                 gamePackage.caseCount += packageSetData.levelUpAddCount;
-                gamePackages[id] = gamePackage;
+               // gamePackages[id] = gamePackage;
                 GameActionManager.instance.QueueAction(default(RefreshPackage));
 
                 SetItemAnimation setItemAnimation = new SetItemAnimation
@@ -643,7 +658,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
             gamePackage.caseCount += count;
-            gamePackages[packageId] = gamePackage;
+            //gamePackages[packageId] = gamePackage;
             return gamePackage.caseCount;
         }
         return 0;
@@ -654,7 +669,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
             gamePackage.caseCount = count;
-            gamePackages[packageId] = gamePackage;
+            //gamePackages[packageId] = gamePackage;
         }
     }
 
@@ -666,7 +681,7 @@ public class PackageManager : Singleton<PackageManager>
             if (gamePackages.TryGetValue(character.characterPackage, out GamePackage gamePackage))
             {
                 bool result = gamePackage.GetItemOutPackage(removePlayerPackageItem.itemDataId, removePlayerPackageItem.itemCount);
-                gamePackages[character.characterPackage] = gamePackage;
+                //gamePackages[character.characterPackage] = gamePackage;
                 if (removePlayerPackageItem.setResult != null)
                 {
                     removePlayerPackageItem.setResult(result);
@@ -692,7 +707,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(removePackageItem.packageId, out GamePackage gamePackage))
         {
             bool result = gamePackage.GetItemOutPackage(removePackageItem.itemDataId, removePackageItem.itemCount);
-            gamePackages[removePackageItem.packageId] = gamePackage;
+            //gamePackages[removePackageItem.packageId] = gamePackage;
             if (removePackageItem.setResult != null)
             {
                 removePackageItem.setResult(result);
@@ -726,7 +741,7 @@ public class PackageManager : Singleton<PackageManager>
                 addPackageItem.setValue(count);
             }
 
-            gamePackages[addPackageItem.packageId] = gamePackage;
+            //gamePackages[addPackageItem.packageId] = gamePackage;
             RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
             GameActionManager.instance.QueueAction(new RefreshShortcut
             {
@@ -829,7 +844,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
             bool result = gamePackage.GetItemOutPackage(itemid, count);
-            gamePackages[packageId] = gamePackage;
+            //gamePackages[packageId] = gamePackage;
             RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
             GameActionManager.instance.QueueAction(new RefreshShortcut
             {
@@ -845,12 +860,12 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
             int result = await gamePackage.SetItemInPackage(item);
-            gamePackages[packageId] = gamePackage;
+            //gamePackages[packageId] = gamePackage;
             RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
             GameActionManager.instance.QueueAction(new RefreshShortcut
             {
                 packageId = gamePackage.instanceId
-            });
+            }, true);
             return result;
         }
 
@@ -873,7 +888,7 @@ public class PackageManager : Singleton<PackageManager>
             if (await UsetItemAction(itemUseEvent.itemId))
             {
                 gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
-                gamePackages[itemUseEvent.packageId] = gamePackage;
+                //gamePackages[itemUseEvent.packageId] = gamePackage;
                 RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
                 GameActionManager.instance.QueueAction(new RefreshShortcut
                 {
@@ -907,7 +922,7 @@ public class PackageManager : Singleton<PackageManager>
         return default(Item);
     }
 
-    private struct GamePackage
+    private class GamePackage
     {
         public string name;
         public int instanceId;
@@ -947,6 +962,7 @@ public class PackageManager : Singleton<PackageManager>
             return packageData;
         }
 
+        public GamePackage() { }
         public GamePackage(int caseCount, string name, int instanceId, int level = 0,
             int dataId = 0, PackageType packageType = PackageType.全部, bool singleCase = false)
         {
@@ -1319,6 +1335,25 @@ public class PackageManager : Singleton<PackageManager>
             }
 
             return false;
+        }
+
+        public void GetItemOutPackage(int itemInstanceId)
+        {
+            int index= items.FindIndex(item => item.instanceId == itemInstanceId);
+            if (packageItemCounts.TryGetValue(items[index].dataId, out int itemCount))
+            {
+                int nowCount = itemCount - items[index].count;
+                if (nowCount > 0)
+                {
+                    packageItemCounts[items[index].dataId] = nowCount;
+                }
+                else
+                {
+                    packageItemCounts.Remove(items[index].dataId);
+                }
+                RefreshSelectItem();
+                items.RemoveAt(index);
+            }
         }
 
         public bool IsHaveItem(int itemDataId)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CharacterInformationPanel : GamePanel<CharacterInformationData>
@@ -71,7 +72,9 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             };
             void SelectAction(Item item, bool selected = true)
             {
-                Character character = CharacterManager.instance.GetCharacter(equipment.characterId);
+                Character character = CharacterManager.instance.GetCharacter(equipment.characterId); 
+
+               
 
                 ClearEquip clearEquip = new ClearEquip
                 {
@@ -79,7 +82,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                     itemType = equipment.ItemType,
                     outPackageId = character.characterPackage
                 };
-                GameActionManager.instance.QueueAction(clearEquip,true);
+                GameActionManager.instance.QueueAction(clearEquip, true);
             }
             UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         }
@@ -111,6 +114,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 {
                     return;
                 }
+              
                 ChangeEquip changeEquip = new ChangeEquip
                 {
                     characterId = equipment.characterId,
@@ -120,7 +124,6 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 GameActionManager.instance.QueueAction(changeEquip,true);
             }
 
-            GameActionManager.instance.QueueAction(openPackage,true);
         }
     }
 
