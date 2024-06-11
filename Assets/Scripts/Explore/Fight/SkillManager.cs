@@ -41,7 +41,7 @@ public class SkillRuntime
 
     public float GetTimeValue()
     {
-        return waitTime/ skillCd;
+        return waitTime/ (float)skillCd;
     }
     public void SetSkillCd(float speed)
     {

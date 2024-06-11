@@ -151,7 +151,8 @@ public class FightCharacterReference : UIObjReference<MyInt>
             return;
         float value = playerSkillRuntime.GetTimeValue();
         value = Mathf.Clamp(value, 0, 1);
-        skillValue.fillAmount = 1 - value;
+        value = 1 - value;
+        skillValue.fillAmount =value;
         if (value <= 0)
         {
             skillButton.interactable = true;

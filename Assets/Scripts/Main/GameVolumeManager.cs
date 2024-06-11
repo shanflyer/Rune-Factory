@@ -31,15 +31,21 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         var screenPos = CameraManager.instance.mainCamera.WorldToScreenPoint(LerpScreenCycleValue.cyclePos);
         var screenSize = GameCommon.GetScreenResolution();
         Vector2 cyclePos = new Vector2(screenPos.x / screenSize.x, screenPos.y / screenSize.y);
-        screenMat.SetVector("_Offset", cyclePos);
-
+        screenMat.SetVector("_Offset", cyclePos); 
        // Debug.Log($"screenPos:{screenPos}--screenSize:{screenSize}-LerpScreenCycleValue.cyclePos:{LerpScreenCycleValue.cyclePos}--{cyclePos}");
         float timeValue = 0;
         var waitTime= new WaitForFixedUpdate();
         float minCycleValue = LerpScreenCycleValue.minCycleValue;
         float maxCycleValue = LerpScreenCycleValue.maxCycleValue;
         float lerpTime = LerpScreenCycleValue.lerpTime;
-        while (timeValue<= lerpTime)
+
+
+        if (minCycleValue == 0)
+        {
+            GameActionManager.instance.QueueAction(new HideAllPanel { hide = true }, true);
+        }
+
+            while (timeValue<= lerpTime)
         {
             float value = math.lerp(minCycleValue, maxCycleValue, timeValue / lerpTime);
             SetScreenCycleValue(value);
@@ -50,6 +56,11 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         if (LerpScreenCycleValue.setResult != null)
         {
             LerpScreenCycleValue.setResult(true);
+        }
+
+        if (maxCycleValue == 0)
+        {
+            GameActionManager.instance.QueueAction(new HideAllPanel { hide = false }, true);
         }
     }
 

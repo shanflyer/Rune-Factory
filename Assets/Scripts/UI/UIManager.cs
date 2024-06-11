@@ -35,8 +35,21 @@ public class UIManager : Singleton<UIManager>
         GameActionManager.instance.AddListener<OpenPanelAction>(OpenPanel);
         GameActionManager.instance.AddListener<HidePanel>(HidePanel);
         GameActionManager.instance.AddListener<HidePanels>(HidePanels);
+        GameActionManager.instance.AddListener<HideAllPanel>(HideAllPanel);
     }
-
+    public void HideAllPanel(HideAllPanel hideAllPanel)
+    {
+        if (hideAllPanel.hide)
+        {
+            canvasGroup.alpha = 0;
+            canvasGroup.interactable = false;
+        }
+        else
+        {
+            canvasGroup.alpha = 1;
+            canvasGroup.interactable = true;
+        }
+    }
     public bool GamePanelIsShow<T>() where T : BaseReference
     {
         if (gamePanels.TryGetValue(typeof(T), out var gamePanel) && gamePanel != null)

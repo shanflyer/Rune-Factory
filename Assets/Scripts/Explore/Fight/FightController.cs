@@ -171,6 +171,7 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<TryStartAutoBehavior>(TryStartAutoBehavior);
         GameActionManager.instance.AddListener<TryStartAutoExplore>(TryStartAutoExplore);
         GameActionManager.instance.AddListener<FightCharacterMove>(FightCharacterMove);
+        GameActionManager.instance.AddListener<EndPlayerRound>(EndPlayerRound);
 
         var behaviorTrees = GetComponents<BehaviorTree>();
         for (int i = 0; i < behaviorTrees.Length; i++)
@@ -190,7 +191,10 @@ public class FightController : MonoBehaviour
 
         monsterObj = Resources.Load<GameObject>(DataPath.monsterPrefabPath).transform;
     }
-
+    void EndPlayerRound(EndPlayerRound endPlayerRound)
+    {
+        _chapterFight = false;
+    }
     private void FightCharacterMove(FightCharacterMove fightCharacterMove)
     {
         if (fightPlayerRuntimes.TryGetValue(fightCharacterMove.characterId, out var fightPlayerRuntime))
@@ -680,7 +684,9 @@ public class FightController : MonoBehaviour
         }
     }
 
-    public bool chapterFight => !chapterMoving;
+    public bool chapterFight => _chapterFight;
+    private bool _chapterFight;
+
     private bool chapterMoving = false;
     private float waitTime;
     private float nowTime;
@@ -749,6 +755,7 @@ public class FightController : MonoBehaviour
         waitTime = 0;
         StopWalk();
         ChapterStepAction chapterStepAction = new ChapterStepAction();
-        GameActionManager.instance.QueueAction(chapterStepAction);
+        GameActionManager.instance.QueueAction(chapterStepAction,true);
+        _chapterFight = true;
     }
 }

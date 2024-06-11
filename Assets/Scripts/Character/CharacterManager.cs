@@ -968,7 +968,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (character == controllerCharacter)
         {
             character.StopMove();
-            character.canMove = false;
+            character.canMove = false; 
             LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
             {
                 cyclePos = GameCommon.GetMapPos(character.coordinate),
