@@ -8,7 +8,7 @@ public enum SkillActionType
 }
 public enum TargetRangeType
 {
-    单体,横向,纵向,全部
+    单体,横向,纵向,全部,Null
 }
 [CreateAssetMenu(menuName ="Data/技能数据")]
 public class SkillData : ScriptableObject, IGameData

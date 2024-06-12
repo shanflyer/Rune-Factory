@@ -127,6 +127,7 @@ public struct FightMapRuntime
         runtimeObj = null;
     }
 }
+ 
 
 public class FightController : MonoBehaviour
 {
@@ -141,15 +142,29 @@ public class FightController : MonoBehaviour
     private FightMapRuntime fightMapRuntime;
 
     [SerializeField]
-    private List<Transform> playerPos = new List<Transform>();
+    GameObject singleMaskParent, allMaskParent, horizontalMaskParent, verticalMaskParent;
 
     [SerializeField]
+    private List<Transform> playerPos = new List<Transform>();
+    [SerializeField]
     private List<Transform> monsterPos = new List<Transform>();
+
+    [SerializeField]
+    private Transform allMaskPos;
+    [SerializeField]
+    private List<Transform> horizontalMaskPos;
+    [SerializeField]
+    private List<Transform> VerticalMaskPos;
 
     private Dictionary<int, FightPlayerRuntime> fightPlayerRuntimes = new Dictionary<int, FightPlayerRuntime>();
     private Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
 
     private Transform monsterObj;
+
+    private Dictionary<int2, SelectMasker> singleSelectMaskerDic = new Dictionary<int2, SelectMasker>();
+    private SelectMasker allSelectMasker;
+    private Dictionary<int, SelectMasker> horizontalMaskerDic = new Dictionary<int, SelectMasker>();
+    private Dictionary<int, SelectMasker> verticalMaskerDic = new Dictionary<int, SelectMasker>();
 
     private void Awake()
     {
@@ -190,6 +205,31 @@ public class FightController : MonoBehaviour
         var sceneInfoManager = SceneInfoManager.instance;
 
         monsterObj = Resources.Load<GameObject>(DataPath.monsterPrefabPath).transform;
+
+        singleSelectMaskerDic.Clear();
+        var selectMaskers = singleMaskParent.GetComponentsInChildren<SelectMasker>();
+        for (int i = 0; i < selectMaskers.Length; i++)
+        {
+            var strs = selectMaskers[i].transform.parent.name.Split(',');
+            selectMaskers[i].DisplayOrHide(false);
+            singleSelectMaskerDic.Add(new int2(int.Parse(strs[0]), int.Parse(strs[1])), selectMaskers[i]);
+        }
+        horizontalMaskerDic.Clear();
+        var horizontalMaskers = horizontalMaskParent.GetComponentsInChildren<SelectMasker>();
+        for(int i = 0; i < horizontalMaskers.Length; i++)
+        {
+            horizontalMaskers[i].DisplayOrHide(false);
+            horizontalMaskerDic.Add(int.Parse(horizontalMaskers[i].transform.parent.name), horizontalMaskers[i]);
+        }
+        verticalMaskerDic.Clear();
+        var verticalMaskers = verticalMaskParent.GetComponentsInChildren<SelectMasker>();
+        for (int i = 0; i < verticalMaskers.Length; i++)
+        {
+            verticalMaskers[i].DisplayOrHide(false);
+            verticalMaskerDic.Add(int.Parse(verticalMaskers[i].transform.parent.name), verticalMaskers[i]);
+        }
+        allSelectMasker = allMaskParent.GetComponentInChildren<SelectMasker>();
+        allSelectMasker.DisplayOrHide(false);
     }
     void EndPlayerRound(EndPlayerRound endPlayerRound)
     {
@@ -219,6 +259,133 @@ public class FightController : MonoBehaviour
             StartWalk();
             //controllerBehavior.EnableBehavior();
         }
+    }
+
+    private TargetRangeType nowDisplayTargetRangeType; 
+    public void DisplayMask(TargetRangeType targetRangeType)
+    {
+        nowDisplayTargetRangeType = targetRangeType;
+        var allFightMonsters = FightManager.instance.GetAllFightMonster();
+        SelectTransform = null;
+        switch (targetRangeType)
+        {
+            case TargetRangeType.Null:
+                singleMaskParent.SetActive(false);
+                horizontalMaskParent.SetActive(false);
+                verticalMaskParent.SetActive(false);
+                allMaskParent.SetActive(false);
+                break;
+            case TargetRangeType.单体:
+                singleMaskParent.SetActive(true);
+                horizontalMaskParent.SetActive(false);
+                verticalMaskParent.SetActive(false);
+                allMaskParent.SetActive(false);
+                foreach (var selectMasker in singleSelectMaskerDic)
+                {
+                    selectMasker.Value.gameObject.SetActive(false);
+                }
+                for (int i = 0; i < allFightMonsters.Count; i++)
+                {
+                    var fightPos = allFightMonsters[i].fightPos;
+                    if (singleSelectMaskerDic.TryGetValue(fightPos, out var selectMasker))
+                    {
+                        if (SelectTransform == null)
+                        {
+                            SelectTransform= selectMasker.transform;
+                        }
+                        selectMasker.gameObject.SetActive(true);
+                    }
+                }
+                break;
+            case TargetRangeType.横向:
+                singleMaskParent.SetActive(false);
+                horizontalMaskParent.SetActive(true);
+                verticalMaskParent.SetActive(false);
+                allMaskParent.SetActive(false);
+                HashSet<int> allhorizontalPos = new HashSet<int>();
+                for (int i = 0; i < allFightMonsters.Count; i++)
+                {
+                    var fightPos = allFightMonsters[i].fightPos;
+                    allhorizontalPos.Add(fightPos.y);
+                }
+                foreach(var selectMasker in horizontalMaskerDic)
+                {
+                    var active = allhorizontalPos.Contains(selectMasker.Key);
+                    if(active&&SelectTransform == null)
+                    {
+                        SelectTransform = selectMasker.Value.transform;
+                    }
+                    selectMasker.Value.gameObject.SetActive(active);
+                }
+                break;
+            case TargetRangeType.纵向:
+                singleMaskParent.SetActive(false);
+                horizontalMaskParent.SetActive(false);
+                verticalMaskParent.SetActive(true);
+                allMaskParent.SetActive(false);
+                HashSet<int> allVerticalPos = new HashSet<int>();
+                for (int i = 0; i < allFightMonsters.Count; i++)
+                {
+                    var fightPos = allFightMonsters[i].fightPos;
+                    allVerticalPos.Add(fightPos.x);
+                }
+                foreach (var selectMasker in verticalMaskerDic)
+                {
+                    var active = allVerticalPos.Contains(selectMasker.Key);
+                    if (active && SelectTransform == null)
+                    {
+                        SelectTransform = selectMasker.Value.transform;
+                    }
+                    selectMasker.Value.gameObject.SetActive(active);
+                }
+                break;
+            case TargetRangeType.全部:
+                SelectTransform = allMaskParent.transform;
+                singleMaskParent.SetActive(false);
+                horizontalMaskParent.SetActive(false);
+                verticalMaskParent.SetActive(false);
+                allMaskParent.SetActive(true);
+                allSelectMasker.gameObject.SetActive(true);
+                break;
+        }
+    }
+
+    private Transform SelectTransform;
+    public void SelectMask(Transform selectMask)
+    {
+        SelectTransform = selectMask;
+        int2 selectValue = int2.zero;
+        switch (nowDisplayTargetRangeType)
+        {
+            case TargetRangeType.单体:
+                foreach(var selectMasker in singleSelectMaskerDic)
+                {
+                    var active = selectMask == selectMasker.Value.transform;
+                    selectValue = selectMasker.Key;
+                    selectMasker.Value.DisplayOrHide(active);
+                }
+                break;
+            case TargetRangeType.横向:
+                foreach (var selectMasker in horizontalMaskerDic)
+                {
+                    var active = selectMask == selectMasker.Value.transform;
+                    selectValue = selectMasker.Key;
+                    selectMasker.Value.DisplayOrHide(active);
+                }
+                break;
+            case TargetRangeType.纵向:
+                foreach (var selectMasker in verticalMaskerDic)
+                {
+                    var active = selectMask == selectMasker.Value.transform;
+                    selectValue = selectMasker.Key;
+                    selectMasker.Value.DisplayOrHide(active);
+                }
+                break;
+            case TargetRangeType.全部:
+                allSelectMasker.DisplayOrHide(true);
+                break;
+        }
+        FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
     }
 
     private void SwitchAutoExplore(SwitchAutoExplore switchAutoExplore)

@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http.Headers;
 using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
@@ -333,6 +334,9 @@ public class FightManager :Singleton<FightManager>
     Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     List<int> fightPlayers = new List<int>();
     List<int> fightMonsters = new List<int>();
+    Dictionary<int2, int> singleMonsterDic = new Dictionary<int2, int>();
+    Dictionary<int2,List<int>> horizontalMonsterDic=new Dictionary<int2, List<int>>;
+    Dictionary<int2, List<int>> verticalMonsterDic = new Dictionary<int2, List<int>>;
 
     public override async void Init()
     {
@@ -381,6 +385,10 @@ public class FightManager :Singleton<FightManager>
         fightCharacters.Clear();
         fightPlayers.Clear();
         fightMonsters.Clear();
+
+        singleMonsterDic.Clear();
+        horizontalMonsterDic.Clear();
+        verticalMonsterDic.Clear();
     }
     public int GetAttackType(int id)
     {
@@ -435,6 +443,11 @@ public class FightManager :Singleton<FightManager>
               {
                   if (fightMonsters.Contains(characterDeath.characterId))
                   {
+                      var monster = (FightMonster)fightCharacters[characterDeath.characterId];
+                      singleMonsterDic.Remove(monster.fightPos);
+                      horizontalMonsterDic.Remove(monster.fightPos.y);
+                      verticalMonsterDic.Remove(monster.fightPos.x);
+
                       fightMonsters.Remove(characterDeath.characterId);
                       fightCharacters.Remove(characterDeath.characterId);
                       FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
@@ -648,6 +661,20 @@ public class FightManager :Singleton<FightManager>
             fightMonster.CreatSkillRuntime(monsterData);
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
+
+            singleMonsterDic.Add(fightMonster.fightPos,fightMonster.instanceId);
+            if (!horizontalMonsterDic.TryGetValue(fightMonster.fightPos.y, out var horizontalMonsters))
+            {
+                horizontalMonsters = new List<int>();
+                horizontalMonsterDic.Add(fightMonster.fightPos.y, horizontalMonsters);
+            }
+            horizontalMonsters.Add(fightMonster.instanceId);  
+            if (!verticalMonsterDic.TryGetValue(fightMonster.fightPos.x, out var verticalMonsters))
+            {
+                verticalMonsters = new List<int>();
+                verticalMonsterDic.Add(fightMonster.fightPos.x, verticalMonsters);
+            }
+            verticalMonsters.Add(fightMonster.instanceId);
 
             FightController.instance.CreatFightMonster(monsterData, fightMonster.instanceId, fightMonster.fightPos);
         }
@@ -1228,6 +1255,76 @@ public class FightManager :Singleton<FightManager>
         return nowFightCharacters;
     }
 
+    public void SetManualSelectTargets(TargetRangeType targetRangeType,int2 value)
+    {
+        List<int> targets = new List<int>();
+        switch (targetRangeType)
+        {
+            case TargetRangeType.全部:
+                for(int i = 0; i < fightMonsters.Count; i++)
+                {
+                    var fightCharacter = fightCharacters[fightMonsters[i]];
+                    if(fightCharacter.characterProperty.HP>0)
+                    {
+                        targets.Add(fightMonsters[i]);
+                    }
+                }
+                break;
+            case TargetRangeType.单体: 
+                if (singleMonsterDic.TryGetValue(value, out var monster))
+                {
+                    var fightCharacter = fightCharacters[monster];
+                    if (fightCharacter.characterProperty.HP > 0)
+                    {
+                        targets.Add(monster);
+                    }
+                }
+                break;
+            case TargetRangeType.横向:
+
+                if(horizontalMonsterDic.TryGetValue(value,out var ints))
+                {
+                    for(int i = 0; i < ints.Count; i++)
+                    {
+                        var fightCharacter = fightCharacters[ints[i]];
+                        if (fightCharacter.characterProperty.HP > 0)
+                        {
+                            targets.Add(ints[i]);
+                        }
+                    }
+                } 
+                break;
+            case TargetRangeType.纵向:
+                if (verticalMonsterDic.TryGetValue(value, out ints))
+                {
+                    for (int i = 0; i < ints.Count; i++)
+                    {
+                        var fightCharacter = fightCharacters[ints[i]];
+                        if (fightCharacter.characterProperty.HP > 0)
+                        {
+                            targets.Add(ints[i]);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    public List<FightMonster> GetAllFightMonster()
+    {
+        List<FightMonster> result = new List<FightMonster>();
+        for(int i = 0; i < fightMonsters.Count; i++)
+        {
+            if (fightCharacters.TryGetValue(fightMonsters[i],out var fightCharacter))
+            {
+                if (fightCharacter.characterProperty.HP > 0)
+                {
+                    result.Add((FightMonster)fightCharacter);
+                }
+            }
+        }
+        return result;
+    }
     public bool2 IsFightEnd()
     { 
         bool2 result=true;
@@ -1314,7 +1411,10 @@ public class FightManager :Singleton<FightManager>
                 fightCharacters.Remove(characterId);
                 FightController.instance.RemoveFightPlayerRuntime(characterId);
             }
-            fightMonsters.Clear();
+            fightMonsters.Clear(); 
+            singleMonsterDic.Clear();
+            horizontalMonsterDic.Clear();
+            verticalMonsterDic.Clear();
 
             ExploreManager.instance.StepFightSucceed();
         }
