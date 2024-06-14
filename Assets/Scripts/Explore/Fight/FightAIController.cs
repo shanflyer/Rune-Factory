@@ -29,6 +29,7 @@ public struct SkillEstimateData
 {
     public int skillId;
     public int source;
-    public List<int> target; 
+    public List<int> targets;
+    public Transform target;
     public float utlilityValue;
 }

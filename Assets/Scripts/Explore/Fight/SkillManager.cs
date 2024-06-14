@@ -19,7 +19,9 @@ public class SkillManager : Singleton<SkillManager>
         SkillData skillData=await GameDataManager.instance.GetAsyncData<SkillData>(skillId);
         SkillRuntime skillRuntime = new SkillRuntime(skillData, myInstance.CreatInstanceId()); 
         return skillRuntime;
-    } 
+    }
+
+  
 }
 public class SkillRuntime
 {

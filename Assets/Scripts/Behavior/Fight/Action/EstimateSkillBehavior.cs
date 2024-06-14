@@ -69,7 +69,7 @@ public class EstimateSkillBehavior : Action
     }
     public override TaskStatus OnUpdate()
 	{
-        if (selectSkill.target==null||selectSkill.target.Count == 0)
+        if (selectSkill.targets==null||selectSkill.targets.Count == 0)
         {
             return TaskStatus.Failure;
         }

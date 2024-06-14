@@ -335,8 +335,8 @@ public class FightManager :Singleton<FightManager>
     List<int> fightPlayers = new List<int>();
     List<int> fightMonsters = new List<int>();
     Dictionary<int2, int> singleMonsterDic = new Dictionary<int2, int>();
-    Dictionary<int2,List<int>> horizontalMonsterDic=new Dictionary<int2, List<int>>;
-    Dictionary<int2, List<int>> verticalMonsterDic = new Dictionary<int2, List<int>>;
+    Dictionary<int2,List<int>> horizontalMonsterDic=new Dictionary<int2, List<int>>();
+    Dictionary<int2, List<int>> verticalMonsterDic = new Dictionary<int2, List<int>>();
 
     public override async void Init()
     {
@@ -842,7 +842,7 @@ public class FightManager :Singleton<FightManager>
                     {
                         source = characterId,
                         skillId = skillId,
-                        target = targetList,
+                        targets = targetList,
                         utlilityValue = 1,
                     };
                     skillEstimateDatas.Add(SkillEstimateData);
@@ -855,9 +855,9 @@ public class FightManager :Singleton<FightManager>
                         {
                             var skillEstimateData = skillEstimateDatas[i];
                             Dictionary<int, int> targetHurtValueDic = new Dictionary<int, int>();
-                            for (int j= 0; j < skillEstimateData.target.Count; j++)
+                            for (int j= 0; j < skillEstimateData.targets.Count; j++)
                             {
-                                int targetId = skillEstimateData.target[j];
+                                int targetId = skillEstimateData.targets[j];
                                 FightCharacter tagetFighter = fightCharacters[targetId];
                                 int hurt = 0;
                                 if (skillData.skillActionType == SkillActionType.属性值)
@@ -897,9 +897,9 @@ public class FightManager :Singleton<FightManager>
                         {
                             var skillEstimateData = skillEstimateDatas[i];
                             float cureValue = 0;
-                            for (int j = 0; j < skillEstimateData.target.Count; j++)
+                            for (int j = 0; j < skillEstimateData.targets.Count; j++)
                             {
-                                int targetId = skillEstimateData.target[j];
+                                int targetId = skillEstimateData.targets[j];
                                 FightCharacter tagetFighter = fightCharacters[targetId];
                                 var targetCureValue = 1 -1 / 1 + math.pow(math.E*GameCommon.hpUtlility,(-tagetFighter.characterProperty.HP/tagetFighter.characterProperty.MaxHP*12+6));
                                 cureValue += targetCureValue;
@@ -1425,6 +1425,64 @@ public class FightManager :Singleton<FightManager>
             PlayerFight playerFight = new PlayerFight(); 
             GameActionManager.instance.QueueAction(playerFight);
         } 
+    } 
+
+    public List<int> GetTargets(int2 key,TargetRangeType targetRangeType)
+    {
+        List<int> targets = new List<int>();
+        switch (targetRangeType)
+        {
+            case TargetRangeType.全部:
+                targets = new List<int>();
+                for (int i = 0; i < fightMonsters.Count; i++)
+                {
+                    var fightCharacter = fightCharacters[fightMonsters[i]];
+                    if (fightCharacter.characterProperty.HP > 0)
+                    {
+                        targets.Add(fightMonsters[i]);
+                    }
+                }
+                break;
+            case TargetRangeType.单体:
+                if (singleMonsterDic.TryGetValue(key, out var monster))
+                {
+                    var fightCharacter = fightCharacters[monster];
+                    if (fightCharacter.characterProperty.HP > 0)
+                    {
+                        targets = new List<int> { monster };
+                    }
+                }
+                break;
+            case TargetRangeType.横向:
+                if (horizontalMonsterDic.TryGetValue(key, out var ints))
+                {
+                    targets = new List<int>();
+                    for (int i = 0; i < ints.Count; i++)
+                    {
+                        var fightCharacter = fightCharacters[ints[i]];
+                        if (fightCharacter.characterProperty.HP > 0)
+                        {
+                            targets.Add(ints[i]);
+                        }
+                    }
+                }
+                break;
+            case TargetRangeType.纵向:
+                if (verticalMonsterDic.TryGetValue(key, out ints))
+                {
+                    targets = new List<int>();
+                    for (int i = 0; i < ints.Count; i++)
+                    {
+                        var fightCharacter = fightCharacters[ints[i]];
+                        if (fightCharacter.characterProperty.HP > 0)
+                        {
+                            targets.Add(ints[i]);
+                        }
+                    }
+                }
+                break;
+        }
+        return targets;
     }
 
     protected override void UpData()

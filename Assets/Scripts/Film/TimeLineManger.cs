@@ -49,7 +49,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                 animator = FightController.instance.FindFightCharacter(source);
                                 break;
                             case BindType.FightTarget:
-                                animator = FightController.instance.FindFightCharacter(skillEstimateData.target[0]);
+                                animator = FightController.instance.FindFightCharacter(skillEstimateData.targets[0]);
                                 break;
                             case BindType.Character:
                                 if (CharacterManager.instance.GetRuntimeCharacterObj(source, out var characterRuntimeObj))
@@ -112,11 +112,11 @@ public class TimeLineManger : Singleton<TimeLineManger>
             {
 
                 List<Transform> targets = new List<Transform>();
-                if (skillEstimateData.target != null)
+                if (skillEstimateData.targets != null)
                 {
-                    for (int i = 0; i < skillEstimateData.target.Count; i++)
+                    for (int i = 0; i < skillEstimateData.targets.Count; i++)
                     {
-                        var target = FightController.instance.FindFightCharacter(skillEstimateData.target[i]);
+                        var target = FightController.instance.FindFightCharacter(skillEstimateData.targets[i]);
                         if (target != null)
                         {
                             targets.Add(target.transform);
@@ -191,7 +191,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                         }
                                         break;
                                     case BindType.FightTarget:
-                                        childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.target[0]);
+                                        childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.targets[0]);
                                         if (childAnimator)
                                         {
                                             childObj = childAnimator.gameObject;
@@ -220,7 +220,13 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                     parentObj.defaultValue = childObj;
                                     asset.sourceGameObject = parentObj;
                                 }
-                            }  
+                            }
+                            else
+                            {
+                                var parentObj = new ExposedReference<GameObject>();
+                                parentObj.defaultValue = skillEstimateData.target.gameObject;
+                                asset.sourceGameObject = parentObj;
+                            }
                             i++;
                         }
 

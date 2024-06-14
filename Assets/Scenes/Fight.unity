@@ -298,7 +298,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 79301790}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &79301792
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -395,7 +407,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 107014839}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &107014841
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -516,6 +540,90 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 208611172}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &279479027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 279479028}
+  - component: {fileID: 279479029}
+  m_Layer: 0
+  m_Name: SkillMask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &279479028
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279479027}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 40, y: 20, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1132308293}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &279479029
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279479027}
+  m_Enabled: 0
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 65044e2de4397b94bae98c11df7d7515, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1001 &299444741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -719,7 +827,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 323493473}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &323493475
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1002,7 +1122,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 445604120}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &445604122
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1251,7 +1383,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 563482709}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &563482711
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2163,6 +2307,7 @@ Transform:
   - {fileID: 999165489}
   - {fileID: 1258247884}
   - {fileID: 1987892564}
+  - {fileID: 279479028}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1132308294
@@ -2179,24 +2324,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controllerBehavior: {fileID: 1132308295}
   manualFightBehavior: {fileID: 1132308295}
-  singleMaskParent: {fileID: 0}
-  allMaskParent: {fileID: 0}
-  horizontalMaskParent: {fileID: 0}
-  verticalMaskParent: {fileID: 0}
+  singleMaskParent: {fileID: 999165488}
+  allMaskParent: {fileID: 2009637958}
+  horizontalMaskParent: {fileID: 1606856434}
+  verticalMaskParent: {fileID: 407404013}
+  skillMask: {fileID: 279479029}
   playerPos:
   - {fileID: 792847113}
   - {fileID: 1562327450}
   - {fileID: 543052147}
   monsterPos:
+  - {fileID: 323493473}
   - {fileID: 1486435288}
   - {fileID: 563482709}
-  - {fileID: 323493473}
-  - {fileID: 2127616690}
   - {fileID: 1369560833}
+  - {fileID: 2127616690}
   - {fileID: 445604120}
-  allMaskPos: {fileID: 0}
-  horizontalMaskPos: []
-  VerticalMaskPos: []
 --- !u!114 &1132308295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2216,7 +2359,7 @@ MonoBehaviour:
   logTaskChanges: 0
   group: 0
   resetValuesOnRestart: 1
-  externalBehavior: {fileID: 11400000, guid: 27ecea0a8cf9afa4d8595adff3b26921, type: 2}
+  externalBehavior: {fileID: 11400000, guid: b2dbb01a66f5c8e42b699d8d36ace02b, type: 2}
   mBehaviorSource:
     behaviorName: "\u56DE\u5408\u5236\u6218\u6597"
     behaviorDescription: 
@@ -2610,7 +2753,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1369560833}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &1369560835
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2956,7 +3111,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1486435288}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &1486435290
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3142,28 +3309,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1625718161}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1732385352 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4603653497537497660, guid: 957f333c8545dc94080f5c9281725318,
-    type: 3}
-  m_PrefabInstance: {fileID: 2053572979}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1732385360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732385352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EventMask:
-    serializedVersion: 2
-    m_Bits: 1
-  m_MaxRayIntersections: 0
 --- !u!1 &1733951467
 GameObject:
   m_ObjectHideFlags: 0
@@ -3214,7 +3359,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1733951468}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &1733951470
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3554,7 +3711,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1911449290}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &1911449292
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3685,7 +3854,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2009637959}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &2009637961
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3830,7 +4011,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2048096632}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &2048096634
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3877,88 +4070,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.38709658, y: 1.394268}
   m_EdgeRadius: 0
---- !u!1001 &2053572979
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1370943531173514582, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1370943531173514582, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6157351341638957001, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      propertyPath: m_Name
-      value: CameraObj
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4603653497537497660, guid: 957f333c8545dc94080f5c9281725318,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1732385360}
-  m_SourcePrefab: {fileID: 100100000, guid: 957f333c8545dc94080f5c9281725318, type: 3}
 --- !u!1 &2087751369
 GameObject:
   m_ObjectHideFlags: 0
@@ -4057,7 +4168,19 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1132308294}
+          m_TargetAssemblyTypeName: FightController, Assembly-CSharp
+          m_MethodName: SelectMask
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2127616690}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!61 &2127616692
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4184,4 +4307,3 @@ SceneRoots:
   m_Roots:
   - {fileID: 1132308293}
   - {fileID: 1850834435}
-  - {fileID: 2053572979}

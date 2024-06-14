@@ -55,7 +55,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
 
     void ActionSkill()
     {
-
+        FightController.instance.SelectSkill(playerSkillRuntime,data.value);
     }
     public override void SetPanelUISerializeObj()
     {
