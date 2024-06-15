@@ -848,7 +848,66 @@ public class FightController : MonoBehaviour
             fightMonster.behaviorTree.EnableBehavior();
         }
     }
+    public Transform GetSkillShowTarget(FightCharacter fightCharacter,TargetRangeType targetRangeType,bool self)
+    {
 
+        bool isPlayer = false;
+        if(fightCharacter is FightPlayer)
+        {
+            if (self)
+            {
+                isPlayer = true;
+            }
+        }
+        else
+        {
+            if (!self)
+            {
+                isPlayer = true;
+            }
+        }
+
+        if(isPlayer)
+        {
+            switch (targetRangeType)
+            {
+                case TargetRangeType.全部:
+                    return playerPos[0]; 
+                default:
+                    return playerPos[fightCharacter.fightPos.x]; 
+            }
+           
+        }
+        else
+        {
+            switch (targetRangeType)
+            {
+                case TargetRangeType.单体:
+
+                    if (singleSelectMaskerDic.TryGetValue(fightCharacter.fightPos, out var selectMasker))
+                    {
+                        return selectMasker.transform.parent;
+                    }
+                    break;
+                case TargetRangeType.横向:
+                    if (horizontalMaskerDic.TryGetValue(fightCharacter.fightPos.x, out   selectMasker))
+                    {
+                        return selectMasker.transform.parent;
+                    }
+                    break;
+                case TargetRangeType.纵向:
+                    if (verticalMaskerDic.TryGetValue(fightCharacter.fightPos.x, out  selectMasker))
+                    {
+                        return selectMasker.transform.parent;
+                    }
+                    break;
+                case TargetRangeType.全部:
+                    return allSelectMasker.transform.parent;
+            }
+        }
+        return null;
+             
+    }
     public void StartSkillAction(SkillEstimateData skillEstimateData, int characterId)
     {
         FightPlayerRuntime fightPlayerRuntime;

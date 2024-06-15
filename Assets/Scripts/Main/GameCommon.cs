@@ -153,6 +153,8 @@ public class GameCommon
     public const float HurtUtlility = 0.6f;
     public const float hpUtlility = 0.68f;
 
+    public const float DefaultPerRoundCd = 1.0f;
+
     public static int3 friendAddCount = new int3(3, 3, 2);
 
     public static List<int> zeroNPC = new List<int>

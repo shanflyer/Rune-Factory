@@ -26,53 +26,34 @@ public class SkillManager : Singleton<SkillManager>
 public class SkillRuntime
 {
     public int instanceId;
-    public SkillData skillData;
-    private float speed=100.0f;
-    private int waitTime;
+    public SkillData skillData;  
     private int skillCd;
 
     public SkillRuntime(SkillData skillData,int instanceId)
     {
         this.skillData = skillData;
         this.instanceId = instanceId;
-        InitCd();
+        skillCd = skillData.cd;
     }
     public FightType fightType=>skillData.fightType;
      
-    public bool waiteCDEnd=> waitTime>=skillCd;
+    public bool waiteCDEnd=> skillCd<=0;
 
     public float GetTimeValue()
     {
-        return waitTime/ (float)skillCd;
+        return skillCd / (float)skillData.cd;
     }
-    public void SetSkillCd(float speed)
-    {
-        this.speed = speed; 
-        InitCd();
-    }
-   
-    void InitCd()
-    {
-        if (speed < 100)
-        {
-            float value = 1 + (100 - speed) * 0.01f;
-            skillCd = (int)(skillData.cd * value);
-        }
-        else
-        {
-            float value = 100.0f / speed;
-            skillCd = (int)(skillData.cd * value);
-        }
-    }
+    
+ 
     public void Reset()
     {
-        waitTime = 0;
+        skillCd = skillData.cd;
     }
     public void UpData(int timeValue)
     { 
-        if (waitTime<skillCd)
+        if (skillCd>0)
         {
-            waitTime += timeValue;
+            skillCd -= 1 ;
         }
     }
 
