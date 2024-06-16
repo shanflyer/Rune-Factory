@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FightCharacterReference : UIObjReference<MyInt>
+public class FightCharacterReference : UIObjReference<FightCharacter>
 {
     [SerializeField]
     private TextMeshProUGUI ATText, DFText, NameText;
@@ -55,7 +55,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
 
     void ActionSkill()
     {
-        FightController.instance.SelectSkill(playerSkillRuntime,data.value);
+        FightController.instance.SelectSkill(playerSkillRuntime,fightPlayer.instanceId);
     }
     public override void SetPanelUISerializeObj()
     {
@@ -84,26 +84,28 @@ public class FightCharacterReference : UIObjReference<MyInt>
         skillValue = FindChildGameObject<Image>("SkillValue");
     }
 
-    public override async Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
-        InitData(t.value);
+        fightPlayer = t as FightPlayer; 
+
+        InitData();
     }
 
     private void RefreshCharacter(RefreshCharacter refreshCharacter)
     {
-        if (data.value == refreshCharacter.id)
+        if (fightPlayer.character.instanceId == refreshCharacter.id)
         {
-            InitData(refreshCharacter.id);
+            InitData();
         }
     }
-
+    FightPlayer fightPlayer;
     SkillRuntime playerSkillRuntime;
-    private void InitData(int characterId)
-    {
-        Character character = CharacterManager.instance.GetCharacter(characterId);
-        if (character != null)
+    private void InitData()
+    { 
+        if (fightPlayer != null)
         {
+            var character = fightPlayer.character;
             Info.gameObject.SetActive(true);
             Null.gameObject.SetActive(false);
 
@@ -122,7 +124,7 @@ public class FightCharacterReference : UIObjReference<MyInt>
             HPSlider.fillAmount = (float)characterProperty.HP / characterProperty.MaxHP;
             MPSlider.fillAmount = (float)characterProperty.MP / characterProperty.MaxMP;
 
-            playerSkillRuntime=FightManager.instance.GetPlayerEquipSkill(characterId);
+            playerSkillRuntime= fightPlayer.GetPlayerEquipSkill();
             if (playerSkillRuntime != null)
             {
                 skillPanel.localScale = Vector3.one;

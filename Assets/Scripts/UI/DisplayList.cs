@@ -83,6 +83,7 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         {
             for (int i = 0; i < list.Count; i++)
             {
+                list[i].ClearData();
                 list[i].enabled = false;
                 list[i].transform.localScale = Vector3.zero;
             }
@@ -92,7 +93,8 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         _dataCount = componentData.Count;
         for (int i = list.Count - 1; i > componentData.Count - 1; i--)
         {
-            list[i].enabled = false;
+            list[i].ClearData();
+            list[i].enabled = false; 
             list[i].transform.localScale = Vector3.zero;
         }
 
@@ -120,6 +122,7 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
     {
         for (int i = 0; i < list.Count; i++)
         {
+            list[i].ClearData();
             list[i].enabled = false;
             list[i].transform.localScale = Vector3.zero;
         }

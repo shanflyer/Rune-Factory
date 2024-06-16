@@ -14,12 +14,13 @@ public enum FightCharacterStaues
     正常, 死亡, 濒死
 }
 
-public class FightCharacter
+public class FightCharacter : IReferenceData
 {
     public FightStatus fightStatus = FightStatus.准备;
     public FightCharacterStaues fightCharacterStaues = FightCharacterStaues.正常;
     public virtual AttributeType AttributeType { get; }
     public virtual CharacterProperty characterProperty { get; }
+    public virtual Sprite icon { get; set; }
     public int instanceId { get; set; }
     public virtual int behaviorId { get; }
     public int2 fightPos;
@@ -102,6 +103,7 @@ public class FightPlayer : FightCharacter
     }
 
     public Character character;
+    public override Sprite icon { get => character.characterData.icon.sprite; set => base.icon = value; }
     public override AttributeType AttributeType => character.AttributeType;
     private int characterSkill, equipSkill;
 
@@ -237,7 +239,7 @@ public class FightMonster : FightCharacter
 
     public MonsterData monsterData;
     public override int behaviorId => monsterData.behaviorId;
-
+    public override Sprite icon { get => monsterData.monsterSprite.sprite; set => base.icon = value; }
     public FightMonster(MonsterData monsterData,int instanceId,int2 fightPos)
     {
         this.monsterData = monsterData;
@@ -381,6 +383,25 @@ public class FightManager : Singleton<FightManager>
     { get { return fightResult; } }
     private FightResult fightResult;
 
+    public List<FightCharacter> GetAllFightCharacters()
+    {
+        List<FightCharacter> _fightCharacters = new List<FightCharacter>();
+        for(int i = 0; i < fightPlayers.Count; i++)
+        {
+            if (fightCharacters.TryGetValue(fightPlayers[i],out var fightCharacter))
+            {
+                _fightCharacters.Add(fightCharacter);
+            }
+        }
+        for (int i = 0; i < fightMonsters.Count; i++)
+        {
+            if (fightCharacters.TryGetValue(fightMonsters[i], out var fightCharacter))
+            {
+                _fightCharacters.Add(fightCharacter);
+            }
+        }
+        return _fightCharacters;
+    }
     private void ExploreEnd(ExploreEnd exploreEnd)
     {
         myInstance.Clear();
@@ -475,6 +496,7 @@ public class FightManager : Singleton<FightManager>
                       fightMonsters.Remove(characterDeath.characterId);
                       fightCharacters.Remove(characterDeath.characterId);
                       FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
+                      GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
                   }
                   else if (fightPlayers.Contains(characterDeath.characterId))
                   {
@@ -678,6 +700,8 @@ public class FightManager : Singleton<FightManager>
             verticalMonsters.Add(fightMonster.instanceId);
 
             FightController.instance.CreatFightMonster(monsterData, fightMonster.instanceId, fightMonster.fightPos);
+
+            GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
         }
 
         var afterAction = await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.afterActionId);

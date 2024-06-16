@@ -29,11 +29,14 @@ public class FightPanel : GamePanel<IReferenceData>
     Transform operateIcon;
     [SerializeField]
     Animator animator;
+    [SerializeField]
+    FightCharacterCard fightCharacterCard;
+    [SerializeField]
+    Transform fightCharacterCardParent;
+    DisplayList<FightCharacterCard, FightCharacter> fightCharacterCardList;
 
-  
 
-
-    DisplayList<FightCharacterReference, MyInt> fightCharacterReferenceList;
+    DisplayList<FightCharacterReference, FightCharacter> fightCharacterReferenceList;
 
     private int dataId;
 
@@ -70,7 +73,8 @@ public class FightPanel : GamePanel<IReferenceData>
         operateIcon = FindChildGameObject("OperateIcon");
         animator = FindChildGameObject<Animator>("CharacterInfoes");
 
-        
+        fightCharacterCard = FindChildGameObject<FightCharacterCard>("FightCard");
+        fightCharacterCardParent = FindChildGameObject("FightCardParent");
     }
 
     private void SwitchFunctionButton(SwitchFunctionButton switchFunctionButton)
@@ -108,6 +112,7 @@ public class FightPanel : GamePanel<IReferenceData>
         GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton);
         GameActionManager.instance.RemoveListener<EndPlayerRound>(EndPlayerRound);
         GameActionManager.instance.RemoveListener<StopAutoFight>(StopAutoFight);
+        GameActionManager.instance.RemoveListener<RefreshFightCharacterList>(RefreshFightCharacterList);
         base.OnDisable();
     }
 
@@ -117,9 +122,16 @@ public class FightPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<SwitchFunctionButton>(SwitchFunctionButton);
         GameActionManager.instance.AddListener<EndPlayerRound>(EndPlayerRound);
         GameActionManager.instance.AddListener<StopAutoFight>(StopAutoFight);
+        GameActionManager.instance.AddListener<RefreshFightCharacterList>(RefreshFightCharacterList);
         AutoTips.localScale = Vector3.zero;
         base.OnEnable();
     }
+
+    void RefreshFightCharacterList(RefreshFightCharacterList refreshFightCharacterList)
+    {
+        RefreshFightCardList();
+    }
+
     PlayerFight playerFight = new PlayerFight();
    // StartRoundFight startRoundFight = new StartRoundFight();
     protected override void Awake()
@@ -192,11 +204,10 @@ public class FightPanel : GamePanel<IReferenceData>
             up = !up;
             animator.SetBool("Up", up);
             operateIcon.transform.localScale = up ? new Vector3(1,-1,1) : new Vector3(1, 1, 1);
-        });
+        }); 
 
-       
-
-        fightCharacterReferenceList = new DisplayList<FightCharacterReference, MyInt>(fightCharacterReference, fightCharacterParent);
+        fightCharacterReferenceList = new DisplayList<FightCharacterReference, FightCharacter>(fightCharacterReference, fightCharacterParent);
+        fightCharacterCardList = new DisplayList<FightCharacterCard, FightCharacter>(fightCharacterCard, fightCharacterCardParent);
     }
 
     void EscapeFightAction()
@@ -297,26 +308,31 @@ public class FightPanel : GamePanel<IReferenceData>
         DisplayAutoExplore(false);
 
         var teamers = TeamManager.instance.TeamerEquipAndProperty;
-        List<MyInt> teamerData = new List<MyInt>();
+        List<FightCharacter> teamerData = new List<FightCharacter>();
         for(int i = 0; i < teamers.characterEquipAndPropertyDatas.Length; i++)
         {
             var id = teamers.characterEquipAndPropertyDatas[i].id;
-            teamerData.Add(new MyInt
+            if(FightManager.instance.GetFightCharacter(id,out var fightCharacter))
             {
-                value = id
-            });
+                teamerData.Add(fightCharacter);
+            } 
         }
-
-        MyInt myInt=new MyInt { value=-1}; 
+         
         for (int i = teamerData.Count; i < 3; i++)
         {
-            teamerData.Add(myInt);
+            teamerData.Add(null);
         }
         fightCharacterReferenceList.InitListData(teamerData);
         up = false;
         animator.SetBool("Up", false);
         operateIcon.transform.localScale = up ? new Vector3(1, -1, 1) : new Vector3(1, 1, 1);
 
-       
+        RefreshFightCardList();
+
+    }
+    void RefreshFightCardList()
+    {
+        var fightCharacters = FightManager.instance.GetAllFightCharacters();
+        fightCharacterCardList.InitListData(fightCharacters);
     }
 }

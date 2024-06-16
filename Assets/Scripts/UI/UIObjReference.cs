@@ -20,8 +20,11 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
 
+    public virtual void ClearData() { }
     public virtual void ClearSelect()
-    { }
+    {
+        
+    }
 
     public virtual void OnEnable()
     {

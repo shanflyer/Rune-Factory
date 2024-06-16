@@ -726,7 +726,7 @@ public class FightController : MonoBehaviour
             if (characterData != null)
             {
                 var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
-                    characterData.objName, characterData.obj.transform, character.instanceId, isActive: false);
+                    characterData.obj.name, characterData.obj.transform, character.instanceId, isActive: false);
                 var transform = characterRuntime.obj as Transform;
                 transform.position = playerPos[index].position;
                 FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime(characterRuntime);

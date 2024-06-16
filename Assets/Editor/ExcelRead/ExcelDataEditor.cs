@@ -110,11 +110,11 @@ public class ExcelDataEditor : MyEditor
                 FieldInfo[] fields = null;
                 if (dataType == null)
                 {
-                    fields = type.GetFields();
+                    fields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic| BindingFlags.Public);
                 }
                 else
                 {
-                    fields = dataType.GetFields();
+                    fields = dataType.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
                 }
 
                 Dictionary<string, FieldInfo> keyFields = new Dictionary<string, FieldInfo>();
