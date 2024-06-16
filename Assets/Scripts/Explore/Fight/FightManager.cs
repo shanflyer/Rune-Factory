@@ -1,6 +1,7 @@
 ﻿using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -1443,12 +1444,29 @@ public class FightManager : Singleton<FightManager>
         List<int> newFightPlayers = new List<int>();
         if (fightCharacters.Count > 1)
         {
+            List<int2> playersPos = new List<int2>();
             for (int i = 1; i < fightPlayers.Count; i++)
             {
                 newFightPlayers.Add(fightPlayers[i]);
+                if(fightCharacters.TryGetValue(fightPlayers[i],out var fightCharacter))
+                {
+                    playersPos.Add(fightCharacter.fightPos);
+                }
             }
             newFightPlayers.Add(fightPlayers[0]);
+            if (fightCharacters.TryGetValue(fightPlayers[0], out var fightCharacter1))
+            {
+                playersPos.Add(fightCharacter1.fightPos);
+            }
             fightPlayers = newFightPlayers;
+
+            for(int i = 0; i < fightPlayers.Count; i++)
+            {
+                if (fightCharacters.TryGetValue(fightPlayers[i], out var fightCharacter))
+                {
+                    fightCharacter.fightPos = playersPos[i];
+                }
+            }
 
             for (int i = 0; i < fightPlayers.Count; i++)
             {
