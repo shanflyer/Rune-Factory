@@ -49,13 +49,19 @@ public class FightCharacter : IReferenceData
     public bool waiteEnd;
     public float WaiteValue()
     {
-        float value = waiteTime / PerRoundTime;
+        float value =1- waiteTime / PerRoundTime;
         return math.clamp(value, 0, 1);
     }
     public void InitRundTime()
     {
         float speed = characterProperty.Speed;
         PerRoundTime = GameCommon.DefaultPerRoundCd * (100.0f / speed);
+    }
+    public void Reset()
+    {
+        fightStatus = FightStatus.准备;
+        waiteTime = 0;
+        waiteEnd = false;
     }
     public void UpData(float timeValue)
     {
@@ -64,13 +70,14 @@ public class FightCharacter : IReferenceData
             if (waiteTime < PerRoundTime)
             {
                 waiteTime += timeValue;
-            }
-            if (waiteTime >= PerRoundTime)
-            {
-                waiteEnd = true;
-                foreach(var skillRuntime in skillRuntimes)
+
+                if (waiteTime >= PerRoundTime)
                 {
-                    skillRuntime.Value.UpData(1);
+                    waiteEnd = true;
+                    foreach (var skillRuntime in skillRuntimes)
+                    {
+                        skillRuntime.Value.UpData(1);
+                    }
                 }
             }
         }
@@ -1111,6 +1118,8 @@ public class FightManager : Singleton<FightManager>
 
     private void ActionSkillEstimate(ActionSkillEstimate actionSkillEstimate)
     {
+        cdTimeMoving = false;
+
         int skillId = actionSkillEstimate.skillId;
         int sourceId = actionSkillEstimate.sourceId;
         int targetId = actionSkillEstimate.targetId;
@@ -1246,11 +1255,8 @@ public class FightManager : Singleton<FightManager>
             return monsterCount;
         }
     }
-
-    public void EndBehavior()
-    {
-        cdTimeMoving = true;
-    }
+   
+    
     public Queue<int> GetReadyFighter()
     {
         Queue<int> nowFightCharacters = new Queue<int>();
@@ -1265,7 +1271,7 @@ public class FightManager : Singleton<FightManager>
     }
 
 
-    private bool cdTimeMoving= false;
+    public  bool cdTimeMoving= false;
 
     public Queue<int> InitFightCharacter()
     {

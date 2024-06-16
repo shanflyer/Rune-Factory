@@ -26,10 +26,15 @@ public class FightCharacterCard : UIObjReference<FightCharacter>
 
     public override Task InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        icon.sprite = data.icon;
-        icon.rectTransform.sizeDelta = GameCommon.SetImageSize(data.icon, new Vector2(32, 32));
-        ActionTips.localScale = Vector2.zero;
-        return base.InitData(t, SelectAction, toggleGroup);
+        var task= base.InitData(t, SelectAction, toggleGroup);
+        if (data != null)
+        {
+            icon.sprite = data.icon;
+            icon.rectTransform.sizeDelta = GameCommon.SetImageSize(data.icon, new Vector2(32, 32));
+            ActionTips.localScale = Vector2.zero;
+        }
+
+        return task;
     }
 
     private void Awake()
@@ -38,6 +43,9 @@ public class FightCharacterCard : UIObjReference<FightCharacter>
 
     private void Update()
     {
-        value.fillAmount = t.WaiteValue();
+        if (data != null)
+        {
+            value.fillAmount = data.WaiteValue();
+        } 
     }
 }

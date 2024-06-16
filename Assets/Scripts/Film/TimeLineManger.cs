@@ -13,18 +13,22 @@ public class TimeLineManger : Singleton<TimeLineManger>
 {
     public override bool NeedUpdata => true;
     struct RuntimePlayable
-    {
+    { 
         public List<Animator> animators;
         public List<List<AnimationParameter>> animationParameters;
         public PlayableDirector playableDirector;
         public Action StopEvent;
+
+        private int source;
         public RuntimePlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData, Action StopAction,int source= -1)
         {
             animators = new List<Animator>();
             animationParameters = new List<List<AnimationParameter>>();
-            this.playableDirector = playableDirector;
+            this.playableDirector = playableDirector; 
             this.StopEvent = StopAction;
-            BindPlayable(playableDirector, myTimeLineData,skillEstimateData,source); 
+            this.source = source;
+            BindPlayable(playableDirector, myTimeLineData,skillEstimateData,source);
+          
         }
         void BindPlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData,
            int source = -1)

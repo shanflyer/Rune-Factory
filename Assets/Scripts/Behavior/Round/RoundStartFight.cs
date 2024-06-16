@@ -11,6 +11,8 @@ public class RoundStartFight : Action
     SharedQueneInt fightCharacters;
     [SerializeField]
     SharedInt nowFightCharacter;
+
+    FightCharacter fightCharacter;
     public override void OnStart()
     {
         if (fightCharacters == null)
@@ -21,18 +23,30 @@ public class RoundStartFight : Action
         {
             nowFightCharacter=(SharedInt)Owner.GetVariable("nowFightCharacter");
         }
-    }
-
+      
+    } 
     public override TaskStatus OnUpdate()
-    {
-        Debug.Log("RoundStartFight");
-        if(fightCharacters.Value.Count>0)
+    {  
+        if(fightCharacter == null||fightCharacter.fightStatus==FightStatus.准备)
         {
-            int characterId = fightCharacters.Value.Dequeue();
-            nowFightCharacter.Value = characterId;
-            FightController.instance.RunFightCharacter(characterId);
-            return TaskStatus.Success;
+            if (fightCharacters.Value.Count > 0)
+            {
+                int characterId = fightCharacters.Value.Dequeue();
+                if (FightManager.instance.GetFightCharacter(characterId,out fightCharacter))
+                { 
+                    nowFightCharacter.Value = characterId;
+                    FightManager.instance.cdTimeMoving = false;
+                    FightController.instance.RunFightCharacter(characterId);
+                } 
+            }
+            else
+            {
+                FightManager.instance.cdTimeMoving = true;
+                return TaskStatus.Failure;
+            }
         }
-        return TaskStatus.Failure;
+
+        return TaskStatus.Running; 
+         
     }
 }

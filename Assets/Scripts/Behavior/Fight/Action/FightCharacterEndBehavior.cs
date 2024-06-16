@@ -8,7 +8,7 @@ public class FightCharacterEndBehavior : Action
    
     public override void OnStart()
     {
-        FightManager.instance.EndBehavior();
+        FightManager.instance.cdTimeMoving=true;
     }
 
     public override TaskStatus OnUpdate()

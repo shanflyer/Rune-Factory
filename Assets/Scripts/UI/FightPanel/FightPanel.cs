@@ -218,14 +218,17 @@ public class FightPanel : GamePanel<IReferenceData>
     }
     void DisplayAutoFight(bool auto)
     {
+        fightCharacterCardParent.gameObject.SetActive(true);
         autoText.text = auto ? "手动" : "自动";
         AutoTips.localScale = auto ? Vector3.one : Vector3.zero;
         FightButton.interactable = !auto;
         EscapeFightButton.interactable = !auto;
         UIManager.instance.CloseGamePanel<WarehousePanel>();
+      
     }
     void DisplayAutoExplore(bool auto)
     {
+        fightCharacterCardParent.gameObject.SetActive(false);
         going = true;
         goingText.text = "前进";
         autoExploreText.text = auto? "手动":"自动";
@@ -233,6 +236,7 @@ public class FightPanel : GamePanel<IReferenceData>
         GoingButton.interactable = !auto;
         RetreatButton.interactable = !auto;
         UIManager.instance.CloseGamePanel<WarehousePanel>();
+        HideFightCardList();
     }
     void StopAutoFight(StopAutoFight stopAutoFight)
     {
@@ -327,11 +331,16 @@ public class FightPanel : GamePanel<IReferenceData>
         animator.SetBool("Up", false);
         operateIcon.transform.localScale = up ? new Vector3(1, -1, 1) : new Vector3(1, 1, 1);
 
-        RefreshFightCardList();
+        //RefreshFightCardList();
 
+    }
+    public void HideFightCardList()
+    {
+        fightCharacterCardParent.gameObject.SetActive(false);
     }
     void RefreshFightCardList()
     {
+        fightCharacterCardParent.gameObject.SetActive(true);
         var fightCharacters = FightManager.instance.GetAllFightCharacters();
         fightCharacterCardList.InitListData(fightCharacters);
     }

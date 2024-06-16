@@ -243,7 +243,7 @@ public class FightController : MonoBehaviour
     private void TryStartAutoBehavior(TryStartAutoBehavior tryStartAutoBehavior)
     {
         if (autoFight)
-        {
+        { 
             controllerBehavior.EnableBehavior();
         }
     }
@@ -838,9 +838,9 @@ public class FightController : MonoBehaviour
         }
     }
     public void RunFightCharacter(int characterId)
-    {
+    { 
         if (fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayer))
-        {
+        { 
             fightPlayer.behaviorTree.EnableBehavior();
         }
         else if (fightMonsterRuntimes.TryGetValue(characterId, out var fightMonster))
@@ -925,7 +925,8 @@ public class FightController : MonoBehaviour
                 TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData
                    , () =>
                    {
-                       fightCharacter.fightStatus = FightStatus.准备;
+                       fightCharacter.Reset();
+                      // fightCharacter.fightStatus = FightStatus.准备;
                    });
                 skillRuntime.Reset();
             }

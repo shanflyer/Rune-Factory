@@ -94,7 +94,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
     private void RefreshCharacter(RefreshCharacter refreshCharacter)
     {
-        if (fightPlayer.character.instanceId == refreshCharacter.id)
+        if (fightPlayer!=null&&fightPlayer.character.instanceId == refreshCharacter.id)
         {
             InitData();
         }
@@ -131,7 +131,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
                 SkillData skillData = playerSkillRuntime.skillData;
                 skillIcon.sprite = skillData.icon;
                 skillName.text = skillData.skillName;
-                skillValue.fillAmount =1- playerSkillRuntime.GetTimeValue();
+                skillValue.fillAmount =playerSkillRuntime.GetTimeValue();
             }
             else
             {
@@ -152,8 +152,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         if (playerSkillRuntime == null)
             return;
         float value = playerSkillRuntime.GetTimeValue();
-        value = Mathf.Clamp(value, 0, 1);
-        value = 1 - value;
+        value = Mathf.Clamp(value, 0, 1); 
         skillValue.fillAmount =value;
         if (value <= 0)
         {

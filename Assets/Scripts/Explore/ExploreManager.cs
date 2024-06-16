@@ -210,8 +210,9 @@ public class ExploreManager : Singleton<ExploreManager>
             fight = true,
             auto = FightController.instance.AutoFight
         };
-        GameActionManager.instance.QueueAction(switchFunctionButton);
-        GameTimerController.instance.DelayAction(100, () =>
+        GameActionManager.instance.QueueAction(switchFunctionButton,true);
+        FightManager.instance.cdTimeMoving = true;
+        GameTimerController.instance.DelayAction(200, () =>
         {
             TryStartAutoBehavior tryStartAutoBehavior = new TryStartAutoBehavior();
             GameActionManager.instance.QueueAction(tryStartAutoBehavior);
