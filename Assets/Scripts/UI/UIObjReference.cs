@@ -34,6 +34,7 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
     public virtual void OnDisable()
     {
         transform.localScale = Vector3.zero;
+        ClearData();
     }
 
     public V FindChildGameObject<V>(string childName)

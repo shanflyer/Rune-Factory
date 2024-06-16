@@ -27,6 +27,10 @@ public class FightCharacter : IReferenceData
     public int2 fightPos;
     public Dictionary<int, SkillRuntime> skillRuntimes { get; set; }
 
+    public virtual bool IsEquipSkill(int skillId)
+    {
+        return false;
+    }
     public virtual bool CheckAction()
     { return false; }
 
@@ -115,6 +119,10 @@ public class FightPlayer : FightCharacter
     public override AttributeType AttributeType => character.AttributeType;
     private int characterSkill, equipSkill;
 
+    public override bool IsEquipSkill(int skillId)
+    {
+        return equipSkill == skillId ;
+    }
     public SkillRuntime GetPlayerEquipSkill()
     {
         return GetSkillRuntime(equipSkill);
@@ -154,7 +162,7 @@ public class FightPlayer : FightCharacter
                 {
                     continue;
                 }
-                if (skillRuntime.instanceId == equipSkill)
+                if (skillRuntime.instanceId == equipSkill&& !FightController.instance.AutoExplore)
                 {
                     continue;
                 }
@@ -168,8 +176,7 @@ public class FightPlayer : FightCharacter
                     skills.Add(skillRuntime.instanceId);
                 }
             }
-        }
-
+        } 
         return results;
     }
 

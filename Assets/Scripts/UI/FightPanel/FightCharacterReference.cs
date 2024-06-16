@@ -39,24 +39,27 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
     [SerializeField]
     GameObject ActiveObj;
 
+    [SerializeField]
+    GameObject Mask;
+
     public override void OnEnable()
     {
         base.OnEnable();
-        GameActionManager.instance.AddListener<RefreshCharacter>(RefreshCharacter);
-        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
-        GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
+       
     }
 
     public override void OnDisable()
     {
-        base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshCharacter>(RefreshCharacter);
-        GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
-        GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
+        base.OnDisable(); 
     }
     private void Awake()
     {
         skillButton.onClick.AddListener(ActionSkill);
+    }
+    void SkillAutoLock(SkillAutoLock skillAutoLock)
+    {
+        autoLock = skillAutoLock.autoLock;
+        Mask.SetActive(!autoLock && !pauseBehavior);
     }
     void NoSelectSkillAction(NoSelectSkillAction noSelectSkillAction)
     { 
@@ -65,11 +68,25 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
     void SkillPauseAction(SkillPauseAction skillPauseAction)
     {
         pauseBehavior = skillPauseAction.pause;
-    }
+        Mask.SetActive(!autoLock && !pauseBehavior);
+    } 
     bool pauseBehavior;
+    bool autoLock;
+    public override void ClearData()
+    {
+        pauseBehavior = false;
+        autoLock = false;
+        Mask.SetActive(false);
+
+        GameActionManager.instance.RemoveListener<RefreshCharacter>(RefreshCharacter);
+        GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
+        GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
+        GameActionManager.instance.RemoveListener<SkillAutoLock>(SkillAutoLock);
+        base.ClearData();
+    }
     void ActionSkill()
     {
-        if (!pauseBehavior&&playerSkillRuntime.GetTimeValue()<=0)
+        if (!autoLock&&!pauseBehavior&&playerSkillRuntime.GetTimeValue()<=0)
         {
             skillButton.interactable = true;
             SelectSkillAction selectSkillAction = new SelectSkillAction
@@ -112,14 +129,21 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         skillName = FindChildGameObject<TextMeshProUGUI>("SkillName");
         skillValue = FindChildGameObject<Image>("SkillValue");
         ActiveObj = FindChildGameObject("Active").gameObject;
+        Mask = FindChildGameObject("Mask").gameObject;
     }
 
     public override async Task InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
-        fightPlayer = t as FightPlayer; 
+        fightPlayer = t as FightPlayer;
+
+        GameActionManager.instance.AddListener<RefreshCharacter>(RefreshCharacter);
+        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
+        GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
+        GameActionManager.instance.AddListener<SkillAutoLock>(SkillAutoLock);
 
         InitData();
+        Mask.gameObject.SetActive(false);
     }
 
     private void RefreshCharacter(RefreshCharacter refreshCharacter)

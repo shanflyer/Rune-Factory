@@ -208,7 +208,7 @@ public class ExploreManager : Singleton<ExploreManager>
         SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
         {
             fight = true,
-            auto = FightController.instance.AutoFight
+            auto = FightController.instance.AutoExplore
         };
         GameActionManager.instance.QueueAction(switchFunctionButton,true);
         FightManager.instance.cdTimeMoving = true;

@@ -7,14 +7,12 @@ using UnityEngine.UI;
 public class FightPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    private Transform AutoTips, FightButtons, ExploreButtons;
+    private Transform AutoTips,  ExploreButtons;
 
     [SerializeField]
     private TextMeshProUGUI MapName, ExploreValue;
 
-    [SerializeField]
-    private Button FightButton, ItemButtom, AutoFightButton, EscapeFightButton, SkillButton;
-
+ 
     [SerializeField]
     private Button GoingButton, UsingButton, AutoButton, RetreatButton, SwitchButton;
     [SerializeField]
@@ -46,16 +44,9 @@ public class FightPanel : GamePanel<IReferenceData>
 
         AutoTips = FindChildGameObject("AutoTips");
         MapName = FindChildGameObject<TextMeshProUGUI>("MapName");
-        ExploreValue = FindChildGameObject<TextMeshProUGUI>("ExploreValue");
-        FightButtons = FindChildGameObject("FightButtons");
+        ExploreValue = FindChildGameObject<TextMeshProUGUI>("ExploreValue"); 
         ExploreButtons = FindChildGameObject("ExploreButtons");
-
-        SkillButton = FindChildGameObject<Button>("SkillButton");
-
-        FightButton = FindChildGameObject<Button>("FightButton"); 
-        ItemButtom = FindChildGameObject<Button>("ItemButton");
-        AutoFightButton = FindChildGameObject<Button>("AutoFightButton");
-        EscapeFightButton = FindChildGameObject<Button>("EscapeFightButton");
+         
 
         GoingButton = FindChildGameObject<Button>("GoingButton");
         UsingButton = FindChildGameObject<Button>("UsingButton");
@@ -63,8 +54,7 @@ public class FightPanel : GamePanel<IReferenceData>
         RetreatButton = FindChildGameObject<Button>("RetreatButton");
         SwitchButton = FindChildGameObject<Button>("SwitchButton");
 
-        goingText = GoingButton.transform.GetComponentInChildren<TextMeshProUGUI>();
-        autoText = AutoFightButton.transform.GetComponentInChildren<TextMeshProUGUI>();
+        goingText = GoingButton.transform.GetComponentInChildren<TextMeshProUGUI>(); 
         autoExploreText=AutoButton.transform.GetComponentInChildren<TextMeshProUGUI>();
 
         fightCharacterParent = FindChildGameObject("CharacterInfoes");
@@ -81,16 +71,11 @@ public class FightPanel : GamePanel<IReferenceData>
     {
         bool fight = switchFunctionButton.fight;
         bool auto = switchFunctionButton.auto;
-        FightButtons.gameObject.SetActive(fight);
-        ExploreButtons.gameObject.SetActive(!fight);
-        if (!fight)
-        {
-            DisplayAutoExplore(auto);
-        }
-        else
-        {
-            DisplayAutoFight(auto);
-        }
+
+        DisplayAutoExplore(auto);
+        fightCharacterCardParent.gameObject.SetActive(fight);
+        GoingButton.interactable = !fight;
+        UsingButton.interactable = !fight;  
     }
 
     private void RefreshFightChapter(RefreshFightChapter refreshFightChapter)
@@ -109,8 +94,7 @@ public class FightPanel : GamePanel<IReferenceData>
     public override void OnDisable()
     {
         GameActionManager.instance.RemoveListener<RefreshFightChapter>(RefreshFightChapter);
-        GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton);
-        GameActionManager.instance.RemoveListener<EndPlayerRound>(EndPlayerRound);
+        GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton); 
         GameActionManager.instance.RemoveListener<StopAutoFight>(StopAutoFight);
         GameActionManager.instance.RemoveListener<RefreshFightCharacterList>(RefreshFightCharacterList);
         base.OnDisable();
@@ -119,8 +103,7 @@ public class FightPanel : GamePanel<IReferenceData>
     public override void OnEnable()
     {
         GameActionManager.instance.AddListener<RefreshFightChapter>(RefreshFightChapter);
-        GameActionManager.instance.AddListener<SwitchFunctionButton>(SwitchFunctionButton);
-        GameActionManager.instance.AddListener<EndPlayerRound>(EndPlayerRound);
+        GameActionManager.instance.AddListener<SwitchFunctionButton>(SwitchFunctionButton); 
         GameActionManager.instance.AddListener<StopAutoFight>(StopAutoFight);
         GameActionManager.instance.AddListener<RefreshFightCharacterList>(RefreshFightCharacterList);
         AutoTips.localScale = Vector3.zero;
@@ -136,27 +119,7 @@ public class FightPanel : GamePanel<IReferenceData>
    // StartRoundFight startRoundFight = new StartRoundFight();
     protected override void Awake()
     {
-        base.Awake();
-       
-
-        EscapeFightButton.onClick.AddListener(EscapeFightAction);
-
-        FightButton.onClick.AddListener(() =>
-        {
-            FightButton.interactable = false;
-            EscapeFightButton.interactable = false;
-            GameActionManager.instance.QueueAction(playerFight);
-        });
-
-        AutoFightButton.onClick.AddListener(() =>
-        {
-            SwitchAutoExplore switchAutoExplore = new SwitchAutoExplore
-            {
-                explore = false,
-                setResult = DisplayAutoFight
-            };
-            GameActionManager.instance.QueueAction(switchAutoExplore, true); 
-        });
+        base.Awake(); 
 
         AutoButton.onClick.AddListener(() =>
         {
@@ -184,20 +147,7 @@ public class FightPanel : GamePanel<IReferenceData>
             };
             PackageManager.instance.ShowPlayerBagUse(true, itemMatchData);
         });
-        ItemButtom.onClick.AddListener(() => {
-            FightController.instance.StopWalk();
-            going = true;
-            goingText.text = "前进";
-            ItemMatchData itemMatchData = new ItemMatchData
-            {
-                itemMatchType = ItemMatchType.ItemType,
-                matchValues = new System.Collections.Generic.HashSet<int>
-                {
-                    (int)ItemType.食物
-                }
-            };
-            PackageManager.instance.ShowPlayerBagUse(true, itemMatchData);
-        });
+        
         SwitchButton.onClick.AddListener(FightManager.instance.RoundPlayer);
         operateButton.onClick.AddListener(() =>
         {
@@ -208,27 +158,9 @@ public class FightPanel : GamePanel<IReferenceData>
 
         fightCharacterReferenceList = new DisplayList<FightCharacterReference, FightCharacter>(fightCharacterReference, fightCharacterParent);
         fightCharacterCardList = new DisplayList<FightCharacterCard, FightCharacter>(fightCharacterCard, fightCharacterCardParent);
-    }
-
-    void EscapeFightAction()
-    {
-        FightButton.interactable = false;
-        EscapeFightButton.interactable = false; 
-        FightManager.instance.EscapeAction();
-    }
-    void DisplayAutoFight(bool auto)
-    {
-        fightCharacterCardParent.gameObject.SetActive(true);
-        autoText.text = auto ? "手动" : "自动";
-        AutoTips.localScale = auto ? Vector3.one : Vector3.zero;
-        FightButton.interactable = !auto;
-        EscapeFightButton.interactable = !auto;
-        UIManager.instance.CloseGamePanel<WarehousePanel>();
-      
-    }
+    } 
     void DisplayAutoExplore(bool auto)
     {
-        fightCharacterCardParent.gameObject.SetActive(false);
         going = true;
         goingText.text = "前进";
         autoExploreText.text = auto? "手动":"自动";
@@ -239,17 +171,11 @@ public class FightPanel : GamePanel<IReferenceData>
         HideFightCardList();
     }
     void StopAutoFight(StopAutoFight stopAutoFight)
-    {
-        ItemButtom.interactable = true;
-        FightButton.interactable = true;
-        EscapeFightButton.interactable = true;
+    { 
         autoText.text =  "自动";
         AutoTips.localScale =  Vector3.zero;
     }
-    void EndPlayerRound(EndPlayerRound endPlayerRound)
-    { 
-        ItemButtom.interactable = true;
-    }
+  
     bool going = true;
     void GoingAction()
     {
@@ -288,10 +214,8 @@ public class FightPanel : GamePanel<IReferenceData>
 
     public override async Task InitData(string dataKey)
     {
-        FightButtons.gameObject.SetActive(false);
         ExploreButtons.gameObject.SetActive(true);
-
-        FightButton.interactable = true; ItemButtom.interactable = true; AutoFightButton.interactable = true; EscapeFightButton.interactable = true; 
+         
         GoingButton.interactable = true; UsingButton.interactable = true; AutoButton.interactable = true; RetreatButton.interactable = true; SwitchButton.interactable = true;
         going = true;
         goingText.text = "前进";

@@ -2283,7 +2283,6 @@ GameObject:
   - component: {fileID: 1132308293}
   - component: {fileID: 1132308294}
   - component: {fileID: 1132308295}
-  - component: {fileID: 1132308296}
   m_Layer: 0
   m_Name: FightController
   m_TagString: Untagged
@@ -2323,7 +2322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerBehavior: {fileID: 1132308295}
-  manualFightBehavior: {fileID: 1132308295}
   singleMaskParent: {fileID: 999165488}
   allMaskParent: {fileID: 2009637958}
   horizontalMaskParent: {fileID: 1606856434}
@@ -2369,46 +2367,6 @@ MonoBehaviour:
       startIndex: 
       variableStartIndex: 
       JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"FightResult","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"FighterCount","IsShared":true,"Int32mValue":-2147483648},{"Type":"SharedQueneInt","Name":"fightCharacters","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"nowFightCharacter","IsShared":true,"Int32mValue":0}]}'
-      fieldSerializationData:
-        typeName: []
-        fieldNameHash: 
-        startIndex: 
-        dataPosition: 
-        unityObjects: []
-        byteData: 
-        byteDataArray: 
-      Version: 1.7.7
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
---- !u!114 &1132308296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1132308292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startWhenEnabled: 0
-  asynchronousLoad: 0
-  pauseWhenDisabled: 1
-  restartWhenComplete: 0
-  logTaskChanges: 0
-  group: 0
-  resetValuesOnRestart: 1
-  externalBehavior: {fileID: 11400000, guid: 7cac98db1634b844bb2b92427cfcd30c, type: 2}
-  mBehaviorSource:
-    behaviorName: "\u624B\u52A8\u6218\u6597"
-    behaviorDescription: 
-    mTaskData:
-      types: []
-      parentIndex: 
-      startIndex: 
-      variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"FightResult","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"nowFightCharacter","IsShared":true,"Int32mValue":0},{"Type":"SharedQueneInt","Name":"fightCharacters","IsShared":true}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
