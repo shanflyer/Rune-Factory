@@ -22,7 +22,7 @@ public struct FightPlayerRuntime
 
     public void InitMonsterSprite(SpriteResourceRenference spriteResourceRenference)
     {
-        spriteResourceRenference.SetSprite(renderer); 
+        spriteResourceRenference.SetSprite(renderer);
     }
 
     public void Recycle()
@@ -31,8 +31,12 @@ public struct FightPlayerRuntime
         material = null;
         playableDirector = null;
         animator = null;
+        if (behaviorTree != null)
+        {
+            behaviorTree.DisableBehavior(false);
+        }
         behaviorTree = null;
-        GameRuntimeObjManager.instance.RecycleRuntimeObj(playerObj); 
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(playerObj);
         playerObj = null;
     }
 
@@ -127,7 +131,6 @@ public struct FightMapRuntime
         runtimeObj = null;
     }
 }
- 
 
 public class FightController : MonoBehaviour
 {
@@ -142,15 +145,16 @@ public class FightController : MonoBehaviour
     private FightMapRuntime fightMapRuntime;
 
     [SerializeField]
-    GameObject singleMaskParent, allMaskParent, horizontalMaskParent, verticalMaskParent;
+    private GameObject singleMaskParent, allMaskParent, horizontalMaskParent, verticalMaskParent;
+
     [SerializeField]
-    SpriteRenderer skillMask;
+    private SpriteRenderer skillMask;
+
     [SerializeField]
     private List<Transform> playerPos = new List<Transform>();
+
     [SerializeField]
     private List<Transform> monsterPos = new List<Transform>();
-
-   
 
     private Dictionary<int, FightPlayerRuntime> fightPlayerRuntimes = new Dictionary<int, FightPlayerRuntime>();
     private Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
@@ -183,6 +187,10 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<TryStartAutoExplore>(TryStartAutoExplore);
         GameActionManager.instance.AddListener<FightCharacterMove>(FightCharacterMove);
         GameActionManager.instance.AddListener<EndPlayerRound>(EndPlayerRound);
+        GameActionManager.instance.AddListener<SelectSkillAction>(SelectSkillAction);
+        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
+        GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
+        GameActionManager.instance.AddListener<ManualSkillAction>(ManualSkillAction);
 
         var behaviorTrees = GetComponents<BehaviorTree>();
         for (int i = 0; i < behaviorTrees.Length; i++)
@@ -212,25 +220,27 @@ public class FightController : MonoBehaviour
         }
         horizontalMaskerDic.Clear();
         var horizontalMaskers = horizontalMaskParent.GetComponentsInChildren<SelectMasker>();
-        for(int i = 0; i < horizontalMaskers.Length; i++)
+        for (int i = 0; i < horizontalMaskers.Length; i++)
         {
-           // horizontalMaskers[i].DisplayOrHide(false);
+            // horizontalMaskers[i].DisplayOrHide(false);
             horizontalMaskerDic.Add(int.Parse(horizontalMaskers[i].transform.parent.name), horizontalMaskers[i]);
         }
         verticalMaskerDic.Clear();
         var verticalMaskers = verticalMaskParent.GetComponentsInChildren<SelectMasker>();
         for (int i = 0; i < verticalMaskers.Length; i++)
         {
-           // verticalMaskers[i].DisplayOrHide(false);
+            // verticalMaskers[i].DisplayOrHide(false);
             verticalMaskerDic.Add(int.Parse(verticalMaskers[i].transform.parent.name), verticalMaskers[i]);
         }
         allSelectMasker = allMaskParent.GetComponentInChildren<SelectMasker>();
         //allSelectMasker.DisplayOrHide(false);
     }
-    void EndPlayerRound(EndPlayerRound endPlayerRound)
+
+    private void EndPlayerRound(EndPlayerRound endPlayerRound)
     {
         _chapterFight = false;
     }
+
     private void FightCharacterMove(FightCharacterMove fightCharacterMove)
     {
         if (fightPlayerRuntimes.TryGetValue(fightCharacterMove.characterId, out var fightPlayerRuntime))
@@ -243,7 +253,7 @@ public class FightController : MonoBehaviour
     private void TryStartAutoBehavior(TryStartAutoBehavior tryStartAutoBehavior)
     {
         if (autoFight)
-        { 
+        {
             controllerBehavior.EnableBehavior();
         }
     }
@@ -257,8 +267,9 @@ public class FightController : MonoBehaviour
         }
     }
 
-    private TargetRangeType nowDisplayTargetRangeType; 
-    public void DisplayMask(TargetRangeType targetRangeType)
+    private TargetRangeType nowDisplayTargetRangeType;
+
+    private void DisplayMask(TargetRangeType targetRangeType)
     {
         nowDisplayTargetRangeType = targetRangeType;
         var allFightMonsters = FightManager.instance.GetAllFightMonster();
@@ -273,6 +284,7 @@ public class FightController : MonoBehaviour
                 verticalMaskParent.SetActive(false);
                 allMaskParent.SetActive(false);
                 break;
+
             case TargetRangeType.单体:
                 singleMaskParent.SetActive(true);
                 horizontalMaskParent.SetActive(false);
@@ -290,13 +302,14 @@ public class FightController : MonoBehaviour
                         selectMasker.SelectAction(false);
                         if (SelectTransform == null)
                         {
-                            SelectTransform= selectMasker.transform.parent;
+                            SelectTransform = selectMasker.transform.parent;
                             selectMasker.SelectAction(true);
                         }
                         selectMasker.transform.parent.localScale = Vector3.one;
                     }
                 }
                 break;
+
             case TargetRangeType.横向:
                 singleMaskParent.SetActive(false);
                 horizontalMaskParent.SetActive(true);
@@ -308,11 +321,11 @@ public class FightController : MonoBehaviour
                     var fightPos = allFightMonsters[i].fightPos;
                     allhorizontalPos.Add(fightPos.y);
                 }
-                foreach(var selectMasker in horizontalMaskerDic)
+                foreach (var selectMasker in horizontalMaskerDic)
                 {
                     selectMasker.Value.SelectAction(false);
                     var active = allhorizontalPos.Contains(selectMasker.Key);
-                    if(active&&SelectTransform == null)
+                    if (active && SelectTransform == null)
                     {
                         SelectTransform = selectMasker.Value.transform.parent;
                         selectMasker.Value.SelectAction(true);
@@ -320,6 +333,7 @@ public class FightController : MonoBehaviour
                     selectMasker.Value.transform.parent.localScale = (active ? Vector3.one : Vector3.zero);
                 }
                 break;
+
             case TargetRangeType.纵向:
                 singleMaskParent.SetActive(false);
                 horizontalMaskParent.SetActive(false);
@@ -340,50 +354,56 @@ public class FightController : MonoBehaviour
                         SelectTransform = selectMasker.Value.transform.parent;
                         selectMasker.Value.SelectAction(true);
                     }
-                    selectMasker.Value.transform.parent.localScale=(active?Vector3.one:Vector3.zero);
+                    selectMasker.Value.transform.parent.localScale = (active ? Vector3.one : Vector3.zero);
                 }
                 break;
+
             case TargetRangeType.全部:
                 SelectTransform = allMaskParent.transform.parent;
                 singleMaskParent.SetActive(false);
                 horizontalMaskParent.SetActive(false);
                 verticalMaskParent.SetActive(false);
                 allMaskParent.SetActive(true);
-                allSelectMasker.transform.parent.localScale =Vector3.one;
+                allSelectMasker.transform.parent.localScale = Vector3.one;
                 allSelectMasker.SelectAction(true);
                 break;
         }
     }
 
-    Transform SelectTransform;
-    int2 selectValue;
-    public void HideSelectMask()
+    private Transform SelectTransform;
+    private int2 selectValue;
+
+    private void HideSelectMask()
     {
         switch (nowDisplayTargetRangeType)
         {
             case TargetRangeType.单体:
                 foreach (var selectMasker in singleSelectMaskerDic)
-                { 
+                {
                     selectMasker.Value.transform.parent.localScale = Vector3.zero;
                 }
                 break;
+
             case TargetRangeType.横向:
                 foreach (var selectMasker in horizontalMaskerDic)
-                { 
+                {
                     selectMasker.Value.transform.parent.localScale = Vector3.zero;
                 }
                 break;
+
             case TargetRangeType.纵向:
                 foreach (var selectMasker in verticalMaskerDic)
-                { 
+                {
                     selectMasker.Value.transform.parent.localScale = Vector3.zero;
                 }
                 break;
+
             case TargetRangeType.全部:
                 allSelectMasker.transform.parent.localScale = Vector3.zero;
                 break;
         }
     }
+
     public void SelectMask(Transform selectMask)
     {
         SelectTransform = selectMask;
@@ -391,7 +411,7 @@ public class FightController : MonoBehaviour
         switch (nowDisplayTargetRangeType)
         {
             case TargetRangeType.单体:
-                foreach(var selectMasker in singleSelectMaskerDic)
+                foreach (var selectMasker in singleSelectMaskerDic)
                 {
                     var active = selectMask == selectMasker.Value.transform.parent;
                     if (active)
@@ -399,6 +419,7 @@ public class FightController : MonoBehaviour
                     selectMasker.Value.SelectAction(active);
                 }
                 break;
+
             case TargetRangeType.横向:
                 foreach (var selectMasker in horizontalMaskerDic)
                 {
@@ -408,6 +429,7 @@ public class FightController : MonoBehaviour
                     selectMasker.Value.SelectAction(active);
                 }
                 break;
+
             case TargetRangeType.纵向:
                 foreach (var selectMasker in verticalMaskerDic)
                 {
@@ -417,6 +439,7 @@ public class FightController : MonoBehaviour
                     selectMasker.Value.SelectAction(active);
                 }
                 break;
+
             case TargetRangeType.全部:
                 allSelectMasker.SelectAction(true);
                 break;
@@ -512,8 +535,11 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.RemoveListener<TryStartAutoBehavior>(TryStartAutoBehavior);
         GameActionManager.instance.RemoveListener<TryStartAutoExplore>(TryStartAutoExplore);
         GameActionManager.instance.RemoveListener<FightCharacterMove>(FightCharacterMove);
-
-      
+        GameActionManager.instance.RemoveListener<EndPlayerRound>(EndPlayerRound);
+        GameActionManager.instance.RemoveListener<SelectSkillAction>(SelectSkillAction);
+        GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
+        GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
+        GameActionManager.instance.RemoveListener<ManualSkillAction>(ManualSkillAction);
 
         int characterMap = CharacterManager.instance.controllerCharacter.mapInstance;
         if (characterMap > 0)
@@ -526,7 +552,7 @@ public class FightController : MonoBehaviour
             {
                 displayMap = CharacterManager.instance.controllerCharacter.mapInstance
             };
-            GameActionManager.instance.QueueAction(displayMap,true);
+            GameActionManager.instance.QueueAction(displayMap, true);
         }
         UIManager.instance.CloseGamePanel<FightPanel>();
         SceneManager.instance.UnloadNowScene(false);
@@ -677,6 +703,8 @@ public class FightController : MonoBehaviour
         Debug.Log("回合结束....");
     }
 
+    private List<int> pauseFightCharacters = new List<int>();
+
     private void OnDestroy()
     {
         instance = null;
@@ -765,7 +793,6 @@ public class FightController : MonoBehaviour
         }
     }*/
 
-
     public async void CreatFightMonster(MonsterData characterData, int instanceId, int2 pos)
     {
         int index = pos.x * 3 + pos.y + 1;
@@ -775,7 +802,6 @@ public class FightController : MonoBehaviour
             var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.MONSTRT.ToString(),
                 "Monster", monsterObj.transform, instanceId, isActive: false);
             var transform = characterRuntime.obj as Transform;
-
 
             transform.position = monsterPos[index].position;
             transform.gameObject.SetActive(true);
@@ -787,6 +813,7 @@ public class FightController : MonoBehaviour
             fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", instanceId);
         }
     }
+
     public GameObject GetParentObj(int instanceId, bool self)
     {
         if (fightPlayerRuntimes.ContainsKey(instanceId))
@@ -812,7 +839,7 @@ public class FightController : MonoBehaviour
             }
         }
     }
-   
+
     public Animator FindFightCharacter(int id)
     {
         if (fightPlayerRuntimes.TryGetValue(id, out var fightPlayer))
@@ -826,7 +853,7 @@ public class FightController : MonoBehaviour
         return null;
     }
 
-   public void StopFightCharacter(int characterId)
+    public void StopFightCharacter(int characterId)
     {
         if (fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayer))
         {
@@ -837,10 +864,11 @@ public class FightController : MonoBehaviour
             fightMonster.behaviorTree.DisableBehavior();
         }
     }
+
     public void RunFightCharacter(int characterId)
-    { 
+    {
         if (fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayer))
-        { 
+        {
             fightPlayer.behaviorTree.EnableBehavior();
         }
         else if (fightMonsterRuntimes.TryGetValue(characterId, out var fightMonster))
@@ -848,11 +876,11 @@ public class FightController : MonoBehaviour
             fightMonster.behaviorTree.EnableBehavior();
         }
     }
-    public Transform GetSkillShowTarget(FightCharacter fightCharacter,TargetRangeType targetRangeType,bool self)
-    {
 
+    public Transform GetSkillShowTarget(FightCharacter fightCharacter, TargetRangeType targetRangeType, bool self)
+    {
         bool isPlayer = false;
-        if(fightCharacter is FightPlayer)
+        if (fightCharacter is FightPlayer)
         {
             if (self)
             {
@@ -867,16 +895,16 @@ public class FightController : MonoBehaviour
             }
         }
 
-        if(isPlayer)
+        if (isPlayer)
         {
             switch (targetRangeType)
             {
                 case TargetRangeType.全部:
-                    return playerPos[0]; 
+                    return playerPos[0];
+
                 default:
-                    return playerPos[fightCharacter.fightPos.x]; 
+                    return playerPos[fightCharacter.fightPos.x];
             }
-           
         }
         else
         {
@@ -889,26 +917,29 @@ public class FightController : MonoBehaviour
                         return selectMasker.transform.parent;
                     }
                     break;
+
                 case TargetRangeType.横向:
-                    if (horizontalMaskerDic.TryGetValue(fightCharacter.fightPos.x, out   selectMasker))
+                    if (horizontalMaskerDic.TryGetValue(fightCharacter.fightPos.x, out selectMasker))
                     {
                         return selectMasker.transform.parent;
                     }
                     break;
+
                 case TargetRangeType.纵向:
-                    if (verticalMaskerDic.TryGetValue(fightCharacter.fightPos.x, out  selectMasker))
+                    if (verticalMaskerDic.TryGetValue(fightCharacter.fightPos.x, out selectMasker))
                     {
                         return selectMasker.transform.parent;
                     }
                     break;
+
                 case TargetRangeType.全部:
                     return allSelectMasker.transform.parent;
             }
         }
         return null;
-             
     }
-    public void StartSkillAction(SkillEstimateData skillEstimateData, int characterId)
+
+    public void StartSkillAction(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false)
     {
         FightPlayerRuntime fightPlayerRuntime;
         if (!fightPlayerRuntimes.TryGetValue(characterId, out fightPlayerRuntime))
@@ -926,7 +957,15 @@ public class FightController : MonoBehaviour
                    , () =>
                    {
                        fightCharacter.Reset();
-                      // fightCharacter.fightStatus = FightStatus.准备;
+                       if (manualSkill)
+                       {
+                           SkillPauseAction skillPauseAction = new SkillPauseAction
+                           {
+                               pause = false,
+                           };
+                           GameActionManager.instance.QueueAction(skillPauseAction, true);
+                       }
+                       // fightCharacter.fightStatus = FightStatus.准备;
                    });
                 skillRuntime.Reset();
             }
@@ -1021,22 +1060,81 @@ public class FightController : MonoBehaviour
         waitTime = 0;
         StopWalk();
         ChapterStepAction chapterStepAction = new ChapterStepAction();
-        GameActionManager.instance.QueueAction(chapterStepAction,true);
+        GameActionManager.instance.QueueAction(chapterStepAction, true);
         _chapterFight = true;
     }
 
+    private SkillRuntime ActionSkillRuntime;
+    private int ActionCharacter;
 
-    SkillRuntime ActionSkillRuntime;
-    int ActionCharacter;
-    public void SelectSkill(SkillRuntime skillRuntime, int ActionCharacter)
+    private void SelectSkillAction(SelectSkillAction selectSkillAction)
     {
-        ActionSkillRuntime = skillRuntime;
-        this.ActionCharacter = ActionCharacter;
-        DisplayMask(skillRuntime.skillData.targetRangeType);
+        ActionSkillRuntime = selectSkillAction.skillRuntime;
+        this.ActionCharacter = selectSkillAction.ActionCharacter;
+        DisplayMask(selectSkillAction.skillRuntime.skillData.targetRangeType);
     }
 
-    public void ActionSkill()
-    { 
+    private void NoSelectSkillAction(NoSelectSkillAction noSelectSkillAction)
+    {
+        ActionSkillRuntime = null;
+        this.ActionCharacter = 0;
+        DisplayMask(TargetRangeType.Null);
+    }
+
+    private void SkillPauseAction(SkillPauseAction skillPauseAction)
+    {
+        if (skillPauseAction.pause)
+        {
+            pauseFightCharacters.Clear();
+            if (AutoFight)
+            {
+                controllerBehavior.DisableBehavior(true);
+            }
+
+            foreach (var fightMonsterRuntime in fightMonsterRuntimes)
+            {
+                var behaviorTree = fightMonsterRuntime.Value.behaviorTree;
+                if (BehaviorManager.instance.IsBehaviorEnabled(behaviorTree))
+                {
+                    behaviorTree.DisableBehavior(true);
+                    pauseFightCharacters.Add(fightMonsterRuntime.Key);
+                }
+            }
+            foreach (var fightPlayerRuntime in fightPlayerRuntimes)
+            {
+                var behaviorTree = fightPlayerRuntime.Value.behaviorTree;
+                if (BehaviorManager.instance.IsBehaviorEnabled(behaviorTree))
+                {
+                    behaviorTree.DisableBehavior(true);
+                    pauseFightCharacters.Add(fightPlayerRuntime.Key);
+                }
+            }
+        }
+        else
+        {
+            skillMask.enabled = false;
+            if (AutoFight)
+            {
+                controllerBehavior.EnableBehavior();
+                controllerBehavior.PauseWhenDisabled = false;
+
+                for (int i = 0; i < pauseFightCharacters.Count; i++)
+                {
+                    if (fightMonsterRuntimes.TryGetValue(pauseFightCharacters[i], out var fightMonsterRuntime))
+                    {
+                        fightMonsterRuntime.behaviorTree.EnableBehavior();
+                    }
+                    else if (fightPlayerRuntimes.TryGetValue(pauseFightCharacters[i], out var fightPlayerRuntime))
+                    {
+                        fightPlayerRuntime.behaviorTree.EnableBehavior();
+                    }
+                }
+            }
+        }
+    }
+
+    private void ManualSkillAction(ManualSkillAction manualSkillAction)
+    {
         SkillEstimateData skillEstimateData = new SkillEstimateData
         {
             skillId = ActionSkillRuntime.instanceId,
@@ -1044,7 +1142,7 @@ public class FightController : MonoBehaviour
             target = SelectTransform,
             targets = FightManager.instance.GetTargets(selectValue, ActionSkillRuntime.skillData.targetRangeType),
         };
-        StartSkillAction(skillEstimateData, ActionCharacter);
+        StartSkillAction(skillEstimateData, ActionCharacter, true);
         HideSelectMask();
     }
 }

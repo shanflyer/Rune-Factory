@@ -17,11 +17,19 @@ public class SkillActionPanel :GamePanel<IReferenceData>
         base.Awake();
         ActionButton.onClick.AddListener(() => 
         {
-            FightController.instance.ActionSkill();
+            ManualSkillAction manualSkillAction = new ManualSkillAction();
+            GameActionManager.instance.QueueAction(manualSkillAction, true); 
             Close();
         });
         CancleButton.onClick.AddListener(() => 
         {
+            SkillPauseAction skillPauseAction = new SkillPauseAction
+            {
+                pause = false,
+            };
+            GameActionManager.instance.QueueAction(skillPauseAction, true);
+            NoSelectSkillAction noSelectSkillAction = new NoSelectSkillAction();
+            GameActionManager.instance.QueueAction(noSelectSkillAction, true);
             Close();
         });
     }

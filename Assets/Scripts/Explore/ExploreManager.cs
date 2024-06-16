@@ -248,6 +248,7 @@ public class ExploreManager : Singleton<ExploreManager>
 
     public void FightFail()
     {
+        FightManager.instance.cdTimeMoving = false;
         ExploreFailed();
     }
     public void SetChapterFindItem(List<int2> items)
@@ -260,6 +261,8 @@ public class ExploreManager : Singleton<ExploreManager>
     }
     public bool StepFightSucceed()
     {
+        FightManager.instance.cdTimeMoving = false;
+
         nowStep++;
         float value = nowStep / (float)nowFightMapData.monsterDeploys.Count;
         float itemValue = fightChapter.findItems.Count / (float)fightChapter.haveItems.Length;

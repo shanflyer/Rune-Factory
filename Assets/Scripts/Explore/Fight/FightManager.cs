@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BehaviorDesigner.Runtime;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -377,6 +378,7 @@ public class FightManager : Singleton<FightManager>
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
         GameActionManager.instance.AddListener<AllCharacterTryAutoFight>(AllCharacterTryAutoFight);
         GameActionManager.instance.AddListener<StopAllCharacterAutoFight>(StopAllCharacterAutoFight);
+        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
 
         fightResult = new FightResult
         {
@@ -416,6 +418,11 @@ public class FightManager : Singleton<FightManager>
         GetItemIndexs.Clear();
         fightResult.fighterResults.Clear();
         fightResult.getItems.Clear();
+    }
+
+    void SkillPauseAction(SkillPauseAction skillPauseAction)
+    {
+        pauseBehavior = skillPauseAction.pause;
     }
 
     protected override void Clear()
@@ -635,6 +642,7 @@ public class FightManager : Singleton<FightManager>
         GameActionManager.instance.QueueAction(refreshFightCharactersInfo);
     }
 
+    
     public async void CreatFightPlayer()
     {
         /*
@@ -1272,6 +1280,7 @@ public class FightManager : Singleton<FightManager>
 
 
     public  bool cdTimeMoving= false;
+    bool pauseBehavior = false;
 
     public Queue<int> InitFightCharacter()
     {
@@ -1554,7 +1563,7 @@ public class FightManager : Singleton<FightManager>
     protected override void UpData()
     {
         base.UpData();
-        if (cdTimeMoving)
+        if (cdTimeMoving&&!pauseBehavior)
         {
             foreach (var fightCharacter in fightCharacters)
             {

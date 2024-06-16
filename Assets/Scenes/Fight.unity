@@ -2354,7 +2354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startWhenEnabled: 0
   asynchronousLoad: 0
-  pauseWhenDisabled: 0
+  pauseWhenDisabled: 1
   restartWhenComplete: 1
   logTaskChanges: 0
   group: 0
@@ -2368,7 +2368,7 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"FightResult","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"nowFightCharacter","IsShared":true,"Int32mValue":0},{"Type":"SharedQueneInt","Name":"fightCharacters","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedAnimationCurve","Name":"\u68c0\u67e5\u6218\u6597\u7ed3\u679c\u662f\u5426\u6218\u6597\u7ed3\u675f","IsShared":true,"AnimationCurvemValue":{"Keys":[[0,0,0,0],[1,1,0,0]],"PreWrapMode":"ClampForever","PostWrapMode":"ClampForever"}}]}'
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":"FightResult","IsShared":true,"BooleanmValue":false},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"FighterCount","IsShared":true,"Int32mValue":-2147483648},{"Type":"SharedQueneInt","Name":"fightCharacters","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"nowFightCharacter","IsShared":true,"Int32mValue":0}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -2394,7 +2394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startWhenEnabled: 0
   asynchronousLoad: 0
-  pauseWhenDisabled: 0
+  pauseWhenDisabled: 1
   restartWhenComplete: 0
   logTaskChanges: 0
   group: 0

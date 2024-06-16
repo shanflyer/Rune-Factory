@@ -36,26 +36,55 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
     Image skillValue;
     [SerializeField]
     Button skillButton;
+    [SerializeField]
+    GameObject ActiveObj;
 
     public override void OnEnable()
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshCharacter>(RefreshCharacter);
+        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
+        GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
         GameActionManager.instance.RemoveListener<RefreshCharacter>(RefreshCharacter);
+        GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
+        GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
     }
     private void Awake()
     {
         skillButton.onClick.AddListener(ActionSkill);
     }
-
+    void NoSelectSkillAction(NoSelectSkillAction noSelectSkillAction)
+    { 
+        skillButton.interactable = true;
+    }
+    void SkillPauseAction(SkillPauseAction skillPauseAction)
+    {
+        pauseBehavior = skillPauseAction.pause;
+    }
+    bool pauseBehavior;
     void ActionSkill()
     {
-        FightController.instance.SelectSkill(playerSkillRuntime,fightPlayer.instanceId);
+        if (!pauseBehavior&&playerSkillRuntime.GetTimeValue()<=0)
+        {
+            skillButton.interactable = true;
+            SelectSkillAction selectSkillAction = new SelectSkillAction
+            {
+                skillRuntime = playerSkillRuntime,
+                ActionCharacter = fightPlayer.instanceId,
+            };
+            GameActionManager.instance.QueueAction(selectSkillAction,true);
+            SkillPauseAction skillPauseAction = new SkillPauseAction
+            {
+                pause = true,
+            };
+            GameActionManager.instance.QueueAction(skillPauseAction, true);
+        }
+       
     }
     public override void SetPanelUISerializeObj()
     {
@@ -82,6 +111,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         skillButton = FindChildGameObject<Button>("SkillPanel");
         skillName = FindChildGameObject<TextMeshProUGUI>("SkillName");
         skillValue = FindChildGameObject<Image>("SkillValue");
+        ActiveObj = FindChildGameObject("Active").gameObject;
     }
 
     public override async Task InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
@@ -154,13 +184,15 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         float value = playerSkillRuntime.GetTimeValue();
         value = Mathf.Clamp(value, 0, 1); 
         skillValue.fillAmount =value;
+       
         if (value <= 0)
         {
-            skillButton.interactable = true;
+            ActiveObj.gameObject.SetActive(true);
         }
         else
         {
-            skillButton.interactable = false;
+            skillButton.interactable = true;
+            ActiveObj.gameObject.SetActive(false);
         }
     }
 }
