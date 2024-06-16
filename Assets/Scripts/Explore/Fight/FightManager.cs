@@ -923,6 +923,15 @@ public class FightManager : Singleton<FightManager>
                                 {
                                     value += hurt;
                                 }
+                                if(fightCharacter is FightPlayer)
+                                {
+                                    var fightPos = fightCharacter.fightPos;
+                                    if (fightPos.x == 0)
+                                    {
+                                        value *= 3;
+                                    }
+                                }
+
                                 targetHurtValueDic[targetId] = value;
                                 if (skillEstimateData.target == null)
                                 {
