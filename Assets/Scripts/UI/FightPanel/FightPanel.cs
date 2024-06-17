@@ -67,15 +67,15 @@ public class FightPanel : GamePanel<IReferenceData>
         fightCharacterCardParent = FindChildGameObject("FightCardParent");
     }
 
+    bool fight = false;
+    bool auto = false;
     private void SwitchFunctionButton(SwitchFunctionButton switchFunctionButton)
     {
-        bool fight = switchFunctionButton.fight;
-        bool auto = switchFunctionButton.auto;
+        fight = switchFunctionButton.fight;
+        auto = switchFunctionButton.auto;
 
-        DisplayAutoExplore(auto);
-        fightCharacterCardParent.gameObject.SetActive(fight);
-        GoingButton.interactable = !fight;
-        UsingButton.interactable = !fight;  
+        DisplayAutoExplore(auto,fight);
+        fightCharacterCardParent.gameObject.SetActive(fight); 
     }
 
     private void RefreshFightChapter(RefreshFightChapter refreshFightChapter)
@@ -89,8 +89,13 @@ public class FightPanel : GamePanel<IReferenceData>
             }
         }
     }
+    public override void Close()
+    {
+        fight = false;
+        auto = false;
+        base.Close();
+    }
 
-    
     public override void OnDisable()
     {
         GameActionManager.instance.RemoveListener<RefreshFightChapter>(RefreshFightChapter);
@@ -126,7 +131,11 @@ public class FightPanel : GamePanel<IReferenceData>
             SwitchAutoExplore switchAutoExplore = new SwitchAutoExplore
             {
                 explore = true,
-                setResult= DisplayAutoExplore
+                setResult=(bool value)=> 
+                {
+                    auto = value;
+                    DisplayAutoExplore(value, fight);
+                }
             };
             GameActionManager.instance.QueueAction(switchAutoExplore,true); 
         });
@@ -159,16 +168,27 @@ public class FightPanel : GamePanel<IReferenceData>
         fightCharacterReferenceList = new DisplayList<FightCharacterReference, FightCharacter>(fightCharacterReference, fightCharacterParent);
         fightCharacterCardList = new DisplayList<FightCharacterCard, FightCharacter>(fightCharacterCard, fightCharacterCardParent);
     } 
-    void DisplayAutoExplore(bool auto)
+    void DisplayAutoExplore(bool auto,bool isfight)
     {
         going = true;
         goingText.text = "前进";
         autoExploreText.text = auto? "手动":"自动";
         AutoTips.localScale = auto ? Vector3.one:Vector3.zero;
-        GoingButton.interactable = !auto;
-        RetreatButton.interactable = !auto;
-        UIManager.instance.CloseGamePanel<WarehousePanel>();
-        HideFightCardList();
+        if (isfight)
+        {
+            GoingButton.interactable = false;
+            RetreatButton.interactable = false;
+            UsingButton.interactable = false;
+            fightCharacterCardParent.gameObject.SetActive(true);
+        }
+        else
+        {
+            GoingButton.interactable = !auto;
+            RetreatButton.interactable = !auto;
+            fightCharacterCardParent.gameObject.SetActive(false);
+        }
+        
+        UIManager.instance.CloseGamePanel<WarehousePanel>(); 
     }
     void StopAutoFight(StopAutoFight stopAutoFight)
     { 
@@ -223,6 +243,8 @@ public class FightPanel : GamePanel<IReferenceData>
         animator.SetBool("Up", up);
         operateIcon.transform.localScale = up ? new Vector3(1, -1, 1) : new Vector3(1, 1, 1);
 
+        fight = false;
+        auto = false;
 
         dataId = int.Parse(dataKey);
         FightChapter fightChapter = ExploreManager.instance.GetFigehtChapter(dataId);
@@ -233,7 +255,7 @@ public class FightPanel : GamePanel<IReferenceData>
             ExploreValue.text = $"{fightChapter.completeValue}%";
         }
         FightManager.instance.RefreshFightPlayerInfo();
-        DisplayAutoExplore(false);
+        DisplayAutoExplore(false,false);
 
         var teamers = TeamManager.instance.TeamerEquipAndProperty;
         List<FightCharacter> teamerData = new List<FightCharacter>();
@@ -258,10 +280,7 @@ public class FightPanel : GamePanel<IReferenceData>
         //RefreshFightCardList();
 
     }
-    public void HideFightCardList()
-    {
-        fightCharacterCardParent.gameObject.SetActive(false);
-    }
+ 
     void RefreshFightCardList()
     {
         fightCharacterCardParent.gameObject.SetActive(true);
