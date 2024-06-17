@@ -61,5 +61,16 @@ public class SkillRuntime
 
 public class BuffRuntime
 {
-
+    public int instanceId;
+    public BuffData buffData;
+    private int nowActionIndex;
+    public BuffRuntime(int instanceId, BuffData buffData)
+    {
+        this.instanceId = instanceId;
+        this.buffData = buffData; 
+    }
+    public void BuffAction()
+    {
+        nowActionIndex++;
+    }
 }

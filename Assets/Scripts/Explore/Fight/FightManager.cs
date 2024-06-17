@@ -1,6 +1,7 @@
 ﻿using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class FightManager : Singleton<FightManager>
 
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
         GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
+        GameActionManager.instance.AddListener<NextActionSkillEstimate>(NextActionSkillEstimate);
 
         deathTimeLineData = await GameSourceManager.instance.GetScriptableObject<MyTimeLineData>(DataPath.MonsterDeathPath);
         GameActionManager.instance.AddListener<CharacterDeath>(CharacterDeath);
@@ -522,6 +524,35 @@ public class FightManager : Singleton<FightManager>
         return hurt;
     }
 
+   void SetNextTarget(SkillData skillData,FightCharacter fightCharacter,ref SkillEstimateData skillEstimateData)
+    {
+        if (skillData.haveNextAction)
+        {
+            skillEstimateData.nextTargets = new List<int>();
+            if (skillData.holdTarget)
+            {
+                skillEstimateData.nextTargets.AddRange(skillEstimateData.targets);
+                skillEstimateData.nextTarget = skillEstimateData.target;
+            }
+            else
+            {
+                skillEstimateData.nextTargets = GetTarget(skillData.nextTargetType, fightCharacter);
+                switch (skillData.nextTargetType)
+                {
+                    case TargetType.敌方:
+
+                        skillEstimateData.nextTarget = FightController.instance.GetSkillShowTarget(fightCharacter, TargetRangeType.全部, false);
+                        break;
+                    case TargetType.我方:
+                        skillEstimateData.nextTarget = FightController.instance.GetSkillShowTarget(fightCharacter, TargetRangeType.全部, true);
+                        break;
+                    case TargetType.自身:
+                        skillEstimateData.nextTarget = FightController.instance.GetSkillShowTarget(fightCharacter, TargetRangeType.单体, true);
+                        break;
+                }
+            }
+        }
+    }
     public List<SkillEstimateData> EstimateSkills(int skillId, int characterId)
     {
         List<SkillEstimateData> skillEstimateDatas = new List<SkillEstimateData>();
@@ -598,9 +629,7 @@ public class FightManager : Singleton<FightManager>
                                 _hurtValue = math.clamp(_hurtValue, 0, 1);
                                 skillEstimateData.utlilityValue += _hurtValue;
                             }
-
-                           
-
+                            SetNextTarget(skillData, fightCharacter, ref skillEstimateData);
                             skillEstimateDatas[i] = skillEstimateData;
                         }
                         break;
@@ -624,6 +653,7 @@ public class FightManager : Singleton<FightManager>
                             }
                             skillEstimateData.utlilityValue = cureValue;
                             skillEstimateDatas[i] = skillEstimateData;
+                            SetNextTarget(skillData, fightCharacter, ref skillEstimateData);
                         }
                         break;
                 }
@@ -631,7 +661,68 @@ public class FightManager : Singleton<FightManager>
         }
         return skillEstimateDatas;
     }
+    private List<int> GetTarget(TargetType targetType, FightCharacter fightCharacter)
+    {
+        List<int> finalTargets = new List<int>(); 
+        switch (targetType)
+        {
+            case TargetType.敌方:
 
+                if (fightPlayers.Contains(fightCharacter.instanceId))
+                {
+                    for (int i = 0; i < fightMonsters.Count; i++)
+                    {
+                        var targetCharacter = fightCharacters[fightMonsters[i]];
+                        if (targetCharacter.characterProperty.HP > 0)
+                        {
+                            finalTargets.Add(targetCharacter.instanceId);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < fightPlayers.Count; i++)
+                    {
+                        var targetCharacter = fightCharacters[fightPlayers[i]];
+                        if (targetCharacter.characterProperty.HP > 0)
+                        {
+                            finalTargets.Add(targetCharacter.instanceId);
+                        }
+                    }
+                }
+                break;
+
+            case TargetType.我方:
+                if (fightMonsters.Contains(fightCharacter.instanceId))
+                {
+                    for (int i = 0; i < fightMonsters.Count; i++)
+                    {
+                        var targetCharacter = fightCharacters[fightMonsters[i]];
+                        if (targetCharacter.characterProperty.HP > 0)
+                        {
+                            finalTargets.Add(targetCharacter.instanceId);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < fightPlayers.Count; i++)
+                    {
+                        var targetCharacter = fightCharacters[fightPlayers[i]];
+                        if (targetCharacter.characterProperty.HP > 0)
+                        {
+                            finalTargets.Add(targetCharacter.instanceId);
+                        }
+                    }
+                }
+                break;
+
+            case TargetType.自身:
+                finalTargets.Add(fightCharacter.instanceId);
+                return finalTargets;
+        } 
+        return finalTargets;
+    }
     private List<List<int>> GetTarget(TargetType targetType, FightCharacter fightCharacter, TargetRangeType targetRangeType)
     {
         List<List<int>> finalTargets = new List<List<int>>();
@@ -792,7 +883,83 @@ public class FightManager : Singleton<FightManager>
         }
         return result;
     }
+    private void NextActionSkillEstimate(NextActionSkillEstimate nextActionSkillEstimate)
+    {
+        int skillId = nextActionSkillEstimate.skillId;
+        int sourceId = nextActionSkillEstimate.sourceId;
+        FightCharacter source = fightCharacters[sourceId];
+        var skillRuntime = source.skillRuntimes[skillId];
+        var skillData = skillRuntime.skillData;
+        List<FightCharacter> targets = new List<FightCharacter>();
+        for(int i = 0; i < nextActionSkillEstimate.targets.Count; i++)
+        { 
+            SkillAction(skillData, source, fightCharacters[nextActionSkillEstimate.targets[i]], nextActionSkillEstimate.displayHurt);
+        }
+       
+    }
 
+    void SkillAction(SkillData skillData,FightCharacter source,FightCharacter target,bool isDisplayHurt)
+    {
+        switch (skillData.fightType)
+        {
+            case FightType.攻击:
+
+                int hurt = 0;
+                HurtResultType hurtResultType;
+                if (skillData.skillActionType == SkillActionType.属性值)
+                {
+                    hurt = HurtValue(source.characterProperty.AT, target.characterProperty.DF,
+                    source.characterProperty.Lucky, target.characterProperty.Lucky, out hurtResultType);
+                    hurt = (int)(hurt * GetAttributeTypeValue(source.AttackAttributeType, target.DefenceAttributeType));
+                    hurt = (int)(hurt * skillData.actionValue * 0.01f);
+                }
+                else
+                {
+                    hurt = skillData.actionValue;
+                    hurtResultType = GetHurtResultType(source.characterProperty.Lucky, target.characterProperty.Lucky);
+                }
+
+                int hp = target.characterProperty.HP - hurt;
+                hp = math.clamp(hp, 0, hp);
+                SetCharacterProperty setCharacterProperty = new SetCharacterProperty
+                {
+                    characterId = target.instanceId,
+                    propertyType = CharacterPropertyType.生命,
+                    Value = hp
+                };
+                GameActionManager.instance.QueueAction(setCharacterProperty, true);
+                if (isDisplayHurt)
+                {
+                    DisplayHurt displayHurt = new DisplayHurt
+                    {
+                        targetId = target.instanceId,
+                        hurtValue = hurt,
+                        hurtResultType = hurtResultType
+                    };
+                    GameActionManager.instance.QueueAction(displayHurt, true);
+                }
+                if (hp <= 0)
+                {
+                    CharacterDeath characterDeath = new CharacterDeath
+                    {
+                        characterId = target.instanceId,
+                    };
+                    GameActionManager.instance.QueueAction(characterDeath);
+                }
+
+                break;
+        }
+        RefreshFightCharacterInfo refreshFightCharacterInfo = new RefreshFightCharacterInfo
+        {
+            characterId = target.instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshFightCharacterInfo, true);
+        RefreshFightCharacterInfo refreshFightCharacterInfo1 = new RefreshFightCharacterInfo
+        {
+            characterId = source.instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshFightCharacterInfo1, true);
+    }
     private void ActionSkillEstimate(ActionSkillEstimate actionSkillEstimate)
     {
         cdTimeMoving = false;
@@ -814,66 +981,8 @@ public class FightManager : Singleton<FightManager>
             changeValue = -skillData.cost
         };
         GameActionManager.instance.QueueAction(changeCharacterProperty, true);
+        SkillAction(skillData, source, target, actionSkillEstimate.displayHurt);
 
-        switch (skillData.fightType)
-        {
-            case FightType.攻击:
-
-                int hurt = 0;
-                HurtResultType hurtResultType;
-                if (skillData.skillActionType == SkillActionType.属性值)
-                {
-                    hurt = HurtValue(source.characterProperty.AT, target.characterProperty.DF,
-                    source.characterProperty.Lucky, target.characterProperty.Lucky, out hurtResultType);
-                    hurt = (int)(hurt * GetAttributeTypeValue(source.AttackAttributeType, target.DefenceAttributeType));
-                    hurt =(int)(hurt * skillData.actionValue * 0.01f);
-                }
-                else
-                {
-                    hurt = skillData.actionValue;
-                    hurtResultType = GetHurtResultType(source.characterProperty.Lucky, target.characterProperty.Lucky);
-                }
-
-                int hp = target.characterProperty.HP - hurt;
-                hp = math.clamp(hp, 0, hp);
-                SetCharacterProperty setCharacterProperty = new SetCharacterProperty
-                {
-                    characterId = target.instanceId,
-                    propertyType = CharacterPropertyType.生命,
-                    Value = hp
-                };
-                GameActionManager.instance.QueueAction(setCharacterProperty, true);
-                if (actionSkillEstimate.displayHurt)
-                {
-                    DisplayHurt displayHurt = new DisplayHurt
-                    {
-                        targetId = targetId,
-                        hurtValue = hurt,
-                        hurtResultType = hurtResultType
-                    };
-                    GameActionManager.instance.QueueAction(displayHurt, true);
-                }
-                if (hp <= 0)
-                {
-                    CharacterDeath characterDeath = new CharacterDeath
-                    {
-                        characterId = targetId
-                    };
-                    GameActionManager.instance.QueueAction(characterDeath);
-                }
-
-                break;
-        }
-        RefreshFightCharacterInfo refreshFightCharacterInfo = new RefreshFightCharacterInfo
-        {
-            characterId = target.instanceId
-        };
-        GameActionManager.instance.QueueAction(refreshFightCharacterInfo, true);
-        RefreshFightCharacterInfo refreshFightCharacterInfo1 = new RefreshFightCharacterInfo
-        {
-            characterId = source.instanceId
-        };
-        GameActionManager.instance.QueueAction(refreshFightCharacterInfo1, true);
     }
 
     private FightRoundType nowFightRound;

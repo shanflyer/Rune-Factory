@@ -1,22 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
  
+public enum BuffActiveType
+{
+    属性改变,定身,伤害,回复
+}
 [CreateAssetMenu(menuName = "Data/Buff数据")]
 public class BuffData : ScriptableObject, IGameData
 {
     public int id;
     public string buffName;
-    public int cd;
-    
-    public int cost;
+    public int lifeTime;
+    public List<int> coverBuffs = new List<int>();
+    public BuffActiveType buffActiveType;
+    public int2 actionValue;
     public Sprite icon;
     [NonSerialized] 
     private string iconName; 
-    [NonSerialized]
-    [HideInInspector]
-    public string myTimeLineDataName;
+    [NonSerialized] 
+    private string buffObjName;
+    public GameObject buffObj;
+
+    private string actionTimeLineDataName;
     public MyTimeLineData myTimeLineData;
     public override string ToString()
     {
@@ -35,7 +44,8 @@ public class BuffData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-        myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
+        myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{actionTimeLineDataName}");
+        buffObj = Resources.Load<GameObject>($"Prefabs/Effect/{buffObjName}");
         if (allSprites.Count == 0)
         {
             var sprites = Resources.LoadAll<Sprite>($"Icon/{iconName}");

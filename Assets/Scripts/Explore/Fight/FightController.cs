@@ -899,7 +899,7 @@ public class FightController : MonoBehaviour
         return null;
     }
 
-    public void StartSkillAction(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false)
+    public async void StartSkillAction(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false, bool _isEquipSkill = false,bool overrideEquipSkill=false)
     {
         FightPlayerRuntime fightPlayerRuntime;
         if (!fightPlayerRuntimes.TryGetValue(characterId, out fightPlayerRuntime))
@@ -910,44 +910,85 @@ public class FightController : MonoBehaviour
         if (FightManager.instance.GetFightCharacter(characterId, out fightCharacter))
         {
             fightCharacter.fightStatus = FightStatus.行动;
-            if (fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId, out var skillRuntime))
+            fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId, out var skillRuntime);
+            SkillData skillData;
+            if (skillRuntime == null)
             {
-                bool isEquipSkill = fightCharacter.IsEquipSkill(skillEstimateData.skillId);
+                skillData = skillRuntime.skillData;
+            }
+            else
+            {
+                skillData =await GameDataManager.instance.GetAsyncData<SkillData>(skillEstimateData.skillId);
+            }
+
+
+            bool isEquipSkill = _isEquipSkill;
+            if (!overrideEquipSkill)
+            {
+                isEquipSkill = fightCharacter.IsEquipSkill(skillEstimateData.skillId);
+            }
+            if (isEquipSkill)
+            {
+                skillMask.enabled = true;
+                SkillAutoLock skillAutoLock = new SkillAutoLock
+                {
+                    autoLock = true,
+                };
+                GameActionManager.instance.QueueAction(skillAutoLock, true);
+            }
+
+            void EndSkillShow()
+            {
                 if (isEquipSkill)
                 {
-                    skillMask.enabled = true;
                     SkillAutoLock skillAutoLock = new SkillAutoLock
                     {
-                        autoLock = true,
+                        autoLock = false,
                     };
                     GameActionManager.instance.QueueAction(skillAutoLock, true);
                 }
-                var skillData = skillRuntime.skillData;
-                TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData
-                   , () =>
-                   {
-                       if (isEquipSkill)
-                       {
-                           SkillAutoLock skillAutoLock = new SkillAutoLock
-                           {
-                               autoLock = false,
-                           };
-                           GameActionManager.instance.QueueAction(skillAutoLock, true);
-                       }
-                       fightCharacter.Reset();
-                       skillMask.enabled = false;
-                       if (manualSkill)
-                       {
-                           SkillPauseAction skillPauseAction = new SkillPauseAction
-                           {
-                               pause = false,
-                           };
-                           GameActionManager.instance.QueueAction(skillPauseAction, true);
-                       }
-                       // fightCharacter.fightStatus = FightStatus.准备;
-                   });
-                skillRuntime.Reset();
+                fightCharacter.Reset();
+                skillMask.enabled = false;
+                if (manualSkill)
+                {
+                    SkillPauseAction skillPauseAction = new SkillPauseAction
+                    {
+                        pause = false,
+                    };
+                    GameActionManager.instance.QueueAction(skillPauseAction, true);
+                }
             }
+
+            TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData
+              , () =>
+              {
+
+                  if (skillData.haveNextAction)
+                  {
+                      if (skillData.nextTimeLineData != null)
+                      {
+                         
+                      }
+                      else
+                      {
+                          NextActionSkillEstimate nextActionSkillEstimate = new NextActionSkillEstimate
+                          {
+                              displayHurt = true,
+                              skillId = skillData.id,
+                              sourceId = fightCharacter.instanceId,
+                              targets = skillEstimateData.nextTargets
+                          };
+                          GameActionManager.instance.QueueAction(nextActionSkillEstimate, true);
+                      }
+                  }
+                  else
+                  {
+                      EndSkillShow();
+                  }                  
+                  // fightCharacter.fightStatus = FightStatus.准备;
+              });
+            if (skillRuntime != null)
+                skillRuntime.Reset();
         }
     }
 

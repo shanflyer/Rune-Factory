@@ -22,15 +22,20 @@ public class SkillData : ScriptableObject, IGameData
     public FightType fightType;
     public SkillActionType skillActionType;  
     public int actionValue;
+
+    public bool haveNextAction;
+    public bool holdTarget;
+    public TargetType nextTargetType;
+    public FightType nextFightType;
+    public SkillActionType nextSkillActionType;
+    public int nextActionValue;
+    private string nextTimeLineDataName;
+    public MyTimeLineData nextTimeLineData;
+
     public int cost;
-    public Sprite icon;
-    [NonSerialized]
-    [HideInInspector]
-    public string iconName;
-    // public int continueSkill;
-    [NonSerialized]
-    [HideInInspector]
-    public string myTimeLineDataName;
+    public Sprite icon; 
+    private string iconName; 
+    private string myTimeLineDataName;
     public MyTimeLineData myTimeLineData;
     public override string ToString()
     {
@@ -50,6 +55,7 @@ public class SkillData : ScriptableObject, IGameData
     public void SetReferenceData()
     {
         myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
+        nextTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{nextTimeLineDataName}");
         if (allSprites.Count == 0)
         {
             var sprites = Resources.LoadAll<Sprite>($"Icon/{iconName}");

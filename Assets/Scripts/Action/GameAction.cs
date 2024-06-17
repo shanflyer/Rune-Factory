@@ -568,7 +568,27 @@ public struct DisplayHurt : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct NextActionSkillEstimate : GameAction
+{
+    public int skillId;
+    public int sourceId; 
+    public bool displayHurt;
+    public List<int> targets;
 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 5)
+        {
+            skillId = int.Parse(parameters[0].value);
+            sourceId = int.Parse(parameters[1].value); 
+            displayHurt = bool.Parse(parameters[2].value);
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct ActionSkillEstimate : GameAction
 {
     public int skillId;

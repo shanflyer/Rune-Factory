@@ -27,7 +27,7 @@ public class EstimateSkillBehavior : Action
         if (fightCharacter==null|| fightCharacter.IsNull())
             fightCharacter = (SharedInt)Owner.GetVariable("fightCharacter");
 
-        selectSkill = default(SkillEstimateData);
+        selectSkill = null;
     }
 
     public override float GetUtility()
@@ -69,7 +69,7 @@ public class EstimateSkillBehavior : Action
     }
     public override TaskStatus OnUpdate()
 	{
-        if (selectSkill.targets==null||selectSkill.targets.Count == 0)
+        if (selectSkill==null||selectSkill.targets==null||selectSkill.targets.Count == 0)
         {
             return TaskStatus.Failure;
         }
