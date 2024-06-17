@@ -422,6 +422,8 @@ public partial class Character
                 equip.shoes =0;
                 break;
         }
+        attackAttributeType = AttributeType.ÎÞ;
+        defenceAttributeType = AttributeType.ÎÞ;
         ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId);
         if (oldItemData != null)
         { 
@@ -442,12 +444,14 @@ public partial class Character
         switch (itemData.type)
         {
             case ItemType.ÎäÆ÷:
+                attackAttributeType = itemData.attributeType;
                 oldItemId = equip.weapon.x;
                 equip.weapon.x = itemData.id;
                 equip.weapon.y = 100;
                 attackType = itemData.otherType;
                 break;
             case ItemType.·À¾ß:
+                defenceAttributeType = itemData.attributeType;
                 oldItemId = equip.clothes.x;
                 equip.clothes.x = itemData.id;
                 equip.clothes.y = 100;
@@ -491,7 +495,7 @@ public partial class Character
                 name = name,
                 characterProperty = CharacterProperty,
                 equip = equip,
-                attributeType = AttributeType
+                //attributeType = AttributeType
             };
         }
     }
@@ -582,8 +586,9 @@ public partial class Character
     public string name;
     private int3 objCoordinate;
 
-    private AttributeType attributeType;
-    public AttributeType AttributeType => attributeType;
+    private AttributeType attackAttributeType,defenceAttributeType;
+    public AttributeType AttackAttributeType => attackAttributeType;
+    public AttributeType DefenceAttributeType => defenceAttributeType;
 
     public int3 ObjCoordinate => objCoordinate;
     public int2 coordinate => objCoordinate.xy;
@@ -961,7 +966,7 @@ public partial class Character
         if (level != this.level)
         {
             var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
-            attributeType = profressionData.attributeType;
+            //attributeType = profressionData.attributeType;
             if (profressionData.id == professionId)
             {
                 if (zero)

@@ -32,9 +32,9 @@ public class ItemData : ScriptableObject, IGameData
     public string itemName;
 #if UNITY_EDITOR
     [NonSerialized]
-    public string iconName;
+    private string iconName;
 #endif
-
+    public AttributeType attributeType;
     public Sprite icon;
     public string info;
     public ItemType type;

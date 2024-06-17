@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+ 
+[CreateAssetMenu(menuName = "Data/Buff数据")]
+public class BuffData : ScriptableObject, IGameData
+{
+    public int id;
+    public string buffName;
+    public int cd;
+    
+    public int cost;
+    public Sprite icon;
+    [NonSerialized] 
+    private string iconName; 
+    [NonSerialized]
+    [HideInInspector]
+    public string myTimeLineDataName;
+    public MyTimeLineData myTimeLineData;
+    public override string ToString()
+    {
+        return id.ToString();
+    }
+    public string GetKey()
+    {
+        return id.ToString();
+    }
+#if UNITY_EDITOR
+    static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>();
+    public static void Clear()
+    {
+        allSprites.Clear();
+    }
+
+    public void SetReferenceData()
+    {
+        myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
+        if (allSprites.Count == 0)
+        {
+            var sprites = Resources.LoadAll<Sprite>($"Icon/{iconName}");
+            for (int i = 0; i < sprites.Length; i++)
+            {
+                allSprites.Add(sprites[i].name, sprites[i]);
+            }
+        }
+
+        if (!allSprites.TryGetValue(iconName, out icon))
+        {
+
+        }
+
+
+    }
+#endif
+
+}
