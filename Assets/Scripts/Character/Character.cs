@@ -96,7 +96,27 @@ public struct CharacterProperty
             return characterProperty;
         }
     }
-    
+    public static CharacterProperty FullPercent
+    {
+        get
+        {
+            CharacterProperty characterProperty = new CharacterProperty
+            {
+                HP = 100,
+                MP = 100,
+                Power = 100,
+                MaxHP = 100,
+                MaxMP = 100,
+                MaxPower = 100,
+                AT = 100,
+                DF = 100,
+                Lucky = 100,
+                Other = 100,
+                Speed = 100
+            };
+            return characterProperty;
+        }
+    }
     public static CharacterProperty operator -(CharacterProperty property0, CharacterProperty property1)
     {
         CharacterProperty CharacterProperty = new CharacterProperty
@@ -212,7 +232,53 @@ public struct CharacterProperty
     {
         return start + (end - start) * LerpValue;
     }
+    public void AddProperty(CharacterPropertyType propertyType,int value)
+    {
+        switch (propertyType)
+        {
+            case CharacterPropertyType.体力:
+                Power += value;
+                break;
 
+            case CharacterPropertyType.生命:
+                HP += value;
+                break;
+
+            case CharacterPropertyType.法力:
+                MP += value;
+                break;
+
+            case CharacterPropertyType.最大体力:
+                MaxPower += value;
+                break;
+
+            case CharacterPropertyType.最大法力:
+                MaxMP += value;
+                break;
+
+            case CharacterPropertyType.最大生命:
+                MaxHP += value;
+                break;
+
+            case CharacterPropertyType.攻击:
+                AT += value;
+                break;
+
+            case CharacterPropertyType.防御:
+                DF += value;
+                break;
+
+            case CharacterPropertyType.幸运:
+                Lucky += value;
+                break;
+            case CharacterPropertyType.敏捷:
+                Speed += value;
+                break;
+            case CharacterPropertyType.自定义值:
+                Other += value;
+                break;
+        }
+    }
     public void SetProperty(SetCharacterProperty setCharacterProperty)
     {
         switch (setCharacterProperty.propertyType)

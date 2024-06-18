@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http.Headers;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -25,6 +26,13 @@ public class FightCharacter : IReferenceData
     public int2 fightPos;
     public Dictionary<int, SkillRuntime> skillRuntimes { get; set; }
 
+    public FightCharacter()
+    {
+        buffMulProperty = CharacterProperty.FullPercent;
+    }
+    public virtual CharacterProperty buffAddProperty { get; }
+    public virtual CharacterProperty buffMulProperty { get; }
+    public List<BuffRuntime> buffRuntimes { get; set; } 
     public virtual bool IsEquipSkill(int skillId)
     {
         return false;
@@ -70,7 +78,52 @@ public class FightCharacter : IReferenceData
         waiteTime = 0;
         waiteEnd = false;
     }
-
+    void AddBuffAction(BuffRuntime buffRuntime)
+    {
+        switch (buffRuntime.buffData.buffactionType)
+        {
+            case BuffActionType.属性改变:
+                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.addActionValue.x, buffRuntime.buffData.addActionValue.y);
+                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.mulActionValue.x, buffRuntime.buffData.mulActionValue.y);
+                break;
+            case BuffActionType.伤害:
+                break;
+            case BuffActionType.回复:
+                break;
+        }
+    }
+    void RemoveBuffAction(BuffRuntime buffRuntime)
+    {
+        switch (buffRuntime.buffData.buffactionType)
+        {
+            case BuffActionType.属性改变:
+                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.addActionValue.x, -buffRuntime.buffData.addActionValue.y);
+                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.mulActionValue.x, -buffRuntime.buffData.mulActionValue.y);
+                break;
+            case BuffActionType.伤害:
+                break;
+            case BuffActionType.回复:
+                break;
+        }
+    }
+    public async void CreatBuffRuntime(int buffId)
+    {
+        var buffRuntime = await SkillManager.instance.CreatBuffRuntime(buffId);
+        for (int i = buffRuntimes.Count - 1; i >= 0; i--)
+        {
+            var oldBuffRuntime = buffRuntimes[i];
+            if (buffRuntime.buffData.coverBuffs.Contains(oldBuffRuntime.buffData.id))
+            {
+                RemoveBuffAction(oldBuffRuntime);
+                buffRuntimes.RemoveAt(i);
+            }
+        }
+        if (buffRuntime.buffData.lifeTime > 0)
+        {
+            AddBuffAction(buffRuntime);
+            buffRuntimes.Add(buffRuntime);
+        }
+    }
     public void UpData(float timeValue)
     {
         if (fightCharacterStaues == FightCharacterStaues.正常)
@@ -85,6 +138,16 @@ public class FightCharacter : IReferenceData
                     foreach (var skillRuntime in skillRuntimes)
                     {
                         skillRuntime.Value.UpData(1);
+                    }
+
+                    for(int i=buffRuntimes.Count-1;i>=0;i--) 
+                    {
+                        buffRuntimes[i].BuffPerAction(instanceId);
+                        if (buffRuntimes[i].BuffActionEnd())
+                        {
+                            RemoveBuffAction(buffRuntimes[i]);
+                            buffRuntimes.RemoveAt(i);
+                        } 
                     }
                 }
             }
@@ -105,6 +168,15 @@ public class FightCharacter : IReferenceData
     public virtual void Clear()
     {
     }
+
+    public void ClearBuff()
+    {
+        for(int i = buffRuntimes.Count - 1; i >= 0; i--)
+        {
+            RemoveBuffAction(buffRuntimes[i]);
+            buffRuntimes.RemoveAt(i);
+        }
+    }
 }
 
 public class FightPlayer : FightCharacter
@@ -113,9 +185,10 @@ public class FightPlayer : FightCharacter
     {
         get
         {
-            return character.CharacterProperty;
+            return character.CharacterProperty*buffMulProperty*0.01f+buffAddProperty;
         }
     }
+ 
 
     public Character character;
     public override Sprite icon { get => character.characterData.icon.sprite; set => base.icon = value; }
@@ -238,13 +311,13 @@ public class FightPlayer : FightCharacter
         base.SetCharacterValue(setCharacterProperty);
     }
 
-    public FightPlayer(Character character)
+    public FightPlayer(Character character) : base()
     {
         this.character = character;
         instanceId = character.instanceId;
         InitRundTime();
     }
-
+    
     public override void Clear()
     {
         base.Clear();
@@ -259,8 +332,9 @@ public class FightMonster : FightCharacter
     public override int behaviorId => monsterData.behaviorId;
     public override Sprite icon { get => monsterData.monsterSprite.sprite; set => base.icon = value; }
 
-    public FightMonster(MonsterData monsterData, int instanceId, int2 fightPos)
+    public FightMonster(MonsterData monsterData, int instanceId, int2 fightPos):base()
     {
+        
         this.monsterData = monsterData;
         this.instanceId = instanceId;
         this.fightPos = fightPos;
@@ -327,7 +401,7 @@ public class FightMonster : FightCharacter
     {
         get
         {
-            return _characterProperty;
+            return _characterProperty * buffMulProperty + buffAddProperty;
         }
     }
 

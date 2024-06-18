@@ -372,7 +372,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
         var myTimeLineData = await GameDataManager.instance.GetAsyncData<MyTimeLineData>(playCharacterTimeLine.playName);
         if (myTimeLineData)
         {
-            PlaySkillTimeline(playCharacterTimeLine.characterId, default(SkillEstimateData), myTimeLineData, null);
+            PlaySkillTimeline(playCharacterTimeLine.characterId, null, myTimeLineData, null);
         }
     }
     protected override void Clear()

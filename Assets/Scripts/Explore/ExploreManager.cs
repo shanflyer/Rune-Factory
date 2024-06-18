@@ -270,6 +270,9 @@ public class ExploreManager : Singleton<ExploreManager>
         fightChapter.completeValue = (int)(value * 50)+ (int)(itemValue * 50);
         fightChapters.SetData(fightChapter);
 
+        EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
+        GameActionManager.instance.QueueAction(endNowRoundFight, true);
+
         if (nowStep >= nowFightMapData.monsterDeploys.Count)
         {
             ExploreSuccessful();
@@ -301,6 +304,9 @@ public class ExploreManager : Singleton<ExploreManager>
 
     private async void ExploreFailed()
     {
+        EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
+        GameActionManager.instance.QueueAction(endNowRoundFight, true);
+
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = false;
@@ -314,6 +320,9 @@ public class ExploreManager : Singleton<ExploreManager>
 
     private async void ExploreSuccessful()
     {
+        EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
+        GameActionManager.instance.QueueAction(endNowRoundFight, true);
+
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.successEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = true;

@@ -628,13 +628,13 @@ public class FightController : MonoBehaviour
             if (fightMonsterRuntimes.TryGetValue(displayHurt.targetId, out fightPlayerRuntime))
             {
                 Vector3 pos = fightPlayerRuntime.animator.transform.position;
-                SceneInfoManager.instance.DisplaySceneInfo(displayHurt.hurtValue.ToString(), pos);
+                SceneInfoManager.instance.DisplaySceneInfo(displayHurt.hurtValue, pos);
             }
         }
         else
         {
             Vector3 pos = fightPlayerRuntime.animator.transform.position;
-            SceneInfoManager.instance.DisplaySceneInfo(displayHurt.hurtValue.ToString(), pos);
+            SceneInfoManager.instance.DisplaySceneInfo(displayHurt.hurtValue, pos);
         }
     }
 

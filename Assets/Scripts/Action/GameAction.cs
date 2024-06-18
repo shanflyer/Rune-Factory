@@ -554,7 +554,7 @@ public struct DisplayHurt : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int targetId;
-    public int hurtValue;
+    public string hurtValue;
     public HurtResultType hurtResultType;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -562,12 +562,13 @@ public struct DisplayHurt : GameAction
         if (parameters.Count >= 3)
         {
             targetId = int.Parse(parameters[0].value);
-            hurtValue = int.Parse(parameters[1].value);
+            hurtValue = parameters[1].value;
             hurtResultType = (HurtResultType)int.Parse(parameters[2].value);
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+ 
 public struct NextActionSkillEstimate : GameAction
 {
     public int skillId;
@@ -891,6 +892,16 @@ public struct PauseFilm : GameAction
     }
 }
 
+public struct EndNowRoundFight : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { set; get; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TryStartAutoExplore : GameAction
 {
     public SetValue setValue { get; set; }

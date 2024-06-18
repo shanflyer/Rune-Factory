@@ -10,6 +10,10 @@ public class FightEventBehavior : PlayableBehaviour
     public SkillEstimateData skillEstimateData;
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {
+        if(skillEstimateData== null)
+        {
+            return;
+        }
         for(int i = 0; i < skillEstimateData.targets.Count; i++)
         {
             ActionSkillEstimate actionSkillEstimate = new ActionSkillEstimate

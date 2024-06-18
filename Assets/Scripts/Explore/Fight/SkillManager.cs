@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class SkillManager : Singleton<SkillManager>
 {
@@ -21,7 +22,12 @@ public class SkillManager : Singleton<SkillManager>
         return skillRuntime;
     }
 
-  
+    public async Task<BuffRuntime> CreatBuffRuntime(int buffId)
+    {
+        BuffData buffData = await GameDataManager.instance.GetAsyncData<BuffData>(buffId);
+        BuffRuntime buffRuntime = new BuffRuntime(buffData, myInstance.CreatInstanceId());
+        return buffRuntime;
+    }
 }
 public class SkillRuntime
 {
@@ -64,13 +70,43 @@ public class BuffRuntime
     public int instanceId;
     public BuffData buffData;
     private int nowActionIndex;
-    public BuffRuntime(int instanceId, BuffData buffData)
+    public BuffRuntime(BuffData buffData,int instanceId)
     {
         this.instanceId = instanceId;
         this.buffData = buffData; 
     }
-    public void BuffAction()
+    public bool BuffActionEnd()
     {
         nowActionIndex++;
+        if (nowActionIndex >= buffData.lifeTime)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void BuffPerAction(int characterId)
+    {
+        void TrueBuffAction()
+        {
+            FightManager.instance.BuffAction(buffData, characterId,true);
+        }
+        if (buffData.myTimeLineData != null)
+        {
+            TimeLineManger.instance.PlaySkillTimeline(characterId, null, buffData.myTimeLineData
+             , () =>
+             {
+
+                 TrueBuffAction();
+                 // fightCharacter.fightStatus = FightStatus.准备;
+             });
+
+           
+        }
+        else
+        {
+            TrueBuffAction();
+        }
+       
     }
 }

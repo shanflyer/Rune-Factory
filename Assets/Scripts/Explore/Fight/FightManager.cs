@@ -82,6 +82,13 @@ public class FightManager : Singleton<FightManager>
         fightResult.getItems.Clear();
     }
 
+    void EndNowRoundFight(EndNowRoundFight endNowRoundFight)
+    {
+       foreach(var fightcharacter in fightCharacters)
+        {
+            fightcharacter.Value.ClearBuff();
+        }
+    }
     void SkillPauseAction(SkillPauseAction skillPauseAction)
     {
         pauseBehavior = skillPauseAction.pause;
@@ -159,7 +166,7 @@ public class FightManager : Singleton<FightManager>
     private void CharacterDeath(CharacterDeath characterDeath)
     {
         //播放死亡效果
-        TimeLineManger.instance.PlaySkillTimeline(characterDeath.characterId, default(SkillEstimateData),
+        TimeLineManger.instance.PlaySkillTimeline(characterDeath.characterId, null,
               deathTimeLineData, () =>
               {
                   if (fightMonsters.Contains(characterDeath.characterId))
@@ -898,6 +905,31 @@ public class FightManager : Singleton<FightManager>
        
     }
 
+    public  void BuffAction(BuffData buffData, int characterId, bool isDisplayHurt)
+    {
+        FightCharacter target = fightCharacters[characterId];
+        switch (buffData.buffactionType)
+        {
+            case BuffActionType.伤害:
+                int hurt = GameRandom.RandomInt(buffData.addActionValue.x, buffData.addActionValue.y);
+                if (hurt > 0)
+                {
+                   int value= GameRandom.RandomInt(buffData.mulActionValue.x, buffData.mulActionValue.y);
+                    hurt =(int)( target.characterProperty.MaxHP * (value * 0.01f));
+                }
+                FightHPChange(-hurt, target, isDisplayHurt, HurtResultType.Default);
+                break;
+            case BuffActionType.回复:
+                int addHP = GameRandom.RandomInt(buffData.addActionValue.x, buffData.addActionValue.y);
+                if (addHP > 0)
+                {
+                    int value = GameRandom.RandomInt(buffData.mulActionValue.x, buffData.mulActionValue.y);
+                    addHP = (int)(target.characterProperty.MaxHP * (value * 0.01f));
+                }
+                FightHPChange(addHP, target, isDisplayHurt, HurtResultType.Default);
+                break;
+        }
+    }
     void SkillAction(SkillData skillData,FightCharacter source,FightCharacter target,bool isDisplayHurt)
     {
         switch (skillData.fightType)
@@ -919,47 +951,70 @@ public class FightManager : Singleton<FightManager>
                     hurtResultType = GetHurtResultType(source.characterProperty.Lucky, target.characterProperty.Lucky);
                 }
 
-                int hp = target.characterProperty.HP - hurt;
-                hp = math.clamp(hp, 0, hp);
-                SetCharacterProperty setCharacterProperty = new SetCharacterProperty
+                FightHPChange(-hurt, target, isDisplayHurt, hurtResultType); 
+                break;
+            case FightType.回复:
+                int addHp = 0;
+                if (skillData.skillActionType == SkillActionType.属性值)
                 {
-                    characterId = target.instanceId,
-                    propertyType = CharacterPropertyType.生命,
-                    Value = hp
-                };
-                GameActionManager.instance.QueueAction(setCharacterProperty, true);
-                if (isDisplayHurt)
-                {
-                    DisplayHurt displayHurt = new DisplayHurt
-                    {
-                        targetId = target.instanceId,
-                        hurtValue = hurt,
-                        hurtResultType = hurtResultType
-                    };
-                    GameActionManager.instance.QueueAction(displayHurt, true);
+                    addHp =(int)( target.characterProperty.MaxHP * (skillData.actionValue * 0.01f));  
                 }
-                if (hp <= 0)
+                else
                 {
-                    CharacterDeath characterDeath = new CharacterDeath
-                    {
-                        characterId = target.instanceId,
-                    };
-                    GameActionManager.instance.QueueAction(characterDeath);
+                    addHp = skillData.actionValue; 
                 }
-
+                FightHPChange(addHp, target, isDisplayHurt, HurtResultType.Default);
+                break;
+            case FightType.buff:
+                target.CreatBuffRuntime(skillData.actionValue);
                 break;
         }
-        RefreshFightCharacterInfo refreshFightCharacterInfo = new RefreshFightCharacterInfo
-        {
-            characterId = target.instanceId
-        };
-        GameActionManager.instance.QueueAction(refreshFightCharacterInfo, true);
+
         RefreshFightCharacterInfo refreshFightCharacterInfo1 = new RefreshFightCharacterInfo
         {
             characterId = source.instanceId
         };
         GameActionManager.instance.QueueAction(refreshFightCharacterInfo1, true);
     }
+
+    void FightHPChange(int changeValue,FightCharacter target,bool isDisplayHurt,HurtResultType hurtResultType)
+    {
+        int hp = target.characterProperty.HP + changeValue;
+        hp = math.clamp(hp, 0, hp);
+        SetCharacterProperty setCharacterProperty = new SetCharacterProperty
+        {
+            characterId = target.instanceId,
+            propertyType = CharacterPropertyType.生命,
+            Value = hp
+        };
+        GameActionManager.instance.QueueAction(setCharacterProperty, true);
+        if (isDisplayHurt)
+        {
+            DisplayHurt displayHurt = new DisplayHurt
+            {
+                targetId = target.instanceId,
+                hurtValue =changeValue>0? $"<color=green>{changeValue}</color>": $"<color=red>{changeValue}</color>",
+                hurtResultType = hurtResultType
+            };
+            GameActionManager.instance.QueueAction(displayHurt, true);
+        }
+        if (hp <= 0)
+        {
+            CharacterDeath characterDeath = new CharacterDeath
+            {
+                characterId = target.instanceId,
+            };
+            GameActionManager.instance.QueueAction(characterDeath);
+        }
+        RefreshFightCharacterInfo refreshFightCharacterInfo = new RefreshFightCharacterInfo
+        {
+            characterId = target.instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshFightCharacterInfo, true);
+       
+    }
+
+
     private void ActionSkillEstimate(ActionSkillEstimate actionSkillEstimate)
     {
         cdTimeMoving = false;

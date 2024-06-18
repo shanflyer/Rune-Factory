@@ -5,9 +5,9 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
  
-public enum BuffActiveType
+public enum BuffActionType
 {
-    属性改变,定身,伤害,回复
+    属性改变,伤害,回复
 }
 [CreateAssetMenu(menuName = "Data/Buff数据")]
 public class BuffData : ScriptableObject, IGameData
@@ -16,8 +16,9 @@ public class BuffData : ScriptableObject, IGameData
     public string buffName;
     public int lifeTime;
     public List<int> coverBuffs = new List<int>();
-    public BuffActiveType buffActiveType;
-    public int2 actionValue;
+    public BuffActionType buffactionType;
+    public int2 addActionValue;
+    public int2 mulActionValue;
     public Sprite icon;
     [NonSerialized] 
     private string iconName; 
