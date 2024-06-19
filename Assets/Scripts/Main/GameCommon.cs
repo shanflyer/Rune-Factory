@@ -52,8 +52,8 @@ public enum CompareType
 [System.Serializable]
 public enum CharacterPropertyType
 {
-    自定义值 = -1, 体力, 生命, 法力, 攻击, 防御, 幸运, 饱食,
-    最大体力, 最大生命, 最大法力,敏捷
+    自定义值 = -1, 体力=0, 生命=1, 法力=2, 攻击=3, 防御=4, 幸运=5, 饱食=6,
+    最大体力=7, 最大生命=8, 最大法力=9,敏捷=10
 }
 
 public enum Direction
@@ -1029,7 +1029,8 @@ public static class DataPath
         {typeof(SkyBackGroundData),"Data/SkyBackGroundData"},
         {typeof(HomeEquipmentData),"Data/HomeEquipmentData" },
         {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"},
-        {typeof(ObjPackageAnimationData),"Data/ObjPackageAnimationData" }
+        {typeof(ObjPackageAnimationData),"Data/ObjPackageAnimationData" },
+        {typeof(BuffData),"Data/BuffData" }
     };
 
     public static string GetDataPath(Type type)

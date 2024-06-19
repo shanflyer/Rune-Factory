@@ -406,7 +406,31 @@ public class FightManager : Singleton<FightManager>
         }
         return false;
     }
-
+    public int GetAttributeTypeRandomValue(AttributeType attributeType0, AttributeType attributeType1,int randomValue)
+    {
+        if (attributeType0 == AttributeType.无 || attributeType1 == AttributeType.无)
+        {
+            return randomValue;
+        }
+        int value = (int)attributeType0 - (int)attributeType1;
+        if (math.abs(value) == 1)
+        {
+            if (value < 0)
+            {
+                return randomValue+(int)((100-randomValue)*0.5f);
+            }
+            return 0;
+        }
+        if (math.abs(value) == 4)
+        {
+            if (value < 0)
+            {
+                return 0;
+            }
+            return randomValue + (int)((100 - randomValue) * 0.5f);
+        }
+        return randomValue;
+    }
     private float GetAttributeTypeValue(AttributeType attributeType0, AttributeType attributeType1)
     {
         if (attributeType0 == AttributeType.无 || attributeType1 == AttributeType.无)

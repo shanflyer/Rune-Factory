@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -173,7 +174,10 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
             DFText.text = $"DF.{characterProperty.DF}";
             LuckyText.text = $"{LanguageManage.SwitchStr("–“‘À")}.{characterProperty.Lucky}";
             ExpText.text = $"Exp.{characterInformationData.exp.nowExp}/{characterInformationData.exp.nowLevelExp}";
-            SpeedText.text = $"{LanguageManage.SwitchStr("√ÙΩ›")}.{characterProperty.Speed}";
+
+            int speed = characterProperty.Speed;
+            speed = math.clamp(speed, 0, 1);
+            SpeedText.text = $"{LanguageManage.SwitchStr("√ÙΩ›")}.{speed}";
 
             HPSlider.fillAmount = (float)characterProperty.HP / characterProperty.MaxHP;
             MPSlider.fillAmount = (float)characterProperty.MP / characterProperty.MaxMP;

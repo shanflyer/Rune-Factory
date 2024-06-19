@@ -69,7 +69,15 @@ public class FightCharacter : IReferenceData
     public void InitRundTime()
     {
         float speed = characterProperty.Speed;
-        PerRoundTime = GameCommon.DefaultPerRoundCd * (100.0f / speed);
+        if (speed <= 0)
+        {
+            PerRoundTime = GameCommon.DefaultPerRoundCd*2;
+        }
+        else
+        {
+            PerRoundTime = GameCommon.DefaultPerRoundCd * (100.0f / speed);
+        }
+        
     }
 
     public void Reset()
@@ -108,7 +116,11 @@ public class FightCharacter : IReferenceData
     }
     public async void CreatBuffRuntime(int buffId)
     {
-        var buffRuntime = await SkillManager.instance.CreatBuffRuntime(buffId,instanceId);
+        var buffRuntime = await SkillManager.instance.CreatBuffRuntime(buffId,this);
+        if (buffRuntime == null)
+        {
+            return;
+        }
         for (int i = buffRuntimes.Count - 1; i >= 0; i--)
         {
             var oldBuffRuntime = buffRuntimes[i];
@@ -134,7 +146,16 @@ public class FightCharacter : IReferenceData
 
                 if (waiteTime >= PerRoundTime)
                 {
-                    waiteEnd = true;
+                    if (characterProperty.Speed <= 0)
+                    {
+                        waiteEnd = false;
+                        waiteTime = 0;
+                    }
+                    else
+                    {
+                        waiteEnd = true;
+                    }
+                   
                     foreach (var skillRuntime in skillRuntimes)
                     {
                         skillRuntime.Value.UpData(1);

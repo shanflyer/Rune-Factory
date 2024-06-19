@@ -964,7 +964,8 @@ public class FightController : MonoBehaviour
               {
 
                   if (skillData.haveNextAction)
-                  {
+                  { 
+
                       if (skillData.nextTimeLineData != null)
                       {
                          

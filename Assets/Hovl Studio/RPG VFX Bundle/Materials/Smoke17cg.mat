@@ -32,12 +32,12 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
-  - DepthOnly
   - SHADOWCASTER
+  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -110,7 +110,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Blend: 2
+    - _Blend: 0
     - _Blend2: 1
     - _BumpScale: 1
     - _CastShadows: 0
@@ -119,7 +119,7 @@ Material:
     - _Cutoff: 0.5
     - _Depthpower: 0.2
     - _DetailNormalMapScale: 1
-    - _DstBlend: 1
+    - _DstBlend: 10
     - _Emission: 2
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -139,7 +139,7 @@ Material:
     - _UVSec: 0
     - _Usecenterglow: 0
     - _Usecustomrandom: 0
-    - _Usedepth: 1
+    - _Usedepth: 0
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0

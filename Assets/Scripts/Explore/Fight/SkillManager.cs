@@ -22,11 +22,17 @@ public class SkillManager : Singleton<SkillManager>
         return skillRuntime;
     }
 
-    public async Task<BuffRuntime> CreatBuffRuntime(int buffId,int characterId)
+    public async Task<BuffRuntime> CreatBuffRuntime(int buffId,FightCharacter fightCharacter)
     {
         BuffData buffData = await GameDataManager.instance.GetAsyncData<BuffData>(buffId);
-        BuffRuntime buffRuntime = new BuffRuntime(buffData, myInstance.CreatInstanceId(), characterId);
-        return buffRuntime;
+        int randomValue = GameRandom.RandomInt(0, 100);
+        randomValue = FightManager.instance.GetAttributeTypeRandomValue(buffData.attributeType, fightCharacter.AttackAttributeType, randomValue);
+        if (randomValue < buffData.probability)
+        {
+            BuffRuntime buffRuntime = new BuffRuntime(buffData, myInstance.CreatInstanceId(), fightCharacter.instanceId);
+            return buffRuntime;
+        }
+        return null;      
     }
 }
 public class SkillRuntime

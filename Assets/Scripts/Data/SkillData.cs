@@ -23,6 +23,7 @@ public class SkillData : ScriptableObject, IGameData
     public SkillActionType skillActionType;  
     public int actionValue;
 
+    public int nextProbability;
     public bool haveNextAction;
     public bool holdTarget;
     public TargetType nextTargetType;

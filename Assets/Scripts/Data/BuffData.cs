@@ -13,9 +13,11 @@ public enum BuffActionType
 public class BuffData : ScriptableObject, IGameData
 {
     public int id;
+    public int probability;
     public string buffName;
     public int lifeTime;
     public List<int> coverBuffs = new List<int>();
+    public AttributeType attributeType;
     public BuffActionType buffactionType;
     public int2 addActionValue;
     public int2 mulActionValue;
@@ -32,6 +34,7 @@ public class BuffData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
+    
     public string GetKey()
     {
         return id.ToString();
