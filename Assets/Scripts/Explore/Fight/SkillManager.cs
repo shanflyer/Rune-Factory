@@ -22,10 +22,10 @@ public class SkillManager : Singleton<SkillManager>
         return skillRuntime;
     }
 
-    public async Task<BuffRuntime> CreatBuffRuntime(int buffId)
+    public async Task<BuffRuntime> CreatBuffRuntime(int buffId,int characterId)
     {
         BuffData buffData = await GameDataManager.instance.GetAsyncData<BuffData>(buffId);
-        BuffRuntime buffRuntime = new BuffRuntime(buffData, myInstance.CreatInstanceId());
+        BuffRuntime buffRuntime = new BuffRuntime(buffData, myInstance.CreatInstanceId(), characterId);
         return buffRuntime;
     }
 }
@@ -70,16 +70,40 @@ public class BuffRuntime
     public int instanceId;
     public BuffData buffData;
     private int nowActionIndex;
-    public BuffRuntime(BuffData buffData,int instanceId)
+    private RuntimeObj runtimeObj;
+    private BuffActionBehavior buffActionBehavior;
+    public BuffRuntime(BuffData buffData,int instanceId,int characterId)
     {
         this.instanceId = instanceId;
         this.buffData = buffData; 
+        Vector3 pos=FightController.instance.GetPosForCharacterId(characterId);
+        if (buffData.buffObj!= null)
+        {
+            runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
+            buffActionBehavior = runtimeObj.obj as BuffActionBehavior;
+            if (buffActionBehavior)
+            {
+                buffActionBehavior.stopAction = ParticleSystemStopAction;
+                buffActionBehavior.transform.position = pos;
+                buffActionBehavior.PlayParticle();
+            }
+        } 
+    }
+    void ParticleSystemStopAction()
+    {
+        if (runtimeObj != null)
+        {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+            runtimeObj = null;
+        }
+       
     }
     public bool BuffActionEnd()
     {
         nowActionIndex++;
         if (nowActionIndex >= buffData.lifeTime)
         {
+            buffActionBehavior.StopParticle();
             return true;
         }
         return false;
@@ -99,9 +123,7 @@ public class BuffRuntime
 
                  TrueBuffAction();
                  // fightCharacter.fightStatus = FightStatus.准备;
-             });
-
-           
+             }); 
         }
         else
         {

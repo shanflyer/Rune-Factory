@@ -1156,4 +1156,17 @@ public class FightController : MonoBehaviour
         StartSkillAction(skillEstimateData, ActionCharacter, true);
         HideSelectMask();
     }
+
+    public Vector3 GetPosForCharacterId(int characterId)
+    {
+        if(fightPlayerRuntimes.TryGetValue(characterId,out var fightPlayerRuntime))
+        {
+            return fightPlayerRuntime.animator.transform.position;
+        }
+        else if(fightMonsterRuntimes.TryGetValue(characterId,out fightPlayerRuntime))
+        {
+            return fightPlayerRuntime.animator.transform.position;
+        }
+        return Vector3.zero;
+    }
 }

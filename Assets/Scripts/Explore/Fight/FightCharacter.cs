@@ -108,7 +108,7 @@ public class FightCharacter : IReferenceData
     }
     public async void CreatBuffRuntime(int buffId)
     {
-        var buffRuntime = await SkillManager.instance.CreatBuffRuntime(buffId);
+        var buffRuntime = await SkillManager.instance.CreatBuffRuntime(buffId,instanceId);
         for (int i = buffRuntimes.Count - 1; i >= 0; i--)
         {
             var oldBuffRuntime = buffRuntimes[i];

@@ -24,7 +24,7 @@ public class BuffData : ScriptableObject, IGameData
     private string iconName; 
     [NonSerialized] 
     private string buffObjName;
-    public GameObject buffObj;
+    public BuffActionBehavior buffObj;
 
     private string actionTimeLineDataName;
     public MyTimeLineData myTimeLineData;
@@ -46,7 +46,7 @@ public class BuffData : ScriptableObject, IGameData
     public void SetReferenceData()
     {
         myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{actionTimeLineDataName}");
-        buffObj = Resources.Load<GameObject>($"Prefabs/Effect/{buffObjName}");
+        buffObj = Resources.Load<BuffActionBehavior>($"Prefabs/Effect/{buffObjName}");
         if (allSprites.Count == 0)
         {
             var sprites = Resources.LoadAll<Sprite>($"Icon/{iconName}");
