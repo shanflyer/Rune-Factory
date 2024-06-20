@@ -7,6 +7,10 @@ using UnityEngine;
     private ParticleSystem particleSystem;
     public Action stopAction;
 
+    private void Awake()
+    {
+        particleSystem = transform.GetComponent<ParticleSystem>();
+    }
     public void PlayParticle()
     {
         if(particleSystem != null)

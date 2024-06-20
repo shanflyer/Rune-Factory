@@ -2,7 +2,10 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using InputSamples;
+using UnityEngine.InputSystem;
+
 public class ETFXSceneManager : MonoBehaviour
 {
 	public bool GUIHide = false;
@@ -101,7 +104,7 @@ public class ETFXSceneManager : MonoBehaviour
 	void Update ()
 	 {
  
-     if(Input.GetKeyDown(KeyCode.L))
+     if(Keyboard.current.lKey.isPressed)
 	 {
          GUIHide = !GUIHide;
      
@@ -114,7 +117,7 @@ public class ETFXSceneManager : MonoBehaviour
              GameObject.Find("CanvasSceneSelect").GetComponent<Canvas> ().enabled = true;
          }
      }
-	      if(Input.GetKeyDown(KeyCode.J))
+	      if(Keyboard.current.jKey.isPressed)
 	 {
          GUIHide2 = !GUIHide2;
      
@@ -127,7 +130,7 @@ public class ETFXSceneManager : MonoBehaviour
              GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
          }
      }
-		if(Input.GetKeyDown(KeyCode.H))
+		if(Keyboard.current.hKey.isPressed)
 	 {
          GUIHide3 = !GUIHide3;
      
@@ -140,7 +143,7 @@ public class ETFXSceneManager : MonoBehaviour
              GameObject.Find("ParticleSysDisplayCanvas").GetComponent<Canvas> ().enabled = true;
          }
      }
-	 	if(Input.GetKeyDown(KeyCode.K))
+	 	if(Keyboard.current.kKey.isPressed)
 	 {
          GUIHide4 = !GUIHide4;
      
