@@ -4,7 +4,7 @@ using UnityEngine;
  public class BuffActionBehavior:MonoBehaviour
  {
     [SerializeField]
-    private ParticleSystem particleSystem;
+    private new ParticleSystem particleSystem;
     public Action stopAction;
 
     private void Awake()
