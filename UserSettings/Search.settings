@@ -1,5 +1,6 @@
 trackSelection = true
 refreshSearchWindowsInPlayMode = false
+pickerAdvancedUI = false
 fetchPreview = true
 defaultFlags = 0
 keepOpen = false
@@ -8,32 +9,16 @@ onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 showStatusBar = false
 scopes = {
-	"last_search.62214EDB" = "Zero"
-	"OpenInspectorPreview.62214EDB" = "0"
-	"currentGroup.62214EDB" = "asset"
-	"picker_window_position_offset.0B486DF2" = "340;146;320;550"
-	"picker_search_text.0B486DF2" = ""
-	"last_search.0B486DF2" = ""
-	"OpenInspectorPreview.0B486DF2" = "0"
-	"currentGroup.0B486DF2" = null
-	"last_search.F24CB9E5" = "Standard Surface t:Shader"
-	"OpenInspectorPreview.F24CB9E5" = "0"
-	"currentGroup.F24CB9E5" = "asset"
 }
 providers = {
-	adb = {
-		active = false
+	archetype = {
+		active = true
 		priority = 2500
 		defaultAction = null
 	}
-	asset = {
+	journal = {
 		active = true
-		priority = 25
-		defaultAction = null
-	}
-	store = {
-		active = true
-		priority = 100
+		priority = 2500
 		defaultAction = null
 	}
 	find = {
@@ -46,9 +31,9 @@ providers = {
 		priority = 210
 		defaultAction = null
 	}
-	packages = {
+	asset = {
 		active = true
-		priority = 90
+		priority = 25
 		defaultAction = null
 	}
 	performance = {
@@ -56,19 +41,24 @@ providers = {
 		priority = 100
 		defaultAction = null
 	}
+	store = {
+		active = false
+		priority = 100
+		defaultAction = null
+	}
+	packages = {
+		active = false
+		priority = 90
+		defaultAction = null
+	}
+	adb = {
+		active = false
+		priority = 2500
+		defaultAction = null
+	}
 	scene = {
 		active = true
 		priority = 50
-		defaultAction = null
-	}
-	archetype = {
-		active = true
-		priority = 2500
-		defaultAction = null
-	}
-	journal = {
-		active = true
-		priority = 2500
 		defaultAction = null
 	}
 	profilermarkers = {
@@ -93,7 +83,7 @@ showSavedSearchPanel = false
 hideTabs = false
 expandedQueries = [
 ]
-queryBuilder = false
+queryBuilder = true
 ignoredProperties = "id;name;classname;imagecontentshash"
 helperWidgetCurrentArea = "all"
 disabledIndexers = ""

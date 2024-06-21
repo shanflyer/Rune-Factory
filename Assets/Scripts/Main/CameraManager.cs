@@ -1,6 +1,6 @@
-﻿using Cinemachine;
+﻿using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 
 public class CameraManager : Singleton<CameraManager>
 {
@@ -8,15 +8,15 @@ public class CameraManager : Singleton<CameraManager>
     public Camera uiCamera;
 
     [SerializeField]
-    private PixelPerfectCamera pixelPerfectCamera;
+    private UnityEngine.Rendering.Universal.PixelPerfectCamera pixelPerfectCamera;
 
     private CinemachineMixingCamera mixingCamera;
-    private CinemachineVirtualCamera fixedCamera;
-    private CinemachineVirtualCamera[] followCameras;
+    private CinemachineCamera fixedCamera;
+    private CinemachineCamera[] followCameras;
     private CinemachineConfiner2D confiner2D;
 
     private CinemachineCameraOffset[] CinemachineCameraOffsets;
-    CinemachineFramingTransposer[] cinemachineFramingTransposers;
+    //CinemachinePositionComposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
     
     public override void Init()
@@ -25,15 +25,15 @@ public class CameraManager : Singleton<CameraManager>
         mainCamera = Camera.main;
         uiCamera = mainCamera.transform.GetChild(0).GetComponent<Camera>();
 
-        pixelPerfectCamera = mainCamera.GetComponent<PixelPerfectCamera>();
+        pixelPerfectCamera = mainCamera.GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();
         mixingCamera = mainCamera.transform.parent.GetComponentInChildren<CinemachineMixingCamera>();
-        followCameras = new CinemachineVirtualCamera[3]
+        followCameras = new CinemachineCamera[3]
         {
-            (CinemachineVirtualCamera)mixingCamera.ChildCameras[0],
-            (CinemachineVirtualCamera)mixingCamera.ChildCameras[1],
-            (CinemachineVirtualCamera)mixingCamera.ChildCameras[2]
+            (CinemachineCamera)mixingCamera.ChildCameras[0],
+            (CinemachineCamera)mixingCamera.ChildCameras[1],
+            (CinemachineCamera)mixingCamera.ChildCameras[2]
         };
-        fixedCamera = (CinemachineVirtualCamera)mixingCamera.ChildCameras[3];
+        fixedCamera = (CinemachineCamera)mixingCamera.ChildCameras[3];
         confiner2D = mixingCamera.GetComponentInChildren<CinemachineConfiner2D>();
         CinemachineCameraOffsets = new CinemachineCameraOffset[3]
         {
@@ -42,12 +42,12 @@ public class CameraManager : Singleton<CameraManager>
             mixingCamera.ChildCameras[2].GetComponent<CinemachineCameraOffset>()
         };
 
-        cinemachineFramingTransposers = new CinemachineFramingTransposer[3]
+       /* cinemachineFramingTransposers = new CinemachinePositionComposer[3]
         {
-             followCameras[0].GetCinemachineComponent<CinemachineFramingTransposer>(),
-             followCameras[1].GetCinemachineComponent<CinemachineFramingTransposer>(),
-             followCameras[2].GetCinemachineComponent<CinemachineFramingTransposer>()
-        };
+             //followCameras[0].GetCinemachineComponent(CinemachineCore.Stage.),
+            //followCameras[1].GetCinemachineComponent<CinemachinePositionComposer>(),
+           //  followCameras[2].GetCinemachineComponent<CinemachinePositionComposer>()
+        };*/
 
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
@@ -127,27 +127,28 @@ public class CameraManager : Singleton<CameraManager>
     public void SetConfiner2DCollider(PolygonCollider2D polygonCollider2D)
     {
         confiner2D.enabled = false;
-        confiner2D.m_BoundingShape2D = polygonCollider2D;
+        confiner2D.BoundingShape2D = polygonCollider2D;
         confiner2D.enabled = true;
-        confiner2D.InvalidateCache();
+        confiner2D.InvalidateBoundingShapeCache(); 
+        /*
         GameTimerController.instance.DeleyActionMain(100, () =>
         {
             confiner2D.enabled = true;
-            confiner2D.InvalidateCache();
+            confiner2D.InvalidateBoundingShapeCache();
             confiner2D.enabled = false;
             confiner2D.enabled = true;
         });
         GameTimerController.instance.DeleyActionMain(200, () =>
         {
-            confiner2D.InvalidateCache();
-        });
+            confiner2D.InvalidateBoundingShapeCache();
+        });*/
     }
 
     public void SetCameraOffset(Vector2 offset)
     {
         for (int i = 0; i < CinemachineCameraOffsets.Length; i++)
         {
-            CinemachineCameraOffsets[i].m_Offset = offset;
+            CinemachineCameraOffsets[i].Offset = offset;
         }
     }
 
@@ -156,7 +157,7 @@ public class CameraManager : Singleton<CameraManager>
         for (int i = 0; i < followCameras.Length; i++)
         {
             followCameras[i].Follow = target;
-            followCameras[i].m_Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
+            followCameras[i].Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
         }
     }
     void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
@@ -187,7 +188,7 @@ public class CameraManager : Singleton<CameraManager>
                 }               
             }
             confiner2D.enabled = true;
-            confiner2D.InvalidateCache();
+            confiner2D.InvalidateBoundingShapeCache();
         }
         else
         {
@@ -218,7 +219,7 @@ public class CameraManager : Singleton<CameraManager>
                 });
             }
             confiner2D.enabled = true;
-            confiner2D.InvalidateCache();
+            confiner2D.InvalidateBoundingShapeCache();
         }
     }
 
