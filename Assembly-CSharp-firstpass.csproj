@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{E8243820-5175-6506-BB49-B8282FFEA622}</ProjectGuid>
+    <ProjectGuid>{D44ED5FE-0976-A4A3-5ABB-C37621CE5EBC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
@@ -59,18 +59,18 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.7f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.7f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.7f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\AspectGenerator.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\JobEntityGenerator.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.LambdaJobs.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.SystemAPI.QueryBuilder.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.SystemAPI.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.SystemAPI.Query.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.Common.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\Common.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.EntityQueryBulkOperations.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory_hub6\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\AspectGenerator.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\JobEntityGenerator.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.LambdaJobs.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.SystemAPI.QueryBuilder.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.SystemAPI.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.SystemAPI.Query.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.Common.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\Common.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\SystemGenerator.EntityQueryBulkOperations.dll" />
+    <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogManager.cs" />
@@ -1460,131 +1460,131 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="CFXRRuntime.csproj">
-      <Project>{AFC88E3E-E6B6-B0E7-49DA-E332D358C62C}</Project>
+      <Project>{7DA1328D-DEF2-0209-3EC7-B1E015F7CC4D}</Project>
       <Name>CFXRRuntime</Name>
     </ProjectReference>
     <ProjectReference Include="CFXREditor.csproj">
-      <Project>{FB0D2E3D-2099-6375-7DDA-6464D252568D}</Project>
+      <Project>{F8606263-3A45-4E2A-11A8-F5389032BE2E}</Project>
       <Name>CFXREditor</Name>
     </ProjectReference>
     <ProjectReference Include="CFXRDemo.csproj">
-      <Project>{92EB6859-11BF-4FCA-9892-93342033BBA1}</Project>
+      <Project>{3307AD9C-B0D0-F38D-5656-486456F588A2}</Project>
       <Name>CFXRDemo</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Timeline.csproj">
-      <Project>{CDDE565E-385E-AB93-3EEE-1258EBF56FBA}</Project>
+      <Project>{56F4CF0B-27B7-8AF3-9FB3-F8183913F6C9}</Project>
       <Name>Unity.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
-      <Project>{56F1B001-D19C-A285-5739-11A2F75B8ADE}</Project>
+      <Project>{3D5EF0A0-443A-F107-529B-C74D80455709}</Project>
       <Name>Unity.RenderPipelines.Core.ShaderLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="ToonyColorsPro.Demo.Editor.csproj">
-      <Project>{D7E77FB8-8493-48DC-C425-563E7FF0F500}</Project>
+      <Project>{90D8C5B0-85A7-272C-B543-ABAE2F80C662}</Project>
       <Name>ToonyColorsPro.Demo.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.GPUDriven.Runtime.csproj">
-      <Project>{12861025-B8B7-3920-4619-E1AC46F25EEC}</Project>
+      <Project>{DF11FC2F-B091-A4E2-50CF-F37D043F56AD}</Project>
       <Name>Unity.RenderPipelines.GPUDriven.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="PPv2URPConverters.csproj">
-      <Project>{1AFB559D-CC69-7212-76AE-54FE48374D34}</Project>
+      <Project>{0A5A1807-3F08-A240-2B45-A5265DEF7A69}</Project>
       <Name>PPv2URPConverters</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Config.Runtime.csproj">
-      <Project>{3A288FD2-D4A1-D969-E4A9-08355836B5B8}</Project>
+      <Project>{1734C5AE-DD48-EE4E-F628-47229BCE7269}</Project>
       <Name>Unity.RenderPipelines.Universal.Config.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Editor.csproj">
-      <Project>{755722CD-35E8-8F92-43B9-5C182D652737}</Project>
+      <Project>{ED00E899-D039-C85E-876E-E05DDA71774B}</Project>
       <Name>Unity.RenderPipelines.Universal.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.csproj">
-      <Project>{BEA6C1FD-A3B2-237A-3706-76C2A76F80EA}</Project>
+      <Project>{7CE36D04-32EB-ED25-CD53-FF4B627BDB56}</Project>
       <Name>Unity.TextMeshPro</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Tilemap.Extras.csproj">
-      <Project>{E10B1BE2-9BFB-E792-9BA5-3E825B7E7A78}</Project>
+      <Project>{9EC290ED-6CE9-B48C-6C71-B23B02D4BAEC}</Project>
       <Name>Unity.2D.Tilemap.Extras</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Runtime.csproj">
-      <Project>{3A72FFB0-5CC2-AA2D-3017-206F0BC6B5F1}</Project>
+      <Project>{982D18EA-5158-C8E9-B17B-7F4F80459022}</Project>
       <Name>Unity.RenderPipelines.Universal.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
-      <Project>{A0D4358F-F792-2308-A963-4F29C51C7893}</Project>
+      <Project>{F7A29FAC-9737-C03A-6D27-D86BE9801B12}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.2D.Runtime.csproj">
-      <Project>{FF0903CE-334B-8C03-342C-E3DD1AD475E6}</Project>
+      <Project>{3429F55E-DF99-C0C4-D049-796BC8267AC0}</Project>
       <Name>Unity.RenderPipelines.Universal.2D.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.InputSystem.ForUI.csproj">
-      <Project>{E64671C4-9408-1BE3-5053-87EC64B9EBC0}</Project>
+      <Project>{289186D7-A016-9256-1E04-695B1207B73C}</Project>
       <Name>Unity.InputSystem.ForUI</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{FD045050-5EEF-53D6-4E6C-CEBF48ABB0DA}</Project>
+      <Project>{402C335F-574F-29D3-81CC-BC0A33F98943}</Project>
       <Name>UnityEditor.UI</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
-      <Project>{AA952A72-099F-7E89-E23B-8FF6199D4C75}</Project>
+      <Project>{B6DA6BFD-FBD2-2BAA-8ED6-56047CCFBEB3}</Project>
       <Name>Unity.RenderPipeline.Universal.ShaderLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Shaders.csproj">
-      <Project>{BD654086-47C6-43BB-BF7F-BFD9E9D989AC}</Project>
+      <Project>{8C5CEFCE-1853-28A4-AB3D-30AAAFB051B6}</Project>
       <Name>Unity.RenderPipelines.Universal.Shaders</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.Shared.csproj">
-      <Project>{70E3A5C7-1BC1-7CEF-09F9-961B36824DB2}</Project>
+      <Project>{994A865A-9528-7952-0AC6-56D1426C7A7D}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Timeline.Editor.csproj">
-      <Project>{87F488CF-D355-C37D-803D-3E6D43413B5F}</Project>
+      <Project>{7579CFE9-2484-A90A-0515-54B24E97C033}</Project>
       <Name>Unity.Timeline.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="TextMeshProEffect.csproj">
-      <Project>{178CE7E1-4F0D-617B-2103-25A00EADB581}</Project>
+      <Project>{520C487E-2AE7-9DB9-FF07-ECE2F6E69CDE}</Project>
       <Name>TextMeshProEffect</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{12FB71DA-DC77-310E-AF8E-DDF15C4324C7}</Project>
+      <Project>{E63B3365-6AB8-BAF8-B2AE-6AA883D92DF8}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Editor.Shared.csproj">
-      <Project>{5E2FEC7C-2B51-9EB3-FEF2-4026228D6AFD}</Project>
+      <Project>{D6E45C9D-E942-4791-3B18-A55D26CB875D}</Project>
       <Name>Unity.RenderPipelines.Core.Editor.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="TextMeshProEffect.Editor.csproj">
-      <Project>{1B3BDDD2-C849-1A01-DA5E-7A3567D2E60B}</Project>
+      <Project>{29894FAA-A0CD-6392-BE47-1B7C19C19DA5}</Project>
       <Name>TextMeshProEffect.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Editor.csproj">
-      <Project>{8D2DE9A8-36D8-D55B-2333-4A217A9E49FA}</Project>
+      <Project>{8E92951B-77C7-628E-ED27-23C891B9CADD}</Project>
       <Name>Unity.Mathematics.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="KinoBloom.Runtime.csproj">
-      <Project>{05D6D1D5-13B5-5D10-F6EF-253A663745FF}</Project>
+      <Project>{2738D9A9-DF73-68D5-80E5-91D879128F3D}</Project>
       <Name>KinoBloom.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
-      <Project>{6423E911-E914-EBA7-8488-B9C456369781}</Project>
+      <Project>{300A357D-077F-AF6D-3BC3-0A2BD243A36D}</Project>
       <Name>Unity.2D.Tilemap.Extras.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.csproj">
-      <Project>{65DB6082-9246-2595-343F-FFB8DDF746A6}</Project>
+      <Project>{4B8C469E-F911-0702-7964-0E21CA3F2CB1}</Project>
       <Name>Unity.Mathematics</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
-      <Project>{16F54C1C-D2CD-7EE6-40E9-962125033FC7}</Project>
+      <Project>{CB337EA5-C405-5E57-86A9-63A35D67A756}</Project>
       <Name>Unity.RenderPipelines.Core.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
-      <Project>{A31536B1-257F-FCCC-8EFB-92282FA46BAC}</Project>
+      <Project>{88B86088-1A69-2D40-699F-A85FC885142A}</Project>
       <Name>Unity.TextMeshPro.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.InputSystem.csproj">
-      <Project>{FD1D7FB7-BE13-97B9-49C7-6E8E29A80FA8}</Project>
+      <Project>{2FEA290E-D7A4-37A2-A2D7-C4898B72390D}</Project>
       <Name>Unity.InputSystem</Name>
     </ProjectReference>
   </ItemGroup>
