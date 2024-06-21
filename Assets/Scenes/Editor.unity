@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!20 &93301981
 Camera:
   m_ObjectHideFlags: 0
@@ -166,10 +166,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.049074072
+    x: 0
     y: 0
-    width: 0.27239582
-    height: 0.27239585
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -528,7 +528,7 @@ PrefabInstance:
     - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -2.04
       objectReference: {fileID: 0}
     - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
@@ -579,6 +579,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FollowY
+      objectReference: {fileID: 0}
+    - target: {fileID: 2354975182043223947, guid: 957f333c8545dc94080f5c9281725318,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4268441121035850149, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
@@ -950,8 +955,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -1.4972501, y: 2.4639, z: 0}
-    m_Extent: {x: 8.462851, y: 8.9077, z: 0}
+    m_Center: {x: -1.5009, y: 2.46855, z: 0}
+    m_Extent: {x: 8.4653, y: 8.90835, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
