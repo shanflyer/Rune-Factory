@@ -161,15 +161,19 @@ public class FightCharacter : IReferenceData
                         skillRuntime.Value.UpData(1);
                     }
 
-                    for(int i=buffRuntimes.Count-1;i>=0;i--) 
+                    if (buffRuntimes != null)
                     {
-                        buffRuntimes[i].BuffPerAction(instanceId);
-                        if (buffRuntimes[i].BuffActionEnd())
+                        for (int i = buffRuntimes.Count - 1; i >= 0; i--)
                         {
-                            RemoveBuffAction(buffRuntimes[i]);
-                            buffRuntimes.RemoveAt(i);
-                        } 
+                            buffRuntimes[i].BuffPerAction(instanceId);
+                            if (buffRuntimes[i].BuffActionEnd())
+                            {
+                                RemoveBuffAction(buffRuntimes[i]);
+                                buffRuntimes.RemoveAt(i);
+                            }
+                        }
                     }
+                   
                 }
             }
         }
