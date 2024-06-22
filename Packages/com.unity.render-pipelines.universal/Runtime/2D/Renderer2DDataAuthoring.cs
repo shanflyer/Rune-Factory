@@ -6,17 +6,19 @@ namespace UnityEngine.Rendering.Universal
     {
 #if UNITY_EDITOR
         [SerializeField]
-        Renderer2DDefaultMaterialType m_DefaultMaterialType = Renderer2DDefaultMaterialType.Lit;
-
+        Renderer2DDefaultMaterialType m_DefaultMaterialType = Renderer2DDefaultMaterialType.Lit; 
         internal override Shader GetDefaultShader()
         {
             return Shader.Find("Universal Render Pipeline/2D/Sprite-Lit-Default");
         }
 
+        [SerializeField]
+        Renderer2DResources resources;
         internal override Material GetDefaultMaterial(DefaultMaterialType materialType)
         {
-            if (!GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out var resources))
+            if (!GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out  resources))
                 return null;
+              
 
             switch (materialType)
             {
@@ -106,6 +108,7 @@ namespace UnityEngine.Rendering.Universal
         private void Awake()
         {
             RebuildBlendStyles();
+            GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out  resources);
         }
 
         void Reset()
