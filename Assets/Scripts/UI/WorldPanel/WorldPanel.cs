@@ -157,15 +157,22 @@ public class WorldPanel : GamePanel<MyInt>
 
                     if (GameController.instance.test)
                     {
-                        SelectFightChapter(data, true);
+                       // SelectFightChapter(data, true);
 
                     }
                     else 
                     if (fightMapData.season == selectSeason && fightMapData.isOpen)
                     {
-                        SelectFightChapter(data, true);
+                       // SelectFightChapter(data, true);
                     }
                 }
+            }
+        }
+        for(int i = 0; i < seasonFightChapterList.Count; i++)
+        {
+            if (seasonFightChapterList[i].TrySelect())
+            {
+                break;
             }
         }
 

@@ -94,16 +94,27 @@ public class BuffRuntime
                 buffActionBehavior.PlayParticle();
             }
         } 
-    }
+    } 
     void ParticleSystemStopAction()
     {
         if (runtimeObj != null)
         {
             GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
             runtimeObj = null;
-        }
-       
+            buffActionBehavior = null;
+        } 
     }
+    public void RemoveBuff()
+    {
+        if (runtimeObj != null)
+        {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+            runtimeObj = null;
+            buffActionBehavior = null;
+        }
+    }
+
+
     public bool BuffActionEnd()
     {
         nowActionIndex++;

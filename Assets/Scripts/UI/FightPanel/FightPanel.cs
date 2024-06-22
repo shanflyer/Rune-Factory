@@ -33,7 +33,6 @@ public class FightPanel : GamePanel<IReferenceData>
     Transform fightCharacterCardParent;
     DisplayList<FightCharacterCard, FightCharacter> fightCharacterCardList;
 
-
     DisplayList<FightCharacterReference, FightCharacter> fightCharacterReferenceList;
 
     private int dataId;

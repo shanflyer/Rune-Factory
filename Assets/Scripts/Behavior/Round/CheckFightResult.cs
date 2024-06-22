@@ -19,7 +19,7 @@ public class CheckFightResult : Action
 	{
 		bool2 result = FightManager.instance.IsFightEnd();
 		FightResult.SetValue(result.y);
-		if (result.x)
+		if (result.x||result.y)
 		{
             return TaskStatus.Success;
         }

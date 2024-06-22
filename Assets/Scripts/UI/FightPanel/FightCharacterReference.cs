@@ -83,6 +83,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
         GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
         GameActionManager.instance.RemoveListener<SkillAutoLock>(SkillAutoLock);
+        GameActionManager.instance.RemoveListener<SetChapterFight>(SetChapterFight);
         base.ClearData();
     }
     void ActionSkill()
@@ -126,7 +127,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
         skillPanel = FindChildGameObject("SkillPanel");
         skillIcon = FindChildGameObject<Image>("SkillIcon");
-        skillButton = FindChildGameObject<Button>("SkillPanel");
+        skillButton = FindChildGameObject<Button>("SkillPanel/BG");
         skillName = FindChildGameObject<TextMeshProUGUI>("SkillName");
         skillValue = FindChildGameObject<Image>("SkillValue");
         ActiveObj = FindChildGameObject("Active").gameObject;
@@ -142,11 +143,15 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
         GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
         GameActionManager.instance.AddListener<SkillAutoLock>(SkillAutoLock);
+        GameActionManager.instance.AddListener<SetChapterFight>(SetChapterFight);
 
         InitData();
-        Mask.gameObject.SetActive(false);
+        //Mask.gameObject.SetActive(false);
     }
-
+    void SetChapterFight(SetChapterFight setChapterFight)
+    {
+        Mask.SetActive(!setChapterFight.isInFight);
+    }
     private void RefreshCharacter(RefreshCharacter refreshCharacter)
     {
         if (fightPlayer!=null&&fightPlayer.character.instanceId == refreshCharacter.id)
@@ -205,14 +210,18 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
     }
 
+    public void SetSkillPanel(bool show)
+    {
+        skillPanel.transform.localScale = show ? Vector3.one : Vector3.zero;
+    }
     private void Update()
     {
         if (playerSkillRuntime == null)
             return;
         float value = playerSkillRuntime.GetTimeValue();
         value = Mathf.Clamp(value, 0, 1); 
-        skillValue.fillAmount =value;
-       
+        skillValue.fillAmount =value; 
+
         if (value <= 0)
         {
             ActiveObj.gameObject.SetActive(true);

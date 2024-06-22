@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public enum FightStatus
 {
@@ -21,6 +22,8 @@ public class FightCharacter : IReferenceData
     public virtual AttributeType DefenceAttributeType { get; }
     public virtual CharacterProperty characterProperty { get; }
     public virtual Sprite icon { get; set; }
+
+    public virtual string Name { get; }
     public int instanceId { get; set; }
     public virtual int behaviorId { get; }
     public int2 fightPos;
@@ -29,6 +32,7 @@ public class FightCharacter : IReferenceData
     public FightCharacter()
     {
         buffMulProperty = CharacterProperty.FullPercent;
+        buffRuntimes = new List<BuffRuntime>();
     }
     public virtual CharacterProperty buffAddProperty { get; }
     public virtual CharacterProperty buffMulProperty { get; }
@@ -37,7 +41,14 @@ public class FightCharacter : IReferenceData
     {
         return false;
     }
-
+    public virtual void DeathAction()
+    {
+        for(int i = 0; i < buffRuntimes.Count; i++)
+        {
+            buffRuntimes[i].RemoveBuff();
+        }
+        buffRuntimes.Clear();
+    }
     public virtual bool CheckAction()
     { return false; }
 
@@ -121,15 +132,19 @@ public class FightCharacter : IReferenceData
         {
             return;
         }
-        for (int i = buffRuntimes.Count - 1; i >= 0; i--)
+        if (buffRuntimes != null && buffRuntimes.Count > 0)
         {
-            var oldBuffRuntime = buffRuntimes[i];
-            if (buffRuntime.buffData.coverBuffs.Contains(oldBuffRuntime.buffData.id))
+            for (int i = buffRuntimes.Count - 1; i >= 0; i--)
             {
-                RemoveBuffAction(oldBuffRuntime);
-                buffRuntimes.RemoveAt(i);
+                var oldBuffRuntime = buffRuntimes[i];
+                if (buffRuntime.buffData.coverBuffs.Contains(oldBuffRuntime.buffData.id))
+                {
+                    RemoveBuffAction(oldBuffRuntime);
+                    buffRuntimes.RemoveAt(i);
+                }
             }
         }
+        
         if (buffRuntime.buffData.lifeTime > 0)
         {
             AddBuffAction(buffRuntime);
@@ -183,7 +198,10 @@ public class FightCharacter : IReferenceData
     {
         InitRundTime();
     }
-
+    public virtual void ChangeCharacterValue(ChangeCharacterProperty setCharacterProperty)
+    {
+        InitRundTime();
+    }
     public virtual Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     {
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
@@ -213,8 +231,8 @@ public class FightPlayer : FightCharacter
             return character.CharacterProperty*buffMulProperty*0.01f+buffAddProperty;
         }
     }
- 
 
+    public override string Name { get => character.name; }
     public Character character;
     public override Sprite icon { get => character.characterData.icon.sprite; set => base.icon = value; }
     public override AttributeType AttackAttributeType => character.AttackAttributeType;
@@ -330,12 +348,7 @@ public class FightPlayer : FightCharacter
         }
     }
 
-    public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
-    {
-        character.SetProperty(setCharacterProperty);
-        base.SetCharacterValue(setCharacterProperty);
-    }
-
+    
     public FightPlayer(Character character) : base()
     {
         this.character = character;
@@ -351,6 +364,7 @@ public class FightPlayer : FightCharacter
 
 public class FightMonster : FightCharacter
 {
+    public override string Name { get => monsterData.monsterName; }
     public override int attackType => monsterData.attackType;
 
     public MonsterData monsterData;
@@ -438,13 +452,25 @@ public class FightMonster : FightCharacter
     private void InitCharacterProperty()
     {
         _characterProperty.HP = monsterData.HP;
+        _characterProperty.MaxHP = monsterData.HP;
         _characterProperty.AT = monsterData.AT;
         _characterProperty.DF = monsterData.DF;
         _characterProperty.Speed = monsterData.Speed;
         _characterProperty.Lucky = monsterData.Lucky;
         attributeType = monsterData.attributeType;
     }
-
+    public override void ChangeCharacterValue(ChangeCharacterProperty changeCharacterProperty)
+    {
+        
+        _characterProperty.ChangeProperty(changeCharacterProperty);
+        CharacterPropertyTrigger CharacterPropertyTrigger = new CharacterPropertyTrigger
+        {
+            characterId = instanceId,
+            characterProperty = _characterProperty
+        };
+        GameActionManager.instance.QueueAction(CharacterPropertyTrigger, true);
+        base.ChangeCharacterValue(changeCharacterProperty);
+    }
     public override void SetCharacterValue(SetCharacterProperty setCharacterProperty)
     {
         _characterProperty.SetProperty(setCharacterProperty);

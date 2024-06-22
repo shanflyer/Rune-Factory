@@ -721,6 +721,10 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             character.AddProperty(changeCharacterProperty);
         }
+        else if (FightManager.instance.GetFightCharacter(changeCharacterProperty.characterId, out FightCharacter fightCharacter))
+        {
+            fightCharacter.ChangeCharacterValue(changeCharacterProperty);
+        }
     }
 
     public int GetCharacterProperty(int characterId, CharacterPropertyType propertyType)

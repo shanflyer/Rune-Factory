@@ -29,6 +29,19 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
         });
     }
 
+    public bool TrySelect()
+    {
+        if (activeObj.localScale != Vector3.zero)
+        {
+            selected.SetIsOnWithoutNotify(true);
+            if (SelectAction != null)
+            {
+                SelectAction(data, true);
+            }
+            return true;
+        }
+        return false;
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();

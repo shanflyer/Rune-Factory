@@ -17,7 +17,7 @@ public class CheckFightCharacterCount : Action
         {
             fightCharacters = (SharedQueneInt)Owner.GetVariable("fightCharacters");
         }
-        Debug.Log($"fightCharacterCount:{fightCharacters.Value.Count}");
+        //Debug.Log($"fightCharacterCount:{fightCharacters.Value.Count}");
     }
 
     public override TaskStatus OnUpdate()
