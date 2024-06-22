@@ -130,7 +130,6 @@ public class FightPanel : GamePanel<IReferenceData>
         {
             SwitchAutoExplore switchAutoExplore = new SwitchAutoExplore
             {
-                explore = true,
                 setResult=(bool value)=> 
                 {
                     auto = value;

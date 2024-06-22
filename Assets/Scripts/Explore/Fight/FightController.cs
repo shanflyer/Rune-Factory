@@ -231,7 +231,7 @@ public class FightController : MonoBehaviour
 
     private void EndPlayerRound(EndPlayerRound endPlayerRound)
     {
-        _chapterFight = false;
+      //  _chapterFight = false;
     }
 
     private void FightCharacterMove(FightCharacterMove fightCharacterMove)
@@ -250,6 +250,7 @@ public class FightController : MonoBehaviour
 
     private void TryStartAutoExplore(TryStartAutoExplore tryStartAutoExplore)
     {
+        _chapterFight = false;
         if (autoExplore)
         {
             StartWalk();
@@ -441,9 +442,8 @@ public class FightController : MonoBehaviour
     private void SwitchAutoExplore(SwitchAutoExplore switchAutoExplore)
     {
         autoExplore = !autoExplore;
-        if (switchAutoExplore.explore)
-        {
-           
+        if (!chapterFight)
+        { 
             if (switchAutoExplore.setResult != null)
             {
                 switchAutoExplore.setResult(autoExplore);
