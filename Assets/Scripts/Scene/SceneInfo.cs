@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SceneInfo : MonoBehaviour
 {
     [SerializeField]
-    Text info;  
+    TextMeshProUGUI info;  
     [SerializeField]
     Animation animation;
 

@@ -426,7 +426,7 @@ public class FightMonster : FightCharacter
     {
         get
         {
-            return _characterProperty * buffMulProperty + buffAddProperty;
+            return _characterProperty * buffMulProperty*0.01f + buffAddProperty;
         }
     }
 

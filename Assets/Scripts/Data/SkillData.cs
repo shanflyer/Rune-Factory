@@ -38,6 +38,7 @@ public class SkillData : ScriptableObject, IGameData
     private string iconName; 
     private string myTimeLineDataName;
     public MyTimeLineData myTimeLineData;
+    public string desc;
     public override string ToString()
     {
         return id.ToString();

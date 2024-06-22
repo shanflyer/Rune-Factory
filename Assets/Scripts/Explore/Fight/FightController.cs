@@ -912,7 +912,7 @@ public class FightController : MonoBehaviour
             fightCharacter.fightStatus = FightStatus.ÐÐ¶¯;
             fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId, out var skillRuntime);
             SkillData skillData;
-            if (skillRuntime == null)
+            if (skillRuntime != null)
             {
                 skillData = skillRuntime.skillData;
             }
