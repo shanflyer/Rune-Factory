@@ -116,7 +116,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
             {
 
                 List<Transform> targets = new List<Transform>();
-                if (skillEstimateData.targets != null)
+                if (skillEstimateData!=null&&skillEstimateData.targets != null)
                 {
                     for (int i = 0; i < skillEstimateData.targets.Count; i++)
                     {
@@ -195,11 +195,15 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                         }
                                         break;
                                     case BindType.FightTarget:
-                                        childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.targets[0]);
-                                        if (childAnimator)
+                                        if (skillEstimateData != null)
                                         {
-                                            childObj = childAnimator.gameObject;
+                                            childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.targets[0]);
+                                            if (childAnimator)
+                                            {
+                                                childObj = childAnimator.gameObject;
+                                            }
                                         }
+                                       
                                         break;
                                     case BindType.Character:
                                         if (CharacterManager.instance.GetRuntimeCharacterObj(source, out var characterRuntimeObj))
