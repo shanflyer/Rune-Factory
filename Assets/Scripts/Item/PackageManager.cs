@@ -38,7 +38,30 @@ public class PackageManager : Singleton<PackageManager>
             }
         }, "使用");
     }
+    public async void ShowFightPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    {
+        Character character = CharacterManager.instance.controllerCharacter;
+        PackageList packageList = new PackageList
+        {
+            packageDatas = new List<PackageData>(),
+            itemMatchData = itemMatchData
+        };
+        if (gamePackages.TryGetValue(character.characterPackage, out GamePackage gamePackage))
+        {
+            packageList.packageDatas.Add(gamePackage.OutGamePackageData());
+        }
+        var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+        warehousePanel.SetSelectItemAction((Item item, bool select) =>
+        {
 
+            FightManager.instance.TryUseItem(item);
+            // UsingAction(item);
+            if (close)
+            {
+                UIManager.instance.CloseGamePanel<WarehousePanel>();
+            }
+        }, "使用");
+    }
     private void UsingAction(Item item)
     {
         ItemUseAction itemUseAction = new ItemUseAction
@@ -901,13 +924,17 @@ public class PackageManager : Singleton<PackageManager>
     private async Task<bool> UsetItemAction(int itemId)
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.ToString());
-        if (itemData != null && itemData.useEventId.Count > 0)
+        if (itemData != null )
         {
-            for (int i = 0; i < itemData.useEventId.Count; i++)
+            if(itemData.useEventId!=null)
             {
-                GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(itemData.useEventId[i].ToString());
-                gameActionData.Action(immediately:true);
+                for (int i = 0; i < itemData.useEventId.Count; i++)
+                {
+                    GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(itemData.useEventId[i].ToString());
+                    gameActionData.Action(immediately: true);
+                }
             }
+           
             return true;
         }
         return false;

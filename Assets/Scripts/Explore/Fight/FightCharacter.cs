@@ -106,8 +106,22 @@ public class FightCharacter : IReferenceData
                 buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.mulActionValue.x, buffRuntime.buffData.mulActionValue.y);
                 break;
             case BuffActionType.伤害:
+                int hurt = GameRandom.RandomInt(buffRuntime.buffData.addActionValue.x, buffRuntime.buffData.addActionValue.y);
+                if (hurt > 0)
+                {
+                    int value = GameRandom.RandomInt(buffRuntime.buffData.mulActionValue.x, buffRuntime.buffData.mulActionValue.y);
+                    hurt = (int)(characterProperty.MaxHP * (value * 0.01f));
+                }
+                FightManager.instance.FightHPChange(-hurt, this, true, HurtResultType.Default);
                 break;
             case BuffActionType.回复:
+                int addHP = GameRandom.RandomInt(buffRuntime.buffData.addActionValue.x, buffRuntime.buffData.addActionValue.y);
+                if (addHP <= 0)
+                {
+                    int value = GameRandom.RandomInt(buffRuntime.buffData.mulActionValue.x, buffRuntime.buffData.mulActionValue.y);
+                    addHP = (int)(characterProperty.MaxHP * (value * 0.01f));
+                }
+                FightManager.instance.FightHPChange(addHP, this, true, HurtResultType.Default);
                 break;
         }
     }
@@ -144,10 +158,9 @@ public class FightCharacter : IReferenceData
                 }
             }
         }
-        
+        AddBuffAction(buffRuntime);
         if (buffRuntime.buffData.lifeTime > 0)
-        {
-            AddBuffAction(buffRuntime);
+        { 
             buffRuntimes.Add(buffRuntime);
         }
     }

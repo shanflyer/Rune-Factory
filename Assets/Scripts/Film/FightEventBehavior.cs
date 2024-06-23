@@ -17,8 +17,8 @@ public class FightEventBehavior : PlayableBehaviour
         for(int i = 0; i < skillEstimateData.targets.Count; i++)
         {
             ActionSkillEstimate actionSkillEstimate = new ActionSkillEstimate
-            {
-                skillId = skillEstimateData.skillId,
+            {  
+                skillId = skillEstimateData.skillRuntime != null?skillEstimateData.skillRuntime.instanceId: skillEstimateData.skillId,
                 sourceId = skillEstimateData.source,
                 index = index,
                 targetId = skillEstimateData.targets[i],

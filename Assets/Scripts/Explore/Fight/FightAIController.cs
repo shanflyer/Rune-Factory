@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum FightType
 {
-   All, 攻击,回复,复活,待机,buff
+   All, 攻击,回复,复活,待机,buff,使用道具
 }
 public enum TargetType
 {
@@ -27,6 +27,7 @@ public class FightAIController :Singleton<FightAIController>
 [System.Serializable]
 public class SkillEstimateData
 {
+    public SkillRuntime skillRuntime;
     public int skillId;
     public int source;
     public List<int> targets;

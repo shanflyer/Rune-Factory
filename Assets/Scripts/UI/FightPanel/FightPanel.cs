@@ -12,7 +12,8 @@ public class FightPanel : GamePanel<IReferenceData>
     [SerializeField]
     private TextMeshProUGUI MapName, ExploreValue;
 
- 
+    [SerializeField]
+    Image useItemMask;
     [SerializeField]
     private Button GoingButton, UsingButton, AutoButton, RetreatButton, SwitchButton;
     [SerializeField]
@@ -64,6 +65,7 @@ public class FightPanel : GamePanel<IReferenceData>
 
         fightCharacterCard = FindChildGameObject<FightCharacterCard>("FightCard");
         fightCharacterCardParent = FindChildGameObject("FightCardParent");
+        useItemMask = FindChildGameObject<Image>("UseItemMask");
     }
 
     bool fight = false;
@@ -101,6 +103,8 @@ public class FightPanel : GamePanel<IReferenceData>
         GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton); 
         GameActionManager.instance.RemoveListener<StopAutoFight>(StopAutoFight);
         GameActionManager.instance.RemoveListener<RefreshFightCharacterList>(RefreshFightCharacterList);
+        GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
+        GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
         base.OnDisable();
     }
 
@@ -110,6 +114,8 @@ public class FightPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<SwitchFunctionButton>(SwitchFunctionButton); 
         GameActionManager.instance.AddListener<StopAutoFight>(StopAutoFight);
         GameActionManager.instance.AddListener<RefreshFightCharacterList>(RefreshFightCharacterList);
+        GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
+        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
         AutoTips.localScale = Vector3.zero;
         base.OnEnable();
     }
@@ -118,7 +124,19 @@ public class FightPanel : GamePanel<IReferenceData>
     {
         RefreshFightCardList();
     }
-
+    void NoSelectSkillAction(NoSelectSkillAction noSelectSkillAction)
+    {
+        if (useItemMask.enabled)
+        {
+            UsingButton.interactable = true;
+        }
+    }
+    bool skillPause = false;
+    void SkillPauseAction(SkillPauseAction skillPauseAction)
+    {
+        skillPause = skillPauseAction.pause;
+        UsingButton.interactable = !skillPauseAction.pause;
+    }
     PlayerFight playerFight = new PlayerFight();
    // StartRoundFight startRoundFight = new StartRoundFight();
     protected override void Awake()
@@ -141,6 +159,18 @@ public class FightPanel : GamePanel<IReferenceData>
         GoingButton.onClick.AddListener(GoingAction);
         RetreatButton.onClick.AddListener(ExitFight);
         UsingButton.onClick.AddListener(() => {
+
+            if (useItemMask.enabled)
+            { 
+                SkillPauseAction skillPauseAction = new SkillPauseAction
+                {
+                    pause = true,
+                };
+                Debug.Log($"使用道具-暂停");
+                GameActionManager.instance.QueueAction(skillPauseAction, true);
+            }
+
+            UsingButton.interactable = false;
             FightController.instance.StopWalk();
             going = true;
             goingText.text = "前进";
@@ -152,7 +182,7 @@ public class FightPanel : GamePanel<IReferenceData>
                     (int)ItemType.食物
                 }
             };
-            PackageManager.instance.ShowPlayerBagUse(true, itemMatchData);
+            PackageManager.instance.ShowFightPlayerBagUse(true, itemMatchData);
         });
         
         SwitchButton.onClick.AddListener(FightManager.instance.RoundPlayer);
@@ -176,11 +206,13 @@ public class FightPanel : GamePanel<IReferenceData>
         {
             GoingButton.interactable = false;
             RetreatButton.interactable = false;
-            UsingButton.interactable = false;
+            useItemMask.enabled = true;
             fightCharacterCardParent.gameObject.SetActive(true);
         }
         else
         {
+            useItemMask.enabled = false;
+            UsingButton.interactable = !auto;
             GoingButton.interactable = !auto;
             RetreatButton.interactable = !auto;
             fightCharacterCardParent.gameObject.SetActive(false);
@@ -233,8 +265,13 @@ public class FightPanel : GamePanel<IReferenceData>
     public override async Task InitData(string dataKey)
     {
         ExploreButtons.gameObject.SetActive(true);
-         
-        GoingButton.interactable = true; UsingButton.interactable = true; AutoButton.interactable = true; RetreatButton.interactable = true; SwitchButton.interactable = true;
+        UsingButton.interactable = true;
+        useItemMask.enabled = false;
+        GoingButton.interactable = true;
+        UsingButton.interactable = true;
+        AutoButton.interactable = true; 
+        RetreatButton.interactable = true;
+        SwitchButton.interactable = true;
         going = true;
         goingText.text = "前进";
         up = false;
@@ -276,7 +313,7 @@ public class FightPanel : GamePanel<IReferenceData>
         operateIcon.transform.localScale = up ? new Vector3(1, -1, 1) : new Vector3(1, 1, 1);
 
         //RefreshFightCardList();
-
+        skillPause = false;
     }
  
     void RefreshFightCardList()
@@ -284,5 +321,20 @@ public class FightPanel : GamePanel<IReferenceData>
         fightCharacterCardParent.gameObject.SetActive(true);
         var fightCharacters = FightManager.instance.GetAllFightCharacters();
         fightCharacterCardList.InitListData(fightCharacters);
+    }
+    private void Update()
+    { 
+        if (useItemMask.enabled&&!skillPause)
+        {
+            useItemMask.fillAmount = FightManager.instance.GetUseItemCd();
+            if (useItemMask.fillAmount <= 0)
+            {
+                UsingButton.interactable = true;
+            }
+            else
+            {
+                UsingButton.interactable = false;
+            }
+        }
     }
 }

@@ -20,10 +20,27 @@ public class FightManager : Singleton<FightManager>
     private Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     private List<int> fightPlayers = new List<int>();
     private List<int> fightMonsters = new List<int>();
+    private Dictionary<int, int> playerDic = new Dictionary<int, int>();
     private Dictionary<int2, int> singleMonsterDic = new Dictionary<int2, int>();
     private Dictionary<int2, List<int>> horizontalMonsterDic = new Dictionary<int2, List<int>>();
     private Dictionary<int2, List<int>> verticalMonsterDic = new Dictionary<int2, List<int>>();
 
+    private SkillRuntime useItemSkillRuntime;
+    private Item nowUsedItem;
+    public void TryUseItem(Item item)
+    {
+        nowUsedItem = item;
+        SelectSkillAction selectSkillAction = new SelectSkillAction
+        {
+            skillRuntime = useItemSkillRuntime,
+            ActionCharacter = CharacterManager.instance.controllerCharacter.instanceId,
+        };
+        GameActionManager.instance.QueueAction(selectSkillAction, true);
+    }
+    public float GetUseItemCd()
+    {
+        return useItemSkillRuntime.GetTimeValue();
+    }
     public override async void Init()
     {
         base.Init();
@@ -40,7 +57,8 @@ public class FightManager : Singleton<FightManager>
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
         GameActionManager.instance.AddListener<AllCharacterTryAutoFight>(AllCharacterTryAutoFight);
         GameActionManager.instance.AddListener<StopAllCharacterAutoFight>(StopAllCharacterAutoFight);
-        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction); 
+        GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
+        GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
 
         fightResult = new FightResult
         {
@@ -54,6 +72,15 @@ public class FightManager : Singleton<FightManager>
     { get { return fightResult; } }
     private FightResult fightResult;
 
+    void NoSelectSkillAction(NoSelectSkillAction noSelectSkillAction)
+    {
+        nowUsedItem = default(Item);
+    }
+    async void CreatUseItemSkill()
+    {
+        int skillId = 1000;
+        useItemSkillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+    }
     public List<FightCharacter> GetAllFightCharacters()
     {
         List<FightCharacter> _fightCharacters = new List<FightCharacter>();
@@ -98,7 +125,7 @@ public class FightManager : Singleton<FightManager>
     protected override void Clear()
     {
         myInstance.Clear();
-
+        useItemSkillRuntime = null;
         ClearCharacter();
         GetItemIndexs.Clear();
         base.Clear();
@@ -109,7 +136,7 @@ public class FightManager : Singleton<FightManager>
         fightCharacters.Clear();
         fightPlayers.Clear();
         fightMonsters.Clear();
-
+        playerDic.Clear();
         singleMonsterDic.Clear();
         horizontalMonsterDic.Clear();
         verticalMonsterDic.Clear();
@@ -276,7 +303,8 @@ public class FightManager : Singleton<FightManager>
     }
 
     private void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
-    {
+    { 
+        playerDic.Clear();
         for (int i = 0; i < creatFightPlayer.players.Count; i++)
         {
             Character character = CharacterManager.instance.GetCharacterForDataId(creatFightPlayer.players[i]);
@@ -294,7 +322,10 @@ public class FightManager : Singleton<FightManager>
                 Character = character,
             };
             fightResult.fighterResults.Add(fighterResult);
+
+            playerDic.Add(i, fightPlayer.instanceId);
         }
+        CreatUseItemSkill();
     }
 
     public bool GetFightCharacter(int id, out FightCharacter fightCharacter)
@@ -610,6 +641,7 @@ public class FightManager : Singleton<FightManager>
                     var targetList = targets[targetIndex];
                     SkillEstimateData SkillEstimateData = new SkillEstimateData
                     {
+                        skillRuntime=skillRuntime,
                         source = characterId,
                         skillId = skillId,
                         targets = targetList,
@@ -965,10 +997,24 @@ public class FightManager : Singleton<FightManager>
                 break;
         }
     }
-    void SkillAction(FightType fightType, SkillActionType skillActionType, int actionValue,FightCharacter source,FightCharacter target,bool isDisplayHurt)
+    async void SkillAction(FightType fightType, SkillActionType skillActionType, int actionValue,FightCharacter source,FightCharacter target,bool isDisplayHurt)
     {
         switch (fightType)
         {
+            case FightType.使用道具:
+                if (nowUsedItem.dataId != 0)
+                {
+                    ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(nowUsedItem.dataId);
+                    target.CreatBuffRuntime(itemData.typeValue);
+                    ItemUseAction itemUseAction = new ItemUseAction
+                    {
+                        itemId = nowUsedItem.dataId,
+                        itemCount = 1,
+                        packageId = nowUsedItem.packageId
+                    };
+                    GameActionManager.instance.QueueAction(itemUseAction, true);
+                }
+                break;
             case FightType.攻击:
 
                 int hurt = 1;
@@ -1015,7 +1061,7 @@ public class FightManager : Singleton<FightManager>
         GameActionManager.instance.QueueAction(refreshFightCharacterInfo1, true);
     }
 
-    void FightHPChange(int changeValue,FightCharacter target,bool isDisplayHurt,HurtResultType hurtResultType)
+    public void FightHPChange(int changeValue,FightCharacter target,bool isDisplayHurt,HurtResultType hurtResultType)
     {
         ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
         {
@@ -1064,7 +1110,16 @@ public class FightManager : Singleton<FightManager>
 
         FightCharacter source = fightCharacters[sourceId];
         FightCharacter target = fightCharacters[targetId];
-        var skillRuntime = source.skillRuntimes[skillId];
+        SkillRuntime skillRuntime;
+        if (useItemSkillRuntime != null && useItemSkillRuntime.instanceId == skillId)
+        {
+            skillRuntime = useItemSkillRuntime;
+        }
+        else
+        {
+            skillRuntime = source.skillRuntimes[skillId];
+        }
+       
         var skillData = skillRuntime.skillData;
 
         ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
@@ -1196,12 +1251,22 @@ public class FightManager : Singleton<FightManager>
 
         return nowFightCharacters;
     }
-
+    /*
     public void SetManualSelectTargets(TargetRangeType targetRangeType, int2 value)
     {
         List<int> targets = new List<int>();
         switch (targetRangeType)
         {
+            case TargetRangeType.Player:
+                if (playerDic.TryGetValue(value.x, out var player))
+                {
+                    var fightCharacter = fightCharacters[player];
+                    //if (fightCharacter.characterProperty.HP > 0)
+                    {
+                        targets.Add(player);
+                    }
+                }
+                break;
             case TargetRangeType.全部:
                 for (int i = 0; i < fightMonsters.Count; i++)
                 {
@@ -1253,8 +1318,22 @@ public class FightManager : Singleton<FightManager>
                 }
                 break;
         }
+    }*/
+    public List<FightPlayer> GetAllFightPlayer()
+    {
+        List<FightPlayer> result = new List<FightPlayer>();
+        for (int i = 0; i < fightPlayers.Count; i++)
+        {
+            if (fightCharacters.TryGetValue(fightPlayers[i], out var fightCharacter))
+            {
+                if (fightCharacter.characterProperty.HP > 0)
+                {
+                    result.Add((FightPlayer)fightCharacter);
+                }
+            }
+        }
+        return result;
     }
-
     public List<FightMonster> GetAllFightMonster()
     {
         List<FightMonster> result = new List<FightMonster>();
@@ -1373,7 +1452,7 @@ public class FightManager : Singleton<FightManager>
             singleMonsterDic.Clear();
             horizontalMonsterDic.Clear();
             verticalMonsterDic.Clear();
-
+            playerDic.Clear();
             ExploreManager.instance.StepFightSucceed();
         }
         else
@@ -1390,6 +1469,16 @@ public class FightManager : Singleton<FightManager>
         List<int> targets = new List<int>();
         switch (targetRangeType)
         {
+            case TargetRangeType.Player:
+                if (playerDic.TryGetValue(key.x, out var player))
+                {
+                    var fightCharacter = fightCharacters[player];
+                    //if (fightCharacter.characterProperty.HP > 0)
+                    {
+                        targets.Add(player);
+                    }
+                } 
+                break;
             case TargetRangeType.全部:
                 targets = new List<int>();
                 for (int i = 0; i < fightMonsters.Count; i++)
@@ -1446,6 +1535,7 @@ public class FightManager : Singleton<FightManager>
         return targets;
     }
 
+    float useItemCd = 0;
     protected override void UpData()
     {
         base.UpData();
@@ -1458,6 +1548,12 @@ public class FightManager : Singleton<FightManager>
                     fightCharacter.Value.UpData(Time.deltaTime);
                 }
                
+            }
+            useItemCd += Time.deltaTime;
+            if (useItemCd >= GameCommon.DefaultPerRoundCd)
+            {
+                useItemCd = 0;
+                useItemSkillRuntime.UpData();
             }
         }
     }

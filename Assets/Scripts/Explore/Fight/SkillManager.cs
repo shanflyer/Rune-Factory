@@ -7,6 +7,7 @@ using UnityEngine.TextCore.Text;
 public class SkillManager : Singleton<SkillManager>
 {
     MyInstance myInstance = new MyInstance();
+    SkillRuntime useItemRuntime;
     public override void Init()
     {
         base.Init();
@@ -15,6 +16,7 @@ public class SkillManager : Singleton<SkillManager>
     {
         base.Clear();
     }
+   
     public async Task<SkillRuntime> CreatSkillRuntime(int skillId)
     {
         SkillData skillData=await GameDataManager.instance.GetAsyncData<SkillData>(skillId);
@@ -61,7 +63,7 @@ public class SkillRuntime
     {
         skillCd = skillData.cd;
     }
-    public void UpData(int timeValue)
+    public void UpData(int timeValue=1)
     { 
         if (skillCd>0)
         {

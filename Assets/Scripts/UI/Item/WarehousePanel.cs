@@ -76,7 +76,7 @@ public class WarehousePanel : GamePanel<PackageList>
         base.Awake();
         var packageDatas = packageList.packageDatas;
 
-        ReturnButton.onClick.AddListener(Close);
+        ReturnButton.onClick.AddListener(ReturenAction);
         itemBoxs = new DisplayList<ItemBoxReference, Item>(itemBoxReference, itemParent);
 
         ActionButton.onClick.AddListener(() =>
@@ -160,13 +160,27 @@ public class WarehousePanel : GamePanel<PackageList>
         //RefreshPackage();
     }
 
+    void ReturenAction()
+    {
+        FightController fightController = FightController.instance;
+        if (fightController)
+        {
+            SkillPauseAction skillPauseAction = new SkillPauseAction
+            {
+                pause = false,
+            };
+            Debug.Log($"使用道具-暂停");
+            GameActionManager.instance.QueueAction(skillPauseAction, true);
+        }
+        Close();
+    }
     public override void Close()
     {
         base.Close();
         if (otherSelectItemAction != null)
         {
             //  otherSelectItemAction(default(Item), selectPackageData.instanceId);
-        }
+        } 
     }
 
     private async void TryPackageLevelUp()
