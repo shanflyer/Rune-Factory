@@ -101,6 +101,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
             {
                 pause = true,
             };
+            Debug.Log($"…Ë÷√‘›Õ£true1");
             GameActionManager.instance.QueueAction(skillPauseAction, true);
         }
        

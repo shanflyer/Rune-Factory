@@ -16,10 +16,11 @@ namespace UnityEngine.Rendering.Universal
         Renderer2DResources resources;
         internal override Material GetDefaultMaterial(DefaultMaterialType materialType)
         {
-            if (!GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out  resources))
-                return null;
-              
-
+            if (resources == null)
+            {
+                if (!GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out resources))
+                    return null;
+            } 
             switch (materialType)
             {
                 case DefaultMaterialType.Sprite:
@@ -108,7 +109,9 @@ namespace UnityEngine.Rendering.Universal
         private void Awake()
         {
             RebuildBlendStyles();
-            GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out  resources);
+            if (resources == null)
+                GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out resources);
+
         }
 
         void Reset()

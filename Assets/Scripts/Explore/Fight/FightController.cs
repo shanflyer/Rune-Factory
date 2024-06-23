@@ -983,6 +983,7 @@ public class FightController : MonoBehaviour
                 skillMask.enabled = false;
                 if (manualSkill)
                 {
+                    FightManager.instance.cdTimeMoving = true;
                     SkillPauseAction skillPauseAction = new SkillPauseAction
                     {
                         pause = false,

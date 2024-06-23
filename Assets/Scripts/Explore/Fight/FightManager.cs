@@ -92,6 +92,7 @@ public class FightManager : Singleton<FightManager>
     void SkillPauseAction(SkillPauseAction skillPauseAction)
     {
         pauseBehavior = skillPauseAction.pause;
+        Debug.Log($"暂停{pauseBehavior}");
     }
 
     protected override void Clear()
@@ -1055,8 +1056,7 @@ public class FightManager : Singleton<FightManager>
 
     private void ActionSkillEstimate(ActionSkillEstimate actionSkillEstimate)
     {
-        cdTimeMoving = false;
-
+        cdTimeMoving = false; 
         int skillId = actionSkillEstimate.skillId;
         int sourceId = actionSkillEstimate.sourceId;
         int targetId = actionSkillEstimate.targetId;

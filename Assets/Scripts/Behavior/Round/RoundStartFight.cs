@@ -35,7 +35,7 @@ public class RoundStartFight : Action
                 if (FightManager.instance.GetFightCharacter(characterId,out fightCharacter))
                 { 
                     nowFightCharacter.Value = characterId;
-                    FightManager.instance.cdTimeMoving = false;
+                    FightManager.instance.cdTimeMoving = false; 
                     FightController.instance.RunFightCharacter(characterId);
                 } 
             }

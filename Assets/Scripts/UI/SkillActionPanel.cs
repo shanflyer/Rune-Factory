@@ -18,11 +18,18 @@ public class SkillActionPanel :GamePanel<IReferenceData>
         ActionButton.onClick.AddListener(() => 
         {
             ManualSkillAction manualSkillAction = new ManualSkillAction();
-            GameActionManager.instance.QueueAction(manualSkillAction, true); 
+            GameActionManager.instance.QueueAction(manualSkillAction, true);
+            Debug.Log($"ÉèÖÃÔÝÍ£true");
+            SkillPauseAction skillPauseAction = new SkillPauseAction
+            {
+                pause = true,
+            };
+            GameActionManager.instance.QueueAction(skillPauseAction, true);
             Close();
         });
         CancleButton.onClick.AddListener(() => 
         {
+            Debug.Log($"È¡ÏûÔÝÍ£false");
             SkillPauseAction skillPauseAction = new SkillPauseAction
             {
                 pause = false,

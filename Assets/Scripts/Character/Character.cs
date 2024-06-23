@@ -1108,7 +1108,7 @@ public partial class Character
 
     public void AddProperty(ChangeCharacterProperty changeCharacterProperty)
     {
-        ProfessionProperty.ChangeProperty(changeCharacterProperty);
+        professionProperty.ChangeProperty(changeCharacterProperty);
         CharacterPropertyTrigger();
         RefreshCharacter refreshCharacter = new RefreshCharacter
         {

@@ -34,8 +34,8 @@ public class FightCharacter : IReferenceData
         buffMulProperty = CharacterProperty.FullPercent;
         buffRuntimes = new List<BuffRuntime>();
     }
-    public virtual CharacterProperty buffAddProperty { get; }
-    public virtual CharacterProperty buffMulProperty { get; }
+    public CharacterProperty buffAddProperty;
+    public CharacterProperty buffMulProperty;
     public List<BuffRuntime> buffRuntimes { get; set; } 
     public virtual bool IsEquipSkill(int skillId)
     {
@@ -82,7 +82,7 @@ public class FightCharacter : IReferenceData
         float speed = characterProperty.Speed;
         if (speed <= 0)
         {
-            PerRoundTime = GameCommon.DefaultPerRoundCd*2;
+            PerRoundTime = GameCommon.DefaultPerRoundCd*2.5f;
         }
         else
         {
