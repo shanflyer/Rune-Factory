@@ -109,8 +109,8 @@ public class GameActionManager : Singleton<GameActionManager>
 
     protected override void UpData()
     {
-        if (ActionQueue.Count > 0)
-        {
+        while (ActionQueue.Count > 0)
+        { 
             var gameAction = ActionQueue.Dequeue();
             if (gameAction != null)
             {

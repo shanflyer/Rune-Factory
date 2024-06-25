@@ -1,158 +1,260 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Collections;
-using Unity.Mathematics;
-using UnityEngine.InputSystem;
+using Unity.Mathematics; 
 
-public class FishingManager:Singleton<FishingManager>
+public class FishingManager : Singleton<FishingManager>
 {
-    MyNativeData<FishPond> fishPonds = new MyNativeData<FishPond>(); 
-    Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>();
-    MyInstance myInstance;
+    private Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>();
+    private MyInstance myInstance;
+
     public override async void Init()
     {
         base.Init();
-        myInstance = new MyInstance();
-        fishPonds.Init(16);
 
         fishPondDatas.Clear();
-        var allData=await GameDataManager.instance.GetAllAsyncData<FishPondData>();
-        for(int i = 0; i < allData.Count; i++)
+        var allData = await GameDataManager.instance.GetAllAsyncData<FishPondData>();
+        for (int i = 0; i < allData.Count; i++)
         {
             var data = allData[i];
             fishPondDatas[data.linkMapItem] = data;
         }
-
-        GameActionManager.instance.AddListener<TryCreatFishPond>(TryCreatFishPond);
-        GameActionManager.instance.AddListener<TryDeleteFishPond>(TryDeleteFishPond);
+        GameActionManager.instance.AddListener<FishingIsSuccess>(FishingIsSuccess);
+        GameActionManager.instance.AddListener<StopFishing>(StopFishing);
+        GameActionManager.instance.AddListener<StartFishing>(StartFishing);
+        GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
     }
+
     protected override void Clear()
     {
         base.Clear();
         myInstance.Clear();
-        fishPonds.Dispose();
+        GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);
+        GameActionManager.instance.RemoveListener<StopFishing>(StopFishing);
+        GameActionManager.instance.RemoveListener<StartFishing>(StartFishing);
+        GameActionManager.instance.RemoveListener<DisplayMap>(DisplayMap);
     }
 
-    void CreatFish(int pondId)
+    private async void FishingIsSuccess(FishingIsSuccess fishingIsSuccess)
     {
-        if(fishPonds.GetData(pondId,out var fishPond))
+        bool isController = CharacterManager.instance.controllerCharacter.instanceId == fishingIsSuccess.characterId;
+        if (fishingIsSuccess.isSuccess)
         {
-            FishPondData fishPondData = fishPondDatas[new int2(fishPond.room, fishPond.itemInstanceId)];
-            if (fishPond.fishs.Count < fishPondData.maxFishCount)
+            var fishPondData = fishingIsSuccess.pondData;
+            Season season = GameTimeManager.instance.Season;
+            if (!fishPondData.seasonRandomValue.TryGetValue(season, out var randomId))
             {
-                Season season = GameTimeManager.instance.Season;
-                if (!fishPondData.seasonRandomValue.TryGetValue(season, out var randomId))
-                {
-                    fishPondData.seasonRandomValue.TryGetValue(Season.Default, out randomId);
-                }
-                var randomResults = GameRandom.instance.GetRandomValue(randomId);
-                if (randomResults.Count > 0)
-                {
-                    var randomResult = randomResults[0];
-                    CreatFish CreatFish = new CreatFish
-                    {
-                        dataId = int.Parse(randomResult.result),
-                        fishValue = randomResult.count,
-                        pondId = pondId, 
-                        room = fishPond.room,  
-                        setValue=SetValue
-                    };
+                fishPondData.seasonRandomValue.TryGetValue(Season.Default, out randomId);
+            }
+            var randomResults = GameRandom.instance.GetRandomValue(randomId);
+            if (randomResults.Count > 0)
+            {
+                var randomResult = randomResults[0];
+                int fishDataId = int.Parse(randomResult.result);
 
-                    void SetValue(int fishId)
-                    {
-                        fishPond.fishs.Add(fishId);
-                        fishPonds.SetData(fishPond);
+                FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(fishDataId);
+                Item item = new Item
+                {
+                    dataId = fishData.itemId,
+                    count = 1,
+                    value = randomResult.count
+                };
+                Character character = CharacterManager.instance.GetCharacter(fishingIsSuccess.characterId);
+                int count = await PackageManager.instance.SetItemInPackage(item, character.characterPackage);
+                if (count <= 0)
+                { 
+                    if (isController)
+                    { 
+                        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(fishData.itemId);
+                        bool newRecord = GameDataSaveManager.instance.SetFishSaveData(fishData.id, randomResult.count, character.mapInstance);
+                        ItemResultInfo itemResultInfo = new ItemResultInfo
+                        {
+                            icon = itemData.icon,
+                            info0 = $"获得了一条  <color=green>{item.value}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
+                            info1 = newRecord ? $"<color=red> 新记录！ </color>" : ""
+                        };
+                        UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
                     }
-
-                    GameActionManager.instance.QueueAction(CreatFish,true);
+                    NPCFishingResult nPCFishingResult = new NPCFishingResult
+                    {
+                        characterId = fishingIsSuccess.characterId,
+                        success = true
+                    };
+                    GameActionManager.instance.QueueAction(nPCFishingResult);
+                }
+                else
+                {
+                    if (isController)
+                    {
+                        ItemResultInfo itemResultInfo = new ItemResultInfo
+                        {
+                            icon = null,
+                            info0 = "",
+                            info1 = "$背包空间不足，鱼已放生"
+                        };
+                        UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+                    }
+                    NPCFishingResult nPCFishingResult = new NPCFishingResult
+                    {
+                        characterId = fishingIsSuccess.characterId,
+                        success = false
+                    };
+                    GameActionManager.instance.QueueAction(nPCFishingResult);
                 }
             }
-            GameTimerController.instance.DelayAction(fishPondData.produceCD, () =>
-            {
-                CreatFish(pondId);
-            });
         }
-    }
-
-    public bool GetFishPond(int instanceId,out FishPond fishPond)
-    {
-        return fishPonds.GetData(instanceId, out fishPond);
-    }
-
-    void TryDeleteFishPond(TryDeleteFishPond tryDeleteFishPond)
-    {
-        if (tryDeleteFishPond.instanceId != 0)
+        else
         {
-            bool result = fishPonds.RemoveData(tryDeleteFishPond.instanceId);
-            if (tryDeleteFishPond.setResult != null)
-                tryDeleteFishPond.setResult(result);
-             
-        }
-        else 
-        {
-            if (tryDeleteFishPond.setResult != null)
-                tryDeleteFishPond.setResult(false);
-        } 
-    }
-    void TryCreatFishPond(TryCreatFishPond tryCreatFishPond)
-    {
-        int2 key=new int2(tryCreatFishPond.room,tryCreatFishPond.itemId);
-        if(fishPondDatas.TryGetValue(key,out var fishPondData))
-        { 
-            int instanceId = tryCreatFishPond.instanceId;
-            
-            FishPond fishPond = new FishPond
+            if (isController)
             {
-                dataId = fishPondData.id,
-                instanceId = instanceId, 
-                room = tryCreatFishPond.room,
-                itemInstanceId=tryCreatFishPond.itemId,
-                fishs = new NativeHashSet<int>(8, Allocator.TempJob)
-            };
-            fishPonds.SetData(fishPond);
-            if (tryCreatFishPond.setValue != null)
-            {
-                tryCreatFishPond.setValue(instanceId);
+                ItemResultInfo itemResultInfo = new ItemResultInfo
+                {
+                    icon = null,
+                    info0 = "",
+                    info1 = "本次垂钓一无所获"
+                };
+                UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
             }
-            CreatFish(instanceId);
-
-
-            GameActionManager.instance.QueueAction(new RefreshFishPondObj
+            NPCFishingResult nPCFishingResult = new NPCFishingResult
             {
-                pondId = instanceId,
-                room = tryCreatFishPond.room,
-            });
-        } 
-        if(tryCreatFishPond.setResult!=null)
-        {
-            tryCreatFishPond.setResult(false);
+                characterId = fishingIsSuccess.characterId,
+                success = false
+            };
+            GameActionManager.instance.QueueAction(nPCFishingResult);
         }
     }
 
-    public void TryRemoveFish(int pondId,int fishId)
+    private Dictionary<int, Delegate> waitFishers = new Dictionary<int, Delegate>();
+    private Dictionary<int, Delegate> fishWaitActions = new Dictionary<int, Delegate>();
+    private HashSet<int> fishers = new HashSet<int>();
+
+    void DisplayMap(DisplayMap displayMap)
     {
-        if(fishPonds.GetData(pondId,out var fishPond))
+        foreach(var fisher in fishers)
         {
-            fishPond.fishs.Remove(fishId);
+            Character character = CharacterManager.instance.GetCharacter(fisher);
+            if (character.mapInstance != displayMap.displayMap)
+            {
+                RecycleFisher recycleFisher = new RecycleFisher
+                {
+                    characterInstance = fisher
+                };
+                GameActionManager.instance.QueueAction(recycleFisher);
+            }
+            else
+            {
+                CreatFisher creatFisher = new CreatFisher
+                {
+                    characterInstance = fisher
+                };
+                GameActionManager.instance.QueueAction(creatFisher);
+            }
         }
     }
-   
-}
-public struct FishPond:INativeData
-{
-    public int instanceId;
-    public int room;
-    public int itemInstanceId;
-    public int dataId;
-     
-    public NativeHashSet<int> fishs;
-    public int Key => instanceId;
-
-    public void Dispose()
+    private void StopFishing(StopFishing stopFishing)
     {
-        fishs.Dispose();
+        int characterId = stopFishing.characterId;
+        if (waitFishers.TryGetValue(characterId, out var @delegate))
+        {
+            GameTimerController.instance.RemoveWaiter(@delegate);
+            waitFishers.Remove(characterId);
+        }
+        else if (fishWaitActions.TryGetValue(characterId, out @delegate))
+        {
+            GameTimerController.instance.RemoveWaiter(@delegate);
+            fishWaitActions.Remove(characterId);
+        }
+    }
+
+    private void StartFishing(StartFishing startFishing)
+    {
+        int mapId = startFishing.mapId;
+        int mapItemId = startFishing.mapItemId;
+        int characterId = startFishing.characterId;
+        int2 key = new int2(mapId, mapItemId);
+        if (fishPondDatas.TryGetValue(key, out var fishPondData))
+        {
+            int waitFishingTime = GameRandom.RandomInt(fishPondData.waitFishingCd.x, fishPondData.waitFishingCd.y);
+            GameTimerController.instance.DelayAction(waitFishingTime, FishingAction);
+            if (waitFishers.TryGetValue(characterId, out var @delegate))
+            {
+                GameTimerController.instance.RemoveWaiter(@delegate);
+            }
+            AddWaitFisher(characterId, FishingAction);
+
+            void FishingAction()
+            {
+                StartFishingGame startFishingGame = new StartFishingGame
+                {
+                    characterId = characterId,
+                    pondData = fishPondData
+                };
+                GameActionManager.instance.QueueAction(startFishingGame);
+                waitFishers.Remove(characterId);
+                fishers.Add(characterId);
+
+                if (fishWaitActions.TryGetValue(characterId, out var @delegate))
+                {
+                    GameTimerController.instance.RemoveWaiter(@delegate);
+                }
+                GameTimerController.instance.DelayAction(GameCommon.fishingGameTime, WaitFishingGame);
+                AddFishingGame(characterId, WaitFishingGame);
+                void WaitFishingGame()
+                {
+                    if (characterId == CharacterManager.instance.controllerCharacter.instanceId)
+                    {
+                        FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
+                        {
+                            characterId = characterId,
+                            isSuccess = false
+                        };
+                        GameActionManager.instance.QueueAction(fishingIsSuccess);
+                    }
+                    else
+                    {
+                        int randomValue = GameRandom.RandomInt(0, 100);
+                        if (randomValue < 50)
+                        {
+                            FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
+                            {
+                                characterId = characterId,
+                                isSuccess = false
+                            };
+                            GameActionManager.instance.QueueAction(fishingIsSuccess);
+                        }
+                        else
+                        {
+                            FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
+                            {
+                                characterId = characterId,
+                                pondData = fishPondData,
+                                isSuccess = true
+                            };
+                            GameActionManager.instance.QueueAction(fishingIsSuccess);
+                        }
+                    }
+                    fishers.Remove(characterId);
+                    fishWaitActions.Remove(characterId);
+                }
+            }
+
+            if(mapId== WorldMapObjManager.instance.displayMap)
+            {
+                CreatFisher creatFisher = new CreatFisher
+                {
+                    characterInstance = characterId,
+                };
+                GameActionManager.instance.QueueAction(creatFisher);
+            }
+        }
+    }
+
+    private void AddWaitFisher(int characterId, Action action)
+    {
+        waitFishers[characterId] = action;
+    }
+
+    private void AddFishingGame(int characterId, Action action)
+    {
+        fishWaitActions[characterId] = action;
     }
 }

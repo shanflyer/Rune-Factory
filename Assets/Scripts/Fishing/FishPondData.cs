@@ -10,13 +10,12 @@ public class FishPondData : ScriptableObject, IGameData
 {
     public int id;
     public string pondName;
-    public int showValue; 
+    public int showValue;
 
+    public int2 waitFishingCd;
 #if UNITY_EDITOR
-    public List<int2> fishRandomIds = new List<int2>();
+    private List<int2> fishRandomIds = new List<int2>();
 #endif
-    public int maxFishCount;
-    public int produceCD;
     public SeasonRandomDictionary seasonRandomValue;
     public int2 linkMapItem;
     public string GetKey()

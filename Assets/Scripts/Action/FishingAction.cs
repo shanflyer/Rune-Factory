@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Unity.Mathematics;
- 
+
 public struct PlayFishWater : GameAction
 {
     public SetValue setValue { get; set; }
@@ -18,66 +17,19 @@ public struct PlayFishWater : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-public struct UnLinkFisher : GameAction
+
+public struct RecycleFisher : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int fishId;
-    public int fisherId;
+    public int characterInstance;
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (source != 0 && source != int.MinValue)
         {
-            fishId = source;
+            characterInstance = source;
         }
-        if (target != 0 && target != int.MinValue)
-        {
-            fisherId = target;
-        }
-        this.setValue = setValue;
-        this.setResult = setResult;
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-public struct TrueLinkFisher : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int fishId;
-    public int fisherId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        if (source != 0 && source != int.MinValue)
-        {
-            fishId = source;
-        }
-        if (target != 0 && target != int.MinValue)
-        {
-            fisherId = target;
-        }
-        this.setValue = setValue;
-        this.setResult = setResult;
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-public struct LinkFisher : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int fishId;
-    public bool trueLink;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        if (source != 0 && source != int.MinValue)
-        {
-            fishId = source;
-        }
-        if(target != 0 && target != int.MinValue) 
-        {
-            trueLink = target==1;
-        }
-        this.setValue = setValue;
-        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -96,87 +48,18 @@ public struct CreatFisher : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-public struct RecycleFisher : GameAction
+
+public struct StopFishing : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int characterInstance; 
+    public int characterId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-        if (source != 0 && source != int.MinValue)
+        if (parameters.Count >= 1)
         {
-            characterInstance = source;
-        }
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-
-public struct DestoryFishPond : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int PondId;
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-
-public struct RefreshFishPondObj : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int pondId;
-    public int room;
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-
-public struct CreatFish : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int pondId;
-    public int dataId;
-    public int fishValue;
-    public int room;
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-
-public struct RemoveFish : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int instanceId;
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
-
-public struct TryGetFish : GameAction
-{ 
-    public int characterId;
-
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
-    {
-
-        if (source != 0 && source != int.MinValue)
-        {
-            characterId = source;
+            characterId = int.Parse(parameters[0].value);
         }
         this.setValue = setValue;
         this.setResult = setResult;
@@ -184,29 +67,73 @@ public struct TryGetFish : GameAction
     }
 }
 
-public struct TryCreatFishPond : GameAction
+public struct NPCFishingResult : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+    public int characterId;
+    public bool success;
 
-    public int itemId;
-    public int room;
-    public int instanceId;
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+            success = int.Parse(parameters[1].value) == 1;
+        }
+        this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 
-public struct TryDeleteFishPond : GameAction
+public struct StartFishing : GameAction
 {
-    public int instanceId; 
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+    public int mapId, mapItemId, characterId;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        if (parameters.Count >= 3)
+        {
+            mapId = int.Parse(parameters[0].value);
+            mapItemId = int.Parse(parameters[1].value);
+            characterId = int.Parse(parameters[2].value);
+        }
+        this.setValue = setValue;
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+
+public struct StartFishingGame : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public FishPondData pondData;
+    public int characterId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setValue = setValue;
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+
+public struct FishingIsSuccess : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public bool isSuccess;
+    public FishPondData pondData;
+    public int characterId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

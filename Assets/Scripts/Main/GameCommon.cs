@@ -223,6 +223,8 @@ public class GameCommon
     public const float ScreenHalfSizeX = 960;
     public const float ScreenHalfSizeY = 540;
 
+    public const int fishingGameTime = 3000;
+
     public const string characterTriggerRenferenceName = "CharacterId";
     public const string triggerRenferenceName = "Reference";
 

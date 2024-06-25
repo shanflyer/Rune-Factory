@@ -33,6 +33,16 @@ public class GameTimerController : Singleton<GameTimerController>
         GameObjectCurveController.instance.UpDataComponent.StartCoroutine(ienumerator);
     }
 
+    public void RemoveWaiter(Delegate @delegate)
+    {
+        if(waitTasks.TryGetValue(@delegate,out var tokenSource))
+        {
+            tokenSource.Cancel();
+            tokenSource.Dispose();
+            waitTasks.Remove(@delegate);
+        }
+        
+    }
     public void DelayAction(int delay, Action action)
     {
         if (waitTasks.TryGetValue(action, out var tokenSource))
