@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.1.0</string>
+        <string>7.3.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -173,9 +173,18 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">horseshoe_crab_10$Normal.png</key>
-            <key type="filename">horseshoe_crab_11$Normal.png</key>
-            <key type="filename">horseshoe_crab_12$Normal.png</key>
+            <key type="filename">fish 00.png</key>
+            <key type="filename">fish 01.png</key>
+            <key type="filename">fish 02.png</key>
+            <key type="filename">fish 03.png</key>
+            <key type="filename">fish 04.png</key>
+            <key type="filename">fish 05.png</key>
+            <key type="filename">fish 06.png</key>
+            <key type="filename">fish 07.png</key>
+            <key type="filename">fish 08.png</key>
+            <key type="filename">fish 09.png</key>
+            <key type="filename">fish 10.png</key>
+            <key type="filename">fish 11.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -184,52 +193,9 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>11,9,21,18</rect>
+                <rect>40,23,80,45</rect>
                 <key>scale9Paddings</key>
-                <rect>11,9,21,18</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">horseshoe_crab_10.png</key>
-            <key type="filename">horseshoe_crab_11.png</key>
-            <key type="filename">horseshoe_crab_12.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.694444</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>11,9,21,18</rect>
-                <key>scale9Paddings</key>
-                <rect>11,9,21,18</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">影子鱼圆5$Normal.png</key>
-            <key type="filename">影子鱼圆5.png</key>
-            <key type="filename">影子鱼圆6$Normal.png</key>
-            <key type="filename">影子鱼圆6.png</key>
-            <key type="filename">影子鱼圆7$Normal.png</key>
-            <key type="filename">影子鱼圆7.png</key>
-            <key type="filename">影子鱼长7$Normal.png</key>
-            <key type="filename">影子鱼长7.png</key>
-            <key type="filename">影子鱼长8$Normal.png</key>
-            <key type="filename">影子鱼长8.png</key>
-            <key type="filename">影子鱼长9$Normal.png</key>
-            <key type="filename">影子鱼长9.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
+                <rect>40,23,80,45</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
