@@ -17,7 +17,21 @@ public struct PlayFishWater : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct TryGetFish : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterInstance;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (source != 0 && source != int.MinValue)
+        {
+            characterInstance = source;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RecycleFisher : GameAction
 {
     public SetValue setValue { get; set; }
@@ -91,16 +105,24 @@ public struct StartFishing : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int mapId, mapItemId, characterId;
+    public int  mapItemId, characterId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 3)
         {
-            mapId = int.Parse(parameters[0].value);
-            mapItemId = int.Parse(parameters[1].value);
-            characterId = int.Parse(parameters[2].value);
+            mapItemId = int.Parse(parameters[0].value);
+            characterId = int.Parse(parameters[1].value);
         }
+        if (source != 0 && source != int.MinValue)
+        {
+            mapItemId = source;
+        }
+        if (target != 0 && target != int.MinValue)
+        {
+            characterId = target;
+        } 
+
         this.setValue = setValue;
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);

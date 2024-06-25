@@ -16,9 +16,48 @@ public class FishController : Singleton<FishController>
         GameActionManager.instance.AddListener<PlayFishWater>(PlayFishWater);
         GameActionManager.instance.AddListener<CreatFisher>(CreatFisher);
         GameActionManager.instance.AddListener<RecycleFisher>(RecycleFisher);
+        GameActionManager.instance.AddListener<TryGetFish>(TryGetFish);
+        GameActionManager.instance.AddListener<NPCFishingResult>(NPCFishingResult);
         fishTool = await GameSourceManager.instance.GetComponent<Transform>(DataPath.fishToolPrefab);
     }
 
+    int playerFishGetNum = 0;
+    void NPCFishingResult(NPCFishingResult nPCFishingResult)
+    {
+        if(Fishers.TryGetValue(nPCFishingResult.characterId,out var fisherRuntime))
+        {
+
+            //垂钓结果表情
+            if (nPCFishingResult.success)
+            {
+
+            }
+            else
+            {
+
+            }
+            SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+            {
+                characterId = nPCFishingResult.characterId,
+                parameterType = ParameterType.BOOL,
+                parameter = "Fish",
+                boolValue = false
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimator);
+            fisherRuntime.Clear();
+            Fishers.Remove(nPCFishingResult.characterId);
+        }
+    }
+    void TryGetFish(TryGetFish tryGetFish)
+    {
+        bool isSuccess = playerFishGetNum == 3;
+        FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
+        {
+            characterId = CharacterManager.instance.controllerCharacter.instanceId,
+            isSuccess=isSuccess
+        };
+        GameActionManager.instance.QueueAction(fishingIsSuccess);
+    }
     void RecycleFisher(RecycleFisher recycleFisher)
     {
         if(Fishers.TryGetValue(recycleFisher.characterInstance,out var fisherRuntime))

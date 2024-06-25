@@ -167,12 +167,22 @@ public class FishingManager : Singleton<FishingManager>
 
     private void StartFishing(StartFishing startFishing)
     {
-        int mapId = startFishing.mapId;
         int mapItemId = startFishing.mapItemId;
         int characterId = startFishing.characterId;
+        Character character = CharacterManager.instance.GetCharacter(characterId);
+        int mapId = character.mapInstance;
         int2 key = new int2(mapId, mapItemId);
         if (fishPondDatas.TryGetValue(key, out var fishPondData))
         {
+            SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+            {
+                characterId = characterId,
+                parameterType = ParameterType.BOOL,
+                parameter = "Fish",
+                boolValue = true
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimator);
+
             int waitFishingTime = GameRandom.RandomInt(fishPondData.waitFishingCd.x, fishPondData.waitFishingCd.y);
             GameTimerController.instance.DelayAction(waitFishingTime, FishingAction);
             if (waitFishers.TryGetValue(characterId, out var @delegate))
