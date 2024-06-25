@@ -15,7 +15,7 @@ public class PolygonOutMesh : MonoBehaviour
     {
         if (polygonCollider != null)
         {
-            Mesh mesh = polygonCollider.CreateMesh(false,false);
+            Mesh mesh = polygonCollider.CreateMesh(true,false);
             mesh.hideFlags = HideFlags.None;
             AssetDatabase.CreateAsset(mesh, $"{outMeshPath}/{meshName}.asset");
         }

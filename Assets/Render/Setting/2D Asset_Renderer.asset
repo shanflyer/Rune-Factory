@@ -144,7 +144,8 @@ MonoBehaviour:
   - {fileID: -9033159978113863346}
   - {fileID: 1450699581313148266}
   - {fileID: -777346220230445787}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5
+  - {fileID: 142935280726465048}
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb01
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
@@ -196,6 +197,46 @@ MonoBehaviour:
       type: 2}
     m_DefaultMaskMaterial: {fileID: 2100000, guid: 15d0c3709176029428a0da2f8cecf0b5,
       type: 2}
+--- !u!114 &142935280726465048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573e83345e5a3524e8d46ac9229de438, type: 3}
+  m_Name: WaterBaker
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    renderPassEvent: 400
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    overrideMat: {fileID: 0}
+    PassNames:
+    - Water
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _WaterTex
+    blitToCameraTarget: 0
+    clearFlag: 0
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &1450699581313148266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,10 +309,11 @@ MonoBehaviour:
     renderPassEvent: 450
     layerMask:
       serializedVersion: 2
-      m_Bits: 4096
+      m_Bits: 69632
     overrideMat: {fileID: 0}
     PassNames:
     - Mirror
+    - OlyWater
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
     textureName: _MirrorTex

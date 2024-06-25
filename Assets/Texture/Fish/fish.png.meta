@@ -30,7 +30,7 @@ TextureImporter:
       213: -515027122047594265
     second: fish_8
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -94,7 +94,7 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -104,9 +104,10 @@ TextureImporter:
     crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -116,201 +117,278 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: horseshoe_crab_10
+      name: fish 00
       rect:
         serializedVersion: 2
         x: 1
-        y: 46
-        width: 12
-        height: 17
+        y: 121
+        width: 105
+        height: 31
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.64705974}
+      pivot: {x: 0.43809524, y: 0.7096774}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c34e888b1d0f204e83b358cc7080dda
-      internalID: -569689605
+      spriteID: f3786a711673e4944b4d0ceb2f23b2df
+      internalID: 24779892
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: horseshoe_crab_11
+      name: fish 01
       rect:
         serializedVersion: 2
         x: 1
-        y: 27
-        width: 12
-        height: 17
+        y: 188
+        width: 105
+        height: 32
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.5882362}
+      pivot: {x: 0.43809524, y: 0.71875}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a58908aeea23a6743b548da48adfac6d
-      internalID: 1595673540
+      spriteID: c17fc1b560285fe47b5fd3d4f32d56ed
+      internalID: -820366994
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: horseshoe_crab_12
+      name: fish 02
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 188
+        width: 105
+        height: 32
+      alignment: 9
+      pivot: {x: 0.43809524, y: 0.75}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abdb89e29a69db74a957b27d3602e4a6
+      internalID: 720653986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish 03
       rect:
         serializedVersion: 2
         x: 1
-        y: 8
-        width: 12
-        height: 17
+        y: 154
+        width: 105
+        height: 32
       alignment: 9
-      pivot: {x: 0.5833333, y: 0.64705974}
+      pivot: {x: 0.43809524, y: 0.75}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c50e7977d653e34baa76d63ae66e64c
-      internalID: -843643264
+      spriteID: 789b5e119c76c1e498d3667ea3ce8f78
+      internalID: 490001981
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5F71\u5B50\u9C7C\u57065"
+      name: fish 04
       rect:
         serializedVersion: 2
-        x: 29
-        y: 35
-        width: 11
-        height: 11
+        x: 108
+        y: 121
+        width: 105
+        height: 31
       alignment: 9
-      pivot: {x: 0.54545456, y: 0.54545456}
+      pivot: {x: 0.43809524, y: 0.67741936}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 12989220966536a40b46337b35ad1e21
-      internalID: -1391000409
+      spriteID: 2e3f7f454af05d84f9594de920a6ca29
+      internalID: -450737785
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5F71\u5B50\u9C7C\u57066"
+      name: fish 05
       rect:
         serializedVersion: 2
-        x: 15
-        y: 34
-        width: 11
-        height: 11
+        x: 1
+        y: 88
+        width: 105
+        height: 31
       alignment: 9
-      pivot: {x: 0.54545456, y: 0.45454547}
+      pivot: {x: 0.43809524, y: 0.5483871}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a69996593047e6e42abf46c819704414
-      internalID: 108765842
+      spriteID: 52c5f5f42dff0e142964f830c6d21130
+      internalID: -125232723
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5F71\u5B50\u9C7C\u57067"
+      name: fish 06
       rect:
         serializedVersion: 2
-        x: 42
-        y: 35
-        width: 11
-        height: 11
+        x: 108
+        y: 88
+        width: 105
+        height: 31
       alignment: 9
-      pivot: {x: 0.54545456, y: 0.36363637}
+      pivot: {x: 0.43809524, y: 0.48387095}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b834855434d319248ab7b887ab7d0188
-      internalID: 751855070
+      spriteID: 9f3326d5f05b0c34586e2e252f93d2e3
+      internalID: -681027575
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5F71\u5B50\u9C7C\u957F7"
+      name: fish 07
       rect:
         serializedVersion: 2
-        x: 29
-        y: 48
-        width: 12
-        height: 15
+        x: 108
+        y: 154
+        width: 105
+        height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.53333336}
+      pivot: {x: 0.43809524, y: 0.4375}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: da50ce5040683b945bb3a031837b7baa
-      internalID: -234022636
+      spriteID: 877c34352989b3c42ae72f717cce70e2
+      internalID: 1702668775
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5F71\u5B50\u9C7C\u957F8"
+      name: fish 08
       rect:
         serializedVersion: 2
-        x: 15
-        y: 47
-        width: 12
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 1
+        y: 222
+        width: 105
+        height: 33
+      alignment: 9
+      pivot: {x: 0.43809524, y: 0.45454547}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5281f2af0544994b8932b4722d3bd76
-      internalID: 869261913
+      spriteID: 58f9086d1b68ac5488b93bbf6c05cc39
+      internalID: -1146842722
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5F71\u5B50\u9C7C\u957F9"
+      name: fish 09
       rect:
         serializedVersion: 2
-        x: 43
-        y: 48
-        width: 12
-        height: 15
+        x: 108
+        y: 222
+        width: 105
+        height: 33
       alignment: 9
-      pivot: {x: 0.5, y: 0.46666667}
+      pivot: {x: 0.43809524, y: 0.4848485}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b332d0e4b82d16d47b5ec516e72f0081
-      internalID: 1069004873
+      spriteID: 1d70f3163c74ac94e899f3c566617451
+      internalID: 414481742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish 10
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 55
+        width: 105
+        height: 31
+      alignment: 9
+      pivot: {x: 0.43809524, y: 0.5483871}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65a6edf3c10470b428f24d2db2b311c5
+      internalID: -555515949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish 11
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 23
+        width: 105
+        height: 30
+      alignment: 9
+      pivot: {x: 0.43809524, y: 0.7}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c10395b5a962d77468b3747e34281f28
+      internalID: 636046299
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 089eaeebcc3209442bd73bea613ea162
@@ -320,16 +398,21 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
-      horseshoe_crab_10: -569689605
-      horseshoe_crab_11: 1595673540
-      horseshoe_crab_12: -843643264
-      "\u5F71\u5B50\u9C7C\u57065": -1391000409
-      "\u5F71\u5B50\u9C7C\u57066": 108765842
-      "\u5F71\u5B50\u9C7C\u57067": 751855070
-      "\u5F71\u5B50\u9C7C\u957F7": -234022636
-      "\u5F71\u5B50\u9C7C\u957F8": 869261913
-      "\u5F71\u5B50\u9C7C\u957F9": 1069004873
+      fish 00: 24779892
+      fish 01: -820366994
+      fish 02: 720653986
+      fish 03: 490001981
+      fish 04: -450737785
+      fish 05: -125232723
+      fish 06: -681027575
+      fish 07: 1702668775
+      fish 08: -1146842722
+      fish 09: 414481742
+      fish 10: -555515949
+      fish 11: 636046299
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

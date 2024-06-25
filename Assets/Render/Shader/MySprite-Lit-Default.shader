@@ -151,7 +151,8 @@ Shader "MySprite-Lit-Default"
 
         TEXTURE2D(_NormalMap);
             SAMPLER(sampler_NormalMap);
-        
+        TEXTURE2D(_MirrorTex);
+        SAMPLER(sampler_MirrorTex); 
 
         ENDHLSL
 
@@ -200,6 +201,8 @@ Shader "MySprite-Lit-Default"
 
             float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
             {
+                float2 mirrorUV=screenUV; 
+
                 float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
                 //水域范围
                 float stepMask=step(0.06,_WaterMask.r); 
@@ -261,8 +264,9 @@ Shader "MySprite-Lit-Default"
                 Unity_Remap_float(_EdgeMaskValue,float2(_WaterHigh,_WaterHigh+EdgeValue),float2(0,1),_EdgeMaskValue);
                 
                 float edge=(_WaterMask1-_WaterMask2)*_EdgeMaskValue; 
-                
-                
+               
+
+               
                 //float3 edgeAddColor=edge*float3(0,1,1)*2; 
                 float3 endWaveColor=edge*EdgeColor*waveBlendCol+waveBlendCol*_WaterMask1.rrr;
                 endWaveColor=clamp(endWaveColor,0,1);
@@ -280,6 +284,20 @@ Shader "MySprite-Lit-Default"
                 outWater=clamp(outWater,0,1);   
                 
                 outWater=outWater+waterColor.xyz*waterColor.a;
+               
+               float water_valueX=outWater.r;
+				float water_valueY=outWater.g;
+                Unity_Remap_float(water_valueX,float2(0,1),float2(-0,0.1),water_valueX);
+				Unity_Remap_float(water_valueY,float2(0,1),float2(-0.02,0.02),water_valueY);
+
+                mirrorUV.x+=water_valueX;
+                mirrorUV.y+=water_valueY;
+ 
+                float3 MirrorTexColor= SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;  
+                float MirrorValue=(MirrorTexColor.x+MirrorTexColor.y+MirrorTexColor.z)/3;
+                //return MirrorTexColor;
+
+                outWater=outWater*(1-MirrorValue)+MirrorTexColor*MirrorValue;
                 outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
                 return outWater;
             }
@@ -989,6 +1007,177 @@ Shader "MySprite-Lit-Default"
                 float value=(mainTex.x+mainTex.y+mainTex.z)/3;
                 float stepValue=1-step(0.5,value);
                 return float4(stepValue.xxx,mainTex.a);
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+             Tags { "LightMode" = "Water" }
+
+            HLSLPROGRAM
+            
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+
+            #pragma vertex CombinedShapeLightVertex
+            #pragma fragment CombinedShapeLightFragment
+
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_0 __
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_1 __
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_2 __
+            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
+            #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+
+            struct Attributes
+            {
+                float3 positionOS   : POSITION;
+                float4 color        : COLOR;
+                float2 uv           : TEXCOORD0; 
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS  : SV_POSITION;
+                half4   color       : COLOR;
+                float2  uv          : TEXCOORD0;
+                half2   lightingUV  : TEXCOORD1; 
+                float4  worldPos : TEXCOORD4;
+                half2   fixScreenUV: TEXCOORD3;
+                #if defined(DEBUG_DISPLAY)
+                    float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/LightingUtility.hlsl"
+
+            float3 WaterFragment(float2 uv,float2 screenUV)
+            {
+                float2 mirrorUV=screenUV; 
+
+                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
+                //水域范围
+                float stepMask=step(0.06,_WaterMask.r); 
+
+                half edgeOffsetValue=_SinTime.w*_EdgeWaveSpeed; 
+                edgeOffsetValue=abs(edgeOffsetValue); 
+                 edgeOffsetValue=clamp(edgeOffsetValue,0,1);
+                _WaterHigh=_WaterHigh+_EdgeWaveOffset*edgeOffsetValue;
+                 //return _EdgeWaveOffset*edgeOffsetValue;
+
+                
+                float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
+                screenUV+=offsetUv;
+                
+                //波纹1
+                float angle0=radians(_WaveAngle0);//转换角度为弧度
+                float2 waveValue0=float2(cos(angle0),sin(angle0))*_WaveSpeed0;  
+
+                float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
+                float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
+                float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
+                _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
+                //波纹2
+                float angle1=radians(_WaveAngle1);
+                float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
+                float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
+                float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
+                float4 _WaveCol1= SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset1);
+                _WaveCol1.rgb = UnpackNormal(_WaveCol1);
+                
+                
+                //波纹叠加
+                float3 _endWave=_WaveCol0.xyz +_WaveCol1.xyz;   
+                //波纹r、g叠加
+                float waveBlendCol=_endWave[0]+_endWave[1]; 
+                waveBlendCol=clamp(waveBlendCol,0,1); 
+                waveBlendCol*=waterValue;
+                //噪声
+                float _waterNoise;
+                Unity_SimpleNoise_float(screenUV.xy, waterNoiseScale, _waterNoise);  
+                waveBlendCol*=_waterNoise;
+                
+
+                //波纹与边缘混合 
+                //映射水面深度
+                Unity_Remap_float(_WaterMask.r,float2(0,1),float2(_WaterZero,_WaterBottom),_WaterMask.r);
+                _WaterMask.r=clamp(_WaterMask.r,0,1);
+                
+
+                float _WaterMask1=step(_WaterHigh,_WaterMask.r);	 
+                float _WaterMask2=step(_WaterHigh+EdgeValue,_WaterMask.r); 
+                stepMask*=_WaterMask1;
+                return stepMask; 
+                
+            }
+
+            // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
+            
+
+            #if USE_SHAPE_LIGHT_TYPE_0
+                SHAPE_LIGHT(0)
+            #endif
+
+            #if USE_SHAPE_LIGHT_TYPE_1
+                SHAPE_LIGHT(1)
+            #endif
+
+            #if USE_SHAPE_LIGHT_TYPE_2
+                SHAPE_LIGHT(2)
+            #endif
+
+            #if USE_SHAPE_LIGHT_TYPE_3
+                SHAPE_LIGHT(3)
+            #endif
+
+            
+ 
+
+            Varyings CombinedShapeLightVertex(Attributes v)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(v);
+
+                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(v.positionOS);
+                o.worldPos.xyz=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos.w=o.worldPos.z;
+                o.worldPos.z+=o.worldPos.y;
+                #if defined(DEBUG_DISPLAY)
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+
+
+                half3 pos=TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
+                half4 carmeraPos=TransformWorldToHClip(pos);
+
+
+
+                o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
+
+                o.color = v.color * _Color * unity_SpriteColor;
+                return o;
+            }
+
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/CombinedShapeLightShared.hlsl"
+
+            half4 CombinedShapeLightFragment(Varyings i) : SV_Target
+            {
+                
+                float3  waterColor=WaterFragment(i.uv,i.lightingUV);
+                 
+
+                return float4(waterColor.xyz,1);
             }
             ENDHLSL
         }

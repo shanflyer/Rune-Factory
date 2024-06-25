@@ -56,7 +56,7 @@ Shader "Cartoon FX/Remaster/Particle Procedural Ring"
 	//# ========================================================
 	//# Shadows
 	//#
-
+        [Toggle(_BlendWater)] _BlendWater("BlendWater",float)=0
 		[KeywordEnum(Off,On,CustomTexture)] _CFXR_DITHERED_SHADOWS ("Dithered Shadows", Float) = 0
 	//# IF_KEYWORD _CFXR_DITHERED_SHADOWS_ON || _CFXR_DITHERED_SHADOWS_CUSTOMTEXTURE
 		_ShadowStrength		("Shadows Strength Max", Range(0,1)) = 1.0

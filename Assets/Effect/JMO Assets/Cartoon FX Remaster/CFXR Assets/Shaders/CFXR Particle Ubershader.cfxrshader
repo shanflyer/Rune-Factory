@@ -156,9 +156,10 @@ Shader "Cartoon FX/Remaster/Particle Ubershader"
 	//# ========================================================
 	//# Shadows
 	//#
-
+        [Toggle(_BlendWater)] _BlendWater("BlendWater",float)=0
 		[KeywordEnum(Off,On,CustomTexture)] _CFXR_DITHERED_SHADOWS ("Dithered Shadows", Float) = 0
 	//# IF_KEYWORD _CFXR_DITHERED_SHADOWS_ON || _CFXR_DITHERED_SHADOWS_CUSTOMTEXTURE
+		
 		_ShadowStrength		("Shadows Strength Max", Range(0,1)) = 1.0
 		//#	IF_KEYWORD _CFXR_DITHERED_SHADOWS_CUSTOMTEXTURE
 		_DitherCustom		("Dithering 3D Texture", 3D) = "black" {}

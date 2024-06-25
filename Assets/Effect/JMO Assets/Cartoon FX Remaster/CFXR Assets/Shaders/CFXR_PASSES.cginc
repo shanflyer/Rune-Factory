@@ -77,6 +77,8 @@
 		half _SoftParticlesFadeDistanceFar;
 		half _EdgeFadePow;
 
+		half _BlendWater;
+
 		half4 _DissolveTex_ST;
 
 	#if !defined(SHADER_API_GLES)
@@ -87,6 +89,7 @@
 		CBUFFER_END
 
 		sampler2D _MainTex;
+		sampler2D _WaterTex;
 		sampler2D _OverlayTex;
 		sampler2D _BumpMap;
 		sampler2D _DissolveTex;
@@ -855,6 +858,8 @@
 				UNITY_SETUP_INSTANCE_ID(i);
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 
+				
+
 
 				// ================================================================
 				// Screen Distortion
@@ -910,6 +915,7 @@
 			half _SoftParticlesFadeDistanceNear;
 			half _SoftParticlesFadeDistanceFar;
 			half _EdgeFadePow;
+			half _BlendWater;
 
 		#if !defined(SHADER_API_GLES)
 			float _ShadowStrength;
@@ -919,6 +925,7 @@
 			CBUFFER_END
 
 			sampler2D _MainTex;
+			sampler2D _WaterTex;
 			sampler2D _DissolveTex;
 			UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 		#if !defined(SHADER_API_GLES)
@@ -1082,8 +1089,7 @@
 		#endif
 			{
 				UNITY_SETUP_INSTANCE_ID(i);
-				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
-
+				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i); 
 				// ================================================================
 				// Color & Alpha
 
@@ -1145,12 +1151,21 @@
 
 				// ================================================================
 				//
+				half4 result;
 
 			#if defined(PASS_SHADOW_CASTER)
-				return frag(i, vpos, particleColor, particleAlpha, dissolveTex, dissolveTime, 0.0);
+				 result=frag(i, vpos, particleColor, particleAlpha, dissolveTex, dissolveTime, 0.0);
 			#else
-				return frag(i, particleColor, particleAlpha, dissolveTex, dissolveTime, 0.0);
+				 result=frag(i, particleColor, particleAlpha, dissolveTex, dissolveTime, 0.0);
 			#endif
+			   #if !defined(PASS_SHADOW_CASTER)
+					 float2 absUV=float2(i.pos.x/_ScreenParams.x,i.pos.y/_ScreenParams.y); 
+			   float waterValue=tex2D(_WaterTex, absUV).r;
+			   float w_a=waterValue*result.a*_BlendWater+(1-_BlendWater)*result.a;
+			   result.a=w_a;
+				#endif
+			  
+			   return result;
 			}
 
 #endif
