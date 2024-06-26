@@ -45,7 +45,7 @@ public class FishingManager : Singleton<FishingManager>
             {
                 fishPondData.seasonRandomValue.TryGetValue(Season.Default, out randomId);
             }
-            var randomResults = GameRandom.instance.GetRandomValue(randomId);
+            var randomResults = GameRandom.instance.GetRandomValue(randomId,countValue:fishingIsSuccess.fishValue);
             if (randomResults.Count > 0)
             {
                 var randomResult = randomResults[0];
@@ -195,8 +195,7 @@ public class FishingManager : Singleton<FishingManager>
             {
                 StartFishingGame startFishingGame = new StartFishingGame
                 {
-                    characterId = characterId,
-                    pondData = fishPondData
+                    characterId = characterId, 
                 };
                 GameActionManager.instance.QueueAction(startFishingGame);
                 waitFishers.Remove(characterId);
@@ -252,6 +251,7 @@ public class FishingManager : Singleton<FishingManager>
                 CreatFisher creatFisher = new CreatFisher
                 {
                     characterInstance = characterId,
+                    pondData= fishPondData,
                 };
                 GameActionManager.instance.QueueAction(creatFisher);
             }

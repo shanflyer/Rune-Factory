@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Unity.Mathematics;
+using Unity.Mathematics; 
 using UnityEngine;
 
 public class FishController : Singleton<FishController>
@@ -7,7 +7,7 @@ public class FishController : Singleton<FishController>
     private MyInstance myInstance;
     Dictionary<int, FisherRuntime> Fishers = new Dictionary<int, FisherRuntime>();
     public override bool NeedUpdata => true;
-    private Transform fishTool;
+    private FishTool fishTool;
 
     public override async void Init()
     {
@@ -18,10 +18,17 @@ public class FishController : Singleton<FishController>
         GameActionManager.instance.AddListener<RecycleFisher>(RecycleFisher);
         GameActionManager.instance.AddListener<TryGetFish>(TryGetFish);
         GameActionManager.instance.AddListener<NPCFishingResult>(NPCFishingResult);
-        fishTool = await GameSourceManager.instance.GetComponent<Transform>(DataPath.fishToolPrefab);
+        fishTool = await GameSourceManager.instance.GetComponent<FishTool>(DataPath.fishToolPrefab);
     }
 
-    int playerFishGetNum = 0;
+    void StartFishingGame(StartFishingGame startFishingGame)
+    {
+        if(Fishers.TryGetValue(startFishingGame.characterId,out var fisherRuntime))
+        {
+            fisherRuntime.fishTool.StartFishing();
+        }
+    }
+     
     void NPCFishingResult(NPCFishingResult nPCFishingResult)
     {
         if(Fishers.TryGetValue(nPCFishingResult.characterId,out var fisherRuntime))
@@ -30,11 +37,25 @@ public class FishController : Singleton<FishController>
             //垂钓结果表情
             if (nPCFishingResult.success)
             {
-
+                ShowEmote showEmote = new ShowEmote
+                {
+                    emoteId = GameCommon.fishSuccessEmote,
+                    showTime = 1000,
+                    entityType = EntityType.角色,
+                    id = nPCFishingResult.characterId
+                };
+                GameActionManager.instance.QueueAction(showEmote);
             }
             else
             {
-
+                ShowEmote showEmote = new ShowEmote
+                {
+                    emoteId = GameCommon.fishFailedmote,
+                    showTime = 1000,
+                    entityType = EntityType.角色,
+                    id = nPCFishingResult.characterId
+                };
+                GameActionManager.instance.QueueAction(showEmote);
             }
             SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
             {
@@ -50,13 +71,19 @@ public class FishController : Singleton<FishController>
     }
     void TryGetFish(TryGetFish tryGetFish)
     {
-        bool isSuccess = playerFishGetNum == 3;
-        FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
+        if(Fishers.TryGetValue(tryGetFish.characterInstance,out var fisherRuntime))
         {
-            characterId = CharacterManager.instance.controllerCharacter.instanceId,
-            isSuccess=isSuccess
-        };
-        GameActionManager.instance.QueueAction(fishingIsSuccess);
+            fisherRuntime.fishTool.StopFishing();
+            FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
+            {
+                characterId = tryGetFish.characterInstance,
+                isSuccess = fisherRuntime.fishTool.isGetFish,
+                fishValue=fisherRuntime.fishTool.FishValue,
+                pondData=fisherRuntime.fishPondData
+            };
+            GameActionManager.instance.QueueAction(fishingIsSuccess); 
+        }
+       
     }
     void RecycleFisher(RecycleFisher recycleFisher)
     {
@@ -73,23 +100,22 @@ public class FishController : Singleton<FishController>
             Character character = CharacterManager.instance.GetCharacter(creatFisher.characterInstance);
             if (character != null)
             {
-                FisherRuntime fisher = new FisherRuntime
-                {
-                    intanceId = character.instanceId,
-                    roomId = character.mapInstance
-                };
                 if (CharacterManager.instance.GetRuntimeCharacterObj(creatFisher.characterInstance, out var characterRuntimeObj))
                 {
-                    RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
-                    fisher.runtimeObj = runtimeObj;
-                    fisher.waterPs = (runtimeObj.obj as Transform).GetComponentInChildren<ParticleSystem>(true);
+                    RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<FishTool>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
+                  
                     Vector3 pos = GameCommon.fishToolOffsets[character.direction];
                     pos += characterRuntimeObj.animator.transform.position;
+
+
+
+                    FisherRuntime fisher = new FisherRuntime(runtimeObj, creatFisher.characterInstance, character.mapInstance,creatFisher.pondData); 
                     fisher.SetToolPos(pos);
 
+                    Fishers.Add(creatFisher.characterInstance, fisher);
+                    Fishers[creatFisher.characterInstance] = fisher;
                 }
-                Fishers.Add(creatFisher.characterInstance, fisher);
-                Fishers[creatFisher.characterInstance] = fisher; 
+             
             }
         }
     }
@@ -122,34 +148,39 @@ public class FishController : Singleton<FishController>
     }
 }
 
-public struct FisherRuntime
+public class FisherRuntime
 {
-    public int intanceId;
-    public ParticleSystem waterPs;
+    public int intanceId; 
     public int roomId;
 
     public RuntimeObj runtimeObj;
+    public FishTool fishTool;
+    public FishPondData fishPondData;
     public void SetToolPos(Vector3 pos)
     {
-        (runtimeObj.obj as Transform).position = pos;
+        (runtimeObj.obj as FishTool).transform.position = pos;
     }
-
-
-    public FisherRuntime(RuntimeObj runtimeObj, int characterId, int roomId)
+     
+    public FisherRuntime(RuntimeObj runtimeObj, int characterId, int roomId, FishPondData fishPondData)
     {
         intanceId = characterId;
         this.runtimeObj = runtimeObj;
         this.roomId = roomId;
-        waterPs = (runtimeObj.obj as Transform).GetComponentInChildren<ParticleSystem>(true);
-        runtimeObj = null;
+        if (runtimeObj == null || runtimeObj.obj == null)
+        {
+            fishTool = null;
+        }
+        else
+        {
+            fishTool = runtimeObj.obj as FishTool;
+        }
+        this.fishPondData = fishPondData;
     }
     public void Clear()
     {
-        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
-        waterPs = null;
+        fishPondData = null;
+        fishTool = null;
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj); 
     }
-    public void FishMove()
-    {
-        waterPs.Play();
-    }
+   
 }

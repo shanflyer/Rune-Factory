@@ -164,7 +164,9 @@ public class GameCommon
 
     public static int defaultOperateId = 0;
     public static int defaultPlayerTalkTime = 2000;
-    
+
+    public const int fishSuccessEmote = 61;
+    public const int fishFailedmote = 24;
 
     public static float2 dropWaitTime = new float2(0.4f, 0.8f);
     public static float4 dropArea = new float4(-0.6f, -0.3f, 0.6f, 0.3f);

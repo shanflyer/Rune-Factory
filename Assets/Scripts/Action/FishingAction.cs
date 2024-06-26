@@ -52,7 +52,7 @@ public struct CreatFisher : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int characterInstance;
-
+    public FishPondData pondData;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (source != 0 && source != int.MinValue)
@@ -133,7 +133,7 @@ public struct StartFishingGame : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public FishPondData pondData;
+  
     public int characterId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -151,6 +151,7 @@ public struct FishingIsSuccess : GameAction
     public bool isSuccess;
     public FishPondData pondData;
     public int characterId;
+    public float fishValue;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
