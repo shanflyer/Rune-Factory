@@ -1,4 +1,4 @@
-﻿using LitJson;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +66,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
             try
             {
-                var results = JsonMapper.ToObject<List<T>>(textAsset.text);
+                var results = JsonConvert.DeserializeObject<List<T>>(textAsset.text);
                 for (int i = 0; i < results.Count; i++)
                 {
                     var data = results[i];
@@ -147,7 +147,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
                 try
                 {
-                    results = JsonMapper.ToObject<List<T>>(dataAsset.text);
+                    results = JsonConvert.DeserializeObject<List<T>>(dataAsset.text);
                     for (int i = 0; i < results.Count; i++)
                     {
                         var data = results[i];
@@ -184,7 +184,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
                 try
                 {
-                    var datas = JsonMapper.ToObject<List<T>>(dataAsset.text);
+                    var datas = JsonConvert.DeserializeObject<List<T>>(dataAsset.text);
                     for (int i = 0; i < datas.Count; i++)
                     {
                         var data = datas[i];
@@ -267,7 +267,7 @@ public class GameDataManager : Singleton<GameDataManager>
             dataDic = new Dictionary<string, IGameData>();
             try
             {
-                var datas = JsonMapper.ToObject<List<T>>(textAsset.text);
+                var datas = JsonConvert.DeserializeObject<List<T>>(textAsset.text);
                 for (int i = 0; i < datas.Count; i++)
                 {
                     var data = datas[i];

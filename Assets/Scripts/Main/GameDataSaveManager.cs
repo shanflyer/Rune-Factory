@@ -1,4 +1,4 @@
-﻿using LitJson;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,12 +53,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             string _dataStr = DecryptDES(dataStr);
             try
             {
-                UserGameSaveDataList userGameSaveDataList = JsonMapper.ToObject<UserGameSaveDataList>(_dataStr);
+                UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(_dataStr);
                 return userGameSaveDataList;
             }
             catch
             {
-                UserGameSaveDataList userGameSaveDataList = JsonMapper.ToObject<UserGameSaveDataList>(dataStr);
+                UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
                 return userGameSaveDataList;
             }
         }
@@ -114,7 +114,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             userGameSaveData.packageSaveDatas = packageSaveDatas;
             userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = userGameSaveData;
         }
-        string strs = JsonMapper.ToJson(userGameSaveDataList);
+        string strs = JsonConvert.SerializeObject(userGameSaveDataList);
         strs = EncryptDES(strs);
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         File.WriteAllText(saveDataPath, strs);
