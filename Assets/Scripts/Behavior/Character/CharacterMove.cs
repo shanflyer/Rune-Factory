@@ -32,14 +32,16 @@ public class CharacterMove : Action
     public override void OnBehaviorComplete()
     {
         base.OnBehaviorComplete();
-        GameActionManager.instance.RemoveListener<CharacterMoveFailed>(FailedMoveAction);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<CharacterMoveFailed>(FailedMoveAction);
         addAction = false;
     }
 
     public override void OnEnd()
     {
         base.OnEnd();
-        GameActionManager.instance.RemoveListener<CharacterMoveFailed>(FailedMoveAction);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<CharacterMoveFailed>(FailedMoveAction);
         addAction = false;
     }
 

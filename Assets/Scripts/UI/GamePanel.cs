@@ -111,7 +111,8 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         base.Close();
         if (changeInputModel)
         {
-            InputManager.instance.SwitchInputMap(false);
+            if (!SingletonType.Cleared)
+                InputManager.instance.SwitchInputMap(false);
         } 
         if (pluralUI)
         {

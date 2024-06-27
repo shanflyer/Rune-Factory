@@ -99,12 +99,16 @@ public class FightPanel : GamePanel<IReferenceData>
 
     public override void OnDisable()
     {
-        GameActionManager.instance.RemoveListener<RefreshFightChapter>(RefreshFightChapter);
-        GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton); 
-        GameActionManager.instance.RemoveListener<StopAutoFight>(StopAutoFight);
-        GameActionManager.instance.RemoveListener<RefreshFightCharacterList>(RefreshFightCharacterList);
-        GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
-        GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<RefreshFightChapter>(RefreshFightChapter);
+            GameActionManager.instance.RemoveListener<SwitchFunctionButton>(SwitchFunctionButton);
+            GameActionManager.instance.RemoveListener<StopAutoFight>(StopAutoFight);
+            GameActionManager.instance.RemoveListener<RefreshFightCharacterList>(RefreshFightCharacterList);
+            GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
+            GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
+        }
+            
         base.OnDisable();
     }
 

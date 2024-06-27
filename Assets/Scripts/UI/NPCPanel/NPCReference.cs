@@ -40,7 +40,8 @@ public class NPCReference : UIObjReference<NPC>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshFriendShip>(RefreshFriendShip);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshFriendShip>(RefreshFriendShip);
     }
 
     private void RefreshFriendShip(RefreshFriendShip refreshFriendShip)

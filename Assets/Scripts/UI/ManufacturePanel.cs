@@ -150,8 +150,12 @@ public class ManufacturePanel : GamePanel<Manufature>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshManufature>(RefreshManufature);
-        GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<RefreshManufature>(RefreshManufature);
+            GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
+        }
+           
     }
 
     protected override void Awake()

@@ -78,12 +78,15 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         pauseBehavior = false;
         autoLock = false;
         Mask.SetActive(false);
-
-        GameActionManager.instance.RemoveListener<RefreshCharacter>(RefreshCharacter);
-        GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
-        GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
-        GameActionManager.instance.RemoveListener<SkillAutoLock>(SkillAutoLock);
-        GameActionManager.instance.RemoveListener<SetChapterFight>(SetChapterFight);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<RefreshCharacter>(RefreshCharacter);
+            GameActionManager.instance.RemoveListener<SkillPauseAction>(SkillPauseAction);
+            GameActionManager.instance.RemoveListener<NoSelectSkillAction>(NoSelectSkillAction);
+            GameActionManager.instance.RemoveListener<SkillAutoLock>(SkillAutoLock);
+            GameActionManager.instance.RemoveListener<SetChapterFight>(SetChapterFight);
+        }
+      
         base.ClearData();
     }
     void ActionSkill()

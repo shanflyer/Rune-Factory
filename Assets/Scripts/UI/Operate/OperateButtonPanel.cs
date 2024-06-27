@@ -31,7 +31,8 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<SwitchOperateList>(SwitchOperateList);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<SwitchOperateList>(SwitchOperateList);
     }
 
     public override void OnEnable()

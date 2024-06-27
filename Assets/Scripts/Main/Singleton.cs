@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class Singleton<T> where T : Singleton<T>
 {
@@ -11,19 +12,19 @@ public class Singleton<T> where T : Singleton<T>
     {
         get
         {
-            if (_instance == null)
+            if (_instance == null&&!SingletonType.Cleared)
             {
                 _instance = Activator.CreateInstance<T>();
                 _instance.Init();
                 if (typeof(T) != typeof(SingletonType))
-                {
+                { 
                     SingletonType.instance.AddType(_instance.Clear);
 
                     if (_instance.NeedUpdata)
                     {
                         SingletonType.instance.AddUpDataAction(_instance.UpData);
                     }
-                }
+                } 
             }
             return _instance;
         }
@@ -41,10 +42,9 @@ public class Singleton<T> where T : Singleton<T>
     public virtual void Init()
     {
 
-    }
-     
+    } 
     protected virtual void Clear()
-    {
+    { 
         if (NeedUpdata)
         {
             SingletonType.instance.RemoveUpDataAction(_instance.UpData);
@@ -58,6 +58,11 @@ public class SingletonType : Singleton<SingletonType>
     public HashSet<SingletonClear> TypeClears = new HashSet<SingletonClear>();
     public List<Action> singleUpdatas = new List<Action>();
 
+    public override void Init()
+    {
+        base.Init();
+        Cleared = false;
+    }
     public void AddUpDataAction(Action action)
     {
         if (!singleUpdatas.Contains(action))
@@ -76,17 +81,27 @@ public class SingletonType : Singleton<SingletonType>
     { 
         TypeClears.Add(typeClear);
     }
+    public static bool Cleared { get; private set; }
     public void ClearAll()
     {
+        Cleared = true;
         singleUpdatas.Clear();
-        foreach(var typeClear in TypeClears)
+        try
         {
-             
-            if (typeClear != null)
+            foreach (var typeClear in TypeClears)
             {
-                typeClear();
+
+                if (typeClear != null)
+                {
+                    typeClear();
+                }
             }
         }
+        catch(Exception e)
+        {
+            Debug.Log(e.ToString());
+        }
+       
         Clear();
     }
 

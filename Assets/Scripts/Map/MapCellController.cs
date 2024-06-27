@@ -5,6 +5,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -1748,27 +1749,18 @@ public class MapCellController : Singleton<MapCellController>
                 neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
                 neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
 
-                NativeList<int2> openCells = new NativeList<int2>(Allocator.Temp);
-                NativeList<int2> closeCells = new NativeList<int2>(Allocator.Temp);
-                NativeHashMap<int2, int> cellCost = new NativeHashMap<int2, int>(16, Allocator.Temp);
-                NativeHashMap<int2, int> parentCell = new NativeHashMap<int2, int>(16, Allocator.Temp);
-
-                int openCellLength = 0;
-                int closeCellLength = 0;
-
-                openCells.Add(startPos);
-                openCellLength++;
-                // int cost = CalculateDistanceCost(startPos, targetPos) * 5;
-                cellCost[startPos] = 0;
-                while (openCellLength > 0)
+                NativeHashMap<int2, int2> parentCell = new NativeHashMap<int2, int2>(16, Allocator.Temp); 
+                MinCellDataList openCellList = new MinCellDataList(16, Allocator.Temp);
+                NativeHashSet<int2> checkedCell = new NativeHashSet<int2>(16, Allocator.Temp);
+                 
+                openCellList.Add(new int3(startPos, 0));
+                int2 nowCell = startPos;
+                while (openCellList.length > 0)
                 {
-                    int2 nowCell = openCells[0];
-
-                    openCells.RemoveAt(0);
+                    nowCell = openCellList.GetData();
+                    checkedCell.Add(nowCell); 
                     //openCells.RemoveAtSwapBack(0);
-                    openCellLength--;
-                    closeCells.Add(nowCell);
-                    closeCellLength++;
+                    
                     if (nowCell.x == targetPos.x && nowCell.y == targetPos.y)
                     {
                         break;
@@ -1777,7 +1769,7 @@ public class MapCellController : Singleton<MapCellController>
                     for (int i = 0; i < 8; i++)
                     {
                         int2 cell = neighbourOffsetArray[i] + nowCell;
-                        if (closeCells.Contains(cell) || openCells.Contains(cell))
+                        if (checkedCell.Contains(cell))
                         {
                             continue;
                         }
@@ -1788,64 +1780,28 @@ public class MapCellController : Singleton<MapCellController>
 
                         int cost = CalculateDistanceCost(cell, startPos) +
                              CalculateDistanceCost(cell, targetPos) * 3;
-                        cellCost[cell] = cost;
-                        parentCell[cell] = closeCellLength - 1;
+                        parentCell[cell] = nowCell;
+                        checkedCell.Add(cell);
+                        openCellList.Add(new int3(cell, cost));
 
                         if (cell.x == targetPos.x && cell.y == targetPos.y)
                         {
-                            openCells.Add(cell);
-                            openCellLength++;
                             break;
-                        }
-
-                        bool insert = false;
-                        for (int j = 0; j < openCells.Length; j++)
-                        {
-                            if (cellCost.TryGetValue(openCells[j], out int _cost))
-                            {
-                                if (_cost > cost)
-                                {
-                                    openCells.InsertRangeWithBeginEnd(j, j + 1);
-                                    openCells[j] = cell;
-
-                                    insert = true;
-                                    openCellLength++;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!insert)
-                        {
-                            openCells.Add(cell);
-                            openCellLength++;
-                        }
+                        } 
                     }
                 }
 
-                var checkCell = closeCells[closeCellLength - 1];
-                pathCells.Add(checkCell);
-                while (checkCell.x != startPos.x || checkCell.y != startPos.y)
+                while (nowCell.Equals(targetPos))
                 {
-                    if (parentCell.TryGetValue(checkCell, out int index))
-                    {
-                        if (closeCellLength <= index)
-                        {
-                            break;
-                        }
-                        checkCell = closeCells[index];
-                        pathCells.Add(checkCell);
-                    }
-                    else
+                    pathCells.Add(nowCell);
+                    if (!parentCell.TryGetValue(nowCell, out nowCell))
                     {
                         break;
                     }
                 }
-
                 neighbourOffsetArray.Dispose();
-                openCells.Dispose();
-                closeCells.Dispose();
-                cellCost.Dispose();
                 parentCell.Dispose();
+                checkedCell.Dispose();
             }
         }
     }

@@ -130,9 +130,10 @@ public class MyLight : MonoBehaviour
     }
     private void OnDisable()
     {
-        if (Application.isPlaying&&GameController.instance!=null)
+        if (Application.isPlaying&&GameController.instance!=null&& !SingletonType.Cleared)
         {
-            EnvironmentManger.instance.RemoveMyLight(this);
+            if (!SingletonType.Cleared)
+                EnvironmentManger.instance.RemoveMyLight(this); 
         }
       
     }

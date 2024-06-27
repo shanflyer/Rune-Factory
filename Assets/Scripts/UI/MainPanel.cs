@@ -27,7 +27,11 @@ public class MainPanel : GamePanel<IReferenceData>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
+        }
+      
     }
     void RefreshTeam(RefreshTeam refreshTeam)
     {

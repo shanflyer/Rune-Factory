@@ -44,7 +44,8 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
     }
     void TalkAction()
     {

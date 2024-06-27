@@ -31,11 +31,13 @@ public class FishingManager : Singleton<FishingManager>
         {
             myInstance.Clear();
         }
-        
-        GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);
-        GameActionManager.instance.RemoveListener<StopFishing>(StopFishing);
-        GameActionManager.instance.RemoveListener<StartFishing>(StartFishing);
-        GameActionManager.instance.RemoveListener<DisplayMap>(DisplayMap);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);
+            GameActionManager.instance.RemoveListener<StopFishing>(StopFishing);
+            GameActionManager.instance.RemoveListener<StartFishing>(StartFishing);
+            GameActionManager.instance.RemoveListener<DisplayMap>(DisplayMap);
+        } 
     }
 
     private async void FishingIsSuccess(FishingIsSuccess fishingIsSuccess)

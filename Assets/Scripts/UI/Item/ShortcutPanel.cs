@@ -70,7 +70,8 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<SelectPackageItemAction>(SelectPackageItemAction);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<SelectPackageItemAction>(SelectPackageItemAction);
     }
 
     protected override void Awake()

@@ -116,8 +116,12 @@ public class WarehousePanel : GamePanel<PackageList>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
-        GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
+            GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
+        }
+            
     }
 
     public override void SetPanelUISerializeObj()

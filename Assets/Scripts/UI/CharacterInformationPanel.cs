@@ -145,8 +145,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshEquip>(RefreshEquip);
-        GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<RefreshEquip>(RefreshEquip);
+            GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
+        }
+           
     }
 
     private void RefreshEquip(RefreshEquip refreshEquip)

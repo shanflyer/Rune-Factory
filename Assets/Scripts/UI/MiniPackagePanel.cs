@@ -98,10 +98,14 @@ public class MiniPackagePanel : GamePanel<PackageList>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
-        GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
-        hidePanels.hide = false;
-        GameActionManager.instance.QueueAction(hidePanels);
+        if (!SingletonType.Cleared)
+        {
+            GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
+            GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
+            hidePanels.hide = false;
+            GameActionManager.instance.QueueAction(hidePanels);
+        }
+            
     }
 
     private SelectAction<Item> otherSelectItemAction;

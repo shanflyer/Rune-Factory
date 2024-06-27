@@ -61,7 +61,8 @@ public class PasturePanel : GamePanel<MyListInt>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshPasture>(RefreshPasture);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshPasture>(RefreshPasture);
     }
 
 

@@ -28,14 +28,16 @@ public class GameTimeCheckRun : Action
     public override void OnBehaviorComplete()
     {
         base.OnBehaviorComplete();
-        GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
         addAction = false;
     }
 
     public override void OnEnd()
     {
         base.OnEnd();
-        GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
         addAction = false;
     }
 

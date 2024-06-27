@@ -86,7 +86,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
     }
 
     public override void Close()

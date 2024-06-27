@@ -44,7 +44,8 @@ public class SetSomeOneGift : Action
         addAction = false;
         characterId = null;
         taskStatus = TaskStatus.Failure;
-        GameActionManager.instance.RemoveListener<GiveGift>(GiveGift);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<GiveGift>(GiveGift);
         base.OnReset();
     }
 

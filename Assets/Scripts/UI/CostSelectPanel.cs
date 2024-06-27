@@ -35,7 +35,8 @@ public class CostSelectPanel : GamePanel<CostEventData>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshPlayerGold>(RefreshPlayerGold);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshPlayerGold>(RefreshPlayerGold);
     }
 
     public override void SetPanelUISerializeObj()

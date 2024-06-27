@@ -38,7 +38,8 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshGameSaveData>(RefreshGameSaveData);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshGameSaveData>(RefreshGameSaveData);
     }
 
     private void RefreshGameSaveData(RefreshGameSaveData refreshGameSaveData)

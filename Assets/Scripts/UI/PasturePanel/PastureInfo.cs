@@ -29,7 +29,8 @@ public class PastureInfo : UIObjReference<Pasture>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshPasture>(RefreshPasture);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshPasture>(RefreshPasture);
     }
      void RefreshPasture(RefreshPasture refreshPasturee)
     {

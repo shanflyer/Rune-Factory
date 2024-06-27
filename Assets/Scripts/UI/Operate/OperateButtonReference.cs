@@ -34,7 +34,8 @@ public class OperateButtonReference : UIObjReference<OperateDataReferenceData>
     public override void OnDisable()
     {
         base.OnDisable();
-        GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
+        if (!SingletonType.Cleared)
+            GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
     }
 
     public override void OnEnable()
