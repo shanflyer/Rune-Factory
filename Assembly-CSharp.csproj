@@ -27,7 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169;USG0001</NoWarn>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,7 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169;USG0001</NoWarn>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <NoConfig>true</NoConfig>
@@ -288,8 +288,8 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetDirection.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedInt.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\ExternalBehaviorTree.cs" />
-    <Compile Include="Assets\Scripts\UI\ManufacturePanel.cs" />
     <Compile Include="Assets\Scripts\test\Test.cs" />
+    <Compile Include="Assets\Scripts\UI\ManufacturePanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Dot.cs" />
     <Compile Include="Assets\Scripts\Main\GameRandom.cs" />

@@ -27,7 +27,11 @@ public class FishingManager : Singleton<FishingManager>
     protected override void Clear()
     {
         base.Clear();
-        myInstance.Clear();
+        if (myInstance != null)
+        {
+            myInstance.Clear();
+        }
+        
         GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);
         GameActionManager.instance.RemoveListener<StopFishing>(StopFishing);
         GameActionManager.instance.RemoveListener<StartFishing>(StartFishing);

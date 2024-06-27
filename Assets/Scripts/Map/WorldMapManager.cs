@@ -737,7 +737,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private async Task InitWorldData(string worldName, int displayMap = 0)
     {
         worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>(worldName);
-        MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
+        //MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
 
         roomMapDatas.Clear();
 

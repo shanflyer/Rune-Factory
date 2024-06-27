@@ -38,7 +38,10 @@ public struct UserGameSaveData:IReferenceData
     }
 
 }
- 
+ public struct MapSaveData
+{
+
+}
 public struct FishSaveData
 {
     public int dataId;

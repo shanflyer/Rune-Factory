@@ -213,10 +213,10 @@ public class MapCellController : Singleton<MapCellController>
         }
     }
 
-    [BurstCompile]
-    public struct RuntimeMapRoom : INativeData
+    //[BurstCompile]
+    public class RuntimeMapRoom
     {
-        public readonly void Dispose()
+        public  void Dispose()
         {
             roomCellData.Dispose();
             linkMapIndexs.Dispose();
@@ -557,7 +557,7 @@ public class MapCellController : Singleton<MapCellController>
         }
     }
 
-    private MyNativeData<RuntimeMapRoom> runtimeMapRooms;
+    private Dictionary<int,RuntimeMapRoom> runtimeMapRooms=new Dictionary<int, RuntimeMapRoom>();
 
     public int2 GetNearestItemPlayerTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
@@ -607,7 +607,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int2 GetRandomRoomCell(int roomId)
     {
-        if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
             return runtimeMapRoom.roomCellData.GetRandomCanWalkCell();
         }
@@ -647,7 +647,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="room"></param>
     public void AddBarrierCell(int2[] cells, int2 itemPos, int room)
     {
-        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             for (int i = 0; i < cells.Length; i++)
             {
@@ -667,7 +667,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="room"></param>
     public void RemoveBarrierCell(int2[] cells, int2 itemPos, int room)
     {
-        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             for (int i = 0; i < cells.Length; i++)
             {
@@ -694,7 +694,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="offset"></param>
     public void AddTriggerCell(int2[] cells, int room, int enterEventId, int exitEventId, EntityType triggerType, int linkId, int2 offset)
     {
-        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             int4 triggerEvent = new int4((int)triggerType, enterEventId, exitEventId, linkId);
 
@@ -712,7 +712,7 @@ public class MapCellController : Singleton<MapCellController>
             }
 
             runtimeMapRoom.commonTriggerAreas.AddTriggerCell(triggerArea);
-            runtimeMapRooms.SetData(runtimeMapRoom);
+           // runtimeMapRooms.SetData(runtimeMapRoom);
         }
     }
 
@@ -724,10 +724,10 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="linkId"></param>
     public void RemoveTriggerCell(int2[] cells, int room, int linkId)
     {
-        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             runtimeMapRoom.commonTriggerAreas.RemoveTriggerCell(linkId);
-            runtimeMapRooms.SetData(runtimeMapRoom);
+            //runtimeMapRooms.SetData(runtimeMapRoom);
         }
     }
 
@@ -741,7 +741,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="offset"></param>
     public void AddPlayerTriggerCell(int2[] cells, int room, int enterEventId, int linkId, int2 offset)
     {
-        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             TriggerArea triggerArea = new TriggerArea
             {
@@ -755,7 +755,7 @@ public class MapCellController : Singleton<MapCellController>
                 triggerArea.cells.Add(cells[i] + offset);
             }
             runtimeMapRoom.playerTriggerAreas.AddTriggerCell(triggerArea);
-            runtimeMapRooms.SetData(runtimeMapRoom);
+            //runtimeMapRooms.SetData(runtimeMapRoom);
         }
     }
 
@@ -767,10 +767,10 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="linkId"></param>
     public void RemovePlayerTriggerCell(int2[] cells, int room, int linkId)
     {
-        if (runtimeMapRooms.GetData(room, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             runtimeMapRoom.playerTriggerAreas.RemoveTriggerCell(linkId);
-            runtimeMapRooms.SetData(runtimeMapRoom);
+           // runtimeMapRooms.SetData(runtimeMapRoom);
         }
     }
 
@@ -987,17 +987,17 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool GetRuntimeMapRoom(int roomId, out RuntimeMapRoom runtimeMapRoom)
     {
-        return runtimeMapRooms.GetData(roomId, out runtimeMapRoom);
+        return runtimeMapRooms.TryGetValue(roomId, out runtimeMapRoom);
     }
 
     public bool ContainsRoom(int roomId)
     {
-        return runtimeMapRooms.Contains(roomId);
+        return runtimeMapRooms.ContainsKey(roomId);
     }
 
     public int3 GetRoomCoordinate(int roomId)
     {
-        if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
             return runtimeMapRoom.coordinate;
         }
@@ -1006,7 +1006,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public RoomCellData GetRoomCellData(int roomId)
     {
-        if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
             return runtimeMapRoom.roomCellData;
         }
@@ -1015,7 +1015,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public MapTriggerAreas GetPlayerTrigger(int roomId)
     {
-        if (runtimeMapRooms.GetData(roomId, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
             return runtimeMapRoom.playerTriggerAreas;
         }
@@ -1024,7 +1024,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public void InitWorldRoomDatas(int roomCount)
     {
-        runtimeMapRooms.Init(roomCount);
+       // runtimeMapRooms.Init(roomCount);
     }
 
     public void InitMapData(int roomId, MapCellData[] mapCellDatas,
@@ -1053,13 +1053,13 @@ public class MapCellController : Singleton<MapCellController>
             neighbourMaps = new NativeHashMap<int, int>(8, Allocator.Persistent),
         };
         runtimeMapRoom.InitTriggerData();
-        runtimeMapRooms.AddData(runtimeMapRoom);
+        runtimeMapRooms.Add(runtimeMapRoom.Key,runtimeMapRoom);
     }
 
     private Direction GetMapDirection(int map0, int map1, int2 coordinate0, int2 coordinate1)
     {
-        if (runtimeMapRooms.GetData(map0, out var runtimeMapRoom0) &&
-            runtimeMapRooms.GetData(map1, out var runtimeMapRoom1))
+        if (runtimeMapRooms.TryGetValue(map0, out var runtimeMapRoom0) &&
+            runtimeMapRooms.TryGetValue(map1, out var runtimeMapRoom1))
         {
             coordinate0.x += runtimeMapRoom0.coordinate.x;
             coordinate0.y += runtimeMapRoom0.coordinate.y;
@@ -1146,31 +1146,31 @@ public class MapCellController : Singleton<MapCellController>
 
     public void DeleteMapLink(MapLine mapLine)
     {
-        if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
         {
             runtimeMapRoom = runtimeMapRoom.DeleteLinkMap(mapLine.cells0);
-            runtimeMapRooms.SetData(runtimeMapRoom);
+           // runtimeMapRooms.SetData(runtimeMapRoom);
         }
 
-        if (runtimeMapRooms.GetData(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
         {
             _runtimeMapRoom = _runtimeMapRoom.DeleteLinkMap(mapLine.cells1);
-            runtimeMapRooms.SetData(_runtimeMapRoom);
+           // runtimeMapRooms.SetData(_runtimeMapRoom);
         }
     }
 
     public void InitLinkMap(MapLine mapLine)
     {
-        if (runtimeMapRooms.GetData(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
         {
             runtimeMapRoom.AddLinkMap(mapLine.cells0);
-            runtimeMapRooms.SetData(runtimeMapRoom);
+           // runtimeMapRooms.SetData(runtimeMapRoom);
         }
 
-        if (runtimeMapRooms.GetData(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
         {
             _runtimeMapRoom.AddLinkMap(mapLine.cells1);
-            runtimeMapRooms.SetData(_runtimeMapRoom);
+          // runtimeMapRooms.SetData(_runtimeMapRoom);
         }
     }
 
@@ -1206,7 +1206,7 @@ public class MapCellController : Singleton<MapCellController>
     public Stack<int2> FindSamplePathNode(int2 startPos, int2 targetPos, int mapId, int2[] cells)
     {
         Stack<int2> outData = new Stack<int2>();
-        if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
             NativeList<int2> pathCells = new NativeList<int2>(16, Allocator.TempJob);
@@ -1241,7 +1241,7 @@ public class MapCellController : Singleton<MapCellController>
     public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId)
     {
         Stack<int2> outData = new Stack<int2>();
-        if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
             NativeList<int2> pathCells = new NativeList<int2>(16, Allocator.TempJob);
@@ -1268,7 +1268,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool CheckIsWalk(Vector2Int coordinate, int mapId)
     {
-        if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
 
@@ -1279,7 +1279,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool CheckIsWalk(int3 coordinate)
     {
-        if (runtimeMapRooms.GetData(coordinate.z, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(coordinate.z, out RuntimeMapRoom runtimeMapRoom))
         {
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
 
@@ -1290,7 +1290,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool CheckFutureIsWalk(int2[] cells, int mapId, HashSet<int2> specialCells)
     {
-        if (runtimeMapRooms.GetData(mapId, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapId, out var runtimeMapRoom))
         {
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
             for (int i = 0; i < cells.Length; i++)
@@ -1321,7 +1321,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool CheckIsWalk(int2 coordinate, int mapId)
     {
-        if (runtimeMapRooms.GetData(mapId, out RuntimeMapRoom runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             RoomCellData roomCellData = runtimeMapRoom.roomCellData;
 
@@ -1332,7 +1332,7 @@ public class MapCellController : Singleton<MapCellController>
 
     private NativeHashMap<int, int> GetRoomNeighbours(int roomId)
     {
-        if (runtimeMapRooms.GetData(roomId, out RuntimeMapRoom sourceRoom))
+        if (runtimeMapRooms.TryGetValue(roomId, out RuntimeMapRoom sourceRoom))
         {
             return sourceRoom.neighbourMaps;
         }
@@ -1401,7 +1401,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public void DeleteRoom(int roomInstanceid)
     {
-        runtimeMapRooms.RemoveData(roomInstanceid);
+        runtimeMapRooms.Remove(roomInstanceid);
     }
 
     public override void Init()
@@ -1425,7 +1425,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool CheckTryMoveTarget(int2 startCoordinate, int2 targetCoordinate, int mapInstace)
     {
-        if (runtimeMapRooms.GetData(mapInstace, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapInstace, out var runtimeMapRoom))
         {
             int dx = targetCoordinate.x - startCoordinate.x;
             int dy = targetCoordinate.y - startCoordinate.y;
@@ -1476,7 +1476,7 @@ public class MapCellController : Singleton<MapCellController>
     public int2 GetTrueFreedomTarget(int2 startCoordinate, int2 targetCoordinate, int mapInstace)
     {
         int2 result = startCoordinate;
-        if (runtimeMapRooms.GetData(mapInstace, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapInstace, out var runtimeMapRoom))
         {
             int dx = targetCoordinate.x - startCoordinate.x;
             int dy = targetCoordinate.y - startCoordinate.y;
@@ -1573,7 +1573,11 @@ public class MapCellController : Singleton<MapCellController>
     protected override void Clear()
     {
         base.Clear();
-        runtimeMapRooms.Dispose();
+        foreach(var runtimeMapRoom in runtimeMapRooms)
+        {
+            runtimeMapRoom.Value.Dispose();
+        }
+        runtimeMapRooms.Clear();
     }
 
     private const int MOVE_STRAIGHT_COST = 10;

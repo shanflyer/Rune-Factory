@@ -4,9 +4,57 @@ using Newtonsoft.Json;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
+using Unity.Jobs;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Collections;
+using UnityEngine.UI;
+ 
+public struct TestData
+{
+    public int index;
+    public NativeArray<int> datas;
+}
+public struct TestJob : IJobParallelFor
+{
 
+    [NativeDisableUnsafePtrRestriction]
+    public unsafe TestData* testData;
+    [WriteOnly]
+    public NativeArray<int> result;
+    public unsafe void Execute(int index)
+    {
+        result[index] = testData->datas[index];
+    }
+}
 public class Test : MonoBehaviour
 {
+    public List<int> testData=new List<int>();
+    public unsafe void TestUnsafe()
+    {
+        TestData Data = new TestData
+        {
+            datas = new NativeArray<int>(testData.Count, Allocator.TempJob),
+        };
+        for(int i = 0; i < testData.Count; i++)
+        {
+            Data.datas[i] = testData[i];
+        }
+        NativeArray<int> result = new NativeArray<int>(testData.Count, Allocator.TempJob);
+        TestJob testJob = new TestJob
+        {
+            result = result,
+            testData = &Data
+        };
+        testJob.Schedule(testData.Count,4).Complete();
+        for(int i = 0; i < result.Length; i++)
+        {
+            Debug.Log(result[i]);
+        }
+        result.Dispose();
+        Data.datas.Dispose();
+    }
+
+
     public List<FilmData> formulaDatas=new List<FilmData>();
     public void TestNewtosoftTostring()
     {
@@ -50,6 +98,10 @@ public class TestEditor : Editor
         if (GUILayout.Button("≤‚ ‘json∑¥–Ú¡–ªØ"))
         {
             test.TesttNewtosoftToObj();
+        }
+        if (GUILayout.Button("≤‚ ‘job"))
+        {
+            test.TestUnsafe();
         }
     }
 }
