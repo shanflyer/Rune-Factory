@@ -1,4 +1,3 @@
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -337,10 +336,10 @@ public class MapCellController : Singleton<MapCellController>
             changeAction = int3.zero;
             if (linkMapIndexs.TryGetValue(nowCoordinate, out int index))
             {
-                int4 linkData = linkMaps[index];
-                if (GameCommon.CheckDirectionValue(direction, linkData.w))
+                int4 nextData = linkMaps[index];
+                if (GameCommon.CheckDirectionValue(direction, nextData.w))
                 {
-                    newMap = linkData.xyz;
+                    newMap = nextData.xyz;
                     changeAction = linkActions[index];
                     return true;
                 }
@@ -353,10 +352,10 @@ public class MapCellController : Singleton<MapCellController>
             newMap = int3.zero;
             if (linkMapIndexs.TryGetValue(nowCoordinate, out int index))
             {
-                int4 linkData = linkMaps[index];
-                if (GameCommon.CheckDirectionValue(direction, linkData.w))
+                int4 nextData = linkMaps[index];
+                if (GameCommon.CheckDirectionValue(direction, nextData.w))
                 {
-                    newMap = linkData.xyz;
+                    newMap = nextData.xyz;
                     return true;
                 }
             }
@@ -483,12 +482,13 @@ public class MapCellController : Singleton<MapCellController>
             }
             return false;
         }
-        public bool CheckWalkable(int x,int y)
+
+        public bool CheckWalkable(int x, int y)
         {
             if (x >= startCoordinate.x && x <= endCoordinate.x &&
            y >= startCoordinate.y && y <= endCoordinate.y)
             {
-                int index = GetCoordinateIndex(x,y);
+                int index = GetCoordinateIndex(x, y);
                 if (cellValue[index] == 1)
                 {
                     if (mapObjBarriers.ContainsKey(index))
@@ -500,6 +500,7 @@ public class MapCellController : Singleton<MapCellController>
             }
             return false;
         }
+
         public bool CheckWalkable(int2 coordinate)
         {
             if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&
@@ -1252,8 +1253,8 @@ public class MapCellController : Singleton<MapCellController>
                 pathCells = pathCells
             };
 
-            findPath.Schedule().Complete();
-            //findPath.Run();
+            // findPath.Schedule().Complete();
+            findPath.Run();
 
             for (int i = 0; i < findPath.pathCells.Length; i++)
             {
@@ -1431,13 +1432,13 @@ public class MapCellController : Singleton<MapCellController>
             int absDx = math.abs(dx);
             int absDy = math.abs(dy);
             if (absDx == absDy && absDx != 0)
-            { 
+            {
                 int addX = targetCoordinate.x < startCoordinate.x ? -1 : 1;
                 int addY = targetCoordinate.y < startCoordinate.y ? -1 : 1;
 
-                int  nowX = startCoordinate.x + addX;
+                int nowX = startCoordinate.x + addX;
                 int nowY = startCoordinate.y + addY;
-                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY); 
+                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY);
             }
             else
             if (absDx > absDy)
@@ -1452,7 +1453,7 @@ public class MapCellController : Singleton<MapCellController>
                 nowX = startCoordinate.x + addX;
                 trueNowY = trueNowY + perAddy;
                 nowY = perAddy < 0 ? (int)math.ceil(trueNowY) : (int)math.floor(trueNowY);
-                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY); 
+                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY);
             }
             else if (absDx < absDy)
             {
@@ -1466,22 +1467,22 @@ public class MapCellController : Singleton<MapCellController>
                 nowY = startCoordinate.y + addY;
                 trueNowX = trueNowX + perAddx;
                 nowX = perAddx < 0 ? (int)math.ceil(trueNowX) : (int)math.floor(trueNowX);
-                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY); 
+                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY);
             }
-
         }
         return false;
     }
-    public int2 GetTrueFreedomTarget(int2 startCoordinate,int2 targetCoordinate,int mapInstace)
+
+    public int2 GetTrueFreedomTarget(int2 startCoordinate, int2 targetCoordinate, int mapInstace)
     {
         int2 result = startCoordinate;
-        if(runtimeMapRooms.GetData(mapInstace,out var runtimeMapRoom))
+        if (runtimeMapRooms.GetData(mapInstace, out var runtimeMapRoom))
         {
             int dx = targetCoordinate.x - startCoordinate.x;
             int dy = targetCoordinate.y - startCoordinate.y;
             int absDx = math.abs(dx);
             int absDy = math.abs(dy);
-            if (absDx == absDy&&absDx!=0)
+            if (absDx == absDy && absDx != 0)
             {
                 int nowX = startCoordinate.x;
                 int nowY = startCoordinate.y;
@@ -1501,26 +1502,27 @@ public class MapCellController : Singleton<MapCellController>
                         result.y = nowY;
                     }
                 }
-            }else
+            }
+            else
             if (absDx > absDy)
             {
-                float perAddy= absDy / (float)absDx;
+                float perAddy = absDy / (float)absDx;
                 int nowX = startCoordinate.x;
                 int nowY = startCoordinate.y;
                 float trueNowY = startCoordinate.y;
                 int addX = targetCoordinate.x < startCoordinate.x ? -1 : 1;
                 perAddy *= targetCoordinate.y < startCoordinate.y ? -1 : 1;
-                for (int x=0;x<= absDx; x++)
+                for (int x = 0; x <= absDx; x++)
                 {
-                    nowX =startCoordinate.x + addX;
-                    trueNowY= trueNowY+perAddy;
+                    nowX = startCoordinate.x + addX;
+                    trueNowY = trueNowY + perAddy;
                     if (x == absDx)
                     {
                         nowY = targetCoordinate.y;
                     }
                     else
                     {
-                        nowY = perAddy<0? (int)math.ceil(trueNowY) : (int)math.floor(trueNowY);
+                        nowY = perAddy < 0 ? (int)math.ceil(trueNowY) : (int)math.floor(trueNowY);
                     }
                     if (!runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY))
                     {
@@ -1564,7 +1566,6 @@ public class MapCellController : Singleton<MapCellController>
                     }
                 }
             }
-            
         }
         return result;
     }
@@ -1595,26 +1596,40 @@ public class MapCellController : Singleton<MapCellController>
     public struct MinCellDataList
     {
         private NativeList<int3> datas;
-        private NativeHashMap<int, int> linkDatas;
+        private NativeHashMap<int, int> nextDatas;
+        private NativeHashMap<int, int> forwardDatas;
         public int length;
         public int minIndex;
+
         public MinCellDataList(int capacity, Allocator allocator)
         {
             datas = new NativeList<int3>(capacity, allocator);
             length = 0;
-            linkDatas=new NativeHashMap<int, int>(capacity, allocator);
+            nextDatas = new NativeHashMap<int, int>(capacity, allocator);
             minIndex = 0;
+            forwardDatas = new NativeHashMap<int, int>(capacity, allocator);
         }
+
         public void Add(int3 t)
         {
-            datas.Add(t);
+            if (length < datas.Length)
+            {
+                datas[length] = t;
+            }
+            else
+            {
+                datas.Add(t);
+            }
+
             length++;
 
             if (length > 1)
             {
                 if (t.z < datas[minIndex].z)
-                { 
-                    linkDatas.Add(length - 1, minIndex);
+                {
+                    nextDatas.Add(length - 1, minIndex);
+                    forwardDatas.Add(minIndex, length - 1);
+                    minIndex = length - 1;
                 }
                 else
                 {
@@ -1622,14 +1637,18 @@ public class MapCellController : Singleton<MapCellController>
                 }
             }
         }
-        void SetSortLinkIndex(int nowIndex, int targetIndex,int targetValue)
+
+        private void SetSortLinkIndex(int nowIndex, int targetIndex, int targetValue)
         {
-            if (linkDatas.TryGetValue(nowIndex, out var nextIndex))
+            if (nextDatas.TryGetValue(nowIndex, out var nextIndex))
             {
                 if (targetValue < datas[nextIndex].z)
-                { 
-                    linkDatas[nowIndex] = targetIndex;
-                    linkDatas[targetIndex] = nextIndex;
+                {
+                    forwardDatas[nextIndex] = targetIndex;
+                    forwardDatas[targetIndex] = nowIndex;
+
+                    nextDatas[nowIndex] = targetIndex;
+                    nextDatas[targetIndex] = nextIndex;
                 }
                 else
                 {
@@ -1638,36 +1657,61 @@ public class MapCellController : Singleton<MapCellController>
             }
             else
             {
-                linkDatas.Add(nowIndex, targetIndex);
+                nextDatas.Add(nowIndex, targetIndex);
+                forwardDatas.Add(targetIndex, nowIndex);
             }
         }
+
         public int2 GetData()
         {
             int2 result = datas[minIndex].xy;
             RemoveMin();
             return result;
         }
-         
+
         public void RemoveMin()
         {
             if (length > 0)
             {
                 if (length > 1)
                 {
-                    int nextMinIndex = linkDatas[minIndex];
-                    linkDatas.Remove(minIndex);
-                    minIndex = nextMinIndex;
-                }                
+                    var deathData = datas[minIndex];
+                    int oldMinIndex = minIndex;
+                    int lastIndex = length - 1;
+
+                    int nextIndex = nextDatas[minIndex];
+                    forwardDatas.Remove(nextIndex);
+                    nextDatas.Remove(minIndex);
+
+                    if (nextIndex != lastIndex)
+                    {
+                        minIndex = nextIndex;
+                    }
+                    datas[oldMinIndex] = datas[lastIndex];
+                    datas[lastIndex] = deathData;
+                    if (forwardDatas.TryGetValue(lastIndex, out var _forwardIndex))
+                    {
+                        nextDatas[_forwardIndex] = oldMinIndex;
+                        forwardDatas.Remove(lastIndex);
+                        forwardDatas[oldMinIndex] = _forwardIndex;
+                    }
+                    if (nextDatas.TryGetValue(lastIndex, out var _nextIndex))
+                    {
+                        forwardDatas[_nextIndex] = oldMinIndex;
+                        nextDatas.Remove(lastIndex);
+                        nextDatas[oldMinIndex] = _nextIndex;
+                    }
+                }
                 length--;
             }
         }
+
         public void Dispose()
         {
             datas.Dispose();
-            linkDatas.Dispose();
+            nextDatas.Dispose();
         }
     }
-
 
     [BurstCompile]
     public struct SampleFindPath : IJob
@@ -1831,20 +1875,20 @@ public class MapCellController : Singleton<MapCellController>
                 neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
                 neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
                 neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
-                 
-                //NativeList<int2> closeCells = new NativeList<int2>(Allocator.Temp); 
+
+                //NativeList<int2> closeCells = new NativeList<int2>(Allocator.Temp);
                 NativeHashMap<int2, int2> parentCell = new NativeHashMap<int2, int2>(16, Allocator.Temp);
 
-                MinCellDataList openCellList = new MinCellDataList(16,Allocator.Temp);
-                NativeHashSet<int2> checkedCell=new NativeHashSet<int2>(16,Allocator.Temp); 
+                MinCellDataList openCellList = new MinCellDataList(16, Allocator.Temp);
+                NativeHashSet<int2> checkedCell = new NativeHashSet<int2>(16, Allocator.Temp);
                 //int closeCellLength = 0;
 
                 openCellList.Add(new int3(startPos, 0));
 
                 // openCells.Add(startPos);
                 // openCellLength++;
-                // int cost = CalculateDistanceCost(startPos, targetPos) * 5; 
-                int2 nowCell=startPos;
+                // int cost = CalculateDistanceCost(startPos, targetPos) * 5;
+                int2 nowCell = startPos;
                 while (openCellList.length > 0)
                 {
                     nowCell = openCellList.GetData();
@@ -1876,31 +1920,29 @@ public class MapCellController : Singleton<MapCellController>
                         }
 
                         int cost = CalculateDistanceCost(cell, startPos) +
-                             CalculateDistanceCost(cell, targetPos) * 3; 
+                             CalculateDistanceCost(cell, targetPos) * 3;
                         parentCell[cell] = nowCell;
-
+                        checkedCell.Add(cell);
                         openCellList.Add(new int3(cell, cost));
                         if (cell.x == targetPos.x && cell.y == targetPos.y)
-                        { 
+                        {
                             break;
                         }
-
-                        
                     }
                 }
 
-               // var checkCell = nowCell;
-              
-                while (nowCell.Equals(startPos))
+                // var checkCell = nowCell;
+
+                while (nowCell.Equals(targetPos))
                 {
                     pathCells.Add(nowCell);
                     if (!parentCell.TryGetValue(nowCell, out nowCell))
                     {
                         break;
-                    } 
+                    }
                 }
 
-                neighbourOffsetArray.Dispose();  
+                neighbourOffsetArray.Dispose();
                 parentCell.Dispose();
                 checkedCell.Dispose();
             }
