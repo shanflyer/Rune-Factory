@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
-public struct UserGameSaveDataList : IReferenceData
+public class UserGameSaveDataList : IReferenceData
 {
     public UserGameSaveData nowSaveData;
-    public List<UserGameSaveData> userGameSaveDatas;
+    public List<UserGameSaveData> userGameSaveDatas=new List<UserGameSaveData>();
 }
-public struct UserGameSaveData:IReferenceData
+public class UserGameSaveData :IReferenceData
 { 
     public CharacterSaveData playerData;
     public OtherSaveData otherSaveData;
@@ -15,6 +16,8 @@ public struct UserGameSaveData:IReferenceData
     public List<PackageSaveData> packageSaveDatas;
     public List<ChapterSave> chapters;
     public List<FishSaveData> fishSaveDatas;
+
+    public List<MapSaveData> mapSaveDatas;
     public string saveTime;
     public int index;
     public static UserGameSaveData CreatSaveData(int index)
@@ -38,10 +41,21 @@ public struct UserGameSaveData:IReferenceData
     }
 
 }
- public struct MapSaveData
+public struct MapSaveData
 {
-
+    public int mapId;
+    public List<MapItemSaveData> mapItemSaveDatas;
 }
+
+public struct MapItemSaveData
+{
+    public int editorId;
+    public int instanceId;
+    public int state;
+    public int2 pos;
+}
+
+
 public struct FishSaveData
 {
     public int dataId;

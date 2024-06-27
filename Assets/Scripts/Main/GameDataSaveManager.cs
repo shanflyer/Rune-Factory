@@ -64,7 +64,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         else
         {
-            UserGameSaveDataList userGameSaveDataList = default(UserGameSaveDataList);
+            UserGameSaveDataList userGameSaveDataList =new UserGameSaveDataList();
             userGameSaveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
             userGameSaveDataList.userGameSaveDatas = new List<UserGameSaveData>
             {
@@ -99,7 +99,15 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         //NPCManager.instance.CreatZeroNPC();
         CharacterManager.instance.CreatPlayer((int)gender, 0);
     }
-
+    static JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
+    {
+        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+        MissingMemberHandling = Newtonsoft.Json.MissingMemberHandling.Ignore,
+        DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore,
+        TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+        Formatting = Newtonsoft.Json.Formatting.None,
+    };
     private void SaveUserGameSaveData()
     {
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
@@ -114,7 +122,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             userGameSaveData.packageSaveDatas = packageSaveDatas;
             userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = userGameSaveData;
         }
-        string strs = JsonConvert.SerializeObject(userGameSaveDataList);
+        string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
         strs = EncryptDES(strs);
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         File.WriteAllText(saveDataPath, strs);
