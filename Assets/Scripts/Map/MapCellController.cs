@@ -1592,6 +1592,83 @@ public class MapCellController : Singleton<MapCellController>
         return cost;
     }
 
+    public struct MinCellDataList
+    {
+        private NativeList<int3> datas;
+        private NativeHashMap<int, int> linkDatas;
+        public int length;
+        public int minIndex;
+        public MinCellDataList(int capacity, Allocator allocator)
+        {
+            datas = new NativeList<int3>(capacity, allocator);
+            length = 0;
+            linkDatas=new NativeHashMap<int, int>(capacity, allocator);
+            minIndex = 0;
+        }
+        public void Add(int3 t)
+        {
+            datas.Add(t);
+            length++;
+
+            if (length > 1)
+            {
+                if (t.z < datas[minIndex].z)
+                { 
+                    linkDatas.Add(length - 1, minIndex);
+                }
+                else
+                {
+                    SetSortLinkIndex(minIndex, length - 1, t.z);
+                }
+            }
+        }
+        void SetSortLinkIndex(int nowIndex, int targetIndex,int targetValue)
+        {
+            if (linkDatas.TryGetValue(nowIndex, out var nextIndex))
+            {
+                if (targetValue < datas[nextIndex].z)
+                { 
+                    linkDatas[nowIndex] = targetIndex;
+                    linkDatas[targetIndex] = nextIndex;
+                }
+                else
+                {
+                    SetSortLinkIndex(nextIndex, targetIndex, targetValue);
+                }
+            }
+            else
+            {
+                linkDatas.Add(nowIndex, targetIndex);
+            }
+        }
+        public int2 GetData()
+        {
+            int2 result = datas[minIndex].xy;
+            RemoveMin();
+            return result;
+        }
+         
+        public void RemoveMin()
+        {
+            if (length > 0)
+            {
+                if (length > 1)
+                {
+                    int nextMinIndex = linkDatas[minIndex];
+                    linkDatas.Remove(minIndex);
+                    minIndex = nextMinIndex;
+                }                
+                length--;
+            }
+        }
+        public void Dispose()
+        {
+            datas.Dispose();
+            linkDatas.Dispose();
+        }
+    }
+
+
     [BurstCompile]
     public struct SampleFindPath : IJob
     {
@@ -1754,28 +1831,29 @@ public class MapCellController : Singleton<MapCellController>
                 neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
                 neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
                 neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
+                 
+                //NativeList<int2> closeCells = new NativeList<int2>(Allocator.Temp); 
+                NativeHashMap<int2, int2> parentCell = new NativeHashMap<int2, int2>(16, Allocator.Temp);
 
-                NativeList<int2> openCells = new NativeList<int2>(Allocator.Temp);
-                NativeList<int2> closeCells = new NativeList<int2>(Allocator.Temp);
-                NativeHashMap<int2, int> cellCost = new NativeHashMap<int2, int>(16, Allocator.Temp);
-                NativeHashMap<int2, int> parentCell = new NativeHashMap<int2, int>(16, Allocator.Temp);
+                MinCellDataList openCellList = new MinCellDataList(16,Allocator.Temp);
+                NativeHashSet<int2> checkedCell=new NativeHashSet<int2>(16,Allocator.Temp); 
+                //int closeCellLength = 0;
 
-                int openCellLength = 0;
-                int closeCellLength = 0;
+                openCellList.Add(new int3(startPos, 0));
 
-                openCells.Add(startPos);
-                openCellLength++;
-                // int cost = CalculateDistanceCost(startPos, targetPos) * 5;
-                cellCost[startPos] = 0;
-                while (openCellLength > 0)
+                // openCells.Add(startPos);
+                // openCellLength++;
+                // int cost = CalculateDistanceCost(startPos, targetPos) * 5; 
+                int2 nowCell=startPos;
+                while (openCellList.length > 0)
                 {
-                    int2 nowCell = openCells[0];
-
-                    openCells.RemoveAt(0);
+                    nowCell = openCellList.GetData();
+                    checkedCell.Add(nowCell);
+                    //openCells.RemoveAt(0);
                     //openCells.RemoveAtSwapBack(0);
-                    openCellLength--;
-                    closeCells.Add(nowCell);
-                    closeCellLength++;
+                    //openCellLength--;
+                    //closeCells.Add(nowCell);
+                    //closeCellLength++;
                     if (nowCell.x == targetPos.x && nowCell.y == targetPos.y)
                     {
                         break;
@@ -1785,9 +1863,9 @@ public class MapCellController : Singleton<MapCellController>
                     {
                         int2 cell = neighbourOffsetArray[i] + nowCell;
 
-                        if (roomCellData.CheckWalkable(cell))
+                        if (!checkedCell.Contains(cell))
                         {
-                            if (closeCells.Contains(cell) || openCells.Contains(cell))
+                            if (!roomCellData.CheckWalkable(cell))
                             {
                                 continue;
                             }
@@ -1798,65 +1876,33 @@ public class MapCellController : Singleton<MapCellController>
                         }
 
                         int cost = CalculateDistanceCost(cell, startPos) +
-                             CalculateDistanceCost(cell, targetPos) * 3;
-                        cellCost[cell] = cost;
-                        parentCell[cell] = closeCellLength - 1;
+                             CalculateDistanceCost(cell, targetPos) * 3; 
+                        parentCell[cell] = nowCell;
 
+                        openCellList.Add(new int3(cell, cost));
                         if (cell.x == targetPos.x && cell.y == targetPos.y)
-                        {
-                            openCells.Add(cell);
-                            openCellLength++;
+                        { 
                             break;
                         }
 
-                        bool insert = false;
-                        for (int j = 0; j < openCells.Length; j++)
-                        {
-                            if (cellCost.TryGetValue(openCells[j], out int _cost))
-                            {
-                                if (_cost > cost)
-                                {
-                                    openCells.InsertRangeWithBeginEnd(j, j + 1);
-                                    openCells[j] = cell;
-
-                                    insert = true;
-                                    openCellLength++;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!insert)
-                        {
-                            openCells.Add(cell);
-                            openCellLength++;
-                        }
+                        
                     }
                 }
 
-                var checkCell = closeCells[closeCellLength - 1];
-                pathCells.Add(checkCell);
-                while (checkCell.x != startPos.x || checkCell.y != startPos.y)
+               // var checkCell = nowCell;
+              
+                while (nowCell.Equals(startPos))
                 {
-                    if (parentCell.TryGetValue(checkCell, out int index))
-                    {
-                        if (closeCellLength <= index)
-                        {
-                            break;
-                        }
-                        checkCell = closeCells[index];
-                        pathCells.Add(checkCell);
-                    }
-                    else
+                    pathCells.Add(nowCell);
+                    if (!parentCell.TryGetValue(nowCell, out nowCell))
                     {
                         break;
-                    }
+                    } 
                 }
 
-                neighbourOffsetArray.Dispose();
-                openCells.Dispose();
-                closeCells.Dispose();
-                cellCost.Dispose();
+                neighbourOffsetArray.Dispose();  
                 parentCell.Dispose();
+                checkedCell.Dispose();
             }
         }
     }
