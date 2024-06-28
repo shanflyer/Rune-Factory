@@ -266,7 +266,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         };
         GameActionManager.instance.QueueAction(setCameraPixelValue,true);
     }
-    public override async void InitReferenceData(HomeEquipList v)
+    public override void InitReferenceData(HomeEquipList v)
     {
         base.InitReferenceData(v);
         EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup);
@@ -291,9 +291,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             }
         }
 
-        cameraValue.text = "x1";
-        var mapDataId = WorldMapManager.instance.GerMapDataName(WorldMapObjManager.instance.displayMap);
-        mapData = await GameDataManager.instance.GetAsyncData<MapRoomData>(mapDataId);
+        cameraValue.text = "x1"; 
+        mapData = WorldMapObjManager.instance.displayMapRoomData;
         if (mapData.fixedCamera)
         {
             cameraValueIndex = 1;

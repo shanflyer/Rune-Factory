@@ -5,7 +5,8 @@ using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
 using UnityEngine.Timeline;
-
+[Serializable]
+public class IntWorldMapDictionary: SerializableDictionary<int, WorldMap> { }
 public class StringFightChapterListDictionary : SerializableDictionary<string, List<FightChapterReference>> { }
 [Serializable]
 public class StringTimelineAssetDataDictionary : SerializableDictionary<string, TimelineAssetData> { }

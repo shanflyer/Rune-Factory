@@ -198,7 +198,7 @@ public class FishPanel : GamePanel<IReferenceData>
                 {
                     int place = fishData.places[i];
                     bool find = fishReferenceData.places.Contains(place); 
-                    var roomName = find?WorldMapManager.instance.GerMapDataName(place):"???";
+                    var roomName = find?WorldMapManager.instance.GetWorldMap(place).mapRoomData.name :"???";
                     if (i > 0)
                     {
                         placeStr = $"{placeStr}¡¢";

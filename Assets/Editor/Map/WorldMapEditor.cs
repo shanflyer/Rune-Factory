@@ -153,11 +153,12 @@ public class WorldMapEditor : MyEditor
         
 
         selectWorld.data.mapLines.Clear();
-        selectWorld.data.worldMaps.Clear();
+        selectWorld.data.worldMapDic.Clear();
 
         foreach(var mapInstance in mapInstances)
         {
-            selectWorld.data.worldMaps.Add(mapInstance.GetWorldMap());
+            var worldMap = mapInstance.GetWorldMap();
+            selectWorld.data.worldMapDic.Add(worldMap.id,worldMap);
         }
         foreach(var mapLink in links)
         {

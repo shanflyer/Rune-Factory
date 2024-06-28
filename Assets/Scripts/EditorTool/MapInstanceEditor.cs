@@ -103,7 +103,8 @@ public class MapInstanceEditor : MonoBehaviour
     {
         WorldMap worldMap = new WorldMap
         {
-            map = mapRoomData.name,
+           // map = mapRoomData.name,
+            mapRoomData=mapRoomData,
             id = id,
             coordinate = new int3(this.coordinate.x, this.coordinate.y, (int)transform.localPosition.z)
         };

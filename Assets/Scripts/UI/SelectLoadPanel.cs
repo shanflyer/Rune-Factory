@@ -79,14 +79,14 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
-        selectGameSaveData = default(UserGameSaveData);
+        selectGameSaveData = null;
         SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
         saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
     }
 
     private void StartAction()
     {
-        if (!string.IsNullOrEmpty(selectGameSaveData.saveTime))
+        if (selectGameSaveData!=null)
         {
             ExploreManager.instance.EnterChapter(-1);
             // SceneManager.instance.SwitchScene("001");

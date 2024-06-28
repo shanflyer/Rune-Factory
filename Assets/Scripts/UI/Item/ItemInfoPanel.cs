@@ -121,7 +121,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                     for (int i = 0; i < homeEquipmentData.canSetMaps.Count; i++)
                     {
                         int roomId = homeEquipmentData.canSetMaps[i];
-                        roomValueText += WorldMapManager.instance.GerMapDataName(roomId);
+                        roomValueText += WorldMapManager.instance.GetWorldMap(roomId).mapRoomData.name;
                         if (i < homeEquipmentData.canSetMaps.Count - 1)
                         {
                             roomValueText += ",";

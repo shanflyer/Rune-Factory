@@ -181,11 +181,11 @@ public class WorldInstanceEditor : MonoBehaviour
     private void InitMapInstance()
     {
         mapInstanceEditors.Clear();
-        foreach (var worldMap in worldMapData.worldMaps)
+        foreach (var worldMap in worldMapData.worldMapDic)
         {
-            var mapData = mapRoomDatas[worldMap.map];
+            var mapData = worldMap.Value.mapRoomData;
 
-            AddMapInstance(mapData, worldMap.id, worldMap.coordinate);
+            AddMapInstance(mapData, worldMap.Value.id, worldMap.Value.coordinate);
         }
     }
 

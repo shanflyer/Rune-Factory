@@ -25,13 +25,13 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         GameActionManager.instance.AddListener<PlayerTalkItem>(PlayerTalkItem);
     }
 
-    private async void PlayerTalkItem(PlayerTalkItem playerTalkItem)
+    private void PlayerTalkItem(PlayerTalkItem playerTalkItem)
     {
         if (CharacterManager.instance.GetRuntimeCharacterObj(playerTalkItem.characterId, out var characterRuntimeObj))
         {
             if (WorldMapManager.instance.GetRuntimeMapItem(playerTalkItem.ItemId, out var runtimeMapItem))
             {
-                MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+                MapItemData mapItemData = runtimeMapItem.mapItemData;
                 if (mapItemData != null)
                 {
                     CharacterResponseData responseData = new CharacterResponseData

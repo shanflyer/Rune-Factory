@@ -4,14 +4,14 @@ using Unity.Mathematics;
 
 public class TempMapItemController : Singleton<TempMapItemController>
 {
-    private MyNativeData<TempMapItem> tempMapItems = new MyNativeData<TempMapItem>();
+    private Dictionary<int,TempMapItem> tempMapItems = new Dictionary<int, TempMapItem>();
     private Dictionary<int, int> characterTempMapItems = new Dictionary<int, int>();
     private Dictionary<int, SetCoordinate> characterSetCoordinates = new Dictionary<int, SetCoordinate>();
 
     public override void Init()
     {
         base.Init();
-        tempMapItems.Init(4);
+        //tempMapItems.Init(4);
         GameActionManager.instance.AddListener<StopSetTempMapItem>(StopSetTempMapItem);
         GameActionManager.instance.AddListener<TrySetTempMapItem>(TrySetTempMapItem);
         GameActionManager.instance.AddListener<CheckTempMapItemSet>(CheckTempMapItemSet);
@@ -24,10 +24,10 @@ public class TempMapItemController : Singleton<TempMapItemController>
     }
     void SetTempMapItemCoordinate(SetTempMapItemCoordinate setTempMapItemCoordinate)
     {
-        if (tempMapItems.GetData(setTempMapItemCoordinate.instanceId,out var tempMapItem))
+        if (tempMapItems.TryGetValue(setTempMapItemCoordinate.instanceId,out var tempMapItem))
         {
             tempMapItem.coordinate = setTempMapItemCoordinate.coordinate;
-            tempMapItems.SetData(tempMapItem);
+            //tempMapItems.SetData(tempMapItem);
             WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
         }
     }
@@ -49,16 +49,21 @@ public class TempMapItemController : Singleton<TempMapItemController>
     protected override void Clear()
     {
         base.Clear();
+        foreach(var tempMapItem in tempMapItems)
+        {
+            tempMapItem.Value.Dispose();
+        }
+        tempMapItems.Clear();
     }
 
     public List<TempMapItem> GetTempMapItems(int roomId)
     {
         List<TempMapItem> list = new List<TempMapItem>();
-        foreach (TempMapItem item in tempMapItems)
+        foreach (var item in tempMapItems)
         {
-            if (item.roomId == roomId)
+            if (item.Value.roomId == roomId)
             {
-                list.Add(item);
+                list.Add(item.Value);
             }
         }
         return list;
@@ -66,14 +71,14 @@ public class TempMapItemController : Singleton<TempMapItemController>
 
     public TempMapItem GetTempMapItem(int instanceId)
     {
-        TempMapItem tempMapItem = default(TempMapItem);
-        tempMapItems.GetData(instanceId, out tempMapItem);
+        TempMapItem tempMapItem = null;
+        tempMapItems.TryGetValue(instanceId, out tempMapItem);
         return tempMapItem;
     }
 
     private void StopSetTempMapItem(StopSetTempMapItem StopSetTempMapItem)
     {
-        if (tempMapItems.GetData(StopSetTempMapItem.instanceId, out var tempMapItem))
+        if (tempMapItems.TryGetValue(StopSetTempMapItem.instanceId, out var tempMapItem))
         {
             DestoryTempMapItem DestoryTempMapItem = new DestoryTempMapItem
             {
@@ -85,7 +90,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
 
     private void TrySetTempMapItem(TrySetTempMapItem TrySetTempMapItem)
     {
-        if (tempMapItems.GetData(TrySetTempMapItem.instanceId, out var tempMapItem))
+        if (tempMapItems.TryGetValue(TrySetTempMapItem.instanceId, out var tempMapItem))
         {
             if (tempMapItem.CanSet)
             {
@@ -94,7 +99,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
                     mapItemInstanceId = TrySetTempMapItem.instanceId,
                     mapInstance = tempMapItem.roomId,
                     coordinate = tempMapItem.coordinate,
-                    dataId = tempMapItem.dataId,
+                    dataId = tempMapItem.MapItemData.id,
                 };
                 GameActionManager.instance.QueueAction(moveMapItem, true);
 
@@ -115,10 +120,10 @@ public class TempMapItemController : Singleton<TempMapItemController>
 
     private void CheckTempMapItemSet(CheckTempMapItemSet CheckTempMapItemSet)
     {
-        if (tempMapItems.GetData(CheckTempMapItemSet.instanceId, out var tempMapItem))
+        if (tempMapItems.TryGetValue(CheckTempMapItemSet.instanceId, out var tempMapItem))
         {
             tempMapItem.InitTempSet();
-            tempMapItems.SetData(tempMapItem);
+           // tempMapItems.SetData(tempMapItem);
             WorldMapObjManager.instance.RefreshTempMapItemColor(tempMapItem);
         }
     }
@@ -131,19 +136,19 @@ public class TempMapItemController : Singleton<TempMapItemController>
             characterTempMapItems.TryGetValue(RefreshTempMapItemCoordinate.chatacterId, out tempId);
         }
 
-        if (tempMapItems.GetData(RefreshTempMapItemCoordinate.instanceId, out var tempMapItem))
+        if (tempMapItems.TryGetValue(RefreshTempMapItemCoordinate.instanceId, out var tempMapItem))
         {
             tempMapItem.InitCoordinate();
-            tempMapItems.SetData(tempMapItem);
+           // tempMapItems.SetData(tempMapItem);
             WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
         }
     }
 
     private void DestoryTempMapItem(DestoryTempMapItem destoryTempMapItem)
     {
-        if (tempMapItems.GetData(destoryTempMapItem.instanceId, out var tempMapItem))
+        if (tempMapItems.TryGetValue(destoryTempMapItem.instanceId, out var tempMapItem))
         {
-            tempMapItems.RemoveData(tempMapItem.instanceId);
+            tempMapItems.Remove(tempMapItem.instanceId);
             if (tempMapItem.characterId != 0)
             {
                 characterTempMapItems.Remove(tempMapItem.characterId);
@@ -161,21 +166,22 @@ public class TempMapItemController : Singleton<TempMapItemController>
 
     private async void CreatControllerTempMapItem(CreatControllerTempMapItem creatControllerTempMapItem)
     {
+        MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(creatControllerTempMapItem.dataId);
         TempMapItem tempMapItem = new TempMapItem
         {
             instanceId = creatControllerTempMapItem.instanceId,
-            dataId = creatControllerTempMapItem.dataId,
+            MapItemData=mapItemData,
             roomId = WorldMapObjManager.instance.displayMap,
             coordinate = creatControllerTempMapItem.coordinate,
             characterId = -1,
             colliderCells = new NativeList<int2>(8, Allocator.TempJob)
         };
-        MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(tempMapItem.dataId);
+        
         for (int i = 0; i < mapItemData.colliderCells.Length; i++)
         {
             tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
         }
-        tempMapItems.SetData(tempMapItem);
+        //tempMapItems.SetData(tempMapItem);
         WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
         if (creatControllerTempMapItem.setResult != null)
             creatControllerTempMapItem.setResult(true);
@@ -189,15 +195,14 @@ public class TempMapItemController : Singleton<TempMapItemController>
                 creatTempMapItem.setResult(false);
             return;
         }
-        if (tempMapItems.Contains(creatTempMapItem.instanceId))
+        if (tempMapItems.ContainsKey(creatTempMapItem.instanceId))
         {
             if (creatTempMapItem.setResult != null)
                 creatTempMapItem.setResult(false);
             return;
         }
 
-        int mapItemInstanceId;
-        int mapItemDataId;
+        int mapItemInstanceId; 
         int2 mapItemCoordiante;
 
         Character character = CharacterManager.instance.GetCharacter(creatTempMapItem.characterId);
@@ -207,42 +212,43 @@ public class TempMapItemController : Singleton<TempMapItemController>
                 creatTempMapItem.setResult(false);
             return;
         }
-
+        MapItemData mapItemData;
         if (WorldMapManager.instance.GetRuntimeMapItem(creatTempMapItem.instanceId, out var runtimeMapItem))
         {
-            mapItemDataId = runtimeMapItem.dataId;
+            mapItemData = runtimeMapItem.mapItemData;
             mapItemInstanceId = runtimeMapItem.instanceId;
             mapItemCoordiante = runtimeMapItem.coordinate;
         }
         else
         {
-            mapItemDataId = creatTempMapItem.dataId;
+            var mapItemDataId = creatTempMapItem.dataId;
             mapItemInstanceId = creatTempMapItem.instanceId;
             mapItemCoordiante = character.coordinate + GameCommon.GetDirectionInt2(character.direction) * 4;
-        }
+            mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItemDataId);
+        } 
         TempMapItem tempMapItem = new TempMapItem
         {
             characterId = character.instanceId,
             instanceId = mapItemInstanceId,
-            dataId = mapItemDataId,
+            MapItemData = mapItemData,
             roomId = character.mapInstance,
             colliderCells = new NativeList<int2>(8, Allocator.TempJob)
         };
-        MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItemDataId);
+       
         for (int i = 0; i < mapItemData.colliderCells.Length; i++)
         {
             tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
         }
         tempMapItem.offsetCoordinate = mapItemCoordiante - character.coordinate;
         tempMapItem.coordinate = mapItemCoordiante;
-        tempMapItems.SetData(tempMapItem);
+        //tempMapItems.SetData(tempMapItem);
         characterTempMapItems[creatTempMapItem.characterId] = tempMapItem.instanceId;
         character.CanMoveCrossMap = false;
         WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
         SetCoordinate setCoordinate = async (int3 coordinate) =>
         {
             tempMapItem.InitCoordinate();
-            tempMapItems.SetData(tempMapItem);
+           // tempMapItems.SetData(tempMapItem);
             WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
         };
         character.AddSetCoordinateDele(setCoordinate);
@@ -253,10 +259,10 @@ public class TempMapItemController : Singleton<TempMapItemController>
     }
 }
 
-public struct TempMapItem : INativeData
+public class TempMapItem : INativeData
 {
     public int instanceId;
-    public int dataId;
+    public MapItemData MapItemData;
     public int characterId;
     public int roomId;
     public int2 coordinate;

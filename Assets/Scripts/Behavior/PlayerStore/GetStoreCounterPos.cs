@@ -43,7 +43,7 @@ public class GetStoreCounterPos : Action
 
         SelectItemGrid();
     } 
-    async void SelectItemGrid()
+    void SelectItemGrid()
     {
         taskStatus = TaskStatus.Running;
         if (WorldMapManager.instance.GetRuntimeMapItem(selectStoreCounterId.Value, out var runtimeMapItem))
@@ -51,7 +51,7 @@ public class GetStoreCounterPos : Action
             faceTargetCoordinate.Value = runtimeMapItem.coordinate;
 
             int mapInstance = runtimeMapItem.mapInstanceId;
-            MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(runtimeMapItem.dataId);
+            MapItemData mapItemData = runtimeMapItem.mapItemData;
             var triggerCells= mapItemData.triggerCells;
 
             List<int2> walkableCells = new List<int2>();

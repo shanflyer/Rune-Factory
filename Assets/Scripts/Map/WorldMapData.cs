@@ -6,12 +6,19 @@ using UnityEngine;
 public class WorldMapData : ScriptableObject, IGameData
 {
     public int defaultMap;
-    public List<WorldMap> worldMaps = new List<WorldMap>();
     public List<MapLine> mapLines = new List<MapLine>();
+
+    public IntWorldMapDictionary worldMapDic;
 #if UNITY_EDITOR
 
     public void SetReferenceData()
     {
+        worldMapDic = new IntWorldMapDictionary();
+        /*
+        foreach(var worldMap in worldMaps)
+        {
+            worldMapDic.Add(worldMap.id, worldMap);
+        }*/
     }
 
 #endif
@@ -24,8 +31,8 @@ public class WorldMapData : ScriptableObject, IGameData
 
 [System.Serializable]
 public struct WorldMap
-{
-    public string map;
+{ 
+    public MapRoomData mapRoomData;
     public int id;
     public int3 coordinate;
     public int eventId;
