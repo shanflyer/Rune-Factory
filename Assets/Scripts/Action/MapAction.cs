@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEngine.TextCore.Text;
+using Unity.Mathematics; 
 
 public struct SetMapEditorItemLinkCharacter : GameAction
 {
@@ -417,7 +416,7 @@ public struct AddMapItemOperate : GameAction
     public SetResult setResult { get; set; }
     public int mapItemId;
     public int addeOperateId;
-
+    public bool needSave;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count > 0)
@@ -437,7 +436,10 @@ public struct AddMapItemOperate : GameAction
         {
             this.setResult = setResult;
         }
-
+        if (value > 0)
+        {
+            needSave = value == 1;
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -448,7 +450,7 @@ public struct RemoveMapItemOperate : GameAction
     public SetResult setResult { get; set; }
     public int mapItemId;
     public int removeOperateId;
-
+    public bool needSave;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count > 0)
@@ -468,7 +470,11 @@ public struct RemoveMapItemOperate : GameAction
         {
             this.setResult = setResult;
         }
-
+        if (value > 0)
+        {
+            needSave = value == 1;
+        }
+      
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

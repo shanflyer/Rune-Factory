@@ -1,5 +1,6 @@
 ﻿using ProFlares;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -123,7 +124,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (GetRuntimeMapItem(AddMapItemOperate.mapItemId, out var runtimeMapItem))
         {
             runtimeMapItem.operateDatas.Add(AddMapItemOperate.addeOperateId);
-           // runtimeMapItems.SetData(runtimeMapItem);
+            if (AddMapItemOperate.needSave)
+            {
+                GameDataSaveManager.instance.UserGameSaveData.AddMapItemOperate(new int2(runtimeMapItem.editorInstanceId, AddMapItemOperate.addeOperateId));
+            }
+            // runtimeMapItems.SetData(runtimeMapItem);
         }
     }
 
@@ -132,6 +137,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (GetRuntimeMapItem(removeMapItemOperate.mapItemId, out var runtimeMapItem))
         {
             runtimeMapItem.operateDatas.Remove(removeMapItemOperate.removeOperateId);
+            if (removeMapItemOperate.needSave)
+            {
+                GameDataSaveManager.instance.UserGameSaveData.RemoveMapItemOperate(new int2(runtimeMapItem.editorInstanceId, removeMapItemOperate.removeOperateId));
+            }
            //runtimeMapItems.SetData(runtimeMapItem);
         }
     }
@@ -246,12 +255,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         if (runtimeMapItems.TryGetValue(instanceid, out RuntimeMapItem runtimeMapItem))
         {
-            int2 oldKey = runtimeMapItem.animationKey;
+            runtimeMapItem.SetAnimationKey(new int2(setItemAnimation.keyX, setItemAnimation.keyY));
 
-            runtimeMapItem.animationKey = new int2(setItemAnimation.keyX != int.MinValue ? setItemAnimation.keyX : oldKey.x,
-                setItemAnimation.keyY != int.MinValue ? setItemAnimation.keyY : oldKey.y);
-
-            WorldMapObjManager.instance.SetItemAnimation(runtimeMapItem);
+           // WorldMapObjManager.instance.SetItemAnimation(runtimeMapItem);
             if (setItemAnimation.setResult != null)
             {
                 setItemAnimation.setResult(true);
@@ -271,9 +277,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private async Task SetItemAimation(int2 key, int dataId, int instaceId)
     {
-        var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
-        AnimationClip animationClip = animationData.GetAnimationClip(key, out int count);
-        MyAnimationController.instance.PlayAnimation(instaceId, animationClip);
+       
     }
 
     public bool GetRuntimeMapItem(int instanceId, out RuntimeMapItem runtimeMapItem)
@@ -324,18 +328,22 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private void RemoveMapItemCollider(RemoveMapItemCollider removeMapItemCollider)
     {
         if (runtimeMapItems.TryGetValue(removeMapItemCollider.mapItemInstanceId, out var runtimeMapItem))
-        {
+        { 
             var mapItemData = runtimeMapItem.mapItemData;
             MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+
+            GameDataSaveManager.instance.UserGameSaveData.AddRemoveMapItemColliderData(runtimeMapItem.mapInstanceId);
         }
     }
 
     private void ReSetMapItemCollider(ReSetMapItemCollider reSetMapItemCollider)
     {
         if (runtimeMapItems.TryGetValue(reSetMapItemCollider.mapItemInstanceId, out var runtimeMapItem))
-        {
+        { 
             var mapItemData=runtimeMapItem.mapItemData;
             MapCellController.instance.AddBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+
+            GameDataSaveManager.instance.UserGameSaveData.AddReSetMapItemColliderData(runtimeMapItem.mapInstanceId);
         }
     }
 
@@ -368,18 +376,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
         }
-
-        RuntimeMapItem runtimeMapItem = new RuntimeMapItem
-        {
-            coordinate = mapItem.coordinate,
-            mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id),
-            instanceId = instanceId,
-            editorInstanceId = mapItem.instanceId,
-            animationKey = mapItem.animationKey,
-            mapInstanceId = mapId,
-            operateDatas = new NativeHashSet<int>(8, Allocator.Persistent),
-            EventReferenceData = new NativeHashMap<FixedString128Bytes, int>(2, Allocator.Persistent),
-        };
+        RuntimeMapItem runtimeMapItem = new RuntimeMapItem(instanceId, mapItem.instanceId, await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id),
+            mapId, mapItem.coordinate, mapItem.animationKey);
+        
         runtimeMapItems.Add(instanceId,runtimeMapItem);
         if (!itemInMapDatas.TryGetValue(mapId, out List<int> items))
         {
@@ -723,6 +722,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (index >= 0)
         {
             MapCellController.instance.DeleteMapLink(worldMapData.mapLines[index]);
+
+            if (!GameDataSaveManager.instance.UserGameSaveData.deleteMapLine.Contains(DeleteMapLink.linkInstanceId))
+            {
+                GameDataSaveManager.instance.UserGameSaveData.deleteMapLine.Add(DeleteMapLink.linkInstanceId);
+            }
+           
         }
     }
 
@@ -732,6 +737,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (index >= 0 && !worldMapData.mapLines[index].zeroInit)
         {
             MapCellController.instance.InitLinkMap(worldMapData.mapLines[index]);
+            GameDataSaveManager.instance.UserGameSaveData.deleteMapLine.Remove(initMapLink.linkInstanceId);
         }
     }
 
@@ -810,12 +816,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(changeMapItem.newDataId);
                 runtimeMapItem.mapItemData =mapItemData;
                 WorldMapObjManager.instance.ChangeMapItemDisplay(changeMapItem.itemId, changeMapItem.newDataId, changeMapItem.animationKey, runtimeMapItem);
+
+
+                int4 value = new int4(runtimeMapItem.editorInstanceId,changeMapItem.newDataId, runtimeMapItem.animationKey);
+                GameDataSaveManager.instance.UserGameSaveData.AddChangeMapItem(value);
             }
             else
             {
-                runtimeMapItem.animationKey = changeMapItem.animationKey;
-
-                SetItemAimation(changeMapItem.animationKey, runtimeMapItem.mapItemData.id, runtimeMapItem.instanceId);
+                runtimeMapItem.SetAnimationKey(changeMapItem.animationKey);   
             }
            // runtimeMapItems.SetData(runtimeMapItem);
         }
@@ -829,8 +837,39 @@ public class RuntimeMapItem : INativeData
     public MapItemData mapItemData;
     public int mapInstanceId;
     public int2 coordinate;
-    public int2 animationKey;
+    public int2 animationKey { get; private set; }
     public int linkCharacter;
+
+    public RuntimeMapItem(int instanceId, int editorInstanceId,  MapItemData mapItemData, int mapInstanceId, int2 coordinate,int2 animationKey)
+    {
+        this.instanceId = instanceId;
+        this.editorInstanceId = editorInstanceId;
+        this.mapItemData = mapItemData;
+        this.mapInstanceId = mapInstanceId;
+        this.coordinate = coordinate;
+        this.animationKey = animationKey;
+        operateDatas = new NativeHashSet<int>(8, Allocator.Persistent);
+        EventReferenceData = new NativeHashMap<FixedString128Bytes, int>(2, Allocator.Persistent);
+    }
+    public void SetAnimationKey(int2 animationKey)
+    { 
+        if (animationKey.x != int.MinValue || animationKey.y != int.MinValue)
+        {
+            int2 nowAnimationKey = this.animationKey;
+            if (animationKey.x != int.MinValue)
+            {
+                nowAnimationKey.x= animationKey.x;
+            }
+            if (animationKey.y != int.MinValue)
+            {
+                nowAnimationKey.y = animationKey.y;
+            }
+            this.animationKey = nowAnimationKey;
+            WorldMapObjManager.instance.SetItemAnimation(this);
+
+            GameDataSaveManager.instance.UserGameSaveData.AddAnimationStateMapItem(new int3(editorInstanceId,animationKey));
+        } 
+    }
     public NativeHashSet<int> operateDatas;
     public NativeHashMap<FixedString128Bytes, int> EventReferenceData;
     public int Key => instanceId;

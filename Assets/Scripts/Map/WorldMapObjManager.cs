@@ -370,7 +370,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     /// <param name="instaceId">物体实例id</param>
     /// <returns></returns>
     private async Task SetItemAimation(int2 key, int dataId, int instaceId)
-    {
+    { 
         var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
         if (animationData != null)
         {
@@ -425,7 +425,10 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             RecycleMap();
         }
     }
-
+    /// <summary>
+    /// 已经显示的物体播放动画
+    /// </summary>
+    /// <param name="runtimeMapItem"></param>
     public async void SetItemAnimation(RuntimeMapItem runtimeMapItem)
     {
         if (nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))

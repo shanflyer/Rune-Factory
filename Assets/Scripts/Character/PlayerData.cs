@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 public class UserGameSaveDataList : IReferenceData
 {
@@ -18,8 +19,78 @@ public class UserGameSaveData :IReferenceData
     public List<FishSaveData> fishSaveDatas;
 
     public List<MapSaveData> mapSaveDatas;
+    public IntInt4Dictionary changeMapItems;
+    public IntInt3Dictionary SetAnimationStateMapItems;
+    public List<int2> removeMapItemOperates;
+    public List<int2> addMapItemOperates;
+
+    public List<int> RemoveMapItemCollider;
+    public List<int> deleteMapLine = new List<int>();
+   
+
     public string saveTime;
     public int index;
+
+    private HashSet<int> RemoveMapItemColliderSet = new HashSet<int>();
+    private HashSet<int2> removeMapItemOperatesSet = new HashSet<int2>();
+    private HashSet<int2> addMapItemOperatesSet = new HashSet<int2>();
+    public void Init()
+    {
+        RemoveMapItemColliderSet.Clear();
+        for(int i = 0; i < RemoveMapItemCollider.Count; i++)
+        {
+            RemoveMapItemColliderSet.Add(RemoveMapItemCollider[i]);
+        }
+        removeMapItemOperatesSet.Clear();
+        addMapItemOperatesSet.Clear();
+        for(int i=0;i< removeMapItemOperates.Count; i++)
+        {
+            removeMapItemOperatesSet.Add(removeMapItemOperates[i]);
+        }
+        for (int i = 0; i < addMapItemOperates.Count; i++)
+        {
+            addMapItemOperatesSet.Add(addMapItemOperates[i]);
+        }
+    }
+    public void SaveData()
+    {
+        RemoveMapItemCollider.Clear();
+        foreach(var itemId in RemoveMapItemColliderSet)
+        {
+            RemoveMapItemCollider.Add(itemId);
+        }
+        removeMapItemOperates.Clear();
+        addMapItemOperates.Clear();
+        foreach(var id in removeMapItemOperatesSet)
+        {
+            removeMapItemOperatesSet.Add(id);
+        }
+        foreach(var id in addMapItemOperatesSet)
+        {
+            addMapItemOperates.Add(id);
+        }
+    }
+    public void RemoveMapItemOperate(int2 itemOperate)
+    {
+        removeMapItemOperatesSet.Add(itemOperate);
+        addMapItemOperatesSet.Remove(itemOperate);
+    }
+    public void AddMapItemOperate(int2 itemOperate)
+    {
+        addMapItemOperatesSet.Add(itemOperate);
+        removeMapItemOperatesSet.Remove(itemOperate);
+    }
+
+    public void AddRemoveMapItemColliderData(int id)
+    {
+        RemoveMapItemColliderSet.Add(id);
+    }
+    public void AddReSetMapItemColliderData(int id)
+    {
+        RemoveMapItemColliderSet.Remove(id); 
+    }
+
+
     public static UserGameSaveData CreatSaveData(int index)
     {
         OtherSaveData otherSaveData = new OtherSaveData
@@ -39,6 +110,27 @@ public class UserGameSaveData :IReferenceData
 
         return userGameSaveData;
     }
+    public void AddAnimationStateMapItem(int3 data)
+    {
+        if (SetAnimationStateMapItems == null)
+        {
+            SetAnimationStateMapItems = new IntInt3Dictionary();
+        } 
+        SetAnimationStateMapItems[data.x] = data;
+    }
+    public void AddChangeMapItem(int4 value)
+    {
+        if (changeMapItems == null)
+        {
+            changeMapItems = new IntInt4Dictionary();
+        }
+        
+        changeMapItems[value.x] = value; 
+    }
+
+}
+public struct ChangeMapItemSaveData
+{
 
 }
 public struct MapSaveData

@@ -4,7 +4,12 @@ using System;
 using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
-using UnityEngine.Timeline;
+[Serializable]
+public class IntIntDictionary : SerializableDictionary<int, int> { }
+[Serializable]
+public class IntInt3Dictionary : SerializableDictionary<int, int3> { }
+[Serializable]
+public class IntInt4Dictionary : SerializableDictionary<int, int4> { }
 [Serializable]
 public class IntWorldMapDictionary: SerializableDictionary<int, WorldMap> { }
 public class StringFightChapterListDictionary : SerializableDictionary<string, List<FightChapterReference>> { }
