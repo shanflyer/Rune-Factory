@@ -57,9 +57,13 @@ public class FarmManager : Singleton<FarmManager>
                         Field field = new Field
                         {
                             instanceId = instanceId,
+                            mapInstance = tryCreatField.roomId,
+                            editorInstanceId=tryCreatField.itemInstanceId,
                             fieldState = FieldState.待平整
                         };
                         fields.Add(instanceId, field);
+
+                        GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
                     }
                 }
             }
@@ -141,6 +145,8 @@ public class FarmManager : Singleton<FarmManager>
             }
             //RefreshField refreshField = new RefreshField { fieldId = field.instanceId };
             // RefreshField(refreshField);
+
+            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
         }
         else
         {
@@ -170,8 +176,7 @@ public class FarmManager : Singleton<FarmManager>
             {
                 Plant plant = new Plant
                 {
-                    instaceId = instanceId,
-                    mapId = coordinate.z,
+                    instaceId = instanceId, 
                     PlantData = plantData,
                     field = creatPlant.fieldId,
                     plantState = PlantState.正常,
@@ -180,6 +185,8 @@ public class FarmManager : Singleton<FarmManager>
                 field.fieldState = FieldState.已平整;
                 field.plant = plant;
                 creatPlant.setResult(true);
+
+                GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
             }
 
             GameActionManager.instance.QueueAction(addMapItem);
@@ -196,6 +203,7 @@ public class FarmManager : Singleton<FarmManager>
         {
             field.SetWaterField();
 
+            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
             setWaterField.setResult(true);
         }
         else
@@ -208,7 +216,7 @@ public class FarmManager : Singleton<FarmManager>
     {
         foreach (var data in fields)
         {
-            data.Value.NewDay();
+            data.Value.NewDay(); 
         }
     }
 
@@ -218,6 +226,8 @@ public class FarmManager : Singleton<FarmManager>
         {
             bool result = await field.TryGetPlantFruit();
             tryGetPlantFruit.setResult(result);
+
+            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
         }
         tryGetPlantFruit.setResult(false);
     }
@@ -231,6 +241,8 @@ public enum FieldState
 public class Field
 {
     public int instanceId;
+    public int mapInstance;
+    public int editorInstanceId;
     public FieldState fieldState;
     public bool isSetWater;
     public Plant plant;
@@ -339,6 +351,8 @@ public class Field
             }
         }
         RefreshField();
+
+        GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
     }
 
     public void SetWaterField()
@@ -380,8 +394,7 @@ public enum PlantState
 }
 
 public class Plant
-{
-    public int mapId;
+{ 
     public int instaceId;
     public int field;
     public PlantData PlantData;

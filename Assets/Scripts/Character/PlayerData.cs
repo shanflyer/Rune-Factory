@@ -25,6 +25,7 @@ public class UserGameSaveData :IReferenceData
     public IntHomeEquipSaveDataDictionary mapHomeEquips;
     public IntManufatureSaveDataDictionary manufatures=new IntManufatureSaveDataDictionary();
     public IntStoreCounterSaveDataDictionary storeCounters = new IntStoreCounterSaveDataDictionary();
+    public IntFieldSaveDataDictionary fields = new IntFieldSaveDataDictionary();
     public List<int2> removeMapItemOperates;
     public List<int2> addMapItemOperates;
 
@@ -96,6 +97,19 @@ public class UserGameSaveData :IReferenceData
     public void ReMoveHomeEquip(int id)
     {
         mapHomeEquips.Remove(id);
+    }
+
+    public void SetFieldData(Field field)
+    {
+        if(fields.TryGetValue(field.instanceId,out var fieldSaveData))
+        {
+            fieldSaveData.SetField(field);
+        }
+        else
+        {
+            fieldSaveData = new FieldSaveData(field);
+            fields.Add(field.instanceId,fieldSaveData);
+        }
     }
     public void SetMapHomeEquipData(HomeEquip homeEquip)
     {
@@ -177,6 +191,50 @@ public class UserGameSaveData :IReferenceData
         }
         
         changeMapItems[value.x] = value; 
+    }
+
+}
+public class FieldSaveData
+{
+    public int instanceId;
+    public int mapInstance;
+    public int editorInstanceId;
+    public FieldState fieldState;
+    public bool isSetWater;
+
+    public int PlantinstaceId; 
+    public int PlantDataId;
+    public int growthStage;
+    public int growthDay; 
+    public PlantState plantState;
+    public int nowCycle;
+
+    public FieldSaveData(Field field)
+    {
+        SetField(field);
+    }
+    public void SetField(Field field)
+    {
+        instanceId = field.instanceId;
+        mapInstance = field.mapInstance;
+        editorInstanceId = field.editorInstanceId;
+        fieldState = field.fieldState;
+        isSetWater = field.isSetWater;
+
+        if (field.plant != null)
+        {
+            PlantinstaceId = 0;
+            PlantDataId = 0;
+        }
+        else
+        {
+            PlantinstaceId = field.plant.instaceId;
+            PlantDataId = field.plant.PlantData.id;
+            growthStage=field.plant.growthStage;
+            growthDay = field.plant.growthDay; 
+            plantState = field.plant.plantState;
+            nowCycle = field.plant.nowCycle;
+        }
     }
 
 }

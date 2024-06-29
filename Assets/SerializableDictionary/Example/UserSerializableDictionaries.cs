@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Unity.Mathematics;
-using BehaviorDesigner.Runtime; 
+using BehaviorDesigner.Runtime;
+[Serializable]
+public class IntFieldSaveDataDictionary : SerializableDictionary<int, FieldSaveData> { }
+
 [Serializable]
 public class IntStoreCounterSaveDataDictionary : SerializableDictionary<int, StoreCounterSaveData> { }
 [Serializable]
