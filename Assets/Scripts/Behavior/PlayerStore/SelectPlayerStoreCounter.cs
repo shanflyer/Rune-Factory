@@ -29,7 +29,7 @@ public class SelectPlayerStoreCounter : Action
 		List<RuntimeStoreCounter> NoGoodStoreCounters = new List<RuntimeStoreCounter>();
 
 		var RuntimeStoreCounters = PlayerStoreManager.instance.RuntimeStoreCounters;
-		foreach(RuntimeStoreCounter RuntimeStoreCounter in RuntimeStoreCounters)
+		foreach(RuntimeStoreCounter RuntimeStoreCounter in RuntimeStoreCounters.Values)
 		{
 			if(RuntimeStoreCounter.count == 0)
 			{
