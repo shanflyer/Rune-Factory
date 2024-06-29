@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerStoreManager : Singleton<PlayerStoreManager>
 {
-    public MyNativeData<RuntimeStoreCounter> RuntimeStoreCounters => runtimeStoreCounters;
-    private MyNativeData<RuntimeStoreCounter> runtimeStoreCounters;
+    public Dictionary<int,RuntimeStoreCounter> RuntimeStoreCounters => runtimeStoreCounters;
+    private Dictionary<int, RuntimeStoreCounter> runtimeStoreCounters;
     private Dictionary<int, RuntimeObj> nowRuntimeStoreCounterObjs = new Dictionary<int, RuntimeObj>();
 
     private SellItem sellItem;
@@ -21,7 +21,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
         var playerStorePrefab = await GameSourceManager.instance.GetPrefab(DataPath.StoreCounterPrefab);
         sellItem = playerStorePrefab.GetComponent<SellItem>();
-        runtimeStoreCounters.Init(32);
+        runtimeStoreCounters=new Dictionary<int, RuntimeStoreCounter>();
         GameActionManager.instance.AddListener<CreatStoreCounter>(CreatStoreCounter);
         GameActionManager.instance.AddListener<DisplayStoreCounter>(DisplayStoreCounter);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteStoreCounter);
@@ -34,7 +34,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
     private async void TryBuyPlayerGood(TryBuyPlayerGood buyPlayerGood)
     {
-        if (runtimeStoreCounters.GetData(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
         {
             if (runtimeStoreCounter.count <= 0)
             {
@@ -49,27 +49,27 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 };
                 GameActionManager.instance.QueueAction(showCoin);
             }
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
+            ItemData itemData = runtimeStoreCounter.itemData;
             PayManager.instance.AddGold(itemData.sellPrice);
             runtimeStoreCounter.count--;
             if (runtimeStoreCounter.count <= 0)
             {
-                runtimeStoreCounter.itemId = 0;
+                runtimeStoreCounter.itemData=null;
                 runtimeStoreCounter.count = 0;
-            }
-            runtimeStoreCounters.SetData(runtimeStoreCounter);
+            } 
             if (runtimeObj.obj != null)
             {
                 (runtimeObj.obj as SellItem).SetItemCount(runtimeStoreCounter.count);
             }
 
+            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
             buyPlayerGood.setResult(true);
         }
     }
 
-    private async void BuyPlayerGood(BuyPlayerGood buyPlayerGood)
+    private void BuyPlayerGood(BuyPlayerGood buyPlayerGood)
     {
-        if (runtimeStoreCounters.GetData(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
         {
             if (runtimeStoreCounter.count <= 0)
             {
@@ -86,33 +86,32 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
             runtimeStoreCounter.count--;
             if (runtimeStoreCounter.count > 0)
-            {
-                runtimeStoreCounters.SetData(runtimeStoreCounter);
+            { 
                 if (runtimeObj.obj != null)
                 {
                     (runtimeObj.obj as SellItem).AddItemCount(-1);
                 }
 
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(runtimeStoreCounter.itemId);
+                ItemData itemData = runtimeStoreCounter.itemData;
                 PayManager.instance.AddGold(itemData.sellPrice);
             }
             else
             {
-                runtimeStoreCounter.itemId = 0;
-                runtimeStoreCounter.count = 0;
-                runtimeStoreCounters.SetData(runtimeStoreCounter);
+                runtimeStoreCounter.itemData = null;
+                runtimeStoreCounter.count = 0; 
                 if (runtimeObj.obj != null)
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                 }
             }
+            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
         }
     }
 
     private async void SetStoreCounter(SetStoreCounter setStoreCounter)
     {
         int characterId = setStoreCounter.playerId;
-        if (runtimeStoreCounters.GetData(setStoreCounter.storeCounterId, out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(setStoreCounter.storeCounterId, out var runtimeStoreCounter))
         {
             if (runtimeStoreCounter.count == 0)
             {
@@ -123,15 +122,16 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             {
                 OpenStoreCounter(setStoreCounter.storeCounterId);
             }
+            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
         }
     }
 
     //设置背包界面物体Action
     private async void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
     {
-        if (runtimeStoreCounters.GetData(storeCounterSetSelectItemAction.targetObj,out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(storeCounterSetSelectItemAction.targetObj,out var runtimeStoreCounter))
         {
-            var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(runtimeStoreCounter.dataId);
+            var storeData = runtimeStoreCounter.storeCounterData;
             var itemMatchData = new ItemMatchData
             {
                 itemMatchType = ItemMatchType.ItemType,
@@ -162,12 +162,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
     private void OpenStoreCounter(int storeId)
     {
-        if (runtimeStoreCounters.GetData(storeId, out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(storeId, out var runtimeStoreCounter))
         {
             SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
             {
                 storeCounterId = storeId,
-                itemId = runtimeStoreCounter.itemId,
+                itemId = runtimeStoreCounter.itemData.id,
                 count = runtimeStoreCounter.count
             };
             UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
@@ -181,24 +181,23 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             storeCounterId = storeId,
             itemId = item.dataId,
         };
-        if (runtimeStoreCounters.GetData(storeId, out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(storeId, out var runtimeStoreCounter))
         {
-            setStoreCounterItem.count = runtimeStoreCounter.count;
+            setStoreCounterItem.count = runtimeStoreCounter.count; 
         }
         UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
     }
 
-    private void SetStoreCounterItem(SetStoreCounterItem setStoreCounterItem)
+    private async void SetStoreCounterItem(SetStoreCounterItem setStoreCounterItem)
     {
-        if (runtimeStoreCounters.GetData(setStoreCounterItem.storeCounterId, out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(setStoreCounterItem.storeCounterId, out var runtimeStoreCounter))
         {
-            runtimeStoreCounter.itemId = setStoreCounterItem.itemId;
+            runtimeStoreCounter.itemData =await GameDataManager.instance.GetAsyncData<ItemData>(setStoreCounterItem.itemId);
             runtimeStoreCounter.count = setStoreCounterItem.count;
             if (runtimeStoreCounter.count == 0)
             {
-                runtimeStoreCounter.itemId = 0;
-            }
-            runtimeStoreCounters.SetData(runtimeStoreCounter);
+                runtimeStoreCounter.itemData=null;
+            } 
 
             if (nowRuntimeStoreCounterObjs.TryGetValue(setStoreCounterItem.storeCounterId, out var runtimeObj))
             {
@@ -212,12 +211,14 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     });
                 }
             }
+
+            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
         }
     }
 
     private async void CreatStoreCounter(CreatStoreCounter creatStoreCounter)
     {
-        if (!runtimeStoreCounters.Contains(creatStoreCounter.itemInstanceId))
+        if (!runtimeStoreCounters.ContainsKey(creatStoreCounter.itemInstanceId))
         {
             var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(creatStoreCounter.storeDataId);
             if (storeData.id == creatStoreCounter.storeDataId)
@@ -225,16 +226,18 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
                 {
                     instanceId = creatStoreCounter.itemInstanceId,
-                    dataId = storeData.id,
+                    storeCounterData = storeData,
                 };
-                runtimeStoreCounters.AddData(runtimeStoreCounter);
+                runtimeStoreCounters.Add(creatStoreCounter.itemInstanceId,runtimeStoreCounter);
+
+                GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
             }
         }
     }
 
-    private async void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
+    private void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
     {
-        if (runtimeStoreCounters.GetData(displayStoreCounter.itemInstanceId, out var runtimeStoreCounter))
+        if (runtimeStoreCounters.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeStoreCounter))
         {
             if (displayStoreCounter.display)
             {
@@ -243,7 +246,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     return;
                 }
 
-                var storeCounterData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(runtimeStoreCounter.dataId);
+                var storeCounterData = runtimeStoreCounter.storeCounterData;
                 if (!nowRuntimeStoreCounterObjs.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeObj))
                 {
                     runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",
@@ -255,7 +258,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 {
                     nowSellItem.InitReferenceData(new Item
                     {
-                        dataId = runtimeStoreCounter.itemId,
+                        dataId = runtimeStoreCounter.itemData.id,
                         count = runtimeStoreCounter.count
                     });
                 }
@@ -274,37 +277,34 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     nowRuntimeStoreCounterObjs.Remove(displayStoreCounter.itemInstanceId);
                 }
             }
+
+            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
         }
     }
 
     private void DeleteStoreCounter(DeleteMapItem deleteMapItem)
     {
-        if (runtimeStoreCounters.RemoveData(deleteMapItem.mapItemInstanceId))
+        if (runtimeStoreCounters.Remove(deleteMapItem.mapItemInstanceId))
         {
             if (nowRuntimeStoreCounterObjs.TryGetValue(deleteMapItem.mapItemInstanceId, out var runtimeObj))
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                 nowRuntimeStoreCounterObjs.Remove(deleteMapItem.mapItemInstanceId);
             }
+            GameDataSaveManager.instance.UserGameSaveData.DeleteStoreCounter(deleteMapItem.mapItemInstanceId) ;
         }
     }
 
     public bool GetRuntimeStoreCounter(int instanceId, out RuntimeStoreCounter runtimeStoreCounter)
     {
-        return runtimeStoreCounters.GetData(instanceId, out runtimeStoreCounter);
+        return runtimeStoreCounters.TryGetValue(instanceId, out runtimeStoreCounter);
     }
 }
 
-public struct RuntimeStoreCounter : INativeData
+public class RuntimeStoreCounter  
 {
     public int instanceId;
-    public int dataId;
-    public int itemId;
-    public int count;
-
-    public int Key => instanceId;
-
-    public void Dispose()
-    {
-    }
+    public StoreCounterData storeCounterData;
+    public ItemData itemData;
+    public int count; 
 }

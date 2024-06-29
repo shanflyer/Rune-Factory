@@ -91,7 +91,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
         {
             int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
-            if (runtimeStoreCounter.itemId == 0 || runtimeStoreCounter.itemId == storeCunterSetData.itemId)
+            if (runtimeStoreCounter.itemData==null || runtimeStoreCounter.itemData.id == storeCunterSetData.itemId)
             { 
                 if (changeCount < 0)
                 {
@@ -123,7 +123,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
                 storeCunterSetData.count = changeCount;
                 if (PackageManager.instance.GetOutItenFromPackage(packageId, storeCunterSetData.itemId, storeCunterSetData.count))
                 {
-                    await PackageManager.instance.SetItemInPackage(new Item { dataId = runtimeStoreCounter.itemId, count = runtimeStoreCounter.count }, packageId);
+                    await PackageManager.instance.SetItemInPackage(new Item { dataId = runtimeStoreCounter.itemData.id, count = runtimeStoreCounter.count }, packageId);
                     GameActionManager.instance.QueueAction(storeCunterSetData);
                 }
             }

@@ -23,8 +23,8 @@ public class UserGameSaveData :IReferenceData
     public IntInt4Dictionary changeMapItems;
     public IntInt3Dictionary SetAnimationStateMapItems;
     public IntHomeEquipSaveDataDictionary mapHomeEquips;
-    public IntManufatureSaveDataDictionary manufatures=new IntManufatureSaveDataDictionary(); 
-
+    public IntManufatureSaveDataDictionary manufatures=new IntManufatureSaveDataDictionary();
+    public IntStoreCounterSaveDataDictionary storeCounters = new IntStoreCounterSaveDataDictionary();
     public List<int2> removeMapItemOperates;
     public List<int2> addMapItemOperates;
 
@@ -126,6 +126,22 @@ public class UserGameSaveData :IReferenceData
         }
     }
 
+    public void DeleteStoreCounter(int id)
+    {
+        storeCounters.Remove(id);
+    }
+    public void SetStoreCounterSaveData(RuntimeStoreCounter runtimeStoreCounter)
+    {
+        if(storeCounters.TryGetValue(runtimeStoreCounter.instanceId,out var storeCounterSaveData))
+        {
+            storeCounterSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
+        }
+        else
+        {
+            storeCounterSaveData = new StoreCounterSaveData(runtimeStoreCounter);
+            storeCounters.Add(runtimeStoreCounter.instanceId, storeCounterSaveData);
+        }
+    }
     public static UserGameSaveData CreatSaveData(int index)
     {
         OtherSaveData otherSaveData = new OtherSaveData
@@ -164,7 +180,24 @@ public class UserGameSaveData :IReferenceData
     }
 
 }
-
+public class StoreCounterSaveData
+{
+    public int instanceId;
+    public int dataId;
+    public int itemDataId;
+    public int count;
+    public StoreCounterSaveData(RuntimeStoreCounter runtimeStoreCounter)
+    {
+        SetStoreCounterSaveData(runtimeStoreCounter);
+    }
+    public void SetStoreCounterSaveData(RuntimeStoreCounter runtimeStoreCounter)
+    {
+        instanceId = runtimeStoreCounter.instanceId;
+        dataId = runtimeStoreCounter.storeCounterData.id;
+        itemDataId = runtimeStoreCounter.itemData.id;
+        count = runtimeStoreCounter.count;
+    }
+}
 public class ManufatureSaveData
 {
     public int instanceId;

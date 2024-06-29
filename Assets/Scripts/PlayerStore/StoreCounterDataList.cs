@@ -22,7 +22,7 @@ public class StoreCounterDataList : ScriptableObject, IGameData, IDataArray<Stor
     }
 }
 [System.Serializable]
-public struct StoreCounterData :  IGameData
+public class StoreCounterData :  IGameData
 {
     public string counterName;
     public int id;  
