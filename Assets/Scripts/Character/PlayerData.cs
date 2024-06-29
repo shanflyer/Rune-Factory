@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,6 +22,9 @@ public class UserGameSaveData :IReferenceData
     public List<MapSaveData> mapSaveDatas;
     public IntInt4Dictionary changeMapItems;
     public IntInt3Dictionary SetAnimationStateMapItems;
+    public IntHomeEquipSaveDataDictionary mapHomeEquips;
+    public IntManufatureSaveDataDictionary manufatures=new IntManufatureSaveDataDictionary(); 
+
     public List<int2> removeMapItemOperates;
     public List<int2> addMapItemOperates;
 
@@ -89,7 +93,38 @@ public class UserGameSaveData :IReferenceData
     {
         RemoveMapItemColliderSet.Remove(id); 
     }
+    public void ReMoveHomeEquip(int id)
+    {
+        mapHomeEquips.Remove(id);
+    }
+    public void SetMapHomeEquipData(HomeEquip homeEquip)
+    {
+        int key = homeEquip.instanceId; 
+        
 
+        if (mapHomeEquips.TryGetValue(key,out var homeEquipSaveData))
+        {
+            homeEquipSaveData.SetHomeEquip(homeEquip);
+        }
+        else
+        {
+            homeEquipSaveData = new HomeEquipSaveData(homeEquip);
+            mapHomeEquips.Add(key, homeEquipSaveData);
+        }
+    }
+ 
+    public void SetManufature(Manufature manufature)
+    {
+        if(manufatures.TryGetValue(manufature.instanceId,out var manufatureSaveData))
+        {
+            manufatureSaveData.SetManufature(manufature);
+        }
+        else
+        {
+            manufatureSaveData = new ManufatureSaveData(manufature);
+            manufatures.Add(manufature.instanceId, manufatureSaveData);
+        }
+    }
 
     public static UserGameSaveData CreatSaveData(int index)
     {
@@ -129,8 +164,55 @@ public class UserGameSaveData :IReferenceData
     }
 
 }
-public struct ChangeMapItemSaveData
+
+public class ManufatureSaveData
 {
+    public int instanceId;
+    public int dataId;
+    public int2[] materials;
+    public int3 product;
+    public int waitTime;
+    public int startTime;
+    public int matchFormula;
+    public List<Formula> formulas = new List<Formula>();
+
+    public ManufatureSaveData(Manufature manufature)
+    {
+        SetManufature(manufature);
+    }
+    public void SetManufature(Manufature manufature)
+    {
+        instanceId = manufature.instanceId;
+        dataId = manufature.dataId;
+        materials = manufature.materials.ToArray();
+        product = manufature.product;
+        waitTime = manufature.waitTime;
+        startTime = manufature.startTime;
+        matchFormula = manufature.matchFormula;
+        formulas = manufature.formulas.Values.ToList();
+    }
+} 
+public class HomeEquipSaveData
+{
+    public int instanceId;
+    public int equipDataId;
+    public int mapEditorInstance;
+    public int mapInstance;
+    public int2 coordinate;
+    public int characterId;
+
+    public HomeEquipSaveData(HomeEquip homeEquip) 
+    {
+        SetHomeEquip(homeEquip);
+    }
+    public void SetHomeEquip(HomeEquip homeEquip)
+    {
+        instanceId = homeEquip.instanceId;
+        equipDataId = homeEquip.equipDataId;
+        mapEditorInstance=homeEquip.mapEditorInstance; mapInstance = homeEquip.mapInstance;
+        coordinate = homeEquip.coordinate;
+        characterId = homeEquip.characterId;
+    }
 
 }
 public struct MapSaveData

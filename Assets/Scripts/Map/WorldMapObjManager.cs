@@ -586,7 +586,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
 
             var manufature = ManufatureManager.instance.GetManufature(runtimeMapItem.instanceId);
-            if (manufature.instanceId == runtimeMapItem.instanceId)
+            if (manufature!=null)
             {
                 if (manufature.waitTime > GameTimeManager.instance.totalMinute)
                 {

@@ -5,6 +5,12 @@ using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
 [Serializable]
+public class IntManufatureSaveDataDictionary : SerializableDictionary<int, ManufatureSaveData> { }
+
+[Serializable]
+public class IntHomeEquipSaveDataDictionary : SerializableDictionary<int, HomeEquipSaveData> { }
+
+[Serializable]
 public class IntIntDictionary : SerializableDictionary<int, int> { }
 [Serializable]
 public class IntInt3Dictionary : SerializableDictionary<int, int3> { }

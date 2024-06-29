@@ -70,6 +70,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             homeEquip.coordinate = int2.zero; 
             RefreshHomeEquip(homeEquip);
             unSetHomeEquip.setResult(true);
+
+            GameDataSaveManager.instance.UserGameSaveData.SetMapHomeEquipData(homeEquip);
         }
     }
 
@@ -147,6 +149,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         {
             creatHomeEquip.setResult(true);
         }
+
+        GameDataSaveManager.instance.UserGameSaveData.SetMapHomeEquipData(homeEquip);
     }
 
     private void RemoveHomeEquip(RemoveHomeEquip removeHomeEquip)
@@ -177,6 +181,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 }
             }
         }
+        GameDataSaveManager.instance.UserGameSaveData.ReMoveHomeEquip(removeHomeEquip.instanceId);
     }
 
     private void ChangeHomeEquipCharacter(ChangeHomeEquipCharacter changeHomeEquipCharacter)
@@ -227,6 +232,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 }
                 homeEquip.characterId = changeHomeEquipCharacter.newPlayer; 
             }
+
+            GameDataSaveManager.instance.UserGameSaveData.SetMapHomeEquipData(homeEquip);
         }
     }
 
@@ -241,6 +248,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     homeEquip.mapInstance = 0;
                     homeEquip.coordinate = int2.zero; 
                     tryLayInHomeEquip.setResult(true);
+
+                    GameDataSaveManager.instance.UserGameSaveData.SetMapHomeEquipData(homeEquip);
                 }
                 return;
             }
@@ -262,6 +271,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     {
                         setHomeEquipCoordinate.setResult(true);
                     }
+
+                    GameDataSaveManager.instance.UserGameSaveData.SetMapHomeEquipData(homeEquip);
                 }
             }
             return;
@@ -368,6 +379,7 @@ public class HomeEquip : INativeData, IReferenceData
     public int mapItemInstance; 
     public HomeEquipmentData homeEquipmentData; 
     public int2 coordinate;
+    public int mapEditorInstance;
     public int mapInstance;
     public int characterId; 
     public int Key => instanceId;
@@ -379,7 +391,12 @@ public class HomeEquip : INativeData, IReferenceData
         this.instanceId = instanceId;
         this.mapItemInstance = mapItemInstance;
         this.characterId = characterId;
-        this.homeEquipmentData=homeEquipmentData;
+        this.homeEquipmentData = homeEquipmentData;
+        if (WorldMapManager.instance.GetRuntimeMapItem(instanceId, out var runtimeMapItem))
+        {
+            mapEditorInstance = runtimeMapItem.editorInstanceId;
+        }
+
     }
     public bool Equals(IReferenceData other)
     {

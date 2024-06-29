@@ -809,7 +809,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     public override Task InitData(string dataKey)
     {
         Manufature manufature = ManufatureManager.instance.GetManufature(int.Parse(dataKey));
-        if (manufature.instanceId != 0)
+        if (manufature!=null)
         {
             InitData(manufature);
             // ClearFormulaItemBoxReferences();
