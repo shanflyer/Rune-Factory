@@ -65,7 +65,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         base.InitData(t, SelectAction, toggleGroup);
 
         toggle.group = toggleGroup;
-        HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(data.equipDataId); 
+        HomeEquipmentData homeEquipmentData = data.homeEquipmentData; 
         toggle.enabled = true;
         setTips.gameObject.SetActive(data.mapInstance > 0);
         unSetTips.gameObject.SetActive(data.mapInstance <= 0);

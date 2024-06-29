@@ -127,9 +127,9 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         }
     }
 
-    async void SetActionState()
+    void SetActionState()
     {
-        var homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
+        var homeEquipmentData = SelectHomeEquip.homeEquipmentData;
         if (SelectHomeEquip.mapInstance <= 0)
         {
             ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
@@ -139,7 +139,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             ActionButton.transform.localScale = Vector3.one;
         }
     }
-    private async void UnSetHomeEquipAsync(bool value)
+    private  void UnSetHomeEquipAsync(bool value)
     {
         if (value)
         {
@@ -149,7 +149,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             selectMapItemRuntimeObj = null;
             ActionName.text = "布置";
             ActionImage.sprite = setSprite;
-            var homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(SelectHomeEquip.equipDataId);
+            var homeEquipmentData =SelectHomeEquip.homeEquipmentData;
             ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
         }
     }
@@ -383,7 +383,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                         coordinate = coordinate,
                         mapInstance = WorldMapObjManager.instance.displayMap,
                         mapItemInstanceId = SelectHomeEquip.instanceId,
-                        dataId = SelectHomeEquip.mapItemDataId,
+                        dataId = SelectHomeEquip.homeEquipmentData.mapItemDataId,
                         setResult = (value) =>
                         {
                             if (!value)
@@ -391,7 +391,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                 CreatControllerTempMapItem creatControllerTempMapItem = new CreatControllerTempMapItem
                                 {
                                     coordinate = coordinate,
-                                    dataId = SelectHomeEquip.mapItemDataId,
+                                    dataId = SelectHomeEquip.homeEquipmentData.mapItemDataId,
                                     instanceId = SelectHomeEquip.instanceId,
                                     setResult =(bool value)=>
                                     {
@@ -495,7 +495,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             
         }
     }
-    private async void SelectEquip(HomeEquip HomeEquip, bool selected = true)
+    private  void SelectEquip(HomeEquip HomeEquip, bool selected = true)
     {
         if (selected)
         {
@@ -507,7 +507,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             {
                 waiteSetHomeEquip = false;
                 SelectHomeEquip = HomeEquip;
-                HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(HomeEquip.equipDataId);
+                HomeEquipmentData homeEquipmentData = HomeEquip.homeEquipmentData;
                 ItemName.text = $"{homeEquipmentData.equipmentName}"; 
                 ActionName.text = HomeEquip.mapInstance <= 0 ? "布置" : "收回";
                 ActionImage.sprite = HomeEquip.mapInstance <= 0 ? setSprite : unSetSprite;

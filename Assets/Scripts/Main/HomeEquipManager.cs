@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 public class HomeEquipManager : Singleton<HomeEquipManager>
 {
-    private MyNativeData<HomeEquip> homeEquips = new MyNativeData<HomeEquip>();
+    private Dictionary<int,HomeEquip> homeEquips = new Dictionary<int, HomeEquip>();
 
     private Dictionary<int, List<int>> characterHomeEquips = new Dictionary<int, List<int>>();
     private Dictionary<int, Dictionary<int, int>> characterHomeEquipCountData = new Dictionary<int, Dictionary<int, int>>();
@@ -11,7 +11,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     public override void Init()
     {
         base.Init();
-        homeEquips.Init(8);
+        homeEquips.Clear();
         GameActionManager.instance.AddListener<CreatHomeEquip>(CreatHomeEquip);
         GameActionManager.instance.AddListener<RemoveHomeEquip>(RemoveHomeEquip);
         GameActionManager.instance.AddListener<ChangeHomeEquipCharacter>(ChangeHomeEquipCharacter);
@@ -28,16 +28,16 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     protected override void Clear()
     {
         base.Clear();
-        homeEquips.Dispose();
+        homeEquips.Clear();
     }
 
     public HomeEquip GetHomeEquip(int instanceId)
     {
-        if (homeEquips.GetData(instanceId, out var homeEquip))
+        if (homeEquips.TryGetValue(instanceId, out var homeEquip))
         {
             return homeEquip;
         }
-        return default(HomeEquip);
+        return null;
     }
 
     public HomeEquipList GetHomeEquipList(int characterId)
@@ -49,9 +49,9 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             for (int i = 0; i < ints.Count; i++)
             {
                 int instanceId = ints[i];
-                if (homeEquips.GetData(instanceId, out var homeEquip))
+                if (homeEquips.TryGetValue(instanceId, out var homeEquip))
                 {
-                    if (homeEquip.hide)
+                    if (homeEquip.homeEquipmentData.hide)
                     {
                         continue;
                     }
@@ -64,11 +64,10 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
     private void UnSetHomeEquip(UnSetHomeEquip unSetHomeEquip)
     {
-        if (homeEquips.GetData(unSetHomeEquip.instanceId, out var homeEquip))
+        if (homeEquips.TryGetValue(unSetHomeEquip.instanceId, out var homeEquip))
         {
             homeEquip.mapInstance = -1;
-            homeEquip.coordinate = int2.zero;
-            homeEquips.SetData(homeEquip);
+            homeEquip.coordinate = int2.zero; 
             RefreshHomeEquip(homeEquip);
             unSetHomeEquip.setResult(true);
         }
@@ -76,13 +75,9 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
     private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
     {
-        HomeEquip homeEquip = new HomeEquip
-        {
-            instanceId = creatHomeEquip.instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : creatHomeEquip.instanceId, 
-            equipDataId = creatHomeEquip.equipDataId,
-            characterId = creatHomeEquip.characterId,
-            mapItemInstance = creatHomeEquip.instanceId,
-        };
+        HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
+        HomeEquip homeEquip = new HomeEquip(creatHomeEquip.instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : creatHomeEquip.instanceId,
+           creatHomeEquip.instanceId, creatHomeEquip.characterId, homeEquipmentData); 
 
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
         {
@@ -104,11 +99,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 count = _count + 1;
             }
         }
-        equipCountData[creatHomeEquip.equipDataId] = count;
-
-        HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
-        homeEquip.hide = homeEquipmentData.hide;
-        homeEquip.mapItemDataId = homeEquipmentData.mapItemDataId;
+        equipCountData[creatHomeEquip.equipDataId] = count; 
 
         switch (homeEquipmentData.homeEquipFunc)
         {
@@ -151,9 +142,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             case HomeEquipFunc.装饰:
                 break;
         }
-
-        
-        homeEquips.SetData(homeEquip);
+         
         if (creatHomeEquip.setResult != null)
         {
             creatHomeEquip.setResult(true);
@@ -162,9 +151,9 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
     private void RemoveHomeEquip(RemoveHomeEquip removeHomeEquip)
     {
-        if (homeEquips.GetData(removeHomeEquip.instanceId, out var homeEquip))
+        if (homeEquips.TryGetValue(removeHomeEquip.instanceId, out var homeEquip))
         {
-            if (homeEquips.RemoveData(removeHomeEquip.instanceId))
+            if (homeEquips.Remove(removeHomeEquip.instanceId))
             {
                 if (characterHomeEquips.TryGetValue(removeHomeEquip.characterId, out var ints))
                 {
@@ -172,16 +161,16 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
                     if (characterHomeEquipCountData.TryGetValue(removeHomeEquip.characterId, out var HomeEquipCountData))
                     {
-                        if (HomeEquipCountData.TryGetValue(homeEquip.equipDataId, out var count))
+                        if (HomeEquipCountData.TryGetValue(homeEquip.homeEquipmentData.id, out var count))
                         {
                             count--;
                             if (count <= 0)
                             {
-                                HomeEquipCountData.Remove(homeEquip.equipDataId);
+                                HomeEquipCountData.Remove(homeEquip.homeEquipmentData.id);
                             }
                             else
                             {
-                                HomeEquipCountData[homeEquip.equipDataId] = count;
+                                HomeEquipCountData[homeEquip.homeEquipmentData.id] = count;
                             }
                         }
                     }
@@ -192,7 +181,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
     private void ChangeHomeEquipCharacter(ChangeHomeEquipCharacter changeHomeEquipCharacter)
     {
-        if (homeEquips.GetData(changeHomeEquipCharacter.equipInstanceId, out var homeEquip))
+        if (homeEquips.TryGetValue(changeHomeEquipCharacter.equipInstanceId, out var homeEquip))
         {
             int oldCharacter = homeEquip.characterId;
             if (oldCharacter != changeHomeEquipCharacter.newPlayer)
@@ -236,8 +225,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     }
                     equipCountData[homeEquip.equipDataId] = count;
                 }
-                homeEquip.characterId = changeHomeEquipCharacter.newPlayer;
-                homeEquips.SetData(homeEquip);
+                homeEquip.characterId = changeHomeEquipCharacter.newPlayer; 
             }
         }
     }
@@ -248,11 +236,10 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         {
             if (ints.Contains(tryLayInHomeEquip.equipInstanceId))
             {
-                if (homeEquips.GetData(tryLayInHomeEquip.equipInstanceId, out var homeEquip))
+                if (homeEquips.TryGetValue(tryLayInHomeEquip.equipInstanceId, out var homeEquip))
                 {
                     homeEquip.mapInstance = 0;
-                    homeEquip.coordinate = int2.zero;
-                    homeEquips.SetData(homeEquip);
+                    homeEquip.coordinate = int2.zero; 
                     tryLayInHomeEquip.setResult(true);
                 }
                 return;
@@ -267,11 +254,10 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         {
             if (ints.Contains(setHomeEquipCoordinate.equipInstanceId))
             {
-                if (homeEquips.GetData(setHomeEquipCoordinate.equipInstanceId, out var homeEquip))
+                if (homeEquips.TryGetValue(setHomeEquipCoordinate.equipInstanceId, out var homeEquip))
                 {
                     homeEquip.mapInstance = setHomeEquipCoordinate.mapInstanceId;
-                    homeEquip.coordinate = setHomeEquipCoordinate.coordinate;
-                    homeEquips.SetData(homeEquip);
+                    homeEquip.coordinate = setHomeEquipCoordinate.coordinate; 
                     if (setHomeEquipCoordinate.setResult != null)
                     {
                         setHomeEquipCoordinate.setResult(true);
@@ -307,8 +293,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             };
             void SetMapItem(int itemInstance)
             {
-                homeEquip.mapItemInstance = itemInstance;
-                homeEquips.SetData(homeEquip);
+                homeEquip.mapItemInstance = itemInstance; 
             }
             GameActionManager.instance.QueueAction(addMapItem, true);
         }
@@ -316,7 +301,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
     private void RefreshHomeEquip(RefreshHomeEquip refreshHomeEquip)
     {
-        if (homeEquips.GetData(refreshHomeEquip.equipInstanceId, out var homeEquip))
+        if (homeEquips.TryGetValue(refreshHomeEquip.equipInstanceId, out var homeEquip))
         {
             RefreshHomeEquip(homeEquip);
         }
@@ -377,18 +362,25 @@ public struct HomeEquipList : IReferenceData
     public List<HomeEquip> homeEquips;
 }
 
-public struct HomeEquip : INativeData, IReferenceData
+public class HomeEquip : INativeData, IReferenceData
 {
     public int instanceId;
-    public int mapItemInstance;
-    public bool hide; 
-    public int equipDataId;
-    public int mapItemDataId;
+    public int mapItemInstance; 
+    public HomeEquipmentData homeEquipmentData; 
     public int2 coordinate;
     public int mapInstance;
     public int characterId; 
     public int Key => instanceId;
 
+    public int equipDataId=> homeEquipmentData.id;
+
+    public HomeEquip(int instanceId, int mapItemInstance, int characterId,HomeEquipmentData homeEquipmentData)
+    {
+        this.instanceId = instanceId;
+        this.mapItemInstance = mapItemInstance;
+        this.characterId = characterId;
+        this.homeEquipmentData=homeEquipmentData;
+    }
     public bool Equals(IReferenceData other)
     {
         if (other is HomeEquip homeEquip)
