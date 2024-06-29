@@ -81,7 +81,7 @@ public struct PastureLevelData
     public int successTalk;
 }
 [Serializable]
-public struct PastureData : IReferenceData, IGameData
+public class PastureData : IReferenceData, IGameData
 {
     public int id;
     public string pastureName;

@@ -23,6 +23,8 @@ public class UserGameSaveData :IReferenceData
     public IntInt4Dictionary changeMapItems;
     public IntInt3Dictionary SetAnimationStateMapItems;
     public IntHomeEquipSaveDataDictionary mapHomeEquips;
+    public IntAnimalSaveDataDictionary animals = new IntAnimalSaveDataDictionary();
+    public IntPastureSaveDataDictionary pastures = new IntPastureSaveDataDictionary();
     public IntManufatureSaveDataDictionary manufatures=new IntManufatureSaveDataDictionary();
     public IntStoreCounterSaveDataDictionary storeCounters = new IntStoreCounterSaveDataDictionary();
     public IntFieldSaveDataDictionary fields = new IntFieldSaveDataDictionary();
@@ -99,6 +101,38 @@ public class UserGameSaveData :IReferenceData
         mapHomeEquips.Remove(id);
     }
 
+    public void SetPastureData(Pasture pasture)
+    {
+        if(pastures.TryGetValue(pasture.instanceId,out var pastureSaveData))
+        {
+            pastureSaveData.SetParture(pasture);
+        }
+        else
+        {
+            pastureSaveData = new PastureSaveData(pasture);
+            pastures.Add(pastureSaveData.instanceId, pastureSaveData);
+        }
+    }
+    public void DeletePasture(int id)
+    {
+        pastures.Remove(id);
+    }
+    public void DeleteAnimal(int id)
+    {
+        animals.Remove(id);
+    }
+    public void SetAnimalData(Animal animal)
+    {
+        if(animals.TryGetValue(animal.instaceId,out var animalSaveData))
+        {
+            animalSaveData.SetAnimal(animal);
+        }
+        else
+        {
+            animalSaveData = new AnimalSaveData(animal);
+            animals.Add(animal.instaceId, animalSaveData);
+        }
+    }
     public void SetFieldData(Field field)
     {
         if(fields.TryGetValue(field.instanceId,out var fieldSaveData))
@@ -193,6 +227,66 @@ public class UserGameSaveData :IReferenceData
         changeMapItems[value.x] = value; 
     }
 
+}
+public class AnimalSaveData
+{
+    public int instaceId;
+    public string name;
+    public int pasture;
+    public int dataId;
+    public int growthStage;
+    public int growthDay;
+    public bool setFood;
+    public AnimalState animalState;
+    public int nowCycle;
+    public int linkCharacterData;
+    public AnimalSaveData(Animal animal)
+    {
+        SetAnimal(animal);
+    }
+    public void SetAnimal(Animal animal)
+    {
+        instaceId = animal.instaceId;
+        name = animal.name;
+        pasture = animal.pasture;
+        growthStage = animal.growthStage;
+        growthDay = animal.growthDay;
+        setFood = animal.setFood;
+        animalState = animal.animalState;
+        nowCycle = animal.nowCycle;
+        linkCharacterData = animal.linkCharacterData;
+        dataId = animal.animalData.id;
+    }
+}
+public class PastureSaveData
+{
+    public int instanceId;
+    public int linkItem;
+    public PastureState pastureState;
+    public int dataId;
+    public int foodPackage; 
+    public int productPackage;
+
+    public int level;
+    public int index;
+    public int animalCase;
+    public int linkRoom;
+    public PastureSaveData(Pasture pasture)
+    {
+        SetParture(pasture);
+    }
+    public void SetParture(Pasture pasture)
+    {
+        instanceId = pasture.instanceId;
+        level = pasture.level;
+        index = pasture.index;
+        linkItem = pasture.linkItem;
+        pastureState = pasture.pastureState;
+        dataId = pasture.pastureData.id;
+        foodPackage = pasture.foodPackage;
+        productPackage = pasture.productPackage;
+        linkRoom=pasture.linkRoom;
+    }
 }
 public class FieldSaveData
 {
