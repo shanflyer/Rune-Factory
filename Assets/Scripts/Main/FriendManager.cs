@@ -118,7 +118,7 @@ public class FriendManager : Singleton<FriendManager>
             var packageData = PackageManager.instance.GetPackageData(character.characterPackage);
             if (isAnimal)
             {
-                AnimalData animalData =await GameDataManager.instance.GetAsyncData<AnimalData>(animal.dataId);
+                AnimalData animalData = animal.animalData;
                 for(int i = 0; i < packageData.items.Count; i++)
                 {
                     var item = packageData.items[i];

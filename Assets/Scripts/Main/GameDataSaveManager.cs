@@ -16,18 +16,13 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         get => userGameSaveDataList;
     }
-
-    private int selectSaveIndex;
+     
 
     public UserGameSaveData UserGameSaveData
     {
         get
         {
-            if (selectSaveIndex < 0)
-            {
-                return userGameSaveDataList.nowSaveData;
-            }
-            return userGameSaveDataList.userGameSaveDatas[selectSaveIndex];
+            return userGameSaveDataList.nowSaveData;
         }
     }
 
@@ -76,26 +71,16 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     public void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
     {
-        if (UserGameSaveDataList.userGameSaveDatas.Count > selectSaveIndex)
+        UserGameSaveData.playerData = new CharacterSaveData();
+        UserGameSaveData.playerData.name = playerName;
+        UserGameSaveData.playerData.gender = gender;
+        UserGameSaveData.playerData.brithDay = new BrithDay
         {
-            var userGameSaveData = UserGameSaveDataList.userGameSaveDatas[selectSaveIndex];
-
-            userGameSaveData.playerData.name = playerName;
-            userGameSaveData.playerData.gender = gender;
-            userGameSaveData.playerData.brithDay = new BrithDay
-            {
-                year = year,
-                season = season,
-                day = day
-            };
-            UserGameSaveDataList.userGameSaveDatas[selectSaveIndex] = userGameSaveData;
-        }
-        else
-        {
-            var userGameSaveData = UserGameSaveData.CreatSaveData(selectSaveIndex);
-            UserGameSaveDataList.userGameSaveDatas.Add(userGameSaveData);
-        }
-
+            year = year,
+            season = season,
+            day = day
+        };
+        UserGameSaveData.playerData.dataId = (int)gender;
         //NPCManager.instance.CreatZeroNPC();
         CharacterManager.instance.CreatPlayer((int)gender, 0);
     }
@@ -111,69 +96,57 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     private void SaveUserGameSaveData()
     {
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
+        UserGameSaveData.packageSaveDatas = packageSaveDatas;
 
-        if (selectSaveIndex < 0)
+        var characters = CharacterManager.instance.GetAllCharacters();
+        UserGameSaveData.characterSaveDatas.Clear();
+        for (int i=0;i<characters.Count; i++)
         {
-            userGameSaveDataList.nowSaveData.packageSaveDatas = packageSaveDatas;
+            if (characters[i].characterData.id != UserGameSaveData.playerData.dataId)
+            {
+                CharacterSaveData characterSaveData = new CharacterSaveData(characters[i]);
+                UserGameSaveData.characterSaveDatas.Add(characterSaveData);
+            }
         }
-        else
-        {
-            var userGameSaveData = userGameSaveDataList.userGameSaveDatas[selectSaveIndex];
-            userGameSaveData.packageSaveDatas = packageSaveDatas;
-            userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = userGameSaveData;
-        }
-        string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
-        strs = EncryptDES(strs);
-        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-        File.WriteAllText(saveDataPath, strs);
+       
     }
 
     public bool SetFishSaveData(int fish,int length,int place)
     {
         var saveData = UserGameSaveData;
         var fishDatas = saveData.fishSaveDatas;
-        if (fishDatas == null)
+          
+        if(fishDatas.TryGetValue(fish,out var fishSaveData))
         {
-            fishDatas = new List<FishSaveData>();
-        }
-        bool newRecord = false;
-        FishSaveData fishSaveData;
-        int index = fishDatas.FindIndex(f => f.dataId == fish);
-        if (index >= 0)
-        {
-            fishSaveData = fishDatas[index];
-            if (fishSaveData.length < length)
-            {
-                fishSaveData.length = length;
-                newRecord = true;
-            }
+            bool newRecord = fishSaveData.length< length;
+
+            fishSaveData.length = length;
+            fishSaveData.dataId = fish;
             if (!fishSaveData.places.Contains(place))
             {
-                fishSaveData.places.Add(place); 
+                fishSaveData.places.Add(place);
             }
-            fishDatas[index] = fishSaveData;
+            return newRecord;
         }
         else
         {
+            fishSaveData = new FishSaveData();
+            
             fishSaveData.length = length;
             fishSaveData.dataId = fish;
             fishSaveData.places = new List<int> { place };
-            fishDatas.Add(fishSaveData);
-            newRecord = true;
-        }
-        saveData.fishSaveDatas = fishDatas;
-        userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = saveData;
-        return newRecord;
+            fishDatas.Add(fish,fishSaveData);
+
+            return true;
+        } 
     }
     public FishSaveData GetFishDataSave(int id)
     {
-        FishSaveData fishSaveData=default(FishSaveData);
+        FishSaveData fishSaveData=null;
         var fishDatas = UserGameSaveData.fishSaveDatas;
         if (fishDatas != null)
         {
-            int index = fishDatas.FindIndex(f => f.dataId == id);
-            if (index >= 0)
-                fishSaveData = fishDatas[index];
+            fishDatas.TryGetValue(id, out fishSaveData);
         }
         return fishSaveData;
     }
@@ -190,15 +163,26 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         base.Clear();
     }
 
-    public bool SaveData(UserGameSaveData userGameSaveData)
-    {
-        selectSaveIndex = userGameSaveData.index;
+    public bool SaveData(int selectSaveIndex)
+    { 
         if (selectSaveIndex > 2)
         {
             return false;
-        }
-        //userGameSaveDataList.userGameSaveDatas[userGameSaveData.index] = userGameSaveData;
+        } 
         SaveUserGameSaveData();
+
+        if (selectSaveIndex >= 0)
+        {
+            var nowStrs = JsonConvert.SerializeObject(UserGameSaveData, JsonSerializerSettings);
+            userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = JsonConvert.DeserializeObject<UserGameSaveData>(nowStrs);
+        }
+         
+
+        string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
+        strs = EncryptDES(strs);
+        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+        File.WriteAllText(saveDataPath, strs);
+
         return true;
     }
 

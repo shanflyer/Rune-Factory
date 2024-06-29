@@ -97,7 +97,7 @@ public class WorldPanel : GamePanel<MyInt>
             exploreValue.text = $"Ì½Ë÷¶È:{chapterData.completeValue}%";
 
             List<MapItemReferenceData> list = new List<MapItemReferenceData>();
-            for (int i = 0; i < chapterData.haveItems.Length; i++)
+            for (int i = 0; i < chapterData.haveItems.Count; i++)
             {
                 int itemId = chapterData.haveItems[i];
                 bool open = chapterData.findItems.Contains(itemId);

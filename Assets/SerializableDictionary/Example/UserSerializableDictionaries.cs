@@ -5,6 +5,10 @@ using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
 [Serializable]
+public class IntChapterSaveDictionary : SerializableDictionary<int, ChapterSave> { }
+[Serializable]
+public class IntFishSaveDataDataDictionary : SerializableDictionary<int, FishSaveData> { }
+[Serializable]
 public class IntAnimalSaveDataDictionary : SerializableDictionary<int, AnimalSaveData> { }
 [Serializable]
 public class IntPastureSaveDataDictionary : SerializableDictionary<int, PastureSaveData> { }

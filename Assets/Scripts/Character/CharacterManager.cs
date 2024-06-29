@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -75,6 +76,10 @@ public class CharacterManager : Singleton<CharacterManager>
     public Player player;
     //private Vector2 playerMoveDirction;
 
+    public List<Character> GetAllCharacters()
+    {
+        return characters.Values.ToList();
+    }
     public int GetCharacterInstance()
     {
         return myInstance.CreatInstanceId();

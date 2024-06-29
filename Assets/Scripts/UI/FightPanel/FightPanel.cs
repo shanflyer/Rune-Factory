@@ -84,7 +84,7 @@ public class FightPanel : GamePanel<IReferenceData>
         if (refreshFightChapter.id == dataId)
         {
             var fightChapter = ExploreManager.instance.GetFigehtChapter(refreshFightChapter.id);
-            if (fightChapter.mapId == dataId)
+            if (fightChapter != null)
             {
                 ExploreValue.text = $"{fightChapter.completeValue}%";
             }
@@ -287,7 +287,7 @@ public class FightPanel : GamePanel<IReferenceData>
 
         dataId = int.Parse(dataKey);
         FightChapter fightChapter = ExploreManager.instance.GetFigehtChapter(dataId);
-        if (fightChapter.mapId == dataId)
+        if (fightChapter!=null)
         {
             FightMapData fightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(dataId.ToString());
             MapName.text = fightMapData.mapName;

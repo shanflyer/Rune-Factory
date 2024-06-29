@@ -68,7 +68,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     {
         if (selected)
         {
-            selectGameSaveData = userGameSaveData;
+            selectGameSaveData = userGameSaveData; 
             bool dataIsNull = string.IsNullOrEmpty(userGameSaveData.saveTime);
             Copy.interactable = !dataIsNull;
             Delete.interactable = userGameSaveData.index > 0 && !dataIsNull;
@@ -78,13 +78,13 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
-        selectGameSaveData = default(UserGameSaveData);
+        selectGameSaveData = null;
         saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
     }
 
     private void SaveAction()
     {
-        if (GameDataSaveManager.instance.SaveData(selectGameSaveData))
+        if (GameDataSaveManager.instance.SaveData())
         {
             //DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
 

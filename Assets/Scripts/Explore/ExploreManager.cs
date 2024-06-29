@@ -1,32 +1,25 @@
 ﻿using System.Collections.Generic;
-using Unity.Collections;
+using Unity.Collections; 
 using Unity.Mathematics;
 using UnityEngine;
 
-public struct FightChapter : IReferenceData, INativeData
+public class FightChapter : IReferenceData
 {
     public int mapId;
-    public FixedString128Bytes mapName;
+    public string mapName;
     public int completeValue;
-    public NativeHashSet<int> findItems;
-    public NativeList<int> haveItems;
+    public HashSet<int> findItems=new HashSet<int>();
+    public List<int> haveItems=new List<int>();
     public int failureEventId;
     public int successEventId; 
     public bool open;
-
-    public void Dispose()
-    {
-        findItems.Dispose();
-        haveItems.Dispose();
-        mapName.Clear();
-    }
-
+     
     public int Key => mapId;
 }
 
 public class ExploreManager : Singleton<ExploreManager>
 {
-    private MyNativeData<FightChapter> fightChapters = new MyNativeData<FightChapter>();
+    private Dictionary<int,FightChapter> fightChapters = new Dictionary<int, FightChapter>();
 
     public int NowCharpter => nowChapter;
 
@@ -36,17 +29,18 @@ public class ExploreManager : Singleton<ExploreManager>
     private int nowStep;
     public bool isExplore => NowCharpter != 0;
     public FightChapter GetFigehtChapter(int id)
-    {
-        fightChapter = default(FightChapter);
-
-        fightChapters.GetData(id, out fightChapter);
-        return fightChapter;
+    { 
+        if(fightChapters.TryGetValue(id,out var fightChapter))
+        {
+            return fightChapter;
+        } 
+        return null;
     }
 
     public override async void Init()
     {
         base.Init();
-        fightChapters.Init(10);
+        fightChapters.Clear();
         var allChapterDatas = await GameDataManager.instance.GetAllAsyncData<FightMapData>();
         for (int i = 0; i < allChapterDatas.Count; i++)
         {
@@ -59,8 +53,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 failureEventId = chapterData.failureEventId,
                 successEventId = chapterData.successEventId
             };
-            fightChapter.haveItems = new NativeList<int>(Allocator.Persistent);
-            fightChapter.findItems = new NativeHashSet<int>(8, Allocator.Persistent);
+           
 
             if (chapterData.items != null && chapterData.items.Count > 0)
             {
@@ -70,26 +63,31 @@ public class ExploreManager : Singleton<ExploreManager>
                 }
             }
 
-            fightChapters.AddData(fightChapter);
+            fightChapters.Add(chapterData.id,fightChapter);
         }
         if (GameDataSaveManager.instance.UserGameSaveData.chapters != null &&
             GameDataSaveManager.instance.UserGameSaveData.chapters.Count > 0)
         {
             var chapters = GameDataSaveManager.instance.UserGameSaveData.chapters;
-            for (int i = 0; i < chapters.Count; i++)
+            foreach(var chapter in chapters)
             {
                 FightChapter fightChapter;
-                if (fightChapters.GetData(chapters[i].mapId, out fightChapter))
-                {
-                    fightChapter.completeValue = chapters[i].completeValue;
-                    fightChapter.open = chapters[i].open;
+                if (fightChapters.TryGetValue(chapter.Value.mapId, out fightChapter))
+                { 
+                    fightChapter.open = chapter.Value.open;
 
-                    for (int j = 0; j < chapters[i].findItems.Count; j++)
+                    for (int j = 0; j < chapter.Value.findItems.Count; j++)
                     {
-                        fightChapter.findItems.Add(chapters[i].findItems[j]);
+                        fightChapter.findItems.Add(chapter.Value.findItems[j]);
                     }
-                }
-                this.fightChapters.SetData(fightChapter);
+                } 
+            }
+        }
+        else
+        {
+            foreach(var fightChapter in fightChapters)
+            {
+                GameDataSaveManager.instance.UserGameSaveData.SetFightChapter(fightChapter.Value);
             }
         }
 
@@ -101,10 +99,10 @@ public class ExploreManager : Singleton<ExploreManager>
 
     void OpenChapter(OpenChapter openChapter)
     {
-        if(fightChapters.GetData(openChapter.id,out var fightChapter))
+        if(fightChapters.TryGetValue(openChapter.id,out var fightChapter))
         {
             fightChapter.open = true;
-            fightChapters.SetData(fightChapter);
+            GameDataSaveManager.instance.UserGameSaveData.SetFightChapter(fightChapter);
         }
     }
     void ExploreEnd(ExploreEnd exploreEnd)
@@ -181,7 +179,7 @@ public class ExploreManager : Singleton<ExploreManager>
         UIManager.instance.CloseGamePanel<WarehousePanel>();
         if (fightChapter.mapId != nowChapter)
         {
-            if (!fightChapters.GetData(nowChapter, out fightChapter))
+            if (!fightChapters.TryGetValue(nowChapter, out fightChapter))
             {
                 return;
             }
@@ -257,7 +255,7 @@ public class ExploreManager : Singleton<ExploreManager>
         {
             fightChapter.findItems.Add(items[i].x);
         }
-        fightChapters.SetData(fightChapter);
+        GameDataSaveManager.instance.UserGameSaveData.SetFightChapter(fightChapter);
     }
     public bool StepFightSucceed()
     {
@@ -265,10 +263,9 @@ public class ExploreManager : Singleton<ExploreManager>
 
         nowStep++;
         float value = nowStep / (float)nowFightMapData.monsterDeploys.Count;
-        float itemValue = fightChapter.findItems.Count / (float)fightChapter.haveItems.Length;
+        float itemValue = fightChapter.findItems.Count / (float)fightChapter.haveItems.Count;
 
-        fightChapter.completeValue = (int)(value * 50)+ (int)(itemValue * 50);
-        fightChapters.SetData(fightChapter);
+        fightChapter.completeValue = (int)(value * 50)+ (int)(itemValue * 50); 
 
         EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
         GameActionManager.instance.QueueAction(endNowRoundFight, true);
@@ -336,7 +333,7 @@ public class ExploreManager : Singleton<ExploreManager>
 
     protected override void Clear()
     {
-        fightChapters.Dispose();
+        fightChapters.Clear();
         base.Clear();
     }
 }

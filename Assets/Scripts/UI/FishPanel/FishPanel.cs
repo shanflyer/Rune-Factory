@@ -118,14 +118,26 @@ public class FishPanel : GamePanel<IReferenceData>
         {
             var fishData = allFishes[i];
             var FishSaveData = GameDataSaveManager.instance.GetFishDataSave(fishData.id);
-            FishReferenceData fishReferenceData = new FishReferenceData
+            if (FishSaveData != null)
             {
-                dataId = fishData.id,
-                seasons = fishData.seasons,
-                record = FishSaveData.length,
-                places = FishSaveData.places
-            };
-            fishReferenceDatas.Add(fishReferenceData);
+                FishReferenceData fishReferenceData = new FishReferenceData
+                {
+                    dataId = fishData.id,
+                    seasons = fishData.seasons,
+                    record = FishSaveData.length,
+                    places = FishSaveData.places
+                };
+                fishReferenceDatas.Add(fishReferenceData);
+            }else
+            {
+                FishReferenceData fishReferenceData = new FishReferenceData
+                {
+                    dataId = fishData.id,
+                    seasons = fishData.seasons, 
+                };
+                fishReferenceDatas.Add(fishReferenceData);
+            }
+           
         }
         DisplayFishes();
     } 

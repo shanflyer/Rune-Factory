@@ -4,6 +4,8 @@ using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 public class UserGameSaveDataList : IReferenceData
 {
     public UserGameSaveData nowSaveData;
@@ -14,12 +16,11 @@ public class UserGameSaveData :IReferenceData
     public CharacterSaveData playerData;
     public OtherSaveData otherSaveData;
     public GameDateSaveData dateData;
-    public List<CharacterSaveData> characterSaveDatas;
-    public List<PackageSaveData> packageSaveDatas;
-    public List<ChapterSave> chapters;
-    public List<FishSaveData> fishSaveDatas;
+    public List<CharacterSaveData> characterSaveDatas=new List<CharacterSaveData>();
+    public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
 
-    public List<MapSaveData> mapSaveDatas;
+    public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
+    public IntFishSaveDataDataDictionary fishSaveDatas=new IntFishSaveDataDataDictionary();
     public IntInt4Dictionary changeMapItems;
     public IntInt3Dictionary SetAnimationStateMapItems;
     public IntHomeEquipSaveDataDictionary mapHomeEquips;
@@ -101,6 +102,18 @@ public class UserGameSaveData :IReferenceData
         mapHomeEquips.Remove(id);
     }
 
+    public void SetFightChapter(FightChapter fightChapter)
+    {
+        if(chapters.TryGetValue(fightChapter.mapId,out var chapterSave))
+        {
+            chapterSave.SetChapterSave(fightChapter);
+        }
+        else
+        {
+            chapterSave = new ChapterSave(fightChapter);
+            chapters.Add(fightChapter.mapId,chapterSave);
+        }
+    }
     public void SetPastureData(Pasture pasture)
     {
         if(pastures.TryGetValue(pasture.instanceId,out var pastureSaveData))
@@ -201,8 +214,7 @@ public class UserGameSaveData :IReferenceData
         {
             otherSaveData = otherSaveData,
             characterSaveDatas = new List<CharacterSaveData>(),
-            packageSaveDatas = new List<PackageSaveData>(),
-            chapters = new List<ChapterSave>(),
+            packageSaveDatas = new List<PackageSaveData>(), 
             saveTime="1989",
             index = index
         };
@@ -415,7 +427,7 @@ public struct MapItemSaveData
 }
 
 
-public struct FishSaveData
+public class FishSaveData
 {
     public int dataId;
     public int length;
@@ -429,12 +441,21 @@ public struct GameDateSaveData
     public int day;
 }
  
-public struct ChapterSave
+public class ChapterSave
 {
-    public int mapId;
-    public int completeValue;
+    public int mapId; 
     public List<int> findItems;
     public bool open;
+    public ChapterSave(FightChapter fightChapter)
+    {
+        SetChapterSave(fightChapter);
+    }
+    public void SetChapterSave(FightChapter fightChapter)
+    {
+        mapId = fightChapter.mapId; 
+        findItems = fightChapter.findItems.ToList();
+        open = fightChapter.open;
+    }
 }
 public struct OtherSaveData
 {
@@ -442,17 +463,35 @@ public struct OtherSaveData
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
 }
-public struct CharacterSaveData:IReferenceData
+public class CharacterSaveData:IReferenceData
 {
-    public string name;
-    public int characterId;
+    public string name; 
+    public int dataId;
     public int level;
     public int exp;
     public Gender gender;
     public BrithDay brithDay;
     public int packageId;
-    public int weapon, clothes;
+    public int2 weapon, clothes,shoe;
     public bool isMarried;
+
+    public CharacterSaveData() { }
+    public CharacterSaveData(Character character)
+    {
+        SetCharacter(character);
+    }
+    public void SetCharacter(Character character)
+    {
+        name = character.name; 
+        dataId=character.dataId;
+        level = character.Level;
+        exp = character.exp.nowExp;
+        packageId = character.characterPackage;
+        weapon = character.Equip.weapon;
+        clothes = character.Equip.clothes;
+        shoe = character.Equip.shoes;
+        gender = character.characterData.gender;
+    }
 }
 
 public struct PackageSaveData
