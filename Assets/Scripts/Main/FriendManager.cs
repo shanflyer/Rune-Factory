@@ -152,7 +152,25 @@ public class FriendManager : Singleton<FriendManager>
             }
         }
     }
-
+    public FriendSaveData GetFriendSaveData()
+    {
+        FriendSaveData friendSaveData = new FriendSaveData
+        {
+            friendAdds = new List<int4>(),
+            friendShips = new List<int3>()
+        };
+        foreach(var friendShip in NPCFriendShips)
+        {
+            friendSaveData.friendShips.Add(new int3(friendShip.Value.characterId, friendShip.Value.friendLevel,
+                friendShip.Value.nowValue)); 
+        }
+        foreach(var friend in friendAdd)
+        {
+            friendSaveData.friendAdds.Add(new int4(friend.Key, friend.Value));
+        }
+        return friendSaveData;
+    }
+    
     private Dictionary<int, FriendShip> NPCFriendShips = new Dictionary<int, FriendShip>();
 
     private Dictionary<int, int3> friendAdd = new Dictionary<int, int3>();

@@ -95,9 +95,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     };
     private void SaveUserGameSaveData()
     {
+        //包裹数据
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
         UserGameSaveData.packageSaveDatas = packageSaveDatas;
 
+        //npc数据
         var characters = CharacterManager.instance.GetAllCharacters();
         UserGameSaveData.characterSaveDatas.Clear();
         for (int i=0;i<characters.Count; i++)
@@ -107,8 +109,28 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 CharacterSaveData characterSaveData = new CharacterSaveData(characters[i]);
                 UserGameSaveData.characterSaveDatas.Add(characterSaveData);
             }
+            else
+            {
+                UserGameSaveData.playerData = new CharacterSaveData(characters[i]);
+            }
         }
-       
+        //玩家数据
+        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.playerPackages;
+
+        //时间
+        UserGameSaveData.dateData = new GameDateSaveData
+        {
+            year = GameTimeManager.instance.Year,
+            day = GameTimeManager.instance.Day,
+            season = GameTimeManager.instance.Season,
+            minute = GameTimeManager.instance.Minute,
+            hour = GameTimeManager.instance.Hour
+        };
+
+        //友情关系
+        UserGameSaveData.friendSaveData = FriendManager.instance.GetFriendSaveData();
+
+        UserGameSaveData.SaveData();
     }
 
     public bool SetFishSaveData(int fish,int length,int place)

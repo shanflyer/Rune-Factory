@@ -19,6 +19,7 @@ public class UserGameSaveData :IReferenceData
     public List<CharacterSaveData> characterSaveDatas=new List<CharacterSaveData>();
     public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
 
+    public FriendSaveData friendSaveData;
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
     public IntFishSaveDataDataDictionary fishSaveDatas=new IntFishSaveDataDataDictionary();
     public IntInt4Dictionary changeMapItems;
@@ -412,21 +413,7 @@ public class HomeEquipSaveData
     }
 
 }
-public struct MapSaveData
-{
-    public int mapId;
-    public List<MapItemSaveData> mapItemSaveDatas;
-}
-
-public struct MapItemSaveData
-{
-    public int editorId;
-    public int instanceId;
-    public int state;
-    public int2 pos;
-}
-
-
+  
 public class FishSaveData
 {
     public int dataId;
@@ -439,6 +426,8 @@ public struct GameDateSaveData
     public int year;
     public Season season;
     public int day;
+    public int hour;
+    public int minute; 
 }
  
 public class ChapterSave
@@ -457,11 +446,16 @@ public class ChapterSave
         open = fightChapter.open;
     }
 }
-public struct OtherSaveData
+public class OtherSaveData
 {
     public int gold, diamond;
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
+}
+public struct FriendSaveData
+{
+    public List<int3> friendShips;
+    public List<int4> friendAdds;
 }
 public class CharacterSaveData:IReferenceData
 {
@@ -473,7 +467,7 @@ public class CharacterSaveData:IReferenceData
     public BrithDay brithDay;
     public int packageId;
     public int2 weapon, clothes,shoe;
-    public bool isMarried;
+    public bool isMarried; 
 
     public CharacterSaveData() { }
     public CharacterSaveData(Character character)
@@ -490,7 +484,7 @@ public class CharacterSaveData:IReferenceData
         weapon = character.Equip.weapon;
         clothes = character.Equip.clothes;
         shoe = character.Equip.shoes;
-        gender = character.characterData.gender;
+        gender = character.characterData.gender; 
     }
 }
 

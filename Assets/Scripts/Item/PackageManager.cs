@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PackageManager : Singleton<PackageManager>
 {
-    private List<int> playerPackages = new List<int>();
+    public List<int> playerPackages = new List<int>();
 
     public void AddPlayerPackage(int id)
     {
