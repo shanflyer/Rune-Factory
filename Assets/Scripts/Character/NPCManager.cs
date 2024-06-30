@@ -136,7 +136,7 @@ public struct NPCList : IReferenceData
     public List<NPC> npcs;
 }
 
-public struct NPC : INativeData, IReferenceData
+public class NPC :  IReferenceData
 {
     public static Color GetStateColor(NPCState state)
     {
@@ -157,13 +157,12 @@ public struct NPC : INativeData, IReferenceData
     }
 
     public NPCState npcState;
-    public int dataId;
+    public NPCData npcData;
     public int characterId;
-    public bool hide;
+    public bool hide=>npcData.hide;
 
     public async Task<CharacterData> GetCharacterData()
-    {
-        NPCData npcData = await GameDataManager.instance.GetAsyncData<NPCData>(dataId);
+    { 
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(npcData.linkCharacterId);
         return characterData;
     }
@@ -172,35 +171,35 @@ public struct NPC : INativeData, IReferenceData
     {
     }
 
-    public int Key => dataId;
+    public int Key => npcData.id;
 }
 
 public class NPCManager : Singleton<NPCManager>
 {
-    private MyNativeData<NPC> npcs = new MyNativeData<NPC>();
+    private Dictionary<int,NPC> npcs = new Dictionary<int, NPC>();
     private Dictionary<int, int> instanceDatas = new Dictionary<int, int>();
 
     public override void Init()
     {
         base.Init();
-        npcs.Init(16); CreatZeroNPC();
+        npcs.Clear(); CreatZeroNPC();
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
     }
 
     protected override void Clear()
     {
         base.Clear();
-        npcs.Dispose();
+        npcs.Clear();
     }
 
-    private async void GiveGift(GiveGift giveGift)
+    private void GiveGift(GiveGift giveGift)
     {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
         {
             Character receiver = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter);
 
             int likeState = 0;
-            NPCData nPCData = await GameDataManager.instance.GetAsyncData<NPCData>(npc.dataId);
+            NPCData nPCData = npc.npcData;
             if (nPCData.likeItems.Contains(giveGift.giftId))
             {
                 likeState = 1;
@@ -276,14 +275,14 @@ public class NPCManager : Singleton<NPCManager>
         npc = default(NPC);
         if (instanceDatas.TryGetValue(instanceId, out var id))
         {
-            return npcs.GetData(id, out npc);
+            return npcs.TryGetValue(id, out npc);
         }
         return false;
     }
 
     public bool GetNPC(int id, out NPC npc)
     {
-        return npcs.GetData(id, out npc);
+        return npcs.TryGetValue(id, out npc);
     }
 
     public NPCList GetNPCList()
@@ -292,7 +291,7 @@ public class NPCManager : Singleton<NPCManager>
         {
             npcs = new List<NPC>(),
         };
-        foreach (NPC npc in npcs)
+        foreach (var npc in npcs.Values)
         {
             if (!npc.hide)
             {
@@ -315,10 +314,9 @@ public class NPCManager : Singleton<NPCManager>
                 {
                     characterId = instanceId,
                     npcState = NPCState.正常,
-                    dataId = NPCData.id,
-                    hide = NPCData.hide
+                    npcData = NPCData, 
                 };
-                npcs.SetData(npc);
+                npcs.Add(npc.Key,npc);
                 instanceDatas[instanceId] = NPCData.id;
             }
         }

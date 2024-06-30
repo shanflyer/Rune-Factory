@@ -5,30 +5,162 @@ using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
 [Serializable]
-public class IntChapterSaveDictionary : SerializableDictionary<int, ChapterSave> { }
+public class IntChapterSaveDictionary : SerializableDictionary<int, ChapterSave> 
+{ 
+    public IntChapterSaveDictionary() { }
+    public void CopyData(IntChapterSaveDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new ChapterSave(kvp.Value);
+        
+        }
+    }
+}
 [Serializable]
-public class IntFishSaveDataDataDictionary : SerializableDictionary<int, FishSaveData> { }
+public class IntFishSaveDataDataDictionary : SerializableDictionary<int, FishSaveData> 
+{
+    public IntFishSaveDataDataDictionary() { }
+    public void CopyData(IntFishSaveDataDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new FishSaveData(kvp.Value);
+
+        }
+    }
+}
 [Serializable]
-public class IntAnimalSaveDataDictionary : SerializableDictionary<int, AnimalSaveData> { }
+public class IntAnimalSaveDataDictionary : SerializableDictionary<int, AnimalSaveData> 
+{
+    public IntAnimalSaveDataDictionary() { }
+    public void CopyData(IntAnimalSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new AnimalSaveData(kvp.Value);
+
+        }
+    }
+}
 [Serializable]
-public class IntPastureSaveDataDictionary : SerializableDictionary<int, PastureSaveData> { }
+public class IntPastureSaveDataDictionary : SerializableDictionary<int, PastureSaveData> 
+{ 
+    public IntPastureSaveDataDictionary() { }
+    public void CopyData(IntPastureSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new PastureSaveData(kvp.Value);
+
+        }
+    }
+}
 [Serializable]
-public class IntFieldSaveDataDictionary : SerializableDictionary<int, FieldSaveData> { }
+public class IntFieldSaveDataDictionary : SerializableDictionary<int, FieldSaveData> 
+{ 
+    public IntFieldSaveDataDictionary() { }
+    public void CopyData(IntFieldSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new FieldSaveData(kvp.Value);
+
+        }
+    }
+}
 
 [Serializable]
-public class IntStoreCounterSaveDataDictionary : SerializableDictionary<int, StoreCounterSaveData> { }
+public class IntStoreCounterSaveDataDictionary : SerializableDictionary<int, StoreCounterSaveData> 
+{ 
+    public IntStoreCounterSaveDataDictionary() { }
+    public void CopyData(IntStoreCounterSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new StoreCounterSaveData(kvp.Value);
+
+        }
+    }
+}
 [Serializable]
-public class IntManufatureSaveDataDictionary : SerializableDictionary<int, ManufatureSaveData> { }
+public class IntManufatureSaveDataDictionary : SerializableDictionary<int, ManufatureSaveData> 
+{
+    public IntManufatureSaveDataDictionary() { }
+    public void CopyData(IntManufatureSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new ManufatureSaveData(kvp.Value);
+
+        }
+    }
+}
 
 [Serializable]
-public class IntHomeEquipSaveDataDictionary : SerializableDictionary<int, HomeEquipSaveData> { }
+public class IntHomeEquipSaveDataDictionary : SerializableDictionary<int, HomeEquipSaveData> 
+{
+    public IntHomeEquipSaveDataDictionary() { }
+    public void CopyData(IntHomeEquipSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new HomeEquipSaveData(kvp.Value);
+
+        }
+    }
+}
 
 [Serializable]
-public class IntIntDictionary : SerializableDictionary<int, int> { }
+public class IntIntDictionary : SerializableDictionary<int, int> 
+{
+    public IntIntDictionary() { }
+    public void CopyData(IntIntDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = kvp.Value;
+
+        }
+    }
+}
 [Serializable]
-public class IntInt3Dictionary : SerializableDictionary<int, int3> { }
+public class IntInt3Dictionary : SerializableDictionary<int, int3> 
+{ 
+    public IntInt3Dictionary() { }
+    public void CopyData(IntInt3Dictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = kvp.Value;
+
+        }
+    }
+}
 [Serializable]
-public class IntInt4Dictionary : SerializableDictionary<int, int4> { }
+public class IntInt4Dictionary : SerializableDictionary<int, int4> 
+{ 
+    public IntInt4Dictionary() { }
+    public void CopyData(IntInt4Dictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = kvp.Value;
+
+        }
+    }
+}
 [Serializable]
 public class IntWorldMapDictionary: SerializableDictionary<int, WorldMap> { }
 public class StringFightChapterListDictionary : SerializableDictionary<string, List<FightChapterReference>> { }

@@ -10,7 +10,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     private SaveReference SaveReference;
 
     [SerializeField]
-    private Button Copy, Delete, Save, Return;
+    private Button Copy,  Save, Return;
 
     [SerializeField]
     private Transform SaveDataParent;
@@ -22,7 +22,6 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         base.SetPanelUISerializeObj();
         SaveReference = FindChildGameObject<SaveReference>("SaveReference");
         Copy = FindChildGameObject<Button>("CopyButton");
-        Delete = FindChildGameObject<Button>("DeleteButton");
         Save = FindChildGameObject<Button>("SaveButton");
         Return = FindChildGameObject<Button>("ReturnButton");
         SaveDataParent = FindChildGameObject("ManualParent");
@@ -33,11 +32,9 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     {
         base.Awake();
         Copy.onClick.AddListener(CopyData);
-        Delete.onClick.AddListener(DeleteData);
         Save.onClick.AddListener(SaveAction);
         Return.onClick.AddListener(() =>
-        {
-            UIManager.instance.ShowGamePanel<ZeroPanel>();
+        { 
             Close();
         });
 
@@ -71,7 +68,6 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
             selectGameSaveData = userGameSaveData; 
             bool dataIsNull = string.IsNullOrEmpty(userGameSaveData.saveTime);
             Copy.interactable = !dataIsNull;
-            Delete.interactable = userGameSaveData.index > 0 && !dataIsNull;
         }
     }
 
@@ -80,15 +76,15 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         base.InitReferenceData(v);
         selectGameSaveData = null;
         saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+        saveList.SelectDefault();
     }
 
     private void SaveAction()
     {
-        if (GameDataSaveManager.instance.SaveData())
+        if (GameDataSaveManager.instance.SaveData(selectGameSaveData.index))
         {
-            //DataSaveAndLoadTest.LoadSaveData(SelectedIndex);
-
-            // Close();
+            RefreshGameSaveData RefreshGameSaveData = new RefreshGameSaveData { };
+            GameActionManager.instance.QueueAction(RefreshGameSaveData);
         }
     }
 
@@ -108,8 +104,4 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         }
     }
 
-    private void DeleteData()
-    {
-        GameDataSaveManager.instance.DeletaSaveData(selectGameSaveData);
-    }
 }

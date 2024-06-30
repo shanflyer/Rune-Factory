@@ -8,7 +8,9 @@ using Unity.Jobs;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Collections;
 using UnityEngine.UI;
- 
+using Unity.Mathematics;
+using Newtonsoft.Json.Serialization;
+
 public struct TestData
 {
     public int index;
@@ -29,6 +31,9 @@ public struct TestJob : IJobParallelFor
 public class Test : MonoBehaviour
 {
     public List<int> testData=new List<int>();
+
+    public List<int2> testInt2 = new List<int2>();
+
     public unsafe void TestUnsafe()
     {
         TestData Data = new TestData
@@ -55,11 +60,11 @@ public class Test : MonoBehaviour
     }
 
 
-    public List<FilmData> formulaDatas=new List<FilmData>();
+    public List<ItemAnimationData> formulaDatas=new List<ItemAnimationData>();
     public void TestNewtosoftTostring()
     {
-        string path = DataPath.GetDataPath(typeof(FilmData));
-        var allData= Resources.LoadAll<FilmData>(path);
+        string path = DataPath.GetDataPath(typeof(ItemAnimationData));
+        var allData= Resources.LoadAll<ItemAnimationData>(path);
         if (allData != null && allData.Length > 0)
         {
             string strs=JsonConvert.SerializeObject(allData);
@@ -67,10 +72,21 @@ public class Test : MonoBehaviour
             Debug.Log(strs);
         }
     }
+    public void TestInt2NewtosoftTostring()
+    {
+        string strs = JsonConvert.SerializeObject(testInt2, new JsonSerializerSettings()
+        { 
+            MetadataPropertyHandling= MetadataPropertyHandling.ReadAhead,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+        File.WriteAllText("test.json", strs);
+        Debug.Log(strs);
+    }
     public void TesttNewtosoftToObj()
     {
         var strs = File.ReadAllText("test.json");
-        formulaDatas = JsonConvert.DeserializeObject<List<FilmData>>(strs);
+        testInt2= JsonConvert.DeserializeObject<List<int2>>(strs);
+        //formulaDatas = JsonConvert.DeserializeObject<List<ItemAnimationData>>(strs);
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -91,6 +107,10 @@ public class TestEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+        if (GUILayout.Button("测试json序列化Int2"))
+        {
+            test.TestInt2NewtosoftTostring();
+        }
         if (GUILayout.Button("测试json序列化"))
         {
             test.TestNewtosoftTostring();

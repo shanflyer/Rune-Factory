@@ -16,24 +16,68 @@ public class GameController : MonoBehaviour
     public bool startPlay = true;
 #if UNITY_EDITOR
     public bool test = false;
-    public bool runTime { get => GameTimeManager.instance.runTime; set => GameTimeManager.instance.runTime = value; }
-   
-    public int runTimeHour { 
-        get => GameTimeManager.instance.Hour;
+    public bool runTime
+    {
+        get
+        {
+            if (Application.isPlaying)
+            {
+                return GameTimeManager.instance.runTime;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
         set
         {
-            if (value != GameTimeManager.instance.Hour)
+            if (Application.isPlaying)
+                GameTimeManager.instance.runTime = value;
+
+        }
+    }
+
+
+    public int runTimeHour {
+        get
+        {
+            if (Application.isPlaying)
+            {
+                return GameTimeManager.instance.Hour;
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+        set
+        {
+            if (Application.isPlaying&&value != GameTimeManager.instance.Hour)
             {
                 GameTimeManager.instance.SetTime(value);
             }
         }
+        
     }
      
-    public int runTimeMinute { 
-        get => GameTimeManager.instance.Minute;
+    public int runTimeMinute {
+        get
+        {
+            if (Application.isPlaying)
+            {
+                return GameTimeManager.instance.Minute;
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
         set
         {
-            if (value != GameTimeManager.instance.Minute)
+            if (Application.isPlaying && value != GameTimeManager.instance.Minute)
             {
                 GameTimeManager.instance.SetTime(minute: value);
             }

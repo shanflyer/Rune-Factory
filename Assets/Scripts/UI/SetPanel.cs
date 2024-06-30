@@ -40,6 +40,7 @@ public class SetPanel : GamePanel<IReferenceData>
 
     private void SaveSet()
     {
-        UIManager.instance.ShowGamePanel<SavePanel>(layer: 2);
+        Close();
+        UIManager.instance.ShowGamePanel<SavePanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
     }
 }

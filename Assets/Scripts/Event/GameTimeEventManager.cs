@@ -3,17 +3,17 @@
 public class GameTimeEventManager : Singleton<GameTimeEventManager>
 {
     // public override bool NeedUpdata => true;
-    private MyNativeData<GameTimeEvent> newDayTimeEvents;
+    private Dictionary<int,GameTimeEvent> newDayTimeEvents=new Dictionary<int, GameTimeEvent>();
 
-    private MyNativeData<GameTimeEvent> wakeUpTimeEvents;
+    private Dictionary<int, GameTimeEvent> wakeUpTimeEvents=new Dictionary<int, GameTimeEvent>();
     private int newDayActionIndex = 0;
     private int newWakeUpActionIndex = 0;
 
     public override async void Init()
     {
         base.Init();
-        newDayTimeEvents.Init(16);
-        wakeUpTimeEvents.Init(16);
+        newDayTimeEvents.Clear();
+        wakeUpTimeEvents.Clear();
         var gameTimeEventDatas = await GameDataManager.instance.GetAllAsyncData<GameTimeEventData>();
         for (int i = 0; i < gameTimeEventDatas.Count; i++)
         {
@@ -30,11 +30,11 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
                 switch (data.timeEventType)
                 {
                     case TimeEventType.时间序列:
-                        newDayTimeEvents.SetData(gameTimeEvent);
+                        newDayTimeEvents.Add(gameTimeEvent.Key,gameTimeEvent);
                         break;
 
                     case TimeEventType.苏醒序列:
-                        wakeUpTimeEvents.SetData(gameTimeEvent);
+                        wakeUpTimeEvents.Add(gameTimeEvent.Key, gameTimeEvent);
                         break;
                 }
             }
@@ -47,15 +47,15 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
     protected override void Clear()
     {
         base.Clear();
-        newDayTimeEvents.Dispose();
-        wakeUpTimeEvents.Dispose();
+        newDayTimeEvents.Clear();
+        wakeUpTimeEvents.Clear();
     }
 
     private void CheckGameTimeEventNewDay(NewDay NewDay)
     {
         newDayActionIndex++;
         List<int> deathEvents = new List<int>();
-        foreach (GameTimeEvent gameTimeEvent in newDayTimeEvents)
+        foreach (var gameTimeEvent in newDayTimeEvents.Values)
         {
             if (gameTimeEvent.triggerValue == newDayActionIndex)
             {
@@ -65,7 +65,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         }
         for (int i = 0; i < deathEvents.Count; i++)
         {
-            newDayTimeEvents.RemoveData(deathEvents[i]);
+            newDayTimeEvents.Remove(deathEvents[i]);
         }
     }
 
@@ -73,7 +73,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
     {
         newWakeUpActionIndex++;
         List<int> deathEvents = new List<int>();
-        foreach (GameTimeEvent gameTimeEvent in wakeUpTimeEvents)
+        foreach (var  gameTimeEvent in wakeUpTimeEvents.Values)
         {
             if (gameTimeEvent.triggerValue == newWakeUpActionIndex)
             {
@@ -83,7 +83,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         }
         for (int i = 0; i < deathEvents.Count; i++)
         {
-            wakeUpTimeEvents.RemoveData(deathEvents[i]);
+            wakeUpTimeEvents.Remove(deathEvents[i]);
         }
     }
 
@@ -97,7 +97,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         return true;
     }
 
-    public struct GameTimeEvent : INativeData
+    public class GameTimeEvent 
     {
         public int id;
         public TimeEventType timeEventType;

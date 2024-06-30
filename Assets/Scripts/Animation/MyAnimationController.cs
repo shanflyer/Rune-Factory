@@ -1,23 +1,24 @@
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using System.Collections.Generic;
 
 //using Unity.Collections;
 
 public class MyAnimationController : Singleton<MyAnimationController>
 {
-    private MyNativeData<AnimationStruct> animationStructData;
+    private Dictionary<int,AnimationStruct> animationStructData=new Dictionary<int, AnimationStruct>();
 
     public void AddItemAnimation(int id, Animator animator, string name)
     {
         AnimationStruct animationStruct = new AnimationStruct();
         animationStruct.InitAnimator(animator, id, name);
-        animationStructData.AddData(animationStruct);
+        animationStructData.Add(animationStruct.Key,animationStruct);
     }
 
     public void PlayAnimation(int id, AnimationClip clip)
     {
-        if (animationStructData.GetData(id, out AnimationStruct animationStruct))
+        if (animationStructData.TryGetValue(id, out AnimationStruct animationStruct))
         {
             animationStruct.Play(clip);
         }
@@ -25,7 +26,7 @@ public class MyAnimationController : Singleton<MyAnimationController>
 
     public void StopAnimation(int id)
     {
-        if (animationStructData.GetData(id, out AnimationStruct animationStruct))
+        if (animationStructData.TryGetValue(id, out AnimationStruct animationStruct))
         {
             animationStruct.Stop();
         }
@@ -33,13 +34,13 @@ public class MyAnimationController : Singleton<MyAnimationController>
 
     public void RemoveItemAnimation(int id)
     {
-        animationStructData.RemoveData(id);
+        animationStructData.Remove(id);
     }
 
     public override void Init()
     {
         base.Init();
-        animationStructData.Init(32);
+        animationStructData.Clear();
     }
 
     public void ClearAnimation()
@@ -50,10 +51,10 @@ public class MyAnimationController : Singleton<MyAnimationController>
     protected override void Clear()
     {
         base.Clear();
-        animationStructData.Dispose();
+        animationStructData.Clear();
     }
 
-    public struct AnimationStruct : INativeData
+    public class AnimationStruct : INativeData
     {
         public int id;
         public PlayableGraph playableGraph;
@@ -69,6 +70,7 @@ public class MyAnimationController : Singleton<MyAnimationController>
         public void InitAnimator(Animator animator, int id, string name)
         {
             this.id = id;
+            playableGraph.Destroy();
             playableGraph = PlayableGraph.Create();
             playableOutput = AnimationPlayableOutput.Create(playableGraph, name, animator);
         }

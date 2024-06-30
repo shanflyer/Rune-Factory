@@ -24,29 +24,27 @@ public enum Season
 }
 
 [System.Serializable]
-public struct GameDate : IReferenceData, INativeData
+public class GameDate : IReferenceData, INativeData
 {
     public Season season;
     public int date;
-    public UnsafeList<int> FestivaList;
-    public UnsafeList<int> CustomFestival;
+    public List<int> FestivaList;
+    public List<int> CustomFestival;
 
     public GameDate(Season _season, int _date, List<int> _festivals)
     {
         season = _season;
         date = _date;
-        FestivaList = new UnsafeList<int>(4, Allocator.TempJob);
+        FestivaList = new List<int>(4);
         foreach (var festival in _festivals)
         {
             FestivaList.Add(festival);
         }
-        CustomFestival = new UnsafeList<int>(4, Allocator.TempJob);
+        CustomFestival = new List<int>(4);
     }
 
     public void Dispose()
-    {
-        FestivaList.Dispose();
-        CustomFestival.Dispose();
+    { 
     }
 
     public int Key => (int)season * 100 + date;
@@ -524,7 +522,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
     }
 
-    private MyNativeData<GameDate> gameDates = new MyNativeData<GameDate>();
+    private Dictionary<int,GameDate> gameDates = new Dictionary<int, GameDate>();
 
     public List<GameDate> GetGameDataForSeason(Season season)
     {
@@ -532,7 +530,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         for (int i = 1; i <= 30; i++)
         {
             int key = (int)season * 100 + i;
-            if (gameDates.GetData(key, out var gameDate))
+            if (gameDates.TryGetValue(key, out var gameDate))
             {
                 results.Add(gameDate);
             }
@@ -543,13 +541,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
     protected override void Clear()
     {
         base.Clear();
-        gameDates.Dispose();
+        gameDates.Clear();
     }
 
     public override void Init()
     {
         base.Init();
-        gameDates.Init(120);
+        gameDates.Clear();
         GameActionManager.instance.AddListener<LerpGameTime>(LerpGameTime);
         GameActionManager.instance.AddListener<SetMapOverrideEnvironment>(SetMapOverrideEnvironment);
         GameActionManager.instance.AddListener<ClearOverrideEnvironment>(ClearOverrideEnvironment);
@@ -770,7 +768,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 festivalIds.Add(festivalData.id);
             }
             GameDate gameDate = new GameDate(season, date, festivalIds);
-            gameDates.AddData(gameDate);
+            gameDates.Add(gameDate.Key,gameDate);
         }
         //timeDisplayAction.UpdataTime();
     }

@@ -7,20 +7,19 @@ using Unity.Collections;
 
 public class ShortcutManager : Singleton<ShortcutManager>
 {
-    MyNativeData<ShortcutPackage> shortcutPackages = new MyNativeData<ShortcutPackage>();
+    Dictionary<int,ShortcutPackage> shortcutPackages = new Dictionary<int, ShortcutPackage>();
     public ShortcutPackage GetShortcutPackage(int characterId)
     {
-        if(!shortcutPackages.GetData(characterId,out var shortcutPackage))
+        if(!shortcutPackages.TryGetValue(characterId,out var shortcutPackage))
         {
-            shortcutPackage = ShortcutPackage.CreatShortCutPackage(characterId);
-            shortcutPackages.SetData(shortcutPackage);
+            shortcutPackage = ShortcutPackage.CreatShortCutPackage(characterId); 
         }
         return shortcutPackage;
     }
     public override void Init()
     {
         base.Init();
-        shortcutPackages.Init(4);
+        shortcutPackages.Clear();
         GameActionManager.instance.AddListener<RemoveShortcutItem>(RemoveShortcutItem);
         GameActionManager.instance.AddListener<SetShortcutItem>(SetShortcutItem);
         GameActionManager.instance.AddListener<ChangeShortcutItemIndex>(ChangeShortcutItemIndex);
@@ -58,7 +57,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
                     }
                 }
             }
-            shortcutPackages.SetData(shortcutPackage);
+            shortcutPackages[shortcutPackage.Key]=(shortcutPackage);
             UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
 
         }
@@ -72,16 +71,16 @@ public class ShortcutManager : Singleton<ShortcutManager>
     }
     void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
     {
-        if(shortcutPackages.GetData(removeShortcutItem.characterId,out var shortcutPackage))
+        if(shortcutPackages.TryGetValue(removeShortcutItem.characterId,out var shortcutPackage))
         {
             shortcutPackage.RemoveItemIndex(removeShortcutItem.index);
-            shortcutPackages.SetData(shortcutPackage);
+            //shortcutPackages.SetData(shortcutPackage);
             RefreshDisplayShortcutPackage(shortcutPackage);
         }
     }
     void SetShortcutItem(SetShortcutItem setShortcutItem)
     {
-        if (shortcutPackages.GetData(setShortcutItem.characterId, out var shortcutPackage))
+        if (shortcutPackages.TryGetValue(setShortcutItem.characterId, out var shortcutPackage))
         {
             SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
             {
@@ -91,28 +90,28 @@ public class ShortcutManager : Singleton<ShortcutManager>
             GameActionManager.instance.QueueAction(setPackageSelectItem);
 
             shortcutPackage.SetItemIndex(setShortcutItem.index,setShortcutItem.Item);
-            shortcutPackages.SetData(shortcutPackage);
+            //shortcutPackages.SetData(shortcutPackage);
             RefreshDisplayShortcutPackage(shortcutPackage);
         }
     }
     void ChangeShortcutItemIndex(ChangeShortcutItemIndex changeShortcutItemIndex)
     {
-        if(shortcutPackages.GetData(changeShortcutItemIndex.characterId, out var shortcutPackage))
+        if(shortcutPackages.TryGetValue(changeShortcutItemIndex.characterId, out var shortcutPackage))
         {
             shortcutPackage.ChangeItemIndex(changeShortcutItemIndex.sourceIndex, changeShortcutItemIndex.targetIndex);
-            shortcutPackages.SetData(shortcutPackage);
+           // shortcutPackages.SetData(shortcutPackage);
             RefreshDisplayShortcutPackage(shortcutPackage);
         }
     }
 }
-public struct ShortcutPackage : IReferenceData, INativeData
+public class ShortcutPackage : IReferenceData, INativeData
 {
     public static ShortcutPackage CreatShortCutPackage(int characterId)
     {
         ShortcutPackage shortcutPackage = new ShortcutPackage
         {
             characterId = characterId,
-            items = new NativeArray<Item>(GameCommon.shortcutItemCount, Allocator.TempJob)
+            items = new Item[GameCommon.shortcutItemCount]
         };
         for (int i = 0; i < GameCommon.shortcutItemCount; i++)
         {
@@ -135,7 +134,7 @@ public struct ShortcutPackage : IReferenceData, INativeData
         }
     }
     public int characterId;
-    public NativeArray<Item> items;
+    public Item[] items;
 
     public int Key => characterId;
 
@@ -198,7 +197,6 @@ public struct ShortcutPackage : IReferenceData, INativeData
         items[targetIndex-1] = sourceItem;
     }
     public void Dispose()
-    {
-        items.Dispose();
+    { 
     }
 }

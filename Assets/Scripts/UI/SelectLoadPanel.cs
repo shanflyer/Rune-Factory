@@ -69,7 +69,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
             selectGameSaveData = userGameSaveData;
             bool dataIsNull = string.IsNullOrEmpty(userGameSaveData.saveTime);
             Copy.interactable = !dataIsNull;
-            Delete.interactable = userGameSaveData.index > 0 && !dataIsNull;
+            Delete.interactable = userGameSaveData.index >= 0 && !dataIsNull;
             Start.interactable = !dataIsNull;
         }
     }
@@ -88,9 +88,8 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     {
         if (selectGameSaveData!=null)
         {
-            ExploreManager.instance.EnterChapter(-1);
-            // SceneManager.instance.SwitchScene("001");
-            //UIManager.instance.ShowGamePanel<LoadingPanel>();
+            SceneManager.instance.SwitchScene("World");
+           // UIManager.instance.ShowGamePanel<LoadingPanel>();
 
             Close();
         }

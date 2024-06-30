@@ -579,7 +579,7 @@ namespace Unity.Mathematics
 
 
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxxx
@@ -588,7 +588,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxxy
@@ -597,7 +597,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxxz
@@ -606,7 +606,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxyx
@@ -615,7 +615,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxyy
@@ -624,7 +624,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxyz
@@ -633,7 +633,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxzx
@@ -642,7 +642,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxzy
@@ -651,7 +651,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xxzz
@@ -660,7 +660,7 @@ namespace Unity.Mathematics
             get { return new int4(x, x, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyxx
@@ -669,7 +669,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyxy
@@ -678,7 +678,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyxz
@@ -687,7 +687,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyyx
@@ -696,7 +696,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyyy
@@ -705,7 +705,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyyz
@@ -714,7 +714,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyzx
@@ -723,7 +723,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyzy
@@ -732,7 +732,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xyzz
@@ -741,7 +741,7 @@ namespace Unity.Mathematics
             get { return new int4(x, y, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzxx
@@ -750,7 +750,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzxy
@@ -759,7 +759,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzxz
@@ -768,7 +768,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzyx
@@ -777,7 +777,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzyy
@@ -786,7 +786,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzyz
@@ -795,7 +795,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzzx
@@ -804,7 +804,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzzy
@@ -813,7 +813,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 xzzz
@@ -822,7 +822,7 @@ namespace Unity.Mathematics
             get { return new int4(x, z, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxxx
@@ -831,7 +831,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxxy
@@ -840,7 +840,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxxz
@@ -849,7 +849,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxyx
@@ -858,7 +858,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxyy
@@ -867,7 +867,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxyz
@@ -876,7 +876,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxzx
@@ -885,7 +885,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxzy
@@ -894,7 +894,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yxzz
@@ -903,7 +903,7 @@ namespace Unity.Mathematics
             get { return new int4(y, x, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyxx
@@ -912,7 +912,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyxy
@@ -921,7 +921,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyxz
@@ -930,7 +930,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyyx
@@ -939,7 +939,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyyy
@@ -948,7 +948,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyyz
@@ -957,7 +957,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyzx
@@ -966,7 +966,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyzy
@@ -975,7 +975,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yyzz
@@ -984,7 +984,7 @@ namespace Unity.Mathematics
             get { return new int4(y, y, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzxx
@@ -993,7 +993,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzxy
@@ -1002,7 +1002,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzxz
@@ -1011,7 +1011,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzyx
@@ -1020,7 +1020,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzyy
@@ -1029,7 +1029,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzyz
@@ -1038,7 +1038,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzzx
@@ -1047,7 +1047,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzzy
@@ -1056,7 +1056,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 yzzz
@@ -1065,7 +1065,7 @@ namespace Unity.Mathematics
             get { return new int4(y, z, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxxx
@@ -1074,7 +1074,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxxy
@@ -1083,7 +1083,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxxz
@@ -1092,7 +1092,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxyx
@@ -1101,7 +1101,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxyy
@@ -1110,7 +1110,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxyz
@@ -1119,7 +1119,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxzx
@@ -1128,7 +1128,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxzy
@@ -1137,7 +1137,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zxzz
@@ -1146,7 +1146,7 @@ namespace Unity.Mathematics
             get { return new int4(z, x, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyxx
@@ -1155,7 +1155,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyxy
@@ -1164,7 +1164,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyxz
@@ -1173,7 +1173,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyyx
@@ -1182,7 +1182,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyyy
@@ -1191,7 +1191,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyyz
@@ -1200,7 +1200,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyzx
@@ -1209,7 +1209,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyzy
@@ -1218,7 +1218,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zyzz
@@ -1227,7 +1227,7 @@ namespace Unity.Mathematics
             get { return new int4(z, y, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzxx
@@ -1236,7 +1236,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzxy
@@ -1245,7 +1245,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzxz
@@ -1254,7 +1254,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzyx
@@ -1263,7 +1263,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzyy
@@ -1272,7 +1272,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzyz
@@ -1281,7 +1281,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzzx
@@ -1290,7 +1290,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzzy
@@ -1299,7 +1299,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int4 zzzz
@@ -1308,7 +1308,7 @@ namespace Unity.Mathematics
             get { return new int4(z, z, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xxx
@@ -1317,7 +1317,7 @@ namespace Unity.Mathematics
             get { return new int3(x, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xxy
@@ -1326,7 +1326,7 @@ namespace Unity.Mathematics
             get { return new int3(x, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xxz
@@ -1335,7 +1335,7 @@ namespace Unity.Mathematics
             get { return new int3(x, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xyx
@@ -1344,7 +1344,7 @@ namespace Unity.Mathematics
             get { return new int3(x, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xyy
@@ -1353,7 +1353,7 @@ namespace Unity.Mathematics
             get { return new int3(x, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xyz
@@ -1364,7 +1364,7 @@ namespace Unity.Mathematics
             set { x = value.x; y = value.y; z = value.z; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xzx
@@ -1373,7 +1373,7 @@ namespace Unity.Mathematics
             get { return new int3(x, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xzy
@@ -1384,7 +1384,7 @@ namespace Unity.Mathematics
             set { x = value.x; z = value.y; y = value.z; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 xzz
@@ -1393,7 +1393,7 @@ namespace Unity.Mathematics
             get { return new int3(x, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yxx
@@ -1402,7 +1402,7 @@ namespace Unity.Mathematics
             get { return new int3(y, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yxy
@@ -1411,7 +1411,7 @@ namespace Unity.Mathematics
             get { return new int3(y, x, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yxz
@@ -1422,7 +1422,7 @@ namespace Unity.Mathematics
             set { y = value.x; x = value.y; z = value.z; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yyx
@@ -1431,7 +1431,7 @@ namespace Unity.Mathematics
             get { return new int3(y, y, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yyy
@@ -1440,7 +1440,7 @@ namespace Unity.Mathematics
             get { return new int3(y, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yyz
@@ -1449,7 +1449,7 @@ namespace Unity.Mathematics
             get { return new int3(y, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yzx
@@ -1460,7 +1460,7 @@ namespace Unity.Mathematics
             set { y = value.x; z = value.y; x = value.z; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yzy
@@ -1469,7 +1469,7 @@ namespace Unity.Mathematics
             get { return new int3(y, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 yzz
@@ -1478,7 +1478,7 @@ namespace Unity.Mathematics
             get { return new int3(y, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zxx
@@ -1487,7 +1487,7 @@ namespace Unity.Mathematics
             get { return new int3(z, x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zxy
@@ -1498,7 +1498,7 @@ namespace Unity.Mathematics
             set { z = value.x; x = value.y; y = value.z; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zxz
@@ -1507,7 +1507,7 @@ namespace Unity.Mathematics
             get { return new int3(z, x, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zyx
@@ -1518,7 +1518,7 @@ namespace Unity.Mathematics
             set { z = value.x; y = value.y; x = value.z; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zyy
@@ -1527,7 +1527,7 @@ namespace Unity.Mathematics
             get { return new int3(z, y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zyz
@@ -1536,7 +1536,7 @@ namespace Unity.Mathematics
             get { return new int3(z, y, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zzx
@@ -1545,7 +1545,7 @@ namespace Unity.Mathematics
             get { return new int3(z, z, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zzy
@@ -1554,7 +1554,7 @@ namespace Unity.Mathematics
             get { return new int3(z, z, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int3 zzz
@@ -1563,7 +1563,7 @@ namespace Unity.Mathematics
             get { return new int3(z, z, z); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 xx
@@ -1572,7 +1572,7 @@ namespace Unity.Mathematics
             get { return new int2(x, x); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 xy
@@ -1583,7 +1583,7 @@ namespace Unity.Mathematics
             set { x = value.x; y = value.y; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 xz
@@ -1594,7 +1594,7 @@ namespace Unity.Mathematics
             set { x = value.x; z = value.y; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 yx
@@ -1605,7 +1605,7 @@ namespace Unity.Mathematics
             set { y = value.x; x = value.y; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 yy
@@ -1614,7 +1614,7 @@ namespace Unity.Mathematics
             get { return new int2(y, y); }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 yz
@@ -1625,7 +1625,7 @@ namespace Unity.Mathematics
             set { y = value.x; z = value.y; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 zx
@@ -1636,7 +1636,7 @@ namespace Unity.Mathematics
             set { z = value.x; x = value.y; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 zy
@@ -1647,7 +1647,7 @@ namespace Unity.Mathematics
             set { z = value.x; y = value.y; }
         }
 
-
+         [Newtonsoft.Json.JsonIgnore()]
         /// <summary>Swizzles the vector.</summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public int2 zz

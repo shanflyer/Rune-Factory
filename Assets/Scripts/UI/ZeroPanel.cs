@@ -6,6 +6,7 @@ using TMPro;
 using System.Threading.Tasks;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using Unity.Entities.UniversalDelegates;
+using UnityEngine.Analytics;
 
 public class ZeroPanel : GamePanel<IReferenceData>
 {
@@ -71,17 +72,26 @@ public class ZeroPanel : GamePanel<IReferenceData>
         Close();
         if (GameController.instance.startPlay)
         {
+            GameDataSaveManager.instance.InitPlayerData("Test", Gender.male, Season.春, 1);
             SceneManager.instance.SwitchScene("World"); 
         }
         else  
         { 
-            PlayFilm playFilm = new PlayFilm
+            if(GameDataSaveManager.instance.LoadDataSuccess)
             {
-                filmName = "角色选择",
-                assetName = "Default"
-            };
-            GameActionManager.instance.QueueAction(playFilm, true);
-            await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+                await UIManager.instance.ShowGamePanel<SelectLoadPanel,UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+            }
+            else
+            {
+                PlayFilm playFilm = new PlayFilm
+                {
+                    filmName = "角色选择",
+                    assetName = "Default"
+                };
+                GameActionManager.instance.QueueAction(playFilm, true);
+                await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+            }
+         
         }
       
     }

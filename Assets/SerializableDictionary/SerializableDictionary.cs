@@ -75,7 +75,7 @@ public class SerializableDictionary<TKey, TValue> : SerializableDictionaryBase<T
 	public SerializableDictionary()
 	{
 	}
-
+	 
 	public SerializableDictionary(IDictionary<TKey, TValue> dict) : base(dict)
 	{
 	}

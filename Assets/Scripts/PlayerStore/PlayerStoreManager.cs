@@ -221,12 +221,14 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         if (!runtimeStoreCounters.ContainsKey(creatStoreCounter.itemInstanceId))
         {
             var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(creatStoreCounter.storeDataId);
+
             if (storeData.id == creatStoreCounter.storeDataId)
             {
                 RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
                 {
                     instanceId = creatStoreCounter.itemInstanceId,
                     storeCounterData = storeData,
+                     
                 };
                 runtimeStoreCounters.Add(creatStoreCounter.itemInstanceId,runtimeStoreCounter);
 

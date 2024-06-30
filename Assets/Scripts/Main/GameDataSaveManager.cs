@@ -30,32 +30,25 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         get
         {
-            return UserGameSaveData.saveTime == "1989";
+            return string.IsNullOrEmpty(UserGameSaveData.saveTime);
         }
     }
 
-    private async void InitUserSaveData()
+    private void InitUserSaveData()
     {
-        userGameSaveDataList = await LoadUserGameSaveData(userName);
+        userGameSaveDataList = LoadUserGameSaveData(userName);
     }
-
-    public async Task<UserGameSaveDataList> LoadUserGameSaveData(string userName)
+    public bool LoadDataSuccess { get; private set; }
+    public UserGameSaveDataList LoadUserGameSaveData(string userName)
     {
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         if (File.Exists(saveDataPath))
         {
-            string dataStr = await File.ReadAllTextAsync(saveDataPath);
+            LoadDataSuccess = true;
+            string dataStr =File.ReadAllText(saveDataPath);
             string _dataStr = DecryptDES(dataStr);
-            try
-            {
-                UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(_dataStr);
-                return userGameSaveDataList;
-            }
-            catch
-            {
-                UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
-                return userGameSaveDataList;
-            }
+            UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(_dataStr);
+            return userGameSaveDataList;
         }
         else
         {
@@ -194,17 +187,15 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         SaveUserGameSaveData();
 
         if (selectSaveIndex >= 0)
-        {
-            var nowStrs = JsonConvert.SerializeObject(UserGameSaveData, JsonSerializerSettings);
-            userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = JsonConvert.DeserializeObject<UserGameSaveData>(nowStrs);
+        { 
+            userGameSaveDataList.userGameSaveDatas[selectSaveIndex] =new UserGameSaveData(UserGameSaveData);
         }
          
 
         string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
         strs = EncryptDES(strs);
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-        File.WriteAllText(saveDataPath, strs);
-
+        File.WriteAllText(saveDataPath, strs); 
         return true;
     }
 

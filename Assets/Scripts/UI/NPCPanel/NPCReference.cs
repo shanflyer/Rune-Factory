@@ -48,7 +48,7 @@ public class NPCReference : UIObjReference<NPC>
     {
         if (refreshFriendShip.characterId == data.characterId)
         {
-            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.dataId).ToString();
+            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.npcData.id).ToString();
         }
     }
 

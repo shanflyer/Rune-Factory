@@ -780,7 +780,7 @@ public class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (runtimeMapRoom.commonTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+                (runtimeMapRoom.commonTriggerAreas.triggerAreas.Length, Allocator.Persistent);
             SingleTriggerJob triggerJob = new SingleTriggerJob
             {
                 TriggerAreas = runtimeMapRoom.commonTriggerAreas.triggerAreas,
@@ -811,7 +811,7 @@ public class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+                (runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.Persistent);
 
             SingleTriggerPlayerJob triggerJob = new SingleTriggerPlayerJob
             {

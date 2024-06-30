@@ -43,7 +43,7 @@ public class DateReference : UIObjReference<GameDate>
         base.InitData(t, SelectAction, toggleGroup);
         selectToggle.group = toggleGroup;
         ValueText.text = data.date.ToString();
-        festivalTips.enabled = gameDate.FestivaList.Length > 0;
+        festivalTips.enabled = gameDate.FestivaList.Count > 0;
         backGround.color = (gameDate.date - 1) % 6 == 0 ? new Color(1, 0.76f, 0.64f) : Color.white; 
 
     }

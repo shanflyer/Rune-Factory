@@ -42,9 +42,9 @@ public struct MyNativeData<T> where T : unmanaged, INativeData
 
     public void Init(int count)
     {
-        datas = new NativeList<T>(count, Allocator.TempJob);
-        itemIndexes = new NativeHashMap<int, int>(count, Allocator.TempJob);
-        nullIndexes = new NativeQueue<int>(Allocator.TempJob);
+        datas = new NativeList<T>(count, Allocator.Persistent);
+        itemIndexes = new NativeHashMap<int, int>(count, Allocator.Persistent);
+        nullIndexes = new NativeQueue<int>(Allocator.Persistent);
     }
 
     public void AddData(T data)

@@ -26,6 +26,15 @@ public class SaveReference : UIObjReference<UserGameSaveData>
     [SerializeField]
     private TextMeshProUGUI SaveTime;
 
+    public override void SelectDefault()
+    {
+        base.SelectDefault();
+        SelectToggle.SetIsOnWithoutNotify(true);
+        if (SelectAction != null)
+        {
+            SelectAction(data, true);
+        }
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -43,10 +52,10 @@ public class SaveReference : UIObjReference<UserGameSaveData>
     {
         base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
-        if (string.IsNullOrEmpty(data.saveTime))
+        if (!string.IsNullOrEmpty(data.saveTime))
         {
             Icon.enabled = true;
-            CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.characterId);
+            CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.dataId);
             characterData.head.SetImageSprite(Icon);
             //Icon.sprite = characterData.icon.sprite;
             Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
@@ -75,5 +84,11 @@ public class SaveReference : UIObjReference<UserGameSaveData>
 
     public void Awake()
     {
+        Icon.enabled = false;
+        Level.text = "-";
+        Name.text = "-";
+        Money.text = "-";
+        Time.text = "-";
+        SaveTime.text = "-";
     }
 }

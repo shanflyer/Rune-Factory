@@ -90,6 +90,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         SetButton.onClick.AddListener(() =>
         {
+            
             // AudioController.instance.PlayAudio(SE.click);
             UIManager.instance.ShowGamePanel<SetPanel>();
         });

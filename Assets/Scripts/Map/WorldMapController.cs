@@ -93,7 +93,14 @@ public class WorldMapController : MonoBehaviour
 
         if (GameController.instance == null||GameController.instance.startPlay)
         {
-            GameTimeManager.instance.StartTimeRun(); 
+            GameTimeManager.instance.StartTimeRun();
+            SetCharacterCoordinate setCharacterCoordinate=new SetCharacterCoordinate 
+            { 
+                characterId = characterId,
+                coordinate =new int3(coordinate, mapInstance),  
+            };
+            GameActionManager.instance.QueueAction(setCharacterCoordinate);
+            /*
             GameActionManager.instance.QueueAction(new CreatCharacter
             {
                 characterId = characterId,
@@ -102,7 +109,7 @@ public class WorldMapController : MonoBehaviour
                 coordinateY = coordinate.y,
                 controller = true,
                 isPlayer=true,
-            });
+            });*/
             await UIManager.instance.ShowGamePanel<MainPanel>(); 
            
             UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
