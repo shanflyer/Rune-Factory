@@ -3,7 +3,22 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Unity.Mathematics;
-using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime; 
+
+
+[Serializable]
+public class IntCharacterSaveDataDictionary : SerializableDictionary<int, CharacterSaveData>
+{
+    public IntCharacterSaveDataDictionary() { }
+    public void CopyData(IntCharacterSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new CharacterSaveData(kvp.Value); 
+        }
+    }
+}
 [Serializable]
 public class IntChapterSaveDictionary : SerializableDictionary<int, ChapterSave> 
 { 
@@ -124,6 +139,34 @@ public class IntIntDictionary : SerializableDictionary<int, int>
 {
     public IntIntDictionary() { }
     public void CopyData(IntIntDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = kvp.Value;
+
+        }
+    }
+}
+[Serializable]
+public class IntInt2Dictionary : SerializableDictionary<int, int2>
+{
+    public IntInt2Dictionary() { }
+    public void CopyData(IntInt2Dictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = kvp.Value;
+
+        }
+    }
+}
+[Serializable]
+public class Int2IntDictionary : SerializableDictionary<int2, int>
+{
+    public Int2IntDictionary() { }
+    public void CopyData(Int2IntDictionary data)
     {
         Clear();
         foreach (var kvp in data)

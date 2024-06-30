@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
@@ -16,8 +16,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         get => userGameSaveDataList;
     }
-     
 
+    public int loadingIndex = -99;
     public UserGameSaveData UserGameSaveData
     {
         get
@@ -25,13 +25,173 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return userGameSaveDataList.nowSaveData;
         }
     }
+    public UserGameSaveData loadGameSaveData
+    {
+        get
+        {
+            if (loadingIndex >= -1)
+            {
+                if (_loadGameSaveData == null)
+                {
+                    if (loadingIndex == -1)
+                    {
+                        _loadGameSaveData=UserGameSaveDataList.nowSaveData;
+                    }
+                    if (loadingIndex < 3)
+                    {
+                        _loadGameSaveData=userGameSaveDataList.userGameSaveDatas[loadingIndex];
+                    }
+                }
+                return _loadGameSaveData;
+            }
+            return null;
+        }
+    }
+    private UserGameSaveData _loadGameSaveData;
 
+    public void InitLoadSaveData()
+    {
+        if (loadGameSaveData != null)
+        {
+            PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas); 
+
+            foreach(var data in loadGameSaveData.storeCounters)
+            {
+                PlayerStoreManager.instance.CreatStoreCounter(data.Value);
+            }
+
+            foreach(var data in loadGameSaveData.manufatures)
+            {
+                ManufatureManager.instance.CreatManufature(data.Value);
+            }
+
+            foreach(var data in loadGameSaveData.mapHomeEquips)
+            {
+                HomeEquipManager.instance.CreatHomeEquip(data.Value);
+            }
+        }
+    }
+    public void AfterInitMapLoadSaveData()
+    {
+        if (loadGameSaveData != null)
+        {
+            foreach(var data in loadGameSaveData.fields)
+            {
+                FarmManager.instance.CreatField(data.Value);
+            }
+
+            foreach (var data in loadGameSaveData.changeMapItems)
+            {
+                ChangeMapItem changeMapItem = new ChangeMapItem
+                {
+                    itemId = data.Key,
+                    newDataId = data.Value.x,
+                    animationKey = data.Value.yz
+                };
+                GameActionManager.instance.QueueAction(changeMapItem);
+            }
+
+            foreach(var data in loadGameSaveData.SetAnimationStateMapItems)
+            {
+                SetItemAnimation setItemAnimation = new SetItemAnimation
+                {
+                    id = data.Key,
+                    keyX = data.Value.x,
+                    keyY = data.Value.y
+                };
+                GameActionManager.instance.QueueAction(setItemAnimation);
+            }
+
+            foreach(var data in loadGameSaveData.removeMapItemOperates)
+            {
+                RemoveMapItemOperate removeMapItemOperate = new RemoveMapItemOperate
+                {
+                    mapItemId = data.x,
+                    removeOperateId = data.y
+                };
+                GameActionManager.instance.QueueAction(removeMapItemOperate);
+            }
+
+            foreach (var data in loadGameSaveData.addMapItemOperates)
+            {
+                AddMapItemOperate addMapItemOperate = new AddMapItemOperate
+                {
+                    mapItemId = data.x,
+                    addeOperateId = data.y
+                };
+                GameActionManager.instance.QueueAction(addMapItemOperate);
+            }
+
+            foreach(var data in loadGameSaveData.RemoveMapItemCollider)
+            {
+                RemoveMapItemCollider removeMapItemCollider = new RemoveMapItemCollider
+                {
+                    mapItemInstanceId = data
+                };
+                GameActionManager.instance.QueueAction(removeMapItemCollider);
+            }
+
+            foreach(var data in loadGameSaveData.pastures)
+            {
+                PastureManager.instance.CreatPasture(data.Value);
+            }
+            foreach(var data in loadGameSaveData.animals)
+            {
+                PastureManager.instance.CreatAnimal(data.Value);
+            }
+
+            FriendManager.instance.InitFriendSaveData(loadGameSaveData.friendSaveData);
+        }
+    }
+
+    public void InitSaveDate()
+    {
+        if (loadGameSaveData != null)
+        {
+            GameTimeManager.instance.InitSaveDate(loadGameSaveData.dateData);
+        }
+    }
+  
     public bool IsZeroGameSave
     {
         get
         {
             return string.IsNullOrEmpty(UserGameSaveData.saveTime);
         }
+    }
+
+    public int GetSaveMapInstance(int2 key)
+    {
+        if(loadGameSaveData!=null)
+        {
+            if (loadGameSaveData.specialMapItem.TryGetValue(key, out var value))
+            {
+                return value;
+            }
+        }
+        return 0;
+    }
+    public void InitMapInstanceData(MyInstance myInstance)
+    {
+        if (loadGameSaveData!=null)
+        { 
+            foreach (var d in loadGameSaveData.specialMapItem)
+            {
+                myInstance.AddInstance(d.Value);
+            } 
+        }
+    }
+    public bool CheckMapLine(int id)
+    {
+        if (loadGameSaveData != null)
+        { 
+            if(loadGameSaveData.mapLineSaveData.TryGetValue(id,out var value))
+            {
+                return value == 1;
+            }
+            
+        }
+        return true;
     }
 
     private void InitUserSaveData()
@@ -48,6 +208,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             string dataStr =File.ReadAllText(saveDataPath);
             string _dataStr = DecryptDES(dataStr);
             UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(_dataStr);
+            userGameSaveDataList.nowSaveData.Init();
+            for(int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
+            {
+                userGameSaveDataList.userGameSaveDatas[i].Init();
+            }
             return userGameSaveDataList;
         }
         else
@@ -61,7 +226,21 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return userGameSaveDataList;
         }
     }
-
+    public CharacterSaveData GetCharacterSaveData(int dataId)
+    {
+        if (loadGameSaveData != null)
+        {
+            if(loadGameSaveData.characterSaveDatas.TryGetValue(dataId,out var characterSaveData))
+            {
+                return characterSaveData;
+            }
+            else if(loadGameSaveData.playerData.dataId==dataId)
+            {
+                return loadGameSaveData.playerData;
+            } 
+        }
+        return null;
+    }
     public void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
     {
         UserGameSaveData.playerData = new CharacterSaveData();
@@ -100,7 +279,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             if (characters[i].characterData.id != UserGameSaveData.playerData.dataId)
             {
                 CharacterSaveData characterSaveData = new CharacterSaveData(characters[i]);
-                UserGameSaveData.characterSaveDatas.Add(characterSaveData);
+                UserGameSaveData.characterSaveDatas.Add(characterSaveData.dataId,characterSaveData);
             }
             else
             {
@@ -117,7 +296,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             day = GameTimeManager.instance.Day,
             season = GameTimeManager.instance.Season,
             minute = GameTimeManager.instance.Minute,
-            hour = GameTimeManager.instance.Hour
+            hour = GameTimeManager.instance.Hour,
+            week=GameTimeManager.instance.Week
         };
 
         //友情关系

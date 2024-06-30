@@ -152,6 +152,24 @@ public class FriendManager : Singleton<FriendManager>
             }
         }
     }
+
+    public void InitFriendSaveData(FriendSaveData friendSaveData)
+    {
+        foreach (var value in friendSaveData.friendShips)
+        {
+            FriendShip friendShip = new FriendShip
+            {
+                characterId = value.x,
+                friendLevel = value.y,
+                nowValue = value.z
+            };
+            NPCFriendShips[value.x] = friendShip;
+        }
+        foreach(var value in friendSaveData.friendAdds)
+        {
+            friendAdd[value.x] = value.yzw;
+        }
+    }
     public FriendSaveData GetFriendSaveData()
     {
         FriendSaveData friendSaveData = new FriendSaveData

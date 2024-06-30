@@ -41,7 +41,49 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<NewDay>(NewDay);
         GameActionManager.instance.AddListener<TryGetPlantFruit>(TryGetPlantFruit);
     }
+    public async void CreatField(FieldSaveData fieldSaveData)
+    {
+        int instanceId = fieldSaveData.instanceId;
+        if (!fields.ContainsKey(instanceId))
+        {
+            Field field = new Field
+            {
+                instanceId = instanceId,
+                mapInstance =fieldSaveData.mapInstance,
+                editorInstanceId = fieldSaveData.editorInstanceId,
+                fieldState = fieldSaveData.fieldState,
+                isSetWater = fieldSaveData.isSetWater,
+               
+            };
+            if (fieldSaveData.PlantinstaceId != 0)
+            {
+                field.plant = new Plant
+                {
+                    instaceId = fieldSaveData.PlantinstaceId,
+                    PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId),
+                    growthDay = fieldSaveData.growthDay,
+                    growthStage = fieldSaveData.growthStage,
+                    plantState = fieldSaveData.plantState,
+                    nowCycle = fieldSaveData.nowCycle,
+                };
+                WorldMapManager.instance.GetMapItemPos(field.instanceId, out var coordinate);
+                AddMapItem addMapItem = new AddMapItem
+                {
+                    dataId = field.plant.PlantData.mapItem,
+                    coordinate = coordinate.xy,
+                    mapId = coordinate.z,
+                    instanceId = fieldSaveData.PlantinstaceId
+                };
+                GameActionManager.instance.QueueAction(addMapItem);
+            }
+           
 
+
+            fields.Add(instanceId, field);
+
+            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+        }
+    }
     private void TryCreatField(TryCreatField tryCreatField)
     {
         if (FieldAreas.TryGetValue(tryCreatField.roomId, out var fieldAreas))

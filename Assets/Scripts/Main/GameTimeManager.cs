@@ -793,6 +793,14 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
     }
 
+    public void InitSaveDate(GameDateSaveData dateData)
+    {
+        nowGameTime.year = dateData.year;
+        nowGameTime.date= dateData.day;
+        nowGameTime.Season = dateData.season;
+        nowGameTime.minute = dateData.minute;
+        nowGameTime.week = dateData.week;
+    }
 
 
     private void LerpGameTime(int targetHour, int targetMinute, float costTime, bool endRun = false, Action endAction = null)

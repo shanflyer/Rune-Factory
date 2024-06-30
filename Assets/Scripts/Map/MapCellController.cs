@@ -1137,7 +1137,7 @@ public class MapCellController : Singleton<MapCellController>
     {
         foreach (var mapLine in mapLines)
         {
-            if (!mapLine.zeroInit)
+            if (!mapLine.zeroInit||!GameDataSaveManager.instance.CheckMapLine(mapLine.instanceId))
             {
                 continue;
             }

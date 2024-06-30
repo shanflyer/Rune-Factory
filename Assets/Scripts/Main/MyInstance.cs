@@ -18,6 +18,10 @@ public class MyInstance
         instanceIds.Add(id);
         return id;
     }
+    public void AddInstance(int id)
+    {
+        instanceIds.Add(id);
+    }
     public void RemoveInstance(int id)
     {
         instanceIds.Remove(id);

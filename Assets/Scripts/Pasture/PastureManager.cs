@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -378,6 +379,45 @@ public class PastureManager : Singleton<PastureManager>
         }
     }
 
+    public async void CreatPasture(PastureSaveData pastureSaveData)
+    {
+        PastureData pastureData = await GameDataManager.instance.GetAsyncData<PastureData>(pastureSaveData.dataId);
+        PastureLevelData pastureLevelData = pastureData.levelDatas[0];
+
+        Pasture pasture = new Pasture
+        {
+            instanceId = pastureSaveData.instanceId,
+            name = pastureSaveData.name,
+            pastureState = pastureSaveData.pastureState,
+            linkItem = pastureSaveData.linkItem,
+            foodPackage = pastureSaveData.foodPackage,
+            //waterPackage = waterPackageId,
+            productPackage = pastureSaveData.productPackage,
+            animals = new HashSet<int>(4),
+            pastureData = pastureData,
+            level = pastureLevelData.level,
+            animalCase = pastureLevelData.animalCase,
+            linkRoom = pastureSaveData.linkRoom
+        };
+        pastureLinkItems.Add(pasture.linkItem, pasture.instanceId);
+
+
+        RefreshPasture refreshPasture = new RefreshPasture
+        {
+            instanceId = pasture.instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshPasture);
+        pastures.Add(pasture.instanceId, pasture);
+
+        SetItemAnimation setItemAnimation = new SetItemAnimation
+        {
+            id = pastureSaveData.instanceId,
+            keyX = pastureLevelData.animationKey.x,
+            keyY = pastureLevelData.animationKey.y,
+        };
+        GameActionManager.instance.QueueAction(setItemAnimation);
+    }
+
     private async void TryCreatPasture(TryCreatPasture tryCreatPasture)
     {
         if (WorldMapManager.instance.GetMapItemPos(tryCreatPasture.itemInstanceId, out var objCoordinate))
@@ -532,6 +572,45 @@ public class PastureManager : Singleton<PastureManager>
         tryDeletePasture.setResult(false);
     }
 
+    public async void CreatAnimal(AnimalSaveData animalSaveData)
+    {
+        AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(animalSaveData.dataId);
+        Animal animal = new Animal
+        {
+            name = animalSaveData.name,
+            instaceId=animalSaveData.instaceId,
+            animalState = animalSaveData.animalState,
+            animalData = animalData,
+            linkCharacterData = animalSaveData.linkCharacterData,
+            pasture= animalSaveData.pasture,
+            growthStage = animalSaveData.growthStage,
+            growthDay=animalSaveData.growthDay,
+            setFood=animalSaveData.setFood,
+            nowCycle=animalSaveData.nowCycle, 
+        };
+        if (pastures.TryGetValue(animal.pasture, out var pasture))
+         {
+            int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
+            if (nextCoordinate.x != int.MinValue)
+            {
+                pasture.animals.Add(animal.instaceId);
+            }
+
+            CreatCharacter creatCharacter = new CreatCharacter
+            {
+                characterId = animalData.linkCharacter,
+                mapInstance = pasture.linkRoom,
+                coordinateX = nextCoordinate.x,
+                coordinateY = nextCoordinate.y, 
+            };
+            GameActionManager.instance.QueueAction(creatCharacter);
+            RefreshPasture refreshPasture = new RefreshPasture
+            {
+                instanceId = pasture.instanceId
+            };
+            GameActionManager.instance.QueueAction(refreshPasture);
+        } 
+    }
     private async void TryCreatAnimal(TryCreatAnimal tryCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(tryCreatAnimal.dataId);

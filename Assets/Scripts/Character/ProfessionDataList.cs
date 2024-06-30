@@ -72,7 +72,7 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
    
 }
 [Serializable]
-public struct ProfessionData:IGameData
+public class ProfessionData:IGameData
 { 
     public string professionName;
     public int id;

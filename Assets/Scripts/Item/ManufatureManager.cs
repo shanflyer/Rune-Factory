@@ -71,6 +71,29 @@ public class ManufatureManager : Singleton<ManufatureManager>
             GameDataSaveManager.instance.UserGameSaveData.SetManufature(manufature);
         }
     }
+
+    public void CreatManufature(ManufatureSaveData manufatureSaveData)
+    {
+        Manufature manufature = new Manufature
+        {
+            instanceId = manufatureSaveData.instanceId,
+            dataId = manufatureSaveData.dataId,
+            waitTime = manufatureSaveData.waitTime,
+            startTime = manufatureSaveData.startTime,
+            matchFormula = manufatureSaveData.matchFormula,
+            product=manufatureSaveData.product,
+
+            formulas = new Dictionary<int, Formula>(),
+            materials = new NativeArray<int2>(4, Allocator.Persistent)
+        };
+        manufature.materials.CopyFrom(manufatureSaveData.materials);
+        for (int i = 0; i < manufatureSaveData.formulas.Count; i++)
+        {
+            manufature.formulas.Add(manufatureSaveData.formulas[i].id, manufatureSaveData.formulas[i]);
+        }
+        Manufatures.Add(manufatureSaveData.instanceId, manufature);
+    }
+
     private async void CreatManufature(CreatManufature creatManufature)
     {
         var manufatureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(creatManufature.manufatureId);

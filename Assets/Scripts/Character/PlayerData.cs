@@ -19,17 +19,13 @@ public class UserGameSaveData : IReferenceData
         playerData = new CharacterSaveData(userGameSaveData.playerData);
         otherSaveData = new OtherSaveData(userGameSaveData.otherSaveData);
         dateData = userGameSaveData.dateData;
-        characterSaveDatas.Clear();
-        foreach(var data in userGameSaveData.characterSaveDatas)
-        {
-            characterSaveDatas.Add(new CharacterSaveData(data));
-        }
+        characterSaveDatas.CopyData(userGameSaveData.characterSaveDatas); 
         packageSaveDatas.CopyTo(userGameSaveData.packageSaveDatas.ToArray());
         friendSaveData = userGameSaveData.friendSaveData;
         removeMapItemOperates.CopyTo(userGameSaveData.removeMapItemOperates.ToArray());
         addMapItemOperates.CopyTo(userGameSaveData.addMapItemOperates.ToArray());
         RemoveMapItemCollider.CopyTo(userGameSaveData.RemoveMapItemCollider.ToArray());
-        deleteMapLine.CopyTo(userGameSaveData.deleteMapLine.ToArray());
+        mapLineSaveData.CopyData(userGameSaveData.mapLineSaveData);
         chapters.CopyData(userGameSaveData.chapters);
         fishSaveDatas.CopyData(userGameSaveData.fishSaveDatas);
         changeMapItems.CopyData(userGameSaveData.changeMapItems);
@@ -40,6 +36,7 @@ public class UserGameSaveData : IReferenceData
         manufatures.CopyData(userGameSaveData.manufatures);
         storeCounters.CopyData(userGameSaveData.storeCounters);
         fields.CopyData(userGameSaveData.fields);
+        specialMapItem.CopyData(userGameSaveData.specialMapItem);
         saveTime = userGameSaveData.saveTime;
     }
 
@@ -49,28 +46,29 @@ public class UserGameSaveData : IReferenceData
     public CharacterSaveData playerData;
     public OtherSaveData otherSaveData;
     public GameDateSaveData dateData;
-    public List<CharacterSaveData> characterSaveDatas = new List<CharacterSaveData>();
+    public IntCharacterSaveDataDictionary characterSaveDatas = new IntCharacterSaveDataDictionary();
     public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
 
     public FriendSaveData friendSaveData;
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
-    public IntFishSaveDataDataDictionary fishSaveDatas = new IntFishSaveDataDataDictionary();
-    public IntInt4Dictionary changeMapItems=new IntInt4Dictionary();
-    public IntInt3Dictionary SetAnimationStateMapItems=new IntInt3Dictionary();
+    public IntIntDictionary mapLineSaveData = new IntIntDictionary();
+
+    public IntFishSaveDataDataDictionary fishSaveDatas = new IntFishSaveDataDataDictionary(); 
     public IntHomeEquipSaveDataDictionary mapHomeEquips = new IntHomeEquipSaveDataDictionary();
     public IntAnimalSaveDataDictionary animals = new IntAnimalSaveDataDictionary();
     public IntPastureSaveDataDictionary pastures = new IntPastureSaveDataDictionary();
     public IntManufatureSaveDataDictionary manufatures = new IntManufatureSaveDataDictionary();
     public IntStoreCounterSaveDataDictionary storeCounters = new IntStoreCounterSaveDataDictionary();
     public IntFieldSaveDataDictionary fields = new IntFieldSaveDataDictionary();
+
+
+    public Int2IntDictionary specialMapItem = new Int2IntDictionary();
+    public IntInt3Dictionary changeMapItems = new IntInt3Dictionary();
+    public IntInt2Dictionary SetAnimationStateMapItems = new IntInt2Dictionary();
     public List<int2> removeMapItemOperates = new List<int2>();
-    public List<int2> addMapItemOperates = new List<int2>();
-
-    public List<int> RemoveMapItemCollider = new List<int>();
-    public List<int> deleteMapLine = new List<int>();
-
-   
-
+    public List<int2> addMapItemOperates = new List<int2>(); 
+    public List<int> RemoveMapItemCollider = new List<int>();  
+     
     private HashSet<int> RemoveMapItemColliderSet = new HashSet<int>();
     private HashSet<int2> removeMapItemOperatesSet = new HashSet<int2>();
     private HashSet<int2> addMapItemOperatesSet = new HashSet<int2>();
@@ -114,26 +112,45 @@ public class UserGameSaveData : IReferenceData
         saveTime = DateTime.Now.ToSafeString();
     }
 
-    public void RemoveMapItemOperate(int2 itemOperate)
+    public void SetMapLineData(int id,bool isInit)
     {
-        removeMapItemOperatesSet.Add(itemOperate);
-        addMapItemOperatesSet.Remove(itemOperate);
+        mapLineSaveData[id] = isInit?1:0;
     }
 
-    public void AddMapItemOperate(int2 itemOperate)
+    public void RemoveMapItemOperate(int3 itemOperate,int instanceId)
     {
-        addMapItemOperatesSet.Add(itemOperate);
-        removeMapItemOperatesSet.Remove(itemOperate);
+        if (itemOperate.y == 0)
+            return;
+        specialMapItem[itemOperate.xy] = instanceId;
+        int2 value = new int2(instanceId, itemOperate.z);
+        removeMapItemOperatesSet.Add(value);
+        addMapItemOperatesSet.Remove(value);
     }
 
-    public void AddRemoveMapItemColliderData(int id)
+    public void AddMapItemOperate(int3 itemOperate, int instanceId)
     {
-        RemoveMapItemColliderSet.Add(id);
+        if (itemOperate.y == 0)
+            return;
+        specialMapItem[itemOperate.xy] = instanceId;
+        int2 value=new int2(instanceId,itemOperate.z);
+        addMapItemOperatesSet.Add(value);
+        removeMapItemOperatesSet.Remove(value);
     }
 
-    public void AddReSetMapItemColliderData(int id)
+    public void AddRemoveMapItemColliderData(int2 id, int instanceId)
     {
-        RemoveMapItemColliderSet.Remove(id);
+        if (id.y == 0)
+            return;
+        specialMapItem[id] = instanceId;
+        RemoveMapItemColliderSet.Add(instanceId);
+    }
+
+    public void AddReSetMapItemColliderData(int2 id, int instanceId)
+    {
+        if (id.y == 0)
+            return;
+        specialMapItem[id] = instanceId;
+        RemoveMapItemColliderSet.Remove(instanceId);
     }
 
     public void ReMoveHomeEquip(int id)
@@ -258,8 +275,7 @@ public class UserGameSaveData : IReferenceData
 
         UserGameSaveData userGameSaveData = new UserGameSaveData
         {
-            otherSaveData = otherSaveData,
-            characterSaveDatas = new List<CharacterSaveData>(),
+            otherSaveData = otherSaveData, 
             packageSaveDatas = new List<PackageSaveData>(), 
             index = index
         };
@@ -267,23 +283,24 @@ public class UserGameSaveData : IReferenceData
         return userGameSaveData;
     }
 
-    public void AddAnimationStateMapItem(int3 data)
+    public void AddAnimationStateMapItem(int2 value,int2 editorKey,int instanceId)
     {
-        if (SetAnimationStateMapItems == null)
-        {
-            SetAnimationStateMapItems = new IntInt3Dictionary();
-        }
-        SetAnimationStateMapItems[data.x] = data;
+        if (editorKey.y == 0)
+            return;
+        specialMapItem[editorKey] = instanceId; 
+        SetAnimationStateMapItems[instanceId] = value;
     }
 
-    public void AddChangeMapItem(int4 value)
+    public void AddChangeMapItem(int3 value,int2 editorKey,int instanceId)
     {
         if (changeMapItems == null)
         {
-            changeMapItems = new IntInt4Dictionary();
+            changeMapItems = new IntInt3Dictionary();
         }
-
-        changeMapItems[value.x] = value;
+        if (editorKey.y == 0)
+            return;
+        specialMapItem[editorKey] = instanceId;
+        changeMapItems[instanceId] = value;
     }
 }
 
@@ -337,6 +354,7 @@ public class AnimalSaveData
 public class PastureSaveData
 {
     public int instanceId;
+    public string name;
     public int linkItem;
     public PastureState pastureState;
     public int dataId;
@@ -350,6 +368,7 @@ public class PastureSaveData
     public PastureSaveData() { }
     public PastureSaveData(PastureSaveData pastureSaveData)
     {
+        name = pastureSaveData.name;
         instanceId = pastureSaveData.instanceId;
         level = pastureSaveData.level;
         index = pastureSaveData.index;
@@ -367,6 +386,7 @@ public class PastureSaveData
 
     public void SetParture(Pasture pasture)
     {
+        name = pasture.name;
         instanceId = pasture.instanceId;
         level = pasture.level;
         index = pasture.index;
@@ -567,6 +587,7 @@ public struct GameDateSaveData
     public int day;
     public int hour;
     public int minute;
+    public Week week;
 }
 
 public class ChapterSave
@@ -621,6 +642,7 @@ public struct FriendSaveData
 public class CharacterSaveData : IReferenceData
 {
     public string name;
+    public int instanceId;
     public int dataId;
     public int level;
     public int exp;
@@ -655,6 +677,7 @@ public class CharacterSaveData : IReferenceData
     public void SetCharacter(Character character)
     {
         name = character.name;
+        instanceId = character.instanceId;
         dataId = character.dataId;
         level = character.Level;
         exp = character.exp.nowExp;

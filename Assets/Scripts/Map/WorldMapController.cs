@@ -52,6 +52,8 @@ public class WorldMapController : MonoBehaviour
         GameObjectCurveController.instance.SetUpDataComponent(this);
         WorldMapObjManager.instance.displayMap = mapInstance;
 
+        GameDataSaveManager.instance.InitLoadSaveData();
+
         var teamManager = TeamManager.instance;
         var npcManager = NPCManager.instance;
         var gameEventManager = GameEventManager.instance;
@@ -114,10 +116,14 @@ public class WorldMapController : MonoBehaviour
            
             UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         }
+       
         if (GameController.instance.startPlay)
         {
             GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
         }
+
+        GameDataSaveManager.instance.AfterInitMapLoadSaveData();
+        GameDataSaveManager.instance.InitSaveDate();
     }
     // Use this for initialization
     void Start()

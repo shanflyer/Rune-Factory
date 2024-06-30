@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -428,21 +429,37 @@ public partial class Character
         isController = controller;
         oldOperateItem = -1;
     }
-
-    public Character()
-    {
-    }
-
-    public Character(CharacterData characterData, int instanceId, int overridePackage = 0)
+    public Character() { }
+    public Character(CharacterData characterData,ProfessionData professionData, int instanceId, int overridePackage = 0)
     {
         this.characterData = characterData;
         this.instanceId = instanceId;
         dataId = characterData.id;
-        professionId = characterData.profession;
+        this.professionData = professionData; 
         name = characterData.characterName;
+
+        var packageInstancId = 0;
+        var saveData = GameDataSaveManager.instance.GetCharacterSaveData(dataId);
+        if (saveData != null)
+        { 
+            name = saveData.name;
+            packageInstancId = saveData.packageId;
+            SetLevel(saveData.level, true);
+            SetNowExp(saveData.exp);
+            SetEquip(ItemType.ÎäÆ÷, saveData.weapon);
+            SetEquip(ItemType.·À¾ß, saveData.clothes);
+            SetEquip(ItemType.Ð¬×Ó, saveData.shoe);
+        }
+        else
+        {
+            SetLevel(1, true);
+        }
+
         //behavior = characterData.behavior;
-        SetLevel(1, true);
-        CreatCharacterPackage(overridePackage);
+        
+        CreatCharacterPackage(overridePackage, packageInstancId);
+
+      
     }
 
     public void SetCellOffset(Vector2 offset)
@@ -463,10 +480,10 @@ public partial class Character
         return Vector2.zero;
     }
 
-    protected virtual async Task CreatCharacterPackage(int overridePackage = 0)
+    protected virtual async Task CreatCharacterPackage(int overridePackage = 0,int instanceId=0)
     {
         characterPackage = await PackageManager.instance.CreatGamePackage(overridePackage == 0 ?
-            characterData.packageId : overridePackage, 0);
+            characterData.packageId : overridePackage, instanceId);
     }
 
     public int attackType;
@@ -502,7 +519,30 @@ public partial class Character
         },true);
         attackType = 0;
     }
-
+    async void SetEquip(ItemType itemType,int2 Equip)
+    {
+        if (Equip.x == 0)
+        {
+            return;
+        }
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(Equip.x);
+        switch (itemData.type)
+        {
+            case ItemType.ÎäÆ÷:
+                attackAttributeType = itemData.attributeType;
+                equip.weapon= Equip;
+                attackType = itemData.otherType;
+                break;
+            case ItemType.·À¾ß:
+                defenceAttributeType = itemData.attributeType; 
+                equip.clothes = Equip;  
+                break;
+            case ItemType.Ð¬×Ó: 
+                equip.shoes = Equip; 
+                break;
+        }
+        EquipmentProperty = EquipmentProperty + itemData.property;
+    }
     public async void ChangeEquip(ItemData itemData, int packageId)
     {
         Item item = default(Item);
@@ -637,7 +677,7 @@ public partial class Character
     private CharacterProperty otherMulProperty = CharacterProperty.One;
 
     public int groupId = -1;
-    public int professionId;
+    public ProfessionData professionData;
     public int dataId;
 
     public int Level
@@ -1011,13 +1051,13 @@ public partial class Character
         // GameController.instance.StopCoroutine(moveEnumerator);
     }
 
-    public async void AddExp(int value)
+    public  void AddExp(int value)
     {
         bool levelUp = false;
-        var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
+         
         while (exp.AddExp(value))
         {
-            exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level - 1);
+            exp.nowLevelExp = professionData.GetLevelExp(level) - professionData.GetLevelExp(level - 1);
             value = 0;
             SetLevel(level + 1);
             levelUp = true;
@@ -1027,20 +1067,33 @@ public partial class Character
         }
     }
 
-    public async void SetLevel(int level, bool zero = false)
+    public void SetNowExp(int nowExp)
+    {
+        if (level > 0)
+        {
+            exp.totalExp = professionData.GetLevelExp(level - 1) + nowExp;
+            exp.nowExp = nowExp;
+        }
+        else
+        {
+            exp.totalExp = nowExp;
+            exp.nowExp = nowExp;
+        }
+        
+    }
+    public void SetLevel(int level, bool zero = false)
     {
         if (level != this.level)
-        {
-            var profressionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(professionId);
+        { 
             //attributeType = profressionData.attributeType;
-            if (profressionData.id == professionId)
+            if (professionData!=null)
             {
                 if (zero)
                 {
                     skills.Clear();
                     for (int i = 1; i <= level; i++)
                     {
-                        int skillId = profressionData.GetLevelSkill(i);
+                        int skillId = professionData.GetLevelSkill(i);
                         if (skillId != -1)
                         {
                             skills.Add(skillId);
@@ -1049,15 +1102,15 @@ public partial class Character
                 }
                 else
                 {
-                    int skillId = profressionData.GetLevelSkill(level);
+                    int skillId = professionData.GetLevelSkill(level);
                     if (skillId != -1)
                     {
                         skills.Add(skillId);
                     } 
                 }
-                ProfessionProperty =  profressionData.GetLevelProperty(level);
+                ProfessionProperty = professionData.GetLevelProperty(level);
             }
-            exp.nowLevelExp = profressionData.GetLevelExp(level) - profressionData.GetLevelExp(level - 1);
+            exp.nowLevelExp = professionData.GetLevelExp(level) - professionData.GetLevelExp(level - 1);
             this.level = level;
             CharacterLevelUp characterLevelUp = new CharacterLevelUp
             {

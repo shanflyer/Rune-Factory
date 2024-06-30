@@ -75,12 +75,41 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
     }
 
+    public async void CreatHomeEquip(HomeEquipSaveData homeEquipSaveData)
+    {
+        HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(homeEquipSaveData.equipDataId);
+        HomeEquip homeEquip = new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.mapEditorInstance,homeEquipSaveData.characterId, homeEquipmentData);
+
+        homeEquip.mapInstance = homeEquipSaveData.mapInstance;
+        homeEquip.coordinate = homeEquipSaveData.coordinate;
+        if (!characterHomeEquips.TryGetValue(homeEquipSaveData.characterId, out var ints))
+        {
+            ints = new List<int>();
+            characterHomeEquips.Add(homeEquipSaveData.characterId, ints);
+        }
+        ints.Add(homeEquip.instanceId);
+
+        int count = 1;
+        if (!characterHomeEquipCountData.TryGetValue(homeEquipSaveData.characterId, out var equipCountData))
+        {
+            equipCountData = new Dictionary<int, int>();
+            characterHomeEquipCountData.Add(homeEquipSaveData.characterId, equipCountData);
+        }
+        else
+        {
+            if (equipCountData.TryGetValue(homeEquipSaveData.equipDataId, out var _count))
+            {
+                count = _count + 1;
+            }
+        }
+        equipCountData[homeEquipSaveData.equipDataId] = count;
+    }
     private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
     {
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
         HomeEquip homeEquip = new HomeEquip(creatHomeEquip.instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : creatHomeEquip.instanceId,
-           creatHomeEquip.instanceId, creatHomeEquip.characterId, homeEquipmentData); 
-
+           creatHomeEquip.instanceId, creatHomeEquip.characterId, homeEquipmentData);
+         
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
         {
             ints = new List<int>();

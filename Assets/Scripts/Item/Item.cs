@@ -35,24 +35,15 @@ public struct Equipment : IReferenceData
     public ItemType ItemType;
 }
 
-public class ItemManager
-{
-    public static ItemManager instance
+public class ItemManager:Singleton<ItemManager>
+{ 
+    private MyInstance myInstance;
+
+    public override void Init()
     {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new ItemManager();
-            }
-            return _instance;
-        }
+        base.Init();
+        myInstance = new MyInstance();
     }
-
-    private static ItemManager _instance;
-
-    private HashSet<int> IntanceIds = new HashSet<int>();
-
     public Item CreatItem(ItemData data, int count)
     {
         Item item = new Item
@@ -77,23 +68,16 @@ public class ItemManager
 
     public int CreatIntance()
     {
-        var guid = Guid.NewGuid();
-        int intanceId = guid.GetHashCode();
-        while (IntanceIds.Contains(intanceId))
-        {
-            guid = Guid.NewGuid();
-            intanceId = guid.GetHashCode();
-        }
-        IntanceIds.Add(intanceId);
-        return intanceId;
+        return myInstance.CreatInstanceId();
     }
 
+    public void AddInstanceId(int instanceId)
+    {
+        myInstance.AddInstance(instanceId);
+    }
     public void DeleteItem(int intanceId)
     {
-        if (IntanceIds.Contains(intanceId))
-        {
-            IntanceIds.Remove(intanceId);
-        }
+        myInstance.RemoveInstance(intanceId); 
     }
 
     public async Task BuyActionAsync(ShopItemData selectShopItemData, int buyCount)

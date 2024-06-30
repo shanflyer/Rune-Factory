@@ -50,7 +50,7 @@ public class TempCharacter : Character
 
     public int _templevel;
 
-    public TempCharacter(CharacterData characterData, int instanceId, int tempDataId) : base(characterData, instanceId)
+    public TempCharacter(CharacterData characterData,ProfessionData professionData, int instanceId, int tempDataId) : base(characterData, professionData, instanceId)
     {
         this._tempDataId = tempDataId;
     }
@@ -69,33 +69,16 @@ public class TempCharacter : Character
 
 public class Player : Character
 {
-    public Player(CharacterData characterData, int instanceId) : base(characterData, instanceId)
+    public Player(CharacterData characterData, int instanceId, ProfessionData professionData) : base(characterData, professionData, instanceId)
     {
     }
 
-    protected override async Task CreatCharacterPackage(int overridePackageId = 0)
+    protected override async Task CreatCharacterPackage(int overridePackageId = 0,int instancId=0)
     {
         await base.CreatCharacterPackage();
         PackageManager.instance.AddPlayerPackage(overridePackageId == 0 ? characterPackage : overridePackageId);
     }
 
-    public Player(string name)
-    {
-        this.name = name;
-        //bag = PackageManager.instance.CreatGamePackage(10, "PlayerBag",instanceId);
-        //临时
-    }
-
-    public Player(CharacterSaveData characterSaveData)
-    {
-        this.name = characterSaveData.name;
-        //SetProperty(characterSaveData.energy, characterSaveData.health, characterSaveData.satiety);
-        //bag = PackageManager.instance.CreatGamePackage(characterSaveData.packageCount, characterSaveData.packageName, instanceId);
-        //foreach(var item in characterSaveData.items)
-        //{
-        //    PackageManager.instance.SetItemInPackage(item, bag);
-        //}
-    }
 }
 
 public partial class Character

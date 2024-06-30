@@ -215,6 +215,24 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
         }
     }
+    public async void CreatStoreCounter(StoreCounterSaveData storeCounterSaveData)
+    {
+        var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(storeCounterSaveData.dataId);
+        if (storeData != null)
+        {
+            RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
+            {
+                instanceId = storeCounterSaveData.instanceId,
+                storeCounterData = storeData,
+
+            };
+            runtimeStoreCounters.Add(storeCounterSaveData.instanceId, runtimeStoreCounter);
+
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(storeCounterSaveData.itemDataId);
+            runtimeStoreCounter.itemData = itemData;
+            runtimeStoreCounter.count = storeCounterSaveData.count;
+        }
+    }
 
     private async void CreatStoreCounter(CreatStoreCounter creatStoreCounter)
     {
@@ -222,7 +240,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         {
             var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(creatStoreCounter.storeDataId);
 
-            if (storeData.id == creatStoreCounter.storeDataId)
+            if (storeData!=null)
             {
                 RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
                 {
