@@ -28,7 +28,7 @@ namespace Unity.Mathematics
 
         public static explicit operator int2(string str)
         {
-            str = str.Substring(0, str.Length - 2);
+            str = str.Substring(0, str.Length -1);
             str = str.Split('(')[1];
             var strs = str.Split(',');
             int2 result = int2.zero;

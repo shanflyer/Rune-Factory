@@ -73,8 +73,51 @@ public class UserGameSaveData : IReferenceData
     private HashSet<int2> removeMapItemOperatesSet = new HashSet<int2>();
     private HashSet<int2> addMapItemOperatesSet = new HashSet<int2>();
 
+    private Dictionary<int, List<int>> removeMapItemOperatesDic = new Dictionary<int, List<int>>();
+    private Dictionary<int, List<int>> addMapItemOperatesDic = new Dictionary<int, List<int>>();
+
+    public void InitMapItemSaveData(int id)
+    {
+        if(removeMapItemOperatesDic.TryGetValue(id,out var list))
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                RemoveMapItemOperate removeMapItemOperate = new RemoveMapItemOperate
+                {
+                    mapItemId = id,
+                    removeOperateId = list[i]
+                };
+                GameActionManager.instance.QueueAction(removeMapItemOperate);
+            }
+        }
+        if(addMapItemOperatesDic.TryGetValue(id,out list))
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                AddMapItemOperate addMapItemOperate = new AddMapItemOperate
+                {
+                    mapItemId = id,
+                    addeOperateId = list[i]
+                };
+                GameActionManager.instance.QueueAction(addMapItemOperate);
+            }
+        }
+        if (RemoveMapItemColliderSet.Contains(id))
+        {
+            RemoveMapItemCollider removeMapItemCollider = new RemoveMapItemCollider
+            {
+                mapItemInstanceId = id
+            };
+            GameActionManager.instance.QueueAction(removeMapItemCollider);
+        }
+    }
+
     public void Init()
     {
+        removeMapItemOperatesDic.Clear();
+        addMapItemOperates.Clear();
+        
+
         RemoveMapItemColliderSet.Clear();
         for (int i = 0; i < RemoveMapItemCollider.Count; i++)
         {
@@ -82,13 +125,31 @@ public class UserGameSaveData : IReferenceData
         }
         removeMapItemOperatesSet.Clear();
         addMapItemOperatesSet.Clear();
+
+       
         for (int i = 0; i < removeMapItemOperates.Count; i++)
         {
             removeMapItemOperatesSet.Add(removeMapItemOperates[i]);
+            if (removeMapItemOperatesDic.TryGetValue(removeMapItemOperates[i].x,out var list))
+            {
+                list.Add(removeMapItemOperates[i].y);
+            }
+            else
+            {
+                removeMapItemOperatesDic.Add(removeMapItemOperates[i].x,new List<int> { removeMapItemOperates[i].y});
+            }
         }
         for (int i = 0; i < addMapItemOperates.Count; i++)
         {
             addMapItemOperatesSet.Add(addMapItemOperates[i]);
+            if (addMapItemOperatesDic.TryGetValue(addMapItemOperates[i].x, out var list))
+            {
+                list.Add(addMapItemOperates[i].y);
+            }
+            else
+            {
+                addMapItemOperatesDic.Add(addMapItemOperates[i].x, new List<int> { addMapItemOperates[i].y });
+            }
         }
     }
 

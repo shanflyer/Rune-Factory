@@ -1,5 +1,4 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -355,7 +354,10 @@ public class PackageManager : Singleton<PackageManager>
     private async void CreatPackage(CreatPackage creatPackage)
     {
         int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level, creatPackage.instanceId);
-
+        if (instanceId == -1)
+        {
+            return;
+        }
         if (creatPackage.playerPackage||GameManager.instance.GetPlayerBoxId() == instanceId)
         {
             AddPlayerPackage(instanceId);
@@ -620,8 +622,10 @@ public class PackageManager : Singleton<PackageManager>
             GamePackage gamePackage = new GamePackage(saveData.caseCount,
                 saveData.packageName, saveData.id, packageSetData, saveData.level)
             {
-                itemPackage = saveData.itemPackage
+                itemPackage = saveData.itemPackage,
+                
             };
+            gamePackage.InitSaveItemList(saveData.items);
             ItemManager.instance.AddInstanceId(saveData.id);
             gamePackages.Add(saveData.id, gamePackage);
         }
@@ -810,8 +814,14 @@ public class PackageManager : Singleton<PackageManager>
 
     public async Task<int> CreatGamePackage(int dataId, int level, int instanceId = 0)
     {
-        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId);
         int packageInstaceId = instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : instanceId;
+        if(gamePackages.ContainsKey(packageInstaceId))
+        {
+            return -1;
+        }
+
+
+        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId); 
         int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
         GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstaceId, packageSetData,level);
         gamePackages.Add(packageInstaceId, gamePackage);
@@ -959,6 +969,30 @@ public class PackageManager : Singleton<PackageManager>
 
         public int SelectItem;
 
+        public void InitSaveItemList(List<Item> items)
+        {
+            this.items = new List<Item>();
+            for(int i = 0; i < items.Count; i++)
+            {
+                if (packageItemCounts.TryGetValue(items[i].dataId,out var count))
+                {
+                    count += items[i].count;
+                }
+                count = items[i].count;
+                packageItemCounts[items[i].dataId] = count;
+                if (packageItemIndexDatas.TryGetValue(items[i].dataId,out var indexs))
+                {
+                    indexs.Add(i);
+                }
+                else
+                {
+                    indexs = new List<int>();
+                    indexs.Add(i);
+                    packageItemIndexDatas.Add(items[i].dataId, indexs);
+                }
+                this.items.Add(items[i]);
+            }
+        }
         public Item GetItemFromInstanceId(int itemInstanceId)
         {
             return items.Find(item => item.instanceId == itemInstanceId);

@@ -795,7 +795,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
             foreach (var data in MapRoomData.mapItems)
             {
-                await AddMapItem(data, room.id);
+                int itemInstanceId= await AddMapItem(data, room.id);
+                GameDataSaveManager.instance.InitMapItemSaveData(itemInstanceId); 
             }
             if (display)
             {

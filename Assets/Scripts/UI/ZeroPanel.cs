@@ -20,6 +20,10 @@ public class ZeroPanel : GamePanel<IReferenceData>
     Canvas[] canvaes; 
     [SerializeField]
     ParticleSystemRenderer systemRenderer;
+    [SerializeField]
+    Transform selectPanel;
+    [SerializeField]
+    Button newButton, loadButton;
 
     public override void SetPanelUISerializeObj()
     {
@@ -28,13 +32,19 @@ public class ZeroPanel : GamePanel<IReferenceData>
         start = FindChildGameObject<Button>("StartButton");
         canvaes = GetComponentsInChildren<Canvas>(); 
         systemRenderer = FindChildGameObject<ParticleSystemRenderer>("Cloud");
+        selectPanel = FindChildGameObject("SelectPanel");
+        newButton = FindChildGameObject<Button>("New");
+        loadButton = FindChildGameObject<Button>("Load");
     }
     protected override void Awake()
     { 
         base.Awake();
         Shader.SetGlobalColor("_CloudColor", cloudColor);
         InitTitleIcon();
-        start.onClick.AddListener(StartGame);
+        start.onClick.AddListener(ClickStart);
+        newButton.onClick.AddListener(StartGame);
+        loadButton.onClick.AddListener(LoadDataPanel);
+
     }
     public override void Show(int layer = -1)
     {
@@ -66,37 +76,47 @@ public class ZeroPanel : GamePanel<IReferenceData>
         var sprite= title.GetSprite(LanguageManage.nowLanguage);
         titleIcon.sprite = sprite;
     }
-    async void StartGame()
+    void ClickStart()
     {
-        AudioController.instance.PlayAudio(SE.click);
-        Close();
         if (GameController.instance.startPlay)
         {
+            Close();
             GameDataSaveManager.instance.InitPlayerData("Test", Gender.male, Season.春, 1);
-            SceneManager.instance.SwitchScene("World"); 
+            SceneManager.instance.SwitchScene("World");
         }
-        else  
-        { 
-            if(GameDataSaveManager.instance.LoadDataSuccess)
+        else
+        {
+            if (!GameDataSaveManager.instance.LoadDataSuccess)
             {
-                await UIManager.instance.ShowGamePanel<SelectLoadPanel,UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+                StartGame();
             }
             else
             {
-                PlayFilm playFilm = new PlayFilm
-                {
-                    filmName = "角色选择",
-                    assetName = "Default"
-                };
-                GameActionManager.instance.QueueAction(playFilm, true);
-                await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+                selectPanel.localScale = Vector3.one;
+                start.transform.localScale = Vector3.zero;
             }
-         
-        }
-      
+        } 
+    }
+    void LoadDataPanel()
+    {
+        Close();
+        UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+    }
+    async void StartGame()
+    {
+        Close();
+        PlayFilm playFilm = new PlayFilm
+        {
+            filmName = "角色选择",
+            assetName = "Default"
+        };
+        GameActionManager.instance.QueueAction(playFilm, true);
+        await UIManager.instance.ShowGamePanel<SelectCharacterPanel>(); 
     }
     public override Task InitData(string dataKay)
     {
+        selectPanel.localScale = Vector3.zero;
+        start.transform.localScale = Vector3.one;
         return base.InitData(dataKay);
     }
      

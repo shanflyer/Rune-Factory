@@ -70,7 +70,12 @@ public class MyAnimationController : Singleton<MyAnimationController>
         public void InitAnimator(Animator animator, int id, string name)
         {
             this.id = id;
-            playableGraph.Destroy();
+            try
+            {
+                playableGraph.Destroy();
+            }
+            catch { }
+          
             playableGraph = PlayableGraph.Create();
             playableOutput = AnimationPlayableOutput.Create(playableGraph, name, animator);
         }

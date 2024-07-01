@@ -798,8 +798,9 @@ public class GameTimeManager : Singleton<GameTimeManager>
         nowGameTime.year = dateData.year;
         nowGameTime.date= dateData.day;
         nowGameTime.Season = dateData.season;
-        nowGameTime.minute = dateData.minute;
         nowGameTime.week = dateData.week;
+        nowGameTime.SetTime(dateData.hour, dateData.minute);        
+        
     }
 
 

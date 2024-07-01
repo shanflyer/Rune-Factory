@@ -55,6 +55,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         if (loadGameSaveData != null)
         { 
             PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
+            PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
 
             await CharacterManager.instance.CreatPlayer((int)loadGameSaveData.playerData.gender, 0, loadGameSaveData.playerData.instanceId);
 
@@ -74,6 +75,33 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
         }
     }
+    public void InitMapItemSaveData(int instanceId)
+    {
+        if (loadGameSaveData != null)
+        {
+            if (loadGameSaveData.changeMapItems.TryGetValue(instanceId, out var data))
+            {
+                ChangeMapItem changeMapItem = new ChangeMapItem
+                {
+                    itemId = instanceId,
+                    newDataId = data.x,
+                    animationKey = data.yz
+                };
+                GameActionManager.instance.QueueAction(changeMapItem);
+            }
+            if (loadGameSaveData.SetAnimationStateMapItems.TryGetValue(instanceId, out var data1))
+            {
+                SetItemAnimation setItemAnimation = new SetItemAnimation
+                {
+                    id = instanceId,
+                    keyX = data1.x,
+                    keyY = data1.y
+                };
+                GameActionManager.instance.QueueAction(setItemAnimation);
+            }
+            loadGameSaveData.InitMapItemSaveData(instanceId);
+        }
+    }
     public void AfterInitMapLoadSaveData()
     {
         if (loadGameSaveData != null)
@@ -82,7 +110,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 FarmManager.instance.CreatField(data.Value);
             }
-
+            /*
             foreach (var data in loadGameSaveData.changeMapItems)
             {
                 ChangeMapItem changeMapItem = new ChangeMapItem
@@ -132,7 +160,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     mapItemInstanceId = data
                 };
                 GameActionManager.instance.QueueAction(removeMapItemCollider);
-            }
+            }*/
 
             foreach(var data in loadGameSaveData.pastures)
             {

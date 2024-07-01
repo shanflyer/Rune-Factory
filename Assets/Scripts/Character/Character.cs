@@ -449,17 +449,16 @@ public partial class Character
             SetEquip(ItemType.ÎäÆ÷, saveData.weapon);
             SetEquip(ItemType.·À¾ß, saveData.clothes);
             SetEquip(ItemType.Ð¬×Ó, saveData.shoe);
+            characterPackage = packageInstancId;
         }
         else
         {
             SetLevel(1, true);
+            CreatCharacterPackage(overridePackage, packageInstancId);
         }
 
         //behavior = characterData.behavior;
-        
-        CreatCharacterPackage(overridePackage, packageInstancId);
-
-      
+         
     }
 
     public void SetCellOffset(Vector2 offset)
