@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -49,13 +50,15 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
     private UserGameSaveData _loadGameSaveData;
 
-    public void InitLoadSaveData()
+    public async Task InitLoadSaveData()
     {
         if (loadGameSaveData != null)
-        {
-            PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas); 
+        { 
+            PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
 
-            foreach(var data in loadGameSaveData.storeCounters)
+            await CharacterManager.instance.CreatPlayer((int)loadGameSaveData.playerData.gender, 0, loadGameSaveData.playerData.instanceId);
+
+            foreach (var data in loadGameSaveData.storeCounters)
             {
                 PlayerStoreManager.instance.CreatStoreCounter(data.Value);
             }
@@ -206,8 +209,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             LoadDataSuccess = true;
             string dataStr =File.ReadAllText(saveDataPath);
-            string _dataStr = DecryptDES(dataStr);
-            UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(_dataStr);
+           //dataStr = DecryptDES(dataStr);
+            UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
             userGameSaveDataList.nowSaveData.Init();
             for(int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
             {
@@ -373,7 +376,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
          
 
         string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
-        strs = EncryptDES(strs);
+        //strs = EncryptDES(strs);
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         File.WriteAllText(saveDataPath, strs); 
         return true;

@@ -26,6 +26,18 @@ namespace Unity.Mathematics
         /// <summary>y component of the vector.</summary>
         public int y;
 
+        public static explicit operator int2(string str)
+        {
+            str = str.Substring(0, str.Length - 2);
+            str = str.Split('(')[1];
+            var strs = str.Split(',');
+            int2 result = int2.zero;
+            result.x = int.Parse(strs[0]);
+            result.y = int.Parse(strs[1]);
+            return result;
+        }
+
+
         /// <summary>int2 zero value.</summary>
         public static readonly int2 zero;
 

@@ -522,10 +522,13 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async Task CreatPlayer(int id, int bag)
+    public async Task CreatPlayer(int id, int bag,int instanceId=0)
     {
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
-        int instanceId = myInstance.CreatInstanceId();
+        if (instanceId == 0)
+        {
+            instanceId = myInstance.CreatInstanceId();
+        } 
         ProfessionData professionData =await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
         player = new Player(playerData, instanceId,professionData);
         controllerCharacter = player;

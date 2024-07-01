@@ -52,7 +52,7 @@ public class WorldMapController : MonoBehaviour
         GameObjectCurveController.instance.SetUpDataComponent(this);
         WorldMapObjManager.instance.displayMap = mapInstance;
 
-        GameDataSaveManager.instance.InitLoadSaveData();
+        await GameDataSaveManager.instance.InitLoadSaveData();
 
         var teamManager = TeamManager.instance;
         var npcManager = NPCManager.instance;
@@ -93,7 +93,7 @@ public class WorldMapController : MonoBehaviour
         GameTimeManager.instance.ZeroGameTime();
 
 
-        if (GameController.instance == null||GameController.instance.startPlay)
+        //if (GameController.instance == null||GameController.instance.startPlay)
         {
             GameTimeManager.instance.StartTimeRun();
             SetCharacterCoordinate setCharacterCoordinate=new SetCharacterCoordinate 

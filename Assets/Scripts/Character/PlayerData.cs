@@ -20,11 +20,11 @@ public class UserGameSaveData : IReferenceData
         otherSaveData = new OtherSaveData(userGameSaveData.otherSaveData);
         dateData = userGameSaveData.dateData;
         characterSaveDatas.CopyData(userGameSaveData.characterSaveDatas); 
-        packageSaveDatas.CopyTo(userGameSaveData.packageSaveDatas.ToArray());
+        packageSaveDatas.AddRange(userGameSaveData.packageSaveDatas);
         friendSaveData = userGameSaveData.friendSaveData;
-        removeMapItemOperates.CopyTo(userGameSaveData.removeMapItemOperates.ToArray());
-        addMapItemOperates.CopyTo(userGameSaveData.addMapItemOperates.ToArray());
-        RemoveMapItemCollider.CopyTo(userGameSaveData.RemoveMapItemCollider.ToArray());
+        removeMapItemOperates.AddRange(userGameSaveData.removeMapItemOperates);
+        addMapItemOperates.AddRange(userGameSaveData.addMapItemOperates);
+        RemoveMapItemCollider.AddRange(userGameSaveData.RemoveMapItemCollider);
         mapLineSaveData.CopyData(userGameSaveData.mapLineSaveData);
         chapters.CopyData(userGameSaveData.chapters);
         fishSaveDatas.CopyData(userGameSaveData.fishSaveDatas);
@@ -627,9 +627,9 @@ public class OtherSaveData
         gold = otherSaveData.gold;
         diamond = otherSaveData.diamond;
         playerPackages = new List<int>();
-        playerPackages.CopyTo(otherSaveData.playerPackages.ToArray());
+        playerPackages.AddRange(otherSaveData.playerPackages);
         isMarriedFood = otherSaveData.isMarriedFood;
-        isAnMo = otherSaveData.isAnMo;
+        isAnMo = otherSaveData.isAnMo;  
     }
 }
 
