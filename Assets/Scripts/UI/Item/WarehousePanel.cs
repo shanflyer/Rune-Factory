@@ -95,13 +95,29 @@ public class WarehousePanel : GamePanel<PackageList>
         ShortCutActionButton.onClick.AddListener(() =>
         {
             if (SelectItem.instanceId != 0)
-            {
-                SelectPackageItemAction selectPackageItemAction = new SelectPackageItemAction
+            { 
+                if (SelectItem.dataId != 0)
                 {
-                    item = SelectItem,
-                    packageId = selectPackageData.instanceId
+                    Item newItem = new Item
+                    {
+                        instanceId = SelectItem.instanceId,
+                        dataId = SelectItem.dataId,
+                        value = SelectItem.value,
+                        count = PackageManager.instance.GetPackageItemCount(selectPackageData.instanceId, SelectItem.dataId)
+                    };
+                    SetShortcutItem setShortcutItem = new SetShortcutItem
+                    {
+                        characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                        Item = newItem
+                    };
+                    GameActionManager.instance.QueueAction(setShortcutItem);
+                }
+                SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
+                {
+                    packageId = selectPackageData.instanceId,
+                    selectItem = SelectItem.instanceId
                 };
-                GameActionManager.instance.QueueAction(selectPackageItemAction);
+                GameActionManager.instance.QueueAction(setPackageSelectItem); 
             }
         });
     }

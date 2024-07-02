@@ -18,12 +18,15 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     [SerializeField]
     private TextMeshProUGUI count;
     [SerializeField]
-    Button UseButton;
+    Button UseButton, UnSetButton;
+    [SerializeField]
+    Image setImage;
 
     public override void ClearSelect()
     {
         base.ClearSelect();
         toggle.SetIsOnWithoutNotify(false);
+        setImage.transform.localScale = UnSetButton.transform.localScale = UseButton.transform.localScale = Vector3.zero;
     }
     public override void SetPanelUISerializeObj()
     {
@@ -34,6 +37,8 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         ItemValue = FindChildGameObject<Image>("ItemValue");
         ItemValueBg = FindChildGameObject("ItemValueBg");
         UseButton = FindChildGameObject<Button>("UseButton");
+        UnSetButton = FindChildGameObject<Button>("UnSetButton");
+        setImage = FindChildGameObject<Image>("setImage");
     }
     public override void SelectDefault()
     {
@@ -65,7 +70,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     {
         toggle.onValueChanged.AddListener((bool value) =>
         {
-             
+            setImage.transform.localScale= setImage.transform.localScale = UnSetButton.transform.localScale = value ? Vector3.one : Vector3.zero;
             if (SelectAction != null)
             {
                 SelectAction.Invoke(data,value);
@@ -94,6 +99,20 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             }
         });
         UseButton.transform.localScale = Vector3.zero;
+        UnSetButton.onClick.AddListener(UnSetAction);
+        UnSetButton.transform.localScale = Vector3.zero;
+        setImage.transform.localScale = Vector3.zero;
+    }
+
+    void UnSetAction()
+    {
+        RemoveShortcutItem removeShortcutItem = new RemoveShortcutItem
+        {
+            characterId = CharacterManager.instance.controllerCharacter.instanceId,
+            index = data.index
+        };
+        GameActionManager.instance.QueueAction(removeShortcutItem);
+        UnSetButton.transform.localScale = Vector3.zero;
     }
     public void ClearData()
     {
@@ -120,16 +139,15 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             count.enabled = data.Item.count > 0;
             toggle.enabled = true;
             ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-            ItemValue.fillAmount = data.Item.value;
+            ItemValue.fillAmount = data.Item.value; 
 
-           
         }
         else
         {
             ItemValueBg.transform.localScale = Vector3.zero;
-            UseButton.transform.localScale = Vector3.zero;
-            // toggle.SetIsOnWithoutNotify(false);
-            // toggle.enabled = false;
+            UseButton.transform.localScale = Vector3.zero; 
+            toggle.SetIsOnWithoutNotify(false);
+            toggle.enabled = false;
             // toggle.graphic.enabled = false;
             icon.enabled = false;
             count.enabled = false;

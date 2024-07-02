@@ -12,7 +12,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
     {
         if(!shortcutPackages.TryGetValue(characterId,out var shortcutPackage))
         {
-            shortcutPackage = ShortcutPackage.CreatShortCutPackage(characterId); 
+            shortcutPackage =new ShortcutPackage(characterId); 
         }
         return shortcutPackage;
     }
@@ -22,7 +22,6 @@ public class ShortcutManager : Singleton<ShortcutManager>
         shortcutPackages.Clear();
         GameActionManager.instance.AddListener<RemoveShortcutItem>(RemoveShortcutItem);
         GameActionManager.instance.AddListener<SetShortcutItem>(SetShortcutItem);
-        GameActionManager.instance.AddListener<ChangeShortcutItemIndex>(ChangeShortcutItemIndex);
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcutAsync);
     }
     protected override void Clear()
@@ -48,12 +47,14 @@ public class ShortcutManager : Singleton<ShortcutManager>
                         CharacterManager.instance.controllerCharacter.characterPackage, item.dataId);
                     if (itemCount <= 0)
                     {
+                        shortcutPackage.haveItems.Remove(shortcutPackage.items[i].instanceId);
                         shortcutPackage.items[i] = default(Item);
                     }
                     else
                     {
                         item.count = itemCount;
                         shortcutPackage.items[i] = item;
+                        shortcutPackage.haveItems.Add(shortcutPackage.items[i].instanceId);
                     }
                 }
             }
@@ -91,43 +92,36 @@ public class ShortcutManager : Singleton<ShortcutManager>
     {
         if (shortcutPackages.TryGetValue(setShortcutItem.characterId, out var shortcutPackage))
         {
-            SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
+            if (shortcutPackage.SetItem(setShortcutItem.Item))
             {
-                packageId = shortcutPackage.packagerId,
-                selectItem = setShortcutItem.Item.instanceId
-            };
-            GameActionManager.instance.QueueAction(setPackageSelectItem);
+                SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
+                {
+                    packageId = shortcutPackage.packagerId,
+                    selectItem = setShortcutItem.Item.instanceId
+                };
+                GameActionManager.instance.QueueAction(setPackageSelectItem);
 
-            shortcutPackage.SetItemIndex(setShortcutItem.index,setShortcutItem.Item);
-            //shortcutPackages.SetData(shortcutPackage);
-            RefreshDisplayShortcutPackageAsync(shortcutPackage);
+
+                //shortcutPackages.SetData(shortcutPackage);
+                RefreshDisplayShortcutPackageAsync(shortcutPackage);
+            } 
         }
     }
-    void ChangeShortcutItemIndex(ChangeShortcutItemIndex changeShortcutItemIndex)
-    {
-        if(shortcutPackages.TryGetValue(changeShortcutItemIndex.characterId, out var shortcutPackage))
-        {
-            shortcutPackage.ChangeItemIndex(changeShortcutItemIndex.sourceIndex, changeShortcutItemIndex.targetIndex);
-           // shortcutPackages.SetData(shortcutPackage);
-            RefreshDisplayShortcutPackageAsync(shortcutPackage);
-        }
-    }
+   
 }
 public class ShortcutPackage : IReferenceData, INativeData
 {
-    public static ShortcutPackage CreatShortCutPackage(int characterId)
+    
+
+    public ShortcutPackage(int characterId)
     {
-        ShortcutPackage shortcutPackage = new ShortcutPackage
-        {
-            characterId = characterId,
-            items = new Item[GameCommon.shortcutItemCount]
-        };
+        this.characterId = characterId;
+        items = new Item[GameCommon.shortcutItemCount]; 
         for (int i = 0; i < GameCommon.shortcutItemCount; i++)
         {
-            shortcutPackage.items[i] = default(Item);
+            items[i] = default(Item); 
         }
-
-        return shortcutPackage;
+      
     }
 
     public int packagerId
@@ -144,7 +138,7 @@ public class ShortcutPackage : IReferenceData, INativeData
     }
     public int characterId;
     public Item[] items;
-
+    public HashSet<int> haveItems = new HashSet<int>();
     public int Key => characterId;
 
     public List<ShortcutItem> GetShortcutItems()
@@ -165,45 +159,26 @@ public class ShortcutPackage : IReferenceData, INativeData
     {
         if (index <= items.Length)
         {
-            items[index-1] = default(Item);
+            haveItems.Add(items[index - 1].instanceId);
+            items[index-1] = default(Item); 
         }
     }
-    public void SetItemIndex(int index,Item item)
+    public bool SetItem(Item item)
     {
-        if (index <= items.Length)
+        if (haveItems.Contains(item.instanceId))
         {
-            if (index <= 0)
-            {
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (items[i].instanceId == 0)
-                    {
-                        items[i] = item;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                items[index - 1] = item;
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (i != index - 1)
-                    {
-                        if (items[i].dataId == item.dataId)
-                        {
-                            items[i] = default(Item);
-                        }
-                    }
-                }
-            } 
+            return false;
         }
-    }
-    public void ChangeItemIndex(int sourceIndex,int targetIndex)
-    {
-        Item sourceItem = items[sourceIndex-1];
-        items[sourceIndex-1] = items[targetIndex-1];
-        items[targetIndex-1] = sourceItem;
+        for(int i=0;i< items.Length; i++)
+        {
+            if (items[i].instanceId == 0)
+            {
+                items[i] = item;
+                haveItems.Add(item.instanceId);
+                return true; 
+            }
+        }
+        return false;
     }
     public void Dispose()
     { 

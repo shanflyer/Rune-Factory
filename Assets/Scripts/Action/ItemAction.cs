@@ -1,18 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-public struct SelectPackageItemAction : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public Item item;
-    public int packageId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        
 
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
 public struct AddItemValue : GameAction
 {
     public SetValue setValue { get; set; }
@@ -90,18 +78,11 @@ public struct SetShortcutItem : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int characterId;
-    public int index;
+    public int characterId; 
     public Item Item;
 }
 
-public struct ChangeShortcutItemIndex : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-    public int characterId;
-    public int sourceIndex, targetIndex;
-}
+ 
 
 public struct RefreshItemValue : GameAction
 {
