@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public delegate void MoveEndAction();
@@ -465,8 +466,9 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (SceneManager.instance.Now == "World")
                 {
                     UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-                    UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(
-                    ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId));
+
+                    var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId);
+                   UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
                 }
                 characterRuntionObjs.TryGetValue(controllerCharacter, out var _ControllerRuntimeObj);
                 ControllerRuntimeObj = _ControllerRuntimeObj;

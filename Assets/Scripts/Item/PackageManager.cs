@@ -833,6 +833,12 @@ public class PackageManager : Singleton<PackageManager>
                 gamePackage.SetItemInPackage(
                     new Item(packageSetData.initItems[i].x, packageSetData.initItems[i].y));
             }
+
+            RefreshShortcut refreshShortcut = new RefreshShortcut
+            {
+                packageId = packageInstaceId, 
+            };
+            GameActionManager.instance.QueueAction(refreshShortcut);
         }
         SetItemAnimation setItemAnimation = new SetItemAnimation
         {

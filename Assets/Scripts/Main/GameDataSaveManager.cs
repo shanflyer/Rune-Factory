@@ -212,17 +212,17 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             } 
         }
     }
-    public bool CheckMapLine(int id)
+    public int CheckMapLine(int id)
     {
         if (loadGameSaveData != null)
         { 
             if(loadGameSaveData.mapLineSaveData.TryGetValue(id,out var value))
             {
-                return value == 1;
+                return value;
             }
             
         }
-        return true;
+        return -1;
     }
 
     private void InitUserSaveData()
@@ -274,6 +274,10 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
     public void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
     {
+        UserGameSaveDataList.nowSaveData = new UserGameSaveData()
+        {
+            index = -1
+        };
         UserGameSaveData.playerData = new CharacterSaveData();
         UserGameSaveData.playerData.name = playerName;
         UserGameSaveData.playerData.gender = gender;

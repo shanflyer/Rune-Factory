@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using static UnityEngine.Rendering.DebugUI;
+using Unity.Mathematics;
 
 public struct RefreshField : GameAction
 {
@@ -7,11 +7,11 @@ public struct RefreshField : GameAction
     public SetResult setResult { get; set; }
     public int fieldId;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count > 0)
         {
-            fieldId =int.Parse(parameters[0].value);
+            fieldId = int.Parse(parameters[0].value);
         }
         if (source != 0)
         {
@@ -27,7 +27,7 @@ public struct RefreshPlant : GameAction
     public SetResult setResult { get; set; }
     public int plantId;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count > 0)
         {
@@ -47,7 +47,7 @@ public struct TryGetPlantFruit : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -59,7 +59,7 @@ public struct SetWaterField : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -72,7 +72,7 @@ public struct TryCreatPlant : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -84,7 +84,7 @@ public struct TrySmoothField : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -96,7 +96,7 @@ public struct CheckFieldState : GameAction
     public SetResult setResult { get; set; }
     public int instanceid;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
         if (source != 0)
@@ -112,8 +112,9 @@ public struct TryCreatField : GameAction
     public SetResult setResult { get; set; }
     public int roomId;
     public int itemInstanceId;
+    public int2 coordinate;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count > 0)
         {

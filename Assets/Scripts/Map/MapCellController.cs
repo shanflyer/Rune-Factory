@@ -1137,7 +1137,21 @@ public class MapCellController : Singleton<MapCellController>
     {
         foreach (var mapLine in mapLines)
         {
-            if (!mapLine.zeroInit||!GameDataSaveManager.instance.CheckMapLine(mapLine.instanceId))
+            bool isInit = true;
+            int saveValue = GameDataSaveManager.instance.CheckMapLine(mapLine.instanceId);
+            switch (saveValue)
+            {
+                case -1:
+                    isInit = mapLine.zeroInit;
+                    break;
+                case 0:
+                    isInit = false;
+                    break;
+                case 1:
+                    isInit = true;
+                    break;
+            } 
+            if (!isInit)
             {
                 continue;
             }

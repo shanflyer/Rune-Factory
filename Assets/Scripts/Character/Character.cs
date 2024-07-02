@@ -450,6 +450,12 @@ public partial class Character
             SetEquip(ItemType.╥ю╬ъ, saveData.clothes);
             SetEquip(ItemType.п╛вс, saveData.shoe);
             characterPackage = packageInstancId;
+
+            RefreshShortcut refreshShortcut = new RefreshShortcut
+            {
+                packageId = packageInstancId,
+            };
+            GameActionManager.instance.QueueAction(refreshShortcut);
         }
         else
         {

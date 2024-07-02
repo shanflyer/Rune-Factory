@@ -40,6 +40,14 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<SetWaterField>(SetWaterField);
         GameActionManager.instance.AddListener<NewDay>(NewDay);
         GameActionManager.instance.AddListener<TryGetPlantFruit>(TryGetPlantFruit);
+        GameActionManager.instance.AddListener<RefreshField>(RefreshField);
+    }
+    public void RefreshField(RefreshField refreshField)
+    {
+        if(fields.TryGetValue(refreshField.fieldId,out var field))
+        {
+            field.RefreshField();
+        }
     }
     public async void CreatField(FieldSaveData fieldSaveData)
     {
@@ -49,10 +57,11 @@ public class FarmManager : Singleton<FarmManager>
             Field field = new Field
             {
                 instanceId = instanceId,
-                mapInstance =fieldSaveData.mapInstance,
+                mapInstance = fieldSaveData.mapInstance,
                 editorInstanceId = fieldSaveData.editorInstanceId,
                 fieldState = fieldSaveData.fieldState,
                 isSetWater = fieldSaveData.isSetWater,
+                coordinate = fieldSaveData.coordinate,
                
             };
             if (fieldSaveData.PlantinstaceId != 0)
@@ -66,22 +75,18 @@ public class FarmManager : Singleton<FarmManager>
                     plantState = fieldSaveData.plantState,
                     nowCycle = fieldSaveData.nowCycle,
                 };
-                WorldMapManager.instance.GetMapItemPos(field.instanceId, out var coordinate);
+                
                 AddMapItem addMapItem = new AddMapItem
                 {
                     dataId = field.plant.PlantData.mapItem,
-                    coordinate = coordinate.xy,
-                    mapId = coordinate.z,
+                    coordinate = field.coordinate,
+                    mapId = field.mapInstance,
                     instanceId = fieldSaveData.PlantinstaceId
                 };
                 GameActionManager.instance.QueueAction(addMapItem);
-            }
-           
-
-
-            fields.Add(instanceId, field);
-
-            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+            } 
+            fields.Add(instanceId, field); 
+            //GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
         }
     }
     private void TryCreatField(TryCreatField tryCreatField)
@@ -100,6 +105,7 @@ public class FarmManager : Singleton<FarmManager>
                         {
                             instanceId = instanceId,
                             mapInstance = tryCreatField.roomId,
+                            coordinate = tryCreatField.coordinate,
                             editorInstanceId=tryCreatField.itemInstanceId,
                             fieldState = FieldState.待平整
                         };
@@ -267,9 +273,7 @@ public class FarmManager : Singleton<FarmManager>
         if (fields.TryGetValue(tryGetPlantFruit.fieldId, out var field))
         {
             bool result = await field.TryGetPlantFruit();
-            tryGetPlantFruit.setResult(result);
-
-            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+            tryGetPlantFruit.setResult(result); 
         }
         tryGetPlantFruit.setResult(false);
     }
@@ -285,6 +289,7 @@ public class Field
     public int instanceId;
     public int mapInstance;
     public int editorInstanceId;
+    public int2 coordinate;
     public FieldState fieldState;
     public bool isSetWater;
     public Plant plant;
@@ -336,6 +341,8 @@ public class Field
             }
             plant.RefreshPlant();
             RefreshField();
+
+            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
             return result;
         }
         return false;

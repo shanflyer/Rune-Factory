@@ -164,10 +164,11 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     {
         if (runtimeStoreCounters.TryGetValue(storeId, out var runtimeStoreCounter))
         {
+            int itemDataId= runtimeStoreCounter.itemData==null?0: runtimeStoreCounter.itemData.id;
             SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
             {
                 storeCounterId = storeId,
-                itemId = runtimeStoreCounter.itemData.id,
+                itemId = itemDataId,
                 count = runtimeStoreCounter.count
             };
             UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
@@ -276,9 +277,11 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 SellItem nowSellItem = runtimeObj.obj as SellItem;
                 if (nowSellItem != null)
                 {
+                    int itemDataId = runtimeStoreCounter.itemData!=null? runtimeStoreCounter.itemData.id:0;
+                    
                     nowSellItem.InitReferenceData(new Item
                     {
-                        dataId = runtimeStoreCounter.itemData.id,
+                        dataId = itemDataId,
                         count = runtimeStoreCounter.count
                     });
                 }

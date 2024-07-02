@@ -464,6 +464,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 roomId = mapId,
                 itemInstanceId = mapItem.instanceId,
+                coordinate=mapItem.coordinate
             };
             GameActionManager.instance.QueueAction(tryCreatField, true);
         }

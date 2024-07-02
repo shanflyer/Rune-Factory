@@ -43,8 +43,8 @@ public class UserGameSaveData : IReferenceData
     public string saveTime;
     public int index;
 
-    public CharacterSaveData playerData;
-    public OtherSaveData otherSaveData;
+    public CharacterSaveData playerData=new CharacterSaveData();
+    public OtherSaveData otherSaveData=new OtherSaveData();
     public GameDateSaveData dateData;
     public IntCharacterSaveDataDictionary characterSaveDatas = new IntCharacterSaveDataDictionary();
     public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
@@ -464,6 +464,7 @@ public class FieldSaveData
 {
     public int instanceId;
     public int mapInstance;
+    public int2 coordinate;
     public int editorInstanceId;
     public FieldState fieldState;
     public bool isSetWater;
@@ -489,6 +490,7 @@ public class FieldSaveData
         growthDay = fieldSaveData.growthDay;
         plantState = fieldSaveData.plantState;
         nowCycle = fieldSaveData.nowCycle;
+        coordinate = fieldSaveData.coordinate;
     }
     public FieldSaveData(Field field)
     {
@@ -502,7 +504,7 @@ public class FieldSaveData
         editorInstanceId = field.editorInstanceId;
         fieldState = field.fieldState;
         isSetWater = field.isSetWater;
-
+        coordinate = field.coordinate;
         if (field.plant == null)
         {
             PlantinstaceId = 0;

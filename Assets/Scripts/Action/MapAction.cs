@@ -569,9 +569,12 @@ public struct SetItemAnimation : GameAction
         }
         else
         {
-            id = source;
-            keyX = target;
-            keyY = value;
+            if (source != 0 && source != int.MinValue)
+                id = source;
+            if (target != 0 && target != int.MinValue)
+                keyX = target;
+            if (value != 0 && value != int.MinValue)
+                keyY = value;
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }
