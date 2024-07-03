@@ -1028,17 +1028,17 @@ public class MapCellController : Singleton<MapCellController>
        // runtimeMapRooms.Init(roomCount);
     }
 
-    public void InitMapData(int roomId, MapCellData[] mapCellDatas,
+    public void InitMapData(int roomId, List<MapCellData> mapCellDatas,
         int2 startCoordinate, int2 endCoordinate, int3 coordinate)
     {
         RoomCellData roomCellData = new RoomCellData
         {
-            cellValue = new NativeArray<int>(mapCellDatas.Length, Allocator.TempJob),
+            cellValue = new NativeArray<int>(mapCellDatas.Count, Allocator.TempJob),
             mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.TempJob),
             startCoordinate = startCoordinate,
             endCoordinate = endCoordinate,
         };
-        for (int i = 0; i < mapCellDatas.Length; i++)
+        for (int i = 0; i < mapCellDatas.Count; i++)
         {
             roomCellData.cellValue[i] = mapCellDatas[i].isWalkable ? 1 : 0;
         }

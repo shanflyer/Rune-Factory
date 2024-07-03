@@ -54,8 +54,8 @@ public class MapEditor : MyEditor
     public static void WindowShow()
     {
         Instance = EditorWindow.CreateWindow<MapEditor>("地图编辑");
-        Instance.minSize = new Vector2(240, 480);
-        Instance.maxSize = new Vector2(240, 480);
+        Instance.minSize = new Vector2(360, 480);
+        Instance.maxSize = new Vector2(360, 480);
         Instance.ShowAuxWindow();
     }
 
@@ -97,7 +97,7 @@ public class MapEditor : MyEditor
 
     private void DrawRoomDataPanel()
     {
-        roomDataPanel.DisplayCommonObjList<MapRoomDataObj>(240, 460, mapRoomDataObjs, 2, false, false, true, false, true);
+        roomDataPanel.DisplayCommonObjList<MapRoomDataObj>(360, 380, mapRoomDataObjs, 3, false, false, true, false, true);
         if (selectMapRoomDataObj != null)
         {
             DrawTextField(selectMapRoomDataObj.mapRoomData.roomName, "地图名字", SetMapRoomName, 60, 100);
@@ -128,6 +128,10 @@ public class MapEditor : MyEditor
     public void OnGUI()
     {
         DrawRoomDataPanel();
+        if (GUILayout.Button("新区域"))
+        {
+            mapInstance.CreatArea();
+        }
     }
 
     private string AutoNewRoomName()
@@ -201,6 +205,14 @@ public class MapEditor : MyEditor
                 }
                 instanceId.Add(mapItemInstance.mapItem.instanceId);
                 selectMapRoomDataObj.mapRoomData.mapItems.Add(mapItemInstance.mapItem);
+            }
+
+            var mapAreas = FindObjectsByType<MapAreaEditor>(FindObjectsSortMode.None);
+
+            foreach (var mapArea in mapAreas)
+            {
+                
+                selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Add(mapArea.GetAreaData());
             }
 
             if (AssetDatabase.Contains(selectMapRoomDataObj.mapRoomData))

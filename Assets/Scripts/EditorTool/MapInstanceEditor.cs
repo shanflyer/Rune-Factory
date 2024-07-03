@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using TMPro;
+using TreeEditor;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class MapInstanceEditor : MonoBehaviour
     private MapRoomData mapRoomData;
     private Transform groundParent;
     private Transform itemParent;
+    private Transform areaParent;
 
     private Tilemap tilemap;
     [SerializeField]
@@ -27,7 +29,20 @@ public class MapInstanceEditor : MonoBehaviour
 
     private static string prefabPath = "Assets/Resources/Prefabs/Ground/";
     private static string defaultMaterial = "Assets/Editor/Source/Default.mat";
+    private const string areaPrefabPath = "Assets/Prefabs/BehaviorArea.prefab";
 
+    public static GameObject areaPrefab
+    {
+        get
+        {
+            if (_areaPrefab == null)
+            {
+                _areaPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(areaPrefabPath);
+            }
+            return _areaPrefab;
+        }
+    }
+    private static GameObject _areaPrefab;
     public static GameObject defaultGround
     {
         get
@@ -151,9 +166,14 @@ public class MapInstanceEditor : MonoBehaviour
 
                 grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
                 tilemapRenderer.enabled = !hideTilemap;
+
+                GameObject areaParentObj = new GameObject("AreaParent");
+                areaParentObj.transform.SetParent(transform, false);
+                areaParent = areaParentObj.transform;
             }
             InitMapObj();
             InitMapTile();
+            InitMapArea();
         }
     }
     public bool CheckPos(ref int2 clickCoordinate)
@@ -229,6 +249,40 @@ public class MapInstanceEditor : MonoBehaviour
                         mapItemInstanceEditor.InitData(itemData,item.blindHomeEquipment, item.instanceId, item.coordinate,item.eventReferenceDatas);
                     }
                 }
+            }
+        }
+    }
+
+    public void CreatArea()
+    {
+        GameObject areaObj = Instantiate(areaPrefab, areaParent);
+        areaObj.name = "ÐÂÇøÓò";
+        var tilemapRenderer = areaObj.AddComponent<TilemapRenderer>();
+        tilemapRenderer.enabled = !hideTilemap;
+        tilemapRenderer.sharedMaterial = material;
+        tilemapRenderers.Add(tilemapRenderer);
+    }
+    private void InitMapArea(bool hideTilemap = false)
+    {
+        if (mapRoomData != null)
+        {
+            for(int i = 0; i < mapRoomData.npcBehaviorAreas.Count; i++)
+            {
+                var areaData = mapRoomData.npcBehaviorAreas[i];
+                GameObject areaObj = Instantiate(areaPrefab, areaParent);
+                areaObj.name = areaData.Name;
+                var tilemapRenderer = areaObj.AddComponent<TilemapRenderer>();
+                var tileMap = areaObj.GetComponentInChildren<Tilemap>();
+                for(int j = 0; j < areaData.cells.Count; j++)
+                {
+                    var cell = areaData.cells[j];
+                    tilemap.SetTile(new Vector3Int(cell.x, cell.y, 0), walkTile);
+                }
+                areaObj.transform.position = GameCommon.GetZeroMapPos(areaData.pos);
+
+                tilemapRenderer.enabled = !hideTilemap;
+                tilemapRenderer.sharedMaterial = material;
+                tilemapRenderers.Add(tilemapRenderer);
             }
         }
     }
@@ -334,7 +388,8 @@ public class MapInstanceEditor : MonoBehaviour
 
         if (oldhideTilemap != hideTilemap)
         {
-            oldhideTilemap = hideTilemap; 
+            oldhideTilemap = hideTilemap;
+            tilemapRenderers.RemoveAll(t => t == null);
             foreach(var renderer in tilemapRenderers)
             {
                 renderer.enabled = !hideTilemap;

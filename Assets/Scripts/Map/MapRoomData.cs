@@ -26,6 +26,17 @@ public enum FlowCameraType
     Default, FlowX, FlowY
 }
 
+public enum BehaviorAreaType
+{
+    创建,聚集,消失
+}
+public class NpcBehaviorArea
+{
+    public string Name;
+    public int2 pos;
+    public List<int2> cells = new List<int2>();
+    public BehaviorAreaType behaviorAreaType;
+}
 public class MapRoomData : ScriptableObject, IGameData
 {
     public string roomName;
@@ -41,6 +52,7 @@ public class MapRoomData : ScriptableObject, IGameData
     public Vector3 fixedCameraPos;
     public int skyBackGroundId;
 
+    public List<NpcBehaviorArea> npcBehaviorAreas=new List<NpcBehaviorArea>();
     public bool CheckBoundary(int2 coordinate)
     {
         if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoordinate.x
