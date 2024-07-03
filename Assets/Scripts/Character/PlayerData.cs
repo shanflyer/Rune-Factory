@@ -651,6 +651,19 @@ public struct GameDateSaveData
     public int hour;
     public int minute;
     public Week week;
+
+    public override string ToString()
+    {
+        switch (LanguageManage.nowLanguage)
+        {
+            case UnityEngine.SystemLanguage.Chinese:
+                return $"{year}年 {season}之月 {day}日"; 
+            default:
+                return $"{day}年 {season}之月 {day}日";
+                break;
+        }
+        return base.ToString();
+    } 
 }
 
 public class ChapterSave

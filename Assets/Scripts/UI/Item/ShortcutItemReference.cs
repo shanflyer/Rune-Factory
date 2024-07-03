@@ -112,10 +112,11 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             index = data.index
         };
         GameActionManager.instance.QueueAction(removeShortcutItem);
-        UnSetButton.transform.localScale = Vector3.zero;
+        UnSetButton.transform.localScale=UseButton.transform.localScale=setImage.transform.localScale = Vector3.zero;
     }
-    public void ClearData()
+    public override void ClearData()
     {
+        base.ClearData();
         data = default(ShortcutItem);
         icon.enabled = false;
         count.enabled = false;
@@ -144,8 +145,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         }
         else
         {
-            ItemValueBg.transform.localScale = Vector3.zero;
-            UseButton.transform.localScale = Vector3.zero; 
+            ItemValueBg.transform.localScale = UseButton.transform.localScale =setImage.transform.localScale= Vector3.zero; 
             toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = false;
             // toggle.graphic.enabled = false;

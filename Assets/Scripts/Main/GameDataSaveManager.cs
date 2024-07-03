@@ -37,7 +37,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     if (loadingIndex == -1)
                     {
                         _loadGameSaveData=UserGameSaveDataList.nowSaveData;
-                    }
+                    }else
                     if (loadingIndex < 3)
                     {
                         _loadGameSaveData=userGameSaveDataList.userGameSaveDatas[loadingIndex];
@@ -240,9 +240,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
            //dataStr = DecryptDES(dataStr);
             UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
             userGameSaveDataList.nowSaveData.Init();
-            for(int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
+            userGameSaveDataList.nowSaveData.index = -1;
+            for (int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
             {
                 userGameSaveDataList.userGameSaveDatas[i].Init();
+                userGameSaveDataList.userGameSaveDatas[i].index = i;
             }
             return userGameSaveDataList;
         }
@@ -404,6 +406,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         if (selectSaveIndex >= 0)
         { 
             userGameSaveDataList.userGameSaveDatas[selectSaveIndex] =new UserGameSaveData(UserGameSaveData);
+            userGameSaveDataList.userGameSaveDatas[selectSaveIndex].index = selectSaveIndex;
         }
          
 

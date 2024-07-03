@@ -79,7 +79,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
-        selectGameSaveData = null;
+        selectGameSaveData = v.nowSaveData;
         SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
         saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
     }

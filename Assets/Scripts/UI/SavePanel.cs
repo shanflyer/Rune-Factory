@@ -74,9 +74,9 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
-        selectGameSaveData = null;
+        //selectGameSaveData = null;
         saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
-        saveList.SelectDefault();
+        //saveList.SelectDefault();
     }
 
     private void SaveAction()

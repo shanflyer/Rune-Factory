@@ -111,8 +111,6 @@ public class ShortcutManager : Singleton<ShortcutManager>
 }
 public class ShortcutPackage : IReferenceData, INativeData
 {
-    
-
     public ShortcutPackage(int characterId)
     {
         this.characterId = characterId;

@@ -61,7 +61,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
             Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
             Name.text = data.playerData.name;
             Money.text = data.otherSaveData.gold.ToString();
-            Time.text = $"{data.dateData.day}/{LanguageManage.SwitchStr(data.dateData.season.ToString())}/{data.dateData.year}";
+            Time.text = data.dateData.ToString();
             SaveTime.text = data.saveTime;
         }
         else
@@ -75,10 +75,14 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         }
         SelectToggle.onValueChanged.AddListener((bool value) =>
         {
-            if (SelectAction != null)
+            if (value)
             {
-                SelectAction(data, value);
+                if (SelectAction != null)
+                {
+                    SelectAction(data, value);
+                }
             }
+            
         });
     }
 
