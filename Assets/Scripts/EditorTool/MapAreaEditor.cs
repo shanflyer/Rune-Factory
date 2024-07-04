@@ -3,20 +3,22 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[ExecuteAlways]
 public class MapAreaEditor : MonoBehaviour
 {
     public int2 pos;
     public BehaviorAreaType behaviorAreaType;
 
-
+    [SerializeField]
     private Tilemap tilemap;
-    private TextMeshProUGUI text;
+    [SerializeField]
+    private TextMeshPro text;
 
     private Vector3 oldPos;
     private void Awake()
     {
         tilemap = GetComponentInChildren<Tilemap>();
-        text = GetComponentInChildren<TextMeshProUGUI>();
+        text = GetComponentInChildren<TextMeshPro>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,6 +27,9 @@ public class MapAreaEditor : MonoBehaviour
     }
     public NpcBehaviorArea GetAreaData()
     {
+        tilemap = GetComponentInChildren<Tilemap>();
+        text = GetComponentInChildren<TextMeshPro>();
+
         NpcBehaviorArea npcBehaviorArea = new NpcBehaviorArea
         {
             pos = this.pos,

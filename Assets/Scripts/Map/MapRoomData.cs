@@ -1,3 +1,4 @@
+锘縰sing System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -28,8 +29,9 @@ public enum FlowCameraType
 
 public enum BehaviorAreaType
 {
-    创建,聚集,消失
+    鍒涘缓,鑱氶泦,娑堝け
 }
+[Serializable]
 public class NpcBehaviorArea
 {
     public string Name;

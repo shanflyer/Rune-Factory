@@ -192,8 +192,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         var MapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(creatRoom.roomId);
        // roomMapDatas.Add(instanceId, MapRoomData.roomName);
         //创建地图房间
-        MapCellController.instance.InitMapData(instanceId, MapRoomData.mapCells,
-            MapRoomData.startCoordinate, MapRoomData.endCoordinate, int3.zero);
+        MapCellController.instance.InitMapData(instanceId, MapRoomData, int3.zero);
 
         foreach (var data in MapRoomData.mapItems)
         {
@@ -791,8 +790,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             //roomMapDatas.Add(room.id, room.map);
 
             //创建地图房间
-            MapCellController.instance.InitMapData(room.id, MapRoomData.mapCells,
-                MapRoomData.startCoordinate, MapRoomData.endCoordinate, room.coordinate);
+            MapCellController.instance.InitMapData(room.id, MapRoomData, room.coordinate);
 
             foreach (var data in MapRoomData.mapItems)
             {

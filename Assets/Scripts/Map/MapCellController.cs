@@ -9,6 +9,7 @@ using Unity.Entities.UniversalDelegates;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using static MapCellController;
 
 public class MapCellController : Singleton<MapCellController>
 {
@@ -217,9 +218,11 @@ public class MapCellController : Singleton<MapCellController>
     //[BurstCompile]
     public class RuntimeMapRoom
     {
+        List<NpcBehaviorArea> NpcBehaviorAreas = new List<NpcBehaviorArea>();
+        Dictionary<BehaviorAreaType, List<int>> NpcBehaviorAreaTypeDic = new Dictionary<BehaviorAreaType, List<int>>();
         public  void Dispose()
         {
-            roomCellData.Dispose();
+            //roomCellData.Dispose();
             linkMapIndexs.Dispose();
             linkMaps.Dispose();
             linkActions.Dispose();
@@ -231,7 +234,8 @@ public class MapCellController : Singleton<MapCellController>
         public int id;
 
         public int3 coordinate;
-        public RoomCellData roomCellData;
+        public int roomCellDataIndex;
+       // public RoomCellData roomCellData;
 
         public NativeHashMap<int2, int> linkMapIndexs;
         public NativeList<int4> linkMaps;
@@ -377,6 +381,28 @@ public class MapCellController : Singleton<MapCellController>
         public NativeHashMap<int, int> mapObjBarriers;
         public int2 startCoordinate, endCoordinate;
 
+        public void AddBarrier(int2 coordinate)
+        {
+            int index = GetCoordinateIndex(coordinate);
+            mapObjBarriers.TryGetValue(index, out int count);
+            count++;
+            mapObjBarriers[index] = count;
+        }
+        public void RemmoveBarrier(int2 coordinate)
+        {
+            int index = GetCoordinateIndex(coordinate);
+            mapObjBarriers.TryGetValue(index, out int count);
+            count--;
+            if (count == 0)
+            {
+                mapObjBarriers.Remove(index);
+            }
+            else
+            {
+                mapObjBarriers[index] = count;
+            }
+            
+        }
         public int2 GetRandomCanWalkCell()
         {
             if (mapObjBarriers.Count < cellValue.Length)
@@ -559,6 +585,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     private Dictionary<int,RuntimeMapRoom> runtimeMapRooms=new Dictionary<int, RuntimeMapRoom>();
+    NativeList<RoomCellData> roomCellDatas;
 
     public int2 GetNearestItemPlayerTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
@@ -610,7 +637,7 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
-            return runtimeMapRoom.roomCellData.GetRandomCanWalkCell();
+            return roomCellDatas[runtimeMapRoom.roomCellDataIndex].GetRandomCanWalkCell(); 
         }
 
         return new int2(int.MinValue, int.MinValue);
@@ -652,10 +679,13 @@ public class MapCellController : Singleton<MapCellController>
         {
             for (int i = 0; i < cells.Length; i++)
             {
-                int index = runtimeMapRoom.roomCellData.GetCoordinateIndex(cells[i] + itemPos);
-                runtimeMapRoom.roomCellData.mapObjBarriers.TryGetValue(index, out int count);
+                roomCellDatas[runtimeMapRoom.roomCellDataIndex].AddBarrier(cells[i] + itemPos);
+
+                /*
+                int index = roomCellDatas[runtimeMapRoom.roomCellDataIndex].GetCoordinateIndex(cells[i] + itemPos);
+                roomCellDatas[runtimeMapRoom.roomCellDataIndex].mapObjBarriers.TryGetValue(index, out int count);
                 count++;
-                runtimeMapRoom.roomCellData.mapObjBarriers[index] = count;
+                roomCellDatas[runtimeMapRoom.roomCellDataIndex].mapObjBarriers[index] = count;*/
             }
         }
     }
@@ -672,13 +702,15 @@ public class MapCellController : Singleton<MapCellController>
         {
             for (int i = 0; i < cells.Length; i++)
             {
-                int index = runtimeMapRoom.roomCellData.GetCoordinateIndex(cells[i] + itemPos);
+                roomCellDatas[runtimeMapRoom.roomCellDataIndex].RemmoveBarrier(cells[i] + itemPos);
+                /*
+                int index = roomCellDatas[runtimeMapRoom.roomCellDataIndex].GetCoordinateIndex(cells[i] + itemPos);
                 runtimeMapRoom.roomCellData.mapObjBarriers.TryGetValue(index, out int count);
                 count--;
                 if (count <= 0)
                 {
                     runtimeMapRoom.roomCellData.mapObjBarriers.Remove(index);
-                }
+                }*/
             }
         }
     }
@@ -985,6 +1017,16 @@ public class MapCellController : Singleton<MapCellController>
             triggerEvents.Dispose();
         }
     }
+    public bool GetCoordinates(int mapInstance, int2 source, int minRange, int maxRange, bool isWalkable,out List<int2> result)
+    {
+        if(GetRuntimeMapRoom(mapInstance,out var runtimeMapRoom))
+        {
+            result= roomCellDatas[runtimeMapRoom.roomCellDataIndex].GetCoordinates(source, minRange, maxRange, isWalkable);
+            return true;
+        }
+        result = null;
+        return false;
+    }
 
     public bool GetRuntimeMapRoom(int roomId, out RuntimeMapRoom runtimeMapRoom)
     {
@@ -1004,16 +1046,14 @@ public class MapCellController : Singleton<MapCellController>
         }
         return int3.zero;
     }
-
-    public RoomCellData GetRoomCellData(int roomId)
+    public List<Vector3Int> GetAllCellData(int mapInstance)
     {
-        if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
+        if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
-            return runtimeMapRoom.roomCellData;
+            return roomCellDatas[runtimeMapRoom.roomCellDataIndex].GetAllCellData();
         }
-        return default(RoomCellData);
-    }
-
+        return null;
+    } 
     public MapTriggerAreas GetPlayerTrigger(int roomId)
     {
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
@@ -1022,31 +1062,25 @@ public class MapCellController : Singleton<MapCellController>
         }
         return default(MapTriggerAreas);
     }
-
-    public void InitWorldRoomDatas(int roomCount)
-    {
-       // runtimeMapRooms.Init(roomCount);
-    }
-
-    public void InitMapData(int roomId, List<MapCellData> mapCellDatas,
-        int2 startCoordinate, int2 endCoordinate, int3 coordinate)
+     
+    public void InitMapData(int roomId, MapRoomData mapRoomData, int3 coordinate)
     {
         RoomCellData roomCellData = new RoomCellData
         {
-            cellValue = new NativeArray<int>(mapCellDatas.Count, Allocator.TempJob),
+            cellValue = new NativeArray<int>(mapRoomData.mapCells.Count, Allocator.TempJob),
             mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.TempJob),
-            startCoordinate = startCoordinate,
-            endCoordinate = endCoordinate,
+            startCoordinate = mapRoomData.startCoordinate,
+            endCoordinate = mapRoomData.endCoordinate,
         };
-        for (int i = 0; i < mapCellDatas.Count; i++)
+        for (int i = 0; i < mapRoomData.mapCells.Count; i++)
         {
-            roomCellData.cellValue[i] = mapCellDatas[i].isWalkable ? 1 : 0;
+            roomCellData.cellValue[i] = mapRoomData.mapCells[i].isWalkable ? 1 : 0;
         }
-
+        roomCellDatas.Add(roomCellData);
         RuntimeMapRoom runtimeMapRoom = new RuntimeMapRoom
         {
             coordinate = coordinate,
-            roomCellData = roomCellData,
+            roomCellDataIndex = roomCellDatas.Length-1,
             id = roomId,
             linkMapIndexs = new NativeHashMap<int2, int>(16, Allocator.Persistent),
             linkMaps = new NativeList<int4>(16, Allocator.Persistent),
@@ -1223,7 +1257,7 @@ public class MapCellController : Singleton<MapCellController>
         Stack<int2> outData = new Stack<int2>();
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
-            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
+            RoomCellData roomCellData = roomCellDatas[runtimeMapRoom.roomCellDataIndex];
             NativeList<int2> pathCells = new NativeList<int2>(16, Allocator.TempJob);
             NativeHashSet<int2> cellSets = new NativeHashSet<int2>(16, Allocator.TempJob);
             for (int i = 0; i < cells.Length; i++)
@@ -1258,7 +1292,7 @@ public class MapCellController : Singleton<MapCellController>
         Stack<int2> outData = new Stack<int2>();
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
-            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
+            RoomCellData roomCellData = roomCellDatas[runtimeMapRoom.roomCellDataIndex];
             NativeList<int2> pathCells = new NativeList<int2>(16, Allocator.TempJob);
             FindPath findPath = new FindPath
             {
@@ -1284,10 +1318,8 @@ public class MapCellController : Singleton<MapCellController>
     public bool CheckIsWalk(Vector2Int coordinate, int mapId)
     {
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
-        {
-            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
-
-            return roomCellData.CheckWalkable(coordinate);
+        { 
+            return roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(coordinate);
         }
         return false;
     }
@@ -1295,10 +1327,8 @@ public class MapCellController : Singleton<MapCellController>
     public bool CheckIsWalk(int3 coordinate)
     {
         if (runtimeMapRooms.TryGetValue(coordinate.z, out RuntimeMapRoom runtimeMapRoom))
-        {
-            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
-
-            return roomCellData.CheckWalkable(coordinate.xy);
+        {  
+            return roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(coordinate.xy);
         }
         return false;
     }
@@ -1306,15 +1336,14 @@ public class MapCellController : Singleton<MapCellController>
     public bool CheckFutureIsWalk(int2[] cells, int mapId, HashSet<int2> specialCells)
     {
         if (runtimeMapRooms.TryGetValue(mapId, out var runtimeMapRoom))
-        {
-            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
+        { 
             for (int i = 0; i < cells.Length; i++)
             {
-                if (!roomCellData.CheckWalkable(cells[i]))
+                if (!roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(cells[i]))
                 {
                     if (specialCells != null)
                     {
-                        if (specialCells.Contains(cells[i]) && roomCellData.CheckBarrierCount(cells[i]) <= 1)
+                        if (specialCells.Contains(cells[i]) && roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckBarrierCount(cells[i]) <= 1)
                         {
                             return true;
                         }
@@ -1337,10 +1366,8 @@ public class MapCellController : Singleton<MapCellController>
     public bool CheckIsWalk(int2 coordinate, int mapId)
     {
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
-        {
-            RoomCellData roomCellData = runtimeMapRoom.roomCellData;
-
-            return roomCellData.CheckWalkable(coordinate);
+        {  
+            return roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(coordinate);
         }
         return false;
     }
@@ -1413,16 +1440,12 @@ public class MapCellController : Singleton<MapCellController>
         }
         return null;
     }
-
-    public void DeleteRoom(int roomInstanceid)
-    {
-        runtimeMapRooms.Remove(roomInstanceid);
-    }
-
+      
     public override void Init()
     {
         base.Init();
         GameActionManager.instance.AddListener<RemoveCellCharacter>(RemoveCellCharacter);
+        roomCellDatas = new NativeList<RoomCellData>(16, Allocator.Persistent);
     }
 
     private void RemoveCellCharacter(RemoveCellCharacter removeCellCharacter)
@@ -1453,7 +1476,7 @@ public class MapCellController : Singleton<MapCellController>
 
                 int nowX = startCoordinate.x + addX;
                 int nowY = startCoordinate.y + addY;
-                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY);
+                return roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(nowX, nowY);
             }
             else
             if (absDx > absDy)
@@ -1468,7 +1491,7 @@ public class MapCellController : Singleton<MapCellController>
                 nowX = startCoordinate.x + addX;
                 trueNowY = trueNowY + perAddy;
                 nowY = perAddy < 0 ? (int)math.ceil(trueNowY) : (int)math.floor(trueNowY);
-                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY);
+                return roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(nowX, nowY);
             }
             else if (absDx < absDy)
             {
@@ -1482,7 +1505,7 @@ public class MapCellController : Singleton<MapCellController>
                 nowY = startCoordinate.y + addY;
                 trueNowX = trueNowX + perAddx;
                 nowX = perAddx < 0 ? (int)math.ceil(trueNowX) : (int)math.floor(trueNowX);
-                return runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY);
+                return roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(nowX, nowY);
             }
         }
         return false;
@@ -1507,7 +1530,7 @@ public class MapCellController : Singleton<MapCellController>
                 {
                     nowX = startCoordinate.x + addX;
                     nowY = startCoordinate.y + addY;
-                    if (!runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY))
+                    if (!roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(nowX, nowY))
                     {
                         break;
                     }
@@ -1539,7 +1562,7 @@ public class MapCellController : Singleton<MapCellController>
                     {
                         nowY = perAddy < 0 ? (int)math.ceil(trueNowY) : (int)math.floor(trueNowY);
                     }
-                    if (!runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY))
+                    if (!roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(nowX, nowY))
                     {
                         break;
                     }
@@ -1570,7 +1593,7 @@ public class MapCellController : Singleton<MapCellController>
                     {
                         nowX = perAddx < 0 ? (int)math.ceil(trueNowX) : (int)math.floor(trueNowX);
                     }
-                    if (!runtimeMapRoom.roomCellData.CheckWalkable(nowX, nowY))
+                    if (!roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(nowX, nowY))
                     {
                         break;
                     }
@@ -1588,7 +1611,12 @@ public class MapCellController : Singleton<MapCellController>
     protected override void Clear()
     {
         base.Clear();
-        foreach(var runtimeMapRoom in runtimeMapRooms)
+        for(int i = 0; i < roomCellDatas.Length; i++)
+        {
+            roomCellDatas[i].Dispose();
+        }
+        roomCellDatas.Dispose();
+        foreach (var runtimeMapRoom in runtimeMapRooms)
         {
             runtimeMapRoom.Value.Dispose();
         }
