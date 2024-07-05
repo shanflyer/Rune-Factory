@@ -1,7 +1,6 @@
 using BehaviorDesigner.Runtime;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -139,6 +138,7 @@ public class FightController : MonoBehaviour
 
     [SerializeField]
     private BehaviorTree controllerBehavior;
+
     private FightMapRuntime fightMapRuntime;
 
     [SerializeField]
@@ -158,7 +158,7 @@ public class FightController : MonoBehaviour
 
     private Transform monsterObj;
 
-    private Dictionary<int,SelectMasker> playerSelectMaskerDic = new Dictionary<int, SelectMasker>();
+    private Dictionary<int, SelectMasker> playerSelectMaskerDic = new Dictionary<int, SelectMasker>();
     private Dictionary<int2, SelectMasker> singleSelectMaskerDic = new Dictionary<int2, SelectMasker>();
     private SelectMasker allSelectMasker;
     private Dictionary<int, SelectMasker> horizontalMaskerDic = new Dictionary<int, SelectMasker>();
@@ -177,7 +177,7 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<DisplayHurt>(DisplayHurt);
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
         GameActionManager.instance.AddListener<SetFightCharacterAnimator>(SetFightCharacterAnimator);
-       // GameActionManager.instance.AddListener<PlayerFight>(PlayerFight);
+        // GameActionManager.instance.AddListener<PlayerFight>(PlayerFight);
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
         GameActionManager.instance.AddListener<SetAutoExplore>(SetAutoExplore);
         GameActionManager.instance.AddListener<SwitchAutoExplore>(SwitchAutoExplore);
@@ -198,7 +198,6 @@ public class FightController : MonoBehaviour
             {
                 controllerBehavior = behaviorTree;
             }
-           
         }
         // controllerBehavior = GetComponent<BehaviorTree>();
         var sceneInfoManager = SceneInfoManager.instance;
@@ -207,7 +206,7 @@ public class FightController : MonoBehaviour
 
         playerSelectMaskerDic.Clear();
         var playerMaskers = playerMaskParent.GetComponentsInChildren<SelectMasker>();
-        for(int i = 0; i < playerMaskers.Length; i++)
+        for (int i = 0; i < playerMaskers.Length; i++)
         {
             playerSelectMaskerDic.Add(int.Parse(playerMaskers[i].transform.parent.name), playerMaskers[i]);
         }
@@ -240,7 +239,7 @@ public class FightController : MonoBehaviour
 
     private void EndPlayerRound(EndPlayerRound endPlayerRound)
     {
-      //  _chapterFight = false;
+        //  _chapterFight = false;
     }
 
     private void FightCharacterMove(FightCharacterMove fightCharacterMove)
@@ -260,7 +259,7 @@ public class FightController : MonoBehaviour
     private void TryStartAutoExplore(TryStartAutoExplore tryStartAutoExplore)
     {
         chapterFight = false;
-     
+
         if (autoExplore)
         {
             StartWalk();
@@ -320,7 +319,7 @@ public class FightController : MonoBehaviour
                             selectMasker.SelectAction(false);
                             if (SelectTransform == null)
                             {
-                                SelectTransform = selectMasker.transform.parent; 
+                                SelectTransform = selectMasker.transform.parent;
                                 selectMasker.SelectAction(true);
                                 selectValue = fightPos;
                                 UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
@@ -330,7 +329,7 @@ public class FightController : MonoBehaviour
                         }
                     }
                 }
-                
+
                 break;
 
             case TargetRangeType.横向:
@@ -404,6 +403,7 @@ public class FightController : MonoBehaviour
                 UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: allSelectMasker.transform.parent);
                 //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                 break;
+
             case TargetRangeType.Player:
                 var allFightPlayers = FightManager.instance.GetAllFightPlayer();
                 singleMaskParent.SetActive(false);
@@ -435,7 +435,7 @@ public class FightController : MonoBehaviour
                         var fightPos = allFightPlayers[i].fightPos;
                         if (playerSelectMaskerDic.TryGetValue(fightPos.x, out var selectMasker))
                         {
-                            selectMasker.SelectAction(false); 
+                            selectMasker.SelectAction(false);
                             if (SelectTransform == null)
                             {
                                 SelectTransform = selectMasker.transform.parent;
@@ -463,8 +463,9 @@ public class FightController : MonoBehaviour
                 foreach (var selectMasker in playerSelectMaskerDic)
                 {
                     selectMasker.Value.transform.parent.localScale = Vector3.zero;
-                } 
+                }
                 break;
+
             case TargetRangeType.单体:
                 foreach (var selectMasker in singleSelectMaskerDic)
                 {
@@ -499,7 +500,7 @@ public class FightController : MonoBehaviour
         switch (nowDisplayTargetRangeType)
         {
             case TargetRangeType.Player:
-                foreach(var selectMasker in playerSelectMaskerDic)
+                foreach (var selectMasker in playerSelectMaskerDic)
                 {
                     var active = selectMask == selectMasker.Value.transform.parent;
                     if (active)
@@ -507,6 +508,7 @@ public class FightController : MonoBehaviour
                     selectMasker.Value.SelectAction(active);
                 }
                 break;
+
             case TargetRangeType.单体:
                 foreach (var selectMasker in singleSelectMaskerDic)
                 {
@@ -549,7 +551,7 @@ public class FightController : MonoBehaviour
     {
         autoExplore = !autoExplore;
         if (!chapterFight)
-        { 
+        {
             if (switchAutoExplore.setResult != null)
             {
                 switchAutoExplore.setResult(autoExplore);
@@ -564,8 +566,7 @@ public class FightController : MonoBehaviour
             }
         }
         else
-        { 
-
+        {
             if (switchAutoExplore.setResult != null)
             {
                 switchAutoExplore.setResult(true);
@@ -575,7 +576,7 @@ public class FightController : MonoBehaviour
 
     private void SetAutoExplore(SetAutoExplore setAutoExplore)
     {
-        autoExplore = setAutoExplore.auto; 
+        autoExplore = setAutoExplore.auto;
         if (autoExplore)
         {
             StartWalk();
@@ -586,7 +587,6 @@ public class FightController : MonoBehaviour
         }
     }
 
- 
     private void DisplayFightScene(DisplayFightScene displayFightScene)
     {
         GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), false);
@@ -605,7 +605,7 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.RemoveListener<DisplayHurt>(DisplayHurt);
         GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd);
         GameActionManager.instance.RemoveListener<SetFightCharacterAnimator>(SetFightCharacterAnimator);
-       // GameActionManager.instance.RemoveListener<PlayerFight>(PlayerFight);
+        // GameActionManager.instance.RemoveListener<PlayerFight>(PlayerFight);
         GameActionManager.instance.RemoveListener<CreatFightPlayer>(CreatFightPlayer);
         GameActionManager.instance.RemoveListener<SetAutoExplore>(SetAutoExplore);
         GameActionManager.instance.RemoveListener<SwitchAutoExplore>(SwitchAutoExplore);
@@ -749,7 +749,6 @@ public class FightController : MonoBehaviour
         instance = null;
     }
 
-  
     public bool AutoExplore => autoExplore;
     private bool autoExplore = false;
 
@@ -1007,7 +1006,7 @@ public class FightController : MonoBehaviour
         return null;
     }
 
-    public async void StartSkillAction(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false, bool _isEquipSkill = false,bool overrideEquipSkill=false)
+    public async void StartSkillAction(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false, bool _isEquipSkill = false, bool overrideEquipSkill = false)
     {
         FightPlayerRuntime fightPlayerRuntime;
         if (!fightPlayerRuntimes.TryGetValue(characterId, out fightPlayerRuntime))
@@ -1018,7 +1017,7 @@ public class FightController : MonoBehaviour
         if (FightManager.instance.GetFightCharacter(characterId, out fightCharacter))
         {
             fightCharacter.fightStatus = FightStatus.行动;
-           // fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId, out var skillRuntime);
+            // fightCharacter.skillRuntimes.TryGetValue(skillEstimateData.skillId, out var skillRuntime);
             SkillData skillData;
             if (skillEstimateData.skillRuntime != null)
             {
@@ -1026,9 +1025,8 @@ public class FightController : MonoBehaviour
             }
             else
             {
-                skillData =await GameDataManager.instance.GetAsyncData<SkillData>(skillEstimateData.skillId);
+                skillData = await GameDataManager.instance.GetAsyncData<SkillData>(skillEstimateData.skillId);
             }
-
 
             bool isEquipSkill = _isEquipSkill;
             if (!overrideEquipSkill)
@@ -1071,12 +1069,10 @@ public class FightController : MonoBehaviour
             TimeLineManger.instance.PlaySkillTimeline(characterId, skillEstimateData, skillData.myTimeLineData
               , () =>
               {
-
                   if (skillData.haveNextAction)
-                  {  
+                  {
                       if (skillData.nextTimeLineData != null)
                       {
-                         
                       }
                       else
                       {
@@ -1115,7 +1111,7 @@ public class FightController : MonoBehaviour
         }
     }
 
-    private bool chapterFight 
+    private bool chapterFight
     {
         get
         {
@@ -1128,9 +1124,10 @@ public class FightController : MonoBehaviour
             {
                 isInFight = value
             };
-            GameActionManager.instance.QueueAction(setChapterFight,true);
+            GameActionManager.instance.QueueAction(setChapterFight, true);
         }
     }
+
     private bool _chapterFight;
 
     private float waitTime;
@@ -1199,7 +1196,7 @@ public class FightController : MonoBehaviour
         StopWalk();
         ChapterStepAction chapterStepAction = new ChapterStepAction();
         GameActionManager.instance.QueueAction(chapterStepAction, true);
-        chapterFight = true; 
+        chapterFight = true;
     }
 
     private SkillRuntime ActionSkillRuntime;
@@ -1269,7 +1266,7 @@ public class FightController : MonoBehaviour
     {
         SkillEstimateData skillEstimateData = new SkillEstimateData
         {
-            skillRuntime=ActionSkillRuntime, 
+            skillRuntime = ActionSkillRuntime,
             source = ActionCharacter,
             target = SelectTransform,
             targets = FightManager.instance.GetTargets(selectValue, ActionSkillRuntime.skillData.targetRangeType),
@@ -1281,11 +1278,11 @@ public class FightController : MonoBehaviour
 
     public Vector3 GetPosForCharacterId(int characterId)
     {
-        if(fightPlayerRuntimes.TryGetValue(characterId,out var fightPlayerRuntime))
+        if (fightPlayerRuntimes.TryGetValue(characterId, out var fightPlayerRuntime))
         {
             return fightPlayerRuntime.animator.transform.position;
         }
-        else if(fightMonsterRuntimes.TryGetValue(characterId,out fightPlayerRuntime))
+        else if (fightMonsterRuntimes.TryGetValue(characterId, out fightPlayerRuntime))
         {
             return fightPlayerRuntime.animator.transform.position;
         }

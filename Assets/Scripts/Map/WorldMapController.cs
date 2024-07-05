@@ -49,8 +49,7 @@ public class WorldMapController : MonoBehaviour
             } 
         }
        
-        GameObjectCurveController.instance.SetUpDataComponent(this);
-        WorldMapObjManager.instance.displayMap = mapInstance;
+        GameObjectCurveController.instance.SetUpDataComponent(this); 
 
         await GameDataSaveManager.instance.InitLoadSaveData();
 

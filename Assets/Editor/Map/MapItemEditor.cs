@@ -1,10 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
 using UnityEngine.Tilemaps;
-using Unity.Mathematics;
-using static MapCellController;
 
 public class MapItemEditor : MyEditor
 {
@@ -27,7 +26,7 @@ public class MapItemEditor : MyEditor
     private static MapItemEditor _Instance;
     private CommonEditor mapItemsPanel;
 
-   // private MapItemDataList mapItemDataList;
+    // private MapItemDataList mapItemDataList;
 
     private List<CommonObj> mapItemDataObjs = new List<CommonObj>();
 
@@ -50,8 +49,9 @@ public class MapItemEditor : MyEditor
     private Tilemap ground, collider, trigger;
     private Transform singleItemParent;
     private MyInstance myInstance;
-    private TileBase colliderTile, triggerTile,playerTriggerTile;
-    private void OnDestroy()
+    private TileBase colliderTile, triggerTile, playerTriggerTile;
+
+    private new void OnDestroy()
     {
         base.OnDestroy();
         ground.ClearAllTiles();
@@ -67,12 +67,14 @@ public class MapItemEditor : MyEditor
         myInstance = null;
         _Instance = null;
     }
+
     [MenuItem("工具/地图道具")]
     public static void WindowShow()
     {
-        _Instance = EditorWindow.CreateWindow<MapItemEditor>("地图道具"); 
+        _Instance = EditorWindow.CreateWindow<MapItemEditor>("地图道具");
         Instance.Init();
     }
+
     public new void ShowAuxWindow()
     {
         Init();
@@ -86,19 +88,20 @@ public class MapItemEditor : MyEditor
         foreach (var file in files)
         {
             var mapItemData = AssetDatabase.LoadAssetAtPath<MapItemData>($"{EditorDataPath.mapItemDataPath}{file.Name}");
-            
+
             MapInstanceEditor.mapItemDatas.Add(mapItemData.id, mapItemData);
         }
     }
-    void Init()
+
+    private void Init()
     {
         mapItemDataObjs.Clear();
         LoadItemData();
-        foreach(var data in MapInstanceEditor.mapItemDatas)
+        foreach (var data in MapInstanceEditor.mapItemDatas)
         {
             mapItemDataObjs.Add(new MapItemDataObj(data.Value));
         }
-        
+
         mapItemsPanel = CreateInstance<CommonEditor>();
         mapItemsPanel.InitData(Instance, null);
         myInstance = new MyInstance();
@@ -148,12 +151,14 @@ public class MapItemEditor : MyEditor
                 itemObj.transform.SetParent(itemParent, false);
                 itemObj.transform.localPosition = Vector3.zero;
                 var mapItemInstanceEditor = itemObj.AddComponent<MapItemInstanceEditor>();
-                mapItemInstanceEditor.InitData(selectMapItemDataObj.itemData,MapEditor.Instance.CreatMapItemInstance(selectMapItemDataObj.itemData.id), Vector2Int.zero);
+                mapItemInstanceEditor.InitData(selectMapItemDataObj.itemData, MapEditor.Instance.CreatMapItemInstance(selectMapItemDataObj.itemData.id), Vector2Int.zero);
             }
         }
     }
+
     [SerializeField]
-    GameObject selectItem; 
+    private GameObject selectItem;
+
     private void NewMapItem()
     {
         DestroyImmediate(singleItemParent.gameObject);
@@ -175,7 +180,6 @@ public class MapItemEditor : MyEditor
         Model.transform.SetParent(selectItem.transform, false);
         Show.transform.SetParent(selectItem.transform, false);
 
-
         MapItemData mapItemData = ScriptableObject.CreateInstance<MapItemData>();
 
         mapItemData.id = myInstance.CreatInstanceId();
@@ -184,9 +188,8 @@ public class MapItemEditor : MyEditor
         mapItemData.itemObj = selectItem;
 
         selectMapItemDataObj = new MapItemDataObj(mapItemData);
-
-
     }
+
     private void EditMapItem()
     {
         if (selectMapItemDataObj == null)
@@ -206,7 +209,7 @@ public class MapItemEditor : MyEditor
         collider.RefreshAllTiles();
         trigger.RefreshAllTiles();
 
-        for(int i = 0; i < selectMapItemDataObj.itemData.colliderCells.Length; i++)
+        for (int i = 0; i < selectMapItemDataObj.itemData.colliderCells.Length; i++)
         {
             var coordinate = selectMapItemDataObj.itemData.colliderCells[i];
             collider.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), colliderTile);
@@ -215,7 +218,7 @@ public class MapItemEditor : MyEditor
         {
             var coordinate = selectMapItemDataObj.itemData.triggerCells[i];
             trigger.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), triggerTile);
-        } 
+        }
 
         if (selectMapItemDataObj.itemData.playerTriggerCells != null)
         {
@@ -225,12 +228,12 @@ public class MapItemEditor : MyEditor
                 ground.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), playerTriggerTile);
             }
         }
-       
 
         selectItem = Instantiate(selectMapItemDataObj.itemData.itemObj);
         selectItem.transform.SetParent(singleItemParent, false);
         selectItem.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
     }
+
     private void SaveMapItem()
     {
         var colliderBound = collider.cellBounds;
@@ -288,7 +291,7 @@ public class MapItemEditor : MyEditor
         selectMapItemDataObj.itemData.itemObj = obj;
         if (!mapItemDataObjs.Contains(selectMapItemDataObj))
         {
-            mapItemDataObjs.Add(selectMapItemDataObj); 
+            mapItemDataObjs.Add(selectMapItemDataObj);
         }
         EditorUtility.SetDirty(selectMapItemDataObj.itemData);
         if (AssetDatabase.Contains(selectMapItemDataObj.itemData))
@@ -299,8 +302,8 @@ public class MapItemEditor : MyEditor
         {
             AssetDatabase.CreateAsset(selectMapItemDataObj.itemData, assetPath);
         }
-
     }
+
     public void OnGUI()
     {
         if (mapItemsPanel == null)
@@ -319,14 +322,14 @@ public class MapItemEditor : MyEditor
 
         DisplayMapObjProperty();
     }
-    void DisplayMapObjProperty()
+
+    private void DisplayMapObjProperty()
     {
         GUILayout.BeginVertical("button");
-        if(selectMapItemDataObj!=null)
+        if (selectMapItemDataObj != null)
         {
             DrawIntField(ref selectMapItemDataObj.itemData.id, "物体Id:", 80, 120);
             DrawTextField(ref selectMapItemDataObj.itemData.itemName, "物体名字:", 80, 120);
-
         }
         GUILayout.EndVertical();
     }

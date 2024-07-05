@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Mathematics; 
+using Unity.Mathematics;
 
 public class FishingManager : Singleton<FishingManager>
 {
@@ -37,7 +37,7 @@ public class FishingManager : Singleton<FishingManager>
             GameActionManager.instance.RemoveListener<StopFishing>(StopFishing);
             GameActionManager.instance.RemoveListener<StartFishing>(StartFishing);
             GameActionManager.instance.RemoveListener<DisplayMap>(DisplayMap);
-        } 
+        }
     }
 
     private async void FishingIsSuccess(FishingIsSuccess fishingIsSuccess)
@@ -51,7 +51,7 @@ public class FishingManager : Singleton<FishingManager>
             {
                 fishPondData.seasonRandomValue.TryGetValue(Season.Default, out randomId);
             }
-            var randomResults = GameRandom.instance.GetRandomValue(randomId,countValue:fishingIsSuccess.fishValue);
+            var randomResults = GameRandom.instance.GetRandomValue(randomId, countValue: fishingIsSuccess.fishValue);
             if (randomResults.Count > 0)
             {
                 var randomResult = randomResults[0];
@@ -67,9 +67,9 @@ public class FishingManager : Singleton<FishingManager>
                 Character character = CharacterManager.instance.GetCharacter(fishingIsSuccess.characterId);
                 int count = await PackageManager.instance.SetItemInPackage(item, character.characterPackage);
                 if (count <= 0)
-                { 
+                {
                     if (isController)
-                    { 
+                    {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(fishData.itemId);
                         bool newRecord = GameDataSaveManager.instance.SetFishSaveData(fishData.id, randomResult.count, character.mapInstance);
                         ItemResultInfo itemResultInfo = new ItemResultInfo
@@ -133,9 +133,9 @@ public class FishingManager : Singleton<FishingManager>
     private Dictionary<int, Delegate> fishWaitActions = new Dictionary<int, Delegate>();
     private HashSet<int> fishers = new HashSet<int>();
 
-    void DisplayMap(DisplayMap displayMap)
+    private void DisplayMap(DisplayMap displayMap)
     {
-        foreach(var fisher in fishers)
+        foreach (var fisher in fishers)
         {
             Character character = CharacterManager.instance.GetCharacter(fisher);
             if (character.mapInstance != displayMap.displayMap)
@@ -156,6 +156,7 @@ public class FishingManager : Singleton<FishingManager>
             }
         }
     }
+
     private void StopFishing(StopFishing stopFishing)
     {
         int characterId = stopFishing.characterId;
@@ -201,7 +202,7 @@ public class FishingManager : Singleton<FishingManager>
             {
                 StartFishingGame startFishingGame = new StartFishingGame
                 {
-                    characterId = characterId, 
+                    characterId = characterId,
                 };
                 GameActionManager.instance.QueueAction(startFishingGame);
                 waitFishers.Remove(characterId);
@@ -252,12 +253,12 @@ public class FishingManager : Singleton<FishingManager>
                 }
             }
 
-            if(mapId== WorldMapObjManager.instance.displayMap)
+            if (mapId == WorldMapObjManager.instance.displayMap)
             {
                 CreatFisher creatFisher = new CreatFisher
                 {
                     characterInstance = characterId,
-                    pondData= fishPondData,
+                    pondData = fishPondData,
                 };
                 GameActionManager.instance.QueueAction(creatFisher);
             }

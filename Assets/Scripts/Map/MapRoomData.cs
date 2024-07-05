@@ -29,8 +29,9 @@ public enum FlowCameraType
 
 public enum BehaviorAreaType
 {
-    创建,聚集,消失
+    创建, 聚集, 消失
 }
+
 [Serializable]
 public class NpcBehaviorArea
 {
@@ -39,6 +40,7 @@ public class NpcBehaviorArea
     public List<int2> cells = new List<int2>();
     public BehaviorAreaType behaviorAreaType;
 }
+
 public class MapRoomData : ScriptableObject, IGameData
 {
     public string roomName;
@@ -53,8 +55,10 @@ public class MapRoomData : ScriptableObject, IGameData
     public FlowCameraType flowCameraType;
     public Vector3 fixedCameraPos;
     public int skyBackGroundId;
+    public int creatTempCharacterId;
 
-    public List<NpcBehaviorArea> npcBehaviorAreas=new List<NpcBehaviorArea>();
+    public List<NpcBehaviorArea> npcBehaviorAreas = new List<NpcBehaviorArea>();
+
     public bool CheckBoundary(int2 coordinate)
     {
         if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoordinate.x

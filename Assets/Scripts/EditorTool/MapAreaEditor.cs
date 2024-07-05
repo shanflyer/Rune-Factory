@@ -1,5 +1,5 @@
 using TMPro;
-using Unity.Mathematics; 
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,20 +11,23 @@ public class MapAreaEditor : MonoBehaviour
 
     [SerializeField]
     private Tilemap tilemap;
+
     [SerializeField]
     private TextMeshPro text;
 
     private Vector3 oldPos;
+
     private void Awake()
     {
         tilemap = GetComponentInChildren<Tilemap>();
         text = GetComponentInChildren<TextMeshPro>();
     }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
     }
+
     public NpcBehaviorArea GetAreaData()
     {
         tilemap = GetComponentInChildren<Tilemap>();
@@ -36,7 +39,7 @@ public class MapAreaEditor : MonoBehaviour
             Name = text.text,
             behaviorAreaType = behaviorAreaType
         };
-        for(int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)
+        for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)
         {
             for (int y = tilemap.cellBounds.yMin; y < tilemap.cellBounds.yMax; y++)
             {
@@ -49,18 +52,20 @@ public class MapAreaEditor : MonoBehaviour
         }
         return npcBehaviorArea;
     }
+
     private void InitPos()
     {
         Vector3 pos = GameCommon.GetMapPos(new Vector2Int(this.pos.x, this.pos.y));
         transform.localPosition = pos;
         oldPos = pos;
     }
+
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if(transform.position!= oldPos)
+        if (transform.position != oldPos)
         {
-            pos = GameCommon.GetMapCoordinateInt(transform.localPosition); 
+            pos = GameCommon.GetMapCoordinateInt(transform.localPosition);
             InitPos();
         }
     }

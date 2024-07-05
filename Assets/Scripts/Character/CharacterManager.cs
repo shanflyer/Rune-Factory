@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public delegate void MoveEndAction();
@@ -70,9 +69,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private MyInstance myInstance;
     private Dictionary<int, Character> characters = new Dictionary<int, Character>();
-    private Dictionary<int, List<int>> characterInstances = new Dictionary<int, List<int>>();
-
-    private List<int> npcInstances = new List<int>();
+    private Dictionary<int, int> characterDataToInstances = new Dictionary<int, int>();
+    private HashSet<int> tempInstances = new HashSet<int>();
 
     public Player player;
     //private Vector2 playerMoveDirction;
@@ -166,6 +164,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
         GameActionManager.instance.AddListener<VisitNPC>(VisitNPC);
         GameActionManager.instance.AddListener<DisplayCharacterItemRenderer>(DisplayCharacterItemRenderer);
+        GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
     }
 
     private void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
@@ -388,7 +387,6 @@ public class CharacterManager : Singleton<CharacterManager>
             }
         }
     }
-    
 
     public void StartCharacterMove(StartCharacterMove startCharacterMove)
     {
@@ -468,7 +466,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     UIManager.instance.ShowGamePanel<PlayerTopPanel>();
 
                     var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId);
-                   UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
+                    UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
                 }
                 characterRuntionObjs.TryGetValue(controllerCharacter, out var _ControllerRuntimeObj);
                 ControllerRuntimeObj = _ControllerRuntimeObj;
@@ -511,10 +509,6 @@ public class CharacterManager : Singleton<CharacterManager>
         return math.distance(controllerCharacter.coordinate, coordinate);
     }
 
-    public void SetControllerCharacter(int id)
-    {
-    }
-
     private void SetCharacterAnimator(SetCharacterAnimator setCharacterAnimator)
     {
         if (GetRuntimeCharacterObj(setCharacterAnimator.characterId, out CharacterRuntimeObj characterRuntimeObj))
@@ -524,15 +518,15 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async Task CreatPlayer(int id, int bag,int instanceId=0)
+    public async Task CreatPlayer(int id, int bag, int instanceId = 0)
     {
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         if (instanceId == 0)
         {
             instanceId = myInstance.CreatInstanceId();
-        } 
-        ProfessionData professionData =await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
-        player = new Player(playerData, instanceId,professionData);
+        }
+        ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
+        player = new Player(playerData, instanceId, professionData);
         controllerCharacter = player;
         AddCharacter(player);
     }
@@ -549,12 +543,26 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
+    private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
+    {
+        foreach (var instanceId in tempInstances)
+        {
+            if (characters.TryGetValue(instanceId, out var character))
+            {
+                RemoveCharacter(character);
+            }
+        }
+    }
+
     private void RemoveCharacter(Character character)
     {
-        if (characterInstances.TryGetValue(character.dataId, out List<int> instances))
+        if (character is TempCharacter)
         {
-            instances.Remove(character.instanceId);
-            characters.Remove(character.instanceId);
+            tempInstances.Remove(character.instanceId);
+        }
+        else
+        {
+            characterDataToInstances.Remove(character.dataId);
         }
 
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
@@ -577,7 +585,7 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
         int level = TempCharacterManager.instance.level;
         var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-        TempCharacter character = new TempCharacter(characterData, professionData, myInstance.CreatInstanceId(),  tempCharacterData.id);
+        TempCharacter character = new TempCharacter(characterData, professionData, myInstance.CreatInstanceId(), tempCharacterData.id);
 
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
@@ -615,12 +623,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             controllerCharacter = character;
         }
-        if (!characterInstances.TryGetValue(creatCharacter.characterId, out var ints))
-        {
-            ints = new List<int>();
-        }
-        ints.Add(character.instanceId);
-        characterInstances[creatCharacter.characterId] = ints;
+        characterDataToInstances[creatCharacter.characterId] = character.instanceId;
         if (creatCharacter.setResult != null)
         {
             creatCharacter.setResult(true);
@@ -633,14 +636,13 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void AddCharacter(Character character)
     {
-        if (!characterInstances.TryGetValue(character.dataId, out List<int> instances))
+        if (character is TempCharacter)
         {
-            instances = new List<int>();
-            characterInstances.Add(character.dataId, instances);
+            tempInstances.Add(character.instanceId);
         }
-        if (!instances.Contains(character.instanceId))
+        else
         {
-            instances.Add(character.instanceId);
+            characterDataToInstances.Add(character.dataId, character.instanceId);
         }
         characters[character.instanceId] = character;
     }
@@ -686,12 +688,9 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             return player;
         }
-        if (characterInstances.TryGetValue(dataId, out var instances))
+        if (characterDataToInstances.TryGetValue(dataId, out var instance))
         {
-            if (instances.Count > 0)
-            {
-                return characters[instances[0]];
-            }
+            return characters[instance];
         }
         return null;
     }
@@ -709,9 +708,9 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         if (character == null)
         {
-            if (characterInstances.TryGetValue(characterId, out var ints))
+            if (characterDataToInstances.TryGetValue(characterId, out var instanceId))
             {
-                characters.TryGetValue(ints[0], out character);
+                characters.TryGetValue(instanceId, out character);
             }
         }
         return character;
@@ -1123,7 +1122,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterSaveData.dataId);
         ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-        player = new Player( characterData, characterSaveData.instanceId, professionData);
+        player = new Player(characterData, characterSaveData.instanceId, professionData);
         player.SetCoordinate(new int3(int2.zero, WorldMapObjManager.instance.displayMap));
         controllerCharacter = player;
         AddCharacter(player);
@@ -1153,16 +1152,11 @@ public class CharacterManager : Singleton<CharacterManager>
             if (!characters.TryGetValue(npc.characterId, out var character))
             {
                 var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
-                var professionData=await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
+                var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
                 character = new Character(characterData, professionData, npc.characterId);
                 characters.Add(npc.characterId, character);
 
-                if (!characterInstances.TryGetValue(character.dataId, out var ints))
-                {
-                    ints = new List<int>();
-                }
-                ints.Add(character.instanceId);
-                characterInstances[character.dataId] = ints;
+                characterDataToInstances[character.dataId] = character.instanceId;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
             RefreshNpcRuntimeObj(character);

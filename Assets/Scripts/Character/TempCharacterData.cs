@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
-using static BehaviorDesigner.Runtime.BehaviorManager;
+
 #if UNITY_EDITOR
+
 using UnityEditor;
+
 #endif
+
 public class TempCharacterData : ScriptableObject, IGameData
 {
     public int id;
@@ -18,15 +17,13 @@ public class TempCharacterData : ScriptableObject, IGameData
     public ExternalBehaviorTree defaultBehavior;
     public IntBehaviorDictionary levelBehavior;
 #if UNITY_EDITOR
-    [HideInInspector]
-    public List<int> levelDatas;
-    [HideInInspector]
-    public List<string> levelBehaviors;
+    private List<int> levelDatas;
+    private List<string> levelBehaviors;
+
     public void SetReferenceData()
     {
         string path = $"{EditorDataPath.tempCharacterBehaviorPath}{defaultBehaviorName}{".asset"}";
         defaultBehavior = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>(path);
-
 
         levelBehavior = new IntBehaviorDictionary();
         if (levelDatas != null)
@@ -41,17 +38,17 @@ public class TempCharacterData : ScriptableObject, IGameData
                 }
             }
         }
-        
     }
+
 #endif
+
     public string GetKey()
     {
         return id.ToString();
-    } 
+    }
+
     public override string ToString()
     {
         return id.ToString();
     }
-
 }
-

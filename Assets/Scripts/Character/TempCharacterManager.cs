@@ -1,81 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine;
 
-public class TempCharacterManager:Singleton<TempCharacterManager>
+public class TempCharacterManager : Singleton<TempCharacterManager>
 {
-    public override bool NeedUpdata => true; 
-    public override  void Init()
+    //public override bool NeedUpdata => true;
+    public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<SetCreateTempCharacterLevel>(SetCreateTempCharacterLevel);
         GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
-        GameActionManager.instance.AddListener<GetTempCharacterExit>(GetTempCharacterExit);
-        GameActionManager.instance.AddListener<SetTempCharacterUpdata>(SetTempCharacterUpdata);
+        GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
+        GameActionManager.instance.AddListener<StartCreatTempCharacter>(StartCreatTempCharacter);
     }
-    TempCharacterCreatData NowTempCharacterCreatData;
-    List<int> tempCharacters;
-    int totalCharacterCount;
-    int nowCd;
-    int waitTime;
-    bool updataCreatCharacter = false;
+
+    private List<int> tempCharacters=new List<int>();
+    private int totalCharacterCount;
     public int level { get; private set; }
 
-    void SetTempCharacterUpdata(SetTempCharacterUpdata setTempCharacterUpdata)
+    protected override void Clear()
     {
-        updataCreatCharacter = setTempCharacterUpdata.canUpdata;
+        base.Clear();
+        creatTempDelegate = null;
     }
-    void GetTempCharacterExit(GetTempCharacterExit getTempCharacterExit)
-    {
-        var TempPosRanges = NowTempCharacterCreatData.tempExitDatas;
-        int index = GameRandom.RandomInt(0, TempPosRanges.Count);
-        var tempPosRange = TempPosRanges[index];
-        int2 coordinate = GameRandom.RandomInt2(tempPosRange.posMin, tempPosRange.posMax);
-        getTempCharacterExit.SetInt3Value(new int3(coordinate, tempPosRange.mapInstance));
-    }
-    
 
-    void DestoryCharacter(DestoryCharacter destoryCharacter)
+    private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
+    {
+        tempCharacters.Clear();
+        totalCharacterCount = 0;
+        if (creatTempDelegate != null)
+        {
+            GameTimerController.instance.RemoveWaiter(creatTempDelegate);
+        }
+        NowTempCharacterCreatData = null;
+    }
+
+    private void DestoryCharacter(DestoryCharacter destoryCharacter)
     {
         if (destoryCharacter.isTemp)
         {
-            if (NowTempCharacterCreatData.tempCharacters.Contains(destoryCharacter.dataId) &&
-            !tempCharacters.Contains(destoryCharacter.dataId))
+            if (tempCharacters.Contains(destoryCharacter.dataId))
             {
                 tempCharacters.Add(destoryCharacter.dataId);
             }
             totalCharacterCount--;
-
-        } 
-    }
-    async void SetCreateTempCharacterLevel(SetCreateTempCharacterLevel setCreateTempCharacterLevel)
-    {
-        level = setCreateTempCharacterLevel.level;
-        NowTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreatData>(level);
-        tempCharacters = new List<int>();
-        if (NowTempCharacterCreatData != null)
-        {
-            tempCharacters.AddRange(NowTempCharacterCreatData.tempCharacters);
         }
-        updataCreatCharacter = true;
     }
-    void CreatTempCharacter()
+
+    private Action creatTempDelegate;
+
+    private async void StartCreatTempCharacter(StartCreatTempCharacter startCreatTempCharacter)
     {
+        NowTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreatData>(startCreatTempCharacter.creatDataId);
+        if (NowTempCharacterCreatData == null)
+        {
+            return;
+        }
+        if (startCreatTempCharacter.clearAll)
+        {
+            ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
+            GameActionManager.instance.QueueAction(clearTempCharacter, true);
+        }
+        CreatTempCharacter();
+    }
+
+    private TempCharacterCreatData NowTempCharacterCreatData;
+
+    private void CreatTempCharacter()
+    {
+        if (NowTempCharacterCreatData == null)
+        {
+            return;
+        }
         if (totalCharacterCount >= NowTempCharacterCreatData.maxCharacterCount)
         {
             return;
         }
-
         int characterId = 0;
-        bool groupCreat=true;
-
-        int BornIndex = GameRandom.RandomInt(0, NowTempCharacterCreatData.tempEnterDatas.Count);
-        TempPosRange tempBornData = NowTempCharacterCreatData.tempEnterDatas[BornIndex];
-        int2 coordinate = GameRandom.RandomInt2(tempBornData.posMin, tempBornData.posMax);
+        bool groupCreat = true;
+        int displayMap = WorldMapObjManager.instance.displayMap;
+        int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, BehaviorAreaType.创建);
 
         if (tempCharacters.Count > 0)
         {
@@ -90,40 +93,22 @@ public class TempCharacterManager:Singleton<TempCharacterManager>
         }
         else
         {
-            int randomIndex = GameRandom.RandomInt(0,NowTempCharacterCreatData.tempGroupCharacters.Count);
+            int randomIndex = GameRandom.RandomInt(0, NowTempCharacterCreatData.tempGroupCharacters.Count);
             characterId = NowTempCharacterCreatData.tempGroupCharacters[randomIndex];
-        } 
-        
-
+        }
         CreatTempCharacter creatTempCharacter = new CreatTempCharacter
         {
             characterId = characterId,
-            mapInstance=tempBornData.mapInstance,
-            coordinateX=coordinate.x,
-            coordinateY=coordinate.y
+            mapInstance = displayMap,
+            coordinateX = coordinate.x,
+            coordinateY = coordinate.y
         };
         GameActionManager.instance.QueueAction(creatTempCharacter);
 
         totalCharacterCount++;
-    }
-    protected override void UpData()
-    {
-        base.UpData();
-        if (!updataCreatCharacter)
-        {
-            return;
-        }
-        if (NowTempCharacterCreatData == null)
-        {
-            return;
-        }
 
-        waitTime += (int)(Time.deltaTime * 1000);
-        if (waitTime > nowCd)
-        {
-            waitTime = 0;
-            nowCd = GameRandom.RandomInt(NowTempCharacterCreatData.cd.x, NowTempCharacterCreatData.cd.y);
-            CreatTempCharacter();
-        }
+        var nowCd = GameRandom.RandomInt(NowTempCharacterCreatData.cd.x, NowTempCharacterCreatData.cd.y);
+        creatTempDelegate = CreatTempCharacter;
+        GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
     }
 }

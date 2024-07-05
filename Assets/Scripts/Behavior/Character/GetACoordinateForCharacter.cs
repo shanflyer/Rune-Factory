@@ -76,7 +76,7 @@ public class GetACoordinateForCharacter : Action
 
         RuntimeMapRoom runtimeMapRoom;
         if (MapCellController.instance.GetCoordinates(mapInstance, coordinate, minRange.Value, maxRange.Value, isWalkable.Value, out var rangeCoordinates))
-        { 
+        {
             GameRandomData gameRandomData = new GameRandomData
             {
                 id = -1,

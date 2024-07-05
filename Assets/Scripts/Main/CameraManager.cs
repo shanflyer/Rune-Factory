@@ -1,7 +1,6 @@
 ﻿using Unity.Cinemachine;
 using UnityEngine;
 
-
 public class CameraManager : Singleton<CameraManager>
 {
     public Camera mainCamera;
@@ -16,9 +15,10 @@ public class CameraManager : Singleton<CameraManager>
     private CinemachineConfiner2D confiner2D;
 
     private CinemachineCameraOffset[] CinemachineCameraOffsets;
+
     //CinemachinePositionComposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
-    
+
     public override void Init()
     {
         base.Init();
@@ -42,12 +42,12 @@ public class CameraManager : Singleton<CameraManager>
             mixingCamera.ChildCameras[2].GetComponent<CinemachineCameraOffset>()
         };
 
-       /* cinemachineFramingTransposers = new CinemachinePositionComposer[3]
-        {
-             //followCameras[0].GetCinemachineComponent(CinemachineCore.Stage.),
-            //followCameras[1].GetCinemachineComponent<CinemachinePositionComposer>(),
-           //  followCameras[2].GetCinemachineComponent<CinemachinePositionComposer>()
-        };*/
+        /* cinemachineFramingTransposers = new CinemachinePositionComposer[3]
+         {
+              //followCameras[0].GetCinemachineComponent(CinemachineCore.Stage.),
+             //followCameras[1].GetCinemachineComponent<CinemachinePositionComposer>(),
+            //  followCameras[2].GetCinemachineComponent<CinemachinePositionComposer>()
+         };*/
 
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
@@ -85,7 +85,7 @@ public class CameraManager : Singleton<CameraManager>
     // 上面三个坐标转换的方法使用 Camera 的地方
     // 当 Canvas renderMode 为 RenderMode.ScreenSpaceCamera、RenderMode.WorldSpace 时 传递参数 canvas.worldCamera
     // 当 Canvas renderMode 为 RenderMode.ScreenSpaceOverlay 时 传递参数 null
-    
+
     // UI 坐标转换为屏幕坐标
     public static Vector2 UIPointToScreenPoint(Vector3 worldPoint)
     {
@@ -106,30 +106,29 @@ public class CameraManager : Singleton<CameraManager>
 
         // 当 Canvas renderMode 为 RenderMode.ScreenSpaceCamera、RenderMode.WorldSpace 时 uiCamera 不能为空
         // 当 Canvas renderMode 为 RenderMode.ScreenSpaceOverlay 时 uiCamera 可以为空
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(rt, screenPoint, uiCamera, out globalMousePos); 
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(rt, screenPoint, uiCamera, out globalMousePos);
         return globalMousePos;
     }
 
     // 屏幕坐标转换为 UGUI RectTransform 的 anchoredPosition
     public static bool ScreenPointToUILocalPoint(RectTransform parentRT, Vector2 screenPoint, out Vector2 localPos)
     {
-       
         Camera uiCamera = instance.uiCamera;
 
         return RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRT, screenPoint, uiCamera, out localPos);
-     
-    } 
+    }
 
     public void MoveFixedCamera(Vector2 movePos)
     {
         fixedCamera.transform.Translate(movePos);
     }
+
     public void SetConfiner2DCollider(PolygonCollider2D polygonCollider2D)
     {
         confiner2D.enabled = false;
         confiner2D.BoundingShape2D = polygonCollider2D;
         confiner2D.enabled = true;
-        confiner2D.InvalidateBoundingShapeCache(); 
+        confiner2D.InvalidateBoundingShapeCache();
         /*
         GameTimerController.instance.DeleyActionMain(100, () =>
         {
@@ -160,15 +159,17 @@ public class CameraManager : Singleton<CameraManager>
             followCameras[i].Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
         }
     }
-    void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
+
+    private void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
     {
         pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue;
     }
+
     private void SetFixedCamera(SetFixedCamera setFixedCamera)
     {
-        pixelPerfectCamera.assetsPPU =setFixedCamera.pixelValue==0?GameCommon.PixelCameraDefaultValue:setFixedCamera.pixelValue;
+        pixelPerfectCamera.assetsPPU = setFixedCamera.pixelValue == 0 ? GameCommon.PixelCameraDefaultValue : setFixedCamera.pixelValue;
         if (setFixedCamera.fixedCamera)
-        { 
+        {
             fixedView = true;
             mixingCamera.SetWeight(0, 0);
             mixingCamera.SetWeight(1, 0);
@@ -178,14 +179,14 @@ public class CameraManager : Singleton<CameraManager>
             {
                 Vector3 localPos = fixedCamera.transform.position;
                 setFixedCamera.fixedPos.z = localPos.z;
-                if(setFixedCamera.fixedPos.x!= -1000)
+                if (setFixedCamera.fixedPos.x != -1000)
                 {
                     fixedCamera.transform.position = setFixedCamera.fixedPos;
                 }
                 else
                 {
                     fixedCamera.transform.position = followCameras[0].transform.position;
-                }               
+                }
             }
             confiner2D.enabled = true;
             confiner2D.InvalidateBoundingShapeCache();
@@ -209,10 +210,9 @@ public class CameraManager : Singleton<CameraManager>
                 mixingCamera.SetWeight(1, 0);
                 mixingCamera.SetWeight(2, 0);
                 mixingCamera.SetWeight(3, 1);
-                
+
                 GameTimerController.instance.DeleyActionMain(100, () =>
                 {
-                    
                     followCameras[flowCameraIndex].Follow = CharacterManager.instance.controllerTransform;
                     mixingCamera.SetWeight((int)setFixedCamera.flowCameraType, 1);
                     mixingCamera.SetWeight(3, 0);

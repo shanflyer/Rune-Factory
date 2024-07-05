@@ -1,36 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq; 
 using System.Threading.Tasks;
-using UnityEngine;
-using Unity.Mathematics;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.Burst;
+using Unity.Mathematics;
+using UnityEngine;
 using Random = Unity.Mathematics.Random;
-using UnityEngine.UI;
-using UnityEditor.Rendering;
 
 [System.Serializable]
 public struct RandomResult
 {
     public string result;
-    public int count; 
+    public int count;
 
     public override string ToString()
     {
         return $"{result}:{count}";
     }
 }
-public class GameRandom:Singleton<GameRandom>
+
+[BurstCompile]
+public class GameRandom : Singleton<GameRandom>
 {
-    public static int RandomInt(int min,int max)
+    public static int RandomInt(int min, int max)
     {
         var random = Random;
-        int result= random.NextInt(min, max);
+        int result = random.NextInt(min, max);
         Random = random;
         return result;
     }
+
     public static int2 RandomInt2(int2 min, int2 max)
     {
         var random = Random;
@@ -38,35 +38,40 @@ public class GameRandom:Singleton<GameRandom>
         Random = random;
         return result;
     }
-    public static float RandomFloat(float min,float max)
+
+    public static float RandomFloat(float min, float max)
     {
         var random = Random;
-        float result= random.NextFloat(min, max);
+        float result = random.NextFloat(min, max);
         Random = random;
         //randomSeed += (uint)result;
         //instance.random = new Random(randomSeed);
         return result;
     }
 
-
     [BurstCompile]
-    public struct GameRandomJobData:IJob
+    public struct GameRandomJobData : IJob
     {
         public Random random;
+
         [ReadOnly]
         public float countValue;
+
         [ReadOnly]
         public bool weightRandom;
+
         [ReadOnly]
         public int randomResultCount;
+
         [ReadOnly]
         public NativeArray<RamdomItemJobData> randomItems;
-      
+
         public NativeList<WeightBarrel> barrels;
+
         [WriteOnly]
         public NativeList<RandomJobResult> randomResults;
 
-        public GameRandomJobData(GameRandomData gameRandomData,int randomResultCount, Random random,float countValue)
+        public GameRandomJobData(GameRandomData gameRandomData, int randomResultCount, Random random, float countValue)
         {
             this.countValue = countValue;
             this.random = random;
@@ -76,7 +81,7 @@ public class GameRandom:Singleton<GameRandom>
             barrels = new NativeList<WeightBarrel>(gameRandomData.barrels.Count, Allocator.TempJob);
             randomResults = new NativeList<RandomJobResult>(Allocator.TempJob);
 
-            for(int i = 0; i < gameRandomData.randomItems.Count; i++)
+            for (int i = 0; i < gameRandomData.randomItems.Count; i++)
             {
                 randomItems[i] = new RamdomItemJobData(gameRandomData.randomItems[i]);
             }
@@ -84,13 +89,12 @@ public class GameRandom:Singleton<GameRandom>
             {
                 barrels.Add(gameRandomData.barrels[i]);
             }
-
         }
 
         public void Execute()
-        {  
+        {
             int nowRandomJobResult = 0;
-            
+
             if (weightRandom)
             {
                 while (nowRandomJobResult < randomResultCount && barrels.Length > 0)
@@ -118,25 +122,23 @@ public class GameRandom:Singleton<GameRandom>
                     else
                     {
                         count = random.NextInt(randomItem.minCount, randomItem.maxCount + 1);
-                    } 
+                    }
                     RandomJobResult randomResult = new RandomJobResult
                     {
                         result = randomItem.itemId,
-                        group= randomItem.isGroup,
+                        group = randomItem.isGroup,
                         count = count
                     };
                     randomResults.Add(randomResult);
                     nowRandomJobResult++;
                 }
-
-
             }
             else
             {
                 for (int i = 0; i < randomItems.Length; i++)
                 {
                     RamdomItemJobData randomItem = randomItems[i];
-                    int randomValue = random.NextInt(0, 10000); 
+                    int randomValue = random.NextInt(0, 10000);
                     if (randomValue < randomItem.randomValue)
                     {
                         // Random random2 = new Random(); int count;
@@ -148,7 +150,7 @@ public class GameRandom:Singleton<GameRandom>
                         else
                         {
                             count = random.NextInt(randomItem.minCount, randomItem.maxCount + 1);
-                        } 
+                        }
 
                         RandomJobResult randomResult = new RandomJobResult
                         {
@@ -160,16 +162,15 @@ public class GameRandom:Singleton<GameRandom>
                         randomResults.Add(randomResult);
                     }
                 }
-
             }
-
         }
     }
+
     [BurstCompile]
     public struct RamdomItemJobData
-    { 
+    {
         public int itemId;
-        public bool isGroup; 
+        public bool isGroup;
         public int randomValue;
         public int maxCount;
         public int minCount;
@@ -183,20 +184,22 @@ public class GameRandom:Singleton<GameRandom>
             minCount = randomItem.minCount;
         }
     }
+
     [BurstCompile]
     public struct RandomJobResult
     {
         public int result;
         public int count;
-        public bool group; 
+        public bool group;
     }
+
     public override void Init()
     {
         base.Init();
         randomSeed = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds;
         random = new Random(randomSeed);
         LoadRandomDataList();
-    } 
+    }
 
     public void RefreshRandomSeed(ref uint randomSeed)
     {
@@ -207,8 +210,8 @@ public class GameRandom:Singleton<GameRandom>
         random = new Random(randomSeed);
     }
 
-    Dictionary<int, GameRandomData> gameRandomDatas = new Dictionary<int, GameRandomData>();
-    Dictionary<int, string> randomItemValues = new Dictionary<int, string>();
+    private Dictionary<int, GameRandomData> gameRandomDatas = new Dictionary<int, GameRandomData>();
+    private Dictionary<int, string> randomItemValues = new Dictionary<int, string>();
 
     private static Random Random
     {
@@ -226,10 +229,10 @@ public class GameRandom:Singleton<GameRandom>
             random = value;
         }
     }
+
     private static Random random;
     private static uint randomSeed;
-    
-  
+
     public async Task LoadRandomDataList()
     {
         GameRandomDataList gameRandomDataList = await ExtensionsResources.LoadResourceAsync<GameRandomDataList>(
@@ -241,18 +244,18 @@ public class GameRandom:Singleton<GameRandom>
         {
             var gameRandomData = gameRandomDataList.gameRandomDatas[i];
             gameRandomDatas[gameRandomData.id] = gameRandomData;
-            for(int j = 0; j < gameRandomData.randomItems.Count; j++)
+            for (int j = 0; j < gameRandomData.randomItems.Count; j++)
             {
                 var randomItem = gameRandomData.randomItems[j];
                 randomItemValues[randomItem.itemId] = randomItem.itemValue;
             }
         }
-
     }
-    public List<RandomResult> GetRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1,bool temp=false,float countValue=-1)
+
+    public List<RandomResult> GetRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1, bool temp = false, float countValue = -1)
     {
         List<RandomResult> randomResults = new List<RandomResult>();
-        var jobResults = GetRandomJobValue(id, innerGroupCount, randomResultCount,countValue);
+        var jobResults = GetRandomJobValue(id, innerGroupCount, randomResultCount, countValue);
         for (int i = 0; i < jobResults.Length; i++)
         {
             var jobResult = jobResults[i];
@@ -268,10 +271,11 @@ public class GameRandom:Singleton<GameRandom>
         jobResults.Dispose();
         return randomResults;
     }
+
     [BurstCompile]
-    NativeList<RandomJobResult> GetRandomJobValue(int id, int innerGroupCount = 0, int randomResultCount = 1,float countValue=-1)
+    private NativeList<RandomJobResult> GetRandomJobValue(int id, int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
     {
-        NativeList<RandomJobResult> randomResults = new NativeList<RandomJobResult>(8,Allocator.TempJob);
+        NativeList<RandomJobResult> randomResults = new NativeList<RandomJobResult>(8, Allocator.TempJob);
         if (innerGroupCount > GameCommon.randomInnerGroupMax)
         {
             Debug.LogError("随机嵌套超过5层！");
@@ -279,10 +283,10 @@ public class GameRandom:Singleton<GameRandom>
         }
         if (gameRandomDatas.TryGetValue(id, out GameRandomData gameRandomData))
         {
-            GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random,countValue);
+            GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random, countValue);
 
-           // gameRandomJobData.Run();
-             gameRandomJobData.Schedule().Complete();
+            // gameRandomJobData.Run();
+            gameRandomJobData.Schedule().Complete();
 
             for (int i = 0; i < gameRandomJobData.randomResults.Length; i++)
             {
@@ -292,7 +296,7 @@ public class GameRandom:Singleton<GameRandom>
                     if (randomItemValues.TryGetValue(randomResult.result, out string randomItemValue))
                     {
                         int groupId = int.Parse(randomItemValue);
-                        var _randomResults = GetRandomJobValue(groupId, innerGroupCount + 1,countValue:countValue);
+                        var _randomResults = GetRandomJobValue(groupId, innerGroupCount + 1, countValue: countValue);
 
                         randomResults.AddRangeNoResize(_randomResults);
                     }
@@ -302,35 +306,33 @@ public class GameRandom:Singleton<GameRandom>
                     randomResults.Add(randomResult);
                 }
             }
-
         }
 
         return randomResults;
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="gameRandomData">随机数据</param>
     /// <param name="innerGroupCount">嵌套层数</param>
     /// <param name="randomResultCount">试图获取的数量</param>
     /// <returns></returns>
-    public List<RandomResult> GetRandomValue(GameRandomData gameRandomData,int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
+    public List<RandomResult> GetRandomValue(GameRandomData gameRandomData, int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
     {
         List<RandomResult> randomResults = new List<RandomResult>();
 
         Dictionary<int, string> temps = new Dictionary<int, string>();
-        for(int i = 0; i < gameRandomData.randomItems.Count; i++)
+        for (int i = 0; i < gameRandomData.randomItems.Count; i++)
         {
             temps.Add(gameRandomData.randomItems[i].itemId, gameRandomData.randomItems[i].itemValue);
         }
 
-
-        var jobResults = GetRandomJobValue(gameRandomData, innerGroupCount, randomResultCount,countValue);
-        for(int i = 0; i < jobResults.Length; i++)
+        var jobResults = GetRandomJobValue(gameRandomData, innerGroupCount, randomResultCount, countValue);
+        for (int i = 0; i < jobResults.Length; i++)
         {
             var jobResult = jobResults[i];
-            if(temps.TryGetValue(jobResult.result,out string itemValue))
+            if (temps.TryGetValue(jobResult.result, out string itemValue))
             {
                 randomResults.Add(new RandomResult
                 {
@@ -342,8 +344,9 @@ public class GameRandom:Singleton<GameRandom>
         jobResults.Dispose();
         return randomResults;
     }
+
     [BurstCompile]
-    NativeList<RandomJobResult> GetRandomJobValue(GameRandomData gameRandomData, int innerGroupCount = 0, int randomResultCount = 1,float countValue=-1)
+    private NativeList<RandomJobResult> GetRandomJobValue(GameRandomData gameRandomData, int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
     {
         NativeList<RandomJobResult> randomResults = new NativeList<RandomJobResult>(Allocator.Temp);
         if (innerGroupCount > GameCommon.randomInnerGroupMax)
@@ -351,7 +354,7 @@ public class GameRandom:Singleton<GameRandom>
             Debug.LogError("随机嵌套超过5层！");
             return randomResults;
         }
-        GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random,countValue);
+        GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random, countValue);
 
         //gameRandomJobData.Run();
         gameRandomJobData.Schedule().Complete();
@@ -364,7 +367,7 @@ public class GameRandom:Singleton<GameRandom>
                 if (randomItemValues.TryGetValue(randomResult.result, out string randomItemValue))
                 {
                     int groupId = int.Parse(randomItemValue);
-                    var _randomResults = GetRandomJobValue(groupId, innerGroupCount + 1,countValue:countValue);
+                    var _randomResults = GetRandomJobValue(groupId, innerGroupCount + 1, countValue: countValue);
 
                     randomResults.AddRangeNoResize(_randomResults);
                 }
@@ -374,9 +377,7 @@ public class GameRandom:Singleton<GameRandom>
                 randomResults.Add(randomResult);
             }
         }
-      
 
         return randomResults;
     }
-    
 }

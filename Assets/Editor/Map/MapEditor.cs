@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
 public class MapEditor : MyEditor
@@ -33,9 +32,9 @@ public class MapEditor : MyEditor
                 }
                 if (_selectMapRoomDataObj != null)
                 {
-                    GameObject mapInstanceObj = new GameObject(_selectMapRoomDataObj.GetName()); 
-                    mapInstance = mapInstanceObj.AddComponent<MapInstanceEditor>(); 
-                    mapInstance.InitData(_selectMapRoomDataObj.mapRoomData,0);
+                    GameObject mapInstanceObj = new GameObject(_selectMapRoomDataObj.GetName());
+                    mapInstance = mapInstanceObj.AddComponent<MapInstanceEditor>();
+                    mapInstance.InitData(_selectMapRoomDataObj.mapRoomData, 0);
                 }
             }
         }
@@ -47,7 +46,7 @@ public class MapEditor : MyEditor
     private CommonEditor roomDataPanel;
     private MapInstanceEditor mapInstance;
 
-    private Tilemap ground, collider, trigger; 
+    private Tilemap ground, collider, trigger;
     private TileBase colliderTile, triggerTile;
 
     [MenuItem("工具/地图编辑")]
@@ -58,7 +57,6 @@ public class MapEditor : MyEditor
         Instance.maxSize = new Vector2(360, 480);
         Instance.ShowAuxWindow();
     }
-
 
     public new void ShowAuxWindow()
     {
@@ -85,14 +83,13 @@ public class MapEditor : MyEditor
             Debug.LogError("场景不对或无MapEditor物体！");
             return;
         }
-        
+
         ground = MapEditor.transform.Find("Ground").GetComponent<Tilemap>();
         collider = MapEditor.transform.Find("Collider").GetComponent<Tilemap>();
-        trigger = MapEditor.transform.Find("Trigger").GetComponent<Tilemap>(); 
+        trigger = MapEditor.transform.Find("Trigger").GetComponent<Tilemap>();
 
         colliderTile = AssetDatabase.LoadAssetAtPath<TileBase>(EditorDataPath.colliderTile);
         triggerTile = AssetDatabase.LoadAssetAtPath<TileBase>(EditorDataPath.triggerTile);
-
     }
 
     private void DrawRoomDataPanel()
@@ -195,7 +192,7 @@ public class MapEditor : MyEditor
             selectMapRoomDataObj.mapRoomData.mapObj = roomObj;
 
             selectMapRoomDataObj.mapRoomData.mapItems.Clear();
-            var mapItemInstances = FindObjectsOfType<MapItemInstanceEditor>(true);
+            var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsSortMode.None);
             HashSet<int> instanceId = new HashSet<int>();
             foreach (var mapItemInstance in mapItemInstances)
             {
@@ -211,7 +208,6 @@ public class MapEditor : MyEditor
 
             foreach (var mapArea in mapAreas)
             {
-                
                 selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Add(mapArea.GetAreaData());
             }
 

@@ -1,305 +1,301 @@
-﻿using System;
-using System.Collections;
-using System.Text;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
+using UnityEngine;
 
-public class ProFlareExporter {
+public class ProFlareExporter
+{
+    public static string animCurveExport(AnimationCurve curve)
+    {
+        string curveString = "{";
 
+        int keyCount = 0;
 
-	public static string animCurveExport(AnimationCurve curve){
-		string curveString = "{";
+        foreach (Keyframe key in curve.keys)
+        {
+            curveString = curveString + "\"key" + keyCount + "\": {\"time\":" + key.time + ",\"value\":" + key.value + ",\"in\":" + key.inTangent + ",\"out\":" + key.outTangent + ",\"tangentMode\":" + key.tangentMode + "}";
 
-		int keyCount = 0;
+            keyCount++;
+            if (keyCount != curve.keys.Length)
+                curveString = curveString + ",";
+        }
+        curveString = curveString + "}";
 
-		foreach(Keyframe key in curve.keys){
+        return curveString;
+    }
 
-			curveString = curveString+"\"key"+keyCount+"\": {\"time\":"+key.time+",\"value\":"+key.value+",\"in\":"+key.inTangent+",\"out\":"+key.outTangent+",\"tangentMode\":"+key.tangentMode+"}";
-		
-			keyCount++;
-			if(keyCount != curve.keys.Length)
-				curveString = curveString+",";
+    // Use this for initialization
+    public static void ExportFlare(ProFlare flare)
+    {
+        Debug.Log("Export Flare");
 
-		}
-		curveString = curveString+"}";
+        string fileName = "Assets/ProFlares/ExportedFlares/" + flare.gameObject.name + ".txt";
 
-		return curveString;
-	}
+        if (File.Exists(fileName))
+        {
+            Debug.Log(fileName + " already exists.");
+            //return;
+        }
+        var sr = File.CreateText(fileName);
+        sr.WriteLine("{");
 
-	// Use this for initialization
-	public static void ExportFlare (ProFlare flare) {
-		Debug.Log ("Export Flare");
+        sr.WriteLine("\"meta\": {");
+        //sr.WriteLine ("	\"frame\": {\"x\":768,\"y\":512,\"w\":256,\"h\":256},");
 
-		string fileName = "Assets/ProFlares/ExportedFlares/"+flare.gameObject.name+".txt";
+        sr.WriteLine("	\"GlobalScale\": {0},", flare.GlobalScale);
 
-		if (File.Exists(fileName))
-		{
-			Debug.Log(fileName+" already exists.");
-			//return;
-		}
-		var sr = File.CreateText(fileName);
-		sr.WriteLine ("{");
+        sr.WriteLine("	\"MultiplyScaleByTransformScale\": {0},", boolToString(flare.MultiplyScaleByTransformScale));
 
-		sr.WriteLine ("\"meta\": {");
-		//sr.WriteLine ("	\"frame\": {\"x\":768,\"y\":512,\"w\":256,\"h\":256},");
+        sr.WriteLine("	\"GlobalBrightness\": {0},", flare.GlobalBrightness);
 
-		sr.WriteLine ("	\"GlobalScale\": {0},",flare.GlobalScale);
+        sr.WriteLine("	\"GlobalTintColor\": {\"r\":" + flare.GlobalTintColor.r + ",\"g\":" + flare.GlobalTintColor.g + ",\"b\":" + flare.GlobalTintColor.b + ",\"a\":" + flare.GlobalTintColor.a + "},");
 
-		sr.WriteLine ("	\"MultiplyScaleByTransformScale\": {0},",boolToString(flare.MultiplyScaleByTransformScale));
+        sr.WriteLine("	\"useMaxDistance\": {0},", boolToString(flare.useMaxDistance));
 
-		sr.WriteLine ("	\"GlobalBrightness\": {0},",flare.GlobalBrightness);
+        sr.WriteLine("	\"useDistanceScale\": {0},", boolToString(flare.useDistanceScale));
 
-		sr.WriteLine ("	\"GlobalTintColor\": {\"r\":"+flare.GlobalTintColor.r+",\"g\":"+flare.GlobalTintColor.g+",\"b\":"+flare.GlobalTintColor.b+",\"a\":"+flare.GlobalTintColor.a+"},");
-	
-		sr.WriteLine ("	\"useMaxDistance\": {0},",boolToString(flare.useMaxDistance));
+        sr.WriteLine("	\"useDistanceFade\": {0},", boolToString(flare.useDistanceFade));
 
-		sr.WriteLine ("	\"useDistanceScale\": {0},",boolToString(flare.useDistanceScale));
+        sr.WriteLine("	\"GlobalMaxDistance\": {0},", flare.GlobalMaxDistance);
 
-		sr.WriteLine ("	\"useDistanceFade\": {0},",boolToString(flare.useDistanceFade));
+        //		//Angle Culling Properties
+        sr.WriteLine("	\"UseAngleLimit\": {0},", boolToString(flare.UseAngleLimit));
 
-		sr.WriteLine ("	\"GlobalMaxDistance\": {0},",flare.GlobalMaxDistance);
+        sr.WriteLine("	\"maxAngle\": {0},", flare.maxAngle);
 
-//		//Angle Culling Properties
-		sr.WriteLine ("	\"UseAngleLimit\": {0},",boolToString(flare.UseAngleLimit));
+        sr.WriteLine("	\"UseAngleScale\": {0},", boolToString(flare.UseAngleScale));
 
-		sr.WriteLine ("	\"maxAngle\": {0},",flare.maxAngle);
+        sr.WriteLine("	\"UseAngleBrightness\": {0},", boolToString(flare.UseAngleBrightness));
 
-		sr.WriteLine ("	\"UseAngleScale\": {0},",boolToString(flare.UseAngleScale));
+        sr.WriteLine("	\"UseAngleCurve\": {0},", boolToString(flare.UseAngleCurve));
 
-		sr.WriteLine ("	\"UseAngleBrightness\": {0},",boolToString(flare.UseAngleBrightness));
+        sr.WriteLine("	\"AngleCurve\": {0},", ProFlareExporter.animCurveExport(flare.AngleCurve));
 
-		sr.WriteLine ("	\"UseAngleCurve\": {0},",boolToString(flare.UseAngleCurve));
+        //		//Occlusion Properties
+        //		public LayerMask mask = 1;
 
-		sr.WriteLine ("	\"AngleCurve\": {0},",ProFlareExporter.animCurveExport(flare.AngleCurve));
+        /////////////////////////////		sr.WriteLine ("	\"mask\": {0},",(int)flare.mask);
 
-//		//Occlusion Properties
-//		public LayerMask mask = 1;
+        //		public bool RaycastPhysics;
+        sr.WriteLine("	\"RaycastPhysics\": {0},", boolToString(flare.RaycastPhysics));
 
-/////////////////////////////		sr.WriteLine ("	\"mask\": {0},",(int)flare.mask);
+        sr.WriteLine("	\"OffScreenFadeDist\": {0},", flare.OffScreenFadeDist);
 
-		//		public bool RaycastPhysics;
-		sr.WriteLine ("	\"RaycastPhysics\": {0},",boolToString(flare.RaycastPhysics));
+        //
+        //		//Dynamic Edge Properties
 
-		sr.WriteLine ("	\"OffScreenFadeDist\": {0},",flare.OffScreenFadeDist);
+        sr.WriteLine("	\"useDynamicEdgeBoost\": {0},", boolToString(flare.useDynamicEdgeBoost));
 
-//		
-//		//Dynamic Edge Properties
+        sr.WriteLine("	\"DynamicEdgeBoost\": {0},", flare.DynamicEdgeBoost);
 
-		sr.WriteLine ("	\"useDynamicEdgeBoost\": {0},",boolToString(flare.useDynamicEdgeBoost));
+        sr.WriteLine("	\"DynamicEdgeBrightness\": {0},", flare.DynamicEdgeBrightness);
 
-		sr.WriteLine ("	\"DynamicEdgeBoost\": {0},",flare.DynamicEdgeBoost);
+        sr.WriteLine("	\"DynamicEdgeRange\": {0},", flare.DynamicEdgeRange);
 
-		sr.WriteLine ("	\"DynamicEdgeBrightness\": {0},",flare.DynamicEdgeBrightness);
+        sr.WriteLine("	\"DynamicEdgeBias\": {0},", flare.DynamicEdgeBias);
 
-		sr.WriteLine ("	\"DynamicEdgeRange\": {0},",flare.DynamicEdgeRange);
+        sr.WriteLine("	\"DynamicEdgeCurve\": {0},", ProFlareExporter.animCurveExport(flare.DynamicEdgeCurve));
 
-		sr.WriteLine ("	\"DynamicEdgeBias\": {0},",flare.DynamicEdgeBias); 
+        //		//Dynamic Center Properties
+        sr.WriteLine("	\"useDynamicCenterBoost\": {0},", boolToString(flare.useDynamicCenterBoost));
 
-		sr.WriteLine ("	\"DynamicEdgeCurve\": {0},",ProFlareExporter.animCurveExport(flare.DynamicEdgeCurve));
+        sr.WriteLine("	\"DynamicCenterBoost\": {0},", flare.DynamicCenterBoost);
 
-//		//Dynamic Center Properties
-		sr.WriteLine ("	\"useDynamicCenterBoost\": {0},",boolToString(flare.useDynamicCenterBoost)); 
+        sr.WriteLine("	\"DynamicCenterBrightness\": {0},", flare.DynamicCenterBrightness);
 
-		sr.WriteLine ("	\"DynamicCenterBoost\": {0},",flare.DynamicCenterBoost); 
+        sr.WriteLine("	\"DynamicCenterRange\": {0},", flare.DynamicCenterRange);
 
-		sr.WriteLine ("	\"DynamicCenterBrightness\": {0},",flare.DynamicCenterBrightness); 
+        sr.WriteLine("	\"DynamicCenterBias\": {0},", flare.DynamicCenterBias);
 
-		sr.WriteLine ("	\"DynamicCenterRange\": {0},",flare.DynamicCenterRange); 
+        //		public bool neverCull;
+        sr.WriteLine("	\"neverCull\": {0},", boolToString(flare.neverCull));
 
-		sr.WriteLine ("	\"DynamicCenterBias\": {0},",flare.DynamicCenterBias); 
+        sr.WriteLine("	\"Elements\": {");
+        int count = 0;
 
-//		public bool neverCull;
-		sr.WriteLine ("	\"neverCull\": {0},",boolToString(flare.neverCull)); 
+        foreach (ProFlareElement element in flare.Elements)
+        {
+            sr.WriteLine("		\"Element" + count + "\": {");
 
-		sr.WriteLine ("	\"Elements\": {");
-		int count = 0;
+            sr.WriteLine("			\"Editing\": {0},", boolToString(element.Editing));
 
-		foreach (ProFlareElement element in flare.Elements) {
-			sr.WriteLine ("		\"Element"+count+"\": {");
+            sr.WriteLine("			\"Visible\": {0},", boolToString(element.Visible));
 
-			sr.WriteLine ("			\"Editing\": {0},",boolToString(element.Editing));
+            //			//Element's texture index inside the texture atlas.
+            //			public int elementTextureID;
+            sr.WriteLine("			\"elementTextureID\": {0},", element.elementTextureID);
 
-			sr.WriteLine ("			\"Visible\": {0},",boolToString(element.Visible));
+            //
+            //			//Elements Sprite name from the texture atlas, this isn't checked at runtime. Its only used to help stop flares breaking when the atlas changes.
+            //			public string SpriteName;
 
-//			//Element's texture index inside the texture atlas.
-//			public int elementTextureID;
-			sr.WriteLine ("			\"elementTextureID\": {0},",element.elementTextureID);
+            sr.WriteLine("			\"Brightness\": {0},", element.Brightness);
 
-//			
-//			//Elements Sprite name from the texture atlas, this isn't checked at runtime. Its only used to help stop flares breaking when the atlas changes.
-//			public string SpriteName;
+            sr.WriteLine("			\"Scale\": {0},", element.Scale);
 
-			sr.WriteLine ("			\"Brightness\": {0},",element.Brightness);
+            sr.WriteLine("			\"ScaleRandom\": {0},", element.ScaleRandom);
 
-			sr.WriteLine ("			\"Scale\": {0},",element.Scale);
+            sr.WriteLine("			\"ScaleFinal\": {0},", element.ScaleFinal);
 
-			sr.WriteLine ("			\"ScaleRandom\": {0},",element.ScaleRandom);
+            sr.WriteLine("			\"RandomColorAmount\": {\"r\":" + element.RandomColorAmount.x + ",\"g\":" + element.RandomColorAmount.y + ",\"b\":" + element.RandomColorAmount.z + ",\"a\":" + element.RandomColorAmount.w + "},");
 
-			sr.WriteLine ("			\"ScaleFinal\": {0},",element.ScaleFinal);
+            //			//Element OffSet Properties
+            sr.WriteLine("			\"position\": {0},", element.position);
 
-			sr.WriteLine ("			\"RandomColorAmount\": {\"r\":"+element.RandomColorAmount.x+",\"g\":"+element.RandomColorAmount.y+",\"b\":"+element.RandomColorAmount.z+",\"a\":"+element.RandomColorAmount.w+"},");
+            sr.WriteLine("			\"useRangeOffset\": {0},", boolToString(element.useRangeOffset));
 
-//			//Element OffSet Properties
-			sr.WriteLine ("			\"position\": {0},",element.position);
+            sr.WriteLine("			\"SubElementPositionRange_Min\": {0},", element.SubElementPositionRange_Min);
 
-			sr.WriteLine ("			\"useRangeOffset\": {0},",boolToString(element.useRangeOffset));
+            sr.WriteLine("			\"SubElementPositionRange_Max\": {0},", element.SubElementPositionRange_Max);
 
-			sr.WriteLine ("			\"SubElementPositionRange_Min\": {0},",element.SubElementPositionRange_Min);
+            sr.WriteLine("			\"SubElementAngleRange_Min\": {0},", element.SubElementAngleRange_Min);
 
-			sr.WriteLine ("			\"SubElementPositionRange_Max\": {0},",element.SubElementPositionRange_Max);
+            sr.WriteLine("			\"SubElementAngleRange_Max\": {0},", element.SubElementAngleRange_Max);
 
-			sr.WriteLine ("			\"SubElementAngleRange_Min\": {0},",element.SubElementAngleRange_Min);
+            sr.WriteLine("			\"OffsetPosition\": {\"r\":" + element.OffsetPosition.x + ",\"g\":" + element.OffsetPosition.y + ",\"b\":" + element.OffsetPosition.z + "},");
 
-			sr.WriteLine ("			\"SubElementAngleRange_Max\": {0},",element.SubElementAngleRange_Max);
+            sr.WriteLine("			\"Anamorphic\": {\"r\":" + element.Anamorphic.x + ",\"g\":" + element.Anamorphic.y + ",\"b\":" + element.Anamorphic.z + "},");
 
-			sr.WriteLine ("			\"OffsetPosition\": {\"r\":"+element.OffsetPosition.x+",\"g\":"+element.OffsetPosition.y+",\"b\":"+element.OffsetPosition.z+"},");
+            sr.WriteLine("			\"OffsetPostion\": {\"r\":" + element.OffsetPostion.x + ",\"g\":" + element.OffsetPostion.y + ",\"b\":" + element.OffsetPostion.z + "},");
 
-			sr.WriteLine ("			\"Anamorphic\": {\"r\":"+element.Anamorphic.x+",\"g\":"+element.Anamorphic.y+",\"b\":"+element.Anamorphic.z+"},");
+            //			//Element Rotation Properties
+            sr.WriteLine("			\"angle\": {0},", element.angle);
 
-			sr.WriteLine ("			\"OffsetPostion\": {\"r\":"+element.OffsetPostion.x+",\"g\":"+element.OffsetPostion.y+",\"b\":"+element.OffsetPostion.z+"},");
+            sr.WriteLine("			\"useRandomAngle\": {0},", boolToString(element.useRandomAngle));
 
-//			//Element Rotation Properties
-			sr.WriteLine ("			\"angle\": {0},",element.angle);
+            sr.WriteLine("			\"useStarRotation\": {0},", boolToString(element.useStarRotation));
 
-			sr.WriteLine ("			\"useRandomAngle\": {0},",boolToString(element.useRandomAngle));
+            sr.WriteLine("			\"AngleRandom_Min\": {0},", element.AngleRandom_Min);
 
-			sr.WriteLine ("			\"useStarRotation\": {0},",boolToString(element.useStarRotation));
+            sr.WriteLine("			\"AngleRandom_Max\": {0},", element.AngleRandom_Max);
 
-			sr.WriteLine ("			\"AngleRandom_Min\": {0},",element.AngleRandom_Min);
+            sr.WriteLine("			\"OrientToSource\": {0},", boolToString(element.OrientToSource));
 
-			sr.WriteLine ("			\"AngleRandom_Max\": {0},",element.AngleRandom_Max);
+            sr.WriteLine("			\"rotateToFlare\": {0},", boolToString(element.rotateToFlare));
 
-			sr.WriteLine ("			\"OrientToSource\": {0},",boolToString(element.OrientToSource));
+            sr.WriteLine("			\"rotationSpeed\": {0},", element.rotationSpeed);
 
-			sr.WriteLine ("			\"rotateToFlare\": {0},",boolToString(element.rotateToFlare));
+            sr.WriteLine("			\"rotationOverTime\": {0},", element.rotationOverTime);
 
-			sr.WriteLine ("			\"rotationSpeed\": {0},",element.rotationSpeed);
+            //			//Colour Properties,
+            sr.WriteLine("			\"useColorRange\": {0},", boolToString(element.useColorRange));
 
-			sr.WriteLine ("			\"rotationOverTime\": {0},",element.rotationOverTime);
+            sr.WriteLine("			\"ElementFinalColor\": {\"r\":" + element.ElementFinalColor.r + ",\"g\":" + element.ElementFinalColor.g + ",\"b\":" + element.ElementFinalColor.b + ",\"a\":" + element.ElementFinalColor.a + "},");
 
-//			//Colour Properties,
-			sr.WriteLine ("			\"useColorRange\": {0},",boolToString(element.useColorRange));
+            sr.WriteLine("			\"ElementTint\": {\"r\":" + element.ElementTint.r + ",\"g\":" + element.ElementTint.g + ",\"b\":" + element.ElementTint.b + ",\"a\":" + element.ElementTint.a + "},");
 
-			sr.WriteLine ("			\"ElementFinalColor\": {\"r\":"+element.ElementFinalColor.r+",\"g\":"+element.ElementFinalColor.g+",\"b\":"+element.ElementFinalColor.b+",\"a\":"+element.ElementFinalColor.a+"},");
+            sr.WriteLine("			\"SubElementColor_Start\": {\"r\":" + element.SubElementColor_Start.r + ",\"g\":" + element.SubElementColor_Start.g + ",\"b\":" + element.SubElementColor_Start.b + ",\"a\":" + element.SubElementColor_Start.a + "},");
 
-			sr.WriteLine ("			\"ElementTint\": {\"r\":"+element.ElementTint.r+",\"g\":"+element.ElementTint.g+",\"b\":"+element.ElementTint.b+",\"a\":"+element.ElementTint.a+"},");
+            sr.WriteLine("			\"SubElementColor_End\": {\"r\":" + element.SubElementColor_End.r + ",\"g\":" + element.SubElementColor_End.g + ",\"b\":" + element.SubElementColor_End.b + ",\"a\":" + element.SubElementColor_End.a + "},");
 
-			sr.WriteLine ("			\"SubElementColor_Start\": {\"r\":"+element.SubElementColor_Start.r+",\"g\":"+element.SubElementColor_Start.g+",\"b\":"+element.SubElementColor_Start.b+",\"a\":"+element.SubElementColor_Start.a+"},");
+            sr.WriteLine("			\"useScaleCurve\": {0},", boolToString(element.useScaleCurve));
 
-			sr.WriteLine ("			\"SubElementColor_End\": {\"r\":"+element.SubElementColor_End.r+",\"g\":"+element.SubElementColor_End.g+",\"b\":"+element.SubElementColor_End.b+",\"a\":"+element.SubElementColor_End.a+"},");
+            sr.WriteLine("			\"ScaleCurve\": {0},", ProFlareExporter.animCurveExport(element.ScaleCurve));
 
-			sr.WriteLine ("			\"useScaleCurve\": {0},",boolToString(element.useScaleCurve));
+            //			//Override Properties
+            sr.WriteLine("			\"OverrideDynamicEdgeBoost\": {0},", boolToString(element.OverrideDynamicEdgeBoost));
 
-			sr.WriteLine ("			\"ScaleCurve\": {0},",ProFlareExporter.animCurveExport(element.ScaleCurve));
+            sr.WriteLine("			\"DynamicEdgeBoostOverride\": {0},", element.DynamicEdgeBoostOverride);
 
-//			//Override Properties
-			sr.WriteLine ("			\"OverrideDynamicEdgeBoost\": {0},",boolToString(element.OverrideDynamicEdgeBoost));
+            sr.WriteLine("			\"OverrideDynamicCenterBoost\": {0},", boolToString(element.OverrideDynamicCenterBoost));
 
-			sr.WriteLine ("			\"DynamicEdgeBoostOverride\": {0},",element.DynamicEdgeBoostOverride);
+            sr.WriteLine("			\"DynamicCenterBoostOverride\": {0},", element.DynamicCenterBoostOverride);
 
-			sr.WriteLine ("			\"OverrideDynamicCenterBoost\": {0},",boolToString(element.OverrideDynamicCenterBoost));
+            sr.WriteLine("			\"OverrideDynamicEdgeBrightness\": {0},", boolToString(element.OverrideDynamicEdgeBrightness));
 
-			sr.WriteLine ("			\"DynamicCenterBoostOverride\": {0},",element.DynamicCenterBoostOverride);
+            sr.WriteLine("			\"DynamicEdgeBrightnessOverride\": {0},", element.DynamicEdgeBrightnessOverride);
 
-			sr.WriteLine ("			\"OverrideDynamicEdgeBrightness\": {0},",boolToString(element.OverrideDynamicEdgeBrightness));
+            sr.WriteLine("			\"OverrideDynamicCenterBrightness\": {0},", boolToString(element.OverrideDynamicCenterBrightness));
 
-			sr.WriteLine ("			\"DynamicEdgeBrightnessOverride\": {0},",element.DynamicEdgeBrightnessOverride);
+            sr.WriteLine("			\"DynamicCenterBrightnessOverride\": {0},", element.DynamicCenterBrightnessOverride);
 
-			sr.WriteLine ("			\"OverrideDynamicCenterBrightness\": {0},",boolToString(element.OverrideDynamicCenterBrightness));
+            if (element.subElements.Count > 0)
+            {
+                sr.WriteLine("			\"subElements\": {");
+                int count2 = 0;
 
-			sr.WriteLine ("			\"DynamicCenterBrightnessOverride\": {0},",element.DynamicCenterBrightnessOverride);
+                foreach (SubElement subElement in element.subElements)
+                {
+                    sr.WriteLine("				\"subElement" + count2 + "\": {");
 
-			if(element.subElements.Count > 0){
+                    sr.WriteLine("					\"color\": {\"r\":" + subElement.color.r + ",\"g\":" + subElement.color.g + ",\"b\":" + subElement.color.b + ",\"a\":" + subElement.color.a + "},");
 
-				sr.WriteLine ("			\"subElements\": {");
-				int count2 = 0;
+                    sr.WriteLine("					\"position\": {0},", subElement.position);
 
-				foreach (SubElement subElement in element.subElements) {
-					sr.WriteLine ("				\"subElement"+count2+"\": {");
-					
-					sr.WriteLine ("					\"color\": {\"r\":"+subElement.color.r+",\"g\":"+subElement.color.g+",\"b\":"+subElement.color.b+",\"a\":"+subElement.color.a+"},");
+                    sr.WriteLine("					\"offset\": {\"r\":" + subElement.color.r + ",\"g\":" + subElement.color.g + ",\"b\":" + subElement.color.b + "},");
 
-					sr.WriteLine ("					\"position\": {0},",subElement.position);
+                    sr.WriteLine("					\"angle\": {0},", subElement.angle);
 
-					sr.WriteLine ("					\"offset\": {\"r\":"+subElement.color.r+",\"g\":"+subElement.color.g+",\"b\":"+subElement.color.b+"},");
+                    sr.WriteLine("					\"scale\": {0},", subElement.scale);
 
-					sr.WriteLine ("					\"angle\": {0},",subElement.angle);
+                    sr.WriteLine("					\"random\": {0},", subElement.random);
 
-					sr.WriteLine ("					\"scale\": {0},",subElement.scale);
+                    sr.WriteLine("					\"random2\": {0},", subElement.random2);
 
-					sr.WriteLine ("					\"random\": {0},",subElement.random);
+                    sr.WriteLine("					\"RandomScaleSeed\": {0},", subElement.RandomScaleSeed);
 
-					sr.WriteLine ("					\"random2\": {0},",subElement.random2);
+                    sr.WriteLine("					\"RandomColorSeedR\": {0},", subElement.RandomColorSeedR);
 
-					sr.WriteLine ("					\"RandomScaleSeed\": {0},",subElement.RandomScaleSeed);
+                    sr.WriteLine("					\"RandomColorSeedG\": {0},", subElement.RandomColorSeedG);
 
-					sr.WriteLine ("					\"RandomColorSeedR\": {0},",subElement.RandomColorSeedR);
+                    sr.WriteLine("					\"RandomColorSeedB\": {0},", subElement.RandomColorSeedB);
 
-					sr.WriteLine ("					\"RandomColorSeedG\": {0},",subElement.RandomColorSeedG);
+                    sr.WriteLine("					\"RandomColorSeedA\": {0}", subElement.RandomColorSeedA);
 
-					sr.WriteLine ("					\"RandomColorSeedB\": {0},",subElement.RandomColorSeedB);
+                    count2++;
+                    if (count2 == element.subElements.Count)
+                        sr.WriteLine("				}");
+                    else
+                        sr.WriteLine("				},");
+                }
 
-					sr.WriteLine ("					\"RandomColorSeedA\": {0}",subElement.RandomColorSeedA);
+                sr.WriteLine("			},");
+            }
 
-					count2++;
-					if(count2 == element.subElements.Count)
-						sr.WriteLine ("				}");
-					else
-						sr.WriteLine ("				},");
-				}
+            sr.WriteLine("			\"EditDynamicTriggering\": {0},", boolToString(element.EditDynamicTriggering));
 
-				sr.WriteLine ("			},");
-			}
+            sr.WriteLine("			\"EditOcclusion\": {0},", boolToString(element.EditOcclusion));
 
-			sr.WriteLine ("			\"EditDynamicTriggering\": {0},",boolToString(element.EditDynamicTriggering));
+            sr.WriteLine("			\"ElementSetting\": {0},", boolToString(element.ElementSetting));
 
-			sr.WriteLine ("			\"EditOcclusion\": {0},",boolToString(element.EditOcclusion));
+            sr.WriteLine("			\"OffsetSetting\": {0},", boolToString(element.OffsetSetting));
 
-			sr.WriteLine ("			\"ElementSetting\": {0},",boolToString(element.ElementSetting));
+            sr.WriteLine("			\"ColorSetting\": {0},", boolToString(element.ColorSetting));
 
-			sr.WriteLine ("			\"OffsetSetting\": {0},",boolToString(element.OffsetSetting));
+            sr.WriteLine("			\"ScaleSetting\": {0},", boolToString(element.ScaleSetting));
 
-			sr.WriteLine ("			\"ColorSetting\": {0},",boolToString(element.ColorSetting));
+            sr.WriteLine("			\"RotationSetting\": {0},", boolToString(element.RotationSetting));
 
-			sr.WriteLine ("			\"ScaleSetting\": {0},",boolToString(element.ScaleSetting));
+            sr.WriteLine("			\"OverrideSetting\": {0},", boolToString(element.OverrideSetting));
 
-			sr.WriteLine ("			\"RotationSetting\": {0},",boolToString(element.RotationSetting));
+            sr.WriteLine("			\"type\": \"{0}\"", (int)element.type);
 
-			sr.WriteLine ("			\"OverrideSetting\": {0},",boolToString(element.OverrideSetting));
+            sr.WriteLine("			\"size\": {\"x\":" + element.size.x + ",\"y\":" + element.size.y + "},");
 
-			sr.WriteLine ("			\"type\": \"{0}\"",(int)element.type);
+            sr.WriteLine("			\"SpriteName\": \"{0}\"", element.SpriteName);
 
-			sr.WriteLine ("			\"size\": {\"x\":"+element.size.x+",\"y\":"+element.size.y+"},");
+            count++;
 
-			sr.WriteLine ("			\"SpriteName\": \"{0}\"",element.SpriteName);
+            if (count == flare.Elements.Count)
+                sr.WriteLine("		}");
+            else
+                sr.WriteLine("		},");
+        }
+        sr.WriteLine("	}");
 
-			count++;
+        sr.WriteLine("}");
 
-			if(count == flare.Elements.Count)
-				sr.WriteLine ("		}");
-			else
-				sr.WriteLine ("		},");
-		}
-		sr.WriteLine ("	}");
+        sr.WriteLine("}");
 
-		sr.WriteLine ("}");
+        sr.Close();
 
-		sr.WriteLine ("}");
+        EditorUtility.SetDirty(flare);
+    }
 
-		sr.Close();
-
-		EditorUtility.SetDirty (flare);
-
-	}
-
-	static string boolToString(bool _bool){
-
-		if (_bool)
-			return "1";
-		else
-			return "0";
-	}
-
+    private static string boolToString(bool _bool)
+    {
+        if (_bool)
+            return "1";
+        else
+            return "0";
+    }
 }

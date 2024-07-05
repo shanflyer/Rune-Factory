@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Collections;
@@ -36,9 +35,10 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         tempRuntimeMapItemObjs.Clear();
         mapPackageItemRenders.Clear();
     }
-    void ChangeMapItemObjLayer(ChangeMapItemObjLayer changeMapItemObjLayer)
+
+    private void ChangeMapItemObjLayer(ChangeMapItemObjLayer changeMapItemObjLayer)
     {
-        if(nowRuntimeMapItemObjs.TryGetValue(changeMapItemObjLayer.mapItemId,out var mapItemRuntimeObj))
+        if (nowRuntimeMapItemObjs.TryGetValue(changeMapItemObjLayer.mapItemId, out var mapItemRuntimeObj))
         {
             mapItemRuntimeObj.SetLayer(changeMapItemObjLayer.layerId);
         }
@@ -55,10 +55,10 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             }
         }
         else if (refreshMapItemDisplay.runtimeMapItem.mapInstanceId == displayMap)
-        { 
+        {
             if (nowRuntimeMapItemObjs.TryGetValue(refreshMapItemDisplay.runtimeMapItem.instanceId, out var mapItemRuntimeObj))
             {
-                mapItemRuntimeObj.coordinate=refreshMapItemDisplay.runtimeMapItem.coordinate;
+                mapItemRuntimeObj.coordinate = refreshMapItemDisplay.runtimeMapItem.coordinate;
                 mapItemRuntimeObj.transform.position = GameCommon.GetMapPos(refreshMapItemDisplay.runtimeMapItem.coordinate);
             }
             else
@@ -186,7 +186,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         var itemObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
                 tempMapItem.MapItemData.id.ToString(), ProfabTransform, -1, overrideParent);
-        MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj,tempMapItem.instanceId,tempMapItem.MapItemData.id, tempMapItem.coordinate);
+        MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj, tempMapItem.instanceId, tempMapItem.MapItemData.id, tempMapItem.coordinate);
         tempMapItemObj.SetDefaultLayer();
         tempMapItemObj.SetCoordinate(tempMapItem.coordinate);
         tempRuntimeMapItemObjs.Add(tempMapItem.instanceId, tempMapItemObj);
@@ -201,27 +201,24 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    public int displayMap { get; set; }
-    public MapRoomData displayMapRoomData { get; private set; }
-
-    public async void DefaultDisplayMap(int defaultMap)
+    public int displayMap 
     {
-        if (displayMap == 0)
-        {
-            displayMap = defaultMap;
-        }
-       await DisplayMap(displayMap);
+        get; 
+        set; 
     }
-    public async void DefaultDisplayMap(MapRoomData mapRoomData,int id)
+    public MapRoomData displayMapRoomData { get; private set; }
+ 
+    public async void DefaultDisplayMap(MapRoomData mapRoomData, int id)
     {
-        if (mapRoomData!=null)
+        if (mapRoomData != null)
         {
             displayMap = id;
         }
         await DisplayMap(displayMap);
     }
+
     private RuntimeObj CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
-    { 
+    {
         if (mapRoomData != null)
         {
             var mapRuntimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), mapRoomData.roomName, mapRoomData.mapObj.transform, instanceId);
@@ -234,7 +231,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     {
         Vector3 pos = GameCommon.GetMapPos(coordinate);
         //pos.z = -100;
-         
+
         if (mapItemData != null)
         {
             var mapItemRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), mapItemData.id.ToString(), mapItemData.itemObj.transform, instanceId);
@@ -253,8 +250,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         return null;
     }
 
-    private  void SetMapOverrideEnvirmentData(MapRoomData mapRoomData)
-    { 
+    private void SetMapOverrideEnvirmentData(MapRoomData mapRoomData)
+    {
         if (mapRoomData == null)
         {
             return;
@@ -311,11 +308,22 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             gameActionData.Action();
         }
     }
-    
+
     public async Task DisplayMap(int mapId)
     {
+        if (displayMap == mapId)
+        {
+            return;
+        }
         displayMap = mapId;
-        displayMapRoomData= WorldMapManager.instance.GetWorldMap(mapId).mapRoomData; 
+        displayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
+        StartCreatTempCharacter startCreatTempCharacter = new StartCreatTempCharacter
+        {
+            creatDataId = displayMapRoomData.creatTempCharacterId,
+            clearAll = true,
+        };
+        GameActionManager.instance.QueueAction(startCreatTempCharacter);
+
         string dataId = displayMapRoomData.name;
         SetMapOverrideEnvirmentData(displayMapRoomData);
         if (!string.IsNullOrEmpty(dataId))
@@ -362,6 +370,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             await SetItemAimation(mapItem.animationKey, mapItem.mapItemData.id, mapItem.instanceId);
         }
     }
+
     /// <summary>
     /// 播放物体动画
     /// </summary>
@@ -370,7 +379,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     /// <param name="instaceId">物体实例id</param>
     /// <returns></returns>
     private async Task SetItemAimation(int2 key, int dataId, int instaceId)
-    { 
+    {
         var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
         if (animationData != null)
         {
@@ -425,6 +434,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             RecycleMap();
         }
     }
+
     /// <summary>
     /// 已经显示的物体播放动画
     /// </summary>
@@ -447,6 +457,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
         return false;
     }
+
     public bool GetTempRuntimeMapItemObj(int instanceId, out MapItemRuntimeObj runtimeObj)
     {
         if (tempRuntimeMapItemObjs.TryGetValue(instanceId, out runtimeObj))
@@ -503,11 +514,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             {
                 SetItemAnimation SetItemAnimation = new SetItemAnimation
                 {
-                    keyX=1,keyY=0,
+                    keyX = 1,
+                    keyY = 0,
                     id = refreshManufature.manufature.instanceId,
                 };
                 GameActionManager.instance.QueueAction(SetItemAnimation);
-               
 
                 ShowEmote showEmote = new ShowEmote
                 {
@@ -570,9 +581,9 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     {
         if (!nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
         {
-            var runtimeObj =  CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
+            var runtimeObj = CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
 
-            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj,runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
+            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
 
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
@@ -586,7 +597,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
 
             var manufature = ManufatureManager.instance.GetManufature(runtimeMapItem.instanceId);
-            if (manufature!=null)
+            if (manufature != null)
             {
                 if (manufature.waitTime > GameTimeManager.instance.totalMinute)
                 {
@@ -634,8 +645,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             GameActionManager.instance.QueueAction(displayStoreCounter, true);
 
             runtimeObj.Recycle();
-            var newObj =CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
-            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id,runtimeMapItem.coordinate);
+            var newObj = CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
+            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[mapItemId] = MapItemRuntimeObj;
 
             MyAnimationController.instance.RemoveItemAnimation(mapItemId);
@@ -651,15 +662,15 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    public bool GetClickMapItemRuntimeObj(Vector2 clickPos,out MapItemRuntimeObj mapItemRuntimeObj)
+    public bool GetClickMapItemRuntimeObj(Vector2 clickPos, out MapItemRuntimeObj mapItemRuntimeObj)
     {
-        foreach(var runtimeMapItem in nowRuntimeMapItemObjs)
+        foreach (var runtimeMapItem in nowRuntimeMapItemObjs)
         {
             if (runtimeMapItem.Value.polygonCollider2D)
             {
                 if (runtimeMapItem.Value.polygonCollider2D.OverlapPoint(clickPos))
                 {
-                    mapItemRuntimeObj= runtimeMapItem.Value;
+                    mapItemRuntimeObj = runtimeMapItem.Value;
                     return true;
                 }
             }
@@ -675,21 +686,25 @@ public struct MapItemRuntimeObjRect
     public int2 pos;
     public int4 rect;
 }
+
 public struct CheckMapItemRuntomeObjPosJob : IJobParallelFor
 {
     [ReadOnly]
     public NativeArray<MapItemRuntimeObjRect> mapItemRuntimeObjRects;
+
     [ReadOnly]
     public int2 clickPos;
+
     [WriteOnly]
     public NativeArray<bool> result;
+
     public void Execute(int index)
-    { 
+    {
         var mapItemRuntimeObjRect = mapItemRuntimeObjRects[index];
-        var minX= mapItemRuntimeObjRect.rect.x+mapItemRuntimeObjRect.pos.x;
-        var maxX= mapItemRuntimeObjRect.rect.z+mapItemRuntimeObjRect.pos.x;
-        var minY= mapItemRuntimeObjRect.rect.y+mapItemRuntimeObjRect.pos.y;
-        var maxY= mapItemRuntimeObjRect.rect.w+mapItemRuntimeObjRect.pos.y;
+        var minX = mapItemRuntimeObjRect.rect.x + mapItemRuntimeObjRect.pos.x;
+        var maxX = mapItemRuntimeObjRect.rect.z + mapItemRuntimeObjRect.pos.x;
+        var minY = mapItemRuntimeObjRect.rect.y + mapItemRuntimeObjRect.pos.y;
+        var maxY = mapItemRuntimeObjRect.rect.w + mapItemRuntimeObjRect.pos.y;
         if (clickPos.x >= minX && clickPos.x <= maxX && clickPos.y >= minY && clickPos.y <= maxY)
         {
             result[index] = true;
@@ -700,6 +715,7 @@ public struct CheckMapItemRuntomeObjPosJob : IJobParallelFor
         }
     }
 }
+
 public class MapItemRuntimeObj
 {
     public int instanceId;
@@ -713,7 +729,7 @@ public class MapItemRuntimeObj
     public int2 coordinate;
     public string key => runtimeObj.key;
 
-    public MapItemRuntimeObj(RuntimeObj runtimeObj,int instanceId,int dataId,int2 coordinate)
+    public MapItemRuntimeObj(RuntimeObj runtimeObj, int instanceId, int dataId, int2 coordinate)
     {
         this.dataId = dataId;
         this.instanceId = instanceId;
@@ -738,15 +754,17 @@ public class MapItemRuntimeObj
             {
                 spriteRenderers[i].gameObject.layer = layerMask;
             }
-        } 
+        }
     }
+
     public void SetDefaultLayer()
-    { 
+    {
         for (int i = 0; i < spriteRenderers.Length; i++)
         {
             spriteRenderers[i].gameObject.layer = 0;
         }
     }
+
     public void SetCoordinate(int2 coordinate)
     {
         this.coordinate = coordinate;
@@ -794,6 +812,5 @@ public class MapItemRuntimeObj
 
     public void Dispose()
     {
-         
     }
 }

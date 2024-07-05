@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -44,7 +42,7 @@ public class GameDate : IReferenceData, INativeData
     }
 
     public void Dispose()
-    { 
+    {
     }
 
     public int Key => (int)season * 100 + date;
@@ -185,7 +183,7 @@ public class GameTime
             environmentLightData.skyBottomColor = DawnEnvironmentData.SkyBottomColor.Evaluate(lightValue);
             Color sunColor = DawnEnvironmentData.sunColor.Evaluate(lightValue);
             float a = sunColor.a;
-             sunColor *= DawnEnvironmentData.sunColorValue.Evaluate(lightValue);
+            sunColor *= DawnEnvironmentData.sunColorValue.Evaluate(lightValue);
             sunColor.a = a;
             environmentLightData.sunColor = sunColor;
             environmentLightData.sunScale = DawnEnvironmentData.sunScaleValue.Evaluate(lightValue);
@@ -193,7 +191,7 @@ public class GameTime
                 DawnEnvironmentData.sunYValue.Evaluate(lightValue));
             environmentLightData.cloudColor = DawnEnvironmentData.CloudColor.Evaluate(lightValue);
             environmentLightData.sunValue = 1;
-            environmentLightData.flareColor=DawnEnvironmentData.flareColor.Evaluate(lightValue);
+            environmentLightData.flareColor = DawnEnvironmentData.flareColor.Evaluate(lightValue);
 
             SetEnvironmentLight setEnvironmentLight = new SetEnvironmentLight
             {
@@ -266,7 +264,7 @@ public class GameTime
                     sunPos = new Vector2(DuskEnvironmentData.sunXValue.Evaluate(lightValue),
                       DuskEnvironmentData.sunYValue.Evaluate(lightValue)),
                     sunValue = 1,
-                    flareColor=DuskEnvironmentData.flareColor.Evaluate(lightValue)
+                    flareColor = DuskEnvironmentData.flareColor.Evaluate(lightValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -302,7 +300,7 @@ public class GameTime
                     sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
                       NightEnvironmentData.sunYValue.Evaluate(lightValue)),
                     sunValue = 0,
-                    flareColor=NightEnvironmentData.flareColor.Evaluate(lightValue)
+                    flareColor = NightEnvironmentData.flareColor.Evaluate(lightValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -338,7 +336,7 @@ public class GameTime
                     sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
                       NightEnvironmentData.sunYValue.Evaluate(lightValue)),
                     sunValue = 0,
-                    flareColor=NightEnvironmentData.flareColor.Evaluate(lightValue)
+                    flareColor = NightEnvironmentData.flareColor.Evaluate(lightValue)
                 }
             };
             GameActionManager.instance.QueueAction(setEnvironmentLight, true);
@@ -390,10 +388,10 @@ public class GameTime
         }
     }
 
-
     private NewDay newDay;
 
     private bool minuteRefresh = false;
+
     public void TimeInit()
     {
         bool dayRefresh = false;
@@ -452,14 +450,14 @@ public class GameTime
         int x = date % 6;
         week = (Week)x;
         SetLightValue();
-       
 
         if (dayRefresh)
         {
             GameActionManager.instance.QueueAction(newDay);
         }
     }
-    void UpDataGameTimeAction()
+
+    private void UpDataGameTimeAction()
     {
         updateGame.year = year;
         updateGame.season = (int)season;
@@ -469,11 +467,10 @@ public class GameTime
         updateGame.totalMinute = minuteTime;
         GameActionManager.instance.QueueAction(updateGame);
     }
+
     private UpdateGameTime updateGame;
 
-    public int minuteTime=> (((year * 4 + (int)season) * 30 + date) * 24 + hour) * 60 + minute;
-
-
+    public int minuteTime => (((year * 4 + (int)season) * 30 + date) * 24 + hour) * 60 + minute;
 }
 
 public class GameTimeManager : Singleton<GameTimeManager>
@@ -512,6 +509,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             return 0;
         }
     }
+
     public int totalMinute => nowGameTime.minuteTime;
 
     public void SetTime(int hour = -1, int minute = -1)
@@ -522,7 +520,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
     }
 
-    private Dictionary<int,GameDate> gameDates = new Dictionary<int, GameDate>();
+    private Dictionary<int, GameDate> gameDates = new Dictionary<int, GameDate>();
 
     public List<GameDate> GetGameDataForSeason(Season season)
     {
@@ -768,7 +766,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 festivalIds.Add(festivalData.id);
             }
             GameDate gameDate = new GameDate(season, date, festivalIds);
-            gameDates.Add(gameDate.Key,gameDate);
+            gameDates.Add(gameDate.Key, gameDate);
         }
         //timeDisplayAction.UpdataTime();
     }
@@ -796,13 +794,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public void InitSaveDate(GameDateSaveData dateData)
     {
         nowGameTime.year = dateData.year;
-        nowGameTime.date= dateData.day;
+        nowGameTime.date = dateData.day;
         nowGameTime.Season = dateData.season;
         nowGameTime.week = dateData.week;
-        nowGameTime.SetTime(dateData.hour, dateData.minute);        
-        
+        nowGameTime.SetTime(dateData.hour, dateData.minute);
     }
-
 
     private void LerpGameTime(int targetHour, int targetMinute, float costTime, bool endRun = false, Action endAction = null)
     {

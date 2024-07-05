@@ -196,7 +196,7 @@ public class CommonTool : MonoBehaviour
         }
     }
 
-    private static async void SaveReable(Texture2D texture2D)
+    private static void SaveReable(Texture2D texture2D)
     {
         int width = texture2D.width;
         int height = texture2D.height;
@@ -283,7 +283,7 @@ public class CommonTool : MonoBehaviour
         }
     }
 
-    private static async void SaveUnReable(Texture2D texture2D)
+    private static void SaveUnReable(Texture2D texture2D)
     {
         string strSaveFile = AssetDatabase.GetAssetPath(texture2D);
         TextureImporter textureImporter = TextureImporter.GetAtPath(strSaveFile) as TextureImporter;

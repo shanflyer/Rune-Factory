@@ -80,7 +80,7 @@ public class ExcelDataEditor : MyEditor
     private void RefreshAllData(List<ExcelDataObj> selectDatas)
     {
         try
-        { 
+        {
             AssetDatabase.StartAssetEditing();
 
             foreach (var selectData in selectDatas)
@@ -110,7 +110,7 @@ public class ExcelDataEditor : MyEditor
                 FieldInfo[] fields = null;
                 if (dataType == null)
                 {
-                    fields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic| BindingFlags.Public);
+                    fields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
                 }
                 else
                 {
@@ -182,10 +182,10 @@ public class ExcelDataEditor : MyEditor
                     array = Array.CreateInstance(dataType, rowCount - 3);
                     listData = Activator.CreateInstance(type);
                 }
-               
+
                 for (int i = 3; i < rowCount; i++)
                 {
-                    var data = Activator.CreateInstance(dataType == null ? type : dataType);
+                    var data = ScriptableObject.CreateInstance(dataType == null ? type : dataType);
                     Dictionary<string, object> childDatas = new Dictionary<string, object>();
                     for (int j = 0; j < columnCount; j++)
                     {
@@ -268,7 +268,7 @@ public class ExcelDataEditor : MyEditor
         {
             value = Convert.ChangeType(value, typeof(int));
             fieldInfo.SetValue(data, value);
-        } 
+        }
         else if (fieldInfo.FieldType == typeof(List<int>))
         {
             var valueStr = value.ToString();

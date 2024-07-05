@@ -1,21 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FuncReference : UIObjReference<FunctionData>
 {
     [SerializeField]
-    Text nameText;
+    private Text nameText;
+
     [SerializeField]
-    Button button;
+    private Button button;
+
     [SerializeField]
-    Transform secondParent; 
-    
+    private Transform secondParent;
 
     private FunctionData functionData;
     private List<Button> secondSelectButtons = new List<Button>();
+
     public override void SetPanelUISerializeObj()
     {
         nameText = FindChildGameObject<Text>("Text");
@@ -24,17 +25,18 @@ public class FuncReference : UIObjReference<FunctionData>
         base.SetPanelUISerializeObj();
     }
 
-    const float showTime=1.0f;
-    float secondButtonHigh;
-    bool show = false;
-    IEnumerator MoveSelectButton(bool hide)
+    private const float showTime = 1.0f;
+    private float secondButtonHigh;
+    private bool show = false;
+
+    private IEnumerator MoveSelectButton(bool hide)
     {
         button.interactable = false;
         float timeValue = 0;
         List<Vector3> targets = new List<Vector3>();
         if (hide)
         {
-            for(int i = 0; i < secondSelectButtons.Count; i++)
+            for (int i = 0; i < secondSelectButtons.Count; i++)
             {
                 targets.Add(Vector3.zero);
             }
@@ -45,7 +47,7 @@ public class FuncReference : UIObjReference<FunctionData>
             for (int i = 0; i < secondSelectButtons.Count; i++)
             {
                 float y = secondButtonHigh * i + secondButtonHigh;
-                targets.Add(new Vector3(0,y,0));
+                targets.Add(new Vector3(0, y, 0));
             }
         }
         List<Vector3> zeros = new List<Vector3>();
@@ -56,13 +58,13 @@ public class FuncReference : UIObjReference<FunctionData>
             zeros.Add(rectTransform.localPosition);
         }
 
-        while (timeValue<=showTime)
+        while (timeValue <= showTime)
         {
             float lerpValue = timeValue / showTime;
             for (int i = 0; i < secondSelectButtons.Count; i++)
             {
                 var selectButton = secondSelectButtons[i];
-                Vector3 pos = Vector3.Lerp(zeros[i], targets[i],lerpValue);
+                Vector3 pos = Vector3.Lerp(zeros[i], targets[i], lerpValue);
                 RectTransform rectTransform = selectButton.transform as RectTransform;
                 rectTransform.localPosition = pos;
             }
@@ -76,38 +78,40 @@ public class FuncReference : UIObjReference<FunctionData>
         }
         button.interactable = true;
     }
-    void ShowSecondSelectButton()
+
+    private void ShowSecondSelectButton()
     {
         show = true;
         IEnumerator enumerator = MoveSelectButton(false);
         GameController.instance.StartCoroutine(enumerator);
     }
-    void HideSecondSelectButton()
+
+    private void HideSecondSelectButton()
     {
         show = false;
         IEnumerator enumerator = MoveSelectButton(true);
         GameController.instance.StartCoroutine(enumerator);
     }
 
-
-    public void InitFunction(FunctionData functionData,Button secondSelectButton)
+    public void InitFunction(FunctionData functionData, Button secondSelectButton)
     {
         this.functionData = functionData;
         nameText.text = functionData.buttonName;
         secondButtonHigh = secondSelectButton.GetComponent<RectTransform>().sizeDelta.y;
 
-        if (functionData.secondFunctions!=null&&functionData.secondFunctions.Length > 0)
+        if (functionData.secondFunctions != null && functionData.secondFunctions.Length > 0)
         {
             secondSelectButtons.Clear();
-            for(int i = 0; i < functionData.secondFunctions.Length; i++)
+            for (int i = 0; i < functionData.secondFunctions.Length; i++)
             {
-                var selectButton = Instantiate(secondSelectButton,Vector3.zero,Quaternion.identity, secondParent);
+                var selectButton = Instantiate(secondSelectButton, Vector3.zero, Quaternion.identity, secondParent);
                 selectButton.transform.localScale = Vector3.one;
                 selectButton.GetComponentInChildren<Text>().text = functionData.secondFunctions[i].buttonName;
-                selectButton.onClick.AddListener(()=> { functionData.secondFunctions[i].gameActionData.Action(); });
+                selectButton.onClick.AddListener(() => { functionData.secondFunctions[i].gameActionData.Action(); });
                 secondSelectButtons.Add(selectButton);
             }
-            button.onClick.AddListener(()=>{
+            button.onClick.AddListener(() =>
+            {
                 if (show)
                 {
                     HideSecondSelectButton();
@@ -120,8 +124,7 @@ public class FuncReference : UIObjReference<FunctionData>
         }
         else
         {
-            button.onClick.AddListener(()=> { this.functionData.gameActionData.Action(); });
+            button.onClick.AddListener(() => { this.functionData.gameActionData.Action(); });
         }
-       
     }
 }

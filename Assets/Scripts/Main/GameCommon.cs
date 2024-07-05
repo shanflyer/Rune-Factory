@@ -52,8 +52,8 @@ public enum CompareType
 [System.Serializable]
 public enum CharacterPropertyType
 {
-    自定义值 = -1, 体力=0, 生命=1, 法力=2, 攻击=3, 防御=4, 幸运=5, 饱食=6,
-    最大体力=7, 最大生命=8, 最大法力=9,敏捷=10
+    自定义值 = -1, 体力 = 0, 生命 = 1, 法力 = 2, 攻击 = 3, 防御 = 4, 幸运 = 5, 饱食 = 6,
+    最大体力 = 7, 最大生命 = 8, 最大法力 = 9, 敏捷 = 10
 }
 
 public enum Direction
@@ -63,7 +63,7 @@ public enum Direction
 
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER, STOREITEM, EMOTE,FISHTOOL
+    MAPGROUND, MAPITEM, CHARACTER, STOREITEM, EMOTE, FISHTOOL
 }
 
 public enum FightRuntimeObjType
@@ -82,37 +82,45 @@ public enum EntityType
 {
     All = 1, 地图道具 = 2, 角色 = 15, 玩家 = 3, NPC = 5
 }
+
 public static class AttackType
 {
     /// <summary>
     /// 默认
     /// </summary>
     public static int defaultAttack = 0;
+
     /// <summary>
     /// 刀剑攻击
     /// </summary>
     public static int swordAttack = 1;
+
     /// <summary>
     /// 长矛攻击
     /// </summary>
     public static int spearAttack = 2;
+
     /// <summary>
     /// 斧子攻击
     /// </summary>
     public static int axeAttack = 3;
+
     /// <summary>
     /// 咬
     /// </summary>
     public static int biteAttack = 4;
+
     /// <summary>
     /// 爪
     /// </summary>
     public static int pawAttack = 5;
+
     /// <summary>
     /// 鞭
     /// </summary>
     public static int whipAttack = 6;
 }
+
 public class GameCommon
 {
     public static Dictionary<Direction, Vector2> fishToolOffsets = new Dictionary<Direction, Vector2>
@@ -122,6 +130,7 @@ public class GameCommon
         {Direction.UP,new Vector2(0,0.6531f)},
         {Direction.DOWN,new Vector2(0,-0.39f)},
     };
+
     public const int BlueObjLayer = 13;
     public const int GreenObjLayer = 14;
     public const int RedObjLayer = 15;

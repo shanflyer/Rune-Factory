@@ -37,7 +37,7 @@ public class GameActionData : ScriptableObject, IGameData
 }
 
 [System.Serializable]
-public struct Parameter
+public class Parameter
 {
     public string value;
     public List<Parameter> parameters;

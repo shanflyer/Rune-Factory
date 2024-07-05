@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using System.Collections.Generic;
 
 [ExecuteAlways]
 public class MapItemInstanceEditor : MonoBehaviour
@@ -10,7 +10,7 @@ public class MapItemInstanceEditor : MonoBehaviour
 
     private Vector3 oldPos;
 
-    public void InitData(MapItemData mapItemData,int blindHomeEquipment, int intanceId, int2 coordinate,List<MapItemEventReferenceData> mapItemEventReferenceDatas)
+    public void InitData(MapItemData mapItemData, int blindHomeEquipment, int intanceId, int2 coordinate, List<MapItemEventReferenceData> mapItemEventReferenceDatas)
     {
         this.itemData = mapItemData;
         mapItem.coordinate = coordinate;
@@ -43,7 +43,6 @@ public class MapItemInstanceEditor : MonoBehaviour
     {
     }
 
-   
     // Update is called once per frame
     private void Update()
     {
