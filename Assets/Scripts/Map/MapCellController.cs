@@ -1873,7 +1873,7 @@ public class MapCellController : Singleton<MapCellController>
                         }
 
                         int cost = CalculateDistanceCost(cell, startPos) +
-                             CalculateDistanceCost(cell, targetPos) * 3;
+                             CalculateDistanceCost(cell, targetPos);
                         parentCell[cell] = nowCell;
                         checkedCell.Add(cell);
                         openCellList.Add(new int3(cell, cost));
@@ -2002,7 +2002,7 @@ public class MapCellController : Singleton<MapCellController>
                         }
 
                         int cost = CalculateDistanceCost(cell, startPos) +
-                             CalculateDistanceCost(cell, targetPos) * 3;
+                             CalculateDistanceCost(cell, targetPos) * 1;
                         parentCell[cell] = nowCell;
                         checkedCell.Add(cell);
                         openCellList.Add(new int3(cell, cost));

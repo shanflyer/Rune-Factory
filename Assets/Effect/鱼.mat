@@ -14,6 +14,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHABLEND_ON
+  - _CFXR_HDR_BOOST
   m_InvalidKeywords:
   - _
   - _CFXR_DITHERED_SHADOWS_OFF
@@ -89,8 +90,8 @@ Material:
     - _EdgeFadePow: 1
     - _EnableExternalAlpha: 0
     - _FadeAlongU: 0
-    - _HdrBoost: 0
-    - _HdrMultiply: 2
+    - _HdrBoost: 1
+    - _HdrMultiply: 3
     - _IndirectLightingMix: 0.5
     - _InvertDissolveTex: 0
     - _LightingWorldPosStrength: 0.2
