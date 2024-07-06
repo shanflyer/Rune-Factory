@@ -189,7 +189,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     {
         base.InitReferenceData(v);
         storeCunterSetData = v;
-        itemBoxReference.InitData(new Item
+       await itemBoxReference.InitData(new Item
         {
             dataId = storeCunterSetData.itemId, count = 0
         });

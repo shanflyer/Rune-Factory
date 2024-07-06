@@ -585,13 +585,13 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
         int level = TempCharacterManager.instance.level;
         var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-        TempCharacter character = new TempCharacter(characterData, professionData, myInstance.CreatInstanceId(), tempCharacterData.id);
+        TempCharacter character = new TempCharacter(characterData, professionData, myInstance.CreatInstanceId(), tempCharacterData);
 
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
             new int2(creatTempCharacter.coordinateX, creatTempCharacter.coordinateY));
 
-        character.templevel = level;
+        //character.templevel = level;
         RefreshNpcRuntimeObj(character);
     }
 

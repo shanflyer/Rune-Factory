@@ -262,8 +262,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         if (data.characterProperty.Speed < characterProperty.Speed)
             SpeedDown.enabled = true;
     }
-
-    private CharacterInformationData data;
+     
 
     public override async void InitReferenceData(CharacterInformationData v)
     {

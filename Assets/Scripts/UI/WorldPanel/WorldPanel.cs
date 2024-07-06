@@ -87,7 +87,7 @@ public class WorldPanel : GamePanel<MyInt>
         Close();
     }
 
-    private async void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
+    private void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
     {
         if (selected)
         {
@@ -153,7 +153,7 @@ public class WorldPanel : GamePanel<MyInt>
                         fightChapterId = fightMapData.id,
                         season = GameController.instance.test ?true: fightMapData.season == selectSeason
                     };
-                    seasonFightChapterList[index].InitData(data, SelectFightChapter);
+                    await seasonFightChapterList[index].InitData(data, SelectFightChapter);
 
                     if (GameController.instance.test)
                     {
@@ -183,7 +183,7 @@ public class WorldPanel : GamePanel<MyInt>
         }
     }
 
-    public override async void InitReferenceData(MyInt v)
+    public override void InitReferenceData(MyInt v)
     {
         base.InitReferenceData(v);
         RefreshUI((Season)v.value);

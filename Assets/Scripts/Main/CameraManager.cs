@@ -18,7 +18,8 @@ public class CameraManager : Singleton<CameraManager>
 
     //CinemachinePositionComposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
-
+    public bool fixedView { get; private set; }
+    
     public override void Init()
     {
         base.Init();
@@ -223,7 +224,7 @@ public class CameraManager : Singleton<CameraManager>
         }
     }
 
-    private bool fixedView = false;
+   // private bool fixedView = false;
     private Vector3 oldCameraPos;
 
     protected override void UpData()

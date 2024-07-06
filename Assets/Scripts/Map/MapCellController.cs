@@ -181,8 +181,8 @@ public class MapCellController : Singleton<MapCellController>
 
         public void InitTriggerData()
         {
-            triggerAreas = new NativeList<TriggerArea>(4, Allocator.TempJob);
-            triggerIndexs = new NativeHashMap<int, int>(4, Allocator.TempJob);
+            triggerAreas = new NativeList<TriggerArea>(4, Allocator.Persistent);
+            triggerIndexs = new NativeHashMap<int, int>(4, Allocator.Persistent);
         }
 
         public void AddTriggerCell(TriggerArea trigger)
@@ -225,7 +225,7 @@ public class MapCellController : Singleton<MapCellController>
                 if (ints.Count > 0)
                 {
                     int index = GameRandom.RandomInt(0, ints.Count);
-                    NpcBehaviorArea npcBehaviorArea = NpcBehaviorAreas[index];
+                    NpcBehaviorArea npcBehaviorArea = NpcBehaviorAreas[ints[index]];
                     int cellIndex = GameRandom.RandomInt(0, npcBehaviorArea.cells.Count);
                     return npcBehaviorArea.pos + npcBehaviorArea.cells[cellIndex];
                 }
@@ -252,7 +252,7 @@ public class MapCellController : Singleton<MapCellController>
         public void Dispose()
         {
             //roomCellData.Dispose();
-            NpcBehaviorAreas.Clear();
+            NpcBehaviorAreas=null;
             NpcBehaviorAreaTypeDic.Clear();
 
             linkMapIndexs.Dispose();
@@ -1112,8 +1112,8 @@ public class MapCellController : Singleton<MapCellController>
     {
         RoomCellData roomCellData = new RoomCellData
         {
-            cellValue = new NativeArray<int>(mapRoomData.mapCells.Count, Allocator.TempJob),
-            mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.TempJob),
+            cellValue = new NativeArray<int>(mapRoomData.mapCells.Count, Allocator.Persistent),
+            mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.Persistent),
             startCoordinate = mapRoomData.startCoordinate,
             endCoordinate = mapRoomData.endCoordinate,
         };
@@ -1353,8 +1353,8 @@ public class MapCellController : Singleton<MapCellController>
                 pathCells = pathCells
             };
 
-            findPath.Schedule().Complete();
-            // findPath.Run();
+           // findPath.Schedule().Complete();
+            findPath.Run();
 
             for (int i = 0; i < findPath.pathCells.Length; i++)
             {
@@ -1983,7 +1983,7 @@ public class MapCellController : Singleton<MapCellController>
                     if (nowCell.x == targetPos.x && nowCell.y == targetPos.y)
                     {
                         break;
-                    }
+                    } 
 
                     for (int i = 0; i < 8; i++)
                     {
@@ -2007,15 +2007,16 @@ public class MapCellController : Singleton<MapCellController>
                         checkedCell.Add(cell);
                         openCellList.Add(new int3(cell, cost));
                         if (cell.x == targetPos.x && cell.y == targetPos.y)
-                        {
-                            break;
+                        { 
+                            break; 
                         }
                     }
+                    
                 }
 
                 // var checkCell = nowCell;
 
-                while (nowCell.Equals(targetPos))
+                while (!nowCell.Equals(startPos))
                 {
                     pathCells.Add(nowCell);
                     if (!parentCell.TryGetValue(nowCell, out nowCell))

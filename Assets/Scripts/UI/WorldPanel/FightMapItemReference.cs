@@ -24,7 +24,7 @@ public class FightMapItemReference : UIObjReference<MapItemReferenceData>
     }
     public override async Task InitData(MapItemReferenceData t, SelectAction<MapItemReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         if (!t.open)
         {
             Icon.sprite = defaultSprite;

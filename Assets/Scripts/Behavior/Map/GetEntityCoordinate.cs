@@ -9,9 +9,17 @@ public class GetEntityCoordinate : Action
 {
     [Header("保存坐标的共享变量")]
     public SharedInt3 targetCoordinate;
+    [Header("地图")]
+    [SerializeField]
+    private SharedInt mapInstance;
+    [Header("坐标")]
+    [SerializeField]
+    private SharedInt2 coordinate;
 
     [Header("个体id")]
     public SharedInt entityId;
+
+ 
 
     public SharedInt2 itemEditorKey;
 
@@ -48,6 +56,12 @@ public class GetEntityCoordinate : Action
                 break;
         }
         targetCoordinate.Value = coordinate;
+        if (mapInstance != null)
+            mapInstance.SetValue(coordinate.z);
+        if (this.coordinate != null)
+        {
+            this.coordinate.SetValue(coordinate.xy);
+        }
     }
 
     public override TaskStatus OnUpdate()

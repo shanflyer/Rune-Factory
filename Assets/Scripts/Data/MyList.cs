@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+public class MyList<T>
+{
+    private List<T> list;
+    public int length { get; private set; }
+    public MyList(List<T> values)
+    {
+        list = new List<T>();
+        list.AddRange(values);
+    }
+    public MyList()
+    {
+        list = new List<T>();
+    }
+    public void Add(T item)
+    {
+        if (list.Count > length)
+        {
+            list[length] = item;
+        }
+        else
+        {
+            list.Add(item);
+        }
+        length++;
+    }
+    public void RemoveAt(int index)
+    {
+        if (length > index)
+        { 
+            if (length == 1)
+            {
+                length = 0;
+                list.Clear();
+            }
+            else
+            {
+                var t = list[index];
+                list[index] = list[length - 1]; 
+                list[length-1] = t;
+                length--;
+            }
+        }
+        else
+        {
+           throw new IndexOutOfRangeException();
+        }
+      
+    }
+
+}

@@ -97,10 +97,10 @@ public class ZeroPanel : GamePanel<IReferenceData>
             }
         } 
     }
-    void LoadDataPanel()
+    async void LoadDataPanel()
     {
         Close();
-        UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+       await  UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
     }
     async void StartGame()
     {

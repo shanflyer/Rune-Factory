@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -28,6 +29,17 @@ public struct MapCell
     public bool CheckCellPos(Vector2Int coordinate)
     {
         return this.coordinate == coordinate;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is MapCell cell &&
+               coordinate.Equals(cell.coordinate);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(coordinate);
     }
 
     public static bool operator ==(MapCell cell1, MapCell cell2)

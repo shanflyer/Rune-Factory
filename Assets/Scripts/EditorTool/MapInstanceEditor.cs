@@ -271,12 +271,12 @@ public class MapInstanceEditor : MonoBehaviour
                 var areaData = mapRoomData.npcBehaviorAreas[i];
                 GameObject areaObj = Instantiate(areaPrefab, areaParent);
                 areaObj.name = areaData.Name;
-                var tilemapRenderer = areaObj.AddComponent<TilemapRenderer>();
+                var tilemapRenderer = areaObj.GetComponentInChildren<TilemapRenderer>();
                 var tileMap = areaObj.GetComponentInChildren<Tilemap>();
                 for(int j = 0; j < areaData.cells.Count; j++)
                 {
                     var cell = areaData.cells[j];
-                    tilemap.SetTile(new Vector3Int(cell.x, cell.y, 0), walkTile);
+                    tileMap.SetTile(new Vector3Int(cell.x, cell.y, 0), walkTile);
                 }
                 areaObj.transform.position = GameCommon.GetZeroMapPos(areaData.pos);
 

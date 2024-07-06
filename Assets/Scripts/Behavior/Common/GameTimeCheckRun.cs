@@ -16,7 +16,9 @@ public class GameTimeCheckRun : Action
     public SharedInt day1;
     public SharedInt hour1;
     public SharedInt minute1;
+#pragma warning disable CS0108 // 成员隐藏继承的成员；缺少关键字 new
     public bool Equals = true;
+#pragma warning restore CS0108 // 成员隐藏继承的成员；缺少关键字 new
 
     public override void OnAwake()
     {

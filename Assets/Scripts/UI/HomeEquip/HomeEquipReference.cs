@@ -44,9 +44,9 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
     {
         AnimationIcon.enabled = isShow;
     }
-    public void ClearData()
+    public override void ClearData()
     {
-        data = default(HomeEquip);
+        data = null;
         icon.enabled = false;
     }
     public override void ClearSelect()
@@ -62,7 +62,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
 
     public override async Task InitData(HomeEquip t, SelectAction<HomeEquip> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await base.InitData(t, SelectAction, toggleGroup);
 
         toggle.group = toggleGroup;
         HomeEquipmentData homeEquipmentData = data.homeEquipmentData; 

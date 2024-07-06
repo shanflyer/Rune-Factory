@@ -17,7 +17,7 @@ public class FishParticle
 
 public class FishTool : MonoBehaviour
 {
-    public ParticleSystem particleSystem;
+    public new ParticleSystem particleSystem;
     private Particle[] m_Particles;
     private int numParticlesAlive; 
     public Vector2 speedRange;

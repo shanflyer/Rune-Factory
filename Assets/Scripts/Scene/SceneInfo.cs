@@ -9,7 +9,7 @@ public class SceneInfo : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI info;  
     [SerializeField]
-    Animation animation;
+    new Animation animation;
 
     public void SetTextValue(string str)
     {

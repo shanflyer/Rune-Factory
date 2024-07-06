@@ -93,7 +93,7 @@ public class GameTime
     /// 黎明时间
     /// </summary>
     private int dawnStart, dawnEnd;
-
+    public bool night { get; private set; }
     /// <summary>
     /// 黄昏时间
     /// </summary>
@@ -101,7 +101,7 @@ public class GameTime
 
     private int totalSunMinute, totalMoonMinute;
     private int totalMinute = 1440;// 24 * 60;
-    private bool night = false;
+    //private bool night = false;
     private float timeValue;
 
     public float TimeValue => timeValue;

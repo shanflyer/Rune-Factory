@@ -36,13 +36,12 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         moneyIcon = FindChildGameObject<Image>("MoneyIcon");
         moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
     }
-
-    private SelectAction<ShopItemData> SelectAction;
+     
     private ShopItemData ShopItemData;
 
     public override async Task InitData(ShopItemData t, SelectAction<ShopItemData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         ShopItemData = t;
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;

@@ -141,7 +141,7 @@ public class FightPanel : GamePanel<IReferenceData>
         skillPause = skillPauseAction.pause;
         UsingButton.interactable = !skillPauseAction.pause;
     }
-    PlayerFight playerFight = new PlayerFight();
+   // PlayerFight playerFight = new PlayerFight();
    // StartRoundFight startRoundFight = new StartRoundFight();
     protected override void Awake()
     {

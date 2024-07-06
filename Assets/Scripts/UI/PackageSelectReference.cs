@@ -32,12 +32,11 @@ public class PackageSelectReference : UIObjReference<PackageData>
         });
     }
 
-    private PackageData PackageData;
-    private SelectAction<PackageData> SelectAction;
+    private PackageData PackageData; 
 
     public override async Task InitData(PackageData t, SelectAction<PackageData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         this.SelectAction = SelectAction;
         PackageData = t;
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(PackageData.dataId);

@@ -27,7 +27,7 @@ public class FuncReference : UIObjReference<FunctionData>
 
     private const float showTime = 1.0f;
     private float secondButtonHigh;
-    private bool show = false;
+   // private bool show = false;
 
     private IEnumerator MoveSelectButton(bool hide)
     {

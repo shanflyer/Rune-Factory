@@ -32,9 +32,7 @@ public struct CharacterInformationData : IReferenceData
 
 public class TempCharacter : Character
 {
-    public int tempDataId => _tempDataId;
-    private int _tempDataId;
-
+    public TempCharacterData tempCharacterData;
     public int templevel
     {
         set
@@ -48,16 +46,16 @@ public class TempCharacter : Character
         get => _templevel;
     }
 
-    public int _templevel;
+    public int _templevel = 0;
 
-    public TempCharacter(CharacterData characterData,ProfessionData professionData, int instanceId, int tempDataId) : base(characterData, professionData, instanceId)
+    public TempCharacter(CharacterData characterData,ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : base(characterData, professionData, instanceId)
     {
-        this._tempDataId = tempDataId;
+        this.tempCharacterData = tempCharacterData;
+        templevel = 1;
     }
 
-    private async void RefreshBehavior()
-    {
-        var tempCharacterData = await GameDataManager.instance.GetAsyncData<TempCharacterData>(tempDataId);
+    private void RefreshBehavior()
+    { 
         if (!tempCharacterData.levelBehavior.TryGetValue(templevel, out var externalBehaviorTree))
         {
             externalBehaviorTree = tempCharacterData.defaultBehavior;

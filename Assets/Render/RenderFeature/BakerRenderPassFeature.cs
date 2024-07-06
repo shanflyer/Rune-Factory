@@ -110,18 +110,19 @@ public class BakerRenderPassFeature : ScriptableRendererFeature
             // instead,
             if (!string.IsNullOrEmpty(settings.textureName))
             {
-                RenderingUtils.ReAllocateIfNeeded(ref dstTextureId, Vector2.one, desc, name: settings.textureName);
+
+                RenderingUtils.ReAllocateHandleIfNeeded(ref dstTextureId, Vector2.one, desc, name: settings.textureName); 
             }
 
-          
-            RenderingUtils.ReAllocateIfNeeded(ref temp, Vector2.one, desc, name: "temp");
+
+            RenderingUtils.ReAllocateHandleIfNeeded(ref temp, Vector2.one, desc, name: "temp");
             if (settings.blitToCameraTarget|| string.IsNullOrEmpty(settings.textureName))
             {
                 destination = renderer.cameraColorTargetHandle;
             }
             else
             {
-                RenderingUtils.ReAllocateIfNeeded(ref destination, Vector2.one, desc, name: settings.textureName);
+                RenderingUtils.ReAllocateHandleIfNeeded(ref destination, Vector2.one, desc, name: settings.textureName);
             }
             
             //Nothing here yet.

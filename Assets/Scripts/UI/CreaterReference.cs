@@ -38,12 +38,11 @@ public class CreaterReference : UIObjReference<MoneyCreatData>
         value = FindChildGameObject<TextMeshProUGUI>("Value");
         cost = FindChildGameObject<TextMeshProUGUI>("CostValue");
     }
-
-    private SelectAction<MoneyCreatData> SelectAction;
+     
 
     public override async Task InitData(MoneyCreatData t, SelectAction<MoneyCreatData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction);
+        await  base.InitData(t, SelectAction);
         this.SelectAction = SelectAction;
         moneyCreatData = t;
         toggle.group = toggleGroup;
