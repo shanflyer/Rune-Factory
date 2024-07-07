@@ -8,9 +8,18 @@ public class MyList<T>
 {
     private List<T> list;
     public int length { get; private set; }
+    public T this[int index]
+    {
+        get { return list[index]; }
+    }
     public MyList(List<T> values)
     {
         list = new List<T>();
+        list.AddRange(values);
+    }
+    public void SetList(List<T> values)
+    {
+        list.Clear();
         list.AddRange(values);
     }
     public MyList()
@@ -41,8 +50,8 @@ public class MyList<T>
             else
             {
                 var t = list[index];
-                list[index] = list[length - 1]; 
-                list[length-1] = t;
+                list[index] = list[length - 1];
+                list.RemoveAt(length-1);
                 length--;
             }
         }

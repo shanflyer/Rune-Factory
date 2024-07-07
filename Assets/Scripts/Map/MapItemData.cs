@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
+using System.Linq;
 
 #if UNITY_EDITOR
 
@@ -21,6 +22,10 @@ public class MapItemData : ScriptableObject, IGameData
     public int2[] colliderCells;
     public int2[] triggerCells;
     public int2[] playerTriggerCells;
+
+    public List<int> colliderGrids, triggerGrids, playerTriggerGrids;
+
+
     public int playerTriggerEvent;
     public List<int> operateIds = new List<int>();
 
@@ -29,7 +34,7 @@ public class MapItemData : ScriptableObject, IGameData
     public int defaultExit, defaultEnter;
     public bool displayTips = true;
     public string playerOperateInfo;
-
+  
     public string GetName()
     {
         return itemName;
@@ -53,13 +58,17 @@ public class MapItemData : ScriptableObject, IGameData
         {
             objName = itemObj.name;
         }
-        /*
-       string operatePath = DataPath.GetDataPath(typeof(OperateData));
-       operateDatas.Clear();
-       foreach (var operate in operateIds)
-       {
-           operateDatas.Add(Resources.Load<OperateData>($"{operatePath}/{operate}"));
-       }*/
+
+        if (colliderCells != null)
+            colliderGrids = GameCommon.CellToGrid(colliderCells.ToList());
+        if (triggerCells != null)
+            triggerGrids = GameCommon.CellToGrid(triggerCells.ToList());
+        if (playerTriggerCells != null)
+            playerTriggerGrids = GameCommon.CellToGrid(playerTriggerCells.ToList());
+
+        colliderCells = null;
+        triggerCells = null;
+        playerTriggerCells = null;
     }
 
     public string GetKey()

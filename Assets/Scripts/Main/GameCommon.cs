@@ -274,6 +274,112 @@ public class GameCommon
 
 #endif
 
+    public static List<int> CellToGrid(List<int2> cells)
+    { 
+        List<int> result = new List<int>();
+
+        HashSet<int2> allCellPoints = new HashSet<int2>();
+
+        for (int i = 0; i < cells.Count; i++)
+        {
+            var cell = cells[i];
+            allCellPoints.Add(cell);
+        }
+
+
+        while (allCellPoints.Count > 0)
+        {
+            int2 startPoint = new int2(int.MinValue, int.MinValue);
+            using (var e = allCellPoints.GetEnumerator())
+            {
+                if (e.MoveNext())
+                {
+                    startPoint = e.Current;
+                }
+            }
+            if (startPoint.x != int.MinValue)
+            {
+                int left = startPoint.x;
+                int right = startPoint.x;
+                int bottom = startPoint.y;
+                int top = startPoint.y;
+
+                bool match = true;
+                while (match)
+                {
+                    left--;
+                    int2 leftPoint = new int2(left, startPoint.y);
+                    if (!allCellPoints.Contains(leftPoint))
+                    {
+                        left++;
+                        match = false;
+                        break;
+                    }
+                }
+
+                match = true;
+                while (match)
+                {
+                    right++;
+                    int2 rightPoint = new int2(right, startPoint.y);
+                    if (!allCellPoints.Contains(rightPoint))
+                    {
+                        right--;
+                        match = false;
+                        break;
+                    }
+                }
+
+                match = true;
+                while (match)
+                {
+                    bottom--;
+                    for (int x = left; x <= right; x++)
+                    {
+                        int2 point = new int2(x, bottom);
+                        if (!allCellPoints.Contains(point))
+                        {
+                            match = false;
+                            bottom++;
+                            break;
+                        }
+                    }
+                }
+
+                match = true;
+                while (match)
+                {
+                    top++;
+                    for (int x = left; x <= right; x++)
+                    {
+                        int2 point = new int2(x, top);
+                        if (!allCellPoints.Contains(point))
+                        {
+                            match = false;
+                            top--;
+                            break;
+                        }
+                    }
+                }
+
+                for (int x = left; x <= right; x++)
+                {
+                    for (int y = bottom; y <= top; y++)
+                    {
+                        int2 point = new int2(x, y);
+                        allCellPoints.Remove(point);
+                    }
+                }
+                result.Add(left);
+                result.Add(bottom);
+                result.Add(right);
+                result.Add(top);
+            }
+        }
+        allCellPoints.Clear();
+        cells.Clear();
+        return result;
+    }
     public static int2 GetDirectionInt2(Direction direction)
     {
         int2 value = int2.zero;

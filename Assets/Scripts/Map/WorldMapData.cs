@@ -13,12 +13,15 @@ public class WorldMapData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-        worldMapDic = new IntWorldMapDictionary();
-        /*
-        foreach(var worldMap in worldMaps)
+        for(int i = 0; i < mapLines.Count; i++)
         {
-            worldMapDic.Add(worldMap.id, worldMap);
-        }*/
+            var mapLine = mapLines[i];
+            mapLine.cells0.girds = GameCommon.CellToGrid(mapLine.cells0.cells);
+            mapLine.cells1.girds = GameCommon.CellToGrid(mapLine.cells1.cells);
+
+            mapLine.cells0.cells.Clear();
+            mapLine.cells1.cells.Clear();
+        }
     }
 
 #endif
@@ -39,14 +42,18 @@ public struct WorldMap
 }
 
 [System.Serializable]
-public struct MapLine
+public class MapLine
 {
     public int instanceId;
     public bool zeroInit;
     public int map0, map1;
-    public LinkMapCell cells0, cells1;
+    public LinkMapCell cells0=new LinkMapCell(), cells1=new LinkMapCell();
     public int beforeActionId, afterActionId;
 
+    public MapLine()
+    {
+
+    }
     public int2 center0
     {
         get
@@ -65,10 +72,11 @@ public struct MapLine
 }
 
 [System.Serializable]
-public struct LinkMapCell
+public class LinkMapCell
 {
     public List<Direction> directions;
     public List<int2> cells;
+    public List<int> girds;
     public int3 targetCell;
     public int beforAction, afterAction, checkAction;
 

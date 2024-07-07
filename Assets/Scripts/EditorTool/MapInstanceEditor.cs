@@ -1,10 +1,13 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using TreeEditor;
+using Unity.Core;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 [ExecuteAlways]
@@ -238,11 +241,27 @@ public class MapInstanceEditor : MonoBehaviour
                         tilemapRenderer.sharedMaterial = material;
                         tilemapRenderers.Add(tilemapRenderer);
 
-                        for (int i=0;i<itemData.colliderCells.Length;i++)
+                        var gridCount = itemData.colliderGrids.Count / 4;
+                        for (int j = 0; j < gridCount; j++)
                         {
-                            var cell = itemData.colliderCells[i];
-                            tilemap.SetTile(new Vector3Int(cell.x, cell.y, 0), barrierTile);
+                            int minX = itemData.colliderGrids[j * 4];
+                            int minY = itemData.colliderGrids[j * 4 + 1];
+                            int maxX = itemData.colliderGrids[j * 4 + 2];
+                            int maxY = itemData.colliderGrids[j * 4 + 3];
+
+                            List<Vector3Int> poses = new List<Vector3Int>();
+                            List<TileBase> tileBases = new List<TileBase>();
+                            for (int x = minX; x <= maxX; x++)
+                            {
+                                for (int y = minY; y <= maxY; y++)
+                                {
+                                    poses.Add(new Vector3Int(x, y));
+                                    tileBases.Add(barrierTile);
+                                }
+                            }
+                            tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
                         }
+ 
                          
                         itemInstance.transform.SetParent(itemParent, false);
                         var mapItemInstanceEditor = itemInstance.gameObject.AddComponent<MapItemInstanceEditor>();
@@ -274,17 +293,35 @@ public class MapInstanceEditor : MonoBehaviour
                 areaObj.name = areaData.Name.ToString();
                 var tilemapRenderer = areaObj.GetComponentInChildren<TilemapRenderer>();
                 var tileMap = areaObj.GetComponentInChildren<Tilemap>();
-                for(int j = 0; j < areaData.cells.Count; j++)
+
+                var gridCount = areaData.grids.Count/4;
+                for (int j = 0; j < gridCount; j++)
                 {
-                    var cell = areaData.cells[j];
-                    tileMap.SetTile(new Vector3Int(cell.x, cell.y, 0), walkTile);
+                    int minX = areaData.grids[j * 4];
+                    int minY = areaData.grids[j * 4 + 1];
+                    int maxX = areaData.grids[j * 4 + 2];
+                    int maxY = areaData.grids[j * 4 + 3];
+
+                    List<Vector3Int> poses = new List<Vector3Int>();
+                    List<TileBase> tileBases = new List<TileBase>();
+                    for (int x = minX; x <= maxX; x++)
+                    {
+                        for (int y = minY; y <= maxY; y++)
+                        {
+                            poses.Add(new Vector3Int(x, y));
+                            tileBases.Add(walkTile);    
+                        }
+                    }
+                    tileMap.SetTiles(poses.ToArray(), tileBases.ToArray());
                 }
+
+
                 areaObj.transform.position = GameCommon.GetZeroMapPos(areaData.pos); 
                 tilemapRenderer.enabled = !hideTilemap;
                 tilemapRenderer.sharedMaterial = material;
                 tilemapRenderers.Add(tilemapRenderer);
 
-                var textMeshUGUI = areaObj.GetComponentInChildren<TextMeshProUGUI>();
+                var textMeshUGUI = areaObj.GetComponentInChildren<TextMeshPro>();
                 textMeshUGUI.text = areaData.Name.ToString();
             }
         }
@@ -353,18 +390,48 @@ public class MapInstanceEditor : MonoBehaviour
         coordinateDisplayParent = new GameObject("CoordinateDisplay");
         coordinateDisplayParent.transform.SetParent(transform, false);
 
-
-        foreach (var tileData in mapRoomData.mapCells)
+        int gridCount = mapRoomData.barrierGrids.Count / 4;
+        HashSet<Vector3Int> barriers = new HashSet<Vector3Int>();
+        for (int i = 0; i < gridCount; i++)
         {
-            TileBase tileBase = tileData.isWalkable ? walkTile : barrierTile;
-            tilemap.SetTile(new Vector3Int(tileData.coordinate.x, tileData.coordinate.y, 0),
-                tileBase);
+            int minX = mapRoomData.barrierGrids[i * 4];
+            int minY = mapRoomData.barrierGrids[i * 4 + 1];
+            int maxX = mapRoomData.barrierGrids[i * 4 + 2];
+            int maxY = mapRoomData.barrierGrids[i * 4 + 3];
+            
+            List<Vector3Int> poses=new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for(int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x, y));
+                    tileBases.Add(barrierTile);
+                    barriers.Add(new Vector3Int(x, y)); 
+                    Vector2 pos = GameCommon.GetMapPos(x,y);
+                    var editorCoordinate = Instantiate(this.editorCoordinate, pos, Quaternion.identity, coordinateDisplayParent.transform);
+                    editorCoordinate.SetText($"{x},{y}");
+                    coordinateDisplayParent.SetActive(displayCoordinate);
+                }
+            }
+            tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
+        }
 
-            Vector2 pos = GameCommon.GetMapPos(tileData.coordinate);
-            var editorCoordinate = Instantiate(this.editorCoordinate, pos, Quaternion.identity, coordinateDisplayParent.transform);
-            editorCoordinate.SetText($"{tileData.coordinate.x},{tileData.coordinate.y}");
-            coordinateDisplayParent.SetActive(displayCoordinate);
-        } 
+        List<Vector3Int> poses1 = new List<Vector3Int>();
+        List<TileBase> tileBases1 = new List<TileBase>();
+        for (int x=mapRoomData.startCoordinate.x; x <= mapRoomData.endCoordinate.x; x++)
+        {
+            for (int y = mapRoomData.startCoordinate.y; y <= mapRoomData.endCoordinate.y; y++)
+            {
+                var pos = new Vector3Int(x, y);
+                if (!barriers.Contains(pos))
+                {
+                    poses1.Add(pos);
+                    tileBases1.Add(walkTile);
+                }
+            }
+        }
+        tilemap.SetTiles(poses1.ToArray(), tileBases1.ToArray());
     }
 
     private Vector3 oldPos;

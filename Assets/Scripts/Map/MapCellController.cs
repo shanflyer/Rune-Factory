@@ -236,6 +236,7 @@ public class MapCellController : Singleton<MapCellController>
         public void SetNpcBehaviorAreas(List<NpcBehaviorArea> NpcBehaviorAreas)
         {
             this.NpcBehaviorAreas = NpcBehaviorAreas;
+            this.NpcBehaviorAreas.Clear();
             NpcBehaviorAreaTypeDic.Clear();
             for (int i = 0; i < NpcBehaviorAreas.Count; i++)
             {

@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine.Tilemaps;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using UnityEditor;
+using static UnityEngine.Tilemaps.Tile;
 
 [ExecuteAlways]
 public class MapLinkEditor : MonoBehaviour
@@ -114,25 +115,50 @@ public class MapLinkEditor : MonoBehaviour
 
         SetLinePoint();
         tilemap0.ClearAllTiles();
-        if (mapLine.cells0.cells != null)
+        var gridCount = mapLine.cells0.girds.Count / 4;
+        for (int j = 0; j < gridCount; j++)
         {
-            for (int i = 0; i < mapLine.cells0.cells.Count; i++)
+            int minX = mapLine.cells0.girds[j * 4];
+            int minY = mapLine.cells0.girds[j * 4 + 1];
+            int maxX = mapLine.cells0.girds[j * 4 + 2];
+            int maxY = mapLine.cells0.girds[j * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for (int x = minX; x <= maxX; x++)
             {
-                var cell = mapLine.cells0.cells[i] - startCoordinate;
-                tilemap0.SetTile(new Vector3Int(cell.x, cell.y, 0), linkTile);
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x - startCoordinate.x, y - startCoordinate.y));
+                    tileBases.Add(linkTile);
+                }
             }
+            tilemap0.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
-      
 
         tilemap1.ClearAllTiles();
-        if (mapLine.cells1.cells != null)
+        var gridCount1 = mapLine.cells1.girds.Count / 4;
+        for (int j = 0; j < gridCount1; j++)
         {
-            for (int i = 0; i < mapLine.cells1.cells.Count; i++)
+            int minX = mapLine.cells1.girds[j * 4];
+            int minY = mapLine.cells1.girds[j * 4 + 1];
+            int maxX = mapLine.cells1.girds[j * 4 + 2];
+            int maxY = mapLine.cells1.girds[j * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for (int x = minX; x <= maxX; x++)
             {
-                var cell = mapLine.cells1.cells[i] - endCoordinate;
-                tilemap1.SetTile(new Vector3Int(cell.x, cell.y, 0), linkTile);
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x - endCoordinate.x, y - endCoordinate.y));
+                    tileBases.Add(linkTile);
+                }
             }
+            tilemap1.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
+
+        
         string linkName = $"{mapLine.map0}-{mapLine.map1}";
         startPoint.gameObject.name = $"{linkName}:{mapLine.map0}";
         endPoint.gameObject.name = $"{linkName}:{mapLine.map1}";
