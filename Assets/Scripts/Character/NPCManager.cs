@@ -48,12 +48,56 @@ public class TempCharacter : Character
 
     public int _templevel = 0;
 
+    public int targetArea { get; private set; }
+    public int nowArea { get; private set; }
+    
+    public void SetTargetArea(int area)
+    {
+        targetArea = area;
+    }
+    public void EndMove()
+    {
+        nowArea = targetArea;
+    }
     public TempCharacter(CharacterData characterData,ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : base(characterData, professionData, instanceId)
     {
         this.tempCharacterData = tempCharacterData;
         templevel = 1;
     }
+    public int GetAreaEmote()
+    {
+        int ramdonEmote = tempCharacterData.defaultEmote;
+        if(tempCharacterData.areaEmote!=null&& tempCharacterData.areaEmote.TryGetValue(nowArea, out ramdonEmote))
+        {
+        }
+        else if (tempCharacterData.mapEmote != null && tempCharacterData.mapEmote.TryGetValue(mapInstance, out ramdonEmote))
+        {
 
+        }
+        var result=GameRandom.instance.GetRandomValue(ramdonEmote);
+        if (result.Count > 0)
+        {
+            return int.Parse(result[0].result);
+        }
+        return 0;
+    }
+    public int GetTalk()
+    {
+        int ramdonTalk = tempCharacterData.defaultTalk;
+        if (tempCharacterData.areaTalk != null && tempCharacterData.areaTalk.TryGetValue(nowArea, out ramdonTalk))
+        {
+        }
+        else if (tempCharacterData.mapTalk != null && tempCharacterData.mapTalk.TryGetValue(mapInstance, out ramdonTalk))
+        {
+
+        }
+        var result = GameRandom.instance.GetRandomValue(ramdonTalk);
+        if (result.Count > 0)
+        {
+            return int.Parse(result[0].result);
+        }
+        return 0;
+    }
     private void RefreshBehavior()
     { 
         if (!tempCharacterData.levelBehavior.TryGetValue(templevel, out var externalBehaviorTree))

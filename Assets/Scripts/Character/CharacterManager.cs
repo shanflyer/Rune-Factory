@@ -165,8 +165,30 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<VisitNPC>(VisitNPC);
         GameActionManager.instance.AddListener<DisplayCharacterItemRenderer>(DisplayCharacterItemRenderer);
         GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
+
+        GameActionManager.instance.AddListener<TempCharacterTalk>(TempCharacterTalk);
     }
 
+    void TempCharacterTalk(TempCharacterTalk tempCharacterTalk)
+    {
+        Character character = GetCharacter(tempCharacterTalk.characterId);
+        if (character != null)
+        {
+            if(character is TempCharacter tempCharacter)
+            {
+                int talkId = tempCharacter.GetTalk();
+                 
+                SimpleTalk simpleTalk = new SimpleTalk
+                {
+                    characterId = tempCharacter.instanceId,
+                    talkId = talkId,
+                    endAction=tempCharacterTalk.endAction
+                };
+                GameActionManager.instance.QueueAction(simpleTalk);
+            }
+
+        }
+    }
     private void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
     {
         Character character = GetCharacter(ChangeCharacterNewMap.characterInstance);

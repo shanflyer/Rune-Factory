@@ -16,9 +16,15 @@ public class CharacterMove : Action
     [SerializeField]
     private TaskStatus taskStatus;
 
+
+    Character character;
     private void MoveEndAction()
     {
         taskStatus = TaskStatus.Success;
+        if(character is TempCharacter tempCharacter)
+        {
+            tempCharacter.EndMove();
+        }
         //Debug.Log($"end:{taskStatus}");
     }
 
@@ -74,7 +80,7 @@ public class CharacterMove : Action
             offsetCoordinate = offset.Value;
         }
         var targetCoordinate = new int3(target.Value.x + offsetCoordinate.x, target.Value.y + offsetCoordinate.y, target.Value.z);
-        var character = CharacterManager.instance.GetCharacter(characterId.Value);
+         character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
         {
             if (character.mapInstance == targetCoordinate.z &&
@@ -102,7 +108,7 @@ public class CharacterMove : Action
         {
             if (smartMove)
             {
-                var character = CharacterManager.instance.GetCharacter(characterId.Value);
+                //var character = CharacterManager.instance.GetCharacter(characterId.Value);
                 if (!character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
                 {
                     taskStatus = TaskStatus.Failure;

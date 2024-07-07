@@ -76,7 +76,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         }
         int characterId = 0; 
         int displayMap = WorldMapObjManager.instance.displayMap;
-        int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, BehaviorAreaType.创建);
+        int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, BehaviorAreaType.创建).xy;
 
         int randomIndex = GameRandom.RandomInt(0, NowTempCharacterCreatData.tempCharacters.Count);
         characterId = NowTempCharacterCreatData.tempCharacters[randomIndex];

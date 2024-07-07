@@ -218,7 +218,7 @@ public class MapCellController : Singleton<MapCellController>
         private List<NpcBehaviorArea> NpcBehaviorAreas = new List<NpcBehaviorArea>();
         private Dictionary<BehaviorAreaType, List<int>> NpcBehaviorAreaTypeDic = new Dictionary<BehaviorAreaType, List<int>>();
 
-        public int2 GetRandomBehaviorCell(BehaviorAreaType behaviorAreaType)
+        public int3 GetRandomBehaviorCell(BehaviorAreaType behaviorAreaType)
         {
             if (NpcBehaviorAreaTypeDic.TryGetValue(behaviorAreaType, out var ints))
             {
@@ -227,10 +227,10 @@ public class MapCellController : Singleton<MapCellController>
                     int index = GameRandom.RandomInt(0, ints.Count);
                     NpcBehaviorArea npcBehaviorArea = NpcBehaviorAreas[ints[index]];
                     int cellIndex = GameRandom.RandomInt(0, npcBehaviorArea.cells.Count);
-                    return npcBehaviorArea.pos + npcBehaviorArea.cells[cellIndex];
+                    return new int3(npcBehaviorArea.pos + npcBehaviorArea.cells[cellIndex],npcBehaviorArea.Name);
                 }
             }
-            return new int2(int.MinValue, int.MinValue);
+            return int3.zero;
         }
 
         public void SetNpcBehaviorAreas(List<NpcBehaviorArea> NpcBehaviorAreas)
@@ -620,13 +620,13 @@ public class MapCellController : Singleton<MapCellController>
     private Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new Dictionary<int, RuntimeMapRoom>();
     private NativeList<RoomCellData> roomCellDatas;
 
-    public int2 GetRandomBehavioCell(int mapInstance, BehaviorAreaType behaviorAreaType)
+    public int3 GetRandomBehavioCell(int mapInstance, BehaviorAreaType behaviorAreaType)
     {
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
             return runtimeMapRoom.GetRandomBehaviorCell(behaviorAreaType);
         }
-        return new int2(int.MinValue, int.MaxValue);
+        return int3.zero;
     }
 
     public int2 GetNearestItemPlayerTriggerCell(int roomId, int itemInstanceId, int2 cell)

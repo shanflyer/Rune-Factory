@@ -16,6 +16,12 @@ public class TempCharacterData : ScriptableObject, IGameData
     public string defaultBehaviorName;
     public ExternalBehaviorTree defaultBehavior;
     public IntBehaviorDictionary levelBehavior;
+    public int defaultEmote;
+    public IntIntDictionary mapEmote;
+    public IntIntDictionary areaEmote;
+    public int defaultTalk;
+    public IntIntDictionary mapTalk;
+    public IntIntDictionary areaTalk;
 #if UNITY_EDITOR
     private List<int> levelDatas;
     private List<string> levelBehaviors;

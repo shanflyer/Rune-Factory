@@ -253,10 +253,11 @@ public class MapInstanceEditor : MonoBehaviour
         }
     }
 
-    public void CreatArea()
+    public void CreatArea(string newArea ,BehaviorAreaType newAreatype)
     {
         GameObject areaObj = Instantiate(areaPrefab, areaParent);
-        areaObj.name = "ÐÂÇøÓò";
+        MapAreaEditor mapAreaEditor = areaObj.GetComponent<MapAreaEditor>();
+        mapAreaEditor.SetData(newArea, newAreatype);
         var tilemapRenderer = areaObj.AddComponent<TilemapRenderer>();
         tilemapRenderer.enabled = !hideTilemap;
         tilemapRenderer.sharedMaterial = material;
@@ -270,7 +271,7 @@ public class MapInstanceEditor : MonoBehaviour
             {
                 var areaData = mapRoomData.npcBehaviorAreas[i];
                 GameObject areaObj = Instantiate(areaPrefab, areaParent);
-                areaObj.name = areaData.Name;
+                areaObj.name = areaData.Name.ToString();
                 var tilemapRenderer = areaObj.GetComponentInChildren<TilemapRenderer>();
                 var tileMap = areaObj.GetComponentInChildren<Tilemap>();
                 for(int j = 0; j < areaData.cells.Count; j++)
@@ -278,11 +279,13 @@ public class MapInstanceEditor : MonoBehaviour
                     var cell = areaData.cells[j];
                     tileMap.SetTile(new Vector3Int(cell.x, cell.y, 0), walkTile);
                 }
-                areaObj.transform.position = GameCommon.GetZeroMapPos(areaData.pos);
-
+                areaObj.transform.position = GameCommon.GetZeroMapPos(areaData.pos); 
                 tilemapRenderer.enabled = !hideTilemap;
                 tilemapRenderer.sharedMaterial = material;
                 tilemapRenderers.Add(tilemapRenderer);
+
+                var textMeshUGUI = areaObj.GetComponentInChildren<TextMeshProUGUI>();
+                textMeshUGUI.text = areaData.Name.ToString();
             }
         }
     }

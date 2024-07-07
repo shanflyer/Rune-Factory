@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -122,12 +123,18 @@ public class MapEditor : MyEditor
         }
     }
 
+    string newArea = "新建区域";
+    BehaviorAreaType newAreatype = BehaviorAreaType.创建;
     public void OnGUI()
     {
         DrawRoomDataPanel();
-        if (GUILayout.Button("新区域"))
+        EditorGUILayout.BeginHorizontal();
+        DrawTextField(ref newArea, "区域名字", 60);
+        DrawEnum(newAreatype, "区域类型", (Enum value) => { newAreatype = (BehaviorAreaType)value; });
+        EditorGUILayout.EndHorizontal();
+        if (GUILayout.Button("新建区域"))
         {
-            mapInstance.CreatArea();
+            mapInstance.CreatArea(newArea,newAreatype);
         }
     }
 
@@ -176,10 +183,10 @@ public class MapEditor : MyEditor
     public int CreatMapItemInstance(int id)
     {
         var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
-        int intanceid = id * 1000 + Random.Range(0, 1000);
+        int intanceid = id * 1000 + UnityEngine.Random.Range(0, 1000);
         while (mapItemInstances.Exists(m => m.mapItem.instanceId == intanceid))
         {
-            intanceid = id * 1000 + Random.Range(0, 1000);
+            intanceid = id * 1000 + UnityEngine.Random.Range(0, 1000);
         }
         return intanceid;
     }

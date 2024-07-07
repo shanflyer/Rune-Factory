@@ -35,7 +35,7 @@ public enum BehaviorAreaType
 [Serializable]
 public class NpcBehaviorArea
 {
-    public string Name;
+    public int Name;
     public int2 pos;
     public List<int2> cells = new List<int2>();
     public BehaviorAreaType behaviorAreaType;

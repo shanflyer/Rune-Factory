@@ -22,7 +22,12 @@ public class MapAreaEditor : MonoBehaviour
         tilemap = GetComponentInChildren<Tilemap>();
         text = GetComponentInChildren<TextMeshPro>();
     }
-
+    public void SetData(string name,BehaviorAreaType behaviorAreaType)
+    {
+        this.name = name;
+        text.name = name;
+        this.behaviorAreaType = behaviorAreaType; 
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
@@ -36,7 +41,7 @@ public class MapAreaEditor : MonoBehaviour
         NpcBehaviorArea npcBehaviorArea = new NpcBehaviorArea
         {
             pos = this.pos,
-            Name = text.text,
+            Name =int.Parse(text.text),
             behaviorAreaType = behaviorAreaType
         };
         for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)

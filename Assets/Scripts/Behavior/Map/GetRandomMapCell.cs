@@ -8,8 +8,11 @@ using UnityEngine;
 public class GetRandomMapCell : Action
 {
     [SerializeField]
+    private SharedInt characterId;
+    [SerializeField]
     private SharedInt room;
-
+    [SerializeField]
+    private SharedInt areaId;
     [SerializeField]
     private BehaviorAreaType behaviorAreaType;
 
@@ -25,6 +28,17 @@ public class GetRandomMapCell : Action
     {
         var cell = MapCellController.instance.GetRandomBehavioCell(room.Value, behaviorAreaType);
         result.SetValue(new int3(cell.xy, room.Value));
+        areaId.SetValue(cell.z);
+        if (characterId != null)
+        {
+            Character character = CharacterManager.instance.GetCharacter(characterId.Value);
+            if(character is TempCharacter tempCharacter)
+            {
+                tempCharacter.SetTargetArea(areaId.Value);
+            }
+        }
+
+
         return TaskStatus.Success;
     }
 }
