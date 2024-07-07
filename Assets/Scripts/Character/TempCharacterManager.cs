@@ -14,6 +14,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
     }
 
     private int totalCharacterCount;
+    private HashSet<int> haveTempCreat;
     public int level { get; private set; }
 
     protected override void Clear()
@@ -54,12 +55,14 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         if (NowTempCharacterCreatData == null)
         {
             return;
-        } 
+        }
+        tempCharacters = new MyList<int>(NowTempCharacterCreatData.tempCharacters);
+
         CreatTempCharacter();
     }
 
     private TempCharacterCreatData NowTempCharacterCreatData;
-    
+    private MyList<int> tempCharacters;
 
     private void CreatTempCharacter()
     {
@@ -77,9 +80,13 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         int characterId = 0; 
         int displayMap = WorldMapObjManager.instance.displayMap;
         int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, BehaviorAreaType.创建).xy;
-
-        int randomIndex = GameRandom.RandomInt(0, NowTempCharacterCreatData.tempCharacters.Count);
-        characterId = NowTempCharacterCreatData.tempCharacters[randomIndex];
+        if (tempCharacters.length == 0)
+        {
+            tempCharacters.SetList(NowTempCharacterCreatData.tempCharacters);
+        }
+        int randomIndex = GameRandom.RandomInt(0, tempCharacters.length);
+        characterId = tempCharacters[randomIndex];
+        tempCharacters.RemoveAt(randomIndex);
         CreatTempCharacter creatTempCharacter = new CreatTempCharacter
         {
             characterId = characterId,

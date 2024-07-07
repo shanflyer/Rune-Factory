@@ -352,6 +352,18 @@ public class ExcelDataEditor : MyEditor
                 value = _value;
                 fieldInfo.SetValue(data, value);
             }
+        }else if (fieldInfo.FieldType == typeof(IntIntDictionary))
+        {
+            var strs = value.ToString().Split('|');
+
+            IntIntDictionary dicValue = new IntIntDictionary();
+            foreach (var str in strs)
+            {
+                var _strs = str.Split(',');
+                dicValue[int.Parse(_strs[0])] = int.Parse(_strs[1]); 
+            }
+            value = dicValue;
+            fieldInfo.SetValue(data, value);
         }
         else if (fieldInfo.FieldType == typeof(float2))
         {

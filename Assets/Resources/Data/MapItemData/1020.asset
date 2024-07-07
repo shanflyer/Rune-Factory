@@ -16,72 +16,12 @@ MonoBehaviour:
   itemName: "\u7A97\u6237"
   objName: "\u7A97\u6237"
   itemObj: {fileID: 809748195239524561, guid: 0ed6ba0e506aaa540856f46138c53ca2, type: 3}
-  colliderCells:
-  - x: -1
-    y: 0
-  - x: -1
-    y: 1
-  - x: -1
-    y: 2
-  - x: -1
-    y: 3
-  - x: 0
-    y: 0
-  - x: 0
-    y: 1
-  - x: 0
-    y: 2
-  - x: 0
-    y: 3
-  - x: 1
-    y: 0
-  - x: 1
-    y: 1
-  - x: 1
-    y: 2
-  - x: 1
-    y: 3
-  triggerCells:
-  - x: -1
-    y: -1
-  - x: 0
-    y: -1
-  - x: 1
-    y: -1
-  playerTriggerCells:
-  - x: -1
-    y: -1
-  - x: -1
-    y: 0
-  - x: -1
-    y: 1
-  - x: -1
-    y: 2
-  - x: -1
-    y: 3
-  - x: 0
-    y: -1
-  - x: 0
-    y: 0
-  - x: 0
-    y: 1
-  - x: 0
-    y: 2
-  - x: 0
-    y: 3
-  - x: 1
-    y: -1
-  - x: 1
-    y: 0
-  - x: 1
-    y: 1
-  - x: 1
-    y: 2
-  - x: 1
-    y: 3
+  colliderGrids: ffffffff000000000100000003000000
+  triggerGrids: ffffffffffffffff01000000ffffffff
+  playerTriggerGrids: ffffffffffffffff0100000003000000
   playerTriggerEvent: 0
   operateIds: 
-  operateList: []
+  creatAction: {fileID: 0}
   defaultExit: 0
   defaultEnter: 0
   displayTips: 1

@@ -176,10 +176,10 @@ public class TempMapItemController : Singleton<TempMapItemController>
             characterId = -1,
             colliderCells = new NativeList<int2>(8, Allocator.TempJob)
         };
-        
-        for (int i = 0; i < mapItemData.colliderCells.Length; i++)
+        var cells = GameCommon.GridToCells(mapItemData.colliderGrids);
+        for (int i = 0; i < cells.Count; i++)
         {
-            tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
+            tempMapItem.colliderCells.Add(cells[i]);
         }
         //tempMapItems.SetData(tempMapItem);
         WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
@@ -234,11 +234,12 @@ public class TempMapItemController : Singleton<TempMapItemController>
             roomId = character.mapInstance,
             colliderCells = new NativeList<int2>(8, Allocator.TempJob)
         };
-       
-        for (int i = 0; i < mapItemData.colliderCells.Length; i++)
+
+        var cells = GameCommon.GridToCells(mapItemData.colliderGrids);
+        for (int i = 0; i < cells.Count; i++)
         {
-            tempMapItem.colliderCells.Add(mapItemData.colliderCells[i]);
-        }
+            tempMapItem.colliderCells.Add(cells[i]);
+        } 
         tempMapItem.offsetCoordinate = mapItemCoordiante - character.coordinate;
         tempMapItem.coordinate = mapItemCoordiante;
         //tempMapItems.SetData(tempMapItem);

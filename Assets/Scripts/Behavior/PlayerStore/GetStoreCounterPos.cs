@@ -52,10 +52,10 @@ public class GetStoreCounterPos : Action
 
             int mapInstance = runtimeMapItem.mapInstanceId;
             MapItemData mapItemData = runtimeMapItem.mapItemData;
-            var triggerCells= mapItemData.triggerCells;
+            var triggerCells=GameCommon.GridToCells(mapItemData.triggerGrids);
 
             List<int2> walkableCells = new List<int2>();
-            for(int i = 0; i < triggerCells.Length; i++)
+            for(int i = 0; i < triggerCells.Count; i++)
             {
                 if (MapCellController.instance.CheckIsWalk(triggerCells[i], mapInstance))
                 {

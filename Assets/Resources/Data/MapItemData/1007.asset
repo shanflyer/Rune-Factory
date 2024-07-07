@@ -16,124 +16,12 @@ MonoBehaviour:
   itemName: "\u6905\u5B50"
   objName: "\u6905\u5B503"
   itemObj: {fileID: 4932853065813295418, guid: 14db1b45dbc55b44fa2df70e901ccfb7, type: 3}
-  colliderCells:
-  - x: -1
-    y: 0
-  - x: -1
-    y: 1
-  - x: 0
-    y: 0
-  - x: 0
-    y: 1
-  - x: 1
-    y: 0
-  - x: 1
-    y: 1
-  triggerCells:
-  - x: -2
-    y: -1
-  - x: -2
-    y: 0
-  - x: -2
-    y: 1
-  - x: -2
-    y: 2
-  - x: -1
-    y: -2
-  - x: -1
-    y: -1
-  - x: -1
-    y: 2
-  - x: -1
-    y: 3
-  - x: 0
-    y: -2
-  - x: 0
-    y: -1
-  - x: 0
-    y: 2
-  - x: 0
-    y: 3
-  - x: 1
-    y: -2
-  - x: 1
-    y: -1
-  - x: 1
-    y: 2
-  - x: 1
-    y: 3
-  - x: 2
-    y: -1
-  - x: 2
-    y: 0
-  - x: 2
-    y: 1
-  - x: 2
-    y: 2
-  - x: 3
-    y: 0
-  - x: 3
-    y: 1
-  playerTriggerCells:
-  - x: -2
-    y: -1
-  - x: -2
-    y: 0
-  - x: -2
-    y: 1
-  - x: -2
-    y: 2
-  - x: -1
-    y: -2
-  - x: -1
-    y: -1
-  - x: -1
-    y: 0
-  - x: -1
-    y: 1
-  - x: -1
-    y: 2
-  - x: -1
-    y: 3
-  - x: 0
-    y: -2
-  - x: 0
-    y: -1
-  - x: 0
-    y: 0
-  - x: 0
-    y: 1
-  - x: 0
-    y: 2
-  - x: 0
-    y: 3
-  - x: 1
-    y: -2
-  - x: 1
-    y: -1
-  - x: 1
-    y: 0
-  - x: 1
-    y: 1
-  - x: 1
-    y: 2
-  - x: 1
-    y: 3
-  - x: 2
-    y: -1
-  - x: 2
-    y: 0
-  - x: 2
-    y: 1
-  - x: 2
-    y: 2
-  - x: 3
-    y: 0
-  - x: 3
-    y: 1
+  colliderGrids: ffffffff000000000100000001000000
+  triggerGrids: feffffffffffffff02000000fffffffffeffffff00000000feffffff02000000fffffffffeffffff01000000feffffffffffffff020000000200000002000000ffffffff03000000010000000300000002000000000000000300000001000000
+  playerTriggerGrids: feffffffffffffff0200000002000000fffffffffeffffff01000000feffffffffffffff03000000010000000300000003000000000000000300000001000000
   playerTriggerEvent: 0
   operateIds: 
-  operateList: []
+  creatAction: {fileID: 0}
   defaultExit: 0
   defaultEnter: 0
   displayTips: 1

@@ -209,25 +209,69 @@ public class MapItemEditor : MyEditor
         collider.RefreshAllTiles();
         trigger.RefreshAllTiles();
 
-        for (int i = 0; i < selectMapItemDataObj.itemData.colliderCells.Length; i++)
+        var collidergridCount = selectMapItemDataObj.itemData.triggerGrids.Count / 4;
+        for (int j = 0; j < collidergridCount; j++)
         {
-            var coordinate = selectMapItemDataObj.itemData.colliderCells[i];
-            collider.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), colliderTile);
-        }
-        for (int i = 0; i < selectMapItemDataObj.itemData.triggerCells.Length; i++)
-        {
-            var coordinate = selectMapItemDataObj.itemData.triggerCells[i];
-            trigger.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), triggerTile);
+            int minX = selectMapItemDataObj.itemData.triggerGrids[j * 4];
+            int minY = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 1];
+            int maxX = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 2];
+            int maxY = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x, y));
+                    tileBases.Add(colliderTile);
+                }
+            }
+            collider.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
 
-        if (selectMapItemDataObj.itemData.playerTriggerCells != null)
+
+        var triggergridCount = selectMapItemDataObj.itemData.triggerGrids.Count / 4;
+        for (int j = 0; j < triggergridCount; j++)
         {
-            for (int i = 0; i < selectMapItemDataObj.itemData.playerTriggerCells.Length; i++)
+            int minX = selectMapItemDataObj.itemData.triggerGrids[j * 4];
+            int minY = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 1];
+            int maxX = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 2];
+            int maxY = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for (int x = minX; x <= maxX; x++)
             {
-                var coordinate = selectMapItemDataObj.itemData.playerTriggerCells[i];
-                ground.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), playerTriggerTile);
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x, y));
+                    tileBases.Add(triggerTile);
+                }
             }
+            trigger.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
+
+        var playerTriggergridCount = selectMapItemDataObj.itemData.playerTriggerGrids.Count / 4;
+        for (int j = 0; j < playerTriggergridCount; j++)
+        {
+            int minX = selectMapItemDataObj.itemData.playerTriggerGrids[j * 4];
+            int minY = selectMapItemDataObj.itemData.playerTriggerGrids[j * 4 + 1];
+            int maxX = selectMapItemDataObj.itemData.playerTriggerGrids[j * 4 + 2];
+            int maxY = selectMapItemDataObj.itemData.playerTriggerGrids[j * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x, y));
+                    tileBases.Add(playerTriggerTile);
+                }
+            }
+            ground.SetTiles(poses.ToArray(), tileBases.ToArray());
+        } 
 
         selectItem = Instantiate(selectMapItemDataObj.itemData.itemObj);
         selectItem.transform.SetParent(singleItemParent, false);
@@ -249,7 +293,7 @@ public class MapItemEditor : MyEditor
                 }
             }
         }
-        selectMapItemDataObj.itemData.colliderCells = colliderCells.ToArray();
+        selectMapItemDataObj.itemData.colliderGrids =GameCommon.CellToGrid(colliderCells);
 
         var triggerBound = trigger.cellBounds;
         List<int2> triggerCells = new List<int2>();
@@ -264,7 +308,7 @@ public class MapItemEditor : MyEditor
                 }
             }
         }
-        selectMapItemDataObj.itemData.triggerCells = triggerCells.ToArray();
+        selectMapItemDataObj.itemData.triggerGrids =GameCommon.CellToGrid(triggerCells);
 
         var playerTriggerBound = ground.cellBounds;
         List<int2> playerTriggerCells = new List<int2>();
@@ -279,7 +323,7 @@ public class MapItemEditor : MyEditor
                 }
             }
         }
-        selectMapItemDataObj.itemData.playerTriggerCells = playerTriggerCells.ToArray();
+        selectMapItemDataObj.itemData.playerTriggerGrids = GameCommon.CellToGrid(playerTriggerCells);
 
         string assetPath = $"{EditorDataPath.mapItemDataPath}{selectMapItemDataObj.GetId()}.asset";
         string objPath = $"{EditorDataPath.mapItemPrefabPath}{selectMapItemDataObj.GetName()}.prefab";

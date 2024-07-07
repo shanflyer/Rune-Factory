@@ -274,6 +274,28 @@ public class GameCommon
 
 #endif
 
+    public static List<int2> GridToCells(List<int> grid)
+    {
+        int gridCount = grid.Count / 4;
+
+        List<int2> cells = new List<int2>();
+        for (int i = 0; i < gridCount; i++)
+        {
+            int minX = grid[i * 4];
+            int minY = grid[i * 4 + 1];
+
+            int maxX = grid[i * 4 + 2];
+            int maxY = grid[i * 4 + 3];
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    cells.Add(new int2(x, y));
+                }
+            }
+        }
+        return cells;
+    }
     public static List<int> CellToGrid(List<int2> cells)
     { 
         List<int> result = new List<int>();

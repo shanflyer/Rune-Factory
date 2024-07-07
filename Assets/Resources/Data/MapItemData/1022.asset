@@ -16,81 +16,9 @@ MonoBehaviour:
   itemName: "\u6B66\u5668\u67B6"
   objName: "\u6B66\u5668\u67B6"
   itemObj: {fileID: 4129408217767718829, guid: c5276654fcaa67c4ea788c1e83766d2e, type: 3}
-  colliderCells:
-  - x: -2
-    y: 0
-  - x: -2
-    y: 1
-  - x: -1
-    y: 0
-  - x: -1
-    y: 1
-  - x: 0
-    y: 0
-  - x: 0
-    y: 1
-  - x: 1
-    y: 0
-  - x: 1
-    y: 1
-  triggerCells:
-  - x: -2
-    y: -1
-  - x: -2
-    y: 2
-  - x: -1
-    y: -1
-  - x: -1
-    y: 2
-  - x: 0
-    y: -1
-  - x: 0
-    y: 2
-  - x: 1
-    y: -1
-  - x: 1
-    y: 2
-  playerTriggerCells:
-  - x: -3
-    y: 0
-  - x: -3
-    y: 1
-  - x: -2
-    y: -1
-  - x: -2
-    y: 0
-  - x: -2
-    y: 1
-  - x: -2
-    y: 2
-  - x: -1
-    y: -1
-  - x: -1
-    y: 0
-  - x: -1
-    y: 1
-  - x: -1
-    y: 2
-  - x: 0
-    y: -1
-  - x: 0
-    y: 0
-  - x: 0
-    y: 1
-  - x: 0
-    y: 2
-  - x: 1
-    y: -1
-  - x: 1
-    y: 0
-  - x: 1
-    y: 1
-  - x: 1
-    y: 2
-  - x: 2
-    y: 0
-  - x: 2
-    y: 1
+  colliderGrids: feffffff000000000100000001000000
+  triggerGrids: feffffffffffffff01000000fffffffffeffffff020000000100000002000000
+  playerTriggerGrids: fdffffff000000000200000001000000feffffffffffffff01000000fffffffffeffffff020000000100000002000000
   playerTriggerEvent: 0
   operateIds: 03000000
   creatAction: {fileID: 0}

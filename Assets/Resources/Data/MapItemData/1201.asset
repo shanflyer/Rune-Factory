@@ -14,81 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1201
   itemName: "\u7EBA\u7EC7\u673A"
-  objName: 
+  objName: "\u7EBA\u7EC7\u673A"
   itemObj: {fileID: 1787570457213729935, guid: 8e3d1e8d7ed0c38439fdb077b0e956e8, type: 3}
-  colliderCells:
-  - x: -2
-    y: -1
-  - x: -2
-    y: 0
-  - x: -1
-    y: -1
-  - x: -1
-    y: 0
-  - x: 0
-    y: -1
-  - x: 0
-    y: 0
-  - x: 1
-    y: -1
-  - x: 1
-    y: 0
-  - x: 2
-    y: -1
-  - x: 2
-    y: 0
-  triggerCells: []
-  playerTriggerCells:
-  - x: -2
-    y: -2
-  - x: -2
-    y: -1
-  - x: -2
-    y: 0
-  - x: -2
-    y: 1
-  - x: -2
-    y: 2
-  - x: -1
-    y: -2
-  - x: -1
-    y: -1
-  - x: -1
-    y: 0
-  - x: -1
-    y: 1
-  - x: -1
-    y: 2
-  - x: 0
-    y: -2
-  - x: 0
-    y: -1
-  - x: 0
-    y: 0
-  - x: 0
-    y: 1
-  - x: 0
-    y: 2
-  - x: 1
-    y: -2
-  - x: 1
-    y: -1
-  - x: 1
-    y: 0
-  - x: 1
-    y: 1
-  - x: 1
-    y: 2
-  - x: 2
-    y: -2
-  - x: 2
-    y: -1
-  - x: 2
-    y: 0
-  - x: 2
-    y: 1
-  - x: 2
-    y: 2
+  colliderGrids: feffffffffffffff0200000000000000
+  triggerGrids: 
+  playerTriggerGrids: fefffffffeffffff0200000002000000
   playerTriggerEvent: 0
   operateIds: 
   creatAction: {fileID: 0}

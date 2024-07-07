@@ -2,6 +2,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 [ExecuteAlways]
 public class MapAreaEditor : MonoBehaviour
@@ -44,6 +45,7 @@ public class MapAreaEditor : MonoBehaviour
             Name =int.Parse(text.text),
             behaviorAreaType = behaviorAreaType
         };
+        List<int2> cells = new List<int2>();
         for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)
         {
             for (int y = tilemap.cellBounds.yMin; y < tilemap.cellBounds.yMax; y++)
@@ -51,10 +53,11 @@ public class MapAreaEditor : MonoBehaviour
                 var tile = tilemap.GetTile(new Vector3Int(x, y, 0));
                 if (tile != null)
                 {
-                    npcBehaviorArea.cells.Add(new int2(x, y));
+                    cells.Add(new int2(x, y));
                 }
             }
         }
+        npcBehaviorArea.grids = GameCommon.CellToGrid(cells);
         return npcBehaviorArea;
     }
 

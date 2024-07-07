@@ -6,7 +6,8 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
+using UnityEngine; 
+using UnityEngine.Tilemaps;
 
 public class MapCellController : Singleton<MapCellController>
 {
@@ -226,8 +227,12 @@ public class MapCellController : Singleton<MapCellController>
                 {
                     int index = GameRandom.RandomInt(0, ints.Count);
                     NpcBehaviorArea npcBehaviorArea = NpcBehaviorAreas[ints[index]];
-                    int cellIndex = GameRandom.RandomInt(0, npcBehaviorArea.cells.Count);
-                    return new int3(npcBehaviorArea.pos + npcBehaviorArea.cells[cellIndex],npcBehaviorArea.Name);
+
+                    int gridIndex = GameRandom.RandomInt(0, npcBehaviorArea.grids.Count/4+1);
+                    int x = GameRandom.RandomInt(npcBehaviorArea.grids[gridIndex*4], npcBehaviorArea.grids[gridIndex * 4+2] + 1);
+                    int y = GameRandom.RandomInt(npcBehaviorArea.grids[gridIndex * 4+1], npcBehaviorArea.grids[gridIndex * 4 + 3] + 1);
+                     
+                    return new int3(x+npcBehaviorArea.pos.x,y+ npcBehaviorArea.pos.y, npcBehaviorArea.Name);
                 }
             }
             return int3.zero;
@@ -329,9 +334,11 @@ public class MapCellController : Singleton<MapCellController>
                     break;
                 }
             }
-            for (int i = 0; i < linkMapCell.cells.Count; i++)
+            var cells = GameCommon.GridToCells(linkMapCell.girds);
+
+            for (int i = 0; i < cells.Count; i++)
             {
-                linkMapIndexs.Remove(linkMapCell.cells[i]);
+                linkMapIndexs.Remove(cells[i]);
             }
             if (neighbourMaps.TryGetValue(linkMapCell.targetCell.z, out var num))
             {
@@ -358,9 +365,10 @@ public class MapCellController : Singleton<MapCellController>
             int3 linkAction = new int3(linkMapCell.beforAction, linkMapCell.afterAction, linkMapCell.checkAction);
             linkActions.Add(linkAction);
 
-            for (int i = 0; i < linkMapCell.cells.Count; i++)
+            var cells = GameCommon.GridToCells(linkMapCell.girds);
+            for (int i = 0; i < cells.Count; i++)
             {
-                linkMapIndexs.Add(linkMapCell.cells[i], linkMaps.Length - 1);
+                linkMapIndexs.Add(cells[i], linkMaps.Length - 1);
             }
             neighbourMaps.TryGetValue(linkMapCell.targetCell.z, out var num);
             num++;
@@ -407,13 +415,18 @@ public class MapCellController : Singleton<MapCellController>
         public readonly void Dispose()
         {
             mapObjBarriers.Dispose();
-            cellValue.Dispose();
         }
 
-        public NativeArray<int> cellValue;
         public NativeHashMap<int, int> mapObjBarriers;
         public int2 startCoordinate, endCoordinate;
 
+        public void AddBarrier(int x,int y)
+        {
+            int index = GetCoordinateIndex(x,y);
+            mapObjBarriers.TryGetValue(index, out int count);
+            count++;
+            mapObjBarriers[index] = count;
+        }
         public void AddBarrier(int2 coordinate)
         {
             int index = GetCoordinateIndex(coordinate);
@@ -439,48 +452,41 @@ public class MapCellController : Singleton<MapCellController>
 
         public int2 GetRandomCanWalkCell()
         {
-            if (mapObjBarriers.Count < cellValue.Length)
+            List<int> walkCells = new List<int>();
+            int startIndex = GetCoordinateIndex(startCoordinate);
+            int endIndex = GetCoordinateIndex(endCoordinate);
+            for(int i = startIndex; i <= endIndex; i++)
             {
-                var tempCells = cellValue.ToList();
-
-                List<int> walkCells = new List<int>();
-                for (int i = tempCells.Count - 1; i >= 0; i--)
+                if (!mapObjBarriers.ContainsKey(i))
                 {
-                    if (tempCells[i] == 1 && !mapObjBarriers.ContainsKey(i))
-                    {
-                        walkCells.Add(i);
-                    }
+                    walkCells.Add(i);
                 }
-
-                int index = GameRandom.RandomInt(0, walkCells.Count);
-                int cell = walkCells[index];
-                return GetCoordinate(cell);
-            }
-
-            return new int2(int.MinValue, int.MinValue);
+            } 
+            int index = GameRandom.RandomInt(0, walkCells.Count);
+            int cell = walkCells[index];
+            return GetCoordinate(cell);
+             
         }
 
 #if UNITY_EDITOR
 
         public List<Vector3Int> GetAllCellData()
         {
-            List<Vector3Int> cellData = new List<Vector3Int>();
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
-            if (cellValue != null && cellValue.Length > 0)
+            List<Vector3Int> cellData = new List<Vector3Int>();
+            int startIndex = GetCoordinateIndex(startCoordinate);
+            int endIndex = GetCoordinateIndex(endCoordinate);
+            for (int i = startIndex; i <= endIndex; i++)
             {
-                for (int i = 0; i < cellValue.Length; i++)
+                int x = i / perRowGridCount + startCoordinate.x;
+                int y = i % perRowGridCount + startCoordinate.y;
+                int z = 1;
+                if (!mapObjBarriers.ContainsKey(i))
                 {
-                    int x = i / perRowGridCount + startCoordinate.x;
-                    int y = i % perRowGridCount + startCoordinate.y;
-                    int z = cellValue[i];
-                    if (z == 1 && mapObjBarriers.ContainsKey(i))
-                    {
-                        z = 0;
-                    }
-                    cellData.Add(new Vector3Int(x, y, z));
+                    z = 0;
                 }
-            }
-
+                cellData.Add(new Vector3Int(x, y, z));
+            }  
             return cellData;
         }
 
@@ -489,6 +495,7 @@ public class MapCellController : Singleton<MapCellController>
         public List<int2> GetCoordinates(int2 source, int minRange, int maxRange, bool isWalkable)
         {
             List<int2> results = new List<int2>();
+            int cellCount = GetCoordinateIndex(endCoordinate);
             for (int x = -maxRange; x <= maxRange; x++)
             {
                 for (int y = -maxRange; y <= maxRange - x; y++)
@@ -499,7 +506,7 @@ public class MapCellController : Singleton<MapCellController>
                     }
                     int2 coordinate = source + new int2(x, y);
                     int index = GetCoordinateIndex(coordinate);
-                    if (index >= 0 && index < cellValue.Length)
+                    if (index >= 0 && index < cellCount)
                     {
                         if (CheckWalkable(index) == isWalkable)
                         {
@@ -533,7 +540,8 @@ public class MapCellController : Singleton<MapCellController>
 
         public bool CheckWalkable(int index)
         {
-            if (cellValue[index] == 1)
+            int cellCount = GetCoordinateIndex(endCoordinate);
+            if (cellCount >index)
             {
                 if (mapObjBarriers.ContainsKey(index))
                 {
@@ -545,19 +553,16 @@ public class MapCellController : Singleton<MapCellController>
         }
 
         public bool CheckWalkable(int x, int y)
-        {
+        { 
             if (x >= startCoordinate.x && x <= endCoordinate.x &&
            y >= startCoordinate.y && y <= endCoordinate.y)
             {
-                int index = GetCoordinateIndex(x, y);
-                if (cellValue[index] == 1)
+                int index = GetCoordinateIndex(x, y); 
+                if (mapObjBarriers.ContainsKey(index))
                 {
-                    if (mapObjBarriers.ContainsKey(index))
-                    {
-                        return false;
-                    }
-                    return true;
+                    return false;
                 }
+                return true;
             }
             return false;
         }
@@ -568,14 +573,11 @@ public class MapCellController : Singleton<MapCellController>
             coordinate.y >= startCoordinate.y && coordinate.y <= endCoordinate.y)
             {
                 int index = GetCoordinateIndex(coordinate);
-                if (cellValue[index] == 1)
+                if (mapObjBarriers.ContainsKey(index))
                 {
-                    if (mapObjBarriers.ContainsKey(index))
-                    {
-                        return false;
-                    }
-                    return true;
+                    return false;
                 }
+                return true;
             }
             return false;
         }
@@ -586,14 +588,11 @@ public class MapCellController : Singleton<MapCellController>
             coordinate.y >= startCoordinate.y && coordinate.y <= endCoordinate.y)
             {
                 int index = GetCoordinateIndex(coordinate);
-                if (cellValue[index] == 1)
+                if (mapObjBarriers.TryGetValue(index, out var count))
                 {
-                    if (mapObjBarriers.TryGetValue(index, out var count))
-                    {
-                        return count;
-                    }
-                    return 0;
+                    return count;
                 }
+                return 0;
             }
             return 0;
         }
@@ -605,14 +604,11 @@ public class MapCellController : Singleton<MapCellController>
             {
                 int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
                 int index = (coordinate.y - startCoordinate.y) + (coordinate.x - startCoordinate.x) * perRowGridCount;
-                if (cellValue[index] == 1)
+                if (mapObjBarriers.ContainsKey(index))
                 {
-                    if (mapObjBarriers.ContainsKey(index))
-                    {
-                        return false;
-                    }
-                    return true;
+                    return false;
                 }
+                return true;
             }
             return false;
         }
@@ -798,7 +794,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="cells"></param>
     /// <param name="room"></param>
     /// <param name="linkId"></param>
-    public void RemoveTriggerCell(int2[] cells, int room, int linkId)
+    public void RemoveTriggerCell(int room, int linkId)
     {
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
@@ -841,7 +837,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="cells"></param>
     /// <param name="room"></param>
     /// <param name="linkId"></param>
-    public void RemovePlayerTriggerCell(int2[] cells, int room, int linkId)
+    public void RemovePlayerTriggerCell(int room, int linkId)
     {
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
@@ -1112,16 +1108,28 @@ public class MapCellController : Singleton<MapCellController>
     public void InitMapData(int roomId, MapRoomData mapRoomData, int3 coordinate)
     {
         RoomCellData roomCellData = new RoomCellData
-        {
-            cellValue = new NativeArray<int>(mapRoomData.mapCells.Count, Allocator.Persistent),
+        { 
             mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.Persistent),
             startCoordinate = mapRoomData.startCoordinate,
             endCoordinate = mapRoomData.endCoordinate,
         };
-        for (int i = 0; i < mapRoomData.mapCells.Count; i++)
+
+        var barrierGridCount = mapRoomData.barrierGrids.Count / 4;
+        for (int j = 0; j < barrierGridCount; j++)
         {
-            roomCellData.cellValue[i] = mapRoomData.mapCells[i].isWalkable ? 1 : 0;
-        }
+            int minX = mapRoomData.barrierGrids[j * 4];
+            int minY = mapRoomData.barrierGrids[j * 4 + 1];
+            int maxX = mapRoomData.barrierGrids[j * 4 + 2];
+            int maxY = mapRoomData.barrierGrids[j * 4 + 3];
+             
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                { 
+                    roomCellData.AddBarrier(x, y);
+                }
+            } 
+        } 
         roomCellDatas.Add(roomCellData);
         RuntimeMapRoom runtimeMapRoom = new RuntimeMapRoom
         {
@@ -1346,8 +1354,7 @@ public class MapCellController : Singleton<MapCellController>
             FindPath findPath = new FindPath
             {
                 startCoordinate = roomCellDatas[runtimeMapRoom.roomCellDataIndex].startCoordinate,
-                endCoordinate = roomCellDatas[runtimeMapRoom.roomCellDataIndex].endCoordinate,
-                cellValue = roomCellDatas[runtimeMapRoom.roomCellDataIndex].cellValue,
+                endCoordinate = roomCellDatas[runtimeMapRoom.roomCellDataIndex].endCoordinate, 
                 mapObjBarriers = roomCellDatas[runtimeMapRoom.roomCellDataIndex].mapObjBarriers,
                 startPos = new int2(startPos.x, startPos.y),
                 targetPos = new int2(targetPos.x, targetPos.y),
@@ -1907,7 +1914,6 @@ public class MapCellController : Singleton<MapCellController>
         //[ReadOnly] public int MOVE_STRAIGHT_COST;
         // [ReadOnly] public int MOVE_DIAGONAL_COST;
 
-        [ReadOnly] public NativeArray<int> cellValue;
         [ReadOnly] public NativeHashMap<int, int> mapObjBarriers;
         [ReadOnly] public int2 startCoordinate, endCoordinate;
 
@@ -1926,14 +1932,11 @@ public class MapCellController : Singleton<MapCellController>
             coordinate.y >= startCoordinate.y && coordinate.y <= endCoordinate.y)
             {
                 int index = GetCoordinateIndex(coordinate);
-                if (cellValue[index] == 1)
+                if (mapObjBarriers.ContainsKey(index))
                 {
-                    if (mapObjBarriers.ContainsKey(index))
-                    {
-                        return false;
-                    }
-                    return true;
+                    return false;
                 }
+                return true;
             }
             return false;
         }

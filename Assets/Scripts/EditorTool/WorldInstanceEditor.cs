@@ -105,37 +105,38 @@ public class WorldInstanceEditor : MonoBehaviour
 
             mapLine.cells0.directions = new List<Direction>();
             mapLine.cells0.directions.AddRange(directValue0);
-            mapLine.cells0.cells = new List<int2>();
+            mapLine.cells0.girds = new List<int>();
             mapLine.cells0.targetCell = new int3(coordinate1.xy, map1);
 
+            List<int2> cells = new List<int2>();
             for (int x = tilemap0.cellBounds.min.x; x<= tilemap0.cellBounds.max.x; x++)
             {
                 for (int y = tilemap0.cellBounds.min.y; y <= tilemap0.cellBounds.max.y; y++)
                 {
                     if(tilemap0.GetTile(new Vector3Int(x, y, 0)) != null)
                     {
-                        mapLine.cells0.cells.Add(new int2(x, y)+ coordinate0);
+                        cells.Add(new int2(x, y)+ coordinate0);
                     } 
                 }
             }
-
+            mapLine.cells0.girds = GameCommon.CellToGrid(cells);
 
             mapLine.cells1.directions = new List<Direction>();
             mapLine.cells1.directions.AddRange(directValue1);
-            mapLine.cells1.cells = new List<int2>();
+            mapLine.cells1.girds = new List<int>();
             mapLine.cells1.targetCell =new int3(coordinate0.xy,map0);
-
+            cells.Clear();
             for (int x = tilemap1.cellBounds.min.x; x <= tilemap1.cellBounds.max.x; x++)
             {
                 for (int y = tilemap1.cellBounds.min.y; y <= tilemap1.cellBounds.max.y; y++)
                 {
                     if (tilemap1.GetTile(new Vector3Int(x, y, 0)) != null)
                     {
-                        mapLine.cells1.cells.Add(new int2(x, y) + coordinate1);
+                        cells.Add(new int2(x, y) + coordinate1);
                     }
                 }
             }
-
+            mapLine.cells1.girds = GameCommon.CellToGrid(cells);
             return true;
         }
 

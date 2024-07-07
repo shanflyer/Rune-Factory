@@ -212,7 +212,7 @@ public class MapEditor : MyEditor
             }
 
             var mapAreas = FindObjectsByType<MapAreaEditor>(FindObjectsSortMode.None);
-
+            selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Clear();
             foreach (var mapArea in mapAreas)
             {
                 selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Add(mapArea.GetAreaData());

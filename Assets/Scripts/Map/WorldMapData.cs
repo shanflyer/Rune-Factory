@@ -13,15 +13,7 @@ public class WorldMapData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-        for(int i = 0; i < mapLines.Count; i++)
-        {
-            var mapLine = mapLines[i];
-            mapLine.cells0.girds = GameCommon.CellToGrid(mapLine.cells0.cells);
-            mapLine.cells1.girds = GameCommon.CellToGrid(mapLine.cells1.cells);
-
-            mapLine.cells0.cells.Clear();
-            mapLine.cells1.cells.Clear();
-        }
+      
     }
 
 #endif
@@ -75,41 +67,8 @@ public class MapLine
 public class LinkMapCell
 {
     public List<Direction> directions;
-    public List<int2> cells;
     public List<int> girds;
     public int3 targetCell;
     public int beforAction, afterAction, checkAction;
 
-    public int2 center
-    {
-        get
-        {
-            int minX = 10000, minY = 10000, maxX = -10000, maxY = -10000;
-            if (cells == null)
-            {
-                cells = new List<int2>();
-                return int2.zero;
-            }
-            for (int i = 0; i < cells.Count; i++)
-            {
-                if (minX > cells[i].x)
-                {
-                    minX = cells[i].x;
-                }
-                if (minY > cells[i].y)
-                {
-                    minY = cells[i].y;
-                }
-                if (maxX < cells[i].x)
-                {
-                    maxX = cells[i].x;
-                }
-                if (maxY < cells[i].y)
-                {
-                    maxY = cells[i].y;
-                }
-            }
-            return new int2(minX + (maxX - minX) / 2, minY + (maxY - minY) / 2);
-        }
-    }
 }

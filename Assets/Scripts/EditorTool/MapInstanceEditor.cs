@@ -329,7 +329,7 @@ public class MapInstanceEditor : MonoBehaviour
 
     public GameObject Save(bool changeMapName = false)
     {
-        mapRoomData.mapCells.Clear();
+        List<int2> cells = new List<int2>();
         var boundary = tilemap.cellBounds;
 
         int2 minCoordinate = new int2(1000, 1000);
@@ -346,16 +346,15 @@ public class MapInstanceEditor : MonoBehaviour
                     minCoordinate.y = y < minCoordinate.y ? y : minCoordinate.y;
                     maxCoordinate.x = x > maxCoordinate.x ? x : maxCoordinate.x;
                     maxCoordinate.y = y > maxCoordinate.y ? y : maxCoordinate.y;
-
-                    MapCellData mapCell = new MapCellData
+                    
+                    if(!(tile != null && tile.name == "1"))
                     {
-                        coordinate = new int2(x, y),
-                        isWalkable = (tile != null && tile.name == "1") ? true : false
-                    };
-                    mapRoomData.mapCells.Add(mapCell);
+                        cells.Add(new int2(x, y));
+                    } 
                 }
             }
         }
+        mapRoomData.barrierGrids = GameCommon.CellToGrid(cells);
         mapRoomData.startCoordinate = minCoordinate;
         mapRoomData.endCoordinate = maxCoordinate;
 

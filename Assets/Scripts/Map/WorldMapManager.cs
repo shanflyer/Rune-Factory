@@ -329,7 +329,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (runtimeMapItems.TryGetValue(removeMapItemCollider.mapItemInstanceId, out var runtimeMapItem))
         {
             var mapItemData = runtimeMapItem.mapItemData;
-            MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+            MapCellController.instance.RemoveBarrierCell(GameCommon.GridToCells(mapItemData.colliderGrids).ToArray(), runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
 
             GameDataSaveManager.instance.UserGameSaveData.AddRemoveMapItemColliderData(new int2(runtimeMapItem.mapInstanceId, runtimeMapItem.editorInstanceId),
                 runtimeMapItem.instanceId);
@@ -341,7 +341,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (runtimeMapItems.TryGetValue(reSetMapItemCollider.mapItemInstanceId, out var runtimeMapItem))
         {
             var mapItemData = runtimeMapItem.mapItemData;
-            MapCellController.instance.AddBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+            MapCellController.instance.AddBarrierCell(GameCommon.GridToCells(mapItemData.colliderGrids).ToArray(), runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
 
             GameDataSaveManager.instance.UserGameSaveData.AddReSetMapItemColliderData(new int2(runtimeMapItem.mapInstanceId, runtimeMapItem.editorInstanceId),
                 runtimeMapItem.instanceId);
@@ -362,9 +362,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 {
                     var mapItemData = runtimeMapItem.mapItemData;
 
-                    MapCellController.instance.RemovePlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
-                    MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells, runtimeMapItem.mapInstanceId, deleteMapItem.mapItemInstanceId);
-                    MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+                    MapCellController.instance.RemovePlayerTriggerCell(runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
+                    MapCellController.instance.RemoveTriggerCell(runtimeMapItem.mapInstanceId, deleteMapItem.mapItemInstanceId);
+                    MapCellController.instance.RemoveBarrierCell(GameCommon.GridToCells(mapItemData.colliderGrids).ToArray(), runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
                 }
             }
         }
@@ -437,19 +437,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
             runtimeMapItem.mapItemData.creatAction.Action(instanceId);
         }
 
-        if (runtimeMapItem.mapItemData.triggerCells.Length > 0)
+        if (runtimeMapItem.mapItemData.triggerGrids.Count > 0)
         {
-            MapCellController.instance.AddTriggerCell(runtimeMapItem.mapItemData.triggerCells, mapId, runtimeMapItem.mapItemData.defaultEnter,
+            MapCellController.instance.AddTriggerCell(GameCommon.GridToCells(runtimeMapItem.mapItemData.triggerGrids).ToArray(), mapId, runtimeMapItem.mapItemData.defaultEnter,
                 runtimeMapItem.mapItemData.defaultExit, EntityType.角色, instanceId, mapItem.coordinate);
         }
-        if (runtimeMapItem.mapItemData.playerTriggerCells != null && runtimeMapItem.mapItemData.playerTriggerCells.Length > 0)
+        if (runtimeMapItem.mapItemData.playerTriggerGrids != null && runtimeMapItem.mapItemData.playerTriggerGrids.Count > 0)
         {
-            MapCellController.instance.AddPlayerTriggerCell(runtimeMapItem.mapItemData.playerTriggerCells, mapId, runtimeMapItem.mapItemData.playerTriggerEvent,
+            MapCellController.instance.AddPlayerTriggerCell(GameCommon.GridToCells(runtimeMapItem.mapItemData.playerTriggerGrids).ToArray(), mapId, runtimeMapItem.mapItemData.playerTriggerEvent,
                 instanceId, mapItem.coordinate);
         }
-        if (runtimeMapItem.mapItemData.colliderCells.Length > 0)
+        if (runtimeMapItem.mapItemData.colliderGrids.Count > 0)
         {
-            MapCellController.instance.AddBarrierCell(runtimeMapItem.mapItemData.colliderCells, mapItem.coordinate, mapId);
+            MapCellController.instance.AddBarrierCell(GameCommon.GridToCells(runtimeMapItem.mapItemData.colliderGrids).ToArray(), mapItem.coordinate, mapId);
         }
 
         if (mapId == WorldMapObjManager.instance.displayMap)
@@ -502,9 +502,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 && !runtimeMapItem.coordinate.Equals(TrySetMapItem.coordinate))
             {
                 oldColliders = new HashSet<int2>();
-                for (int i = 0; i < mapItemData.colliderCells.Length; i++)
+                var cells = GameCommon.GridToCells(mapItemData.colliderGrids);
+                for (int i = 0; i < cells.Count; i++)
                 {
-                    int2 oldCollider = mapItemData.colliderCells[i] + runtimeMapItem.coordinate;
+                    int2 oldCollider = cells[i] + runtimeMapItem.coordinate;
                     oldColliders.Add(oldCollider);
                 }
             }
@@ -513,10 +514,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             newItem = true;
         }
-        newTriggers = new int2[mapItemData.triggerCells.Length];
-        for (int i = 0; i < mapItemData.triggerCells.Length; i++)
+        var triggerCells = GameCommon.GridToCells(mapItemData.triggerGrids);
+        newTriggers = new int2[triggerCells.Count];
+        for (int i = 0; i < triggerCells.Count; i++)
         {
-            int2 newTrigger = mapItemData.triggerCells[i] + TrySetMapItem.coordinate;
+            int2 newTrigger = triggerCells[i] + TrySetMapItem.coordinate;
             newTriggers[i] = newTrigger;
         }
 
@@ -557,9 +559,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 var mapItemData = runtimeMapItem.mapItemData;
 
-                MapCellController.instance.RemovePlayerTriggerCell(mapItemData.playerTriggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
-                MapCellController.instance.RemoveTriggerCell(mapItemData.triggerCells, runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
-                MapCellController.instance.RemoveBarrierCell(mapItemData.colliderCells, runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
+                MapCellController.instance.RemovePlayerTriggerCell(runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
+                MapCellController.instance.RemoveTriggerCell(runtimeMapItem.mapInstanceId, runtimeMapItem.instanceId);
+                MapCellController.instance.RemoveBarrierCell(GameCommon.GridToCells(mapItemData.colliderGrids).ToArray(), runtimeMapItem.coordinate, runtimeMapItem.mapInstanceId);
 
                 /*
                 WorldMapObjManager.instance.DeleteMapItem(new DeleteMapItem
@@ -571,19 +573,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 runtimeMapItem.coordinate = moveMapItem.coordinate;
                 if (moveMapItem.mapItemInstanceId > 0)
                 {
-                    if (mapItemData.triggerCells.Length > 0)
+                    if (mapItemData.triggerGrids.Count > 0)
                     {
-                        MapCellController.instance.AddTriggerCell(mapItemData.triggerCells, moveMapItem.mapInstance, mapItemData.defaultEnter,
+                        MapCellController.instance.AddTriggerCell(GameCommon.GridToCells(mapItemData.triggerGrids).ToArray(), moveMapItem.mapInstance, mapItemData.defaultEnter,
                             mapItemData.defaultExit, EntityType.角色, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
                     }
-                    if (mapItemData.playerTriggerCells != null && mapItemData.playerTriggerCells.Length > 0)
+                    if (mapItemData.playerTriggerGrids != null && mapItemData.playerTriggerGrids.Count > 0)
                     {
-                        MapCellController.instance.AddPlayerTriggerCell(mapItemData.playerTriggerCells, moveMapItem.mapInstance, mapItemData.playerTriggerEvent,
+                        MapCellController.instance.AddPlayerTriggerCell(GameCommon.GridToCells(mapItemData.playerTriggerGrids).ToArray(), moveMapItem.mapInstance, mapItemData.playerTriggerEvent,
                             runtimeMapItem.instanceId, moveMapItem.coordinate);
                     }
-                    if (mapItemData.colliderCells.Length > 0)
+                    if (mapItemData.colliderGrids.Count > 0)
                     {
-                        MapCellController.instance.AddBarrierCell(mapItemData.colliderCells, moveMapItem.coordinate, moveMapItem.mapInstance);
+                        MapCellController.instance.AddBarrierCell(GameCommon.GridToCells(mapItemData.colliderGrids).ToArray(), moveMapItem.coordinate, moveMapItem.mapInstance);
                     }
                 }
                 //runtimeMapItems.SetData(runtimeMapItem);

@@ -19,10 +19,6 @@ public class MapItemData : ScriptableObject, IGameData
 
     public GameObject itemObj;
 
-    public int2[] colliderCells;
-    public int2[] triggerCells;
-    public int2[] playerTriggerCells;
-
     public List<int> colliderGrids, triggerGrids, playerTriggerGrids;
 
 
@@ -58,17 +54,6 @@ public class MapItemData : ScriptableObject, IGameData
         {
             objName = itemObj.name;
         }
-
-        if (colliderCells != null)
-            colliderGrids = GameCommon.CellToGrid(colliderCells.ToList());
-        if (triggerCells != null)
-            triggerGrids = GameCommon.CellToGrid(triggerCells.ToList());
-        if (playerTriggerCells != null)
-            playerTriggerGrids = GameCommon.CellToGrid(playerTriggerCells.ToList());
-
-        colliderCells = null;
-        triggerCells = null;
-        playerTriggerCells = null;
     }
 
     public string GetKey()
