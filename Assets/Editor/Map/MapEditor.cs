@@ -123,13 +123,13 @@ public class MapEditor : MyEditor
         }
     }
 
-    string newArea = "新建区域";
+    int newArea = 999;
     BehaviorAreaType newAreatype = BehaviorAreaType.创建;
     public void OnGUI()
     {
         DrawRoomDataPanel();
         EditorGUILayout.BeginHorizontal();
-        DrawTextField(ref newArea, "区域名字", 60);
+        DrawIntField(ref newArea, "区域名字", 60);
         DrawEnum(newAreatype, "区域类型", (Enum value) => { newAreatype = (BehaviorAreaType)value; });
         EditorGUILayout.EndHorizontal();
         if (GUILayout.Button("新建区域"))

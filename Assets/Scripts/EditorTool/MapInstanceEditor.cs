@@ -72,8 +72,18 @@ public class MapInstanceEditor : MonoBehaviour
         }
     }
     private static Material _material;
-
-    private static TileBase walkTile
+    public static TileBase defaultTile
+    {
+        get
+        {
+            if (_defaultTile == null)
+            {
+                _defaultTile = AssetDatabase.LoadAssetAtPath<TileBase>("Assets/TileMap/Tiles/Event/default.asset");
+            }
+            return _defaultTile;
+        }
+    }
+    public static TileBase walkTile
     {
         get
         {
@@ -85,7 +95,7 @@ public class MapInstanceEditor : MonoBehaviour
         }
     }
 
-    private static TileBase barrierTile
+    public static TileBase barrierTile
     {
         get
         {
@@ -97,7 +107,7 @@ public class MapInstanceEditor : MonoBehaviour
         }
     }
 
-    private static TileBase _walkTile;
+    private static TileBase _walkTile,_defaultTile;
     private static TileBase _barrierTile;
     public int id;
 
@@ -272,15 +282,12 @@ public class MapInstanceEditor : MonoBehaviour
         }
     }
 
-    public void CreatArea(string newArea ,BehaviorAreaType newAreatype)
+    public void CreatArea(int newArea ,BehaviorAreaType newAreatype)
     {
         GameObject areaObj = Instantiate(areaPrefab, areaParent);
         MapAreaEditor mapAreaEditor = areaObj.GetComponent<MapAreaEditor>();
-        mapAreaEditor.SetData(newArea, newAreatype);
-        var tilemapRenderer = areaObj.AddComponent<TilemapRenderer>();
-        tilemapRenderer.enabled = !hideTilemap;
-        tilemapRenderer.sharedMaterial = material;
-        tilemapRenderers.Add(tilemapRenderer);
+        mapAreaEditor.SetData(newArea, newAreatype); 
+        tilemapRenderers.Add(mapAreaEditor.tilemapRenderer);
     }
     private void InitMapArea(bool hideTilemap = false)
     {
@@ -290,39 +297,9 @@ public class MapInstanceEditor : MonoBehaviour
             {
                 var areaData = mapRoomData.npcBehaviorAreas[i];
                 GameObject areaObj = Instantiate(areaPrefab, areaParent);
-                areaObj.name = areaData.Name.ToString();
-                var tilemapRenderer = areaObj.GetComponentInChildren<TilemapRenderer>();
-                var tileMap = areaObj.GetComponentInChildren<Tilemap>();
-
-                var gridCount = areaData.grids.Count/4;
-                for (int j = 0; j < gridCount; j++)
-                {
-                    int minX = areaData.grids[j * 4];
-                    int minY = areaData.grids[j * 4 + 1];
-                    int maxX = areaData.grids[j * 4 + 2];
-                    int maxY = areaData.grids[j * 4 + 3];
-
-                    List<Vector3Int> poses = new List<Vector3Int>();
-                    List<TileBase> tileBases = new List<TileBase>();
-                    for (int x = minX; x <= maxX; x++)
-                    {
-                        for (int y = minY; y <= maxY; y++)
-                        {
-                            poses.Add(new Vector3Int(x, y));
-                            tileBases.Add(walkTile);    
-                        }
-                    }
-                    tileMap.SetTiles(poses.ToArray(), tileBases.ToArray());
-                }
-
-
-                areaObj.transform.position = GameCommon.GetZeroMapPos(areaData.pos); 
-                tilemapRenderer.enabled = !hideTilemap;
-                tilemapRenderer.sharedMaterial = material;
-                tilemapRenderers.Add(tilemapRenderer);
-
-                var textMeshUGUI = areaObj.GetComponentInChildren<TextMeshPro>();
-                textMeshUGUI.text = areaData.Name.ToString();
+                MapAreaEditor mapAreaEditor = areaObj.GetComponent<MapAreaEditor>();
+                mapAreaEditor.SetData(areaData);
+               
             }
         }
     }

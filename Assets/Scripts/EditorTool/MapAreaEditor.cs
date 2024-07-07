@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class MapAreaEditor : MonoBehaviour
 {
     public int2 pos;
     public BehaviorAreaType behaviorAreaType;
+    public TilemapRenderer tilemapRenderer;
 
     [SerializeField]
     private Tilemap tilemap;
@@ -18,33 +20,60 @@ public class MapAreaEditor : MonoBehaviour
 
     private Vector3 oldPos;
 
+    NpcBehaviorArea areaData;
     private void Awake()
     {
         tilemap = GetComponentInChildren<Tilemap>();
         text = GetComponentInChildren<TextMeshPro>();
     }
-    public void SetData(string name,BehaviorAreaType behaviorAreaType)
+    public void SetData(int name, BehaviorAreaType behaviorAreaType)
     {
-        this.name = name;
-        text.name = name;
-        this.behaviorAreaType = behaviorAreaType; 
+        this.name = name.ToString();
+        text.name = name.ToString();
+        this.behaviorAreaType = behaviorAreaType;
+        areaData = new NpcBehaviorArea
+        {
+            behaviorAreaType = behaviorAreaType,
+            grids = new List<int>(),
+            Name = name
+        };
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    public void SetData(NpcBehaviorArea npcBehaviorArea)
     {
+        this.areaData = npcBehaviorArea;
+        var gridCount = areaData.grids.Count / 4;
+        for (int j = 0; j < gridCount; j++)
+        {
+            int minX = areaData.grids[j * 4];
+            int minY = areaData.grids[j * 4 + 1];
+            int maxX = areaData.grids[j * 4 + 2];
+            int maxY = areaData.grids[j * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x, y));
+                    tileBases.Add(MapInstanceEditor.defaultTile);
+                }
+            }
+            tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
+        }
+        gameObject.name = text.text = areaData.Name.ToString(); 
+        transform.position = GameCommon.GetZeroMapPos(areaData.pos);
+        this.behaviorAreaType = npcBehaviorArea.behaviorAreaType;
     }
+
 
     public NpcBehaviorArea GetAreaData()
     {
         tilemap = GetComponentInChildren<Tilemap>();
         text = GetComponentInChildren<TextMeshPro>();
 
-        NpcBehaviorArea npcBehaviorArea = new NpcBehaviorArea
-        {
-            pos = this.pos,
-            Name =int.Parse(text.text),
-            behaviorAreaType = behaviorAreaType
-        };
+        areaData.pos = pos;
+        areaData.Name = int.Parse(text.text);
         List<int2> cells = new List<int2>();
         for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)
         {
@@ -57,8 +86,8 @@ public class MapAreaEditor : MonoBehaviour
                 }
             }
         }
-        npcBehaviorArea.grids = GameCommon.CellToGrid(cells);
-        return npcBehaviorArea;
+        areaData.grids = GameCommon.CellToGrid(cells);
+        return areaData;
     }
 
     private void InitPos()
@@ -68,6 +97,7 @@ public class MapAreaEditor : MonoBehaviour
         oldPos = pos;
     }
 
+    BehaviorAreaType OldbehaviorAreaType;
     // Update is called once per frame
     private void Update()
     {
@@ -76,5 +106,22 @@ public class MapAreaEditor : MonoBehaviour
             pos = GameCommon.GetMapCoordinateInt(transform.localPosition);
             InitPos();
         }
+        if (OldbehaviorAreaType != behaviorAreaType)
+        {
+            OldbehaviorAreaType = behaviorAreaType;
+            switch (behaviorAreaType)
+            {
+                case BehaviorAreaType.创建:
+                    tilemap.color = Color.white;
+                    break;
+                case BehaviorAreaType.聚集:
+                    tilemap.color = Color.blue;
+                    break;
+                case BehaviorAreaType.消失:
+                    tilemap.color = Color.red;
+                    break;
+            }
+        }
     }
 }
+#endif
