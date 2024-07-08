@@ -66,13 +66,17 @@ public class TempCharacter : Character
     }
     public int GetAreaEmote()
     {
-        int ramdonEmote = tempCharacterData.defaultEmote;
+        int ramdonEmote = 0;
         if(tempCharacterData.areaEmote!=null&& tempCharacterData.areaEmote.TryGetValue(nowArea, out ramdonEmote))
         {
         }
         else if (tempCharacterData.mapEmote != null && tempCharacterData.mapEmote.TryGetValue(mapInstance, out ramdonEmote))
         {
 
+        }
+        else
+        {
+            ramdonEmote = tempCharacterData.defaultEmote;
         }
         var result=GameRandom.instance.GetRandomValue(ramdonEmote);
         if (result.Count > 0)

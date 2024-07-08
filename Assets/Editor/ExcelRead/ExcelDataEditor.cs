@@ -148,7 +148,7 @@ public class ExcelDataEditor : MyEditor
                             {
                                 childFields = new Dictionary<string, FieldInfo>();
                                 var childType = fieldInfo.FieldType;
-                                var childFieldArray = childType.GetFields();
+                                var childFieldArray = childType.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
                                 foreach (var childField in childFieldArray)
                                 {
                                     childFields.Add(childField.Name, childField);
@@ -185,7 +185,7 @@ public class ExcelDataEditor : MyEditor
 
                 for (int i = 3; i < rowCount; i++)
                 {
-                    var data = ScriptableObject.CreateInstance(dataType == null ? type : dataType);
+                    var data = Activator.CreateInstance(dataType == null ? type : dataType);
                     Dictionary<string, object> childDatas = new Dictionary<string, object>();
                     for (int j = 0; j < columnCount; j++)
                     {
@@ -211,7 +211,7 @@ public class ExcelDataEditor : MyEditor
                 }
                 if (dataType != null)
                 {
-                    var Listfields = type.GetFields();
+                    var Listfields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
                     FieldInfo selectField = null;
                     foreach (var field in Listfields)
                     {
@@ -354,8 +354,12 @@ public class ExcelDataEditor : MyEditor
             }
         }else if (fieldInfo.FieldType == typeof(IntIntDictionary))
         {
+            if (string.IsNullOrEmpty(value.ToString()))
+            {
+                return;
+            }
             var strs = value.ToString().Split('|');
-
+            
             IntIntDictionary dicValue = new IntIntDictionary();
             foreach (var str in strs)
             {

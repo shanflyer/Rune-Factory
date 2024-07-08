@@ -21,6 +21,7 @@ public class MyList<T>
     {
         list.Clear();
         list.AddRange(values);
+        length = values.Count;
     }
     public MyList()
     {

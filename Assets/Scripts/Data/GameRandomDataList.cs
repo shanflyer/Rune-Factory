@@ -11,9 +11,8 @@ using UnityEditor;
 [CreateAssetMenu(menuName ="Data/随机数据")]
 public class GameRandomDataList : ScriptableObject
 {
-#if UNITY_EDITOR
-    [NonSerialized]
-    public GameRandomDataEditor[] gameRandomDataEditors;
+#if UNITY_EDITOR 
+    private GameRandomDataEditor[] gameRandomDataEditors;
 
     public void SetReferenceData()
     {

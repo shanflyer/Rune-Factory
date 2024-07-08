@@ -228,7 +228,7 @@ public class MapCellController : Singleton<MapCellController>
                     int index = GameRandom.RandomInt(0, ints.Count);
                     NpcBehaviorArea npcBehaviorArea = NpcBehaviorAreas[ints[index]];
 
-                    int gridIndex = GameRandom.RandomInt(0, npcBehaviorArea.grids.Count/4+1);
+                    int gridIndex = GameRandom.RandomInt(0, npcBehaviorArea.grids.Count/4);
                     int x = GameRandom.RandomInt(npcBehaviorArea.grids[gridIndex*4], npcBehaviorArea.grids[gridIndex * 4+2] + 1);
                     int y = GameRandom.RandomInt(npcBehaviorArea.grids[gridIndex * 4+1], npcBehaviorArea.grids[gridIndex * 4 + 3] + 1);
                      
@@ -240,9 +240,9 @@ public class MapCellController : Singleton<MapCellController>
 
         public void SetNpcBehaviorAreas(List<NpcBehaviorArea> NpcBehaviorAreas)
         {
-            this.NpcBehaviorAreas = NpcBehaviorAreas;
             this.NpcBehaviorAreas.Clear();
             NpcBehaviorAreaTypeDic.Clear();
+            this.NpcBehaviorAreas = NpcBehaviorAreas;
             for (int i = 0; i < NpcBehaviorAreas.Count; i++)
             {
                 NpcBehaviorArea npcBehaviorArea = NpcBehaviorAreas[i];
