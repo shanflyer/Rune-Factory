@@ -25,6 +25,7 @@ public class TempCharacterShowEmote:Action
             taskStatus = TaskStatus.Running;
             int emoteId = tempCharacter.GetAreaEmote();
             int showTimeValue = GameRandom.RandomInt(showTime.x, showTime.y);
+           // Debug.Log($"emoteId{emoteId}");
             ShowEmote showEmote = new ShowEmote
             {
                 emoteId = emoteId,

@@ -28,8 +28,8 @@ public class CharacterRemoveItem : Action
                         RemovePackageItem addPackageItem = new RemovePackageItem
                         {
                             packageId = package,
-                            itemDataId = int.Parse(results[i].result),
-                            itemCount = results[i].count
+                            itemDataId = results[i].x,
+                            itemCount = results[i].y
                         };
                         GameActionManager.instance.QueueAction(addPackageItem, true);
                     }

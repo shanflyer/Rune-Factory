@@ -236,8 +236,8 @@ public class FightManager : Singleton<FightManager>
             List<int2> items = new List<int2>();
             for (int i = 0; i < dropResult.Count; i++)
             {
-                int itemId = int.Parse(dropResult[i].result);
-                int count = dropResult[i].count;
+                int itemId = dropResult[i].x;
+                int count = dropResult[i].y;
                 items.Add(new int2(itemId, count));
 
                 if (GetItemIndexs.TryGetValue(itemId, out int index))
@@ -389,7 +389,7 @@ public class FightManager : Singleton<FightManager>
 
         var randomResults = GameRandom.instance.GetRandomValue(monsterDeploy.refreshId);
         var result = randomResults[0];
-        var characterGroupData = await GameDataManager.instance.GetAsyncData<CharacterGroupData>(result.result);
+        var characterGroupData = await GameDataManager.instance.GetAsyncData<CharacterGroupData>(result.x);
         for (int i = 0; i < characterGroupData.characters.Count; i++)
         {
             int characterId = characterGroupData.characters[i];
@@ -931,7 +931,7 @@ public class FightManager : Singleton<FightManager>
         {
             id = -1,
             weightRandom = true,
-            barrels = new List<WeightBarrel>(),
+            barrels = new List<int3>(),
             randomItems = new List<RandomItem>(),
             text = "选择目标"
         };
@@ -939,9 +939,8 @@ public class FightManager : Singleton<FightManager>
         for (int i = 0; i < characters.Count; i++)
         {
             RandomItem randomItem = new RandomItem
-            {
-                itemId = characters.Count - i,
-                itemValue = characters[characters.Count - 1 - i].ToString(),
+            { 
+                itemValue = characters[characters.Count - 1 - i],
                 randomValue = 20 * i,
                 maxCount = 1,
                 minCount = 1
@@ -953,7 +952,7 @@ public class FightManager : Singleton<FightManager>
         var results = GameRandom.instance.GetRandomValue(gameRandomData, randomResultCount: targetCount);
         for (int i = 0; i < results.Count; i++)
         {
-            result.Add(int.Parse(results[i].result));
+            result.Add(results[i].x);
         }
         return result;
     }

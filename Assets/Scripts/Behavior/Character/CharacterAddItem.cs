@@ -21,8 +21,8 @@ public class CharacterAddItem : Action
 					AddPackageItem addPackageItem = new AddPackageItem
 					{
 						packageId = packageId.Value,
-						itemDataId = int.Parse(results[i].result),
-						itemCount = results[i].count
+						itemDataId = results[i].x,
+						itemCount = results[i].y
 					};
 					GameActionManager.instance.QueueAction(addPackageItem, true);
 				}

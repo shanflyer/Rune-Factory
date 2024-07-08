@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 
 public enum NPCState
@@ -81,7 +82,7 @@ public class TempCharacter : Character
         var result=GameRandom.instance.GetRandomValue(ramdonEmote);
         if (result.Count > 0)
         {
-            return int.Parse(result[0].result);
+            return result[0].x;
         }
         return 0;
     }
@@ -98,7 +99,7 @@ public class TempCharacter : Character
         var result = GameRandom.instance.GetRandomValue(ramdonTalk);
         if (result.Count > 0)
         {
-            return int.Parse(result[0].result);
+            return result[0].x;
         }
         return 0;
     }
@@ -240,8 +241,8 @@ public class NPCManager : Singleton<NPCManager>
             int talkId = 0;
             int emoteId = 0;
             int friendValue = 0;
-            List<RandomResult> talkRandomResults = new List<RandomResult>();
-            List<RandomResult> emoteRandomResults = new List<RandomResult>();
+            List<int2> talkRandomResults = new List<int2>();
+            List<int2> emoteRandomResults = new List<int2>();
             switch (likeState)
             {
                 case 1:
@@ -261,9 +262,8 @@ public class NPCManager : Singleton<NPCManager>
                     emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.unlikeEmote);
                     break;
             }
-            talkId = int.Parse(talkRandomResults[0].result);
-            emoteId = int.Parse(emoteRandomResults[0].result);
-
+            talkId = talkRandomResults[0].x;
+            emoteId = emoteRandomResults[0].x;
             GameTimerController.instance.DelayAction(1000, () =>
             {
                 if (CharacterManager.instance.controllerCharacter.instanceId == giveGift.giveCharacter)

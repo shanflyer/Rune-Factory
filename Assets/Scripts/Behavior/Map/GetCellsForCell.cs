@@ -35,7 +35,7 @@ public class GetCellsForCell : Action
         {
             id = -1,
             weightRandom = true,
-            barrels = new List<WeightBarrel>(),
+            barrels = new List<int3>(),
             randomItems = new List<RandomItem>(),
             text = "选择目标"
         };
@@ -47,9 +47,8 @@ public class GetCellsForCell : Action
             if (length <= maxRange.Value && length >= minRange.Value)
             {
                 RandomItem randomItem = new RandomItem
-                {
-                    itemId = i,
-                    itemValue = i.ToString(),
+                { 
+                    itemValue = i,
                     randomValue = 10,
                     maxCount = 1,
                     minCount = 1
@@ -66,7 +65,7 @@ public class GetCellsForCell : Action
         }
         else
         {
-            result.SetValue(new int3(cellList[int.Parse(randomResults[0].result)],room.Value));
+            result.SetValue(new int3(cellList[randomResults[0].x],room.Value));
         }
 
         return TaskStatus.Success; 

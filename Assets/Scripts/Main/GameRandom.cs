@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework.Internal;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Burst;
@@ -6,20 +7,10 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Windows;
 using Random = Unity.Mathematics.Random;
 
-[System.Serializable]
-public struct RandomResult
-{
-    public string result;
-    public int count;
-
-    public override string ToString()
-    {
-        return $"{result}:{count}";
-    }
-}
-
+ 
 [BurstCompile]
 public class GameRandom : Singleton<GameRandom>
 {
@@ -49,156 +40,13 @@ public class GameRandom : Singleton<GameRandom>
         return result;
     }
 
-    [BurstCompile]
-    public struct GameRandomJobData : IJob
-    {
-        public Random random;
-
-        [ReadOnly]
-        public float countValue;
-
-        [ReadOnly]
-        public bool weightRandom;
-
-        [ReadOnly]
-        public int randomResultCount;
-
-        [ReadOnly]
-        public NativeArray<RamdomItemJobData> randomItems;
-
-        public NativeList<WeightBarrel> barrels;
-
-        [WriteOnly]
-        public NativeList<RandomJobResult> randomResults;
-
-        public GameRandomJobData(GameRandomData gameRandomData, int randomResultCount, Random random, float countValue)
-        {
-            this.countValue = countValue;
-            this.random = random;
-            weightRandom = gameRandomData.weightRandom;
-            this.randomResultCount = randomResultCount;
-            randomItems = new NativeArray<RamdomItemJobData>(gameRandomData.randomItems.Count, Allocator.TempJob);
-            barrels = new NativeList<WeightBarrel>(gameRandomData.barrels.Count, Allocator.TempJob);
-            randomResults = new NativeList<RandomJobResult>(Allocator.TempJob);
-
-            for (int i = 0; i < gameRandomData.randomItems.Count; i++)
-            {
-                randomItems[i] = new RamdomItemJobData(gameRandomData.randomItems[i]);
-            }
-            for (int i = 0; i < gameRandomData.barrels.Count; i++)
-            {
-                barrels.Add(gameRandomData.barrels[i]);
-            }
-        }
-
-        public void Execute()
-        {
-            int nowRandomJobResult = 0;
-
-            if (weightRandom)
-            {
-                while (nowRandomJobResult < randomResultCount && barrels.Length > 0)
-                {
-                    int randomIndex = random.NextInt(0, barrels.Length);
-                    int randomValue = random.NextInt(0, 10000);
-
-                    RamdomItemJobData randomItem;
-                    WeightBarrel weightBarrel = barrels[randomIndex];
-
-                    if (barrels[randomIndex].baseWeight > randomValue)
-                    {
-                        randomItem = randomItems[weightBarrel.itemIndex];
-                    }
-                    else
-                    {
-                        randomItem = randomItems[weightBarrel.fillItemIndex];
-                    }
-                    barrels.RemoveAt(randomIndex);
-                    int count;
-                    if (countValue > 0)
-                    {
-                        count = (int)((randomItem.maxCount - randomItem.minCount) * countValue + randomItem.minCount);
-                    }
-                    else
-                    {
-                        count = random.NextInt(randomItem.minCount, randomItem.maxCount + 1);
-                    }
-                    RandomJobResult randomResult = new RandomJobResult
-                    {
-                        result = randomItem.itemId,
-                        group = randomItem.isGroup,
-                        count = count
-                    };
-                    randomResults.Add(randomResult);
-                    nowRandomJobResult++;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < randomItems.Length; i++)
-                {
-                    RamdomItemJobData randomItem = randomItems[i];
-                    int randomValue = random.NextInt(0, 10000);
-                    if (randomValue < randomItem.randomValue)
-                    {
-                        // Random random2 = new Random(); int count;
-                        int count;
-                        if (countValue > 0)
-                        {
-                            count = (int)((randomItem.maxCount - randomItem.minCount) * countValue + randomItem.minCount);
-                        }
-                        else
-                        {
-                            count = random.NextInt(randomItem.minCount, randomItem.maxCount + 1);
-                        }
-
-                        RandomJobResult randomResult = new RandomJobResult
-                        {
-                            result = randomItem.itemId,
-                            group = randomItem.isGroup,
-                            count = count
-                        };
-
-                        randomResults.Add(randomResult);
-                    }
-                }
-            }
-        }
-    }
-
-    [BurstCompile]
-    public struct RamdomItemJobData
-    {
-        public int itemId;
-        public bool isGroup;
-        public int randomValue;
-        public int maxCount;
-        public int minCount;
-
-        public RamdomItemJobData(RandomItem randomItem)
-        {
-            itemId = randomItem.itemId;
-            isGroup = randomItem.isGroup;
-            randomValue = randomItem.randomValue;
-            maxCount = randomItem.maxCount;
-            minCount = randomItem.minCount;
-        }
-    }
-
-    [BurstCompile]
-    public struct RandomJobResult
-    {
-        public int result;
-        public int count;
-        public bool group;
-    }
-
-    public override void Init()
+ 
+    public override async void Init()
     {
         base.Init();
         randomSeed = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds;
         random = new Random(randomSeed);
-        LoadRandomDataList();
+        await LoadRandomDataList();
     }
 
     public void RefreshRandomSeed(ref uint randomSeed)
@@ -210,8 +58,7 @@ public class GameRandom : Singleton<GameRandom>
         random = new Random(randomSeed);
     }
 
-    private Dictionary<int, GameRandomData> gameRandomDatas = new Dictionary<int, GameRandomData>();
-    private Dictionary<int, string> randomItemValues = new Dictionary<int, string>();
+    private Dictionary<int, GameRandomData> gameRandomDatas = new Dictionary<int, GameRandomData>(); 
 
     private static Random Random
     {
@@ -220,7 +67,7 @@ public class GameRandom : Singleton<GameRandom>
             if (random.state == 0)
             {
                 randomSeed = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds;
-                random = new Random(randomSeed);
+                random = new Random(randomSeed); 
             }
             return random;
         }
@@ -228,8 +75,7 @@ public class GameRandom : Singleton<GameRandom>
         {
             random = value;
         }
-    }
-
+    } 
     private static Random random;
     private static uint randomSeed;
 
@@ -237,80 +83,27 @@ public class GameRandom : Singleton<GameRandom>
     {
         GameRandomDataList gameRandomDataList = await ExtensionsResources.LoadResourceAsync<GameRandomDataList>(
           $"{DataPath.GetDataPath(typeof(GameRandomDataList))}");
-        gameRandomDatas.Clear();
-        randomItemValues.Clear();
+        gameRandomDatas.Clear(); 
 
         for (int i = 0; i < gameRandomDataList.gameRandomDatas.Count; i++)
         {
             var gameRandomData = gameRandomDataList.gameRandomDatas[i];
             gameRandomDatas[gameRandomData.id] = gameRandomData;
-            for (int j = 0; j < gameRandomData.randomItems.Count; j++)
-            {
-                var randomItem = gameRandomData.randomItems[j];
-                randomItemValues[randomItem.itemId] = randomItem.itemValue;
-            }
+            
         }
     }
-
-    public List<RandomResult> GetRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1, bool temp = false, float countValue = -1)
+  
+    public List<int2> GetRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1, bool temp = false, float countValue = -1)
     {
-        List<RandomResult> randomResults = new List<RandomResult>();
-        var jobResults = GetRandomJobValue(id, innerGroupCount, randomResultCount, countValue);
-        for (int i = 0; i < jobResults.Length; i++)
+        if(gameRandomDatas.TryGetValue(id,out var gameRandomData))
         {
-            var jobResult = jobResults[i];
-            if (randomItemValues.TryGetValue(jobResult.result, out string itemValue))
-            {
-                randomResults.Add(new RandomResult
-                {
-                    result = itemValue,
-                    count = jobResult.count
-                });
-            }
+            return GetRandomValue(gameRandomData, innerGroupCount, randomResultCount, countValue);
         }
-        jobResults.Dispose();
-        return randomResults;
+        return null; 
     }
+     
 
-    [BurstCompile]
-    private NativeList<RandomJobResult> GetRandomJobValue(int id, int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
-    {
-        NativeList<RandomJobResult> randomResults = new NativeList<RandomJobResult>(8, Allocator.TempJob);
-        if (innerGroupCount > GameCommon.randomInnerGroupMax)
-        {
-            Debug.LogError("随机嵌套超过5层！");
-            return randomResults;
-        }
-        if (gameRandomDatas.TryGetValue(id, out GameRandomData gameRandomData))
-        {
-            GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random, countValue);
-
-            // gameRandomJobData.Run();
-            gameRandomJobData.Schedule().Complete();
-
-            for (int i = 0; i < gameRandomJobData.randomResults.Length; i++)
-            {
-                var randomResult = gameRandomJobData.randomResults[i];
-                if (randomResult.group)
-                {
-                    if (randomItemValues.TryGetValue(randomResult.result, out string randomItemValue))
-                    {
-                        int groupId = int.Parse(randomItemValue);
-                        var _randomResults = GetRandomJobValue(groupId, innerGroupCount + 1, countValue: countValue);
-
-                        randomResults.AddRangeNoResize(_randomResults);
-                    }
-                }
-                else
-                {
-                    randomResults.Add(randomResult);
-                }
-            }
-        }
-
-        return randomResults;
-    }
-
+    
     /// <summary>
     ///
     /// </summary>
@@ -318,66 +111,94 @@ public class GameRandom : Singleton<GameRandom>
     /// <param name="innerGroupCount">嵌套层数</param>
     /// <param name="randomResultCount">试图获取的数量</param>
     /// <returns></returns>
-    public List<RandomResult> GetRandomValue(GameRandomData gameRandomData, int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
+    public List<int2> GetRandomValue(GameRandomData gameRandomData, int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
     {
-        List<RandomResult> randomResults = new List<RandomResult>();
-
-        Dictionary<int, string> temps = new Dictionary<int, string>();
-        for (int i = 0; i < gameRandomData.randomItems.Count; i++)
+        if (innerGroupCount > 5)
         {
-            temps.Add(gameRandomData.randomItems[i].itemId, gameRandomData.randomItems[i].itemValue);
+            return null;
         }
-
-        var jobResults = GetRandomJobValue(gameRandomData, innerGroupCount, randomResultCount, countValue);
-        for (int i = 0; i < jobResults.Length; i++)
+        List<int2> randomResults = new List<int2>(); 
+        if (gameRandomData.weightRandom)
         {
-            var jobResult = jobResults[i];
-            if (temps.TryGetValue(jobResult.result, out string itemValue))
+            MyList<int3> weightBarrels = new MyList<int3>(gameRandomData.barrels);
+            RandomBarrelAction(randomResultCount);
+
+            void RandomBarrelAction(int nowRandomResultCount)
             {
-                randomResults.Add(new RandomResult
+                if (weightBarrels.length == 0)
                 {
-                    result = itemValue,
-                    count = jobResult.count
-                });
-            }
-        }
-        jobResults.Dispose();
-        return randomResults;
-    }
+                    weightBarrels.SetList(gameRandomData.barrels);
+                }
 
-    [BurstCompile]
-    private NativeList<RandomJobResult> GetRandomJobValue(GameRandomData gameRandomData, int innerGroupCount = 0, int randomResultCount = 1, float countValue = -1)
-    {
-        NativeList<RandomJobResult> randomResults = new NativeList<RandomJobResult>(Allocator.Temp);
-        if (innerGroupCount > GameCommon.randomInnerGroupMax)
-        {
-            Debug.LogError("随机嵌套超过5层！");
-            return randomResults;
-        }
-        GameRandomJobData gameRandomJobData = new GameRandomJobData(gameRandomData, randomResultCount, random, countValue);
+                int index = RandomInt(0, weightBarrels.length);
+                var barrel = weightBarrels[index];
+                int randomValue = RandomInt(0, 10000);
+                weightBarrels.RemoveAt(index); 
 
-        //gameRandomJobData.Run();
-        gameRandomJobData.Schedule().Complete();
-
-        for (int i = 0; i < gameRandomJobData.randomResults.Length; i++)
-        {
-            var randomResult = gameRandomJobData.randomResults[i];
-            if (randomResult.group)
-            {
-                if (randomItemValues.TryGetValue(randomResult.result, out string randomItemValue))
+                RandomItem randomItem;
+                if (randomValue < barrel.y)
                 {
-                    int groupId = int.Parse(randomItemValue);
-                    var _randomResults = GetRandomJobValue(groupId, innerGroupCount + 1, countValue: countValue);
+                    randomItem = gameRandomData.randomItems[barrel.x];
+                }
+                else
+                {
+                    randomItem = gameRandomData.randomItems[barrel.z];
+                }
+                if (!randomItem.isGroup)
+                {
+                    int count = RandomInt(randomItem.minCount, randomItem.maxCount);
+                    int2 randomResult = new int2(randomItem.randomValue, count);
+                    randomResults.Add(randomResult);
 
-                    randomResults.AddRangeNoResize(_randomResults);
+                    nowRandomResultCount -= count;
+                    if (nowRandomResultCount > 0)
+                    {
+                        RandomBarrelAction(nowRandomResultCount);
+                    }
+                }
+                else
+                {
+                    if (gameRandomDatas.TryGetValue(randomItem.itemValue, out var randomData))
+                    {
+                        var result = GetRandomValue(randomData, innerGroupCount++, nowRandomResultCount, countValue);
+                        if (result != null)
+                        {
+                            randomResults.AddRange(result);
+                        }
+                    }
                 }
             }
-            else
-            {
-                randomResults.Add(randomResult);
-            }
+             
         }
-
+        else
+        {
+           for(int i = 0; i < gameRandomData.randomItems.Count; i++)
+            {
+                var randomItem = gameRandomData.randomItems[i];
+                int randomValue = RandomInt(0, 10000);
+                if (randomValue < randomItem.randomValue)
+                {
+                    if (!randomItem.isGroup)
+                    {
+                        int count=RandomInt(randomItem.minCount, randomItem.maxCount);
+                        int2 randomResult = new int2(randomItem.randomValue, count);
+                        randomResults.Add(randomResult);
+                    }
+                    else
+                    { 
+                        if (gameRandomDatas.TryGetValue(randomItem.itemValue, out var randomData))
+                        {
+                            var result = GetRandomValue(randomData, innerGroupCount++, randomResultCount, countValue);
+                            if (result != null)
+                            {
+                                randomResults.AddRange(result);
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+       
         return randomResults;
     }
 }

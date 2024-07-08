@@ -55,14 +55,14 @@ public class FishingManager : Singleton<FishingManager>
             if (randomResults.Count > 0)
             {
                 var randomResult = randomResults[0];
-                int fishDataId = int.Parse(randomResult.result);
+                int fishDataId = randomResult.x;
 
                 FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(fishDataId);
                 Item item = new Item
                 {
                     dataId = fishData.itemId,
                     count = 1,
-                    value = randomResult.count
+                    value = randomResult.y
                 };
                 Character character = CharacterManager.instance.GetCharacter(fishingIsSuccess.characterId);
                 int count = await PackageManager.instance.SetItemInPackage(item, character.characterPackage);
@@ -71,7 +71,7 @@ public class FishingManager : Singleton<FishingManager>
                     if (isController)
                     {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(fishData.itemId);
-                        bool newRecord = GameDataSaveManager.instance.SetFishSaveData(fishData.id, randomResult.count, character.mapInstance);
+                        bool newRecord = GameDataSaveManager.instance.SetFishSaveData(fishData.id, randomResult.y, character.mapInstance);
                         ItemResultInfo itemResultInfo = new ItemResultInfo
                         {
                             icon = itemData.icon,

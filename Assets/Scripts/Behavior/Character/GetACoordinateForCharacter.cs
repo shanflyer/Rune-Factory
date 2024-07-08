@@ -81,16 +81,15 @@ public class GetACoordinateForCharacter : Action
             {
                 id = -1,
                 weightRandom = true,
-                barrels = new List<WeightBarrel>(),
+                barrels = new List<int3>(),
                 randomItems = new List<RandomItem>(),
                 text = "选择目标"
             };
             for (int i = 0; i < rangeCoordinates.Count; i++)
             {
                 RandomItem randomItem = new RandomItem
-                {
-                    itemId = i,
-                    itemValue = i.ToString(),
+                { 
+                    itemValue = i,
                     randomValue = 10,
                     maxCount = 1,
                     minCount = 1
@@ -109,7 +108,7 @@ public class GetACoordinateForCharacter : Action
                 List<int3> resultValue = new List<int3>();
                 for (int i = 0; i < randomResults.Count; i++)
                 {
-                    int index = int.Parse(randomResults[i].result);
+                    int index = randomResults[i].x;
                     int2 targetCoordinate = rangeCoordinates[index];
                     resultValue.Add(new int3(targetCoordinate, mapInstance));
                 }

@@ -37,12 +37,11 @@ public class GameRandomDataList : ScriptableObject
                     text=editorData.text,
                     weightRandom=editorData.weightRandom,
                     randomItems=new List<RandomItem>(),
-                    barrels=new List<WeightBarrel>()
+                    barrels=new List<int3>()
                 };
             }
             RandomItem randomItem = new RandomItem
-            {
-                itemId=editorData.itemId,
+            { 
                 isGroup = editorData.isGroup,
                 text = editorData.itemText,
                 itemValue = editorData.itemValue,
@@ -84,7 +83,7 @@ public class GameRandomDataList : ScriptableObject
         }
 
         int fillIndex = 0;
-        WeightBarrel[] barrels = new WeightBarrel[gameRandomData.randomItems.Count];
+        int3[] barrels = new int3[gameRandomData.randomItems.Count];
 
         if (fillRamdomItems.Count > 0)
         {
@@ -92,12 +91,7 @@ public class GameRandomDataList : ScriptableObject
             {
                 if (fillIndex >= fillRamdomItems.Count)
                 {
-                    WeightBarrel endBarrel = new WeightBarrel
-                    {
-                        itemIndex = baseRamdomItems[i].x,
-                        baseWeight = 10000,
-                        fillItemIndex = -1
-                    };
+                    int3 endBarrel = new int3(baseRamdomItems[i].x, 10000, -1);
                     barrels[i] = endBarrel;
                     break;
                 }
@@ -106,12 +100,7 @@ public class GameRandomDataList : ScriptableObject
                 int fillValue = fillRamdomItems[fillIndex].y - value;
 
                 int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
-                WeightBarrel weightBarrel = new WeightBarrel
-                {
-                    itemIndex = baseRamdomItems[i].x,
-                    baseWeight = baseWeight,
-                    fillItemIndex = fillRamdomItems[fillIndex].x
-                };
+                int3 weightBarrel = new int3(baseRamdomItems[i].x, baseWeight, fillRamdomItems[fillIndex].x); 
                 barrels[i] = weightBarrel;
 
                 if (fillValue > averageValue)
@@ -129,11 +118,7 @@ public class GameRandomDataList : ScriptableObject
         {
             for (int i = 0; i < barrels.Length; i++)
             {
-                WeightBarrel weightBarrel = new WeightBarrel
-                {
-                    itemIndex = baseRamdomItems[i].x,
-                    baseWeight = 10000,
-                };
+                int3 weightBarrel = new int3(baseRamdomItems[i].x, 10000, 0); 
                 barrels[i] = weightBarrel;
             }
         }
@@ -161,11 +146,10 @@ public struct GameRandomDataEditor
     public string text;
     public int id;
     public bool weightRandom;
-
-    public int itemId;
+     
     public string itemText;
     public bool isGroup;
-    public string itemValue;
+    public int itemValue;
     public int randomValue;
     public int maxCount;
     public int minCount;
@@ -175,7 +159,7 @@ public struct GameRandomDataEditor
 
 
 [System.Serializable]
-public struct GameRandomData
+public class GameRandomData
 {
     public string text;
     public int id;
@@ -183,7 +167,7 @@ public struct GameRandomData
 
     public List<RandomItem> randomItems;
 
-    public List<WeightBarrel> barrels;
+    public List<int3> barrels;
 
     public void Pretreatment()
     {
@@ -208,7 +192,7 @@ public struct GameRandomData
         }
 
         int fillIndex = 0;
-        WeightBarrel[] barrels = new WeightBarrel[randomItems.Count];
+        int3[] barrels = new int3[randomItems.Count];
 
         if (fillRamdomItems.Count > 0)
         {
@@ -216,12 +200,7 @@ public struct GameRandomData
             {
                 if (fillRamdomItems.Count > 0 && fillIndex >= fillRamdomItems.Count)
                 {
-                    WeightBarrel endBarrel = new WeightBarrel
-                    {
-                        itemIndex = baseRamdomItems[i].x,
-                        baseWeight = 10000,
-                        fillItemIndex = -1
-                    };
+                    int3 endBarrel = new int3(baseRamdomItems[i].x, 10000, -1); 
                     barrels[i] = endBarrel;
                     break;
                 }
@@ -236,12 +215,8 @@ public struct GameRandomData
 
                 int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
 
-                WeightBarrel weightBarrel = new WeightBarrel
-                {
-                    itemIndex = baseRamdomItems[i].x,
-                    baseWeight = baseWeight,
-                    fillItemIndex = fillRamdomItems.Count > fillIndex ? fillRamdomItems[fillIndex].x : baseRamdomItems[i].x
-                };
+                int3 weightBarrel = new int3(baseRamdomItems[i].x, baseWeight, fillRamdomItems.Count > fillIndex ? fillRamdomItems[fillIndex].x : baseRamdomItems[i].x);
+              
                 barrels[i] = weightBarrel;
                 if (baseWeight == 10000)
                 {
@@ -265,11 +240,7 @@ public struct GameRandomData
         {
             for (int i = 0; i < barrels.Length; i++)
             {
-                WeightBarrel weightBarrel = new WeightBarrel
-                {
-                    itemIndex = baseRamdomItems[i].x,
-                    baseWeight = 10000,
-                };
+                int3 weightBarrel = new int3(baseRamdomItems[i].x, 10000, 0); 
                 barrels[i] = weightBarrel;
             }
         }
@@ -283,25 +254,17 @@ public struct GameRandomData
 
 [System.Serializable]
 
-public struct RandomItem
+public class RandomItem
 { 
-    public string text;
-    public int itemId;
+    public string text; 
     public bool isGroup;
-    public string itemValue;
+    public int itemValue;
     public int randomValue;
     public int maxCount;
     public int minCount;
    // public Vector2Int countRange;
 }
-[System.Serializable]
-[BurstCompile]
-public struct WeightBarrel
-{
-    public int itemIndex;
-    public int baseWeight;
-    public int fillItemIndex;
-}
+
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(GameRandomDataList))]
