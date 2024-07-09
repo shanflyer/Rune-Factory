@@ -205,7 +205,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalPosition.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedInt.cs" />
     <Compile Include="Assets\Scripts\Map\MapItemData.cs" />
-    <Compile Include="Assets\Scripts\Map\MapNpcData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\SelectorEvaluator.cs" />
     <Compile Include="Assets\Scripts\EditorTool\WorldInstanceEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetPosition.cs" />
@@ -274,7 +273,6 @@
     <Compile Include="Assets\Effect\FX Quest\Scripts\EQ_OrbitCamera.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetVector3.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\IsPlaying.cs" />
-    <Compile Include="Assets\Scripts\Data\NPCFunctionData.cs" />
     <Compile Include="Assets\Scripts\Environment\SkyEnviromentMono.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerTopPanel.cs" />
     <Compile Include="Assets\Scripts\UI\FuncReference.cs" />
@@ -284,6 +282,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\StopRecording.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedTrigger.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedTransformList.cs" />
+    <Compile Include="Assets\Scripts\Character\NPC\MapNpcData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Reflection\GetPropertyValue.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\SetXYZ.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetDirection.cs" />
@@ -420,6 +419,7 @@
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\TempCharacterExit.cs" />
     <Compile Include="Assets\Scripts\Action\HomeEquipAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedGameObjectList.cs" />
+    <Compile Include="Assets\Scripts\Character\NPC\NPCTaskScheduleManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForce.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\MapObjTipsPanel.cs" />
@@ -561,6 +561,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetConstraints.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMute.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Blend.cs" />
+    <Compile Include="Assets\Scripts\Character\NPC\NPCData.cs" />
     <Compile Include="Assets\Scripts\Data\MonsterData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\DeleteKey.cs" />
     <Compile Include="Assets\Scripts\Behavior\Round\RoundEnd.cs" />
@@ -579,7 +580,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider2D\SetSize.cs" />
     <Compile Include="Assets\Scripts\Action\FarmActioncs.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetRadius.cs" />
-    <Compile Include="Assets\Scripts\Data\NPCData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetVelocity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Dot.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedColor.cs" />
@@ -846,6 +846,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\SetBool.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\IsChildOf.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\UtilitySelector.cs" />
+    <Compile Include="Assets\Scripts\Character\NPC\NPCFunctionData.cs" />
     <Compile Include="Assets\Scripts\Action\ItemAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowSoftness.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetCharacterPackageBehavior.cs" />
@@ -859,13 +860,13 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetTime.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsKeyDown.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\CompareValueBehavior.cs" />
+    <Compile Include="Assets\Scripts\Character\NPC\NPCManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedGameObjectToTransform.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetTime.cs" />
     <Compile Include="Assets\Scripts\Item\ItemData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetRadius.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetForwardVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
-    <Compile Include="Assets\Scripts\Character\NPCManager.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ShortcutPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetBoolParameter.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\MultiCameraDemo.cs" />
@@ -917,6 +918,7 @@
     <Compile Include="Assets\Scripts\Main\GameSourceManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterPropertyEvent.cs" />
     <Compile Include="Assets\Scripts\Data\ItemAnimationData.cs" />
+    <Compile Include="Assets\Scripts\Character\NPC\NPCTaskScheduleData.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\SplitScreenDemo.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Identity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetIntegerParameter.cs" />

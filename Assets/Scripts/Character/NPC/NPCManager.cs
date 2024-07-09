@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BehaviorDesigner.Runtime;
+using OfficeOpenXml.ConditionalFormatting;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -168,6 +170,12 @@ public struct NPCList : IReferenceData
 
 public class NPC :  IReferenceData
 {
+    public NPC(int instanceId,NPCData nPCData)
+    {
+        characterId = instanceId;
+        npcData = nPCData;
+        npcState = NPCState.正常; 
+    } 
     public static Color GetStateColor(NPCState state)
     {
         if (state == NPCState.正常)
@@ -188,32 +196,136 @@ public class NPC :  IReferenceData
 
     public NPCState npcState;
     public NPCData npcData;
+    public bool isActive;
     public int characterId;
     public bool hide=>npcData.hide;
 
+    public void SetNPCTaskScheduleTimeList(List<int> dailyTasks)
+    {
+        List<NPCTaskScheduleData> timeTaskSheduleDatas = new List<NPCTaskScheduleData>();
+        for(int i=0;i<dailyTasks.Count;i++)
+        {
+            if(NPCTaskScheduleManager.instance.GetTaskScheduleData(dailyTasks[i],out var nPCTaskScheduleData))
+            {
+                timeTaskSheduleDatas.Add(nPCTaskScheduleData);
+            } 
+        }
+        nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(timeTaskSheduleDatas);
+    }
     public async Task<CharacterData> GetCharacterData()
     { 
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(npcData.linkCharacterId);
         return characterData;
     }
 
+    private NPCTaskScheduleTimeList nPCTaskScheduleTimeList;
+
+    public bool SetNowBehaviorTree()
+    {
+        var exterNalBehavior = GetNowTaskScheduleBehavior();
+        if (exterNalBehavior != null)
+        {
+            var taskSheduleData = nPCTaskScheduleTimeList.GetNowTaskSheduleData();
+            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, taskSheduleData.loopBehavior);
+            return true;
+        }
+        return false;
+    }
+    void EndNowBehaviorTree()
+    {
+        NPCTaskScheduleData nPCTaskScheduleData=null;
+        if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(new int2(GameTimeManager.instance.Hour, GameTimeManager.instance.Minute),ref nPCTaskScheduleData))
+        {
+            CharacterBehaviorManager.instance.AddBehavior(characterId, nPCTaskScheduleData.externalBehavior, nPCTaskScheduleData.loopBehavior);
+        }
+        else
+        {
+            ReStartCharacterBehavior reStartCharacterBehavior = new ReStartCharacterBehavior
+            {
+                characterId = characterId
+            };
+            GameActionManager.instance.QueueAction(reStartCharacterBehavior, true);
+        }
+    }
+    public ExternalBehaviorTree GetNowTaskScheduleBehavior()
+    { 
+        var data = nPCTaskScheduleTimeList.GetTaskScheduleData(new int2(GameTimeManager.instance.Hour,GameTimeManager.instance.Minute));
+        if (data != null)
+        {
+            return data.externalBehavior;
+        }
+        return null;
+    }
     public void Dispose()
     {
     }
 
     public int Key => npcData.id;
+
+  
+
+}
+
+public class NPCTaskScheduleTimeList
+{
+    private List<NPCTaskScheduleData> timeTaskSheduleDatas = new List<NPCTaskScheduleData>();
+    private List<GameTimeKey> gameTimeKeys = new List<GameTimeKey>();
+
+    public NPCTaskScheduleData GetNowTaskSheduleData()
+    {
+        return timeTaskSheduleDatas[nowTimeKeyIndex];
+    }
+    public NPCTaskScheduleTimeList(List<NPCTaskScheduleData> timeTaskSheduleDatas)
+    {
+        this.timeTaskSheduleDatas = timeTaskSheduleDatas;
+        gameTimeKeys.Clear();
+        for(int i = 0; i < timeTaskSheduleDatas.Count; i++)
+        {
+            var timeTaskSheduleData = timeTaskSheduleDatas[i];
+            gameTimeKeys.Add(new GameTimeKey(timeTaskSheduleData.gameTimeRange));
+        }
+        nowTimeKeyIndex = 0;
+    }
+    int nowTimeKeyIndex;
+    public bool GetTaskScheduleDataOrder(int2 time,ref NPCTaskScheduleData nPCTaskScheduleData)
+    {
+        if (gameTimeKeys[nowTimeKeyIndex] == time)
+        {
+            return false;
+        }
+        nowTimeKeyIndex ++;
+        if(nowTimeKeyIndex >= gameTimeKeys.Count)
+        {
+            nowTimeKeyIndex = 0;
+        }
+        nPCTaskScheduleData = timeTaskSheduleDatas[nowTimeKeyIndex]; 
+        
+        return true;
+    }
+    public NPCTaskScheduleData GetTaskScheduleData(int2 time)
+    {
+        for(int i = 0; i < gameTimeKeys.Count; i++)
+        {
+            if (gameTimeKeys[i]==time)
+            {
+                nowTimeKeyIndex = i;
+                return timeTaskSheduleDatas[i];
+            }
+        }
+        return null;
+    }
 }
 
 public class NPCManager : Singleton<NPCManager>
 {
-    private Dictionary<int,NPC> npcs = new Dictionary<int, NPC>();
-    private Dictionary<int, int> instanceDatas = new Dictionary<int, int>();
-
+    private MyDic<int,NPC> npcs = new MyDic<int, NPC>();
+    private Dictionary<int, int> instanceDatas = new Dictionary<int, int>(); 
     public override void Init()
     {
         base.Init();
         npcs.Clear(); CreatZeroNPC();
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
     }
 
     protected override void Clear()
@@ -221,7 +333,10 @@ public class NPCManager : Singleton<NPCManager>
         base.Clear();
         npcs.Clear();
     }
+    void UpdateGameTime(UpdateGameTime updateGameTime)
+    {
 
+    }
     private void GiveGift(GiveGift giveGift)
     {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
@@ -301,7 +416,7 @@ public class NPCManager : Singleton<NPCManager>
 
     public bool GetNPCFormInstance(int instanceId, out NPC npc)
     {
-        npc = default(NPC);
+        npc =null;
         if (instanceDatas.TryGetValue(instanceId, out var id))
         {
             return npcs.TryGetValue(id, out npc);
@@ -318,15 +433,9 @@ public class NPCManager : Singleton<NPCManager>
     {
         NPCList nPCList = new NPCList
         {
-            npcs = new List<NPC>(),
+            npcs = npcs.GetValueList(),
         };
-        foreach (var npc in npcs.Values)
-        {
-            if (!npc.hide)
-            {
-                nPCList.npcs.Add(npc);
-            }
-        }
+        
         return nPCList;
     }
 
@@ -339,12 +448,7 @@ public class NPCManager : Singleton<NPCManager>
             if (NPCData.zeroCreate)
             {
                 int instanceId = CharacterManager.instance.GetCharacterInstance();
-                NPC npc = new NPC
-                {
-                    characterId = instanceId,
-                    npcState = NPCState.正常,
-                    npcData = NPCData, 
-                };
+                NPC npc = new NPC(instanceId, NPCData); 
                 npcs.Add(npc.Key,npc);
                 instanceDatas[instanceId] = NPCData.id;
             }

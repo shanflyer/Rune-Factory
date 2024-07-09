@@ -1171,7 +1171,8 @@ public static class DataPath
         {typeof(HomeEquipmentData),"Data/HomeEquipmentData" },
         {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"},
         {typeof(ObjPackageAnimationData),"Data/ObjPackageAnimationData" },
-        {typeof(BuffData),"Data/BuffData" }
+        {typeof(BuffData),"Data/BuffData" },
+        {typeof(NPCTaskScheduleData),"Data/NPCTaskScheduleData" }
     };
 
     public static string GetDataPath(Type type)

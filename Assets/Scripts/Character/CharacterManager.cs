@@ -1171,22 +1171,31 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (NPCManager.instance.GetNPC(mapNpcData.dataId, out var npc))
         {
+            npc.SetNPCTaskScheduleTimeList(mapNpcData.dailyTasks);
+           
             if (!characters.TryGetValue(npc.characterId, out var character))
-            {
+            { 
                 var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
                 var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
                 character = new Character(characterData, professionData, npc.characterId);
-                characters.Add(npc.characterId, character);
-
+                characters.Add(npc.characterId, character); 
                 characterDataToInstances[character.dataId] = character.instanceId;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
             RefreshNpcRuntimeObj(character);
 
-            if (mapNpcData.externalBehavior && mapNpcData.beginMap > 0)
+            if (mapNpcData.beginMap > 0)
             {
-                CharacterBehaviorManager.instance.AddBehavior(npc.characterId, mapNpcData.externalBehavior);
+                npc.isActive = true;
+                if (!npc.SetNowBehaviorTree())
+                {
+                    CharacterBehaviorManager.instance.AddBehavior(npc.characterId, mapNpcData.externalBehavior);
+                }
             }
+            else
+            {
+                npc.isActive = false;  
+            } 
         }
 
         /*

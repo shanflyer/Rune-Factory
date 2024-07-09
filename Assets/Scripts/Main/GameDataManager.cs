@@ -288,7 +288,10 @@ public class GameDataManager : Singleton<GameDataManager>
 public interface IGameData
 {
     public string GetKey();
-
+    public string ToString()
+    {
+       return GetKey();
+    }
     public string GetName() { return ToString(); }
 
 #if UNITY_EDITOR

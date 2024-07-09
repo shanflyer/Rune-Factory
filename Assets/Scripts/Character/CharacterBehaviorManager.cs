@@ -1,6 +1,7 @@
 ﻿using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 {
@@ -49,8 +50,8 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
             behaviorTree.Start();
         }
     }
-
-    public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior)
+    
+    public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior,bool loopBehavior=true)
     {
         if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
@@ -60,7 +61,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         behaviorTree.StopAllTaskCoroutines();
         behaviorTree.ExternalBehavior = externalBehavior;
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
-        behaviorTree.RestartWhenComplete = true;
+        behaviorTree.RestartWhenComplete = loopBehavior;
         behaviorTree.Start();
     }
 
@@ -68,7 +69,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     {
         if (behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
-            Object.Destroy(behaviorTree);
+            GameObject.Destroy(behaviorTree);
         }
     }
 }
