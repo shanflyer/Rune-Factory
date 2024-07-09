@@ -16,6 +16,7 @@ public class MyList<T>
     {
         list = new List<T>();
         list.AddRange(values);
+        length = values.Count;
     }
     public void SetList(List<T> values)
     {

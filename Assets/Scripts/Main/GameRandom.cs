@@ -1,16 +1,10 @@
-﻿using NUnit.Framework.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Burst;
-using Unity.Collections;
-using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.Windows;
 using Random = Unity.Mathematics.Random;
 
- 
 [BurstCompile]
 public class GameRandom : Singleton<GameRandom>
 {
@@ -40,7 +34,6 @@ public class GameRandom : Singleton<GameRandom>
         return result;
     }
 
- 
     public override async void Init()
     {
         base.Init();
@@ -58,7 +51,7 @@ public class GameRandom : Singleton<GameRandom>
         random = new Random(randomSeed);
     }
 
-    private Dictionary<int, GameRandomData> gameRandomDatas = new Dictionary<int, GameRandomData>(); 
+    private Dictionary<int, GameRandomData> gameRandomDatas = new Dictionary<int, GameRandomData>();
 
     private static Random Random
     {
@@ -67,7 +60,7 @@ public class GameRandom : Singleton<GameRandom>
             if (random.state == 0)
             {
                 randomSeed = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds;
-                random = new Random(randomSeed); 
+                random = new Random(randomSeed);
             }
             return random;
         }
@@ -75,7 +68,8 @@ public class GameRandom : Singleton<GameRandom>
         {
             random = value;
         }
-    } 
+    }
+
     private static Random random;
     private static uint randomSeed;
 
@@ -83,27 +77,24 @@ public class GameRandom : Singleton<GameRandom>
     {
         GameRandomDataList gameRandomDataList = await ExtensionsResources.LoadResourceAsync<GameRandomDataList>(
           $"{DataPath.GetDataPath(typeof(GameRandomDataList))}");
-        gameRandomDatas.Clear(); 
+        gameRandomDatas.Clear();
 
         for (int i = 0; i < gameRandomDataList.gameRandomDatas.Count; i++)
         {
             var gameRandomData = gameRandomDataList.gameRandomDatas[i];
             gameRandomDatas[gameRandomData.id] = gameRandomData;
-            
         }
     }
-  
+
     public List<int2> GetRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1, bool temp = false, float countValue = -1)
     {
-        if(gameRandomDatas.TryGetValue(id,out var gameRandomData))
+        if (gameRandomDatas.TryGetValue(id, out var gameRandomData))
         {
             return GetRandomValue(gameRandomData, innerGroupCount, randomResultCount, countValue);
         }
-        return null; 
+        return null;
     }
-     
 
-    
     /// <summary>
     ///
     /// </summary>
@@ -117,12 +108,12 @@ public class GameRandom : Singleton<GameRandom>
         {
             return null;
         }
-        List<int2> randomResults = new List<int2>(); 
+        List<int2> randomResults = new List<int2>();
         if (gameRandomData.weightRandom)
         {
             MyList<int3> weightBarrels = new MyList<int3>(gameRandomData.barrels);
+            HashSet<int> haveGetItems = new HashSet<int>();
             RandomBarrelAction(randomResultCount);
-
             void RandomBarrelAction(int nowRandomResultCount)
             {
                 if (weightBarrels.length == 0)
@@ -133,21 +124,29 @@ public class GameRandom : Singleton<GameRandom>
                 int index = RandomInt(0, weightBarrels.length);
                 var barrel = weightBarrels[index];
                 int randomValue = RandomInt(0, 10000);
-                weightBarrels.RemoveAt(index); 
+                weightBarrels.RemoveAt(index);
 
                 RandomItem randomItem;
+                if (haveGetItems.Contains(barrel.x) && haveGetItems.Contains(barrel.z))
+                {
+                    RandomBarrelAction(nowRandomResultCount);
+                    return;
+                }
                 if (randomValue < barrel.y)
                 {
                     randomItem = gameRandomData.randomItems[barrel.x];
+                    haveGetItems.Add(barrel.x);
                 }
                 else
                 {
                     randomItem = gameRandomData.randomItems[barrel.z];
+                    haveGetItems.Add(barrel.z);
                 }
+
                 if (!randomItem.isGroup)
                 {
                     int count = RandomInt(randomItem.minCount, randomItem.maxCount);
-                    int2 randomResult = new int2(randomItem.randomValue, count);
+                    int2 randomResult = new int2(randomItem.itemValue, count);
                     randomResults.Add(randomResult);
 
                     nowRandomResultCount -= count;
@@ -168,11 +167,10 @@ public class GameRandom : Singleton<GameRandom>
                     }
                 }
             }
-             
         }
         else
         {
-           for(int i = 0; i < gameRandomData.randomItems.Count; i++)
+            for (int i = 0; i < gameRandomData.randomItems.Count; i++)
             {
                 var randomItem = gameRandomData.randomItems[i];
                 int randomValue = RandomInt(0, 10000);
@@ -180,12 +178,12 @@ public class GameRandom : Singleton<GameRandom>
                 {
                     if (!randomItem.isGroup)
                     {
-                        int count=RandomInt(randomItem.minCount, randomItem.maxCount);
-                        int2 randomResult = new int2(randomItem.randomValue, count);
+                        int count = RandomInt(randomItem.minCount, randomItem.maxCount);
+                        int2 randomResult = new int2(randomItem.itemValue, count);
                         randomResults.Add(randomResult);
                     }
                     else
-                    { 
+                    {
                         if (gameRandomDatas.TryGetValue(randomItem.itemValue, out var randomData))
                         {
                             var result = GetRandomValue(randomData, innerGroupCount++, randomResultCount, countValue);
@@ -197,8 +195,8 @@ public class GameRandom : Singleton<GameRandom>
                     }
                 }
             }
-        } 
-       
+        }
+
         return randomResults;
     }
 }
