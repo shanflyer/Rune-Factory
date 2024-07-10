@@ -169,6 +169,15 @@ public class GameRandomData
 
     public List<int3> barrels;
 
+    public List<int> GetRandomItemList()
+    {
+        List<int> result = new List<int>(randomItems.Count);
+        for(int i = 0; i < randomItems.Count; i++)
+        {
+            result.Add(randomItems[i].itemValue);
+        }
+        return result;
+    }
     public void Pretreatment()
     {
         int totalValue = 0;

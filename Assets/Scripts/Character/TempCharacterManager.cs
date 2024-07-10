@@ -1,6 +1,8 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine; 
 
 public class TempCharacterManager : Singleton<TempCharacterManager>
 {
@@ -13,8 +15,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         GameActionManager.instance.AddListener<StartCreatTempCharacter>(StartCreatTempCharacter);
     }
 
-    private int totalCharacterCount;
-    private HashSet<int> haveTempCreat;
+    private int totalCharacterCount; 
     public int level { get; private set; }
 
     protected override void Clear()
@@ -43,7 +44,8 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
     }
 
     private Action creatTempDelegate;
-
+    private List<int> tempList=new List<int>();
+    private int tempRandomId;
     private async void StartCreatTempCharacter(StartCreatTempCharacter startCreatTempCharacter)
     {
         if (startCreatTempCharacter.clearAll)
@@ -56,37 +58,52 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         {
             return;
         }
-        tempCharacters = new MyList<int>(NowTempCharacterCreatData.tempCharacters);
+        if (NowTempCharacterCreatData.gameTimeKeyTempCharacterDic.TryGetValue(GameTimeManager.instance.nowHourMinute, out var tempId))
+        {
+            if (tempRandomId != tempId)
+            {
+                tempRandomId = tempId;
+                tempList = GameRandom.instance.GetRandomItemList(tempId);
+            }
+           
+        }  
+        tempCharacters = new MyList<int>(tempList);
 
+        int zeroCount = NowTempCharacterCreatData.maxCharacterCount / 2 ;
+        int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
+        for (int i = 0; i < zeroCount; i++)
+        {
+            CreatCharacter(nowTimeKey, BehaviorAreaType.聚集);
+        }
         CreatTempCharacter();
     }
 
     private TempCharacterCreatData NowTempCharacterCreatData;
     private MyList<int> tempCharacters;
-
-    private void CreatTempCharacter()
+     
+    void CreatCharacter(int2 nowTimeKey, BehaviorAreaType behaviorAreaType)
     {
-        if (NowTempCharacterCreatData == null)
+        int characterId = 0;
+        if (NowTempCharacterCreatData.gameTimeKeyTempCharacterDic.TryGetValue(nowTimeKey, out var tempId))
         {
-            return;
+            if (tempRandomId != tempId)
+            {
+                tempRandomId = tempId;
+                tempList = GameRandom.instance.GetRandomItemList(tempId);
+                tempCharacters.SetList(tempList);
+            }
+
         }
-        var nowCd = GameRandom.RandomInt(NowTempCharacterCreatData.cd.x, NowTempCharacterCreatData.cd.y);
-        creatTempDelegate = CreatTempCharacter;
-        if (totalCharacterCount >= NowTempCharacterCreatData.maxCharacterCount)
-        { 
-            GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
-            return;
-        }
-        int characterId = 0; 
-        int displayMap = WorldMapObjManager.instance.displayMap;
-        int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, BehaviorAreaType.创建).xy;
         if (tempCharacters.length == 0)
         {
-            tempCharacters.SetList(NowTempCharacterCreatData.tempCharacters);
+            tempCharacters.SetList(tempList);
         }
         int randomIndex = GameRandom.RandomInt(0, tempCharacters.length);
         characterId = tempCharacters[randomIndex];
         tempCharacters.RemoveAt(randomIndex);
+
+        int displayMap = WorldMapObjManager.instance.displayMap;
+        int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, BehaviorAreaType.创建).xy;
         CreatTempCharacter creatTempCharacter = new CreatTempCharacter
         {
             characterId = characterId,
@@ -97,8 +114,27 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         GameActionManager.instance.QueueAction(creatTempCharacter);
 
         totalCharacterCount++;
-
-     
+    }
+    private void CreatTempCharacter()
+    {
+        if (NowTempCharacterCreatData == null)
+        {
+            return;
+        }
+        int nowCd = 1;
+        int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
+        if (NowTempCharacterCreatData.gameTimeKeyIntDic.TryGetValue(nowTimeKey, out var cdRange))
+        {
+            nowCd = GameRandom.RandomInt(cdRange)*1000;
+        }
+        Debug.Log($"creatCD:{nowCd}");
+        creatTempDelegate = CreatTempCharacter;
+        if (totalCharacterCount >= NowTempCharacterCreatData.maxCharacterCount)
+        { 
+            GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
+            return;
+        } 
+        CreatCharacter(nowTimeKey,BehaviorAreaType.创建);
         GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
     }
 }

@@ -3,9 +3,23 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Unity.Mathematics;
-using BehaviorDesigner.Runtime; 
-
-
+using BehaviorDesigner.Runtime;
+[Serializable]
+public class GameTimeKeyIntDataDictionary : SerializableDictionary<GameTimeKey, int>
+{
+    internal bool TryGetValue(int2 testKey, out int value)
+    {
+        return TryGetValue((GameTimeKey)testKey, out value);
+    }
+}
+[Serializable]
+public class GameTimeKeyInt2DataDictionary : SerializableDictionary<GameTimeKey, int2>
+{
+    internal bool TryGetValue(int2 testKey, out int2 value)
+    {
+        return TryGetValue((GameTimeKey)testKey,out value);
+    }
+}
 [Serializable]
 public class IntCharacterSaveDataDictionary : SerializableDictionary<int, CharacterSaveData>
 {

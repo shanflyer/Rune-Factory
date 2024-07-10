@@ -481,6 +481,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public bool runTime = true;
 #endif
     public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime);
+    public int2 nowHourMinute=> new int2(nowGameTime.hour, nowGameTime.minute);
+    public GameTimeKey nowGameTimeKey => new GameTimeKey(nowGameTime.hour, nowGameTime.minute, nowGameTime.hour, nowGameTime.minute);
     public int Year => nowGameTime.year;
     public Season Season => nowGameTime.Season;
     public Week Week => nowGameTime.week;

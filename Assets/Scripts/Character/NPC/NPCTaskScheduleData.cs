@@ -1,4 +1,6 @@
 ﻿using BehaviorDesigner.Runtime;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics; 
 using UnityEngine; 
@@ -26,9 +28,37 @@ public enum NPCTaskScheduleType
 {
     时间, 事件,
 }
-public struct GameTimeKey 
+[Serializable]
+public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
 {
     public int minHour,minMinute,maxHour,maxMinute;
+    public static explicit operator GameTimeKey(string str)
+    { 
+        var strs = str.Split(',');
+        GameTimeKey gameTimeKey = new GameTimeKey
+        {
+            minHour = int.Parse(strs[0]),
+            minMinute = int.Parse(strs[1]),
+            maxHour = int.Parse(strs[2]),
+            maxMinute = int.Parse(strs[3])
+        }; 
+        return gameTimeKey;
+    }
+    public static explicit operator GameTimeKey(int2 value)
+    { 
+        GameTimeKey gameTimeKey = new GameTimeKey
+        {
+            minHour = value.x,
+            minMinute = value.y,
+            maxHour = value.x,
+            maxMinute = value.y
+        };
+        return gameTimeKey;
+    }
+    public override string ToString()
+    {
+        return $"{minHour},{minMinute},{maxHour},{maxMinute}";
+    }
     public GameTimeKey(int[] timeArray)
     {
 
@@ -48,26 +78,138 @@ public struct GameTimeKey
     {
         if(obj is GameTimeKey timeKey)
         {
-            return timeKey.minHour == minHour && timeKey.minMinute == minMinute && timeKey.maxHour == maxHour && timeKey.maxMinute == maxMinute;
+            if (timeKey.maxHour == timeKey.minHour && timeKey.maxMinute == timeKey.minMinute)
+            {
+                if(timeKey.maxHour > minHour)
+                {
+                    if(timeKey.maxHour < maxHour)
+                    {
+                        return true;
+                    }
+                    else if(timeKey.maxMinute<maxMinute)
+                    {
+                        return true;
+                    }
+                }
+                else if (timeKey.maxHour== minHour&&timeKey.maxMinute>=minMinute)
+                {
+                    return true;
+                }
+                return false; 
+            }
+            else
+            {
+                return timeKey.minHour == minHour && timeKey.minMinute == minMinute && timeKey.maxHour == maxHour && timeKey.maxMinute == maxMinute;
+            } 
+           
         }else if(obj is int2 time)
         {
-            return time.x<=maxHour && time.x>=minHour && time.y<=maxMinute && time.y>=minMinute;
+            if (time.x > minHour)
+            {
+                if (time.x < maxHour)
+                {
+                    return true;
+                }
+                else if (time.y< maxMinute)
+                {
+                    return true;
+                }
+            }
+            else if (time.x == minHour && time.y >= minMinute)
+            {
+                return true;
+            }
+            return false;
         }
         return false;
     }
     public static bool operator ==(GameTimeKey gameTimeKey,int2 timeKey)
     {
-        return timeKey.x>= gameTimeKey.minHour && timeKey.x >= gameTimeKey.minMinute &&
-            timeKey.y <= gameTimeKey.maxHour && timeKey.y<= gameTimeKey.maxMinute;
+        if (timeKey.x > gameTimeKey.minHour)
+        {
+            if (timeKey.x < gameTimeKey.maxHour)
+            {
+                return true;
+            }
+            else if (timeKey.y < gameTimeKey.maxMinute)
+            {
+                return true;
+            }
+        }
+        else if (timeKey.x == gameTimeKey.minHour && timeKey.y >= gameTimeKey.minMinute)
+        {
+            return true;
+        }
+        return false;
     }
     public static bool operator !=(GameTimeKey gameTimeKey, int2 timeKey)
     {
-        return !(timeKey.x >= gameTimeKey.minHour && timeKey.x >= gameTimeKey.minMinute &&
-            timeKey.y <= gameTimeKey.maxHour && timeKey.y <= gameTimeKey.maxMinute);
+        if (timeKey.x > gameTimeKey.minHour)
+        {
+            if (timeKey.x < gameTimeKey.maxHour)
+            {
+                return false;
+            }
+            else if (timeKey.y < gameTimeKey.maxMinute)
+            {
+                return false;
+            }
+        }
+        else if (timeKey.x == gameTimeKey.minHour && timeKey.y >= gameTimeKey.minMinute)
+        {
+            return false;
+        }
+        return true;
     }
     public override int GetHashCode()
     {
-        return base.GetHashCode();
+        return 0;
     }
 
+    public bool Equals(int2 time)
+    {
+        if (time.x > minHour)
+        {
+            if (time.x < maxHour)
+            {
+                return true;
+            }
+            else if (time.y < maxMinute)
+            {
+                return true;
+            }
+        }
+        else if (time.x == minHour && time.y >= minMinute)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool Equals(GameTimeKey timeKey)
+    {
+        if (timeKey.maxHour == timeKey.minHour && timeKey.maxMinute == timeKey.minMinute)
+        {
+            if (timeKey.maxHour > minHour)
+            {
+                if (timeKey.maxHour < maxHour)
+                {
+                    return true;
+                }
+                else if (timeKey.maxMinute < maxMinute)
+                {
+                    return true;
+                }
+            }
+            else if (timeKey.maxHour == minHour && timeKey.maxMinute >= minMinute)
+            {
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            return timeKey.minHour == minHour && timeKey.minMinute == minMinute && timeKey.maxHour == maxHour && timeKey.maxMinute == maxMinute;
+        }
+    }
 }

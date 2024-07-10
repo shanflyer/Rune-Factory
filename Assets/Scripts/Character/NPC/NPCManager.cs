@@ -110,7 +110,7 @@ public class TempCharacter : Character
         if (!tempCharacterData.levelBehavior.TryGetValue(templevel, out var externalBehaviorTree))
         {
             externalBehaviorTree = tempCharacterData.defaultBehavior;
-        }
+        } 
         CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
         CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree);
     }
@@ -219,7 +219,17 @@ public class NPC :  IReferenceData
     }
 
     private NPCTaskScheduleTimeList nPCTaskScheduleTimeList;
-
+    public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
+    {
+        var exterNalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime);
+        if (exterNalBehavior != null)
+        {
+            var taskSheduleData = nPCTaskScheduleTimeList.GetNowTaskSheduleData();
+            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, taskSheduleData.loopBehavior);
+            return true;
+        }
+        return false;
+    }
     public bool SetNowBehaviorTree()
     {
         var exterNalBehavior = GetNowTaskScheduleBehavior();
@@ -246,6 +256,15 @@ public class NPC :  IReferenceData
             };
             GameActionManager.instance.QueueAction(reStartCharacterBehavior, true);
         }
+    }
+    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime)
+    {
+        var data = nPCTaskScheduleTimeList.GetTaskScheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
+        if (data != null)
+        {
+            return data.externalBehavior;
+        }
+        return null;
     }
     public ExternalBehaviorTree GetNowTaskScheduleBehavior()
     { 
@@ -335,7 +354,10 @@ public class NPCManager : Singleton<NPCManager>
     }
     void UpdateGameTime(UpdateGameTime updateGameTime)
     {
-
+        for(int i = 0; i < npcs.length; i++)
+        {
+            npcs[i].SetTimeBehaviorTree(updateGameTime);
+        }
     }
     private void GiveGift(GiveGift giveGift)
     {

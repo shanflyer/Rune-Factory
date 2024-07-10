@@ -34,6 +34,29 @@ public class Test : MonoBehaviour
 
     public List<int2> testInt2 = new List<int2>();
 
+    public List<GameTimeKey> gameTimeKeys;
+    public List<int2> values;
+    public GameTimeKeyInt2DataDictionary gameTimeKeyIntDic;
+    public int2 testKey;
+    public void InitDic()
+    {
+        gameTimeKeyIntDic = new GameTimeKeyInt2DataDictionary();
+        for(int i = 0; i < gameTimeKeys.Count; i++)
+        {
+            gameTimeKeyIntDic.Add(gameTimeKeys[i], values[i]);
+        }
+    }
+    public void TestDic()
+    {
+        float nowTime = Time.realtimeSinceStartup;
+        if(gameTimeKeyIntDic.TryGetValue(testKey, out var value))
+        {
+            Debug.Log(Time.realtimeSinceStartup - nowTime);
+            Debug.Log($"Value:{value}");
+        }
+        
+    }
+
     public unsafe void TestUnsafe()
     {
         TestData Data = new TestData
@@ -122,6 +145,11 @@ public class TestEditor : Editor
         if (GUILayout.Button("²âÊÔjob"))
         {
             test.TestUnsafe();
+        }
+        if (GUILayout.Button("²âÊÔDic"))
+        {
+            test.InitDic();
+            test.TestDic();
         }
     }
 }

@@ -58,7 +58,13 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
             behaviorTree = obj.AddComponent<BehaviorTree>();
             behaviorTrees[characterId] = behaviorTree;
         }
-        behaviorTree.StopAllTaskCoroutines();
+        else
+        {
+            behaviorTree.StopAllTaskCoroutines();
+            Character character=CharacterManager.instance.GetCharacter(characterId);
+            character.RemoveMove();
+        }
+       
         behaviorTree.ExternalBehavior = externalBehavior;
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
         behaviorTree.RestartWhenComplete = loopBehavior;

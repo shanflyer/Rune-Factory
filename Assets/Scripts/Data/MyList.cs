@@ -100,7 +100,14 @@ public class MyDic<K,T>
     public bool TryGetValue(K key,out T t)
     {
         bool ishave=indexDic.TryGetValue(key, out int index);
-        t = list[index];
+        if (ishave)
+        {
+            t = list[index];
+        }
+        else
+        {
+            t = default(T);
+        }
         return ishave;
     }
     public void Add(K key,T item)
