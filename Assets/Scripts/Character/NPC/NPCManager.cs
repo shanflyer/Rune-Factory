@@ -1,5 +1,6 @@
 ﻿using BehaviorDesigner.Runtime;
 using OfficeOpenXml.ConditionalFormatting;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -203,49 +204,52 @@ public class NPC :  IReferenceData
         return character.GetInformation();
     }
 
+    private int2 bed;
+    private List<int2> workItem;
+    private int homeMap;
+
+    public int2 Bed=>bed;
+    public List<int2> WorkItem=>workItem;
+    public int HomeMap=>homeMap;
+
     public NPCState npcState;
     public NPCData npcData;
     public bool isActive;
     public int characterId;
     public bool hide=>npcData.hide;
 
-    public void SetNPCTaskScheduleTimeList(List<int> dailyTasks)
+    public async void SetNPCTaskScheduleTimeList(List<int> dailyTasks)
     {
-        List<NPCTaskScheduleData> timeTaskSheduleDatas = new List<NPCTaskScheduleData>();
+        List<TaskScheduleModelData> taskSheduleModelDatas = new List<TaskScheduleModelData>();
         for(int i=0;i<dailyTasks.Count;i++)
         {
-            if(NPCTaskScheduleManager.instance.GetTaskScheduleData(dailyTasks[i],out var nPCTaskScheduleData))
-            {
-                timeTaskSheduleDatas.Add(nPCTaskScheduleData);
-            } 
+            var taskSheduleModelData =await GameDataManager.instance.GetAsyncData<TaskScheduleModelData>(dailyTasks[i]);
+            taskSheduleModelDatas.Add(taskSheduleModelData);
         }
-        nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(timeTaskSheduleDatas);
+        nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(taskSheduleModelDatas);
     }
     public async Task<CharacterData> GetCharacterData()
     { 
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(npcData.linkCharacterId);
         return characterData;
     }
-
     private NPCTaskScheduleTimeList nPCTaskScheduleTimeList;
     public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
-    {
-        var exterNalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime);
+    { 
+        var exterNalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime,out var loopBehavior);
         if (exterNalBehavior != null)
-        {
-            var taskSheduleData = nPCTaskScheduleTimeList.GetNowTaskSheduleData();
-            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, taskSheduleData.loopBehavior);
+        { 
+            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, loopBehavior);
             return true;
         }
         return false;
     }
     public bool SetNowBehaviorTree()
     {
-        var exterNalBehavior = GetNowTaskScheduleBehavior();
+        var exterNalBehavior = GetNowTaskScheduleBehavior( out var loopBehavior);
         if (exterNalBehavior != null)
-        {
-            var taskSheduleData = nPCTaskScheduleTimeList.GetNowTaskSheduleData();
-            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, taskSheduleData.loopBehavior);
+        { 
+            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, loopBehavior);
             return true;
         }
         return false;
@@ -266,22 +270,26 @@ public class NPC :  IReferenceData
             GameActionManager.instance.QueueAction(reStartCharacterBehavior, true);
         }
     }
-    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime)
+    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime,out bool loopBehavior)
     {
-        var data = nPCTaskScheduleTimeList.GetTaskScheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
+        var data = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
         if (data != null)
         {
+            loopBehavior = data.loopBehavior;
             return data.externalBehavior;
         }
+        loopBehavior = false;
         return null;
     }
-    public ExternalBehaviorTree GetNowTaskScheduleBehavior()
+    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior)
     { 
-        var data = nPCTaskScheduleTimeList.GetTaskScheduleData(new int2(GameTimeManager.instance.Hour,GameTimeManager.instance.Minute));
+        var data = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(GameTimeManager.instance.Hour,GameTimeManager.instance.Minute));
         if (data != null)
         {
+            loopBehavior = data.loopBehavior;
             return data.externalBehavior;
         }
+        loopBehavior = false;
         return null;
     }
     public void Dispose()
@@ -296,52 +304,73 @@ public class NPC :  IReferenceData
 
 public class NPCTaskScheduleTimeList
 {
-    private List<NPCTaskScheduleData> timeTaskSheduleDatas = new List<NPCTaskScheduleData>();
-    private List<GameTimeKey> gameTimeKeys = new List<GameTimeKey>();
+    private List<TaskScheduleModelData> taskScheduleModelDatas = new List<TaskScheduleModelData>(); 
 
-    public NPCTaskScheduleData GetNowTaskSheduleData()
+    public NPCTaskScheduleTimeList(List<TaskScheduleModelData> taskScheduleModelDatas)
     {
-        return timeTaskSheduleDatas[nowTimeKeyIndex];
-    }
-    public NPCTaskScheduleTimeList(List<NPCTaskScheduleData> timeTaskSheduleDatas)
-    {
-        this.timeTaskSheduleDatas = timeTaskSheduleDatas;
-        gameTimeKeys.Clear();
-        for(int i = 0; i < timeTaskSheduleDatas.Count; i++)
-        {
-            var timeTaskSheduleData = timeTaskSheduleDatas[i];
-            gameTimeKeys.Add(new GameTimeKey(timeTaskSheduleData.gameTimeRange));
-        }
+        this.taskScheduleModelDatas = taskScheduleModelDatas;  
         nowTimeKeyIndex = 0;
     }
     int nowTimeKeyIndex;
     public bool GetTaskScheduleDataOrder(int2 time,ref NPCTaskScheduleData nPCTaskScheduleData)
     {
-        if (gameTimeKeys[nowTimeKeyIndex] == time)
+        if (taskScheduleModelDatas[nowTimeKeyIndex].gameTimeKey == time)
         {
             return false;
         }
         nowTimeKeyIndex ++;
-        if(nowTimeKeyIndex >= gameTimeKeys.Count)
+        if(nowTimeKeyIndex >= taskScheduleModelDatas.Count)
         {
             nowTimeKeyIndex = 0;
         }
-        nPCTaskScheduleData = timeTaskSheduleDatas[nowTimeKeyIndex]; 
+        nPCTaskScheduleData = GetTaskSheduleData(time); 
         
         return true;
     }
-    public NPCTaskScheduleData GetTaskScheduleData(int2 time)
+
+
+    public NPCTaskScheduleData GetTaskSheduleData(int2 time)
     {
-        for(int i = 0; i < gameTimeKeys.Count; i++)
+        TaskScheduleModelData taskScheduleModelData = taskScheduleModelDatas[nowTimeKeyIndex];
+        int startM = taskScheduleModelData.gameTimeKey.minHour * 60 + taskScheduleModelData.gameTimeKey.minMinute;
+        int endM= taskScheduleModelData.gameTimeKey.maxHour * 60 + taskScheduleModelData.gameTimeKey.maxMinute;
+        int nowM = time.x * 60 + time.y;
+
+        float e_value = (nowM - startM) / (float)(endM - startM);
+
+        GameRandomData gameRandomData = new GameRandomData
         {
-            if (gameTimeKeys[i]==time)
+            id = -1,
+            weightRandom = true,
+            barrels = new List<int3>(),
+            randomItems = new List<RandomItem>(),
+            text = "选择目标"
+        };
+        for(int i = 0; i < taskScheduleModelData.dailyTaskDataItems.Count; i++)
+        {
+            int2 dailyItem = taskScheduleModelData.dailyTaskDataItems[i].GetNowTaskRandomValue(e_value);
+            RandomItem randomItem = new RandomItem
             {
-                nowTimeKeyIndex = i;
-                return timeTaskSheduleDatas[i];
-            }
-        }
+                itemValue = dailyItem.x,
+                randomValue = dailyItem.y,
+                maxCount = 1,
+                minCount = 1
+            };
+            gameRandomData.randomItems.Add(randomItem);
+        } 
+        gameRandomData.Pretreatment();
+        var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, 1);
+        if (randomResults.Count > 0)
+        {
+            if (NPCTaskScheduleManager.instance.GetTaskScheduleData(randomResults[0].x,out var nPCTaskScheduleData))
+            {
+                return nPCTaskScheduleData;
+            }  
+        }  
         return null;
     }
+
+  
 }
 
 public class NPCManager : Singleton<NPCManager>
@@ -360,14 +389,35 @@ public class NPCManager : Singleton<NPCManager>
     {
         base.Clear();
         npcs.Clear();
-    }
+    } 
     void UpdateGameTime(UpdateGameTime updateGameTime)
     {
-        for(int i = 0; i < npcs.length; i++)
+       var IEnumerator = UpDataNPCTimeBehaviorTree(updateGameTime);
+        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(IEnumerator);
+        /*
+        for (int i = 0; i < npcs.length; i++)
         {
             npcs[i].SetTimeBehaviorTree(updateGameTime);
+        }*/
+    }
+    
+    IEnumerator UpDataNPCTimeBehaviorTree(UpdateGameTime updateGameTime)
+    {
+        int totalNum = 0;
+        int perNum = npcs.length / 10;
+        for (int i = 0; i < npcs.length; i++)
+        {
+            npcs[i].SetTimeBehaviorTree(updateGameTime);
+            totalNum++;
+            if (totalNum >= perNum)
+            {
+                yield return 0;
+                totalNum = 0;
+            }
+            
         }
     }
+
     private void GiveGift(GiveGift giveGift)
     {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))

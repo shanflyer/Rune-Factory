@@ -2,3 +2,4 @@
 {
     public T[] DataList { get; }
 }
+public interface ISingleDataArray<T> where T : IGameData{ }

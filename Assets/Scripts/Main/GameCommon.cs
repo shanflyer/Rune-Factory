@@ -1112,6 +1112,7 @@ public static class EditorDataPath
     public const string mapItemAnimationPath = "Assets/Animation/MapItem/";
     public const string gameEventDataPath = "Assets/Resources/Behavior/";
     public const string tempCharacterBehaviorPath = "Assets/Resources/Behavior/TempCharacter/";
+    public const string npcCharacterBehaviorPath = "Assets/Resources/Behavior/NPC/";
 }
 
 public static class DataPath
@@ -1172,7 +1173,8 @@ public static class DataPath
         {typeof(ShopItemDisplayData),"Data/ShopItemDisplayData"},
         {typeof(ObjPackageAnimationData),"Data/ObjPackageAnimationData" },
         {typeof(BuffData),"Data/BuffData" },
-        {typeof(NPCTaskScheduleData),"Data/NPCTaskScheduleData" }
+        {typeof(NPCTaskScheduleData),"Data/NPCTaskScheduleData" },
+        {typeof(TaskScheduleModelData),"Data/TaskScheduleModelData/TaskScheduleModelDataList" }
     };
 
     public static string GetDataPath(Type type)

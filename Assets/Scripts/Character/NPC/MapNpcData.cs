@@ -1,6 +1,7 @@
 ﻿using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
 using System.Collections.Generic;
+using System;
 
 #if UNITY_EDITOR
 
@@ -23,6 +24,9 @@ public class MapNpcData : ScriptableObject, IGameData
     public List<int> dailyTasks=new List<int>();
     public List<int> eventTasks = new List<int>();
 
+    public List<int2> beds = new List<int2>();
+    public List<int2> workItems = new List<int2>(); 
+
     public string behaviorName;
     public ExternalBehaviorTree externalBehavior;
 #if UNITY_EDITOR
@@ -44,3 +48,7 @@ public class MapNpcData : ScriptableObject, IGameData
         return id.ToString();
     }
 }
+
+
+
+ 

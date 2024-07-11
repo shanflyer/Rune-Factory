@@ -5,6 +5,11 @@ using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
 [Serializable]
+public class IntTaskScheduleModelDataDictionary : SerializableDictionary<int, TaskScheduleModelData>
+{
+
+}
+[Serializable]
 public class GameTimeKeyIntDataDictionary : SerializableDictionary<GameTimeKey, int>
 {
     internal bool TryGetValue(int2 testKey, out int value)

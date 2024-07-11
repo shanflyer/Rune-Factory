@@ -1,39 +1,52 @@
 ﻿using BehaviorDesigner.Runtime;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
-using System.Collections.Generic;
-using Unity.Mathematics; 
-using UnityEngine; 
+using Unity.Mathematics;
+using UnityEngine;
+
+#if UNITY_EDITOR
+
+using UnityEditor;
+
+#endif
+
 [CreateAssetMenu(menuName = "Data/Npc任务计划表数据")]
 public class NPCTaskScheduleData : ScriptableObject, IGameData
 {
     public int id;
     public string taskName;
-    public NPCTaskScheduleType type;
-    public int[] gameTimeRange;
+    public NPCTaskScheduleType type; 
     private string behaviorName;
     public ExternalBehaviorTree externalBehavior;
     public bool loopBehavior;
-    
+
     public string GetKey()
     {
         return id.ToString();
     }
 
+#if UNITY_EDITOR
+
     public void SetReferenceData()
-    { 
+    {
+        var path = $"{EditorDataPath.npcBehaviorPath}{behaviorName}{".asset"}";
+        externalBehavior = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>(path);
     }
+
+#endif
 }
+
 public enum NPCTaskScheduleType
 {
     时间, 事件,
 }
+
 [Serializable]
-public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
+public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 {
-    public int minHour,minMinute,maxHour,maxMinute;
+    public int minHour, minMinute, maxHour, maxMinute;
+
     public static explicit operator GameTimeKey(string str)
-    { 
+    {
         var strs = str.Split(',');
         GameTimeKey gameTimeKey = new GameTimeKey
         {
@@ -41,11 +54,12 @@ public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
             minMinute = int.Parse(strs[1]),
             maxHour = int.Parse(strs[2]),
             maxMinute = int.Parse(strs[3])
-        }; 
+        };
         return gameTimeKey;
     }
+
     public static explicit operator GameTimeKey(int2 value)
-    { 
+    {
         GameTimeKey gameTimeKey = new GameTimeKey
         {
             minHour = value.x,
@@ -55,18 +69,20 @@ public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
         };
         return gameTimeKey;
     }
+
     public override string ToString()
     {
         return $"{minHour},{minMinute},{maxHour},{maxMinute}";
     }
+
     public GameTimeKey(int[] timeArray)
     {
-
         this.minHour = timeArray[0];
         this.minMinute = timeArray[1];
         this.maxHour = timeArray[2];
         this.maxMinute = timeArray[3];
     }
+
     public GameTimeKey(int minHour, int minMinute, int maxHour, int maxMinute)
     {
         this.minHour = minHour;
@@ -74,35 +90,36 @@ public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
         this.maxHour = maxHour;
         this.maxMinute = maxMinute;
     }
+
     public override bool Equals(object obj)
     {
-        if(obj is GameTimeKey timeKey)
+        if (obj is GameTimeKey timeKey)
         {
             if (timeKey.maxHour == timeKey.minHour && timeKey.maxMinute == timeKey.minMinute)
             {
-                if(timeKey.maxHour > minHour)
+                if (timeKey.maxHour > minHour)
                 {
-                    if(timeKey.maxHour < maxHour)
+                    if (timeKey.maxHour < maxHour)
                     {
                         return true;
                     }
-                    else if(timeKey.maxMinute<maxMinute)
+                    else if (timeKey.maxMinute < maxMinute)
                     {
                         return true;
                     }
                 }
-                else if (timeKey.maxHour== minHour&&timeKey.maxMinute>=minMinute)
+                else if (timeKey.maxHour == minHour && timeKey.maxMinute >= minMinute)
                 {
                     return true;
                 }
-                return false; 
+                return false;
             }
             else
             {
                 return timeKey.minHour == minHour && timeKey.minMinute == minMinute && timeKey.maxHour == maxHour && timeKey.maxMinute == maxMinute;
-            } 
-           
-        }else if(obj is int2 time)
+            }
+        }
+        else if (obj is int2 time)
         {
             if (time.x > minHour)
             {
@@ -110,7 +127,7 @@ public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
                 {
                     return true;
                 }
-                else if (time.y< maxMinute)
+                else if (time.y < maxMinute)
                 {
                     return true;
                 }
@@ -123,7 +140,8 @@ public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
         }
         return false;
     }
-    public static bool operator ==(GameTimeKey gameTimeKey,int2 timeKey)
+
+    public static bool operator ==(GameTimeKey gameTimeKey, int2 timeKey)
     {
         if (timeKey.x > gameTimeKey.minHour)
         {
@@ -142,6 +160,7 @@ public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
         }
         return false;
     }
+
     public static bool operator !=(GameTimeKey gameTimeKey, int2 timeKey)
     {
         if (timeKey.x > gameTimeKey.minHour)
@@ -161,6 +180,7 @@ public struct GameTimeKey :IEquatable<int2>, IEquatable<GameTimeKey>
         }
         return true;
     }
+
     public override int GetHashCode()
     {
         return 0;
