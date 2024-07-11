@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
+using Unity.Mathematics;
 
 #if UNITY_EDITOR
 
@@ -15,7 +16,7 @@ public class TempCharacterData : ScriptableObject, IGameData
     public int linkCharacterId;
     public string defaultBehaviorName;
     public ExternalBehaviorTree defaultBehavior;
-    public IntBehaviorDictionary levelBehavior;
+    public IntBehaviorDictionarys levelMapBehaviors;
     public int defaultEmote;
     public IntIntDictionary mapEmote;
     public IntIntDictionary areaEmote;
@@ -23,7 +24,7 @@ public class TempCharacterData : ScriptableObject, IGameData
     public IntIntDictionary mapTalk;
     public IntIntDictionary areaTalk;
 #if UNITY_EDITOR
-    private List<int> levelDatas;
+    private List<int2> levelDatas;
     private List<string> levelBehaviors;
 
     public void SetReferenceData()
@@ -31,7 +32,7 @@ public class TempCharacterData : ScriptableObject, IGameData
         string path = $"{EditorDataPath.tempCharacterBehaviorPath}{defaultBehaviorName}{".asset"}";
         defaultBehavior = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>(path);
 
-        levelBehavior = new IntBehaviorDictionary();
+        levelMapBehaviors = new IntBehaviorDictionarys();
         if (levelDatas != null)
         {
             for (int i = 0; i < levelDatas.Count; i++)
@@ -40,7 +41,14 @@ public class TempCharacterData : ScriptableObject, IGameData
                 {
                     path = $"{EditorDataPath.tempCharacterBehaviorPath}{levelBehaviors[i]}{".asset"}";
                     var behaviorTree = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>(path);
-                    levelBehavior.Add(levelDatas[i], behaviorTree);
+
+                    int level = levelDatas[i].x;
+                    int map = levelDatas[i].y;
+                    if(!levelMapBehaviors.TryGetValue(level,out var behaviorDic))
+                    {
+                        behaviorDic = new IntBehaviorDictionary();
+                    }
+                    behaviorDic[map] = behaviorTree; 
                 }
             }
         }

@@ -317,13 +317,16 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         displayMap = mapId;
         displayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
-        StartCreatTempCharacter startCreatTempCharacter = new StartCreatTempCharacter
+        if (displayMapRoomData.autoCreatTempNpc)
         {
-            creatDataId = displayMapRoomData.creatTempCharacterId,
-            clearAll = true,
-        };
-        GameActionManager.instance.QueueAction(startCreatTempCharacter);
-
+            StartCreatTempCharacter startCreatTempCharacter = new StartCreatTempCharacter
+            {
+                creatDataId = displayMapRoomData.creatTempCharacterId,
+                clearAll = true,
+                prewarm=displayMapRoomData.tempNpcPrewarm
+            };
+            GameActionManager.instance.QueueAction(startCreatTempCharacter);
+        } 
         string dataId = displayMapRoomData.name;
         SetMapOverrideEnvirmentData(displayMapRoomData);
         if (!string.IsNullOrEmpty(dataId))

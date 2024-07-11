@@ -67,14 +67,16 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
             }
            
         }  
-        tempCharacters = new MyList<int>(tempList);
-
-        int zeroCount = NowTempCharacterCreatData.maxCharacterCount / 2 ;
-        int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
-        for (int i = 0; i < zeroCount; i++)
+        tempCharacters = new MyList<int>(tempList); 
+        if (startCreatTempCharacter.prewarm)
         {
-            CreatCharacter(nowTimeKey, BehaviorAreaType.聚集);
-        }
+            int zeroCount = NowTempCharacterCreatData.maxCharacterCount / 2;
+            int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
+            for (int i = 0; i < zeroCount; i++)
+            {
+                CreatCharacter(nowTimeKey, BehaviorAreaType.聚集);
+            }
+        } 
         CreatTempCharacter();
     }
 

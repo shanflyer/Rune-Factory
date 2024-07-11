@@ -563,6 +563,7 @@ public struct StartCreatTempCharacter : GameAction
     public SetResult setResult { get; set; }
     public int creatDataId;
     public bool clearAll;
+    public bool prewarm;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -570,7 +571,21 @@ public struct StartCreatTempCharacter : GameAction
             creatDataId = int.Parse(parameters[0].value);
         if (parameters.Count > 1)
             clearAll = bool.Parse(parameters[1].value);
+        if (parameters.Count > 2)
+            prewarm = bool.Parse(parameters[2].value);
 
+        if (source > 0)
+        {
+            creatDataId = source;
+        }
+        if (target >= 0)
+        {
+            clearAll = target==1;
+        }
+        if (value >= 0)
+        {
+            prewarm = value == 1;
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

@@ -228,6 +228,8 @@ public class SeasonRandomDictionary : SerializableDictionary<Season, int> { }
 [Serializable]
 public class ItemAnimationDictionary : SerializableDictionary<int2, AnimationStateData> { }
 [Serializable]
+public class IntBehaviorDictionarys : SerializableDictionary<int, IntBehaviorDictionary> { }
+[Serializable]
 public class IntBehaviorDictionary: SerializableDictionary<int,ExternalBehaviorTree> { }
 
 [Serializable]

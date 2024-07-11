@@ -106,11 +106,20 @@ public class TempCharacter : Character
         return 0;
     }
     private void RefreshBehavior()
-    { 
-        if (!tempCharacterData.levelBehavior.TryGetValue(templevel, out var externalBehaviorTree))
+    {
+        ExternalBehaviorTree externalBehaviorTree;
+        if (!tempCharacterData.levelMapBehaviors.TryGetValue(templevel, out var externalBehaviorTreeDic))
+        {
+            if(!externalBehaviorTreeDic.TryGetValue(mapInstance,out externalBehaviorTree))
+            {
+                externalBehaviorTreeDic.TryGetValue(0, out externalBehaviorTree);
+            }
+            externalBehaviorTree = tempCharacterData.defaultBehavior; 
+        }
+        else
         {
             externalBehaviorTree = tempCharacterData.defaultBehavior;
-        } 
+        }
         CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
         CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree);
     }

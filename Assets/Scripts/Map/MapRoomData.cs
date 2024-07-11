@@ -59,6 +59,8 @@ public class MapRoomData : ScriptableObject, IGameData
     public int skyBackGroundId;
     public int creatTempCharacterId;
 
+    public bool autoCreatTempNpc;
+    public bool tempNpcPrewarm;
     public List<NpcBehaviorArea> npcBehaviorAreas = new List<NpcBehaviorArea>();
 
     public bool CheckBoundary(int2 coordinate)

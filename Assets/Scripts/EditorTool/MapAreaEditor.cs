@@ -29,14 +29,14 @@ public class MapAreaEditor : MonoBehaviour
     public void SetData(int name, BehaviorAreaType behaviorAreaType)
     {
         this.name = name.ToString();
-        text.name = name.ToString();
+        text.text=text.name = name.ToString();
         this.behaviorAreaType = behaviorAreaType;
         areaData = new NpcBehaviorArea
         {
             behaviorAreaType = behaviorAreaType,
             grids = new List<int>(),
             Name = name
-        };
+        }; 
     }
     public void SetData(NpcBehaviorArea npcBehaviorArea)
     {
