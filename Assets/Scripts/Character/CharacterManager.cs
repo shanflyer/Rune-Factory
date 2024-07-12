@@ -1171,6 +1171,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (NPCManager.instance.GetNPC(mapNpcData.dataId, out var npc))
         {
+            npc.SetBedAndWorkItem(mapNpcData.beds, mapNpcData.workItems);
             npc.SetNPCTaskScheduleTimeList(mapNpcData.dailyTasks);
            
             if (!characters.TryGetValue(npc.characterId, out var character))
@@ -1189,7 +1190,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 npc.isActive = true;
                 if (!npc.SetNowBehaviorTree())
                 {
-                    CharacterBehaviorManager.instance.AddBehavior(npc.characterId, mapNpcData.externalBehavior);
+                    npc.AddNpcBehavior(mapNpcData.externalBehavior, true); 
                 }
             }
             else

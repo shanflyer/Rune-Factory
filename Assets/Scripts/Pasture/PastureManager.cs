@@ -654,7 +654,7 @@ public class PastureManager : Singleton<PastureManager>
 
                 if (animalData.externalBehavior != null)
                 {
-                    CharacterBehaviorManager.instance.AddBehavior(animal.instaceId, animalData.externalBehavior);
+                    CharacterBehaviorManager.instance.AddBehavior(animal.instaceId, animalData.externalBehavior,true);
                 }
 
                 GameDataSaveManager.instance.UserGameSaveData.SetAnimalData(animal);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using static BehaviorDesigner.Runtime.Behavior;
 
 public enum NPCState
 {
@@ -122,7 +123,7 @@ public class TempCharacter : Character
             externalBehaviorTree = tempCharacterData.defaultBehavior;
         }
         CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
-        CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree);
+        CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree,true);
     }
 }
 
@@ -184,7 +185,9 @@ public class NPC :  IReferenceData
     {
         characterId = instanceId;
         npcData = nPCData;
-        npcState = NPCState.正常; 
+        npcState = NPCState.正常;
+        endBehavior = true;
+        behaviorCanBreak = false;
     } 
     public static Color GetStateColor(NPCState state)
     {
@@ -204,12 +207,12 @@ public class NPC :  IReferenceData
         return character.GetInformation();
     }
 
-    private int2 bed;
-    private List<int2> workItem;
+    private List<int2> beds;
+    private List<int2> workItems;
     private int homeMap;
 
-    public int2 Bed=>bed;
-    public List<int2> WorkItem=>workItem;
+    public List<int2> Beds =>beds;
+    public List<int2> WorkItems=>workItems;
     public int HomeMap=>homeMap;
 
     public NPCState npcState;
@@ -217,7 +220,11 @@ public class NPC :  IReferenceData
     public bool isActive;
     public int characterId;
     public bool hide=>npcData.hide;
-
+    public void SetBedAndWorkItem(List<int2> Beds, List<int2> WorkItems)
+    {
+        beds.AddRange(Beds);
+        workItems.AddRange(WorkItems);
+    }
     public async void SetNPCTaskScheduleTimeList(List<int> dailyTasks)
     {
         List<TaskScheduleModelData> taskSheduleModelDatas = new List<TaskScheduleModelData>();
@@ -234,62 +241,71 @@ public class NPC :  IReferenceData
         return characterData;
     }
     private NPCTaskScheduleTimeList nPCTaskScheduleTimeList;
-    public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
-    { 
-        var exterNalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime,out var loopBehavior);
-        if (exterNalBehavior != null)
-        { 
-            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, loopBehavior);
-            return true;
+    private bool endBehavior=true;
+    private bool behaviorCanBreak = false;
+    void ResetBehaviorState(Behavior behavior)
+    {
+        endBehavior = true;
+        behaviorCanBreak = false;
+        var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior, out behaviorCanBreak);
+        if (externalBehavior != null)
+        {
+            AddNpcBehavior(externalBehavior, loopBehavior); 
         }
+    }
+    public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
+    {
+        if (endBehavior || behaviorCanBreak)
+        {
+            var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out var loopBehavior,out behaviorCanBreak);
+            if (externalBehavior != null)
+            {
+                AddNpcBehavior(externalBehavior, loopBehavior); 
+                return true;
+            }
+        } 
         return false;
+    }
+    public void AddNpcBehavior(ExternalBehaviorTree externalBehavior, bool loopBehavior = true)
+    {
+        CharacterBehaviorManager.instance.AddBehavior(characterId, externalBehavior, loopBehavior, ResetBehaviorState);
+        endBehavior = false;
     }
     public bool SetNowBehaviorTree()
     {
-        var exterNalBehavior = GetNowTaskScheduleBehavior( out var loopBehavior);
-        if (exterNalBehavior != null)
-        { 
-            CharacterBehaviorManager.instance.AddBehavior(characterId, exterNalBehavior, loopBehavior);
+        var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior,out behaviorCanBreak);
+        if (externalBehavior != null)
+        {
+            AddNpcBehavior(externalBehavior, loopBehavior);
             return true;
         }
         return false;
     }
-    void EndNowBehaviorTree()
-    {
-        NPCTaskScheduleData nPCTaskScheduleData=null;
-        if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(new int2(GameTimeManager.instance.Hour, GameTimeManager.instance.Minute),ref nPCTaskScheduleData))
-        {
-            CharacterBehaviorManager.instance.AddBehavior(characterId, nPCTaskScheduleData.externalBehavior, nPCTaskScheduleData.loopBehavior);
-        }
-        else
-        {
-            ReStartCharacterBehavior reStartCharacterBehavior = new ReStartCharacterBehavior
-            {
-                characterId = characterId
-            };
-            GameActionManager.instance.QueueAction(reStartCharacterBehavior, true);
-        }
-    }
-    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime,out bool loopBehavior)
+ 
+    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime,out bool loopBehavior,out bool behaviorCanBreak)
     {
         var data = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
         if (data != null)
         {
             loopBehavior = data.loopBehavior;
+            behaviorCanBreak = data.canBreak;
             return data.externalBehavior;
         }
         loopBehavior = false;
+        behaviorCanBreak = false;
         return null;
     }
-    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior)
+    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak)
     { 
-        var data = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(GameTimeManager.instance.Hour,GameTimeManager.instance.Minute));
+        var data = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
         if (data != null)
         {
             loopBehavior = data.loopBehavior;
+            behaviorCanBreak = data.canBreak;
             return data.externalBehavior;
         }
         loopBehavior = false;
+        behaviorCanBreak = false;
         return null;
     }
     public void Dispose()

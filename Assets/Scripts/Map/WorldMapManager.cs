@@ -68,8 +68,15 @@ public class WorldMapManager : Singleton<WorldMapManager>
             if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
             {
                 runtimeMapItem.linkCharacter = SetMapEditorItemLinkCharacter.linkInstanceId;
-                // runtimeMapItems.SetData(runtimeMapItem);
+                if (SetMapEditorItemLinkCharacter.setResult != null)
+                {
+                    SetMapEditorItemLinkCharacter.setResult(true);
+                }
             }
+        }
+        if (SetMapEditorItemLinkCharacter.setResult != null)
+        {
+            SetMapEditorItemLinkCharacter.setResult(false);
         }
     }
 

@@ -18,7 +18,7 @@ public class NPCTaskScheduleData : ScriptableObject, IGameData
     private string behaviorName;
     public ExternalBehaviorTree externalBehavior;
     public bool loopBehavior;
-
+    public bool canBreak;
     public string GetKey()
     {
         return id.ToString();

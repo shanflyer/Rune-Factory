@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static BehaviorDesigner.Runtime.Behavior;
 
 public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 {
@@ -51,7 +52,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
     }
     
-    public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior,bool loopBehavior=true)
+    public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior,bool loopBehavior=true, BehaviorHandler behaviorHandler=null)
     {
         if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
@@ -64,7 +65,18 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
             Character character=CharacterManager.instance.GetCharacter(characterId);
             character.RemoveMove();
         }
-       
+        if (behaviorHandler != null)
+        {
+            if (loopBehavior)
+            {
+                behaviorTree.OnBehaviorRestart += behaviorHandler;
+            }
+            else
+            {
+                behaviorTree.OnBehaviorEnd += behaviorHandler;
+            } 
+        }
+         
         behaviorTree.ExternalBehavior = externalBehavior;
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
         behaviorTree.RestartWhenComplete = loopBehavior;
