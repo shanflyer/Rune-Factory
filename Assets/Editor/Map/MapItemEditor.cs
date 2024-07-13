@@ -209,13 +209,13 @@ public class MapItemEditor : MyEditor
         collider.RefreshAllTiles();
         trigger.RefreshAllTiles();
 
-        var collidergridCount = selectMapItemDataObj.itemData.triggerGrids.Count / 4;
+        var collidergridCount = selectMapItemDataObj.itemData.colliderGrids.Count / 4;
         for (int j = 0; j < collidergridCount; j++)
         {
-            int minX = selectMapItemDataObj.itemData.triggerGrids[j * 4];
-            int minY = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 1];
-            int maxX = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 2];
-            int maxY = selectMapItemDataObj.itemData.triggerGrids[j * 4 + 3];
+            int minX = selectMapItemDataObj.itemData.colliderGrids[j * 4];
+            int minY = selectMapItemDataObj.itemData.colliderGrids[j * 4 + 1];
+            int maxX = selectMapItemDataObj.itemData.colliderGrids[j * 4 + 2];
+            int maxY = selectMapItemDataObj.itemData.colliderGrids[j * 4 + 3];
 
             List<Vector3Int> poses = new List<Vector3Int>();
             List<TileBase> tileBases = new List<TileBase>();

@@ -110,7 +110,7 @@ public class TempCharacter : Character
     private void RefreshBehavior()
     {
         ExternalBehaviorTree externalBehaviorTree;
-        if (!tempCharacterData.levelMapBehaviors.TryGetValue(templevel, out var externalBehaviorTreeDic))
+        if (tempCharacterData.levelMapBehaviors.TryGetValue(templevel, out var externalBehaviorTreeDic))
         {
             if(!externalBehaviorTreeDic.TryGetValue(mapInstance,out externalBehaviorTree))
             {

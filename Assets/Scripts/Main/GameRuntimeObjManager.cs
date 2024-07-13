@@ -87,13 +87,8 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
     }
     public void RecycleRuntimeObj(RuntimeObj runtimeObj)
     {
-        if(runtimeObj.obj == null)
-        {
-
-        }
-        else
-        {
-
+        if(runtimeObj.obj != null)
+        {  
             runtimeObj.use = false;
             var component = runtimeObj.obj as Component;
 
@@ -120,11 +115,11 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             }
             else
             {
-                runtimeObj = null;
+                GameObject.Destroy(component.gameObject); 
             }
            
         }
-        
+        runtimeObj = null;
     }
 
     public void SetObjParent(string runtimeObjType, bool hide)

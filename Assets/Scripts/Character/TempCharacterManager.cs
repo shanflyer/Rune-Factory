@@ -129,7 +129,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         {
             nowCd = GameRandom.RandomInt(cdRange)*1000;
         }
-        Debug.Log($"creatCD:{nowCd}");
+       // Debug.Log($"creatCD:{nowCd}");
         creatTempDelegate = CreatTempCharacter;
         if (totalCharacterCount >= NowTempCharacterCreatData.maxCharacterCount)
         { 

@@ -326,6 +326,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 prewarm=displayMapRoomData.tempNpcPrewarm
             };
             GameActionManager.instance.QueueAction(startCreatTempCharacter);
+        }
+        else
+        {
+            ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
+            GameActionManager.instance.QueueAction(clearTempCharacter, true);
         } 
         string dataId = displayMapRoomData.name;
         SetMapOverrideEnvirmentData(displayMapRoomData);

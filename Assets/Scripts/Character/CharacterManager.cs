@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -567,13 +568,15 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
     {
-        foreach (var instanceId in tempInstances)
+        var tems = tempInstances.ToArray();
+        for(int i = 0; i < tems.Length; i++)
         {
-            if (characters.TryGetValue(instanceId, out var character))
+            if (characters.TryGetValue(tems[i], out var character))
             {
                 RemoveCharacter(character);
             }
         }
+        tempInstances.Clear();
     }
 
     private void RemoveCharacter(Character character)
@@ -969,15 +972,29 @@ public class CharacterManager : Singleton<CharacterManager>
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector2 pos) =>
              {
-                 if (runtimeObj != null)
+                 if (runtimeObj != null&&runtimeObj.runtimeObj!=null && runtimeObj.runtimeObj.obj!=null)
                  {
                      SetCharacterAnimationSpeed(1, runtimeObj);
-                     var transform = runtimeObj.runtimeObj.obj as Transform;
-                     if (transform)
+                     try
                      {
-                         transform.transform.position = pos;
-                         //transform.Translate(Vector3.zero);
+                         var transform = runtimeObj.runtimeObj.obj as Transform;
+                         if (transform)
+                         {
+                             transform.transform.position = pos;
+                             //transform.Translate(Vector3.zero);
+                         }
                      }
+                     catch(Exception e)
+                     {
+                         Debug.Log(e);
+                     }
+                    
+                 }
+                 else
+                 {
+                     if (runtimeObj != null)
+                         runtimeObj.runtimeObj = null; 
+                     runtimeObj = null;
                  }
              },
             () =>
@@ -991,8 +1008,17 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                    if (runtimeObj != null)
+                    if (runtimeObj != null && runtimeObj.runtimeObj != null && runtimeObj.runtimeObj.obj != null)
+                    {
                         SetCharacterAnimationSpeed(0, runtimeObj);
+                    }
+                    else
+                    {
+                        if (runtimeObj != null)
+                            runtimeObj.runtimeObj = null; 
+                        runtimeObj = null;
+                    }
+                        
                     CrossMap(targetCoordinate, character, out int3 newMap, EndAction);
                 }
                 if (changeCoordinateAction != null)
@@ -1289,7 +1315,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
                     {
-                        CreatCharacterObjAsync(character);
+                       await  CreatCharacterObjAsync(character);
                     }
                     else
                     {
