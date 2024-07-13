@@ -4,9 +4,13 @@ using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using System.Collections.Generic; 
 
+public enum BindItemType
+{
+    床,工作台
+}
 [TaskCategory("Game/Character")]
-[TaskName("选择床并找到移动的目标")]
-public class SelectBedAndFindMoveTarget: Action
+[TaskName("选择Npc绑定物体并找到移动的目标")]
+public class SelectBlindItemAndFindMoveTarget: Action
 {
     [Header("角色ID")]
     [SerializeField]
@@ -17,10 +21,14 @@ public class SelectBedAndFindMoveTarget: Action
     [Header("最大范围")]
     [SerializeField]
     private SharedInt maxRange;
-    [Header("床移动目标")]
+    [SerializeField]
+    BindItemType selectBindItemType;
+
+    [Header("移动目标")]
     [SerializeField]
     private SharedInt3 targetCoordinate;
-    private int2 SelectBed;
+    [SerializeField]
+    private SharedInt2 SelectItem;
     public override void OnStart()
     {
         if (characterId == null || characterId.IsNull())
@@ -30,34 +38,40 @@ public class SelectBedAndFindMoveTarget: Action
         taskStatus = TaskStatus.Failure;
         if (NPCManager.instance.GetNPC(characterId.Value,out NPC npc))
         {
-            List<int2> beds = new List<int2>();
-            for(int i = 0; i < npc.Beds.Count; i++)
+            List<int2> items = new List<int2>();
+
+            List<int2> checkItems = npc.Beds;
+            if(selectBindItemType== BindItemType.工作台)
+            {
+                checkItems = npc.WorkItems;
+            }
+            for(int i = 0; i < checkItems.Count; i++)
             {
                 CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter = new CheckMapEditorItemLinkCharacter
                 {
-                    mapId = npc.Beds[i].x,
-                    itemEditorId = npc.Beds[i].y,
+                    mapId = checkItems[i].x,
+                    itemEditorId = checkItems[i].y,
                     setResult = (bool value) =>
                     { 
                         if (value)
                         {
-                            beds.Add(npc.Beds[i]);
+                            items.Add(checkItems[i]);
                         }
                     }
                 };
                 GameActionManager.instance.QueueAction(checkMapEditorItemLinkCharacter, true);
             } 
             
-            if (beds.Count > 0)
+            if (items.Count > 0)
             {
                 taskStatus = TaskStatus.Running;
 
-                int index=GameRandom.RandomInt(0,beds.Count);
-                SelectBed = beds[index];
+                int index=GameRandom.RandomInt(0, items.Count);
+                SelectItem = items[index];
                 SetMapEditorItemLinkCharacter setMapEditorItemLinkCharacter = new SetMapEditorItemLinkCharacter
                 {
-                    mapId = SelectBed.x,
-                    mapItemEditorId = SelectBed.y,
+                    mapId = SelectItem.Value.x,
+                    mapItemEditorId = SelectItem.Value.y,
                     linkInstanceId = characterId.Value,
                     setResult= SetMapEditorItemLinkResult
                 };
@@ -70,9 +84,19 @@ public class SelectBedAndFindMoveTarget: Action
     {
         if (value)
         {
-            if(WorldMapManager.instance.GetMapItemPos(SelectBed, out var coordinate))
+            if(WorldMapManager.instance.GetMapItemPos(SelectItem.Value, out var coordinate))
             {
-                if (MapCellController.instance.GetCoordinates(SelectBed.x, coordinate.xy, minRange.Value, maxRange.Value, true, out var rangeCoordinates))
+                if(maxRange.Value<=0)
+                {
+                   int2 cell= WorldMapManager.instance.GetItemCommonCenterTriggerCellForEditorInstance(SelectItem.Value.x, SelectItem.Value.y);
+                    if (cell.x > int.MinValue)
+                    {
+                        targetCoordinate = new int3(cell, SelectItem.Value.x);
+                        taskStatus = TaskStatus.Success;
+                        return; 
+                    }
+                }
+                if (MapCellController.instance.GetCoordinates(SelectItem.Value.x, coordinate.xy, minRange.Value, maxRange.Value, true, out var rangeCoordinates))
                 {
                     GameRandomData gameRandomData = new GameRandomData
                     {
@@ -97,12 +121,12 @@ public class SelectBedAndFindMoveTarget: Action
 
                     var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, randomResultCount: 1);
                     if (randomResults.Count >= 0)
-                    { 
+                    {
                         int index = randomResults[0].x;
-                        targetCoordinate =new int3(rangeCoordinates[index],SelectBed.x); 
+                        targetCoordinate = new int3(rangeCoordinates[index], SelectItem.Value.x);
                         taskStatus = TaskStatus.Success;
                         return;
-                    } 
+                    }
                 }
             } 
         }

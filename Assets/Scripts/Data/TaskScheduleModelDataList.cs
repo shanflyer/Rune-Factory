@@ -21,7 +21,7 @@ public class TaskScheduleModelDataList : ScriptableObject, IGameData,IDataArray<
 
     public void SetReferenceData()
     {
-        var growModelDataList = Resources.Load<GrowModelDataList>(DataPath.GetDataPath(typeof(DailyTaskDataItem)));
+        var growModelDataList = Resources.Load<GrowModelDataList>(DataPath.GetDataPath(typeof(GrowModelData)));
         Dictionary<int, GrowModelData> GrowModelDataDic = new Dictionary<int, GrowModelData>();
         for(int i = 0; i < growModelDataList.DataList.Length; i++)
         {
@@ -49,7 +49,11 @@ public class TaskScheduleModelDataList : ScriptableObject, IGameData,IDataArray<
                 itemValue = data.itemValue,
                 weight = data.weight, 
             };
-            dailyTaskDataItem.growCurve = GrowModelDataDic[data.growCurve].curve; 
+            if(GrowModelDataDic.TryGetValue(data.growCurve,out var d))
+            {
+                dailyTaskDataItem.growCurve = d.curve;
+            }
+           
             taskScheduleModelData.dailyTaskDataItems.Add(dailyTaskDataItem);
         }
         taskScheduleModelDatas = taskScheduleModelDataList.ToArray();
@@ -61,11 +65,11 @@ public class TaskScheduleModelDataList : ScriptableObject, IGameData,IDataArray<
     }
 #endif
 }
-
+[Serializable]
 public class TaskScheduleModelData : IGameData
 {
-    public int id;
     public string modelName;
+    public int id; 
     public GameTimeKey gameTimeKey;
     public List<DailyTaskDataItem> dailyTaskDataItems = new List<DailyTaskDataItem>();
 

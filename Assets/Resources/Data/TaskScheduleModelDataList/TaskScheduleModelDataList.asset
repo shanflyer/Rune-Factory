@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acf94de498bc1d74386d14fd8f513d2f, type: 3}
+  m_Name: TaskScheduleModelDataList
+  m_EditorClassIdentifier: 
+  taskScheduleModelDatas:
+  - id: 1
+    modelName: "\u767D\u5929"
+    gameTimeKey:
+      minHour: 6
+      minMinute: 0
+      maxHour: 20
+      maxMinute: 0
+    dailyTaskDataItems:
+    - itemValue: 2002
+      weight: 1000
+      growCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - itemValue: 2001
+      weight: 1000
+      growCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+  - id: 2
+    modelName: "\u665A\u4E0A"
+    gameTimeKey:
+      minHour: 20
+      minMinute: 0
+      maxHour: 24
+      maxMinute: 0
+    dailyTaskDataItems:
+    - itemValue: 2002
+      weight: 1000
+      growCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -2.2674358
+          outSlope: -2.2674358
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.08202941
+        - serializedVersion: 3
+          time: 0.75
+          value: 0
+          inSlope: -0.075911276
+          outSlope: -0.075911276
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11491877
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - itemValue: 2001
+      weight: 1000
+      growCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -2.2674358
+          outSlope: -2.2674358
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.08202941
+        - serializedVersion: 3
+          time: 0.75
+          value: 0
+          inSlope: -0.075911276
+          outSlope: -0.075911276
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.11491877
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - itemValue: 2000
+      weight: 1000
+      growCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2.0914078
+          outSlope: 2.0914078
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.07214587
+        - serializedVersion: 3
+          time: 1
+          value: 2
+          inSlope: 5.9574714
+          outSlope: 5.9574714
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.056862175
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+  - id: 3
+    modelName: "\u51CC\u6668"
+    gameTimeKey:
+      minHour: 0
+      minMinute: 0
+      maxHour: 6
+      maxMinute: 0
+    dailyTaskDataItems:
+    - itemValue: 2000
+      weight: 1000
+      growCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4

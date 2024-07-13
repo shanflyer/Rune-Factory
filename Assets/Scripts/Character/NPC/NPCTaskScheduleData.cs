@@ -23,12 +23,15 @@ public class NPCTaskScheduleData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
-
+    public override string ToString()
+    {
+        return id.ToString();
+    }
 #if UNITY_EDITOR
 
     public void SetReferenceData()
     {
-        var path = $"{EditorDataPath.npcBehaviorPath}{behaviorName}{".asset"}";
+        var path = $"{EditorDataPath.npcBehaviorPath}New/{behaviorName}{".asset"}";
         externalBehavior = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>(path);
     }
 

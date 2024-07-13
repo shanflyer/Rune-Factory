@@ -648,7 +648,32 @@ public class MapCellController : Singleton<MapCellController>
         }
         return cell;
     }
-
+     
+    public int2 GetItemCommonCenterTriggerCell(int roomId, int itemInstanceId)
+    {
+        var cells = GetItemTriggerCells(itemInstanceId, roomId);
+        int minX=int.MaxValue,minY= int.MaxValue, maxX=int.MinValue, maxY= int.MinValue;
+        for (int i = 0; i < cells.Length; i++)
+        {
+            if (cells[i].x < minX)
+            {
+                minX = cells[i].x;
+            }
+            if (cells[i].x > maxX)
+            {
+                maxX = cells[i].x;
+            }
+            if (cells[i].y < minY)
+            {
+                minY = cells[i].y;
+            }
+            if (cells[i].y > maxY)
+            {
+                maxY = cells[i].y;
+            }
+        }
+        return new int2((minX + maxX) / 2, (minY + maxY) / 2); 
+    }
     public int2 GetNearestItemCommonTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
         var cells = GetItemTriggerCells(itemInstanceId, roomId);
@@ -1067,7 +1092,7 @@ public class MapCellController : Singleton<MapCellController>
         result = null;
         return false;
     }
-
+  
     public bool GetRuntimeMapRoom(int roomId, out RuntimeMapRoom runtimeMapRoom)
     {
         return runtimeMapRooms.TryGetValue(roomId, out runtimeMapRoom);

@@ -2,10 +2,16 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
 
+public enum RandomType
+{
+    默认,随机区间
+}
+
 [TaskCategory("NewGame/Common")]
 [TaskName("随机结果")]
 public class GameRandomEvent : Action
 {
+    public RandomType randomType;
     public SharedIntList randomSources;
     public SharedInt result;
     public SharedIntList withOutSource;
