@@ -23,19 +23,19 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1115
-    instanceId: 1115447
-    coordinate:
-      x: -9
-      y: 16
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1098
     instanceId: 1098337
     coordinate:
       x: 21
       y: -27
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1115
+    instanceId: 1115447
+    coordinate:
+      x: -9
+      y: 16
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -57,4 +57,54 @@ MonoBehaviour:
   fixedCameraPos: {x: 0, y: 0, z: 0}
   skyBackGroundId: 11
   creatTempCharacterId: 0
-  npcBehaviorAreas: []
+  autoCreatTempNpc: 0
+  tempNpcPrewarm: 0
+  npcBehaviorAreas:
+  - Name: 123
+    pos:
+      x: 38
+      y: -1
+    grids: ddffffff01000000e6ffffff04000000e1ffffff12000000e7ffffff15000000fcffffff06000000020000000b00000004000000faffffff09000000fdffffff
+    behaviorAreaType: 1
+  - Name: 127
+    pos:
+      x: 76
+      y: -15
+    grids: fffffffff7ffffff0200000005000000
+    behaviorAreaType: 2
+  - Name: 125
+    pos:
+      x: -53
+      y: -22
+    grids: f8fffffffeffffff030000000100000011000000f8ffffff17000000faffffff36000000f4ffffff39000000f5ffffff
+    behaviorAreaType: 1
+  - Name: 124
+    pos:
+      x: -9
+      y: 4
+    grids: faffffff000000000500000005000000
+    behaviorAreaType: 1
+  - Name: 120
+    pos:
+      x: -80
+      y: 31
+    grids: fefffffffbffffff0100000004000000
+    behaviorAreaType: 0
+  - Name: 121
+    pos:
+      x: 76
+      y: -17
+    grids: 01000000faffffff0400000006000000
+    behaviorAreaType: 0
+  - Name: 122
+    pos:
+      x: -49
+      y: 22
+    grids: f1ffffff0e000000f4ffffff13000000f6ffffff09000000020000000d00000005000000f9ffffff140000000000000016000000eeffffff1b000000f5ffffff
+    behaviorAreaType: 1
+  - Name: 126
+    pos:
+      x: -79
+      y: 33
+    grids: fefffffff9ffffff0000000002000000
+    behaviorAreaType: 2

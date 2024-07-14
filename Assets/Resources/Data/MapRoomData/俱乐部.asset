@@ -57,4 +57,60 @@ MonoBehaviour:
   fixedCameraPos: {x: 0, y: 0, z: 0}
   skyBackGroundId: 0
   creatTempCharacterId: 0
-  npcBehaviorAreas: []
+  autoCreatTempNpc: 0
+  tempNpcPrewarm: 0
+  npcBehaviorAreas:
+  - Name: 63
+    pos:
+      x: 18
+      y: 4
+    grids: f8fffffff5fffffffafffffff5fffffff8ffffff01000000faffffff0100000001000000f5ffffff03000000f5ffffff0100000001000000040000000100000009000000f5ffffff0b000000f5ffffff09000000010000000c00000001000000
+    behaviorAreaType: 1
+  - Name: 61
+    pos:
+      x: 24
+      y: 26
+    grids: fefffffff7ffffff08000000ffffffff
+    behaviorAreaType: 1
+  - Name: 66
+    pos:
+      x: -16
+      y: 20
+    grids: f7ffffff00000000fdffffff000000000300000000000000080000000000000016000000fcffffff1e000000fcffffff
+    behaviorAreaType: 1
+  - Name: 67
+    pos:
+      x: -27
+      y: -3
+    grids: fffffffffbffffffffffffff13000000
+    behaviorAreaType: 2
+  - Name: 62
+    pos:
+      x: 34
+      y: 32
+    grids: f0fffffff3fffffff0fffffffcfffffff6fffffffffffffffeffffff00000000f7ffffff06000000010000000600000001000000f4ffffff01000000feffffff
+    behaviorAreaType: 1
+  - Name: 65
+    pos:
+      x: -13
+      y: 5
+    grids: f4ffffff01000000f4ffffff0b000000f6fffffff4ffffff00000000f4ffffff010000000d0000000a0000000d0000000e000000f6ffffff0e000000ffffffff
+    behaviorAreaType: 1
+  - Name: 68
+    pos:
+      x: 5
+      y: -15
+    grids: fcffffffffffffff0100000002000000
+    behaviorAreaType: 2
+  - Name: 64
+    pos:
+      x: 35
+      y: 7
+    grids: 00000000f3ffffff00000000fdffffff000000000100000001000000030000000000000009000000010000000a000000
+    behaviorAreaType: 1
+  - Name: 60
+    pos:
+      x: 3
+      y: -15
+    grids: fefffffffeffffff0300000001000000
+    behaviorAreaType: 0

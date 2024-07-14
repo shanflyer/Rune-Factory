@@ -207,8 +207,8 @@ public class NPC :  IReferenceData
         return character.GetInformation();
     }
 
-    private List<int2> beds;
-    private List<int2> workItems;
+    private List<int2> beds=new List<int2>();
+    private List<int2> workItems=new List<int2>();
     private int homeMap;
 
     public List<int2> Beds =>beds;
@@ -222,10 +222,12 @@ public class NPC :  IReferenceData
     public bool hide=>npcData.hide;
     public void SetBedAndWorkItem(List<int2> Beds, List<int2> WorkItems)
     {
+        beds.Clear();
+        workItems.Clear();
         beds.AddRange(Beds);
         workItems.AddRange(WorkItems);
     }
-    public async void SetNPCTaskScheduleTimeList(List<int> dailyTasks)
+    public async void SetNPCTaskScheduleTimeList(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
     {
         List<TaskScheduleModelData> taskSheduleModelDatas = new List<TaskScheduleModelData>();
         for(int i=0;i<dailyTasks.Count;i++)
@@ -234,6 +236,11 @@ public class NPC :  IReferenceData
             taskSheduleModelDatas.Add(taskSheduleModelData);
         }
         nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(taskSheduleModelDatas);
+
+        if (!SetNowBehaviorTree())
+        {
+            AddNpcBehavior(externalBehavior, true);
+        }
     }
     public async Task<CharacterData> GetCharacterData()
     { 
@@ -296,14 +303,18 @@ public class NPC :  IReferenceData
         return null;
     }
     public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak)
-    { 
-        var data = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
-        if (data != null)
+    {
+        if (nPCTaskScheduleTimeList != null)
         {
-            loopBehavior = data.loopBehavior;
-            behaviorCanBreak = data.canBreak;
-            return data.externalBehavior;
+            var data = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
+            if (data != null)
+            {
+                loopBehavior = data.loopBehavior;
+                behaviorCanBreak = data.canBreak;
+                return data.externalBehavior;
+            }
         }
+       
         loopBehavior = false;
         behaviorCanBreak = false;
         return null;
@@ -347,6 +358,10 @@ public class NPCTaskScheduleTimeList
 
     public NPCTaskScheduleData GetTaskSheduleData(int2 time)
     {
+        if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
+        {
+            return null;
+        }
         TaskScheduleModelData taskScheduleModelData = taskScheduleModelDatas[nowTimeKeyIndex];
         int startM = taskScheduleModelData.gameTimeKey.minHour * 60 + taskScheduleModelData.gameTimeKey.minMinute;
         int endM= taskScheduleModelData.gameTimeKey.maxHour * 60 + taskScheduleModelData.gameTimeKey.maxMinute;

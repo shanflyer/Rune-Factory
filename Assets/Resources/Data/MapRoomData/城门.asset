@@ -15,11 +15,11 @@ MonoBehaviour:
   roomName: "\u57CE\u95E8"
   barrierGrids: d2ffffffdcffffff2d000000e1ffffffd2ffffffe2fffffffdffffffe9ffffffd2ffffffeafffffff7ffffffffffffffd2ffffff00000000f3ffffff03000000d2ffffff04000000d3ffffff3f000000d4ffffff1e000000d9ffffff3f000000d8ffffff1c000000dbffffff1d000000daffffff21000000fbffffff31000000daffffff32000000f7ffffff3f000000e4ffffff04000000f7ffffff05000000e6ffffff1d000000fbffffff20000000f4ffffff18000000f7ffffff1c000000f8ffffff3a0000002d0000003f000000fcffffffeafffffffdffffffebffffff030000001d000000170000003100000006000000e2ffffff2d000000e9ffffff06000000eaffffff07000000ebffffff08000000180000000b0000001c00000008000000320000002d000000390000000a000000f6ffffff2d000000fbffffff0e000000eaffffff2d000000f5ffffff0e000000fcffffff2d00000009000000120000000a0000002d0000000f00000018000000210000002d000000310000001a000000100000002d000000110000001c0000001a0000002d0000002000000027000000120000002d00000019000000
   mapItems:
-  - id: 1056
-    instanceId: 1056256
+  - id: 1077
+    instanceId: 1077658
     coordinate:
-      x: -8
-      y: 0
+      x: 2
+      y: -27
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -31,19 +31,19 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1077
-    instanceId: 1077658
-    coordinate:
-      x: 2
-      y: -27
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1099
     instanceId: 1099388
     coordinate:
       x: 0
       y: 33
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1056
+    instanceId: 1056256
+    coordinate:
+      x: -8
+      y: 0
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -65,4 +65,66 @@ MonoBehaviour:
   fixedCameraPos: {x: 0, y: 0, z: 0}
   skyBackGroundId: 0
   creatTempCharacterId: 0
-  npcBehaviorAreas: []
+  autoCreatTempNpc: 0
+  tempNpcPrewarm: 0
+  npcBehaviorAreas:
+  - Name: 100
+    pos:
+      x: 24
+      y: 23
+    grids: 00000000fbffffff0200000002000000
+    behaviorAreaType: 2
+  - Name: 99
+    pos:
+      x: 0
+      y: -19
+    grids: feffffff000000000500000001000000
+    behaviorAreaType: 2
+  - Name: 92
+    pos:
+      x: 25
+      y: 22
+    grids: 00000000fcffffff0200000003000000
+    behaviorAreaType: 0
+  - Name: 97
+    pos:
+      x: -2
+      y: 54
+    grids: fdffffffffffffff0400000001000000
+    behaviorAreaType: 2
+  - Name: 98
+    pos:
+      x: -41
+      y: 17
+    grids: fffffffffbffffff0100000002000000
+    behaviorAreaType: 2
+  - Name: 90
+    pos:
+      x: -1
+      y: 55
+    grids: fcffffffffffffff0300000001000000
+    behaviorAreaType: 0
+  - Name: 93
+    pos:
+      x: 1
+      y: -19
+    grids: fdffffffffffffff0400000000000000
+    behaviorAreaType: 0
+  - Name: 91
+    pos:
+      x: -41
+      y: 15
+    grids: fefffffffdffffff0000000004000000
+    behaviorAreaType: 0
+  - Name: 95
+    pos:
+      x: 0
+      y: -4
+    grids: fafffffff6fffffffdffffff00000000ffffffff08000000040000000d00000004000000f6ffffff0700000000000000
+    behaviorAreaType: 1
+  - Name: 94
+    pos:
+      x: -3
+      y: 21
+    grids: e5ffffff04000000efffffff06000000eefffffff7fffffff9fffffff8ffffff010000000800000003000000130000000c000000f8ffffff11000000fbffffff12000000040000001900000006000000
+    behaviorAreaType: 1
