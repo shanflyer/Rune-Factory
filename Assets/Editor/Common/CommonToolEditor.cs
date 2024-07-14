@@ -105,6 +105,10 @@ public class CommonToolEditor : MyEditor
         {
             InitPlantAnimation();
         }
+        if (GUILayout.Button("标准化名字"))
+        {
+            ReSaveImage();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -123,7 +127,32 @@ public class CommonToolEditor : MyEditor
             Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_3");
         }*/
     }
+    private void ReSaveImage()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(sourcePath);
+        var files=directoryInfo.GetFiles("*.png");
+        Dictionary<string,int> fileOrders=new Dictionary<string,int>();
+        foreach (var file in files)
+        {
+            var str = file.Name.Split('.')[0];
+            var strs=str.Split("_");
+            var key = str.Replace(strs[strs.Length - 1], "");
+            if(!fileOrders.TryGetValue(key,out var order))
+            {
+                order = 1;
+                fileOrders.Add(key, 1);
+            }
+            else
+            {
+                order++;
+                fileOrders[key] = order;
+            }
 
+
+            File.Move(file.FullName, file.FullName.Replace(strs[strs.Length - 1], order.ToString("00")));
+
+        }
+    }
     private void InitPlantAnimation()
     {
         string plantDataPath = "Data/PlantData";
