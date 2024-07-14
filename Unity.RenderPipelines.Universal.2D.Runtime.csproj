@@ -61,60 +61,60 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.7f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\UTess2D\UTess.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Renderer2DData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\Utility\LayerUtility.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\DrawRenderer2DPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DAuthoring.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\CinemachineUniversalPixelPerfect.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DBlendStyle.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\Render2DLightingPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\CompositeShadowCaster2D.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowRendering.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShape2DProvider_SpriteRenderer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\LightUtility.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Clipper.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShape2DProvider_SpriteSkin.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2D.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShapeProviderUtility.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowEdge.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowCasterGroup2DManager.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\RendererFeatures\ScriptableRenderPass2D.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShapeProvider2D_Utility.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\UTess2D\ArraySlice.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Renderer2D.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\UpscalePass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\CopyCameraSortingLayerPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowMesh2D.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowShape2D.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\Renderer2DRendergraph.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DShape.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\PixelPerfectBackgroundPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\UTess2D\Tessellator.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\Utility\LightBatch.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\AssemblyInfo.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\DrawNormal2DPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\DrawShadow2DPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowCaster2D.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DCullResult.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowUtility.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowShape2DProvider.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\UTess2D\UTess.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Renderer2DData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DAuthoring.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DBlendStyle.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\Render2DLightingPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowRendering.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShape2DProvider_SpriteRenderer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShape2DProvider_SpriteSkin.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2D.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowEdge.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShapeProvider2D_Utility.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\CopyCameraSortingLayerPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowMesh2D.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\Renderer2DRendergraph.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\PixelPerfectBackgroundPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\UTess2D\Tessellator.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\Utility\RendererLighting.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShape2DProvider_Collider.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\DrawNormal2DPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\IEdgeStore.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\PixelPerfectCamera.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowCasterGroup2D.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Renderer2DDataAuthoring.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\UTess2D\PlanarGraph.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\Utility\Light2DLookupTexture.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\DrawShadow2DPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowCaster2D.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\EdgeDictionary.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DManager.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Passes\IRenderPass2D.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DCullResult.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\PixelPerfectCameraInternal.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\Providers\ShadowShape2DProvider_SpriteShape.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Rendergraph\DrawLight2DPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowUtility.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\VertexDictionary.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Light2DPoint.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Shadows\ShadowProvider\ShadowShape2DProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.unity.render-pipelines.universal\Runtime\2D\Unity.RenderPipelines.Universal.2D.Runtime.asmdef" />
@@ -600,6 +600,10 @@
       <HintPath>Assets\Effect\FX Quest\Editor\FX Quest.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="LiteDB">
+      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\litedb.5.0.16\lib\netstandard1.3\LiteDB.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
@@ -664,6 +668,14 @@
       <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Markdig">
+      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Markdig.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Dependencies\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="BehaviorDesigner.Runtime">
       <HintPath>Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -698,6 +710,10 @@
     </Reference>
     <Reference Include="TexturePackerImporter">
       <HintPath>Assets\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UltraLiteDB">
+      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\Plugins\UltraLiteDB.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JMOAssets">
