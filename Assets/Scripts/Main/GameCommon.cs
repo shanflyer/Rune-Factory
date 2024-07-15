@@ -1174,6 +1174,7 @@ public static class DataPath
         {typeof(ObjPackageAnimationData),"Data/ObjPackageAnimationData" },
         {typeof(BuffData),"Data/BuffData" },
         {typeof(NPCTaskScheduleData),"Data/NPCTaskScheduleData" },
+        {typeof(ZeroInitDataList),"Data/ZeroInitDataList" },
         {typeof(TaskScheduleModelData),"Data/TaskScheduleModelData/TaskScheduleModelDataList" }
     };
 

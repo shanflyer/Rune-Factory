@@ -5,6 +5,11 @@ using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
 [Serializable]
+public class StringListDictionary : SerializableDictionary<string, List<string>>
+{
+
+}
+[Serializable]
 public class IntTaskScheduleModelDataDictionary : SerializableDictionary<int, TaskScheduleModelData>
 {
 

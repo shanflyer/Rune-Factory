@@ -252,6 +252,10 @@ public class NPC :  IReferenceData
     private bool behaviorCanBreak = false;
     void ResetBehaviorState(Behavior behavior)
     {
+        if (SingletonType.Cleared)
+        {
+            return;
+        }
         endBehavior = true;
         behaviorCanBreak = false;
         var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior, out behaviorCanBreak);
@@ -304,16 +308,24 @@ public class NPC :  IReferenceData
     }
     public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak)
     {
-        if (nPCTaskScheduleTimeList != null)
+        try
         {
-            var data = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
-            if (data != null)
+            if (nPCTaskScheduleTimeList != null)
             {
-                loopBehavior = data.loopBehavior;
-                behaviorCanBreak = data.canBreak;
-                return data.externalBehavior;
+                var data = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
+                if (data != null)
+                {
+                    loopBehavior = data.loopBehavior;
+                    behaviorCanBreak = data.canBreak;
+                    return data.externalBehavior;
+                }
             }
         }
+        catch
+        {
+
+        }
+       
        
         loopBehavior = false;
         behaviorCanBreak = false;
