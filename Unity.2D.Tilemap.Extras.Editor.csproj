@@ -61,18 +61,18 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.7f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\RuleOverrideTile\AdvancedRuleOverrideTileEditor.cs" />
-    <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Brushes\GameObjectBrush\GameObjectBrush.cs" />
-    <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Brushes\GroupBrush\GroupBrush.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Brushes\LineBrush\LineBrush.cs" />
+    <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\RuleOverrideTile\AdvancedRuleOverrideTileEditor.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\HexagonalRuleTile\HexagonalRuleTileEditor.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\RuleTile\RuleTileEditor.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Brushes\RandomBrush\RandomBrush.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Menu\CustomRuleTileMenu.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\RuleOverrideTile\PopulateRuleOverrideTileWizard.cs" />
+    <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Brushes\GameObjectBrush\GameObjectBrush.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\IsometricRuleTile\IsometricRuleTileEditor.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\RuleOverrideTile\RuleOverrideTileEditor.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Tiles\AnimatedTile\AnimatedTileEditor.cs" />
+    <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Brushes\GroupBrush\GroupBrush.cs" />
     <Compile Include="Packages\com.unity.2d.tilemap.extras\Editor\Menu\MenuItemOrder.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -567,10 +567,6 @@
       <HintPath>Assets\Effect\FX Quest\Editor\FX Quest.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="LiteDB">
-      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\litedb.5.0.16\lib\netstandard1.3\LiteDB.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
@@ -635,14 +631,6 @@
       <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Markdig">
-      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Markdig.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Dependencies\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="BehaviorDesigner.Runtime">
       <HintPath>Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -677,10 +665,6 @@
     </Reference>
     <Reference Include="TexturePackerImporter">
       <HintPath>Assets\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UltraLiteDB">
-      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\Plugins\UltraLiteDB.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JMOAssets">

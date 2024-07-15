@@ -61,56 +61,113 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.7f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ColorAdjustments.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\ScreenSpaceAmbientOcclusionPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalEntityManager.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ScreenSpaceLensFlare.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\RawColorHistory.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RTHandleUtils.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\ScreenSpace\DecalScreenSpaceRenderPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\VolumeRequiresRendererFeatures.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalCameraHistory.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ForwardLights.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalCameraData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\GBufferPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\LightMinMaxZJob.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ShadowUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\FinalBlitPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalAdditionalCameraData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ShadowsMidtonesHighlights.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\DecalRendererFeature.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\SpaceFillingCurves.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\TilingJob.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugDisplaySettingsMaterial.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Settings\URPDefaultVolumeProfileSetting.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Data\UniversalRenderPipelineAsset.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\StpHistory.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\PaniniProjection.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderPipelineGlobalSettings.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DBuffer\DBufferDepthCopyPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalResourceData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\StencilUsage.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ComponentUtility.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\HDRDebugViewPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\NormalReconstruction.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\DepthOfField.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\DeferredPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugRenderSetup.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\PostProcessUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderTargetBufferSystem.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\ProbeVolumeDebugPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Memory\PinnedArray.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Settings\RenderGraphSettings.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\MotionVectors.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Data\UniversalRenderPipelineAssetPrefiltering.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\SplitToning.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\ScreenSpaceAmbientOcclusion.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\TaaHistory.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalPostProcessingData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\Bloom.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalShadowData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugDisplaySettingsRendering.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\SupportedOnRenderer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineDebugShaders.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalUpdateCullingGroupSystem.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\RawDepthHistory.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\PostProcessPassRenderGraph.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\FullScreenPassRendererFeature.migration.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderPipelineRenderGraph.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\Renderer2DResources.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\WhiteBalance.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Settings\URPShaderStrippingSetting.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DecalProjector.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\ScriptableRenderPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineEditorShaders.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderGraph\RenderGraphGraphicsAutomatedTests.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Memory\BuddyAllocator.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\LiftGammaGain.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\AdditionalLightsShadowAtlasLayout.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Deprecated.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\ColorGradingLutPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\TileRangeExpansionJob.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\TemporalAA.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\VFXGraph\Utility\PropertyBinders\URPCameraBinder.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineEditorMaterials.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalUpdateCachedSystem.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\Vignette.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\Universal2DResourceData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ShaderUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Documentation.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\InvokeOnRenderObjectCallbackPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\StpUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderingUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\SampleCount.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\UniversalRenderPipelineDebugDisplaySettings.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\FilmGrain.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\MotionBlur.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ColorLookup.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalChunk.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\TileSize.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\DrawSkyboxPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\LightCookieManager.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\ScreenSpaceShadows.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ShaderBitArray.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalRenderingData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ScriptableRendererFeature.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRendererDebug.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\TransparentSettingsPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\XR\XRSystemUniversal.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DecalPreviewPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\CopyColorPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\MotionVectorRenderPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalCreateDrawCallSystem.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\RenderObjectsPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ChromaticAberration.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\Tonemapping.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderPipelineCore.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\IntermediateTextureMode.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ForwardRendererData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalResourceBase.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\DrawScreenSpaceUIPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Data\PostProcessData.cs" />
@@ -119,88 +176,12 @@
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderPipeline.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\DrawObjectsPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ColorCurves.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineRuntimeTextures.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\PostProcessPasses.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugDisplaySettingsLighting.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ShadowCulling.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\LensDistortion.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\XROcclusionMeshPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ReflectionProbeManager.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\DepthNormalOnlyPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderingLayerUtils.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineRuntimeShaders.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\SceneViewDrawMode.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineRuntimeXRResources.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderTargetHandle.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Data\RenderStateData.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugHandler.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\XR\XRPassUniversal.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRendererResources.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\RenderObjects.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ChannelMixer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DBuffer\DBufferRenderPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ScriptableRendererData.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\DeferredLights.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ColorAdjustments.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ScreenSpaceLensFlare.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\RawColorHistory.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\ScreenSpace\DecalScreenSpaceRenderPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\VolumeRequiresRendererFeatures.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalCameraData.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\GBufferPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ShadowUtils.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ShadowsMidtonesHighlights.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugDisplaySettingsMaterial.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Settings\URPDefaultVolumeProfileSetting.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Data\UniversalRenderPipelineAsset.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\StpHistory.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\PaniniProjection.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderPipelineGlobalSettings.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalResourceData.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ComponentUtility.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\HDRDebugViewPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\NormalReconstruction.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugRenderSetup.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\PostProcessUtils.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Settings\RenderGraphSettings.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\SplitToning.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\ScreenSpaceAmbientOcclusion.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\TaaHistory.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugDisplaySettingsRendering.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\SupportedOnRenderer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineDebugShaders.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalUpdateCullingGroupSystem.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\RawDepthHistory.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\PostProcessPassRenderGraph.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\FullScreenPassRendererFeature.migration.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderPipelineRenderGraph.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\Renderer2DResources.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Settings\URPShaderStrippingSetting.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DecalProjector.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineEditorShaders.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Memory\BuddyAllocator.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\ColorGradingLutPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\VFXGraph\Utility\PropertyBinders\URPCameraBinder.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalUpdateCachedSystem.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\Vignette.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\Universal2DResourceData.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\UniversalRenderPipelineDebugDisplaySettings.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ColorLookup.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\TileSize.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\LightCookieManager.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\ScreenSpaceShadows.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ShaderBitArray.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalRenderingData.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ScriptableRendererFeature.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\XR\XRSystemUniversal.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DecalPreviewPass.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ChromaticAberration.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRenderPipelineCore.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\IntermediateTextureMode.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ForwardRendererData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRendererRenderGraph.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\NativeRenderPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineRuntimeTextures.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\PostProcessPasses.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Memory\Fixed2.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugDisplaySettingsLighting.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\History\SingleHistoryBase.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\UniversalRenderPipelineVolumeDebugSettings.deprecated.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalUpdateCulledSystem.cs" />
@@ -209,27 +190,46 @@
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\AssemblyInfo.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalSkipCulledSystem.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalRendererData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ShadowCulling.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\LensDistortion.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\XROcclusionMeshPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ReflectionProbeManager.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\DepthNormalOnlyPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\UniversalRenderPipelineDebugDisplayStats.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderingLayerUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\UniversalRenderPipelineVolumeDebugSettings.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineRuntimeShaders.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\SceneViewDrawMode.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\InclusiveRange.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\UniversalAdditionalLightData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ScriptableRenderer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\MainLightShadowCasterPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRenderPipelineRuntimeXRResources.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\ReflectionProbeMinMaxZJob.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderTargetHandle.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Data\UniversalRenderPipelineAsset.DefaultResources.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalDrawSystem.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Data\RenderStateData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Debug\DebugHandler.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\FrameData\UniversalLightData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\Entities\DecalDrawSystem.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\PostProcessPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\CapturePass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\FullScreenPassRendererFeature.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Tiling\ZBinningJob.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\XR\XRPassUniversal.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\DepthOnlyPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\ScreenSpace\DecalGBufferRenderPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RenderPipelineResources\UniversalRendererResources.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\NoAllocUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DBuffer\DecalForwardEmissivePass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DecalDrawErrorRenderPass.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\CopyDepthPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\RendererFeatures\RenderObjects.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Overrides\ChannelMixer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DBuffer\DBufferRenderPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\ScriptableRendererData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\Passes\AdditionalLightsShadowCasterPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.universal\Runtime\DeferredLights.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.unity.render-pipelines.universal\Runtime\Decal\DBuffer\DBufferClear.shader" />
@@ -720,10 +720,6 @@
       <HintPath>Assets\Effect\FX Quest\Editor\FX Quest.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="LiteDB">
-      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\litedb.5.0.16\lib\netstandard1.3\LiteDB.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
@@ -788,14 +784,6 @@
       <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Markdig">
-      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Markdig.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Dependencies\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="BehaviorDesigner.Runtime">
       <HintPath>Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -830,10 +818,6 @@
     </Reference>
     <Reference Include="TexturePackerImporter">
       <HintPath>Assets\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UltraLiteDB">
-      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\Plugins\UltraLiteDB.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JMOAssets">

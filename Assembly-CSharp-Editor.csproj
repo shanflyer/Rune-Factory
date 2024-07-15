@@ -73,14 +73,22 @@
     <Analyzer Include="D:\MyGame\Rune Factory_hub\Library\PackageCache\com.unity.entities\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\Common\SpriteRendererEditor.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\FlareEditorHelper.cs" />
     <Compile Include="Assets\Editor\Map\MapEditor.cs" />
     <Compile Include="Assets\Editor\Common\MeshRendererEditor.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareBatchInspector.cs" />
     <Compile Include="Assets\codeandweb.com\Editor\UIImageSetSizeAndPivot.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\FlareJson.cs" />
+    <Compile Include="Assets\Behavior Designer\Editor\ExternalBehaviorTreeInspector.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareExporter.cs" />
     <Compile Include="Assets\Editor\Common\CommonItem.cs" />
+    <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
     <Compile Include="Assets\Editor\Map\WorldMapEditor.cs" />
+    <Compile Include="Assets\Editor\Map\EditorCoordinate.cs" />
+    <Compile Include="Assets\Editor\Common\CommonObjData.cs" />
+    <Compile Include="Assets\SerializableDictionary\Editor\SerializableDictionaryPropertyDrawer.cs" />
+    <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
     <Compile Include="Assets\Editor\Map\MapItemEditor.cs" />
     <Compile Include="Assets\SerializableDictionary\Example\Editor\UserSerializableDictionaryPropertyDrawers.cs" />
     <Compile Include="Assets\Editor\Character\CharacterEditor.cs" />
@@ -92,22 +100,14 @@
     <Compile Include="Assets\codeandweb.com\Editor\SpritesheetImporter.cs" />
     <Compile Include="Assets\Editor\Tool\PolyColliderToMesh.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\StackedConditionalDrawer.cs" />
-    <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\IntSliderDrawer.cs" />
-    <Compile Include="Assets\Editor\Common\ExportAssetBundles.cs" />
-    <Compile Include="Assets\Editor\Common\UnityEditorWindowController.cs" />
-    <Compile Include="Assets\Editor\Common\SpriteRendererEditor.cs" />
-    <Compile Include="Assets\Effect\ProFlares\Editor\FlareEditorHelper.cs" />
-    <Compile Include="Assets\Behavior Designer\Editor\ExternalBehaviorTreeInspector.cs" />
-    <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
-    <Compile Include="Assets\Editor\Map\EditorCoordinate.cs" />
-    <Compile Include="Assets\Editor\Common\CommonObjData.cs" />
-    <Compile Include="Assets\SerializableDictionary\Editor\SerializableDictionaryPropertyDrawer.cs" />
-    <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
     <Compile Include="Assets\Editor\Common\CommonToolEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\FloatSliderDrawer.cs" />
+    <Compile Include="Assets\Behavior Designer\Editor\Object Drawers\IntSliderDrawer.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareAtlasInspector.cs" />
+    <Compile Include="Assets\Editor\Common\ExportAssetBundles.cs" />
     <Compile Include="Assets\Effect\JMO Assets\Cartoon FX Easy Editor\Editor\CFXEasyEditor.cs" />
     <Compile Include="Assets\Editor\Common\MyEditor.cs" />
+    <Compile Include="Assets\Editor\Common\UnityEditorWindowController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Effect\FX Quest\Editor\FX Quest.dll" />
@@ -1340,16 +1340,16 @@
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.SpatialTracking">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.SpatialTracking.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Entities.Build">
       <HintPath>Library\ScriptAssemblies\Unity.Entities.Build.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.Purchasing.SecurityCore">
       <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityCore.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SpatialTracking">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.SpatialTracking.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Services.Core.Analytics">
@@ -1702,13 +1702,13 @@
       <Project>{520C487E-2AE7-9DB9-FF07-ECE2F6E69CDE}</Project>
       <Name>TextMeshProEffect</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.Core.Editor.Shared.csproj">
-      <Project>{D6E45C9D-E942-4791-3B18-A55D26CB875D}</Project>
-      <Name>Unity.RenderPipelines.Core.Editor.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{E63B3365-6AB8-BAF8-B2AE-6AA883D92DF8}</Project>
       <Name>UnityEngine.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Editor.Shared.csproj">
+      <Project>{D6E45C9D-E942-4791-3B18-A55D26CB875D}</Project>
+      <Name>Unity.RenderPipelines.Core.Editor.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="TextMeshProEffect.Editor.csproj">
       <Project>{29894FAA-A0CD-6392-BE47-1B7C19C19DA5}</Project>

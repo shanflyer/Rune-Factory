@@ -61,14 +61,27 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.7f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\TimedScope.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\BoolParameterDrawer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreEditorDrawers.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\RenderPipelineResourcesEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\LookDevRenderer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\ComparisonGizmoState.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\PropertyDrawers\DefaultVolumeProfileSettingsPropertyDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Properties\AdvancedPropertiesObserver.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\EnvironmentLibrary.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ContextualMenuDispatcher.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumesPreferences.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeGizmoDrawer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeSubdivisionResult.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\Compositor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RenderGraph\RenderGraphViewer.SidePanel.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ICoreRenderPipelinePreferencesProvider.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderStrippingWatcher.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ISerializedLight.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightUnit\LightUnitSliderSettings.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\SettingsStrippers\GPUResidentDrawerResourcesStripper.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.Dilate.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\VolumeProfileOverridesAnalytic.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightUnit\LightUnitSlider.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeBuildProcessor.cs" />
@@ -76,180 +89,167 @@
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\EditorWindowWithHelpButton.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\FloatParameterDrawer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\QuaternionPropertyDrawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeBakingSetEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbePlacement.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\MenuManager.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeSubdivisionContext.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\IESReader.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\IVariantStripper.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeMenuItems.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Rendering.Skin.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\SerializedDataParameter.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightUI.Drawers.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Gizmo\GizmoUtility.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderExtensions.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.PhysicalCamera.Skin.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\EditorPrefBool.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SampleDependencyImportSystem\SampleDependencyImporter.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\MaterialHeaderScopeList.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Output.Drawers.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreEditorUtils.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Output.Skin.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\SceneRenderPipelineEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.RenderingLayers.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SampleDependencyImportSystem\SampleList.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeParameterDrawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RelativePropertiesDrawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Environment.Skin.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\Stage.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\PropertyDrawers\ShaderStrippingSettingsPropertyDrawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\Shadow\ShadowCascadeGUI.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\EditorMaterialQuality.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\CoreBuildData.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.VirtualOffset.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\InspectorCurveEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderPreprocessor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SpeedTree9MaterialUpgrader.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\MaterialHeaderScopeItem.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\Environment.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PostProcessing\LensFlareEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\Vector4ParameterDrawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\RenderGraphViewerLifetimeAnalytic.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\ColorParameterDrawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeProfileEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\RenderPipelineGraphicsSettingsAnalytics.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentProvider.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Gizmo\HierarchicalSphere.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\EditorPrefBoolFlags.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PostProcessing\LensFlareEditorUtils.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\DebugState.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderStrippingReport.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightAnchorHandles.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\ISerializedCamera.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\ShaderStrippers\SRPDisabledComputeShaderVariantStripper.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\SerializedBitArray.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ExpandedState.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\DisplayWindow.EnvironmentLibrarySidePanel.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SerializedPropertyExtension.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\StringExtensions.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumesOptionsEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\RenderPipelineGlobalSettingsProvider.deprecated.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.SkyOcclusion.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\LocalizationHelper.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\CoreLightEditorUtilities.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\ComparisonGizmoController.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\DropArea.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Rendering.Drawers.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\DebugUIDrawer.Builtins.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Properties\AdditionalPropertiesState.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\SettingsProviderGUIScope.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeUI.Drawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CommandBuffers\CommandBufferGenerator\CommandBufferGenerator.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Environment.Drawers.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\IESImporter.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\CorePreprocessBuild.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolumeMenuItems.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\TimedScope.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\BoolParameterDrawer.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\RenderPipelineResourcesEditor.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\ComparisonGizmoState.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Properties\AdvancedPropertiesObserver.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\EnvironmentLibrary.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ContextualMenuDispatcher.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumesPreferences.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RenderGraph\RenderGraphViewer.SidePanel.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderStrippingWatcher.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ISerializedLight.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\SettingsStrippers\GPUResidentDrawerResourcesStripper.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.Dilate.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeResourceStripper.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PropertyFetcher.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightAnchorEditorTool.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\VolumeProfileUsageAnalytic.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\CameraController.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeBakingSetEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbePlacement.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\MenuManager.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeSubdivisionContext.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\IESReader.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\RenderPipelineGlobalSettingsUI.Drawers.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\DebugUIDrawer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeProfileUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\Context.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\AssemblyInfo.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\IESObject.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\IVariantStripper.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\DefaultVolumeProfileEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\IESEngine.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeMenuItems.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\SerializedProbeAdjustmentVolume.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Rendering.Skin.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\SerializedDataParameter.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\MaterialHeaderScope.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Drawers.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightUnit\TemperatureSlider.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightUI.Drawers.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Gizmo\GizmoUtility.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderExtensions.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.PhysicalCamera.Skin.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\EditorPrefBool.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SampleDependencyImportSystem\SampleDependencyImporter.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreEditorStyles.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\MaterialHeaderScopeList.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RenderGraph\RenderGraphUtilsResourceStripper.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Output.Drawers.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightAnchorEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\IntParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreEditorUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderGenerator\ShaderGeneratorMenu.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ProjectorEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PostProcessing\LensFlareDataSRPEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Output.Skin.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\SceneRenderPipelineEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.RenderingLayers.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\BuildTargetAnalytic.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\LookDev.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RenderGraph\RenderGraphViewer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SampleDependencyImportSystem\SampleList.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RelativePropertiesDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Environment.Skin.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.Serialization.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightPlacementTool.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\Stage.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeLightingTab.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\PropertyDrawers\ShaderStrippingSettingsPropertyDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\Shadow\ShadowCascadeGUI.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RenderGraph\RenderGraphViewer.PanManipulator.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\EditorMaterialQuality.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\CoreBuildData.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\CameraState.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.Invalidation.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeUI.Skin.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CustomRenderTexture\CustomRenderTextureMenuItem.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\DisplayWindow.DebugSidePanel.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.VirtualOffset.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\DebugWindow.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\InspectorCurveEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderPreprocessor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeProfileFactory.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.PhysicalCamera.Drawers.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SpeedTree9MaterialUpgrader.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Gizmo\HierarchicalBox.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\SerializedBitArray.deprecated.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\MaterialHeaderScopeItem.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeBakingProcessSettingsDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\Environment.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\UIFoldoutEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildTargetExtensions.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PostProcessing\LensFlareEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\Vector4ParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\RenderGraphViewerLifetimeAnalytic.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\ColorParameterDrawer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Skin.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RenderGraph\RenderGraphViewer.PassTitleLabel.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeProfileEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\MaterialUpgrader.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\ToolbarRadio.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\RenderPipelineGlobalSettingsEndNameEditAction.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\SerializedProbeVolume.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\RenderPipelineGraphicsSettingsAnalytics.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeAdjustmentVolumeEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentProvider.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeAdditionalGizmo.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CameraEditorUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PostProcessing\LensFlareComponentSRPEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Gizmo\HierarchicalSphere.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\EditorPrefBoolFlags.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PostProcessing\LensFlareEditorUtils.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\DebugState.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.LightTransport.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\DebugManagerWidgetUsedAnalytic.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderGenerator\ShaderTypeGeneration.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Properties\AdvancedProperties.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\FilterWindow.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderStripping\ShaderStrippingReport.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightAnchorHandles.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\ISerializedCamera.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\ShaderStrippers\SRPDisabledComputeShaderVariantStripper.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RemoveComponentUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\IESImporterEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\SerializedBitArray.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ExpandedState.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\DisplayWindow.EnvironmentLibrarySidePanel.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ShaderGenerator\CSharpToHLSL.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SerializedPropertyExtension.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightIntensitySlider.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\StringExtensions.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\DecalPreferences.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumesOptionsEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\VolumePriorityUsageAnalytic.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\RenderPipelineGlobalSettingsProvider.deprecated.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.SkyOcclusion.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\PropertyDrawers\RenderPipelineGraphicsSettingsContainerPropertyDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Utilities\LocalizationHelper.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\DebugManagerWindowLifetimeAnalytic.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\RemoveAdditionalDataUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Deprecated.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\CoreLightEditorUtilities.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\DisplayWindow.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\LightUI.Skin.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\ComparisonGizmoController.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\LookDev\DropArea.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Rendering.Drawers.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentListEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\DebugUIDrawer.Builtins.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Properties\AdditionalPropertiesState.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreRenderPipelinePreferences.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\SettingsProviderGUIScope.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentCopyPaste.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeVolumeUI.Drawer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Settings\DefaultVolumeProfileCategories.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\TextureParameterDrawer.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SpeedTree8MaterialUpgrader.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Debugging\DebugUIHandlerCanvasEditor.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.Placement.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Analytics\AnalyticsUtils.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CommandBuffers\CommandBufferGenerator\CommandBufferGenerator.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\AssetReimportUtils.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\AssetDatabaseHelper.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolume\ProbeGIBaking.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Camera\CameraUI.Environment.Drawers.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\IESImporter.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Material\MaterialEditorExtension.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Editor\HeaderFoldout.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\BuildProcessors\CorePreprocessBuild.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Lighting\ProbeVolumeMenuItems.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.unity.render-pipelines.core\Editor\UXML\RenderGraphViewer.uxml" />
@@ -781,10 +781,6 @@
       <HintPath>Assets\Effect\FX Quest\Editor\FX Quest.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="LiteDB">
-      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\litedb.5.0.16\lib\netstandard1.3\LiteDB.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
@@ -849,14 +845,6 @@
       <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Markdig">
-      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Markdig.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>Library\PackageCache\com.unity.muse.chat\Editor\Scripts\Markup\Markdig\Dependencies\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="BehaviorDesigner.Runtime">
       <HintPath>Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -891,10 +879,6 @@
     </Reference>
     <Reference Include="TexturePackerImporter">
       <HintPath>Assets\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UltraLiteDB">
-      <HintPath>Library\PackageCache\com.unity.muse.common\ThirdParty\Plugins\UltraLiteDB.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JMOAssets">
