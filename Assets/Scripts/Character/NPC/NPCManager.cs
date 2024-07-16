@@ -55,10 +55,11 @@ public class TempCharacter : Character
 
     public int targetArea { get; private set; }
     public int nowArea { get; private set; }
-    
-    public void SetTargetArea(int area)
+    public int2 targetCoordinate { get; private set; }
+    public void SetTargetArea(int area,int2 target)
     {
         targetArea = area;
+        targetCoordinate = target;
     }
     public void EndMove()
     {

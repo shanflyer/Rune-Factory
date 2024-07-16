@@ -168,8 +168,18 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
 
         GameActionManager.instance.AddListener<TempCharacterTalk>(TempCharacterTalk);
+        GameActionManager.instance.AddListener<SetTempCharacterTarget>(SetTempCharacterTarget);
     }
-
+    void SetTempCharacterTarget(SetTempCharacterTarget setTempCharacterTarget)
+    {
+        if(characters.TryGetValue(setTempCharacterTarget.characterId,out var character))
+        {
+            if(character is TempCharacter tempCharacter)
+            {
+                tempCharacter.SetTargetArea(setTempCharacterTarget.area, setTempCharacterTarget.targetCoordinate);
+            }
+        }
+    }
     void TempCharacterTalk(TempCharacterTalk tempCharacterTalk)
     {
         Character character = GetCharacter(tempCharacterTalk.characterId);
@@ -618,6 +628,10 @@ public class CharacterManager : Singleton<CharacterManager>
 
         //character.templevel = level;
         RefreshNpcRuntimeObj(character);
+        if (creatTempCharacter.setValue != null)
+        {
+            creatTempCharacter.setValue(character.instanceId);
+        }
     }
 
     private async void CreatCharacter(CreatCharacter creatCharacter)

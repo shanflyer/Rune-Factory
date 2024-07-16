@@ -326,6 +326,17 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 prewarm=displayMapRoomData.tempNpcPrewarm
             };
             GameActionManager.instance.QueueAction(startCreatTempCharacter);
+            
+            for(int i = 0; i < displayMapRoomData.specialNpcBehaviorAreas.Count; i++)
+            {
+                var area = displayMapRoomData.specialNpcBehaviorAreas[i];
+                StartCreatSpecialTempCharacter startCreatSpecialTempCharacter = new StartCreatSpecialTempCharacter
+                {
+                    creatDataId = area.tempCreatId,
+                    gridRange = new int4(area.grids[0] + area.pos.x, area.grids[1] + area.pos.y, area.grids[2] + area.pos.x, area.grids[3] + area.pos.y)
+                };
+                GameActionManager.instance.QueueAction(startCreatSpecialTempCharacter);
+            }
         }
         else
         {

@@ -3,6 +3,19 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+public struct SetTempCharacterTarget : GameAction
+{
+    public int characterId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int area;
+    public int2 targetCoordinate;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null,
+        SetValue setValue = null, bool immediately = false)
+    { 
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TempCharacterTalk : GameAction
 {
     public int characterId; 
@@ -556,7 +569,19 @@ public struct SetTempCharacterUpdata : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct StartCreatSpecialTempCharacter : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int creatDataId;
+    public int4 gridRange;
+    public int2 areaKey;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    { 
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct StartCreatTempCharacter : GameAction
 {
     public SetValue setValue { get; set; }

@@ -41,6 +41,15 @@ public class NpcBehaviorArea
     public List<int> grids = new List<int>();
     public BehaviorAreaType behaviorAreaType;
 }
+[Serializable]
+public class SpecoalNpcBehaviorArea
+{
+    public int Name;
+    public int2 pos;
+    public List<int> grids = new List<int>();
+    public int tempCreatId;
+    public Direction fixedDirection;
+}
 
 public class MapRoomData : ScriptableObject, IGameData
 {
@@ -62,6 +71,7 @@ public class MapRoomData : ScriptableObject, IGameData
     public bool autoCreatTempNpc;
     public bool tempNpcPrewarm;
     public List<NpcBehaviorArea> npcBehaviorAreas = new List<NpcBehaviorArea>();
+    public List<SpecoalNpcBehaviorArea> specialNpcBehaviorAreas = new List<SpecoalNpcBehaviorArea>();
 
     public bool CheckBoundary(int2 coordinate)
     {

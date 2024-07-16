@@ -34,7 +34,7 @@ public class GetRandomMapCell : Action
             Character character = CharacterManager.instance.GetCharacter(characterId.Value);
             if(character is TempCharacter tempCharacter)
             {
-                tempCharacter.SetTargetArea(areaId.Value);
+                tempCharacter.SetTargetArea(areaId.Value,cell.xy);
             }
         }
 

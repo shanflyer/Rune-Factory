@@ -29,8 +29,52 @@ public struct TestJob : IJobParallelFor
     }
 }
 
+
+public struct TestStruct
+{
+    public List<int> list;
+}
 public class Test : MonoBehaviour
 {
+    public TestStruct testStruct;
+
+    public void TestStructAction()
+    {
+        List<TestStruct> testStructs = new List<TestStruct>();
+        testStruct = new TestStruct
+        {
+            list = new List<int>
+            {
+                1,2,3,4
+            }
+        };
+        testStructs.Add(testStruct);
+        string log = "zero:";
+        for (int i = 0; i < testStruct.list.Count; i++)
+        {
+            log+=(testStruct.list[i])+",";
+        }
+        Debug.Log(log);
+
+        var t = testStructs[0];
+        t.list.Add(999);
+        log = "add:";
+        for (int i = 0; i < testStructs[0].list.Count; i++)
+        {
+            log += (testStructs[0].list[i]) + ",";
+        }
+        Debug.Log(log);
+        var t1 = testStructs[0];
+        t1.list.RemoveAt(2);
+        log = "remove:";
+        for (int i = 0; i < testStructs[0].list.Count; i++)
+        {
+            log += (testStructs[0].list[i]) + ",";
+        }
+        Debug.Log(log);
+    }
+
+
     public List<int> testData = new List<int>();
 
     public List<int2> testInt2 = new List<int2>();
@@ -173,6 +217,10 @@ public class TestEditor : Editor
         {
             test.InitDic();
             test.TestDic();
+        }
+        if (GUILayout.Button("≤‚ ‘struct"))
+        {
+            test.TestStructAction(); 
         }
     }
 }
