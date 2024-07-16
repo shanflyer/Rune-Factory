@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEditor;
@@ -109,6 +110,10 @@ public class CommonToolEditor : MyEditor
         {
             ReSaveImage();
         }
+        if (GUILayout.Button("标准资源"))
+        {
+            AddReSaveImage();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -134,23 +139,95 @@ public class CommonToolEditor : MyEditor
         Dictionary<string,int> fileOrders=new Dictionary<string,int>();
         foreach (var file in files)
         {
-            var str = file.Name.Split('.')[0];
+            var str = file.FullName.Split('.')[0];
             var strs=str.Split("_");
-            var key = str.Replace(strs[strs.Length - 1], "");
+            var key = strs[0];
             if(!fileOrders.TryGetValue(key,out var order))
             {
-                order = 1;
-                fileOrders.Add(key, 1);
+                order = 0;
+                fileOrders.Add(key, 0);
             }
             else
             {
                 order++;
                 fileOrders[key] = order;
             }
+            int A = order / 3;
+            int B = order % 3+1;
+            string animationName="";
+            switch (A)
+            {
+                case 0:
+                    animationName = "下";
+                    break;
+                case 1:
+                    animationName = "右";
+                    break;
+                case 2:
+                    animationName = "上";
+                    break;
+            }
 
+            File.Move(file.FullName, $"{strs[0]}_{animationName}_{B.ToString("00")}.png");
 
-            File.Move(file.FullName, file.FullName.Replace(strs[strs.Length - 1], order.ToString("00")));
-
+        }
+    }
+    private void AddReSaveImage()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(sourcePath);
+        var files = directoryInfo.GetFiles("*.png");
+        Dictionary<string,Dictionary<string,List<FileInfo>>> fileOrders = new Dictionary<string, Dictionary<string, List<FileInfo>>>();
+        foreach (var file in files)
+        {
+            var str = file.Name.Split('.')[0];
+            var strs = str.Split("_");
+            var key = strs[0];
+            var dir = strs[1];
+            if(!fileOrders.TryGetValue(key,out var dirDic))
+            {
+                dirDic = new Dictionary<string, List<FileInfo>>();
+                fileOrders.Add(key,dirDic);
+            }
+            if(!dirDic.TryGetValue(dir,out var fileInfos))
+            {
+                fileInfos = new List<FileInfo>();
+                dirDic.Add(dir, fileInfos);
+            }
+            fileInfos.Add(file);
+        }
+        Dictionary<string, int> addDatas = new Dictionary<string, int>
+        {
+            {"通用动作",0},{"托举",0},{"坐",2},{"单手",2},
+        };
+        foreach(var d in fileOrders)
+        {
+            foreach(var add in addDatas)
+            {
+                if (add.Value > 0)
+                {
+                    foreach(var dir in d.Value)
+                    {
+                        var fileName = dir.Value[1].FullName;
+                        var strs = fileName.Split("\\");
+                        var path = fileName.Replace(strs[strs.Length-1], $"{d.Key}_{add.Key}_{dir.Key}_00.png");
+                        File.Copy(fileName, path);
+                    }
+                }
+                else
+                {
+                    foreach (var dir in d.Value)
+                    {
+                        for(int i = 0; i < dir.Value.Count; i++)
+                        {
+                            var fileName = dir.Value[i].FullName;
+                            var strs = fileName.Split("\\");
+                            var path = fileName.Replace(strs[strs.Length - 1], $"{d.Key}_{add.Key}_{dir.Key}_{(i+1).ToString("00")}.png");
+                            File.Copy(fileName, path,true);
+                        }
+                       
+                    }
+                }
+            }
         }
     }
     private void InitPlantAnimation()

@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fbba81da6ff9ef49b7acff0b2f4e6de, type: 3}
+  m_Name: 1002
+  m_EditorClassIdentifier: 
+  id: 1002
+  creatName: "\u5546\u5E97\u8857\u4EBA\u7FA4"
+  maxCharacterCount: 10
+  gameTimeKeyTempCharacterDic:
+    m_keys:
+    - minHour: 6
+      minMinute: 0
+      maxHour: 8
+      maxMinute: 0
+    - minHour: 8
+      minMinute: 0
+      maxHour: 17
+      maxMinute: 0
+    - minHour: 17
+      minMinute: 0
+      maxHour: 19
+      maxMinute: 0
+    - minHour: 19
+      minMinute: 0
+      maxHour: 23
+      maxMinute: 0
+    - minHour: 23
+      minMinute: 0
+      maxHour: 24
+      maxMinute: 0
+    - minHour: 0
+      minMinute: 0
+      maxHour: 2
+      maxMinute: 0
+    - minHour: 2
+      minMinute: 0
+      maxHour: 6
+      maxMinute: 0
+    m_values: 5cc300005dc300005ec300005fc3000060c3000061c3000000000000
+  gameTimeKeyIntDic:
+    m_keys:
+    - minHour: 6
+      minMinute: 0
+      maxHour: 8
+      maxMinute: 0
+    - minHour: 8
+      minMinute: 0
+      maxHour: 17
+      maxMinute: 0
+    - minHour: 17
+      minMinute: 0
+      maxHour: 19
+      maxMinute: 0
+    - minHour: 19
+      minMinute: 0
+      maxHour: 23
+      maxMinute: 0
+    - minHour: 23
+      minMinute: 0
+      maxHour: 24
+      maxMinute: 0
+    - minHour: 0
+      minMinute: 0
+      maxHour: 2
+      maxMinute: 0
+    - minHour: 2
+      minMinute: 0
+      maxHour: 6
+      maxMinute: 0
+    m_values:
+    - x: 8
+      y: 16
+    - x: 4
+      y: 8
+    - x: 6
+      y: 12
+    - x: 8
+      y: 16
+    - x: 16
+      y: 32
+    - x: 32
+      y: 64
+    - x: 600
+      y: 600

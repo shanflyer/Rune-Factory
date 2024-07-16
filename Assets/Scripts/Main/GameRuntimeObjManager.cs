@@ -69,8 +69,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         {
             parent = overrideParent;
         }
-         
-        if (!GetRuntimeObj(runtimeObjType,key, out var runtimeObj))
+        if (!GetRuntimeObj(runtimeObjType, key, out var runtimeObj))
         {
             runtimeObj = new RuntimeObj();
             runtimeObj.obj = GameObject.Instantiate(objPre, parent);
@@ -78,10 +77,18 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             runtimeObj.key = key;
         }
         runtimeObj.linkId = linkId;
-        var obj = runtimeObj.obj as Component;
-       
-        obj.transform.SetParent(parent, false); 
-        obj.gameObject.SetActive(isActive);
+        try
+        { 
+            var obj = runtimeObj.obj as Component; 
+            obj.transform.SetParent(parent, false);
+            obj.gameObject.SetActive(isActive);
+        }
+        catch(Exception e)
+        {
+            Debug.LogError(e);
+        }
+         
+        
         runtimeObj.use = true;
         return runtimeObj;
     }
@@ -119,7 +126,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             }
            
         }
-        runtimeObj = null;
+        //runtimeObj = null;
     }
 
     public void SetObjParent(string runtimeObjType, bool hide)

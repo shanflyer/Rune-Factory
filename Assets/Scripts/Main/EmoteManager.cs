@@ -1,15 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 
+public class EmoteRuntime
+{
+    public RuntimeObj runtimeObj;
+    public Action waitAction;
+
+    public void Recycle()
+    {
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+        GameTimerController.instance.StopWaitDeleyAction(waitAction);
+    }
+}
 public class EmoteManager : Singleton<EmoteManager>
 {
     private Animator emoteAnimator;
     private static string emoteObjPath = "Prefabs/Other/emote";
 
-    private Dictionary<int, RuntimeObj> characterEmoteRuntimes = new Dictionary<int, RuntimeObj>();
-    private Dictionary<int, RuntimeObj> itemEmoteRuntimes = new Dictionary<int, RuntimeObj>();
+    private Dictionary<int, EmoteRuntime> characterEmoteRuntimes = new Dictionary<int, EmoteRuntime>();
+    private Dictionary<int, EmoteRuntime> itemEmoteRuntimes = new Dictionary<int, EmoteRuntime>();
+
+
     public override async void Init()
     {
         base.Init();
@@ -22,7 +36,7 @@ public class EmoteManager : Singleton<EmoteManager>
     {
         if(itemEmoteRuntimes.TryGetValue(id,out var runtimeObj))
         {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+            runtimeObj.Recycle();
             itemEmoteRuntimes.Remove(id);
         }
     }
@@ -30,7 +44,7 @@ public class EmoteManager : Singleton<EmoteManager>
     {
         if (characterEmoteRuntimes.TryGetValue(id, out var runtimeObj))
         {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+            runtimeObj.Recycle();
             characterEmoteRuntimes.Remove(id);
         }
     }
@@ -44,38 +58,41 @@ public class EmoteManager : Singleton<EmoteManager>
 
     private async void ShowEmote(ShowEmote showEmote)
     {
-        RuntimeObj runtimeObj = null;
+        EmoteRuntime emoteRuntime=null;
         switch (showEmote.entityType)
         {
             case EntityType.角色:
-                if (!characterEmoteRuntimes.TryGetValue(showEmote.id,out runtimeObj))
+                if (!characterEmoteRuntimes.TryGetValue(showEmote.id,out emoteRuntime))
                 {
+                   
                     if (CharacterManager.instance.GetRuntimeCharacterObj(showEmote.id, out var characterRuntimeObj))
                     {
-                        runtimeObj = GetEmote(showEmote.emoteId, characterRuntimeObj.model);
-                        characterEmoteRuntimes[showEmote.id] = runtimeObj;
+                        emoteRuntime = new EmoteRuntime();
+                        emoteRuntime.runtimeObj = GetEmote(showEmote.emoteId, characterRuntimeObj.model);
+                        characterEmoteRuntimes[showEmote.id] = emoteRuntime;
                     }
                 } 
                 break;
 
             default:
 
-                if (!itemEmoteRuntimes.TryGetValue(showEmote.id, out runtimeObj))
-                {
+                if (!itemEmoteRuntimes.TryGetValue(showEmote.id, out emoteRuntime))
+                { 
                     if (WorldMapObjManager.instance.GetRuntimeMapItemObj(showEmote.id, out var itemRuntimeObj))
                     {
-                        runtimeObj = GetEmote(showEmote.emoteId, itemRuntimeObj.transform);
-                        itemEmoteRuntimes[showEmote.id] = runtimeObj;
+                        emoteRuntime = new EmoteRuntime();
+                        emoteRuntime.runtimeObj = GetEmote(showEmote.emoteId, itemRuntimeObj.transform);
+                        itemEmoteRuntimes[showEmote.id] = emoteRuntime;
                     }
                 }
                 break;
         }
-        if (runtimeObj== null)
+        if (emoteRuntime == null||emoteRuntime.runtimeObj==null)
         {
             return;
         }
         var emoteData = await GameDataManager.instance.GetAsyncData<EmoteData>(showEmote.emoteId);
-        Animator animator = runtimeObj.obj as Animator;
+        Animator animator = emoteRuntime.runtimeObj.obj as Animator;
         animator.transform.localPosition = new Vector3(emoteData.X * 0.01f, emoteData.Y * 0.01f, -emoteData.Y * 0.01f);
         var playableGraph = PlayableGraph.Create();
         var playableOutput = AnimationPlayableOutput.Create(playableGraph, "emote", animator);
@@ -85,14 +102,18 @@ public class EmoteManager : Singleton<EmoteManager>
 
         if (showEmote.showTime > 0)
         {
-            GameTimerController.instance.DeleyActionMain(showEmote.showTime, () =>
+            Action action =WaitStopEmote;
+            emoteRuntime.waitAction = action;
+            GameTimerController.instance.DeleyActionMain(showEmote.showTime, action);
+
+            void WaitStopEmote()
             {
-                if (runtimeObj.obj != null)
+                if (emoteRuntime.runtimeObj.obj != null)
                 {
                     playableGraph.Stop();
                 }
 
-                GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+                emoteRuntime.Recycle();
                 if (showEmote.entityType == EntityType.地图道具)
                 {
                     itemEmoteRuntimes.Remove(showEmote.id);
@@ -101,7 +122,7 @@ public class EmoteManager : Singleton<EmoteManager>
                 {
                     characterEmoteRuntimes.Remove(showEmote.id);
                 }
-            });
+            }
         }
         
     }
