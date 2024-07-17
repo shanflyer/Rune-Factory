@@ -69,16 +69,21 @@ public class CharacterManager : Singleton<CharacterManager>
     public const float updataMoveSpeed = 1f;
 
     private MyInstance myInstance;
-    private Dictionary<int, Character> characters = new Dictionary<int, Character>();
+    private MyDic<int, Character> characters = new MyDic<int, Character>();
     private Dictionary<int, int> characterDataToInstances = new Dictionary<int, int>();
     private HashSet<int> tempInstances = new HashSet<int>();
 
     public Player player;
     //private Vector2 playerMoveDirction;
 
+    void SetPlayerNeighboor()
+    {
+
+    }
+
     public List<Character> GetAllCharacters()
     {
-        return characters.Values.ToList();
+        return characters.GetValueList();
     }
 
     public int GetCharacterInstance()
@@ -358,7 +363,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
                     characterRuntionObjs.Remove(character);
 
-                    CreatCharacterObjAsync(character);
+                   await CreatCharacterObjAsync(character);
                 }
             }
         }
@@ -683,7 +688,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             characterDataToInstances.Add(character.dataId, character.instanceId);
         }
-        characters[character.instanceId] = character;
+        characters.TrySetValue(character.instanceId,character);
     }
 
     private void MapClickAction(object obj)
@@ -1303,31 +1308,28 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public async Task RefreshNpcRuntimeObj()
     {
-        using (var e = characters.GetEnumerator())
+        for(int i = 0; i < characters.length; i++)
         {
-            while (e.MoveNext())
-            {
-                var character = e.Current.Value;
-                if (character.mapInstance != WorldMapObjManager.instance.displayMap
+            var character = characters[i];
+            if (character.mapInstance != WorldMapObjManager.instance.displayMap
                     && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+            {
+                RecycleCharacterObj(character);
+            }
+            if (character.mapInstance == WorldMapObjManager.instance.displayMap)
+            {
+                if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
                 {
-                    RecycleCharacterObj(character);
+                    await CreatCharacterObjAsync(character);
                 }
-                if (character.mapInstance == WorldMapObjManager.instance.displayMap)
+                else
                 {
-                    if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
-                    {
-                       await  CreatCharacterObjAsync(character);
-                    }
-                    else
-                    {
-                        Vector3 pos = GameCommon.GetMapPos(character.coordinate);
-                        Transform transform = characterRuntimeObj.runtimeObj.obj as Transform;
-                        transform.localPosition = pos;
-                    }
+                    Vector3 pos = GameCommon.GetMapPos(character.coordinate);
+                    Transform transform = characterRuntimeObj.runtimeObj.obj as Transform;
+                    transform.localPosition = pos;
                 }
             }
-        }
+        } 
     }
 
     public void SetCharacterAnimationSpeed(float speed, Character character)

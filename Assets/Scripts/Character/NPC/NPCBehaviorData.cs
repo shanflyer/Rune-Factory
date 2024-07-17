@@ -28,7 +28,9 @@ public class NPCBehaviorData : ScriptableObject, IGameData
 
     private int[] gameTimeRanges;
     private int[] visitMaps;
-    public GameTimeKeyIntDataDictionary gameTimeKeyVisitMapDic;
+    public GameTimeKeyIntDataDictionary gameTimeKeyVisitMapDic; 
+    public List<int2> npcFriends=new List<int2>();
+   
     public override string ToString()
     {
         return id.ToString();

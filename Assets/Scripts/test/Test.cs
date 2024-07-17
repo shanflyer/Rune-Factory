@@ -97,7 +97,14 @@ public class Test : MonoBehaviour
             Debug.Log($"Restart:{behavior.BehaviorName}");
         };
     }
-
+    public void DisEnableBehavior()
+    {
+        behaviorTree.DisableBehavior();
+    }
+    public void StopEnableBehavior()
+    {
+        behaviorTree.StopAllTaskCoroutines(); 
+    }
     public void InitDic()
     {
         gameTimeKeyIntDic = new GameTimeKeyInt2DataDictionary();
@@ -197,30 +204,13 @@ public class TestEditor : Editor
         {
             test.TestBehavior();
         }
-        if (GUILayout.Button("≤‚ ‘json–Ú¡–ªØInt2"))
+        if (GUILayout.Button("Disable"))
         {
-            test.TestInt2NewtosoftTostring();
+            test.DisEnableBehavior();
         }
-        if (GUILayout.Button("≤‚ ‘json–Ú¡–ªØ"))
+        if (GUILayout.Button("Stop"))
         {
-            test.TestNewtosoftTostring();
-        }
-        if (GUILayout.Button("≤‚ ‘json∑¥–Ú¡–ªØ"))
-        {
-            test.TesttNewtosoftToObj();
-        }
-        if (GUILayout.Button("≤‚ ‘job"))
-        {
-            test.TestUnsafe();
-        }
-        if (GUILayout.Button("≤‚ ‘Dic"))
-        {
-            test.InitDic();
-            test.TestDic();
-        }
-        if (GUILayout.Button("≤‚ ‘struct"))
-        {
-            test.TestStructAction(); 
+            test.StopEnableBehavior();
         }
     }
 }

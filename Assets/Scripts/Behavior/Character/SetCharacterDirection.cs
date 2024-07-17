@@ -5,12 +5,18 @@ using System.Linq;
 using UnityEngine;
 using Unity.VisualScripting;
 
+
+
 [TaskCategory("Game/Character")]
 [TaskName("设置角色面向目标")]
 public class SetCharacterDirection : Action
 {
     [SerializeField]
     private bool faceItem;
+    [SerializeField]
+    private bool faceCharacter;
+    [SerializeField]
+    public SharedInt targetNPC;
     [SerializeField]
     public SharedInt2 itemEditorInstance;
     [SerializeField]
@@ -41,6 +47,19 @@ public class SetCharacterDirection : Action
                 return;
             }
             taskStatus = TaskStatus.Failure;
+        }else
+        if (faceCharacter)
+        {
+            var target = NPCManager.instance.GetNPCCharacter(targetNPC.Value);
+            if (target != null)
+            {
+                SetTargetDirection SetTargetDirection = new SetTargetDirection
+                {
+                    characterId = characterId.Value,
+                    targetCoordinate = target.coordinate
+                };
+                GameActionManager.instance.QueueAction(SetTargetDirection, true);
+            }
         }
         else
         {

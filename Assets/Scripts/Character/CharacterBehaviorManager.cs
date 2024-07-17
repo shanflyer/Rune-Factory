@@ -22,7 +22,21 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
     private GameObject obj;
     private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
-
+    private Dictionary<int, BehaviorHandler> behaviorHandlers = new Dictionary<int, BehaviorHandler>();
+    public BehaviorHandler EventStopCharacterBehavior(int characterId)
+    {
+        if(behaviorTrees.TryGetValue(characterId,out var behaviorTree))
+        {
+            if(behaviorHandlers.TryGetValue(characterId,out var behaviorHandler))
+            {
+                behaviorHandlers.Remove(characterId);
+                return behaviorHandler;
+            }
+            behaviorTree.StopAllTaskCoroutines();
+            behaviorTree.enabled = false;
+        }
+        return null;
+    }
     void ReStartCharacterBehavior(ReStartCharacterBehavior reStartCharacterBehavior)
     {
         if (behaviorTrees.TryGetValue(reStartCharacterBehavior.characterId, out BehaviorTree behaviorTree))
@@ -46,13 +60,14 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     private void StartCharacterBehavior(StartCharacterBehavior startCharacterBehavior)
     {
         if (behaviorTrees.TryGetValue(startCharacterBehavior.characterId, out BehaviorTree behaviorTree))
-        {
+        { 
             behaviorTree.enabled = true;
-            behaviorTree.Start();
+            behaviorTree.Start(); 
         }
     }
     
-    public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior,bool loopBehavior=true, BehaviorHandler behaviorHandler=null)
+    public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior,bool loopBehavior=true, BehaviorHandler behaviorHandler=null,
+        bool PauseWhenDisabled = false)
     {
         if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
@@ -69,18 +84,27 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         {
             if (loopBehavior)
             {
-                behaviorTree.OnBehaviorRestart += behaviorHandler;
+                behaviorTree.OnBehaviorRestart += CallBack;
             }
             else
             {
-                behaviorTree.OnBehaviorEnd += behaviorHandler;
+                behaviorTree.OnBehaviorEnd += CallBack;
             } 
         }
-         
+        behaviorHandlers[characterId] = behaviorHandler;
         behaviorTree.ExternalBehavior = externalBehavior;
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
         behaviorTree.RestartWhenComplete = loopBehavior;
+        behaviorTree.PauseWhenDisabled = PauseWhenDisabled;
         behaviorTree.Start();
+
+        void CallBack(Behavior behavior)
+        {
+            if(behaviorHandlers.TryGetValue(characterId,out var result))
+            {
+                result(behavior);
+            }
+        }
     }
 
     public void DestroyBehavior(int characterId)
@@ -88,6 +112,8 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         if (behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
             GameObject.Destroy(behaviorTree);
+            behaviorHandlers.Remove(characterId);
+            behaviorTrees.Remove(characterId);
         }
     }
 }
