@@ -79,7 +79,7 @@ public class MyDic<K,T>
     public int length { get; private set; }
     public T this[int index]
     {
-        get { return list[index]; }
+        get { return list[index]; } 
     }
     public MyDic()
     {
@@ -96,6 +96,18 @@ public class MyDic<K,T>
     public List<K> GetKeyList()
     {
         return keys;
+    }
+    public void TrySetValue(K key , T t)
+    {
+        bool ishave = indexDic.TryGetValue(key, out int index);
+        if (ishave)
+        {
+            list[index] = t;
+        }
+        else
+        {
+            Add(key, t);
+        }
     }
     public bool TryGetValue(K key,out T t)
     {

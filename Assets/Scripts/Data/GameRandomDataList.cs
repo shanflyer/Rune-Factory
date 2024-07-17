@@ -168,7 +168,15 @@ public class GameRandomData
     public List<RandomItem> randomItems;
 
     public List<int3> barrels;
-
+    public List<int2> GetRandomItemValueList()
+    {
+        List<int2> result = new List<int2>(randomItems.Count);
+        for (int i = 0; i < randomItems.Count; i++)
+        {
+            result.Add(new int2(randomItems[i].itemValue, randomItems[i].randomValue));
+        }
+        return result;
+    }
     public List<int> GetRandomItemList()
     {
         List<int> result = new List<int>(randomItems.Count);

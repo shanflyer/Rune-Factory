@@ -106,6 +106,15 @@ public class GameRandom : Singleton<GameRandom>
             gameRandomDatas[gameRandomData.id] = gameRandomData;
         }
     }
+    public List<int2> GetRandomItemValueList(int id)
+    {
+
+        if (gameRandomDatas.TryGetValue(id, out var gameRandomData))
+        {
+            return gameRandomData.GetRandomItemValueList();
+        }
+        return null;
+    }
     public List<int> GetRandomItemList(int id)
     {
 

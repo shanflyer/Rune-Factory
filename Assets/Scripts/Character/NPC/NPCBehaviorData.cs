@@ -12,8 +12,8 @@ using UnityEditor;
 
 public class NPCBehaviorData : ScriptableObject, IGameData
 {
-  
     public string npcName; public int id;
+    public int home;
     public List<int> dailyTasks = new List<int>();
     public List<int> eventTasks = new List<int>();
 
@@ -28,7 +28,7 @@ public class NPCBehaviorData : ScriptableObject, IGameData
 
     private int[] gameTimeRanges;
     private int[] visitMaps;
-    public GameTimeKeyInt2DataDictionary gameTimeKeyVisitMapDic;
+    public GameTimeKeyIntDataDictionary gameTimeKeyVisitMapDic;
     public override string ToString()
     {
         return id.ToString();
@@ -45,22 +45,24 @@ public class NPCBehaviorData : ScriptableObject, IGameData
     {
         externalBehavior = AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>($"{EditorDataPath.npcBehaviorPath}{behaviorName}.asset");
 
-        gameTimeKeyVisitMapDic = new GameTimeKeyInt2DataDictionary();
-
-        int count = gameTimeRanges.Length / 4;
-        for (int i = 0; i < count; i++)
+        gameTimeKeyVisitMapDic = new GameTimeKeyIntDataDictionary();
+        if (gameTimeRanges != null && gameTimeRanges.Length > 0)
         {
-            int index = i * 4;
-            GameTimeKey gameTimeKey = new GameTimeKey
+            int count = gameTimeRanges.Length / 4;
+            for (int i = 0; i < count; i++)
             {
-                minHour = gameTimeRanges[index],
-                minMinute = gameTimeRanges[index + 1],
-                maxHour = gameTimeRanges[index + 2],
-                maxMinute = gameTimeRanges[index + 3]
-            };
-            int2 mapVisit = new int2(visitMaps[i * 2], visitMaps[i * 2 + 1]);
-            gameTimeKeyVisitMapDic.Add(gameTimeKey, mapVisit);
-        } 
+                int index = i * 4;
+                GameTimeKey gameTimeKey = new GameTimeKey
+                {
+                    minHour = gameTimeRanges[index],
+                    minMinute = gameTimeRanges[index + 1],
+                    maxHour = gameTimeRanges[index + 2],
+                    maxMinute = gameTimeRanges[index + 3]
+                };
+                gameTimeKeyVisitMapDic.Add(gameTimeKey, visitMaps[index]);
+            }
+        }
+       
     }
 
 #endif
