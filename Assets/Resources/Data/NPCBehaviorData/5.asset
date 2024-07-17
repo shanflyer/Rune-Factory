@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a8d5455db46fa48aa75e6b7fc7e4c1, type: 3}
+  m_Name: 5
+  m_EditorClassIdentifier: 
+  npcName: "\u739B\u5FB7\u7433"
+  id: 5
+  dailyTasks: 010000000200000003000000
+  eventTasks: 
+  beds:
+  - x: 948
+    y: 1070089
+  workItems:
+  - x: 948
+    y: 1068306
+  likeItems: e9030000ef030000
+  unLikeItems: ea030000ec030000
+  likeTalk: 30000
+  unlikeTalk: 30001
+  likeEmote: 30002
+  unlikeEmote: 30003
+  defaultTalk: 30004
+  defaultEmote: 30005
+  externalBehavior: {fileID: 11400000, guid: 7f00a5ba4f0dc6349ace02e526736764, type: 2}

@@ -207,13 +207,11 @@ public class NPC :  IReferenceData
         }
         return character.GetInformation();
     }
-
-    private List<int2> beds=new List<int2>();
-    private List<int2> workItems=new List<int2>();
+    private NPCBehaviorData NPCBehaviorData; 
     private int homeMap;
 
-    public List<int2> Beds =>beds;
-    public List<int2> WorkItems=>workItems;
+    public List<int2> Beds => NPCBehaviorData.beds;
+    public List<int2> WorkItems=> NPCBehaviorData.workItems;
     public int HomeMap=>homeMap;
 
     public NPCState npcState;
@@ -221,14 +219,14 @@ public class NPC :  IReferenceData
     public bool isActive;
     public int characterId;
     public bool hide=>npcData.hide;
-    public void SetBedAndWorkItem(List<int2> Beds, List<int2> WorkItems)
+
+    public async void InitBehaviorData()
     {
-        beds.Clear();
-        workItems.Clear();
-        beds.AddRange(Beds);
-        workItems.AddRange(WorkItems);
+        NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
+        SetNPCTaskScheduleTimeList(NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
     }
-    public async void SetNPCTaskScheduleTimeList(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
+    
+    async void SetNPCTaskScheduleTimeList(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
     {
         List<TaskScheduleModelData> taskSheduleModelDatas = new List<TaskScheduleModelData>();
         for(int i=0;i<dailyTasks.Count;i++)
@@ -338,7 +336,76 @@ public class NPC :  IReferenceData
 
     public int Key => npcData.id;
 
-  
+    public void GetGift(int giveCharacter, int giftId)
+    {
+        int likeState = 0;
+        if (NPCBehaviorData.likeItems.Contains(giftId))
+        {
+            likeState = 1;
+        }
+        else if (NPCBehaviorData.unLikeItems.Contains(giftId))
+        {
+            likeState = -1;
+        }
+        int talkId = 0;
+        int emoteId = 0;
+        int friendValue = 0;
+        List<int2> talkRandomResults = new List<int2>();
+        List<int2> emoteRandomResults = new List<int2>();
+        switch (likeState)
+        {
+            case 1:
+                friendValue = 4;
+                talkRandomResults = GameRandom.instance.GetRandomValue(NPCBehaviorData.likeTalk);
+                emoteRandomResults = GameRandom.instance.GetRandomValue(NPCBehaviorData.likeEmote);
+                break;
+
+            case 0:
+                friendValue = 2;
+                talkRandomResults = GameRandom.instance.GetRandomValue(NPCBehaviorData.defaultTalk);
+                emoteRandomResults = GameRandom.instance.GetRandomValue(NPCBehaviorData.defaultEmote);
+                break;
+
+            case -1:
+                talkRandomResults = GameRandom.instance.GetRandomValue(NPCBehaviorData.unlikeTalk);
+                emoteRandomResults = GameRandom.instance.GetRandomValue(NPCBehaviorData.unlikeEmote);
+                break;
+        }
+        talkId = talkRandomResults[0].x;
+        emoteId = emoteRandomResults[0].x;
+        GameTimerController.instance.DelayAction(1000, () =>
+        {
+            if (CharacterManager.instance.controllerCharacter.instanceId == giveCharacter)
+            {
+                Talk talk = new Talk
+                {
+                    characterId = characterId,
+                    talkId = talkId,
+                    displayFunction = false,
+                    endAction = () =>
+                    {
+                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterId);
+                    }
+                };
+                GameActionManager.instance.QueueAction(talk);
+
+                AddFriendShipValue addFriendShipValue = new AddFriendShipValue
+                {
+                    characterId = characterId,
+                    friendAddType = FriendAddType.礼物,
+                    value = friendValue
+                };
+                GameActionManager.instance.QueueAction(addFriendShipValue);
+            }
+            ShowEmote showEmote = new ShowEmote
+            {
+                emoteId = emoteId,
+                entityType = EntityType.角色,
+                id = characterId
+            };
+            GameActionManager.instance.QueueAction(showEmote);
+        });
+    }
 
 }
 
@@ -466,76 +533,7 @@ public class NPCManager : Singleton<NPCManager>
     {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
         {
-            Character receiver = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter);
-
-            int likeState = 0;
-            NPCData nPCData = npc.npcData;
-            if (nPCData.likeItems.Contains(giveGift.giftId))
-            {
-                likeState = 1;
-            }
-            else if (nPCData.unLikeItems.Contains(giveGift.giftId))
-            {
-                likeState = -1;
-            }
-            int talkId = 0;
-            int emoteId = 0;
-            int friendValue = 0;
-            List<int2> talkRandomResults = new List<int2>();
-            List<int2> emoteRandomResults = new List<int2>();
-            switch (likeState)
-            {
-                case 1:
-                    friendValue = 4;
-                    talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.likeTalk);
-                    emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.likeEmote);
-                    break;
-
-                case 0:
-                    friendValue = 2;
-                    talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.defaultTalk);
-                    emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.defaultEmote);
-                    break;
-
-                case -1:
-                    talkRandomResults = GameRandom.instance.GetRandomValue(nPCData.unlikeTalk);
-                    emoteRandomResults = GameRandom.instance.GetRandomValue(nPCData.unlikeEmote);
-                    break;
-            }
-            talkId = talkRandomResults[0].x;
-            emoteId = emoteRandomResults[0].x;
-            GameTimerController.instance.DelayAction(1000, () =>
-            {
-                if (CharacterManager.instance.controllerCharacter.instanceId == giveGift.giveCharacter)
-                {
-                    Talk talk = new Talk
-                    {
-                        characterId = giveGift.receiveCharacter,
-                        talkId = talkId,
-                        displayFunction = false,
-                        endAction = () =>
-                        {
-                            CharacterManager.instance.controllerCharacter.SetNeighborhood(giveGift.receiveCharacter);
-                        }
-                    };
-                    GameActionManager.instance.QueueAction(talk);
-
-                    AddFriendShipValue addFriendShipValue = new AddFriendShipValue
-                    {
-                        characterId = giveGift.receiveCharacter,
-                        friendAddType = FriendAddType.礼物,
-                        value = friendValue
-                    };
-                    GameActionManager.instance.QueueAction(addFriendShipValue);
-                }
-                ShowEmote showEmote = new ShowEmote
-                {
-                    emoteId = emoteId,
-                    entityType = EntityType.角色,
-                    id = giveGift.receiveCharacter
-                };
-                GameActionManager.instance.QueueAction(showEmote);
-            });
+            npc.GetGift(giveGift.giveCharacter, giveGift.giftId); 
         }
     }
 

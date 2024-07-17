@@ -1175,7 +1175,8 @@ public static class DataPath
         {typeof(BuffData),"Data/BuffData" },
         {typeof(NPCTaskScheduleData),"Data/NPCTaskScheduleData" },
         {typeof(ZeroInitDataList),"Data/ZeroInitDataList" },
-        {typeof(TaskScheduleModelData),"Data/TaskScheduleModelData/TaskScheduleModelDataList" }
+        {typeof(TaskScheduleModelData),"Data/TaskScheduleModelData/TaskScheduleModelDataList" },
+        {typeof(NPCBehaviorData),"Data/NPCBehaviorData" }
     };
 
     public static string GetDataPath(Type type)

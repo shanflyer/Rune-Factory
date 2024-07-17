@@ -1223,8 +1223,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
             RefreshNpcRuntimeObj(character);
-            npc.SetBedAndWorkItem(mapNpcData.beds, mapNpcData.workItems);
-            npc.SetNPCTaskScheduleTimeList(mapNpcData.dailyTasks,mapNpcData.externalBehavior);
+            npc.InitBehaviorData(); 
 
         }
 
