@@ -30,7 +30,7 @@ public enum FlowCameraType
 
 public enum BehaviorAreaType
 {
-    创建, 聚集, 消失
+    创建, 聚集, 消失,特殊
 }
 
 [Serializable]
@@ -42,7 +42,7 @@ public class NpcBehaviorArea
     public BehaviorAreaType behaviorAreaType;
 }
 [Serializable]
-public class SpecoalNpcBehaviorArea
+public class SpecialNpcBehaviorArea
 {
     public int Name;
     public int2 pos;
@@ -71,7 +71,7 @@ public class MapRoomData : ScriptableObject, IGameData
     public bool autoCreatTempNpc;
     public bool tempNpcPrewarm;
     public List<NpcBehaviorArea> npcBehaviorAreas = new List<NpcBehaviorArea>();
-    public List<SpecoalNpcBehaviorArea> specialNpcBehaviorAreas = new List<SpecoalNpcBehaviorArea>();
+    public List<SpecialNpcBehaviorArea> specialNpcBehaviorAreas = new List<SpecialNpcBehaviorArea>();
 
     public bool CheckBoundary(int2 coordinate)
     {

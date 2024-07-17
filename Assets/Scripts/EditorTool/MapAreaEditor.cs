@@ -11,7 +11,8 @@ public class MapAreaEditor : MonoBehaviour
     public int2 pos;
     public BehaviorAreaType behaviorAreaType;
     public TilemapRenderer tilemapRenderer;
-
+    public int areaLinkData;
+    public Direction direction;
     [SerializeField]
     private Tilemap tilemap;
 
@@ -19,8 +20,7 @@ public class MapAreaEditor : MonoBehaviour
     private TextMeshPro text;
 
     private Vector3 oldPos;
-
-    NpcBehaviorArea areaData;
+     
     private void Awake()
     {
         tilemap = GetComponentInChildren<Tilemap>();
@@ -31,16 +31,39 @@ public class MapAreaEditor : MonoBehaviour
         this.name = name.ToString();
         text.text=text.name = name.ToString();
         this.behaviorAreaType = behaviorAreaType;
-        areaData = new NpcBehaviorArea
+         
+    }
+    public void SetData(SpecialNpcBehaviorArea SpecialNpcBehaviorArea)
+    { 
+        var gridCount = SpecialNpcBehaviorArea.grids.Count / 4;
+        for (int j = 0; j < gridCount; j++)
         {
-            behaviorAreaType = behaviorAreaType,
-            grids = new List<int>(),
-            Name = name
-        }; 
+            int minX = SpecialNpcBehaviorArea.grids[j * 4];
+            int minY = SpecialNpcBehaviorArea.grids[j * 4 + 1];
+            int maxX = SpecialNpcBehaviorArea.grids[j * 4 + 2];
+            int maxY = SpecialNpcBehaviorArea.grids[j * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    poses.Add(new Vector3Int(x, y));
+                    tileBases.Add(MapInstanceEditor.defaultTile);
+                }
+            }
+            tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
+        }
+        gameObject.name = text.text = SpecialNpcBehaviorArea.Name.ToString();
+        transform.position = GameCommon.GetZeroMapPos(SpecialNpcBehaviorArea.pos);
+        this.behaviorAreaType = BehaviorAreaType.特殊;
+        direction = SpecialNpcBehaviorArea.fixedDirection;
+        areaLinkData = SpecialNpcBehaviorArea.tempCreatId;
     }
     public void SetData(NpcBehaviorArea npcBehaviorArea)
     {
-        this.areaData = npcBehaviorArea;
+        var areaData = npcBehaviorArea;
         var gridCount = areaData.grids.Count / 4;
         for (int j = 0; j < gridCount; j++)
         {
@@ -64,14 +87,47 @@ public class MapAreaEditor : MonoBehaviour
         gameObject.name = text.text = areaData.Name.ToString(); 
         transform.position = GameCommon.GetZeroMapPos(areaData.pos);
         this.behaviorAreaType = npcBehaviorArea.behaviorAreaType;
+      
     }
 
-
-    public NpcBehaviorArea GetAreaData()
+    public SpecialNpcBehaviorArea GetSpecialData()
     {
+        if (behaviorAreaType != BehaviorAreaType.特殊)
+        {
+            return null;
+        }
+        SpecialNpcBehaviorArea SpecialNpcBehaviorArea = new SpecialNpcBehaviorArea();
+        SpecialNpcBehaviorArea.Name = int.Parse(text.name);
+        SpecialNpcBehaviorArea.fixedDirection = direction;
+        SpecialNpcBehaviorArea.tempCreatId = areaLinkData;
         tilemap = GetComponentInChildren<Tilemap>();
         text = GetComponentInChildren<TextMeshPro>();
+        List<int2> cells = new List<int2>();
+        for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)
+        {
+            for (int y = tilemap.cellBounds.yMin; y < tilemap.cellBounds.yMax; y++)
+            {
+                var tile = tilemap.GetTile(new Vector3Int(x, y, 0));
+                if (tile != null)
+                {
+                    cells.Add(new int2(x, y));
+                }
+            }
+        }
+        SpecialNpcBehaviorArea.grids = GameCommon.CellToGrid(cells);
+        SpecialNpcBehaviorArea.pos = pos;
+        return SpecialNpcBehaviorArea;
+    }
+    public NpcBehaviorArea GetAreaData()
+    {
+        if (behaviorAreaType == BehaviorAreaType.特殊)
+        {
+            return null;
+        }
 
+        tilemap = GetComponentInChildren<Tilemap>();
+        text = GetComponentInChildren<TextMeshPro>();
+        NpcBehaviorArea areaData = new NpcBehaviorArea();
         areaData.pos = pos;
         areaData.Name = int.Parse(text.text);
         List<int2> cells = new List<int2>();
@@ -87,6 +143,7 @@ public class MapAreaEditor : MonoBehaviour
             }
         }
         areaData.grids = GameCommon.CellToGrid(cells);
+        areaData.behaviorAreaType = behaviorAreaType;
         return areaData;
     }
 
@@ -119,6 +176,9 @@ public class MapAreaEditor : MonoBehaviour
                     break;
                 case BehaviorAreaType.消失:
                     tilemap.color = Color.red;
+                    break;
+                case BehaviorAreaType.特殊:
+                    tilemap.color = new Color(1, 1, 0);
                     break;
             }
         }

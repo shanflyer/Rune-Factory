@@ -213,9 +213,22 @@ public class MapEditor : MyEditor
 
             var mapAreas = FindObjectsByType<MapAreaEditor>(FindObjectsSortMode.None);
             selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Clear();
+            selectMapRoomDataObj.mapRoomData.specialNpcBehaviorAreas.Clear();
             foreach (var mapArea in mapAreas)
             {
-                selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Add(mapArea.GetAreaData());
+                var data = mapArea.GetAreaData();
+                if (data != null)
+                {
+                    selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Add(data);
+                }
+                else
+                {
+                    var specialData=mapArea.GetSpecialData();
+                    if (specialData != null)
+                    {
+                        selectMapRoomDataObj.mapRoomData.specialNpcBehaviorAreas.Add(specialData);
+                    }
+                }
             }
 
             if (AssetDatabase.Contains(selectMapRoomDataObj.mapRoomData))

@@ -301,6 +301,13 @@ public class MapInstanceEditor : MonoBehaviour
                 mapAreaEditor.SetData(areaData);
                
             }
+            for(int i = 0; i < mapRoomData.specialNpcBehaviorAreas.Count; i++)
+            {
+                var specialNpcBehaviorArea = mapRoomData.specialNpcBehaviorAreas[i];
+                GameObject areaObj = Instantiate(areaPrefab, areaParent);
+                MapAreaEditor mapAreaEditor = areaObj.GetComponent<MapAreaEditor>();
+                mapAreaEditor.SetData(specialNpcBehaviorArea);
+            }
         }
     }
 
