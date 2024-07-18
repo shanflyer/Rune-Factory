@@ -7,8 +7,10 @@ using UnityEngine;
 [TaskName("角色移动")]
 public class CharacterMove : Action
 {
+    [SerializeField]
     private SharedInt characterId;
-    public SharedInt3 target;
+    [SerializeField]
+    private SharedInt3 target;
     public SharedInt2 offset;
     public bool smartMove;
 

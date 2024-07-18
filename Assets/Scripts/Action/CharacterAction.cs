@@ -3,6 +3,33 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+public struct TraceCharacterResult : GameAction
+{
+    public int characterId;
+    public int targetId;
+    public bool successed;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null,
+      SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 1)
+            characterId= int.Parse(parameters[0].value);
+        if (parameters.Count > 2)
+            targetId = int.Parse(parameters[1].value);
+        if (parameters.Count > 3)
+            successed = bool.Parse(parameters[2].value);
+
+        if (source != 0 && source != int.MinValue)
+            characterId = source;
+        if (target != 0 && target != int.MinValue)
+            targetId = source;
+        if (value >= 0 && value != int.MinValue)
+            successed = value==1;
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct SetTempCharacterTarget : GameAction
 {
     public int characterId;
@@ -159,6 +186,21 @@ public struct JoinTeam : GameAction
     }
 }
 
+public struct PauseCharacterBehavior : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int characterId;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            characterId = int.Parse(parameters[0].value);
+        if (source != 0)
+            characterId = source;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct StopCharacterBehavior : GameAction
 {
     public SetValue setValue { get; set; }

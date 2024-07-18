@@ -97,6 +97,10 @@ public class MyDic<K,T>
     {
         return keys;
     }
+    public bool ContainsKey(K key)
+    {
+        return indexDic.ContainsKey(key);
+    }
     public void TrySetValue(K key , T t)
     {
         bool ishave = indexDic.TryGetValue(key, out int index);
@@ -166,6 +170,10 @@ public class MyDic<K,T>
     }
     public void Remove(K key)
     {
+        if (!indexDic.ContainsKey(key))
+        {
+            return;
+        }
         int index = indexDic[key];
         indexDic.Remove(key);
 

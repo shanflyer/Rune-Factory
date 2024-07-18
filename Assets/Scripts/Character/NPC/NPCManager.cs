@@ -149,7 +149,7 @@ public class Player : Character
 public partial class Character
 {
     public int selectItem;
-
+    public int mulitGroup;
     public CharacterInformationData GetInformation()
     {
         CharacterInformationData characterInformationData = new CharacterInformationData();

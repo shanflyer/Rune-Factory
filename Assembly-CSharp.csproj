@@ -295,6 +295,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\ExternalBehaviorTree.cs" />
     <Compile Include="Assets\Scripts\test\Test.cs" />
     <Compile Include="Assets\Scripts\UI\ManufacturePanel.cs" />
+    <Compile Include="Assets\Scripts\Main\MultiNPCBehaviorManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Dot.cs" />
     <Compile Include="Assets\Scripts\Main\GameRandom.cs" />
@@ -563,6 +564,7 @@
     <Compile Include="Assets\Effect\Epic Toon FX\Demo\Scripts\VFX Library\ParticleEffectsLibrary.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Idle.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterDistance.cs" />
     <Compile Include="Assets\Scripts\UI\FightPanel\FightCharacterCard.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\IsEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetIsKinematic.cs" />
@@ -796,6 +798,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\Replace.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Move.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics2D\Linecast.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\RefreshCharacterCoordinate.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\Play.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedVector3.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetIsStopped.cs" />
@@ -994,6 +997,7 @@
     <Compile Include="Assets\Scripts\Data\SleepSetDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\Play.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetDeltaTime.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CharacterMoveNoWait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatClamp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsKinematic.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />

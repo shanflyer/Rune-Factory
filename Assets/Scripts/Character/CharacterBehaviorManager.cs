@@ -17,6 +17,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         GameActionManager.instance.AddListener<StopCharacterBehavior>(StopCharacterBehavior);
         GameActionManager.instance.AddListener<StartCharacterBehavior>(StartCharacterBehavior);
         GameActionManager.instance.AddListener<ReStartCharacterBehavior>(ReStartCharacterBehavior);
+        GameActionManager.instance.AddListener<PauseCharacterBehavior>(PauseCharacterBehavior);
        // Object.DontDestroyOnLoad(obj);
     }
 
@@ -36,6 +37,13 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
             behaviorTree.enabled = false;
         }
         return null;
+    }
+    void PauseCharacterBehavior(PauseCharacterBehavior pauseCharacterBehavior)
+    {
+        if (behaviorTrees.TryGetValue(pauseCharacterBehavior.characterId, out BehaviorTree behaviorTree))
+        { 
+            behaviorTree.DisableBehavior(true); 
+        }
     }
     void ReStartCharacterBehavior(ReStartCharacterBehavior reStartCharacterBehavior)
     {
@@ -62,7 +70,11 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         if (behaviorTrees.TryGetValue(startCharacterBehavior.characterId, out BehaviorTree behaviorTree))
         { 
             behaviorTree.enabled = true;
-            behaviorTree.Start(); 
+            behaviorTree.EnableBehavior();
+            if (!behaviorTree.StartWhenEnabled)
+            {
+                behaviorTree.Start();
+            } 
         }
     }
     
