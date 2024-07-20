@@ -59,20 +59,27 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
             await CharacterManager.instance.CreatPlayer((int)loadGameSaveData.playerData.gender, 0, loadGameSaveData.playerData.instanceId);
 
-            foreach (var data in loadGameSaveData.storeCounters)
+            using(var e = loadGameSaveData.storeCounters.Values.GetEnumerator())
             {
-                PlayerStoreManager.instance.CreatStoreCounter(data.Value);
-            }
-
-            foreach(var data in loadGameSaveData.manufatures)
+                while (e.MoveNext())
+                {
+                    PlayerStoreManager.instance.CreatStoreCounter(e.Current);
+                }
+            } 
+            using(var e = loadGameSaveData.manufatures.Values.GetEnumerator())
             {
-                ManufatureManager.instance.CreatManufature(data.Value);
+                while (e.MoveNext())
+                {
+                    ManufatureManager.instance.CreatManufature(e.Current);
+                }
             }
-
-            foreach(var data in loadGameSaveData.mapHomeEquips)
+            using(var e = loadGameSaveData.mapHomeEquips.Values.GetEnumerator())
             {
-                HomeEquipManager.instance.CreatHomeEquip(data.Value);
-            }
+                while (e.MoveNext())
+                {
+                    HomeEquipManager.instance.CreatHomeEquip(e.Current);
+                }
+            } 
         }
     }
     public void InitMapItemSaveData(int instanceId)
@@ -106,71 +113,41 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadGameSaveData != null)
         {
-            foreach(var data in loadGameSaveData.fields)
+            using(var e = loadGameSaveData.fields.Values.GetEnumerator())
             {
-                FarmManager.instance.CreatField(data.Value);
-            }
-            /*
-            foreach (var data in loadGameSaveData.changeMapItems)
-            {
-                ChangeMapItem changeMapItem = new ChangeMapItem
+                while (e.MoveNext())
                 {
-                    itemId = data.Key,
-                    newDataId = data.Value.x,
-                    animationKey = data.Value.yz
-                };
-                GameActionManager.instance.QueueAction(changeMapItem);
-            }
-
-            foreach(var data in loadGameSaveData.SetAnimationStateMapItems)
+                    FarmManager.instance.CreatField(e.Current);
+                }
+            } 
+            using(var e = loadGameSaveData.shops.Values.GetEnumerator())
             {
-                SetItemAnimation setItemAnimation = new SetItemAnimation
+                while (e.MoveNext())
                 {
-                    id = data.Key,
-                    keyX = data.Value.x,
-                    keyY = data.Value.y
-                };
-                GameActionManager.instance.QueueAction(setItemAnimation);
+                    ShopManager.instance.InitShop(e.Current);
+                }
             }
-
-            foreach(var data in loadGameSaveData.removeMapItemOperates)
+            using(var e = loadGameSaveData.shopLists.Values.GetEnumerator())
             {
-                RemoveMapItemOperate removeMapItemOperate = new RemoveMapItemOperate
+                while (e.MoveNext())
                 {
-                    mapItemId = data.x,
-                    removeOperateId = data.y
-                };
-                GameActionManager.instance.QueueAction(removeMapItemOperate);
+                    ShopManager.instance.InitShopList(e.Current);
+                }
             }
-
-            foreach (var data in loadGameSaveData.addMapItemOperates)
+            using(var e = loadGameSaveData.pastures.Values.GetEnumerator())
             {
-                AddMapItemOperate addMapItemOperate = new AddMapItemOperate
+                while (e.MoveNext())
                 {
-                    mapItemId = data.x,
-                    addeOperateId = data.y
-                };
-                GameActionManager.instance.QueueAction(addMapItemOperate);
-            }
-
-            foreach(var data in loadGameSaveData.RemoveMapItemCollider)
+                    PastureManager.instance.CreatPasture(e.Current);
+                }
+            } 
+            using(var e = loadGameSaveData.animals.Values.GetEnumerator())
             {
-                RemoveMapItemCollider removeMapItemCollider = new RemoveMapItemCollider
+                while (e.MoveNext())
                 {
-                    mapItemInstanceId = data
-                };
-                GameActionManager.instance.QueueAction(removeMapItemCollider);
-            }*/
-
-            foreach(var data in loadGameSaveData.pastures)
-            {
-                PastureManager.instance.CreatPasture(data.Value);
-            }
-            foreach(var data in loadGameSaveData.animals)
-            {
-                PastureManager.instance.CreatAnimal(data.Value);
-            }
-
+                    PastureManager.instance.CreatAnimal(e.Current);
+                }
+            } 
             FriendManager.instance.InitFriendSaveData(loadGameSaveData.friendSaveData);
         }
     }
@@ -206,9 +183,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadGameSaveData!=null)
         { 
-            foreach (var d in loadGameSaveData.specialMapItem)
+            using(var e = loadGameSaveData.specialMapItem.Values.GetEnumerator())
             {
-                myInstance.AddInstance(d.Value);
+                while (e.MoveNext())
+                {
+                    myInstance.AddInstance(e.Current);
+                }
             } 
         }
     }

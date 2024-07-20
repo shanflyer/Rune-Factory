@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopPanel : GamePanel<ShopGroup>
+public class ShopPanel : GamePanel<ShopList>
 {
     //public override bool changeInputModel => false;
     [SerializeField]
@@ -55,7 +55,7 @@ public class ShopPanel : GamePanel<ShopGroup>
     [SerializeField]
     private ShopSelectReference ShopSelectReference;
 
-    private DisplayList<ShopSelectReference, ShopData> shops;
+    private DisplayList<ShopSelectReference, Shop> shops;
     private DisplayList<ShopItemReference, ShopItemData> shopItems;
 
     public override void SetPanelUISerializeObj()
@@ -105,7 +105,7 @@ public class ShopPanel : GamePanel<ShopGroup>
 
         CloseButton.onClick.AddListener(Close);
         shopItems = new DisplayList<ShopItemReference, ShopItemData>(ShopItemReference, ShopItemParent);
-        shops = new DisplayList<ShopSelectReference, ShopData>(ShopSelectReference, ShopSelectParent);
+        shops = new DisplayList<ShopSelectReference, Shop>(ShopSelectReference, ShopSelectParent);
 
         buyCountValue.onValueChanged.AddListener((string value) =>
         {
@@ -217,24 +217,24 @@ public class ShopPanel : GamePanel<ShopGroup>
         SelectInformation.transform.localScale = Vector3.one;
     }
 
-    private void SelecShopData(ShopData shopData, bool selected)
+    private void SelecShopData(Shop shop, bool selected)
     {
         if (selected)
         {
-            List<ShopItemData> shopItemDatas = shopData.shopItem.FindAll(s => s.open);
+            List<ShopItemData> shopItemDatas = shop.GetOpenShopItem();
             shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup);
         }
     }
 
-    public override void InitReferenceData(ShopGroup v)
+    public override void InitReferenceData(ShopList v)
     {
         base.InitReferenceData(v);
-        Title.text = v.name;
+        Title.text = v.groupName;
         ShopGroup.enabled = true;
         ItemGroup.enabled = true;
-        shops.InitListData(v.shopDatas, SelecShopData, ShopGroup);
+        shops.InitListData(v.shops.GetValueList(), SelecShopData, ShopGroup);
         shops.SelectDefault();
-        SelecShopData(v.shopDatas[0], true);
+        SelecShopData(v.shops[0], true);
         buyCount = 1;
         RefreshBuyCount();
     }

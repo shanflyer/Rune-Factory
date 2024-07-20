@@ -32,8 +32,8 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
         List<ShopGroup> shopGroups = new List<ShopGroup>(); 
         int groupIndex = -2;
         int shopIndex = -2;
-        ShopGroup shopGroup=default(ShopGroup);
-        ShopData shopData = default(ShopData);
+        ShopGroup shopGroup=new ShopGroup();
+        ShopData shopData = new ShopData();
         for (int i = 0; i < shopItemDatas.Length; i++)
         {
             EditorShopItemData shopItemData = shopItemDatas[i];
@@ -121,10 +121,13 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
      
 }
 [Serializable]
-public struct ShopGroup : IReferenceData, IGameData
+public class ShopGroup : IReferenceData, IGameData
 { 
     public string name;
-    public List<ShopData> shopDatas;
+    public int mapInstance;
+    public int mapItem;
+    public List<int> bindCharacters;
+    public List<ShopData> shopDatas=new List<ShopData>();
 
     public string GetKey()
     {
@@ -136,14 +139,15 @@ public struct ShopGroup : IReferenceData, IGameData
     } 
 }
 [Serializable]
-public struct ShopData:IReferenceData
+public class ShopData :IReferenceData
 {
     public string shopName;
+   
     public int shopId;
-    public List<ShopItemData> shopItem;
+    public List<ShopItemData> shopItem=new List<ShopItemData>();
 }
 [Serializable]
-public struct ShopItemData: IReferenceData
+public class ShopItemData : IReferenceData
 {
     public int item;
     public ShopItemType type;

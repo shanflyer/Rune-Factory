@@ -4,11 +4,14 @@ using System;
 using UnityEngine;
 using Unity.Mathematics;
 using BehaviorDesigner.Runtime;
+using JetBrains.Annotations;
+
 [Serializable]
 public class StringListDictionary : SerializableDictionary<string, List<string>>
 {
 
 }
+ 
 [Serializable]
 public class IntTaskScheduleModelDataDictionary : SerializableDictionary<int, TaskScheduleModelData>
 {
@@ -95,6 +98,34 @@ public class IntPastureSaveDataDictionary : SerializableDictionary<int, PastureS
         foreach (var kvp in data)
         {
             this[kvp.Key] = new PastureSaveData(kvp.Value);
+
+        }
+    }
+}
+[Serializable]
+public class IntShopSaveDataDictionary : SerializableDictionary<int, ShopSaveData>
+{
+    public IntShopSaveDataDictionary() { }
+    public void CopyData(IntShopSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new ShopSaveData(kvp.Value);
+
+        }
+    }
+}
+[Serializable]
+public class StringShopListSaveDataDictionary : SerializableDictionary<int, ShopListSaveData>
+{
+    public StringShopListSaveDataDictionary() { }
+    public void CopyData(StringShopListSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new ShopListSaveData(kvp.Value);
 
         }
     }

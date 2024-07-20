@@ -125,7 +125,31 @@ public struct NewDay : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct OpenShopItem : GameAction
+{
+    public int shopId;
+    public int itemId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+            shopId = int.Parse(parameters[0].value);
+        if (parameters.Count > 1)
+            itemId = int.Parse(parameters[1].value);
 
+        if (source != 0&&source!=int.MinValue)
+        {
+            shopId = source;
+        }
+        if (target != 0 && target != int.MinValue)
+        {
+            itemId = target;
+        }
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TryVisitShop : GameAction
 {
     public SetValue setValue { get; set; }

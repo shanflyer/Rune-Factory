@@ -37,6 +37,8 @@ public class UserGameSaveData : IReferenceData
         storeCounters.CopyData(userGameSaveData.storeCounters);
         fields.CopyData(userGameSaveData.fields);
         specialMapItem.CopyData(userGameSaveData.specialMapItem);
+        shops.CopyData(userGameSaveData.shops);
+        shopLists.CopyData(userGameSaveData.shopLists);
         saveTime = userGameSaveData.saveTime;
     }
 
@@ -60,7 +62,8 @@ public class UserGameSaveData : IReferenceData
     public IntManufatureSaveDataDictionary manufatures = new IntManufatureSaveDataDictionary();
     public IntStoreCounterSaveDataDictionary storeCounters = new IntStoreCounterSaveDataDictionary();
     public IntFieldSaveDataDictionary fields = new IntFieldSaveDataDictionary();
-
+    public IntShopSaveDataDictionary shops = new IntShopSaveDataDictionary();
+    public StringShopListSaveDataDictionary shopLists = new StringShopListSaveDataDictionary();
 
     public Int2IntDictionary specialMapItem = new Int2IntDictionary();
     public IntInt3Dictionary changeMapItems = new IntInt3Dictionary();
@@ -280,7 +283,18 @@ public class UserGameSaveData : IReferenceData
             fields.Add(field.instanceId, fieldSaveData);
         }
     }
-
+    public void SetShopSaveData(Shop shop)
+    {
+        if(shops.TryGetValue(shop.shopId,out var shopSaveData))
+        {
+            shopSaveData.SetData(shop);
+        }
+        else
+        {
+            shopSaveData = new ShopSaveData(shop);
+            shops.Add(shop.shopId, shopSaveData);
+        }
+    }
     public void SetMapHomeEquipData(HomeEquip homeEquip)
     {
         int key = homeEquip.instanceId;
@@ -459,7 +473,50 @@ public class PastureSaveData
         linkRoom = pasture.linkRoom;
     }
 }
-
+public class ShopListSaveData
+{
+    public string name;
+    public List<int> binders = new List<int>();
+    public ShopListSaveData(ShopList shopList)
+    {
+        name = shopList.groupName;
+        binders.AddRange(shopList.bindCharacters);
+    }
+    public ShopListSaveData(ShopListSaveData shopListSaveData)
+    {
+        name=shopListSaveData.name;
+        binders.AddRange(shopListSaveData.binders);
+    }
+    public void SetData(ShopList shopList)
+    {
+        binders.Clear();
+        binders.AddRange(shopList.bindCharacters);
+    }
+} 
+public class ShopSaveData
+{
+    public int shopId;
+    public List<int> openItems=new List<int>(); 
+    public ShopSaveData(Shop shop) 
+    { 
+        shopId = shop.shopId;
+        SetData(shop);
+    }
+    public ShopSaveData(ShopSaveData shopSaveData)
+    {
+        shopId = shopSaveData.shopId;
+        openItems.AddRange(shopSaveData.openItems);
+    }
+    public void SetData(Shop shop)
+    {
+        openItems.Clear();
+        var shopItems= shop.GetOpenShopItem();
+        for(int i = 0; i < shopItems.Count; i++)
+        {
+            openItems.Add(shopItems[i].item);
+        }
+    }
+}
 public class FieldSaveData
 {
     public int instanceId;

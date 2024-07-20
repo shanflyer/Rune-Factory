@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopSelectReference : UIObjReference<ShopData>
+public class ShopSelectReference : UIObjReference<Shop>
 {
     [SerializeField]
     private TextMeshProUGUI shopName0, shopName1;
@@ -38,7 +38,7 @@ public class ShopSelectReference : UIObjReference<ShopData>
         shopName1 = FindChildGameObject<TextMeshProUGUI>("ShopName1");
     }
 
-    public override async Task InitData(ShopData t, SelectAction<ShopData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(Shop t, SelectAction<Shop> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
