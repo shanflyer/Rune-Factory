@@ -88,14 +88,25 @@ public class MyDic<K,T>
         keys = new List<K>();
         length = 0;
     }
-    
+    public T GetValueForIndex(int index)
+    {
+        return list[index];
+    }
+    public K GetKeyForIndex(int index)
+    {
+        return keys[index];
+    }
     public List<T> GetValueList()
     {
-        return list;
+        List<T> result = new List<T>();
+        result.AddRange(list);
+        return result;
     }
     public List<K> GetKeyList()
     {
-        return keys;
+        List<K> result = new List<K>();
+        result.AddRange(keys);
+        return result;
     }
     public bool ContainsKey(K key)
     {

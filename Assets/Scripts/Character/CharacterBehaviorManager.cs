@@ -38,6 +38,15 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
         return null;
     }
+
+    public BehaviorTree GetCharacterBehaviorTree(int characterId)
+    {
+        if(behaviorTrees.TryGetValue(characterId,out var behaviorTree))
+        {
+            return behaviorTree;
+        }
+        return null;
+    }
     void PauseCharacterBehavior(PauseCharacterBehavior pauseCharacterBehavior)
     {
         if (behaviorTrees.TryGetValue(pauseCharacterBehavior.characterId, out BehaviorTree behaviorTree))

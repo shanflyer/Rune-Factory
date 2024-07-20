@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: "\u4E24\u4EBA\u76F8\u4F1A"
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(476.013428,-83.34009)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(9.536743E-06,160)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GroupCharacterMoveToEachOther","NodeData":{"Offset":"(-67.00983,164.799408)"},"ID":2,"Name":"\u7ec4\u56e2\u89d2\u8272\u5f7c\u6b64\u9760\u8fd1","Instant":true,"SharedIntListcharacterIds":{"Type":"SharedIntList","Name":"GroupCharacters","IsShared":true,"List`1mValue":[]},"Int32distance":4,"SharedIntmultiNPCGroupId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"GroupID","IsShared":true,"Int32mValue":-2147483648},"SinglewaitDuration":1},{"Type":"CharacterGroupEmote","NodeData":{"Offset":"(81.303894,156.701569)"},"ID":3,"Name":"\u56e2\u4f53\u89d2\u8272\u8868\u60c5\u5c55\u793a","Instant":true,"SharedIntListcharacterIds":{"Type":"SharedIntList","Name":"GroupCharacters","IsShared":true,"List`1mValue":[]},"SharedIntrandomEmote":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"SinglewaitDuration":2.5,"float2showTime":{"Singlex":2,"Singley":3}}]},"Variables":[{"Type":"SharedIntList","Name":"GroupCharacters","IsShared":true,"List`1mValue":[]},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"GroupID","IsShared":true,"Int32mValue":-2147483648}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.7

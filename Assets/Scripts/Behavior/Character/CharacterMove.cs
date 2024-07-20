@@ -34,34 +34,21 @@ public class CharacterMove : Action
     {
         base.OnAwake();
     }
-
-    private bool addAction;
-
+     
     public override void OnBehaviorComplete()
     {
-        base.OnBehaviorComplete();
-        if (!SingletonType.Cleared)
-            GameActionManager.instance.RemoveListener<CharacterMoveFailed>(FailedMoveAction);
-        addAction = false;
+        base.OnBehaviorComplete();  
     }
 
     public override void OnEnd()
     {
-        base.OnEnd();
-        if (!SingletonType.Cleared)
-            GameActionManager.instance.RemoveListener<CharacterMoveFailed>(FailedMoveAction);
-        addAction = false;
+        base.OnEnd();  
     }
 
     private int2 offsetCoordinate = int2.zero;
 
     public override void OnStart()
-    {
-        if (!addAction)
-        {
-            GameActionManager.instance.AddListener<CharacterMoveFailed>(FailedMoveAction);
-            addAction = true;
-        }
+    { 
 
         taskStatus = TaskStatus.Running;
         if (characterId == null || characterId.IsNull())
@@ -92,7 +79,7 @@ public class CharacterMove : Action
             }
             else
             {
-                if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, MoveEndAction))
+                if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, MoveEndAction,failedMoveAction:FailedMoveAction))
                 {
                     // taskStatus = TaskStatus.Failure;
                 }
@@ -104,22 +91,19 @@ public class CharacterMove : Action
         }
     }
 
-    private void FailedMoveAction(CharacterMoveFailed characterMoveFailed)
+    private void FailedMoveAction(int3 value,int count=0)
     {
-        if (characterMoveFailed.characterId == characterId.Value)
+        if (smartMove)
         {
-            if (smartMove)
-            {
-                //var character = CharacterManager.instance.GetCharacter(characterId.Value);
-                if (!character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
-                {
-                    taskStatus = TaskStatus.Failure;
-                }
-            }
-            else
+            //var character = CharacterManager.instance.GetCharacter(characterId.Value);
+            if (!character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
             {
                 taskStatus = TaskStatus.Failure;
             }
+        }
+        else
+        {
+            taskStatus = TaskStatus.Failure;
         }
     }
 

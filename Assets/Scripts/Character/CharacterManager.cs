@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
-public delegate void MoveEndAction();
-
+public delegate void MoveEndAction(); 
 public class CharacterRuntimeObj
 {
     public RuntimeObj runtimeObj;

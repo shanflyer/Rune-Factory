@@ -152,6 +152,7 @@
     <Compile Include="Assets\Scripts\Map\MapCellController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IntComparison.cs" />
     <Compile Include="Assets\Resources\InputData\MyInput.cs" />
+    <Compile Include="Assets\Scripts\Behavior\CharacterGroup\CharacterGroupEmote.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetRightVector.cs" />
     <Compile Include="Assets\Scripts\Fishing\FishPondData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForceAtPosition.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetDrag.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\GetTag.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedMaterial.cs" />
+    <Compile Include="Assets\Scripts\Behavior\CharacterGroup\GroupCharacterMoveToEachOther.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetCenter.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetFisherToolCoordinateBehavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetIntegerParameter.cs" />
@@ -295,7 +297,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\ExternalBehaviorTree.cs" />
     <Compile Include="Assets\Scripts\test\Test.cs" />
     <Compile Include="Assets\Scripts\UI\ManufacturePanel.cs" />
-    <Compile Include="Assets\Scripts\Main\MultiNPCBehaviorManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Dot.cs" />
     <Compile Include="Assets\Scripts\Main\GameRandom.cs" />
@@ -523,6 +524,7 @@
     <Compile Include="Assets\Scripts\Data\GrowModelDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Reflection\ComparePropertyValue.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetCenter.cs" />
+    <Compile Include="Assets\Scripts\Character\MultiNPCBehaviorManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPriority.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedCollision.cs" />
     <Compile Include="Assets\Scripts\UI\Talk\NPCFunctionReference.cs" />
@@ -637,6 +639,7 @@
     <Compile Include="Assets\Scripts\Character\NPC\NPCBehaviorData.cs" />
     <Compile Include="Assets\Scripts\Data\TalkData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\FromToRotation.cs" />
+    <Compile Include="Assets\Scripts\Character\MulitiBehaviorData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Debug\DrawRay.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetLoop.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedAnimationCurve.cs" />
@@ -946,6 +949,7 @@
     <Compile Include="Assets\Scripts\Behavior\Pasture\LinkPasturePackageBehavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetIgnoreListenerPause.cs" />
     <Compile Include="Assets\Scripts\Data\PackageSetData.cs" />
+    <Compile Include="Assets\Scripts\Behavior\CharacterGroup\CreatMultiNPCGroup.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetVelocity.cs" />
     <Compile Include="Assets\Scripts\Item\NewBehaviourScript1.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\BuildString.cs" />
@@ -995,9 +999,9 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetLoop.cs" />
     <Compile Include="Assets\Scripts\Data\FunctionButtonData.cs" />
     <Compile Include="Assets\Scripts\Data\SleepSetDataList.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CharacterMoveNoWait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\Play.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetDeltaTime.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Character\CharacterMoveNoWait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatClamp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsKinematic.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />
@@ -1047,6 +1051,7 @@
     <Compile Include="Assets\Scripts\UI\NPCPanel\NPCPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\RandomSequence.cs" />
+    <Compile Include="Assets\Scripts\Behavior\CharacterGroup\CheckCharacterInGroup.cs" />
     <Compile Include="Assets\Scripts\Main\AudioController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Wait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Lerp.cs" />

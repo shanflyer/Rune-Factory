@@ -1044,6 +1044,11 @@ public partial class Character
         GameObjectCurveController.instance.RemoveLineMove(moveEnumeratorId);
         CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
         moveEnumeratorId = 0;
+
+        moveTarget = int3.zero;
+        this.moveEndAction = null;
+        this.changeCoordinateAction = null;
+        this.failedMoveAction = null;
     }
 
     public void StartMove()
@@ -1393,12 +1398,26 @@ public partial class Character
         coordinate.xy += offsetCoordinate;
     }
 
-    public bool MoveCrossMap(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null)
+    public int3 moveTarget { get; private set; }
+    public MoveEndAction moveEndAction { get; private set; }
+    public MoveEndAction changeCoordinateAction { get; private set; }
+    public Int3Action failedMoveAction { get; private set; }
+    public bool MoveCrossMap(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
+       Int3Action failedMoveAction = null)
     {
+        return MoveCrossMap(mapInstance, targetCoordinate, moveEndAction, changeCoordinateAction, failedMoveAction);
+    }
+    public bool MoveCrossMap(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
+        Int3Action failedMoveAction = null)
+    {
+        this.moveEndAction = moveEndAction;
+        this.changeCoordinateAction = changeCoordinateAction;
+        this.failedMoveAction = failedMoveAction;
         if (!CanMoveCrossMap)
         {
             return false;
         }
+        moveTarget = new int3(targetCoordinate, targetMap);
 
         bool result = false;
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, ref result);
@@ -1406,13 +1425,14 @@ public partial class Character
         {
             void FailedMoveAction()
             {
-                CharacterMoveFailed characterMoveFailed = new CharacterMoveFailed
+                moveTarget = new int3(-1, -1, -1); 
+                if (failedMoveAction != null)
                 {
-                    characterId = instanceId,
-                    oldTargetCoordinate = targetCoordinate,
-                    oldTargetMapInstance = targetMap,
-                };
-                GameActionManager.instance.QueueAction(characterMoveFailed, true);
+                    failedMoveAction(new int3(targetCoordinate.xy,targetMap));
+                }
+                moveEndAction = null;
+                changeCoordinateAction = null;
+                failedMoveAction = null;
             }
 
             MoveCrossMap(resultList, targetCoordinate, moveEndAction, changeCoordinateAction, FailedMoveAction);
@@ -1473,10 +1493,14 @@ public partial class Character
         }
         else
         {
+            moveTarget = new int3(0, 0, 0);
             if (endAction != null)
             {
                 endAction.Invoke();
             }
+            this.moveEndAction = null;
+            this.changeCoordinateAction = null;
+            this.failedMoveAction = null;
         }
     }
 }

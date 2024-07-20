@@ -80,7 +80,7 @@ public static class CharacterAnimatorParameter
 
 public enum EntityType
 {
-    All = 1, 地图道具 = 2, 角色 = 15, 玩家 = 3, NPC = 5
+    All = 1, 地图道具 = 2, 角色 = 15, 玩家 = 3
 }
 
 public static class AttackType
@@ -1176,7 +1176,8 @@ public static class DataPath
         {typeof(NPCTaskScheduleData),"Data/NPCTaskScheduleData" },
         {typeof(ZeroInitDataList),"Data/ZeroInitDataList" },
         {typeof(TaskScheduleModelData),"Data/TaskScheduleModelData/TaskScheduleModelDataList" },
-        {typeof(NPCBehaviorData),"Data/NPCBehaviorData" }
+        {typeof(NPCBehaviorData),"Data/NPCBehaviorData" },
+        {typeof(MulitiBehaviorData),"Data/MulitiBehaviorData" }
     };
 
     public static string GetDataPath(Type type)
