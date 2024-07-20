@@ -9,6 +9,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
     private SellItem sellItem;
 
+    public bool playerStoreOpen { get; private set; }
     protected override void Clear()
     {
         base.Clear();
@@ -30,9 +31,30 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<SetStoreCounter>(SetStoreCounter);
         GameActionManager.instance.AddListener<BuyPlayerGood>(BuyPlayerGood);
         GameActionManager.instance.AddListener<TryBuyPlayerGood>(TryBuyPlayerGood);
+        GameActionManager.instance.AddListener<SetPlayerStoreOpen>(SetPlayerStoreOpen);
     }
-
-    private async void TryBuyPlayerGood(TryBuyPlayerGood buyPlayerGood)
+    void SetPlayerStoreOpen(SetPlayerStoreOpen setPlayerStoreOpen)
+    {
+        if (playerStoreOpen != setPlayerStoreOpen.open)
+        {
+            playerStoreOpen = setPlayerStoreOpen.open;
+            if (playerStoreOpen)
+            {
+                StartCreatTempCharacter startCreatTempCharacter = new StartCreatTempCharacter
+                {
+                    creatDataId = 1,
+                };
+                GameActionManager.instance.QueueAction(startCreatTempCharacter,true);
+            }
+            else
+            {
+                ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
+                GameActionManager.instance.QueueAction(clearTempCharacter,true);
+            }
+            
+        }  
+    }
+    private  void TryBuyPlayerGood(TryBuyPlayerGood buyPlayerGood)
     {
         if (runtimeStoreCounters.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
         {

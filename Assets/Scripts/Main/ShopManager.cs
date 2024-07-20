@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 public class ShopManager : Singleton<ShopManager>
 {
@@ -18,6 +19,17 @@ public class ShopManager : Singleton<ShopManager>
         {
             shop.OpenShopItem(openShopItem.itemId);  
         }
+    }
+    public int2 GetShopMapItem(int shopId)
+    {
+        if(shopDic.TryGetValue(shopId,out var shop))
+        {
+            if(shopListDic.TryGetValue(shop.listName,out var shopList))
+            {
+                return new int2(shopList.mapInstance, shopList.mapItemInstance);
+            }
+        }
+        return int2.zero;
     }
     public void InitShopList(ShopListSaveData shopListSaveData)
     {
@@ -56,6 +68,7 @@ public class ShopManager : Singleton<ShopManager>
             for(int j = 0; j < shopGroupData.shopDatas.Count; j++)
             {
                 Shop shop = new Shop(shopGroupData.shopDatas[j]); 
+                shop.listName=shopGroupData.name;
                 shopList.shops.Add(shop.shopId,shop);
                 shopDic.Add(shop.shopId, shop);
             }
@@ -88,6 +101,7 @@ public class ShopList : IReferenceData
 public class Shop:IReferenceData
 { 
     public string shopName;
+    public string listName;
     public int shopId;
     private MyDic<int,ShopItemData> shopItemDatas=new MyDic<int, ShopItemData>();
     private MyDic<int, ShopItemData> openShopItems = new MyDic<int, ShopItemData>();

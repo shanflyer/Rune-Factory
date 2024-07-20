@@ -212,7 +212,9 @@ public class NPC : IReferenceData
         return character.GetInformation();
     }
 
-    private NPCBehaviorData NPCBehaviorData; 
+    private NPCBehaviorData NPCBehaviorData;
+
+    public List<int> likeItems => NPCBehaviorData.likeItems;
 
     public List<int2> Beds => NPCBehaviorData.beds;
     public List<int2> WorkItems => NPCBehaviorData.workItems;
@@ -226,6 +228,7 @@ public class NPC : IReferenceData
 
     private MyDic<int, int3> visitMaps = new MyDic<int, int3>();
     private MyDic<int, int2> visitFriends = new MyDic<int, int2>();
+    private MyDic<int, int> visitShops = new MyDic<int, int>();
     public async void InitBehaviorData()
     {
         NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
@@ -237,6 +240,10 @@ public class NPC : IReferenceData
         {
             visitFriends.Add(NPCBehaviorData.npcFriends[i].x, NPCBehaviorData.npcFriends[i]);
         }
+        for(int i = 0; i < NPCBehaviorData.visitShops.Count; i++)
+        {
+            visitShops.Add(NPCBehaviorData.visitShops[i].x, NPCBehaviorData.visitShops[i].y);
+        }
     }
     public bool IsInHome()
     {
@@ -247,10 +254,11 @@ public class NPC : IReferenceData
         }
         return false;
     }
+     
     private void InitNowVisitMap()
     {
         if (NPCBehaviorData.gameTimeKeyVisitMapDic.TryGetValue(GameTimeManager.instance.nowHourMinute, out var value))
-        {
+        { 
             var int2 = GameRandom.instance.GetRandomItemValueList(value);
             HashSet<int> nowMaps = new HashSet<int>();
             for (int i = 0; i < int2.Count; i++)
@@ -323,6 +331,14 @@ public class NPC : IReferenceData
     }
     public int GetVisitFriend()
     {
+        if (visitFriends.length == 0)
+        {
+            for (int i = 0; i < NPCBehaviorData.npcFriends.Count; i++)
+            {
+                visitFriends.Add(NPCBehaviorData.npcFriends[i].x, NPCBehaviorData.npcFriends[i]);
+            }
+        }
+
         GameRandomData gameRandomData = new GameRandomData
         {
             id = -1,
@@ -347,9 +363,48 @@ public class NPC : IReferenceData
         if (randomResults.Count > 0)
         {
             int npcId = randomResults[0].x;
+            visitFriends.Remove(npcId);
             return npcId;
         }
 
+        return 0;
+    }
+    public int GetVisitShop()
+    {
+        if (visitShops.length == 0)
+        {
+            for (int i = 0; i < NPCBehaviorData.visitShops.Count; i++)
+            {
+                visitShops.Add(NPCBehaviorData.visitShops[i].x, NPCBehaviorData.visitShops[i].y);
+            }
+        }
+        GameRandomData gameRandomData = new GameRandomData
+        {
+            id = -1,
+            weightRandom = true,
+            barrels = new List<int3>(),
+            randomItems = new List<RandomItem>(),
+            text = "选择目标"
+        };
+        for (int i = 0; i < visitShops.length; i++)
+        {
+            RandomItem randomItem = new RandomItem
+            {
+                itemValue = visitShops.GetKeyForIndex(i),
+                randomValue = visitShops.GetValueForIndex(i),
+                maxCount = 1,
+                minCount = 1
+            };
+            gameRandomData.randomItems.Add(randomItem);
+        }
+        gameRandomData.Pretreatment();
+        var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, 1);
+        if (randomResults.Count > 0)
+        {
+            int shopId = randomResults[0].x;
+            visitShops.Remove(shopId);
+            return shopId;
+        }
         return 0;
     }
 

@@ -59,6 +59,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<TrySetMapItem>(TrySetMapItem);
         GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
     }
+    public int2 GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance)
+    {
+        if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
+        {
+            return MapCellController.instance.GetRandomItemPlayerTriggerCell(roomId, itemInstanceId);
+        }
+        return new int2(int.MinValue, int.MinValue);
+    }
     public int2 GetItemCommonCenterTriggerCellForEditorInstance(int roomId, int itemEditorInstance)
     {
         if(editorItemRemapInstanceIds.TryGetValue(new int2(roomId,itemEditorInstance),out var itemInstanceId))

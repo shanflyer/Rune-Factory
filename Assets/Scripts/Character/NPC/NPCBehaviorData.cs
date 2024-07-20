@@ -19,6 +19,7 @@ public class NPCBehaviorData : ScriptableObject, IGameData
 
     public List<int2> beds = new List<int2>();
     public List<int2> workItems = new List<int2>();
+    public List<int2> visitShops = new List<int2>();
 
     public List<int> likeItems = new List<int>();
     public List<int> unLikeItems = new List<int>();

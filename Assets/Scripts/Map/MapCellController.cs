@@ -641,7 +641,12 @@ public class MapCellController : Singleton<MapCellController>
         }
         return int3.zero;
     }
-
+    public int2 GetRandomItemPlayerTriggerCell(int roomId,int itemInstanceId)
+    {
+        var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
+        int index = GameRandom.RandomInt(0, cells.Length);
+        return cells[index];
+    }
     public int2 GetNearestItemPlayerTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
         var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
