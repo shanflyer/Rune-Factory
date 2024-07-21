@@ -817,7 +817,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             }
             if (display)
             {
-                WorldMapObjManager.instance.DisplayMap(displayMap);
+               await WorldMapObjManager.instance.DisplayMap(displayMap);
             }
             if (room.eventId != 0)
             {

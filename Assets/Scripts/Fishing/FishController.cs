@@ -93,7 +93,7 @@ public class FishController : Singleton<FishController>
             Fishers.Remove(recycleFisher.characterInstance);
         }
     }
-    void CreatFisher(CreatFisher creatFisher)
+    async void CreatFisher(CreatFisher creatFisher)
     {
         if (!Fishers.ContainsKey(creatFisher.characterInstance))
         {
@@ -102,7 +102,7 @@ public class FishController : Singleton<FishController>
             {
                 if (CharacterManager.instance.GetRuntimeCharacterObj(creatFisher.characterInstance, out var characterRuntimeObj))
                 {
-                    RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<FishTool>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
+                    RuntimeObj runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<FishTool>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
                   
                     Vector3 pos = GameCommon.fishToolOffsets[character.direction];
                     pos += characterRuntimeObj.animator.transform.position;

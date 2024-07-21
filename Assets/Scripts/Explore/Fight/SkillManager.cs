@@ -87,14 +87,19 @@ public class BuffRuntime
         Vector3 pos=FightController.instance.GetPosForCharacterId(characterId);
         if (buffData.buffObj!= null)
         {
-            runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
-            buffActionBehavior = runtimeObj.obj as BuffActionBehavior;
-            if (buffActionBehavior)
+            InitRuntimeObj();
+            async void InitRuntimeObj()
             {
-                buffActionBehavior.stopAction = ParticleSystemStopAction;
-                buffActionBehavior.transform.position = pos;
-                buffActionBehavior.PlayParticle();
+                runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
+                buffActionBehavior = runtimeObj.obj as BuffActionBehavior;
+                if (buffActionBehavior)
+                {
+                    buffActionBehavior.stopAction = ParticleSystemStopAction;
+                    buffActionBehavior.transform.position = pos;
+                    buffActionBehavior.PlayParticle();
+                }
             }
+            
         } 
     } 
     void ParticleSystemStopAction()

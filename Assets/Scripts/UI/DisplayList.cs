@@ -76,7 +76,7 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         }
     }
 
-    public void InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+    public async void InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
     {
        
         if (componentData == null)
@@ -108,7 +108,9 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
             }
             else
             {
-                T t = GameObject.Instantiate(listPrefab);
+                var async = GameObject.InstantiateAsync(listPrefab);
+                await async;
+                T t = async.Result[0];
                 t.InitData(componentData[i], SelectAction, toggleGroup);
                 t.enabled = true;
                 t.transform.SetParent(parent);

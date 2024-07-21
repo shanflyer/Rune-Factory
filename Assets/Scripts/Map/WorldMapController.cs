@@ -45,7 +45,9 @@ public class WorldMapController : MonoBehaviour
             var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)
             {
-                Instantiate(cameraPrefab);
+                var async = InstantiateAsync(cameraPrefab);
+                await async;
+                //Instantiate(cameraPrefab);
             } 
         }
        

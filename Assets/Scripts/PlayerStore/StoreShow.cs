@@ -15,9 +15,9 @@ public class StoreShow:Singleton<StoreShow>
         CoinPrefab =await GameSourceManager.instance.GetComponent<Animation>(DataPath.StoreCoinPrefab);
         GameActionManager.instance.AddListener<ShowCoin>(ShowCoin);
     }
-    public void ShowCoin(ShowCoin ShowCoin)
+    public async void ShowCoin(ShowCoin ShowCoin)
     {
-        var coinRuntimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Animation>(RuntimeObjType.STOREITEM.ToString(), "Coin", CoinPrefab, 0);
+        var coinRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Animation>(RuntimeObjType.STOREITEM.ToString(), "Coin", CoinPrefab, 0);
         Animation animation = coinRuntimeObj.obj as Animation;
         animation.transform.position = ShowCoin.pos;
         animation.Play();

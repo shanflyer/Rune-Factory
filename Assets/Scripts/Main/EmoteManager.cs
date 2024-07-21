@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -49,9 +50,9 @@ public class EmoteManager : Singleton<EmoteManager>
         }
     }
 
-    public RuntimeObj GetEmote(int id, Transform parent)
+    public async Task<RuntimeObj> GetEmote(int id, Transform parent)
     {
-        RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Animator>(RuntimeObjType.EMOTE.ToString(),
+        RuntimeObj runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Animator>(RuntimeObjType.EMOTE.ToString(),
             "emote", emoteAnimator, id, parent);
         return runtimeObj;
     }
@@ -68,7 +69,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     if (CharacterManager.instance.GetRuntimeCharacterObj(showEmote.id, out var characterRuntimeObj))
                     {
                         emoteRuntime = new EmoteRuntime();
-                        emoteRuntime.runtimeObj = GetEmote(showEmote.emoteId, characterRuntimeObj.model);
+                        emoteRuntime.runtimeObj =await GetEmote(showEmote.emoteId, characterRuntimeObj.model);
                         characterEmoteRuntimes[showEmote.id] = emoteRuntime;
                     }
                 } 
@@ -81,7 +82,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     if (WorldMapObjManager.instance.GetRuntimeMapItemObj(showEmote.id, out var itemRuntimeObj))
                     {
                         emoteRuntime = new EmoteRuntime();
-                        emoteRuntime.runtimeObj = GetEmote(showEmote.emoteId, itemRuntimeObj.transform);
+                        emoteRuntime.runtimeObj =await GetEmote(showEmote.emoteId, itemRuntimeObj.transform);
                         itemEmoteRuntimes[showEmote.id] = emoteRuntime;
                     }
                 }

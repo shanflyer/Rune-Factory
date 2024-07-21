@@ -36,6 +36,16 @@ public struct TestStruct
 }
 public class Test : MonoBehaviour
 {
+
+    public GameObject prefab;
+    public GameObject obj;
+    public async void TestCreatObj()
+    {
+      var AsyncInstantiateOperation = InstantiateAsync(prefab);
+        await AsyncInstantiateOperation;
+        obj = AsyncInstantiateOperation.Result[0];
+    }
+
     public TestStruct testStruct;
 
     public void TestStructAction()
@@ -200,17 +210,10 @@ public class TestEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("testBehavior"))
+        if (GUILayout.Button("testCreat"))
         {
-            test.TestBehavior();
+            test.TestCreatObj();
         }
-        if (GUILayout.Button("Disable"))
-        {
-            test.DisEnableBehavior();
-        }
-        if (GUILayout.Button("Stop"))
-        {
-            test.StopEnableBehavior();
-        }
+      
     }
 }

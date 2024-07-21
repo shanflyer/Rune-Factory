@@ -680,7 +680,7 @@ public class FightController : MonoBehaviour
                 var itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId);
                 for (int j = 0; j < itemCount; j++)
                 {
-                    var itemRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
+                    var itemRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
                       "dropItem", GameSourceManager.instance.dropItem, itemData.id);
                     SpriteRenderer spriteRenderer = itemRuntime.obj as SpriteRenderer;
                     spriteRenderer.sprite = itemData.icon;
@@ -777,11 +777,11 @@ public class FightController : MonoBehaviour
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
     }
 
-    public void CreatFightMap(FightMapData fightMapData)
+    public async void CreatFightMap(FightMapData fightMapData)
     {
         if (fightMapData.fightMapObj != null)
         {
-            var mapRuntimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
+            var mapRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
             fightMapData.id.ToString(), fightMapData.fightMapObj.transform, 0);
 
             fightMapRuntime = new FightMapRuntime(mapRuntimeObj, fightMapData.cycleSize);
@@ -818,7 +818,7 @@ public class FightController : MonoBehaviour
             CharacterData characterData = character.characterData;
             if (characterData != null)
             {
-                var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
+                var characterRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
                     characterData.obj.name, characterData.obj.transform, character.instanceId, isActive: false);
                 var transform = characterRuntime.obj as Transform;
                 transform.position = playerPos[index].position;
@@ -866,7 +866,7 @@ public class FightController : MonoBehaviour
         index = math.clamp(index, 0, 5);
         if (characterData != null)
         {
-            var characterRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.MONSTRT.ToString(),
+            var characterRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.MONSTRT.ToString(),
                 "Monster", monsterObj.transform, instanceId, isActive: false);
             var transform = characterRuntime.obj as Transform;
 

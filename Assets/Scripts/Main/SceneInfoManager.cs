@@ -5,9 +5,9 @@ using UnityEngine;
 public class SceneInfoManager : Singleton<SceneInfoManager>
 {
     private SceneInfo sceneInfoPre;
-    public void DisplaySceneInfo(string str,Vector3 pos)
+    public async void DisplaySceneInfo(string str,Vector3 pos)
     {
-        var runtimeSceneInfo = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
+        var runtimeSceneInfo =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
            "", sceneInfoPre, 0);
         SceneInfo sceneInfo = runtimeSceneInfo.obj as SceneInfo;
         sceneInfo.transform.position = pos;

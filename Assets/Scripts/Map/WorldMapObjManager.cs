@@ -166,7 +166,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    private void CreatTempMapObjItem(TempMapItem tempMapItem)
+    private async void CreatTempMapObjItem(TempMapItem tempMapItem)
     {
         Transform overrideParent = null;
         if (CharacterManager.instance.GetRuntimeCharacterObj(tempMapItem.characterId, out var characterRuntimeObj))
@@ -184,7 +184,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             MapItemData mapItemData = tempMapItem.MapItemData;
             ProfabTransform = mapItemData.itemObj.transform;
         }
-        var itemObj = GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
+        var itemObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
                 tempMapItem.MapItemData.id.ToString(), ProfabTransform, -1, overrideParent);
         MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj, tempMapItem.instanceId, tempMapItem.MapItemData.id, tempMapItem.coordinate);
         tempMapItemObj.SetDefaultLayer();
@@ -217,24 +217,24 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         await DisplayMap(displayMap);
     }
 
-    private RuntimeObj CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
+    private async Task<RuntimeObj> CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
     {
         if (mapRoomData != null)
         {
-            var mapRuntimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), mapRoomData.roomName, mapRoomData.mapObj.transform, instanceId);
+            var mapRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), mapRoomData.roomName, mapRoomData.mapObj.transform, instanceId);
             return mapRuntimeObj;
         }
         return null;
     }
 
-    private RuntimeObj CreatMapItemRuntime(MapItemData mapItemData, int instanceId, int2 coordinate)
+    private async Task<RuntimeObj> CreatMapItemRuntime(MapItemData mapItemData, int instanceId, int2 coordinate)
     {
         Vector3 pos = GameCommon.GetMapPos(coordinate);
         //pos.z = -100;
 
         if (mapItemData != null)
         {
-            var mapItemRuntime = GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), mapItemData.id.ToString(), mapItemData.itemObj.transform, instanceId);
+            var mapItemRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), mapItemData.id.ToString(), mapItemData.itemObj.transform, instanceId);
             (mapItemRuntime.obj as Transform).localPosition = pos;
 
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
@@ -349,7 +349,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
             //Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
-            nowMapRoomObj = CreatMapRunTime(displayMapRoomData, mapId);
+            nowMapRoomObj =await CreatMapRunTime(displayMapRoomData, mapId);
             // (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
             List<int> mapItems = WorldMapManager.instance.GetMapItems(mapId);
@@ -596,11 +596,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     private Dictionary<int, Manufature> manufatureObjs = new Dictionary<int, Manufature>();
 
-    public void DisplayMapItem(RuntimeMapItem runtimeMapItem)
+    public async void DisplayMapItem(RuntimeMapItem runtimeMapItem)
     {
         if (!nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
         {
-            var runtimeObj = CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
+            var runtimeObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
 
             MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
@@ -646,7 +646,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    public void ChangeMapItemDisplay(int mapItemId, int newId, int2 animationKey, RuntimeMapItem runtimeMapItem)
+    public async void ChangeMapItemDisplay(int mapItemId, int newId, int2 animationKey, RuntimeMapItem runtimeMapItem)
     {
         if (nowRuntimeMapItemObjs.TryGetValue(mapItemId, out MapItemRuntimeObj runtimeObj))
         {
@@ -664,7 +664,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             GameActionManager.instance.QueueAction(displayStoreCounter, true);
 
             runtimeObj.Recycle();
-            var newObj = CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
+            var newObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
             MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[mapItemId] = MapItemRuntimeObj;
 

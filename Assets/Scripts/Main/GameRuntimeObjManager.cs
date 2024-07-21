@@ -58,7 +58,8 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         return false;
     }
  
-    public RuntimeObj CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,Transform overrideParent=null,bool isActive=true)where T:Component
+    public async Task<RuntimeObj> CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,
+        Transform overrideParent=null,bool isActive=true)where T:Component
     {
         if(!objParents.TryGetValue(runtimeObjType,out Transform parent))
         {
@@ -72,7 +73,9 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         if (!GetRuntimeObj(runtimeObjType, key, out var runtimeObj))
         {
             runtimeObj = new RuntimeObj();
-            runtimeObj.obj = GameObject.Instantiate(objPre, parent);
+            var asyncInstantiateOperation = GameObject.InstantiateAsync(objPre, parent);
+            await asyncInstantiateOperation;
+            runtimeObj.obj = asyncInstantiateOperation.Result[0];
             runtimeObj.runtimeObjType = runtimeObjType;
             runtimeObj.key = key;
         }

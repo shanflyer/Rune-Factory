@@ -106,7 +106,9 @@ public class InputManager :Singleton<InputManager>
             playerInput.actions = await GameSourceManager.instance.GetScriptableObject<InputActionAsset>(DataPath.InputDataPath);
 
             var pointerPre = await GameSourceManager.instance.GetPrefab(DataPath.pointerEffectPath);
-            var pointerObj = GameObject.Instantiate(pointerPre, inputController.transform); 
+            var asyncInstantiateOperation = GameObject.InstantiateAsync(pointerPre, inputController.transform);
+            await asyncInstantiateOperation;
+            var pointerObj = asyncInstantiateOperation.Result[0]; 
             particleSystem=pointerObj.GetComponent<ParticleSystem>();
         }
         var actionMaps= playerInput.actions.actionMaps;

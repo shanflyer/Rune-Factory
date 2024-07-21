@@ -225,7 +225,7 @@ public class CameraManager : Singleton<CameraManager>
     }
 
    // private bool fixedView = false;
-    private Vector3 oldCameraPos;
+    public Vector3 oldCameraPos { get; private set; }
 
     protected override void UpData()
     {

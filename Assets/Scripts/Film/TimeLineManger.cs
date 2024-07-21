@@ -324,10 +324,10 @@ public class TimeLineManger : Singleton<TimeLineManger>
 
     private PlayableDirector defaultPlayableDirector;
      
-    public void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
+    public async void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
         Action endAction)
     {
-        var runtimeObj = GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYABLEDIRECTOR.ToString(), "default", defaultPlayableDirector, 0);
+        var runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYABLEDIRECTOR.ToString(), "default", defaultPlayableDirector, 0);
         var playableDirector = runtimeObj.obj as PlayableDirector;
 
         if(!playableDirector.gameObject.TryGetComponent(out MyReciver myReciver))

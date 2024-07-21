@@ -60,19 +60,24 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
     public void SetCameraPos(Vector2 pos)
     {
-        skyEnviromentMono.SetBgPos(pos);
+        if(skyEnviromentMono)
+            skyEnviromentMono.SetBgPos(pos);
     }
-    public override void Init()
+    public override async void Init()
     {
         base.Init(); 
         if (skyEnviromentMono == null)
         {
             var _skyEnviromentMono = Resources.Load<SkyEnviromentMono>("Prefabs/Environment");
-            skyEnviromentMono = GameObject.Instantiate(_skyEnviromentMono,CameraManager.instance.mainCamera.transform);
+
+            var asyncInstantiateOperation = GameObject.InstantiateAsync(_skyEnviromentMono, CameraManager.instance.mainCamera.transform);
+            await asyncInstantiateOperation;
+            skyEnviromentMono = asyncInstantiateOperation.Result[0];
             var skyPos = skyEnviromentMono.transform.position;
             var skyLocalPos = skyEnviromentMono.transform.localPosition;
             skyLocalPos.z-=skyPos.z;
             skyEnviromentMono.transform.localPosition = skyLocalPos;
+            skyEnviromentMono.SetBgPos(CameraManager.instance.oldCameraPos);
            // GameObject.DontDestroyOnLoad(skyEnviromentMono.gameObject);
         }
          

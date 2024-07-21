@@ -140,7 +140,9 @@ public class GameController : MonoBehaviour
             var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)
             {
-                var cameraObj = Instantiate(cameraPrefab);
+                var asyncInstantiateOperation = InstantiateAsync(cameraPrefab);
+                await asyncInstantiateOperation;
+                var cameraObj = asyncInstantiateOperation.Result[0];
               //  GameObject.DontDestroyOnLoad(cameraObj);
             }
         }

@@ -93,7 +93,7 @@ public class FuncReference : UIObjReference<FunctionData>
         GameController.instance.StartCoroutine(enumerator);
     }
 
-    public void InitFunction(FunctionData functionData, Button secondSelectButton)
+    public async void InitFunction(FunctionData functionData, Button secondSelectButton)
     {
         this.functionData = functionData;
         nameText.text = functionData.buttonName;
@@ -104,7 +104,9 @@ public class FuncReference : UIObjReference<FunctionData>
             secondSelectButtons.Clear();
             for (int i = 0; i < functionData.secondFunctions.Length; i++)
             {
-                var selectButton = Instantiate(secondSelectButton, Vector3.zero, Quaternion.identity, secondParent);
+                var async=InstantiateAsync(secondSelectButton, secondParent, Vector3.zero, Quaternion.identity);
+                await async;
+                var selectButton = async.Result[0];
                 selectButton.transform.localScale = Vector3.one;
                 selectButton.GetComponentInChildren<Text>().text = functionData.secondFunctions[i].buttonName;
                 selectButton.onClick.AddListener(() => { functionData.secondFunctions[i].gameActionData.Action(); });

@@ -189,7 +189,9 @@ public class FilmController : Singleton<FilmController>
         {
             if (filmData.FilmObj)
             {
-                GameObject filmObj = GameObject.Instantiate(filmData.FilmObj, filmParent);
+                var asyncInstantiateOperation= GameObject.InstantiateAsync(filmData.FilmObj, filmParent);
+                await asyncInstantiateOperation;
+                GameObject filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
                 BindFilm(filmData.GetTimeLineAsset(assetName), playableDirector);
                 Film film = new Film
@@ -208,7 +210,9 @@ public class FilmController : Singleton<FilmController>
             var filmPrefab = await GameSourceManager.instance.GetPrefab(filmPath);
             if (filmPrefab != null)
             {
-                GameObject filmObj = GameObject.Instantiate(filmPrefab, filmParent);
+                var asyncInstantiateOperation = GameObject.InstantiateAsync(filmPrefab, filmParent);
+                await asyncInstantiateOperation;
+                var filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
                 Film film = new Film
                 {

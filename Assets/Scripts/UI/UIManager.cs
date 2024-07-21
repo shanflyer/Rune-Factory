@@ -113,7 +113,9 @@ public class UIManager : Singleton<UIManager>
         {
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
-            var _Panel = GameObject.Instantiate(gamePanelObj, parent == null ? canvasParent : parent);
+            var async=GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
+            await async;
+            var _Panel = async.Result[0];
             var gamePanelComponent = _Panel.GetComponent(type);
             _Panel.transform.localPosition = Vector3.zero;
             GamePanel<V> gamePanel;
@@ -185,8 +187,10 @@ public class UIManager : Singleton<UIManager>
         if (!gamePanels.TryGetValue(type, out BaseReference gamePanel) || gamePanel == null || gamePanel.pluralUI)
         {
             string path = $"{DataPath.UIPath}{type}";
-            var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
-            var _Panel = GameObject.Instantiate(gamePanelObj, parent == null ? canvasParent : parent);
+            var gamePanelObj = await GameSourceManager.instance.GetPrefab(path); 
+            var async = GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
+            await async;
+            var _Panel = async.Result[0]; 
             _Panel.transform.localPosition = Vector3.zero;
             var gamePanelComponent = _Panel.GetComponent(type);
 

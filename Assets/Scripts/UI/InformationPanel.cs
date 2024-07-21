@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 public class InformationPanel : GamePanel<IReferenceData>
 {
@@ -21,7 +22,7 @@ public class InformationPanel : GamePanel<IReferenceData>
         close = FindChildGameObject<Button>("Close");
         close.onClick.AddListener(Close);
     }
-    public void RefreshInformations(List<string> strs,int startIndex)
+    public async void RefreshInformations(List<string> strs,int startIndex)
     {
         int index = 0;
         for(int i = startIndex; i < strs.Count; i++)
@@ -34,7 +35,9 @@ public class InformationPanel : GamePanel<IReferenceData>
             }
             else
             {
-                TextMeshProUGUI infoObj = Instantiate(info, infoParent, false);
+                var async = InstantiateAsync(info, infoParent);
+                await async;
+                TextMeshProUGUI infoObj = async.Result[0];
                 infoObj.text = strs[i];
                 infoObj.transform.localScale = Vector3.one;
             }
@@ -52,7 +55,9 @@ public class InformationPanel : GamePanel<IReferenceData>
                 }
                 else
                 {
-                    TextMeshProUGUI infoObj = Instantiate(info, infoParent, false);
+                    var async = InstantiateAsync(info, infoParent);
+                    await async;
+                    TextMeshProUGUI infoObj = async.Result[0];
                     infoObj.text = strs[i];
                     infoObj.transform.localScale = Vector3.one;
                 }
@@ -68,7 +73,7 @@ public class InformationPanel : GamePanel<IReferenceData>
             }
         }
     }
-    public void AddInfo(string information,bool cycle=false)
+    public async Task AddInfoAsync(string information,bool cycle=false)
     {
         if (cycle&&infoParent.childCount>0)
         {
@@ -78,7 +83,9 @@ public class InformationPanel : GamePanel<IReferenceData>
         }
         else
         {
-            TextMeshProUGUI infoObj = Instantiate(info, infoParent, false);
+            var async = InstantiateAsync(info, infoParent);
+            await async;
+            TextMeshProUGUI infoObj = async.Result[0];
             infoObj.text = information;
             infoObj.transform.localScale = Vector3.one;
         }
