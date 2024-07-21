@@ -15,13 +15,13 @@ MonoBehaviour:
   roomName: "\u5DE5\u574A"
   barrierGrids: d4fffffff8ffffff16000000f8ffffffd4fffffff9ffffffe8ffffffffffffffd4ffffff1c000000e8ffffff23000000e9ffffff200000001600000023000000fbffffff10000000ffffffff1f000000ffffffff0e000000ffffffff0f0000000000000014000000160000001f000000020000000e00000002000000130000000300000010000000160000001300000013000000f9ffffff16000000000000001300000007000000160000000f00000016000000010000001600000006000000
   mapItems:
-  - id: 1091
-    instanceId: 1091753
+  - id: 1122
+    instanceId: 1122611
     coordinate:
-      x: -13
-      y: 18
+      x: 14
+      y: -5
     animationKey: 0
-    blindHomeEquipment: 2104
+    blindHomeEquipment: 2109
     eventReferenceDatas: []
   - id: 1120
     instanceId: 1120438
@@ -31,13 +31,13 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 2107
     eventReferenceDatas: []
-  - id: 1122
-    instanceId: 1122611
+  - id: 1091
+    instanceId: 1091753
     coordinate:
-      x: 14
-      y: -5
+      x: -13
+      y: 18
     animationKey: 0
-    blindHomeEquipment: 2109
+    blindHomeEquipment: 2104
     eventReferenceDatas: []
   startCoordinate:
     x: -44
@@ -57,4 +57,13 @@ MonoBehaviour:
   fixedCameraPos: {x: 0, y: 0, z: 0}
   skyBackGroundId: 0
   creatTempCharacterId: 0
-  npcBehaviorAreas: []
+  autoCreatTempNpc: 0
+  tempNpcPrewarm: 0
+  npcBehaviorAreas:
+  - Name: 160
+    pos:
+      x: -3
+      y: 4
+    grids: ddffffffffffffff1300000008000000ddffffff09000000eeffffff15000000effffffffbffffff12000000feffffff
+    behaviorAreaType: 1
+  specialNpcBehaviorAreas: []

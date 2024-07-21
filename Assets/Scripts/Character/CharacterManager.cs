@@ -630,7 +630,7 @@ public class CharacterManager : Singleton<CharacterManager>
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
             new int2(creatTempCharacter.coordinateX, creatTempCharacter.coordinateY));
 
-        //character.templevel = level;
+        character.templevel = level;
         RefreshNpcRuntimeObj(character);
         if (creatTempCharacter.setValue != null)
         {

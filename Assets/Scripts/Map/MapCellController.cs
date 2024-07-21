@@ -63,7 +63,8 @@ public class MapCharacterGrid
 
     public MapCharacterGrid()
     {
-        characters = new NativeList<int3>(16,Allocator.Persistent); 
+        characters = new NativeList<int3>(16,Allocator.Persistent);
+        characterIndexs = new Dictionary<int, int>();
     } 
     public void Dispose()
     {
@@ -1506,7 +1507,11 @@ public class MapCellController : Singleton<MapCellController>
         {
             int checkId = nowList[i];
             var Neighbours = GetRoomNeighbours(checkId);
-
+            if (Neighbours.IsEmpty)
+            {
+                result = false;
+                return new Queue<int>();
+            }
             foreach (var neighbour in Neighbours)
             {
                 if (!checkRoom.Contains(neighbour.Key))

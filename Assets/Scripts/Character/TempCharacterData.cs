@@ -47,6 +47,7 @@ public class TempCharacterData : ScriptableObject, IGameData
                     if(!levelMapBehaviors.TryGetValue(level,out var behaviorDic))
                     {
                         behaviorDic = new IntBehaviorDictionary();
+                        levelMapBehaviors.Add(level, behaviorDic);
                     }
                     behaviorDic[map] = behaviorTree; 
                 }

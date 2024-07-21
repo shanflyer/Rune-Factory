@@ -44,7 +44,8 @@ public class RandomEmoteBehavior : Action
             else
             {
                 taskStatus = TaskStatus.Success;
-            } 
+            }
+            return;
         }
         taskStatus = TaskStatus.Failure;
     }

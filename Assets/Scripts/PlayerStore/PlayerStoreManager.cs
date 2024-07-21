@@ -48,8 +48,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             }
             else
             {
-                ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
-                GameActionManager.instance.QueueAction(clearTempCharacter,true);
+                StopTempCharacterCreat stopTempCharacterCreat = new StopTempCharacterCreat(); 
+                GameActionManager.instance.QueueAction(stopTempCharacterCreat, true);
             }
             
         }  

@@ -75,7 +75,7 @@ public class TempCharacter : Character
     public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : base(characterData, professionData, instanceId)
     {
         this.tempCharacterData = tempCharacterData;
-        templevel = 1;
+        //templevel = 1;
     }
 
     public int GetAreaEmote()
@@ -123,9 +123,9 @@ public class TempCharacter : Character
         {
             if (!externalBehaviorTreeDic.TryGetValue(mapInstance, out externalBehaviorTree))
             {
-                externalBehaviorTreeDic.TryGetValue(0, out externalBehaviorTree);
+                externalBehaviorTree = tempCharacterData.defaultBehavior;
             }
-            externalBehaviorTree = tempCharacterData.defaultBehavior;
+           
         }
         else
         {
@@ -468,6 +468,10 @@ public class NPC : IReferenceData
 
     public void AddNpcBehavior(ExternalBehaviorTree externalBehavior, bool loopBehavior = true,bool PauseWhenDisabled=false)
     {
+        if (externalBehavior == null)
+        {
+            return;
+        }
         CharacterBehaviorManager.instance.AddBehavior(characterId, externalBehavior, loopBehavior, ResetBehaviorState, PauseWhenDisabled);
         endBehavior = false;
     }

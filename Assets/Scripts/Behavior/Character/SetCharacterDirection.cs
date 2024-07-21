@@ -25,17 +25,22 @@ public class SetCharacterDirection : Action
     private SharedInt characterId; 
     public override void OnStart()
     {
-        if (characterId==null|| characterId.IsNull())
-        {
-            characterId = (SharedInt)Owner.GetVariable("CharacterId");
-        }
-        if (faceTargetCoordinate==null|| faceTargetCoordinate.IsNull())
-        {
-            faceTargetCoordinate = (SharedInt3)Owner.GetVariable("FaceTargetCoordinate");
-        }
+       
         if (faceItem)
         {
-            if(WorldMapManager.instance.GetMapItemPos(itemEditorInstance.Value,out var objCoordinate))
+            bool getItem =false;
+            if (!WorldMapManager.instance.GetMapItemPos(targetNPC.Value, out var objCoordinate))
+            {
+                if(WorldMapManager.instance.GetMapItemPos(itemEditorInstance.Value, out objCoordinate))
+                {
+                    getItem = true;
+                }
+            }
+            else
+            {
+                getItem = true;
+            }
+            if (getItem)
             {
                 SetTargetDirection SetTargetDirection = new SetTargetDirection
                 {

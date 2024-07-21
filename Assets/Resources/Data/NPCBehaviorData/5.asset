@@ -15,7 +15,7 @@ MonoBehaviour:
   npcName: "\u739B\u5FB7\u7433"
   id: 5
   home: 948
-  dailyTasks: 010000000200000003000000
+  dailyTasks: 00000000010000000200000003000000
   eventTasks: 
   beds:
   - x: 948
@@ -23,6 +23,7 @@ MonoBehaviour:
   workItems:
   - x: 948
     y: 1068306
+  visitShops: []
   likeItems: e9030000ef030000
   unLikeItems: ea030000ec030000
   likeTalk: 30000
@@ -31,7 +32,8 @@ MonoBehaviour:
   unlikeEmote: 30003
   defaultTalk: 30004
   defaultEmote: 30005
-  externalBehavior: {fileID: 11400000, guid: 7f00a5ba4f0dc6349ace02e526736764, type: 2}
+  externalBehavior: {fileID: 0}
   gameTimeKeyVisitMapDic:
     m_keys: []
     m_values: 
+  npcFriends: []

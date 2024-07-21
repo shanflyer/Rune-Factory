@@ -15,27 +15,11 @@ MonoBehaviour:
   roomName: "\u690D\u7269\u5E97"
   barrierGrids: c0fffffff0fffffffffffffff1ffffffc0fffffff2ffffffc3fffffff3ffffffc0fffffff4ffffffc0ffffff1c000000c1fffffff9ffffffc2ffffff03000000c1ffffff04000000c1ffffff1c000000c2ffffff1a000000c9ffffff1c000000c7ffffff01000000e8ffffff03000000c9ffffff10000000cdffffff12000000caffffff0f000000ccffffff0f000000caffffff13000000ccffffff13000000caffffff1b000000ffffffff1c000000d2ffffff1a000000d7ffffff1a000000d6fffffffdffffffeafffffffdffffffd6fffffffeffffffe8ffffff00000000dafffffff2fffffffffffffff8ffffffdafffffff9ffffffecfffffffbffffffdafffffffcffffffebfffffffcffffffdaffffff04000000e8ffffff08000000daffffff09000000e7ffffff09000000dbffffff0a000000e0ffffff0a000000dbffffff13000000ffffffff1a000000dcffffff0b000000dfffffff0b000000dcffffff12000000ffffffff12000000e3ffffff11000000efffffff11000000ebffffff10000000eeffffff10000000f3fffffff9fffffffffffffffbfffffff4fffffffcfffffffffffffffcfffffffaffffff11000000ffffffff11000000fbffffff10000000ffffffff10000000fcffffff0f000000ffffffff0f000000fdffffff0e000000ffffffff0e000000fefffffffdffffffffffffff0d000000
   mapItems:
-  - id: 1068
-    instanceId: 1068306
+  - id: 1073
+    instanceId: 1073344
     coordinate:
-      x: -11
-      y: 8
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1069
-    instanceId: 1069997
-    coordinate:
-      x: -51
-      y: 25
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1070
-    instanceId: 1070089
-    coordinate:
-      x: -39
-      y: 23
+      x: -60
+      y: 13
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -47,6 +31,14 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
+  - id: 1068
+    instanceId: 1068306
+    coordinate:
+      x: -11
+      y: 8
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
   - id: 1072
     instanceId: 1072035
     coordinate:
@@ -55,19 +47,27 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1073
-    instanceId: 1073344
-    coordinate:
-      x: -60
-      y: 13
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1074
     instanceId: 1074627
     coordinate:
       x: -55
       y: 23
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1070
+    instanceId: 1070089
+    coordinate:
+      x: -39
+      y: 23
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1069
+    instanceId: 1069997
+    coordinate:
+      x: -51
+      y: 25
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -89,4 +89,13 @@ MonoBehaviour:
   fixedCameraPos: {x: 0, y: 0, z: 0}
   skyBackGroundId: 0
   creatTempCharacterId: 0
-  npcBehaviorAreas: []
+  autoCreatTempNpc: 0
+  tempNpcPrewarm: 0
+  npcBehaviorAreas:
+  - Name: 165
+    pos:
+      x: -33
+      y: 14
+    grids: f4ffffff00000000fcffffff0200000003000000ffffffff08000000010000000d000000f2ffffff14000000f5ffffff
+    behaviorAreaType: 0
+  specialNpcBehaviorAreas: []

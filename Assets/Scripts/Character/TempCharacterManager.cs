@@ -22,6 +22,8 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
         GameActionManager.instance.AddListener<StartCreatTempCharacter>(StartCreatTempCharacter);
         GameActionManager.instance.AddListener<StartCreatSpecialTempCharacter>(StartCreatSpecialTempCharacter);
+        GameActionManager.instance.AddListener<StopTempCharacterCreat>(StopTempCharacterCreat);
+        level = 1;
     }
 
     private int totalCharacterCount;
@@ -33,6 +35,15 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         creatTempDelegate = null;
     }
 
+    void StopTempCharacterCreat(StopTempCharacterCreat stopTempCharacterCreat)
+    {
+        totalCharacterCount = 0;
+        if (creatTempDelegate != null)
+        {
+            GameTimerController.instance.RemoveWaiter(creatTempDelegate);
+        }
+        NowTempCharacterCreatData = null;
+    }
     private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
     {
         totalCharacterCount = 0;
