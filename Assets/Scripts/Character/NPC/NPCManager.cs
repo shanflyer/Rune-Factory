@@ -9,7 +9,10 @@ public enum NPCState
 {
     修养中 = 0, 正常 = 1
 }
-
+public enum NPCBehaviorState
+{
+    闲置=0,工作=1,睡眠=2,
+}
 public struct CharacterInformationDataList : IReferenceData
 {
     public List<CharacterInformationData> characterInformationDatas;
@@ -213,7 +216,7 @@ public class NPC : IReferenceData
     }
 
     private NPCBehaviorData NPCBehaviorData;
-
+    
     public List<int> likeItems => NPCBehaviorData.likeItems;
 
     public List<int2> Beds => NPCBehaviorData.beds;
@@ -483,33 +486,33 @@ public class NPC : IReferenceData
     public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime, out bool loopBehavior, out bool behaviorCanBreak
         , out bool pauseWhenDisabled)
     {
-        var data = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
-        if (data != null)
+        nowScheduleData = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
+        if (nowScheduleData != null)
         {
-            loopBehavior = data.loopBehavior;
-            behaviorCanBreak = data.canBreak;
-            pauseWhenDisabled = data.PauseWhenDisabled;
-            return data.externalBehavior;
+            loopBehavior = nowScheduleData.loopBehavior;
+            behaviorCanBreak = nowScheduleData.canBreak;
+            pauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
+            return nowScheduleData.externalBehavior;
         }
         loopBehavior = false;
         behaviorCanBreak = false;
         pauseWhenDisabled = false;
         return null;
     }
-
+    public NPCTaskScheduleData nowScheduleData { get; private set; }
     public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak,out bool PauseWhenDisabled)
     {
         try
         {
             if (nPCTaskScheduleTimeList != null)
             {
-                var data = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
-                if (data != null)
+                nowScheduleData = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
+                if (nowScheduleData != null)
                 {
-                    loopBehavior = data.loopBehavior;
-                    behaviorCanBreak = data.canBreak;
-                    PauseWhenDisabled = data.PauseWhenDisabled;
-                    return data.externalBehavior;
+                    loopBehavior = nowScheduleData.loopBehavior;
+                    behaviorCanBreak = nowScheduleData.canBreak;
+                    PauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
+                    return nowScheduleData.externalBehavior;
                 }
             }
         }

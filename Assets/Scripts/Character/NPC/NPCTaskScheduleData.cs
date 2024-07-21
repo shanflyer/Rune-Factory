@@ -20,6 +20,8 @@ public class NPCTaskScheduleData : ScriptableObject, IGameData
     public bool loopBehavior;
     public bool canBreak;
     public bool PauseWhenDisabled;
+    public bool holdPos;
+    public NPCBehaviorState behaviorState;
     public string GetKey()
     {
         return id.ToString();

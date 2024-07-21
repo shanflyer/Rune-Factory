@@ -869,8 +869,8 @@
     <Compile Include="Assets\Scripts\Character\NPC\NPCFunctionData.cs" />
     <Compile Include="Assets\Scripts\Action\ItemAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowSoftness.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Character\GetCharacterPackageBehavior.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetVisitShop.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\GetCharacterPackageBehavior.cs" />
     <Compile Include="Assets\Scripts\Environment\EnvironmentDataList.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FilghtTilmeLineController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
@@ -915,6 +915,7 @@
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\SwitchCameraDemo.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetUpVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\GetComponent.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCBehaviorState.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedVector2.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetRightVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Normalize.cs" />
@@ -1009,6 +1010,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsKinematic.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetPlaybackSpeed.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCNowTaskCanPauseByMulit.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsSleeping.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterDirection.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetShadowStrength.cs" />

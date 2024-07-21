@@ -120,8 +120,16 @@ public class GroupCharacterMoveToEachOther : Action
             for(int i = 0; i < characters.length; i++)
             {
                 var character = characters[i];
-                character.RemoveMove();
-                character.MoveCrossMap(nowCenter);
+                if(NPCManager.instance.GetNPCFormInstance(character.instanceId,out var npc)
+                    &&npc.nowScheduleData.holdPos)
+                {
+                    character.RemoveMove(); 
+                }
+                else
+                {
+                    character.RemoveMove();
+                    character.MoveCrossMap(nowCenter);
+                } 
             }
             oldCenter = nowCenter;
         }
