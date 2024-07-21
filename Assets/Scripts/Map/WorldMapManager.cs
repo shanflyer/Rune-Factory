@@ -791,45 +791,43 @@ public class WorldMapManager : Singleton<WorldMapManager>
             displayMap = worldMapData.defaultMap;
         }
         var displayRoom = worldMapData.worldMapDic[displayMap];
-        await CreatRoomRuntime(displayRoom, true);
+        await CreatRoomRuntime(displayRoom, true, displayMap);
 
         foreach (var room in worldMapData.worldMapDic.Values)
         {
             if (room.id != displayMap)
             {
-                await CreatRoomRuntime(room, false);
+                await CreatRoomRuntime(room, false, displayMap);
             }
-        }
-
-        async Task CreatRoomRuntime(WorldMap room, bool display)
-        {
-            //获取房间数据
-            var MapRoomData = room.mapRoomData;
-            //roomMapDatas.Add(room.id, room.map);
-
-            //创建地图房间
-            MapCellController.instance.InitMapData(room.id, MapRoomData, room.coordinate);
-
-            foreach (var data in MapRoomData.mapItems)
-            {
-                int itemInstanceId = await AddMapItem(data, room.id);
-                GameDataSaveManager.instance.InitMapItemSaveData(itemInstanceId);
-            }
-            if (display)
-            {
-               await WorldMapObjManager.instance.DisplayMap(displayMap);
-            }
-            if (room.eventId != 0)
-            {
-                await GameEventManager.instance.AddGameEvent(room.eventId);
-            }
-        }
-
+        } 
         //生成地图链接
         MapCellController.instance.InitLinkMap(worldMapData.mapLines);
         // return true;
 
         //WorldMapObjManager.instance.DefaultDisplayMap(displayMap);
+    }
+    async Task CreatRoomRuntime(WorldMap room, bool display, int displayMap = 0)
+    {
+        //获取房间数据
+        var MapRoomData = room.mapRoomData;
+        //roomMapDatas.Add(room.id, room.map);
+
+        //创建地图房间
+        MapCellController.instance.InitMapData(room.id, MapRoomData, room.coordinate);
+
+        foreach (var data in MapRoomData.mapItems)
+        {
+            int itemInstanceId = await AddMapItem(data, room.id);
+            GameDataSaveManager.instance.InitMapItemSaveData(itemInstanceId);
+        }
+        if (display)
+        {
+            await WorldMapObjManager.instance.DisplayMap(displayMap);
+        }
+        if (room.eventId != 0)
+        {
+            await GameEventManager.instance.AddGameEvent(room.eventId);
+        }
     }
 
     private async void ChangeMapItem(ChangeMapItem changeMapItem)

@@ -82,7 +82,7 @@ public class WorldMapController : MonoBehaviour
         {
             worldName = worldName,
             displayMap = mapInstance
-        },true);
+        });
       
         GameActionManager.instance.QueueAction(new CreatDefaultNPC());
 

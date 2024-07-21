@@ -279,7 +279,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
 
     private async void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
-    {
+    { 
         if (runtimeStoreCounters.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeStoreCounter))
         {
             if (displayStoreCounter.display)
@@ -293,7 +293,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 if (!nowRuntimeStoreCounterObjs.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeObj))
                 {
                     runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",
-                        sellItem, displayStoreCounter.itemInstanceId);
+                        sellItem, displayStoreCounter.itemInstanceId); 
                     nowRuntimeStoreCounterObjs.Add(displayStoreCounter.itemInstanceId, runtimeObj);
                 }
                 SellItem nowSellItem = runtimeObj.obj as SellItem;

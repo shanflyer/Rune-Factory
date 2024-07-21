@@ -353,6 +353,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             // (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
             List<int> mapItems = WorldMapManager.instance.GetMapItems(mapId);
+           
             for (int i = 0; i < mapItems.Count; i++)
             {
                 if (WorldMapManager.instance.GetRuntimeMapItem(mapItems[i], out RuntimeMapItem mapItem))
@@ -605,15 +606,16 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
 
+            /*
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
             {
                 display = true,
                 itemInstanceId = runtimeMapItem.instanceId,
                 transform = runtimeObj.obj as Transform
             };
-            GameActionManager.instance.QueueAction(displayStoreCounter);
+            GameActionManager.instance.QueueAction(displayStoreCounter);*/
 
-            RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
+            await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
 
             var manufature = ManufatureManager.instance.GetManufature(runtimeMapItem.instanceId);
             if (manufature != null)
@@ -655,13 +657,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 tempObj.Recycle();
                 tempRuntimeMapItemObjs.Remove(mapItemId);
             }
-
-            DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
-            {
-                display = false,
-                itemInstanceId = runtimeMapItem.instanceId,
-            };
-            GameActionManager.instance.QueueAction(displayStoreCounter, true);
+             
 
             runtimeObj.Recycle();
             var newObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
