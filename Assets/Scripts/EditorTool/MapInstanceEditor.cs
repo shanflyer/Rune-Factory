@@ -391,10 +391,7 @@ public class MapInstanceEditor : MonoBehaviour
                     poses.Add(new Vector3Int(x, y));
                     tileBases.Add(barrierTile);
                     barriers.Add(new Vector3Int(x, y)); 
-                    Vector2 pos = GameCommon.GetMapPos(x,y);
-                    var editorCoordinate = Instantiate(this.editorCoordinate, pos, Quaternion.identity, coordinateDisplayParent.transform);
-                    editorCoordinate.SetText($"{x},{y}");
-                    coordinateDisplayParent.SetActive(displayCoordinate);
+                   
                 }
             }
             tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
@@ -407,6 +404,12 @@ public class MapInstanceEditor : MonoBehaviour
             for (int y = mapRoomData.startCoordinate.y; y <= mapRoomData.endCoordinate.y; y++)
             {
                 var pos = new Vector3Int(x, y);
+
+                Vector2 pos1 = GameCommon.GetMapPos(x, y);
+                var editorCoordinate = Instantiate(this.editorCoordinate, pos1, Quaternion.identity, coordinateDisplayParent.transform);
+                editorCoordinate.SetText($"{x},{y}");
+                coordinateDisplayParent.SetActive(displayCoordinate);
+
                 if (!barriers.Contains(pos))
                 {
                     poses1.Add(pos);

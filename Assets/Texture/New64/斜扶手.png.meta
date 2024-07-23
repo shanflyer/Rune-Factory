@@ -12,7 +12,7 @@ TextureImporter:
       213: 3491908509985373253
     second: "\u659C\u6276\u624B_2"
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -54,7 +54,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -76,7 +76,7 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -86,9 +86,10 @@ TextureImporter:
     crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -98,6 +99,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -107,13 +109,14 @@ TextureImporter:
       name: "\u659C\u6276\u624B_0"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 35
-        height: 40
+        x: 2
+        y: 3
+        width: 34
+        height: 38
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -128,13 +131,14 @@ TextureImporter:
       name: "\u659C\u6276\u624B_1"
       rect:
         serializedVersion: 2
-        x: 35
-        y: 0
+        x: 36
+        y: 3
         width: 32
-        height: 40
+        height: 36
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -149,13 +153,14 @@ TextureImporter:
       name: "\u659C\u6276\u624B_2"
       rect:
         serializedVersion: 2
-        x: 67
-        y: 0
+        x: 68
+        y: 3
         width: 34
-        height: 40
+        height: 38
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -167,6 +172,7 @@ TextureImporter:
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 4c6c265a4fb34864e9e73cc181a780d1
@@ -178,6 +184,8 @@ TextureImporter:
     secondaryTextures:
     - texture: {fileID: 2800000, guid: 5cff1fde678f59b46a6c79a318f17fa7, type: 3}
       name: _NormalMap
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
       "\u659C\u6276\u624B_0": -2021585209496538916
       "\u659C\u6276\u624B_1": 2955210935153582261

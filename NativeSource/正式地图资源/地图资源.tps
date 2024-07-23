@@ -3741,6 +3741,28 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">房子门0.png</key>
+            <key type="filename">房子门0_normal.png</key>
+            <key type="filename">房子门1.png</key>
+            <key type="filename">房子门1_normal.png</key>
+            <key type="filename">房子门2.png</key>
+            <key type="filename">房子门2_normal.png</key>
+            <key type="filename">房子门3.png</key>
+            <key type="filename">房子门3_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>7,10,14,19</rect>
+                <key>scale9Paddings</key>
+                <rect>7,10,14,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">搅拌机.png</key>
             <key type="filename">搅拌机0.png</key>
             <key type="filename">搅拌机1.png</key>
