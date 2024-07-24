@@ -307,6 +307,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741826
+  - first: {x: 1, y: -4, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 92
+      m_TileSpriteIndex: 92
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741826
   - first: {x: 3, y: -4, z: 0}
     second:
       serializedVersion: 2
@@ -1193,6 +1203,8 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: edc608ebf31d1c24096a2fa96e83322c, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 0c37aafc3c7624d45b303d511a0bb63f, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 0cd63460b7030144eab1410fb0d195f7, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
     m_Data: {fileID: -318840853, guid: 143235d8da96b2f42a4e5f46769c3f15, type: 3}
@@ -1359,7 +1371,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 1834691882, guid: db0cb404718b5f84c81333e112c3f761, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -1951230506, guid: 0390fb67b200534449d4afc44d59c40c, type: 3}
+    m_Data: {fileID: 793260988, guid: 0390fb67b200534449d4afc44d59c40c, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1334998019, guid: 0390fb67b200534449d4afc44d59c40c, type: 3}
   - m_RefCount: 1
@@ -1385,8 +1397,10 @@ Tilemap:
     m_Data: {fileID: -147030578, guid: 3e1d151fc61c44547bc772571bd08aac, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1519018412, guid: 6bc0a8a479d58ca47b6deb4fa49766bb, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: -811118868, guid: 0390fb67b200534449d4afc44d59c40c, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 92
+  - m_RefCount: 93
     m_Data:
       e00: 1
       e01: 0
@@ -1405,7 +1419,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 92
+  - m_RefCount: 93
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -1448,6 +1462,9 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1480,7 +1497,7 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
---- !u!114 &958356671659415434
+--- !u!114 &5216954728630842382
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
