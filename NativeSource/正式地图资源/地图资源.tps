@@ -472,9 +472,6 @@
             <key type="filename">提灯.png</key>
             <key type="filename">提灯_normal.png</key>
             <key type="filename">教堂建筑_42_normal.png</key>
-            <key type="filename">新家具_06.png</key>
-            <key type="filename">新家具_102.png</key>
-            <key type="filename">新家具_140.png</key>
             <key type="filename">服饰架_normal.png</key>
             <key type="filename">木桶_01_normal.png</key>
             <key type="filename">木桶_02_normal.png</key>
@@ -507,6 +504,7 @@
             <key type="filename">武器架_normal.png</key>
             <key type="filename">武器柜右_normal.png</key>
             <key type="filename">油画_normal.png</key>
+            <key type="filename">灰色柜子_normal.png</key>
             <key type="filename">矮柜_normal.png</key>
             <key type="filename">矮桌_normal.png</key>
             <key type="filename">窗户1_normal.png</key>
@@ -547,6 +545,7 @@
             <key type="filename">箱子_34.png</key>
             <key type="filename">箱子_34_normal.png</key>
             <key type="filename">箱子_35_normal.png</key>
+            <key type="filename">紫色椅子_normal.png</key>
             <key type="filename">绿植0_normal.png</key>
             <key type="filename">绿植1_normal.png</key>
             <key type="filename">绿植2_normal.png</key>
@@ -578,11 +577,12 @@
             <key type="filename">门_19_normal.png</key>
             <key type="filename">门_20_normal.png</key>
             <key type="filename">门洞_normal.png</key>
-            <key type="filename">魔法店铺_159.png</key>
+            <key type="filename">魔法店铺_159_normal.png</key>
             <key type="filename">魔法店铺_160.png</key>
-            <key type="filename">魔法店铺_41.png</key>
-            <key type="filename">魔法店铺_42.png</key>
-            <key type="filename">魔镜.png</key>
+            <key type="filename">魔法店铺_160_normal.png</key>
+            <key type="filename">魔法店铺_41_normal.png</key>
+            <key type="filename">魔法店铺_42_normal.png</key>
+            <key type="filename">魔镜_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -670,8 +670,6 @@
             <key type="filename">家具_98_normal.png</key>
             <key type="filename">教堂建筑_07_normal.png</key>
             <key type="filename">教堂建筑_46_normal.png</key>
-            <key type="filename">新家具_84.png</key>
-            <key type="filename">新家具_96.png</key>
             <key type="filename">柜子2_normal.png</key>
             <key type="filename">桌子_normal.png</key>
             <key type="filename">武器柜横_normal.png</key>
@@ -687,7 +685,7 @@
             <key type="filename">赌_85.png</key>
             <key type="filename">赌_85_normal.png</key>
             <key type="filename">长柜_normal.png</key>
-            <key type="filename">魔法店铺_153.png</key>
+            <key type="filename">魔法店铺_153_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -721,7 +719,7 @@
             <key type="filename">长椅_01_normal.png</key>
             <key type="filename">长椅_02.png</key>
             <key type="filename">长椅_02_normal.png</key>
-            <key type="filename">魔法店铺_158.png</key>
+            <key type="filename">魔法店铺_158_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -775,9 +773,15 @@
             <key type="filename">in_08.png</key>
             <key type="filename">in_09.png</key>
             <key type="filename">in_31.png</key>
+            <key type="filename">新家具_174.png</key>
+            <key type="filename">新家具_175.png</key>
+            <key type="filename">新家具_176.png</key>
             <key type="filename">长椅_03.png</key>
             <key type="filename">长椅_04.png</key>
             <key type="filename">雕像_09.png</key>
+            <key type="filename">魔法店铺_146.png</key>
+            <key type="filename">魔法店铺_148.png</key>
+            <key type="filename">魔法店铺_96.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.802083</point_f>
@@ -831,9 +835,6 @@
             <key type="filename">教堂建筑_09_normal.png</key>
             <key type="filename">教堂建筑_30.png</key>
             <key type="filename">教堂建筑_30_normal.png</key>
-            <key type="filename">新家具_174.png</key>
-            <key type="filename">新家具_175.png</key>
-            <key type="filename">新家具_176.png</key>
             <key type="filename">梯子.png</key>
             <key type="filename">梯子_normal.png</key>
             <key type="filename">赌_03_normal.png</key>
@@ -841,9 +842,9 @@
             <key type="filename">长椅_04_normal.png</key>
             <key type="filename">雕像_02_normal.png</key>
             <key type="filename">雕像_09_normal.png</key>
-            <key type="filename">魔法店铺_146.png</key>
-            <key type="filename">魔法店铺_148.png</key>
-            <key type="filename">魔法店铺_96.png</key>
+            <key type="filename">魔法店铺_146_normal.png</key>
+            <key type="filename">魔法店铺_148_normal.png</key>
+            <key type="filename">魔法店铺_96_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1000,6 +1001,7 @@
             <key type="filename">桌子.png</key>
             <key type="filename">武器柜横.png</key>
             <key type="filename">长柜.png</key>
+            <key type="filename">魔法店铺_153.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.703125</point_f>
@@ -1029,6 +1031,7 @@
             <key type="filename">家具_52.png</key>
             <key type="filename">家具_53.png</key>
             <key type="filename">教堂建筑_37.png</key>
+            <key type="filename">魔法店铺_56.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.8125</point_f>
@@ -1241,21 +1244,33 @@
             <key type="filename">蜡烛_08_normal.png</key>
             <key type="filename">蜡烛_09_normal.png</key>
             <key type="filename">魔法店铺_106.png</key>
+            <key type="filename">魔法店铺_106_normal.png</key>
             <key type="filename">魔法店铺_107.png</key>
+            <key type="filename">魔法店铺_107_normal.png</key>
             <key type="filename">魔法店铺_108.png</key>
+            <key type="filename">魔法店铺_108_normal.png</key>
             <key type="filename">魔法店铺_109.png</key>
+            <key type="filename">魔法店铺_109_normal.png</key>
             <key type="filename">魔法店铺_114.png</key>
+            <key type="filename">魔法店铺_114_normal.png</key>
             <key type="filename">魔法店铺_115.png</key>
+            <key type="filename">魔法店铺_115_normal.png</key>
             <key type="filename">魔法店铺_164.png</key>
+            <key type="filename">魔法店铺_164_normal.png</key>
             <key type="filename">魔法店铺_165.png</key>
-            <key type="filename">魔法店铺_29.png</key>
-            <key type="filename">魔法店铺_43.png</key>
-            <key type="filename">魔法店铺_44.png</key>
-            <key type="filename">魔法店铺_56.png</key>
+            <key type="filename">魔法店铺_165_normal.png</key>
+            <key type="filename">魔法店铺_29_normal.png</key>
+            <key type="filename">魔法店铺_43_normal.png</key>
+            <key type="filename">魔法店铺_44_normal.png</key>
+            <key type="filename">魔法店铺_56_normal.png</key>
             <key type="filename">魔法店铺_57.png</key>
+            <key type="filename">魔法店铺_57_normal.png</key>
             <key type="filename">魔法店铺_58.png</key>
+            <key type="filename">魔法店铺_58_normal.png</key>
             <key type="filename">魔法店铺_70.png</key>
+            <key type="filename">魔法店铺_70_normal.png</key>
             <key type="filename">魔法店铺_71.png</key>
+            <key type="filename">魔法店铺_71_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1285,6 +1300,7 @@
             <key type="filename">书架.png</key>
             <key type="filename">家具_100.png</key>
             <key type="filename">家具_99.png</key>
+            <key type="filename">新家具_06.png</key>
             <key type="filename">木桶_01.png</key>
             <key type="filename">木桶_02.png</key>
             <key type="filename">木桶_03.png</key>
@@ -1315,6 +1331,8 @@
             <key type="filename">箱子_29.png</key>
             <key type="filename">箱子_30.png</key>
             <key type="filename">箱子_32.png</key>
+            <key type="filename">魔法店铺_41.png</key>
+            <key type="filename">魔法店铺_42.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.703125</point_f>
@@ -1405,6 +1423,7 @@
             <key type="filename">flower_30.png</key>
             <key type="filename">家具_76.png</key>
             <key type="filename">火把.png</key>
+            <key type="filename">魔法店铺_29.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.6875</point_f>
@@ -1637,7 +1656,7 @@
             <key type="filename">赌_96.png</key>
             <key type="filename">赌_96_normal.png</key>
             <key type="filename">长桌_normal.png</key>
-            <key type="filename">魔法店铺_01.png</key>
+            <key type="filename">魔法店铺_01_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -1990,6 +2009,7 @@
             </struct>
             <key type="filename">Fridge.png</key>
             <key type="filename">in_32.png</key>
+            <key type="filename">新家具_84.png</key>
             <key type="filename">赌_19.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -2305,6 +2325,7 @@
             <key type="filename">in_53.png</key>
             <key type="filename">in_55.png</key>
             <key type="filename">圆桌.png</key>
+            <key type="filename">新家具_140.png</key>
             <key type="filename">椅子0.png</key>
             <key type="filename">椅子1.png</key>
             <key type="filename">椅子2.png</key>
@@ -2334,6 +2355,7 @@
             <key type="filename">门_18.png</key>
             <key type="filename">门_19.png</key>
             <key type="filename">门_20.png</key>
+            <key type="filename">魔法店铺_159.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.90625</point_f>
@@ -2353,6 +2375,8 @@
             <key type="filename">圆凳1.png</key>
             <key type="filename">收获篮_01_0.png</key>
             <key type="filename">收获篮_02_0.png</key>
+            <key type="filename">魔法店铺_43.png</key>
+            <key type="filename">魔法店铺_44.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.90625</point_f>
@@ -2888,6 +2912,21 @@
             <key type="filename">书架灰色.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
+                <point_f>0.5,0.899471</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,47,31,95</rect>
+                <key>scale9Paddings</key>
+                <rect>16,47,31,95</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">书架灰色_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
@@ -2901,6 +2940,21 @@
                 <false/>
             </struct>
             <key type="filename">书架灰色测.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.903846</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>11,26,22,52</rect>
+                <key>scale9Paddings</key>
+                <rect>11,26,22,52</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">书架灰色测_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -2931,6 +2985,7 @@
                 <false/>
             </struct>
             <key type="filename">入口.png</key>
+            <key type="filename">入口_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3169,7 +3224,7 @@
             <key type="filename">草料2_normal.png</key>
             <key type="filename">草料3_normal.png</key>
             <key type="filename">草料槽_normal.png</key>
-            <key type="filename">魔法店铺_73.png</key>
+            <key type="filename">魔法店铺_73_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3205,6 +3260,7 @@
             <key type="filename">草料1.png</key>
             <key type="filename">草料2.png</key>
             <key type="filename">草料3.png</key>
+            <key type="filename">魔法店铺_73.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.697917</point_f>
@@ -3325,14 +3381,23 @@
                 <false/>
             </struct>
             <key type="filename">壁画_01.png</key>
+            <key type="filename">壁画_01_normal.png</key>
             <key type="filename">壁画_02.png</key>
+            <key type="filename">壁画_02_normal.png</key>
             <key type="filename">壁画_03.png</key>
+            <key type="filename">壁画_03_normal.png</key>
             <key type="filename">壁画_04.png</key>
+            <key type="filename">壁画_04_normal.png</key>
             <key type="filename">壁画_05.png</key>
+            <key type="filename">壁画_05_normal.png</key>
             <key type="filename">壁画_06.png</key>
+            <key type="filename">壁画_06_normal.png</key>
             <key type="filename">壁画_07.png</key>
+            <key type="filename">壁画_07_normal.png</key>
             <key type="filename">壁画_08.png</key>
+            <key type="filename">壁画_08_normal.png</key>
             <key type="filename">裁缝招牌.png</key>
+            <key type="filename">裁缝招牌_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3815,7 +3880,37 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">小帐篷_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>14,16,27,33</rect>
+                <key>scale9Paddings</key>
+                <rect>14,16,27,33</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">屏风会.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.75</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,25,33,49</rect>
+                <key>scale9Paddings</key>
+                <rect>16,25,33,49</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">屏风会_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -3965,6 +4060,7 @@
                 <false/>
             </struct>
             <key type="filename">收获篮_03_0.png</key>
+            <key type="filename">魔法店铺_158.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.90625</point_f>
@@ -4148,6 +4244,44 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">新家具_102.png</key>
+            <key type="filename">绿植0.png</key>
+            <key type="filename">绿植1.png</key>
+            <key type="filename">绿植2.png</key>
+            <key type="filename">绿植3.png</key>
+            <key type="filename">绿植4.png</key>
+            <key type="filename">绿植5.png</key>
+            <key type="filename">蜡烛_05.png</key>
+            <key type="filename">蜡烛_06.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.796875</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">新家具_96.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,1</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">旗帜9.png</key>
             <key type="filename">旗帜9_normal.png</key>
             <struct type="IndividualSpriteSettings">
@@ -4180,6 +4314,21 @@
                 <false/>
             </struct>
             <key type="filename">望远镜.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.518519,0.692308</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>7,10,13,19</rect>
+                <key>scale9Paddings</key>
+                <rect>7,10,13,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">望远镜_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -4474,6 +4623,7 @@
                 <false/>
             </struct>
             <key type="filename">梳妆台6_normal.png</key>
+            <key type="filename">灰色梳妆台_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -4616,11 +4766,24 @@
                 <false/>
             </struct>
             <key type="filename">灰色柜子.png</key>
-            <key type="filename">灰色桌子.png</key>
-            <key type="filename">紫色椅子.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0.5,0.65</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,24,24,48</rect>
+                <key>scale9Paddings</key>
+                <rect>12,24,24,48</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">灰色桌子.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.697917</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -4635,7 +4798,7 @@
             <key type="filename">灰色梳妆台.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0.5,0.798611</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -4800,6 +4963,7 @@
                 <false/>
             </struct>
             <key type="filename">石台阶.png</key>
+            <key type="filename">石台阶_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -4845,6 +5009,7 @@
                 <false/>
             </struct>
             <key type="filename">窗帘关闭.png</key>
+            <key type="filename">窗帘关闭_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -4960,6 +5125,7 @@
                 <false/>
             </struct>
             <key type="filename">紫地毯.png</key>
+            <key type="filename">紫地毯_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -4971,6 +5137,21 @@
                 <rect>16,16,31,31</rect>
                 <key>scale9Paddings</key>
                 <rect>16,16,31,31</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">紫色椅子.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,24,24,48</rect>
+                <key>scale9Paddings</key>
+                <rect>12,24,24,48</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -5097,28 +5278,6 @@
                 <rect>17,15,33,30</rect>
                 <key>scale9Paddings</key>
                 <rect>17,15,33,30</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">绿植0.png</key>
-            <key type="filename">绿植1.png</key>
-            <key type="filename">绿植2.png</key>
-            <key type="filename">绿植3.png</key>
-            <key type="filename">绿植4.png</key>
-            <key type="filename">绿植5.png</key>
-            <key type="filename">蜡烛_05.png</key>
-            <key type="filename">蜡烛_06.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.796875</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>8,16,16,32</rect>
-                <key>scale9Paddings</key>
-                <rect>8,16,16,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -5379,6 +5538,20 @@
                 <false/>
             </struct>
             <key type="filename">钢琴.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.905405</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,19,32,37</rect>
+                <key>scale9Paddings</key>
+                <rect>16,19,32,37</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">钢琴_normal.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -5722,6 +5895,36 @@
                 <rect>16,32,32,64</rect>
                 <key>scale9Paddings</key>
                 <rect>16,32,32,64</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">魔法店铺_01.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.65</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>24,16,48,32</rect>
+                <key>scale9Paddings</key>
+                <rect>24,16,48,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">魔镜.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.95</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,16,16,32</rect>
+                <key>scale9Paddings</key>
+                <rect>8,16,16,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
