@@ -13,37 +13,13 @@ MonoBehaviour:
   m_Name: "\u6559\u5802\u4E8C\u697C"
   m_EditorClassIdentifier: 
   roomName: "\u6559\u5802\u4E8C\u697C"
-  barrierGrids: d0ffffffe0fffffff7ffffffe1ffffffd0ffffffe2ffffffefffffff00000000d0ffffff0a000000d3ffffff0d000000d4ffffff0c000000fbffffff0d000000daffffff0a000000e1ffffff0b000000dcffffff03000000dfffffff05000000e2ffffff0b000000f4ffffff0b000000e7ffffff01000000fbffffff03000000e7ffffff08000000f4ffffff0a000000f0ffffffeffffffffbffffff00000000f6ffffffe4fffffffbffffffe9fffffffdffffffe0ffffff07000000e1ffffffffffffffe2ffffff07000000e2ffffffffffffff0c0000002b0000000d00000000000000efffffff040000000200000005000000f0ffffff2b000000ffffffff050000000000000016000000020000000800000008000000130000000b0000000a000000e0ffffff2b000000efffffff18000000060000001c00000007000000200000000a000000230000000b00000023000000000000002b00000001000000280000000a0000002b0000000b0000002a000000020000002b00000007000000
+  barrierGrids: d0ffffffe0fffffff7ffffffe1ffffffd0ffffffe2fffffff0ffffff00000000d0ffffff01000000d0ffffff0d000000d1ffffff0a000000d3ffffff0d000000d4ffffff0c000000fbffffff0d000000daffffff0a000000e1ffffff0b000000dcffffff03000000dfffffff05000000e2ffffff0b000000f4ffffff0b000000e7ffffff01000000fcffffff02000000e7ffffff03000000fbffffff03000000e7ffffff08000000f4ffffff0a000000f1ffffffeffffffffbffffff00000000f6ffffffe4fffffffcffffffe9fffffffcfffffff0fffffffcffffff00000000fdffffffe0ffffff07000000e1ffffffffffffffe2ffffff07000000e2fffffffffffffff0ffffff2b000000ffffffffffffffff000000001800000002000000ffffffff0c0000002b0000000d00000000000000efffffff04000000efffffff0700000008000000140000000b00000009000000e0ffffff2b000000efffffff1400000007000000140000000700000018000000060000001c00000007000000200000000a000000230000000b00000022000000000000002b00000001000000280000000a0000002b0000000b00000029000000020000002b00000009000000
   mapItems:
   - id: 1156
     instanceId: 1156284
     coordinate:
       x: -41
       y: 8
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1008
-    instanceId: 1008766
-    coordinate:
-      x: 30
-      y: 8
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1157
-    instanceId: 1157136
-    coordinate:
-      x: -15
-      y: -23
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1003
-    instanceId: 1003492
-    coordinate:
-      x: -39
-      y: 1
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -56,10 +32,26 @@ MonoBehaviour:
     blindHomeEquipment: 0
     eventReferenceDatas: []
   - id: 1156
+    instanceId: 1156900
+    coordinate:
+      x: 38
+      y: 8
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1156
     instanceId: 1156253
     coordinate:
       x: 7
       y: -20
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1157
+    instanceId: 1157136
+    coordinate:
+      x: -15
+      y: -23
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -71,10 +63,18 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1156
-    instanceId: 1156900
+  - id: 1003
+    instanceId: 1003492
     coordinate:
-      x: 38
+      x: -39
+      y: 1
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1008
+    instanceId: 1008766
+    coordinate:
+      x: 30
       y: 8
     animationKey: 0
     blindHomeEquipment: 0
@@ -86,11 +86,11 @@ MonoBehaviour:
     x: 43
     y: 13
   mapObj: {fileID: 1247861017253229008, guid: 1ab4ff0f8740ad746ad27e9d991ebc49, type: 3}
-  dayEnvironmentDataName: 
-  duskEnvironmentDataName: 
-  dawnEnvironmentDataName: 
-  nightEnvironmentDataName: 
-  displaySky: 1
+  dayEnvironmentDataName: "\u5BA4\u5185\u767D\u5929"
+  duskEnvironmentDataName: "\u5BA4\u5185\u9EC4\u660F"
+  dawnEnvironmentDataName: "\u5BA4\u5185\u9ECE\u660E"
+  nightEnvironmentDataName: "\u5BA4\u5185\u665A\u4E0A"
+  displaySky: 0
   displaySunlight: 0
   fixedCamera: 0
   flowCameraType: 0

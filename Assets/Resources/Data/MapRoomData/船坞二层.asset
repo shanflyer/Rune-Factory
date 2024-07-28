@@ -13,53 +13,13 @@ MonoBehaviour:
   m_Name: "\u8239\u575E\u4E8C\u5C42"
   m_EditorClassIdentifier: 
   roomName: "\u8239\u575E\u4E8C\u5C42"
-  barrierGrids: ebfffffff4fffffffcffffff1f000000ebffffff20000000f6ffffff21000000ebffffff22000000ecffffff32000000edffffff2a000000efffffff32000000f0ffffff2d000000f0ffffff32000000f1ffffff2e000000f4ffffff32000000f5ffffff2f000000f7ffffff32000000f8ffffff300000001d00000032000000fcffffff270000000000000028000000fdffffff26000000ffffffff26000000fdffffff2f0000001d0000002f000000fffffffff4ffffff1d000000fdfffffffffffffffeffffff0d000000ffffffffffffffff04000000080000001f00000007000000230000001d0000002b00000008000000200000001d000000220000000900000007000000100000001f0000000b0000002c0000001d0000002e0000000c00000006000000100000000600000011000000080000001d0000001f00000015000000070000001d0000000700000017000000feffffff1d00000006000000
+  barrierGrids: ebfffffff4fffffffcffffff1f000000ebffffff20000000f6ffffff21000000ebffffff22000000ecffffff32000000edffffff2a000000efffffff32000000f0ffffff2d000000f0ffffff32000000f1ffffff2e000000f4ffffff32000000f5ffffff2f000000f7ffffff32000000f8ffffff300000001d00000032000000fcffffff270000000000000028000000fdffffff26000000ffffffff26000000fdffffff2f0000001d0000002f000000fffffffff4ffffff1d000000fdfffffffffffffffeffffff0d000000ffffffffffffffff04000000080000001f00000007000000230000001d0000002b00000008000000200000001d000000220000000900000007000000100000001f0000000b0000000600000010000000060000000b0000002c0000001d0000002e00000011000000080000001d0000001f00000015000000070000001d0000000700000017000000feffffff1d00000006000000
   mapItems:
-  - id: 1150
-    instanceId: 1150449
-    coordinate:
-      x: 3
-      y: 32
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1137
-    instanceId: 1137889
-    coordinate:
-      x: -10
-      y: 47
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1163
-    instanceId: 1163501
-    coordinate:
-      x: 7
-      y: 47
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1150
     instanceId: 1150150
     coordinate:
       x: -7
       y: 32
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1150
-    instanceId: 1150095
-    coordinate:
-      x: 18
-      y: -4
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1001
-    instanceId: 1001440
-    coordinate:
-      x: -14
-      y: 40
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -71,11 +31,51 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
+  - id: 1163
+    instanceId: 1163501
+    coordinate:
+      x: 7
+      y: 47
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1137
+    instanceId: 1137889
+    coordinate:
+      x: -10
+      y: 47
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1150
+    instanceId: 1150095
+    coordinate:
+      x: 18
+      y: -4
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1150
+    instanceId: 1150449
+    coordinate:
+      x: 3
+      y: 32
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
   - id: 1162
     instanceId: 1162796
     coordinate:
       x: 25
       y: 2
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1001
+    instanceId: 1001440
+    coordinate:
+      x: -14
+      y: 40
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -86,11 +86,11 @@ MonoBehaviour:
     x: 29
     y: 50
   mapObj: {fileID: 6418520366927608753, guid: 64d9ccee1f7e53e47864c2701f621f3b, type: 3}
-  dayEnvironmentDataName: 
-  duskEnvironmentDataName: 
-  dawnEnvironmentDataName: 
-  nightEnvironmentDataName: 
-  displaySky: 1
+  dayEnvironmentDataName: "\u5BA4\u5185\u767D\u5929"
+  duskEnvironmentDataName: "\u5BA4\u5185\u9EC4\u660F"
+  dawnEnvironmentDataName: "\u5BA4\u5185\u9ECE\u660E"
+  nightEnvironmentDataName: "\u5BA4\u5185\u665A\u4E0A"
+  displaySky: 0
   displaySunlight: 0
   fixedCamera: 0
   flowCameraType: 0

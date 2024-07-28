@@ -368,8 +368,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 RefreshTempMapItem(tempItems[i]);
             }
 
-            PolygonCollider2D polygonCollider2D = (nowMapRoomObj.obj as Transform).GetComponent<PolygonCollider2D>();
-            CameraManager.instance.SetConfiner2DCollider(polygonCollider2D);
+            Collider2D collider2D = (nowMapRoomObj.obj as Transform).GetComponent<Collider2D>();
+            CameraManager.instance.SetConfiner2DCollider(collider2D);
 #if UNITY_EDITOR
             // if (MapCellTestDisplay.Instance)
             // {

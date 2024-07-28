@@ -124,10 +124,10 @@ public class CameraManager : Singleton<CameraManager>
         fixedCamera.transform.Translate(movePos);
     }
 
-    public void SetConfiner2DCollider(PolygonCollider2D polygonCollider2D)
+    public void SetConfiner2DCollider(Collider2D collider2D)
     {
         confiner2D.enabled = false;
-        confiner2D.BoundingShape2D = polygonCollider2D;
+        confiner2D.BoundingShape2D = collider2D;
         confiner2D.enabled = true;
         confiner2D.InvalidateBoundingShapeCache();
         /*
