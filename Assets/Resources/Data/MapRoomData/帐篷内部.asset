@@ -13,13 +13,37 @@ MonoBehaviour:
   m_Name: "\u5E10\u7BF7\u5185\u90E8"
   m_EditorClassIdentifier: 
   roomName: "\u5E10\u7BF7\u5185\u90E8"
-  barrierGrids: f0fffffffaffffff0f000000fafffffff0fffffffbfffffffdfffffffcfffffff0fffffffdfffffff1ffffff13000000f2ffffff110000000f00000013000000f9ffffff050000000500000008000000f9ffffff09000000fdffffff0d00000002000000fbffffff0f000000fcffffff0e000000fdffffff0f00000010000000
-  mapItems: []
+  barrierGrids: e0fffffffaffffff1f000000faffffffe0fffffffbfffffffdfffffffcffffffe0fffffffdfffffff1ffffff00000000e0ffffff01000000e1ffffff13000000e2ffffff0d000000f1ffffff13000000eaffffff01000000f1ffffff05000000eaffffff0a000000f1ffffff0c000000f2ffffff110000001f00000013000000f9ffffff08000000fdffffff0d00000002000000fbffffff1f000000fcffffff0e000000fdffffff1f000000010000000e0000000200000015000000050000000e0000000a0000001500000010000000160000000c0000001f000000100000001e000000020000001f0000000b000000
+  mapItems:
+  - id: 1166
+    instanceId: 1166131
+    coordinate:
+      x: -26
+      y: 7
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1166
+    instanceId: 1166294
+    coordinate:
+      x: 26
+      y: 8
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1019
+    instanceId: 1019972
+    coordinate:
+      x: 0
+      y: 5
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
   startCoordinate:
-    x: -16
+    x: -32
     y: -6
   endCoordinate:
-    x: 15
+    x: 31
     y: 19
   mapObj: {fileID: 7702727824035925054, guid: 5a2ac48b88d241749a7816a4c0a83e52, type: 3}
   dayEnvironmentDataName: "\u5BA4\u5185\u767D\u5929"

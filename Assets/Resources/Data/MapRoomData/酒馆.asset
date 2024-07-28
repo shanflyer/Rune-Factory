@@ -13,8 +13,208 @@ MonoBehaviour:
   m_Name: "\u9152\u9986"
   m_EditorClassIdentifier: 
   roomName: "\u9152\u9986"
-  barrierGrids: d8ffffffe3ffffff1f000000e4ffffffd8ffffffe5fffffff8ffffffe8ffffffd8ffffffe9ffffffe3ffffffe9ffffffd8ffffffeaffffffe0fffffff7ffffffd8fffffff8ffffffd8ffffff2c000000d9ffffff02000000dbffffff08000000d9ffffff0c000000e0ffffff2c000000dcfffffffbffffffe2fffffffcffffffdcffffff03000000dcffffff08000000ddffffff04000000e0ffffff07000000dffffffffdffffffe3fffffffdffffffe1ffffff05000000e1ffffff06000000e1ffffff19000000e3ffffff2c000000e2ffffff0d000000e3ffffff0e000000e3fffffff4ffffffe6fffffff5ffffffe3fffffffcffffffe3fffffffcffffffe4ffffffffffffffe7ffffffffffffffe4ffffff1a000000e6ffffff2c000000e5fffffffeffffffe6fffffffeffffffe5ffffff00000000e6ffffff00000000e5ffffff0d000000e9ffffff0e000000e6ffffff0c000000e8ffffff0c000000e7ffffff1b000000e7ffffff2c000000e8fffffff5ffffffebfffffff7ffffffe8ffffff11000000ebffffff11000000e8ffffff1c000000fcffffff2c000000e9ffffffebffffffebffffffecffffffe9fffffff1ffffffecfffffff2ffffffe9fffffffbffffffecfffffffdffffffe9ffffff12000000eaffffff12000000e9ffffff18000000ecffffff19000000eaffffff10000000eaffffff10000000edffffffecfffffff2ffffffedffffffedfffffff8ffffffeffffffff9ffffffeeffffffebfffffff1ffffffebffffffefffffff09000000f4ffffff0a000000f0ffffff0b000000f3ffffff0b000000f0ffffff0e000000f3ffffff0f000000f1ffffff08000000f2ffffff08000000f3ffffff1a000000f6ffffff1b000000f4ffffffebfffffff6ffffffecfffffff4ffffff05000000f7ffffff06000000f5fffffffafffffff8fffffffbfffffff8ffffff0f0000000400000013000000f8ffffff14000000fcffffff1b000000f9ffffff0d000000fcffffff0e000000fafffffffdfffffffefffffffdfffffffaffffff00000000fdffffff01000000fbfffffffbfffffffefffffffcfffffffbfffffffefffffffefffffffefffffffcfffffffafffffffefffffffafffffffdffffff1d000000010000002c000000feffffff0d000000010000000e000000ffffffffe5ffffff1f000000e8ffffff00000000faffffff02000000fbffffff020000001e0000000c0000002c00000003000000e9ffffff08000000eaffffff04000000ebffffff07000000ebffffff04000000eeffffff07000000efffffff0400000004000000090000000500000005000000ffffffff08000000000000000500000003000000080000000300000005000000060000000800000006000000070000000f0000000c000000130000000b000000f9ffffff0c0000000e0000000b000000140000000c0000001d0000000c000000f4ffffff1f000000f5ffffff0d000000f6ffffff1f000000f6ffffff0d000000faffffff0d000000000000000d000000060000000e000000090000000d000000230000000d0000002c0000000e000000f7ffffff1f000000f7ffffff0e000000fbffffff0e000000000000000e000000280000001f0000002c0000000f000000f8ffffff1f000000f8ffffff0f000000fcffffff0f0000000000000010000000eeffffff14000000f0ffffff10000000f9ffffff1f000000f9ffffff10000000fdffffff1000000000000000100000000600000014000000080000001000000019000000120000001a0000001000000023000000100000002700000011000000faffffff1f000000faffffff11000000feffffff110000000000000011000000240000001f0000002700000012000000fbffffff1f000000fbffffff12000000ffffffff120000000000000013000000fcffffff1f000000fcffffff13000000000000001300000000000000140000000b000000170000000c0000001400000019000000180000001a00000015000000180000001700000018000000150000001b000000180000001b000000150000001e000000180000001f00000016000000eeffffff18000000efffffff1a000000160000001c000000170000001b000000e9ffffff1f000000ebffffff1b000000f0ffffff1f000000f3ffffff1b000000040000001f000000110000001c000000ffffffff1f000000030000001c000000210000001f000000230000001e000000ecffffff1f000000efffffff1f000000120000001f00000020000000
-  mapItems: []
+  barrierGrids: d8ffffffe3ffffff1f000000e4ffffffd8ffffffe5fffffff8ffffffe8ffffffd8ffffffe9ffffffe3ffffffe9ffffffd8ffffffeaffffffe0fffffff7ffffffd8fffffff8ffffffd8ffffff2c000000d9ffffff0c000000e0ffffff2c000000dcffffff05000000e1ffffff06000000dcffffff07000000e0ffffff07000000ddffffff04000000e0ffffff04000000dffffffffbffffffe2fffffffdffffffe1ffffff19000000e3ffffff2c000000e3fffffffcffffffe3fffffffdffffffe4ffffff1a000000e6ffffff2c000000e5ffffff0d000000e9ffffff0e000000e6ffffff0c000000e8ffffff0c000000e7ffffff1b000000e7ffffff2c000000e8fffffff5ffffffebfffffff7ffffffe8ffffff1c000000fcffffff2c000000e9fffffffbffffffecfffffffdffffffedffffffecfffffff2ffffffedffffffeeffffffebfffffff1ffffffebffffffefffffff09000000f4ffffff0a000000f0ffffff0b000000f3ffffff0b000000f1ffffff08000000f2ffffff08000000fafffffffdfffffffefffffffdfffffffbfffffffbfffffffefffffffcfffffffbfffffffefffffffefffffffefffffffcfffffffafffffffefffffffafffffffdffffff1d000000010000002c000000ffffffffe5ffffff1f000000e8ffffff020000001e0000000c0000002c00000003000000e9ffffff08000000eaffffff04000000ebffffff07000000ebffffff040000000400000009000000050000000500000003000000080000000300000005000000060000000800000006000000070000000f0000000c000000130000000b000000f9ffffff0c0000000e0000000b000000140000000c0000001d0000000c000000f4ffffff1f000000f5ffffff0d000000f6ffffff1f000000f6ffffff0d000000faffffff0d000000000000000d000000230000000d0000002c0000000e000000f7ffffff1f000000f7ffffff0e000000fbffffff0e000000000000000e000000280000001f0000002c0000000f000000f8ffffff1f000000f8ffffff0f000000fcffffff0f0000000000000010000000f9ffffff1f000000f9ffffff10000000fdffffff1000000000000000100000000600000014000000080000001000000023000000100000002700000011000000faffffff1f000000faffffff11000000feffffff110000000000000011000000240000001f0000002700000012000000fbffffff1f000000fbffffff12000000ffffffff120000000000000013000000fcffffff1f000000fcffffff130000000000000013000000000000001400000019000000180000001a00000015000000180000001700000018000000150000001b000000180000001b0000001b000000e9ffffff1f000000ebffffff1b000000f0ffffff1f000000f3ffffff1b000000040000001f000000110000001c000000ffffffff1f000000030000001c000000210000001f000000230000001e000000ecffffff1f000000efffffff1f000000120000001f00000020000000
+  mapItems:
+  - id: 1003
+    instanceId: 1003584
+    coordinate:
+      x: -22
+      y: -21
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003322
+    coordinate:
+      x: -5
+      y: 12
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1007
+    instanceId: 1007268
+    coordinate:
+      x: 13
+      y: 6
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1160
+    instanceId: 1160395
+    coordinate:
+      x: -34
+      y: 10
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1006
+    instanceId: 1006442
+    coordinate:
+      x: 6
+      y: -18
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003347
+    coordinate:
+      x: -10
+      y: -6
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1152
+    instanceId: 1152101
+    coordinate:
+      x: -22
+      y: 23
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003939
+    coordinate:
+      x: 0
+      y: 12
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1165
+    instanceId: 1165443
+    coordinate:
+      x: -2
+      y: 16
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003490
+    coordinate:
+      x: -10
+      y: 5
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003240
+    coordinate:
+      x: 17
+      y: 25
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1007
+    instanceId: 1007998
+    coordinate:
+      x: -36
+      y: -5
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1008
+    instanceId: 1008862
+    coordinate:
+      x: -27
+      y: -2
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1007
+    instanceId: 1007150
+    coordinate:
+      x: -30
+      y: 13
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1006
+    instanceId: 1006596
+    coordinate:
+      x: 22
+      y: 29
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003417
+    coordinate:
+      x: -28
+      y: -12
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003920
+    coordinate:
+      x: -21
+      y: -15
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003615
+    coordinate:
+      x: -11
+      y: -21
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003137
+    coordinate:
+      x: 27
+      y: 22
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1006
+    instanceId: 1006719
+    coordinate:
+      x: -4
+      y: 0
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003850
+    coordinate:
+      x: -18
+      y: -8
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1160
+    instanceId: 1160590
+    coordinate:
+      x: -11
+      y: 26
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1161
+    instanceId: 1161015
+    coordinate:
+      x: 7
+      y: 2
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003464
+    coordinate:
+      x: -15
+      y: 14
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003626
+    coordinate:
+      x: -37
+      y: 1
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
   startCoordinate:
     x: -40
     y: -29
@@ -36,3 +236,4 @@ MonoBehaviour:
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
   npcBehaviorAreas: []
+  specialNpcBehaviorAreas: []

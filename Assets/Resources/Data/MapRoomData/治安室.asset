@@ -13,8 +13,48 @@ MonoBehaviour:
   m_Name: "\u6CBB\u5B89\u5BA4"
   m_EditorClassIdentifier: 
   roomName: "\u6CBB\u5B89\u5BA4"
-  barrierGrids: e4ffffffe5fffffff0ffffffe7ffffffe4ffffffe8ffffffeaffffffecffffffe4ffffffedffffffe7fffffffaffffffe4fffffffbffffffe6fffffffbffffffe4ffffff00000000ebffffff03000000e4ffffff04000000e4ffffff0e000000e5ffffff06000000e8ffffff0e000000e8fffffff0ffffffe8fffffffaffffffe9fffffff1ffffffe9fffffffaffffffe9ffffff0b000000f4ffffff0e000000eafffffff6ffffffeafffffff9ffffffecffffff02000000f0ffffff03000000f0fffffff6fffffff5fffffff6fffffff1fffffff5fffffff4fffffff5fffffff1fffffff7fffffff4fffffff7fffffff3ffffffe5ffffff11000000e7fffffff3fffffffafffffff6fffffffbfffffff5ffffff0c000000110000000e000000f7ffffff07000000faffffff0b000000f8fffffff7fffffffbfffffff8fffffffdffffffe8ffffff11000000ecfffffffdfffffff2ffffff11000000f3fffffffeffffff0b000000110000000b000000ffffffffedffffff11000000f1fffffffffffffff4ffffff11000000f9ffffffffffffff020000001100000003000000000000000100000011000000010000000600000006000000110000000a0000000b000000faffffff11000000fcffffff0b0000000000000011000000000000000b00000004000000110000000500000011000000fdffffff11000000ffffffff
-  mapItems: []
+  barrierGrids: e4ffffffe5fffffff0ffffffe7ffffffe4ffffffe8ffffffeaffffffecffffffe4ffffffedffffffe7fffffff8ffffffe4fffffff9ffffffe4fffffffbffffffe4ffffff00000000ebffffff03000000e4ffffff04000000e4ffffff0e000000e5ffffff0c000000110000000e000000e7fffffffaffffffe9fffffffaffffffe8fffffff0ffffffe8fffffff8ffffffe9fffffff1ffffffe9fffffff8ffffffe9ffffff0b000000f4ffffff0b000000eafffffff6ffffffeafffffff8ffffffecffffff02000000f0ffffff03000000f0fffffff6fffffff5fffffff6fffffff1fffffff5fffffff4fffffff5fffffff1fffffff7fffffff4fffffff7fffffff3ffffffe5ffffff11000000e7fffffff7ffffff07000000faffffff0b000000fdffffffe8ffffff11000000ecfffffffdfffffff2ffffff11000000f3fffffffeffffff0b000000050000000b000000ffffffffedffffff11000000f1fffffffffffffff4ffffff11000000f9ffffffffffffff020000001100000003000000000000000100000011000000010000000b000000faffffff11000000fcffffff0b0000000000000011000000000000000b00000004000000110000000b00000011000000fdffffff11000000ffffffff
+  mapItems:
+  - id: 1080
+    instanceId: 1080613
+    coordinate:
+      x: 8
+      y: 11
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1080
+    instanceId: 1080779
+    coordinate:
+      x: -26
+      y: 11
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003010
+    coordinate:
+      x: -12
+      y: -6
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003642
+    coordinate:
+      x: -7
+      y: -9
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1006
+    instanceId: 1006364
+    coordinate:
+      x: -24
+      y: -4
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
   startCoordinate:
     x: -28
     y: -27
@@ -33,4 +73,7 @@ MonoBehaviour:
   fixedCameraPos: {x: -0.56, y: 0, z: -500}
   skyBackGroundId: 0
   creatTempCharacterId: 0
+  autoCreatTempNpc: 0
+  tempNpcPrewarm: 0
   npcBehaviorAreas: []
+  specialNpcBehaviorAreas: []
