@@ -19,8 +19,6 @@ public class MapLinkEditor : MonoBehaviour
     private Vector3 mapPos0, mapPos1;
     [SerializeField]
     private Tilemap tilemap0, tilemap1;
-    public List<Direction> directions0;
-    public List<Direction> directions1;
 
     private  static TileBase linkTile
     {
@@ -79,8 +77,6 @@ public class MapLinkEditor : MonoBehaviour
 
         mapPos0 = mapInstance0.transform.position;
         mapPos1 = mapInstance1.transform.position;
-        directions0 = mapLine.cells0.directions;
-        directions1 = mapLine.cells1.directions;
 
         string linkName = $"{mapLine.map0}-{mapLine.map1}";
         startPoint.gameObject.name=$"{linkName}:{mapLine.map0}";
@@ -198,7 +194,7 @@ public class MapLinkEditor : MonoBehaviour
         var trueStartCoordinate = startCoordinate - mapInstance0.coordinate;
         var trueEndCoordinate=endCoordinate-mapInstance1.coordinate;
         if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate,tilemap0,tilemap1,
-            mapInstance0.coordinate,mapInstance1.coordinate,directions0,directions1,
+            mapInstance0.coordinate,mapInstance1.coordinate,
              ref mapLine))
         { 
 
@@ -230,7 +226,7 @@ public class MapLinkEditor : MonoBehaviour
             SetLinePoint();
 
             if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate, tilemap0, tilemap1, 
-            mapInstance0.coordinate, mapInstance1.coordinate, directions0, directions1,
+            mapInstance0.coordinate, mapInstance1.coordinate, 
              ref mapLine))
             {
                 DestroyImmediate(gameObject);

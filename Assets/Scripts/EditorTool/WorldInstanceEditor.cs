@@ -64,7 +64,7 @@ public class WorldInstanceEditor : MonoBehaviour
 
     public bool InitLinkMap(int2 coordinate0, int2 coordinate1,
         Tilemap tilemap0,Tilemap tilemap1, int2 startCoordinate,int2 endCoordinate,
-        List<Direction> directValue0, List<Direction> directValue1, ref MapLine mapLine)
+         ref MapLine mapLine)
     {
         bool init0 = false;
         bool init1 = false;
@@ -103,8 +103,6 @@ public class WorldInstanceEditor : MonoBehaviour
             mapLine.map0 = map0;
             mapLine.map1 = map1;
 
-            mapLine.cells0.directions = new List<Direction>();
-            mapLine.cells0.directions.AddRange(directValue0);
             mapLine.cells0.girds = new List<int>();
             mapLine.cells0.targetCell = new int3(coordinate1.xy, map1);
 
@@ -121,8 +119,6 @@ public class WorldInstanceEditor : MonoBehaviour
             }
             mapLine.cells0.girds = GameCommon.CellToGrid(cells);
 
-            mapLine.cells1.directions = new List<Direction>();
-            mapLine.cells1.directions.AddRange(directValue1);
             mapLine.cells1.girds = new List<int>();
             mapLine.cells1.targetCell =new int3(coordinate0.xy,map0);
             cells.Clear();
