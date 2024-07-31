@@ -1,6 +1,12 @@
-﻿using System.IO;
+﻿using Excel;
+using OfficeOpenXml;
+using System.Data;
+using System.IO;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static Codice.Client.BaseCommands.Import.Commit;
+using UnityEngine.Purchasing;
 
 public class CommonTool : MonoBehaviour
 {
@@ -16,16 +22,44 @@ public class CommonTool : MonoBehaviour
                 MyDataDIc myDataDIc = ScriptableObject.CreateInstance<MyDataDIc>();
 
                 var path = AssetDatabase.GetAssetPath(activeObject);
-
-                DirectoryInfo directoryInfo = new DirectoryInfo(path);
-                var files = directoryInfo.GetFiles("*.asset");
-                foreach (var file in files)
+                if (File.Exists(path))
                 {
-                    var data = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path + "/" + file.Name);
+                    var data = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
                     IGameData gameData = data as IGameData;
-                    myDataDIc.daraDic.Add(gameData.GetKey(), gameData.GetName());
+                    if (gameData.GetDataDic() != null)
+                    {
+                        SaveExcel(gameData.GetDataDic(), gameData.GetKey());
+                        return;
+                    }
                 }
-                AssetDatabase.CreateAsset(myDataDIc, $"Assets/Editor/DataDic/{activeObject.name}.asset");
+                else
+                {
+                    DirectoryInfo directoryInfo = new DirectoryInfo(path);
+
+                    var files = directoryInfo.GetFiles("*.asset");
+                    foreach (var file in files)
+                    {
+                        var data = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path + "/" + file.Name);
+                        IGameData gameData = data as IGameData;
+                        if (gameData.GetDataDic() != null)
+                        {
+                            SaveExcel(gameData.GetDataDic(), gameData.GetKey());
+                        }
+                        else
+                        {
+                            myDataDIc.daraDic.Add(gameData.GetKey(), gameData.GetName());
+                        }
+                        
+                    }
+                    if (myDataDIc.daraDic.Count>0)
+                    {
+                        SaveExcel(myDataDIc.daraDic, activeObject.name);
+                    }
+                   // AssetDatabase.CreateAsset(myDataDIc, $"Assets/Editor/DataDic/{activeObject.name}.asset");
+                }
+               
+              
+               
             }
         }
         finally
@@ -33,7 +67,62 @@ public class CommonTool : MonoBehaviour
             AssetDatabase.StopAssetEditing();
         }
     }
+    const string excelPath = "Assets/Editor/DataDic/Data.xlsx";
+    private static void SaveExcel(StringStringDictionary data,string name)
+    {
+        FileInfo file = new FileInfo(excelPath);
+        /*if (!File.Exists(excelPath))
+        {
+         
+        }
+        else
+        {
 
+        }*/
+       
+        using (ExcelPackage package = new ExcelPackage(file))
+        {
+            ExcelWorksheet worksheet;
+            try
+            {
+                worksheet = package.Workbook.Worksheets[name];
+                var cells = worksheet.Cells;
+                cells.Clear();
+            }
+            catch
+            {
+                worksheet = package.Workbook.Worksheets.Add(name);
+            }
+            worksheet.Cells[1, 2].Value = "Key";
+            worksheet.Cells[1, 3].Value = "Name";
+           
+            using(var e = data.GetEnumerator())
+            {
+                int i = 2;
+                while (e.MoveNext())
+                {
+                    worksheet.Cells[i, 2].Value = e.Current.Key;
+                    worksheet.Cells[i, 3].Value = e.Current.Value;
+                    i++;
+                }
+              
+            }
+            package.Save();
+        } 
+       
+
+        /*
+        FileInfo file = new FileInfo(excelPath);
+        using (ExcelPackage package = new ExcelPackage(file))
+        {
+            ExcelWorksheet excelWorksheet = package.Workbook.Worksheets["PVP"];
+
+            package.Save();
+        }*/
+    }
+   
+
+  
     [MenuItem("Assets/图片资源工具/检测并重新保存图片")]
     public static void CheckAndResaveTexture()
     {

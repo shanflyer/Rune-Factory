@@ -15,7 +15,18 @@ public class WorldMapData : ScriptableObject, IGameData
     {
       
     }
-
+    public StringStringDictionary GetDataDic()
+    {
+        StringStringDictionary dic = new StringStringDictionary();
+        using(var e = worldMapDic.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                dic.Add(e.Current.Key.ToString(), e.Current.Value.mapRoomData.name);
+            }
+        }
+        return dic;
+    }
 #endif
 
     public string GetKey()

@@ -90,6 +90,10 @@ public class MapRoomData : ScriptableObject, IGameData
     }
 
 #endif
+    public string GetName()
+    {
+        return roomName;
+    }
 
     public string GetKey()
     {

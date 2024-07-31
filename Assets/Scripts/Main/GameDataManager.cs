@@ -292,10 +292,14 @@ public interface IGameData
     {
        return GetKey();
     }
+  
     public string GetName() { return ToString(); }
 
 #if UNITY_EDITOR
-
+    public StringStringDictionary GetDataDic()
+    {
+        return null;
+    }
     public void SetReferenceData();
 
 #endif
