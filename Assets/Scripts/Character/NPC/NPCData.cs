@@ -11,6 +11,7 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public int overridePackage;
     public NPCState zeroState;
     public bool hide;
+    public string text;
     public override string ToString()
     {
         return id.ToString();

@@ -62,7 +62,7 @@ public class NPCBehaviorData : ScriptableObject, IGameData
                     maxHour = gameTimeRanges[index + 2],
                     maxMinute = gameTimeRanges[index + 3]
                 };
-                gameTimeKeyVisitMapDic.Add(gameTimeKey, visitMaps[index]);
+                gameTimeKeyVisitMapDic.Add(gameTimeKey, visitMaps[i]);
             }
         }
        
