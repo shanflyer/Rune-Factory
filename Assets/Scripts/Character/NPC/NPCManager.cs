@@ -196,7 +196,18 @@ public class NPC : IReferenceData
         endBehavior = true;
         behaviorCanBreak = false;
     }
-
+    public Character Character
+    {
+        get
+        {
+            if (character == null)
+            {
+                character = CharacterManager.instance.GetCharacter(characterId);
+            }
+            return character;
+        }
+    }
+    private Character character;
     public static Color GetStateColor(NPCState state)
     {
         if (state == NPCState.正常)
@@ -207,12 +218,8 @@ public class NPC : IReferenceData
     }
 
     public CharacterInformationData GetInformation()
-    {
-        Character character = CharacterManager.instance.GetCharacter(characterId);
-        if (character != null)
-        {
-        }
-        return character.GetInformation();
+    {  
+        return Character.GetInformation();
     }
 
     private NPCBehaviorData NPCBehaviorData;
@@ -249,11 +256,10 @@ public class NPC : IReferenceData
         }
     }
     public bool IsInHome()
-    {
-        Character character = CharacterManager.instance.GetCharacter(characterId);
-        if (character != null)
+    { 
+        if (Character != null)
         {
-            return character.mapInstance == HomeMap;
+            return Character.mapInstance == HomeMap;
         }
         return false;
     }
@@ -277,24 +283,28 @@ public class NPC : IReferenceData
                     visitMaps.TrySetValue(int2[i].x, visitMap);
                 }
             }
-            for (int i = visitMaps.length - 1; i >= 0; i++)
+            if (visitMaps.length > 0)
             {
-                if (!nowMaps.Contains(visitMaps[i].x))
+                for (int i = visitMaps.length - 1; i >= 0; i--)
                 {
-                    visitMaps.RemoveAt(i);
+                    if (!nowMaps.Contains(visitMaps[i].x))
+                    {
+                        visitMaps.RemoveAt(i);
+                    }
                 }
             }
+           
         }
     }
 
     public int GetVisitMap()
     {
         InitNowVisitMap();
-        Character character = CharacterManager.instance.GetCharacter(characterId);
+        
         for (int i = 0; i < visitMaps.length; i++)
         {
             int3 visitMap = visitMaps[i];
-            if (visitMap.x != character.mapInstance)
+            if (visitMap.x != Character.mapInstance)
             {
                 visitMap.z *= 2;
             }
@@ -420,7 +430,7 @@ public class NPC : IReferenceData
             taskSheduleModelDatas.Add(taskSheduleModelData);
         }
         nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(taskSheduleModelDatas);
-
+        Debug.Log($"nPCTaskScheduleTimeList.ini{npcData.npcName}");
         if (!SetNowBehaviorTree())
         {
             AddNpcBehavior(externalBehavior, true);
@@ -490,6 +500,10 @@ public class NPC : IReferenceData
     public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime, out bool loopBehavior, out bool behaviorCanBreak
         , out bool pauseWhenDisabled)
     {
+        if (nPCTaskScheduleTimeList == null)
+        {
+            Debug.Log($"null nPCTaskScheduleTimeList{npcData.npcName}");
+        }
         nowScheduleData = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
         if (nowScheduleData != null)
         {
@@ -702,31 +716,20 @@ public class NPCManager : Singleton<NPCManager>
     }
 
     private void UpdateGameTime(UpdateGameTime updateGameTime)
-    {
-        var IEnumerator = UpDataNPCTimeBehaviorTree(updateGameTime);
-        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(IEnumerator);
-        /*
-        for (int i = 0; i < npcs.length; i++)
-        {
-            npcs[i].SetTimeBehaviorTree(updateGameTime);
-        }*/
-    }
-
-    private IEnumerator UpDataNPCTimeBehaviorTree(UpdateGameTime updateGameTime)
-    {
-        int totalNum = 0;
+    { 
         int perNum = npcs.length / 10;
         for (int i = 0; i < npcs.length; i++)
         {
-            npcs[i].SetTimeBehaviorTree(updateGameTime);
-            totalNum++;
-            if (totalNum >= perNum)
+            if (npcs[i].Character==null||npcs[i].Character.mapInstance <= 0)
             {
-                yield return 0;
-                totalNum = 0;
+                continue;
             }
+            npcs[i].SetTimeBehaviorTree(updateGameTime);
+            
         }
     }
+
+    
 
     private void GiveGift(GiveGift giveGift)
     {

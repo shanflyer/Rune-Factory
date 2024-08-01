@@ -1,4 +1,5 @@
-﻿using BehaviorDesigner.Runtime.Tasks;
+﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime.Tasks; 
 using UnityEngine;
 
 [TaskCategory("Game/Character")]
@@ -9,7 +10,7 @@ public class SetCharacterMoveTarget : Action
     public SharedInt3List results;
 
     public SharedInt3 targetCoordinate;
-
+    private SharedInt characterId;
     public override void OnStart()
     {
         if (targetCoordinate == null || targetCoordinate.IsNull())
@@ -21,7 +22,10 @@ public class SetCharacterMoveTarget : Action
                 Owner.SetVariable("TargetCoordinate", targetCoordinate);
             }
         }
-
+        if (characterId == null || characterId.IsNull())
+        {
+            characterId = (SharedInt)Owner.GetVariable("CharacterId");
+        }
         if (results == null)
         {
             results = (SharedInt3List)Owner.GetVariable("CoordinateResults");
@@ -31,9 +35,17 @@ public class SetCharacterMoveTarget : Action
                 Owner.SetVariable("CoordinateResults", results);
             }
         }
-
-        int index = GameRandom.RandomInt(0, results.Value.Count);
-        targetCoordinate.SetValue(results.Value[index]);
+        try
+        {
+            int index = GameRandom.RandomInt(0, results.Value.Count);
+            targetCoordinate.SetValue(results.Value[index]);
+        }
+        catch(System.Exception e)
+        {
+            Character character = CharacterManager.instance.GetCharacter(characterId.Value);
+            Debug.LogError($"{character.name}--behaviorTree:{Owner.ExternalBehavior.name}--{Owner.BehaviorName}-{e}");
+        }
+        
     }
 
     public override TaskStatus OnUpdate()
