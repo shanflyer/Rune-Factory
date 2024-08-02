@@ -1071,13 +1071,13 @@ public class CharacterManager : Singleton<CharacterManager>
             GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
             character.SetCoordinate(new int3(targetCoordinate, targetMap));
 
-            GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
+            GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
             {
                 WorldMapObjManager.instance.RecycleMap();
                 SetPlayerPos(character);
                 await WorldMapObjManager.instance.DisplayMap(targetMap);
 
-                GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                 {
                     LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
                     {

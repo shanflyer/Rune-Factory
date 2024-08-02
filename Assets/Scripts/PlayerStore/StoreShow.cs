@@ -22,7 +22,7 @@ public class StoreShow:Singleton<StoreShow>
         animation.transform.position = ShowCoin.pos;
         animation.Play();
          
-        GameTimerController.instance.DeleyActionMain(GameCommon.storeCoinTime, () =>
+        GameTimerController.instance.DelayAction(GameCommon.storeCoinTime, () =>
         {
             GameRuntimeObjManager.instance.RecycleRuntimeObj(coinRuntimeObj);
         });

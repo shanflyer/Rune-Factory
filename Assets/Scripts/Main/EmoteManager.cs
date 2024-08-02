@@ -9,11 +9,34 @@ public class EmoteRuntime
 {
     public RuntimeObj runtimeObj;
     public Action waitAction;
-
+    public EmoteData emote;
+    public void InitData(EmoteData emoteData)
+    {
+        emote = emoteData;
+        Show();
+    }
+    PlayableGraph playableGraph;
+    void Show()
+    {
+        Animator animator = runtimeObj.obj as Animator;
+        animator.transform.localPosition = new Vector3(emote.X * 0.01f, emote.Y * 0.01f, -emote.Y * 0.01f);
+        playableGraph = PlayableGraph.Create();
+        var playableOutput = AnimationPlayableOutput.Create(playableGraph, "emote", animator);
+        var clipPlayable = AnimationClipPlayable.Create(playableGraph, emote.animationClip);
+        playableOutput.SetSourcePlayable(clipPlayable);
+        playableGraph.Play(); 
+    }
     public void Recycle()
     {
+        if (playableGraph.IsDone())
+        {
+            playableGraph.Stop();
+            playableGraph.Destroy();
+        }
+       
         GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
-        GameTimerController.instance.StopWaitDeleyAction(waitAction);
+        GameTimerController.instance.RemoveWaiter(waitAction);
+        
     }
 }
 public class EmoteManager : Singleton<EmoteManager>
@@ -104,27 +127,17 @@ public class EmoteManager : Singleton<EmoteManager>
             Debug.LogError($"缺少表情数据{emoteId}");
             return;
         }
-        Animator animator = emoteRuntime.runtimeObj.obj as Animator;
-        animator.transform.localPosition = new Vector3(emoteData.X * 0.01f, emoteData.Y * 0.01f, -emoteData.Y * 0.01f);
-        var playableGraph = PlayableGraph.Create();
-        var playableOutput = AnimationPlayableOutput.Create(playableGraph, "emote", animator);
-        var clipPlayable = AnimationClipPlayable.Create(playableGraph, emoteData.animationClip);
-        playableOutput.SetSourcePlayable(clipPlayable);
-        playableGraph.Play();
+        emoteRuntime.InitData(emoteData);
 
         if (showTime > 0)
         {
             Action action = WaitStopEmote;
             emoteRuntime.waitAction = action;
-            GameTimerController.instance.DeleyActionMain(showTime, action);
+            GameTimerController.instance.DelayAction(showTime, action);
 
             void WaitStopEmote()
             {
-                if (emoteRuntime.runtimeObj.obj != null)
-                {
-                    playableGraph.Stop();
-                }
-
+                
                 emoteRuntime.Recycle();
                 if (entityType == EntityType.地图道具)
                 {

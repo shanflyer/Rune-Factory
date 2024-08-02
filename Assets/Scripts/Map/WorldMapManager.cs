@@ -822,7 +822,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         if (display)
         {
-            await WorldMapObjManager.instance.DisplayMap(displayMap);
+             await WorldMapObjManager.instance.DisplayMap(displayMap);
         }
         if (room.eventId != 0)
         {

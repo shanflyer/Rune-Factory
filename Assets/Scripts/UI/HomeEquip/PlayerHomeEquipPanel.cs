@@ -398,7 +398,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                         if(value&&WorldMapObjManager.instance.GetTempRuntimeMapItemObj(SelectHomeEquip.instanceId,out var mapItemRuntimeObj))
                                         {
                                            mapItemRuntimeObj.SetLayer(GameCommon.RedObjLayer);
-                                            GameTimerController.instance.DeleyActionMain(500, () =>
+                                            GameTimerController.instance.DelayAction(500, () =>
                                             {
                                                 DestoryTempMapItem destoryTempMapItem = new DestoryTempMapItem
                                                 {
@@ -457,12 +457,12 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                             {
                                 if (!value)
                                 {
-                                    GameTimerController.instance.DeleyActionMain(500, () =>
+                                    GameTimerController.instance.DelayAction(500, () =>
                                     {
                                         int2 oldCoordinate = selectMapItemRuntimeObj.coordinate;
                                         selectMapItemRuntimeObj.SetCoordinate(coordinate);
                                         selectMapItemRuntimeObj.SetLayer(GameCommon.RedObjLayer);
-                                        GameTimerController.instance.DeleyActionMain(500, () =>
+                                        GameTimerController.instance.DelayAction(500, () =>
                                         {
                                             selectMapItemRuntimeObj.SetCoordinate(oldCoordinate);
                                             selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);

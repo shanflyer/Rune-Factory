@@ -44,7 +44,7 @@ public class InformationController : Singleton<InformationController>
         {
             nowShow = true;
             var information = informationsQueue.Dequeue();
-            GameTimerController.instance.DeleyActionMain(2000, ShowInformation);
+            GameTimerController.instance.DelayAction(2000, ShowInformation);
 
             if (InformationShowPanel == null)
             {
@@ -84,7 +84,7 @@ public class InformationController : Singleton<InformationController>
         {
             PromptPanel.Show();
             PromptPanel.InitData(information);
-            GameTimerController.instance.DeleyActionMain((int)(GameCommon.PromptTime*1000), ClosePromptPanel);
+            GameTimerController.instance.DelayAction((int)(GameCommon.PromptTime*1000), ClosePromptPanel);
         }
     }
     void ClosePromptPanel()

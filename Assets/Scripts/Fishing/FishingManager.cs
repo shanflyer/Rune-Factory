@@ -129,8 +129,8 @@ public class FishingManager : Singleton<FishingManager>
         }
     }
 
-    private Dictionary<int, Delegate> waitFishers = new Dictionary<int, Delegate>();
-    private Dictionary<int, Delegate> fishWaitActions = new Dictionary<int, Delegate>();
+    private Dictionary<int, Action> waitFishers = new Dictionary<int, Action>();
+    private Dictionary<int, Action> fishWaitActions = new Dictionary<int, Action>();
     private HashSet<int> fishers = new HashSet<int>();
 
     private void DisplayMap(DisplayMap displayMap)

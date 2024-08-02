@@ -207,16 +207,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         set; 
     }
     public MapRoomData displayMapRoomData { get; private set; }
- 
-    public async void DefaultDisplayMap(MapRoomData mapRoomData, int id)
-    {
-        if (mapRoomData != null)
-        {
-            displayMap = id;
-        }
-        await DisplayMap(displayMap);
-    }
-
+  
     private async Task<RuntimeObj> CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
     {
         if (mapRoomData != null)
@@ -234,6 +225,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
         if (mapItemData != null)
         {
+           // Debug.Log($"CreatRuntimeObj:{mapItemData.itemName}");
             var mapItemRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), mapItemData.id.ToString(), mapItemData.itemObj.transform, instanceId);
             (mapItemRuntime.obj as Transform).localPosition = pos;
 
@@ -358,7 +350,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             {
                 if (WorldMapManager.instance.GetRuntimeMapItem(mapItems[i], out RuntimeMapItem mapItem))
                 {
-                    DisplayMapItem(mapItem);
+                   DisplayMapItem(mapItem);
                 }
             }
 
@@ -606,14 +598,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
 
-            /*
-            DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
-            {
-                display = true,
-                itemInstanceId = runtimeMapItem.instanceId,
-                transform = runtimeObj.obj as Transform
-            };
-            GameActionManager.instance.QueueAction(displayStoreCounter);*/
+         
 
             await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
 

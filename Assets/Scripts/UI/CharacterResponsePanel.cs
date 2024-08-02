@@ -58,7 +58,7 @@ public class CharacterResponsePanel : GamePanel<CharacterResponseData>
         animationPlayableOutput.SetSourcePlayable(clipPlayable);
         graph.Play();
 
-        GameTimerController.instance.DeleyActionMain(characterResponseData.displayTime == 0 ? GameCommon.defaultPlayerTalkTime : characterResponseData.displayTime,
+        GameTimerController.instance.DelayAction(characterResponseData.displayTime == 0 ? GameCommon.defaultPlayerTalkTime : characterResponseData.displayTime,
             () =>
             {
                 if (characterResponseData.endAction != null)

@@ -107,6 +107,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
         float timeValue = 0;
         float deltaValue = Time.fixedDeltaTime;
         int endCount = 0;
+        var WaitForFixedUpdate = new WaitForFixedUpdate();
         while (endCount < curveMoveDatas.Count)
         {
             timeValue += deltaValue;
@@ -137,7 +138,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
                     endCount++;
                 }
             }
-            yield return new WaitForFixedUpdate();
+            yield return WaitForFixedUpdate;
         }
         if (curveEndAction != null)
         {
@@ -166,10 +167,11 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
     {
         float timeValue = 0;
         float deltaValue = Time.fixedDeltaTime * speed;
+        var WaitForFixedUpdate=new WaitForFixedUpdate();
         while (timeValue < 1)
         {
             timeValue += deltaValue;
-            yield return new WaitForFixedUpdate();
+            yield return WaitForFixedUpdate;
             curveAction(getCurvePos(timeValue));
         }
         if (curveEndAction != null)

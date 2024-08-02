@@ -8,42 +8,20 @@ using UnityEngine;
 
 public class GameTimerController : Singleton<GameTimerController>
 {
-    private Dictionary<Delegate, IEnumerator> waitIEnumerators = new Dictionary<Delegate, IEnumerator>();
-    private ConcurrentDictionary<Delegate, CancellationTokenSource> waitTasks = new ConcurrentDictionary<Delegate, CancellationTokenSource>();
+    private ConcurrentDictionary<Action, CancellationTokenSource> waitTasks = new ConcurrentDictionary<Action, CancellationTokenSource>();
+
+    Queue<Action> activeActions = new Queue<Action>();
     public override bool NeedUpdata => true;
 
     public override void Init()
     {
         base.Init();
     }
-    public void StopWaitDeleyAction( Action action)
-    {
-        if (waitIEnumerators.TryGetValue(action, out var ienumerator))
-        {
-            GameObjectCurveController.instance.UpDataComponent.StopCoroutine(ienumerator);
-        }
-        waitIEnumerators.Remove(action);
-    }
-    public void DeleyActionMain(int delay, Action action)
-    {
-        if (waitIEnumerators.TryGetValue(action, out var ienumerator))
-        {
-            GameObjectCurveController.instance.UpDataComponent.StopCoroutine(ienumerator);
-        }
-        ienumerator = Wait();
-        waitIEnumerators[action] = ienumerator;
-        IEnumerator Wait()
-        {
-            yield return new WaitForSeconds(delay * 0.001f);
-            action.Invoke();
-            waitIEnumerators.Remove(action);
-        }
-        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(ienumerator);
-    }
+  
 
-    public void RemoveWaiter(Delegate @delegate)
+    public void RemoveWaiter(Action action)
     {
-        if(waitTasks.TryRemove(@delegate,out var tokenSource))
+        if(waitTasks.TryRemove(action, out var tokenSource))
         {
             tokenSource.Cancel();
             tokenSource.Dispose(); 
@@ -62,12 +40,22 @@ public class GameTimerController : Singleton<GameTimerController>
         Task task = Task.Factory.StartNew(async () =>
         {
             await Task.Delay(delay);
-            action.Invoke();
+            activeActions.Enqueue(action);
+            //action.Invoke();
             waitTasks.TryRemove(action, out var tokenSource);
            // waitTasks.Remove(action);
             tokenSource2.Dispose();
         }, tokenSource2.Token);
         waitTasks.TryAdd(action, tokenSource2);
         //waitTasks[action] = tokenSource2;
+    }
+
+    protected override void UpData()
+    {
+        base.UpData();
+        while(activeActions.Count > 0)
+        {
+            activeActions.Dequeue().Invoke();
+        }
     }
 }

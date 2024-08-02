@@ -1458,7 +1458,7 @@ public partial class Character
                     if (this == CharacterManager.instance.controllerCharacter)
                     {
                         canMove = false;
-                        GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                        GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                         {
                             MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
                         });

@@ -15,7 +15,7 @@ public class SceneInfoManager : Singleton<SceneInfoManager>
 
 
 
-        GameTimerController.instance.DeleyActionMain(500, () =>
+        GameTimerController.instance.DelayAction(500, () =>
         {
             GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeSceneInfo);
         });

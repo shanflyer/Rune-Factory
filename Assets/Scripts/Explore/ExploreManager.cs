@@ -155,7 +155,7 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true); 
             FightManager.instance.CreatFightPlayer();
 
-            GameTimerController.instance.DeleyActionMain(100, async () =>
+            GameTimerController.instance.DelayAction(100, async () =>
             {
                 await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(), layer: 2);
                 UIManager.instance.CloseGamePanel<PlayerTopPanel>();

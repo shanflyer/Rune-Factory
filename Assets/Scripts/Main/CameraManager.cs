@@ -212,7 +212,7 @@ public class CameraManager : Singleton<CameraManager>
                 mixingCamera.SetWeight(2, 0);
                 mixingCamera.SetWeight(3, 1);
 
-                GameTimerController.instance.DeleyActionMain(100, () =>
+                GameTimerController.instance.DelayAction(100, () =>
                 {
                     followCameras[flowCameraIndex].Follow = CharacterManager.instance.controllerTransform;
                     mixingCamera.SetWeight((int)setFixedCamera.flowCameraType, 1);

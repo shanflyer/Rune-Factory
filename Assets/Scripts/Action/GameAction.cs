@@ -566,7 +566,7 @@ public struct WaitAction : GameAction
             for (int i = 0; i < _parameters.Count; i++)
             {
                 var Parameter = _parameters[i];
-                GameTimerController.instance.DeleyActionMain(WaitValue, () =>
+                GameTimerController.instance.DelayAction(WaitValue, () =>
                 {
                     GameActionDataManager.instance.GameAction(Parameter.value, Parameter.parameters, source, target);
                 });

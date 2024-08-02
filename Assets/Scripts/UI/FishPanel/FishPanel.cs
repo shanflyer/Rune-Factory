@@ -155,7 +155,7 @@ public class FishPanel : GamePanel<IReferenceData>
         }
         BookPaper.gameObject.SetActive(true);
         BookPaper.Play("Paper");
-        GameTimerController.instance.DeleyActionMain(820, DisplayFishes);
+        GameTimerController.instance.DelayAction(820, DisplayFishes);
     }
     void DisplayFishes()
     {
