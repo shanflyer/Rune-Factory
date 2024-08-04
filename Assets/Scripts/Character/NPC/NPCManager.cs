@@ -515,6 +515,10 @@ public class NPC : IReferenceData
         if (nPCTaskScheduleTimeList == null)
         {
             Debug.Log($"null nPCTaskScheduleTimeList{npcData.npcName}");
+            loopBehavior = false;
+            behaviorCanBreak = false;
+            pauseWhenDisabled = false;
+            return null;
         }
         nowScheduleData = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
         if (nowScheduleData != null)

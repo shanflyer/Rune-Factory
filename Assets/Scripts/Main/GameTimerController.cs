@@ -21,11 +21,22 @@ public class GameTimerController : Singleton<GameTimerController>
 
     public void RemoveWaiter(Action action)
     {
-        if(waitTasks.TryRemove(action, out var tokenSource))
+        if (action == null)
         {
-            tokenSource.Cancel();
-            tokenSource.Dispose(); 
+            return;
         }
+        try
+        {
+            if (waitTasks.TryRemove(action, out var tokenSource))
+            {
+                tokenSource.Cancel();
+                tokenSource.Dispose();
+            }
+        }
+        catch
+        { 
+        }
+      
         
     }
     public void DelayAction(int delay, Action action)

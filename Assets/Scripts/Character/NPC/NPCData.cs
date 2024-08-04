@@ -21,19 +21,24 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
 
     public int GetTalk(int friendShipLevel)
     {
+        int talkId = -1;
         for (int i = 0; i < talkForFriendShip.Count; i++)
         {
-            if (talkForFriendShip[i].x == friendShipLevel)
+            if (talkForFriendShip[i].x<= friendShipLevel)
             {
                 var results = GameRandom.instance.GetRandomValue(talkForFriendShip[i].y);
                 if (results.Count > 0)
                 {
-                    return results[0].x;
+                    talkId=results[0].x;
                 }
+            }
+            else
+            {
+                break;
             }
         }
 
-        return -1;
+        return talkId;
     }
     public override string ToString()
     {

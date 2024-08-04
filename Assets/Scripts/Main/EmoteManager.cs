@@ -27,16 +27,16 @@ public class EmoteRuntime
         playableGraph.Play(); 
     }
     public void Recycle()
-    {
-        if (playableGraph.IsDone())
+    { 
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+        GameTimerController.instance.RemoveWaiter(waitAction);
+        if (playableGraph.IsValid())
         {
             playableGraph.Stop();
             playableGraph.Destroy();
         }
-       
-        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
-        GameTimerController.instance.RemoveWaiter(waitAction);
-        
+        runtimeObj = null;
+
     }
 }
 public class EmoteManager : Singleton<EmoteManager>
@@ -119,6 +119,15 @@ public class EmoteManager : Singleton<EmoteManager>
         }
         if (emoteRuntime == null || emoteRuntime.runtimeObj == null)
         {
+            if (entityType == EntityType.地图道具)
+            {
+                itemEmoteRuntimes.Remove(entityId);
+            }
+            else
+            {
+                characterEmoteRuntimes.Remove(entityId);
+            }
+            emoteRuntime = null;
             return;
         }
         var emoteData = await GameDataManager.instance.GetAsyncData<EmoteData>(emoteId);
@@ -137,16 +146,23 @@ public class EmoteManager : Singleton<EmoteManager>
 
             void WaitStopEmote()
             {
-                
-                emoteRuntime.Recycle();
                 if (entityType == EntityType.地图道具)
                 {
-                    itemEmoteRuntimes.Remove(entityId);
+                    if(itemEmoteRuntimes.TryGetValue(emoteId,out var runtimeObj))
+                    {
+                        runtimeObj.Recycle();
+                        itemEmoteRuntimes.Remove(entityId);
+                    } 
                 }
                 else
                 {
-                    characterEmoteRuntimes.Remove(entityId);
-                }
+                    if(characterEmoteRuntimes.TryGetValue(emoteId,out var runtimeObj))
+                    {
+                        runtimeObj.Recycle();
+                        characterEmoteRuntimes.Remove(entityId);
+                    }
+                   
+                } 
             }
         }
 
