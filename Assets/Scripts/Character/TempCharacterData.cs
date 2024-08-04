@@ -23,6 +23,10 @@ public class TempCharacterData : ScriptableObject, IGameData
     public int defaultTalk;
     public IntIntDictionary mapTalk;
     public IntIntDictionary areaTalk;
+     
+    public int nextTalkEventId;
+    public int tempTalkEventId;
+
 #if UNITY_EDITOR
     private List<int2> levelDatas;
     private List<string> levelBehaviors;

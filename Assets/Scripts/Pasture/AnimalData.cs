@@ -29,6 +29,7 @@ public class AnimalData : ScriptableObject, IGameData
     public string GrowthStageStr;
 #endif
     public List<GrowthStage> growthStages = new List<GrowthStage>();
+    public List<int> functionIds;
     public string GetKey()
     {
         return id.ToString();

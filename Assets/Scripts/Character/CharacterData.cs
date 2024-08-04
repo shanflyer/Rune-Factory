@@ -30,11 +30,8 @@ public class CharacterData : ScriptableObject, IGameData
     public string fightBehavior;
     public int packageId;
     public AttributeType attributeType;
-    public int playerOperateEventId;
-    public int nextTalkEventId;
-    public int tempTalkEventId;
-    public string shopName;
-    public List<int> functionIds;
+   
+   
 
     public string GetKey()
     {

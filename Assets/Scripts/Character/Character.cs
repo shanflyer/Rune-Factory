@@ -933,15 +933,18 @@ public partial class Character
                     name = "TargetCharacter",
                     value = instanceId
                 };
-                EventReferenceData NextTalkReferenceData = new EventReferenceData
-                {
-                    name = "NextTalkEventId",
-                    value = character.characterData.nextTalkEventId
-                };
-                bool temp = character is TempCharacter;
 
-                if (!temp)
+                int nextTalkEventId = 0;
+                int eventId = 0;
+                if (character is TempCharacter tempCharacter)
                 {
+                    nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
+                    eventId = tempCharacter.tempCharacterData.tempTalkEventId;
+                }
+                else if(NPCManager.instance.GetNPCFormInstance(character.instanceId,out var NPC))
+                {
+                    nextTalkEventId = NPC.npcData.nextTalkEventId;
+                    eventId = NPC.npcData.playerOperateEventId;
                     AddFriendShipValue addFriendShipValue = new AddFriendShipValue
                     {
                         characterId = character.instanceId,
@@ -951,8 +954,14 @@ public partial class Character
                     GameActionManager.instance.QueueAction(addFriendShipValue);
                 }
 
-                GameEventManager.instance.AddGameEvent(
-                temp ? character.characterData.tempTalkEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+                EventReferenceData NextTalkReferenceData = new EventReferenceData
+                {
+                    name = "NextTalkEventId",
+                    value = nextTalkEventId
+                };
+            
+
+                GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });
@@ -976,14 +985,34 @@ public partial class Character
                 name = "TargetCharacter",
                 value = instanceId
             };
+
+            int nextTalkEventId = 0;
+            int eventId = 0;
+            if (character is TempCharacter tempCharacter)
+            {
+                nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
+                eventId = tempCharacter.tempCharacterData.tempTalkEventId;
+            }
+            else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
+            {
+                nextTalkEventId = NPC.npcData.nextTalkEventId;
+                eventId = NPC.npcData.playerOperateEventId;
+                /*AddFriendShipValue addFriendShipValue = new AddFriendShipValue
+                {
+                    characterId = character.instanceId,
+                    friendAddType = FriendAddType.¶Ô»°,
+                    value = 1
+                };
+                GameActionManager.instance.QueueAction(addFriendShipValue);*/
+            }
+
             EventReferenceData NextTalkReferenceData = new EventReferenceData
             {
                 name = "NextTalkEventId",
-                value = character.characterData.nextTalkEventId
-            };
-            bool temp = character is TempCharacter;
+                value = nextTalkEventId
+            }; 
             GameEventManager.instance.AddGameEvent(
-            temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+            eventId, new List<EventReferenceData>
             {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
             });
@@ -995,40 +1024,7 @@ public partial class Character
             NeighborhoodCharacter = 0;
         }
     }
-
-    public void SetNeighborhood(Character character)
-    {
-        if (character != null)
-        {
-            EventReferenceData eventReferenceData = new EventReferenceData
-            {
-                name = "CharacterId",
-                value = character.instanceId
-            };
-            EventReferenceData targetReferenceData = new EventReferenceData
-            {
-                name = "TargetCharacter",
-                value = instanceId
-            };
-            EventReferenceData NextTalkReferenceData = new EventReferenceData
-            {
-                name = "NextTalkEventId",
-                value = character.characterData.nextTalkEventId
-            };
-            bool temp = character is TempCharacter;
-            GameEventManager.instance.AddGameEvent(
-            temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
-            {
-                    eventReferenceData,targetReferenceData,NextTalkReferenceData
-            });
-
-            NeighborhoodCharacter = character.instanceId;
-        }
-        else
-        {
-            NeighborhoodCharacter = 0;
-        }
-    }
+     
 
     public void StopMove()
     {

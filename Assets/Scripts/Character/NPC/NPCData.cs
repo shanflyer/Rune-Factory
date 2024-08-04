@@ -12,6 +12,10 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public NPCState zeroState;
     public bool hide;
     public string text;
+    public List<int> functionIds;
+    public string shopName;
+    public int playerOperateEventId;
+    public int nextTalkEventId; 
     public override string ToString()
     {
         return id.ToString();

@@ -32,7 +32,7 @@ public class TalkManager : Singleton<TalkManager>
         Talk(talk.talkId, talk.characterId, talk.displayFunction, talk.endAction, talk.nextTalkEventId);
     }
 
-    public async void Talk(int talkId, int characterId = -1,
+    async void Talk(int talkId, int characterId = -1,
         bool displayFunction = false, Action endAction = null, int nextTalkEventId = 0)
     {
         TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkId);
@@ -45,13 +45,22 @@ public class TalkManager : Singleton<TalkManager>
             nextTalkEventId = nextTalkEventId,
             endAction = endAction
         };
-        CharacterData characterData = CharacterManager.instance.GetCharacterDataFromInstance(characterId);
-        if (characterData != null)
+        List<int> functionIds=null;
+        if(NPCManager.instance.GetNPCFormInstance(characterId,out var NPC))
         {
-            for (int i = 0; i < characterData.functionIds.Count; i++)
+            functionIds = NPC.functions;
+          
+        }
+        else if(PastureManager.instance.GetAnimal(characterId,out var animal))
+        {
+            functionIds = animal.animalData.functionIds;
+        }
+        if (functionIds != null)
+        {
+            for (int i = 0; i < functionIds.Count; i++)
             {
-                int funtionId = characterData.functionIds[i];
-                if (funtionId == GameCommon.setTeamerFunctionId&&TeamManager.instance.playerTeam.CheckCharacter(characterId))
+                int funtionId = functionIds[i];
+                if (funtionId == GameCommon.setTeamerFunctionId && TeamManager.instance.playerTeam.CheckCharacter(characterId))
                 {
 
                 }
@@ -60,7 +69,6 @@ public class TalkManager : Singleton<TalkManager>
                     NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
                     NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
                 }
-                
             }
         }
 

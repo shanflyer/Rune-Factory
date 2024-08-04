@@ -223,8 +223,9 @@ public class NPC : IReferenceData
     }
 
     private NPCBehaviorData NPCBehaviorData;
-    
+    public List<int> functions => npcData.functionIds;
     public List<int> likeItems => NPCBehaviorData.likeItems;
+    public string shopName => npcData.shopName;
 
     public List<int2> Beds => NPCBehaviorData.beds;
     public List<int2> WorkItems => NPCBehaviorData.workItems;

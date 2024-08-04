@@ -62,14 +62,26 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 name = "TargetCharacter",
                 value = CharacterManager.instance.controllerCharacter.instanceId
             };
+
+            int nextTalkEventId = 0; int eventId = 0;
+            if (character is TempCharacter tempCharacter)
+            {
+                nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
+                eventId = tempCharacter.tempCharacterData.tempTalkEventId;
+            }
+            else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
+            {
+                nextTalkEventId = NPC.npcData.nextTalkEventId;
+                eventId = NPC.npcData.playerOperateEventId;
+            }
+
             EventReferenceData NextTalkReferenceData = new EventReferenceData
             {
                 name = "NextTalkEventId",
-                value = character.characterData.nextTalkEventId
+                value = nextTalkEventId
             };
             bool temp = character is TempCharacter;
-            GameEventManager.instance.AddGameEvent(
-            temp ? character.characterData.playerOperateEventId : character.characterData.playerOperateEventId, new List<EventReferenceData>
+            GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
             {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
             });

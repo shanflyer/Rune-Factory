@@ -80,8 +80,10 @@ public class ShopManager : Singleton<ShopManager>
         string shopName = tryVisitShop.ShopName;
         if (string.IsNullOrEmpty(shopName))
         {
-            Character character = CharacterManager.instance.GetCharacter(tryVisitShop.CharacterId);
-            shopName = character.characterData.shopName;
+            if(NPCManager.instance.GetNPCFormInstance(tryVisitShop.CharacterId,out var NPC))
+            {
+                shopName = NPC.shopName;
+            } 
         } 
         if(shopListDic.TryGetValue(shopName, out var shopList))
         {
