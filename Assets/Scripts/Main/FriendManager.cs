@@ -244,7 +244,7 @@ public class FriendManager : Singleton<FriendManager>
             }
         }
     }
-
+  
     public void AddFriendShip(int characterId, int value)
     {
         if (NPCFriendShips.TryGetValue(characterId, out var friendShip))

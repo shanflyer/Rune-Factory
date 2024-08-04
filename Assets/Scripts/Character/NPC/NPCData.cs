@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Unity.Mathematics;
 
 public class NPCData : ScriptableObject, IReferenceData, IGameData
 {
@@ -15,7 +16,25 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public List<int> functionIds;
     public string shopName;
     public int playerOperateEventId;
-    public int nextTalkEventId; 
+    public int nextTalkEventId;
+    public List<int2> talkForFriendShip;
+
+    public int GetTalk(int friendShipLevel)
+    {
+        for (int i = 0; i < talkForFriendShip.Count; i++)
+        {
+            if (talkForFriendShip[i].x == friendShipLevel)
+            {
+                var results = GameRandom.instance.GetRandomValue(talkForFriendShip[i].y);
+                if (results.Count > 0)
+                {
+                    return results[0].x;
+                }
+            }
+        }
+
+        return -1;
+    }
     public override string ToString()
     {
         return id.ToString();

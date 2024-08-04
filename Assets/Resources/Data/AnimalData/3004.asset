@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42ea687c6ae2c2e40a3e7a52f1347575, type: 3}
+  m_Name: 3004
+  m_EditorClassIdentifier: 
+  animalName: "\u5BB6\u5154"
+  id: 3004
+  goodId: 0
+  linkCharacter: 3004
+  age: 1
+  foods: 64000000
+  produceCycle: 2
+  product: 1001
+  productCount: 1
+  cycleStage: 1
+  getFoodEmote: 8
+  hungerEmote: 24
+  productEmote: 14
+  behavior: "\u52A8\u7269"
+  externalBehavior: {fileID: 0}
+  GrowthStageStr: "\u5E7C\u5154,0,1,0,3004|\u5BB6\u5154,1,100,0,3005|\u5BB6\u5154,2,100,0,3005"
+  growthStages:
+  - stageName: "\u5E7C\u5154"
+    stage: 0
+    growthDay: 1
+    productValue: 0
+    stageObj: 3004
+  - stageName: "\u5BB6\u5154"
+    stage: 1
+    growthDay: 100
+    productValue: 0
+    stageObj: 3005
+  - stageName: "\u5BB6\u5154"
+    stage: 2
+    growthDay: 100
+    productValue: 0
+    stageObj: 3005
+  functionIds: 04000000090000000a0000000b000000

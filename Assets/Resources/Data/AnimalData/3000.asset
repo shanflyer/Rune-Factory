@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ea687c6ae2c2e40a3e7a52f1347575, type: 3}
   m_Name: 3000
   m_EditorClassIdentifier: 
-  animalName: "\u9E21"
+  animalName: "\u6BCD\u9E21"
   id: 3000
   goodId: 0
   linkCharacter: 3000
@@ -25,11 +25,11 @@ MonoBehaviour:
   getFoodEmote: 8
   hungerEmote: 24
   productEmote: 14
-  behavior: "\u9E21"
-  externalBehavior: {fileID: 11400000, guid: 784277b561517f44e861c50e5ddf4293, type: 2}
-  GrowthStageStr: "\u5C0F\u9E21,0,1,0,3000|\u6BCD\u9E21,1,100,0,3001|\u6BCD\u9E21,2,100,0,3001"
+  behavior: "\u52A8\u7269"
+  externalBehavior: {fileID: 0}
+  GrowthStageStr: "\u5E7C\u9E21,0,1,0,3000|\u6BCD\u9E21,1,100,0,3001|\u6BCD\u9E21,2,100,0,3001"
   growthStages:
-  - stageName: "\u5C0F\u9E21"
+  - stageName: "\u5E7C\u9E21"
     stage: 0
     growthDay: 1
     productValue: 0
@@ -44,3 +44,4 @@ MonoBehaviour:
     growthDay: 100
     productValue: 0
     stageObj: 3001
+  functionIds: 04000000090000000a0000000b000000

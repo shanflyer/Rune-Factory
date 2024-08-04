@@ -190,7 +190,7 @@ public class NPC : IReferenceData
 {
     public NPC(int instanceId, NPCData nPCData)
     {
-        characterId = instanceId;
+       characterInstance = instanceId;
         npcData = nPCData;
         npcState = NPCState.正常;
         endBehavior = true;
@@ -202,7 +202,7 @@ public class NPC : IReferenceData
         {
             if (character == null)
             {
-                character = CharacterManager.instance.GetCharacter(characterId);
+                character = CharacterManager.instance.GetCharacter(characterInstance);
             }
             return character;
         }
@@ -230,16 +230,27 @@ public class NPC : IReferenceData
     public List<int2> Beds => NPCBehaviorData.beds;
     public List<int2> WorkItems => NPCBehaviorData.workItems;
     public int HomeMap => NPCBehaviorData.home;
+    public int playerOperateEventId => npcData.playerOperateEventId;
+    public int nextTalkEventId => npcData.nextTalkEventId;
 
     public NPCState npcState;
-    public NPCData npcData;
+    private NPCData npcData;
     public bool isActive;
-    public int characterId;
+    /// <summary>
+    /// 
+    /// </summary>
+    public int characterInstance;
+    public int dataId => npcData.id;
     public bool hide => npcData.hide;
 
     private MyDic<int, int3> visitMaps = new MyDic<int, int3>();
     private MyDic<int, int2> visitFriends = new MyDic<int, int2>();
     private MyDic<int, int> visitShops = new MyDic<int, int>();
+    public int GetTalkId()
+    {
+        int friendShipLevel = FriendManager.instance.GetFriendShipLevel(dataId) ;
+        return npcData.GetTalk(friendShipLevel);
+    }
     public async void InitBehaviorData()
     {
         NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
@@ -483,7 +494,7 @@ public class NPC : IReferenceData
         {
             return;
         }
-        CharacterBehaviorManager.instance.AddBehavior(characterId, externalBehavior, loopBehavior, ResetBehaviorState, PauseWhenDisabled);
+        CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior, loopBehavior, ResetBehaviorState, PauseWhenDisabled);
         endBehavior = false;
     }
 
@@ -594,19 +605,19 @@ public class NPC : IReferenceData
             {
                 Talk talk = new Talk
                 {
-                    characterId = characterId,
+                    characterId = characterInstance,
                     talkId = talkId,
                     displayFunction = false,
                     endAction = () =>
                     {
-                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterId);
+                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterInstance);
                     }
                 };
                 GameActionManager.instance.QueueAction(talk);
 
                 AddFriendShipValue addFriendShipValue = new AddFriendShipValue
                 {
-                    characterId = characterId,
+                    characterId = characterInstance,
                     friendAddType = FriendAddType.礼物,
                     value = friendValue
                 };
@@ -616,7 +627,7 @@ public class NPC : IReferenceData
             {
                 emoteId = emoteId,
                 entityType = EntityType.角色,
-                id = characterId
+                id = characterInstance
             };
             GameActionManager.instance.QueueAction(showEmote);
         });
@@ -754,7 +765,7 @@ public class NPCManager : Singleton<NPCManager>
     {
         if(GetNPC(id,out var npc))
         {
-            return CharacterManager.instance.GetCharacter(npc.characterId);
+            return CharacterManager.instance.GetCharacter(npc.characterInstance);
         }
         return null;
     }

@@ -77,7 +77,7 @@ public class NPCPanel : GamePanel<NPCList>
         VisitNPC visitNPC = new VisitNPC
         {
             sourceId = CharacterManager.instance.controllerCharacter.instanceId,
-            targetId = selectNpc.characterId
+            targetId = selectNpc.characterInstance
         };
         GameActionManager.instance.QueueAction(visitNPC);
         Close();

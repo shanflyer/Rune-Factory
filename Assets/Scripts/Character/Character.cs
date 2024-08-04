@@ -943,8 +943,8 @@ public partial class Character
                 }
                 else if(NPCManager.instance.GetNPCFormInstance(character.instanceId,out var NPC))
                 {
-                    nextTalkEventId = NPC.npcData.nextTalkEventId;
-                    eventId = NPC.npcData.playerOperateEventId;
+                    nextTalkEventId = NPC.nextTalkEventId;
+                    eventId = NPC.playerOperateEventId;
                     AddFriendShipValue addFriendShipValue = new AddFriendShipValue
                     {
                         characterId = character.instanceId,
@@ -995,8 +995,8 @@ public partial class Character
             }
             else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
             {
-                nextTalkEventId = NPC.npcData.nextTalkEventId;
-                eventId = NPC.npcData.playerOperateEventId;
+                nextTalkEventId = NPC.nextTalkEventId;
+                eventId = NPC.playerOperateEventId;
                 /*AddFriendShipValue addFriendShipValue = new AddFriendShipValue
                 {
                     characterId = character.instanceId,

@@ -1217,12 +1217,12 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             npc.isActive = mapNpcData.beginMap > 0;
               
-            if (!characters.TryGetValue(npc.characterId, out var character))
+            if (!characters.TryGetValue(npc.characterInstance, out var character))
             { 
                 var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
                 var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-                character = new Character(characterData, professionData, npc.characterId);
-                characters.Add(npc.characterId, character); 
+                character = new Character(characterData, professionData, npc.characterInstance);
+                characters.Add(npc.characterInstance, character); 
                 characterDataToInstances[character.dataId] = character.instanceId;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));

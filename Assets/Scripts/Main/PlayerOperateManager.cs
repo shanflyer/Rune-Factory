@@ -93,8 +93,8 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 }
                 else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
                 {
-                    nextTalkEventId = NPC.npcData.nextTalkEventId;
-                    eventId = NPC.npcData.playerOperateEventId;
+                    nextTalkEventId = NPC.nextTalkEventId;
+                    eventId = NPC.playerOperateEventId;
                 }
 
                 EventReferenceData NextTalkReferenceData = new EventReferenceData
