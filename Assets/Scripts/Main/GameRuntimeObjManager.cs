@@ -143,7 +143,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
 }
 public class RuntimeObj
 {
-    public Object obj;
+    public Component obj;
     public int linkId;
     public string runtimeObjType;
     public string key;

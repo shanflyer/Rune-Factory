@@ -163,6 +163,13 @@ public class MyDic<K,T>
                 keys.Clear();
                 indexDic.Clear();
             }
+            else if (index == list.Count - 1)
+            {
+                list.RemoveAt(length - 1);
+                keys.RemoveAt(length - 1);
+
+                length--;
+            }
             else
             {
                 list[index] = list[length - 1];
@@ -196,6 +203,13 @@ public class MyDic<K,T>
                 list.Clear();
                 keys.Clear();
                 indexDic.Clear();
+            }
+            else if (index == list.Count - 1)
+            {
+                list.RemoveAt(length - 1);
+                keys.RemoveAt(length - 1);
+
+                length--;
             }
             else
             {

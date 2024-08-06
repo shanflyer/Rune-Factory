@@ -46,7 +46,7 @@ public class RuntimeObjMoveEvent : Action
                 
                 if (CharacterManager.instance.GetRuntimeCharacterObj(objId.Value, out CharacterRuntimeObj characterRuntimeObj))
                 {
-                    runtimeObjTransform = characterRuntimeObj.runtimeObj.obj as Transform;
+                    runtimeObjTransform = characterRuntimeObj.transform;
                     taskStatus = TaskStatus.Running;
                 }
                 else

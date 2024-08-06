@@ -23,7 +23,7 @@ public class CharacterData : ScriptableObject, IGameData
 #endif
 
     public SpriteResourceRenference head;
-    public GameObject obj;
+    public CharacterRuntimeObj obj;
     public SpriteResourceRenference icon;
     public int profession;
     public int level;
@@ -74,7 +74,7 @@ public class CharacterData : ScriptableObject, IGameData
             iconDatas.TryGetValue(iconName.Split('/')[1], out icon);
         }
 
-        obj = Resources.Load<GameObject>(objName);
+        obj = Resources.Load<CharacterRuntimeObj>(objName);
     }
 
 #endif

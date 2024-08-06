@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using static BehaviorDesigner.Runtime.BehaviorManager;
+using UnityEngine.TextCore.Text;
 
 public enum NPCState
 {
@@ -131,8 +133,18 @@ public class TempCharacter : Character
         {
             externalBehaviorTree = tempCharacterData.defaultBehavior;
         }
-        CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
-        CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree, true);
+        if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))
+        {
+            characterRuntimeObj.behaviorTree.ExternalBehavior = externalBehaviorTree;
+            characterRuntimeObj.behaviorTree.enabled = true;
+            characterRuntimeObj.behaviorTree.SetVariable("CharacterId", new SharedInt { Value = instanceId });
+            characterRuntimeObj.behaviorTree.EnableBehavior();
+        }
+        else
+        {
+            CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
+            CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree, true);
+        } 
     }
 }
 
@@ -442,7 +454,7 @@ public class NPC : IReferenceData
             taskSheduleModelDatas.Add(taskSheduleModelData);
         }
         nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(taskSheduleModelDatas);
-        Debug.Log($"nPCTaskScheduleTimeList.ini{npcData.npcName}");
+        //Debug.Log($"nPCTaskScheduleTimeList.ini{npcData.npcName}");
         if (!SetNowBehaviorTree())
         {
             AddNpcBehavior(externalBehavior, true);

@@ -98,7 +98,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     if (CharacterManager.instance.GetRuntimeCharacterObj(entityId, out var characterRuntimeObj))
                     {
                         emoteRuntime = new EmoteRuntime();
-                        emoteRuntime.runtimeObj = await GetEmote(emoteId, characterRuntimeObj.model);
+                        emoteRuntime.runtimeObj = await GetEmote(emoteId, characterRuntimeObj.transform);
                         characterEmoteRuntimes[entityId] = emoteRuntime;
                     }
                 }

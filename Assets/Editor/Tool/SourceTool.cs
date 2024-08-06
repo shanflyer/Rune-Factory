@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -104,13 +105,32 @@ public class SourceTool : MonoBehaviour
             for (int i = 0; i < selection.Length; i++)
             {
                 resources[i] = AssetDatabase.GetAssetPath(selection[i]);
-                IGameData gameData = selection[i] as IGameData;
-                if (gameData != null)
+                if (selection[i] is GameObject obj)
                 {
-                    gameData.SetReferenceData();
-                    EditorUtility.SetDirty(selection[i]);
-                    AssetDatabase.SaveAssets();
+                    var components = obj.GetComponents<Component>();
+                    for(int x= 0; x < components.Length; x++)
+                    {
+                        Type type= components[x].GetType();
+                      //  Debug.Log($"type:{type}");
+                        var t = Convert.ChangeType(components[x], type);
+                        if (t is IGameData gameData)
+                        {
+                            gameData.SetReferenceData();
+                        }
+                    }
+                    PrefabUtility.SavePrefabAsset(obj);
                 }
+                else
+                {
+                    IGameData gameData = selection[i] as IGameData;
+                    if (gameData != null)
+                    {
+                        gameData.SetReferenceData();
+                        EditorUtility.SetDirty(selection[i]);
+                        AssetDatabase.SaveAssets();
+                    }
+                }
+                
             }
         }
         finally

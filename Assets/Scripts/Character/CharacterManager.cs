@@ -7,54 +7,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public delegate void MoveEndAction(); 
-public class CharacterRuntimeObj
-{
-    public RuntimeObj runtimeObj;
-    public Animator animator;
-    public Transform model;
-    public MyShadowPolygon myShadow;
-    public SpriteRenderer equipRenderer;
-
-    public void Clear()
-    {
-        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
-        runtimeObj = null;
-        animator = null;
-        model = null;
-        myShadow = null;
-        equipRenderer = null;
-    }
-
-    public void SetAnimationDirection(float2 direction)
-    {
-        if (direction.x == float.NaN || direction.y == float.NaN)
-        {
-            return;
-        }
-        if (animator != null)
-        {
-            if (direction.x == 0 && direction.y == 0)
-            {
-                return;
-            }
-            animator.SetFloat(CharacterAnimatorParameter.Dir_X, direction.x);
-            animator.SetFloat(CharacterAnimatorParameter.Dir_Y, direction.y);
-        }
-    }
-
-    public void SetAnimationSpeed(float speed, float animationSpeed = 1)
-    {
-        if (animator != null)
-        {
-            animator.SetFloat(CharacterAnimatorParameter.Speed, speed);
-            if (speed > 0)
-            {
-                animator.speed = animationSpeed;
-            }
-        }
-    }
-}
-
+ 
 public struct TeamerEquipAndProperty : IReferenceData
 {
     public CharacterEquipAndPropertyData[] characterEquipAndPropertyDatas;
@@ -112,22 +65,16 @@ public class CharacterManager : Singleton<CharacterManager>
     private async Task CreatCharacterObjAsync(Character character, bool controller = false)
     {
         var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
-        Transform transform = runtimeObj.obj as Transform;
-        var characterRuntimeObj = new CharacterRuntimeObj
-        {
-            runtimeObj = runtimeObj,
-            animator = transform.GetComponentInChildren<Animator>(),
-            equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>(),
-            model = transform.Find("Body")
-        };
+        CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
+        characterRuntimeObj.runtimeObj = runtimeObj;
         characterRuntionObjs.Add(character, characterRuntimeObj);
 
-        Vector2 pos = GameCommon.GetMapPos(character.coordinate);
-        transform.position = pos;
+        //Vector2 pos = GameCommon.GetMapPos(character.coordinate);
+        //transform.position = pos;
 
         if (controller || character == controllerCharacter)
         {
-            CameraManager.instance.SetFollowTarget(transform);
+            CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
             ControllerRuntimeObj = characterRuntimeObj;
         }
     }
@@ -579,6 +526,13 @@ public class CharacterManager : Singleton<CharacterManager>
             RemoveCharacter(character);
         }
     }
+    void DestoryCharacter(int destoryCharacter)
+    {
+        if (characters.TryGetValue(destoryCharacter, out var character))
+        {
+            RemoveCharacter(character);
+        }
+    }
 
     private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
     {
@@ -612,6 +566,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId);
         CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
+        characters.Remove(character.instanceId);
     }
 
     /// <summary>
@@ -629,9 +584,9 @@ public class CharacterManager : Singleton<CharacterManager>
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
             new int2(creatTempCharacter.coordinateX, creatTempCharacter.coordinateY));
+        await RefreshNpcRuntimeObj(character);
 
-        character.templevel = level;
-        RefreshNpcRuntimeObj(character);
+        character.templevel = level; 
         if (creatTempCharacter.setValue != null)
         {
             creatTempCharacter.setValue(character.instanceId);
@@ -826,10 +781,10 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             else
             {
-                if (characterRuntimeObj.runtimeObj.obj)
+                if (characterRuntimeObj)
                 {
                     Vector2 pos = GameCommon.GetMapPos(character.coordinate);
-                    var transform = characterRuntimeObj.runtimeObj.obj as Transform;
+                    var transform = characterRuntimeObj.transform;
                     transform.position = pos;
                     //transform.Translate(new Vector3(0, 0, -100));
                 }
@@ -837,7 +792,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else if (character.mapInstance == WorldMapObjManager.instance.displayMap)
         {
-            CreatCharacterObjAsync(character);
+          await  CreatCharacterObjAsync(character);
         }
     }
 
@@ -846,7 +801,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             //SetCharacterAnimationSpeed(0, characterRuntimeObj);
-            var transform = characterRuntimeObj.runtimeObj.obj as Transform;
+            var transform = characterRuntimeObj.transform;
             Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
             transform.position = targetPos;
             SetCharacterAnimationSpeed(1, characterRuntimeObj);
@@ -870,7 +825,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 else
                 {
                     SetCharacterAnimationSpeed(1, characterRuntimeObj);
-                    var transform = characterRuntimeObj.runtimeObj.obj as Transform;
+                    var transform = characterRuntimeObj.transform;
                     Vector3 TranslateValue = new Vector3(moveValue.x, moveValue.y, 0);
                     transform.Translate(TranslateValue);
 
@@ -887,7 +842,7 @@ public class CharacterManager : Singleton<CharacterManager>
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             //SetCharacterAnimationSpeed(0, characterRuntimeObj);
-            var transform = characterRuntimeObj.runtimeObj.obj as Transform;
+            var transform = characterRuntimeObj.transform;
             Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
             Vector3 offsetPos = targetPos - transform.position;
 
@@ -918,7 +873,7 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector2 startPos = GameCommon.GetMapPos(character.coordinate);
         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj runtimeObj))
         {
-            var transform = runtimeObj.runtimeObj.obj as Transform;
+            var transform = runtimeObj.transform;
             startPos = transform.position;
         }
 
@@ -937,10 +892,10 @@ public class CharacterManager : Singleton<CharacterManager>
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(character.nowSpeed, startPos, targetPos, (Vector2 pos) =>
         {
-            if (runtimeObj != null)
+            if (runtimeObj != null&&runtimeObj.gameObject.activeSelf)
             {
                 SetCharacterAnimationSpeed(1, runtimeObj);
-                var transform = runtimeObj.runtimeObj.obj as Transform;
+                var transform = runtimeObj.transform;
                 transform.transform.position = pos;
                 //transform.Translate(Vector3.zero);
             }
@@ -967,7 +922,7 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector2 startPos = GameCommon.GetMapPos(character.coordinate);
         if (characterRuntionObjs.TryGetValue(character, out var runtimeObj))
         {
-            var transform = runtimeObj.runtimeObj.obj as Transform;
+            var transform = runtimeObj.transform;
             startPos = transform.position;
         }
 
@@ -990,12 +945,12 @@ public class CharacterManager : Singleton<CharacterManager>
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector2 pos) =>
              {
-                 if (runtimeObj != null&&runtimeObj.runtimeObj!=null && runtimeObj.runtimeObj.obj!=null)
+                 if (runtimeObj != null)
                  {
                      SetCharacterAnimationSpeed(1, runtimeObj);
                      try
                      {
-                         var transform = runtimeObj.runtimeObj.obj as Transform;
+                         var transform = runtimeObj.transform;
                          if (transform)
                          {
                              transform.transform.position = pos;
@@ -1026,7 +981,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                    if (runtimeObj != null && runtimeObj.runtimeObj != null && runtimeObj.runtimeObj.obj != null)
+                    if (runtimeObj != null)
                     {
                         SetCharacterAnimationSpeed(0, runtimeObj);
                     }
@@ -1253,14 +1208,14 @@ public class CharacterManager : Singleton<CharacterManager>
         if (characterData != null)
         {
             var runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj.name,
-               characterData.obj.transform, instacneId);
-            (runtimeObj.obj as Transform).position = pos;
+               characterData.obj, instacneId);
+            (runtimeObj.obj as CharacterRuntimeObj).transform.position = pos;
             return runtimeObj;
         }
         return null;
     }
 
-    public async void RefreshNpcRuntimeObj(Character character, bool controller = false)
+    public async Task RefreshNpcRuntimeObj(Character character, bool controller = false)
     {
         CharacterRuntimeObj characterRuntimeObj;
         if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
@@ -1276,7 +1231,7 @@ public class CharacterManager : Singleton<CharacterManager>
             else
             {
                 Vector3 pos = GameCommon.GetMapPos(character.coordinate);
-                var transform = characterRuntimeObj.runtimeObj.obj as Transform;
+                var transform = characterRuntimeObj.transform;
                 Vector3 oldPos = transform.position;
                 pos.z = oldPos.z;
                 transform.position = pos;
@@ -1290,9 +1245,9 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance == WorldMapObjManager.instance.displayMap)
             {
-                await CreatCharacterObjAsync(character);
+                await CreatCharacterObjAsync(character); 
             }
-        }
+        } 
     }
 
     public void RecycleCharacter()
@@ -1307,27 +1262,33 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public async Task RefreshNpcRuntimeObj()
     {
-        for(int i = 0; i < characters.length; i++)
+        for(int i = characters.length-1; i >=0; i--)
         {
             var character = characters[i];
-            if (character.mapInstance != WorldMapObjManager.instance.displayMap
-                    && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+            if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
-                RecycleCharacterObj(character);
+                if(characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+                {
+                    RecycleCharacterObj(character);
+                }
+                if(character is TempCharacter tempCharacter)
+                {
+                    DestoryCharacter(character.instanceId);
+                }
             }
-            if (character.mapInstance == WorldMapObjManager.instance.displayMap)
+            else
             {
-                if (!characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
+                if (!characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
                     await CreatCharacterObjAsync(character);
                 }
                 else
                 {
                     Vector3 pos = GameCommon.GetMapPos(character.coordinate);
-                    Transform transform = characterRuntimeObj.runtimeObj.obj as Transform;
+                    Transform transform = characterRuntimeObj.transform;
                     transform.localPosition = pos;
                 }
-            }
+            } 
         } 
     }
 

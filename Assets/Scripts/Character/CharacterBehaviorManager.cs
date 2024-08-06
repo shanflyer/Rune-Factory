@@ -117,7 +117,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
         behaviorTree.RestartWhenComplete = loopBehavior;
         behaviorTree.PauseWhenDisabled = PauseWhenDisabled;
-        behaviorTree.Start();
+        behaviorTree.EnableBehavior();
 
         void CallBack(Behavior behavior)
         {

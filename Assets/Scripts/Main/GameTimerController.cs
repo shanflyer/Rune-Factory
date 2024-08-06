@@ -17,7 +17,13 @@ public class GameTimerController : Singleton<GameTimerController>
     {
         base.Init();
     }
-  
+    protected override void Clear()
+    {
+        base.Clear();
+        waitTasks.Clear();
+        activeActions.Clear();
+
+    }
 
     public void RemoveWaiter(Action action)
     {

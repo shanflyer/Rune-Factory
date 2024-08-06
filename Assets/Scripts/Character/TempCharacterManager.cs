@@ -237,7 +237,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
             int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
             for (int i = 0; i < zeroCount; i++)
             {
-                CreatCharacter(nowTimeKey, BehaviorAreaType.聚集);
+              //  CreatCharacter(nowTimeKey, BehaviorAreaType.聚集);
             }
         }
         CreatTempCharacter();
@@ -294,12 +294,10 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         }
         // Debug.Log($"creatCD:{nowCd}");
         creatTempDelegate = CreatTempCharacter;
-        if (totalCharacterCount >= NowTempCharacterCreatData.maxCharacterCount)
-        {
-            GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
-            return;
-        }
-        CreatCharacter(nowTimeKey, BehaviorAreaType.创建);
         GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
+        if (totalCharacterCount < NowTempCharacterCreatData.maxCharacterCount)
+        {
+            CreatCharacter(nowTimeKey, BehaviorAreaType.创建);
+        } 
     }
 }

@@ -227,13 +227,13 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
            // Debug.Log($"CreatRuntimeObj:{mapItemData.itemName}");
             var mapItemRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), mapItemData.id.ToString(), mapItemData.itemObj.transform, instanceId);
-            (mapItemRuntime.obj as Transform).localPosition = pos;
+            mapItemRuntime.obj.transform.localPosition = pos;
 
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
             {
                 display = true,
                 itemInstanceId = instanceId,
-                transform = mapItemRuntime.obj as Transform
+                transform = mapItemRuntime.obj.transform
             };
             GameActionManager.instance.QueueAction(displayStoreCounter);
 
@@ -375,7 +375,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     private async Task RuntimeMapItemPlay(RuntimeMapItem mapItem, RuntimeObj runtimeObj)
     {
-        Animator animator = (runtimeObj.obj as Transform).GetComponent<Animator>();
+        Animator animator = (runtimeObj.obj.transform).GetComponent<Animator>();
         if (animator)
         {
             MyAnimationController.instance.AddItemAnimation(mapItem.instanceId, animator, mapItem.mapItemData.id.ToString());
