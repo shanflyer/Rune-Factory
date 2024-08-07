@@ -58,6 +58,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<DeleteMapLink>(DeleteMapLink);
         GameActionManager.instance.AddListener<TrySetMapItem>(TrySetMapItem);
         GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
+        GameActionManager.instance.AddListener<CheckMapEditorItemLinkCharacter>(CheckMapEditorItemLinkCharacter);
     }
     public int2 GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance)
     {
@@ -94,7 +95,15 @@ public class WorldMapManager : Singleton<WorldMapManager>
             SetMapEditorItemLinkCharacter.setResult(false);
         }
     }
-
+    public void CheckMapEditorItemLinkCharacter(CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter)
+    {
+        int2 editorKey = new int2(checkMapEditorItemLinkCharacter.mapId, checkMapEditorItemLinkCharacter.itemEditorId);
+        bool result= IsCheckRuntimeMapItemLink(editorKey, checkMapEditorItemLinkCharacter.characterId);
+        if (checkMapEditorItemLinkCharacter.setResult != null)
+        {
+            checkMapEditorItemLinkCharacter.setResult(result);
+        }
+    }
     public bool IsCheckRuntimeMapItemLink(int2 editorKey, int linkCharacterId = -1)
     {
         if (editorItemRemapInstanceIds.TryGetValue(editorKey,
@@ -828,6 +837,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             await GameEventManager.instance.AddGameEvent(room.eventId);
         }
+        var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
+        var mapNpcDatas = mapNpcDataList.GetMapNPCDatas(room.id);
+        if (mapNpcDatas != null)
+        {
+            for (int i = 0; i < mapNpcDatas.Count; i++)
+            {
+                if (mapNpcDatas[i].initialBegin)
+                {
+                    CharacterManager.instance.CreatNpc(mapNpcDatas[i]);
+                }
+            }
+        }
+        
     }
 
     private async void ChangeMapItem(ChangeMapItem changeMapItem)

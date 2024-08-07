@@ -1126,7 +1126,7 @@ public static class DataPath
         {typeof(GrowModelData),"Data/GrowModelDataList" },
         {typeof(ItemData),"Data/ItemData" },
         {typeof(ItemAnimationData),"Data/ItemAnimationData" },
-        {typeof(MapNpcData),"Data/MapNpcData" },
+        {typeof(MapNpcDataList),"Data/MapNpcData/MapNpcDataList" },
         {typeof(MapRoomData),"Data/MapRoomData" },
         {typeof(MonsterData),"Data/MonsterData" },
         {typeof(ProfessionData),"Data/ProfessionData/ProfessionDataList" },

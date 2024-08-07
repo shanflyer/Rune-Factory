@@ -550,17 +550,6 @@ public struct SetFightCharacterAnimator : GameAction
     }
 }
 
-//创建默认地图Npc
-public struct CreatDefaultNPC : GameAction
-{
-    public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
-}
 public struct StopTempCharacterCreat : GameAction
 {
     public SetValue setValue { get; set; }

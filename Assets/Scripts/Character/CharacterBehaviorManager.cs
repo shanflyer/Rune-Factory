@@ -88,7 +88,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     }
     
     public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior,bool loopBehavior=true, BehaviorHandler behaviorHandler=null,
-        bool PauseWhenDisabled = false)
+        bool PauseWhenDisabled = false,string behaviorName="")
     {
         if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
@@ -118,6 +118,10 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         behaviorTree.RestartWhenComplete = loopBehavior;
         behaviorTree.PauseWhenDisabled = PauseWhenDisabled;
         behaviorTree.EnableBehavior();
+        if (!string.IsNullOrEmpty(behaviorName))
+        {
+            behaviorTree.BehaviorName = behaviorName;
+        }
 
         void CallBack(Behavior behavior)
         {

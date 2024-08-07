@@ -245,20 +245,30 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
-        if (dataAsset != null && dataAsset is IDataArray<T> dataArray)
+        if (dataAsset != null)
         {
-            dataDic = new Dictionary<string, IGameData>();
-            for (int i = 0; i < dataArray.DataList.Length; i++)
+            if(dataAsset is IDataArray<T> dataArray)
             {
-                var item = dataArray.DataList[i];
-                item.Init();
-                dataDic[dataArray.DataList[i].GetKey()] = item;
+                dataDic = new Dictionary<string, IGameData>();
+                for (int i = 0; i < dataArray.DataList.Length; i++)
+                {
+                    var item = dataArray.DataList[i];
+                    item.Init();
+                    dataDic[dataArray.DataList[i].GetKey()] = item;
+                }
+                allGameStaticDatas[type] = dataDic;
+                if (dataDic.TryGetValue(key, out var data1))
+                {
+                    return (T)data1;
+                }
             }
-            allGameStaticDatas[type] = dataDic;
-            if (dataDic.TryGetValue(key, out var data1))
+            else if(dataAsset is T t)
             {
-                return (T)data1;
-            }
+                dataDic = new Dictionary<string, IGameData>();
+                dataDic[key] = t;
+                allGameStaticDatas[type] = dataDic;
+                return t;
+            } 
         }
 
         var textAsset = dataAsset as TextAsset;

@@ -6,6 +6,7 @@ public struct CheckMapEditorItemLinkCharacter : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int mapId,itemEditorId;
+    public int characterId;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
@@ -16,10 +17,16 @@ public struct CheckMapEditorItemLinkCharacter : GameAction
         {
             itemEditorId = int.Parse(parameters[0].value);
         }
+     
         if (source > 0)
             mapId = source;
         if (target > 0)
             itemEditorId = target;
+        if (value != -1 && value != int.MinValue)
+        {
+            characterId = value;
+        }
+
         this.setResult = setResult;
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);

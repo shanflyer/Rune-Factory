@@ -35,8 +35,8 @@ public class SelectBlindItemAndFindMoveTarget: Action
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        taskStatus = TaskStatus.Failure;
-        if (NPCManager.instance.GetNPC(characterId.Value,out NPC npc))
+        taskStatus = TaskStatus.Running;
+        if (NPCManager.instance.GetNPCFormInstance(characterId.Value,out NPC npc))
         {
             List<int2> items = new List<int2>();
 
@@ -47,37 +47,50 @@ public class SelectBlindItemAndFindMoveTarget: Action
             }
             for(int i = 0; i < checkItems.Count; i++)
             {
+                int index = i;
                 CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter = new CheckMapEditorItemLinkCharacter
-                {
-                    mapId = checkItems[i].x,
-                    itemEditorId = checkItems[i].y,
+                { 
+                    mapId = checkItems[index].x,
+                    itemEditorId = checkItems[index].y,
+                    characterId=characterId.Value,
                     setResult = (bool value) =>
                     { 
                         if (value)
                         {
-                            items.Add(checkItems[i]);
+                            items.Add(checkItems[index]);
+                           
+                        }
+                        if (index >= checkItems.Count - 1)
+                        {
+                            if (items.Count > 0)
+                            {
+                                taskStatus = TaskStatus.Running;
+
+                                int index = GameRandom.RandomInt(0, items.Count);
+                                SelectItem = items[index];
+                                SetMapEditorItemLinkCharacter setMapEditorItemLinkCharacter = new SetMapEditorItemLinkCharacter
+                                {
+                                    mapId = SelectItem.Value.x,
+                                    mapItemEditorId = SelectItem.Value.y,
+                                    linkInstanceId = characterId.Value,
+                                    setResult = SetMapEditorItemLinkResult
+                                };
+                                GameActionManager.instance.QueueAction(setMapEditorItemLinkCharacter);
+                            }
+                            else
+                            {
+                                taskStatus = TaskStatus.Failure;
+                            }
                         }
                     }
                 };
                 GameActionManager.instance.QueueAction(checkMapEditorItemLinkCharacter, true);
-            } 
-            
-            if (items.Count > 0)
-            {
-                taskStatus = TaskStatus.Running;
-
-                int index=GameRandom.RandomInt(0, items.Count);
-                SelectItem = items[index];
-                SetMapEditorItemLinkCharacter setMapEditorItemLinkCharacter = new SetMapEditorItemLinkCharacter
-                {
-                    mapId = SelectItem.Value.x,
-                    mapItemEditorId = SelectItem.Value.y,
-                    linkInstanceId = characterId.Value,
-                    setResult= SetMapEditorItemLinkResult
-                };
-                GameActionManager.instance.QueueAction(setMapEditorItemLinkCharacter);
-            }
-        } 
+            }  
+        }
+        else
+        {
+            taskStatus = TaskStatus.Failure;
+        }
 
     }
     void SetMapEditorItemLinkResult(bool value)

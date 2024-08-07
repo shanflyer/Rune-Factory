@@ -91,8 +91,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
         GameActionManager.instance.AddListener<CreatTempCharacter>(CreatTempCharacter);
         GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
-
-        GameActionManager.instance.AddListener<CreatDefaultNPC>(CreatDefaultNPC);
+         
         GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
         GameActionManager.instance.AddListener<InitInputAction>(InitInputAction);
 
@@ -1153,20 +1152,8 @@ public class CharacterManager : Singleton<CharacterManager>
         RuntimeObj runtimeObj=await GameRuntimeObjManager.Instance.CreatCharacterRuntimeObj(player);
         characterRuntionObjs.Add(player, runtimeObj); */
     }
-
-    private async void CreatDefaultNPC(CreatDefaultNPC creatDefaultNPC)
-    {
-        var mapNpcDatas = await GameDataManager.instance.GetAllAsyncData<MapNpcData>();
-        foreach (var mapNpc in mapNpcDatas)
-        {
-            if (mapNpc.initialBegin)
-            {
-                CreatNpc(mapNpc);
-            }
-        }
-    }
-
-    private async void CreatNpc(MapNpcData mapNpcData)
+     
+    public async void CreatNpc(MapNpcData mapNpcData)
     {
         if (NPCManager.instance.GetNPC(mapNpcData.dataId, out var npc))
         {
@@ -1181,7 +1168,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 characterDataToInstances[character.dataId] = character.instanceId;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
-            RefreshNpcRuntimeObj(character);
+            await RefreshNpcRuntimeObj(character);
             npc.InitBehaviorData(); 
 
         }

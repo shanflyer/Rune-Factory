@@ -1,20 +1,19 @@
 ﻿using BehaviorDesigner.Runtime;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using static BehaviorDesigner.Runtime.BehaviorManager;
-using UnityEngine.TextCore.Text;
 
 public enum NPCState
 {
     修养中 = 0, 正常 = 1
 }
+
 public enum NPCBehaviorState
 {
-    闲置=0,工作=1,睡眠=2,
+    闲置 = 0, 工作 = 1, 睡眠 = 2,
 }
+
 public struct CharacterInformationDataList : IReferenceData
 {
     public List<CharacterInformationData> characterInformationDatas;
@@ -127,13 +126,12 @@ public class TempCharacter : Character
             {
                 externalBehaviorTree = tempCharacterData.defaultBehavior;
             }
-           
         }
         else
         {
             externalBehaviorTree = tempCharacterData.defaultBehavior;
         }
-        if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
         {
             characterRuntimeObj.behaviorTree.ExternalBehavior = externalBehaviorTree;
             characterRuntimeObj.behaviorTree.enabled = true;
@@ -144,7 +142,7 @@ public class TempCharacter : Character
         {
             CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
             CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree, true);
-        } 
+        }
     }
 }
 
@@ -165,6 +163,7 @@ public partial class Character
 {
     public int selectItem;
     public int mulitGroup;
+
     public CharacterInformationData GetInformation()
     {
         CharacterInformationData characterInformationData = new CharacterInformationData();
@@ -202,12 +201,13 @@ public class NPC : IReferenceData
 {
     public NPC(int instanceId, NPCData nPCData)
     {
-       characterInstance = instanceId;
+        characterInstance = instanceId;
         npcData = nPCData;
         npcState = NPCState.正常;
         endBehavior = true;
         behaviorCanBreak = false;
     }
+
     public Character Character
     {
         get
@@ -219,7 +219,9 @@ public class NPC : IReferenceData
             return character;
         }
     }
+
     private Character character;
+
     public static Color GetStateColor(NPCState state)
     {
         if (state == NPCState.正常)
@@ -230,7 +232,7 @@ public class NPC : IReferenceData
     }
 
     public CharacterInformationData GetInformation()
-    {  
+    {
         return Character.GetInformation();
     }
 
@@ -248,21 +250,25 @@ public class NPC : IReferenceData
     public NPCState npcState;
     private NPCData npcData;
     public bool isActive;
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public int characterInstance;
+
     public int dataId => npcData.id;
     public bool hide => npcData.hide;
 
     private MyDic<int, int3> visitMaps = new MyDic<int, int3>();
     private MyDic<int, int2> visitFriends = new MyDic<int, int2>();
     private MyDic<int, int> visitShops = new MyDic<int, int>();
+
     public int GetTalkId()
     {
-        int friendShipLevel = FriendManager.instance.GetFriendShipLevel(dataId) ;
+        int friendShipLevel = FriendManager.instance.GetFriendShipLevel(dataId);
         return npcData.GetTalk(friendShipLevel);
     }
+
     public async void InitBehaviorData()
     {
         NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
@@ -270,28 +276,29 @@ public class NPC : IReferenceData
         visitMaps.Clear();
         InitNowVisitMap();
         visitFriends.Clear();
-        for(int i=0;i<NPCBehaviorData.npcFriends.Count;i++)
+        for (int i = 0; i < NPCBehaviorData.npcFriends.Count; i++)
         {
             visitFriends.Add(NPCBehaviorData.npcFriends[i].x, NPCBehaviorData.npcFriends[i]);
         }
-        for(int i = 0; i < NPCBehaviorData.visitShops.Count; i++)
+        for (int i = 0; i < NPCBehaviorData.visitShops.Count; i++)
         {
             visitShops.Add(NPCBehaviorData.visitShops[i].x, NPCBehaviorData.visitShops[i].y);
         }
     }
+
     public bool IsInHome()
-    { 
+    {
         if (Character != null)
         {
             return Character.mapInstance == HomeMap;
         }
         return false;
     }
-     
+
     private void InitNowVisitMap()
     {
         if (NPCBehaviorData.gameTimeKeyVisitMapDic.TryGetValue(GameTimeManager.instance.nowHourMinute, out var value))
-        { 
+        {
             var int2 = GameRandom.instance.GetRandomItemValueList(value);
             HashSet<int> nowMaps = new HashSet<int>();
             for (int i = 0; i < int2.Count; i++)
@@ -317,14 +324,13 @@ public class NPC : IReferenceData
                     }
                 }
             }
-           
         }
     }
 
     public int GetVisitMap()
     {
         InitNowVisitMap();
-        
+
         for (int i = 0; i < visitMaps.length; i++)
         {
             int3 visitMap = visitMaps[i];
@@ -366,6 +372,7 @@ public class NPC : IReferenceData
         }
         return -1;
     }
+
     public int GetVisitFriend()
     {
         if (visitFriends.length == 0)
@@ -406,6 +413,7 @@ public class NPC : IReferenceData
 
         return 0;
     }
+
     public int GetVisitShop()
     {
         if (visitShops.length == 0)
@@ -479,10 +487,10 @@ public class NPC : IReferenceData
         }
         endBehavior = true;
         behaviorCanBreak = false;
-        var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior, out behaviorCanBreak,out var pauseWhenDisabled);
+        var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior, out behaviorCanBreak, out var pauseWhenDisabled);
         if (externalBehavior != null)
         {
-            AddNpcBehavior(externalBehavior, loopBehavior,PauseWhenDisabled:pauseWhenDisabled);
+            AddNpcBehavior(externalBehavior, loopBehavior, PauseWhenDisabled: pauseWhenDisabled);
         }
     }
 
@@ -490,24 +498,32 @@ public class NPC : IReferenceData
     {
         if (endBehavior || behaviorCanBreak)
         {
-            var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out var loopBehavior, out behaviorCanBreak,out var pauseWhenDisabled);
+            var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out var loopBehavior, out behaviorCanBreak, out var pauseWhenDisabled);
             if (externalBehavior != null)
             {
-                AddNpcBehavior(externalBehavior, loopBehavior,PauseWhenDisabled:pauseWhenDisabled);
+                AddNpcBehavior(externalBehavior, loopBehavior, PauseWhenDisabled: pauseWhenDisabled);
                 return true;
             }
         }
         return false;
     }
 
-    public void AddNpcBehavior(ExternalBehaviorTree externalBehavior, bool loopBehavior = true,bool PauseWhenDisabled=false)
+    public void AddNpcBehavior(ExternalBehaviorTree externalBehavior, bool loopBehavior = true, bool PauseWhenDisabled = false)
     {
         if (externalBehavior == null)
         {
             return;
         }
-        CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior, loopBehavior, ResetBehaviorState, PauseWhenDisabled);
-        endBehavior = false;
+        try
+        {
+            CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior, loopBehavior,
+          ResetBehaviorState, PauseWhenDisabled, Character.name);
+            endBehavior = false;
+        }
+        catch
+        {
+            Debug.LogError($"NPCbehavior:{npcData.name}!!!!");
+        }
     }
 
     public bool SetNowBehaviorTree()
@@ -515,7 +531,7 @@ public class NPC : IReferenceData
         var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior, out behaviorCanBreak, out var pauseWhenDisabled);
         if (externalBehavior != null)
         {
-            AddNpcBehavior(externalBehavior, loopBehavior,PauseWhenDisabled:pauseWhenDisabled);
+            AddNpcBehavior(externalBehavior, loopBehavior, PauseWhenDisabled: pauseWhenDisabled);
             return true;
         }
         return false;
@@ -545,8 +561,10 @@ public class NPC : IReferenceData
         pauseWhenDisabled = false;
         return null;
     }
+
     public NPCTaskScheduleData nowScheduleData { get; private set; }
-    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak,out bool PauseWhenDisabled)
+
+    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak, out bool PauseWhenDisabled)
     {
         try
         {
@@ -744,20 +762,17 @@ public class NPCManager : Singleton<NPCManager>
     }
 
     private void UpdateGameTime(UpdateGameTime updateGameTime)
-    { 
+    {
         int perNum = npcs.length / 10;
         for (int i = 0; i < npcs.length; i++)
         {
-            if (npcs[i].Character==null||npcs[i].Character.mapInstance <= 0)
+            if (npcs[i].Character == null || npcs[i].Character.mapInstance <= 0)
             {
                 continue;
             }
             npcs[i].SetTimeBehaviorTree(updateGameTime);
-            
         }
     }
-
-    
 
     private void GiveGift(GiveGift giveGift)
     {
@@ -779,12 +794,13 @@ public class NPCManager : Singleton<NPCManager>
 
     public Character GetNPCCharacter(int id)
     {
-        if(GetNPC(id,out var npc))
+        if (GetNPC(id, out var npc))
         {
             return CharacterManager.instance.GetCharacter(npc.characterInstance);
         }
         return null;
     }
+
     public bool GetNPC(int id, out NPC npc)
     {
         return npcs.TryGetValue(id, out npc);

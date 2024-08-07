@@ -82,10 +82,8 @@ public class WorldMapController : MonoBehaviour
         {
             worldName = worldName,
             displayMap = mapInstance
-        });
-      
-        GameActionManager.instance.QueueAction(new CreatDefaultNPC());
-
+        },true);
+        
          
         InputManager.instance.SwitchInputMap(false);
         GameActionManager.instance.QueueAction(new InitInputAction());
