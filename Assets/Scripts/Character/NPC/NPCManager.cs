@@ -522,7 +522,7 @@ public class NPC : IReferenceData
         }
         catch
         {
-            Debug.LogError($"NPCbehavior:{npcData.name}!!!!");
+          Debug.LogError($"NPCbehavior:{npcData.name}!!!!");
         }
     }
 

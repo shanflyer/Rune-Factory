@@ -87,6 +87,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 if (SetMapEditorItemLinkCharacter.setResult != null)
                 {
                     SetMapEditorItemLinkCharacter.setResult(true);
+                    return;
                 }
             }
         }
@@ -101,7 +102,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         bool result= IsCheckRuntimeMapItemLink(editorKey, checkMapEditorItemLinkCharacter.characterId);
         if (checkMapEditorItemLinkCharacter.setResult != null)
         {
-            checkMapEditorItemLinkCharacter.setResult(result);
+            checkMapEditorItemLinkCharacter.setResult(!result);
         }
     }
     public bool IsCheckRuntimeMapItemLink(int2 editorKey, int linkCharacterId = -1)
