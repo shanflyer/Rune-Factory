@@ -595,11 +595,11 @@ public class Teamer
     public Character character;
     public Teamer nextTeamer;
 
-    public void SetNowCoordinate(float2 nowCoordinate, float2 directionValue)
+    public async void SetNowCoordinate(float2 nowCoordinate, float2 directionValue)
     {
         this.nowCoordinate = (int2)nowCoordinate;
         character.SetCoordinate(this.nowCoordinate);
-        CharacterManager.instance.RefreshNpcRuntimeObj(character);
+       await CharacterManager.instance.RefreshNpcRuntimeObj(character);
         character.moveDirection = directionValue;
         direction = directionValue;
     }

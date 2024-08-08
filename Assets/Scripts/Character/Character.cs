@@ -583,7 +583,7 @@ public partial class Character
         
         if (item.dataId != 0)
         {
-            PackageManager.instance.SetItemInPackage(item, packageId);
+         await PackageManager.instance.SetItemInPackage(item, packageId);
         }
         if (itemData != null)
         {

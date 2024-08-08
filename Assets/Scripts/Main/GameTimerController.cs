@@ -72,7 +72,11 @@ public class GameTimerController : Singleton<GameTimerController>
         base.UpData();
         while(activeActions.Count > 0)
         {
-            activeActions.Dequeue().Invoke();
+            var Action = activeActions.Dequeue();
+            if (Action != null)
+            {
+                Action.Invoke();
+            } 
         }
     }
 }

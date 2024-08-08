@@ -17,7 +17,7 @@ public class ItemCostBehavior : Action
     public int money;
     public List<int2> costItems = new List<int2>();
 
-    public override void OnStart()
+    public override async void OnStart()
     {
         taskStatus = TaskStatus.Running;
         List<MyInt3> items = new List<MyInt3>();
@@ -39,7 +39,7 @@ public class ItemCostBehavior : Action
             items = items,
             afterAction=SetResult
         };
-        UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
+       await UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
     }
     void SetResult(bool result)
     {

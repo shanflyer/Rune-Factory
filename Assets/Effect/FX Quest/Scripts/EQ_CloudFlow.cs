@@ -249,7 +249,7 @@ public class EQ_CloudFlow : MonoBehaviour
 	{
 		if(m_Camera==null)
 		{
-			Camera[] CameraList = FindObjectsOfType<Camera>();
+			Camera[] CameraList =FindObjectsByType<Camera>(FindObjectsSortMode.None);
 			foreach(Camera child in CameraList)
 			{
 				if(child.orthographic==true)

@@ -99,11 +99,30 @@ public class WorldMapManager : Singleton<WorldMapManager>
     public void CheckMapEditorItemLinkCharacter(CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter)
     {
         int2 editorKey = new int2(checkMapEditorItemLinkCharacter.mapId, checkMapEditorItemLinkCharacter.itemEditorId);
-        bool result= IsCheckRuntimeMapItemLink(editorKey, checkMapEditorItemLinkCharacter.characterId);
+        bool result= CanLinkRuntimeMapItem(editorKey, checkMapEditorItemLinkCharacter.characterId);
         if (checkMapEditorItemLinkCharacter.setResult != null)
         {
-            checkMapEditorItemLinkCharacter.setResult(!result);
+            checkMapEditorItemLinkCharacter.setResult(result);
         }
+    }
+    public bool CanLinkRuntimeMapItem(int2 editorKey, int linkCharacterId)
+    {
+        if (editorItemRemapInstanceIds.TryGetValue(editorKey,
+              out var instanceId))
+        {
+            if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
+            {
+               
+                if (runtimeMapItem.linkCharacter != linkCharacterId)
+                {
+                    return true;
+                }
+                Debug.LogWarning($"已经有人：{runtimeMapItem.linkCharacter}");
+            }
+            return false;
+        }
+        Debug.LogWarning($"找不到：{editorKey}-linkCharacter:{linkCharacterId}");
+        return false;
     }
     public bool IsCheckRuntimeMapItemLink(int2 editorKey, int linkCharacterId = -1)
     {
@@ -120,8 +139,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 {
                     return true;
                 }
+                Debug.LogWarning($"找不到：{editorKey}-linkCharacter:{linkCharacterId}");
             }
+            return false;
         }
+        Debug.LogWarning($"找不到：{editorKey}-linkCharacter:{linkCharacterId}");
         return false;
     }
 
@@ -837,20 +859,21 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (room.eventId != 0)
         {
             await GameEventManager.instance.AddGameEvent(room.eventId);
-        }
-        var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
-        var mapNpcDatas = mapNpcDataList.GetMapNPCDatas(room.id);
-        if (mapNpcDatas != null)
-        {
-            for (int i = 0; i < mapNpcDatas.Count; i++)
+        } 
+        GameTimerController.instance.DelayAction(300, async () => {
+            var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
+            var mapNpcDatas = mapNpcDataList.GetMapNPCDatas(room.id);
+            if (mapNpcDatas != null)
             {
-                if (mapNpcDatas[i].initialBegin)
+                for (int i = 0; i < mapNpcDatas.Count; i++)
                 {
-                    CharacterManager.instance.CreatNpc(mapNpcDatas[i]);
+                    if (mapNpcDatas[i].initialBegin)
+                    {
+                        CharacterManager.instance.CreatNpc(mapNpcDatas[i]);
+                    }
                 }
             }
-        }
-        
+        }); 
     }
 
     private async void ChangeMapItem(ChangeMapItem changeMapItem)

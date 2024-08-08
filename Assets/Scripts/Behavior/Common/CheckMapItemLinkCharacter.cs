@@ -11,7 +11,7 @@ public class CheckMapItemLinkCharacter : Action
     public SharedInt mapId;
     public SharedInt editorId;
  
-    public override async void OnStart()
+    public override  void OnStart()
     { 
     }
 

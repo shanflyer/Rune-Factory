@@ -717,9 +717,8 @@ public struct GameDateSaveData
                 return $"{year}年 {season}之月 {day}日"; 
             default:
                 return $"{day}年 {season}之月 {day}日";
-                break;
+               
         }
-        return base.ToString();
     } 
 }
 

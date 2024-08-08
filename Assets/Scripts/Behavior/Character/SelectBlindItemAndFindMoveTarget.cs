@@ -45,7 +45,8 @@ public class SelectBlindItemAndFindMoveTarget: Action
             {
                 checkItems = npc.WorkItems;
             }
-            for(int i = 0; i < checkItems.Count; i++)
+            Debug.LogWarning($"尝试寻找:{npc.Character.name}");
+            for (int i = 0; i < checkItems.Count; i++)
             {
                 int index = i;
                 CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter = new CheckMapEditorItemLinkCharacter
@@ -67,7 +68,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                                 taskStatus = TaskStatus.Running;
 
                                 int index = GameRandom.RandomInt(0, items.Count);
-                                SelectItem = items[index];
+                                SelectItem.Value = items[index];
                                 SetMapEditorItemLinkCharacter setMapEditorItemLinkCharacter = new SetMapEditorItemLinkCharacter
                                 {
                                     mapId = SelectItem.Value.x,
@@ -104,7 +105,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                    int2 cell= WorldMapManager.instance.GetItemCommonCenterTriggerCellForEditorInstance(SelectItem.Value.x, SelectItem.Value.y);
                     if (cell.x > int.MinValue)
                     {
-                        targetCoordinate = new int3(cell, SelectItem.Value.x);
+                        targetCoordinate.Value = new int3(cell, SelectItem.Value.x);
                         taskStatus = TaskStatus.Success;
                         return; 
                     }
@@ -136,7 +137,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                     if (randomResults.Count >= 0)
                     {
                         int index = randomResults[0].x;
-                        targetCoordinate = new int3(rangeCoordinates[index], SelectItem.Value.x);
+                        targetCoordinate.Value = new int3(rangeCoordinates[index], SelectItem.Value.x);
                         taskStatus = TaskStatus.Success;
                         return;
                     }

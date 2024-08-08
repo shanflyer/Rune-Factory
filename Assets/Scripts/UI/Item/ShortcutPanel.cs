@@ -24,6 +24,29 @@ public struct ShortcutItem : IReferenceData
 
         return false;
     }
+    public bool Equals(Object @object)
+    {
+        ShortcutItem other = (ShortcutItem)@object;
+        if (other!=null)
+        {
+            if (index == other.index)
+            {
+                return true;
+            }
+            /*
+            if (Item.instanceId == other.Item.instanceId)
+            {
+                return true;
+            }*/
+        }
+
+        return false;
+    }
+
+    public static explicit operator ShortcutItem(Object v)
+    {
+        throw new System.NotImplementedException();
+    }
 
     public static bool operator ==(ShortcutItem item0, ShortcutItem item1)
     {
