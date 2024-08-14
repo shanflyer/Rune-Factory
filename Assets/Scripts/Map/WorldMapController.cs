@@ -57,14 +57,13 @@ public class WorldMapController : MonoBehaviour
 
         var teamManager = TeamManager.instance;
         var npcManager = NPCManager.instance;
+
         var gameEventManager = GameEventManager.instance;
         var tempCharacterManager = TempCharacterManager.instance;
         var characterManager = CharacterManager.instance;
         var gameManager = GameManager.instance;
         var playerStoreManager = PlayerStoreManager.instance;
-        var talkManager = TalkManager.instance;
-        var friendManager = FriendManager.instance;
-        var shopManager = ShopManager.instance;
+        var talkManager = TalkManager.instance; 
         var farmManager = FarmManager.instance;
         var tempMapItemController = TempMapItemController.instance;
         var festivalManager = FestivalManager.instance;

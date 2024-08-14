@@ -5,11 +5,11 @@ using Unity.Mathematics;
 
 
 [TaskCategory("Game/Character")]
-[TaskName("获取角色家地图位置")]
-public class GetNPCHomePos : Action
+[TaskName("获取角色工作地图位置")]
+public class GetNPCWorkPos : Action
 {
     [SerializeField]
-    private SharedInt characterId; 
+    private SharedInt characterId;
     [SerializeField]
     private SharedInt3 result;
     public override void OnStart()
@@ -24,11 +24,11 @@ public class GetNPCHomePos : Action
     {
         if (NPCManager.instance.GetNPCFormInstance(characterId.Value, out var npc))
         {
-            int visitMap = npc.HomeMap;
+            int visitMap = npc.WorkMap;
 
             if (visitMap > 0)
             {
-                int areaId = npc.GetHomeArea(); 
+                int areaId = npc.GetWorkArea();
                 if (areaId == 0)
                 {
                     var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, BehaviorAreaType.聚集);

@@ -76,7 +76,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                                     linkInstanceId = characterId.Value,
                                     setResult = SetMapEditorItemLinkResult
                                 };
-                                GameActionManager.instance.QueueAction(setMapEditorItemLinkCharacter);
+                                GameActionManager.instance.QueueAction(setMapEditorItemLinkCharacter,true);
                             }
                             else
                             {

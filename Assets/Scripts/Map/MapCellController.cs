@@ -235,7 +235,20 @@ public class MapCellController : Singleton<MapCellController>
     {
         private List<NpcBehaviorArea> NpcBehaviorAreas = new List<NpcBehaviorArea>();
         private Dictionary<BehaviorAreaType, List<int>> NpcBehaviorAreaTypeDic = new Dictionary<BehaviorAreaType, List<int>>();
+        public int3 GetRandomBehaviorCell(int areaId)
+        {
+            var npcBehaviorArea = NpcBehaviorAreas.Find(n=>n.Name==areaId);
 
+            if (npcBehaviorArea!=null)
+            {
+                int gridIndex = GameRandom.RandomInt(0, npcBehaviorArea.grids.Count / 4);
+                int x = GameRandom.RandomInt(npcBehaviorArea.grids[gridIndex * 4], npcBehaviorArea.grids[gridIndex * 4 + 2] + 1);
+                int y = GameRandom.RandomInt(npcBehaviorArea.grids[gridIndex * 4 + 1], npcBehaviorArea.grids[gridIndex * 4 + 3] + 1);
+
+                return new int3(x + npcBehaviorArea.pos.x, y + npcBehaviorArea.pos.y, npcBehaviorArea.Name);
+            }
+            return int3.zero;
+        }
         public int3 GetRandomBehaviorCell(BehaviorAreaType behaviorAreaType)
         {
             if (NpcBehaviorAreaTypeDic.TryGetValue(behaviorAreaType, out var ints))
@@ -633,7 +646,14 @@ public class MapCellController : Singleton<MapCellController>
 
     private Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new Dictionary<int, RuntimeMapRoom>();
     private NativeList<RoomCellData> roomCellDatas;
-
+    public int3 GetRandomBehavioCell(int mapInstance, int areaId)
+    {
+        if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
+        {
+            return runtimeMapRoom.GetRandomBehaviorCell(areaId);
+        }
+        return int3.zero;
+    }
     public int3 GetRandomBehavioCell(int mapInstance, BehaviorAreaType behaviorAreaType)
     {
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))

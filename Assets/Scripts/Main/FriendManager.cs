@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 
@@ -11,6 +12,7 @@ public struct FriendShip
     public async void AddValue(int value)
     {
         int totalVaue = value + nowValue;
+        int friendLevel = this.friendLevel;
         if (value < 0)
         {
             while (totalVaue < 0)
@@ -34,6 +36,17 @@ public struct FriendShip
                 }
             }
         }
+        if (this.friendLevel != friendLevel)
+        {
+            if(NPCManager.instance.GetNPC(characterId,out var npc))
+            {
+                RefreshShopLevel refreshShopLevel = new RefreshShopLevel
+                {
+                    shopName = npc.shopName
+                };
+                GameActionManager.instance.QueueAction(refreshShopLevel);
+            }
+        }
     }
 }
 
@@ -44,28 +57,27 @@ public enum FriendAddType
 public class FriendManager : Singleton<FriendManager>
 {
     
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
         NPCFriendShips.Clear();
-        var allNpc = await GameDataManager.instance.GetAllAsyncData<NPCData>();
-        for (int i = 0; i < allNpc.Count; i++)
-        {
-            var npc = allNpc[i];
-            FriendShip friendShip = new FriendShip
-            {
-                characterId = npc.id,
-                friendLevel = npc.zeroFriendShipLevel,
-            };
-            NPCFriendShips[npc.id] = friendShip;
-            friendAdd[npc.id] = GameCommon.friendAddCount;
-        }
-
+      
         GameActionManager.instance.AddListener<AddFriendShipValue>(AddFriendShipValue);
         GameActionManager.instance.AddListener<TryGiveGiftOpenPackage>(TryGiveGiftOpenPackage);
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
         GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
+    public void ZeroFriendShip(int npcId,int zeroFriendShipLevel)
+    {
+        FriendShip friendShip = new FriendShip
+        {
+            characterId = npcId,
+            friendLevel = zeroFriendShipLevel,
+        };
+        NPCFriendShips[npcId] = friendShip;
+        friendAdd[npcId] = GameCommon.friendAddCount; 
+    }
+   
     private void NewDay(NewDay newDay)
     {
         if (friendAdd.Count > 0)
@@ -202,12 +214,17 @@ public class FriendManager : Singleton<FriendManager>
     }
 
     private void AddFriendShipValue(AddFriendShipValue addFriendShipValue)
-    {
+    { 
+        if(!NPCManager.instance.GetNPCIdFromInstance(addFriendShipValue.characterId, out var characterId))
+        {
+            characterId = addFriendShipValue.characterId;
+        } 
+
         bool canAddFriendShip = true;
         if (addFriendShipValue.value > 0)
         {
             canAddFriendShip = false;
-            if (friendAdd.TryGetValue(addFriendShipValue.characterId, out var int3))
+            if (friendAdd.TryGetValue(characterId, out var int3))
             {
                 switch (addFriendShipValue.friendAddType)
                 {
@@ -227,15 +244,15 @@ public class FriendManager : Singleton<FriendManager>
                         break;
                 }
                 int3 = math.clamp(int3.zero, int3, int3);
-                friendAdd[addFriendShipValue.characterId] = int3;
+                friendAdd[characterId] = int3;
             }
         }
         if (canAddFriendShip)
         {
-            if (NPCFriendShips.TryGetValue(addFriendShipValue.characterId, out var friendShip))
+            if (NPCFriendShips.TryGetValue(characterId, out var friendShip))
             {
                 friendShip.AddValue(addFriendShipValue.value);
-                NPCFriendShips[addFriendShipValue.characterId] = friendShip;
+                NPCFriendShips[characterId] = friendShip;
                 RefreshFriendShip refreshFriendShip = new RefreshFriendShip
                 {
                     characterId = addFriendShipValue.characterId

@@ -1010,7 +1010,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         int targetMap = newMap.z;
         var targetCoordinate = new int2(newMap.x, newMap.y);
-
+        
         if (character == controllerCharacter)
         {
             character.StopMove();
@@ -1061,6 +1061,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
+            character.SetCoordinate(new int3(targetCoordinate, targetMap));
             SetPlayerPos(character);
         }
     }

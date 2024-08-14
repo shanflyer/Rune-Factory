@@ -1468,7 +1468,7 @@ public partial class Character
         }
         else
         {
-            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, targetCoordinate, nowMap);
+            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, targetCoordinate, objCoordinate.z);
 
             /*
             if (CellDebugDisplay.Instance)

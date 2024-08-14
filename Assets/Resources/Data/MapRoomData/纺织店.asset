@@ -15,11 +15,11 @@ MonoBehaviour:
   roomName: "\u7EBA\u7EC7\u5E97"
   barrierGrids: effffffff8ffffff00000000fbffffffeffffffffcfffffff0ffffff47000000f1fffffffffffffff9ffffff01000000f1ffffff02000000f3ffffff05000000f1ffffff11000000f6ffffff2d000000f1ffffff2e000000f4ffffff47000000f4fffffffefffffff9fffffffefffffff4ffffff04000000f8ffffff05000000f5ffffff3a000000ffffffff47000000f7ffffff12000000180000002b000000f7ffffff2c000000170000002c000000f7ffffff2d000000f7ffffff2d000000faffffff01000000faffffff01000000faffffff30000000feffffff36000000000000003b0000000000000047000000010000003e0000001d0000004700000003000000f8ffffff1d000000fbffffff030000000600000005000000070000000400000008000000040000000b0000000b000000030000001d000000070000000b0000001100000018000000110000000b0000003b0000001d0000003d0000000c000000390000001d0000003a0000000f00000010000000180000001000000010000000010000001d0000000200000013000000fcffffff1d0000000000000013000000080000001d0000000b00000017000000340000001d0000003800000019000000330000001d000000330000001b0000000c0000001d00000032000000
   mapItems:
-  - id: 1081
-    instanceId: 1081691
+  - id: 1159
+    instanceId: 1159783
     coordinate:
-      x: 6
-      y: 62
+      x: -1
+      y: 10
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -31,11 +31,11 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1159
-    instanceId: 1159783
+  - id: 1081
+    instanceId: 1081691
     coordinate:
-      x: -1
-      y: 10
+      x: 6
+      y: 62
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -59,5 +59,17 @@ MonoBehaviour:
   creatTempCharacterId: 0
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
-  npcBehaviorAreas: []
+  npcBehaviorAreas:
+  - Name: 530900
+    pos:
+      x: 4
+      y: 52
+    grids: fdfffffffbffffff1000000003000000
+    behaviorAreaType: 1
+  - Name: 539001
+    pos:
+      x: -3
+      y: 4
+    grids: f6ffffff0a000000120000000a000000f6ffffff0b0000000c0000000b000000fffffffffeffffff0a000000ffffffffffffffff00000000040000000300000005000000fcffffff0a000000fdffffff0b000000040000000c000000090000000d000000080000001200000009000000
+    behaviorAreaType: 1
   specialNpcBehaviorAreas: []

@@ -12,6 +12,18 @@ public class ShopManager : Singleton<ShopManager>
         InitShop();
         GameActionManager.instance.AddListener<TryVisitShop>(TryVisitShop);
         GameActionManager.instance.AddListener<OpenShopItem>(OpenShopItem);
+        GameActionManager.instance.AddListener<RefreshShopLevel>(RefreshShopLevel);
+    }
+    void RefreshShopLevel(RefreshShopLevel refreshShopLevel)
+    {
+        if (shopListDic.TryGetValue(refreshShopLevel.shopName, out var shopList))
+        {
+           for(int i = 0; i < shopList.shops.length; i++)
+            {
+                var shop = shopList.shops[i];
+                shop.RefreshOpenItem();
+            }
+        }
     }
     void OpenShopItem(OpenShopItem openShopItem) 
     { 
@@ -67,7 +79,7 @@ public class ShopManager : Singleton<ShopManager>
 
             for(int j = 0; j < shopGroupData.shopDatas.Count; j++)
             {
-                Shop shop = new Shop(shopGroupData.shopDatas[j]); 
+                Shop shop = new Shop(shopGroupData.shopDatas[j],shopGroupData.bindCharacters); 
                 shop.listName=shopGroupData.name;
                 shopList.shops.Add(shop.shopId,shop);
                 shopDic.Add(shop.shopId, shop);
@@ -102,11 +114,12 @@ public class ShopList : IReferenceData
 }
 public class Shop:IReferenceData
 { 
-    public string shopName;
+    public string shopName=>shopData.shopName;
     public string listName;
-    public int shopId;
+    public int shopId=> shopData.shopId;
     private MyDic<int,ShopItemData> shopItemDatas=new MyDic<int, ShopItemData>();
     private MyDic<int, ShopItemData> openShopItems = new MyDic<int, ShopItemData>();
+    private List<int> bindCharacters = new List<int>();
 
     public bool OpenShopItem(int itemId,bool saveData=true)
     {
@@ -119,16 +132,41 @@ public class Shop:IReferenceData
         }
         return false;
     }
-    public Shop(ShopData shopData)
+    int friendLevel = 0;
+    public async void RefreshOpenItem()
     {
-        shopItemDatas.Clear();
-        shopName = shopData.shopName;
-        shopId = shopData.shopId;
-
-        for(int i = 0; i < shopData.shopItem.Count; i++)
+        if (this.bindCharacters != null)
         {
-           
-            if (shopData.shopItem[i].open)
+            for (int i = 0; i < this.bindCharacters.Count; i++)
+            {
+                int friendLevel = FriendManager.instance.GetFriendShipLevel(this.bindCharacters[i]);
+                if (friendLevel > this.friendLevel)
+                {
+                    this.friendLevel = friendLevel;
+                }
+            }
+        }
+        for (int i = shopItemDatas.length-1; i >=0; i--)
+        {  
+            if (shopItemDatas[i].openFriendLevel <= friendLevel)
+            {
+                openShopItems.Add(shopItemDatas[i].item, shopItemDatas[i]);
+                openShopItems.RemoveAt(shopItemDatas[i].item);
+
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemDatas[i].item);
+                InformationController.instance.AddInformation($"{itemData}已经开始售卖!");
+            } 
+        }
+    }
+    ShopData shopData;
+    public Shop(ShopData shopData, List<int> bindCharacters)
+    {
+        this.shopData=shopData;
+        shopItemDatas.Clear();
+        for (int i = 0; i < shopData.shopItem.Count; i++)
+        {
+
+            if (shopData.shopItem[i].openFriendLevel <= friendLevel)
             {
                 openShopItems.Add(shopData.shopItem[i].item, shopData.shopItem[i]);
             }
@@ -137,6 +175,8 @@ public class Shop:IReferenceData
                 shopItemDatas.Add(shopData.shopItem[i].item, shopData.shopItem[i]);
             }
         }
+
+       // RefreshOpenItem(); 
     }
     public List<ShopItemData> GetOpenShopItem()
     {

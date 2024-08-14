@@ -14,6 +14,9 @@ public class NPCBehaviorData : ScriptableObject, IGameData
 {
     public string npcName; public int id;
     public int home;
+    public List<int> homeAreas = new List<int>();
+    public int workMap;
+    public List<int> workMapAreas = new List<int>();
     public List<int> dailyTasks = new List<int>();
     public List<int> eventTasks = new List<int>();
 

@@ -244,6 +244,7 @@ public class NPC : IReferenceData
     public List<int2> Beds => NPCBehaviorData.beds;
     public List<int2> WorkItems => NPCBehaviorData.workItems;
     public int HomeMap => NPCBehaviorData.home;
+    public int WorkMap => NPCBehaviorData.workMap;
     public int playerOperateEventId => npcData.playerOperateEventId;
     public int nextTalkEventId => npcData.nextTalkEventId;
 
@@ -251,6 +252,24 @@ public class NPC : IReferenceData
     private NPCData npcData;
     public bool isActive;
 
+    public int GetHomeArea()
+    {
+        if (NPCBehaviorData.homeAreas.Count>0)
+        {
+            int index = GameRandom.RandomInt(0, NPCBehaviorData.homeAreas.Count);
+            return NPCBehaviorData.homeAreas[index];
+        }
+        return 0;
+    }
+    public int GetWorkArea()
+    {
+        if (NPCBehaviorData.workMapAreas.Count > 0)
+        {
+            int index = GameRandom.RandomInt(0, NPCBehaviorData.workMapAreas.Count);
+            return NPCBehaviorData.workMapAreas[index];
+        }
+        return 0;
+    }
     /// <summary>
     ///
     /// </summary>
@@ -781,7 +800,15 @@ public class NPCManager : Singleton<NPCManager>
             npc.GetGift(giveGift.giveCharacter, giveGift.giftId);
         }
     }
-
+    public bool GetNPCIdFromInstance(int instanceId,out int npcId)
+    {
+        if (instanceDatas.TryGetValue(instanceId, out npcId))
+        {
+            return true;
+        }
+        npcId = 0;
+        return false ;
+    }
     public bool GetNPCFormInstance(int instanceId, out NPC npc)
     {
         npc = null;
@@ -816,7 +843,7 @@ public class NPCManager : Singleton<NPCManager>
         return nPCList;
     }
 
-    public async void CreatZeroNPC()
+    async void CreatZeroNPC()
     {
         var NPCDatas = await GameDataManager.instance.GetAllAsyncData<NPCData>();
         for (int i = 0; i < NPCDatas.Count; i++)
@@ -828,7 +855,10 @@ public class NPCManager : Singleton<NPCManager>
                 NPC npc = new NPC(instanceId, NPCData);
                 npcs.Add(npc.Key, npc);
                 instanceDatas[instanceId] = NPCData.id;
+                FriendManager.instance.ZeroFriendShip(NPCData.id, NPCData.zeroFriendShipLevel);
             }
         }
+        var shopManager = ShopManager.instance;
+
     }
 }

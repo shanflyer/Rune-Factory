@@ -113,7 +113,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
             {
                
-                if (runtimeMapItem.linkCharacter != linkCharacterId)
+                if (runtimeMapItem.linkCharacter <=0|| runtimeMapItem.linkCharacter==linkCharacterId)
                 {
                     return true;
                 }
@@ -860,7 +860,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             await GameEventManager.instance.AddGameEvent(room.eventId);
         } 
-        GameTimerController.instance.DelayAction(300, async () => {
+        GameTimerController.instance.DelayAction(1800, async () => {
             var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
             var mapNpcDatas = mapNpcDataList.GetMapNPCDatas(room.id);
             if (mapNpcDatas != null)

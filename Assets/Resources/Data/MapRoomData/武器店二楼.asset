@@ -15,11 +15,11 @@ MonoBehaviour:
   roomName: "\u6B66\u5668\u5E97\u4E8C\u697C"
   barrierGrids: d4fffffff0ffffff0f000000f1ffffffd4fffffff2fffffffcfffffff3ffffffd4fffffff4ffffffdcfffffff5ffffffd4fffffffaffffffd7ffffff02000000d4ffffff03000000d4ffffff18000000d5ffffff08000000d7ffffff18000000d8ffffff0c000000edffffff18000000e0ffffff09000000ecffffff0b000000e3fffffffbffffffeeffffff05000000e3ffffff06000000edffffff06000000e3ffffff07000000ecffffff08000000eeffffff140000000300000018000000f4fffffffcfffffffffffffffefffffff5fffffffbfffffffefffffffbfffffff6ffffff11000000f9ffffff13000000020000000b0000000f0000000b000000020000000c000000070000001000000003000000f8ffffff080000000a00000004000000180000000f00000018000000080000000e000000080000001000000009000000faffffff0f0000000a000000090000000f00000009000000100000000a000000100000000a000000100000000b000000f8ffffff0f000000f9ffffff0c000000160000000f000000170000000f000000f2ffffff0f000000f7ffffff0f0000000c0000000f00000015000000
   mapItems:
-  - id: 1006
-    instanceId: 1006070
+  - id: 1071
+    instanceId: 1071058
     coordinate:
-      x: -6
-      y: 1
+      x: -15
+      y: 14
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -31,11 +31,11 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1071
-    instanceId: 1071058
+  - id: 1006
+    instanceId: 1006070
     coordinate:
-      x: -15
-      y: 14
+      x: -6
+      y: 1
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -75,5 +75,11 @@ MonoBehaviour:
   creatTempCharacterId: 0
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
-  npcBehaviorAreas: []
+  npcBehaviorAreas:
+  - Name: 18560
+    pos:
+      x: -3
+      y: 4
+    grids: e1fffffff6ffffffe3fffffffdffffffe5fffffff2fffffff0fffffff3fffffff5ffffff03000000fbffffff05000000f7fffffff2fffffffdfffffff3ffffffffffffff07000000010000000c00000001000000000000000300000003000000
+    behaviorAreaType: 1
   specialNpcBehaviorAreas: []

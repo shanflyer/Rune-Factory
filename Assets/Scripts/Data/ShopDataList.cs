@@ -11,10 +11,11 @@ public struct EditorShopItemData
     public string shopName;
     public string shopGroup;
     public int item;
+    public int openFriendLevel;
     public ShopItemType shopItemType;
+    public List<int> bindCharacters;
     public PayType payType;
-    public int priceValue;
-    public bool open;
+    public int priceValue; 
     public bool buyLimitOne;
     public int buyAction;
 }
@@ -94,7 +95,7 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
                     type=shopItemData.shopItemType,
                     payType=shopItemData.payType,
                     priceValue=shopItemData.priceValue,
-                    open=shopItemData.open
+                    openFriendLevel=shopItemData.openFriendLevel
                 }
                 );
 
@@ -153,7 +154,7 @@ public class ShopItemData : IReferenceData
     public ShopItemType type;
     public PayType payType;
     public int priceValue;
-    public bool open;
+    public int openFriendLevel;
     public bool buyLimitOne;
     public int buyAction;
 }
