@@ -208,7 +208,7 @@ public class ShopPanel : GamePanel<ShopList>
             selectItemProperty.text = itemData.property.ToString();
             selectItemIcon.sprite = itemData.icon;
             selectItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(itemData.icon, new Vector2(32, 32));
-            selectMoneyValue.text = (itemData.shopPrice * shopItemData.priceValue / 100.0f).ToString("0");
+            selectMoneyValue.text = (itemData.shopPrice * shopItemData.priceValue *0.01f).ToString("0");
             selectMoneyIcon.sprite = PayManager.instance.GetPayMoneySprite(shopItemData.payType);
         }
         buyCountValue.interactable = addButton.interactable = reduceButton.interactable = !shopItemData.buyLimitOne;
