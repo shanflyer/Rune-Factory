@@ -23,22 +23,6 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1080
-    instanceId: 1080779
-    coordinate:
-      x: -26
-      y: 11
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1003
-    instanceId: 1003010
-    coordinate:
-      x: -12
-      y: -6
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1003
     instanceId: 1003642
     coordinate:
@@ -52,6 +36,22 @@ MonoBehaviour:
     coordinate:
       x: -24
       y: -4
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1080
+    instanceId: 1080779
+    coordinate:
+      x: -26
+      y: 11
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003010
+    coordinate:
+      x: -12
+      y: -6
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -75,5 +75,23 @@ MonoBehaviour:
   creatTempCharacterId: 0
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
-  npcBehaviorAreas: []
+  npcBehaviorAreas:
+  - Name: 19120
+    pos:
+      x: -3
+      y: 4
+    grids: efffffffebfffffffafffffff0ffffffeffffffff1fffffff1fffffff3fffffff1fffffff5fffffff3fffffffafffffff2ffffffe7fffffffaffffffeafffffff7fffffffaffffff07000000fafffffff7fffffffbffffff00000000fdfffffffbffffffecfffffffdfffffff1fffffffbfffffff8ffffff07000000f9ffffff
+    behaviorAreaType: 1
+  - Name: 19122
+    pos:
+      x: -3
+      y: 4
+    grids: 01000000020000000800000005000000
+    behaviorAreaType: 1
+  - Name: 19121
+    pos:
+      x: -3
+      y: 4
+    grids: edffffff01000000f6ffffff05000000
+    behaviorAreaType: 1
   specialNpcBehaviorAreas: []

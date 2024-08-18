@@ -33,4 +33,13 @@ MonoBehaviour:
   fixedCameraPos: {x: 0.14, y: 1, z: -500}
   skyBackGroundId: 0
   creatTempCharacterId: 0
-  npcBehaviorAreas: []
+  autoCreatTempNpc: 0
+  tempNpcPrewarm: 0
+  npcBehaviorAreas:
+  - Name: 25270
+    pos:
+      x: -3
+      y: 4
+    grids: f6fffffffefffffffffffffffefffffff6fffffffffffffff9ffffff09000000f8fffffff9ffffff0f000000fbfffffff8fffffffcfffffffffffffffdfffffffaffffff060000001400000006000000faffffff070000001100000008000000faffffff090000000600000009000000fffffffff8ffffff0b000000f8ffffff09000000fcffffff11000000fcffffff0e000000fdffffff11000000ffffffff0f00000000000000140000000500000012000000feffffff14000000ffffffff
+    behaviorAreaType: 1
+  specialNpcBehaviorAreas: []

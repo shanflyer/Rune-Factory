@@ -31,8 +31,16 @@ public class GetNPCHomePos : Action
                 int areaId = npc.GetHomeArea(); 
                 if (areaId == 0)
                 {
-                    var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, BehaviorAreaType.聚集);
-                    result.SetValue(new int3(cell.xy, visitMap));
+                    try
+                    {
+                        var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, BehaviorAreaType.聚集);
+                        result.SetValue(new int3(cell.xy, visitMap));
+                    }
+                    catch
+                    {
+                        Debug.LogError($"npc-{Owner.BehaviorName} error");
+                        return TaskStatus.Failure;
+                    }
                 }
                 else
                 {

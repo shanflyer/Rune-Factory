@@ -15,11 +15,11 @@ MonoBehaviour:
   roomName: "\u5360\u535C\u5C4B"
   barrierGrids: e0fffffff9fffffffcfffffffbffffffe0fffffffcfffffffbfffffffcffffffe0fffffffdfffffff8ffffffffffffffe0ffffff00000000f7ffffff00000000e0ffffff01000000e0ffffff1c000000e1ffffff0a000000e2ffffff1c000000e2ffffff06000000e4ffffff07000000e3ffffff0b000000fcffffff0d000000e3ffffff0e000000fbffffff0e000000e3ffffff0f000000ecffffff1c000000e4ffffff03000000e6ffffff04000000e8ffffff01000000efffffff01000000edffffff1c000000140000001c000000f2ffffff1a000000f5ffffff1b000000fcffffff16000000ffffffff18000000fffffffff9ffffff14000000fbffffff00000000fcffffff14000000fcffffff000000000e0000000f0000000f0000000100000014000000140000001b00000003000000fdffffff1400000002000000030000000b0000000c0000000d00000003000000100000001400000013000000050000000300000014000000040000000b0000000500000014000000060000000d0000000700000014000000080000000d0000000c0000000f0000000d000000120000000c000000140000000f0000001300000009000000140000000b000000
   mapItems:
-  - id: 1003
-    instanceId: 1003246
+  - id: 1144
+    instanceId: 1144907
     coordinate:
       x: -7
-      y: 25
+      y: 6
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -31,11 +31,19 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1144
-    instanceId: 1144907
+  - id: 1143
+    instanceId: 1143244
+    coordinate:
+      x: -17
+      y: 23
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003246
     coordinate:
       x: -7
-      y: 6
+      y: 25
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -44,14 +52,6 @@ MonoBehaviour:
     coordinate:
       x: -23
       y: 12
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1143
-    instanceId: 1143244
-    coordinate:
-      x: -17
-      y: 23
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -75,5 +75,17 @@ MonoBehaviour:
   creatTempCharacterId: 0
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
-  npcBehaviorAreas: []
+  npcBehaviorAreas:
+  - Name: 48000
+    pos:
+      x: -3
+      y: 4
+    grids: efffffff04000000f3ffffff04000000efffffff05000000f1ffffff05000000f0ffffff02000000f3ffffff03000000f3fffffffeffffff010000000000000004000000020000000c00000004000000
+    behaviorAreaType: 1
+  - Name: 48001
+    pos:
+      x: -3
+      y: 4
+    grids: f6ffffff0f000000feffffff14000000
+    behaviorAreaType: 1
   specialNpcBehaviorAreas: []
