@@ -264,212 +264,222 @@ public class ExcelDataEditor : MyEditor
         Dictionary<string, List<FieldInfo>> childFieldDatas = null,
          Dictionary<string, object> childDatas = null)
     {
-        if (fieldInfo.FieldType.BaseType == typeof(Enum))
+        try
         {
-            value = Convert.ChangeType(value, typeof(int));
-            fieldInfo.SetValue(data, value);
-        }
-        else if (fieldInfo.FieldType == typeof(List<int>))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
+            if (fieldInfo.FieldType.BaseType == typeof(Enum))
             {
-                var strs = value.ToString().Split(',');
-
-                List<int> _value = new List<int>();
-                foreach (var str in strs)
-                {
-                    _value.Add(int.Parse(str));
-                }
-                value = _value;
+                value = Convert.ChangeType(value, typeof(int));
                 fieldInfo.SetValue(data, value);
             }
-        }
-        else if (fieldInfo.FieldType == typeof(int[]))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
+            else if (fieldInfo.FieldType == typeof(List<int>))
             {
-                var strs = value.ToString().Split(',');
-
-                List<int> _value = new List<int>();
-                foreach (var str in strs)
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
                 {
-                    _value.Add(int.Parse(str));
+                    var strs = value.ToString().Split(',');
+
+                    List<int> _value = new List<int>();
+                    foreach (var str in strs)
+                    {
+                        _value.Add(int.Parse(str));
+                    }
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
                 }
-                value = _value.ToArray();
-                fieldInfo.SetValue(data, value);
             }
-        }
-        else if (fieldInfo.FieldType == typeof(List<int2>))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
+            else if (fieldInfo.FieldType == typeof(int[]))
             {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var strs = value.ToString().Split(',');
+
+                    List<int> _value = new List<int>();
+                    foreach (var str in strs)
+                    {
+                        _value.Add(int.Parse(str));
+                    }
+                    value = _value.ToArray();
+                    fieldInfo.SetValue(data, value);
+                }
+            }
+            else if (fieldInfo.FieldType == typeof(List<int2>))
+            {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var strs = value.ToString().Split('|');
+
+                    List<int2> _value = new List<int2>();
+                    foreach (var str in strs)
+                    {
+                        var _strs = str.Split(',');
+                        int2 int3Value = new int2(int.Parse(_strs[0]), int.Parse(_strs[1]));
+                        _value.Add(int3Value);
+                    }
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
+                }
+            }
+            else if (fieldInfo.FieldType == typeof(List<float2>))
+            {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var strs = value.ToString().Split('|');
+
+                    List<float2> _value = new List<float2>();
+                    foreach (var str in strs)
+                    {
+                        var _strs = str.Split(',');
+                        float2 int3Value = new float2(float.Parse(_strs[0]), float.Parse(_strs[1]));
+                        _value.Add(int3Value);
+                    }
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
+                }
+            }
+            else if (fieldInfo.FieldType == typeof(List<int3>))
+            {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var strs = value.ToString().Split('|');
+
+                    List<int3> _value = new List<int3>();
+                    foreach (var str in strs)
+                    {
+                        var _strs = str.Split(',');
+                        int3 int3Value = new int3(int.Parse(_strs[0]), int.Parse(_strs[1]), int.Parse(_strs[2]));
+                        _value.Add(int3Value);
+                    }
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
+                }
+            }
+            else if (fieldInfo.FieldType == typeof(int2))
+            {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var strs = value.ToString().Split(',');
+
+                    int2 _value = int2.zero;
+                    _value.x = int.Parse(strs[0]);
+                    _value.y = int.Parse(strs[1]);
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
+                }
+            }
+            else if (fieldInfo.FieldType == typeof(IntIntDictionary))
+            {
+                if (string.IsNullOrEmpty(value.ToString()))
+                {
+                    return;
+                }
                 var strs = value.ToString().Split('|');
 
-                List<int2> _value = new List<int2>();
+                IntIntDictionary dicValue = new IntIntDictionary();
                 foreach (var str in strs)
                 {
                     var _strs = str.Split(',');
-                    int2 int3Value = new int2(int.Parse(_strs[0]), int.Parse(_strs[1]));
-                    _value.Add(int3Value);
+                    dicValue[int.Parse(_strs[0])] = int.Parse(_strs[1]);
                 }
-                value = _value;
+                value = dicValue;
                 fieldInfo.SetValue(data, value);
             }
-        }
-        else if (fieldInfo.FieldType == typeof(List<float2>))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
+            else if (fieldInfo.FieldType == typeof(float2))
             {
-                var strs = value.ToString().Split('|');
-
-                List<float2> _value = new List<float2>();
-                foreach (var str in strs)
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
                 {
-                    var _strs = str.Split(',');
-                    float2 int3Value = new float2(float.Parse(_strs[0]), float.Parse(_strs[1]));
-                    _value.Add(int3Value);
-                }
-                value = _value;
-                fieldInfo.SetValue(data, value);
-            }
-        }
-        else if (fieldInfo.FieldType == typeof(List<int3>))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
-            {
-                var strs = value.ToString().Split('|');
+                    var strs = value.ToString().Split(',');
 
-                List<int3> _value = new List<int3>();
-                foreach (var str in strs)
+                    float2 _value = float2.zero;
+                    _value.x = float.Parse(strs[0]);
+                    _value.y = float.Parse(strs[1]);
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
+                }
+            }
+            else if (fieldInfo.FieldType == typeof(Vector2))
+            {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
                 {
-                    var _strs = str.Split(',');
-                    int3 int3Value = new int3(int.Parse(_strs[0]), int.Parse(_strs[1]), int.Parse(_strs[2]));
-                    _value.Add(int3Value);
+                    var strs = value.ToString().Split(',');
+
+                    Vector2 _value = Vector2.zero;
+                    _value.x = float.Parse(strs[0]);
+                    _value.y = float.Parse(strs[1]);
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
                 }
-                value = _value;
-                fieldInfo.SetValue(data, value);
             }
-        }
-        else if (fieldInfo.FieldType == typeof(int2))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
+            else if (fieldInfo.FieldType == typeof(Vector3))
             {
-                var strs = value.ToString().Split(',');
-
-                int2 _value = int2.zero;
-                _value.x = int.Parse(strs[0]);
-                _value.y = int.Parse(strs[1]);
-                value = _value;
-                fieldInfo.SetValue(data, value);
-            }
-        }else if (fieldInfo.FieldType == typeof(IntIntDictionary))
-        {
-            if (string.IsNullOrEmpty(value.ToString()))
-            {
-                return;
-            }
-            var strs = value.ToString().Split('|');
-            
-            IntIntDictionary dicValue = new IntIntDictionary();
-            foreach (var str in strs)
-            {
-                var _strs = str.Split(',');
-                dicValue[int.Parse(_strs[0])] = int.Parse(_strs[1]); 
-            }
-            value = dicValue;
-            fieldInfo.SetValue(data, value);
-        }
-        else if (fieldInfo.FieldType == typeof(float2))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
-            {
-                var strs = value.ToString().Split(',');
-
-                float2 _value = float2.zero;
-                _value.x = float.Parse(strs[0]);
-                _value.y = float.Parse(strs[1]);
-                value = _value;
-                fieldInfo.SetValue(data, value);
-            }
-        }
-        else if (fieldInfo.FieldType == typeof(Vector2))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
-            {
-                var strs = value.ToString().Split(',');
-
-                Vector2 _value = Vector2.zero;
-                _value.x = float.Parse(strs[0]);
-                _value.y = float.Parse(strs[1]);
-                value = _value;
-                fieldInfo.SetValue(data, value);
-            }
-        }
-        else if (fieldInfo.FieldType == typeof(Vector3))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
-            {
-                var strs = value.ToString().Split(',');
-
-                Vector3 _value = Vector3.zero;
-                _value.x = float.Parse(strs[0]);
-                _value.y = float.Parse(strs[1]);
-                _value.z = float.Parse(strs[2]);
-                value = _value;
-                fieldInfo.SetValue(data, value);
-            }
-        }
-        else if (fieldInfo.FieldType == typeof(List<string>))
-        {
-            var valueStr = value.ToString();
-            if (!string.IsNullOrEmpty(valueStr))
-            {
-                var strs = value.ToString().Split(',');
-
-                List<string> _value = new List<string>();
-                foreach (var str in strs)
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
                 {
-                    _value.Add(str);
+                    var strs = value.ToString().Split(',');
+
+                    Vector3 _value = Vector3.zero;
+                    _value.x = float.Parse(strs[0]);
+                    _value.y = float.Parse(strs[1]);
+                    _value.z = float.Parse(strs[2]);
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
                 }
-                value = _value;
-                fieldInfo.SetValue(data, value);
+            }
+            else if (fieldInfo.FieldType == typeof(List<string>))
+            {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var strs = value.ToString().Split(',');
+
+                    List<string> _value = new List<string>();
+                    foreach (var str in strs)
+                    {
+                        _value.Add(str);
+                    }
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
+                }
+            }
+            else if (childFieldDatas != null && childFieldDatas.TryGetValue(fieldInfo.Name, out var childFileds))
+            {
+                if (!childDatas.TryGetValue(fieldInfo.Name, out var childData))
+                {
+                    childData = Activator.CreateInstance(fieldInfo.FieldType);
+                    childDatas.Add(fieldInfo.Name, childData);
+                }
+                for (int childFieldIndex = 0; childFieldIndex < childFileds.Count; childFieldIndex++)
+                {
+                    FieldInfo childFieldInfo = childFileds[childFieldIndex];
+                    LinkDataFieldValue(childData, childFieldInfo, value);
+                }
+                fieldInfo.SetValue(data, childData);
+            }
+            else
+            {
+                try
+                {
+                    value = Convert.ChangeType(value, fieldInfo.FieldType);
+                    fieldInfo.SetValue(data, value);
+                }
+                catch
+                {
+                    Debug.LogError($"{fieldInfo.Name}-{value.ToString()}");
+                }
             }
         }
-        else if (childFieldDatas != null && childFieldDatas.TryGetValue(fieldInfo.Name, out var childFileds))
+        catch
         {
-            if (!childDatas.TryGetValue(fieldInfo.Name, out var childData))
-            {
-                childData = Activator.CreateInstance(fieldInfo.FieldType);
-                childDatas.Add(fieldInfo.Name, childData);
-            }
-            for (int childFieldIndex = 0; childFieldIndex < childFileds.Count; childFieldIndex++)
-            {
-                FieldInfo childFieldInfo = childFileds[childFieldIndex];
-                LinkDataFieldValue(childData, childFieldInfo, value);
-            }
-            fieldInfo.SetValue(data, childData);
+            Debug.LogError($"{fieldInfo.Name}-{value.ToString()}");
         }
-        else
-        {
-            try
-            {
-                value = Convert.ChangeType(value, fieldInfo.FieldType);
-                fieldInfo.SetValue(data, value);
-            }
-            catch
-            {
-                Debug.LogError($"{fieldInfo.Name}-{value.ToString()}");
-            }
-        }
+
+      
     }
 
     public new void Show()

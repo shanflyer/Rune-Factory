@@ -17,21 +17,19 @@ public class NPCBehaviorData : ScriptableObject, IGameData
     public List<int> homeAreas = new List<int>();
     public int workMap;
     public List<int> workMapAreas = new List<int>();
-    public List<int> dailyTasks = new List<int>();
-    public List<int> eventTasks = new List<int>();
-
-    public List<int2> beds = new List<int2>();
-    public List<int2> workItems = new List<int2>();
     public List<int2> visitShops = new List<int2>();
-
     public List<int> likeItems = new List<int>();
     public List<int> unLikeItems = new List<int>();
-    public int likeTalk, unlikeTalk, likeEmote, unlikeEmote, defaultTalk, defaultEmote; 
+    public int likeTalk, unlikeTalk, likeEmote, unlikeEmote, defaultTalk, defaultEmote;
     private string behaviorName;
-    public ExternalBehaviorTree externalBehavior;
+
+    public List<int> dailyTasks = new List<int>(); 
+    public List<int2> beds = new List<int2>();
+    public List<int2> workItems = new List<int2>();
 
     private int[] gameTimeRanges;
-    private int[] visitMaps;
+    private int[] visitMaps; 
+    public ExternalBehaviorTree externalBehavior; 
     public GameTimeKeyIntDataDictionary gameTimeKeyVisitMapDic; 
     public List<int2> npcFriends=new List<int2>();
    

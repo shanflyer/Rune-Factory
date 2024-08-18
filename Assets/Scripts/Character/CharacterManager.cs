@@ -332,6 +332,9 @@ public class CharacterManager : Singleton<CharacterManager>
                 case ItemType.п╛вс:
                     itemId = character.Equip.shoes.x;
                     break;
+                case ItemType.ц╠вс:
+                    itemId = character.Equip.headgear.x;
+                    break;
             }
             character.ClearEquip(clearEquip.itemType);
             if (itemId != 0 && clearEquip.outPackageId != 0)

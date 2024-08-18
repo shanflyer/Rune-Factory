@@ -404,6 +404,7 @@ public struct Equip
     public int2 weapon;
     public int2 clothes;
     public int2 shoes;
+    public int2 headgear;
 }
 
 public delegate void SetCoordinate(int3 coordinate);
@@ -448,6 +449,7 @@ public partial class Character
             SetEquip(ItemType.武器, saveData.weapon);
             SetEquip(ItemType.防具, saveData.clothes);
             SetEquip(ItemType.鞋子, saveData.shoe);
+            SetEquip(ItemType.帽子, saveData.headgear);
             characterPackage = packageInstancId;
 
             RefreshShortcut refreshShortcut = new RefreshShortcut
@@ -508,6 +510,10 @@ public partial class Character
                 oldItemId = equip.shoes.x;
                 equip.shoes =0;
                 break;
+            case ItemType.帽子:
+                oldItemId = equip.headgear.x;
+                equip.headgear = 0;
+                break;
         }
         attackAttributeType = AttributeType.无;
         defenceAttributeType = AttributeType.无;
@@ -544,6 +550,9 @@ public partial class Character
             case ItemType.鞋子: 
                 equip.shoes = Equip; 
                 break;
+            case ItemType.帽子:
+                equip.headgear = Equip;
+                break;
         }
         EquipmentProperty = EquipmentProperty + itemData.property;
     }
@@ -570,6 +579,11 @@ public partial class Character
                 oldItemId = equip.shoes.x;
                 equip.shoes.x = itemData.id;
                 equip.shoes.y = 100;
+                break;
+            case ItemType.帽子:
+                oldItemId = equip.headgear.x;
+                equip.headgear.x = itemData.id;
+                equip.headgear.y = 100;
                 break;
         }
         ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId); 

@@ -18,6 +18,8 @@ public struct EditorShopItemData
     public int priceValue; 
     public bool buyLimitOne;
     public int buyAction;
+    public int mapInstance;
+    public int mapItem;
 }
 [CreateAssetMenu(menuName = "Data/商店数据")]
 public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
@@ -56,7 +58,9 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
                     shopGroup = new ShopGroup
                     {
                         name = shopItemData.shopGroup,
-                        shopDatas = new List<ShopData>()
+                        shopDatas = new List<ShopData>(),
+                        mapInstance=shopItemData.mapInstance,
+                        mapItem=shopItemData.mapItem,
                     };
                     shopGroups.Add(shopGroup);
                     groupIndex = shopGroups.Count - 1;

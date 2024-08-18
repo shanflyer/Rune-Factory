@@ -781,7 +781,7 @@ public class CharacterSaveData : IReferenceData
     public Gender gender;
     public BrithDay brithDay;
     public int packageId;
-    public int2 weapon, clothes, shoe;
+    public int2 weapon, clothes, shoe,headgear;
     public bool isMarried;
 
     public CharacterSaveData(CharacterSaveData characterSaveData)

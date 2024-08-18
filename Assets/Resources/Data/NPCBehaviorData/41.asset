@@ -15,15 +15,34 @@ MonoBehaviour:
   npcName: "\u7EBA\u7EC7\u5A46\u5A46"
   id: 41
   home: 5309
-  dailyTasks: 00000000010000000200000003000000
-  eventTasks: 
-  beds:
-  - x: 5309
-    y: 1081691
-  workItems:
-  - x: 5309
-    y: 1159783
-  visitShops: []
+  homeAreas: d4190800
+  workMap: 5309
+  workMapAreas: 79390800
+  visitShops:
+  - x: 1000
+    y: 500
+  - x: 1001
+    y: 500
+  - x: 1002
+    y: 500
+  - x: 1003
+    y: 500
+  - x: 1004
+    y: 500
+  - x: 1005
+    y: 500
+  - x: 1006
+    y: 500
+  - x: 1007
+    y: 500
+  - x: 1008
+    y: 500
+  - x: 1009
+    y: 500
+  - x: 1010
+    y: 500
+  - x: 1011
+    y: 500
   likeItems: e9030000ef030000
   unLikeItems: ea030000ec030000
   likeTalk: 30000
@@ -32,6 +51,13 @@ MonoBehaviour:
   unlikeEmote: 30003
   defaultTalk: 30004
   defaultEmote: 30005
+  dailyTasks: 00000000010000000200000003000000
+  beds:
+  - x: 5309
+    y: 1081691
+  workItems:
+  - x: 5309
+    y: 1159783
   externalBehavior: {fileID: 11400000, guid: 31909e5c773408a419a63237df9472ee, type: 2}
   gameTimeKeyVisitMapDic:
     m_keys:

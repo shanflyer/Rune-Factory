@@ -195,6 +195,8 @@
             <key type="filename">三明治.png</key>
             <key type="filename">丝织长袍$Normal.png</key>
             <key type="filename">丝织长袍.png</key>
+            <key type="filename">书写配方$Normal.png</key>
+            <key type="filename">书写配方.png</key>
             <key type="filename">五彩搏鱼$Normal.png</key>
             <key type="filename">五彩搏鱼.png</key>
             <key type="filename">亡者之土$Normal.png</key>
@@ -647,6 +649,8 @@
             <key type="filename">绅士礼帽.png</key>
             <key type="filename">绯红之吻$Normal.png</key>
             <key type="filename">绯红之吻.png</key>
+            <key type="filename">缝纫配方$Normal.png</key>
+            <key type="filename">缝纫配方.png</key>
             <key type="filename">罗非鱼$Normal.png</key>
             <key type="filename">罗非鱼.png</key>
             <key type="filename">羊毛$Normal.png</key>
@@ -779,6 +783,8 @@
             <key type="filename">迷幻菇.png</key>
             <key type="filename">遗骨$Normal.png</key>
             <key type="filename">遗骨.png</key>
+            <key type="filename">酒水配方$Normal.png</key>
+            <key type="filename">酒水配方.png</key>
             <key type="filename">酸味香料$Normal.png</key>
             <key type="filename">酸味香料.png</key>
             <key type="filename">野蜂拉格$Normal.png</key>
@@ -813,6 +819,8 @@
             <key type="filename">银块.png</key>
             <key type="filename">银龙鱼$Normal.png</key>
             <key type="filename">银龙鱼.png</key>
+            <key type="filename">铸造配方$Normal.png</key>
+            <key type="filename">铸造配方.png</key>
             <key type="filename">锁子甲$Normal.png</key>
             <key type="filename">锁子甲.png</key>
             <key type="filename">锦鲤$Normal.png</key>
@@ -851,6 +859,8 @@
             <key type="filename">风神之履.png</key>
             <key type="filename">食人鱼$Normal.png</key>
             <key type="filename">食人鱼.png</key>
+            <key type="filename">食物配方$Normal.png</key>
+            <key type="filename">食物配方.png</key>
             <key type="filename">饭团$Normal.png</key>
             <key type="filename">饭团.png</key>
             <key type="filename">饺子$Normal.png</key>

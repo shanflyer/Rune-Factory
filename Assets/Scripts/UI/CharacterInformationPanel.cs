@@ -43,7 +43,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     private TextMeshProUGUI SpeedUp, SpeedDown, LuckUp, LuckDown;
 
     [SerializeField]
-    private EquipBoxReference WeaponBox, ClothesBox,ShoesBox;
+    private EquipBoxReference WeaponBox, ClothesBox,ShoesBox, HeadgearBox;
     [SerializeField]
     Transform Visit;
     [SerializeField]
@@ -210,6 +210,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         WeaponBox = FindChildGameObject<EquipBoxReference>("Weapon");
         ClothesBox = FindChildGameObject<EquipBoxReference>("Clothes");
         ShoesBox = FindChildGameObject<EquipBoxReference>("Shoes");
+        HeadgearBox = FindChildGameObject<EquipBoxReference>("Headgear");
         Visit = FindChildGameObject("Visit");
         visitButton = FindChildGameObject<Button>("VisitButton");
         closeButton = FindChildGameObject<Button>("Close");
@@ -343,10 +344,18 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         ShoesBox.InitData(new Equipment
         {
             characterId = characterId,
+            dataId = v.equip.headgear.x,
+            itemValue = v.equip.headgear.y / 100.0f,
+            ItemType = ItemType.ц╠вс
+        }, SelectEquipReference); ;
+
+        HeadgearBox.InitData(new Equipment
+        {
+            characterId = characterId,
             dataId = v.equip.shoes.x,
             itemValue = v.equip.shoes.y / 100.0f,
             ItemType = ItemType.п╛вс
-        }, SelectEquipReference); ;
+        }, SelectEquipReference);
 
         if (v.isNpc)
         {
