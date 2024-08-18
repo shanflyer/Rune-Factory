@@ -860,7 +860,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             await GameEventManager.instance.AddGameEvent(room.eventId);
         } 
-        GameTimerController.instance.DelayAction(1800, async () => {
+        GameTimerController.instance.DelayAction(100, async () => {
             var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
             var mapNpcDatas = mapNpcDataList.GetMapNPCDatas(room.id);
             if (mapNpcDatas != null)

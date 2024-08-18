@@ -1536,7 +1536,7 @@ public class MapCellController : Singleton<MapCellController>
             {
                 if (!checkRoom.Contains(neighbour.Key))
                 {
-                    links[neighbour.Key] = targetId;
+                    links[neighbour.Key] = checkId;
                     checkRoom.Add(neighbour.Key);
                     nowList.Add(neighbour.Key);
                     if (sourceId == neighbour.Key)

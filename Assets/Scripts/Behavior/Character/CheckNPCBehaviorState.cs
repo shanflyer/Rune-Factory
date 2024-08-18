@@ -25,7 +25,7 @@ public class CheckNPCBehaviorState : Action
     {
         if(NPCManager.instance.GetNPCFormInstance(characterId.Value,out var npc))
         {
-            var state = npc.nowScheduleData.behaviorState;
+            var state = npc.behaviorState;
             if (isEqual)
             {
                 return state==nPCBehaviorState? TaskStatus.Success : TaskStatus.Failure;

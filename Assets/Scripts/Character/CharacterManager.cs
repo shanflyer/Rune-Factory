@@ -1173,7 +1173,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
             await RefreshNpcRuntimeObj(character);
-            npc.InitBehaviorData(); 
+            GameTimerController.instance.DelayAction(2000, npc.InitBehaviorData); 
 
         }
 

@@ -27,11 +27,12 @@ public class GetRandomMapCell : Action
     public override TaskStatus OnUpdate()
     {
         int3 cell = int3.zero;
-        if (room != null&& room.IsNull())
+        if (room != null&& !room.IsNull())
         {
             cell = MapCellController.instance.GetRandomBehavioCell(room.Value, behaviorAreaType);
             result.SetValue(new int3(cell.xy, room.Value));
             areaId.SetValue(cell.z);
+            return TaskStatus.Success;
         }
        
 

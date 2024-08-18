@@ -295,14 +295,22 @@ public class NPC : IReferenceData
         visitMaps.Clear();
         InitNowVisitMap();
         visitFriends.Clear();
-        for (int i = 0; i < NPCBehaviorData.npcFriends.Count; i++)
+        try
         {
-            visitFriends.Add(NPCBehaviorData.npcFriends[i].x, NPCBehaviorData.npcFriends[i]);
+            for (int i = 0; i < NPCBehaviorData.npcFriends.Count; i++)
+            {
+                visitFriends.Add(NPCBehaviorData.npcFriends[i].x, NPCBehaviorData.npcFriends[i]);
+            }
+            for (int i = 0; i < NPCBehaviorData.visitShops.Count; i++)
+            {
+                visitShops.Add(NPCBehaviorData.visitShops[i].x, NPCBehaviorData.visitShops[i].y);
+            }
         }
-        for (int i = 0; i < NPCBehaviorData.visitShops.Count; i++)
+        catch
         {
-            visitShops.Add(NPCBehaviorData.visitShops[i].x, NPCBehaviorData.visitShops[i].y);
+            Debug.LogError($"{npcData.npcName}--error");
         }
+       
     }
 
     public bool IsInHome()
@@ -332,6 +340,7 @@ public class NPC : IReferenceData
                     visitMap = new int3(int2[i].x, int2[i].y, 10000);
                     visitMaps.TrySetValue(int2[i].x, visitMap);
                 }
+                nowMaps.Add(int2[i].x);
             }
             if (visitMaps.length > 0)
             {
@@ -567,9 +576,8 @@ public class NPC : IReferenceData
             pauseWhenDisabled = false;
             return null;
         }
-        nowScheduleData = nPCTaskScheduleTimeList.GetTaskSheduleData(new int2(UpdateGameTime.hour, UpdateGameTime.minute));
-        if (nowScheduleData != null)
-        {
+        if(nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(new int2(UpdateGameTime.hour, UpdateGameTime.minute),ref nowScheduleData))
+        { 
             loopBehavior = nowScheduleData.loopBehavior;
             behaviorCanBreak = nowScheduleData.canBreak;
             pauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
@@ -581,16 +589,17 @@ public class NPC : IReferenceData
         return null;
     }
 
-    public NPCTaskScheduleData nowScheduleData { get; private set; }
+    private NPCTaskScheduleData nowScheduleData;
+    public NPCBehaviorState behaviorState => nowScheduleData.behaviorState;
+    public bool holdPos => nowScheduleData.holdPos;
 
     public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak, out bool PauseWhenDisabled)
     {
         try
         {
             if (nPCTaskScheduleTimeList != null)
-            {
-                nowScheduleData = nPCTaskScheduleTimeList.GetTaskSheduleData(GameTimeManager.instance.nowHourMinute);
-                if (nowScheduleData != null)
+            { 
+                if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(GameTimeManager.instance.nowHourMinute,ref nowScheduleData))
                 {
                     loopBehavior = nowScheduleData.loopBehavior;
                     behaviorCanBreak = nowScheduleData.canBreak;
@@ -715,7 +724,7 @@ public class NPCTaskScheduleTimeList
         return true;
     }
 
-    public NPCTaskScheduleData GetTaskSheduleData(int2 time)
+    private NPCTaskScheduleData GetTaskSheduleData(int2 time)
     {
         if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
         {

@@ -37,7 +37,7 @@ public class GetVisitShop : Action
                 var mapItem = ShopManager.instance.GetShopMapItem(visitShop);
                 visitMap.SetValue(mapItem.x);
                 shopItemId.SetValue(mapItem.y);
-
+                Debug.Log($"ShopMapItem:{mapItem}");
                 var cell = WorldMapManager.instance.GetRandomItemPlayerTriggerCell(mapItem.x, mapItem.y);
                 targetCell.Value = new int3(cell, visitMap.Value);
                 return TaskStatus.Success;

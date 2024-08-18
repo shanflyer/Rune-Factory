@@ -15,6 +15,7 @@ public class CheckCharacterInGroup : Action
     public override TaskStatus OnUpdate()
     {
         Character character = CharacterManager.instance.GetCharacter(characterId.Value);
+      
         groupId.Value = character.groupId;
         if (character.groupId == 0)
         {

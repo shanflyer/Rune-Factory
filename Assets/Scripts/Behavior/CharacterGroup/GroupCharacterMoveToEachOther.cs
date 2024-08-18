@@ -121,7 +121,7 @@ public class GroupCharacterMoveToEachOther : Action
             {
                 var character = characters[i];
                 if(NPCManager.instance.GetNPCFormInstance(character.instanceId,out var npc)
-                    &&npc.nowScheduleData.holdPos)
+                    &&npc.holdPos)
                 {
                     character.RemoveMove(); 
                 }

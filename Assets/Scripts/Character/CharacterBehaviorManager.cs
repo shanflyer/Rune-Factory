@@ -125,7 +125,11 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
         void CallBack(Behavior behavior)
         {
-            if(behaviorHandlers.TryGetValue(characterId,out var result))
+            if (SingletonType.Cleared)
+            {
+                return;
+            }
+            if (behaviorHandlers.TryGetValue(characterId, out var result))
             {
                 result(behavior);
             }

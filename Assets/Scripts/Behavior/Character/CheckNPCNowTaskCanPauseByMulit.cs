@@ -20,7 +20,7 @@ public class CheckNPCNowTaskCanPauseByMulit : Action
     {
         if (NPCManager.instance.GetNPCFormInstance(characterId.Value,out var npc))
         {
-            if (npc.nowScheduleData.holdPos)
+            if (npc.holdPos)
             {
                 return TaskStatus.Success;
             } 
