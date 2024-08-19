@@ -17,35 +17,21 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnStart()
         {
-            if (behaviorGameObject == null || behaviorGameObject.Value == null)
-            {
-                behavior = Owner;
-            }
-            else
-            {
-                var behaviorTrees = GetDefaultGameObject(behaviorGameObject.Value).GetComponents<Behavior>();
-                if (behaviorTrees.Length == 1)
-                {
+            var behaviorTrees = GetDefaultGameObject(behaviorGameObject.Value).GetComponents<Behavior>();
+            if (behaviorTrees.Length == 1) {
+                behavior = behaviorTrees[0];
+            } else if (behaviorTrees.Length > 1) {
+                for (int i = 0; i < behaviorTrees.Length; ++i) {
+                    if (behaviorTrees[i].Group == group.Value) {
+                        behavior = behaviorTrees[i];
+                        break;
+                    }
+                }
+                // If the group can't be found then use the first behavior tree
+                if (behavior == null) {
                     behavior = behaviorTrees[0];
                 }
-                else if (behaviorTrees.Length > 1)
-                {
-                    for (int i = 0; i < behaviorTrees.Length; ++i)
-                    {
-                        if (behaviorTrees[i].Group == group.Value)
-                        {
-                            behavior = behaviorTrees[i];
-                            break;
-                        }
-                    }
-                    // If the group can't be found then use the first behavior tree
-                    if (behavior == null)
-                    {
-                        behavior = behaviorTrees[0];
-                    }
-                }
             }
-           
         }
 
         public override TaskStatus OnUpdate()

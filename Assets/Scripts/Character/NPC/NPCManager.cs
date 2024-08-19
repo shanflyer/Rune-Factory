@@ -574,7 +574,7 @@ public class NPC : IReferenceData
     {
         if (nPCTaskScheduleTimeList == null)
         {
-            Debug.Log($"null nPCTaskScheduleTimeList{npcData.npcName}"); 
+           // Debug.Log($"null nPCTaskScheduleTimeList{npcData.npcName}"); 
             behaviorCanBreak = false;
             pauseWhenDisabled = false;
             return null;

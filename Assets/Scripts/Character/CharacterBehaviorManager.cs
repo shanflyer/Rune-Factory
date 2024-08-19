@@ -90,7 +90,9 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior, BehaviorHandler behaviorHandler=null,
         bool PauseWhenDisabled = false,string behaviorName="")
     {
+       
         Character character = CharacterManager.instance.GetCharacter(characterId);
+        Debug.Log($"AddBehavior:{character.name}--{externalBehavior.name}");
         if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
             behaviorTree = obj.AddComponent<BehaviorTree>();
@@ -101,16 +103,17 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
             }
         }
         else
-        {
-            behaviorTree.StopAllTaskCoroutines(); 
+        { 
             character.RemoveMove();
         }
        
         behaviorHandlers[characterId] = behaviorHandler;
-        behaviorTree.ExternalBehavior = externalBehavior;
+        behaviorTree.ExternalBehavior = externalBehavior; 
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
         behaviorTree.RestartWhenComplete = false;
+        //behaviorTree.r
         behaviorTree.PauseWhenDisabled = PauseWhenDisabled;
+        behaviorTree.enabled = true;
         behaviorTree.EnableBehavior();
         if (!string.IsNullOrEmpty(behaviorName))
         {
@@ -119,20 +122,27 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
         void CallBack(Behavior behavior)
         {
-           // behaviorTree.DisableBehavior()
-            Debug.Log($"CallBack:{character.name}--{characterId}");
-            if (SingletonType.Cleared)
-            {
-                return;
+            if(behavior is  BehaviorTree tree) 
+            { 
+                tree.StopAllTaskCoroutines();
+                tree.DisableBehavior();
+                behaviorTree.enabled = false;
+                //  tree.SaveResetValues();
+                Debug.Log($"CallBack:{character.name}--{characterId}");
+                if (SingletonType.Cleared)
+                {
+                    return;
+                }
+                if (behaviorHandlers.TryGetValue(characterId, out var result))
+                {
+                    result(behavior);
+                }
+                else
+                {
+                    Debug.Log($"没有行为回调:{character.name}");
+                }
             }
-            if (behaviorHandlers.TryGetValue(characterId, out var result))
-            {
-                result(behavior);
-            }
-            else
-            {
-                Debug.Log($"没有行为回调:{character.name}");
-            }
+             
         }
     }
 

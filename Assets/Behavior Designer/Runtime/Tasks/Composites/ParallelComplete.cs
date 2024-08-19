@@ -1,13 +1,12 @@
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    [TaskDescription("Similar to the parallel selector task, except the parallel complete task will return the child status as soon as the child returns success or failure." +
+    [TaskDescription("Similar to the parallel selector task, except the parallel complete task will return the child status as soon as the child returns success or failure." + 
                      "The child tasks are executed simultaneously.")]
     [TaskIcon("{SkinColor}ParallelCompleteIcon.png")]
     public class ParallelComplete : Composite
     {
         // The index of the child that is currently running or is about to run.
         private int currentChildIndex;
-
         // The task status of every child task.
         private TaskStatus[] executionStatus;
 
@@ -51,23 +50,19 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             // Start from the beginning on an abort
             currentChildIndex = 0;
-            for (int i = 0; i < executionStatus.Length; ++i)
-            {
+            for (int i = 0; i < executionStatus.Length; ++i) {
                 executionStatus[i] = TaskStatus.Inactive;
             }
         }
 
         public override TaskStatus OverrideStatus(TaskStatus status)
         {
-            if (currentChildIndex == 0)
-            {
+            if (currentChildIndex == 0) {
                 return TaskStatus.Success;
             }
             // Return the child task's status as soon as a child task returns success or failure.
-            for (int i = 0; i < currentChildIndex; ++i)
-            {
-                if (executionStatus[i] == TaskStatus.Success || executionStatus[i] == TaskStatus.Failure)
-                {
+            for (int i = 0; i < currentChildIndex; ++i) {
+                if (executionStatus[i] == TaskStatus.Success || executionStatus[i] == TaskStatus.Failure) {
                     return executionStatus[i];
                 }
             }
@@ -77,8 +72,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnEnd()
         {
             // Reset the execution status and the child index back to their starting values.
-            for (int i = 0; i < executionStatus.Length; ++i)
-            {
+            for (int i = 0; i < executionStatus.Length; ++i) {
                 executionStatus[i] = TaskStatus.Inactive;
             }
             currentChildIndex = 0;
