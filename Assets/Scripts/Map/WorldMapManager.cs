@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ProFlares;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -834,6 +835,24 @@ public class WorldMapManager : Singleton<WorldMapManager>
         } 
         //生成地图链接
         MapCellController.instance.InitLinkMap(worldMapData.mapLines);
+
+        GameTimerController.instance.DelayAction(200, async () => {
+            var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
+            var datas = mapNpcDataList.datas;
+
+            for(int i = 0; i < datas.Count; i++)
+            {
+                for(int j=0;j<datas[i].datas.Count; j++)
+                {
+                    if (datas[i].datas[j].initialBegin)
+                    {
+                       await CharacterManager.instance.CreatNpc(datas[i].datas[j]);
+                    }
+                }
+            }
+
+            NPCManager.instance.InitNPCBehavior();
+        });
         // return true;
 
         //WorldMapObjManager.instance.DefaultDisplayMap(displayMap);
@@ -860,20 +879,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             await GameEventManager.instance.AddGameEvent(room.eventId);
         } 
-        GameTimerController.instance.DelayAction(100, async () => {
-            var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
-            var mapNpcDatas = mapNpcDataList.GetMapNPCDatas(room.id);
-            if (mapNpcDatas != null)
-            {
-                for (int i = 0; i < mapNpcDatas.Count; i++)
-                {
-                    if (mapNpcDatas[i].initialBegin)
-                    {
-                        CharacterManager.instance.CreatNpc(mapNpcDatas[i]);
-                    }
-                }
-            }
-        }); 
+      
     }
 
     private async void ChangeMapItem(ChangeMapItem changeMapItem)

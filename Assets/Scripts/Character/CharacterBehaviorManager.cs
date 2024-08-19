@@ -125,6 +125,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
         void CallBack(Behavior behavior)
         {
+            Debug.Log($"CallBack:{behavior.GetOwnerName()}--{characterId}");
             if (SingletonType.Cleared)
             {
                 return;

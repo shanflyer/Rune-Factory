@@ -1156,8 +1156,8 @@ public class CharacterManager : Singleton<CharacterManager>
         RuntimeObj runtimeObj=await GameRuntimeObjManager.Instance.CreatCharacterRuntimeObj(player);
         characterRuntionObjs.Add(player, runtimeObj); */
     }
-     
-    public async void CreatNpc(MapNpcData mapNpcData)
+  
+    public async Task CreatNpc(MapNpcData mapNpcData)
     {
         if (NPCManager.instance.GetNPC(mapNpcData.dataId, out var npc))
         {
@@ -1172,9 +1172,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 characterDataToInstances[character.dataId] = character.instanceId;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
-            await RefreshNpcRuntimeObj(character);
-            GameTimerController.instance.DelayAction(2000, npc.InitBehaviorData); 
-
+            await RefreshNpcRuntimeObj(character);  
         }
 
         /*
