@@ -16,8 +16,7 @@ public class NPCTaskScheduleData : ScriptableObject, IGameData
     public string taskName;
     public NPCTaskScheduleType type; 
     private string behaviorName;
-    public ExternalBehaviorTree externalBehavior;
-    public bool loopBehavior;
+    public ExternalBehaviorTree externalBehavior; 
     public bool canBreak;
     public bool PauseWhenDisabled;
     public bool holdPos;

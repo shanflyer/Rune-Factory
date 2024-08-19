@@ -142,7 +142,7 @@ public class TempCharacter : Character
         else
         {
             CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
-            CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree, true);
+            CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree);
         }
     }
 }
@@ -517,11 +517,12 @@ public class NPC : IReferenceData
         }
         endBehavior = true;
         behaviorCanBreak = false;
-        var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior, out behaviorCanBreak, out var pauseWhenDisabled);
+        Debug.Log($"进入回调:{npcData.npcName}");
+        var externalBehavior = GetNowTaskScheduleBehavior(out behaviorCanBreak, out var pauseWhenDisabled);
         if (externalBehavior != null)
         {
             Debug.Log($"ResetBehaviorStat:{externalBehavior.name}--{npcData.npcName}");
-            AddNpcBehavior(externalBehavior, loopBehavior, PauseWhenDisabled: pauseWhenDisabled);
+            AddNpcBehavior(externalBehavior, PauseWhenDisabled: pauseWhenDisabled);
         }
     }
 
@@ -529,17 +530,17 @@ public class NPC : IReferenceData
     {
         if (endBehavior || behaviorCanBreak)
         {
-            var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out var loopBehavior, out behaviorCanBreak, out var pauseWhenDisabled);
+            var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out behaviorCanBreak, out var pauseWhenDisabled);
             if (externalBehavior != null)
             {
-                AddNpcBehavior(externalBehavior, loopBehavior, PauseWhenDisabled: pauseWhenDisabled);
+                AddNpcBehavior(externalBehavior, PauseWhenDisabled: pauseWhenDisabled);
                 return true;
             }
         }
         return false;
     }
 
-    public void AddNpcBehavior(ExternalBehaviorTree externalBehavior, bool loopBehavior = true, bool PauseWhenDisabled = false)
+    public void AddNpcBehavior(ExternalBehaviorTree externalBehavior,bool PauseWhenDisabled = false)
     {
         if (externalBehavior == null)
         {
@@ -547,7 +548,7 @@ public class NPC : IReferenceData
         }
         try
         {
-            CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior, loopBehavior,
+            CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior,
           ResetBehaviorState, PauseWhenDisabled, Character.name);
             endBehavior = false;
         }
@@ -559,34 +560,31 @@ public class NPC : IReferenceData
 
     public bool SetNowBehaviorTree()
     {
-        var externalBehavior = GetNowTaskScheduleBehavior(out var loopBehavior, out behaviorCanBreak, out var pauseWhenDisabled);
+        var externalBehavior = GetNowTaskScheduleBehavior(out behaviorCanBreak, out var pauseWhenDisabled);
         if (externalBehavior != null)
         {
-            AddNpcBehavior(externalBehavior, loopBehavior, PauseWhenDisabled: pauseWhenDisabled);
+            AddNpcBehavior(externalBehavior, PauseWhenDisabled: pauseWhenDisabled);
             return true;
         }
         return false;
     }
 
-    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime, out bool loopBehavior, out bool behaviorCanBreak
+    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime,  out bool behaviorCanBreak
         , out bool pauseWhenDisabled)
     {
         if (nPCTaskScheduleTimeList == null)
         {
-            Debug.Log($"null nPCTaskScheduleTimeList{npcData.npcName}");
-            loopBehavior = false;
+            Debug.Log($"null nPCTaskScheduleTimeList{npcData.npcName}"); 
             behaviorCanBreak = false;
             pauseWhenDisabled = false;
             return null;
         }
         if(nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(new int2(UpdateGameTime.hour, UpdateGameTime.minute),ref nowScheduleData))
-        { 
-            loopBehavior = nowScheduleData.loopBehavior;
+        {  
             behaviorCanBreak = nowScheduleData.canBreak;
             pauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
             return nowScheduleData.externalBehavior;
-        }
-        loopBehavior = false;
+        } 
         behaviorCanBreak = false;
         pauseWhenDisabled = false;
         return null;
@@ -596,26 +594,28 @@ public class NPC : IReferenceData
     public NPCBehaviorState behaviorState => nowScheduleData.behaviorState;
     public bool holdPos => nowScheduleData.holdPos;
 
-    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool loopBehavior, out bool behaviorCanBreak, out bool PauseWhenDisabled)
+    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool behaviorCanBreak, out bool PauseWhenDisabled)
     {
         try
         {
             if (nPCTaskScheduleTimeList != null)
             { 
                 if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(GameTimeManager.instance.nowHourMinute,ref nowScheduleData))
-                {
-                    loopBehavior = nowScheduleData.loopBehavior;
+                { 
                     behaviorCanBreak = nowScheduleData.canBreak;
                     PauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
                     return nowScheduleData.externalBehavior;
                 }
             }
+            else
+            {
+                Debug.Log($"{npcName}-无nPCTaskScheduleTimeList");
+            }
         }
         catch
         {
         }
-
-        loopBehavior = false;
+         
         behaviorCanBreak = false;
         PauseWhenDisabled = false;
         return null;
@@ -713,11 +713,17 @@ public class NPCTaskScheduleTimeList
 
     public bool GetTaskScheduleDataOrder(int2 time, ref NPCTaskScheduleData nPCTaskScheduleData)
     {
-        if (taskScheduleModelDatas[nowTimeKeyIndex].gameTimeKey == time)
+        if (taskScheduleModelDatas[nowTimeKeyIndex].gameTimeKey != time)
         {
-            return false;
-        }
-        nowTimeKeyIndex++;
+           for(int i = 0; i < taskScheduleModelDatas.Count; i++)
+            {
+                if (taskScheduleModelDatas[i].gameTimeKey == time)
+                {
+                    nowTimeKeyIndex = i;
+                    break;
+                }
+            }
+        } 
         if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
         {
             nowTimeKeyIndex = 0;
