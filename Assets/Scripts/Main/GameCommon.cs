@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
@@ -13,12 +13,12 @@ public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
 [System.Serializable]
 public enum AttributeType
 {
-    ÎŞ = 0,
-    Ë® = 1,
-    »ğ = 2,
-    ±ù = 3,
-    ·ç = 4,
-    ÍÁ = 5
+    æ—  = 0,
+    æ°´ = 1,
+    ç« = 2,
+    å†° = 3,
+    é£ = 4,
+    åœŸ = 5
 }
 
 [System.Serializable]
@@ -46,14 +46,14 @@ public enum ValueType
 [System.Serializable]
 public enum CompareType
 {
-    µÈÓÚ, ²»µÈÓÚ, ´óÓÚ, ²»´óÓÚ, Ğ¡ÓÚ, ²»Ğ¡ÓÚ
+    ç­‰äº, ä¸ç­‰äº, å¤§äº, ä¸å¤§äº, å°äº, ä¸å°äº
 }
 
 [System.Serializable]
 public enum CharacterPropertyType
 {
-    ×Ô¶¨ÒåÖµ = -1, ÌåÁ¦ = 0, ÉúÃü = 1, ·¨Á¦ = 2, ¹¥»÷ = 3, ·ÀÓù = 4, ĞÒÔË = 5, ±¥Ê³ = 6,
-    ×î´óÌåÁ¦ = 7, ×î´óÉúÃü = 8, ×î´ó·¨Á¦ = 9, Ãô½İ = 10
+    è‡ªå®šä¹‰å€¼ = -1, ä½“åŠ› = 0, ç”Ÿå‘½ = 1, æ³•åŠ› = 2, æ”»å‡» = 3, é˜²å¾¡ = 4, å¹¸è¿ = 5, é¥±é£Ÿ = 6,
+    æœ€å¤§ä½“åŠ› = 7, æœ€å¤§ç”Ÿå‘½ = 8, æœ€å¤§æ³•åŠ› = 9, æ•æ· = 10
 }
 
 public enum Direction
@@ -80,43 +80,43 @@ public static class CharacterAnimatorParameter
 
 public enum EntityType
 {
-    All = 1, µØÍ¼µÀ¾ß = 2, ½ÇÉ« = 15, Íæ¼Ò = 3
+    All = 1, åœ°å›¾é“å…· = 2, è§’è‰² = 15, ç©å®¶ = 3
 }
 
 public static class AttackType
 {
     /// <summary>
-    /// Ä¬ÈÏ
+    /// é»˜è®¤
     /// </summary>
     public static int defaultAttack = 0;
 
     /// <summary>
-    /// µ¶½£¹¥»÷
+    /// åˆ€å‰‘æ”»å‡»
     /// </summary>
     public static int swordAttack = 1;
 
     /// <summary>
-    /// ³¤Ã¬¹¥»÷
+    /// é•¿çŸ›æ”»å‡»
     /// </summary>
     public static int spearAttack = 2;
 
     /// <summary>
-    /// ¸«×Ó¹¥»÷
+    /// æ–§å­æ”»å‡»
     /// </summary>
     public static int axeAttack = 3;
 
     /// <summary>
-    /// Ò§
+    /// å’¬
     /// </summary>
     public static int biteAttack = 4;
 
     /// <summary>
-    /// ×¦
+    /// çˆª
     /// </summary>
     public static int pawAttack = 5;
 
     /// <summary>
-    /// ±Ş
+    /// é­
     /// </summary>
     public static int whipAttack = 6;
 }
@@ -147,7 +147,7 @@ public class GameCommon
     public static int2 fightWalkTime = new int2(4000, 7000);
     public const int giftEventId = 412;
     public const int zeroGameYear = 1300;
-    public const Season zeroSeasom = Season.´º;
+    public const Season zeroSeasom = Season.æ˜¥;
     public const int zeroDay = 1;
     public const float sleepCostTime = 8.0f;
     public const int shortcutItemCount = 5;
@@ -221,7 +221,7 @@ public class GameCommon
     public const float waterRandomMax = 1;
 
     /// <summary>
-    /// Éú³ÉË®ÃæµÄÔëÉùÊ±¶Ô½á¹ûµÄÖØÓ³Éä
+    /// ç”Ÿæˆæ°´é¢çš„å™ªå£°æ—¶å¯¹ç»“æœçš„é‡æ˜ å°„
     /// </summary>
     public const float waterLerpValueMin_Min = 0.5f;
 
@@ -244,7 +244,7 @@ public class GameCommon
     public static Vector2 GetScreenResolution()
     {
         Vector2 gameViewSize;
-        //Ê¹ÓÃºê±àÒëÖ÷ÒªÊÇÎªÁË´ò°üµÄÊ±ºò²»»á±¨´í
+        //ä½¿ç”¨å®ç¼–è¯‘ä¸»è¦æ˜¯ä¸ºäº†æ‰“åŒ…çš„æ—¶å€™ä¸ä¼šæŠ¥é”™
 #if UNITY_EDITOR
         gameViewSize = GameViewSize();
 #else
@@ -427,7 +427,7 @@ public class GameCommon
     }
 
     /// <summary>
-    /// ×ª»»·½ÏòÎªÖµ
+    /// è½¬æ¢æ–¹å‘ä¸ºå€¼
     /// </summary>
     /// <param name="direction"></param>
     /// <returns></returns>
@@ -442,7 +442,7 @@ public class GameCommon
     }
 
     /// <summary>
-    /// ¼ì²é·½ÏòÖµ
+    /// æ£€æŸ¥æ–¹å‘å€¼
     /// </summary>
     /// <param name="direction"></param>
     /// <param name="target"></param>
@@ -1189,7 +1189,7 @@ public static class DataPath
         return null;
     }
 
-    public const string fishToolPrefab = "Prefabs/Other/ÓãÆ¯";
+    public const string fishToolPrefab = "Prefabs/Other/é±¼æ¼‚";
     public const string StoreCoinPrefab = "Prefabs/Other/Coin";
     public const string StoreCounterPrefab = "Prefabs/Other/SellItem";
     public const string goldSpritePath = "Reference/Gold";
@@ -1200,7 +1200,7 @@ public static class DataPath
 
     public const string pointerEffectPath = "Prefabs/Effect/PointerEffect";
     public const string DropItemPrefabPath = "Prefabs/Other/DropItem";
-    public const string MonsterDeathPath = "Data/TimeLineData/¹ÖÎïËÀÍö";
+    public const string MonsterDeathPath = "Data/TimeLineData/æ€ªç‰©æ­»äº¡";
     public const string BehaviorPath = "Behavior/";
     public const string sceneInfoPath = "Prefabs/Other/SceneInfo";
 

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -206,6 +206,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
 
         void EnnAction()
         {
+           // Debug.Log($"EnnAction()");
             if (curveEndAction != null)
             {
                 curveEndAction();

@@ -52,12 +52,15 @@ public class GameTimerController : Singleton<GameTimerController>
             tokenSource.Cancel();
             tokenSource.Dispose();
         }
+        //Debug.Log($"新增延时{action.Target}");
+
         var tokenSource2 = new CancellationTokenSource();
         CancellationToken ct = tokenSource2.Token;
         Task task = Task.Factory.StartNew(async () =>
         {
             await Task.Delay(delay);
             activeActions.Enqueue(action);
+           // Debug.Log($"延时入队{action.Target}");
             //action.Invoke();
             waitTasks.TryRemove(action, out var tokenSource);
            // waitTasks.Remove(action);
@@ -71,8 +74,9 @@ public class GameTimerController : Singleton<GameTimerController>
     {
         base.UpData();
         while(activeActions.Count > 0)
-        {
+        { 
             var Action = activeActions.Dequeue();
+          //  Debug.Log($"延时出队{Action.Target}");
             if (Action != null)
             {
                 Action.Invoke();

@@ -210,6 +210,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
      
     private async void StartCreatTempCharacter(StartCreatTempCharacter startCreatTempCharacter)
     {
+       // return;
         if (startCreatTempCharacter.clearAll)
         {
             ClearSpecialNPC();

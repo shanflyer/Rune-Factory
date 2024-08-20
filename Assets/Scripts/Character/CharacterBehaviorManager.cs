@@ -92,7 +92,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     {
        
         Character character = CharacterManager.instance.GetCharacter(characterId);
-        Debug.Log($"AddBehavior:{character.name}--{externalBehavior.name}");
+       // Debug.Log($"AddBehavior:{character.name}--{externalBehavior.name}");
         if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
         {
             behaviorTree = obj.AddComponent<BehaviorTree>();
@@ -128,7 +128,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
                 tree.DisableBehavior();
                 behaviorTree.enabled = false;
                 //  tree.SaveResetValues();
-                Debug.Log($"CallBack:{character.name}--{characterId}");
+               // Debug.Log($"CallBack:{character.name}--{characterId}");
                 if (SingletonType.Cleared)
                 {
                     return;

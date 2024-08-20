@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst;
 using Unity.Collections;
@@ -7,6 +7,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using static MapCellController;
 
 [BurstCompile]
 public struct CharacterGrid : INativeData
@@ -309,7 +310,7 @@ public class MapCellController : Singleton<MapCellController>
         public NativeList<int4> linkMaps;
 
         /// <summary>
-        /// Íæ¼Ò×ª»»µØÍ¼Ç°ºóµÄÊÂ¼ş
+        /// ç©å®¶è½¬æ¢åœ°å›¾å‰åçš„äº‹ä»¶
         /// </summary>
         public NativeList<int3> linkActions;
 
@@ -330,13 +331,17 @@ public class MapCellController : Singleton<MapCellController>
         {
             NativeList<int2> coordinates = new NativeList<int2>(4, Allocator.Temp);
 
-            foreach (var linkIndex in linkMapIndexs)
+            using(var e = linkMapIndexs.GetEnumerator())
             {
-                if (linkMaps[linkIndex.Value].z == linkMap)
+                while (e.MoveNext())
                 {
-                    coordinates.Add(linkIndex.Key);
+                    if (linkMaps[e.Current.Value].z == linkMap&&MapCellController.instance.CheckRoomIsWalk(e.Current.Key,roomCellDataIndex))
+                    {
+                        coordinates.Add(e.Current.Key);
+                    }
                 }
             }
+          
 
             if (coordinates.Length > 0)
             {
@@ -775,7 +780,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// Ìí¼ÓÕÏ°­
+    /// æ·»åŠ éšœç¢
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="itemPos"></param>
@@ -798,7 +803,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// ÒÆ³ıÕÏ°­
+    /// ç§»é™¤éšœç¢
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="itemPos"></param>
@@ -823,7 +828,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// Ìí¼ÓÍ¨ÓÃ´¥·¢¸ñ×Ó
+    /// æ·»åŠ é€šç”¨è§¦å‘æ ¼å­
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="room"></param>
@@ -857,7 +862,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// ÒÆ³ıÍ¨ÓÃ´¥·¢¸ñ×Ó
+    /// ç§»é™¤é€šç”¨è§¦å‘æ ¼å­
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="room"></param>
@@ -872,7 +877,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// Ìí¼ÓÍæ¼Ò½»»¥¸ñ×Ó
+    /// æ·»åŠ ç©å®¶äº¤äº’æ ¼å­
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="room"></param>
@@ -900,7 +905,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// ÒÆ³ıÍæ¼Ò½»»¥¸ñ×Ó
+    /// ç§»é™¤ç©å®¶äº¤äº’æ ¼å­
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="room"></param>
@@ -958,7 +963,7 @@ public class MapCellController : Singleton<MapCellController>
                 cell = cell,
                 exit = exit,
                 oldLinkId = oldLink,
-                triggerType = EntityType.Íæ¼Ò,
+                triggerType = EntityType.ç©å®¶,
                 triggerEvents = triggerEvents
             };
             //triggerJob.Run(triggerEvents.Length);
@@ -983,7 +988,7 @@ public class MapCellController : Singleton<MapCellController>
             }
             if (enterEventDatas.Count != 0)
             {
-                //ÅĞ¶Ï×î½ü¾àÀë
+                //åˆ¤æ–­æœ€è¿‘è·ç¦»
                 float distance = 1000;
                 int3 selectEventData = enterEventDatas[0];
                 for (int i = 0; i < enterEventDatas.Count; i++)
@@ -1011,7 +1016,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// ¼ì²â´¥·¢ÊÂ¼ş
+    /// æ£€æµ‹è§¦å‘äº‹ä»¶
     /// </summary>
     /// <param name="entityId"></param>
     /// <param name="entityType"></param>
@@ -1051,7 +1056,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     /// <summary>
-    /// ¼ì²âÊÇ·ñ½øÈëÍæ¼Ò½»»¥ÇøÓò
+    /// æ£€æµ‹æ˜¯å¦è¿›å…¥ç©å®¶äº¤äº’åŒºåŸŸ
     /// </summary>
     /// <param name="entityId"></param>
     /// <param name="entityType"></param>
@@ -1073,7 +1078,7 @@ public class MapCellController : Singleton<MapCellController>
                 oldCell = oldCell,
                 nowCell = nowCell,
                 oldLinkId = oldLink,
-                triggerType = EntityType.Íæ¼Ò,
+                triggerType = EntityType.ç©å®¶,
                 triggerEvents = triggerEvents
             };
             // triggerJob.Run(triggerEvents.Length);
@@ -1098,7 +1103,7 @@ public class MapCellController : Singleton<MapCellController>
             }
             if (enterEventDatas.Count != 0)
             {
-                //ÅĞ¶Ï×î½ü¾àÀë
+                //åˆ¤æ–­æœ€è¿‘è·ç¦»
                 float distance = 1000;
                 int3 selectEventData = enterEventDatas[0];
                 for (int i = 0; i < enterEventDatas.Count; i++)
@@ -1459,7 +1464,10 @@ public class MapCellController : Singleton<MapCellController>
         }
         return false;
     }
-
+    public bool CheckRoomIsWalk(int2 coordinate,int roomCellDataIndex)
+    {
+        return roomCellDatas[roomCellDataIndex].CheckWalkable(coordinate.xy);
+    }
     public bool CheckFutureIsWalk(int2[] cells, int mapId, HashSet<int2> specialCells)
     {
         if (runtimeMapRooms.TryGetValue(mapId, out var runtimeMapRoom))
@@ -2163,12 +2171,12 @@ public class MapCellController : Singleton<MapCellController>
             {
                 if (exit)
                 {
-                    //Àë¿ªÊÂ¼ş
+                    //ç¦»å¼€äº‹ä»¶
                     triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
                 }
                 else
                 {
-                    //½øÈëÊÂ¼ş
+                    //è¿›å…¥äº‹ä»¶
                     triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
                 }
             }
@@ -2200,12 +2208,12 @@ public class MapCellController : Singleton<MapCellController>
 
             if (oldContanins && !nowContanins)
             {
-                //Àë¿ªÊÂ¼ş
+                //ç¦»å¼€äº‹ä»¶
                 triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
             }
             else if (!oldContanins && nowContanins)
             {
-                //½øÈëÊÂ¼ş
+                //è¿›å…¥äº‹ä»¶
                 triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
             }
         }
@@ -2237,7 +2245,7 @@ public class MapCellController : Singleton<MapCellController>
             {
                 if (oldContanins && !nowContanins)
                 {
-                    //Àë¿ªÊÂ¼ş
+                    //ç¦»å¼€äº‹ä»¶
                     triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
                 }
             }
@@ -2245,7 +2253,7 @@ public class MapCellController : Singleton<MapCellController>
             {
                 if (nowContanins)
                 {
-                    //½øÈë
+                    //è¿›å…¥
                     triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
                 }
             }
@@ -2277,12 +2285,12 @@ public class MapCellController : Singleton<MapCellController>
             {
                 if (triggerArea.referenceId == oldLinkId && exit)
                 {
-                    //Àë¿ªÊÂ¼ş
+                    //ç¦»å¼€äº‹ä»¶
                     triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
                 }
                 if (!exit && triggerArea.referenceId != oldLinkId)
                 {
-                    //½øÈë
+                    //è¿›å…¥
                     triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
                 }
             }

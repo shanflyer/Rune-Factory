@@ -24,11 +24,15 @@ public class GetVisitNPC : Action
         if (NPCManager.instance.GetNPCFormInstance(characterId.Value, out var npc))
         {
             int visitNpc = npc.GetVisitFriend();
-            this.visitNPC.SetValue(visitNpc);
-            if (visitNpc > 0)
-            { 
+            if (NPCManager.instance.GetNPC(visitNpc, out var npc1))
+            {
+                if (npc1.Character == null)
+                {
+                    return TaskStatus.Failure;
+                }
+                this.visitNPC.SetValue(npc1.Character.instanceId);
                 return TaskStatus.Success;
-            }
+            }  
         }
 
         return TaskStatus.Failure;

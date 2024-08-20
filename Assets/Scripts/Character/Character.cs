@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine; 
@@ -25,52 +25,52 @@ public struct CharacterProperty
         if (MaxHP != 0)
         {
             string operatorStr = MaxHP > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.×î´óÉúÃü}{operatorStr}{MaxHP}  ";
+            result = $"{CharacterPropertyType.æœ€å¤§ç”Ÿå‘½}{operatorStr}{MaxHP}  ";
         }
         if (HP != 0)
         {
             string operatorStr = HP > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.ÉúÃü}{operatorStr}{HP} ";
+            result = $"{CharacterPropertyType.ç”Ÿå‘½}{operatorStr}{HP} ";
         }
         if (MaxMP != 0)
         {
             string operatorStr = MaxMP > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.×î´ó·¨Á¦}{operatorStr}{MaxMP} ";
+            result = $"{CharacterPropertyType.æœ€å¤§æ³•åŠ›}{operatorStr}{MaxMP} ";
         }
         if (MP != 0)
         {
             string operatorStr = MP > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.·¨Á¦}{operatorStr}{MP}  ";
+            result = $"{CharacterPropertyType.æ³•åŠ›}{operatorStr}{MP}  ";
         }
         if (MaxPower != 0)
         {
             string operatorStr = MaxPower > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.×î´óÌåÁ¦}{operatorStr}{MaxPower}";
+            result = $"{CharacterPropertyType.æœ€å¤§ä½“åŠ›}{operatorStr}{MaxPower}";
         }
         if (Power != 0)
         {
             string operatorStr = Power > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.ÌåÁ¦}{operatorStr}{Power}  ";
+            result = $"{CharacterPropertyType.ä½“åŠ›}{operatorStr}{Power}  ";
         }
         if (AT != 0)
         {
             string operatorStr = AT > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.¹¥»÷}{operatorStr}{AT}  ";
+            result = $"{CharacterPropertyType.æ”»å‡»}{operatorStr}{AT}  ";
         }
         if (DF != 0)
         {
             string operatorStr = DF > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.·ÀÓù}{operatorStr}{DF}  ";
+            result = $"{CharacterPropertyType.é˜²å¾¡}{operatorStr}{DF}  ";
         }
         if (Lucky != 0)
         {
             string operatorStr = Lucky > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.ĞÒÔË}{operatorStr}{Lucky}  ";
+            result = $"{CharacterPropertyType.å¹¸è¿}{operatorStr}{Lucky}  ";
         }
         if (Speed != 0)
         {
             string operatorStr = Speed > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.Ãô½İ}{operatorStr}{Speed}  ";
+            result = $"{CharacterPropertyType.æ•æ·}{operatorStr}{Speed}  ";
         }
         return result;
     }
@@ -195,33 +195,33 @@ public struct CharacterProperty
     {
         switch (CharacterPropertyType)
         {
-            case CharacterPropertyType.ÌåÁ¦:
+            case CharacterPropertyType.ä½“åŠ›:
                 return Power;
 
-            case CharacterPropertyType.ÉúÃü:
+            case CharacterPropertyType.ç”Ÿå‘½:
                 return HP;
 
-            case CharacterPropertyType.·¨Á¦:
+            case CharacterPropertyType.æ³•åŠ›:
                 return MP;
 
-            case CharacterPropertyType.¹¥»÷:
+            case CharacterPropertyType.æ”»å‡»:
                 return AT;
 
-            case CharacterPropertyType.·ÀÓù:
+            case CharacterPropertyType.é˜²å¾¡:
                 return DF;
 
-            case CharacterPropertyType.ĞÒÔË:
+            case CharacterPropertyType.å¹¸è¿:
                 return Lucky;
 
-            case CharacterPropertyType.×î´óÌåÁ¦:
+            case CharacterPropertyType.æœ€å¤§ä½“åŠ›:
                 return MaxPower;
 
-            case CharacterPropertyType.×î´óÉúÃü:
+            case CharacterPropertyType.æœ€å¤§ç”Ÿå‘½:
                 return MaxHP;
 
-            case CharacterPropertyType.×î´ó·¨Á¦:
+            case CharacterPropertyType.æœ€å¤§æ³•åŠ›:
                 return MaxMP;
-            case CharacterPropertyType.Ãô½İ:
+            case CharacterPropertyType.æ•æ·:
                 return Speed;
             default:
                 return Other;
@@ -236,45 +236,45 @@ public struct CharacterProperty
     {
         switch (propertyType)
         {
-            case CharacterPropertyType.ÌåÁ¦:
+            case CharacterPropertyType.ä½“åŠ›:
                 Power += value;
                 break;
 
-            case CharacterPropertyType.ÉúÃü:
+            case CharacterPropertyType.ç”Ÿå‘½:
                 HP += value;
                 break;
 
-            case CharacterPropertyType.·¨Á¦:
+            case CharacterPropertyType.æ³•åŠ›:
                 MP += value;
                 break;
 
-            case CharacterPropertyType.×î´óÌåÁ¦:
+            case CharacterPropertyType.æœ€å¤§ä½“åŠ›:
                 MaxPower += value;
                 break;
 
-            case CharacterPropertyType.×î´ó·¨Á¦:
+            case CharacterPropertyType.æœ€å¤§æ³•åŠ›:
                 MaxMP += value;
                 break;
 
-            case CharacterPropertyType.×î´óÉúÃü:
+            case CharacterPropertyType.æœ€å¤§ç”Ÿå‘½:
                 MaxHP += value;
                 break;
 
-            case CharacterPropertyType.¹¥»÷:
+            case CharacterPropertyType.æ”»å‡»:
                 AT += value;
                 break;
 
-            case CharacterPropertyType.·ÀÓù:
+            case CharacterPropertyType.é˜²å¾¡:
                 DF += value;
                 break;
 
-            case CharacterPropertyType.ĞÒÔË:
+            case CharacterPropertyType.å¹¸è¿:
                 Lucky += value;
                 break;
-            case CharacterPropertyType.Ãô½İ:
+            case CharacterPropertyType.æ•æ·:
                 Speed += value;
                 break;
-            case CharacterPropertyType.×Ô¶¨ÒåÖµ:
+            case CharacterPropertyType.è‡ªå®šä¹‰å€¼:
                 Other += value;
                 break;
         }
@@ -283,45 +283,45 @@ public struct CharacterProperty
     {
         switch (setCharacterProperty.propertyType)
         {
-            case CharacterPropertyType.ÌåÁ¦:
+            case CharacterPropertyType.ä½“åŠ›:
                 Power = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.ÉúÃü:
+            case CharacterPropertyType.ç”Ÿå‘½:
                 HP = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.·¨Á¦:
+            case CharacterPropertyType.æ³•åŠ›:
                 MP = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.×î´óÌåÁ¦:
+            case CharacterPropertyType.æœ€å¤§ä½“åŠ›:
                 MaxPower = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.×î´ó·¨Á¦:
+            case CharacterPropertyType.æœ€å¤§æ³•åŠ›:
                 MaxMP = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.×î´óÉúÃü:
+            case CharacterPropertyType.æœ€å¤§ç”Ÿå‘½:
                 MaxHP = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.¹¥»÷:
+            case CharacterPropertyType.æ”»å‡»:
                 AT = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.·ÀÓù:
+            case CharacterPropertyType.é˜²å¾¡:
                 DF = setCharacterProperty.Value;
                 break;
 
-            case CharacterPropertyType.ĞÒÔË:
+            case CharacterPropertyType.å¹¸è¿:
                 Lucky = setCharacterProperty.Value;
                 break;
-            case CharacterPropertyType.Ãô½İ:
+            case CharacterPropertyType.æ•æ·:
                 Speed = setCharacterProperty.Value;
                 break;
-            case CharacterPropertyType.×Ô¶¨ÒåÖµ:
+            case CharacterPropertyType.è‡ªå®šä¹‰å€¼:
                 Other = setCharacterProperty.Value;
                 break;
         }
@@ -331,48 +331,48 @@ public struct CharacterProperty
     {
         switch (changeCharacterProperty.propertyType)
         {
-            case CharacterPropertyType.ÌåÁ¦:
+            case CharacterPropertyType.ä½“åŠ›:
                 Power += changeCharacterProperty.changeValue;
                 Power = math.clamp(Power, 0, MaxPower);
                 break;
 
-            case CharacterPropertyType.ÉúÃü:
+            case CharacterPropertyType.ç”Ÿå‘½:
                 HP += changeCharacterProperty.changeValue;
                 HP = math.clamp(HP, 0, MaxHP);
                 break;
 
-            case CharacterPropertyType.·¨Á¦:
+            case CharacterPropertyType.æ³•åŠ›:
                 MP += changeCharacterProperty.changeValue;
                 MP = math.clamp(MP, 0, MaxMP);
                 break;
 
-            case CharacterPropertyType.×î´óÌåÁ¦:
+            case CharacterPropertyType.æœ€å¤§ä½“åŠ›:
                 MaxPower += changeCharacterProperty.changeValue;
                 break;
 
-            case CharacterPropertyType.×î´ó·¨Á¦:
+            case CharacterPropertyType.æœ€å¤§æ³•åŠ›:
                 MaxMP += changeCharacterProperty.changeValue;
                 break;
 
-            case CharacterPropertyType.×î´óÉúÃü:
+            case CharacterPropertyType.æœ€å¤§ç”Ÿå‘½:
                 MaxHP += changeCharacterProperty.changeValue;
                 break;
 
-            case CharacterPropertyType.¹¥»÷:
+            case CharacterPropertyType.æ”»å‡»:
                 AT += changeCharacterProperty.changeValue;
                 break;
 
-            case CharacterPropertyType.·ÀÓù:
+            case CharacterPropertyType.é˜²å¾¡:
                 DF += changeCharacterProperty.changeValue;
                 break;
 
-            case CharacterPropertyType.ĞÒÔË:
+            case CharacterPropertyType.å¹¸è¿:
                 Lucky += changeCharacterProperty.changeValue;
                 break;
-            case CharacterPropertyType.Ãô½İ:
+            case CharacterPropertyType.æ•æ·:
                 Speed += changeCharacterProperty.changeValue;
                 break;
-            case CharacterPropertyType.×Ô¶¨ÒåÖµ:
+            case CharacterPropertyType.è‡ªå®šä¹‰å€¼:
                 Other += changeCharacterProperty.changeValue;
                 break;
         }
@@ -446,10 +446,10 @@ public partial class Character
             packageInstancId = saveData.packageId;
             SetLevel(saveData.level, true);
             SetNowExp(saveData.exp);
-            SetEquip(ItemType.ÎäÆ÷, saveData.weapon);
-            SetEquip(ItemType.·À¾ß, saveData.clothes);
-            SetEquip(ItemType.Ğ¬×Ó, saveData.shoe);
-            SetEquip(ItemType.Ã±×Ó, saveData.headgear);
+            SetEquip(ItemType.æ­¦å™¨, saveData.weapon);
+            SetEquip(ItemType.é˜²å…·, saveData.clothes);
+            SetEquip(ItemType.é‹å­, saveData.shoe);
+            SetEquip(ItemType.å¸½å­, saveData.headgear);
             characterPackage = packageInstancId;
 
             RefreshShortcut refreshShortcut = new RefreshShortcut
@@ -498,25 +498,25 @@ public partial class Character
         int oldItemId = 0;
         switch (itemType)
         {
-            case ItemType.ÎäÆ÷:
+            case ItemType.æ­¦å™¨:
                 oldItemId = equip.weapon.x;
                 equip.weapon = 0;
                 break;
-            case ItemType.·À¾ß:
+            case ItemType.é˜²å…·:
                 oldItemId = equip.clothes.x;
                 equip.clothes = 0;
                 break;
-            case ItemType.Ğ¬×Ó:
+            case ItemType.é‹å­:
                 oldItemId = equip.shoes.x;
                 equip.shoes =0;
                 break;
-            case ItemType.Ã±×Ó:
+            case ItemType.å¸½å­:
                 oldItemId = equip.headgear.x;
                 equip.headgear = 0;
                 break;
         }
-        attackAttributeType = AttributeType.ÎŞ;
-        defenceAttributeType = AttributeType.ÎŞ;
+        attackAttributeType = AttributeType.æ— ;
+        defenceAttributeType = AttributeType.æ— ;
         ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId);
         if (oldItemData != null)
         { 
@@ -538,19 +538,19 @@ public partial class Character
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(Equip.x);
         switch (itemData.type)
         {
-            case ItemType.ÎäÆ÷:
+            case ItemType.æ­¦å™¨:
                 attackAttributeType = itemData.attributeType;
                 equip.weapon= Equip;
                 attackType = itemData.otherType;
                 break;
-            case ItemType.·À¾ß:
+            case ItemType.é˜²å…·:
                 defenceAttributeType = itemData.attributeType; 
                 equip.clothes = Equip;  
                 break;
-            case ItemType.Ğ¬×Ó: 
+            case ItemType.é‹å­: 
                 equip.shoes = Equip; 
                 break;
-            case ItemType.Ã±×Ó:
+            case ItemType.å¸½å­:
                 equip.headgear = Equip;
                 break;
         }
@@ -562,25 +562,25 @@ public partial class Character
         int oldItemId = 0;
         switch (itemData.type)
         {
-            case ItemType.ÎäÆ÷:
+            case ItemType.æ­¦å™¨:
                 attackAttributeType = itemData.attributeType;
                 oldItemId = equip.weapon.x;
                 equip.weapon.x = itemData.id;
                 equip.weapon.y = 100;
                 attackType = itemData.otherType;
                 break;
-            case ItemType.·À¾ß:
+            case ItemType.é˜²å…·:
                 defenceAttributeType = itemData.attributeType;
                 oldItemId = equip.clothes.x;
                 equip.clothes.x = itemData.id;
                 equip.clothes.y = 100;
                 break;
-            case ItemType.Ğ¬×Ó:
+            case ItemType.é‹å­:
                 oldItemId = equip.shoes.x;
                 equip.shoes.x = itemData.id;
                 equip.shoes.y = 100;
                 break;
-            case ItemType.Ã±×Ó:
+            case ItemType.å¸½å­:
                 oldItemId = equip.headgear.x;
                 equip.headgear.x = itemData.id;
                 equip.headgear.y = 100;
@@ -962,7 +962,7 @@ public partial class Character
                     AddFriendShipValue addFriendShipValue = new AddFriendShipValue
                     {
                         characterId = character.instanceId,
-                        friendAddType = FriendAddType.¶Ô»°,
+                        friendAddType = FriendAddType.å¯¹è¯,
                         value = 1
                     };
                     GameActionManager.instance.QueueAction(addFriendShipValue);
@@ -1014,7 +1014,7 @@ public partial class Character
                 /*AddFriendShipValue addFriendShipValue = new AddFriendShipValue
                 {
                     characterId = character.instanceId,
-                    friendAddType = FriendAddType.¶Ô»°,
+                    friendAddType = FriendAddType.å¯¹è¯,
                     value = 1
                 };
                 GameActionManager.instance.QueueAction(addFriendShipValue);*/
@@ -1203,11 +1203,11 @@ public partial class Character
     }
 
     /// <summary>
-    /// ÊÂ¼ş´¥·¢
+    /// äº‹ä»¶è§¦å‘
     /// </summary>
-    /// <param name="eventid">ÊÂ¼şid</param>
-    /// <param name="reference">Êı¾İid</param>
-    /// <param name="enter">ÊÇ·ñ½øÈëÊÂ¼ş</param>
+    /// <param name="eventid">äº‹ä»¶id</param>
+    /// <param name="reference">æ•°æ®id</param>
+    /// <param name="enter">æ˜¯å¦è¿›å…¥äº‹ä»¶</param>
     private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
         if (team!=null && this != CharacterManager.instance.controllerCharacter)
@@ -1289,15 +1289,15 @@ public partial class Character
     }
 
     /// <summary>
-    /// ÉèÖÃ×ø±ê
+    /// è®¾ç½®åæ ‡
     /// </summary>
-    /// <param name="coordinate">x.y;z:µØÍ¼id</param>
+    /// <param name="coordinate">x.y;z:åœ°å›¾id</param>
     public void SetCoordinate(int3 coordinate)
     {
         int2 oldCoordinate = objCoordinate.xy;
         if (mapInstance != coordinate.z)
         {
-            MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«,
+            MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.è§’è‰²,
                 objCoordinate.z, oldCoordinate, true, TriggerEventAction);
 
             if (isController)
@@ -1320,7 +1320,7 @@ public partial class Character
             oldCoordinate = new int2(int.MinValue);
         }
 
-        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, coordinate.z, oldCoordinate, coordinate.xy,
+        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.è§’è‰², coordinate.z, oldCoordinate, coordinate.xy,
            TriggerEventAction);
         if (isController)
         {
@@ -1370,7 +1370,7 @@ public partial class Character
     {
         int2 oldCoordinate = objCoordinate.xy;
         int3 checkCoordinate = new int3(coordinate.xy, mapInstance);
-        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.½ÇÉ«, mapInstance, oldCoordinate, coordinate.xy,
+        MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.è§’è‰², mapInstance, oldCoordinate, coordinate.xy,
            TriggerEventAction);
 
         SetObjCoordinate(checkCoordinate);
@@ -1433,6 +1433,7 @@ public partial class Character
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, ref result);
         if (result)
         {
+           // Debug.Log($"resultList{resultList.Count}");
             void FailedMoveAction()
             {
                 moveTarget = new int3(-1, -1, -1); 
@@ -1461,8 +1462,9 @@ public partial class Character
             int2 inCoordinate = int2.zero;
             if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, target, ref inCoordinate))
             {
+               // Debug.Log($"ä¸‹ä¸€åœ°å›¾{target}ï¼š--{inCoordinate}");
                 Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, inCoordinate, nowMap);
-
+                //Debug.Log($"pathNodesï¼š--{pathNodes.Count}");
                 PlayerMove(pathNodes, () =>
                 {
                     if (this == CharacterManager.instance.controllerCharacter)

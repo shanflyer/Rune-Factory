@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.TextCore.Text;
+using UnityEngine; 
 
 public enum NPCState
 {
@@ -492,7 +491,7 @@ public class NPC : IReferenceData
             taskSheduleModelDatas.Add(taskSheduleModelData);
         }
         nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(taskSheduleModelDatas);
-         Debug.Log($"nPCTaskScheduleTimeList.ini{npcData.npcName}");
+         //Debug.Log($"nPCTaskScheduleTimeList.ini{npcData.npcName}");
         if (!SetNowBehaviorTree())
         {
             AddNpcBehavior(externalBehavior, true);
@@ -517,11 +516,11 @@ public class NPC : IReferenceData
         }
         endBehavior = true;
         behaviorCanBreak = false;
-        Debug.Log($"进入回调:{npcData.npcName}");
+       // Debug.Log($"进入回调:{npcData.npcName}");
         var externalBehavior = GetNowTaskScheduleBehavior(out behaviorCanBreak, out var pauseWhenDisabled);
         if (externalBehavior != null)
         {
-            Debug.Log($"ResetBehaviorStat:{externalBehavior.name}--{npcData.npcName}");
+           // Debug.Log($"ResetBehaviorStat:{externalBehavior.name}--{npcData.npcName}");
             AddNpcBehavior(externalBehavior, PauseWhenDisabled: pauseWhenDisabled);
         }
     }
@@ -803,7 +802,7 @@ public class NPCManager : Singleton<NPCManager>
         {
             if (npcs[i].Character == null || npcs[i].Character.mapInstance < 0)
             {
-                Debug.Log($"npc:{npcs[i].npcName}--不适合");
+               // Debug.Log($"npc:{npcs[i].npcName}--不适合");
                 continue;
             }
             npcs[i].InitBehaviorData();

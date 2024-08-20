@@ -34,6 +34,7 @@ public class MyAnimationController : Singleton<MyAnimationController>
 
     public void RemoveItemAnimation(int id)
     {
+        animationStructData[id].Dispose();
         animationStructData.Remove(id);
     }
 
@@ -51,6 +52,10 @@ public class MyAnimationController : Singleton<MyAnimationController>
     protected override void Clear()
     {
         base.Clear();
+        foreach(var  animation in animationStructData.Values)
+        {
+            animation.Dispose();
+        }
         animationStructData.Clear();
     }
 
