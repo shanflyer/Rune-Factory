@@ -162,6 +162,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 UIManager.instance.CloseGamePanel<MainPanel>();
                 UIManager.instance.CloseGamePanel<ShortcutPanel>();
                 UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
+                UIManager.instance.CloseGamePanel<CharacterButtonPanel>();
                 if (afterActionData != null)
                 {
                     afterActionData.Action();

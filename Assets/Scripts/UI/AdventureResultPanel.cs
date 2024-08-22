@@ -58,6 +58,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         ExploreEnd exploreEnd = new ExploreEnd();
         GameActionManager.instance.QueueAction(exploreEnd, true);
 
+        UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
         UIManager.instance.ShowGamePanel<PlayerTopPanel>();
         UIManager.instance.ShowGamePanel<MainPanel>();
         UIManager.instance.ShowGamePanel<ShortcutPanel>();

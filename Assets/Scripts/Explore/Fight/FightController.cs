@@ -622,6 +622,7 @@ public class FightController : MonoBehaviour
         if (characterMap > 0)
         {
             UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+            UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
             UIManager.instance.ShowGamePanel<MainPanel>();
             UIManager.instance.ShowGamePanel<ShortcutPanel>();
             UIManager.instance.ShowGamePanel<ScreenControllerPanel>();

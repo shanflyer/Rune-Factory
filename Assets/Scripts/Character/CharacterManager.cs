@@ -450,7 +450,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (SceneManager.instance.Now == "World")
                 {
                     UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-
+                    UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
                     var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId);
                     UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
                 }

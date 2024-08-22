@@ -3,6 +3,37 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+public struct RefreshOperateCharacter : GameAction
+{
+    public int characterId;
+    public bool join;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null,
+     SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 1)
+            characterId = int.Parse(parameters[0].value);
+        if (parameters.Count > 2)
+            join = bool.Parse(parameters[2].value);
+         
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
+public struct RefreshOperateCharacters : GameAction
+{
+    public HashSet<int> joinCharacters,leaveCharacters; 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null,
+     SetValue setValue = null, bool immediately = false)
+    {
+       
+
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TraceCharacterResult : GameAction
 {
     public int characterId;

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine; 
@@ -895,7 +897,11 @@ public partial class Character
         objCoordinate = coordinate;
         if (CharacterManager.instance.controllerCharacter == this)
         {
-            CheckNeighborhood();
+            RefreshNeighborhood();
+        }
+        else
+        {
+            CharacterManager.instance.controllerCharacter.TryRefreshNeighborhood(this);
         }
         // Debug.Log($"setCoordinate0:{coordinate}");
         if (SetCoordianteDele != null)
@@ -912,7 +918,7 @@ public partial class Character
 
         if (CharacterManager.instance.controllerCharacter == this)
         {
-            CheckNeighborhood();
+            RefreshNeighborhood();
         }
 
         //Debug.Log($"setCoordinate:{newCoordinate}");
@@ -922,66 +928,72 @@ public partial class Character
         }
     }
 
-    private int NeighborhoodCharacter;
+    private HashSet<int> NeighborhoodCharacters=new HashSet<int>();
 
-    private void CheckNeighborhood()
+    public void TryRefreshNeighborhood(Character character,int range=5)
     {
-        int clickCharacter = MapCellController.instance.GetClickCharacter(objCoordinate);
-        if (clickCharacter != -1 && clickCharacter != instanceId && clickCharacter != NeighborhoodCharacter)
+        if (mapInstance != character.mapInstance)
         {
-            Character character = CharacterManager.instance.GetCharacter(clickCharacter);
-
-            if (character != null)
+            if (NeighborhoodCharacters.Contains(character.instanceId))
             {
-                if (character.team!=null)
+                RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
                 {
-                    return;
-                }
-                EventReferenceData eventReferenceData = new EventReferenceData
-                {
-                    name = "CharacterId",
-                    value = clickCharacter
+                    characterId = character.instanceId,
+                    join = false
                 };
-                EventReferenceData targetReferenceData = new EventReferenceData
-                {
-                    name = "TargetCharacter",
-                    value = instanceId
-                };
-
-                int nextTalkEventId = 0;
-                int eventId = 0;
-                if (character is TempCharacter tempCharacter)
-                {
-                    nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
-                    eventId = tempCharacter.tempCharacterData.tempTalkEventId;
-                }
-                else if(NPCManager.instance.GetNPCFormInstance(character.instanceId,out var NPC))
-                {
-                    nextTalkEventId = NPC.nextTalkEventId;
-                    eventId = NPC.playerOperateEventId;
-                    AddFriendShipValue addFriendShipValue = new AddFriendShipValue
-                    {
-                        characterId = character.instanceId,
-                        friendAddType = FriendAddType.对话,
-                        value = 1
-                    };
-                    GameActionManager.instance.QueueAction(addFriendShipValue);
-                }
-
-                EventReferenceData NextTalkReferenceData = new EventReferenceData
-                {
-                    name = "NextTalkEventId",
-                    value = nextTalkEventId
-                };
-            
-
-                GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
-                {
-                    eventReferenceData,targetReferenceData,NextTalkReferenceData
-                });
+                GameActionManager.instance.QueueAction(refreshOperateCharacter);
             }
         }
-        NeighborhoodCharacter = clickCharacter;
+        else
+        {
+            int absX = math.abs(character.coordinate.x - coordinate.x);
+            int absY = math.abs(character.coordinate.y - coordinate.y);
+
+            if (NeighborhoodCharacters.Contains(character.instanceId))
+            {
+                if (absX > range || absY > range)
+                {
+                    RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                    {
+                        characterId = character.instanceId,
+                        join = false
+                    };
+                    GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                    NeighborhoodCharacters.Remove(character.instanceId);
+                }
+            }
+            else
+            {
+                if (absX <= range && absY <= range)
+                {
+                    RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                    {
+                        characterId = character.instanceId,
+                        join = true
+                    };
+                    GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                    NeighborhoodCharacters.Add(character.instanceId);
+                }
+            }
+        }
+       
+    }
+
+    private void RefreshNeighborhood()
+    {
+        RefreshOperateCharacters refreshOperateCharacters = new RefreshOperateCharacters();
+        var NeighborhoodCharacters1 = MapCellController.instance.GetCharacters(objCoordinate);
+        if (NeighborhoodCharacters1 == null)
+        {
+            refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters;
+        }
+        else
+        {
+            refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters.Except(NeighborhoodCharacters1).ToHashSet<int>();
+            refreshOperateCharacters.joinCharacters= NeighborhoodCharacters1.Except(NeighborhoodCharacters).ToHashSet<int>(); 
+        }
+        NeighborhoodCharacters = NeighborhoodCharacters1;
+        GameActionManager.instance.QueueAction(refreshOperateCharacters); 
     }
 
     public void SetNeighborhood(int characterId)
@@ -1030,13 +1042,9 @@ public partial class Character
             {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
             });
-
-            NeighborhoodCharacter = character.instanceId;
+             
         }
-        else
-        {
-            NeighborhoodCharacter = 0;
-        }
+         
     }
      
 

@@ -83,7 +83,8 @@ public class MiniPackagePanel : GamePanel<PackageList>
         typeof(OperateButtonPanel),
         typeof(OtherFuntionPanel),  
         typeof(PermissionPanel),
-        typeof(ScreenControllerPanel)
+        typeof(ScreenControllerPanel),
+        typeof(CharacterButtonPanel)
         }
     };
     public override void OnEnable()

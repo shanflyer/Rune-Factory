@@ -237,6 +237,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         {
         typeof(ShortcutPanel),
         typeof(OperateButtonPanel),
+        typeof(CharacterButtonPanel),
         typeof(OtherFuntionPanel),
         typeof(ItemInfoPanel),
         typeof(MainPanel),

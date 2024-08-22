@@ -128,6 +128,32 @@ public class MapCellController : Singleton<MapCellController>
             return data;
         }
         return null;
+    } 
+    public HashSet<int> GetCharacters(int3 coordinate, int Range = 5)
+    {
+        if (MapCharacterGrids.TryGetValue(coordinate.z, out var mapCharacterGrid))
+        {
+            NativeList<int> results = new NativeList<int>(mapCharacterGrid.characters.Length, Allocator.TempJob);
+            FindCharacterRangeInCell findCharacterRangeInCell = new FindCharacterRangeInCell
+            {
+                coordinate = coordinate.xy,
+                girds = mapCharacterGrid.characters,
+                result = results.AsParallelWriter(),
+                range = Range
+            };
+            findCharacterRangeInCell.ScheduleParallel(mapCharacterGrid.characters.Length, 8, new JobHandle()).Complete();
+            if (results.Length > 0)
+            { 
+                HashSet<int> result = new HashSet<int>();
+                for(int i = 0; i < results.Length; i++)
+                {
+                    result.Add(results[i]);
+                }
+                results.Dispose();
+                return result;
+            }
+        }
+        return null;
     }
     public int GetClickCharacter(int3 coordinate,int Range=5)
     {
