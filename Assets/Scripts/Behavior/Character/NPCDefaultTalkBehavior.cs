@@ -74,7 +74,7 @@ public class NPCDefaultTalkBehavior : Action
                 endAction = isStopMove.Value ? () =>
                 {
                     CharacterStartMoveAction();
-                    RemoveEvent();
+                    RemoveEvent(); 
                 }
                 :
                     () => { RemoveEvent(); }

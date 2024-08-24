@@ -21,6 +21,7 @@ public class NPCTaskScheduleData : ScriptableObject, IGameData
     public bool PauseWhenDisabled;
     public bool holdPos;
     public NPCBehaviorState behaviorState;
+    public float maxPauseTime;
     public string GetKey()
     {
         return id.ToString();

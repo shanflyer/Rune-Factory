@@ -26,50 +26,102 @@ public class MapCharacterGrid
     public int mapInstance;
     public NativeList<int3> characters;
     public Dictionary<int, int> characterIndexs;
+    public NativeList<int3> tempCharacters;
+    public Dictionary<int, int> tempCharacterIndexs;
 
-    public void RemoveCharacter(int characterInstance)
+    public void RemoveCharacter(int characterInstance,bool isTemp)
     {
-        if(characterIndexs.TryGetValue(characterInstance,out var index))
+        if (isTemp)
         {
-            if (index != characters.Length - 1)
+            if (tempCharacterIndexs.TryGetValue(characterInstance, out var index))
             {
-                int3 lastCharacter = characters[characters.Length - 1];
-                characters[index] = lastCharacter;
-                characterIndexs[lastCharacter.z] = index;
+                if (index != tempCharacters.Length - 1)
+                {
+                    int3 lastCharacter = tempCharacters[characters.Length - 1];
+                    tempCharacters[index] = lastCharacter;
+                    tempCharacterIndexs[lastCharacter.z] = index;
+                }
+                tempCharacterIndexs.Remove(characterInstance);
+                tempCharacters.RemoveAt(tempCharacters.Length - 1);
             }
-            characterIndexs.Remove(characterInstance);
-            characters.RemoveAt(characters.Length - 1);
-        }
-    }
-    public void AddCharacter(int characterInstance, int2 coordinate)
-    {
-        if(!characterIndexs.ContainsKey(characterInstance))
-        {
-            characterIndexs.Add(characterInstance, characters.Length);
-            characters.Add(new int3(coordinate.xy,characterInstance));
-        }
-    } 
-    public void ChangeCharacter(int characterInstance, int2 coordinate)
-    {
-        if (!characterIndexs.TryGetValue(characterInstance,out int index))
-        {
-            characterIndexs.Add(characterInstance, characters.Length);
-            characters.Add(new int3(coordinate.xy, characterInstance));
         }
         else
         {
-            characters[index] = new int3(coordinate.xy, characterInstance);
+            if (characterIndexs.TryGetValue(characterInstance, out var index))
+            {
+                if (index != characters.Length - 1)
+                {
+                    int3 lastCharacter = characters[characters.Length - 1];
+                    characters[index] = lastCharacter;
+                    characterIndexs[lastCharacter.z] = index;
+                }
+                characterIndexs.Remove(characterInstance);
+                characters.RemoveAt(characters.Length - 1);
+            }
         }
+       
+    }
+    public void AddCharacter(int characterInstance, int2 coordinate, bool isTemp)
+    {
+        if (isTemp)
+        {
+            if (!tempCharacterIndexs.ContainsKey(characterInstance))
+            {
+                tempCharacterIndexs.Add(characterInstance, tempCharacters.Length);
+                tempCharacters.Add(new int3(coordinate.xy, characterInstance));
+            }
+        }
+        else
+        {
+            if (!characterIndexs.ContainsKey(characterInstance))
+            {
+                characterIndexs.Add(characterInstance, characters.Length);
+                characters.Add(new int3(coordinate.xy, characterInstance));
+            }
+        }
+       
+    } 
+    public void ChangeCharacter(int characterInstance, int2 coordinate, bool isTemp)
+    {
+        if (isTemp)
+        {
+            if (!tempCharacterIndexs.TryGetValue(characterInstance, out int index))
+            {
+                tempCharacterIndexs.Add(characterInstance, tempCharacters.Length);
+                tempCharacters.Add(new int3(coordinate.xy, characterInstance));
+            }
+            else
+            {
+                tempCharacters[index] = new int3(coordinate.xy, characterInstance);
+            }
+        }
+        else
+        {
+            if (!characterIndexs.TryGetValue(characterInstance, out int index))
+            {
+                characterIndexs.Add(characterInstance, characters.Length);
+                characters.Add(new int3(coordinate.xy, characterInstance));
+            }
+            else
+            {
+                characters[index] = new int3(coordinate.xy, characterInstance);
+            }
+
+        }
+       
     }
 
     public MapCharacterGrid()
     {
         characters = new NativeList<int3>(16,Allocator.Persistent);
         characterIndexs = new Dictionary<int, int>();
+        tempCharacters = new NativeList<int3>(16, Allocator.Persistent);
+        tempCharacterIndexs = new Dictionary<int, int>();
     } 
     public void Dispose()
     {
         characters.Dispose();
+        tempCharacters.Dispose();
     }
 }
 
@@ -83,13 +135,13 @@ public class MapCellController : Singleton<MapCellController>
 
     private Dictionary<int, MapCharacterGrid> MapCharacterGrids = new Dictionary<int, MapCharacterGrid>();
 
-    public void SetCharacterCoordinate(int3 oldCoordinate, int3 newCoordinate, int characterId)
+    public void SetCharacterCoordinate(int3 oldCoordinate, int3 newCoordinate, int characterId,bool isTemp)
     {
         if (newCoordinate.z != oldCoordinate.z)
         {
             if (MapCharacterGrids.TryGetValue(oldCoordinate.z, out var oldMapCharacterGrid))
             {
-                oldMapCharacterGrid.RemoveCharacter(characterId);
+                oldMapCharacterGrid.RemoveCharacter(characterId,isTemp);
             }
         }
         if (!MapCharacterGrids.TryGetValue(newCoordinate.z, out var mapCharacterGrid))
@@ -100,14 +152,14 @@ public class MapCellController : Singleton<MapCellController>
             };
             MapCharacterGrids.Add(newCoordinate.z, mapCharacterGrid);
         }
-        mapCharacterGrid.ChangeCharacter(characterId, newCoordinate.xy);
+        mapCharacterGrid.ChangeCharacter(characterId, newCoordinate.xy, isTemp);
     }
 
-    public void RemoveCharacterCoordinate(int3 coordinate, int characterId)
+    public void RemoveCharacterCoordinate(int3 coordinate, int characterId, bool isTemp)
     {
         if (MapCharacterGrids.TryGetValue(coordinate.z, out var mapCharacterGrid))
         {
-            mapCharacterGrid.RemoveCharacter(characterId);
+            mapCharacterGrid.RemoveCharacter(characterId, isTemp);
         }
     }
     public int[] GetCharactersForRange(int3 coordinate, int Range)
@@ -1618,11 +1670,11 @@ public class MapCellController : Singleton<MapCellController>
         if (removeCellCharacter.cell.Equals(int3.zero))
         {
             Character character = CharacterManager.instance.GetCharacter(removeCellCharacter.characterId);
-            RemoveCharacterCoordinate(character.ObjCoordinate, removeCellCharacter.characterId);
+            RemoveCharacterCoordinate(character.ObjCoordinate, removeCellCharacter.characterId, removeCellCharacter.isTemp);
         }
         else
         {
-            RemoveCharacterCoordinate(removeCellCharacter.cell, removeCellCharacter.characterId);
+            RemoveCharacterCoordinate(removeCellCharacter.cell, removeCellCharacter.characterId, removeCellCharacter.isTemp);
         }
     }
 

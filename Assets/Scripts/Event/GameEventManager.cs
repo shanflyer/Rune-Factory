@@ -220,13 +220,12 @@ public class GameEventManager : Singleton<GameEventManager>
     }
 
     public void RemoveGameEvent(int id)
-    {
-        behaviorTrees.Remove(id);
-        /*
+    { 
         if (behaviorTrees.TryGetValue(id, out BehaviorTree behaviorTree))
         {
             GameObject.Destroy(behaviorTree);
-        }*/
+        }
+        behaviorTrees.Remove(id);
     }
 
     public void SetGameEventAwake(int id, bool awake, bool pause)

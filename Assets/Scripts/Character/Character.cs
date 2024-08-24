@@ -893,13 +893,13 @@ public partial class Character
 
     private void SetObjCoordinate(int3 coordinate)
     {
-        MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId);
+        MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
         objCoordinate = coordinate;
         if (CharacterManager.instance.controllerCharacter == this)
         {
             RefreshNeighborhood();
         }
-        else
+        else if(!(this is TempCharacter))
         {
             CharacterManager.instance.controllerCharacter.TryRefreshNeighborhood(this);
         }
@@ -913,12 +913,16 @@ public partial class Character
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
     {
         int3 newCoordinate = new int3(coordinate, mapInstance);
-        MapCellController.instance.SetCharacterCoordinate(objCoordinate, newCoordinate, instanceId);
+        MapCellController.instance.SetCharacterCoordinate(objCoordinate, newCoordinate, instanceId, this is TempCharacter);
         objCoordinate = newCoordinate;
 
         if (CharacterManager.instance.controllerCharacter == this)
         {
             RefreshNeighborhood();
+        }
+        else if (!(this is TempCharacter))
+        {
+            CharacterManager.instance.controllerCharacter.TryRefreshNeighborhood(this);
         }
 
         //Debug.Log($"setCoordinate:{newCoordinate}");

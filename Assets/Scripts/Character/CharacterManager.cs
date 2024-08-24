@@ -566,7 +566,7 @@ public class CharacterManager : Singleton<CharacterManager>
             EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
             characterRuntionObjs.Remove(character);
         }
-        MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId);
+        MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId, this is TempCharacter);
         CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
         characters.Remove(character.instanceId);
     }

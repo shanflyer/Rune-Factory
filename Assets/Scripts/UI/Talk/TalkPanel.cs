@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class TalkPanel : GamePanel<NPCTalkOperateData>
@@ -54,6 +55,11 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         {
             NPCTalkOperateData.endAction();
         }
+        TryContinueBehavior tryContinueBehavior = new TryContinueBehavior
+        {
+            characterId = NPCTalkOperateData.characterId
+        };
+        GameActionManager.instance.QueueAction(tryContinueBehavior);
         base.Close();
     }
 

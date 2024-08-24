@@ -25,12 +25,21 @@ public class GroupCharacterMoveToEachOther : Action
 
         for(int i = 0; i < characters.length; i++)
         {
-            var character = characters[i];
-            character.StopMove();
-            if (!character.MoveCrossMap(target))
+            var character = characters[i]; character.StopMove();
+            if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc)
+                  && npc.holdPos)
             {
-
+               
+               
             }
+            else
+            {
+                if (!character.MoveCrossMap(target))
+                {
+
+                }
+            }
+            
         }
         startTime = Time.time;
     }

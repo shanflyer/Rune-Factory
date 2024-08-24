@@ -91,7 +91,7 @@ public class CharacterTalk : Action
                 endAction = isStopMove.Value ? () =>
                 {
                     CharacterStartMoveAction();
-                    RemoveEvent();
+                    RemoveEvent(); 
                 }
                 :
                 () => { RemoveEvent(); }

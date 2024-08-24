@@ -44,7 +44,7 @@ public class GetSomeOneGift : Action
                     {
                         characterId = characterId.Value,
                     };
-                    GameActionManager.instance.QueueAction(StartCharacterMove);
+                    GameActionManager.instance.QueueAction(StartCharacterMove); 
                 }
             };
             GameActionManager.instance.QueueAction(talk);

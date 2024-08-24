@@ -528,7 +528,7 @@ public class NPC : IReferenceData
     public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
     {
         if (endBehavior || behaviorCanBreak)
-        {
+        { 
             var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out behaviorCanBreak, out var pauseWhenDisabled);
             if (externalBehavior != null)
             {
@@ -591,7 +591,60 @@ public class NPC : IReferenceData
 
     private NPCTaskScheduleData nowScheduleData;
     public NPCBehaviorState behaviorState => nowScheduleData.behaviorState;
-    public bool holdPos => nowScheduleData.holdPos;
+    public bool holdPos
+    {
+        get
+        {
+            if (overrideHold)
+            {
+                return _holdPos;
+            }else
+            {
+                return nowScheduleData.holdPos;
+            }
+        }
+    }
+
+    bool overrideHold;
+    bool _holdPos;
+    public void SetOverrideHold(bool hold)
+    {
+        overrideHold = true;
+        _holdPos = hold; 
+    }
+
+    public void RemoveOverrideHold()
+    {
+        overrideHold = false; 
+    }
+
+
+    bool behaviorIsPause;
+    float pauseTime;
+    public void PauseCharacterBehavior()
+    {
+        behaviorIsPause = true;
+        pauseTime = Time.time;
+    }
+    public void ResetCharacterBehavior()
+    {
+        if (behaviorIsPause)
+        {
+            behaviorIsPause = false;
+            if (Time.time - pauseTime > nowScheduleData.maxPauseTime)
+            {
+                SetNowBehaviorTree();
+            }
+            else
+            {
+                StartCharacterBehavior startCharacterBehavior = new StartCharacterBehavior
+                {
+                    characterId = characterInstance
+                };
+                GameActionManager.instance.QueueAction(startCharacterBehavior);
+            }
+        }
+    }
 
     public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool behaviorCanBreak, out bool PauseWhenDisabled)
     {
@@ -674,7 +727,7 @@ public class NPC : IReferenceData
                     displayFunction = false,
                     endAction = () =>
                     {
-                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterInstance);
+                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterInstance); 
                     }
                 };
                 GameActionManager.instance.QueueAction(talk);
@@ -789,6 +842,7 @@ public class NPCManager : Singleton<NPCManager>
         npcs.Clear(); CreatZeroNPC();
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
+        GameActionManager.instance.AddListener<TryContinueBehavior>(TryContinueBehavior);
     }
 
     protected override void Clear()
@@ -888,5 +942,13 @@ public class NPCManager : Singleton<NPCManager>
         }
         var shopManager = ShopManager.instance;
 
+    }
+    public void TryContinueBehavior(TryContinueBehavior tryContinueBehavior)
+    {
+        if(GetNPCFormInstance(tryContinueBehavior.characterId,out var npc))
+        {
+            npc.RemoveOverrideHold(); 
+            npc.ResetCharacterBehavior();
+        }
     }
 }
