@@ -168,16 +168,16 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.AddListener<TryTeamLeaderStop>(TryTeamLeaderStop);
         GameActionManager.instance.AddListener<LeaveTeam>(LeaveTeam);
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
-        GameActionManager.instance.AddListener<CheckInTeam>(CheckInTeam);
+        GameActionManager.instance.AddListener<CheckIsNotInTeam>(CheckInTeam);
     }
-    private void CheckInTeam(CheckInTeam checkInTeam)
+    private void CheckInTeam(CheckIsNotInTeam checkInTeam)
     {
         if (IsInTeam(checkInTeam.characterId))
         {
-            checkInTeam.setResult(true);
+            checkInTeam.setResult(false);
             return;
         }
-        checkInTeam.setResult(false);
+        checkInTeam.setResult(true);
     }
     private void LeaveTeam(LeaveTeam leaveTeam)
     {

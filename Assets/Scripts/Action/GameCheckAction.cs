@@ -58,7 +58,7 @@ public struct CheckGameTimeDate : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-public struct CheckInTeam : GameAction
+public struct CheckIsNotInTeam : GameAction
 {
     public int characterId;
     public SetValue setValue { get; set; }

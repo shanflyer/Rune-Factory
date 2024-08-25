@@ -772,7 +772,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return false;
     }
 
-    private async void SetPlayerPos(Character character)
+    private async Task SetPlayerPos(Character character)
     {
         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
         {
@@ -929,7 +929,8 @@ public class CharacterManager : Singleton<CharacterManager>
         }
        // Debug.Log($"next cell:{targetCoordinate}");
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
-        character.moveDirection = math.normalizesafe(targetCoordinate - character.coordinate, character.moveDirection);
+        character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
+        //Debug.Log($"moveDirection: {character.moveDirection}");
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
         if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
         {
@@ -1010,7 +1011,7 @@ public class CharacterManager : Singleton<CharacterManager>
         ChangeMapAction(character, coordinate, 0);
     }
 
-    private void ChangeMapAction(Character character, int3 newMap, int afterAction)
+    private async void ChangeMapAction(Character character, int3 newMap, int afterAction)
     {
         int targetMap = newMap.z;
         var targetCoordinate = new int2(newMap.x, newMap.y);
@@ -1032,41 +1033,43 @@ public class CharacterManager : Singleton<CharacterManager>
             GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
             {
                 WorldMapObjManager.instance.RecycleMap();
-                SetPlayerPos(character);
-                await WorldMapObjManager.instance.DisplayMap(targetMap); 
-            });
+                await SetPlayerPos(character);
+                await WorldMapObjManager.instance.DisplayMap(targetMap);
 
-            GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 2000), () =>
-            {
-                LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
+                GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                 {
-                    cyclePos = GameCommon.GetMapPos(character.coordinate),
-                    minCycleValue = 1,
-                    maxCycleValue = 0,
-                    lerpTime = GameCommon.mapChangeLerpTime,
-                    setResult = AfterLerpScreenCycle
-                };
-
-                async void AfterLerpScreenCycle(bool value)
-                {
-                    if (afterAction != 0)
+                    LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
                     {
-                        var dataAction = await GameDataManager.instance.GetAsyncData<GameActionData>();
-                        if (dataAction)
-                        {
-                            dataAction.Action();
-                        }
-                    }
+                        cyclePos = GameCommon.GetMapPos(character.coordinate),
+                        minCycleValue = 1,
+                        maxCycleValue = 0,
+                        lerpTime = GameCommon.mapChangeLerpTime,
+                        setResult = AfterLerpScreenCycle
+                    };
 
-                    character.canMove = true;
-                }
-                GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
+                    async void AfterLerpScreenCycle(bool value)
+                    {
+                        if (afterAction != 0)
+                        {
+                            var dataAction = await GameDataManager.instance.GetAsyncData<GameActionData>();
+                            if (dataAction)
+                            {
+                                dataAction.Action();
+                            }
+                        }
+
+                        character.canMove = true;
+                    }
+                    GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
+                });
             });
+
+            
         }
         else
         {
             character.SetCoordinate(new int3(targetCoordinate, targetMap));
-            SetPlayerPos(character);
+            await SetPlayerPos(character);
         }
     }
 
