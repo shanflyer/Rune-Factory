@@ -67,7 +67,19 @@ public class TalkManager : Singleton<TalkManager>
                 else
                 {
                     NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
-                    NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                    if (nPCFunctionData.GameActionData != null)
+                    {
+                        nPCFunctionData.GameActionData.Action(characterId, setResult: (bool value) =>
+                        {
+                            if(value)
+                                NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                        },immediately:true);
+                    }
+                    else
+                    {
+                        NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                    }
+                   
                 }
             }
         }

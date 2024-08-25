@@ -16,6 +16,7 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     public bool closeTalk;
     public int checkAction;
     public int OperateAction;
+    public GameActionData GameActionData;
     public string GetKey()
     {
         return id.ToString();

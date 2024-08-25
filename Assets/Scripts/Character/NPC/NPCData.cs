@@ -17,26 +17,42 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public string shopName;
     public int playerOperateEventId;
     public int nextTalkEventId;
-    public List<int2> talkForFriendShip;
+    private List<int3> talkForFriendShip;
 
-    public int GetTalk(int friendShipLevel)
+    public Int2IntDictionary talkDatas=new Int2IntDictionary();
+
+    public int GetTalk(int friendShipLevel,int mapInstance)
     {
         int talkId = -1;
-        for (int i = 0; i < talkForFriendShip.Count; i++)
+        int2 key = new int2(friendShipLevel, mapInstance);
+
+        for (int i = friendShipLevel; i >= 0; i--)
         {
-            if (talkForFriendShip[i].x<= friendShipLevel)
+            key = new int2(i, mapInstance);
+            if (talkDatas.TryGetValue(key, out talkId))
             {
-                var results = GameRandom.instance.GetRandomValue(talkForFriendShip[i].y);
+                var results = GameRandom.instance.GetRandomValue(talkId);
                 if (results.Count > 0)
                 {
-                    talkId=results[0].x;
+                    talkId = results[0].x;
                 }
-            }
-            else
-            {
-                break;
+                return talkId;
             }
         }
+        for (int i = friendShipLevel; i >= 0; i--)
+        {
+            key = new int2(i, 0);
+            if (talkDatas.TryGetValue(key, out talkId))
+            {
+                var results = GameRandom.instance.GetRandomValue(talkId);
+                if (results.Count > 0)
+                {
+                    talkId = results[0].x;
+                }
+                return talkId;
+            }
+        }
+        
 
         return talkId;
     }
@@ -52,5 +68,10 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
 
     public void SetReferenceData()
     { 
+        talkDatas.Clear();
+        for(int i = 0; i < talkForFriendShip.Count; i++)
+        {
+            talkDatas[talkForFriendShip[i].xy] = talkForFriendShip[i].z;
+        }
     }
 }

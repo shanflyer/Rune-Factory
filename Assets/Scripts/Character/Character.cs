@@ -414,6 +414,7 @@ public delegate void SetCoordinate(int3 coordinate);
 public partial class Character
 {
     private bool isController = false;
+    public int linkItem;
     private int oldOperateItem = -1;
     public int OperateItem => oldOperateItem;
 

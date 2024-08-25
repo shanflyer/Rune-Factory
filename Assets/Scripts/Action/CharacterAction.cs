@@ -74,6 +74,27 @@ public struct SetTempCharacterTarget : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct CheckNpcShopLink : GameAction
+{
+    public int characterId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; } 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null,
+        SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 1)
+            characterId = int.Parse(parameters[0].value);
+
+
+        if (source != 0 && source != int.MinValue)
+        {
+            characterId = source;
+        }
+
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TempCharacterTalk : GameAction
 {
     public int characterId; 

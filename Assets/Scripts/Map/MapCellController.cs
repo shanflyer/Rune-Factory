@@ -25,25 +25,13 @@ public class MapCharacterGrid
 {
     public int mapInstance;
     public NativeList<int3> characters;
-    public Dictionary<int, int> characterIndexs;
-    public NativeList<int3> tempCharacters;
-    public Dictionary<int, int> tempCharacterIndexs;
+    public Dictionary<int, int> characterIndexs; 
 
     public void RemoveCharacter(int characterInstance,bool isTemp)
     {
         if (isTemp)
         {
-            if (tempCharacterIndexs.TryGetValue(characterInstance, out var index))
-            {
-                if (index != tempCharacters.Length - 1)
-                {
-                    int3 lastCharacter = tempCharacters[characters.Length - 1];
-                    tempCharacters[index] = lastCharacter;
-                    tempCharacterIndexs[lastCharacter.z] = index;
-                }
-                tempCharacterIndexs.Remove(characterInstance);
-                tempCharacters.RemoveAt(tempCharacters.Length - 1);
-            }
+            
         }
         else
         {
@@ -65,11 +53,7 @@ public class MapCharacterGrid
     {
         if (isTemp)
         {
-            if (!tempCharacterIndexs.ContainsKey(characterInstance))
-            {
-                tempCharacterIndexs.Add(characterInstance, tempCharacters.Length);
-                tempCharacters.Add(new int3(coordinate.xy, characterInstance));
-            }
+            
         }
         else
         {
@@ -85,15 +69,7 @@ public class MapCharacterGrid
     {
         if (isTemp)
         {
-            if (!tempCharacterIndexs.TryGetValue(characterInstance, out int index))
-            {
-                tempCharacterIndexs.Add(characterInstance, tempCharacters.Length);
-                tempCharacters.Add(new int3(coordinate.xy, characterInstance));
-            }
-            else
-            {
-                tempCharacters[index] = new int3(coordinate.xy, characterInstance);
-            }
+           
         }
         else
         {
@@ -114,14 +90,11 @@ public class MapCharacterGrid
     public MapCharacterGrid()
     {
         characters = new NativeList<int3>(16,Allocator.Persistent);
-        characterIndexs = new Dictionary<int, int>();
-        tempCharacters = new NativeList<int3>(16, Allocator.Persistent);
-        tempCharacterIndexs = new Dictionary<int, int>();
+        characterIndexs = new Dictionary<int, int>(); 
     } 
     public void Dispose()
     {
-        characters.Dispose();
-        tempCharacters.Dispose();
+        characters.Dispose(); 
     }
 }
 

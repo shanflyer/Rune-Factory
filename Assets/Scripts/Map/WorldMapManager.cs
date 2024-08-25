@@ -84,7 +84,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
             {
+                if (runtimeMapItem.linkCharacter != 0)
+                {
+                    Character character = CharacterManager.instance.GetCharacter(runtimeMapItem.linkCharacter);
+                    character.linkItem = 0;
+                }
                 runtimeMapItem.linkCharacter = SetMapEditorItemLinkCharacter.linkInstanceId;
+
+                if (runtimeMapItem.linkCharacter != 0)
+                {
+                    Character character = CharacterManager.instance.GetCharacter(runtimeMapItem.linkCharacter);
+                    character.linkItem = runtimeMapItem.instanceId;
+                }
+
                 if (SetMapEditorItemLinkCharacter.setResult != null)
                 {
                     SetMapEditorItemLinkCharacter.setResult(true);
@@ -168,7 +180,18 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         if (GetRuntimeMapItem(SetMapItemLinkCharacter.mapItemInstanceId, out var runtimeMapItem))
         {
+            if (runtimeMapItem.linkCharacter != 0)
+            {
+                Character character = CharacterManager.instance.GetCharacter(runtimeMapItem.linkCharacter);
+                character.linkItem = 0;
+            }
             runtimeMapItem.linkCharacter = SetMapItemLinkCharacter.linkInstanceId;
+
+            if (runtimeMapItem.linkCharacter != 0)
+            {
+                Character character = CharacterManager.instance.GetCharacter(runtimeMapItem.linkCharacter);
+                character.linkItem = runtimeMapItem.instanceId;
+            } 
             // runtimeMapItems.SetData(runtimeMapItem);
         }
     }

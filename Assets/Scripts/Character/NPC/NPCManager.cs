@@ -252,6 +252,22 @@ public class NPC : IReferenceData
     private NPCData npcData;
     public bool isActive;
 
+    public bool CheckNpcShop()
+    {
+        if (character.linkItem == 0)
+        {
+            return false;
+        }
+        else
+        {
+            if (nowScheduleData.taskName == "看守柜台")
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int GetHomeArea()
     {
         if (NPCBehaviorData.homeAreas.Count>0)
@@ -286,7 +302,7 @@ public class NPC : IReferenceData
     public int GetTalkId()
     {
         int friendShipLevel = FriendManager.instance.GetFriendShipLevel(dataId);
-        return npcData.GetTalk(friendShipLevel);
+        return npcData.GetTalk(friendShipLevel,character.mapInstance);
     }
 
     public async void InitBehaviorData()
@@ -589,6 +605,7 @@ public class NPC : IReferenceData
         return null;
     }
 
+
     private NPCTaskScheduleData nowScheduleData;
     public NPCBehaviorState behaviorState => nowScheduleData.behaviorState;
     public bool holdPos
@@ -843,6 +860,7 @@ public class NPCManager : Singleton<NPCManager>
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<TryContinueBehavior>(TryContinueBehavior);
+        GameActionManager.instance.AddListener<CheckNpcShopLink>(CheckNpcShopLink);
     }
 
     protected override void Clear()
@@ -861,6 +879,19 @@ public class NPCManager : Singleton<NPCManager>
             }
             npcs[i].InitBehaviorData();
         }
+    }
+  
+    public void CheckNpcShopLink(CheckNpcShopLink checkNpcShopLink)
+    {
+        if(GetNPCFormInstance(checkNpcShopLink.characterId,out var npc))
+        {
+            if (npc.CheckNpcShop())
+            {
+                checkNpcShopLink.setResult(true);
+                return;
+            }
+        }
+        checkNpcShopLink.setResult(false);
     }
     private void UpdateGameTime(UpdateGameTime updateGameTime)
     {
@@ -919,7 +950,7 @@ public class NPCManager : Singleton<NPCManager>
     {
         NPCList nPCList = new NPCList
         {
-            npcs = npcs.GetValueList(),
+            npcs = npcs.GetValueList().FindAll(n=>!n.hide),
         };
 
         return nPCList;

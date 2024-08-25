@@ -11,7 +11,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     CharacterButtonReference CharacterButtonReference;
     [SerializeField]
     Transform characterButtonParent;
-
+    
     DisplayList<CharacterButtonReference,MyInt> characterButtons;
     protected override void Awake()
     {

@@ -143,6 +143,8 @@ public class FishPanel : GamePanel<IReferenceData>
     } 
     void DelyDisplayFishes(bool next)
     {
+        leftParent.localScale = Vector3.zero;
+        rightParent.localScale = Vector3.zero;
         nextButton.transform.localScale = Vector3.zero;
         frontButton.transform.localScale = Vector3.zero;
         if (next)
@@ -159,6 +161,8 @@ public class FishPanel : GamePanel<IReferenceData>
     }
     void DisplayFishes()
     {
+        leftParent.localScale = Vector3.one;
+        rightParent.localScale = Vector3.one;
         nextButton.transform.localScale = Vector3.one;
         frontButton.transform.localScale = Vector3.one;
         BookPaper.gameObject.SetActive(false);

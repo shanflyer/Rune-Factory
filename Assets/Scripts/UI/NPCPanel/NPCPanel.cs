@@ -34,29 +34,52 @@ public class NPCPanel : GamePanel<NPCList>
 
         nextButton.onClick.AddListener(() =>
         {
+            DelyDisplay(true);
+        });
+        frontButton.onClick.AddListener(() =>
+        {
+            DelyDisplay(false);
+        });
+
+
+        displayList = new DisplayList<NPCReference, NPC>(NPCReference, NPCParent);
+    }
+    void DelyDisplay(bool next)
+    { 
+        nextButton.transform.localScale = Vector3.zero;
+        frontButton.transform.localScale = Vector3.zero;
+        NPCParent.localScale = Vector3.zero;
+        if (next)
+        {
             displayIndex += 1;
             if (displayIndex > maxIndex - 1)
             {
                 displayIndex = maxIndex - 1;
             }
-            InitButton();
-            DisplayNpc();
-        });
-        frontButton.onClick.AddListener(() =>
+            BookPaper.transform.localScale = new Vector3(-400, 640, 400);
+        }
+        else
         {
             displayIndex -= 1;
             if (displayIndex < 0)
             {
                 displayIndex = 0;
             }
+            BookPaper.transform.localScale = new Vector3(400, 640, 400);
+        }
+        BookPaper.gameObject.SetActive(true);
+        BookPaper.Play("Paper");
+        GameTimerController.instance.DelayAction(820, () =>
+        {
+            NPCParent.localScale = Vector3.one;
+            nextButton.transform.localScale = Vector3.one;
+            frontButton.transform.localScale = Vector3.one;
+            BookPaper.gameObject.SetActive(false);
             InitButton();
             DisplayNpc();
         });
-
-
-        displayList = new DisplayList<NPCReference, NPC>(NPCReference, NPCParent);
+       
     }
-
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
