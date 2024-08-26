@@ -595,7 +595,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         void WakeUp()
         {
-            Debug.Log($"characterId:{characterId}");
+           // Debug.Log($"characterId:{characterId}");
             Character character = CharacterManager.instance.GetCharacter(characterId);
             PlayerWakeUp playerWakeUp = new PlayerWakeUp
             {

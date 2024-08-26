@@ -14,7 +14,7 @@ public class MyLight : MonoBehaviour
 
 
     [SerializeField]
-    AnimationCurve psCurve;
+    public AnimationCurve psCurve;
     [SerializeField]
     private Light2D light2D;
     [SerializeField]
@@ -24,14 +24,14 @@ public class MyLight : MonoBehaviour
     private bool autoLerpValue;
 
     [SerializeField]
-    private AnimationCurve lerpCurve;
+    public AnimationCurve lerpCurve;
 
     [SerializeField]
     private bool autoLerpColor;
 
     [SerializeField]
     [GradientUsage(true)]
-    private Gradient lerpColor;
+    public Gradient lerpColor;
 
     private float _psValue;
     private float psValue

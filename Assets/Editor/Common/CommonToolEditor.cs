@@ -114,6 +114,10 @@ public class CommonToolEditor : MyEditor
         {
             AddReSaveImage();
         }
+        if (GUILayout.Button("重新保存灯光变化"))
+        {
+            ReSavePrefab();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -131,6 +135,85 @@ public class CommonToolEditor : MyEditor
         {
             Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_3");
         }*/
+    }
+    private void ReSavePrefab()
+    {
+        string objPath = "Assets/Resources/Prefabs/Ground";
+        DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
+        var files = directoryInfo.GetFiles("*.prefab");
+         
+        foreach(var file in files)
+        {
+            var path = $"{objPath}/{file.Name}";
+            SavePrefab(path);
+        }
+
+        string objPath1 = "Assets/Resources/Prefabs/MapItem";
+        DirectoryInfo directoryInfo1 = new DirectoryInfo(objPath1);
+        var files1 = directoryInfo1.GetFiles("*.prefab");
+
+        foreach (var file in files1)
+        {
+            var path = $"{objPath1}/{file.Name}";
+            SavePrefab(path);
+        }
+
+
+        string objPath2 = "Assets/Resources/Prefabs/MapObj";
+        DirectoryInfo directoryInfo2 = new DirectoryInfo(objPath2);
+        var files2 = directoryInfo2.GetFiles("*.prefab");
+
+        foreach (var file in files2)
+        {
+            var path = $"{objPath2}/{file.Name}";
+            SavePrefab(path);
+        }
+
+
+        void SavePrefab(string path)
+        {
+            GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            var myLights = obj.GetComponentsInChildren<MyLight>(true);
+            if (myLights != null && myLights.Length > 0)
+            {
+                for (int i = 0; i < myLights.Length; i++)
+                {
+                    var myLight = myLights[i];
+                    var lerpColor = myLight.lerpColor;
+                    var akeys = lerpColor.alphaKeys;
+                    if (akeys.Length == 6)
+                    {
+                        akeys[1].time = 0.24f;
+                        akeys[2].time = 0.25f;
+                        akeys[3].time = 0.75f;
+                        akeys[4].time = 0.76f;
+                    }
+                    lerpColor.alphaKeys = akeys;
+
+                    var cKeys = lerpColor.colorKeys;
+                    if (cKeys.Length == 6)
+                    {
+                        cKeys[1].time = 0.24f;
+                        cKeys[2].time = 0.25f;
+                        cKeys[3].time = 0.75f;
+                        cKeys[4].time = 0.76f;
+                    }
+                    lerpColor.colorKeys = cKeys;
+
+                    if (myLight.psCurve != null && myLight.psCurve.length > 0 && myLight.psCurve.keys.Length == 6)
+                    {
+                        var keys = myLight.psCurve.keys;
+                        keys[1].time = 0.24f;
+                        keys[2].time = 0.25f;
+                        keys[3].time = 0.75f;
+                        keys[4].time = 0.76f;
+                        myLight.psCurve.keys = keys;
+                    }
+                }
+                EditorUtility.SetDirty(obj);
+                PrefabUtility.SaveAsPrefabAsset(obj, path);
+            }
+        }
     }
     private void ReSaveImage()
     {
