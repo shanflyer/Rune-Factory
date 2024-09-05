@@ -55,6 +55,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _WindNoiseTexture:
+        m_Texture: {fileID: 2800000, guid: bdca5e9a5f4be924782b84af1614d624, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - EdgeValue: 0.2
@@ -72,6 +76,8 @@ Material:
     - _DampValue: 1
     - _EdgeOffset: 0.053
     - _EdgeSpeed: 1.22
+    - _EdgeWaveOffset: 0
+    - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _Fail: 0
     - _HighLighStep: 0
@@ -80,6 +86,7 @@ Material:
     - _NoiseAlpha: 1
     - _NoiseValue: 500
     - _Pass: 0
+    - _SnowBlend: 1
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _Water: 0
@@ -98,6 +105,9 @@ Material:
     - _WaveSpeed0: 0.1
     - _WaveSpeed1: 0.05
     - _WetValue: 0
+    - _WindJitter: 0.2
+    - _WindNoiseValue: 0
+    - _WindScroll: 0.15
     - _shadowStep: 1
     - waterNoiseScale: 136
     - waterValue: 0.242

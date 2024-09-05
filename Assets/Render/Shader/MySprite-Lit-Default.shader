@@ -4,10 +4,11 @@ Shader "MySprite-Lit-Default"
     {
         _MainTex("Diffuse", 2D) = "white" {}
         _MaskTex("Mask", 2D) = "white" {}
-        _WaterMaskTex("WaterMaskTex", 2D) = "black" {}
+        _WaterMaskTex("_MoveMask", 2D) = "black" {}
 
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
+        _MoveMask("WaterMaskTex", 2D) =""{}
         _WetValue("WetValue",Range(0,1))=0
         _shadowStep("ShadowStep",int)=0
         _LightBlend("LightBlend",float)=1
@@ -15,6 +16,11 @@ Shader "MySprite-Lit-Default"
         _BlendVertexColor("BlendVertexColor",int)=0
 
         _Water("Water",int)=0 
+
+        _WindNoiseTexture("Wind Noise Texture", 2D) = "white" {}
+        _WindScroll("Wind Scroll", Range( 0 , 3)) = 0.1
+		_WindJitter("Wind Jitter", Range( 0 , 3)) = 0.1
+        _WindNoiseValue("WindNoiseValue",Range(0,1))=0
 
         _DampBlend("_DampBlend",int)=0 
         _Damp("_Damp",int)=0
@@ -113,6 +119,10 @@ Shader "MySprite-Lit-Default"
             float _LightBlend;
             int _BackBlend;
             int _BlendVertexColor;
+
+            float _WindJitter;
+			float _WindScroll;
+            float _WindNoiseValue;
             
             half4 waterColor;
             half _WaterZero;
@@ -142,6 +152,12 @@ Shader "MySprite-Lit-Default"
         SAMPLER(sampler_WaterMaskTex);
         TEXTURE2D(_BackMaskTex);
         SAMPLER(sampler_BackMaskTex);
+
+        TEXTURE2D(_WindNoiseTexture);
+        SAMPLER(sampler_WindNoiseTexture);
+
+        TEXTURE2D(_MoveMask);
+        SAMPLER(sampler_MoveMask);
 
         TEXTURE2D(_WaterNormalMap);
         SAMPLER(sampler_WaterNormalMap);
@@ -300,6 +316,27 @@ Shader "MySprite-Lit-Default"
                 outWater=outWater*(1-MirrorValue)+MirrorTexColor*MirrorValue;
                 outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
                 return outWater;
+            }
+
+            float2 MoveUV(float2 uv,float2 screenUV)
+            {
+                float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
+                screenUV+=offsetUv;
+
+                float2 panner63 = _WindScroll * 0.3 * _TimeParameters.x + screenUV;
+				float2 panner74 =_TimeParameters.x * _WindJitter * 0.5  + screenUV *2;
+
+                float4 WindNoise0=pow(SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63) , 2.5);
+				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
+
+                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
+                //return float2(moveValue.x,moveValue.x);
+                float value=abs(moveValue-0.5)/0.5*_WindNoiseValue;
+                return WindNoise0*WindNoise1*value+uv;
             }
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
@@ -498,13 +535,13 @@ Shader "MySprite-Lit-Default"
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
+                float2 uv=i.uv;
+                uv=MoveUV(uv,i.lightingUV);
+                //return half4(uv.xxx,1);
+                half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+                const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, uv);
                 //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
-
-                 
-
-             
+ 
                 half4 result;
                 
                 float singleValue=(main.x+main.y+main.z)/3;
@@ -515,15 +552,15 @@ Shader "MySprite-Lit-Default"
  
                 if(_DampBlend)
                 {
-                   waterColor=DampColor(waterColor,i.lightingUV,i.uv); 
+                   waterColor=DampColor(waterColor,i.lightingUV,uv); 
                 } 
                  main.xyz*=i.color.xyz;
                 if(_Water==1)
                 {
-                    waterColor=WaterFragment(i.uv,i.lightingUV,main);
+                    waterColor=WaterFragment(uv,i.lightingUV,main);
                 }
                 if(_SnowValue>0){
-                       float3 snowValue=SnowColor(waterColor.xyz,i.lightingUV,i.uv);
+                       float3 snowValue=SnowColor(waterColor.xyz,i.lightingUV,uv);
                 waterColor.xyz=snowValue;
                 }
              

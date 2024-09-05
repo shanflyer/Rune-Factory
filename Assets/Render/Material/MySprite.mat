@@ -50,6 +50,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _WindNoiseTexture:
+        m_Texture: {fileID: 2800000, guid: bdca5e9a5f4be924782b84af1614d624, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - EdgeValue: 0.1
@@ -83,6 +87,8 @@ Material:
     - _WaveSpeed0: 0
     - _WaveSpeed1: 0
     - _WetValue: 0
+    - _WindJitter: 0.47
+    - _WindScroll: 0.1
     - _shadowStep: 0
     - waterNoiseScale: 0
     - waterValue: 0.2
@@ -98,3 +104,4 @@ Material:
     - _WaterColor: {r: 1, g: 1, b: 1, a: 1}
     - waterColor: {r: 0, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
