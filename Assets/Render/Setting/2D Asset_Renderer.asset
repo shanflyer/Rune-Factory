@@ -42,6 +42,46 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &-1919989437086517868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573e83345e5a3524e8d46ac9229de438, type: 3}
+  m_Name: GrassBaker
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    renderPassEvent: 400
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 262144
+    overrideMat: {fileID: 0}
+    PassNames:
+    - Grass
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _GrassTex
+    blitToCameraTarget: 0
+    clearFlag: 0
+    clearColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!114 &-898443647823300259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,11 +185,12 @@ MonoBehaviour:
   - {fileID: 1450699581313148266}
   - {fileID: -777346220230445787}
   - {fileID: 142935280726465048}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb01
+  - {fileID: -1919989437086517868}
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
-    m_Bits: 196497
+    m_Bits: 458641
   m_TransparencySortMode: 3
   m_TransparencySortAxis: {x: 0, y: 1, z: 1}
   m_HDREmulationScale: 1

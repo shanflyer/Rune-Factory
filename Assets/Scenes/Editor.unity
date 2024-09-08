@@ -551,7 +551,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &695726430
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -637,6 +637,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1370943531173514582, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
+      propertyPath: orthographic size
+      value: 2.8235295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370943531173514582, guid: 957f333c8545dc94080f5c9281725318,
+        type: 3}
       propertyPath: m_NormalizedViewPortRect.x
       value: 0
       objectReference: {fileID: 0}
@@ -704,6 +709,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3712870892567725334, guid: 957f333c8545dc94080f5c9281725318,
+        type: 3}
+      propertyPath: m_AssetsPPU
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4268441121035850149, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}

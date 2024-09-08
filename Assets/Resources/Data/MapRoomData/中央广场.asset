@@ -23,18 +23,26 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1087
-    instanceId: 1087931
+  - id: 1046
+    instanceId: 1046273
     coordinate:
-      x: -8
-      y: 4
+      x: -38
+      y: 51
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
   - id: 1087
-    instanceId: 1087213
+    instanceId: 1087204
     coordinate:
-      x: 12
+      x: -53
+      y: 5
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1087
+    instanceId: 1087931
+    coordinate:
+      x: -8
       y: 4
     animationKey: 0
     blindHomeEquipment: 0
@@ -48,50 +56,18 @@ MonoBehaviour:
     blindHomeEquipment: 0
     eventReferenceDatas: []
   - id: 1087
-    instanceId: 1087499
+    instanceId: 1087949
     coordinate:
-      x: -39
-      y: 5
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1105
-    instanceId: 1105445
-    coordinate:
-      x: 28
-      y: 50
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1046
-    instanceId: 1046273
-    coordinate:
-      x: -38
-      y: 51
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1048
-    instanceId: 1048166
-    coordinate:
-      x: 28
-      y: 50
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1087
-    instanceId: 1087242
-    coordinate:
-      x: -43
+      x: 12
       y: 30
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1050
-    instanceId: 1050823
+  - id: 1104
+    instanceId: 1104652
     coordinate:
-      x: -73
-      y: 8
+      x: -38
+      y: 51
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -99,22 +75,6 @@ MonoBehaviour:
     instanceId: 1087244
     coordinate:
       x: -27
-      y: 30
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1087
-    instanceId: 1087204
-    coordinate:
-      x: -53
-      y: 5
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1087
-    instanceId: 1087797
-    coordinate:
-      x: -65
       y: 30
     animationKey: 0
     blindHomeEquipment: 0
@@ -127,19 +87,35 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1087
-    instanceId: 1087949
+  - id: 1050
+    instanceId: 1050822
     coordinate:
-      x: 12
-      y: 30
+      x: -74
+      y: 37
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1087
-    instanceId: 1087524
+  - id: 1050
+    instanceId: 1050823
     coordinate:
-      x: -4
-      y: 30
+      x: -73
+      y: 8
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1048
+    instanceId: 1048166
+    coordinate:
+      x: 28
+      y: 50
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1105
+    instanceId: 1105445
+    coordinate:
+      x: 28
+      y: 50
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -159,19 +135,19 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1104
-    instanceId: 1104652
+  - id: 1087
+    instanceId: 1087524
     coordinate:
-      x: -38
-      y: 51
+      x: -4
+      y: 30
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1050
-    instanceId: 1050822
+  - id: 1087
+    instanceId: 1087797
     coordinate:
-      x: -74
-      y: 37
+      x: -65
+      y: 30
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -180,6 +156,30 @@ MonoBehaviour:
     coordinate:
       x: 0
       y: 0
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1087
+    instanceId: 1087499
+    coordinate:
+      x: -39
+      y: 5
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1087
+    instanceId: 1087242
+    coordinate:
+      x: -43
+      y: 30
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1087
+    instanceId: 1087213
+    coordinate:
+      x: 12
+      y: 4
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -204,29 +204,65 @@ MonoBehaviour:
   autoCreatTempNpc: 1
   tempNpcPrewarm: 1
   npcBehaviorAreas:
+  - Name: 45
+    pos:
+      x: -37
+      y: 39
+    grids: f4ffffffffffffff0900000005000000
+    behaviorAreaType: 1
+  - Name: 42
+    pos:
+      x: -19
+      y: -56
+    grids: fbfffffffeffffff0500000001000000
+    behaviorAreaType: 0
+  - Name: 58
+    pos:
+      x: -93
+      y: -26
+    grids: fdfffffffcffffff0000000001000000
+    behaviorAreaType: 2
+  - Name: 41
+    pos:
+      x: -94
+      y: -28
+    grids: fffffffffeffffff0200000003000000
+    behaviorAreaType: 0
+  - Name: 50
+    pos:
+      x: 9
+      y: -44
+    grids: f8fffffffcffffff0c00000002000000
+    behaviorAreaType: 1
+  - Name: 47
+    pos:
+      x: -11
+      y: 41
+    grids: f9ffffffffffffff0800000006000000
+    behaviorAreaType: 1
   - Name: 51
     pos:
       x: 39
       y: 9
     grids: ebfffffff6fffffff2fffffffafffffff0fffffffbffffff06000000fbfffffff3fffffff8ffffff00000000fafffffffefffffffcffffff060000000e00000001000000faffffff06000000faffffff
     behaviorAreaType: 1
-  - Name: 46
-    pos:
-      x: 26
-      y: 39
-    grids: f4fffffff7fffffff8ffffff00000000f5ffffff010000000900000003000000f9ffffffffffffff0900000000000000
-    behaviorAreaType: 1
-  - Name: 43
-    pos:
-      x: 52
-      y: -25
-    grids: fefffffffcffffff0000000004000000
-    behaviorAreaType: 0
   - Name: 49
     pos:
       x: -23
       y: 16
     grids: f4fffffffcffffff0e00000006000000
+    behaviorAreaType: 1
+  - Name: 55
+    pos:
+      x: -23
+      y: -56
+    grids: fffffffffdffffff09000000ffffffff
+    behaviorAreaType: 2
+  - Name: 48
+    pos:
+      x: -52
+      y: 17
+    grids: f0fffffffcffffff0200000003000000
     behaviorAreaType: 1
   - Name: 40
     pos:
@@ -234,77 +270,11 @@ MonoBehaviour:
       y: 13
     grids: fefffffffcffffff0100000002000000
     behaviorAreaType: 0
-  - Name: 48
-    pos:
-      x: -52
-      y: 17
-    grids: f0fffffffcffffff0200000003000000
-    behaviorAreaType: 1
-  - Name: 41
-    pos:
-      x: -94
-      y: -28
-    grids: fffffffffeffffff0200000003000000
-    behaviorAreaType: 0
-  - Name: 52
-    pos:
-      x: 11
-      y: -30
-    grids: f7ffffff020000001b00000003000000f9ffffff080000000900000009000000
-    behaviorAreaType: 1
-  - Name: 56
-    pos:
-      x: 51
-      y: -23
-    grids: 00000000fbffffff0300000002000000
-    behaviorAreaType: 2
-  - Name: 58
-    pos:
-      x: -93
-      y: -26
-    grids: fdfffffffcffffff0000000001000000
-    behaviorAreaType: 2
-  - Name: 47
-    pos:
-      x: -11
-      y: 41
-    grids: f9ffffffffffffff0800000006000000
-    behaviorAreaType: 1
-  - Name: 53
-    pos:
-      x: -64
-      y: -28
-    grids: eefffffff2fffffff2fffffff6fffffff1fffffff7fffffff7fffffff9fffffff3fffffff5fffffff4fffffff6fffffff5fffffff6fffffff7fffffff6fffffff6fffffffafffffff9fffffffbfffffff9fffffffcfffffffaffffff00000000fbffffff0000000008000000020000000f000000060000001100000009000000
-    behaviorAreaType: 1
-  - Name: 45
-    pos:
-      x: -37
-      y: 39
-    grids: f4ffffffffffffff0900000005000000
-    behaviorAreaType: 1
   - Name: 57
     pos:
       x: -91
       y: 14
     grids: fbfffffffcffffffffffffff01000000
-    behaviorAreaType: 2
-  - Name: 50
-    pos:
-      x: 9
-      y: -44
-    grids: f8fffffffcffffff0c00000002000000
-    behaviorAreaType: 1
-  - Name: 54
-    pos:
-      x: -42
-      y: -47
-    grids: fbffffffffffffff0600000003000000fdffffff040000000600000005000000
-    behaviorAreaType: 2
-  - Name: 55
-    pos:
-      x: -23
-      y: -56
-    grids: fffffffffdffffff09000000ffffffff
     behaviorAreaType: 2
   - Name: 44
     pos:
@@ -312,10 +282,40 @@ MonoBehaviour:
       y: 39
     grids: f5ffffffffffffff0400000003000000
     behaviorAreaType: 1
-  - Name: 42
+  - Name: 46
     pos:
-      x: -19
-      y: -56
-    grids: fbfffffffeffffff0500000001000000
+      x: 26
+      y: 39
+    grids: f4fffffff7fffffff8ffffff00000000f5ffffff010000000900000003000000f9ffffffffffffff0900000000000000
+    behaviorAreaType: 1
+  - Name: 52
+    pos:
+      x: 11
+      y: -30
+    grids: f7ffffff020000001b00000003000000f9ffffff080000000900000009000000
+    behaviorAreaType: 1
+  - Name: 54
+    pos:
+      x: -42
+      y: -47
+    grids: fbffffffffffffff0600000003000000fdffffff040000000600000005000000
+    behaviorAreaType: 2
+  - Name: 56
+    pos:
+      x: 51
+      y: -23
+    grids: 00000000fbffffff0300000002000000
+    behaviorAreaType: 2
+  - Name: 53
+    pos:
+      x: -64
+      y: -28
+    grids: eefffffff2fffffff2fffffff6fffffff1fffffff7fffffff7fffffff9fffffff3fffffff5fffffff4fffffff6fffffff5fffffff6fffffff7fffffff6fffffff6fffffffafffffff9fffffffbfffffff9fffffffcfffffffaffffff00000000fbffffff0000000008000000020000000f000000060000001100000009000000
+    behaviorAreaType: 1
+  - Name: 43
+    pos:
+      x: 52
+      y: -25
+    grids: fefffffffcffffff0000000004000000
     behaviorAreaType: 0
   specialNpcBehaviorAreas: []

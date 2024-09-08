@@ -8,12 +8,12 @@ Shader "MySprite-Lit-Default"
 
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
-        _MoveMask("WaterMaskTex", 2D) =""{}
+        _MoveMask("WaterMaskTex", 2D) ="black"{}
         _WetValue("WetValue",Range(0,1))=0
-        _shadowStep("ShadowStep",int)=0
-        _LightBlend("LightBlend",float)=1
-        _BackBlend("BackBlend",int)=1
-        _BlendVertexColor("BlendVertexColor",int)=0
+        [Toggle]_shadowStep("ShadowStep",int)=0
+        _LightBlend("LightBlend",float)=1 
+        [Toggle]_BackBlend("BackBlend",int)=1
+        [Toggle]_BlendVertexColor("BlendVertexColor",int)=0
 
         _Water("Water",int)=0 
 
@@ -21,10 +21,11 @@ Shader "MySprite-Lit-Default"
         _WindScroll("Wind Scroll", Range( 0 , 3)) = 0.1
 		_WindJitter("Wind Jitter", Range( 0 , 3)) = 0.1
         _WindNoiseValue("WindNoiseValue",Range(0,1))=0
+        [Toggle]_GrassBlend("_GrassBlend",int)=0
 
-        _DampBlend("_DampBlend",int)=0 
-        _Damp("_Damp",int)=0
-        _SnowBlend("_SnowBlen",int)=1
+        [Toggle]_DampBlend("_DampBlend",int)=0 
+        [Toggle]_Damp("_Damp",int)=0
+        [Toggle]_SnowBlend("_SnowBlend",int)=1
         
         //水面颜色
         [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
@@ -107,6 +108,7 @@ Shader "MySprite-Lit-Default"
             int _DampBlend;
             int _Damp;
             int _SnowBlend;
+            int _GrassBlend; 
             
             half4 _MainTex_TexelSize;
             half4 _MainTex_ST;
@@ -147,35 +149,15 @@ Shader "MySprite-Lit-Default"
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
         TEXTURE2D(_MaskTex);
-        SAMPLER(sampler_MaskTex);
-        TEXTURE2D(_WaterMaskTex);
-        SAMPLER(sampler_WaterMaskTex);
-        TEXTURE2D(_BackMaskTex);
-        SAMPLER(sampler_BackMaskTex);
-
-        TEXTURE2D(_WindNoiseTexture);
-        SAMPLER(sampler_WindNoiseTexture);
-
-        TEXTURE2D(_MoveMask);
-        SAMPLER(sampler_MoveMask);
-
-        TEXTURE2D(_WaterNormalMap);
-        SAMPLER(sampler_WaterNormalMap);
-
-        TEXTURE2D(_ShadowTex);
-        SAMPLER(sampler_ShadowTex);
-
-        TEXTURE2D(_NormalMap);
-            SAMPLER(sampler_NormalMap);
-        TEXTURE2D(_MirrorTex);
-        SAMPLER(sampler_MirrorTex); 
-
+        SAMPLER(sampler_MaskTex); 
+        
+        
         ENDHLSL
 
          
         Pass
         {
-             Tags { "LightMode" = "Universal2D" }
+            Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM
             
@@ -189,6 +171,32 @@ Shader "MySprite-Lit-Default"
             #pragma multi_compile USE_SHAPE_LIGHT_TYPE_2 __
             #pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
             #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+
+            TEXTURE2D(_MirrorTex);
+            SAMPLER(sampler_MirrorTex); 
+
+            TEXTURE2D(_ShadowTex);
+            SAMPLER(sampler_ShadowTex);
+            
+            TEXTURE2D(_BackMaskTex);
+            SAMPLER(sampler_BackMaskTex);
+
+            TEXTURE2D(_WaterMaskTex);
+            SAMPLER(sampler_WaterMaskTex);
+            TEXTURE2D(_WaterNormalMap);
+            SAMPLER(sampler_WaterNormalMap);
+            TEXTURE2D(_NormalMap);
+            SAMPLER(sampler_NormalMap); 
+            TEXTURE2D(_WindNoiseTexture);
+            SAMPLER(sampler_WindNoiseTexture);
+
+            TEXTURE2D(_MoveMask);
+            SAMPLER(sampler_MoveMask); 
+
+            TEXTURE2D(_GrassTex);
+            SAMPLER(sampler_GrassTex); 
+            
+
 
             struct Attributes
             {
@@ -335,7 +343,7 @@ Shader "MySprite-Lit-Default"
 
                 float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
                 //return float2(moveValue.x,moveValue.x);
-                float value=abs(moveValue-0.5)/0.5*_WindNoiseValue;
+                float value=moveValue*_WindNoiseValue;
                 return WindNoise0*WindNoise1*value+uv;
             }
 
@@ -510,9 +518,19 @@ Shader "MySprite-Lit-Default"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.worldPos.xyz=UNITY_MATRIX_M._m03_m13_m23;
-                o.worldPos.w=o.worldPos.z;
-                o.worldPos.z+=o.worldPos.y;
+                o.worldPos.xyz=TransformObjectToWorld(v.positionOS);
+                o.worldPos.y=UNITY_MATRIX_M._m13;
+                //o.worldPos.w=o.worldPos.z;
+                //o.worldPos.z+=o.worldPos.y;
+                
+                half4 worldPosCs=TransformWorldToHClip(o.worldPos.xyz);
+                half2 worldScreen=half2(ComputeScreenPos(worldPosCs / worldPosCs.w).xy);
+                o.worldPos.zw=worldScreen;
+               // half4 grassColor=  SAMPLE_TEXTURE2D_LOD(_GrassTex, sampler_GrassTex, worldScreen,0); 
+               // float GrassColorValue=abs(grassColor.r-0.5)/0.5;
+               // o.worldPos.w=GrassColorValue;
+
+
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
@@ -540,7 +558,19 @@ Shader "MySprite-Lit-Default"
                 //return half4(uv.xxx,1);
                 half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, uv);
-                //const half4 water = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, i.uv);
+                if(_GrassBlend==1)
+                { 
+                    half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, uv);
+                    half4 _GrassColor = SAMPLE_TEXTURE2D(_GrassTex, sampler_GrassTex, i.worldPos.zw);
+                    float GrassColorValue=_GrassColor.r*_GrassColor.g*0.6+_GrassColor.g*0.25; 
+                    
+                    //return float4(GrassColorValue.xxx,1);
+                    
+                    float HightValue=step(GrassColorValue,_NormalColor.a)*step(0.01,_NormalColor.a);
+                    //return float4(HightValue.xxx,1);
+                    main.a=main.a*HightValue;
+                }
+                
  
                 half4 result;
                 
@@ -597,9 +627,9 @@ Shader "MySprite-Lit-Default"
                 
                 if(_BackBlend&&_backColor)
                 {
-                half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
-                half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
-                result.xyz=half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue);
+                    half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
+                    half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
+                    result.xyz=half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue);
 
                 }
                 
@@ -622,6 +652,17 @@ Shader "MySprite-Lit-Default"
             #pragma fragment NormalsRenderingFragment
 
             #pragma multi_compile _ SKINNED_SPRITE
+           
+
+            TEXTURE2D(_NormalMap);
+            SAMPLER(sampler_NormalMap); 
+            TEXTURE2D(_WindNoiseTexture);
+            SAMPLER(sampler_WindNoiseTexture);
+
+            TEXTURE2D(_MoveMask);
+            SAMPLER(sampler_MoveMask); 
+            TEXTURE2D(_GrassTex);
+            SAMPLER(sampler_GrassTex);
 
             struct Attributes
             {
@@ -641,11 +682,31 @@ Shader "MySprite-Lit-Default"
                 half3   normalWS        : TEXCOORD1;
                 half3   tangentWS       : TEXCOORD2;
                 half3   bitangentWS     : TEXCOORD3;
-                half3   screenUV : TEXCOORD4;
+                half4   lightingUV  : TEXCOORD4; 
+                //half3   screenUV : TEXCOORD4;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
             
-            
+             float2 MoveUV(float2 uv,float2 screenUV)
+            {
+                float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
+                screenUV+=offsetUv;
+
+                float2 panner63 = _WindScroll * 0.3 * _TimeParameters.x + screenUV;
+				float2 panner74 =_TimeParameters.x * _WindJitter * 0.5  + screenUV *2;
+
+                float4 WindNoise0=pow(SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63) , 2.5);
+				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
+
+                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
+                //return float2(moveValue.x,moveValue.x);
+                float value=moveValue*_WindNoiseValue;
+                return WindNoise0*WindNoise1*value+uv;
+            }
 
             /*float3 WaterFragment(float2 uv,float2 screenUV,float3 _MainTexColor)
             {
@@ -706,10 +767,10 @@ Shader "MySprite-Lit-Default"
                 attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
 
-                o.screenUV.xy=o.positionCS.xy;        
+               /* o.screenUV.xy=o.positionCS.xy;        
                 o.screenUV.z=unity_SpriteProps.x;       
                 Unity_Remap_float(o.screenUV.x,float2(-1,1),float2(0,1),o.screenUV.x);
-                Unity_Remap_float(o.screenUV.y,float2(-1,1),float2(1,0),o.screenUV.y);
+                Unity_Remap_float(o.screenUV.y,float2(-1,1),float2(1,0),o.screenUV.y);*/
                 
                 o.uv = TRANSFORM_TEX(attributes.uv, _NormalMap);
                 o.color = attributes.color;
@@ -717,6 +778,13 @@ Shader "MySprite-Lit-Default"
                 //o.tangentWS = TransformObjectToWorldDir(attributes.tangent.xyz);
                 o.tangentWS = attributes.tangent.xyz;
                 o.bitangentWS = cross(o.normalWS, o.tangentWS) * attributes.tangent.w;
+                o.lightingUV.xy = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+
+                half3 worldPos=TransformObjectToWorld(attributes.positionOS.xyz);
+                worldPos.y=UNITY_MATRIX_M._m13;
+                half4 worldPosCs=TransformWorldToHClip(worldPos);
+                half2 worldScreen=half2(ComputeScreenPos(worldPosCs / worldPosCs.w).xy);
+                o.lightingUV.zw=worldScreen;
                 return o;
             }
 
@@ -724,14 +792,31 @@ Shader "MySprite-Lit-Default"
 
             half4 NormalsRenderingFragment(Varyings i) : SV_Target
             { 
-                const half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                half3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv));
+                float2 uv=MoveUV(i.uv,i.lightingUV.xy);
+                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
 
-                // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
-                half4 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
+               if(_GrassBlend==1)
+                {  
+                    half4 _GrassColor = SAMPLE_TEXTURE2D(_GrassTex, sampler_GrassTex, i.lightingUV.zw);
+                    float GrassColorValue=_GrassColor.r*_GrassColor.g*0.45; 
+                    
+                    //return float4(GrassColorValue.xxx,1);
+                    
+                    float HightValue=step(GrassColorValue,_NormalColor.a)*step(0.01,_NormalColor.a);
+                    //return float4(HightValue.xxx,1);
+                    mainTex.a=mainTex.a*HightValue;
+                }
+
+                half3 normalTS;
+                half4 result=half4(1,1,1,1);
+                normalTS = UnpackNormal(_NormalColor);
+                result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
                 result.x=unity_SpriteProps.x*result.x+(1-unity_SpriteProps.x)*(1-result.x);
                 result.z=0; 
                 result=result*i.color; 
+                // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
+                
                 return result;
             }
             ENDHLSL
@@ -1065,6 +1150,11 @@ Shader "MySprite-Lit-Default"
             #pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
             #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
 
+            TEXTURE2D(_WaterMaskTex);
+            SAMPLER(sampler_WaterMaskTex);
+            TEXTURE2D(_WaterNormalMap);
+            SAMPLER(sampler_WaterNormalMap);
+
             struct Attributes
             {
                 float3 positionOS   : POSITION;
@@ -1215,6 +1305,62 @@ Shader "MySprite-Lit-Default"
                  
 
                 return float4(waterColor.xyz,1);
+            }
+            ENDHLSL
+        }
+        Pass
+        {
+             Tags { "LightMode" = "Grass" }
+
+            HLSLPROGRAM
+            
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+
+            #pragma vertex  Vertex
+            #pragma fragment  Fragment 
+            TEXTURE2D(_MoveMask);
+            SAMPLER(sampler_MoveMask); 
+
+            struct Attributes
+            {
+                float3 positionOS   : POSITION; 
+                float2 uv           : TEXCOORD0; 
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS  : SV_POSITION; 
+                float2  uv          : TEXCOORD0; 
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+          
+ 
+
+            Varyings  Vertex(Attributes v)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(v);
+
+                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(v.positionOS); 
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                 
+                return o;
+            }
+ 
+
+            half4 Fragment(Varyings i) : SV_Target
+            {
+                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, i.uv);
+                moveValue.a=mainTex.a;
+
+                return moveValue;
             }
             ENDHLSL
         }

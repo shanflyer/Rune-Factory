@@ -12,7 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - __SNOWBLEND_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -68,7 +69,7 @@ Material:
     - EdgeValue: 0.2
     - WaveColorValue: 1.39
     - WaveK: 2.22
-    - _BackBlend: 1
+    - _BackBlend: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
     - _Comp: 8
@@ -84,6 +85,7 @@ Material:
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _Fail: 0
+    - _GrassBlend: 0
     - _HighLighStep: 0
     - _HighLightNoise: 50
     - _LightBlend: 1
@@ -112,6 +114,11 @@ Material:
     - _WindJitter: 0.3
     - _WindNoiseValue: 0.05
     - _WindScroll: 0.05
+    - __BlendVertexColor: 0
+    - __Damp: 0
+    - __DampBlend: 0
+    - __SnowBlend: 1
+    - __shadowStep: 0
     - _shadowStep: 1
     - waterNoiseScale: 136
     - waterValue: 0.242
