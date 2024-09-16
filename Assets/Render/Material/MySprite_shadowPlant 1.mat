@@ -12,7 +12,10 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _DAMPBLEND_ON
+  - _PLANTAUTUMNBLEND_ON
+  - _SHADOWSTEP_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -35,7 +38,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MoveMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SnowTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -64,7 +75,7 @@ Material:
     - EdgeValue: 0.2
     - WaveColorValue: 1.39
     - WaveK: 2.22
-    - _BackBlend: 1
+    - _BackBlend: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
     - _Comp: 8
@@ -80,13 +91,17 @@ Material:
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _Fail: 0
+    - _GrassBlend: 0
     - _HighLighStep: 0
     - _HighLightNoise: 50
     - _LightBlend: 1
     - _NoiseAlpha: 1
     - _NoiseValue: 500
     - _Pass: 0
-    - _SnowBlend: 1
+    - _PlantAutumnBlend: 1
+    - _PlantAutumnNoiseScale: 20
+    - _SeasonValue: 2.82
+    - _SnowBlend: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _Water: 0
@@ -123,6 +138,12 @@ Material:
     - _DampColor: {r: 0.6247775, g: 0.9379376, b: 0.9811321, a: 1}
     - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
     - _HightLightColor: {r: 0.008406067, g: 0.47284126, b: 0.53588676, a: 1}
+    - _PlantAutumnColor0: {r: 0.8301887, g: 0.7307685, b: 0.14489143, a: 1}
+    - _PlantAutumnColor1: {r: 0.6509434, g: 0.39813322, b: 0.11974903, a: 1}
+    - _PlantSpringColor: {r: 0.605976, g: 1, b: 0.3820755, a: 1}
+    - _PlantSpringColor1: {r: 0.43596473, g: 0.9150943, b: 0.5400962, a: 1}
+    - _PlantWinterColor: {r: 0.7735849, g: 0.7002403, b: 0.52910286, a: 1}
+    - _PlantWinterColor1: {r: 0.6603774, g: 0.4391706, b: 0.40806338, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _WaterColor: {r: 0.048700586, g: 0.3584906, b: 0.34440923, a: 1}
     - _WaveKSet0: {r: 3, g: 1.8, b: 0, a: 0}

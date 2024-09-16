@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using Mono.Cecil.Cil;
+using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEngine;
+using UnityEngine; 
 
 public class CommonToolEditor : MyEditor
 {
@@ -118,6 +121,16 @@ public class CommonToolEditor : MyEditor
         {
             ReSavePrefab();
         }
+        oldSourcePath=EditorGUILayout.TextField("dataPath",oldSourcePath);
+        newSourecePath = EditorGUILayout.TextField("newSourcePath", newSourecePath);
+       // if (GUILayout.Button("Test serial"))
+        {
+           // ResetInstance();
+        }
+        if (GUILayout.Button("室外映射"))
+        {
+            SetSprite();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -136,6 +149,82 @@ public class CommonToolEditor : MyEditor
             Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_3");
         }*/
     }
+    string oldSourcePath = "";
+    string newSourecePath = "";
+
+    public void SetSprite()
+    {
+        Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
+        var sources = AssetDatabase.LoadAllAssetsAtPath(newSourecePath);
+        foreach(var source in sources)
+        {
+            if(source is Sprite sprite)
+            {
+                sprites.Add(sprite.name, sprite);
+            }
+        }
+
+
+        DirectoryInfo dir = new DirectoryInfo(oldSourcePath);
+        var files = dir.GetFiles("*.prefab");
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            foreach (var file in files)
+            {
+                var obj = AssetDatabase.LoadAssetAtPath<GameObject>(oldSourcePath + file.Name);
+                var spriteRenderers = obj.GetComponentsInChildren<SpriteRenderer>();
+                bool reSave = false;
+                foreach (var spriteRenderer in spriteRenderers)
+                {
+                    if (spriteRenderer.sprite != null && sprites.TryGetValue(spriteRenderer.sprite.name, out var sprite))
+                    {
+                        spriteRenderer.sprite = sprite;
+                        reSave = true;
+                    }
+                }
+                AssetDatabase.SaveAssetIfDirty(obj);
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+      
+    }
+
+    public class ReMapSpriteData
+    {
+        public Dictionary<string, string> Remap;
+    }
+
+    public void ResetInstance()
+    {
+        if(File.Exists(oldSourcePath))
+        {
+             var strs = File.ReadAllText(newSourecePath);
+
+            var datas = File.ReadAllText(oldSourcePath);
+            var remapData = JsonConvert.DeserializeObject<ReMapSpriteData>(datas);
+            foreach(var d in remapData.Remap)
+            {
+                strs=strs.Replace(d.Key,d.Value);
+            }
+            File.WriteAllText(newSourecePath, strs);
+        }
+
+        /*
+        var assets = AssetDatabase.LoadAllAssetsAtPath(oldSourcePath);
+        for(var i = 0; i < assets.Length; i++)
+        {
+            if (assets[i] is Sprite sprite)
+            {
+              var instanceId=  assets[i].GetInstanceID();
+              //Editor.c
+            }
+        }*/
+    }
+
     private void ReSavePrefab()
     {
         string objPath = "Assets/Resources/Prefabs/Ground";

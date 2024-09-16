@@ -5,6 +5,7 @@ Shader "MySprite-Lit-Default"
         _MainTex("Diffuse", 2D) = "white" {}
         _MaskTex("Mask", 2D) = "white" {}
         _WaterMaskTex("_MoveMask", 2D) = "black" {}
+        _SnowTex("_SnowTex", 2D) = "black" {}
 
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
@@ -22,6 +23,17 @@ Shader "MySprite-Lit-Default"
 		_WindJitter("Wind Jitter", Range( 0 , 3)) = 0.1
         _WindNoiseValue("WindNoiseValue",Range(0,1))=0
         [Toggle]_GrassBlend("_GrassBlend",int)=0
+        
+
+        _PlantSpringColor("_PlantSpringColor",color)=(0,0,0)
+        _PlantSpringColor1("_PlantSpringColor1",color)=(0,0,0)
+        _PlantAutumnColor0("_PlantAutumnColor0",color)=(0,0,0)
+        _PlantAutumnColor1("_PlantAutumnColor1",color)=(1,1,1)
+        _PlantWinterColor("_PlantWinterColor",color)=(0,0,0)
+        _PlantWinterColor1("_PlantWinterColor1",color)=(0,0,0)
+        _SeasonValue("_SeasonValue",Range(0,4))=0
+        _PlantAutumnNoiseScale("_PlantAutumnNoiseScale",float)=1
+        [Toggle]_PlantAutumnBlend("_PlantAutumnBlend",int)=0
 
         [Toggle]_DampBlend("_DampBlend",int)=0 
         [Toggle]_Damp("_Damp",int)=0
@@ -109,6 +121,15 @@ Shader "MySprite-Lit-Default"
             int _Damp;
             int _SnowBlend;
             int _GrassBlend; 
+
+            half3 _PlantSpringColor1;
+            half3 _PlantSpringColor;
+            half3 _PlantAutumnColor0;
+            half3 _PlantAutumnColor1;
+            half3 _PlantWinterColor;
+            half3 _PlantWinterColor1; 
+            float _PlantAutumnNoiseScale; 
+            float _SeasonValue;
             
             half4 _MainTex_TexelSize;
             half4 _MainTex_ST;
@@ -150,6 +171,7 @@ Shader "MySprite-Lit-Default"
         SAMPLER(sampler_MainTex);
         TEXTURE2D(_MaskTex);
         SAMPLER(sampler_MaskTex); 
+       
         
         
         ENDHLSL
@@ -195,6 +217,8 @@ Shader "MySprite-Lit-Default"
 
             TEXTURE2D(_GrassTex);
             SAMPLER(sampler_GrassTex); 
+            TEXTURE2D(_SnowTex);
+            SAMPLER(sampler_SnowTex);
             
 
 
@@ -326,7 +350,7 @@ Shader "MySprite-Lit-Default"
                 return outWater;
             }
 
-            float2 MoveUV(float2 uv,float2 screenUV)
+            float2 MoveUV(float2 uv,float2 screenUV,out float2 offset)
             {
                 float svalue =_ScreenParams.y/ 1920;
                 svalue=floor(svalue);
@@ -344,7 +368,8 @@ Shader "MySprite-Lit-Default"
                 float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
                 //return float2(moveValue.x,moveValue.x);
                 float value=moveValue*_WindNoiseValue;
-                return WindNoise0*WindNoise1*value+uv;
+                offset=WindNoise0*WindNoise1*value;
+                return offset+uv;
             }
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
@@ -519,11 +544,12 @@ Shader "MySprite-Lit-Default"
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
                 o.worldPos.xyz=TransformObjectToWorld(v.positionOS);
-                o.worldPos.y=UNITY_MATRIX_M._m13;
+                float3 worldCS=o.worldPos.xyz;
+                worldCS.y=UNITY_MATRIX_M._m13;
                 //o.worldPos.w=o.worldPos.z;
                 //o.worldPos.z+=o.worldPos.y;
                 
-                half4 worldPosCs=TransformWorldToHClip(o.worldPos.xyz);
+                half4 worldPosCs=TransformWorldToHClip(worldCS.xyz);
                 half2 worldScreen=half2(ComputeScreenPos(worldPosCs / worldPosCs.w).xy);
                 o.worldPos.zw=worldScreen;
                // half4 grassColor=  SAMPLE_TEXTURE2D_LOD(_GrassTex, sampler_GrassTex, worldScreen,0); 
@@ -539,9 +565,7 @@ Shader "MySprite-Lit-Default"
 
 
                 half3 pos=TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
-                half4 carmeraPos=TransformWorldToHClip(pos);
-
-
+                half4 carmeraPos=TransformWorldToHClip(pos); 
 
                 o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
 
@@ -554,10 +578,90 @@ Shader "MySprite-Lit-Default"
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
                 float2 uv=i.uv;
-                uv=MoveUV(uv,i.lightingUV);
+                float2 offset;
+                uv=MoveUV(uv,i.lightingUV,offset);
                 //return half4(uv.xxx,1);
                 half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, uv);
+
+                const half4 grassTex=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask,uv);
+                float mainValue=(main.y);
+                mainValue=clamp(mainValue,0,1);
+
+                 float noiseValue;
+                Unity_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale,noiseValue); 
+                float noiseValue1;
+                Unity_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale*2,noiseValue1); 
+                
+                //春季颜色
+                int springBlend=1-step(1,_SeasonValue);
+                float w_s=_SeasonValue;
+                Unity_Remap_float(w_s,float2(0,0.25),float2(0,1),w_s); 
+                int w_sBlend=1-step(0.5,w_s);
+                float springValue=_SeasonValue;
+                Unity_Remap_float(springValue,float2(0.25,0.5),float2(0,1),springValue);
+                springValue=clamp(springValue,0,1);
+                float3 winterColor=(_PlantWinterColor*noiseValue+_PlantWinterColor1*(1-noiseValue))*mainValue; 
+                float3 springColor0=(_PlantWinterColor*noiseValue1+_PlantSpringColor*(1-noiseValue1))*mainValue; 
+                float3 springColor=(_PlantSpringColor*noiseValue+_PlantSpringColor1*(1-noiseValue))*mainValue; 
+                springColor=(winterColor*(1-w_s)+springColor0*w_s)*w_sBlend
+                          +(1-w_sBlend)*(springColor0*(1-springValue)+springColor*springValue);
+                
+                //夏季颜色
+                float s_s=_SeasonValue;
+                Unity_Remap_float(s_s,float2(1,1.25),float2(0,1),s_s);
+                s_s=clamp(s_s,0,1);
+                float3 summerColor=springColor*(1-s_s)+main.xyz*s_s;
+
+                //秋季颜色
+                float s_a=_SeasonValue;
+                Unity_Remap_float(s_a,float2(2,2.25),float2(0,1),s_a);
+                s_a=clamp(s_a,0,1); 
+
+                float3 AutumnColor0=(main.xyz*noiseValue1+_PlantAutumnColor0*(1-noiseValue1))*mainValue; 
+                AutumnColor0=AutumnColor0*s_a+summerColor*(1-s_a);
+
+                float a_a=_SeasonValue;
+                Unity_Remap_float(a_a,float2(2.25,2.5),float2(0,1),a_a);
+                a_a=clamp(a_a,0,1); 
+ 
+                float3 AutumnColor=(_PlantAutumnColor0*noiseValue+_PlantAutumnColor1*(1-noiseValue))*mainValue; 
+                AutumnColor=AutumnColor*a_a+AutumnColor0*(1-a_a);
+
+                //冬季颜色
+                float a_w=_SeasonValue;
+                Unity_Remap_float(a_w,float2(2.85,3.15),float2(0,1),a_w);
+                a_w=clamp(a_w,0,1); 
+                float3 winterColor0=(_PlantAutumnColor0*noiseValue1+_PlantWinterColor1*(1-noiseValue1))*mainValue; 
+                winterColor0=winterColor0*a_w+AutumnColor*(1-a_w);
+
+                 float w_w=_SeasonValue;
+                Unity_Remap_float(w_w,float2(3.15,3.35),float2(0,1),w_w);
+                w_w=clamp(w_w,0,1); 
+                winterColor=winterColor*w_w+winterColor0*(1-w_w); 
+
+                half _BlendValue=step(0.01,grassTex.r);
+                main.xyz=main.xyz*(1-_BlendValue)+winterColor*_BlendValue;  
+
+                half4 snow = SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, uv);
+                main.xyz=main.xyz*(1-snow.a)+snow.xyz*snow.a;
+                main.a=main.a*(1-snow.a)+snow.a;
+                
+                /*
+                float snowNoise=noiseValue+noiseValue1;
+                snowNoise=clamp(noiseValue,0,1);
+                snowNoise=1-snowNoise;
+                Unity_Remap_float(snowNoise,float2(0,1),float2(0.8,1),snowNoise);
+                half grassValue=(1-snowNoise)*main.xyz;
+                snowNoise=snowNoise*snowNoise+grassValue;
+
+                main.xyz=main.xyz*(1-_BlendValue)+snowNoise*_BlendValue; */
+
+                
+                //float grassValue=step(0.001,grassTex.r*noiseValue);
+                //main.xyz=mainValue*AutumnColor*_PlantAutumnBlend*grassValue+main.xyz*(1-_PlantAutumnBlend*grassValue);
+
+
                 if(_GrassBlend==1)
                 { 
                     half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, uv);
@@ -568,7 +672,7 @@ Shader "MySprite-Lit-Default"
                     
                     float HightValue=step(GrassColorValue,_NormalColor.a)*step(0.01,_NormalColor.a);
                     //return float4(HightValue.xxx,1);
-                    main.a=main.a*HightValue;
+                    main.a=main.a*HightValue; 
                 }
                 
  
