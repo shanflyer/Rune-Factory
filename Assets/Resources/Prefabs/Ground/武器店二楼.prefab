@@ -5352,7 +5352,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6067,6 +6067,11 @@ PrefabInstance:
       propertyPath: lerpColor.atime4
       value: 49807
       objectReference: {fileID: 0}
+    - target: {fileID: 2260651312238135923, guid: 452106db5af5fce4399ecf33fb74239c,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
     - target: {fileID: 2474370566523499134, guid: 452106db5af5fce4399ecf33fb74239c,
         type: 3}
       propertyPath: m_Name
@@ -6186,6 +6191,11 @@ PrefabInstance:
       propertyPath: lerpColor.atime4
       value: 49807
       objectReference: {fileID: 0}
+    - target: {fileID: 2260651312238135923, guid: 452106db5af5fce4399ecf33fb74239c,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
     - target: {fileID: 2474370566523499134, guid: 452106db5af5fce4399ecf33fb74239c,
         type: 3}
       propertyPath: m_Name

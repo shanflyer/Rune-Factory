@@ -10,6 +10,7 @@ Shader "Toon/ToonCommonTree2d"
         _MainTex("Diffuse", 2D) = "white" {}
         _SnowTex("Snow", 2D) = "black" {}
         _SnowRange("SnowRange",vector)=(0,1,0,1) 
+        _SnowColor("SnowColor",color)=(1,1,1,1)
 
         _WindNoiseTexture("Wind Noise Texture", 2D) = "white" {}
 		_WindScroll("Wind Scroll", Range( 0 , 3)) = 0.1
@@ -21,7 +22,7 @@ Shader "Toon/ToonCommonTree2d"
         _PlantAutumnColor0("_PlantAutumnColor0",color)=(0,0,0)
         _PlantAutumnColor1("_PlantAutumnColor1",color)=(1,1,1)
         _PlantWinterColor("_PlantWinterColor",color)=(0,0,0)
-        _PlantWinterColor1("_PlantWinterColor1",color)=(0,0,0)
+        _PlantWinterColor1("_PlantWinterColor1",color)=(0,0,0) 
         
         _PlantAutumnNoiseScale("_PlantAutumnNoiseScale",float)=1
         [Toggle]_PlantAutumnBlend("_PlantAutumnBlend",int)=0 
@@ -80,6 +81,7 @@ Shader "Toon/ToonCommonTree2d"
 			 
              int _NormalTex;
              float4 _SnowRange;
+             half4 _SnowColor;
         CBUFFER_END
             sampler2D _WindNoiseTexture; 
 
@@ -108,7 +110,7 @@ Shader "Toon/ToonCommonTree2d"
             #pragma multi_compile USE_SHAPE_LIGHT_TYPE_1 __
             #pragma multi_compile USE_SHAPE_LIGHT_TYPE_2 __
             #pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
-             #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+            #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
 
 
             struct VertexInput
@@ -169,7 +171,14 @@ Shader "Toon/ToonCommonTree2d"
  
 				float3 vertexValue = v.normalOS * (_ScaleValue) * min(clipPos.w , 1.5);
 
-                
+                float s_w=0;
+                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
+                s_w=clamp(s_w,0,1);
+
+                float s_w1=0;
+                Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                s_w1=clamp(s_w1,0,1);
+                s_w+=s_w1;                
 
                 float3 worldPos = TransformObjectToWorld(v.positionOS.xyz); 
 				float2 appendResult60 = float2(worldPos.x , worldPos.z)* 0.1; 
@@ -179,7 +188,7 @@ Shader "Toon/ToonCommonTree2d"
                 float4 WindNoise0=pow( tex2Dlod( _WindNoiseTexture, float4( panner63, 0, 0.0) ) , 2.5);
 				float4 WindNoise1=tex2Dlod( _WindNoiseTexture, float4( panner74, 0, 0.0) ); 
 				float4 WindScroll = WindNoise0*WindNoise1 * v.color;
-                vertexValue += WindScroll.rgb*_WindValue; 
+                vertexValue += WindScroll.rgb*_WindValue*(1-s_w); 
 				 
 
               // float3 worldNormal = TransformObjectToWorldNormal(v.normalOS);   
@@ -286,7 +295,7 @@ Shader "Toon/ToonCommonTree2d"
                 Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
                 s_w1=clamp(s_w1,0,1);
                 s_w+=s_w1;
-                texColor=texColor*(1-s_w)+SnowColor*s_w;
+                texColor=texColor*(1-s_w)+SnowColor*s_w*_SnowColor;
 
 
 				float Alpha = texColor.a;  
@@ -384,7 +393,16 @@ Shader "Toon/ToonCommonTree2d"
                     float4 WindNoise0=pow( tex2Dlod( _WindNoiseTexture, float4( panner63, 0, 0.0) ) , 2.5);
                     float4 WindNoise1=tex2Dlod( _WindNoiseTexture, float4( panner74, 0, 0.0) ); 
                     float4 WindScroll = WindNoise0*WindNoise1 * v.color;
-                    vertexValue += WindScroll.rgb*_WindValue;
+
+                    float s_w=0;
+                    Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
+                    s_w=clamp(s_w,0,1);
+
+                    float s_w1=0;
+                    Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                    s_w1=clamp(s_w1,0,1);
+                    s_w+=s_w1; 
+                    vertexValue += WindScroll.rgb*_WindValue*(1-s_w);
 
 
                     v.positionOS.xyz += vertexValue;  

@@ -350,7 +350,7 @@ Shader "MySprite-Lit-Default"
                 return outWater;
             }
 
-            float2 MoveUV(float2 uv,float2 screenUV,out float2 offset)
+            float2 MoveUV(float2 uv,float2 screenUV,float SnowMove,out float2 offset)
             {
                 float svalue =_ScreenParams.y/ 1920;
                 svalue=floor(svalue);
@@ -368,7 +368,7 @@ Shader "MySprite-Lit-Default"
                 float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
                 //return float2(moveValue.x,moveValue.x);
                 float value=moveValue*_WindNoiseValue;
-                offset=WindNoise0*WindNoise1*value;
+                offset=WindNoise0*WindNoise1*value*SnowMove;
                 return offset+uv;
             }
 
@@ -391,75 +391,7 @@ Shader "MySprite-Lit-Default"
                 SHAPE_LIGHT(3)
             #endif
 
-            float3 SnowColor(float3 col,float2 uv,float2 objUV)
-            { 
-                
-                float _DampNoiseValue;	 
-
-                float svalue =_ScreenParams.y/ 1920;
-                svalue=floor(svalue);
-                svalue=clamp(svalue,1,svalue);
-                svalue/=2;  
-
-                uv+=objUV;
-
-
-				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_DampNoise,_DampNoiseValue);
-                float3 d=float3(_DampNoiseValue,_DampNoiseValue,_DampNoiseValue);    
-                
-
-
-                float3 water=float3(1-_DampNoiseValue,1-_DampNoiseValue,1-_DampNoiseValue);    
-      
-
-                 float _HighLightNoiseValue;	
-				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_HighLightNoise,_HighLightNoiseValue);
-                float3 h=float3(_HighLightNoiseValue,_HighLightNoiseValue,_HighLightNoiseValue); 
-
-               // h*=(1-_DampNoiseValue);       
-                
-                             
-                float dValue=1-waterValue;
-                d*=dValue;               
-				//d*=d; 
-               // d*=2;
-                d=clamp(d,0,1); 
- 
-              
             
-               // water*=waterValue;
-                //water*=water;  
-                //water=clamp(water,0,1);
-                //return water*_WaterColor;
-
-               // h*=waterValue;
-                //h*=step(_HighLighStep,h);
-                //h*=h*2;
-               // h=clamp(h,0,1);
-       
-                float snowV=d.x+h.x;  
-                snowV=clamp(snowV,0,1);
-                snowV*=snowV;
-                Unity_Remap_float(snowV,float2(0,1),float2(0.8,1),snowV);
-                 
- 
-                half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, objUV);
-                //half3 normalUnpacked = UnpackNormalRGBNoScale(normal);
-                float gv=normal.z*2; 
-                gv=clamp(gv,0,1);
-               // Unity_Remap_float(gv,float2(0,1),float2(0.2,1),gv); 
-                
-                float3 snowColor=float3(snowV,snowV,1)*gv*_SnowBlend*0.8;
-                gv=gv*_SnowBlend;
-              //  float stepGv=step(0.5,gv);
-                // gv=stepGv+(1-stepGv)*gv; 
-                 //return snowColor;
-
-                float3 result=col*(1-gv)+snowColor;
-
-
-                return result;
-            }
 
              float3 DampColor(float3 col,float2 uv,float2 objUV)
             {
@@ -579,7 +511,17 @@ Shader "MySprite-Lit-Default"
             {
                 float2 uv=i.uv;
                 float2 offset;
-                uv=MoveUV(uv,i.lightingUV,offset);
+
+                float s_w=0;
+                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
+                s_w=clamp(s_w,0,1);
+
+                float s_w1=0;
+                Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                s_w1=clamp(s_w1,0,1);
+                s_w+=s_w1;
+ 
+                uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
                 //return half4(uv.xxx,1);
                 half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, uv);
@@ -643,9 +585,14 @@ Shader "MySprite-Lit-Default"
                 half _BlendValue=step(0.01,grassTex.r);
                 main.xyz=main.xyz*(1-_BlendValue)+winterColor*_BlendValue;  
 
+                
+
                 half4 snow = SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, uv);
-                main.xyz=main.xyz*(1-snow.a)+snow.xyz*snow.a;
-                main.a=main.a*(1-snow.a)+snow.a;
+                //return snow;
+                half3 mainSnow=main.xyz*(1-snow.a)+snow.xyz*snow.a;
+                half snowA=main.a*(1-snow.a)+snow.a;
+                half snowValue= s_w*_SnowBlend;
+                main=main*(1-snowValue)+half4(mainSnow.xyz,snowA)*snowValue;
                 
                 /*
                 float snowNoise=noiseValue+noiseValue1;
@@ -693,10 +640,7 @@ Shader "MySprite-Lit-Default"
                 {
                     waterColor=WaterFragment(uv,i.lightingUV,main);
                 }
-                if(_SnowValue>0){
-                       float3 snowValue=SnowColor(waterColor.xyz,i.lightingUV,uv);
-                waterColor.xyz=snowValue;
-                }
+               
              
                // return float4( waterColor.xyz,main.a);
                 SurfaceData2D surfaceData;
@@ -791,7 +735,7 @@ Shader "MySprite-Lit-Default"
                 UNITY_VERTEX_OUTPUT_STEREO
             };
             
-             float2 MoveUV(float2 uv,float2 screenUV)
+             float2 MoveUV(float2 uv,float2 screenUV,float SnowMove)
             {
                 float svalue =_ScreenParams.y/ 1920;
                 svalue=floor(svalue);
@@ -809,7 +753,7 @@ Shader "MySprite-Lit-Default"
                 float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
                 //return float2(moveValue.x,moveValue.x);
                 float value=moveValue*_WindNoiseValue;
-                return WindNoise0*WindNoise1*value+uv;
+                return WindNoise0*WindNoise1*value*SnowMove+uv;
             }
 
             /*float3 WaterFragment(float2 uv,float2 screenUV,float3 _MainTexColor)
@@ -896,7 +840,17 @@ Shader "MySprite-Lit-Default"
 
             half4 NormalsRenderingFragment(Varyings i) : SV_Target
             { 
-                float2 uv=MoveUV(i.uv,i.lightingUV.xy);
+                float s_w=0;
+                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
+                s_w=clamp(s_w,0,1);
+
+                float s_w1=0;
+                Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                s_w1=clamp(s_w1,0,1);
+                s_w+=s_w1;
+
+
+                float2 uv=MoveUV(i.uv,i.lightingUV.xy,1-s_w);
                 half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
 
@@ -917,7 +871,7 @@ Shader "MySprite-Lit-Default"
                 normalTS = UnpackNormal(_NormalColor);
                 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
                 result.x=unity_SpriteProps.x*result.x+(1-unity_SpriteProps.x)*(1-result.x);
-                result.z=0; 
+                // result.z-=i.positionCS.y; 
                 result=result*i.color; 
                 // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
                 
