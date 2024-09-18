@@ -5,8 +5,7 @@ Shader "Toon/ToonCommonTree2d"
         _BlendColor("BlendColor",Color)=(0,1,1,1)
         _BlendValue("BlendValue",Range(0,1))=0
 		_BlendRmapMin("BlendRmapMin",Range(0,1))=0
-        
-		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1) 
+         
         _MainTex("Diffuse", 2D) = "white" {}
         _SnowTex("Snow", 2D) = "black" {}
         _SnowRange("SnowRange",vector)=(0,1,0,1) 
@@ -30,12 +29,9 @@ Shader "Toon/ToonCommonTree2d"
 
         _NormalMap("Normal Map", 2D) = "bump" {}
         [Toggle]_NormalTex("NormalTex",int)=0
-
-        _OutlineWidth("Outline  Width", Range( 0.0000 , 0.5)) = 0.0065
-		_OutlineColor("Outline Color", Color) = (0,0,0,0)
+  
         _ScaleValue("ScaleValue", Range(0 , 2)) = 0.5 
-        _ClipValue("ClipValue",Range(0,2))=0.5
-        _Color("_Color",Color)=(1,1,1,1)
+        _ClipValue("ClipValue",Range(0,2))=0.5 
 
     }
     SubShader
@@ -69,12 +65,9 @@ Shader "Toon/ToonCommonTree2d"
             int _PlantAutumnBlend;
             float _PlantAutumnNoiseScale; 
             
-
-			float4 _OutlineColor; 
-			float _OutlineWidth;
+ 
 			float _ScaleValue;  
-            float _ClipValue;
-			float4 _Color;
+            float _ClipValue; 
 
             half4 _MainTex_ST;
             half4 _NormalMap_ST; 
@@ -118,8 +111,7 @@ Shader "Toon/ToonCommonTree2d"
 				float4 positionOS : POSITION;
 				float3 normalOS : NORMAL;
                 float4 color : COLOR;
-				float4 texcoord : TEXCOORD0;
-				float4 texcoord1 : TEXCOORD1; 
+				float4 uv  : TEXCOORD0; 
                 UNITY_SKINNED_VERTEX_INPUTS
                 UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
@@ -129,9 +121,9 @@ Shader "Toon/ToonCommonTree2d"
 				float4 positionCS : SV_POSITION; 
 		        half4   color       : COLOR;
                 float3 worldPos:TEXCOORD0;
-				float4 texcoord3 : TEXCOORD3;
-				float4 texcoord4 : TEXCOORD4;   
-                float3 normal:TEXCOORD1;
+				half2   lightingUV  : TEXCOORD3;
+				float4 uv : TEXCOORD4;   
+                float3 normal:NORMAL;
                 UNITY_VERTEX_OUTPUT_STEREO
 			};
   
@@ -159,17 +151,8 @@ Shader "Toon/ToonCommonTree2d"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 UNITY_SKINNED_VERTEX_COMPUTE(v);
 
-               
-				float3 worldNormal = TransformObjectToWorldNormal(v.normalOS);  
-				o.texcoord4.xy = v.texcoord.xy;  
-
-                Unity_Remap_float3(worldNormal,float2(-1,1),float2(0,1),o.normal); 
-                //Unity_Remap_float3(o.normal,float2(0.5,1),float2(0,1),worldNormal);  
- 
-				float4 clipPos = TransformObjectToHClip(v.positionOS.xyz);
-				o.texcoord3 =  ComputeScreenPos(clipPos); 
- 
-				float3 vertexValue = v.normalOS * (_ScaleValue) * min(clipPos.w , 1.5);
+                float4 clipPos = TransformObjectToHClip(v.positionOS.xyz);
+				
 
                 float s_w=0;
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
@@ -178,7 +161,14 @@ Shader "Toon/ToonCommonTree2d"
                 float s_w1=0;
                 Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
                 s_w1=clamp(s_w1,0,1);
-                s_w+=s_w1;                
+                s_w+=s_w1;          
+
+               
+				float3 worldNormal = TransformObjectToWorldNormal(v.normalOS);  
+				o.uv.xy = v.uv.xy;   
+                Unity_Remap_float3(worldNormal,float2(-1,1),float2(0,1),o.normal); 
+               // Unity_Remap_float3(o.normal,float2(0.5,1),float2(0,1),worldNormal);  
+				float3 vertexValue = v.normalOS * _ScaleValue* min(clipPos.w , 1.5);
 
                 float3 worldPos = TransformObjectToWorld(v.positionOS.xyz); 
 				float2 appendResult60 = float2(worldPos.x , worldPos.z)* 0.1; 
@@ -189,33 +179,21 @@ Shader "Toon/ToonCommonTree2d"
 				float4 WindNoise1=tex2Dlod( _WindNoiseTexture, float4( panner74, 0, 0.0) ); 
 				float4 WindScroll = WindNoise0*WindNoise1 * v.color;
                 vertexValue += WindScroll.rgb*_WindValue*(1-s_w); 
-				 
-
-              // float3 worldNormal = TransformObjectToWorldNormal(v.normalOS);   
-                
-              
-
-               // worldPos.y+=o.normal.y;
+		  
                 o.worldPos=worldPos;
                 v.positionOS.xyz += vertexValue; 
-
-				o.positionCS = TransformWorldToHClip(worldPos); 
-
+				o.positionCS =TransformObjectToHClip(v.positionOS.xyz); //TransformWorldToHClip(worldPos); 
+                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
 				return o;
             }
  
            
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/CombinedShapeLightShared.hlsl"
             half4 frag ( VertexOutput IN ) : SV_Target
-			{  
-				float4 screenPos = IN.texcoord3;
-				float4 screenPosNorm = screenPos / screenPos.w;
-				screenPosNorm.z = ( UNITY_NEAR_CLIP_VALUE >= 0 ) ? screenPosNorm.z : screenPosNorm.z * 0.5 + 0.5;
-				float2 ScreenUV = (screenPosNorm).xy; 
-				float4 texColor =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.texcoord4.xy );
- 
-			 
-			    texColor*=_Color;
+			{   
+				float2 ScreenUV = IN.lightingUV; 
+				float4 texColor =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv.xy );
+  
 
                 float ColorValue=(texColor.r+texColor.g+texColor.b)/3;
 				Unity_Remap_float(ColorValue,float2(0,1),float2(_BlendRmapMin,1),ColorValue);
@@ -281,7 +259,7 @@ Shader "Toon/ToonCommonTree2d"
                
                 //texColor.xyz=((1-IN.normal.y)*texColor.xyz+IN.normal.y)*(1-_NormalTex)+(_NormalTex)*texColor.xyz;
                   
-                float4 SnowColor =SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, IN.texcoord4.xy );
+                float4 SnowColor =SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, IN.uv.xy );
                 float normalY=IN.normal.y;
                 Unity_Remap_float(normalY,float2(0,1),_SnowRange.xy,normalY);
                 normalY=clamp(normalY,0,1);
@@ -304,7 +282,7 @@ Shader "Toon/ToonCommonTree2d"
                 InputData2D inputData;
 
                 InitializeSurfaceData(texColor,Alpha, float4(0,0,0,0), surfaceData);
-                InitializeInputData(IN.texcoord4.xy, ScreenUV, inputData);
+                InitializeInputData(IN.uv.xy, ScreenUV, inputData);
 
                 //SETUP_DEBUG_TEXTURE_DATA_2D(inputData, i.positionWS, i.positionCS, _MainTex);
                 float4 result=CombinedShapeLightShared(surfaceData, inputData); 
