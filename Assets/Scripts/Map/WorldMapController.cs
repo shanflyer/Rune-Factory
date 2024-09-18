@@ -9,10 +9,12 @@ public class WorldMapController : MonoBehaviour
 {
 #if UNITY_EDITOR
     public bool runTime { get => GameTimeManager.instance.runTime; set => GameTimeManager.instance.runTime = value; }
-
+    public int runTimeDate { get => GameTimeManager.instance.Day; set => GameTimeManager.instance.SetDate(value); }
     public int runTimeHour { get => GameTimeManager.instance.Hour; set => GameTimeManager.instance.SetTime(value); }
 
     public int runTimeMinute { get => GameTimeManager.instance.Minute; set => GameTimeManager.instance.SetTime(minute: value); }
+
+
 #endif
     public static WorldMapController instance;
     WorldMapManager worldMapManager;
@@ -155,6 +157,7 @@ public class WorldMapControllerEditor : Editor
     {
         base.OnInspectorGUI();
         gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
+        gameController.runTimeDate = EditorGUILayout.IntField("Date", gameController.runTimeDate);
         gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
         gameController.runTimeMinute = EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
     }

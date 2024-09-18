@@ -147,14 +147,30 @@ public class MyLight : MonoBehaviour
             color = lerpColor.Evaluate(timeValue);
         if (light2D)
         {
-            if (intensity == 0 || color.a == 0)
+            if (autoLerpValue)
             {
-                light2D.enabled = false;
+                if (intensity == 0)
+                {
+                    light2D.enabled = false;
+                }
+                else
+                {
+                    light2D.enabled = true;
+                }
             }
-            else
+            else if (autoLerpColor)
             {
-                light2D.enabled = true;
+                if (color.a == 0)
+                {
+                    light2D.enabled = false;
+                }
+                else
+                {
+                    light2D.enabled = true;
+                }
             }
+
+               
         }
            
     }

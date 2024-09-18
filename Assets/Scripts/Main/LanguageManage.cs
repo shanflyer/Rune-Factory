@@ -87,7 +87,7 @@ public class LanguageManage : Singleton<LanguageManage>
         }
         else
         {
-            result = $"{nowGameTime.year}年 {nowGameTime.Season} {nowGameTime.date}日";
+            result = $"{nowGameTime.year}年 {nowGameTime.Season} {nowGameTime.day}日";
         }
 
         return result;

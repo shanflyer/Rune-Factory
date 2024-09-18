@@ -37,7 +37,29 @@ public class GameController : MonoBehaviour
 
         }
     }
+    public int runTimeDate
+    {
+        get
+        {
+            if (Application.isPlaying)
+            {
+                return GameTimeManager.instance.Day;
+            }
+            else
+            {
+                return 0;
+            }
 
+        }
+        set
+        {
+            if (Application.isPlaying && value != GameTimeManager.instance.Day)
+            {
+                GameTimeManager.instance.SetDate(value);
+            }
+        }
+
+    }
 
     public int runTimeHour {
         get
@@ -83,7 +105,12 @@ public class GameController : MonoBehaviour
             }
         } 
     }
+    [Range(0,4)]
+    public float seasonValue;
+    public float testSeasonSpeed;
 #endif
+    private float _seasonValue;
+
 
     public static GameController instance;
     public bool SetLanguage;
@@ -203,7 +230,20 @@ public class GameController : MonoBehaviour
     }
     private void Update()
     {
-        SingletonType.instance.UpData(); 
+        SingletonType.instance.UpData();
+#if UNITY_EDITOR
+        seasonValue += Time.deltaTime * testSeasonSpeed;
+        if(seasonValue>4)
+        {
+            seasonValue = 0;
+        }
+
+        if (seasonValue != _seasonValue)
+        {
+            _seasonValue = seasonValue;
+            Shader.SetGlobalFloat("_SeasonValue", seasonValue);
+        }
+#endif 
     }
 #if UNITY_EDITOR
     public Transform testObj;
@@ -234,6 +274,7 @@ public class GameControllerEditor : Editor
     {
         base.OnInspectorGUI();
         gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
+        gameController.runTimeDate = EditorGUILayout.IntField("Date", gameController.runTimeDate);
         gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
         gameController.runTimeMinute= EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
         if (GUILayout.Button("test"))

@@ -31,7 +31,7 @@ Shader "MySprite-Lit-Default"
         _PlantAutumnColor1("_PlantAutumnColor1",color)=(1,1,1)
         _PlantWinterColor("_PlantWinterColor",color)=(0,0,0)
         _PlantWinterColor1("_PlantWinterColor1",color)=(0,0,0)
-        _SeasonValue("_SeasonValue",Range(0,4))=0
+        //_SeasonValue("_SeasonValue",Range(0,4))=0
         _PlantAutumnNoiseScale("_PlantAutumnNoiseScale",float)=1
         [Toggle]_PlantAutumnBlend("_PlantAutumnBlend",int)=0
 
@@ -116,6 +116,7 @@ Shader "MySprite-Lit-Default"
 
         float4 _GlobalColor;
         half4 _SunColor;
+        float _SeasonValue;
         CBUFFER_START(UnityPerMaterial)
             int _DampBlend;
             int _Damp;
@@ -129,7 +130,7 @@ Shader "MySprite-Lit-Default"
             half3 _PlantWinterColor;
             half3 _PlantWinterColor1; 
             float _PlantAutumnNoiseScale; 
-            float _SeasonValue;
+            
             
             half4 _MainTex_TexelSize;
             half4 _MainTex_ST;
@@ -517,7 +518,7 @@ Shader "MySprite-Lit-Default"
                 s_w=clamp(s_w,0,1);
 
                 float s_w1=0;
-                Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
                 s_w1=clamp(s_w1,0,1);
                 s_w+=s_w1;
  
@@ -528,6 +529,7 @@ Shader "MySprite-Lit-Default"
 
                 const half4 grassTex=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask,uv);
                 float mainValue=(main.y);
+               
                 mainValue=clamp(mainValue,0,1);
 
                  float noiseValue;
@@ -562,6 +564,7 @@ Shader "MySprite-Lit-Default"
 
                 float3 AutumnColor0=(main.xyz*noiseValue1+_PlantAutumnColor0*(1-noiseValue1))*mainValue; 
                 AutumnColor0=AutumnColor0*s_a+summerColor*(1-s_a);
+ 
 
                 float a_a=_SeasonValue;
                 Unity_Remap_float(a_a,float2(2.25,2.5),float2(0,1),a_a);
@@ -570,20 +573,25 @@ Shader "MySprite-Lit-Default"
                 float3 AutumnColor=(_PlantAutumnColor0*noiseValue+_PlantAutumnColor1*(1-noiseValue))*mainValue; 
                 AutumnColor=AutumnColor*a_a+AutumnColor0*(1-a_a);
 
+               
+
                 //冬季颜色
                 float a_w=_SeasonValue;
                 Unity_Remap_float(a_w,float2(2.85,3.15),float2(0,1),a_w);
                 a_w=clamp(a_w,0,1); 
                 float3 winterColor0=(_PlantAutumnColor0*noiseValue1+_PlantWinterColor1*(1-noiseValue1))*mainValue; 
+                 
                 winterColor0=winterColor0*a_w+AutumnColor*(1-a_w);
 
                  float w_w=_SeasonValue;
                 Unity_Remap_float(w_w,float2(3.15,3.35),float2(0,1),w_w);
                 w_w=clamp(w_w,0,1); 
                 winterColor=winterColor*w_w+winterColor0*(1-w_w); 
+                
 
-                half _BlendValue=step(0.01,grassTex.r);
+                half _BlendValue=1-step(grassTex.g,0);
                 main.xyz=main.xyz*(1-_BlendValue)+winterColor*_BlendValue;  
+               // return float4(main.xyz,main.a);
 
                 
 
@@ -871,6 +879,8 @@ Shader "MySprite-Lit-Default"
                 normalTS = UnpackNormal(_NormalColor);
                 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
                 result.x=unity_SpriteProps.x*result.x+(1-unity_SpriteProps.x)*(1-result.x);
+               result.z=0;
+               
                 // result.z-=i.positionCS.y; 
                 result=result*i.color; 
                 // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);

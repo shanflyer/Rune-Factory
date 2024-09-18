@@ -26,7 +26,7 @@ Shader "Toon/ToonCommonTree2d"
         
         _PlantAutumnNoiseScale("_PlantAutumnNoiseScale",float)=1
         [Toggle]_PlantAutumnBlend("_PlantAutumnBlend",int)=0 
-        _SeasonValue("_SeasonValue",Range(0,4))=0
+        //_SeasonValue("_SeasonValue",Range(0,4))=0
 
         _NormalMap("Normal Map", 2D) = "bump" {}
         [Toggle]_NormalTex("NormalTex",int)=0
@@ -51,7 +51,7 @@ Shader "Toon/ToonCommonTree2d"
  
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"  
         #include "Assets/Render/Shader/UnityAction.cginc"
-        
+        float _SeasonValue;
          CBUFFER_START(UnityPerMaterial)
             float3 _BlendColor;
 			float _BlendValue;
@@ -68,7 +68,7 @@ Shader "Toon/ToonCommonTree2d"
             half3 _PlantWinterColor1;
             int _PlantAutumnBlend;
             float _PlantAutumnNoiseScale; 
-            float _SeasonValue;
+            
 
 			float4 _OutlineColor; 
 			float _OutlineWidth;
@@ -292,7 +292,7 @@ Shader "Toon/ToonCommonTree2d"
                 s_w=clamp(s_w,0,1);
 
                 float s_w1=0;
-                Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
                 s_w1=clamp(s_w1,0,1);
                 s_w+=s_w1;
                 texColor=texColor*(1-s_w)+SnowColor*s_w*_SnowColor;

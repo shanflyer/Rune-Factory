@@ -149,22 +149,23 @@ Shader "Sun"
                 }else{
                      moonMask=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv);  
                      moonMask1=SAMPLE_TEXTURE2D(_MoonMask, sampler_MoonMask, i.uv+float2(-_moonOffSet,-_moonOffSet)); 
-                }
-                
+                } 
                 float d_a=moonMask.a-moonMask1.a;
                 d_a=clamp(d_a,0,1); 
                 
                 half3 moonColor=moonMask.xyz*d_a;  
+               
                 moonColor+=moonMask.xyz*(1-moonMask.a+moonMask1.a)*0.1;
                 moonMask.xyz=moonColor*moonMask.a;
-                maskR=clamp(maskR,0,1);
+                maskR=clamp(maskR,0,0.75);
                 //maskR=(1-step(1,maskR))*maskR; 
-                moonMask.xyz=moonMask.xyz*(1-maskR)+maskR*i.color.a;
-               
+                 moonMask.xyz=moonMask.xyz*(1-maskR)+maskR*i.color.a;
+               //  moonMask.xyz*=moonMask.xyz;
                   // return float4(moonMask.xyz,1); 
-                moonMask.xyz*=i.color;
+                 moonMask.xyz*=i.color;
                 
-                moonMask.xyz+=maskR.xxx*0*(1-moonMask.a);
+                
+               moonMask.xyz+=maskR.xxx*0*(1-moonMask.a);
                 moonMask.a+=maskR;
                 moonMask.a=clamp(moonMask.a,0,1);
                 return moonMask;

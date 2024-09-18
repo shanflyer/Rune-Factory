@@ -66,7 +66,7 @@ public class GameTime
     }
 
     private Season season;
-    public int date = 1;
+    public int day = 1;
     public int hour;
     public int minute;
     public int mySecond;
@@ -106,6 +106,22 @@ public class GameTime
 
     public float TimeValue => timeValue;
 
+    public void SetDate(int day)
+    {
+        if (day <= 15)
+        {
+            float moonOffSet = day / 15.0f;
+            Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
+        }
+        else
+        {
+            float moonOffSet = (30 - day) / 15.0f;
+            Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
+        }
+        this.day = day;
+        TimeInit();
+        UpDataGameTimeAction();
+    }
     public void SetTime(int hour, int minute)
     {
         if (hour > 0)
@@ -115,7 +131,6 @@ public class GameTime
         TimeInit();
         UpDataGameTimeAction();
     }
-
     public async void SetMapOverrideEnvironment(string dayEnvironmentDataName,
         string duskEnvironmentDataName, string dawnEnvironmentDataName, string nightEnvironmentDataName)
     {
@@ -353,19 +368,19 @@ public class GameTime
 
     public int GetTimeKey()
     {
-        return (year * 1000 + (int)Season * 100) + date;
+        return (year * 1000 + (int)Season * 100) + day;
     }
 
     public int GetTimeKeyNoYear()
     {
-        return ((int)Season * 100) + date;
+        return ((int)Season * 100) + day;
     }
 
-    public GameTime(int _year, Season _season, int _date, int _hour, int _minute)
+    public GameTime(int _year, Season _season, int _day, int _hour, int _minute)
     {
         year = _year;
         Season = _season;
-        date = _date;
+        day = _day;
         hour = _hour;
         minute = _minute;
         TimeInit();
@@ -380,7 +395,7 @@ public class GameTime
             return;
         }
 #endif
-        mySecond++;
+        mySecond+=1;
         TimeInit();
         if (minuteRefresh)
         {
@@ -409,21 +424,21 @@ public class GameTime
         if (hour >= 24)
         {
             dayRefresh = true;
-            date += hour / 24;
+            day += hour / 24;
             hour = hour % 24;
 
-            if (date <= 15)
+            if (day <= 15)
             {
-                float moonOffSet = date / 15.0f;
+                float moonOffSet = day / 15.0f;
                 Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
             }
             else
             {
-                float moonOffSet = (30 - date) / 15.0f;
+                float moonOffSet = (30 - day) / 15.0f;
                 Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
             }
         }
-        if (date > 30)
+        if (day > 30)
         {
             int seasonId = (int)Season;
             if (seasonId < 4)
@@ -436,18 +451,20 @@ public class GameTime
                 seasonId = 1;
             }
             Season = (Season)seasonId;
-            date = 1;
+            day = 1;
+            float moonOffSet = day / 15.0f;
+            Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
 
             if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
             {
-                InformationController.instance.AddInformation("*" + year + "年" + Season + "之月" + date + "日");
+                InformationController.instance.AddInformation("*" + year + "年" + Season + "之月" + day + "日");
             }
             else
             {
-                InformationController.instance.AddInformation("*" + date + "," + LanguageManage.SwitchStr(Season.ToString()) + "," + year + LanguageManage.SwitchStr("年"));
+                InformationController.instance.AddInformation("*" + day+ "," + LanguageManage.SwitchStr(Season.ToString()) + "," + year + LanguageManage.SwitchStr("年"));
             }
         }
-        int x = date % 6;
+        int x = day % 6;
         week = (Week)x;
         SetLightValue();
 
@@ -455,13 +472,19 @@ public class GameTime
         {
             GameActionManager.instance.QueueAction(newDay);
         }
+
+        int nowYearHour = ((int)season * 30-30 + day-1) * 24+hour;
+        float seasonValue = nowYearHour / totalYearHour;
+        Shader.SetGlobalFloat("_SeasonValue", seasonValue);
     }
+    const float totalYearHour = (4 * 30) * 24;
+
 
     private void UpDataGameTimeAction()
     {
         updateGame.year = year;
         updateGame.season = (int)season;
-        updateGame.day = date;
+        updateGame.day = day;
         updateGame.hour = hour;
         updateGame.minute = minute;
         updateGame.totalMinute = minuteTime;
@@ -470,13 +493,13 @@ public class GameTime
 
     private UpdateGameTime updateGame;
 
-    public int minuteTime => (((year * 4 + (int)season) * 30 + date) * 24 + hour) * 60 + minute;
+    public int minuteTime => (((year * 4 + (int)season) * 30 + day) * 24 + hour) * 60 + minute;
 }
 
 public class GameTimeManager : Singleton<GameTimeManager>
 {
     private GameTime nowGameTime;
-    public float timeRunScale = 1;
+    public int timeRunScale = 1;
 #if UNITY_EDITOR
     public bool runTime = true;
 #endif
@@ -486,7 +509,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public int Year => nowGameTime.year;
     public Season Season => nowGameTime.Season;
     public Week Week => nowGameTime.week;
-    public int Day => nowGameTime.date;
+    public int Day => nowGameTime.day;
 
     public int Hour
     {
@@ -521,7 +544,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
             nowGameTime.SetTime(hour, minute);
         }
     }
-
+    public void SetDate(int day)
+    {
+        if (nowGameTime != null)
+        {
+            nowGameTime.SetDate(day);
+        }
+    }
     private Dictionary<int, GameDate> gameDates = new Dictionary<int, GameDate>();
 
     public List<GameDate> GetGameDataForSeason(Season season)
@@ -666,7 +695,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             int year = nowGameTime.year;
             int season = (int)nowGameTime.Season;
-            int day = nowGameTime.date;
+            int day = nowGameTime.day;
             int hour = playerSleep.targetHour;
             if (hour < nowGameTime.hour)
             {
@@ -727,7 +756,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     {
         string timeStr = nowGameTime.year.ToString();
         timeStr += "," + nowGameTime.Season;
-        timeStr += "," + nowGameTime.date;
+        timeStr += "," + nowGameTime.day;
         return timeStr;
     }
 
@@ -736,7 +765,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         var x = timeStr.Split(',');
         nowGameTime.year = int.Parse(x[0]);
         nowGameTime.Season = (Season)Enum.Parse(typeof(Season), x[1]);
-        nowGameTime.date = int.Parse(x[2]);
+        nowGameTime.day = int.Parse(x[2]);
     }
 
     public int DaysToSave(string timeStr)
@@ -796,10 +825,22 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public void InitSaveDate(GameDateSaveData dateData)
     {
         nowGameTime.year = dateData.year;
-        nowGameTime.date = dateData.day;
+        nowGameTime.day = dateData.day;
+
         nowGameTime.Season = dateData.season;
         nowGameTime.week = dateData.week;
         nowGameTime.SetTime(dateData.hour, dateData.minute);
+
+        if (nowGameTime.day <= 15)
+        {
+            float moonOffSet = nowGameTime.day / 15.0f;
+            Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
+        }
+        else
+        {
+            float moonOffSet = (30 - nowGameTime.day) / 15.0f;
+            Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
+        }
     }
 
     private void LerpGameTime(int targetHour, int targetMinute, float costTime, bool endRun = false, Action endAction = null)
@@ -847,16 +888,20 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
     private IEnumerator TimeRun()
     {
+        var  waitFixedUpdate=new WaitForFixedUpdate(); 
+        bool timeRun = false;
         while (true)
         {
-            float waitTime = 0.05f;
-            if (timeRunScale > 0)
+            for(int i = 0; i < timeRunScale; i++)
             {
-                waitTime = waitTime / timeRunScale;
-            }
-            nowGameTime.TimeRun();
+                if (timeRun)
+                {
+                    nowGameTime.TimeRun();
+                }
+                timeRun = !timeRun;
+            } 
             //timeDisplayAction.UpdataTime();
-            yield return new WaitForSeconds(waitTime);
+            yield return waitFixedUpdate;
         }
     }
 }
