@@ -161,7 +161,7 @@ public class BakerRenderPassFeature : ScriptableRendererFeature
                 if (!string.IsNullOrEmpty(settings.textureName))
                 {
 
-                    Blitter.BlitCameraTexture(cmd, destination, dstTextureId, Vector2.one);
+                    Blitter.BlitCameraTexture(cmd, destination, dstTextureId, Vector2.one*settings.blitScale);
                     cmd.SetGlobalTexture(settings.textureName, dstTextureId);
                 } 
             }
@@ -170,7 +170,7 @@ public class BakerRenderPassFeature : ScriptableRendererFeature
                 if (!string.IsNullOrEmpty(settings.textureName))
                 {
 
-                    Blitter.BlitCameraTexture(cmd, destination, dstTextureId, Vector2.one);
+                    Blitter.BlitCameraTexture(cmd, destination, dstTextureId, Vector2.one * settings.blitScale);
                     cmd.SetGlobalTexture(settings.textureName, dstTextureId);
                 } 
             }
@@ -218,6 +218,7 @@ public class BakerRenderPassFeature : ScriptableRendererFeature
         public int afterPassId;
         public string textureName;
 
+        public float blitScale = 1;
         public bool blitToCameraTarget;
         public ClearFlag clearFlag;
         public Color clearColor = Color.black;

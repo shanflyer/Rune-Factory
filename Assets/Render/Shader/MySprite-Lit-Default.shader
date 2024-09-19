@@ -1284,7 +1284,7 @@ Shader "MySprite-Lit-Default"
         Pass
         {
            Tags { "LightMode" = "MyDepth" "Queue"="Transparent" "RenderType"="Transparent"}
-             BlendOp Max 
+            // BlendOp Max 
 
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"

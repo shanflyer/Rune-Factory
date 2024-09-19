@@ -60,6 +60,9 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
     /// </summary>
     public int passIndex = 0;
 
+    public float scale = 1.0f;
+    public string blitTextureName;
+
     /// <summary>
     /// Specifies if the active camera's depth-stencil buffer should be bound when rendering the full screen pass.
     /// Disabling this will ensure that the material's depth and stencil commands will have no effect (this could also have a slight performance benefit).
@@ -71,7 +74,7 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
     /// <inheritdoc/>
     public override void Create()
     {
-        m_FullScreenPass = new FullScreenRenderPass(name);
+        m_FullScreenPass = new FullScreenRenderPass(name,blitTextureName);
     }
 
     internal override bool RequireRenderingLayers(bool isDeferred, bool needsGBufferAccurateNormals, out RenderingLayerUtils.Event atEvent, out RenderingLayerUtils.MaskSize maskSize)
@@ -103,7 +106,7 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
 
         m_FullScreenPass.renderPassEvent = (RenderPassEvent)injectionPoint;
         m_FullScreenPass.ConfigureInput(requirements);
-        m_FullScreenPass.SetupMembers(passMaterial, passIndex, fetchColorBuffer, bindDepthStencilAttachment);
+        m_FullScreenPass.SetupMembers(passMaterial, passIndex, fetchColorBuffer, bindDepthStencilAttachment,scale);
 
         m_FullScreenPass.requiresIntermediateTexture = fetchColorBuffer;
 
@@ -123,18 +126,25 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
         private bool m_CopyActiveColor;
         private bool m_BindDepthStencilAttachment;
         private RTHandle m_CopiedColor;
+        private RTHandle dstTexture;
+        private RTHandle m_CopiedColor1;
+        private float scale;
+        private string blitTextureName;
 
         private static MaterialPropertyBlock s_SharedPropertyBlock = new MaterialPropertyBlock();
 
-        public FullScreenRenderPass(string passName)
+        public FullScreenRenderPass(string passName, string blitTextureName)
         {
             profilingSampler = new ProfilingSampler(passName);
+            this.blitTextureName = blitTextureName;
+
         }
 
-        public void SetupMembers(Material material, int passIndex, bool copyActiveColor, bool bindDepthStencilAttachment)
+        public void SetupMembers(Material material, int passIndex, bool copyActiveColor, bool bindDepthStencilAttachment,float scale)
         {
             m_Material = material;
             m_PassIndex = passIndex;
+            this.scale = scale;
             m_CopyActiveColor = copyActiveColor;
             m_BindDepthStencilAttachment = bindDepthStencilAttachment;
         }
@@ -150,19 +160,31 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
             #pragma warning restore CS0618
 
             if (m_CopyActiveColor)
+            {
                 ReAllocate(renderingData.cameraData.cameraTargetDescriptor);
+            }
+                
         }
 
         internal void ReAllocate(RenderTextureDescriptor desc)
         {
             desc.msaaSamples = 1;
-            desc.depthBufferBits = (int)DepthBits.None;
+            desc.depthBufferBits = (int)DepthBits.None; 
             RenderingUtils.ReAllocateHandleIfNeeded(ref m_CopiedColor, desc, name: "_FullscreenPassColorCopy");
+            desc.height = (int)(desc.height * scale);
+            desc.width = (int)(desc.width * scale);
+            RenderingUtils.ReAllocateHandleIfNeeded(ref m_CopiedColor1, desc, name: "_TestColorCopy");
+            if (!string.IsNullOrEmpty(blitTextureName))
+            { 
+                RenderingUtils.ReAllocateHandleIfNeeded(ref dstTexture, desc, name: blitTextureName);
+            }
         }
 
         public void Dispose()
         {
             m_CopiedColor?.Release();
+            m_CopiedColor1?.Release();
+            dstTexture?.Release();
         }
 
         private static void ExecuteCopyColorPass(RasterCommandBuffer cmd, RTHandle sourceTexture)
@@ -170,14 +192,14 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
             Blitter.BlitTexture(cmd, sourceTexture, new Vector4(1, 1, 0, 0), 0.0f, false);
         }
 
-        private static void ExecuteMainPass(RasterCommandBuffer cmd, RTHandle sourceTexture, Material material, int passIndex)
+        private static void ExecuteMainPass(RasterCommandBuffer cmd, RTHandle sourceTexture, Material material, int passIndex,float scale)
         {
             s_SharedPropertyBlock.Clear();
             if (sourceTexture != null)
                 s_SharedPropertyBlock.SetTexture(ShaderPropertyId.blitTexture, sourceTexture);
 
             // We need to set the "_BlitScaleBias" uniform for user materials with shaders relying on core Blit.hlsl to work
-            s_SharedPropertyBlock.SetVector(ShaderPropertyId.blitScaleBias, new Vector4(1, 1, 0, 0));
+            s_SharedPropertyBlock.SetVector(ShaderPropertyId.blitScaleBias, new Vector4(1, 1, 0, 0)); 
 
             cmd.DrawProcedural(Matrix4x4.identity, material, passIndex, MeshTopology.Triangles, 3, 1, s_SharedPropertyBlock);
         }
@@ -193,8 +215,9 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
                 RasterCommandBuffer rasterCmd = CommandBufferHelpers.GetRasterCommandBuffer(cmd);
                 if (m_CopyActiveColor)
                 {
-                    CoreUtils.SetRenderTarget(cmd, m_CopiedColor);
+                    CoreUtils.SetRenderTarget(cmd, m_CopiedColor1);
                     ExecuteCopyColorPass(rasterCmd, cameraData.renderer.cameraColorTargetHandle);
+                    Blitter.BlitCameraTexture(cmd,m_CopiedColor1,m_CopiedColor);
                 }
 
                 if (m_BindDepthStencilAttachment)
@@ -202,7 +225,17 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
                 else
                     CoreUtils.SetRenderTarget(cmd, cameraData.renderer.cameraColorTargetHandle);
 
-                ExecuteMainPass(rasterCmd, m_CopyActiveColor ? m_CopiedColor : null, m_Material, m_PassIndex);
+                if (!string.IsNullOrEmpty(blitTextureName))
+                {
+                    Blitter.BlitCameraTexture(cmd, m_CopiedColor, dstTexture, m_Material, m_PassIndex);
+                    //ExecuteMainPass(rasterCmd, dstTexture, m_Material, m_PassIndex, scale);
+                    cmd.SetGlobalTexture(blitTextureName, dstTexture);
+                }
+                else
+                {
+                    ExecuteMainPass(rasterCmd, m_CopyActiveColor ? m_CopiedColor : null, m_Material, m_PassIndex, scale);
+                }
+               
             }
         }
 
@@ -212,6 +245,8 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
 
             var colorCopyDescriptor = cameraData.cameraTargetDescriptor;
+           // colorCopyDescriptor.width = (int)(colorCopyDescriptor.width * scale);
+           // colorCopyDescriptor.height= (int)(colorCopyDescriptor.height * scale);
             colorCopyDescriptor.msaaSamples = 1;
             colorCopyDescriptor.depthBufferBits = (int)DepthBits.None;
             TextureHandle copiedColor = TextureHandle.nullHandle;
@@ -240,6 +275,7 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
 
                 passData.material = m_Material;
                 passData.passIndex = m_PassIndex;
+                passData.scale = scale;
 
                 if (m_CopyActiveColor)
                 {
@@ -253,7 +289,7 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
 
                 builder.SetRenderFunc((MainPassData data, RasterGraphContext rgContext) =>
                 {
-                    ExecuteMainPass(rgContext.cmd, data.inputTexture.IsValid() ? data.inputTexture : null, data.material, data.passIndex);
+                    ExecuteMainPass(rgContext.cmd, data.inputTexture.IsValid() ? data.inputTexture : null, data.material, data.passIndex,data.scale);
                 });
             }
         }
@@ -268,6 +304,7 @@ public partial class FullScreenPassRendererFeature : ScriptableRendererFeature
             internal Material material;
             internal int passIndex;
             internal TextureHandle inputTexture;
+            internal float scale;
         }
     }
 }

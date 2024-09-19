@@ -42,6 +42,69 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &-7700621039921025094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573e83345e5a3524e8d46ac9229de438, type: 3}
+  m_Name: BakerRenderPassFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    renderPassEvent: 300
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 455057
+    overrideMat: {fileID: 0}
+    PassNames:
+    - MyDepth
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _MyDepthTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 0
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &-6404687707689177119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
+  m_Name: MyBlur
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  injectionPoint: 550
+  fetchColorBuffer: 1
+  requirements: 0
+  passMaterial: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
+  passIndex: 0
+  scale: 0.2
+  blitTextureName: _BlurTex
+  bindDepthStencilAttachment: 0
+  m_Version: 1
 --- !u!114 &-1919989437086517868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +142,7 @@ MonoBehaviour:
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
     textureName: _GrassTex
+    blitScale: 1
     blitToCameraTarget: 0
     clearFlag: 0
     clearColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
@@ -100,6 +164,8 @@ MonoBehaviour:
   requirements: 0
   passMaterial: {fileID: 2100000, guid: da1f5db2cc22d5c41b53fa52ab3bbe6c, type: 2}
   passIndex: 0
+  scale: 1
+  blitTextureName: 
   bindDepthStencilAttachment: 0
   m_Version: 1
 --- !u!114 &-777346220230445787
@@ -186,7 +252,10 @@ MonoBehaviour:
   - {fileID: -777346220230445787}
   - {fileID: 142935280726465048}
   - {fileID: -1919989437086517868}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5
+  - {fileID: -6404687707689177119}
+  - {fileID: -7700621039921025094}
+  - {fileID: 7361033078031376960}
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef145d39c930431688f3c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5e12fe09d76fa1da7baaf9bbdf6e5219540e2f58395a42766
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
@@ -275,6 +344,7 @@ MonoBehaviour:
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
     textureName: _WaterTex
+    blitScale: 1
     blitToCameraTarget: 0
     clearFlag: 0
     clearColor: {r: 0, g: 0, b: 0, a: 1}
@@ -358,6 +428,7 @@ MonoBehaviour:
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
     textureName: _MirrorTex
+    blitScale: 1
     blitToCameraTarget: 0
     clearFlag: -1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
@@ -398,9 +469,32 @@ MonoBehaviour:
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
     textureName: _ShadowTex
+    blitScale: 1
     blitToCameraTarget: 0
     clearFlag: 1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &7361033078031376960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
+  m_Name: FullScreenPassRendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  injectionPoint: 550
+  fetchColorBuffer: 1
+  requirements: 0
+  passMaterial: {fileID: 2100000, guid: c977e7e7329827147b1592f00cfc74c8, type: 2}
+  passIndex: 0
+  scale: 1
+  blitTextureName: 
+  bindDepthStencilAttachment: 0
+  m_Version: 1
 --- !u!114 &8839455909964680641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +532,7 @@ MonoBehaviour:
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
     textureName: _BackMaskTex
+    blitScale: 1
     blitToCameraTarget: 0
     clearFlag: 1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
