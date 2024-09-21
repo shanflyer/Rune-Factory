@@ -95,7 +95,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         runtimeObj.use = true;
         return runtimeObj;
     }
-    public void RecycleRuntimeObj(RuntimeObj runtimeObj)
+    public void RecycleRuntimeObj(RuntimeObj runtimeObj,bool setActive=true)
     {
         if(runtimeObj.obj != null)
         {  
@@ -106,7 +106,11 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             {
                 component.transform.SetParent(parent, false);
             }
-            component.gameObject.SetActive(false);
+            if (setActive)
+            {
+                component.gameObject.SetActive(false);
+            }
+           
             Dictionary<string, Stack<RuntimeObj>> objs;
             if (!unusedRuntimeObjs.TryGetValue(runtimeObj.runtimeObjType, out objs))
             {
@@ -119,7 +123,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
                 runtimeObjs = new Stack<RuntimeObj>();
                 objs[runtimeObj.key] = runtimeObjs;
             }
-            if(runtimeObjs.Count <10)
+            if(runtimeObjs.Count <10||!setActive)
             {
                 runtimeObjs.Push(runtimeObj);
             }

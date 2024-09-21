@@ -724,33 +724,7 @@ public partial class Character
     public int instanceId;
     public Direction direction { private set; get; }
 
-    public void SetDirection(Direction direction)
-    {
-        this.direction = direction;
-
-        switch (direction)
-        {
-            case Direction.UP:
-                _moveDirection = new int2(0, 1);
-                break;
-
-            case Direction.LEFT:
-                _moveDirection = new int2(-1, 0);
-                break;
-
-            case Direction.DOWN:
-                _moveDirection = new int2(0, -1);
-                break;
-
-            case Direction.RIGHT:
-                _moveDirection = new int2(1, 0);
-                break;
-        }
-        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
-        {
-            runtimeObj.SetAnimationDirection(_moveDirection);
-        }
-    }
+     
 
     private float2 _moveDirection;
 
@@ -773,29 +747,14 @@ public partial class Character
                 direction = GameCommon.GetCharacterDirect(moveDirection, direction);
                 //Debug.Log($"direction:{moveDirection}--{direction}");
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
-                {
-                    runtimeObj.SetAnimationDirection(GameCommon.GetDirectValue(direction));
-                    runtimeObj.SetMoveDirection(_moveDirection);
+                { 
+                    runtimeObj.SetAnimationDirection(_moveDirection, direction); 
                 }
             }
         }
     }
 
-    public void SetDataDirection(float2 value)
-    {
-        _moveDirection = value;
-    }
-
-    public void SetAnimationDirection(float2 value)
-    {
-        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj) &&
-            CanMoveCrossMap)
-        {
-            direction = GameCommon.GetCharacterDirect(value, direction);
-            runtimeObj.SetAnimationDirection(GameCommon.GetDirectValue(direction));
-        }
-    }
-
+  
     private float _nowSpeed;
 
     public float nowSpeed

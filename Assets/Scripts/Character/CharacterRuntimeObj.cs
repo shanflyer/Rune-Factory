@@ -2,12 +2,15 @@
 using UnityEngine;
 using BehaviorDesigner.Runtime;
 using static UnityEngine.ParticleSystem;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 public class CharacterRuntimeObj:MonoBehaviour,IGameData
 {
     public RuntimeObj runtimeObj;
+    [SerializeField]
+    private Transform body,equip,shadow; 
     public Animator Animator => animator;
     [SerializeField]
     private Animator animator;
@@ -27,6 +30,8 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
     Vector3 leftFootPos, rightFootPos;
     [SerializeField]
     float FootTime;
+    [SerializeField]
+    float2 direction;
     public void Clear()
     {
         if (runtimeObj != null)
@@ -34,7 +39,14 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
             behaviorTree.DisableBehavior();
             behaviorTree.enabled = false;
             behaviorTree.ExternalBehavior = null;
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+
+            this.enabled = false;
+            Vector3 offset = new Vector3(0, 0, -99999);
+            body.localScale = Vector3.zero;
+            equip.Translate(offset);
+            shadow.Translate(offset);
+
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj,false);
         }
     }
     public void SetAnimationFloat(int hashParameter,float value)
@@ -42,6 +54,10 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         if (animator)
         {
             animator.SetFloat(hashParameter, value);
+            if(hashParameter== CharacterAnimatorParameter.Speed)
+            {
+                this.speed = value;
+            }
         }
     }
     public void SetEquipSprite(Sprite sprite)
@@ -65,28 +81,28 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         var emission= footStep.emission;
         emission.enabled = on;
     }
+    [SerializeField]
     Vector2 moveDirection;
-    public void SetMoveDirection(float2 direction)
-    {
-        moveDirection = direction;
-    }
+    [SerializeField]
     float speed; 
-    public void SetAnimationDirection(float2 direction)
+     
+    public void SetAnimationDirection(float2 moveDirection, Direction direction)
     {
-        if (direction.x == float.NaN || direction.y == float.NaN)
+        this.moveDirection = moveDirection;
+        this.direction = GameCommon.GetDirectValue(direction);
+        if (this.direction.x == float.NaN || this.direction.y == float.NaN)
         {
             return;
         }
         if (animator != null)
         {
-            if (direction.x == 0 && direction.y == 0)
+            if (this.direction.x == 0 && this.direction.y == 0)
             {
                 return;
             }
-            animator.SetFloat(CharacterAnimatorParameter.Dir_X, direction.x);
-            animator.SetFloat(CharacterAnimatorParameter.Dir_Y, direction.y);
+            animator.SetFloat(CharacterAnimatorParameter.Dir_X, this.direction.x);
+            animator.SetFloat(CharacterAnimatorParameter.Dir_Y, this.direction.y);
         }
-        
     }
 
     public void SetAnimationSpeed(float speed, float animationSpeed = 1)
@@ -108,6 +124,15 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
     {
         waitFootTime = 0;
         isLeftFoot = false;
+
+
+        body.localScale = Vector3.one; 
+        Vector3 offset = equip.localPosition;
+        offset.z = 0;
+        equip.localPosition = offset;
+        offset = shadow.localPosition;
+        offset.z = 0;
+        shadow.localPosition = offset;  
     }
      
     void Update()
@@ -117,7 +142,7 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
             if (waitFootTime <= 0)
             {
                 float angel = GameCommon.VectorAngle(Vector2.up, moveDirection);
-
+                //
                 EmitParams ep = new EmitParams();
                 Vector3 offSetPos = isLeftFoot ? leftFootPos :rightFootPos;
                 offSetPos.x *= moveDirection.y;
@@ -137,7 +162,10 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
     public void SetReferenceData()
     {
         animator = gameObject.GetComponentInChildren<Animator>();
-        myShadow = transform.Find("Shadow").GetComponent<MyShadowPolygon>();
+        body = transform.Find("Body");
+        equip = transform.Find("Equip");
+        shadow = transform.Find("Shadow");
+        myShadow = shadow.GetComponent<MyShadowPolygon>();
         equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>();
         behaviorTree = transform.GetComponent<BehaviorTree>();
         DirOther = transform.Find("Other/Dir");
@@ -147,6 +175,7 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
             if(footStepTrans)
                 footStep = footStepTrans.GetComponent<ParticleSystem>();
         }
+       
     }
 
 #endif

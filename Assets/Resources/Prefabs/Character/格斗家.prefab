@@ -199,6 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13c5c54c81ecd244b3ad1fcb3a1e7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 3802633594670847853}
+  equip: {fileID: 6821670482374822912}
+  shadow: {fileID: 4303837414443657715}
   animator: {fileID: 8190145308750544388}
   myShadow: {fileID: 7134494918851183248}
   equipRenderer: {fileID: 4745831632106767156}
@@ -209,6 +212,11 @@ MonoBehaviour:
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
   rightFootPos: {x: 0.05, y: 0.025, z: 0}
   FootTime: 0.06
+  direction:
+    x: 0
+    y: 0
+  moveDirection: {x: 0, y: 0}
+  speed: 0
 --- !u!1 &3364341606104071018
 GameObject:
   m_ObjectHideFlags: 0

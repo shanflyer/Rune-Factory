@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public delegate void MoveEndAction(); 
  
@@ -69,7 +70,8 @@ public class CharacterManager : Singleton<CharacterManager>
         CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
         characterRuntimeObj.runtimeObj = runtimeObj;
         characterRuntionObjs.Add(character, characterRuntimeObj);
-
+        characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction);
+        characterRuntimeObj.enabled = true;
         //Vector2 pos = GameCommon.GetMapPos(character.coordinate);
         //transform.position = pos;
 
@@ -771,7 +773,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return false;
     }
 
-    private async Task SetPlayerPos(Character character)
+    private async Task SetPlayerPos(Character character,bool refreshDirection = false)
     {
         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
         {
@@ -790,6 +792,10 @@ public class CharacterManager : Singleton<CharacterManager>
                     if (character == controllerCharacter)
                     {
                         SetShaderPlayerPos(pos);
+                    }
+                    if (refreshDirection)
+                    {
+                        characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
                     }
                     //transform.Translate(new Vector3(0, 0, -100));
                 }
@@ -948,7 +954,7 @@ public class CharacterManager : Singleton<CharacterManager>
        // Debug.Log($"next cell:{targetCoordinate}");
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
         character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
-        //Debug.Log($"moveDirection: {character.moveDirection}");
+         //Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
         if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
         {
@@ -1055,7 +1061,7 @@ public class CharacterManager : Singleton<CharacterManager>
             GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
             {
                 WorldMapObjManager.instance.RecycleMap();
-                await SetPlayerPos(character);
+                await SetPlayerPos(character,true);
                 await WorldMapObjManager.instance.DisplayMap(targetMap);
 
                 GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
@@ -1084,6 +1090,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         {
                             Vector2 pos = characterRuntimeObj.transform.position;
                             SetShaderPlayerPos(pos);
+                            characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
                         }
                         character.canMove = true;
                     }
