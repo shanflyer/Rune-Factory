@@ -10,6 +10,7 @@ Shader "MySprite-Lit-Default"
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
         _MoveMask("WaterMaskTex", 2D) ="black"{}
+        _DepthTex("DepthTex", 2D) ="black"{}
         _WetValue("WetValue",Range(0,1))=0
         [Toggle]_shadowStep("ShadowStep",int)=0
         _LightBlend("LightBlend",float)=1 
@@ -1283,7 +1284,7 @@ Shader "MySprite-Lit-Default"
 
         Pass
         {
-           Tags { "LightMode" = "MyDepth" "Queue"="Transparent" "RenderType"="Transparent"}
+            Tags { "LightMode" = "MyDepth" "Queue"="Transparent" "RenderType"="Transparent"}
             // BlendOp Max 
 
             HLSLPROGRAM
@@ -1294,6 +1295,8 @@ Shader "MySprite-Lit-Default"
             #pragma fragment UnlitFragment
 
             #pragma multi_compile _ SKINNED_SPRITE
+            TEXTURE2D(_DepthTex);
+            SAMPLER(sampler_DepthTex); 
 
             struct Attributes
             {
@@ -1331,15 +1334,18 @@ Shader "MySprite-Lit-Default"
                 o.uv = TRANSFORM_TEX(attributes.uv, _MainTex);
 
                 float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
-                float3 worldClip=TransformWorldToHClip(ObjPos);
+                float stepPosZ=step(49,ObjPos.z);
+                float3 _objSortPos=ObjPos;
+                _objSortPos.y+=_objSortPos.z*(1-stepPosZ);
+                float3 worldClip=TransformWorldToHClip(_objSortPos);
 
-                worldClip.z=0;
+               // worldClip.z=0;
                 float positionCSY=o.positionCS.y;
                 
                  Unity_Remap_float(worldClip.y,float2(-1,1),float2(0,1),worldClip.y);
                 Unity_Remap_float(positionCSY,float2(-1,1),float2(0,1),positionCSY);
+ 
 
-                float stepPosZ=step(80,ObjPos.z);
                // worldClip.y=stepPosZ;
                  worldClip.y=stepPosZ*positionCSY+(1-stepPosZ)*worldClip.y;
 
@@ -1351,7 +1357,11 @@ Shader "MySprite-Lit-Default"
             float4 UnlitFragment(Varyings i) : SV_Target
             {
                 float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                mainTex.xyz=i.color.yyy; 
+                float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
+                half offset=DepthTex.r*512/_ScreenParams.y;
+
+
+                mainTex.xyz=i.color.yyy-offset; 
                 
 
                 return mainTex;

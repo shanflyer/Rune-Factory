@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -788,6 +789,10 @@ public class CharacterManager : Singleton<CharacterManager>
                     Vector2 pos = GameCommon.GetMapPos(character.coordinate);
                     var transform = characterRuntimeObj.transform;
                     transform.position = pos;
+                    if (character == controllerCharacter)
+                    {
+                        SetShaderPlayerPos(pos);
+                    }
                     //transform.Translate(new Vector3(0, 0, -100));
                 }
             }
@@ -807,7 +812,22 @@ public class CharacterManager : Singleton<CharacterManager>
             Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
             transform.position = targetPos;
             SetCharacterAnimationSpeed(1, characterRuntimeObj);
+
+            transform.position = pos;
+            if (character == controllerCharacter)
+            {
+                SetShaderPlayerPos(pos);
+            }
         }
+    }
+    public static void SetShaderPlayerPos(Vector3 pos)
+    {
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+        float ScreenWidth = Screen.width;
+        float ScreenHeight = Screen.height;
+        Vector2 PlayerPos = new Vector4(screenPos.x / ScreenWidth, screenPos.y / ScreenHeight);
+        //Debug.Log($"PlayerPos:{PlayerPos}");
+        Shader.SetGlobalVector("_PlayerPos", PlayerPos);
     }
 
     public void MoveCharacterObj(Character character, float2 moveValue, ref int2 coordinate)
@@ -958,6 +978,10 @@ public class CharacterManager : Singleton<CharacterManager>
                          if (transform)
                          {
                              transform.transform.position = pos;
+                             if (character == controllerCharacter)
+                             {
+                                 SetShaderPlayerPos(pos);
+                             }
                              //transform.Translate(Vector3.zero);
                          }
                      }
@@ -1058,6 +1082,11 @@ public class CharacterManager : Singleton<CharacterManager>
                             }
                         }
 
+                        if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
+                        {
+                            Vector2 pos = characterRuntimeObj.transform.position;
+                            SetShaderPlayerPos(pos);
+                        }
                         character.canMove = true;
                     }
                     GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
@@ -1230,6 +1259,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 transform.position = pos;
                 if (controller)
                 {
+                    SetShaderPlayerPos(pos);
                     CameraManager.instance.SetFollowTarget(transform);
                 }
             }
@@ -1511,6 +1541,9 @@ public class CharacterManager : Singleton<CharacterManager>
                     };
                     GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
                     controllerTransform.position = new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z);
+                    SetShaderPlayerPos(targetPos);
+
+
                     if (controllerCharacter.coordinate.x != targetCoordinate.x ||
                     controllerCharacter.coordinate.y != targetCoordinate.y)
                     {
