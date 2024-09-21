@@ -661,6 +661,13 @@ public class GameCommon
             }
         }
     }
+    public static float VectorAngle(Vector2 from, Vector2 to)
+    {
+        float angle;
+        Vector3 cross = Vector3.Cross(from, to);
+        angle = Vector2.Angle(from, to);
+        return cross.z > 0 ? angle : -angle;
+    }
 
     private static float tansMin = math.tan(math.radians(22.5f));
     private static float tansMax = math.tan(math.radians(67.5f));

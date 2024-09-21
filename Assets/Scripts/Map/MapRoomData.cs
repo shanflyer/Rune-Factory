@@ -67,6 +67,7 @@ public class MapRoomData : ScriptableObject, IGameData
     public Vector3 fixedCameraPos;
     public int skyBackGroundId;
     public int creatTempCharacterId;
+    public float fixedSeason;
 
     public bool autoCreatTempNpc;
     public bool tempNpcPrewarm;

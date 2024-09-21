@@ -171,7 +171,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         Transform overrideParent = null;
         if (CharacterManager.instance.GetRuntimeCharacterObj(tempMapItem.characterId, out var characterRuntimeObj))
         {
-            overrideParent = characterRuntimeObj.animator.transform;
+            overrideParent = characterRuntimeObj.transform;
         }
         Transform ProfabTransform;
         if (nowRuntimeMapItemObjs.TryGetValue(tempMapItem.instanceId, out var mapItemRuntimeObj))
@@ -272,6 +272,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             flowCameraType = mapRoomData.flowCameraType
         };
         GameActionManager.instance.QueueAction(setFixedCamera, true);
+
+        SetFixedSeason SetFixedSeason = new SetFixedSeason
+        {
+            season = mapRoomData.fixedSeason
+        };
+        GameActionManager.instance.QueueAction(SetFixedSeason);
 
         if (!string.IsNullOrEmpty(mapRoomData.dawnEnvironmentDataName))
         {

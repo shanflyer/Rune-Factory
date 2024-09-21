@@ -475,7 +475,7 @@ public partial class Character
     {
         if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
         {
-            characterRuntimeObj.animator.transform.Translate(offset);
+            characterRuntimeObj.transform.Translate(offset);
         }
     }
 
@@ -484,7 +484,7 @@ public partial class Character
         if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
         {
             Vector3 pos = GameCommon.GetMapPos(coordinate);
-            return characterRuntimeObj.animator.transform.position - pos;
+            return characterRuntimeObj.transform.position - pos;
         }
         return Vector2.zero;
     }
@@ -775,6 +775,7 @@ public partial class Character
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
                     runtimeObj.SetAnimationDirection(GameCommon.GetDirectValue(direction));
+                    runtimeObj.SetMoveDirection(_moveDirection);
                 }
             }
         }

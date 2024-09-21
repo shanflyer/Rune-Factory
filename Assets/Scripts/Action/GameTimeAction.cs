@@ -86,7 +86,12 @@ public struct ClearOverrideEnvironment : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-
+public struct SetFixedSeason : GameAction
+{
+    public float season;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+}
 public struct SetMapOverrideEnvironment : GameAction
 {
     public string dayEnvironmentDataName;

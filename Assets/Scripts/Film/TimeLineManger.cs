@@ -58,7 +58,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                             case BindType.Character:
                                 if (CharacterManager.instance.GetRuntimeCharacterObj(source, out var characterRuntimeObj))
                                 {
-                                    animator = characterRuntimeObj.animator;
+                                    animator = characterRuntimeObj.Animator;
                                 }
                                 break;
                             case BindType.Default:
@@ -208,7 +208,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                     case BindType.Character:
                                         if (CharacterManager.instance.GetRuntimeCharacterObj(source, out var characterRuntimeObj))
                                         {
-                                            childAnimator = characterRuntimeObj.animator;
+                                            childAnimator = characterRuntimeObj.Animator;
                                             if (childAnimator)
                                             {
                                                 childObj = childAnimator.gameObject;

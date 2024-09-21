@@ -133,10 +133,7 @@ public class TempCharacter : Character
         }
         if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
         {
-            characterRuntimeObj.behaviorTree.ExternalBehavior = externalBehaviorTree;
-            characterRuntimeObj.behaviorTree.enabled = true;
-            characterRuntimeObj.behaviorTree.SetVariable("CharacterId", new SharedInt { Value = instanceId });
-            characterRuntimeObj.behaviorTree.EnableBehavior();
+            characterRuntimeObj.SetEnableBehavior(instanceId, externalBehaviorTree); 
         }
         else
         {

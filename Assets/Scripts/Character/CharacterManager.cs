@@ -190,13 +190,11 @@ public class CharacterManager : Singleton<CharacterManager>
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(displayCharacterItemRenderer.itemId);
                 if (itemData != null)
                 {
-                    characterRuntimeObj.equipRenderer.sprite = itemData.icon;
-                    characterRuntimeObj.equipRenderer.enabled = true;
+                    characterRuntimeObj.SetEquipSprite(itemData.icon); 
                 }
                 else
                 {
-                    characterRuntimeObj.equipRenderer.sprite = null;
-                    characterRuntimeObj.equipRenderer.enabled = false;
+                    characterRuntimeObj.SetEquipSprite(null);
                 }
             }
         }
@@ -268,7 +266,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
             {
-                characterRuntimeObj.animator.transform.position = setCharacterTempPos.pos;
+                characterRuntimeObj.transform.position = setCharacterTempPos.pos;
                 if (setCharacterTempPos.setResult != null)
                 {
                     setCharacterTempPos.setResult(true);
@@ -292,7 +290,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
-            characterRuntimeObj.animator.gameObject.SetActive(displayOrHideCharacter.display);
+            characterRuntimeObj.gameObject.SetActive(displayOrHideCharacter.display);
         }
     }
 
@@ -486,7 +484,7 @@ public class CharacterManager : Singleton<CharacterManager>
             controllerRuntimeObj = value;
             if (value != null)
             {
-                controllerTransform = controllerRuntimeObj.animator.transform;
+                controllerTransform = controllerRuntimeObj.transform;
             }
         }
     }
@@ -500,7 +498,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (GetRuntimeCharacterObj(setCharacterAnimator.characterId, out CharacterRuntimeObj characterRuntimeObj))
         {
-            Animator animator = characterRuntimeObj.animator;
+            Animator animator = characterRuntimeObj.Animator;
             setCharacterAnimator.SetAnimator(animator);
         }
     }
@@ -1319,19 +1317,13 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
         {
-            if (characterRuntimeObj.animator)
-            {
-                characterRuntimeObj.animator.SetFloat(CharacterAnimatorParameter.Speed, speed);
-            }
+            characterRuntimeObj.SetAnimationFloat(CharacterAnimatorParameter.Speed, speed);
         }
     }
 
     public void SetCharacterAnimationSpeed(float speed, CharacterRuntimeObj characterRuntimeObj)
     {
-        if (characterRuntimeObj.animator)
-        {
-            characterRuntimeObj.animator.SetFloat(CharacterAnimatorParameter.Speed, speed);
-        }
+        characterRuntimeObj.SetAnimationFloat(CharacterAnimatorParameter.Speed, speed);
     }
 
     public void ControllerCharacterMove(Vector2 mouseScreenPos)

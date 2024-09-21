@@ -230,6 +230,8 @@ Shader "MySprite-Lit-Default"
             SAMPLER(sampler_WaterMaskTex);
             TEXTURE2D(_WaterNormalMap);
             SAMPLER(sampler_WaterNormalMap);
+            TEXTURE2D(_DepthTex);
+            SAMPLER(sampler_DepthTex); 
             TEXTURE2D(_NormalMap);
             SAMPLER(sampler_NormalMap); 
             TEXTURE2D(_WindNoiseTexture);
@@ -698,13 +700,13 @@ Shader "MySprite-Lit-Default"
 
                 if(_GrassBlend==1)
                 { 
-                    half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, uv);
+                    half4 _DepthColor = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, uv);
                     half4 _GrassColor = SAMPLE_TEXTURE2D(_GrassTex, sampler_GrassTex, i.worldPos.zw);
                     float GrassColorValue=_GrassColor.r*_GrassColor.g*0.6+_GrassColor.g*0.25; 
                     
                     //return float4(GrassColorValue.xxx,1);
                     
-                    float HightValue=step(GrassColorValue,_NormalColor.a)*step(0.01,_NormalColor.a);
+                    float HightValue=step(GrassColorValue,_DepthColor.r)*step(0.01,_DepthColor.r);
                     //return float4(HightValue.xxx,1);
                     main.a=main.a*HightValue; 
                 }

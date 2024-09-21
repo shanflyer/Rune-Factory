@@ -105,7 +105,7 @@ public class FishController : Singleton<FishController>
                     RuntimeObj runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<FishTool>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
                   
                     Vector3 pos = GameCommon.fishToolOffsets[character.direction];
-                    pos += characterRuntimeObj.animator.transform.position;
+                    pos += characterRuntimeObj.transform.position;
 
 
 

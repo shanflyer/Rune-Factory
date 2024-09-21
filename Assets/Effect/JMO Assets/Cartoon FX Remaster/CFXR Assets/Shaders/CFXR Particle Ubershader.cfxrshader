@@ -157,6 +157,7 @@ Shader "Cartoon FX/Remaster/Particle Ubershader"
 	//# Shadows
 	//#
         [Toggle(_BlendWater)] _BlendWater("BlendWater",float)=0
+		[Toggle(_BlendSnow)] _BlendSnow("BlendSnow",float)=0
 		[KeywordEnum(Off,On,CustomTexture)] _CFXR_DITHERED_SHADOWS ("Dithered Shadows", Float) = 0
 	//# IF_KEYWORD _CFXR_DITHERED_SHADOWS_ON || _CFXR_DITHERED_SHADOWS_CUSTOMTEXTURE
 		

@@ -475,11 +475,18 @@ public class GameTime
 
         int nowYearHour = ((int)season * 30-30 + day-1) * 24+hour;
         float seasonValue = nowYearHour / totalYearHour;
-        Shader.SetGlobalFloat("_SeasonValue", seasonValue);
+        Shader.SetGlobalFloat("_SeasonValue", fixedSeason <0?seasonValue:fixedSeason);
     }
     const float totalYearHour = (4 * 30) * 24;
 
-
+    float fixedSeason = -1;
+    public void SetFixedSeason(SetFixedSeason SetFixedSeason)
+    {
+        fixedSeason = SetFixedSeason.season;
+        int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
+        float seasonValue = nowYearHour / totalYearHour;
+        Shader.SetGlobalFloat("_SeasonValue", fixedSeason < 0 ? seasonValue : fixedSeason);
+    }
     private void UpDataGameTimeAction()
     {
         updateGame.year = year;
@@ -582,9 +589,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameActionManager.instance.AddListener<ClearOverrideEnvironment>(ClearOverrideEnvironment);
         GameActionManager.instance.AddListener<PlayerSleep>(PlayerSleep);
         GameActionManager.instance.AddListener<CheckGameTimeDate>(CheckGameTimeDate);
+        GameActionManager.instance.AddListener<SetFixedSeason>(SetFixedSeason);
         // CreatData();
     }
-
+    void SetFixedSeason(SetFixedSeason SetFixedSeason)
+    {
+        nowGameTime.SetFixedSeason(SetFixedSeason);
+    }
     private void CheckGameTimeDate(CheckGameTimeDate checkGameTimeDate)
     {
         bool result = false;
