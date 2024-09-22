@@ -23,19 +23,19 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1148
-    instanceId: 1148203
-    coordinate:
-      x: -10
-      y: 53
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1081
     instanceId: 1081691
     coordinate:
       x: 6
       y: 62
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1148
+    instanceId: 1148203
+    coordinate:
+      x: -10
+      y: 53
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -61,16 +61,16 @@ MonoBehaviour:
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
   npcBehaviorAreas:
-  - Name: 530900
-    pos:
-      x: 4
-      y: 52
-    grids: fdfffffffbffffff1000000003000000
-    behaviorAreaType: 1
   - Name: 539001
     pos:
       x: -3
       y: 4
     grids: f6ffffff0a000000120000000a000000f6ffffff0b0000000c0000000b000000fffffffffeffffff0a000000ffffffffffffffff00000000040000000300000005000000fcffffff0a000000fdffffff0b000000040000000c000000090000000d000000080000001200000009000000
+    behaviorAreaType: 1
+  - Name: 530900
+    pos:
+      x: 4
+      y: 52
+    grids: fdfffffffbffffff1000000003000000
     behaviorAreaType: 1
   specialNpcBehaviorAreas: []

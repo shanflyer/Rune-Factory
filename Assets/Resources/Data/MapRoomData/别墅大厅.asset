@@ -15,14 +15,6 @@ MonoBehaviour:
   roomName: "\u522B\u5885\u5927\u5385"
   barrierGrids: d9ffffffedffffff3f000000edffffffd9ffffffeeffffff2c000000f0ffffffd9fffffff1fffffffcfffffff7ffffffd9fffffff8fffffffbfffffff8ffffffd9fffffff9fffffff0ffffff00000000d9ffffff01000000e0ffffff07000000d9ffffff08000000dfffffff09000000d9ffffff0a000000dcffffff0a000000d9ffffff0b000000dbffffff0b000000d9ffffff0c000000daffffff0e000000dbffffff0e0000003f0000000e000000deffffff0d0000003f0000000d000000e0ffffff0c0000003f0000000c000000e6ffffff0b000000330000000b000000f1fffffffdfffffff5ffffff00000000f6fffffffafffffff7fffffffbfffffffdffffff0a000000ffffffff0a00000003000000f1ffffff2c000000f7ffffff04000000f8ffffff2c000000f8ffffff04000000faffffff09000000fcffffff09000000fdffffff0b000000feffffff0e000000f9ffffff2c000000feffffff0e000000ffffffff2b000000ffffffff1b0000000a0000002c0000000a0000001f000000050000002c0000000900000020000000040000002b000000040000002f000000f8ffffff3f000000fdffffff2f000000feffffff2f000000ffffffff31000000f7ffffff33000000f7ffffff31000000060000003f0000000800000036000000f7ffffff39000000f7ffffff39000000030000003f0000000500000039000000090000003f0000000b000000
   mapItems:
-  - id: 1142
-    instanceId: 1142128
-    coordinate:
-      x: 49
-      y: -15
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1042
     instanceId: 1042715
     coordinate:
@@ -36,6 +28,14 @@ MonoBehaviour:
     coordinate:
       x: 4
       y: 1
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1142
+    instanceId: 1142128
+    coordinate:
+      x: 49
+      y: -15
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -61,16 +61,16 @@ MonoBehaviour:
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
   npcBehaviorAreas:
-  - Name: 46961
-    pos:
-      x: -3
-      y: 4
-    grids: 35000000edffffff3a000000f1ffffff
-    behaviorAreaType: 1
   - Name: 46960
     pos:
       x: -3
       y: 4
     grids: eafffffffffffffff3ffffff03000000f9fffffffdffffff0400000003000000fdfffffff6ffffff02000000f9ffffff09000000ffffffff1d0000000300000023000000fdffffff37000000feffffff32000000ffffffff3700000000000000
+    behaviorAreaType: 1
+  - Name: 46961
+    pos:
+      x: -3
+      y: 4
+    grids: 35000000edffffff3a000000f1ffffff
     behaviorAreaType: 1
   specialNpcBehaviorAreas: []

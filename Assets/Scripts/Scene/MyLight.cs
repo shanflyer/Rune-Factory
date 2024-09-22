@@ -1,6 +1,9 @@
 using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [ExecuteAlways]
 //[RequireComponent(typeof(Light2D))]
@@ -119,6 +122,19 @@ public class MyLight : MonoBehaviour
         if (Application.isPlaying)
             EnvironmentManger.instance.AddMyLight(this);
     }
+#if UNITY_EDITOR
+    public void Display(float value)
+    {
+        if (autoLerpColor)
+        {
+            light2D.color = lerpColor.Evaluate(value);
+        }
+       if(autoLerpValue)
+        {
+            light2D.intensity = lerpCurve.Evaluate(value);
+        }
+    }
+#endif
     private void Awake()
     {
         mainModules = new ParticleSystem.MainModule[ps.Length];
@@ -175,3 +191,20 @@ public class MyLight : MonoBehaviour
            
     }
 }
+#if UNITY_EDITOR
+[CustomEditor(typeof(MyLight))]
+public class MyLightEditor : Editor
+{
+    private float value;
+    public MyLight myLight => target as MyLight;
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        value = EditorGUILayout.Slider(value, 0, 1);
+        if (GUILayout.Button("Test"))
+        {
+            myLight.Display(value);
+        }
+    }
+}
+#endif

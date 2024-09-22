@@ -40,7 +40,7 @@ public class ShopSelectReference : UIObjReference<Shop>
 
     public override async Task InitData(Shop t, SelectAction<Shop> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
         shopName0.text = data.shopName;

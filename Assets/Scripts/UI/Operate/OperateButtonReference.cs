@@ -59,7 +59,7 @@ public class OperateButtonReference : UIObjReference<OperateDataReferenceData>
 
     public override async Task InitData(OperateDataReferenceData t, SelectAction<OperateDataReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await  base.InitData(t, SelectAction, toggleGroup);
         nameText.text = t.operateData.operateName;
         if (t.operateData.linkItem == 0)
         {

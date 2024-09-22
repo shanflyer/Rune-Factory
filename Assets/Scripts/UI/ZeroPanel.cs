@@ -36,11 +36,11 @@ public class ZeroPanel : GamePanel<IReferenceData>
         newButton = FindChildGameObject<Button>("New");
         loadButton = FindChildGameObject<Button>("Load");
     }
-    protected override void Awake()
+    protected override async void Awake()
     { 
         base.Awake();
         Shader.SetGlobalColor("_CloudColor", cloudColor);
-        InitTitleIcon();
+        await InitTitleIcon();
         start.onClick.AddListener(ClickStart);
         newButton.onClick.AddListener(StartGame);
         loadButton.onClick.AddListener(LoadDataPanel);

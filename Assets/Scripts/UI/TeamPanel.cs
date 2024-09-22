@@ -132,7 +132,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     }
 
     int SelectCharacterId = 0;
-    void SelectAction(CharacterInformationData characterInformationData,bool select)
+    async void SelectAction(CharacterInformationData characterInformationData,bool select)
     {
         SelectCharacterId = characterInformationData.characterId;
         if (characterInformationData.characterId == CharacterManager.instance.controllerCharacter.instanceId)
@@ -143,7 +143,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         {
             operatePanel.gameObject.SetActive(true);
         }
-        UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+      await  UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
     }
     public override void InitReferenceData(CharacterInformationDataList v)
     {
