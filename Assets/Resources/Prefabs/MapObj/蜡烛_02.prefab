@@ -1626,8 +1626,8 @@ ParticleSystem:
         m_NumAlphaKeys: 5
   UVModule:
     serializedVersion: 2
-    enabled: 0
-    mode: 0
+    enabled: 1
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -1745,7 +1745,7 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: 1472852380, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -5050,7 +5050,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e653836c30661fe419b8992e230ca189, type: 2}
+  - {fileID: 2100000, guid: 99aefffe1dc38424eaa64ccf8ea1e63b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6469,7 +6469,7 @@ ParticleSystem:
   UVModule:
     serializedVersion: 2
     enabled: 1
-    mode: 0
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -6578,7 +6578,15 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: 1599092876, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: 1625023739, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: -96387419, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: 1882588234, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: -1941069552, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: -956866834, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: -1693688670, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: 1258051936, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
+    - sprite: {fileID: -1579887624, guid: c3ceb4d16f615de45ac21893be6a2da5, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -9883,7 +9891,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c9efd9c0aef879843ab896b400d9ec2c, type: 2}
+  - {fileID: 2100000, guid: 99aefffe1dc38424eaa64ccf8ea1e63b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

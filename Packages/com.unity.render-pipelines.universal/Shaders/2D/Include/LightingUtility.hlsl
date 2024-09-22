@@ -16,10 +16,10 @@
             output.lightDirection.w = 0;
         
         #define Directional_NORMALS_LIGHTING(output, lightPosition, lightZDistance)\
-            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w);\ 
+            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w);\
             half3 planeNormal = -GetViewForwardDir();\
-             half3 projLightPos =-(dot(lightPosition.xyz, planeNormal) - lightZDistance) * planeNormal;\
-            output.lightDirection.xyz=normalize(lightPosition.xyz);\  
+            half3 projLightPos =-(dot(lightPosition.xyz, planeNormal) - lightZDistance) * planeNormal;\
+            output.lightDirection.xyz=normalize(lightPosition.xyz);\
             output.lightDirection.z=-output.lightDirection.z;\
             output.lightDirection.w = 0;
 
@@ -38,7 +38,7 @@
             output.positionWS = worldSpacePos;
 
         #define Directional_NORMALS_LIGHTING(output, lightPosition, lightZDistance)\
-            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w);\ 
+            output.screenUV = ComputeNormalizedDeviceCoordinates(output.positionCS.xyz / output.positionCS.w);\
             output.positionWS = worldSpacePos;
 
         #define APPLY_NORMALS_LIGHTING(input, lightColor, lightPosition, lightZDistance)\

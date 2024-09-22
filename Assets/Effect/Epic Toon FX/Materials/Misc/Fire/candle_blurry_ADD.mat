@@ -26,7 +26,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHABLEND_ON
+  - _CFXR_ADDITIVE
   - _CFXR_HDR_BOOST
   m_InvalidKeywords:
   - _
@@ -91,7 +91,9 @@ Material:
     - _BacklightTransmittance: 1
     - _Blend: 2
     - _BlendOp: 0
-    - _BlendingType: 0
+    - _BlendSnow: 0
+    - _BlendWater: 0
+    - _BlendingType: 3
     - _BumpScale: 1
     - _CFXR_DITHERED_SHADOWS: 0
     - _CFXR_OVERLAYBLEND: 0

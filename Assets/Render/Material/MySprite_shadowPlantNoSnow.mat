@@ -31,6 +31,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DepthTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -77,8 +81,10 @@ Material:
     - WaveColorValue: 1.39
     - WaveK: 2.22
     - _BackBlend: 0
+    - _BlendRmapMin: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
+    - _ClipValue: 0.5
     - _Comp: 8
     - _Cycle: 0
     - _CycleRange: 0
@@ -101,10 +107,12 @@ Material:
     - _Pass: 0
     - _PlantAutumnBlend: 1
     - _PlantAutumnNoiseScale: 8
+    - _ScaleValue: 0.5
     - _SeasonValue: 3.16
     - _SnowBlend: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _Tree3D: 0
     - _Water: 0
     - _WaterBottom: 1.33
     - _WaterHigh: 0
@@ -124,6 +132,8 @@ Material:
     - _WindJitter: 0.3
     - _WindNoiseValue: 0.05
     - _WindScroll: 0.05
+    - _WindValue: 1
+    - _ZWrite: 0
     - __BlendVertexColor: 0
     - __Damp: 0
     - __DampBlend: 0
@@ -140,6 +150,7 @@ Material:
     - PubuWaveScale: {r: 0, g: 0, b: 0, a: 0}
     - WaveScale0: {r: 4, g: 6, b: 0, a: 0}
     - WaveScale1: {r: -2, g: -8, b: 0, a: 0}
+    - _BlendColor: {r: 0, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DampColor: {r: 0.6247775, g: 0.9379376, b: 0.9811321, a: 1}
     - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
@@ -151,6 +162,8 @@ Material:
     - _PlantWinterColor: {r: 0.7735849, g: 0.7002403, b: 0.52910286, a: 1}
     - _PlantWinterColor1: {r: 0.6603774, g: 0.4391706, b: 0.40806338, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowRange: {r: 0, g: 1, b: 0, a: 1}
     - _WaterColor: {r: 0.048700586, g: 0.3584906, b: 0.34440923, a: 1}
     - _WaveKSet0: {r: 3, g: 1.8, b: 0, a: 0}
     - _WaveKSet1: {r: 2.1, g: -1.5, b: 0, a: 0}

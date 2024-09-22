@@ -14,21 +14,22 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _DAMPBLEND_ON
-  - _EMISSION
-  - _FLIPBOOKBLENDING_OFF
   - _SNOWBLEND_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -69,7 +70,10 @@ Material:
     - EdgeValue: 0.1
     - _AlphaClip: 0
     - _BackBlend: 0
+    - _BlendRmapMin: 0
+    - _BlendValue: 0
     - _BlendVertexColor: 0
+    - _ClipValue: 0.5
     - _Comp: 8
     - _Damp: 0
     - _DampBlend: 1
@@ -88,10 +92,12 @@ Material:
     - _Pass: 50
     - _PlantAutumnBlend: 0
     - _PlantAutumnNoiseScale: 1
+    - _ScaleValue: 0.5
     - _SeasonValue: 0
     - _SnowBlend: 1
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _Tree3D: 0
     - _Water: 1
     - _WaterBottom: 1
     - _WaterHigh: 0
@@ -104,6 +110,8 @@ Material:
     - _WindJitter: 0.47
     - _WindNoiseValue: 0
     - _WindScroll: 0.1
+    - _WindValue: 1
+    - _ZWrite: 0
     - _shadowStep: 0
     - waterNoiseScale: 0
     - waterValue: 0.2
@@ -111,6 +119,7 @@ Material:
     - EdgeColor: {r: 0.990566, g: 0.9765486, b: 0.9765486, a: 0}
     - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
     - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
+    - _BlendColor: {r: 0, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DampColor: {r: 0, g: 0, b: 0, a: 0}
     - _ForceColor: {r: 0, g: Infinity, b: 0, a: 0}
@@ -122,6 +131,8 @@ Material:
     - _PlantWinterColor: {r: 0, g: 0, b: 0, a: 1}
     - _PlantWinterColor1: {r: 0, g: 0, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 0}
+    - _SnowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowRange: {r: 0, g: 1, b: 0, a: 1}
     - _WaterColor: {r: 1, g: 1, b: 1, a: 1}
     - waterColor: {r: 0, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
