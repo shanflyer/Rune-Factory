@@ -160,6 +160,7 @@ namespace UnityEngine.InputSystem.Editor
             {
                 // If it changed from disabled to enabled, perform an initial save.
                 onSave();
+                onSaveNameData();
             }
 
             InputEditorUserSettings.autoSaveInputActionAssets = autoSaveNew;

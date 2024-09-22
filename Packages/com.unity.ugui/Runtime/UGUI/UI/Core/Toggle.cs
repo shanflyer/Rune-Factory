@@ -262,6 +262,7 @@ namespace UnityEngine.UI
             if (m_IsOn == value)
                 return;
 
+            // if we are in a group and set to true, do group logic
             m_IsOn = value;
             if (m_Group != null && m_Group.isActiveAndEnabled && IsActive())
             {
@@ -281,8 +282,7 @@ namespace UnityEngine.UI
             {
                 UISystemProfilerApi.AddMarker("Toggle.value", this);
                 onValueChanged.Invoke(m_IsOn);
-            } 
-
+            }
         }
 
         /// <summary>

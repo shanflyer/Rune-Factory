@@ -579,15 +579,7 @@ namespace TMPro
         /// </summary>
         public override void SetVerticesDirty()
         {
-            if (!this.IsActive())
-                return;
-
-            // This is called on the parent TextMeshPro component.
-            if (m_TextComponent != null)
-            {
-                m_TextComponent.havePropertiesChanged = true;
-                m_TextComponent.SetVerticesDirty();
-            }
+            // Do nothing as updates of the text are driven by the parent text component
         }
 
 
@@ -605,22 +597,12 @@ namespace TMPro
         /// </summary>
         public override void SetMaterialDirty()
         {
-            //Debug.Log("*** STO-UI - SetMaterialDirty() *** FRAME (" + Time.frameCount + ")");
-
-            //if (!this.IsActive())
-            //    return;
-
             m_materialDirty = true;
 
             UpdateMaterial();
 
             if (m_OnDirtyMaterialCallback != null)
                 m_OnDirtyMaterialCallback();
-
-            //TMP_ITextElementUpdateManager.RegisterTextElementForGraphicRebuild(this);
-
-            //TMP_UpdateRegistry.RegisterCanvasElementForGraphicRebuild((ICanvasElement)this);
-            //m_TextComponent.SetMaterialDirty();
         }
 
 

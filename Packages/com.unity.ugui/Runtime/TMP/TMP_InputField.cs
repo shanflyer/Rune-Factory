@@ -19,7 +19,11 @@ namespace TMPro
     /// Editable text input field.
     /// </summary>
     [AddComponentMenu("UI/TextMeshPro - Input Field", 11)]
+        #if UNITY_2023_2_OR_NEWER
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/TextMeshPro/index.html")]
+    #else
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2")]
+    #endif
     public class TMP_InputField : Selectable,
         IUpdateSelectedHandler,
         IBeginDragHandler,
@@ -331,7 +335,7 @@ namespace TMPro
 
         private bool m_IsTextComponentUpdateRequired = false;
 
-        private bool m_isLastKeyBackspace = false;
+        private bool m_HasTextBeenRemoved = false;
         private float m_PointerDownClickStartTime;
         private float m_KeyDownStartTime;
         private float m_DoubleClickDelay = 0.5f;
@@ -452,6 +456,9 @@ namespace TMPro
                     case RuntimePlatform.Android:
                     case RuntimePlatform.IPhonePlayer:
                     case RuntimePlatform.tvOS:
+                    #if UNITY_XR_VISIONOS_SUPPORTED
+                    case RuntimePlatform.VisionOS:
+                    #endif
                     case RuntimePlatform.WSAPlayerX86:
                     case RuntimePlatform.WSAPlayerX64:
                     case RuntimePlatform.WSAPlayerARM:
@@ -482,6 +489,9 @@ namespace TMPro
                     case RuntimePlatform.Android:
                     case RuntimePlatform.IPhonePlayer:
                     case RuntimePlatform.tvOS:
+                    #if UNITY_XR_VISIONOS_SUPPORTED
+                    case RuntimePlatform.VisionOS:
+                    #endif
                     case RuntimePlatform.WSAPlayerX86:
                     case RuntimePlatform.WSAPlayerX64:
                     case RuntimePlatform.WSAPlayerARM:
@@ -522,6 +532,9 @@ namespace TMPro
                     return InPlaceEditing() && m_HideSoftKeyboard;
                 case RuntimePlatform.IPhonePlayer:
                 case RuntimePlatform.tvOS:
+                #if UNITY_XR_VISIONOS_SUPPORTED
+                case RuntimePlatform.VisionOS:
+                #endif
                     return m_HideSoftKeyboard;
                 #if UNITY_2020_2_OR_NEWER
                 case RuntimePlatform.PS4:
@@ -1768,6 +1781,7 @@ namespace TMPro
                     for (int i = 0; i < val.Length; ++i)
                     {
                         char c = val[i];
+						bool hasValidateUpdatedText = false;
 
                         if (c == '\r' || c == 3)
                             c = '\n';
@@ -1775,11 +1789,15 @@ namespace TMPro
                         if (onValidateInput != null)
                             c = onValidateInput(m_Text, m_Text.Length, c);
                         else if (characterValidation != CharacterValidation.None)
+						{
+							string textBeforeValidate = m_Text;
                             c = Validate(m_Text, m_Text.Length, c);
+                            hasValidateUpdatedText = textBeforeValidate != m_Text;
+						}
 
-                        if (lineType == LineType.MultiLineSubmit && c == '\n')
+                        if (lineType != LineType.MultiLineNewline && c == '\n')
                         {
-                            m_SoftKeyboard.text = m_Text;
+                            UpdateLabel();
 
                             OnSubmit(null);
                             OnDeselect(null);
@@ -1787,7 +1805,8 @@ namespace TMPro
                         }
 
                         // In the case of a Custom Validator, the user is expected to modify the m_Text where as such we do not append c.
-                        if (c != 0 && characterValidation != CharacterValidation.CustomValidator)
+                        // However we will append c if the user did not modify the m_Text (UUM-42147)
+                        if (c != 0 && (characterValidation != CharacterValidation.CustomValidator || !hasValidateUpdatedText))
                             m_Text += c;
                     }
 
@@ -2234,9 +2253,9 @@ namespace TMPro
                         }
                         else
                         {
-                            var textInfo = m_TextComponent.textInfo;
+                            TMP_TextInfo textInfo = m_TextComponent.textInfo;
 
-                            if (textInfo != null && textInfo.lineCount >= m_LineLimit)
+                            if (m_LineLimit > 0 && textInfo != null && textInfo.lineCount >= m_LineLimit)
                             {
                                 m_ReleaseSelection = true;
                                 return EditState.Finish;
@@ -3084,7 +3103,7 @@ namespace TMPro
 
             if (hasSelection)
             {
-                m_isLastKeyBackspace = true;
+                m_HasTextBeenRemoved = true;
 
                 Delete();
                 UpdateTouchKeyboardFromEditChanges();
@@ -3102,7 +3121,7 @@ namespace TMPro
                         else
                             m_Text = text.Remove(stringPositionInternal, 1);
 
-                        m_isLastKeyBackspace = true;
+                        m_HasTextBeenRemoved = true;
 
                         UpdateTouchKeyboardFromEditChanges();
                         SendOnValueChangedAndUpdateLabel();
@@ -3123,7 +3142,7 @@ namespace TMPro
 
                         m_Text = text.Remove(nextCharacterStringPosition, numberOfCharactersToRemove);
 
-                        m_isLastKeyBackspace = true;
+                        m_HasTextBeenRemoved = true;
 
                         SendOnValueChangedAndUpdateLabel();
                     }
@@ -3145,7 +3164,7 @@ namespace TMPro
 
             if (hasSelection)
             {
-                m_isLastKeyBackspace = true;
+                m_HasTextBeenRemoved = true;
 
                 Delete();
                 UpdateTouchKeyboardFromEditChanges();
@@ -3169,7 +3188,7 @@ namespace TMPro
 
                         caretSelectPositionInternal = caretPositionInternal = caretPositionInternal - 1;
 
-                        m_isLastKeyBackspace = true;
+                        m_HasTextBeenRemoved = true;
 
                         UpdateTouchKeyboardFromEditChanges();
                         SendOnValueChangedAndUpdateLabel();
@@ -3200,7 +3219,7 @@ namespace TMPro
                         caretSelectPositionInternal = caretPositionInternal = caretPositionIndex;
                     }
 
-                    m_isLastKeyBackspace = true;
+                    m_HasTextBeenRemoved = true;
 
                     UpdateTouchKeyboardFromEditChanges();
                     SendOnValueChangedAndUpdateLabel();
@@ -3252,6 +3271,9 @@ namespace TMPro
 
             if (selectionFocusPosition != selectionAnchorPosition)
             {
+
+                m_HasTextBeenRemoved = true;
+
                 if (m_isRichTextEditingAllowed || m_isSelectAll)
                 {
                     // Handling of Delete when Rich Text is allowed.
@@ -3861,7 +3883,7 @@ namespace TMPro
             }
 
             // Adjust the position of the RectTransform based on the caret position in the viewport (only if we have focus).
-            if (isFocused && startPosition != m_LastPosition || m_forceRectTransformAdjustment || m_isLastKeyBackspace)
+            if (isFocused && startPosition != m_LastPosition || m_forceRectTransformAdjustment || m_HasTextBeenRemoved)
                 AdjustRectTransformRelativeToViewport(startPosition, height, currentCharacter.isVisible);
 
             m_LastPosition = startPosition;
@@ -4109,8 +4131,8 @@ namespace TMPro
                 }
             }
 
-            // Special handling of backspace
-            if (m_isLastKeyBackspace)
+            // Special handling of backspace/text being removed
+            if (m_HasTextBeenRemoved)
             {
                 float anchoredPositionX = m_TextComponent.rectTransform.anchoredPosition.x;
 
@@ -4139,7 +4161,7 @@ namespace TMPro
                     AssignPositioningIfNeeded();
                 }
 
-                m_isLastKeyBackspace = false;
+                m_HasTextBeenRemoved = false;
             }
 
             m_forceRectTransformAdjustment = false;
@@ -4445,7 +4467,7 @@ namespace TMPro
 
             SendOnSubmit();
             DeactivateInputField();
-            eventData.Use();
+            eventData?.Use();
         }
 
         public virtual void OnCancel(BaseEventData eventData)

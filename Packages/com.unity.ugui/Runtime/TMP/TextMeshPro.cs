@@ -17,7 +17,11 @@ namespace TMPro
     [RequireComponent(typeof(MeshRenderer))]
     [AddComponentMenu("Mesh/TextMeshPro - Text")]
     [ExecuteAlways]
+        #if UNITY_2023_2_OR_NEWER
+    [HelpURL("https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/TextMeshPro/index.html")]
+    #else
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.2")]
+    #endif
     public class TextMeshPro : TMP_Text, ILayoutElement
     {
         // Public Properties and Serializable Properties
@@ -832,7 +836,7 @@ namespace TMPro
             //m_sharedMaterialHashCode = TMP_TextUtilities.GetSimpleHashCode(m_sharedMaterial.name);
 
             UpdateMask();
-            UpdateEnvMapMatrix();
+            ValidateEnvMapProperty();
             m_havePropertiesChanged = true;
 
             SetVerticesDirty();
@@ -972,6 +976,9 @@ namespace TMPro
                 }
             }
 
+            // Cache environment map property validation.
+            ValidateEnvMapProperty();
+            
             m_padding = GetPaddingForMaterial();
             m_isMaskingEnabled = ShaderUtilities.IsMaskingEnabled(m_sharedMaterial);
 
@@ -981,14 +988,32 @@ namespace TMPro
             SetMaterialDirty();
         }
 
-
+        /// <summary>
+        /// Method to check if the environment map property is valid.
+        /// </summary>
+        void ValidateEnvMapProperty()
+        {
+            if (m_sharedMaterial != null)
+                m_hasEnvMapProperty = m_sharedMaterial.HasProperty(ShaderUtilities.ID_EnvMap) && m_sharedMaterial.GetTexture(ShaderUtilities.ID_EnvMap) != null;
+            else
+                m_hasEnvMapProperty = false;
+        }
+        
         void UpdateEnvMapMatrix()
         {
-            if (!m_sharedMaterial.HasProperty(ShaderUtilities.ID_EnvMap) || m_sharedMaterial.GetTexture(ShaderUtilities.ID_EnvMap) == null)
+            if (!m_hasEnvMapProperty)
                 return;
 
             //Debug.Log("Updating Env Matrix...");
             Vector3 rotation = m_sharedMaterial.GetVector(ShaderUtilities.ID_EnvMatrixRotation);
+            #if !UNITY_EDITOR
+            // The matrix property is reverted on editor save because m_sharedMaterial will be replaced with a new material instance.
+            // Disable rotation change check if editor to handle this material change.
+            if (m_currentEnvMapRotation == rotation)
+                return;
+            #endif
+            
+            m_currentEnvMapRotation = rotation;
             m_EnvMapMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(rotation), Vector3.one);
 
             m_sharedMaterial.SetMatrix(ShaderUtilities.ID_EnvMatrix, m_EnvMapMatrix);
@@ -1539,7 +1564,7 @@ namespace TMPro
                 }
                 #endregion
 
-                bool isUsingAlternativeTypeface;
+                bool isUsingAlternativeTypeface = false;
                 bool isUsingFallbackOrAlternativeTypeface = false;
 
                 TMP_FontAsset prev_fontAsset = m_currentFontAsset;
@@ -1574,7 +1599,27 @@ namespace TMPro
 
                 // Lookup the Glyph data for each character and cache it.
                 #region LOOKUP GLYPH
-                TMP_TextElement character = GetTextElement(unicode, m_currentFontAsset, m_FontStyleInternal, m_FontWeightInternal, out isUsingAlternativeTypeface);
+                TMP_TextElement character = null;
+
+                uint nextCharacter = i + 1 < textProcessingArray.Length ? textProcessingArray[i + 1].unicode : 0;
+
+                // Check Emoji Fallback first in the event the requested unicode code point is an Emoji
+                if (emojiFallbackSupport && ((TMP_TextParsingUtilities.IsEmojiPresentationForm(unicode) && nextCharacter != 0xFE0E) || (TMP_TextParsingUtilities.IsEmoji(unicode) && nextCharacter == 0xFE0F)))
+                {
+                    if (TMP_Settings.emojiFallbackTextAssets != null && TMP_Settings.emojiFallbackTextAssets.Count > 0)
+                    {
+                        character = TMP_FontAssetUtilities.GetTextElementFromTextAssets(unicode, m_currentFontAsset, TMP_Settings.emojiFallbackTextAssets, true, fontStyle, fontWeight, out isUsingAlternativeTypeface);
+
+                        if (character != null)
+                        {
+                            // Add character to font asset lookup cache
+                            //fontAsset.AddCharacterToLookupCache(unicode, character);
+                        }
+                    }
+                }
+
+                if (character == null)
+                    character = GetTextElement(unicode, m_currentFontAsset, m_FontStyleInternal, m_FontWeightInternal, out isUsingAlternativeTypeface);
 
                 // Check if Lowercase or Uppercase variant of the character is available.
                 /* Not sure this is necessary anyone as it is very unlikely with recursive search through fallback fonts.
@@ -1592,7 +1637,7 @@ namespace TMPro
                     }
                 }*/
 
-                // Special handling for missing character.
+                #region MISSING CHARACTER HANDLING
                 // Replace missing glyph by the Square (9633) glyph or possibly the Space (32) glyph.
                 if (character == null)
                 {
@@ -1644,6 +1689,7 @@ namespace TMPro
                         Debug.LogWarning(formattedWarning, this);
                     }
                 }
+                #endregion
 
                 m_textInfo.characterInfo[m_totalCharacterCount].alternativeGlyph = null;
 
@@ -1656,8 +1702,7 @@ namespace TMPro
                     }
 
                     #region VARIATION SELECTOR
-                    uint nextCharacter = i + 1 < textProcessingArray.Length ? (uint)textProcessingArray[i + 1].unicode : 0;
-                    if (nextCharacter >= 0xFE00 && nextCharacter <= 0xFE0F)
+                    if (nextCharacter >= 0xFE00 && nextCharacter <= 0xFE0F || nextCharacter >= 0xE0100 && nextCharacter <= 0xE01EF)
                     {
                         // Get potential variant glyph index
                         uint variantGlyphIndex = m_currentFontAsset.GetGlyphVariantIndex((uint)unicode, nextCharacter);
@@ -2013,6 +2058,9 @@ namespace TMPro
                 m_havePropertiesChanged = true;
                 OnPreRenderObject();
             }
+
+            // Update Environment Matrix property to support changing the rotation via a script.
+            UpdateEnvMapMatrix();
         }
 
 
@@ -2558,14 +2606,14 @@ namespace TMPro
                 #region Handle Kerning
                 GlyphValueRecord glyphAdjustments = new GlyphValueRecord();
                 float characterSpacingAdjustment = m_characterSpacing;
-                if (kerning)
+                if (kerning && m_textElementType == TMP_TextElementType.Character)
                 {
                     k_HandleGPOSFeaturesMarker.Begin();
 
                     GlyphPairAdjustmentRecord adjustmentPair;
                     uint baseGlyphIndex = m_cached_TextElement.m_GlyphIndex;
 
-                    if (m_characterCount < totalCharacterCount - 1)
+                    if (m_characterCount < totalCharacterCount - 1 && m_textInfo.characterInfo[m_characterCount + 1].elementType == TMP_TextElementType.Character)
                     {
                         uint nextGlyphIndex = m_textInfo.characterInfo[m_characterCount + 1].textElement.m_GlyphIndex;
                         uint key = nextGlyphIndex << 16 | baseGlyphIndex;
@@ -2582,7 +2630,7 @@ namespace TMPro
                         uint previousGlyphIndex = m_textInfo.characterInfo[m_characterCount - 1].textElement.m_GlyphIndex;
                         uint key = baseGlyphIndex << 16 | previousGlyphIndex;
 
-                        if (m_currentFontAsset.m_FontFeatureTable.m_GlyphPairAdjustmentRecordLookup.TryGetValue(key, out adjustmentPair))
+                        if (textInfo.characterInfo[m_characterCount - 1].elementType == TMP_TextElementType.Character && m_currentFontAsset.m_FontFeatureTable.m_GlyphPairAdjustmentRecordLookup.TryGetValue(key, out adjustmentPair))
                         {
                             glyphAdjustments += adjustmentPair.secondAdjustmentRecord.glyphValueRecord;
                             characterSpacingAdjustment = (adjustmentPair.featureLookupFlags & UnityEngine.TextCore.LowLevel.FontFeatureLookupFlags.IgnoreSpacingAdjustments) == UnityEngine.TextCore.LowLevel.FontFeatureLookupFlags.IgnoreSpacingAdjustments ? 0 : characterSpacingAdjustment;
@@ -3732,8 +3780,17 @@ namespace TMPro
                 if (charCode == 9)
                 {
                     float tabSize = m_currentFontAsset.m_FaceInfo.tabWidth * m_currentFontAsset.tabSize * currentElementScale;
-                    float tabs = Mathf.Ceil(m_xAdvance / tabSize) * tabSize;
-                    m_xAdvance = tabs > m_xAdvance ? tabs : m_xAdvance + tabSize;
+                    // Adjust horizontal tab depending on RTL
+                    if (m_isRightToLeft)
+                    {
+                        float tabs = Mathf.Floor(m_xAdvance / tabSize) * tabSize;
+                        m_xAdvance = tabs < m_xAdvance ? tabs : m_xAdvance - tabSize;
+                    }
+                    else
+                    {
+                        float tabs = Mathf.Ceil(m_xAdvance / tabSize) * tabSize;
+                        m_xAdvance = tabs > m_xAdvance ? tabs : m_xAdvance + tabSize;
+                    }
                 }
                 else if (m_monoSpacing != 0)
                 {
@@ -4905,7 +4962,7 @@ namespace TMPro
             #endregion
 
             // Set vertex count for Underline geometry
-            //m_textInfo.meshInfo[m_Underline.materialIndex].vertexCount = last_vert_index;
+            m_textInfo.meshInfo[m_Underline.materialIndex].vertexCount = last_vert_index;
 
             // METRICS ABOUT THE TEXT OBJECT
             m_textInfo.characterCount = m_characterCount;

@@ -61,6 +61,7 @@
     <Analyzer Include="D:\Unity\6000.0.20f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\DebugManagerTests.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\VolumeComponents\VolumeComponentSupportedOnAnySRP.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\VolumeComponents\CopyPasteTestComponent2.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\RuntimeExampleTest.cs" />
@@ -82,7 +83,6 @@
     <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\VolumeComponents\VolumeComponentSupportedOnCustomSRP.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\VolumeComponents\VolumeComponentCustomRenderPipelineAsset.cs" />
     <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\AssemblyInfos.cs" />
-    <Compile Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\DebugManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages\com.unity.render-pipelines.core\Tests\Runtime\Threading\FunctionTestsGroup.compute" />

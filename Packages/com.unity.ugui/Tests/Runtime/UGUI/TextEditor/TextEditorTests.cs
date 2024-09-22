@@ -19,9 +19,7 @@ public class TextEditorTests
             yield return new TestCaseData("\U0001f642\U0001f643", new[] { 0, 2, 4 }).SetName("(U+1F642)(U+1F643)");
             yield return new TestCaseData("a\U0001f642b\U0001f643c", new[] { 0, 1, 3, 4, 6, 7 }).SetName("a(U+1F642)b(U+1F643)c");
 
-            // Unstable - https://jira.unity3d.com/browse/UUM-19454
-            // yield return new TestCaseData("Hello 😁 World", new[] { 0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14 }).SetName("Hello (U+1F601) World");
-            // yield return new TestCaseData("見ざる🙈、聞かざる🙉、言わざる🙊", new[] { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 19 }).SetName("Three wise monkeys");
+             yield return new TestCaseData("Hello 😁 World", new[] { 0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14 }).SetName("Hello (U+1F601) World");
         }
     }
 
@@ -29,15 +27,14 @@ public class TextEditorTests
     {
         get
         {
-			yield return new TestCaseData(null, new int[0], new int[0]);
+            yield return new TestCaseData(null, new int[0], new int[0]);
             yield return new TestCaseData("", new int[0], new int[0]);
             yield return new TestCaseData(" ", new int[0], new int[0]);
             yield return new TestCaseData("one two three", new[] { 0, 4, 8 }, new[] { 3, 7, 13 });
-
-            // Unstable - https://jira.unity3d.com/browse/UUM-19454
-            // yield return new TestCaseData("\U00010000 \U00010001 \U00010002\U00010003", new[] { 0, 3, 6 }, new[] { 2, 5, 10 }).SetName("(U+10000) (U+10001) (U+10002)(U+10003)");
-            // yield return new TestCaseData("Hello 😁 World", new[] { 0, 6, 9 }, new[] { 5, 8, 14 }).SetName("Hello (U+1F601) World");
-            // yield return new TestCaseData("見ざる🙈、聞かざる🙉、言わざる🙊", new[] { 0, 3, 6, 10, 13, 17 }, new[] { 3, 6, 10, 13, 17, 19 }).SetName("Three wise monkeys");
+#if !UNITY_PLAYSTATION
+            //yield return new TestCaseData("\U00010000 \U00010001 \U00010002\U00010003", new[] { 0, 3, 6 }, new[] { 2, 5, 10 }).SetName("(U+10000) (U+10001) (U+10002)(U+10003)"); // Disabled for Instability https://jira.unity3d.com/browse/UUM-71065
+            //yield return new TestCaseData("Hello 😁 World", new[] { 0, 6, 9 }, new[] { 5, 8, 14 }).SetName("Hello (U+1F601) World"); // Disabled for Instability https://jira.unity3d.com/browse/UUM-71070
+#endif
         }
     }
 
@@ -138,7 +135,7 @@ public class TextEditorTests
         }
     }
 
-    [Test, Ignore("Disabled due to instability UUM-19454")]
+    [Test]
     [TestCaseSource("textWithWordStartAndEndIndices")]
     [TestCaseSource("textWithWordStartAndEndIndicesWherePunctuationIsAWord")]
     public void DeleteWordBack_DeletesBackToPreviousWordStart(string text, int[] wordStartIndices, int[] wordEndIndices)
@@ -156,11 +153,12 @@ public class TextEditorTests
             var previousWordStart = wordStartIndices.Reverse().FirstOrDefault(i => i < oldCursorIndex);
             Assert.AreEqual(previousWordStart, m_TextEditor.stringCursorIndex, string.Format("cursorIndex {0} did not move to previous word start", oldCursorIndex));
             Assert.AreEqual(previousWordStart, m_TextEditor.stringSelectIndex, string.Format("selectIndex {0} did not move to previous word start", oldSelectIndex));
-            Assert.AreEqual(text.Remove(previousWordStart, oldCursorIndex - previousWordStart), m_TextEditor.text, string.Format("wrong resulting text for cursorIndex {0}", oldCursorIndex));
+            if (text != null)
+                Assert.AreEqual(text.Remove(previousWordStart, oldCursorIndex - previousWordStart), m_TextEditor.text, string.Format("wrong resulting text for cursorIndex {0}", oldCursorIndex));
         }
     }
 
-    [Test, Ignore("Disabled due to instability UUM-19454")]
+    [Test]
     [TestCaseSource("textWithWordStartAndEndIndices")]
     [TestCaseSource("textWithWordStartAndEndIndicesWherePunctuationIsAWord")]
     public void DeleteWordForward_DeletesForwardToNextWordStart(string text, int[] wordStartIndices, int[] wordEndIndices)
@@ -175,10 +173,13 @@ public class TextEditorTests
 
             m_TextEditor.DeleteWordForward();
 
-            var nextWordStart = oldCursorIndex == text.Length ? text.Length : wordStartIndices.Concat(new[] { text.Length }).First(i => i > oldCursorIndex);
             Assert.AreEqual(oldCursorIndex, m_TextEditor.stringCursorIndex, string.Format("cursorIndex {0} should not change", oldCursorIndex));
             Assert.AreEqual(oldSelectIndex, m_TextEditor.stringSelectIndex, string.Format("selectIndex {0} should not change", oldSelectIndex));
-            Assert.AreEqual(text.Remove(oldCursorIndex, nextWordStart - oldCursorIndex), m_TextEditor.text, string.Format("wrong resulting text for cursorIndex {0}", oldCursorIndex));
+            if (text != null)
+            {
+                var nextWordStart = oldCursorIndex == text.Length ? text.Length : wordStartIndices.Concat(new[] { text.Length }).First(i => i > oldCursorIndex);
+                Assert.AreEqual(text.Remove(oldCursorIndex, nextWordStart - oldCursorIndex), m_TextEditor.text, string.Format("wrong resulting text for cursorIndex {0}", oldCursorIndex));
+            }
         }
     }
 
@@ -424,7 +425,7 @@ public class TextEditorTests
         }
     }
 
-    [Test, Ignore("Disabled due to instability UUM-19454")]
+    [Test]
     [TestCaseSource("textWithWordStartAndEndIndices")]
     [TestCaseSource("textWithWordStartAndEndIndicesWherePunctuationIsAWord")]
     public void MoveToStartOfNextWord_MovesCursorToNextWordStart(string text, int[] wordStartIndices, int[] wordEndIndices)
@@ -447,7 +448,7 @@ public class TextEditorTests
         }
     }
 
-    [Test, Ignore("Disabled due to instability UUM-19454")]
+    [Test]
     [TestCaseSource("textWithWordStartAndEndIndices")]
     [TestCaseSource("textWithWordStartAndEndIndicesWherePunctuationIsAWord")]
     public void MoveToEndOfPreviousWord_MovesCursorToPreviousWordStart(string text, int[] wordStartIndices, int[] wordEndIndices)

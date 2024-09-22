@@ -194,45 +194,66 @@ namespace TMPro
             yield return new object[] { 6, 6 };
         }
 
-        [Test, TestCaseSource("TestCases_MultiLineNewline_OnLastLine_WhenPressedEnter_Caret_ShouldNotGoto_NextLine")]
-        public void MultiLineNewline_OnLastLine_WhenPressedEnter_Caret_ShouldNotGoto_NextLine(int lineLimit, int expectedLineCount)
+        [Test, TestCaseSource(nameof(TestCases_MultiLineNewline_OnLastLine_WhenPressedEnter_Caret_ShouldNotGoto_NextLine))]
+        public void MultiLineNewline_OnLastLine_WhenPressedEnter_Caret_ShouldNotGoto_NextLine(int lineLimit,
+            int expectedLineCount)
         {
-            var cameraObject = new GameObject("Camera Object", typeof(Camera));
-            var canvasObject = new GameObject("Canvas Object", typeof(Canvas), typeof(GraphicRaycaster));
+            MultiLineNewline_LineLimit_ExpectedLineCount_Logic(lineLimit, lineLimit, 3);
+            Assert.AreEqual(m_TextComponent.textInfo.lineCount, expectedLineCount);
+        }
+
+        private void MultiLineNewline_LineLimit_ExpectedLineCount_Logic(int lineLimitValue, int lineLimitApplied,
+            int extraKeyDownEventCount)
+        {
+            GameObject cameraObject = new GameObject("Camera Object", typeof(Camera));
+            GameObject canvasObject = new GameObject("Canvas Object", typeof(Canvas), typeof(GraphicRaycaster));
             canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-            var inputObject = new GameObject("Input Object", typeof(TMP_InputField));
+            GameObject inputObject = new GameObject("Input Object", typeof(TMP_InputField));
             inputObject.transform.parent = canvasObject.transform;
             inputObject.AddComponent<Image>();
-            var inputField = inputObject.GetComponent<TMP_InputField>(); 
-            inputField.targetGraphic = inputObject.GetComponent<Image>();
-            inputField.textComponent = m_TextComponent;
-            inputField.lineType = TMP_InputField.LineType.MultiLineNewline;
-            inputField.lineLimit = lineLimit;
+            TMP_InputField m_InputField = inputObject.GetComponent<TMP_InputField>();
+            m_InputField.targetGraphic = inputObject.GetComponent<Image>();
+            m_InputField.textComponent = m_TextComponent;
+            m_InputField.lineType = TMP_InputField.LineType.MultiLineNewline;
+            m_InputField.lineLimit = lineLimitValue;
 
-            var eventGameObject = new GameObject("Event Object", typeof(EventSystem), typeof(StandaloneInputModule));
-            var enterKeyDownEvent = new Event { type = EventType.KeyDown, keyCode = KeyCode.KeypadEnter, modifiers = EventModifiers.None, character = '\n' };
+            GameObject eventGameObject = new GameObject("Event Object", typeof(EventSystem), typeof(StandaloneInputModule));
+            Event enterKeyDownEvent = new Event { type = EventType.KeyDown, keyCode = KeyCode.KeypadEnter, modifiers = EventModifiers.None, character = '\n' };
 
-            inputField.text = "POTUS";
+            m_InputField.text = "POTUS";
             EventSystem.current.SetSelectedGameObject(inputObject);
-            inputField.ActivateInputField();
-            var count = 0;
-            while (count < lineLimit + 3)
+            m_InputField.ActivateInputField();
+            int count = lineLimitApplied + extraKeyDownEventCount;
+            while (count > 0)
             {
-                inputField.ProcessEvent(enterKeyDownEvent);
-                inputField.ForceLabelUpdate();
-                count++;
+                m_InputField.ProcessEvent(enterKeyDownEvent);
+                m_InputField.ForceLabelUpdate();
+                count--;
             }
 
-            inputField.textComponent.ForceMeshUpdate();
-            CanvasUpdateRegistry.RegisterCanvasElementForGraphicRebuild(inputField);
+            m_InputField.textComponent.ForceMeshUpdate();
+            CanvasUpdateRegistry.RegisterCanvasElementForGraphicRebuild(m_InputField);
 
-            inputField.DeactivateInputField();
+            m_InputField.DeactivateInputField();
             GameObject.Destroy(eventGameObject);
             GameObject.Destroy(inputObject);
             GameObject.Destroy(canvasObject);
             GameObject.Destroy(cameraObject);
+        }
 
-            Assert.AreEqual(m_TextComponent.textInfo.lineCount, expectedLineCount);
+        public static IEnumerable<object[]> TestCases_MultiLineNewLine_NegativeOrZeroLineLimit_AddsNewLine()
+        {
+            yield return new object[] { 0, 0, 1 };
+            yield return new object[] { 0, 0, 4 };
+            yield return new object[] { -1, 0, 2 };
+        }
+
+        [Test, TestCaseSource(nameof(TestCases_MultiLineNewLine_NegativeOrZeroLineLimit_AddsNewLine))]
+        public void MultiLineNewLine_NegativeOrZeroLineLimit_AddsNewLine(int lineLimitValue, int lineLimitApplied,
+            int extraKeyDownEventCount)
+        {
+            MultiLineNewline_LineLimit_ExpectedLineCount_Logic(lineLimitValue, lineLimitApplied, extraKeyDownEventCount);
+            Assert.AreEqual(m_TextComponent.textInfo.lineCount, extraKeyDownEventCount + 1);
         }
 
         //[OneTimeTearDown]

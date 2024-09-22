@@ -16,6 +16,36 @@ namespace InputfieldTests
     {
         protected GameObject m_PrefabRoot;
 
+        IEnumerator Waiting()
+        {
+#if UNITY_EDITOR
+            // WaitForEndOfFrame doesn't work in batch mode
+            int startFrame = Time.frameCount;
+            return new WaitUntil(() => Time.frameCount - startFrame >= 1);
+
+#else
+        yield return new WaitForEndOfFrame();
+#endif
+        }
+
+        protected IEnumerator WaitForCondition(string name, Func<bool> condition, float timeOutInSeconds, Func<string> additionalErrorMessage = null)
+        {
+            var start = Time.realtimeSinceStartup;
+
+            while (condition() == false)
+            {
+                yield return Waiting();
+
+                if (Time.realtimeSinceStartup - start > timeOutInSeconds)
+                {
+                    var msg = $"TimeOut ({timeOutInSeconds} seconds) while waiting for '{name}'";
+                    if (additionalErrorMessage != null)
+                        msg += Environment.NewLine + additionalErrorMessage.Invoke();
+                    throw new Exception(msg);
+                }
+            }
+        }
+
         public void CreateInputFieldAsset(string prefabPath)
         {
 #if UNITY_EDITOR
