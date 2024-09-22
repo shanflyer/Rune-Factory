@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace UnityEngine.Rendering.Universal
 {
-    public partial class Light2D
+    public sealed partial class Light2D
     {
 #if UNITY_EDITOR
         private const string s_IconsPath = "Packages/com.unity.render-pipelines.universal/Editor/2D/Resources/SceneViewIcons/";
@@ -26,7 +26,6 @@ namespace UnityEngine.Rendering.Universal
             {
                 Gizmos.DrawIcon(transform.position, s_IconsPath + s_LightIconFileNames[(int)m_LightType], true);
             }
-
         }
 
         void Reset()

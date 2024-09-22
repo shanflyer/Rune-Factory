@@ -1,3 +1,6 @@
+---
+uid: urp-xr-untethered-device-optimization
+---
 # Optimization techniques for untethered XR devices
 
 This page describes the optimization techniques for URP projects that target untethered XR devices.

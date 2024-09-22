@@ -223,17 +223,6 @@ namespace UnityEngine.Rendering.Universal
         _4xBilinear
     }
 
-    internal enum DefaultMaterialType
-    {
-        Standard,
-        Particle,
-        Terrain,
-        Sprite,
-        UnityBuiltinDefault,
-        SpriteMask,
-        Decal
-    }
-
     /// <summary>
     /// Options for light rendering mode.
     /// </summary>
@@ -467,6 +456,7 @@ namespace UnityEngine.Rendering.Universal
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use m_RendererDataList instead.")]
         [SerializeField] internal ScriptableRendererData m_RendererData = null;
+
         public ScriptableRendererData[] RendererDataList => m_RendererDataList;
         // Renderer settings
         [SerializeField] internal ScriptableRendererData[] m_RendererDataList = new ScriptableRendererData[1];

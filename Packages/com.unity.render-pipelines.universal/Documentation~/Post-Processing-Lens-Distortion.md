@@ -1,3 +1,6 @@
+---
+uid: urp-post-processing-lens-distortion
+---
 # Lens Distortion
 
 ![Lens Distortion off](Images/post-proc/lens-distortion-off.png)

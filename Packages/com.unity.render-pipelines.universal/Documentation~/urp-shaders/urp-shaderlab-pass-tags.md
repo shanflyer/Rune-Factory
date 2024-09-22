@@ -1,3 +1,6 @@
+---
+uid: urp-urp-shaderlab-pass-tags
+---
 # URP ShaderLab Pass tags
 
 This section contains descriptions of URP-specific ShaderLab Pass tags.

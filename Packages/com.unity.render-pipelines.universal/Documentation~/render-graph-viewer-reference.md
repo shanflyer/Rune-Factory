@@ -1,3 +1,6 @@
+---
+uid: urp-render-graph-viewer-reference
+---
 
 # Render Graph Viewer window reference
 

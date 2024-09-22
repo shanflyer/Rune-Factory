@@ -1,3 +1,6 @@
+---
+uid: urp-volume-profile
+---
 # Create a Volume Profile
 
 To create a Volume Profile, do one of the following:

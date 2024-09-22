@@ -20,6 +20,7 @@ namespace UnityEngine.Rendering.Universal
         Render2DLightingPass m_Render2DLightingPass;
         PixelPerfectBackgroundPass m_PixelPerfectBackgroundPass;
         UpscalePass m_UpscalePass;
+        CopyDepthPass m_CopyDepthPass;
         CopyCameraSortingLayerPass m_CopyCameraSortingLayerPass;
         FinalBlitPass m_FinalBlitPass;
         DrawScreenSpaceUIPass m_DrawOffscreenUIPass;
@@ -39,6 +40,7 @@ namespace UnityEngine.Rendering.Universal
         internal RTHandle m_DepthTextureHandle;
 
 #if UNITY_EDITOR
+        SetEditorTargetPass m_SetEditorTargetPass;
         internal RTHandle m_DefaultWhiteTextureHandle;
 #endif
 
@@ -77,6 +79,12 @@ namespace UnityEngine.Rendering.Universal
             if (GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out var renderer2DResources))
             {
                 m_Render2DLightingPass = new Render2DLightingPass(data, m_BlitMaterial, m_SamplingMaterial, renderer2DResources.fallOffLookup);
+
+                m_CopyDepthPass = new CopyDepthPass(
+                    RenderPassEvent.AfterRenderingTransparents,
+                    renderer2DResources.copyDepthPS,
+                    shouldClear: true,
+                    copyResolvedDepth: RenderingUtils.MultisampleDepthResolveSupported());
             }
 
             // we should determine why clearing the camera target is set so late in the events... sounds like it could be earlier
@@ -87,6 +95,10 @@ namespace UnityEngine.Rendering.Universal
 
             m_DrawOffscreenUIPass = new DrawScreenSpaceUIPass(RenderPassEvent.BeforeRenderingPostProcessing, true);
             m_DrawOverlayUIPass = new DrawScreenSpaceUIPass(RenderPassEvent.AfterRendering + k_AfterFinalBlitPassQueueOffset, false); // after m_FinalBlitPass
+
+#if UNITY_EDITOR
+            m_SetEditorTargetPass = new SetEditorTargetPass(RenderPassEvent.AfterRendering + 9);
+#endif
 
             // RenderTexture format depends on camera and pipeline (HDR, non HDR, etc)
             // Samples (MSAA) depend on camera and pipeline
@@ -119,6 +131,7 @@ namespace UnityEngine.Rendering.Universal
             m_DepthTextureHandle?.Release();
             ReleaseRenderTargets();
             m_UpscalePass.Dispose();
+            m_CopyDepthPass?.Dispose();
             m_FinalBlitPass?.Dispose();
             m_DrawOffscreenUIPass?.Dispose();
             m_DrawOverlayUIPass?.Dispose();
@@ -445,6 +458,18 @@ namespace UnityEngine.Rendering.Universal
             {
                 EnqueuePass(m_DrawOverlayUIPass);
             }
+
+            // The editor scene view still relies on some builtin passes (i.e. drawing the scene grid). The builtin
+            // passes are not explicitly setting RTs and rely on the last active render target being set.
+            // TODO: this will go away once we remove the builtin dependencies and implement the grid in SRP.
+#if UNITY_EDITOR
+            bool isSceneViewOrPreviewCamera = cameraData.isSceneViewCamera || cameraData.isPreviewCamera;
+            bool isGizmosEnabled = UnityEditor.Handles.ShouldRenderGizmos();
+            if (isSceneViewOrPreviewCamera || (isGizmosEnabled && lastCameraInStack))
+            {
+                EnqueuePass(m_SetEditorTargetPass);
+            }
+#endif
         }
 
         public override void SetupCullingParameters(ref ScriptableCullingParameters cullingParameters, ref CameraData cameraData)
@@ -507,4 +532,22 @@ namespace UnityEngine.Rendering.Universal
             get => !IsGLDevice(); // GLES and doesn't support MSAA resolve with the NRP API
         }
     }
+
+#if UNITY_EDITOR
+    internal class SetEditorTargetPass : ScriptableRenderPass
+    {
+        public SetEditorTargetPass(RenderPassEvent evt)
+        {
+            renderPassEvent = evt;
+        }
+
+        [Obsolete(DeprecationMessage.CompatibilityScriptingAPIObsolete, false)]
+        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        {
+            renderingData.commandBuffer.SetRenderTarget(k_CameraTarget,
+                       RenderBufferLoadAction.Load, RenderBufferStoreAction.Store, // color
+                       RenderBufferLoadAction.Load, RenderBufferStoreAction.DontCare); // depth
+        }
+    }
+#endif
 }

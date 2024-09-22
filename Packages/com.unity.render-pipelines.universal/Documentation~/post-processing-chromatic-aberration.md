@@ -1,3 +1,6 @@
+---
+uid: urp-post-processing-chromatic-aberration
+---
 # Chromatic Aberration
 
 ![Chromatic Aberration Off](Images/post-proc/chromatic-aberration-off.png)

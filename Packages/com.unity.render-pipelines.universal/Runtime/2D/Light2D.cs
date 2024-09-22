@@ -19,7 +19,7 @@ namespace UnityEngine.Rendering.Universal
     [MovedFrom(true, "UnityEngine.Experimental.Rendering.Universal", "Unity.RenderPipelines.Universal.Runtime")]
     [AddComponentMenu("Rendering/2D/Light 2D")]
     [HelpURL("https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest/index.html?subfolder=/manual/2DLightProperties.html")]
-    public partial class Light2D : Light2DBase, ISerializationCallbackReceiver
+    public sealed partial class Light2D : Light2DBase, ISerializationCallbackReceiver
     {
         /// <summary>
         /// Deprecated Light types that are no supported. Please migrate to either Freeform or Point lights.
@@ -336,10 +336,7 @@ namespace UnityEngine.Rendering.Universal
         /// <summary>
         /// Returns the calculation quality for the normal map rendering. Please refer to NormalMapQuality.
         /// </summary>
-        public NormalMapQuality normalMapQuality { get => m_NormalMapQuality; set => m_NormalMapQuality = value; }
-
-        public bool useNormalMap { get => m_UseNormalMap; set => m_UseNormalMap = value; }
-
+        public NormalMapQuality normalMapQuality => m_NormalMapQuality;
 
         /// <summary>
         /// Returns if volumetric shadows should be rendered.

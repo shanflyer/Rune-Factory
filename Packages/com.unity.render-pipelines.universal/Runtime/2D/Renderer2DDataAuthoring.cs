@@ -6,21 +6,24 @@ namespace UnityEngine.Rendering.Universal
     {
 #if UNITY_EDITOR
         [SerializeField]
-        Renderer2DDefaultMaterialType m_DefaultMaterialType = Renderer2DDefaultMaterialType.Lit; 
+        Renderer2DDefaultMaterialType m_DefaultMaterialType = Renderer2DDefaultMaterialType.Lit;
+
+        [SerializeField, Reload("Runtime/Materials/Sprite-Lit-Default.mat")]
+        Material m_DefaultCustomMaterial = null;
+
         internal override Shader GetDefaultShader()
         {
-            return Shader.Find("Universal Render Pipeline/2D/Sprite-Lit-Default");
+            if (!GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out var resources))
+                return null;
+
+            return resources.defaultLitMaterial.shader;
         }
 
-        [SerializeField]
-        Renderer2DResources resources;
         internal override Material GetDefaultMaterial(DefaultMaterialType materialType)
         {
-            if (resources == null)
-            {
-                if (!GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out resources))
-                    return null;
-            } 
+            if (!GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out var resources))
+                return null;
+
             switch (materialType)
             {
                 case DefaultMaterialType.Sprite:
@@ -30,7 +33,7 @@ namespace UnityEngine.Rendering.Universal
                     {
                         Renderer2DDefaultMaterialType.Lit => resources.defaultLitMaterial,
                         Renderer2DDefaultMaterialType.Unlit => resources.defaultUnlitMaterial,
-                        _ => resources.defaultCustomMaterial
+                        _ => m_DefaultCustomMaterial
                     };
                 }
                 case DefaultMaterialType.SpriteMask:
@@ -71,6 +74,9 @@ namespace UnityEngine.Rendering.Universal
 
         void RebuildBlendStyles(bool force = false)
         {
+            // Initialize Editor Prefs for Sprite Editor
+            InitializeSpriteEditorPrefs();
+
             // Initialize Light Blend Styles
             if (m_LightBlendStyles != null && !force)
             {
@@ -101,17 +107,11 @@ namespace UnityEngine.Rendering.Universal
             m_LightBlendStyles[3].name = "Additive with Mask";
             m_LightBlendStyles[3].blendMode = Light2DBlendStyle.BlendMode.Additive;
             m_LightBlendStyles[3].maskTextureChannel = Light2DBlendStyle.TextureChannel.R;
-
-            // Initialize Editor Prefs for Sprite Editor
-            InitializeSpriteEditorPrefs();
         }
 
         private void Awake()
         {
             RebuildBlendStyles();
-            if (resources == null)
-                GraphicsSettings.TryGetRenderPipelineSettings<Renderer2DResources>(out resources);
-
         }
 
         void Reset()

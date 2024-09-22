@@ -227,8 +227,11 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             {
                 var graphPass = graph.m_RenderPasses[passId];
                 ref var passData = ref ctx.passData.ElementAt(passId);
+                string passName = passData.GetName(ctx).name;
+                string passDisplayName = InjectSpaces(passName);
+
                 RenderGraph.DebugData.PassData debugPass = new RenderGraph.DebugData.PassData();
-                debugPass.name = InjectSpaces(passData.GetName(ctx).name);
+                debugPass.name = passDisplayName;
                 debugPass.type = passData.type;
                 debugPass.culled = passData.culled;
                 debugPass.async = passData.asyncCompute;
@@ -237,7 +240,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 debugPass.resourceReadLists = new List<int>[(int)RenderGraphResourceType.Count];
                 debugPass.resourceWriteLists = new List<int>[(int)RenderGraphResourceType.Count];
 
-                RenderGraph.DebugData.s_PassScriptMetadata.TryGetValue(debugPass.name, out debugPass.scriptInfo);
+                RenderGraph.DebugData.s_PassScriptMetadata.TryGetValue(passName, out debugPass.scriptInfo);
 
                 debugPass.syncFromPassIndex = -1; // TODO async compute support
                 debugPass.syncToPassIndex = -1; // TODO async compute support
@@ -282,8 +285,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             foreach (ref readonly var nativePassData in ctx.NativePasses)
             {
                 List<int> mergedPassIds = new List<int>();
-                for (int passOffset = 0; passOffset < nativePassData.numGraphPasses; ++passOffset)
-                    mergedPassIds.Add(nativePassData.firstGraphPass + passOffset);
+                for (int graphPassId = nativePassData.firstGraphPass; graphPassId < nativePassData.lastGraphPass + 1; ++graphPassId)
+                    mergedPassIds.Add(graphPassId);
 
                 if (nativePassData.numGraphPasses > 0)
                 {

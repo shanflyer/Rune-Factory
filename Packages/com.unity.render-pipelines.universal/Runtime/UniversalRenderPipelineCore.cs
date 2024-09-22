@@ -1274,6 +1274,9 @@ namespace UnityEngine.Rendering.Universal
         /// <summary> Keyword used for HDR Color Grading. </summary>
         public const string HDRGrading = "_HDR_GRADING";
 
+        /// <summary> Keyword used for HDR UI Overlay compositing. </summary>
+        public const string HDROverlay = "_HDR_OVERLAY";
+
         /// <summary> Keyword used for ACES Tonemapping. </summary>
         public const string TonemapACES = "_TONEMAP_ACES";
 
@@ -1854,7 +1857,7 @@ namespace UnityEngine.Rendering.Universal
         ColorGradingLUT,
         CopyColor,
         CopyDepth,
-        DepthNormalPrepass,
+        DrawDepthNormalPrepass,
         DepthPrepass,
         UpdateReflectionProbeAtlas,
 
@@ -1919,7 +1922,8 @@ namespace UnityEngine.Rendering.Universal
         [HideInDebugUI] RG_FinalFSRScale,
         [HideInDebugUI] RG_FinalBlit,
 
-        FinalBlit
+        BlitFinalToBackBuffer,
+        DrawSkybox
     }
 
     // Internal class to detect and cache runtime platform information.
@@ -2000,5 +2004,7 @@ namespace UnityEngine.Rendering.Universal
 
             return mode;
         }
+
+        internal static bool isRunningOnPowerVRGPU = SystemInfo.graphicsDeviceName.Contains("PowerVR");
     }
 }

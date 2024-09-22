@@ -1,3 +1,6 @@
+---
+uid: urp-reflection-probes
+---
 # Reflection probes
 
 This page describes URP-specific behavior of reflection probes.

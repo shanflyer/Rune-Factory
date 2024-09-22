@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine.Rendering.UnifiedRayTracing;
 using Unity.Collections;
+using UnityEngine.Rendering.Sampling;
 
 namespace UnityEngine.Rendering
 {
@@ -46,6 +47,7 @@ namespace UnityEngine.Rendering
             static readonly int _ProbePositions = Shader.PropertyToID("_ProbePositions");
             static readonly int _LayerMasks = Shader.PropertyToID("_LayerMasks");
             static readonly int _RenderingLayerMasks = Shader.PropertyToID("_RenderingLayerMasks");
+            static readonly int _SobolBuffer = Shader.PropertyToID("_SobolMatricesBuffer");
 
             int batchIndex, batchCount;
             Vector4 regionMasks;
@@ -63,6 +65,7 @@ namespace UnityEngine.Rendering
             AccelStructAdapter m_AccelerationStructure;
             GraphicsBuffer scratchBuffer;
             GraphicsBuffer probePositionsBuffer;
+            GraphicsBuffer sobolBuffer;
 
             public override ulong currentStep => (ulong)batchIndex;
             public override ulong stepCount => (ulong)batchCount;
@@ -92,12 +95,16 @@ namespace UnityEngine.Rendering
                 layerMaskBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, batchSize, Marshal.SizeOf<uint>());
                 scratchBuffer = RayTracingHelper.CreateScratchBufferForBuildAndDispatch(m_AccelerationStructure.GetAccelerationStructure(), s_TracingContext.shaderRL, (uint)batchSize, 1, 1);
 
+                int sobolBufferSize = (int)(SobolData.SobolDims * SobolData.SobolSize);
+                sobolBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, sobolBufferSize, Marshal.SizeOf<uint>());
+                sobolBuffer.SetData(SobolData.SobolMatrices);
+
                 cmd = new CommandBuffer();
                 m_AccelerationStructure.Build(cmd, ref scratchBuffer);
                 Graphics.ExecuteCommandBuffer(cmd);
                 cmd.Clear();
             }
-
+     
             static AccelStructAdapter BuildAccelerationStructure()
             {
                 var accelStruct = s_TracingContext.CreateAccelerationStructure();
@@ -110,21 +117,18 @@ namespace UnityEngine.Rendering
                         continue;
 
                     int subMeshCount = mesh.subMeshCount;
-                    for (int i = 0; i < subMeshCount; ++i)
-                    {
-                        var matIndices = new uint[subMeshCount];
-                        Array.Fill(matIndices, renderer.component.renderingLayerMask); // repurpose the material id as we don't need it here
-                        var perSubMeshMask = new uint[subMeshCount];
-                        Array.Fill(perSubMeshMask, GetInstanceMask(renderer.component.shadowCastingMode));
-                        accelStruct.AddInstance(renderer.component.GetInstanceID(), renderer.component, perSubMeshMask, matIndices);
-                    }
+                    var matIndices = new uint[subMeshCount];
+                    Array.Fill(matIndices, renderer.component.renderingLayerMask); // repurpose the material id as we don't need it here
+                    var perSubMeshMask = new uint[subMeshCount];
+                    Array.Fill(perSubMeshMask, GetInstanceMask(renderer.component.shadowCastingMode));
+                    accelStruct.AddInstance(renderer.component.GetInstanceID(), renderer.component, perSubMeshMask, matIndices, 1);
                 }
 
                 foreach (var terrain in contributors.terrains)
                 {
                     uint mask = GetInstanceMask(terrain.component.shadowCastingMode);
                     uint materialID = terrain.component.renderingLayerMask; // repurpose the material id as we don't need it here
-                    accelStruct.AddInstance(terrain.component.GetInstanceID(), terrain.component, new uint[1] { mask }, new uint[1] { materialID });
+                    accelStruct.AddInstance(terrain.component.GetInstanceID(), terrain.component, new uint[1] { mask }, new uint[1] { materialID }, 1);
                 }
 
                 return accelStruct;
@@ -145,6 +149,7 @@ namespace UnityEngine.Rendering
                 shader.SetVectorParam(cmd, _RenderingLayerMasks, regionMasks);
                 shader.SetBufferParam(cmd, _ProbePositions, probePositionsBuffer);
                 shader.SetBufferParam(cmd, _LayerMasks, layerMaskBuffer);
+                shader.SetBufferParam(cmd, _SobolBuffer, sobolBuffer);
 
                 shader.Dispatch(cmd, scratchBuffer, (uint)batchSize, 1, 1);
                 batchIndex++;
@@ -176,6 +181,7 @@ namespace UnityEngine.Rendering
                 scratchBuffer?.Dispose();
                 probePositionsBuffer.Dispose();
                 m_AccelerationStructure.Dispose();
+                sobolBuffer?.Dispose();
 
                 layerMaskBuffer.Dispose();
                 layerMask.Dispose();

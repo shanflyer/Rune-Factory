@@ -1,3 +1,6 @@
+---
+uid: urp-index
+---
 # Universal Render Pipeline overview
 
 ![Universal Render Pipeline in action](Images/AssetShots/Beauty/Overview.png)

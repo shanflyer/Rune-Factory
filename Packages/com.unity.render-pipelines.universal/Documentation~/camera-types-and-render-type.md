@@ -1,3 +1,6 @@
+---
+uid: urp-camera-types-and-render-type
+---
 # Camera render types
 
 There are two types of Camera in the Universal Render Pipeline (URP):

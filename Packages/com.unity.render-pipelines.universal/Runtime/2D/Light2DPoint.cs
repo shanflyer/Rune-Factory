@@ -2,7 +2,7 @@ using System;
 
 namespace UnityEngine.Rendering.Universal
 {
-    public partial class Light2D
+    public sealed partial class Light2D
     {
         [SerializeField] float m_PointLightInnerAngle = 360.0f;
         [SerializeField] float m_PointLightOuterAngle = 360.0f;

@@ -1,3 +1,6 @@
+---
+uid: urp-rendering-debugger
+---
 # Rendering Debugger
 
 The Rendering Debugger lets you visualize various lighting, rendering, and Material properties. The visualizations help you identify rendering issues and optimize scenes and rendering configurations.

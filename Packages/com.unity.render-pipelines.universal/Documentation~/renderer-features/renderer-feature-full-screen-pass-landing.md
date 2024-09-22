@@ -1,3 +1,6 @@
+---
+uid: urp-renderer-feature-full-screen-pass-landing
+---
 # Full Screen Pass Renderer Feature
 
 A Full Screen Pass Renderer Feature lets you render a full screen effect, such as a vignette or a blur, using a Material.

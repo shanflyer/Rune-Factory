@@ -213,16 +213,17 @@ namespace UnityEngine.Rendering
         internal bool ShouldCullCell(Vector3 cellPosition)
         {
             var cellSizeInMeters = ProbeReferenceVolume.instance.MaxBrickSize();
-            var probeOffset = ProbeReferenceVolume.instance.ProbeOffset();
+            var probeOffset = ProbeReferenceVolume.instance.ProbeOffset() + ProbeVolumeDebug.currentOffset;
             var debugDisplay = ProbeReferenceVolume.instance.probeVolumeDebug;
             if (debugDisplay.realtimeSubdivision)
             {
-                if (!ProbeReferenceVolume.instance.TryGetBakingSetForLoadedScene(gameObject.scene, out var bakingSet))
+                var bakingSet = ProbeVolumeBakingSet.GetBakingSetForScene(gameObject.scene);
+                if (bakingSet == null)
                     return true;
 
                 // Use the non-backed data to display real-time info
                 cellSizeInMeters = ProbeVolumeBakingSet.GetMinBrickSize(bakingSet.minDistanceBetweenProbes) * ProbeVolumeBakingSet.GetCellSizeInBricks(bakingSet.simplificationLevels);
-                probeOffset = bakingSet.probeOffset;
+                probeOffset = bakingSet.probeOffset + ProbeVolumeDebug.currentOffset;
             }
             Camera activeCamera = Camera.current;
 #if UNITY_EDITOR
@@ -271,10 +272,11 @@ namespace UnityEngine.Rendering
 
             float minBrickSize = ProbeReferenceVolume.instance.MinBrickSize();
             var cellSizeInMeters = ProbeReferenceVolume.instance.MaxBrickSize();
-            var probeOffset = ProbeReferenceVolume.instance.ProbeOffset();
+            var probeOffset = ProbeReferenceVolume.instance.ProbeOffset() + ProbeVolumeDebug.currentOffset;
             if (debugDisplay.realtimeSubdivision)
             {
-                if (!ProbeReferenceVolume.instance.TryGetBakingSetForLoadedScene(gameObject.scene, out var bakingSet))
+                var bakingSet = ProbeVolumeBakingSet.GetBakingSetForScene(gameObject.scene);
+                if (bakingSet == null)
                     return;
 
                 // Overwrite settings with data from profile

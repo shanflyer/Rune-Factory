@@ -1,3 +1,6 @@
+---
+uid: urp-volume-component-reference
+---
 # Volume component reference
 
 Volumes components contain properties that control how they affect Cameras and how they interact with other Volumes.

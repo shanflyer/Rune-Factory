@@ -1,3 +1,6 @@
+---
+uid: urp-renderer-feature-decal-landing
+---
 # Decal Renderer Feature
 
 A Decal Renderer Features projects specific materials (decals) onto other objects in the scene. Decals interact with the scene's lighting and wrap around meshes.

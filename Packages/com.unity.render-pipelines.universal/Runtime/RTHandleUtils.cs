@@ -47,7 +47,6 @@ namespace UnityEngine.Rendering.Universal
         // Return true if resource is added to pool successfully, return false otherwise.
         internal bool AddResourceToPool(in TextureDesc texDesc, RTHandle resource, int currentFrameIndex)
         {
-           
             if (s_CurrentStaleResourceCount >= s_StaleResourceMaxCapacity)
                 return false;
 
@@ -59,10 +58,7 @@ namespace UnityEngine.Rendering.Universal
                 list = new SortedList<int, (RTHandle resource, int frameIndex)>(s_StaleResourceMaxCapacity);
                 m_ResourcePool.Add(hashCode, list);
             }
-            if (list.ContainsKey(resource.GetInstanceID()))
-            {
-                return false;
-            }
+
             list.Add(resource.GetInstanceID(), (resource, currentFrameIndex));
             s_CurrentStaleResourceCount++;
 

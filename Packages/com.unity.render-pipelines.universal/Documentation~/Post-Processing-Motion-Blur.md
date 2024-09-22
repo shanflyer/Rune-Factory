@@ -1,3 +1,6 @@
+---
+uid: urp-post-processing-motion-blur
+---
 # Motion Blur
 
 ![Motion Blur off](Images/post-proc/motion-blur-off.png)

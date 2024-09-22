@@ -25,7 +25,7 @@ namespace UnityEditor.Rendering.Universal
                     return false;
                 else
                     return base.IsAvailable() && (light.lightType == Light2D.LightType.Freeform ||
-                        light.lightType == Light2D.LightType.Directional);
+                       light.lightType == Light2D.LightType.Directional);
             }
 
             protected override IShape GetShape(Object target)
@@ -73,7 +73,7 @@ namespace UnityEditor.Rendering.Universal
             public static GUIContent lightTypePoint = new GUIContent("Spot", Resources.Load("InspectorIcons/PointLight") as Texture);
             public static GUIContent lightTypeGlobal = new GUIContent("Global", Resources.Load("InspectorIcons/GlobalLight") as Texture);
             public static GUIContent lightDirectional = new GUIContent("Directional", Resources.Load("InspectorIcons/GlobalLight") as Texture);
-            public static GUIContent[] lightTypeOptions = new GUIContent[] { lightTypeFreeform, lightTypeSprite, lightTypePoint, lightTypeGlobal, lightDirectional };
+            public static GUIContent[] lightTypeOptions = new GUIContent[] { lightTypeFreeform, lightTypeSprite, lightTypePoint, lightTypeGlobal };
 
 
             public static GUIContent blendingSettingsFoldout = EditorGUIUtility.TrTextContent("Blending", "Options used for blending");
@@ -390,7 +390,7 @@ namespace UnityEditor.Rendering.Universal
                 EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(m_NormalMapZDistance, Styles.generalNormalMapZDistance);
                 if (EditorGUI.EndChangeCheck())
-                    m_NormalMapZDistance.floatValue = m_NormalMapZDistance.floatValue;
+                    m_NormalMapZDistance.floatValue = Mathf.Max(0.0f, m_NormalMapZDistance.floatValue);
 
                 EditorGUI.EndDisabledGroup();
             }
@@ -560,7 +560,7 @@ namespace UnityEditor.Rendering.Universal
                 meshChanged = true;
             }
             EditorGUI.EndProperty();
-            EditorGUILayout.PropertyField(m_LightDirection, Styles.generalDirection); 
+
             // Color and intensity
             EditorGUILayout.PropertyField(m_LightColor, Styles.generalLightColor);
             EditorGUI.BeginChangeCheck();

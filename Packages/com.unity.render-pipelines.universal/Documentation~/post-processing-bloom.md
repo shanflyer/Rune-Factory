@@ -1,3 +1,6 @@
+---
+uid: urp-post-processing-bloom
+---
 # Bloom
 
 ![Bloom](Images/post-proc/Bloom-off.png)

@@ -4,7 +4,6 @@ Shader "Hidden/Light2D"
     {
         [HideInInspector] _SrcBlend("__src", Float) = 1.0
         [HideInInspector] _DstBlend("__dst", Float) = 0.0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _HandleZTest("_HandleZTest", Int) = 4
     }
 
     SubShader
@@ -15,7 +14,7 @@ Shader "Hidden/Light2D"
         {
             Blend [_SrcBlend][_DstBlend]
             ZWrite Off
-            ZTest [_HandleZTest]
+            ZTest Off
             Cull Off
 
             HLSLPROGRAM
@@ -183,7 +182,7 @@ Shader "Hidden/Light2D"
                 }
 
 #if !USE_VOLUMETRIC
-                 APPLY_NORMALS_LIGHTING(i, lightColor,_L2D_DIRECTION.xyz, _L2D_POSITION.w);
+                APPLY_NORMALS_LIGHTING(i, lightColor, _L2D_POSITION.xyz, _L2D_POSITION.w);
 #endif
                 APPLY_SHADOWS(i, lightColor, _L2D_SHADOW_INTENSITY);
                 return ToFragmentOutput(lightColor);

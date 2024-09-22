@@ -21,8 +21,7 @@ namespace UnityEngine.Rendering.Universal
         /// <seealso cref="RenderPassEvent"/>
         public DrawSkyboxPass(RenderPassEvent evt)
         {
-            base.profilingSampler = new ProfilingSampler("Draw Skybox");
-
+            profilingSampler = ProfilingSampler.Get(URPProfileId.DrawSkybox);
             renderPassEvent = evt;
         }
 
@@ -123,7 +122,6 @@ namespace UnityEngine.Rendering.Universal
         {
             internal XRPass xr;
             internal RendererListHandle skyRendererListHandle;
-            internal TextureHandle cameraDepthTexture;
             internal Material material;
         }
 
@@ -149,7 +147,7 @@ namespace UnityEngine.Rendering.Universal
                 }
             }
 
-            using (var builder = renderGraph.AddRasterRenderPass<PassData>(profilingSampler.name, out var passData, profilingSampler))
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>(passName, out var passData, profilingSampler))
             {
                 var skyRendererListHandle = CreateSkyBoxRendererList(renderGraph, cameraData);
                 InitPassData(ref passData, cameraData.xr, skyRendererListHandle);
@@ -158,21 +156,8 @@ namespace UnityEngine.Rendering.Universal
                 builder.SetRenderAttachment(colorTarget, 0, AccessFlags.Write);
                 builder.SetRenderAttachmentDepth(depthTarget, AccessFlags.Write);
 
-                UniversalRenderer renderer = cameraData.renderer as UniversalRenderer;
-                if (hasDepthCopy && resourceData.cameraDepthTexture.IsValid())
-                {
-                    if (renderer.renderingModeActual != RenderingMode.Deferred)
-                    {
-                        builder.UseGlobalTexture(s_CameraDepthTextureID);
-                        passData.cameraDepthTexture = resourceData.cameraDepthTexture;
-                    }
-
-                    else if (renderer.deferredLights.GbufferDepthIndex != -1)
-                    {
-                        builder.UseTexture(resourceData.gBuffer[renderer.deferredLights.GbufferDepthIndex]);
-                        passData.cameraDepthTexture = resourceData.gBuffer[renderer.deferredLights.GbufferDepthIndex];
-                    }
-                }
+                if (hasDepthCopy)
+                    builder.UseGlobalTexture(s_CameraDepthTextureID);
 
                 builder.AllowPassCulling(false);
                 if (cameraData.xr.enabled)
@@ -183,8 +168,6 @@ namespace UnityEngine.Rendering.Universal
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                 {
-                    if(data.cameraDepthTexture.IsValid())
-                        data.material.SetTexture(s_CameraDepthTextureID, data.cameraDepthTexture);
                     ExecutePass(context.cmd, data.xr, data.skyRendererListHandle);
                 });
             }

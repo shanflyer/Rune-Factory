@@ -1,3 +1,6 @@
+---
+uid: urp-render-graph-compute-shader-input
+---
 
 ## Create input data for a compute shader
 

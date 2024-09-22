@@ -122,7 +122,7 @@ namespace UnityEditor.Rendering.Universal
 
             m_UseDepthStencilBuffer = serializedObject.FindProperty("m_UseDepthStencilBuffer");
             m_DefaultMaterialType = serializedObject.FindProperty("m_DefaultMaterialType");
-            m_DefaultCustomMaterial = serializedObject.FindProperty("resources.m_DefaultCustomMaterial");
+            m_DefaultCustomMaterial = serializedObject.FindProperty("m_DefaultCustomMaterial");
 
             m_GeneralFoldout = new SavedBool($"{target.GetType()}.GeneralFoldout", true);
             m_LightRenderTexturesFoldout = new SavedBool($"{target.GetType()}.LightRenderTexturesFoldout", true);
