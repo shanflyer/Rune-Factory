@@ -162,7 +162,7 @@ public class FightManager : Singleton<FightManager>
                 var fighterResult = fightResult.fighterResults[i];
                 fighterResult.levelUp = true;
                 fightResult.fighterResults[i] = fighterResult;
-                break;
+               // break;
             }
         }
     }
@@ -348,7 +348,7 @@ public class FightManager : Singleton<FightManager>
     }
 
     
-    public async void CreatFightPlayer()
+    public void CreatFightPlayer()
     {
         /*
         var player = CharacterManager.instance.player;

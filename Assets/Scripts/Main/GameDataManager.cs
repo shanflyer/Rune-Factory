@@ -314,7 +314,7 @@ public interface IGameData
 
 #endif
 
-    public async void Init() { }
+    public void Init() { }
 
     public void Clear() { }
 }

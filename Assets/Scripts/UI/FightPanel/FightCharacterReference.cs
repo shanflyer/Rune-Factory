@@ -140,7 +140,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
     public override async Task InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+      await  base.InitData(t, SelectAction, toggleGroup);
         fightPlayer = t as FightPlayer;
 
         GameActionManager.instance.AddListener<RefreshCharacter>(RefreshCharacter);

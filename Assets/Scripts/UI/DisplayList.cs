@@ -65,13 +65,13 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         }
         return null;
     }
-    public void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+    public async void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         for (int i = 0; i < list.Count; i++)
         {
             if (list[i].t.Equals(v))
             {
-                list[i].InitData(v, SelectAction, toggleGroup);
+              await  list[i].InitData(v, SelectAction, toggleGroup);
             }
         }
     }
@@ -104,14 +104,14 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-                list[i].InitData(componentData[i], SelectAction, toggleGroup);
+               await list[i].InitData(componentData[i], SelectAction, toggleGroup);
             }
             else
             {
                 var async = GameObject.InstantiateAsync(listPrefab);
                 await async;
                 T t = async.Result[0];
-                t.InitData(componentData[i], SelectAction, toggleGroup);
+               await t.InitData(componentData[i], SelectAction, toggleGroup);
                 t.enabled = true;
                 t.transform.SetParent(parent);
                 t.transform.localScale = Vector3.one;

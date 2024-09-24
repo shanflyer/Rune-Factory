@@ -13,7 +13,7 @@ public class DisplayOtherFunctionPanel : Action
     {
         DisplayPanel();
     }
-    void DisplayPanel()
+    async void DisplayPanel()
     {
         FunctionButtonList FunctionButtonList = new FunctionButtonList
         {
@@ -39,7 +39,7 @@ public class DisplayOtherFunctionPanel : Action
             };
             FunctionButtonList.buttons.Add(functionButton);
         }
-        UIManager.instance.ShowGamePanel<OtherFuntionPanel, FunctionButtonList>(FunctionButtonList);
+       await UIManager.instance.ShowGamePanel<OtherFuntionPanel, FunctionButtonList>(FunctionButtonList);
     }
 
     void CloseOtherFunctionPanel(bool success)

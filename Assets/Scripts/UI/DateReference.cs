@@ -40,7 +40,7 @@ public class DateReference : UIObjReference<GameDate>
 
     public override async Task InitData(GameDate t, SelectAction<GameDate> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await base.InitData(t, SelectAction, toggleGroup);
         selectToggle.group = toggleGroup;
         ValueText.text = data.date.ToString();
         festivalTips.enabled = gameDate.FestivaList.Count > 0;

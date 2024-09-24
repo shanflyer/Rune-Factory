@@ -35,6 +35,6 @@ public class ItemReference : UIObjReference<Item>
 
         icon.sprite = itemData.icon;
         text.text = item.count.ToString();
-        base.InitData(t, SelectAction);
+       await base.InitData(t, SelectAction);
     }
 }

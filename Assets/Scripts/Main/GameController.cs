@@ -111,6 +111,8 @@ public class GameController : MonoBehaviour
 #endif
     private float _seasonValue;
 
+    [HideInInspector]
+    public EnvironmentManger environmentManger;
 
     public static GameController instance;
     public bool SetLanguage;
@@ -173,7 +175,7 @@ public class GameController : MonoBehaviour
               //  GameObject.DontDestroyOnLoad(cameraObj);
             }
         }
-        var environmentManger = EnvironmentManger.instance;
+        environmentManger = EnvironmentManger.instance;
         var gameVolumeManager = GameVolumeManager.instance;
         var gameManager = GameManager.instance;
         var gameActionDataManager = GameActionDataManager.instance;
@@ -281,6 +283,11 @@ public class GameControllerEditor : Editor
         {
             gameController.Test();
         }
+        if (gameController.environmentManger != null)
+        {
+            gameController.environmentManger.cloudValue= EditorGUILayout.FloatField("Cloud", gameController.environmentManger.cloudValue);
+        }
+        
     }
 }
 #endif

@@ -541,7 +541,7 @@ public class Plant
                     nowCycle++;
                 }
 
-                PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage);
+                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage);
                 return true;
             }
 

@@ -90,6 +90,11 @@ Shader "MySprite-Lit-Default"
         _SnowColor("SnowColor",color)=(1,1,1,1)
         _ScaleValue("ScaleValue", Range(0 , 2)) = 0.5 
          _ClipValue("ClipValue",Range(0,2))=0.5
+ 
+        _WindDir("WindDir",vector)=(1,0.5,0.4,0.5) 
+        _NoiseSet0("NoiseSet0",vector)=(0.6,0.8,6,0.25)
+        _NoiseSet1("NoiseSet1",vector)=(0.5,1,10,0.3)
+        _cloudColor("CloudColor",Color)=(0,0,0,0.35)
         
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
@@ -256,7 +261,24 @@ Shader "MySprite-Lit-Default"
                 
                 Out = t;
             }
-            
+            void Unity_SimpleNoise_float2(float2 UV, float2 Scale, out float Out)
+            {
+                float t = 0.0;
+                
+                float freq = pow(2.0, float(0));
+                float amp = pow(0.5, float(3-0));
+                t += Unity_SimpleNoise_ValueNoise_float(float2(UV.x*Scale.x/freq, UV.y*Scale.y/freq))*amp;
+                
+                freq = pow(2.0, float(1));
+                amp = pow(0.5, float(3-1));
+                t += Unity_SimpleNoise_ValueNoise_float(float2(UV.x*Scale.x/freq, UV.y*Scale.y/freq))*amp;
+                
+                freq = pow(2.0, float(2));
+                amp = pow(0.5, float(3-2));
+                t += Unity_SimpleNoise_ValueNoise_float(float2(UV.x*Scale.x/freq, UV.y*Scale.y/freq))*amp;
+                
+                Out = t;
+            }
 
             float3 StandardColorRevise(float3 baseColor,float3 standardColor,float colorThresHold)
             {
@@ -301,6 +323,9 @@ Shader "MySprite-Lit-Default"
             TEXTURE2D(_SnowTex);
             SAMPLER(sampler_SnowTex);
 
+            TEXTURE2D(_CloudTex);
+            SAMPLER(sampler_CloudTex); 
+
             half4 GlobalColor; 
          half2 LightDirection;
          half _ShadowValue;
@@ -319,6 +344,7 @@ Shader "MySprite-Lit-Default"
         float4 _GlobalColor;
         half4 _SunColor;
         float _SeasonValue;
+        float _CloudValue;
         CBUFFER_START(UnityPerMaterial)
 			float3 _BlendColor;
 			float _BlendValue;
@@ -378,6 +404,13 @@ Shader "MySprite-Lit-Default"
 
             half _EdgeWaveSpeed;
             half _EdgeWaveOffset;
+
+
+             float4 _WindDir;
+            float4 _NoiseSet0;
+            float4 _NoiseSet1;
+            float4 _cloudColor;
+            
                       
         CBUFFER_END 
         
@@ -732,8 +765,7 @@ Shader "MySprite-Lit-Default"
             }
 
             Varyings CombinedShapeLightVertex(Attributes v)
-            {
-                return DefaultVertex(v); 
+            { 
                 if(_Tree3D==1)
                 {
                     return TreeVert(v);
@@ -745,7 +777,34 @@ Shader "MySprite-Lit-Default"
 
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/CombinedShapeLightShared.hlsl"
 
-            
+            half3 BlendScreenCloudColor(half3 col,half2 screenUV)
+            {
+
+                 float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
+
+                 float2 noiseUV=screenUV+_TimeParameters.x*_WindDir.xy*_NoiseSet0.w+offsetUv;
+                float2 noiseUV1=screenUV+_TimeParameters.x*_WindDir.zw*_NoiseSet1.w+offsetUv;
+                 float noise0; 
+                Unity_SimpleNoise_float2(noiseUV,float2(_NoiseSet0.z,_NoiseSet0.z*2),noise0);
+                float noise1; 
+                Unity_SimpleNoise_float2(noiseUV1,float2(_NoiseSet1.z,_NoiseSet1.z*2),noise1);
+
+                noise0*=_CloudValue;
+                noise1*=_CloudValue;
+                Unity_Remap_float(noise0,_NoiseSet0.xy,float2(0,1),noise0);
+                Unity_Remap_float(noise1,_NoiseSet1.xy,float2(0,1),noise1);
+                noise0=clamp(noise0,0,1);
+                noise1=clamp(noise1,0,1);
+                float cloud=noise0+noise1;
+                cloud=clamp(cloud,0,1);
+                float4 cloudColor=cloud*_cloudColor;
+                col=col.xyz*(1-cloudColor.a)+cloudColor.xyz*cloudColor.a; 
+                return col;
+            }
 
             half4 DefaultFragment(Varyings i) : SV_Target
             {
@@ -887,6 +946,8 @@ Shader "MySprite-Lit-Default"
                 {
                     waterColor=WaterFragment(uv,i.lightingUV,main);
                 }
+
+                waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
                
              
                // return float4( waterColor.xyz,main.a);
@@ -940,9 +1001,12 @@ Shader "MySprite-Lit-Default"
 				float4 texColor =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv.xy );
   
 
-                float ColorValue=(texColor.r+texColor.g+texColor.b)/3;
+                float ColorValue=(texColor.r+texColor.g+texColor.b)/3; 
+
 				Unity_Remap_float(ColorValue,float2(0,1),float2(_BlendRmapMin,1),ColorValue);
 				texColor.xyz=texColor.xyz*(1-_BlendValue)+_BlendColor*_BlendValue*ColorValue; 
+
+               
 
                 float noiseValue;
                 Unity_SimpleNoise_float(IN.worldPos.xy,_PlantAutumnNoiseScale,noiseValue); 
@@ -1005,11 +1069,16 @@ Shader "MySprite-Lit-Default"
                 //texColor.xyz=((1-IN.normal.y)*texColor.xyz+IN.normal.y)*(1-_NormalTex)+(_NormalTex)*texColor.xyz;
                   
                 float4 SnowColor =SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, IN.uv.xy );
+              
                 float normalY=IN.normal.y;
+                  
                 Unity_Remap_float(normalY,float2(0,1),_SnowRange.xy,normalY);
                 normalY=clamp(normalY,0,1);
                 float snowValue=normalY; 
+
+               
                 SnowColor=texColor*(1-snowValue)+SnowColor*snowValue; 
+                
                 float s_w=0;
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
                 s_w=clamp(s_w,0,1);
@@ -1019,6 +1088,8 @@ Shader "MySprite-Lit-Default"
                 s_w1=clamp(s_w1,0,1);
                 s_w+=s_w1;
                 texColor=texColor*(1-s_w)+SnowColor*s_w*_SnowColor;
+
+                texColor.xyz=BlendScreenCloudColor(texColor.xyz,IN.lightingUV);
 
 
 				float Alpha = texColor.a;  
@@ -1037,7 +1108,7 @@ Shader "MySprite-Lit-Default"
 			}
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
-            {return DefaultFragment(i); 
+            {  
                  if(_Tree3D==1)
                  {
                      return TreeFrag(i);

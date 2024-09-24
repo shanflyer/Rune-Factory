@@ -30,7 +30,7 @@ public class SleepReference : UIObjReference<SleepSetData>
 
     public override async Task InitData(SleepSetData t, SelectAction<SleepSetData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+      await  base.InitData(t, SelectAction, toggleGroup);
         sleepText.text = data.text;
         Icon.sprite = t.icon;
     }

@@ -336,7 +336,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private void ShowMultiPackagePanel(ShowMultiPackagePanel showMultiPackagePanel)
+    private async void ShowMultiPackagePanel(ShowMultiPackagePanel showMultiPackagePanel)
     {
         PackageData packageData0 = GetPackageData(showMultiPackagePanel.packageId0);
         PackageData packageData1 = GetPackageData(showMultiPackagePanel.packageId1);
@@ -348,7 +348,7 @@ public class PackageManager : Singleton<PackageManager>
                 packageData0,packageData1
             }
         };
-        UIManager.instance.ShowGamePanel<MultiPackagePanel, PackageList>(packageList);
+       await UIManager.instance.ShowGamePanel<MultiPackagePanel, PackageList>(packageList);
     }
 
     private async void CreatPackage(CreatPackage creatPackage)
@@ -453,12 +453,12 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private void GiveGift(GiveGift giveGift)
+    private async void GiveGift(GiveGift giveGift)
     {
         Character receiveCharacter = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter);
         if (receiveCharacter != null)
         {
-            SetItemInPackage(new Item(giveGift.giftId, 1), receiveCharacter.characterPackage);
+           await SetItemInPackage(new Item(giveGift.giftId, 1), receiveCharacter.characterPackage);
         }
         Character giveCharacter = CharacterManager.instance.GetCharacter(giveGift.giveCharacter);
         if (giveCharacter != null)
@@ -830,7 +830,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             for (int i = 0; i < packageSetData.initItems.Count; i++)
             {
-                gamePackage.SetItemInPackage(
+              await  gamePackage.SetItemInPackage(
                     new Item(packageSetData.initItems[i].x, packageSetData.initItems[i].y));
             }
 

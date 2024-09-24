@@ -12,7 +12,7 @@ public class ProFlareExporter
 
         foreach (Keyframe key in curve.keys)
         {
-            curveString = curveString + "\"key" + keyCount + "\": {\"time\":" + key.time + ",\"value\":" + key.value + ",\"in\":" + key.inTangent + ",\"out\":" + key.outTangent + ",\"tangentMode\":" + key.tangentMode + "}";
+            curveString = curveString + "\"key" + keyCount + "\": {\"time\":" + key.time + ",\"value\":" + key.value + ",\"in\":" + key.inTangent +  "}";
 
             keyCount++;
             if (keyCount != curve.keys.Length)

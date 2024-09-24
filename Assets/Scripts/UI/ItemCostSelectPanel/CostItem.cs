@@ -24,7 +24,7 @@ public class CostItem : UIObjReference<MyInt3>
         countText.text = $"{t.value.y}/{t.value.z}";
         countText.color=t.value.y>=t.value.z? Color.red : Color.green;
 
-        base.InitData(t, SelectAction, toggleGroup);
+      await  base.InitData(t, SelectAction, toggleGroup);
         
     }
 }

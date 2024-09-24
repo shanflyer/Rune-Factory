@@ -57,7 +57,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     private bool waiteSetHomeEquip=false;
     private bool upState=true;
 
-    private async void SelectAction()
+    private void SelectAction()
     {
         if (SelectHomeEquip.equipDataId != 0)
         {
@@ -165,7 +165,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         EquipBoxs = new DisplayList<HomeEquipReference, HomeEquip>(homeEquipReference, EquipParent);
 
         ActionButton.onClick.AddListener(SelectAction);
-        InfoButton.onClick.AddListener(() =>
+        InfoButton.onClick.AddListener(async () =>
         {
             ItemInfo itemInfo = new ItemInfo
             {
@@ -178,7 +178,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 showClose = true,
                 OffsetPos = infoOffsetY, 
             };
-            UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+           await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         });
 
         TitleButton.onClick.AddListener(() =>

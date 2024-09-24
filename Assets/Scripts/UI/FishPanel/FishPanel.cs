@@ -26,7 +26,7 @@ public class FishPanel : GamePanel<IReferenceData>
     FishUIReference fishUIReference;
 
 
-    protected override async void Awake()
+    protected override void Awake()
     {
         base.Awake();
         nextButton.onClick.AddListener(() =>
@@ -101,7 +101,7 @@ public class FishPanel : GamePanel<IReferenceData>
     }
     public override async Task InitData(string dataKey)
     {
-        base.InitData(dataKey);
+      await  base.InitData(dataKey);
 
         if (allFishes==null||allFishes.Count > 0)
             allFishes = await GameDataManager.instance.GetAllAsyncData<FishData>();

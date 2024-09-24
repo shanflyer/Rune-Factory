@@ -64,7 +64,7 @@ public class NPCReference : UIObjReference<NPC>
 
     public override async Task InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+         await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
 
         CharacterData characterData = await data.GetCharacterData();

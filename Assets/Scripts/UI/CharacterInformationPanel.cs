@@ -51,7 +51,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     [SerializeField]
     private float infoOffsetY =330f;
 
-    private void SelectEquipReference(Equipment equipment, bool selected = false)
+    private async void SelectEquipReference(Equipment equipment, bool selected = false)
     {
         bool isController = equipment.characterId == CharacterManager.instance.controllerCharacter.instanceId;
 
@@ -84,7 +84,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 };
                 GameActionManager.instance.QueueAction(clearEquip, true);
             }
-            UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+           await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         }
         else if (isController)
         {
@@ -326,14 +326,14 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             Attribute.sprite = spriteRenference.sprite;
         }
        
-        WeaponBox.InitData(new Equipment
+      await  WeaponBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.weapon.x,
             itemValue = v.equip.weapon.y / 100.0f,
             ItemType = ItemType.ÎäÆ÷
         }, SelectEquipReference); ;
-        ClothesBox.InitData(new Equipment
+      await  ClothesBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.clothes.x,
@@ -341,7 +341,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             ItemType = ItemType.·À¾ß
         }, SelectEquipReference);
 
-        ShoesBox.InitData(new Equipment
+      await  ShoesBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.headgear.x,
@@ -349,7 +349,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             ItemType = ItemType.Ã±×Ó
         }, SelectEquipReference); ;
 
-        HeadgearBox.InitData(new Equipment
+      await  HeadgearBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.shoes.x,

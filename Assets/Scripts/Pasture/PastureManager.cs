@@ -95,7 +95,7 @@ public class PastureManager : Singleton<PastureManager>
         return animals.TryGetValue(id, out animal);
     }
 
-    private void TryUpPastureLevel(TryUpPastureLevel tryUpPastureLevel)
+    private async void TryUpPastureLevel(TryUpPastureLevel tryUpPastureLevel)
     {
         if (!pastureLinkItems.TryGetValue(tryUpPastureLevel.itemInstance, out var pastureId))
         {
@@ -128,7 +128,7 @@ public class PastureManager : Singleton<PastureManager>
                     items = items,
                     afterAction = UpPastureLevel,
                 };
-                UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
+               await UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
 
                 void UpPastureLevel(bool result)
                 {
@@ -445,7 +445,7 @@ public class PastureManager : Singleton<PastureManager>
                 items = items,
                 afterAction = CreatPasture,
             };
-            UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
+           await UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
 
             void CreatPasture(bool result)
             {

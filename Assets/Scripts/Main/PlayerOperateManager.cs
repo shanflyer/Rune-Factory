@@ -25,7 +25,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         GameActionManager.instance.AddListener<PlayerTalkItem>(PlayerTalkItem);
     }
 
-    private void PlayerTalkItem(PlayerTalkItem playerTalkItem)
+    private async void PlayerTalkItem(PlayerTalkItem playerTalkItem)
     {
         if (CharacterManager.instance.GetRuntimeCharacterObj(playerTalkItem.characterId, out var characterRuntimeObj))
         {
@@ -39,7 +39,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                         talkValue = mapItemData.playerOperateInfo,
                         displayTime = GameCommon.defaultPlayerTalkTime
                     };
-                    UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(responseData,
+                   await UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(responseData,
                         parent: characterRuntimeObj.runtimeObj.obj as Transform);
                 }
             }
@@ -53,7 +53,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
     /// <param name="reference">数据id</param>
     /// <param name="enter">是否进入事件</param>
 
-    private void ClickObj(object obj)
+    private async void ClickObj(object obj)
     {
         EventSystem.current.UpData();
         if (EventSystem.current.currentSelectedGameObject != null)
@@ -103,7 +103,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                     value = nextTalkEventId
                 };  
                 bool temp = character is TempCharacter;
-                GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
+               await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });
@@ -158,7 +158,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                         });
                     }
                 }
-                UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
+               await UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
             }
         }
     }

@@ -165,7 +165,7 @@ public class WorldInstanceEditor : MonoBehaviour
         {
             mapInstanceEditors.Remove(mapInstanceEditor.id);
         }
-        var links = FindObjectsOfType<MapLinkEditor>();
+        var links = FindObjectsByType<MapLinkEditor>(FindObjectsSortMode.InstanceID);
         foreach (var link in links)
         {
             if (link.CheckLink(mapInstanceEditor.id))

@@ -43,7 +43,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
     }
     public override async Task InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await base.InitData(t, SelectAction, toggleGroup);
         typeText.text = data.ItemType.ToString();
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(data.dataId);
         if(itemData!=null)

@@ -246,7 +246,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
         characterTempMapItems[creatTempMapItem.characterId] = tempMapItem.instanceId;
         character.CanMoveCrossMap = false;
         WorldMapObjManager.instance.RefreshTempMapItem(tempMapItem);
-        SetCoordinate setCoordinate = async (int3 coordinate) =>
+        SetCoordinate setCoordinate =  (int3 coordinate) =>
         {
             tempMapItem.InitCoordinate();
            // tempMapItems.SetData(tempMapItem);

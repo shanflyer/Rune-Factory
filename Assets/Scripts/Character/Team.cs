@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -111,11 +112,11 @@ public class TeamManager : Singleton<TeamManager>
         }
     }
 
-    public bool LeaveTeam(int characterId)
+    public async Task<bool> LeaveTeam(int characterId)
     {
         if (teams.TryGetValue(characterId, out var team))
         {
-            team.RemoveCharacter(characterId);
+           await team.RemoveCharacter(characterId);
             return true;
         }
 
@@ -129,7 +130,7 @@ public class TeamManager : Singleton<TeamManager>
         }
         if (team != null)
         {
-            if (team.RemoveCharacter(characterId))
+            if (await team.RemoveCharacter(characterId))
             {
             }
             return true;
@@ -179,9 +180,9 @@ public class TeamManager : Singleton<TeamManager>
         }
         checkInTeam.setResult(true);
     }
-    private void LeaveTeam(LeaveTeam leaveTeam)
+    private async void LeaveTeam(LeaveTeam leaveTeam)
     {
-        bool result = LeaveTeam(leaveTeam.teamCharacterId);
+        bool result = await LeaveTeam(leaveTeam.teamCharacterId);
         RefreshAnimalPos refreshAnimalPos = new RefreshAnimalPos
         {
             animalId = leaveTeam.teamCharacterId
@@ -270,9 +271,9 @@ public class TeamManager : Singleton<TeamManager>
             joinTeam.setResult(false);
     }
 
-    private void RemoveCharacter(DestoryCharacter destoryCharacter)
+    private async void RemoveCharacter(DestoryCharacter destoryCharacter)
     {
-        LeaveTeam(destoryCharacter.characterId);
+      await  LeaveTeam(destoryCharacter.characterId);
     }
 
     protected override void Clear()
@@ -509,7 +510,7 @@ public class Team
         //  CharacterManager.instance.RefreshNpcRuntimeObj(nowCharacter);
     }
 
-    public bool RemoveCharacter(int characterid)
+    public async Task<bool> RemoveCharacter(int characterid)
     {
         bool isLeader = leader.instanceId == characterid;
         int oldCharacterId = leader.instanceId;
@@ -536,7 +537,7 @@ public class Team
                         var forwardCharacter = Teamers[i - 1];
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
                         nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
-                        CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character);
+                       await CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character);
                     }
                 }
                 Teamers[index].character.LeaveTeam();
@@ -657,7 +658,7 @@ public class Teamer
         }
     }
 
-    public void SetNewMapCoordinate(int3 coordinate, float2 directionValue)
+    public async void SetNewMapCoordinate(int3 coordinate, float2 directionValue)
     {
         nowCoordinate = coordinate.xy;
         queueCoordinate.Clear();
@@ -667,7 +668,7 @@ public class Teamer
             queueCoordinate.Enqueue(targetCoordinate);
         }
         character.SetCoordinate(coordinate);
-        CharacterManager.instance.RefreshNpcRuntimeObj(character);
+       await CharacterManager.instance.RefreshNpcRuntimeObj(character);
         canMove = true;
     }
 

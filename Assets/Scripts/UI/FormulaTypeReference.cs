@@ -37,7 +37,7 @@ public class FormulaTypeReference : UIObjReference<FormulaTypeData>
 
     public override async Task InitData(FormulaTypeData t, SelectAction<FormulaTypeData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await base.InitData(t, SelectAction, toggleGroup);
         typeName.text = data.formulaType.ToString();
     }
 

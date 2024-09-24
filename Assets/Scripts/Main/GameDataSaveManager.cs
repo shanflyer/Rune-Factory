@@ -254,7 +254,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         return null;
     }
-    public void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
+    public async void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
     {
         UserGameSaveDataList.nowSaveData = new UserGameSaveData()
         {
@@ -271,7 +271,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         };
         UserGameSaveData.playerData.dataId = (int)gender;
         //NPCManager.instance.CreatZeroNPC();
-        CharacterManager.instance.CreatPlayer((int)gender, 0);
+       await CharacterManager.instance.CreatPlayer((int)gender, 0);
     }
     static JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
     {

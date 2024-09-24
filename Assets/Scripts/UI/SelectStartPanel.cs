@@ -17,11 +17,11 @@ public class SelectStartPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        NewButton.onClick.AddListener(() =>
+        NewButton.onClick.AddListener(async () =>
         {
             Close();
             UIManager.instance.CloseGamePanel<ZeroPanel>();
-            UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+           await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
         });
         LoadButton.onClick.AddListener(() =>
         {

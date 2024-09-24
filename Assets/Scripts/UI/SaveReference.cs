@@ -50,7 +50,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
 
     public override async Task InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await  base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
         if (!string.IsNullOrEmpty(data.saveTime))
         {

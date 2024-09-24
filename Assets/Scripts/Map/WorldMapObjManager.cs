@@ -661,7 +661,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             if (animator)
             {
                 MyAnimationController.instance.AddItemAnimation(mapItemId, animator, newId.ToString());
-                SetItemAimation(animationKey, newId, mapItemId);
+                await SetItemAimation(animationKey, newId, mapItemId);
             }
 
             TryAddMapPackageItemRender(runtimeObj.animator.transform, runtimeMapItem.instanceId);

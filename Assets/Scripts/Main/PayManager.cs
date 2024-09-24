@@ -51,7 +51,7 @@ public class PayManager : Singleton<PayManager>
                    });
     }
 
-    public void PayAction(string title, string notice, int cost, PayType payType, SetResult afterAction)
+    public async void PayAction(string title, string notice, int cost, PayType payType, SetResult afterAction)
     {
         CostEventData CostEventData = new CostEventData
         {
@@ -61,7 +61,7 @@ public class PayManager : Singleton<PayManager>
             payType = payType,
             afterAction = afterAction
         };
-        UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData);
+       await UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData);
     }
 
     public bool TryCost(PayType payType, int count)
@@ -98,9 +98,9 @@ public class PayManager : Singleton<PayManager>
         return false;
     }
 
-    public void TryCreatGold()
+    public async void TryCreatGold()
     {
-        UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
+       await UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
     }
 
     public void TryCreatMoney()

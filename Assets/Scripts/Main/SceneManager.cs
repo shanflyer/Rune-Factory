@@ -36,7 +36,7 @@ public class SceneManager : Singleton<SceneManager>
         : null);
     }
 
-    public async void SwitchScene(string sceneName, Action beforeLoadSceneAction = null, Action afterSceneAction = null)
+    public void SwitchScene(string sceneName, Action beforeLoadSceneAction = null, Action afterSceneAction = null)
     {
         this.loadSceneAction = afterSceneAction;
 
@@ -55,13 +55,13 @@ public class SceneManager : Singleton<SceneManager>
         nowSceen = sceneName;
     }
 
-    public void UnloadNowScene(bool Async=true)
+    public async void UnloadNowScene(bool Async=true)
     {
         if (!string.IsNullOrEmpty(nowSceen))
         {
             if (Async)
             {
-                UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
+               await UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
             }
             else
             {

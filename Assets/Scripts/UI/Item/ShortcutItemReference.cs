@@ -124,7 +124,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     ItemData itemData;
     public override async Task InitData(ShortcutItem t, SelectAction<ShortcutItem> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup); 
+       await base.InitData(t, SelectAction, toggleGroup); 
 
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;

@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class GameVolumeManager : Singleton<GameVolumeManager>
-{ 
+{
+    public override bool NeedUpdata => true;
     Material screenMat; 
     public override void Init()
     {
@@ -67,5 +68,11 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     public void SetScreenCycleValue(float value)
     {
         screenMat.SetFloat("_CycleValue", value);
+    }
+
+  
+    protected override void UpData()
+    { 
+        base.UpData();
     }
 }

@@ -78,7 +78,7 @@ public class FishingManager : Singleton<FishingManager>
                             info0 = $"获得了一条  <color=green>{item.value}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
                             info1 = newRecord ? $"<color=red> 新记录！ </color>" : ""
                         };
-                        UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+                      await  UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
                     }
                     NPCFishingResult nPCFishingResult = new NPCFishingResult
                     {
@@ -97,7 +97,7 @@ public class FishingManager : Singleton<FishingManager>
                             info0 = "",
                             info1 = "$背包空间不足，鱼已放生"
                         };
-                        UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+                      await  UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
                     }
                     NPCFishingResult nPCFishingResult = new NPCFishingResult
                     {
@@ -118,7 +118,7 @@ public class FishingManager : Singleton<FishingManager>
                     info0 = "",
                     info1 = "本次垂钓一无所获"
                 };
-                UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+               await UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
             }
             NPCFishingResult nPCFishingResult = new NPCFishingResult
             {

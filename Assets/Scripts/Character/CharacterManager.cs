@@ -153,7 +153,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
         }
     }
-    private void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
+    private async void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
     {
         Character character = GetCharacter(ChangeCharacterNewMap.characterInstance);
         if (character != null)
@@ -173,7 +173,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 characterId = character.instanceId
             };
             GameActionManager.instance.QueueAction(reStartCharacterBehavior);
-            RefreshNpcRuntimeObj(character);
+           await RefreshNpcRuntimeObj(character);
 
             if (ChangeCharacterNewMap.setResult != null)
             {
@@ -212,7 +212,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private void SetCharacterRandomCoordinate(SetCharacterRandomCoordinate setCharacterRandomCoordinate)
+    private async void SetCharacterRandomCoordinate(SetCharacterRandomCoordinate setCharacterRandomCoordinate)
     {
         Character character = GetCharacter(setCharacterRandomCoordinate.characterId);
         if (character != null)
@@ -222,7 +222,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
             character.RemoveMove();
             character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
-            RefreshNpcRuntimeObj(character);
+           await RefreshNpcRuntimeObj(character);
 
             if (setCharacterRandomCoordinate.setResult != null)
             {
@@ -235,7 +235,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private void SetCharacterRandomPos(SetCharacterRandomPos SetCharacterRandomPos)
+    private async void SetCharacterRandomPos(SetCharacterRandomPos SetCharacterRandomPos)
     {
         Character character = GetCharacter(SetCharacterRandomPos.characterId);
         if (character != null && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
@@ -248,7 +248,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
 
-                RefreshNpcRuntimeObj(character);
+              await  RefreshNpcRuntimeObj(character);
             }
 
             if (SetCharacterRandomPos.setResult != null)
@@ -315,7 +315,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private void ClearEquip(ClearEquip clearEquip)
+    private async void ClearEquip(ClearEquip clearEquip)
     {
         if (characters.TryGetValue(clearEquip.characterId, out var character))
         {
@@ -340,7 +340,7 @@ public class CharacterManager : Singleton<CharacterManager>
             character.ClearEquip(clearEquip.itemType);
             if (itemId != 0 && clearEquip.outPackageId != 0)
             {
-                PackageManager.instance.SetItemInPackage(new Item(itemId, 1), clearEquip.outPackageId);
+               await PackageManager.instance.SetItemInPackage(new Item(itemId, 1), clearEquip.outPackageId);
             }
         }
     }
@@ -450,8 +450,8 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 if (SceneManager.instance.Now == "World")
                 {
-                    UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-                    UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+                     UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+                     UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
                     var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId);
                     UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
                 }
@@ -717,7 +717,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return character;
     }
 
-    private void SetCharacterCoordiante(SetCharacterCoordinate setCharacterCoordinate)
+    private async void SetCharacterCoordiante(SetCharacterCoordinate setCharacterCoordinate)
     {
         Character character = GetCharacter(setCharacterCoordinate.characterId);
         character.RemoveMove();
@@ -725,7 +725,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             character.SetCoordinate(setCharacterCoordinate.coordinate);
 
-            RefreshNpcRuntimeObj(character);
+           await RefreshNpcRuntimeObj(character);
         }
     }
 

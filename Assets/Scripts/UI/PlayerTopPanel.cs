@@ -75,24 +75,24 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        playerButton.onClick.AddListener(() =>
+        playerButton.onClick.AddListener(async () =>
         {
             var characterInformation = CharacterManager.instance.controllerCharacter.GetInformation();
-            UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation);
+           await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation);
         });
 
-        calendar.onClick.AddListener(() =>
+        calendar.onClick.AddListener(async () =>
         {
-            UIManager.instance.ShowGamePanel<CalendarPanel>(layer: 3);
+           await UIManager.instance.ShowGamePanel<CalendarPanel>(layer: 3);
         });
         goldAdd.onClick.AddListener(PayManager.instance.TryCreatGold);
         crystalAdd.onClick.AddListener(PayManager.instance.TryCreatMoney);
 
-        SetButton.onClick.AddListener(() =>
+        SetButton.onClick.AddListener(async () =>
         {
             
             // AudioController.instance.PlayAudio(SE.click);
-            UIManager.instance.ShowGamePanel<SetPanel>();
+           await UIManager.instance.ShowGamePanel<SetPanel>();
         });
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);

@@ -11,7 +11,7 @@ public class GameManager : Singleton<GameManager>
         GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
     }
 
-    public void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
+    public async void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
     {
         TwoSelectData twoSelectData = new TwoSelectData
         {
@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
             yesAction = yesAction,
             noAction = noAction
         };
-        UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
+       await UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
     }
 
     private async void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
@@ -59,9 +59,9 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void ShowObjTips(string info, Transform parent)
+    public async void ShowObjTips(string info, Transform parent)
     {
-        UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
+       await UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
     }
 
     public int GetPlayerBoxId()

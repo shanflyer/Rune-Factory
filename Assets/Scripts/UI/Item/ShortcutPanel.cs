@@ -99,7 +99,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     {
         base.Awake();
         itemList = new DisplayList<ShortcutItemReference, ShortcutItem>(ShortcutItemReference, itemParent);
-        bagButton.onClick.AddListener(async () =>
+        bagButton.onClick.AddListener( () =>
         {
             if (UIManager.instance.GamePanelIsShow<WarehousePanel>())
             {

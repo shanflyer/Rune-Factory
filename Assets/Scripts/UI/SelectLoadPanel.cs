@@ -53,9 +53,9 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         Copy.onClick.AddListener(CopyData);
         Delete.onClick.AddListener(DeleteData);
         Start.onClick.AddListener(StartAction);
-        Return.onClick.AddListener(() =>
+        Return.onClick.AddListener(async () =>
         {
-            UIManager.instance.ShowGamePanel<ZeroPanel>();
+           await UIManager.instance.ShowGamePanel<ZeroPanel>();
             Close();
         });
 
@@ -76,11 +76,11 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
 
     private UserGameSaveData selectGameSaveData;
 
-    public override void InitReferenceData(UserGameSaveDataList v)
+    public override async void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
         selectGameSaveData = v.nowSaveData;
-        SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
+        await SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
         saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
     }
 

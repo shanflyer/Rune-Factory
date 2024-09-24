@@ -131,12 +131,12 @@ public class ShopPanel : GamePanel<ShopList>
         buyCountValue.SetTextWithoutNotify(buyCount.ToString());
     }
 
-    private void BuyAction()
+    private async void BuyAction()
     {
         switch (selectShopItemData.type)
         {
             case ShopItemType.道具:
-                ItemManager.instance.BuyActionAsync(selectShopItemData, buyCount);
+               await ItemManager.instance.BuyActionAsync(selectShopItemData, buyCount);
                 break;
 
             case ShopItemType.动物:

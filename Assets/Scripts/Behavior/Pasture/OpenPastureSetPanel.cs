@@ -11,7 +11,7 @@ public class OpenPastureSetPanel : Action
     private SharedBool showTeam;
     [SerializeField]
     private SharedIntList otherAnimals; 
-    public override void OnStart()
+    public override async void OnStart()
     {
          
         MyListInt myListInt = new MyListInt();
@@ -34,7 +34,7 @@ public class OpenPastureSetPanel : Action
             }
         }
         myListInt.intList = ints;
-        UIManager.instance.ShowGamePanel<PasturePanel, MyListInt>(myListInt);
+       await UIManager.instance.ShowGamePanel<PasturePanel, MyListInt>(myListInt);
         
         taskStatus = TaskStatus.Success;
     }

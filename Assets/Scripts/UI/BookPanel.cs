@@ -22,14 +22,14 @@ public class BookPanel : GamePanel<IReferenceData>
     {
         base.Awake();
         closeButton.onClick.AddListener(Close);
-        characterButton.onClick.AddListener(() =>
+        characterButton.onClick.AddListener(async () =>
         {
-            UIManager.instance.ShowGamePanel<NPCPanel,NPCList>(NPCManager.instance.GetNPCList());
+          await  UIManager.instance.ShowGamePanel<NPCPanel,NPCList>(NPCManager.instance.GetNPCList());
             Close();
         });
-        fishButton.onClick.AddListener(() =>
+        fishButton.onClick.AddListener(async () =>
         {
-            UIManager.instance.ShowGamePanel<FishPanel>();
+          await  UIManager.instance.ShowGamePanel<FishPanel>();
         });
         
     }

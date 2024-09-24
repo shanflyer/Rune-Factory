@@ -48,18 +48,18 @@ public class MainPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        InfoButton.onClick.AddListener(() =>
+        InfoButton.onClick.AddListener(async () =>
         {
-            UIManager.instance.ShowGamePanel<BookPanel>();
+           await UIManager.instance.ShowGamePanel<BookPanel>();
         });
-        TeamButton.onClick.AddListener(() =>
+        TeamButton.onClick.AddListener(async () =>
         {
-            UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
+           await UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
         });
-        HomeEquipmentButton.onClick.AddListener(() =>
+        HomeEquipmentButton.onClick.AddListener(async () =>
         {
             var homeEquipList= HomeEquipManager.instance.GetHomeEquipList(CharacterManager.instance.controllerCharacter.instanceId);
-            UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel,HomeEquipList>(homeEquipList);
+          await  UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel,HomeEquipList>(homeEquipList);
         });
     }
     public override Task InitData(string dataKey)

@@ -95,11 +95,11 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         NameInputField.onValueChanged.AddListener(NameInputAction);
 
         Ok.onClick.AddListener(OkButtonAction);
-        Return.onClick.AddListener(() =>
+        Return.onClick.AddListener(async () =>
         {
             AudioController.instance.PlayAudio(SE.Return);
             Close();
-            UIManager.instance.ShowGamePanel<ZeroPanel>();
+           await UIManager.instance.ShowGamePanel<ZeroPanel>();
         });
 
         InitData();
@@ -151,12 +151,12 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         NameInputField.text = playerName;
     }
 
-    private void OkButtonAction()
+    private async void OkButtonAction()
     {
         AudioController.instance.PlayAudio(SE.click);
 
         GameDataSaveManager.instance.InitPlayerData(playerName, gender, brothSeason, brothDate);
         //DataSaveAndLoadTest.IniteZerodata();
-        UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel>(layer: 3);
+       await UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel>(layer: 3);
     }
 }

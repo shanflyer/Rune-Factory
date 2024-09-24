@@ -36,7 +36,7 @@ public class AnimalReference : UIObjReference<MyInt>
     }
     public override async Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         Character character = CharacterManager.instance.GetCharacter(data.value);
         character.characterData.head.SetImageSprite(icon);

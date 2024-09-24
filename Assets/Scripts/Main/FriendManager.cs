@@ -90,7 +90,7 @@ public class FriendManager : Singleton<FriendManager>
         }
        
     }
-    private void GiveGift(GiveGift giveGift)
+    private async void GiveGift(GiveGift giveGift)
     {
         EventReferenceData eventReferenceData = new EventReferenceData
         {
@@ -111,7 +111,7 @@ public class FriendManager : Singleton<FriendManager>
         {
             eventReferenceData,eventReferenceData1,eventReferenceData2,
         };
-        GameEventManager.instance.AddGameEvent(GameCommon.giftEventId, eventReferenceDatas);
+       await GameEventManager.instance.AddGameEvent(GameCommon.giftEventId, eventReferenceDatas);
     }
 
     private async void TryGiveGiftOpenPackage(TryGiveGiftOpenPackage tryGiveGiftOpenPackage)

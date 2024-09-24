@@ -38,9 +38,9 @@ public class SetPanel : GamePanel<IReferenceData>
         saveButton.onClick.AddListener(SaveSet);
     }
 
-    private void SaveSet()
+    private async void SaveSet()
     {
         Close();
-        UIManager.instance.ShowGamePanel<SavePanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+       await UIManager.instance.ShowGamePanel<SavePanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
     }
 }

@@ -33,7 +33,7 @@ public class AdventureTeamerRenference : UIObjReference<FighterResult>
 
     public override async Task InitData(FighterResult t, SelectAction<FighterResult> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await base.InitData(t, SelectAction, toggleGroup);
 
         this.LevelUp.localScale = data.levelUp ? Vector3.one : Vector3.zero;
         this.SkillUp.localScale = data.skillUp ? Vector3.one : Vector3.zero;

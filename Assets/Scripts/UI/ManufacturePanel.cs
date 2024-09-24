@@ -194,9 +194,9 @@ public class ManufacturePanel : GamePanel<Manufature>
             }
         });
 
-        FormulaDropdown.onValueChanged.AddListener((int index) =>
+        FormulaDropdown.onValueChanged.AddListener(async (int index) =>
         {
-            SelectFormulaAsync(index);
+           await  SelectFormulaAsync(index);
         });
 
         AutoSelect.onClick.AddListener(AutoSelectMaterials);

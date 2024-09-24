@@ -360,7 +360,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
             runtimePlayable.StopAction(playableDirector);
         }
     }
-    public override async void Init()
+    public override void Init()
     {
         defaultPlayableDirector = new GameObject("defaultPlayableDirector").AddComponent<PlayableDirector>();
         defaultPlayableDirector.playOnAwake = false;

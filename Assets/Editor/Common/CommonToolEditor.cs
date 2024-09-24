@@ -174,7 +174,7 @@ public class CommonToolEditor : MyEditor
             {
                 var obj = AssetDatabase.LoadAssetAtPath<GameObject>(oldSourcePath + file.Name);
                 var spriteRenderers = obj.GetComponentsInChildren<SpriteRenderer>();
-                bool reSave = false;
+               bool reSave = false;
                 foreach (var spriteRenderer in spriteRenderers)
                 {
                     if (spriteRenderer.sprite != null && sprites.TryGetValue(spriteRenderer.sprite.name, out var sprite))
@@ -183,7 +183,8 @@ public class CommonToolEditor : MyEditor
                         reSave = true;
                     }
                 }
-                AssetDatabase.SaveAssetIfDirty(obj);
+                if(reSave)
+                    AssetDatabase.SaveAssetIfDirty(obj);
             }
         }
         finally

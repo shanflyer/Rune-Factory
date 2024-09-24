@@ -81,7 +81,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             storeCounterId = storeCunterSetData.storeCounterId,
             count = 0
         };
-        UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+       await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
         UIManager.instance.CloseGamePanel<WarehousePanel>();
     }
 

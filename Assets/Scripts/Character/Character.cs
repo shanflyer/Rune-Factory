@@ -961,7 +961,7 @@ public partial class Character
         GameActionManager.instance.QueueAction(refreshOperateCharacters); 
     }
 
-    public void SetNeighborhood(int characterId)
+    public async void SetNeighborhood(int characterId)
     {
         Character character = CharacterManager.instance.GetCharacter(characterId);
         if (character != null)
@@ -1002,7 +1002,7 @@ public partial class Character
                 name = "NextTalkEventId",
                 value = nextTalkEventId
             }; 
-            GameEventManager.instance.AddGameEvent(
+           await GameEventManager.instance.AddGameEvent(
             eventId, new List<EventReferenceData>
             {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
@@ -1181,7 +1181,7 @@ public partial class Character
     /// <param name="eventid">事件id</param>
     /// <param name="reference">数据id</param>
     /// <param name="enter">是否进入事件</param>
-    private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
+    private async void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
     {
         if (team!=null && this != CharacterManager.instance.controllerCharacter)
         {
@@ -1258,7 +1258,7 @@ public partial class Character
             value = reference
         });
 
-        GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
+       await  GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
     }
 
     /// <summary>

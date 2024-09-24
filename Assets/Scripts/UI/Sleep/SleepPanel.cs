@@ -40,7 +40,7 @@ public class SleepPanel : GamePanel<MyInt>
 
     private int mapItemInstance = 0;
 
-    private async void SelectAction(SleepSetData data, bool value)
+    private void SelectAction(SleepSetData data, bool value)
     {
         CloseMapObjTips closeMapObjTips = new CloseMapObjTips
         {
@@ -101,7 +101,7 @@ public class SleepPanel : GamePanel<MyInt>
         Close();
     }
 
-    public override async void InitReferenceData(MyInt v)
+    public override void InitReferenceData(MyInt v)
     {
         base.InitReferenceData(v);
     }

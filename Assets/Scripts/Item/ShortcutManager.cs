@@ -79,16 +79,16 @@ public class ShortcutManager : Singleton<ShortcutManager>
             }    
         }
     }
-    void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
+    async void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
     {
         if(shortcutPackages.TryGetValue(removeShortcutItem.characterId,out var shortcutPackage))
         {
             shortcutPackage.RemoveItemIndex(removeShortcutItem.index);
             //shortcutPackages.SetData(shortcutPackage);
-            RefreshDisplayShortcutPackageAsync(shortcutPackage);
+           await RefreshDisplayShortcutPackageAsync(shortcutPackage);
         }
     }
-    void SetShortcutItem(SetShortcutItem setShortcutItem)
+    async void SetShortcutItem(SetShortcutItem setShortcutItem)
     {
         if (shortcutPackages.TryGetValue(setShortcutItem.characterId, out var shortcutPackage))
         {
@@ -103,7 +103,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
 
 
                 //shortcutPackages.SetData(shortcutPackage);
-                RefreshDisplayShortcutPackageAsync(shortcutPackage);
+               await RefreshDisplayShortcutPackageAsync(shortcutPackage);
             } 
         }
     }

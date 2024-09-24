@@ -269,7 +269,7 @@ public class FightController : MonoBehaviour
 
     private TargetRangeType nowDisplayTargetRangeType;
 
-    private void DisplayMask(TargetRangeType targetRangeType)
+    private async void DisplayMask(TargetRangeType targetRangeType)
     {
         nowDisplayTargetRangeType = targetRangeType;
         var allFightMonsters = FightManager.instance.GetAllFightMonster();
@@ -306,7 +306,7 @@ public class FightController : MonoBehaviour
                         selectValue = fightPos;
                         SelectTransform = selectMasker.transform.parent;
                     }
-                    UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
+                   await UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
                     //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                 }
                 else
@@ -322,7 +322,7 @@ public class FightController : MonoBehaviour
                                 SelectTransform = selectMasker.transform.parent;
                                 selectMasker.SelectAction(true);
                                 selectValue = fightPos;
-                                UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
+                               await UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
                                 //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                             }
                             selectMasker.transform.parent.localScale = Vector3.one;
@@ -353,7 +353,7 @@ public class FightController : MonoBehaviour
                         SelectTransform = selectMasker.Value.transform.parent;
                         selectMasker.Value.SelectAction(true);
                         selectValue = selectMasker.Key;
-                        UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.Value.transform.parent);
+                       await UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.Value.transform.parent);
                         //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                     }
                     selectMasker.Value.transform.parent.localScale = (active ? Vector3.one : Vector3.zero);
@@ -382,7 +382,7 @@ public class FightController : MonoBehaviour
 
                         selectMasker.Value.SelectAction(true);
                         selectValue = selectMasker.Key;
-                        UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.Value.transform.parent);
+                      await  UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.Value.transform.parent);
                         //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                     }
                     selectMasker.Value.transform.parent.localScale = (active ? Vector3.one : Vector3.zero);
@@ -400,7 +400,7 @@ public class FightController : MonoBehaviour
                 allSelectMasker.SelectAction(true);
 
                 selectValue = int2.zero;
-                UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: allSelectMasker.transform.parent);
+               await UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: allSelectMasker.transform.parent);
                 //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                 break;
 
@@ -425,7 +425,7 @@ public class FightController : MonoBehaviour
                         selectValue = fightPos;
                         SelectTransform = selectMasker.transform.parent;
                     }
-                    UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
+                  await  UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
                     //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                 }
                 else
@@ -441,7 +441,7 @@ public class FightController : MonoBehaviour
                                 SelectTransform = selectMasker.transform.parent;
                                 selectMasker.SelectAction(true);
                                 selectValue = fightPos;
-                                UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
+                              await  UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMasker.transform.parent);
                                 //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
                             }
                             selectMasker.transform.parent.localScale = Vector3.one;
@@ -493,7 +493,7 @@ public class FightController : MonoBehaviour
         }
     }
 
-    public void SelectMask(Transform selectMask)
+    public async void SelectMask(Transform selectMask)
     {
         SelectTransform = selectMask;
         selectValue = int2.zero;
@@ -543,7 +543,7 @@ public class FightController : MonoBehaviour
                 allSelectMasker.SelectAction(true);
                 break;
         }
-        UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMask);
+      await  UIManager.instance.ShowGamePanel<SkillActionPanel>(parent: selectMask);
         //FightManager.instance.SetManualSelectTargets(nowDisplayTargetRangeType, selectValue);
     }
 
@@ -597,7 +597,7 @@ public class FightController : MonoBehaviour
         GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), true);
     }
 
-    private void ExploreEnd(ExploreEnd exploreEnd)
+    private async void ExploreEnd(ExploreEnd exploreEnd)
     {
         GameActionManager.instance.RemoveListener<HideFightScene>(HideFightScene);
         GameActionManager.instance.RemoveListener<DisplayFightScene>(DisplayFightScene);
@@ -621,11 +621,11 @@ public class FightController : MonoBehaviour
         int characterMap = CharacterManager.instance.controllerCharacter.mapInstance;
         if (characterMap > 0)
         {
-            UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-            UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
-            UIManager.instance.ShowGamePanel<MainPanel>();
-            UIManager.instance.ShowGamePanel<ShortcutPanel>();
-            UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+           await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+           await UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+           await UIManager.instance.ShowGamePanel<MainPanel>();
+           await UIManager.instance.ShowGamePanel<ShortcutPanel>();
+           await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
             DisplayMap displayMap = new DisplayMap
             {
                 displayMap = CharacterManager.instance.controllerCharacter.mapInstance

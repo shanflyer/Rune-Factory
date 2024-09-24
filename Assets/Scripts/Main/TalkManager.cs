@@ -23,7 +23,7 @@ public class TalkManager : Singleton<TalkManager>
                 talkValue = talkData.text,
                 endAction = simpleTalk.endAction
             };
-            UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(characterResponseData, parent: characterRuntimeObj.runtimeObj.obj as Transform);
+          await  UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(characterResponseData, parent: characterRuntimeObj.runtimeObj.obj as Transform);
         }
     }
 
@@ -84,6 +84,6 @@ public class TalkManager : Singleton<TalkManager>
             }
         }
 
-        UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+       await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
     }
 }

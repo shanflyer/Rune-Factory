@@ -22,6 +22,7 @@ public struct EnvironmentLightData
 
 public class EnvironmentManger : Singleton<EnvironmentManger>
 {
+    public override bool NeedUpdata => true;
     SkyEnviromentMono skyEnviromentMono;
     ProFlare flare => skyEnviromentMono.ProFlare;
     Transform sunTransform => skyEnviromentMono.Sun;
@@ -189,5 +190,16 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     protected override void Clear()
     {
         base.Clear();
+    }
+    public float cloudValue = 1;
+    float oldCloudValue = 1;
+    protected override void UpData()
+    {
+        if (cloudValue != oldCloudValue)
+        {
+            oldCloudValue = cloudValue;
+            Shader.SetGlobalFloat("_CloudValue", cloudValue);
+        }
+        base.UpData();
     }
 }

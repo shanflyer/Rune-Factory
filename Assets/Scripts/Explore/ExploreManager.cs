@@ -130,7 +130,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 beforeActionData.Action();
             }
         },
-        async () =>
+         () =>
         {
             WorldMapObjManager.instance.RecycleMap();
             CharacterManager.instance.RecycleCharacter();
@@ -308,7 +308,7 @@ public class ExploreManager : Singleton<ExploreManager>
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = false;
-        UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+       await UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
         Debug.Log("章节探索失败");
         if (gameEventData != null)
         {
@@ -324,7 +324,7 @@ public class ExploreManager : Singleton<ExploreManager>
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.successEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = true;
-        UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+       await UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
         Debug.Log("章节探索成功");
         if (gameEventData != null)
         {

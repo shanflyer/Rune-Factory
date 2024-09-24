@@ -352,11 +352,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         return -1;
     }
-
-    private async Task SetItemAimation(int2 key, int dataId, int instaceId)
-    {
-    }
-
+     
     public bool GetRuntimeMapItem(int instanceId, out RuntimeMapItem runtimeMapItem)
     {
         return runtimeMapItems.TryGetValue(instanceId, out runtimeMapItem);

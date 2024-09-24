@@ -47,7 +47,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         if (!SingletonType.Cleared)
             GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
     }
-    void TalkAction()
+    async void TalkAction()
     {
         Character character = CharacterManager.instance.GetCharacter(SelectCharacterId);
         if (character != null)
@@ -81,7 +81,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 value = nextTalkEventId
             };
             bool temp = character is TempCharacter;
-            GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
+           await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
             {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
             });

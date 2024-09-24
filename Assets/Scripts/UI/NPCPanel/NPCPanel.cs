@@ -106,10 +106,10 @@ public class NPCPanel : GamePanel<NPCList>
         Close();
     }
 
-    private void DetailAction()
+    private async void DetailAction()
     {
         CharacterInformationData characterInformationData = selectNpc.GetInformation();
-        UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+       await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
     }
 
     private NPC selectNpc;

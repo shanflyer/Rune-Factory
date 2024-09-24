@@ -29,7 +29,7 @@ public class NPCFunctionReference : UIObjReference<NPCFunctionData>
 
     public override async Task InitData(NPCFunctionData t, SelectAction<NPCFunctionData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await  base.InitData(t, SelectAction, toggleGroup);
         icon.sprite = data.icon;
         Name.text = data.npcFunctionName;
     }

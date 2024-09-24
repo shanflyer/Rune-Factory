@@ -28,7 +28,7 @@ public class PermissionReference : UIObjReference<Permission>
 
     public override async Task InitData(Permission t, SelectAction<Permission> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await  base.InitData(t, SelectAction, toggleGroup);
         Name.text = data.permissionData.permissionName;
         ConditionValue.text = data.permissionData.conditionStr;
         RewardValue.text = data.permissionData.reward.ToString();

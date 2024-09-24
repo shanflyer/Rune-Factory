@@ -33,7 +33,7 @@ public class FishUIReference:UIObjReference<FishReferenceData>
     }
     public override async Task InitData(FishReferenceData t, SelectAction<FishReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+      await  base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         if (data.record == 0)
         {

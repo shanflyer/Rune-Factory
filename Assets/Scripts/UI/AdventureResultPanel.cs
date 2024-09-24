@@ -30,7 +30,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         teamerList=new DisplayList<AdventureTeamerRenference, FighterResult>(teamerRenference,Team);
         base.Awake();
     }
-    void OKAction()
+    async void OKAction()
     {
         /*WaitAction waitAction = new WaitAction();
         Parameter parameter = new Parameter
@@ -58,11 +58,11 @@ public class AdventureResultPanel: GamePanel<FightResult>
         ExploreEnd exploreEnd = new ExploreEnd();
         GameActionManager.instance.QueueAction(exploreEnd, true);
 
-        UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
-        UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-        UIManager.instance.ShowGamePanel<MainPanel>();
-        UIManager.instance.ShowGamePanel<ShortcutPanel>();
-        UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+      await  UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+        await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+        await UIManager.instance.ShowGamePanel<MainPanel>();
+        await UIManager.instance.ShowGamePanel<ShortcutPanel>();
+        await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
        // SceneManager.instance.UnloadNowScene();
         // UIManager.instance.
     }

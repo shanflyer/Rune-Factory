@@ -35,7 +35,7 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
 
     public override async Task InitData(CharacterInformationData t, SelectAction<CharacterInformationData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         data.head.SetImageSprite(NPCImage);
        // NPCImage.sprite = data.icon;
         // data.head.SetImageSprite(NPCImage);

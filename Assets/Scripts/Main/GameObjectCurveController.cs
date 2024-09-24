@@ -253,7 +253,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
     
     private IEnumerator ObjectMoving(Character character, GetMoveVector GetObjectPos, SetMoveTarge SetMoveTarge, int instanceId)
     { 
-        bool _continue = true;
+       // bool _continue = true;
         while (!character.moveDirection.Equals(float2.zero))
         {
             Vector2 direction = character.moveDirection;

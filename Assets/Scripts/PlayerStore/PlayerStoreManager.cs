@@ -182,7 +182,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private void OpenStoreCounter(int storeId)
+    private async void OpenStoreCounter(int storeId)
     {
         if (runtimeStoreCounters.TryGetValue(storeId, out var runtimeStoreCounter))
         {
@@ -193,11 +193,11 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 itemId = itemDataId,
                 count = runtimeStoreCounter.count
             };
-            UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+           await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
         }
     }
 
-    private void OpenSetItemPanel(int storeId, Item item)
+    private async void OpenSetItemPanel(int storeId, Item item)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {
@@ -208,7 +208,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         {
             setStoreCounterItem.count = runtimeStoreCounter.count; 
         }
-        UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+       await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
     }
 
     private async void SetStoreCounterItem(SetStoreCounterItem setStoreCounterItem)

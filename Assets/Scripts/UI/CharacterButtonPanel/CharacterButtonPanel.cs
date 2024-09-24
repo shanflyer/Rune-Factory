@@ -42,7 +42,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     }
     List<MyInt> nowCharacters = new List<MyInt>();
     HashSet<int> characters = new HashSet<int>();
-    void SelectAction(MyInt seletCharacter, bool selected = true)
+    async void SelectAction(MyInt seletCharacter, bool selected = true)
     {
 
         Character character = CharacterManager.instance.GetCharacter(seletCharacter.value);
@@ -91,7 +91,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
             };
 
 
-            GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
+           await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });

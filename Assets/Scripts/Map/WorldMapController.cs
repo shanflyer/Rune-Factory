@@ -114,7 +114,7 @@ public class WorldMapController : MonoBehaviour
             });*/
             await UIManager.instance.ShowGamePanel<MainPanel>(); 
            
-            UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+           await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         }
        
         if (GameController.instance.startPlay)

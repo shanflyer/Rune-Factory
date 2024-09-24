@@ -30,7 +30,7 @@ public class OtherFunctionButtonReference : UIObjReference<FunctionButton>
 
     public override async Task InitData(FunctionButton t, SelectAction<FunctionButton> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        base.InitData(t, SelectAction, toggleGroup);
+       await base.InitData(t, SelectAction, toggleGroup);
         Name.text = data.name;
         Icon.sprite = data.sprite;
         Icon.rectTransform.sizeDelta = GameCommon.SetImageSize(data.sprite, new Vector2(32, 32));
