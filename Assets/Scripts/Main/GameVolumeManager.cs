@@ -25,7 +25,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     void LerpScreenCycleValue(LerpScreenCycleValue LerpScreenCycleValue)
     {
         IEnumerator enumerator = LerpCycleValue(LerpScreenCycleValue);
-        GameObjectCurveController.instance.UpDataComponent.StartCoroutine(enumerator);
+        GameObjectCurveController.instance.StartIEnumerator(enumerator);
     }
     IEnumerator LerpCycleValue(LerpScreenCycleValue LerpScreenCycleValue)
     {

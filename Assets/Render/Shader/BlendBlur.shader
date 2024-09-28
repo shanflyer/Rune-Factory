@@ -1,7 +1,7 @@
 Shader "BlendBlur"
 {
     Properties
-    {   
+    {    _MainTex("Diffuse", 2D) = "white" {}
         _BlurOffsetPos("_BlurOffsetPos",Range(0,0.5))=0
         _ReMapValue("_ReMapValue",vector)=(0,1,0,0)
          _BlurAmount("_BlurAmount", Vector) = (1, 1, 0, 0) 
@@ -74,14 +74,13 @@ Shader "BlendBlur"
             half2 _BlurAmount; 
             half2 _PlayerPos;
 
-            
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
             TEXTURE2D(_BlurTex);
             SAMPLER(sampler_BlurTex);
         
             TEXTURE2D(_MyDepthTex);
-            SAMPLER(sampler_MyDepthTex);
-            // sampler2D _MyBlurTex; 
-            TEXTURE2D_X(_BlitTexture);  
+            SAMPLER(sampler_MyDepthTex); 
 
             v2f vert(appdata_t v)
             {
@@ -91,7 +90,7 @@ Shader "BlendBlur"
                 OUT.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
                 OUT.uv= OUT.vertex* 0.5 + 0.5; 
                 OUT.uv.y = 1 - OUT.uv.y;
-                OUT.uv= OUT.uv*_ScreenSize.xy;
+               // OUT.uv= OUT.uv*_ScreenSize.xy;
                 OUT.uv1=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy); 
 
                 OUT.uv01 =  OUT.uv1.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1);
@@ -107,8 +106,9 @@ Shader "BlendBlur"
 
             half4 frag(v2f IN) : SV_Target
             { 
+               // return half4(IN.uv.xy,0,1);
                 // uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
-                half4 color =   LOAD_TEXTURE2D_X_LOD(_BlitTexture, IN.uv,0);
+                half4 color =   SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
                 half4 BlurColor=0.40 *SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv1);
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.xy); 
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.zw); 
@@ -120,7 +120,8 @@ Shader "BlendBlur"
                 half centerY=1-_PlayerPos.y;
                 //return half4(centerY.xxx,1);
 
-                half4 myDepthColor=SAMPLE_TEXTURE2D(_MyDepthTex,sampler_MyDepthTex, IN.uv1);
+                half4 myDepthColor=SAMPLE_TEXTURE2D(_MyDepthTex,sampler_MyDepthTex, IN.uv);
+                //return myDepthColor;
                 float x=myDepthColor.x;
                 Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
                 x=clamp(x,0,1)*step(centerY-_BlurOffsetPos,myDepthColor.x);

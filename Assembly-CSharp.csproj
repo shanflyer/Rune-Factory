@@ -135,6 +135,7 @@
     <Compile Include="Assets\Scripts\UI\TransmissionPanel\TransmissionReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\UseGravity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartLifetime.cs" />
+    <Compile Include="Assets\Render\RenderFeature\SceneBlurRenderPassFeature.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedFloat.cs" />
     <Compile Include="Assets\Scripts\EditorTool\MapItemInstanceEditor.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedSharedInt3List.cs" />
@@ -451,6 +452,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Scripts\UI\SelectStartPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\EntryTask.cs" />
+    <Compile Include="Assets\Render\RenderFeature\BakerRenderGraphPassFeature.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\CopyRotationValue.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPlaying.cs" />
     <Compile Include="Assets\Scripts\UI\GoldCreatPanel.cs" />
@@ -513,6 +515,7 @@
     <Compile Include="Assets\Scripts\Behavior\Character\GetSomeOneGift.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\BehaviorTreeReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetDrag.cs" />
+    <Compile Include="Assets\Scripts\Environment\WeatherManager.cs" />
     <Compile Include="Assets\Scripts\Main\MyNativeData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\SetCenter.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Demo\Scripts\VFX Library\PEButtonScript.cs" />
@@ -688,6 +691,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedTransformToGameObject.cs" />
     <Compile Include="Assets\Render\RenderFeature\BakerRenderPassFeature.cs" />
     <Compile Include="Assets\Scripts\Main\Singleton.cs" />
+    <Compile Include="Assets\Render\RenderFeature\MyScreenRenderPassFeature.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPaused.cs" />
     <Compile Include="Assets\Scripts\UI\BaseReference.cs" />
     <Compile Include="Assets\Scripts\Data\GameEventData.cs" />
@@ -840,7 +844,6 @@
     <Compile Include="Assets\Scripts\Main\GamePlayerRecordManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAngularSpeed.cs" />
     <Compile Include="Assets\Scripts\UI\FormulaTypeReference.cs" />
-    <Compile Include="Assets\Render\RenderFeature\CustomRenderPassFeature.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\IsName.cs" />
     <Compile Include="Assets\Scripts\IOSTest.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetRadius.cs" />
@@ -1115,6 +1118,7 @@
     <None Include="Assets\Hovl Studio\RPG VFX Bundle\Shaders\DissolveNoise.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Effect\ProFlares\Demos\Scenes\README.txt" />
+    <None Include="Assets\Render\Shader\New\NewSampleBlur.shader" />
     <None Include="Assets\Render\Shader\Damp.shader" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_Board_Cutout.shader" />
     <None Include="Assets\Render\Shader\MySprite-Lit-Default.shader" />

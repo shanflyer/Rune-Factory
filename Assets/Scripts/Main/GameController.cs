@@ -108,6 +108,9 @@ public class GameController : MonoBehaviour
     [Range(0,4)]
     public float seasonValue;
     public float testSeasonSpeed;
+
+    public float _CloudValue;
+    public Vector4 _WindDir, _NoiseSet0, _NoiseSet1;
 #endif
     private float _seasonValue;
 
@@ -256,6 +259,13 @@ public class GameController : MonoBehaviour
         Vector2 screenValue = new Vector2(pos.x / screenSize.x, pos.y / screenSize.y);
         Debug.Log($"pos:{pos}--ScreenSize:{screenSize}--ScreenValue:{screenValue}");
     }
+    public void SetCloudGlobal()
+    {
+        Shader.SetGlobalFloat("_CloudValue", _CloudValue);
+        Shader.SetGlobalVector("_WindDir", _WindDir);
+        Shader.SetGlobalVector("_NoiseSet0", _NoiseSet0);
+        Shader.SetGlobalVector("_NoiseSet1", _NoiseSet1);
+    }
 #endif 
 
 }
@@ -272,6 +282,7 @@ public class GameControllerEditor : Editor
             return target as GameController;
         }
     }
+    float cloudValue;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -283,11 +294,12 @@ public class GameControllerEditor : Editor
         {
             gameController.Test();
         }
-        if (gameController.environmentManger != null)
+
+       
+        if (GUILayout.Button("SetCloud"))
         {
-            gameController.environmentManger.cloudValue= EditorGUILayout.FloatField("Cloud", gameController.environmentManger.cloudValue);
+            gameController.SetCloudGlobal();
         }
-        
     }
 }
 #endif

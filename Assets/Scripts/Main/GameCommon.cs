@@ -241,6 +241,8 @@ public class GameCommon
 
     public const string PlayerBoxId = "PlayerBoxId";
 
+    public const float weatherLerpTime = 5.0f;
+
     public static Vector2 GetScreenResolution()
     {
         Vector2 gameViewSize;

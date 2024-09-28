@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\u80CC\u540E\u8F6E\u5ED3"
-  m_Shader: {fileID: 4800000, guid: 99ca8ffb25a70884b8d2a5901d8e0901, type: 3}
+  m_Name: "\u65B0\u6A21\u7CCA"
+  m_Shader: {fileID: 4800000, guid: 845beec8ebe03fc4196e1b709e2f7238, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -27,15 +27,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _BlitTexture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MyDepthTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -45,10 +45,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BlurOffsetPos: 0.1
     - _EnableExternalAlpha: 0
-    - _FlipValue: 0.8
+    - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 0.07537435, b: 0, a: 1}
+    - _BlurAmount: {r: 4, g: -4, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ReMapValue: {r: 0, g: 2, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

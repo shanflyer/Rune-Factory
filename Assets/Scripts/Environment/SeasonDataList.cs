@@ -30,7 +30,7 @@ public struct SeasonData : IGameData
     public Season season;
     public int sunupHour, sunupMinute;
     public int sundownHour, sundownMinute;
-    public int dayWeather, nightWeather;
+    public int WeatherCurveId,WeatherCurveId1;
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
 
     public string GetKey()

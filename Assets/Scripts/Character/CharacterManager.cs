@@ -883,7 +883,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     timeValue += Time.deltaTime;
                 }
             }
-            GameObjectCurveController.instance.UpDataComponent.StartCoroutine(LerpPos());
+            GameObjectCurveController.instance.StartIEnumerator(LerpPos());
         }
     }
 

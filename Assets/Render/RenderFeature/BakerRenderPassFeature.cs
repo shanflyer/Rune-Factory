@@ -131,6 +131,7 @@ public class BakerRenderPassFeature : ScriptableRendererFeature
         
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {  
+            /*
             if (Camera.main == null)
             {
               //  return;
@@ -181,7 +182,7 @@ public class BakerRenderPassFeature : ScriptableRendererFeature
             cmd.Clear();
             CommandBufferPool.Release(cmd);
 
-
+            */
 
         }
         public void Dispose()

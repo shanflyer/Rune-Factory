@@ -402,6 +402,22 @@ public class ExcelDataEditor : MyEditor
                     fieldInfo.SetValue(data, value);
                 }
             }
+            else if (fieldInfo.FieldType == typeof(float4))
+            {
+                var valueStr = value.ToString();
+                if (!string.IsNullOrEmpty(valueStr))
+                {
+                    var strs = value.ToString().Split(',');
+
+                    float4 _value = float4.zero;
+                    _value.x = float.Parse(strs[0]);
+                    _value.y = float.Parse(strs[1]);
+                    _value.z = float.Parse(strs[2]);
+                    _value.w = float.Parse(strs[3]);
+                    value = _value;
+                    fieldInfo.SetValue(data, value);
+                }
+            }
             else if (fieldInfo.FieldType == typeof(Vector2))
             {
                 var valueStr = value.ToString();

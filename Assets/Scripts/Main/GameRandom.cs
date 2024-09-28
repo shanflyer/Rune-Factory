@@ -45,6 +45,15 @@ public class GameRandom : Singleton<GameRandom>
         //instance.random = new Random(randomSeed);
         return result;
     }
+    public static float2 RandomFloat2(float4 range)
+    {
+        var random = Random;
+        float2 result = random.NextFloat2(range.xy, range.zw);
+        Random = random;
+        //randomSeed += (uint)result;
+        //instance.random = new Random(randomSeed);
+        return result;
+    }
     public static float RandomFloat(float min, float max)
     {
         var random = Random;
@@ -133,6 +142,18 @@ public class GameRandom : Singleton<GameRandom>
         return null;
     }
 
+    public int GetSingleRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1, bool temp = false, float countValue = -1)
+    { 
+        if (gameRandomDatas.TryGetValue(id, out var gameRandomData))
+        {
+            List<int2> result=GetRandomValue(gameRandomData, innerGroupCount, randomResultCount, countValue);
+            if (result.Count > 0)
+            {
+                return result[0].x;
+            } 
+        }
+        return -1;
+    }
     /// <summary>
     ///
     /// </summary>

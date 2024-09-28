@@ -16,6 +16,7 @@ namespace UnityEngine.Rendering
         protected internal CommandBuffer m_WrappedCommandBuffer;
         internal RenderGraphPass m_ExecutingPass;
 
+        public CommandBuffer  CommandBuffer=> m_WrappedCommandBuffer;
         // Users cannot directly create command buffers. The rendergraph creates them and passes them to callbacks.
         internal BaseCommandBuffer(CommandBuffer wrapped, RenderGraphPass executingPass, bool isAsync)
         {

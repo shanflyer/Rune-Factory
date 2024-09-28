@@ -1,10 +1,13 @@
-Shader "SampleBlur"
+Shader "NewSampleBlur"
 {
     Properties
     { 
         _MainTex("Diffuse", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
-        _BlurAmount("_BlurAmount", Vector) = (1, 1, 0, 0)  
+         _BlurOffsetPos("_BlurOffsetPos",Range(0,0.5))=0
+        _ReMapValue("_ReMapValue",vector)=(0,1,0,0)
+         _BlurAmount("_BlurAmount", Vector) = (1, 1, 0, 0) 
+        _MyDepthTex("_MyDepthTex",2D) = "white" {}
     }
 
     SubShader
@@ -71,10 +74,15 @@ Shader "SampleBlur"
                 };
                 TEXTURE2D(_MainTex);
                 SAMPLER(sampler_MainTex);
+                float _BlurOffsetPos;
+                float2 _ReMapValue;
                 half2 _BlurAmount; 
+                half2 _PlayerPos;
                 half4 _Color;
                 half4 _TextureSampleAdd;
                 half4 _ClipRect; 
+                  TEXTURE2D(_MyDepthTex);
+                  SAMPLER(sampler_MyDepthTex); 
  
                // sampler2D _MyBlurTex;  
 
@@ -100,7 +108,8 @@ Shader "SampleBlur"
                 half4 frag(v2f IN) : SV_Target
                 {
                    // uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
-                    half4 color = 0.40 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                    half4 col=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                    half4 color = 0.40 * col;
                     //return color;
                     
                     color += 0.15 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv01.xy); 
@@ -112,6 +121,19 @@ Shader "SampleBlur"
 
 
                     color *= IN.color;
+
+                    half centerY=1-_PlayerPos.y;
+                    half4 myDepthColor=SAMPLE_TEXTURE2D(_MyDepthTex,sampler_MyDepthTex, IN.uv);
+                    float x=myDepthColor.x;
+                     Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
+                     x=clamp(x,0,1)*step(centerY-_BlurOffsetPos,myDepthColor.x);
+
+                     float x1=myDepthColor.x;
+                     Unity_Remap_float(x1,float2(centerY-_BlurOffsetPos,0),_ReMapValue.xy,x1);
+                     x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
+                     x+=x1;
+
+                    color=color*x+col*(1-x);
 
                    
                     return color;

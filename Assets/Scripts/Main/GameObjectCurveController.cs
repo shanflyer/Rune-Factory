@@ -29,8 +29,26 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
     private Dictionary<int, IEnumerator> pauseEnumerator = new Dictionary<int, IEnumerator>();
     private MyInstance myInstance;
 
-    public MonoBehaviour UpDataComponent;
+    private MonoBehaviour UpDataComponent;
 
+    public void  StartIEnumerator(IEnumerator enumerator)
+    {
+        if(UpDataComponent == null)
+        {
+            Debug.LogError("UpDataComponent 为 空");
+            return;
+        }
+        UpDataComponent.StartCoroutine(enumerator);
+    }
+    public void StopIEnumerator(IEnumerator enumerator)
+    {
+        if (UpDataComponent == null)
+        {
+            Debug.LogError("UpDataComponent 为 空");
+            return;
+        }
+        UpDataComponent.StopCoroutine(enumerator);
+    }
     public void RemoveLineMove(int instanceId)
     {
         if (runIEnumerator.TryGetValue(instanceId, out var enumerator))

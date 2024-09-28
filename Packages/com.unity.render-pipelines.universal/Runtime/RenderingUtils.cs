@@ -377,7 +377,7 @@ namespace UnityEngine.Rendering.Universal
         static ShaderTagId[] s_ShaderTagValues = new ShaderTagId[1];
         static RenderStateBlock[] s_RenderStateBlocks = new RenderStateBlock[1];
         // Create a RendererList using a RenderStateBlock override is quite common so we have this optimized utility function for it
-        internal static void CreateRendererListWithRenderStateBlock(RenderGraph renderGraph, ref CullingResults cullResults, DrawingSettings ds, FilteringSettings fs, RenderStateBlock rsb, ref RendererListHandle rl)
+        public static void CreateRendererListWithRenderStateBlock(RenderGraph renderGraph, ref CullingResults cullResults, DrawingSettings ds, FilteringSettings fs, RenderStateBlock rsb, ref RendererListHandle rl)
         {
             s_ShaderTagValues[0] = ShaderTagId.none;
             s_RenderStateBlocks[0] = rsb;

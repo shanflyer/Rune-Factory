@@ -90,11 +90,7 @@ Shader "MySprite-Lit-Default"
         _SnowColor("SnowColor",color)=(1,1,1,1)
         _ScaleValue("ScaleValue", Range(0 , 2)) = 0.5 
          _ClipValue("ClipValue",Range(0,2))=0.5
- 
-        _WindDir("WindDir",vector)=(1,0.5,0.4,0.5) 
-        _NoiseSet0("NoiseSet0",vector)=(0.6,0.8,6,0.25)
-        _NoiseSet1("NoiseSet1",vector)=(0.5,1,10,0.3)
-        _cloudColor("CloudColor",Color)=(0,0,0,0.35)
+  
         
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
@@ -345,6 +341,9 @@ Shader "MySprite-Lit-Default"
         half4 _SunColor;
         float _SeasonValue;
         float _CloudValue;
+        float4 _WindDir;
+        float4 _NoiseSet0;
+        float4 _NoiseSet1; 
         CBUFFER_START(UnityPerMaterial)
 			float3 _BlendColor;
 			float _BlendValue;
@@ -406,10 +405,7 @@ Shader "MySprite-Lit-Default"
             half _EdgeWaveOffset;
 
 
-             float4 _WindDir;
-            float4 _NoiseSet0;
-            float4 _NoiseSet1;
-            float4 _cloudColor;
+             
             
                       
         CBUFFER_END 
@@ -792,17 +788,17 @@ Shader "MySprite-Lit-Default"
                 Unity_SimpleNoise_float2(noiseUV,float2(_NoiseSet0.z,_NoiseSet0.z*2),noise0);
                 float noise1; 
                 Unity_SimpleNoise_float2(noiseUV1,float2(_NoiseSet1.z,_NoiseSet1.z*2),noise1);
-
-                noise0*=_CloudValue;
-                noise1*=_CloudValue;
-                Unity_Remap_float(noise0,_NoiseSet0.xy,float2(0,1),noise0);
-                Unity_Remap_float(noise1,_NoiseSet1.xy,float2(0,1),noise1);
+                
+                
+                Unity_Remap_float(noise0,_NoiseSet0.xy,float2(0,_CloudValue),noise0);
+                Unity_Remap_float(noise1,_NoiseSet1.xy,float2(0,_CloudValue),noise1);
                 noise0=clamp(noise0,0,1);
                 noise1=clamp(noise1,0,1);
-                float cloud=noise0+noise1;
+                float cloud=noise0+noise1; 
                 cloud=clamp(cloud,0,1);
-                float4 cloudColor=cloud*_cloudColor;
-                col=col.xyz*(1-cloudColor.a)+cloudColor.xyz*cloudColor.a; 
+                 // return noise1.xxx;
+                
+                col=col.xyz*(1-cloud.x);
                 return col;
             }
 

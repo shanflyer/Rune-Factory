@@ -102,7 +102,7 @@ Shader "ScreenCycle"
                 //return float4(_ScreenSize.xy,0,1);
                 // sample the texture
                 uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
-                float4 col =LOAD_TEXTURE2D_X_LOD(_BlitTexture, pixelCoords, 0);
+                float4 col =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv); 
                   
                 float4 cycleColor=SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.cycleUV.xy); 
                 float stepX=step(0,i.cycleUV.x)*(1-step(1,i.cycleUV.x));

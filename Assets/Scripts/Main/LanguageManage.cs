@@ -78,7 +78,7 @@ public class LanguageManage : Singleton<LanguageManage>
         }
         return s;
     }  
-    public string GameTimeToString(GameTime nowGameTime)
+    public string GameTimeToString(int year,Season season,int day)
     {
         string result = "";
         if(nowLanguage == SystemLanguage.English)
@@ -87,7 +87,7 @@ public class LanguageManage : Singleton<LanguageManage>
         }
         else
         {
-            result = $"{nowGameTime.year}年 {nowGameTime.Season} {nowGameTime.day}日";
+            result = $"{year}年 {season} {day}日";
         }
 
         return result;
