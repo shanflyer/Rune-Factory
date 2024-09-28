@@ -11,6 +11,9 @@ namespace UnityEngine.Rendering.Universal
     [ExcludeFromPreset]
     public abstract class ScriptableRendererFeature : ScriptableObject, IDisposable
     {
+
+        public bool checkCameraTag;
+        public string cameraTag;
         [SerializeField, HideInInspector] private bool m_Active = true;
         /// <summary>
         /// Returns the state of the ScriptableRenderFeature (true: the feature is active, false: the feature is inactive). Use the method ScriptableRenderFeature.SetActive to change the value of this variable.
@@ -50,6 +53,10 @@ namespace UnityEngine.Rendering.Universal
             // ScriptableRendererFeature.Create() will be called by ScriptableRenderer constructor.
             if (RenderPipelineManager.currentPipeline is UniversalRenderPipeline)
                 Create();
+        }
+        public bool InitCheckCamera(Camera camera)
+        {
+            return camera.tag == cameraTag||!checkCameraTag;
         }
 
         void OnValidate()

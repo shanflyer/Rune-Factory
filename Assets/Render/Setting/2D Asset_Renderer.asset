@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: BlueMask
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   settings:
     passTag: BlueMask
@@ -54,6 +56,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: MyDepth
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   settings:
     m_transparencySortMode: 3
@@ -115,6 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
   m_Name: ScreenCycle
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   renderPassEvent: 550
   material: {fileID: 2100000, guid: da1f5db2cc22d5c41b53fa52ab3bbe6c, type: 2}
@@ -133,6 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: GrassBaker
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   settings:
     m_transparencySortMode: 3
@@ -175,6 +183,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: RedMask
   m_EditorClassIdentifier: 
+  checkCameraTag: 0
+  cameraTag: 
   m_Active: 1
   settings:
     passTag: RedMask
@@ -250,8 +260,7 @@ MonoBehaviour:
   - {fileID: -7700621039921025094}
   - {fileID: 5208366081940331415}
   - {fileID: 8718721150439679252}
-  - {fileID: 7702948015363309193}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14f041d91f9851a0cfc10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e52195971b3f3e5bd547481465a44bb11eff7889be0773685ee66a
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14f041d91f9851a0cfc10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e52195971b3f3e5bd547481465a44bb11eff78
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
@@ -274,8 +283,8 @@ MonoBehaviour:
     maskTextureChannel: 1
     blendMode: 0
   m_UseDepthStencilBuffer: 0
-  m_UseCameraSortingLayersTexture: 1
-  m_CameraSortingLayersTextureBound: 0
+  m_UseCameraSortingLayersTexture: 0
+  m_CameraSortingLayersTextureBound: -1
   m_CameraSortingLayerDownsamplingMethod: 0
   m_MaxLightRenderTextureCount: 16
   m_MaxShadowRenderTextureCount: 1
@@ -295,6 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: WaterBaker
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   settings:
     m_transparencySortMode: 3
@@ -337,6 +348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: GreenMask
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   settings:
     passTag: GreenMask
@@ -379,7 +392,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: Mirror
   m_EditorClassIdentifier: 
-  m_Active: 0
+  checkCameraTag: 1
+  cameraTag: MainCamera
+  m_Active: 1
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
@@ -420,6 +435,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
   m_Name: MyBlur
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   renderPassEvent: 550
   material: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
@@ -438,6 +455,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: Shadow
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   settings:
     m_transparencySortMode: 3
@@ -468,34 +487,6 @@ MonoBehaviour:
     blitToCameraTarget: 0
     clearFlag: 1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
---- !u!114 &7702948015363309193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24acb9227dc224945abd85a2b94d1a1c, type: 3}
-  m_Name: SceneBlurRenderPassFeature
-  m_EditorClassIdentifier: 
-  m_Active: 0
-  settings:
-    m_transparencySortMode: 0
-    m_transparencySortAxis: {x: 0, y: 0, z: 1}
-    opaque: 0
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 4294967295
-    clearFlag: 0
-    clearColor: {r: 0, g: 0, b: 0, a: 1}
-    overrideMat: {fileID: 0}
-    ShaderTags:
-    - MyDepth
-    blurMaterial: {fileID: 2100000, guid: 694b278fe90c5d744857f5e267a30352, type: 2}
-    blendBlurMaterial: {fileID: 2100000, guid: 694b278fe90c5d744857f5e267a30352, type: 2}
-    renderPassEvent: 550
 --- !u!114 &8718721150439679252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,7 +499,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
   m_Name: BlendBlur
   m_EditorClassIdentifier: 
-  m_Active: 0
+  checkCameraTag: 1
+  cameraTag: MainCamera
+  m_Active: 1
   renderPassEvent: 550
   material: {fileID: 2100000, guid: c977e7e7329827147b1592f00cfc74c8, type: 2}
   blitName: 
@@ -526,6 +519,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: BackMask
   m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
   m_Active: 1
   settings:
     m_transparencySortMode: 3

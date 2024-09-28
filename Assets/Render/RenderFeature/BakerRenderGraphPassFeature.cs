@@ -259,7 +259,8 @@ namespace UnityEngine.Rendering.Universal.Internal
         // This method is called when setting up the renderer once per-camera.
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            renderer.EnqueuePass(m_ScriptablePass);
+            if (InitCheckCamera(renderingData.cameraData.camera))
+                renderer.EnqueuePass(m_ScriptablePass);
         }
     }
 }

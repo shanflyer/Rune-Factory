@@ -1113,7 +1113,7 @@ namespace UnityEngine.Rendering.Universal
 #endif
                                 UpdateVolumeFramework(overlayCamera, overlayAdditionalCameraData);
 
-                                bool lastCamera = i == lastActiveOverlayCameraIndex;
+                                bool lastCamera =  i == lastActiveOverlayCameraIndex;
                                 InitializeAdditionalCameraData(overlayCamera, overlayAdditionalCameraData, lastCamera, overlayCameraData);
 
                                 overlayCameraData.stackAnyPostProcessingEnabled = anyPostProcessingEnabled;

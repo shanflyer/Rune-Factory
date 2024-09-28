@@ -115,6 +115,7 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
      
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        renderer.EnqueuePass(m_ScriptablePass);
+        if (InitCheckCamera(renderingData.cameraData.camera))
+            renderer.EnqueuePass(m_ScriptablePass);
     }
 }
