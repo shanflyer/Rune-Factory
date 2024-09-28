@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: MyDepth
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
   m_Name: MyBlur
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   renderPassEvent: 550
   material: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
   blitName: _BlurTex
@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24acb9227dc224945abd85a2b94d1a1c, type: 3}
   m_Name: SceneBlurRenderPassFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     m_transparencySortMode: 0
     m_transparencySortAxis: {x: 0, y: 0, z: 1}
