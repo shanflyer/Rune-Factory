@@ -13,7 +13,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         UniversalRenderPipelineAsset universalRenderPipelineAsset = UniversalRenderPipeline.asset;
         var Renderer2DData= universalRenderPipelineAsset.RendererDataList[0];
         var rendererFeature= Renderer2DData.rendererFeatures.Find(r => r.name == "ScreenCycle");
-        screenMat = ((FullScreenPassRendererFeature)rendererFeature).passMaterial;
+        screenMat = ((MyScreenRenderPassFeature)rendererFeature).material;
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
     }
     protected override void Clear()
