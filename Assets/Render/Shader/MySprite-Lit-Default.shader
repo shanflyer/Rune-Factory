@@ -11,7 +11,7 @@ Shader "MySprite-Lit-Default"
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
         _MoveMask("WaterMaskTex", 2D) ="black"{}
-        _DepthTex("DepthTex", 2D) ="black"{}
+        _DepthTex("DepthTex", 2D) ="gray"{}
         _WetValue("WetValue",Range(0,1))=0
         [Toggle]_shadowStep("ShadowStep",int)=0
         _LightBlend("LightBlend",float)=1 
@@ -1545,17 +1545,21 @@ Shader "MySprite-Lit-Default"
                 float stepPosZ=step(49,ObjPos.z);
                 float3 _objSortPos=ObjPos;
                 _objSortPos.y+=_objSortPos.z*(1-stepPosZ);
-                float3 worldClip=TransformWorldToHClip(_objSortPos).xyz;
-
+                float4 worldClip=TransformWorldToHClip(_objSortPos);
+             
                // worldClip.z=0;
-                float positionCSY=o.positionCS.y;
-                
-                 Unity_Remap_float(worldClip.y,float2(-1,1),float2(0,1),worldClip.y);
-                Unity_Remap_float(positionCSY,float2(-1,1),float2(0,1),positionCSY);
- 
-
+                float positionCSY=o.positionCS.y; 
                // worldClip.y=stepPosZ;
                  worldClip.y=stepPosZ*positionCSY+(1-stepPosZ)*worldClip.y;
+
+                
+
+
+                worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
+
+                //Unity_Remap_float(worldClip.y,float2(-1,1),float2(0,1),worldClip.y);
+               // Unity_Remap_float(positionCSY,float2(-1,1),float2(0,1),positionCSY);
+
 
                 //float myDepth=(ObjPos.y+ObjPos.z+200)/400;
                 o.color = worldClip;
@@ -1566,10 +1570,10 @@ Shader "MySprite-Lit-Default"
             {
                 float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
-                half offset=DepthTex.r*512/_ScreenParams.y;
+                half offset=(DepthTex.r-0.5)*512*4/_ScreenParams.y;
 
 
-                mainTex.xyz=i.color.yyy-offset; 
+                mainTex.xyz=i.color.yyy+offset; 
                 
 
                 return mainTex;

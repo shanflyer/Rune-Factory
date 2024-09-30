@@ -65,10 +65,14 @@ public class WeatherManager : Singleton<WeatherManager>
             yield return 0;
         }
     }
-  
+     
+
     void ShowWeather()
     {
         Shader.SetGlobalFloat("_CloudValue", nowWeather.cloud);
         Shader.SetGlobalVector("_Wind", nowWeather.wind);
+        Shader.SetGlobalFloat("_Fog",nowWeather.fog);
     }
+
+    
 }

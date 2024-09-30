@@ -59,7 +59,7 @@ Shader "BlendBlur"
             struct v2f
             {
                 float4 vertex   : SV_POSITION; 
-                //float2 playerUV:Normal;
+                float2 playerUV:Normal;
                 float2 uv  : TEXCOORD0; 
                 float2 uv1  : TEXCOORD1; 
                 float4 uv01 : TEXCOORD2;
@@ -72,7 +72,7 @@ Shader "BlendBlur"
             float _BlurOffsetPos;
             float2 _ReMapValue;
             half2 _BlurAmount; 
-            half2 _PlayerPos;
+            half3 _PlayerPos;
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
@@ -97,9 +97,9 @@ Shader "BlendBlur"
                 OUT.uv23 =  OUT.uv1.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 2.0;
                 OUT.uv45 =  OUT.uv1.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 3.0;
 
-               // float4 playerCS=TransformWorldToHClip(_PlayerPos);
-                //OUT.playerUV=half2(ComputeScreenPos(playerCS/playerCS.w).xy); 
-                // Unity_Remap_float2(OUT.playerUV,float2(-1,1),float2(0,1),OUT.playerUV);
+                float4 playerCS=TransformWorldToHClip(_PlayerPos);
+                OUT.playerUV=half2(ComputeScreenPos(playerCS/playerCS.w).xy); 
+               // Unity_Remap_float2(OUT.playerUV,float2(-1,1),float2(0,1),OUT.playerUV);
 
                 return OUT;
             }
@@ -117,10 +117,12 @@ Shader "BlendBlur"
                 BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv45.xy); 
                 BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv45.zw); 
 
-                half centerY=1-_PlayerPos.y;
-                //return half4(centerY.xxx,1);
+                half centerY=IN.playerUV.y;
+                //return half4(IN.playerUV.yyy,1);
 
                 half4 myDepthColor=SAMPLE_TEXTURE2D(_MyDepthTex,sampler_MyDepthTex, IN.uv);
+                //return myDepthColor;
+
                 //return myDepthColor;
                 float x=myDepthColor.x;
                 Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
@@ -134,7 +136,7 @@ Shader "BlendBlur"
                 x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
                 x+=x1;
 
-                // return half4(x.xxx,1);
+                 //return half4(x.xxx,1);
 
                 color=BlurColor*x+color*(1-x);
                 return color;

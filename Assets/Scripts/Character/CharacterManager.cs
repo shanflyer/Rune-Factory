@@ -826,12 +826,12 @@ public class CharacterManager : Singleton<CharacterManager>
     }
     public static void SetShaderPlayerPos(Vector3 pos)
     {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
-        float ScreenWidth = Screen.width;
-        float ScreenHeight = Screen.height;
-        Vector2 PlayerPos = new Vector4(screenPos.x / ScreenWidth, screenPos.y / ScreenHeight);
-        //Debug.Log($"PlayerPos:{PlayerPos}");
-        Shader.SetGlobalVector("_PlayerPos", PlayerPos);
+       // Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+       // float ScreenWidth = Screen.width;
+     //  float ScreenHeight = Screen.height;
+        //Vector2 PlayerPos = new Vector4(screenPos.x / ScreenWidth, screenPos.y / ScreenHeight);
+       // Debug.Log($"PlayerPos:{PlayerPos}");
+        Shader.SetGlobalVector("_PlayerPos", pos);
     }
 
     public void MoveCharacterObj(Character character, float2 moveValue, ref int2 coordinate)

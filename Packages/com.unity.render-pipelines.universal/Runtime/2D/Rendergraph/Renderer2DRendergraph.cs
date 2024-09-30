@@ -678,7 +678,7 @@ namespace UnityEngine.Rendering.Universal
                     postProcessPass.RenderFinalPassRenderGraph(renderGraph, frameData, in finalColorHandle, commonResourceData.overlayUITexture, in finalBlitTarget, needsColorEncoding);
                 else if (cameraData.resolveFinalTarget)
                 {
-                    Debug.Log($"camera:{cameraData.camera.name}");
+                   // Debug.Log($"camera:{cameraData.camera.name}");
                     m_FinalBlitPass.Render(renderGraph, frameData, cameraData, finalColorHandle, finalBlitTarget, commonResourceData.overlayUITexture);
                 }
 
