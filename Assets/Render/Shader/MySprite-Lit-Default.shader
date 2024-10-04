@@ -106,7 +106,7 @@ Shader "MySprite-Lit-Default"
 
         Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
         Cull Off
-        ZWrite [_ZWrite]
+        ZWrite off
 		ZTest LEqual
 
         HLSLINCLUDE
@@ -1544,7 +1544,7 @@ Shader "MySprite-Lit-Default"
                 float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
                 float stepPosZ=step(49,ObjPos.z);
                 float3 _objSortPos=ObjPos;
-                _objSortPos.y+=_objSortPos.z*(1-stepPosZ);
+                //_objSortPos.y+=_objSortPos.z*(1-stepPosZ);
                 float4 worldClip=TransformWorldToHClip(_objSortPos);
              
                // worldClip.z=0;
@@ -1570,7 +1570,16 @@ Shader "MySprite-Lit-Default"
             {
                 float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
-                half offset=(DepthTex.r-0.5)*512*4/_ScreenParams.y;
+                half depthStep_R=step(0.0001,abs(DepthTex.r-0.5));
+                half depthStep_G=step(0.0001,DepthTex.g);
+                half depthStep_B=step(0.0001,DepthTex.b);
+
+                half otherStep=depthStep_R*depthStep_G*depthStep_B;
+
+                half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*otherStep;
+
+
+                half offset=depthValue*512*4/_ScreenParams.y;
 
 
                 mainTex.xyz=i.color.yyy+offset; 
