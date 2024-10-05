@@ -831,7 +831,11 @@ Shader "MySprite-Lit-Default"
                 float noiseValue1;
                 Unity_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale*2,noiseValue1); 
                 
-                //春季颜色
+                int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z;
+                
+                if(seasonColorBlend>0)
+                {
+                    //春季颜色
                 int springBlend=1-step(1,_SeasonValue);
                 float w_s=_SeasonValue;
                 Unity_Remap_float(w_s,float2(0,0.25),float2(0,1),w_s); 
@@ -885,6 +889,9 @@ Shader "MySprite-Lit-Default"
 
                 half _BlendValue=1-step(grassTex.g,0);
                 main.xyz=main.xyz*(1-_BlendValue)+winterColor*_BlendValue;  
+
+                }
+                
                // return float4(main.xyz,main.a);
 
                 
@@ -1536,33 +1543,25 @@ Shader "MySprite-Lit-Default"
 
                 attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                float3 objWroldPos=TransformObjectToWorld(attributes.positionOS);
                 #if defined(DEBUG_DISPLAY)
-                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                    o.positionWS = objWroldPos;
                 #endif
                 o.uv = attributes.uv;
 
                 float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
                 float stepPosZ=step(49,ObjPos.z);
-                float3 _objSortPos=ObjPos;
-                //_objSortPos.y+=_objSortPos.z*(1-stepPosZ);
-                float4 worldClip=TransformWorldToHClip(_objSortPos);
-             
-               // worldClip.z=0;
-                float positionCSY=o.positionCS.y; 
-               // worldClip.y=stepPosZ;
-                 worldClip.y=stepPosZ*positionCSY+(1-stepPosZ)*worldClip.y;
 
-                
-
-
+                float3 _objSortPos=ObjPos; 
+                float4 worldClip=TransformWorldToHClip(_objSortPos); 
+                float high=(1-stepPosZ)*(objWroldPos.y-ObjPos.y)*0.5;
+                float positionCSY=o.positionCS.y;  
+                worldClip.y=stepPosZ*positionCSY+(1-stepPosZ)*worldClip.y;  
                 worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
 
-                //Unity_Remap_float(worldClip.y,float2(-1,1),float2(0,1),worldClip.y);
-               // Unity_Remap_float(positionCSY,float2(-1,1),float2(0,1),positionCSY);
-
-
-                //float myDepth=(ObjPos.y+ObjPos.z+200)/400;
-                o.color = worldClip;
+                
+                o.color.x=clamp(high,0,1);                 
+                o.color.y= worldClip.y;
                 return o;
             }
 
@@ -1570,19 +1569,29 @@ Shader "MySprite-Lit-Default"
             {
                 float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
-                half depthStep_R=step(0.0001,abs(DepthTex.r-0.5));
-                half depthStep_G=step(0.0001,DepthTex.g);
-                half depthStep_B=step(0.0001,DepthTex.b);
+                half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
 
-                half otherStep=depthStep_R*depthStep_G*depthStep_B;
+                half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
+                half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
+                half depthStep_B=step(0.01,abs(DepthTex.b-0.5));
 
-                half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*otherStep;
+                half otherStep=depthStep_R*depthStep_G+depthStep_B; 
+                otherStep=1-clamp(otherStep,0,1);
 
-
+                half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*otherStep; 
                 half offset=depthValue*512*4/_ScreenParams.y;
 
+               
+                half depth=i.color.y+offset;
+                half setpHigh=depthStep_G; 
 
-                mainTex.xyz=i.color.yyy+offset; 
+                half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
+
+
+                mainTex.xyz=half3(depth,high,_NormalColor.g);
+                 clip(mainTex.a-_ClipValue);
+
+               // mainTex.xyz=otherStep.xxx;
                 
 
                 return mainTex;

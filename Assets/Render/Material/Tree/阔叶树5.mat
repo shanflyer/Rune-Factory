@@ -8,12 +8,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\u9614\u53F6\u68115"
-  m_Shader: {fileID: 4800000, guid: 7bbca2e1aa73d024d90fb64da46bdde0, type: 3}
+  m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _BACKBLEND_ON
   - _PLANTAUTUMNBLEND_ON
+  - _SNOWBLEND_ON
+  - _TREE3D_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -24,7 +27,15 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -48,7 +59,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: b350a85546837c147a924ff576c0b371, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoveMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -76,6 +95,14 @@ Material:
         m_Texture: {fileID: 2800000, guid: b350a85546837c147a924ff576c0b371, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _WaterMaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _WindNoiseTexture:
         m_Texture: {fileID: 2800000, guid: bdca5e9a5f4be924782b84af1614d624, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -98,17 +125,27 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - EdgeValue: 0.1
     - _AlphaCutoff: 0.5
+    - _BackBlend: 1
     - _BlendRmapMin: 0
     - _BlendValue: 1
+    - _BlendVertexColor: 0
     - _BumpScale: 1
     - _ClipValue: 0.5
     - _Cutoff: 0.85
+    - _Damp: 0
+    - _DampBlend: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EdgeWaveOffset: 0
+    - _EdgeWaveSpeed: 0
+    - _EnableExternalAlpha: 0
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _GrassBlend: 0
+    - _LightBlend: 1
     - _Metallic: 0
     - _Mode: 0
     - _NormalTex: 0
@@ -123,15 +160,33 @@ Material:
     - _ScaleValue: 0
     - _SeasonValue: 0
     - _SmoothnessTextureChannel: 0
+    - _SnowBlend: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _Tree3D: 1
     - _UVSec: 0
+    - _Water: 0
+    - _WaterBottom: 1
+    - _WaterHigh: 0
+    - _WaterZero: 0
+    - _WaveAngle0: 0
+    - _WaveAngle1: 0
+    - _WaveSpeed0: 0
+    - _WaveSpeed1: 0
+    - _WetValue: 0
     - _WindJitter: 0.1
+    - _WindNoiseValue: 0
     - _WindScroll: 0.05
     - _WindValue: 0.5
     - _ZWrite: 1
     - __dirty: 0
+    - _shadowStep: 0
+    - waterNoiseScale: 0
+    - waterValue: 0.2
     m_Colors:
+    - EdgeColor: {r: 0.990566, g: 0.9765486, b: 0.9765486, a: 0}
+    - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
+    - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
     - _BlendColor: {r: 0.0047169924, g: 1, b: 0.6170626, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
@@ -142,7 +197,9 @@ Material:
     - _PlantSpringColor1: {r: 0.43596473, g: 0.9150943, b: 0.5400962, a: 1}
     - _PlantWinterColor: {r: 0.7735849, g: 0.7002403, b: 0.52910286, a: 1}
     - _PlantWinterColor1: {r: 0.6603774, g: 0.4391706, b: 0.40806338, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SnowColor: {r: 0.78653437, g: 0.9445154, b: 0.9528302, a: 1}
     - _SnowRange: {r: -0.08, g: 1, b: 1, a: 1}
+    - waterColor: {r: 0, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
