@@ -612,6 +612,7 @@ Shader "MySprite-Lit-Default"
                 float g=col.g*col.g;
                 float b=col.b*col.b;
                 float3 _col=float3(r,g,b);
+                float3 col1=_col;
                 
                 float _DampNoiseValue;	 
 
@@ -661,21 +662,19 @@ Shader "MySprite-Lit-Default"
                 water*=_DampWaterColor.xyz*c;
                 h*=_HightLightColor.xyz*c; 
 
-                _col+=d+water+h; 
-
+                _col+=d+water+h;  
                 half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, objUV);
                 //half3 normalUnpacked = UnpackNormalRGBNoScale(normal);
                 float gv=normal.z;
                 //return normal.zzz;
                 //float stepGv=step(0.5,gv);
                 //gv=stepGv+(1-stepGv)*gv; 
-                //return gv.xxx;
+                // return gv.xxx;
                 Unity_Remap_float(gv,float2(0,1),float2(0.2,1),gv);
 
                 float3 result=lerp(col,_col,clamp(_DampValue/0.5,0,1)*gv);
-
-                
-                
+                //return _DampValue.xxx;
+                 //result=lerp(col,result,_DampValue); 
                return result*(1-_Damp)+_col*_Damp; 
             }
 
@@ -743,7 +742,7 @@ Shader "MySprite-Lit-Default"
                // float GrassColorValue=abs(grassColor.r-0.5)/0.5;
                // o.worldPos.w=GrassColorValue;
 
-
+                int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z; 
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
@@ -833,62 +832,62 @@ Shader "MySprite-Lit-Default"
                 
                 int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z;
                 
-                if(seasonColorBlend>0)
+                if(seasonColorBlend>0.01)
                 {
                     //春季颜色
-                int springBlend=1-step(1,_SeasonValue);
-                float w_s=_SeasonValue;
-                Unity_Remap_float(w_s,float2(0,0.25),float2(0,1),w_s); 
-                int w_sBlend=1-step(0.5,w_s);
-                float springValue=_SeasonValue;
-                Unity_Remap_float(springValue,float2(0.25,0.5),float2(0,1),springValue);
-                springValue=clamp(springValue,0,1);
-                float3 winterColor=(_PlantWinterColor*noiseValue+_PlantWinterColor1*(1-noiseValue))*mainValue; 
-                float3 springColor0=(_PlantWinterColor*noiseValue1+_PlantSpringColor*(1-noiseValue1))*mainValue; 
-                float3 springColor=(_PlantSpringColor*noiseValue+_PlantSpringColor1*(1-noiseValue))*mainValue; 
-                springColor=(winterColor*(1-w_s)+springColor0*w_s)*w_sBlend
-                          +(1-w_sBlend)*(springColor0*(1-springValue)+springColor*springValue);
-                
-                //夏季颜色
-                float s_s=_SeasonValue;
-                Unity_Remap_float(s_s,float2(1,1.25),float2(0,1),s_s);
-                s_s=clamp(s_s,0,1);
-                float3 summerColor=springColor*(1-s_s)+main.xyz*s_s;
+                    int springBlend=1-step(1,_SeasonValue);
+                    float w_s=_SeasonValue;
+                    Unity_Remap_float(w_s,float2(0,0.25),float2(0,1),w_s); 
+                    int w_sBlend=1-step(0.5,w_s);
+                    float springValue=_SeasonValue;
+                    Unity_Remap_float(springValue,float2(0.25,0.5),float2(0,1),springValue);
+                    springValue=clamp(springValue,0,1);
+                    float3 winterColor=(_PlantWinterColor*noiseValue+_PlantWinterColor1*(1-noiseValue))*mainValue; 
+                    float3 springColor0=(_PlantWinterColor*noiseValue1+_PlantSpringColor*(1-noiseValue1))*mainValue; 
+                    float3 springColor=(_PlantSpringColor*noiseValue+_PlantSpringColor1*(1-noiseValue))*mainValue; 
+                    springColor=(winterColor*(1-w_s)+springColor0*w_s)*w_sBlend
+                            +(1-w_sBlend)*(springColor0*(1-springValue)+springColor*springValue);
+                    
+                    //夏季颜色
+                    float s_s=_SeasonValue;
+                    Unity_Remap_float(s_s,float2(1,1.25),float2(0,1),s_s);
+                    s_s=clamp(s_s,0,1);
+                    float3 summerColor=springColor*(1-s_s)+main.xyz*s_s;
 
-                //秋季颜色
-                float s_a=_SeasonValue;
-                Unity_Remap_float(s_a,float2(2,2.25),float2(0,1),s_a);
-                s_a=clamp(s_a,0,1); 
+                    //秋季颜色
+                    float s_a=_SeasonValue;
+                    Unity_Remap_float(s_a,float2(2,2.25),float2(0,1),s_a);
+                    s_a=clamp(s_a,0,1); 
 
-                float3 AutumnColor0=(main.xyz*noiseValue1+_PlantAutumnColor0*(1-noiseValue1))*mainValue; 
-                AutumnColor0=AutumnColor0*s_a+summerColor*(1-s_a);
- 
+                    float3 AutumnColor0=(main.xyz*noiseValue1+_PlantAutumnColor0*(1-noiseValue1))*mainValue; 
+                    AutumnColor0=AutumnColor0*s_a+summerColor*(1-s_a);
+    
 
-                float a_a=_SeasonValue;
-                Unity_Remap_float(a_a,float2(2.25,2.5),float2(0,1),a_a);
-                a_a=clamp(a_a,0,1); 
- 
-                float3 AutumnColor=(_PlantAutumnColor0*noiseValue+_PlantAutumnColor1*(1-noiseValue))*mainValue; 
-                AutumnColor=AutumnColor*a_a+AutumnColor0*(1-a_a);
+                    float a_a=_SeasonValue;
+                    Unity_Remap_float(a_a,float2(2.25,2.5),float2(0,1),a_a);
+                    a_a=clamp(a_a,0,1); 
+    
+                    float3 AutumnColor=(_PlantAutumnColor0*noiseValue+_PlantAutumnColor1*(1-noiseValue))*mainValue; 
+                    AutumnColor=AutumnColor*a_a+AutumnColor0*(1-a_a);
 
-               
-
-                //冬季颜色
-                float a_w=_SeasonValue;
-                Unity_Remap_float(a_w,float2(2.85,3.15),float2(0,1),a_w);
-                a_w=clamp(a_w,0,1); 
-                float3 winterColor0=(_PlantAutumnColor0*noiseValue1+_PlantWinterColor1*(1-noiseValue1))*mainValue; 
-                 
-                winterColor0=winterColor0*a_w+AutumnColor*(1-a_w);
-
-                 float w_w=_SeasonValue;
-                Unity_Remap_float(w_w,float2(3.15,3.35),float2(0,1),w_w);
-                w_w=clamp(w_w,0,1); 
-                winterColor=winterColor*w_w+winterColor0*(1-w_w); 
                 
 
-                half _BlendValue=1-step(grassTex.g,0);
-                main.xyz=main.xyz*(1-_BlendValue)+winterColor*_BlendValue;  
+                    //冬季颜色
+                    float a_w=_SeasonValue;
+                    Unity_Remap_float(a_w,float2(2.85,3.15),float2(0,1),a_w);
+                    a_w=clamp(a_w,0,1); 
+                    float3 winterColor0=(_PlantAutumnColor0*noiseValue1+_PlantWinterColor1*(1-noiseValue1))*mainValue; 
+                    
+                    winterColor0=winterColor0*a_w+AutumnColor*(1-a_w);
+
+                    float w_w=_SeasonValue;
+                    Unity_Remap_float(w_w,float2(3.15,3.35),float2(0,1),w_w);
+                    w_w=clamp(w_w,0,1); 
+                    winterColor=winterColor*w_w+winterColor0*(1-w_w); 
+                    
+
+                    half _BlendValue=1-step(grassTex.g,0);
+                    main.xyz=main.xyz*(1-_BlendValue)+winterColor*_BlendValue;                  
 
                 }
                 
@@ -940,17 +939,19 @@ Shader "MySprite-Lit-Default"
               
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
  
-                if(_DampBlend)
+                if(_DampBlend>=1)
                 {
                    waterColor=DampColor(waterColor,i.lightingUV,uv); 
                 } 
+                 waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
                  main.xyz*=i.color.xyz;
                 if(_Water==1)
                 {
                     waterColor=WaterFragment(uv,i.lightingUV,main);
                 }
+                return float4(waterColor.xyz,main.a);
 
-                waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
+               
                
              
                // return float4( waterColor.xyz,main.a);

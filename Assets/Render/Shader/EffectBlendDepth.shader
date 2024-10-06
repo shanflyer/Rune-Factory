@@ -12,7 +12,7 @@ Shader "EffectBlendDepth"
     {
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
 
-        Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+        Blend SrcAlpha OneMinusSrcAlpha, DstColor Zero
         Cull Off
         ZWrite off
 		ZTest LEqual
@@ -105,7 +105,7 @@ Shader "EffectBlendDepth"
                 mul_a=clamp(mul_a,0,1);
                 half resultA=x*mul_a+(1-step(mul_a,0))*mul_a;
                 resultA=clamp(resultA,0,1);
-
+ 
                 color.a*=resultA;
                 return color;
             }

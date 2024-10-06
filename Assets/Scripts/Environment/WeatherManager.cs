@@ -2,14 +2,61 @@
 using UnityEngine;
 using Unity.Mathematics;
 using System.Collections;
+using System;
 
+[Serializable]
 public struct Weather
 { 
     public float cloud;
     public float temperature;
     public float fog;
-    public Vector3 wind;
+    public float wind;
     public float waterFall;
+    public bool IsSnow()
+    {
+        float seasonValue = GameTimeManager.instance.SeasonValue;
+        bool snow = seasonValue >= 3 || seasonValue < 0.05f;
+        return snow;
+    }
+
+    public float GetWeatherLight()
+    {
+        float fogValue =(1- fog) * 0.25f + 0.75f;
+        float cloudValue = (1-cloud) * 0.25f + 0.75f;
+        float waterFallValue=(1- waterFall) * 0.4f + 0.6f;
+        if (waterFall > 0.5f)
+        {
+            return waterFallValue;
+        }
+        else
+        {
+            return fogValue * cloudValue;
+        }
+    }
+    public float GetFlareLight()
+    {
+        float fogValue =1.0f- fog*2;
+        fogValue = fogValue < 0 ? 0 : fogValue;
+         
+        float cloudValue = 1.0f - cloud * 2;
+        cloudValue = cloudValue < 0 ? 0 : cloudValue;
+
+        float waterFallValue = 1.0f - waterFall * 4;
+        waterFallValue = waterFallValue < 0 ? 0 : waterFallValue;
+
+        if (fogValue > cloudValue || fogValue > waterFallValue)
+        {
+            if(cloudValue> waterFallValue)
+            {
+                return waterFallValue;
+            }
+            else
+            {
+                return cloudValue;
+            }
+        }
+        return fogValue;
+    }
 }
 public class WeatherManager : Singleton<WeatherManager>
 {
@@ -32,7 +79,7 @@ public class WeatherManager : Singleton<WeatherManager>
                 cloud = GameRandom.RandomFloat(weatherData.cloud),
                 fog = GameRandom.RandomFloat(weatherData.fog),
                 waterFall = GameRandom.RandomFloat(weatherData.rainfall),
-                wind = new float3(GameRandom.RandomFloat2(weatherData.windDir), GameRandom.RandomFloat(weatherData.windStrength)),
+                wind = GameRandom.RandomFloat(weatherData.windStrength),
             };
             if (!ZeroWeather)
             {
@@ -69,9 +116,14 @@ public class WeatherManager : Singleton<WeatherManager>
 
     void ShowWeather()
     {
-        Shader.SetGlobalFloat("_CloudValue", nowWeather.cloud);
-        Shader.SetGlobalVector("_Wind", nowWeather.wind);
-        Shader.SetGlobalFloat("_Fog",nowWeather.fog);
+        SetWeather setWeather = new SetWeather
+        {
+            weather = nowWeather
+        };
+        GameActionManager.instance.QueueAction(setWeather);
+      //  Shader.SetGlobalFloat("_CloudValue", nowWeather.cloud);
+        //Shader.SetGlobalVector("_Wind", nowWeather.wind);
+       // Shader.SetGlobalFloat("_Fog",nowWeather.fog);
     }
 
     

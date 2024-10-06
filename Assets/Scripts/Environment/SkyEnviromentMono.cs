@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class SkyEnviromentMono : MonoBehaviour
+public class SkyEnviromentMono : MonoBehaviour, IGameData
 {
     [SerializeField]
     ProFlare proFlare;
@@ -24,6 +24,8 @@ public class SkyEnviromentMono : MonoBehaviour
     SpriteRenderer bg,sea;
     [SerializeField]
     ParticleSystemRenderer cloud;
+    [SerializeField]
+    WeatherMono weatherMono;
     public ProFlare ProFlare
     {
         get
@@ -124,4 +126,46 @@ public class SkyEnviromentMono : MonoBehaviour
         CameraManager.instance.SetCameraOffset(new Vector2(0, cameraOffsetY));
     }
 
+    public void SetWeather(Weather weather)
+    { 
+        if (weather.IsSnow())
+        {
+            weatherMono.SetRain(0);
+            weatherMono.SetSnow(weather.waterFall);
+        }
+        else
+        {
+            weatherMono.SetSnow(0);
+            weatherMono.SetRain(weather.waterFall);
+        }
+        weatherMono.SetFog(weather.fog);
+        weatherMono.SetWind(weather.wind);
+    }
+    public void SetWeather(float waterFall,float fog,float wind,float clund)
+    {
+        float seasonValue = GameTimeManager.instance.SeasonValue;
+        bool snow = seasonValue >= 3 || seasonValue < 0.05f;
+        if (snow)
+        {
+            weatherMono.SetRain(0);
+            weatherMono.SetSnow(waterFall);
+        }
+        else
+        {
+            weatherMono.SetSnow(0);
+            weatherMono.SetRain(waterFall);
+        }
+        weatherMono.SetFog(fog);
+        weatherMono.SetWind(wind);
+    }
+    public string GetKey()
+    {
+        return ToString();
+    }
+
+    public void SetReferenceData()
+    {
+        weatherMono = transform.Find("Weather").GetComponent<WeatherMono>();
+        weatherMono.SetReferenceData();
+    }
 }

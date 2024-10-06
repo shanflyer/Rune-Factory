@@ -15,6 +15,9 @@ public class GameController : MonoBehaviour
   
     public bool startPlay = true;
 #if UNITY_EDITOR
+
+    public Weather weather;
+
     public bool test = false;
     public bool runTime
     {
@@ -266,6 +269,14 @@ public class GameController : MonoBehaviour
         Shader.SetGlobalVector("_NoiseSet0", _NoiseSet0);
         Shader.SetGlobalVector("_NoiseSet1", _NoiseSet1);
     }
+    public void SetWeatherTest()
+    {
+        SetWeather setWeather = new SetWeather
+        {
+            weather = weather
+        };
+        GameActionManager.instance.QueueAction(setWeather);
+    }
 #endif 
 
 }
@@ -299,6 +310,10 @@ public class GameControllerEditor : Editor
         if (GUILayout.Button("SetCloud"))
         {
             gameController.SetCloudGlobal();
+        }
+        if (GUILayout.Button("SetWeather"))
+        {
+            gameController.SetWeatherTest();
         }
     }
 }

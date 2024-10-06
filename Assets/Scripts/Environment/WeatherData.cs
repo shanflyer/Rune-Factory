@@ -9,8 +9,7 @@ public class WeatherData : ScriptableObject, IGameData
     public float2 temperature;
     public float2 rainfall;
     public float2 fog;
-    public float2 windStrength;
-    public float4 windDir;
+    public float2 windStrength; 
     public float2 cloud;
     public int2 duration;
 

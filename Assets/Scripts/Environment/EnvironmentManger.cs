@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -85,21 +87,93 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         GameActionManager.instance.AddListener<SetEnvironmentLight>(SetEnvironmentLight);
         GameActionManager.instance.AddListener<OverrideEnvironmentLight>(OverrideEnvironmentLight);
         GameActionManager.instance.AddListener<ClearOverrideEnvironmentLight>(ClearOverrideEnvironmentLight);
+        GameActionManager.instance.AddListener<SetWeather>(SetWeather);
 
     }
 
     private EnvironmentLightData natureLightData;
+    private EnvironmentLightData overrideLightData;
+    bool overSkyAndSun;
+    private Weather weather;
     private bool overrideEnvironment;
 
-    private void SetEnvironmentLight(SetEnvironmentLight SetEnvironmentLight)
+
+    void SetWeather(SetWeather setWeather)
     {
-        natureLightData = SetEnvironmentLight.environmentLightData;
-         
+        weather = setWeather.weather; 
+        //RefreshEnvironment();
+        var lerp = LerpWeather(weather);
+        GameObjectCurveController.instance.StartIEnumerator(lerp);
+        //skyEnviromentMono.SetWeather(setWeather.weather);
+    }
+
+    IEnumerator LerpWeather(Weather newWeather)
+    {
+        float timeValue = 0;
+        bool oldDamp = !weather.IsSnow() && weather.waterFall > 0;
+        bool newDamp= !newWeather.IsSnow() && newWeather.waterFall > 0;
+        while (timeValue<=2)
+        {
+            float value = timeValue / 2.0f;
+            float waterFall=math.lerp(weather.waterFall,newWeather.waterFall,value);
+            float fog = math.lerp(weather.fog, newWeather.fog, value);
+            float wind = math.lerp(weather.wind, newWeather.wind, value);
+            float cloud = math.lerp(weather.cloud, newWeather.cloud, value);
+            skyEnviromentMono.SetWeather(waterFall,fog,wind,cloud);
+
+            float weatherLightValue=math.lerp(weather.GetWeatherLight(),newWeather.GetWeatherLight(),value);
+            float flareLight = math.lerp(weather.GetFlareLight(), newWeather.GetFlareLight(), value);
+            RefreshEnvironment(weatherLightValue, flareLight);
+
+            if (oldDamp && !newDamp)
+            {
+                Shader.SetGlobalFloat("_DampValue", 1 - timeValue);
+            }else
+            if (!oldDamp && newDamp)
+            {
+                Shader.SetGlobalFloat("_DampValue", timeValue);
+            }else if (newDamp)
+            {
+                Shader.SetGlobalFloat("_DampValue", 1);
+            }
+            else
+            {
+                Shader.SetGlobalFloat("_DampValue", 0);
+            }
+
+            timeValue += Time.deltaTime;
+            yield return 0;
+        }
+        skyEnviromentMono.SetWeather(newWeather);
+        weather = newWeather;
+    }
+
+
+    void RefreshEnvironment(float weatherLightValue, float flareLight)
+    {  
         if (!overrideEnvironment)
         {
-            Shader.SetGlobalColor("_CloudColor", natureLightData.cloudColor);
-            Shader.SetGlobalColor("_SkyTopColor", natureLightData.skyTopColor);
-            Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
+            Color cloudColor = natureLightData.cloudColor;
+            float cloudColorA = cloudColor.a;
+            cloudColor *= weatherLightValue;
+            cloudColor.a = cloudColorA;
+
+            Color skyTopColor = natureLightData.skyTopColor;
+            float skyTopColorA = skyTopColor.a;
+            skyTopColor *= weatherLightValue;
+            skyTopColor.a = skyTopColorA;
+
+            Color skyBottomColor = natureLightData.skyBottomColor;
+            float skyBottomColorA = skyBottomColor.a;
+            skyBottomColor *= weatherLightValue;
+            skyBottomColor.a = skyBottomColorA;
+
+            Color flareColor = natureLightData.flareColor; 
+            flareColor *= weatherLightValue* flareLight; 
+
+            Shader.SetGlobalColor("_CloudColor", cloudColor);
+            Shader.SetGlobalColor("_SkyTopColor", skyTopColor);
+            Shader.SetGlobalColor("_SkyBottomColor", skyBottomColor);
             Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
             Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
@@ -107,8 +181,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             {
                 sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
                 sunTransform.localPosition = natureLightData.sunPos;
-            } 
-            flare.GlobalTintColor = natureLightData.flareColor;  
+            }
+            flare.GlobalTintColor = flareColor;
 
             globalLight.color = natureLightData.globalColor;
             globalLight.intensity = natureLightData.globalIntensity;
@@ -117,43 +191,75 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
             directionLight.Direction = natureLightData.direction;
             directionLight.color = natureLightData.color;
-            directionLight.intensity = natureLightData.intensity;
+            directionLight.intensity = natureLightData.intensity * weatherLightValue;
+
+            Shader.SetGlobalColor("_DirectionColor", directionLight.color * directionLight.intensity);
+
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue);
         }
+        else
+        {
+            if (directionLight)
+            {
+                directionLight.Direction = overrideLightData.direction;
+                directionLight.color = overrideLightData.color;
+                directionLight.intensity = overrideLightData.intensity * weatherLightValue;
+            }
+            if (globalLight)
+            {
+                globalLight.color = overrideLightData.globalColor;
+                globalLight.intensity = overrideLightData.globalIntensity;
+                Shader.SetGlobalColor("_GlobalColor", globalLight.color * globalLight.intensity);
+            }
+            if (overSkyAndSun)
+            {
+                Color cloudColor = overrideLightData.cloudColor;
+                float cloudColorA = cloudColor.a;
+                cloudColor *= weatherLightValue;
+                cloudColor.a = cloudColorA;
+
+                Color skyTopColor = overrideLightData.skyTopColor;
+                float skyTopColorA = skyTopColor.a;
+                skyTopColor *= weatherLightValue;
+                skyTopColor.a = skyTopColorA;
+
+                Color skyBottomColor = overrideLightData.skyBottomColor;
+                float skyBottomColorA = skyBottomColor.a;
+                skyBottomColor *= weatherLightValue;
+                skyBottomColor.a = skyBottomColorA;
+
+                Color flareColor = overrideLightData.flareColor;
+                flareColor *= weatherLightValue * flareLight;
+
+
+                Shader.SetGlobalColor("_CloudColor", cloudColor);
+                Shader.SetGlobalColor("_SkyTopColor", skyTopColor);
+                Shader.SetGlobalColor("_SkyBottomColor", skyBottomColor);
+                Shader.SetGlobalFloat("_SkyHalfValue", overrideLightData.skyHalfValue);
+                Shader.SetGlobalColor("_SunColor", overrideLightData.sunColor);
+                Shader.SetGlobalInt("_Sun", overrideLightData.sunValue);
+                if (sunTransform)
+                {
+                    sunTransform.localScale = new Vector3(overrideLightData.sunScale, overrideLightData.sunScale, 1);
+                    sunTransform.localPosition = overrideLightData.sunPos;
+                }
+                flare.GlobalTintColor = flareColor;
+            }
+            Shader.SetGlobalFloat("_ShadowValue", overrideLightData.shadowValue);
+        }
+    }
+    private void SetEnvironmentLight(SetEnvironmentLight SetEnvironmentLight)
+    {
+        natureLightData = SetEnvironmentLight.environmentLightData;
+        RefreshEnvironment(weather.GetWeatherLight(),weather.GetFlareLight()); 
     }
 
     private void OverrideEnvironmentLight(OverrideEnvironmentLight OverrideEnvironmentLight)
     {
-        var environmentLight = OverrideEnvironmentLight.environmentLightData;
+        overrideLightData = OverrideEnvironmentLight.environmentLightData;
         overrideEnvironment = true;
-        if (directionLight)
-        {
-            directionLight.Direction = environmentLight.direction;
-            directionLight.color = environmentLight.color;
-            directionLight.intensity = environmentLight.intensity;
-        }
-        if (globalLight)
-        {
-            globalLight.color = environmentLight.globalColor;
-            globalLight.intensity = environmentLight.globalIntensity;
-            Shader.SetGlobalColor("_GlobalColor", globalLight.color * globalLight.intensity);
-        }
-        if (OverrideEnvironmentLight.overSkyAndSun)
-        {
-            Shader.SetGlobalColor("_CloudColor", environmentLight.cloudColor);
-            Shader.SetGlobalColor("_SkyTopColor", environmentLight.skyTopColor);
-            Shader.SetGlobalColor("_SkyBottomColor", environmentLight.skyBottomColor);
-            Shader.SetGlobalFloat("_SkyHalfValue", environmentLight.skyHalfValue);
-            Shader.SetGlobalColor("_SunColor", environmentLight.sunColor);
-            Shader.SetGlobalInt("_Sun", environmentLight.sunValue);
-            if (sunTransform)
-            {
-                sunTransform.localScale = new Vector3(environmentLight.sunScale, environmentLight.sunScale, 1);
-                sunTransform.localPosition = environmentLight.sunPos;
-            }
-            flare.GlobalTintColor = environmentLight.flareColor;
-        }
-        Shader.SetGlobalFloat("_ShadowValue", environmentLight.shadowValue);
+        overSkyAndSun = OverrideEnvironmentLight.overSkyAndSun;
+        RefreshEnvironment(weather.GetWeatherLight(), weather.GetFlareLight());
     }
 
     private void ClearOverrideEnvironmentLight(ClearOverrideEnvironmentLight clearOverrideEnvironmentLight)

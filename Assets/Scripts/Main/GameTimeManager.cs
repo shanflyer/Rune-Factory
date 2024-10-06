@@ -499,17 +499,18 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
             seasonValue = nowYearHour / totalYearHour;
-            Shader.SetGlobalFloat("_SeasonValue", fixedSeason < 0 ? seasonValue : fixedSeason);
+            Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
         }
         const float totalYearHour = (4 * 30) * 24;
 
         float fixedSeason = -1;
+        public float SeasonValue => fixedSeason < 0 ? seasonValue : fixedSeason;
         public void SetFixedSeason(SetFixedSeason SetFixedSeason)
         {
             fixedSeason = SetFixedSeason.season;
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
             seasonValue = nowYearHour / totalYearHour;
-            Shader.SetGlobalFloat("_SeasonValue", fixedSeason < 0 ? seasonValue : fixedSeason);
+            Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
         }
         private void UpDataGameTimeAction()
         {
@@ -531,6 +532,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 #if UNITY_EDITOR
     public bool runTime = true;
 #endif
+    public float SeasonValue => nowGameTime.SeasonValue;
     public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime.year,nowGameTime.Season,nowGameTime.day);
     public int2 nowHourMinute=> new int2(nowGameTime.hour, nowGameTime.minute);
     public GameTimeKey nowGameTimeKey => new GameTimeKey(nowGameTime.hour, nowGameTime.minute, nowGameTime.hour, nowGameTime.minute);

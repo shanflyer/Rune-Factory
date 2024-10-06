@@ -12,7 +12,11 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _BACKBLEND_ON
+  - _DAMPBLEND_ON
+  - _SHADOWSTEP_ON
+  - _SNOWBLEND_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -27,6 +31,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DepthTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -35,7 +43,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MoveMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SnowTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -65,26 +81,33 @@ Material:
     - WaveColorValue: 1.39
     - WaveK: 2.22
     - _BackBlend: 1
+    - _BlendRmapMin: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
+    - _ClipValue: 0.5
     - _Comp: 8
     - _Cycle: 0
     - _CycleRange: 0
     - _Damp: 0
-    - _DampBlend: 0
+    - _DampBlend: 1
     - _EdgeOffset: 0.053
     - _EdgeSpeed: 1.22
     - _EdgeWaveOffset: 0
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _Fail: 0
+    - _GrassBlend: 0
     - _LightBlend: 1
     - _NoiseAlpha: 1
     - _NoiseValue: 500
     - _Pass: 0
+    - _PlantAutumnBlend: 0
+    - _PlantAutumnNoiseScale: 1
+    - _ScaleValue: 0.5
     - _SnowBlend: 1
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _Tree3D: 0
     - _Water: 1
     - _WaterBottom: 1.33
     - _WaterHigh: 0.17
@@ -104,6 +127,8 @@ Material:
     - _WindJitter: 0.3
     - _WindNoiseValue: 0.05
     - _WindScroll: 0.05
+    - _WindValue: 1
+    - _ZWrite: 0
     - _shadowStep: 1
     - waterNoiseScale: 136
     - waterValue: 0.242
@@ -115,9 +140,18 @@ Material:
     - PubuWaveScale: {r: 0, g: 0, b: 0, a: 0}
     - WaveScale0: {r: 4, g: 6, b: 0, a: 0}
     - WaveScale1: {r: -2, g: -8, b: 0, a: 0}
+    - _BlendColor: {r: 0, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
+    - _PlantAutumnColor0: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantAutumnColor1: {r: 1, g: 1, b: 1, a: 1}
+    - _PlantSpringColor: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantSpringColor1: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantWinterColor: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantWinterColor1: {r: 0, g: 0, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowRange: {r: 0, g: 1, b: 0, a: 1}
     - _WaveKSet0: {r: 3, g: 1.8, b: 0, a: 0}
     - _WaveKSet1: {r: 2.1, g: -1.5, b: 0, a: 0}
     - _WaveKSet2: {r: 0, g: 0, b: 0, a: 0}
