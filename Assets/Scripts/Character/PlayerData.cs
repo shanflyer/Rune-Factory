@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
+using Unity.Mathematics; 
 
 public class UserGameSaveDataList : IReferenceData
 {
@@ -173,7 +172,7 @@ public class UserGameSaveData : IReferenceData
         {
             addMapItemOperates.Add(id);
         }
-        saveTime = DateTime.Now.ToSafeString();
+        saveTime = DateTime.Now.ToString();
     }
 
     public void SetMapLineData(int id,bool isInit)

@@ -237,10 +237,6 @@ namespace UnityEngine.Rendering.Universal
             if (renderingData.cameraData.cameraType == CameraType.Preview
                 || UniversalRenderer.IsOffscreenDepthTexture(ref renderingData.cameraData))
                 return;
-            if (!InitCheckCamera(renderingData.cameraData.camera))
-            {
-                return;
-            }
             renderer.EnqueuePass(renderObjectsPass);
         }
 

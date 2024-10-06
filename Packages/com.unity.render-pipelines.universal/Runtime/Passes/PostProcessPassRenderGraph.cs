@@ -8,7 +8,6 @@ namespace UnityEngine.Rendering.Universal
     internal partial class PostProcessPass : ScriptableRenderPass
     {
         static readonly int s_CameraDepthTextureID = Shader.PropertyToID("_CameraDepthTexture");
-        static readonly int s_CameraOpaqueTextureID = Shader.PropertyToID("_CameraOpaqueTexture");
 
         private class UpdateCameraResolutionPassData
         {
@@ -946,7 +945,7 @@ namespace UnityEngine.Rendering.Universal
 
         private void RenderSTP(RenderGraph renderGraph, UniversalResourceData resourceData, UniversalCameraData cameraData, ref TextureHandle source, out TextureHandle destination)
         {
-            TextureHandle cameraDepth = resourceData.cameraDepth;
+            TextureHandle cameraDepth = resourceData.cameraDepthTexture;
             TextureHandle motionVectors = resourceData.motionVectorColor;
 
             Debug.Assert(motionVectors.IsValid(), "MotionVectors are invalid. STP requires a motion vector texture.");
@@ -1546,6 +1545,15 @@ namespace UnityEngine.Rendering.Universal
                 if (settings.requireHDROutput && m_EnableColorEncodingIfNeeded)
                     builder.UseTexture(overlayUITexture, AccessFlags.Read);
 
+#if ENABLE_VR && ENABLE_XR_MODULE
+                if (cameraData.xr.enabled)
+                {
+                    // This is a screen-space pass, make sure foveated rendering is disabled for non-uniform renders
+                    bool passSupportsFoveation = !XRSystem.foveatedRenderingCaps.HasFlag(FoveatedRenderingCaps.NonUniformRaster);
+                    builder.EnableFoveatedRasterization(cameraData.xr.supportsFoveatedRendering && passSupportsFoveation);
+                }
+#endif
+
                 builder.SetRenderFunc(static (PostProcessingFinalBlitPassData data, RasterGraphContext context) =>
                 {
                     var cmd = context.cmd;
@@ -1835,14 +1843,15 @@ namespace UnityEngine.Rendering.Universal
             {
                 UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
 
-                // Only the UniversalRenderer guarantees that global textures will be available at this point
-                bool isUniversalRenderer = (cameraData.renderer as UniversalRenderer) != null;
-
-                if (cameraData.requiresDepthTexture && isUniversalRenderer)
-                    builder.UseGlobalTexture(s_CameraDepthTextureID);
-
-                if (cameraData.requiresOpaqueTexture && isUniversalRenderer)
-                    builder.UseGlobalTexture(s_CameraOpaqueTextureID);
+#if ENABLE_VR && ENABLE_XR_MODULE
+                if (cameraData.xr.enabled)
+                {
+                    bool passSupportsFoveation = cameraData.xrUniversal.canFoveateIntermediatePasses || resourceData.isActiveTargetBackBuffer;
+                    // This is a screen-space pass, make sure foveated rendering is disabled for non-uniform renders
+                    passSupportsFoveation &= !XRSystem.foveatedRenderingCaps.HasFlag(FoveatedRenderingCaps.NonUniformRaster);
+                    builder.EnableFoveatedRasterization(cameraData.xr.supportsFoveatedRendering && passSupportsFoveation);
+                }
+#endif
 
                 builder.AllowGlobalStateModification(true);
                 passData.destinationTexture = destTexture;

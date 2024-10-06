@@ -107,7 +107,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                     desc.height = (int)(settings.blitScale * desc.height);
 
                     desc.colorFormat = RenderTextureFormat.Default;
-                    desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.R8_SRGB;
+                    desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.None;
                     TextureHandle destination = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc,settings.afterRenderMaterial!=null? $"{passName}_destination":settings.textureName,
                         settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All);
                    
@@ -143,7 +143,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                     desc.width = (int)(settings.blitScale * desc.width);
                     desc.height = (int)(settings.blitScale * desc.height);
                     desc.colorFormat = RenderTextureFormat.Default;
-                    desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.R8_SRGB; 
+                    desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.None;
                     TextureHandle outTexHandle =settings.blitToCameraTarget?resourceData.activeColorTexture: UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, settings.textureName,
                     false);
                     var customData = frameData.Get<MyCustomData>();

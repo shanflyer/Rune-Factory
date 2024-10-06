@@ -1,12 +1,7 @@
-﻿using Excel;
-using OfficeOpenXml;
-using System.Data;
+﻿using OfficeOpenXml;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using static Codice.Client.BaseCommands.Import.Commit;
-using UnityEngine.Purchasing;
 
 public class CommonTool : MonoBehaviour
 {
@@ -49,17 +44,13 @@ public class CommonTool : MonoBehaviour
                         {
                             myDataDIc.daraDic.Add(gameData.GetKey(), gameData.GetName());
                         }
-                        
                     }
-                    if (myDataDIc.daraDic.Count>0)
+                    if (myDataDIc.daraDic.Count > 0)
                     {
                         SaveExcel(myDataDIc.daraDic, activeObject.name);
                     }
-                   // AssetDatabase.CreateAsset(myDataDIc, $"Assets/Editor/DataDic/{activeObject.name}.asset");
+                    // AssetDatabase.CreateAsset(myDataDIc, $"Assets/Editor/DataDic/{activeObject.name}.asset");
                 }
-               
-              
-               
             }
         }
         finally
@@ -67,19 +58,19 @@ public class CommonTool : MonoBehaviour
             AssetDatabase.StopAssetEditing();
         }
     }
-    const string excelPath = "Assets/Editor/DataDic/Data.xlsx";
-    private static void SaveExcel(StringStringDictionary data,string name)
+
+    private const string excelPath = "Assets/Editor/DataDic/Data.xlsx";
+
+    private static void SaveExcel(StringStringDictionary data, string name)
     {
         FileInfo file = new FileInfo(excelPath);
         /*if (!File.Exists(excelPath))
         {
-         
         }
         else
         {
-
         }*/
-       
+
         using (ExcelPackage package = new ExcelPackage(file))
         {
             ExcelWorksheet worksheet;
@@ -95,8 +86,8 @@ public class CommonTool : MonoBehaviour
             }
             worksheet.Cells[1, 2].Value = "Key";
             worksheet.Cells[1, 3].Value = "Name";
-           
-            using(var e = data.GetEnumerator())
+
+            using (var e = data.GetEnumerator())
             {
                 int i = 2;
                 while (e.MoveNext())
@@ -105,11 +96,9 @@ public class CommonTool : MonoBehaviour
                     worksheet.Cells[i, 3].Value = e.Current.Value;
                     i++;
                 }
-              
             }
             package.Save();
-        } 
-       
+        }
 
         /*
         FileInfo file = new FileInfo(excelPath);
@@ -120,9 +109,7 @@ public class CommonTool : MonoBehaviour
             package.Save();
         }*/
     }
-   
 
-  
     [MenuItem("Assets/图片资源工具/检测并重新保存图片")]
     public static void CheckAndResaveTexture()
     {

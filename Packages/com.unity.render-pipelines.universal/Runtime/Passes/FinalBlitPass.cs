@@ -268,7 +268,7 @@ namespace UnityEngine.Rendering.Universal.Internal
         internal void Render(RenderGraph renderGraph, ContextContainer frameData, UniversalCameraData cameraData, in TextureHandle src, in TextureHandle dest, TextureHandle overlayUITexture)
         {
             using (var builder = renderGraph.AddRasterRenderPass<PassData>(passName, out var passData, profilingSampler))
-            { 
+            {
                 UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
 
                 // Only the UniversalRenderer guarantees that global textures will be available at this point

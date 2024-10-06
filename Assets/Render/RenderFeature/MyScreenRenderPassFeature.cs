@@ -60,7 +60,7 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
 
             RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor;
             desc.colorFormat = RenderTextureFormat.Default;
-            desc.depthStencilFormat = GraphicsFormat.R8_SRGB;
+            desc.depthStencilFormat = GraphicsFormat.None;
             desc.width = (int)(desc.width * scale);
             desc.height= (int)(desc.height * scale);
             TextureHandle outTexHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, blitTexture ? blitName : "TempScreenTex", false);

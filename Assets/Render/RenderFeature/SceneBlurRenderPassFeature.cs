@@ -103,7 +103,7 @@ public class SceneBlurRenderPassFeature : ScriptableRendererFeature
             RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor; 
 
             desc.colorFormat = RenderTextureFormat.Default;
-            desc.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R8_SRGB;
+            desc.depthStencilFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.None;
             TextureHandle depthTextureHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, $"{passName}_destination",
                 settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All);
 

@@ -1,7 +1,6 @@
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using static UnityEngine.Rendering.Universal.UniversalResourceDataBase;
-
 using CommonResourceData = UnityEngine.Rendering.Universal.UniversalResourceData;
 
 namespace UnityEngine.Rendering.Universal
@@ -121,28 +120,9 @@ namespace UnityEngine.Rendering.Universal
             }
             else
             {
-                bool msaaSamplesChangedThisFrame = false;
-#if !UNITY_EDITOR
-                // for safety do this only for the NRP path, even though works also on non NRP, but would need extensive testing
-                if (m_CreateColorTexture && renderGraph.nativeRenderPassesEnabled && Screen.msaaSamples > 1)
-                {
-                    msaaSamplesChangedThisFrame = true;
-                    Screen.SetMSAASamples(1);
-                }
-#endif
-                int numSamples = Mathf.Max(Screen.msaaSamples, 1);
-
-                // Handle edge cases regarding numSamples setup
-                // On OSX & IOS player, the Screen API MSAA samples change request is only applied in the following frame,
-                // as a workaround we keep the old MSAA sample count for the previous frame
-                // this workaround can be removed once the Screen API issue (UUM-42825) is fixed
-                // UPDATE: UUM-42825 is fixed already, but by supplementing relevant document. Thus, this behaviour must be maintained until next plan comes
-                // The editor always allocates the system rendertarget with a single msaa sample
-                // See: ConfigureTargetTexture in PlayModeView.cs
-                if (msaaSamplesChangedThisFrame && (Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.IPhonePlayer))
-                    numSamples = cameraData.cameraTargetDescriptor.msaaSamples;
-                else if (Application.isEditor)
-                    numSamples = 1;
+                // Backbuffer is the final render target, we obtain its number of MSAA samples through Screen API
+                // in some cases we disable multisampling for optimization purpose
+                int numSamples = AdjustAndGetScreenMSAASamples(renderGraph, m_CreateColorTexture);
 
                 //NOTE: Careful what you use here as many of the properties bake-in the camera rect so for example
                 //cameraData.cameraTargetDescriptor.width is the width of the rectangle but not the actual render target
@@ -233,8 +213,8 @@ namespace UnityEngine.Rendering.Universal
             }
 
             var renderTextureScale = m_Renderer2DData.lightRenderTextureScale;
-            var width = (int)(cameraData.cameraTargetDescriptor.width * renderTextureScale);
-            var height = (int)(cameraData.cameraTargetDescriptor.height * renderTextureScale);
+            var width = (int)Mathf.Max(1, cameraData.cameraTargetDescriptor.width * renderTextureScale);
+            var height = (int)Mathf.Max(1, cameraData.cameraTargetDescriptor.height * renderTextureScale);
 
             // Intermediate depth desc (size of renderTextureScale)
             {
@@ -523,6 +503,9 @@ namespace UnityEngine.Rendering.Universal
 
             var cameraSortingLayerBoundsIndex = Render2DLightingPass.GetCameraSortingLayerBoundsIndex(m_Renderer2DData);
 
+            // Set Global Light Textures
+            GlobalLightTexturePass.SetGlobals(renderGraph);
+
             // Main render passes
 
             // Normal Pass
@@ -677,11 +660,7 @@ namespace UnityEngine.Rendering.Universal
                 if (applyFinalPostProcessing)
                     postProcessPass.RenderFinalPassRenderGraph(renderGraph, frameData, in finalColorHandle, commonResourceData.overlayUITexture, in finalBlitTarget, needsColorEncoding);
                 else if (cameraData.resolveFinalTarget)
-                {
-                   // Debug.Log($"camera:{cameraData.camera.name}");
                     m_FinalBlitPass.Render(renderGraph, frameData, cameraData, finalColorHandle, finalBlitTarget, commonResourceData.overlayUITexture);
-                }
-
 
                 finalColorHandle = finalBlitTarget;
 
@@ -719,7 +698,7 @@ namespace UnityEngine.Rendering.Universal
             m_RenderGraphBackbufferColorHandle?.Release();
             m_RenderGraphBackbufferDepthHandle?.Release();
             m_CameraSortingLayerHandle?.Release();
-            m_LightPass.Dispose();
+            Light2DLookupTexture.Release();
         }
     }
 }
