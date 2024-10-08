@@ -78,7 +78,6 @@
 		half _EdgeFadePow;
 
 		half _BlendWater;
-		half _BlendSnow;
 
 		half4 _DissolveTex_ST;
 
@@ -88,7 +87,6 @@
 	#endif
 
 		CBUFFER_END
-		 float _SeasonValue;
 
 		sampler2D _MainTex;
 		sampler2D _WaterTex;
@@ -1163,7 +1161,7 @@
 			   #if !defined(PASS_SHADOW_CASTER)
 					 float2 absUV=float2(i.pos.x/_ScreenParams.x,i.pos.y/_ScreenParams.y); 
 			   float waterValue=tex2D(_WaterTex, absUV).r;
-			   float w_a=waterValue*result.a*_BlendWater+(1-_BlendWater)*result.a; 
+			   float w_a=waterValue*result.a*_BlendWater+(1-_BlendWater)*result.a;
 			   result.a=w_a;
 				#endif
 			  

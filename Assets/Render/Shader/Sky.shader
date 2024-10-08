@@ -65,6 +65,7 @@ Shader "Sky"
          half4 _SkyBottomColor; 
          half _SkyHalfValue;
          half4 _SunColor;
+         half _CloudValue;
         CBUFFER_START(UnityPerMaterial)
             int _Water;
             half4 waterColor;
@@ -245,7 +246,6 @@ Shader "Sky"
                  MirrorTexColor=MirrorTexColor*endWaveColorValue;
                 //return float4(MirrorTexColor.xyz,1);
 
-                half sunValue=(_SunColor.x+_SunColor.y+_SunColor.z)/3;
 
                 //return float4(MirrorTexColor.xyz,1);
                 
@@ -255,11 +255,12 @@ Shader "Sky"
                 _MainColor+=(1-waterColor.a)*_MainTexColor.xyz;
                 _MainColor.xyz*=_WaterMask.r;
 
-                 endWaveColor=endWaveColor.xyz*(1-MirrorValue)*_SunColor.xyz/sunValue+MirrorValue*MirrorTexColor;
+                 endWaveColor=endWaveColor.xyz*(1-MirrorValue)*_SunColor.xyz+MirrorValue*MirrorTexColor;
 
                 float3 outWater=endWaveColor+_MainColor; 
                 outWater=clamp(outWater,0,1);    
                 outWater=outWater+waterColor.xyz*waterColor.a; 
+                outWater*=1-0.25*_CloudValue;
 
                 outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
                 return outWater;

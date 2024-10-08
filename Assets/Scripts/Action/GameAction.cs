@@ -34,6 +34,7 @@ public interface GameAction
 public delegate void SetPanelReference(BaseReference baseReference);
 
 public delegate void SetValue(int value);
+public delegate void SetFloatValue(float value);
 
 public delegate void SetInt3Value(int3 value);
 

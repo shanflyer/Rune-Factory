@@ -101,8 +101,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0022500157, y: 0.0032500029, z: 0}
-    m_Extent: {x: 0.57725, y: 0.59745, z: 0}
+    m_Center: {x: -0.0027500093, y: 0.00455001, z: 0}
+    m_Extent: {x: 0.57445, y: 0.59064996, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -247,8 +247,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0036500096, y: 0.011749983, z: 0}
-    m_Extent: {x: 0.57245, y: 0.58805, z: 0}
+    m_Center: {x: -0.0027500093, y: 0.00455001, z: 0}
+    m_Extent: {x: 0.57445, y: 0.59064996, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -1126,8 +1126,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.0043500066, y: -0.0012499988, z: 0}
-    m_Extent: {x: 0.57355, y: 0.59185004, z: 0}
+    m_Center: {x: -0.0027500093, y: 0.00455001, z: 0}
+    m_Extent: {x: 0.57445, y: 0.59064996, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -1272,8 +1272,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.0043500066, y: 0.005250007, z: 0}
-    m_Extent: {x: 0.57605, y: 0.59755003, z: 0}
+    m_Center: {x: -0.00069999695, y: 0.005549997, z: 0}
+    m_Extent: {x: 0.5745, y: 0.59095, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -1420,8 +1420,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.0015999973, y: 0.012299985, z: 0}
-    m_Extent: {x: 0.58280003, y: 0.59150004, z: 0}
+    m_Center: {x: -0.00069999695, y: 0.005549997, z: 0}
+    m_Extent: {x: 0.5745, y: 0.59095, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -1694,6 +1694,7 @@ GameObject:
   - component: {fileID: 6925488799031551862}
   - component: {fileID: 6433250527686258871}
   - component: {fileID: 2878334405666387259}
+  - component: {fileID: 3725628213151626475}
   m_Layer: 0
   m_Name: Smoke
   m_TagString: Untagged
@@ -6348,6 +6349,23 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &3725628213151626475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5820738066356070960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects:
+  - particleSystem: {fileID: 6433250527686258871}
+    windSpeed:
+      x: 4
+      y: -4
 --- !u!1 &6209684546973212379
 GameObject:
   m_ObjectHideFlags: 0

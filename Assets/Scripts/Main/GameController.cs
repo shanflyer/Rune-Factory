@@ -113,8 +113,10 @@ public class GameController : MonoBehaviour
     public float testSeasonSpeed;
 
     public float _CloudValue;
-    public Vector4 _WindDir, _NoiseSet0, _NoiseSet1;
+
 #endif
+    [SerializeField]
+    private Vector4 _WindDir, _NoiseSet0, _NoiseSet1;
     private float _seasonValue;
 
     [HideInInspector]
@@ -226,8 +228,16 @@ public class GameController : MonoBehaviour
             UI = true
         };
         GameActionManager.instance.QueueAction(switchInputMap, true);
+        ZeroSetCloudGlobal();
         // GameActionManager.instance.AddListener<ZeroWorld>(ZeroWorld);
     }
+    void ZeroSetCloudGlobal()
+    { 
+        Shader.SetGlobalVector("_WindDir", _WindDir);
+        Shader.SetGlobalVector("_NoiseSet0", _NoiseSet0);
+        Shader.SetGlobalVector("_NoiseSet1", _NoiseSet1);
+    }
+
     void TestMoveAction(object obj)
     {
         if (obj != null)

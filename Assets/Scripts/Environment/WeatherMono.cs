@@ -33,31 +33,73 @@ public struct WindData
 [Serializable]
 public struct WindParticleData
 {
-    public ParticleSystem wind, leave, smoke;
+    public ParticleSystem wind, spring,summer,autumn,winter, smoke;
 
     ParticleSystem.EmissionModule windEmission;
-    ParticleSystem.EmissionModule leaveEmission;
+    ParticleSystem.EmissionModule springEmission,summerEmission,autumnEmission,winterEmission;
     ParticleSystem.EmissionModule smokeEmission;
 
-    float windValue, leaveValue, smokeValue;
+    float windValue, springValue,summerValue,autumnValue,winterValue, smokeValue;
     public void InitParticle()
     {
         windEmission = wind.emission;
-        leaveEmission = leave.emission;
+        springEmission = spring.emission;
+        summerEmission = summer.emission;
+        autumnEmission = autumn.emission;
+        winterEmission = winter.emission;
         smokeEmission = smoke.emission;
 
         windValue = windEmission.rateOverTime.constant;
-        leaveValue = leaveEmission.rateOverTime.constant;
+        springValue = springEmission.rateOverTime.constant;
+        summerValue = summerEmission.rateOverTime.constant;
+        autumnValue = autumnEmission.rateOverTime.constant;
+        winterValue = winterEmission.rateOverTime.constant;
+
         smokeValue = smokeEmission.rateOverTime.constant;
 
-        windEmission.enabled = leaveEmission.enabled = smokeEmission.enabled = false;
+        windEmission.enabled = false;
+        springEmission.enabled= false; 
+        summerEmission.enabled= false; 
+        autumnEmission.enabled= false;
+        winterEmission.enabled= false; 
+        smokeEmission.enabled = false;
     }
     public void SetValue(float value)
     {
-        windEmission.enabled = leaveEmission.enabled = smokeEmission.enabled = value > 0;
+        springEmission.enabled = summerEmission.enabled = autumnEmission.enabled =
+            winterEmission.enabled = smokeEmission.enabled = false;
+        float seasonValue = GameTimeManager.instance.SeasonValue;
+        if (seasonValue < 0.1f)
+        {
+            winterEmission.enabled = value > 0;
+            winterEmission.rateOverTime = math.lerp(0, winterValue, value);
+        }
+        else
+        if (seasonValue>0.1f&&seasonValue<1)
+        {
+            springEmission.enabled = value > 0;
+            springEmission.rateOverTime = math.lerp(0, springValue, value);
+        }else if (seasonValue < 2.25f)
+        {
+            summerEmission.enabled = value > 0;
+            summerEmission.rateOverTime = math.lerp(0, summerValue, value);
+        }else if(seasonValue<3.3)
+        {
+            autumnEmission.enabled = value > 0;
+            autumnEmission.rateOverTime = math.lerp(0, autumnValue, value);
+        }
+        else
+        {
+            winterEmission.enabled = value > 0;
+            winterEmission.rateOverTime=math.lerp(0,winterValue, value);
+        }
+
+        windEmission.enabled =  value > 0;
         windEmission.rateOverTime = math.lerp(0, windValue, value);
-        leaveEmission.rateOverTime = math.lerp(0, leaveValue, value);
-        smokeEmission.rateOverTime=math.lerp(0,smokeValue, value);
+        smokeEmission.enabled = value >= 0.25f;
+        float _value = (value - 0.25f) * 1.334f;
+        
+        smokeEmission.rateOverTime=math.lerp(0,smokeValue, _value);
     }
 }
 [Serializable]
@@ -92,7 +134,7 @@ public struct RainParticleData
     }
     public void SetWindValue(float value)
     {
-        velocityOverLifetime.x = 3 * value;
+        velocityOverLifetime.x =- 3 * value;
     }
 }
 [Serializable]
@@ -149,11 +191,11 @@ public struct SnowParticleData
     {
         var _lifeTime = lifeTime * math.lerp(1.0f, 0.4f, math.abs(value));
         mainModule.startLifetime=new ParticleSystem.MinMaxCurve(_lifeTime.x,_lifeTime.y);
-        velocityOverLifetime.y = 0.03f * value;
-        velocityOverLifetime.x = -0.01f * value;
+        velocityOverLifetime.orbitalY = 0.03f * value;
+        velocityOverLifetime.orbitalX = -0.01f * math.abs(value);
     }
 }
-public class WeatherMono : MonoBehaviour
+public class WeatherMono : MonoBehaviour,IGameData
 {
     [SerializeField]
     FogParticleData fogParticle; 
@@ -178,11 +220,27 @@ public class WeatherMono : MonoBehaviour
     }
     public void SetWind(float windValue)
     {
+       // float value = math.abs(windValue);
+       // value = math.lerp(0.5f, 3, value);
+       // value = windValue < 0 ? value : -value;
+        Shader.SetGlobalFloat("_WindValue", windValue);
+
         windData.SetValue(windValue);
         rainParticle.SetWindValue(windValue);
         snowData.SetWindValue(windValue);
     }
 
+    public void Play()
+    {
+        ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams();
+       
+
+        fogParticle.fog.Play();
+        snowData.snow.Play();
+        rainParticle.rain.Play();
+        rainParticle.drop.Play();
+        rainParticle.clouds.Play();
+    }
     public string GetKey()
     {
         return "WeatherMono";
@@ -197,15 +255,28 @@ public class WeatherMono : MonoBehaviour
 
         ParticleSystem left = transform.Find("Wind/Left").GetComponent<ParticleSystem>();
         windData.left.wind = left;
-        ParticleSystem leave = transform.Find("Wind/Left/BlowingLeaves").GetComponent<ParticleSystem>();
-        windData.left.leave = leave;
+        ParticleSystem leftSpring = transform.Find("Wind/Left/Spring").GetComponent<ParticleSystem>();
+        windData.left.spring = leftSpring;
+        ParticleSystem leftSummer = transform.Find("Wind/Left/Summer").GetComponent<ParticleSystem>();
+        windData.left.summer = leftSummer;
+        ParticleSystem leftAutumn = transform.Find("Wind/Left/Autumn").GetComponent<ParticleSystem>();
+        windData.left.autumn = leftAutumn;
+        ParticleSystem leftWinter = transform.Find("Wind/Left/Winter").GetComponent<ParticleSystem>();
+        windData.left.winter = leftWinter;
         ParticleSystem smoke = transform.Find("Wind/Left/SmokeWhiteSoft").GetComponent<ParticleSystem>();
         windData.left.smoke = smoke;
 
         ParticleSystem right = transform.Find("Wind/Right").GetComponent<ParticleSystem>();
         windData.right.wind = right;
-        ParticleSystem rightLeave = transform.Find("Wind/Right/BlowingLeaves").GetComponent<ParticleSystem>();
-        windData.right.leave = rightLeave;
+        ParticleSystem rightSpring = transform.Find("Wind/Right/Spring").GetComponent<ParticleSystem>();
+        windData.right.spring= rightSpring;
+        ParticleSystem rightSummer = transform.Find("Wind/Right/Summer").GetComponent<ParticleSystem>();
+        windData.right.summer = rightSummer;
+        ParticleSystem rightAutumn = transform.Find("Wind/Right/Autumn").GetComponent<ParticleSystem>();
+        windData.right.autumn = rightAutumn;
+        ParticleSystem rightWinter = transform.Find("Wind/Right/Winter").GetComponent<ParticleSystem>();
+        windData.right.winter= rightWinter;
+
         ParticleSystem rightSmoke = transform.Find("Wind/Right/SmokeWhiteSoft").GetComponent<ParticleSystem>();
         windData.right.smoke = rightSmoke;
 

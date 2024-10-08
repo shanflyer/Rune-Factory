@@ -26,6 +26,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 {
     public override bool NeedUpdata => true;
     SkyEnviromentMono skyEnviromentMono;
+    public SkyEnviromentMono SkyEnviromentMono =>skyEnviromentMono;
     ProFlare flare => skyEnviromentMono.ProFlare;
     Transform sunTransform => skyEnviromentMono.Sun;
     Light2D globalLight=> skyEnviromentMono.GlobalLight;
@@ -94,35 +95,46 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     private EnvironmentLightData natureLightData;
     private EnvironmentLightData overrideLightData;
     bool overSkyAndSun;
-    private Weather weather;
+    private Weather nowWeather;
     private bool overrideEnvironment;
 
+    private HashSet<WindEffect> windEffects = new HashSet<WindEffect>();
+    public void AddWindEffect(WindEffect windEffect)
+    {
+        windEffects.Add(windEffect);
+        windEffect.SetWindValue(nowWeather.wind);
+    }
+    public void RemoveWindEffect(WindEffect windEffect)
+    {
+        windEffects.Remove(windEffect);
+    }
 
     void SetWeather(SetWeather setWeather)
-    {
-        weather = setWeather.weather; 
-        //RefreshEnvironment();
-        var lerp = LerpWeather(weather);
-        GameObjectCurveController.instance.StartIEnumerator(lerp);
-        //skyEnviromentMono.SetWeather(setWeather.weather);
+    { 
+        var lerp = LerpWeather(setWeather.weather);
+        GameObjectCurveController.instance.StartIEnumerator(lerp); 
     }
 
     IEnumerator LerpWeather(Weather newWeather)
     {
         float timeValue = 0;
-        bool oldDamp = !weather.IsSnow() && weather.waterFall > 0;
+        bool oldDamp = !nowWeather.IsSnow() && nowWeather.waterFall > 0;
         bool newDamp= !newWeather.IsSnow() && newWeather.waterFall > 0;
+        Weather weather = nowWeather;
         while (timeValue<=2)
         {
             float value = timeValue / 2.0f;
-            float waterFall=math.lerp(weather.waterFall,newWeather.waterFall,value);
-            float fog = math.lerp(weather.fog, newWeather.fog, value);
-            float wind = math.lerp(weather.wind, newWeather.wind, value);
-            float cloud = math.lerp(weather.cloud, newWeather.cloud, value);
-            skyEnviromentMono.SetWeather(waterFall,fog,wind,cloud);
-
-            float weatherLightValue=math.lerp(weather.GetWeatherLight(),newWeather.GetWeatherLight(),value);
-            float flareLight = math.lerp(weather.GetFlareLight(), newWeather.GetFlareLight(), value);
+            nowWeather = Weather.Lerp(weather, newWeather, value);
+            skyEnviromentMono.SetWeather(nowWeather);
+            using(var e = windEffects.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    e.Current.SetWindValue(nowWeather.wind);
+                }
+            }
+            float weatherLightValue= nowWeather.GetWeatherLight();
+            float flareLight = nowWeather.GetFlareLight();
             RefreshEnvironment(weatherLightValue, flareLight);
 
             if (oldDamp && !newDamp)
@@ -143,9 +155,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
             timeValue += Time.deltaTime;
             yield return 0;
-        }
-        skyEnviromentMono.SetWeather(newWeather);
-        weather = newWeather;
+        } 
+        nowWeather = newWeather;
     }
 
 
@@ -169,13 +180,18 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             skyBottomColor.a = skyBottomColorA;
 
             Color flareColor = natureLightData.flareColor; 
-            flareColor *= weatherLightValue* flareLight; 
+            flareColor *= weatherLightValue* flareLight;
+
+            Color sunColor = natureLightData.sunColor;
+            float sunColorA = sunColor.a;
+            sunColor*= weatherLightValue;
+            sunColor.a = sunColorA;
 
             Shader.SetGlobalColor("_CloudColor", cloudColor);
             Shader.SetGlobalColor("_SkyTopColor", skyTopColor);
             Shader.SetGlobalColor("_SkyBottomColor", skyBottomColor);
             Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
-            Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
+            Shader.SetGlobalColor("_SunColor", sunColor);
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
             if (sunTransform)
             {
@@ -232,6 +248,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 flareColor *= weatherLightValue * flareLight;
 
 
+
                 Shader.SetGlobalColor("_CloudColor", cloudColor);
                 Shader.SetGlobalColor("_SkyTopColor", skyTopColor);
                 Shader.SetGlobalColor("_SkyBottomColor", skyBottomColor);
@@ -251,7 +268,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     private void SetEnvironmentLight(SetEnvironmentLight SetEnvironmentLight)
     {
         natureLightData = SetEnvironmentLight.environmentLightData;
-        RefreshEnvironment(weather.GetWeatherLight(),weather.GetFlareLight()); 
+        RefreshEnvironment(nowWeather.GetWeatherLight(),nowWeather.GetFlareLight()); 
     }
 
     private void OverrideEnvironmentLight(OverrideEnvironmentLight OverrideEnvironmentLight)
@@ -259,7 +276,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         overrideLightData = OverrideEnvironmentLight.environmentLightData;
         overrideEnvironment = true;
         overSkyAndSun = OverrideEnvironmentLight.overSkyAndSun;
-        RefreshEnvironment(weather.GetWeatherLight(), weather.GetFlareLight());
+        RefreshEnvironment(nowWeather.GetWeatherLight(), nowWeather.GetFlareLight());
     }
 
     private void ClearOverrideEnvironmentLight(ClearOverrideEnvironmentLight clearOverrideEnvironmentLight)
@@ -296,16 +313,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     protected override void Clear()
     {
         base.Clear();
-    }
-    public float cloudValue = 1;
-    float oldCloudValue = 1;
+    } 
     protected override void UpData()
     {
-        if (cloudValue != oldCloudValue)
-        {
-            oldCloudValue = cloudValue;
-            Shader.SetGlobalFloat("_CloudValue", cloudValue);
-        }
+         
         base.UpData();
     }
 }

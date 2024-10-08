@@ -23,8 +23,7 @@ Shader "MySprite-Lit-Default"
         _WindNoiseTexture("Wind Noise Texture", 2D) = "white" {}
         _WindScroll("Wind Scroll", Range( 0 , 3)) = 0.1
 		_WindJitter("Wind Jitter", Range( 0 , 3)) = 0.1
-        _WindNoiseValue("WindNoiseValue",Range(0,1))=0
-        _WindValue("WindValue", Range( 0 , 3)) = 1
+        _WindNoiseValue("WindNoiseValue",Range(0,1))=0 
         [Toggle]_GrassBlend("_GrassBlend",int)=0
         
 
@@ -344,11 +343,12 @@ Shader "MySprite-Lit-Default"
         float4 _WindDir;
         float4 _NoiseSet0;
         float4 _NoiseSet1; 
+        float _WindValue; 
         CBUFFER_START(UnityPerMaterial)
 			float3 _BlendColor;
 			float _BlendValue;
 			float _BlendRmapMin;
-            float _WindValue; 
+            
             float _ScaleValue;  
             float _ClipValue;
             int _Tree3D;
@@ -579,9 +579,14 @@ Shader "MySprite-Lit-Default"
 				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
 
                 float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
+
+                float windValue=lerp(1,2,abs(_WindValue));
                 //return float2(moveValue.x,moveValue.x);
-                float value=moveValue.x*_WindNoiseValue;
+                float value=moveValue.x*_WindNoiseValue*windValue;
                 offset=WindNoise0.x*WindNoise1.x*value*SnowMove;
+                int stepWind=step(0,_WindValue);
+                offset.x=offset.x*stepWind-offset.x*(1-stepWind);
+
                 return offset+uv;
             }
 
@@ -711,10 +716,14 @@ Shader "MySprite-Lit-Default"
                 float4 WindNoise0=pow(SAMPLE_TEXTURE2D_LOD( _WindNoiseTexture,sampler_WindNoiseTexture, panner63,1) , 2.5);
 				float4 WindNoise1=SAMPLE_TEXTURE2D_LOD( _WindNoiseTexture,sampler_WindNoiseTexture, panner74,1); 
 				float4 WindScroll = WindNoise0*WindNoise1 * v.color;
-                vertexValue += WindScroll.rgb*_WindValue*(1-s_w); 
+                float windValue=lerp(0.5,3,abs(_WindValue));
+                int stepWind=step(0,_WindValue);
+                windValue=-stepWind*windValue+(1-stepWind)*windValue;
+                vertexValue += WindScroll.rgb*windValue*(1-s_w); 
 		  
                 o.worldPos=half4(worldPos.xyz,1);
-                v.positionOS.xyz += vertexValue; 
+                v.positionOS.xz += vertexValue; 
+                v.positionOS.y+=abs(vertexValue);
 				o.positionCS =TransformObjectToHClip(v.positionOS.xyz); //TransformWorldToHClip(worldPos); 
                 o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
 				return o;
@@ -943,13 +952,13 @@ Shader "MySprite-Lit-Default"
                 {
                    waterColor=DampColor(waterColor,i.lightingUV,uv); 
                 } 
-                 waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
+                // waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
                  main.xyz*=i.color.xyz;
                 if(_Water==1)
                 {
                     waterColor=WaterFragment(uv,i.lightingUV,main);
                 }
-                return float4(waterColor.xyz,main.a);
+               //return float4(waterColor.xyz,main.a);
 
                
                
@@ -1093,7 +1102,7 @@ Shader "MySprite-Lit-Default"
                 s_w+=s_w1;
                 texColor=texColor*(1-s_w)+SnowColor*s_w*_SnowColor;
 
-                texColor.xyz=BlendScreenCloudColor(texColor.xyz,IN.lightingUV);
+               //texColor.xyz=BlendScreenCloudColor(texColor.xyz,IN.lightingUV);
 
 
 				float Alpha = texColor.a;  
@@ -1175,9 +1184,14 @@ Shader "MySprite-Lit-Default"
 				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
 
                 float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
+                float windValue=lerp(1,2,abs(_WindValue));
                 //return float2(moveValue.x,moveValue.x);
-                float value=moveValue.x*_WindNoiseValue;
-                return WindNoise0.x*WindNoise1.x*value*SnowMove+uv;
+                float value=moveValue.x*_WindNoiseValue*windValue;
+                float  offset=WindNoise0.x*WindNoise1.x*value*SnowMove;
+                int stepWind=step(0,_WindValue);
+                offset.x=offset.x*stepWind-offset.x*(1-stepWind);
+
+                return offset+uv;
             }
             Varyings TreeVert (Attributes v )
 			{ 
@@ -1212,10 +1226,12 @@ Shader "MySprite-Lit-Default"
                 Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
                 s_w1=clamp(s_w1,0,1);
                 s_w+=s_w1; 
-                vertexValue += WindScroll.rgb*_WindValue*(1-s_w);
-
-
-                v.positionOS.xyz += vertexValue;  
+                float windValue=lerp(0.5,3,abs(_WindValue));
+                int stepWind=step(0,_WindValue);
+                windValue=-stepWind*windValue+(1-stepWind)*windValue;
+                vertexValue += WindScroll.rgb*windValue*(1-s_w); 
+                v.positionOS.xz += vertexValue; 
+                v.positionOS.y+=abs(vertexValue);  
                 o.positionCS = TransformObjectToHClip(v.positionOS.xyz);   
 				return o;
 			} 

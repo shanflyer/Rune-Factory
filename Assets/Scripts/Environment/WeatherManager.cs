@@ -12,6 +12,19 @@ public struct Weather
     public float fog;
     public float wind;
     public float waterFall;
+
+    public static Weather Lerp(Weather weather0, Weather weather1,float value) 
+    {
+        Weather weather = new Weather
+        {
+            cloud = math.lerp(weather0.cloud, weather1.cloud, value),
+            temperature = math.lerp(weather0.temperature, weather1.temperature, value),
+            fog = math.lerp(weather0.fog, weather1.fog, value),
+            wind = math.lerp(weather0.wind, weather1.wind, value),
+            waterFall = math.lerp(weather0.waterFall, weather1.waterFall, value),
+        };
+        return weather;
+    }
     public bool IsSnow()
     {
         float seasonValue = GameTimeManager.instance.SeasonValue;
