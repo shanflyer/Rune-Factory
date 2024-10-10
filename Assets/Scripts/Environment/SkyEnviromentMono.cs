@@ -122,6 +122,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             sun.gameObject.SetActive(true);
             sunClollider.enabled = true;
             ProFlareBatch.gameObject.SetActive(true);
+            ProFlareBatch.ForceRefresh();
         }
         else
         {
@@ -136,6 +137,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             {
                 ProFlareBatch.gameObject.SetActive(true);
                 ProFlareBatch.SetTrigger2DGameObject(true);
+                ProFlareBatch.ForceRefresh();
             }
             else
             {

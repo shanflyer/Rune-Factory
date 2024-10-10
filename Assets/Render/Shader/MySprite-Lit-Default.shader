@@ -304,7 +304,7 @@ Shader "MySprite-Lit-Default"
             TEXTURE2D(_WaterNormalMap);
             SAMPLER(sampler_WaterNormalMap);
             TEXTURE2D(_DepthTex);
-            SAMPLER(sampler_DepthTex); 
+            SAMPLER(sampler_DepthTex);  
             TEXTURE2D(_NormalMap);
             SAMPLER(sampler_NormalMap); 
             TEXTURE2D(_WindNoiseTexture);
@@ -1578,7 +1578,7 @@ Shader "MySprite-Lit-Default"
 
                 
                 o.color.x=clamp(high,0,1);                 
-                o.color.y= worldClip.y;
+                o.color.yz= worldClip.xy;
                 return o;
             }
 
@@ -1587,25 +1587,29 @@ Shader "MySprite-Lit-Default"
                 float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
                 half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
-
+                 
                 half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
                 half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
                 half depthStep_B=step(0.01,abs(DepthTex.b-0.5));
+                half depthStep_ZeroB=step(0.01,DepthTex.b);
+                half stepDepthOne=step(1,DepthTex.b);
 
                 half otherStep=depthStep_R*depthStep_G+depthStep_B; 
-                otherStep=1-clamp(otherStep,0,1);
+                otherStep=clamp(otherStep,0,1)*depthStep_ZeroB;
+               // return float4(otherStep.xxx,mainTex.a);
 
-                half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*otherStep; 
+                half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*(1-stepDepthOne)*otherStep; 
                 half offset=depthValue*512*4/_ScreenParams.y;
 
                
-                half depth=i.color.y+offset;
+                half depth=i.color.z+offset;
                 half setpHigh=depthStep_G; 
 
                 half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
 
-
-                mainTex.xyz=half3(depth,high,_NormalColor.g);
+              
+                mainTex.xyz=half3(depth,high,_NormalColor.g*0.5+stepDepthOne);
+                mainTex.a=mainTex.a*(1-stepDepthOne)+DepthTex.a*stepDepthOne;
                  clip(mainTex.a-_ClipValue);
 
                // mainTex.xyz=otherStep.xxx;
