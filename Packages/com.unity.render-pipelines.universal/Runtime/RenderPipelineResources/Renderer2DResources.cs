@@ -15,13 +15,18 @@ namespace UnityEngine.Rendering.Universal
 
         [SerializeField, ResourcePath("Shaders/2D/Light2D.shader")]
         Shader m_LightShader;
-
         internal Shader lightShader
         {
             get => m_LightShader;
             set => this.SetValueAndNotify(ref m_LightShader, value, nameof(m_LightShader));
         }
-
+        [SerializeField, ResourcePath("Shaders/2D/View2D.shader")]
+        Shader m_ViewShader;
+        internal Shader viewShader
+        {
+            get => m_ViewShader;
+            set => this.SetValueAndNotify(ref m_ViewShader, value, nameof(m_ViewShader));
+        } 
         [SerializeField, ResourcePath("Shaders/2D/Shadow2D-Projected.shader")]
         Shader m_ProjectedShadowShader;
         internal Shader projectedShadowShader

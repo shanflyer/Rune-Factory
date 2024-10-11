@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
-  m_Name: MyDepth
+  m_Name: ObjDepth
   m_EditorClassIdentifier: 
   checkCameraTag: 1
   cameraTag: MainCamera
@@ -80,10 +80,10 @@ MonoBehaviour:
       m_Bits: 455057
     overrideMat: {fileID: 0}
     ShaderTags:
-    - MyDepth
+    - ObjDepth
     afterRenderMaterial: {fileID: 0}
     afterPassId: 0
-    textureName: _MyDepthTex
+    textureName: _ObjDepthTex
     blitScale: 1
     blitToCameraTarget: 0
     clearFlag: 1
@@ -127,6 +127,50 @@ MonoBehaviour:
   blitName: 
   scale: 1
   blitTexture: 0
+--- !u!114 &-2393396154472095211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: CharacterDepth
+  m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
+  m_Active: 1
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 400
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - CharacterDepth
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _CharacterDepthTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 1
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &-1919989437086517868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,9 +302,10 @@ MonoBehaviour:
   - {fileID: 142935280726465048}
   - {fileID: -1919989437086517868}
   - {fileID: -7700621039921025094}
+  - {fileID: -2393396154472095211}
   - {fileID: 5208366081940331415}
   - {fileID: 8718721150439679252}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14f041d91f9851a0cfc10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e52195971b3f3e5bd547481465a44bb11eff78
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14f041d91f9851a0cfc10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e5219515a2e7d5e0f2c8de971b3f3e5bd547481465a44bb11eff78
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2

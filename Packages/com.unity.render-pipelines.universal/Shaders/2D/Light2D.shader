@@ -302,6 +302,7 @@ Shader "Hidden/Light2D"
                 noise1=clamp(noise1,0,1);
                 float cloud=noise0+noise1; 
                 cloud=clamp(cloud,0,1);
+                Unity_Remap_float(cloud,float2(0,1),float2(0,0.5),cloud);
                  // return noise1.xxx;
                 
                 col=col.xyz*(1-cloud.x);

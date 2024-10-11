@@ -53,7 +53,7 @@
     #define NORMALS_LIGHTING_VARIABLES \
             TEXTURE2D(_NormalMap); \
             SAMPLER(sampler_NormalMap);
-#else
+#else 
     #define NORMALS_LIGHTING_COORDS(TEXCOORDA, TEXCOORDB)
     #define NORMALS_LIGHTING_VARIABLES
     #define Directional_NORMALS_LIGHTING(output, lightPosition, lightZDistance)

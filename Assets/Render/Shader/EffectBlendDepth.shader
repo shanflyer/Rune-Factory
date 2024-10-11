@@ -64,8 +64,11 @@ Shader "EffectBlendDepth"
             TEXTURE2D(_BlurTex);
             SAMPLER(sampler_BlurTex);
         
-            TEXTURE2D(_MyDepthTex);
-            SAMPLER(sampler_MyDepthTex); 
+           TEXTURE2D(_CharacterDepthTex);
+            SAMPLER(sampler_CharacterDepthTex); 
+
+            TEXTURE2D(_ObjDepthTex);
+            SAMPLER(sampler_ObjDepthTex); 
 
             v2f vert(appdata_t v)
             {
@@ -90,7 +93,12 @@ Shader "EffectBlendDepth"
                 half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv)*IN.color; 
 
                 half centerY=IN.playerUV.y;  
-                half4 myDepthColor=SAMPLE_TEXTURE2D(_MyDepthTex,sampler_MyDepthTex, IN.uv1); 
+
+                 half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, IN.uv);
+                half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, IN.uv);
+                int stepCharacter=step(objDepthColor.r+objDepthColor.g+objDepthColor.b,0);
+                half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor; 
+
                 float x=myDepthColor.x;
                 Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
                 x=clamp(x,0,1)*step(centerY-_BlurOffsetPos,myDepthColor.x); 

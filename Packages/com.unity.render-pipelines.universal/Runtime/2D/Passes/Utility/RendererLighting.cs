@@ -677,8 +677,10 @@ namespace UnityEngine.Rendering.Universal
             var fastQualityBit = (light.normalMapQuality == Light2D.NormalMapQuality.Fast) ? 1u << bitIndex : 0u;
             bitIndex++;
             var useNormalMap = light.normalMapQuality != Light2D.NormalMapQuality.Disabled ? 1u << bitIndex : 0u;
+            bitIndex++;
+            var isView= light.IsView ? 1u << bitIndex : 0u;
 
-            return fastQualityBit | pointCookieBit | additiveBit | shapeBit | volumeBit | useNormalMap;
+            return fastQualityBit | pointCookieBit | additiveBit | shapeBit | volumeBit | useNormalMap| isView;
         }
 
         private static Material CreateLightMaterial(Renderer2DData rendererData, Light2D light, bool isVolume)
@@ -688,7 +690,7 @@ namespace UnityEngine.Rendering.Universal
 
             var isPoint = light.isPointLight;
 
-            Material material = CoreUtils.CreateEngineMaterial(resources.lightShader);
+            Material material = CoreUtils.CreateEngineMaterial(light.IsView? resources.viewShader : resources.lightShader);
 
             if (!isVolume)
             {

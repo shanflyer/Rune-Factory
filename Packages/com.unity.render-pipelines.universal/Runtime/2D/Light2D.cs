@@ -164,6 +164,8 @@ namespace UnityEngine.Rendering.Universal
         [SerializeField] bool m_ShadowVolumeIntensityEnabled = false;
         [Range(0, 1)]
         [SerializeField] float m_ShadowVolumeIntensity = 0.75f;
+        [SerializeField] bool m_isView = false;
+        public bool IsView => m_isView;
 
         Mesh m_Mesh;
 

@@ -36,7 +36,7 @@ public struct Weather
     {
         float fogValue =(1- fog) * 0.25f + 0.75f;
         float cloudValue = (1-cloud) * 0.25f + 0.75f;
-        float waterFallValue=(1- waterFall) * 0.4f + 0.6f;
+        float waterFallValue=(1- waterFall) * 0.3f + 0.7f;
         if (waterFall > 0.5f)
         {
             return waterFallValue;

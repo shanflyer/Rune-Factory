@@ -73,7 +73,7 @@ namespace UnityEditor.Rendering.Universal
             public static GUIContent lightTypePoint = new GUIContent("Spot", Resources.Load("InspectorIcons/PointLight") as Texture);
             public static GUIContent lightTypeGlobal = new GUIContent("Global", Resources.Load("InspectorIcons/GlobalLight") as Texture);
             public static GUIContent lightDirectional = new GUIContent("Directional", Resources.Load("InspectorIcons/GlobalLight") as Texture);
-            public static GUIContent[] lightTypeOptions = new GUIContent[] { lightTypeFreeform, lightTypeSprite, lightTypePoint, lightTypeGlobal };
+            public static GUIContent[] lightTypeOptions = new GUIContent[] { lightTypeFreeform, lightTypeSprite, lightTypePoint, lightTypeGlobal, lightDirectional };
 
 
             public static GUIContent blendingSettingsFoldout = EditorGUIUtility.TrTextContent("Blending", "Options used for blending");
@@ -84,6 +84,7 @@ namespace UnityEditor.Rendering.Universal
             public static GUIContent generalLightType = EditorGUIUtility.TrTextContent("Light Type", "Select the light type. \n\nGlobal Light: For ambient light. \nSpot Light: For a spot light / point light. \nFreeform Light: For a custom shape light. \nSprite Light: For a custom light cookie using Sprites.");
 
             public static GUIContent generalDirection = EditorGUIUtility.TrTextContent("Direction", "Direction");
+            public static GUIContent generalIsView = EditorGUIUtility.TrTextContent("IsView ", "IsView");
 
             public static GUIContent generalFalloffSize = EditorGUIUtility.TrTextContent("Falloff", "Adjusts the falloff area of this light. The higher the falloff value, the larger area the falloff spans.");
             public static GUIContent generalFalloffIntensity = EditorGUIUtility.TrTextContent("Falloff Strength", "Adjusts the falloff curve to control the softness of this light’s edges. The higher the falloff strength, the softer the edges of this light.");
@@ -132,6 +133,7 @@ namespace UnityEditor.Rendering.Universal
         const float k_RangeCapSize = 0.025f * k_GlobalLightGizmoSize;
         const float k_InnerRangeCapSize = 0.08f * k_GlobalLightGizmoSize;
 
+        SerializedProperty m_IsView;
         SerializedProperty m_LightType;
         SerializedProperty m_LightColor;
         SerializedProperty m_LightDirection;
@@ -229,6 +231,7 @@ namespace UnityEditor.Rendering.Universal
             m_VolumetricSettingsFoldout = new SavedBool($"{target.GetType()}.2DURPVolumetricSettingsFoldout", false);
             m_NormalMapsSettingsFoldout = new SavedBool($"{target.GetType()}.2DURPNormalMapsSettingsFoldout", false);
 
+            m_IsView = serializedObject.FindProperty("m_isView");
             m_LightType = serializedObject.FindProperty("m_LightType");
             m_LightColor = serializedObject.FindProperty("m_Color");
             m_LightDirection = serializedObject.FindProperty("m_Direction");
@@ -550,7 +553,8 @@ namespace UnityEditor.Rendering.Universal
         bool DrawLightCommon()
         {
             var meshChanged = false;
-            Rect lightTypeRect = EditorGUILayout.GetControlRect();
+            EditorGUILayout.PropertyField(m_IsView, Styles.generalIsView);
+            Rect lightTypeRect = EditorGUILayout.GetControlRect(); 
             EditorGUI.BeginProperty(lightTypeRect, GUIContent.none, m_LightType);
             EditorGUI.BeginChangeCheck();
             int newLightType = EditorGUI.Popup(lightTypeRect, Styles.generalLightType, m_LightType.intValue - 1, Styles.lightTypeOptions);  // -1 is a bit hacky its to support compatibiltiy. We need something better.

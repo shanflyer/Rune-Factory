@@ -82,6 +82,12 @@ Shader "BlendBlur"
             TEXTURE2D(_MyDepthTex);
             SAMPLER(sampler_MyDepthTex); 
 
+            TEXTURE2D(_CharacterDepthTex);
+            SAMPLER(sampler_CharacterDepthTex); 
+
+            TEXTURE2D(_ObjDepthTex);
+            SAMPLER(sampler_ObjDepthTex); 
+
             v2f vert(appdata_t v)
             {
                 v2f OUT;
@@ -120,7 +126,10 @@ Shader "BlendBlur"
                 half centerY=IN.playerUV.y;
                 //return half4(IN.playerUV.yyy,1);
 
-                half4 myDepthColor=SAMPLE_TEXTURE2D(_MyDepthTex,sampler_MyDepthTex, IN.uv);
+                half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, IN.uv);
+                half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, IN.uv);
+                int stepCharacter=step(objDepthColor.r+objDepthColor.g+objDepthColor.b,0);
+                half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor;
                 //return myDepthColor;
 
                 //return myDepthColor;
