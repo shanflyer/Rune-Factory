@@ -105,8 +105,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensity: 0.75
   m_isView: 0
   m_LocalBounds:
-    m_Center: {x: -0.00015000254, y: 0.11395001, z: 0}
-    m_Extent: {x: 0.19435, y: 0.29975, z: 0}
+    m_Center: {x: 0.0023500025, y: 0.1152, z: 0}
+    m_Extent: {x: 0.19125, y: 0.3, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -337,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -549,6 +551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:

@@ -1064,10 +1064,11 @@ public class CharacterManager : Singleton<CharacterManager>
                 await SetPlayerPos(character,true);
                 await WorldMapObjManager.instance.DisplayMap(targetMap);
 
+                /*
                 GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 500), () =>
                 { 
                     EnvironmentManger.instance.SkyEnviromentMono.PlayWeather(); 
-                });
+                });*/
 
 
                 GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
@@ -1100,7 +1101,6 @@ public class CharacterManager : Singleton<CharacterManager>
                             characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
                         }
                         character.canMove = true;
-                       
                     }
                     GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
                 });

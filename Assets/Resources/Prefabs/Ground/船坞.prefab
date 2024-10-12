@@ -3884,6 +3884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -6515,6 +6516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -7423,8 +7425,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensity: 0.75
   m_isView: 0
   m_LocalBounds:
-    m_Center: {x: 0.15509999, y: -0.010399997, z: 0}
-    m_Extent: {x: 0.8169, y: 0.5449, z: 0}
+    m_Center: {x: 0.17300001, y: -0.017149985, z: 0}
+    m_Extent: {x: 0.799, y: 0.55165, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -7435,8 +7437,8 @@ MonoBehaviour:
   m_ShapeLightFalloffSize: 0.16
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
-  - {x: -0.5022644, y: -0.3943262, z: 0}
-  - {x: 0.8023208, y: -0.3809042, z: 0}
+  - {x: -0.46175444, y: -0.40782952, z: 0}
+  - {x: 0.80907243, y: -0.40115905, z: 0}
   - {x: 0.81303805, y: 0.36753392, z: 0}
   - {x: -0.46537435, y: 0.37419963, z: 0}
 --- !u!114 &6923525946428739631
@@ -7451,6 +7453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -7653,6 +7656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -8597,6 +8601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -10513,10 +10518,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1374908703416076356, guid: cc04e338c959ce14d9b740db9c422330,
+        type: 3}
+      propertyPath: blendWeatherLight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3911343803691085767, guid: cc04e338c959ce14d9b740db9c422330,
+        type: 3}
+      propertyPath: blendWeatherLight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7437845026514804368, guid: cc04e338c959ce14d9b740db9c422330,
         type: 3}
       propertyPath: m_Name
       value: "\u5916\u7A97_47"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7877709084991762617, guid: cc04e338c959ce14d9b740db9c422330,
+        type: 3}
+      propertyPath: blendWeatherLight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8041182904230360148, guid: cc04e338c959ce14d9b740db9c422330,
         type: 3}

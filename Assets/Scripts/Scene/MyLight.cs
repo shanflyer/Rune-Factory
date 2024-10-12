@@ -10,6 +10,8 @@ using UnityEditor;
 public class MyLight : MonoBehaviour
 {
     [SerializeField]
+    bool blendWeatherLight;
+    [SerializeField]
     private bool lerpPs;
     [SerializeField]
     private ParticleSystem[] ps;
@@ -67,7 +69,8 @@ public class MyLight : MonoBehaviour
             _intensity = value;
             if (light2D)
             {
-                light2D.intensity = value;
+                float weatherLight = EnvironmentManger.instance.weatherLight+ EnvironmentManger.instance.lightningLight;
+                light2D.intensity = blendWeatherLight ? value * weatherLight : value;
             }
         }
 
@@ -86,13 +89,18 @@ public class MyLight : MonoBehaviour
         set
         {
             _color = value;
+            float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
             if (light2D)
             {
-                light2D.color= value;
+                light2D.color= blendWeatherLight?value* weatherLight : value;
             }
             if (spriteRenderer)
             {
-                spriteRenderer.color = _color;
+                Color color1 = _color;
+                float a = _color.a;
+                color1*= weatherLight;
+                color1.a=a;
+                spriteRenderer.color = blendWeatherLight ?color1: _color;
             }
 
         }

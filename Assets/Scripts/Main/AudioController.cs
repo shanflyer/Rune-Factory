@@ -99,9 +99,9 @@ public class AudioController : Singleton<AudioController>
     private void PlaySE(AudioClip audioClip, bool loop = false)
     {
         try
-        {
-            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(seGraph, audioClip, loop);
-            seOut.SetSourcePlayable(audioClipPlayable);
+        { 
+            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(seGraph, audioClip, loop); 
+            seOut.SetSourcePlayable(audioClipPlayable); 
             seGraph.Play();
         }
         catch (Exception e)

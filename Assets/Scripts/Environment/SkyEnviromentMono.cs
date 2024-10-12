@@ -43,9 +43,10 @@ public struct SkyCloudData
     }
     
 }
+ 
 
 public class SkyEnviromentMono : MonoBehaviour, IGameData
-{
+{ 
     [SerializeField]
     ProFlare proFlare;
     [SerializeField]
@@ -105,10 +106,10 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     float2 cameraOffset;
 
     public SetFloatValue setWindValue;
-    public void PlayWeather()
-    {
-       // weatherMono.Play();
-    }
+
+ 
+
+   
     async void DisplaySky(DisplaySky displaySky)
     {
         bgOffset =float4.zero;
@@ -176,20 +177,20 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         CameraManager.instance.SetCameraOffset(new Vector2(0, cameraOffsetY));
     }
 
-    public void SetWeather(Weather weather)
+    public void SetWeather(Weather weather,float lightningLight,bool immediatelyStop=false)
     { 
         if (weather.IsSnow())
         {
-            weatherMono.SetRain(0);
-            weatherMono.SetSnow(weather.waterFall);
+            weatherMono.SetRain(0, immediatelyStop);
+            weatherMono.SetSnow(weather.waterFall, immediatelyStop);
         }
         else
         {
-            weatherMono.SetSnow(0);
-            weatherMono.SetRain(weather.waterFall);
+            weatherMono.SetSnow(0, immediatelyStop);
+            weatherMono.SetRain(weather.waterFall, immediatelyStop);
         }
-        weatherMono.SetFog(weather.fog);
-        weatherMono.SetWind(weather.wind);
+        weatherMono.SetFog(weather.fog, immediatelyStop);
+        weatherMono.SetWind(weather.wind, immediatelyStop);
         float cloudValue = weather.waterFall * 3;
         float cloud = weather.cloud;
         if (cloudValue > weather.cloud)
@@ -197,6 +198,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             cloud = cloudValue;
         }
         cloud = cloud > 1 ? 1 : cloud;
+        cloud *= (1 - lightningLight);
         skyCloud.SetCloudValue(cloud);
         skyCloud.SetWindValue(weather.wind);
         Shader.SetGlobalFloat("_CloudValue", cloud);

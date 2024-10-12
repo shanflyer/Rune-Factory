@@ -929,7 +929,7 @@ Shader "MySprite-Lit-Default"
                    waterColor=DampColor(waterColor,i.lightingUV,uv); 
                 } 
                 // waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
-                 main.xyz*=i.color.xyz;
+                main.xyz=waterColor.xyz;
                 if(_Water==1)
                 {
                     waterColor=WaterFragment(uv,i.lightingUV,main);
@@ -1587,10 +1587,11 @@ Shader "MySprite-Lit-Default"
 
               
                 mainTex.xyz=half3(depth,high,_NormalColor.g*0.5+stepDepthOne);
-                mainTex.y+=ObjDepthTex.y;
+               // mainTex.y+=ObjDepthTex.y;
                 mainTex.z+=ObjDepthTex.z;
                 mainTex.a=mainTex.a*(1-stepDepthOne)+DepthTex.a*stepDepthOne;
- 
+
+               // mainTex.xyz=half3(0,0,ObjDepthTex.z); 
 
 
 
@@ -1654,6 +1655,7 @@ Shader "MySprite-Lit-Default"
                 float stepPosZ=step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
+                _objSortPos.y+=_objSortPos.z;
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 
                 float high=(1-stepPosZ)*(objWroldPos.y-ObjPos.y)*0.5;
                 float positionCSY=o.positionCS.y;  
@@ -1671,6 +1673,8 @@ Shader "MySprite-Lit-Default"
             {
                 float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
+                float clipA=1-step(DepthTex.a,0);
+                DepthTex.xyz*=clipA;
                 half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
                  
                 half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
@@ -1679,26 +1683,35 @@ Shader "MySprite-Lit-Default"
                 half depthStep_ZeroB=step(0.01,DepthTex.b);
                 half stepDepthOne=step(1,DepthTex.b);
 
+                int clearColor=1-step(DepthTex.b,0)*step(DepthTex.r,0)*step(DepthTex.g,0);
+
                 half otherStep=depthStep_R*depthStep_G+depthStep_B; 
                 otherStep=clamp(otherStep,0,1)*depthStep_ZeroB;
-               // return float4(otherStep.xxx,mainTex.a);
+               
 
                 half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*(1-stepDepthOne)*otherStep; 
                 half offset=depthValue*512*4/_ScreenParams.y;
 
                
-                half depth=i.color.z+offset;
+                half depth=i.color.z+offset*clearColor;
                 half setpHigh=depthStep_G; 
+
+                 //return float4(depth.xxx,mainTex.a);
 
                 half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 
                 mainTex.xyz=half3(depth,high,_NormalColor.g*0.5+stepDepthOne)*(1-_Character);
+               
+                
 
                 half absUv=length(i.screenUV-i.color.yz);
-                int stepMul=step(absUv,0)*_Character;
+                int stepMul=step(absUv,0.001)*_Character;
+                
 
                 mainTex.a=(mainTex.a*(1-stepDepthOne)+DepthTex.a*stepDepthOne)*(1-stepMul);
-                clip(mainTex.a);
+
+                //return mainTex.aaaa;
+                //clip(mainTex.a);
 
                // mainTex.xyz=otherStep.xxx;
                 

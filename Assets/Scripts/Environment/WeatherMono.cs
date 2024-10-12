@@ -10,7 +10,7 @@ public struct WindData
         left.InitParticle();
         right.InitParticle();
     }
-    public void SetValue(float value)
+    public void SetValue(float value, bool immediatelyStop = false)
     {
         if (value == 0)
         {
@@ -64,7 +64,7 @@ public struct WindParticleData
         winterEmission.enabled= false; 
         smokeEmission.enabled = false;
     }
-    public void SetValue(float value)
+    public void SetValue(float value, bool immediatelyStop = false)
     {
         springEmission.enabled = summerEmission.enabled = autumnEmission.enabled =
             winterEmission.enabled = smokeEmission.enabled = false;
@@ -125,14 +125,14 @@ public struct RainParticleData
         velocityOverLifetime.x = 0;
         rainEmission.enabled = dropEmission.enabled = cloudsEmission.enabled = false;
     }
-    public void SetValue(float value)
+    public void SetValue(float value, bool immediatelyStop = false)
     {
         rainEmission.enabled=dropEmission.enabled=cloudsEmission.enabled = value > 0;
         rainEmission.rateOverTime = math.lerp(0, rainValue, value);
         dropEmission.rateOverTime=math.lerp(0, dropValue, value);
         cloudsEmission.rateOverTime=math.lerp(0,cloudsValue, value);
     }
-    public void SetWindValue(float value)
+    public void SetWindValue(float value, bool immediatelyStop = false)
     {
         velocityOverLifetime.x =- 3 * value;
     }
@@ -146,7 +146,7 @@ public struct FogParticleData
     ParticleSystem.MainModule fogParticleMain;
     float mainColor_a;
 
-    public void SetValue(float value)
+    public void SetValue(float value, bool immediatelyStop = false)
     {
         fogParticleEmission.enabled = value > 0;
         float now_a=math.lerp(0,mainColor_a,value);
@@ -182,12 +182,12 @@ public struct SnowParticleData
         velocityOverLifetime = snow.velocityOverLifetime;
         emission.enabled = false;
     }
-    public void SetValue(float value)
+    public void SetValue(float value, bool immediatelyStop = false)
     {
         emission.enabled = value > 0;
         emission.rateOverTime=math.lerp(0,snowEmission,value);
     }
-    public void SetWindValue(float value)
+    public void SetWindValue(float value, bool immediatelyStop = false)
     {
         var _lifeTime = lifeTime * math.lerp(1.0f, 0.4f, math.abs(value));
         mainModule.startLifetime=new ParticleSystem.MinMaxCurve(_lifeTime.x,_lifeTime.y);
@@ -206,19 +206,46 @@ public class WeatherMono : MonoBehaviour,IGameData
     [SerializeField]
     RainParticleData rainParticle;
 
-    public void SetFog(float fogValue)
+    public void SetFog(float fogValue, bool immediatelyStop = false)
     {
         fogParticle.SetValue(fogValue);
+        if(immediatelyStop&&fogValue == 0)
+        {
+            fogParticle.fog.Clear();
+        }
+        else if (fogParticle.fog.isStopped)
+        {
+            fogParticle.fog.Play();
+        }
     }
-    public void SetSnow(float snowValue)
+    public void SetSnow(float snowValue, bool immediatelyStop = false)
     {
         snowData.SetValue(snowValue);
+        if (immediatelyStop && snowValue == 0)
+        {
+            snowData.snow.Clear(true); 
+        }
+        else if (snowData.snow.isStopped)
+        {
+            snowData.snow.Play();
+        }
     }
-    public void SetRain(float rainValue)
+    public void SetRain(float rainValue, bool immediatelyStop = false)
     {
         rainParticle.SetValue(rainValue);
+        if (immediatelyStop && rainValue == 0)
+        {
+            rainParticle.rain.Clear();
+            rainParticle.drop.Clear();
+            rainParticle.clouds.Clear();
+        }else if (rainParticle.rain.isStopped)
+        {
+            rainParticle.rain.Play();
+            rainParticle.drop.Play();
+            rainParticle.clouds.Play();
+        }
     }
-    public void SetWind(float windValue)
+    public void SetWind(float windValue, bool immediatelyStop = false)
     {
        // float value = math.abs(windValue);
        // value = math.lerp(0.5f, 3, value);
@@ -228,6 +255,39 @@ public class WeatherMono : MonoBehaviour,IGameData
         windData.SetValue(windValue);
         rainParticle.SetWindValue(windValue);
         snowData.SetWindValue(windValue);
+        if (immediatelyStop && windValue == 0)
+        {
+            windData.right.wind.Clear();
+            windData.right.smoke.Clear();
+            windData.left.wind.Clear();
+            windData.left.smoke.Clear();
+
+            windData.right.winter.Clear();
+            windData.left.winter.Clear();
+            windData.right.summer.Clear();
+            windData.left.summer.Clear();
+            windData.left.spring.Clear();
+            windData.right.spring.Clear();
+            windData.left.autumn.Clear();
+            windData.right.autumn.Clear();
+        }
+        else if (windData.right.wind.isStopped)
+        {
+            windData.right.wind.Play();
+            windData.right.smoke.Play();
+            windData.left.wind.Play();
+            windData.left.smoke.Play();
+
+            windData.right.winter.Play();
+            windData.left.winter.Play();
+            windData.right.summer.Play();
+            windData.left.summer.Play();
+            windData.left.spring.Play();
+            windData.right.spring.Play();
+            windData.left.autumn.Play();
+            windData.right.autumn.Play();
+        }
+        
     }
 
     public void Play()

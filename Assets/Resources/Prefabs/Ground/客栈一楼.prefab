@@ -9953,6 +9953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 1
   lerpPs: 0
   ps: []
   psCurve:
@@ -12436,6 +12437,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8167723770505538273}
     m_Modifications:
+    - target: {fileID: 507390733065740641, guid: 20c1a47ade262924fb6381d8aafc70cc,
+        type: 3}
+      propertyPath: blendWeatherLight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3650228012061668489, guid: 20c1a47ade262924fb6381d8aafc70cc,
+        type: 3}
+      propertyPath: blendWeatherLight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5287977684783270171, guid: 20c1a47ade262924fb6381d8aafc70cc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12490,6 +12501,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: "\u7EA2\u7A97\u5E18\u7A97 (2)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8929478144101336241, guid: 20c1a47ade262924fb6381d8aafc70cc,
+        type: 3}
+      propertyPath: blendWeatherLight
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

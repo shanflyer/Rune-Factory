@@ -68,6 +68,7 @@ public class MapRoomData : ScriptableObject, IGameData
     public int skyBackGroundId;
     public int creatTempCharacterId;
     public float fixedSeason;
+    public bool hideWeather;
 
     public bool autoCreatTempNpc;
     public bool tempNpcPrewarm;

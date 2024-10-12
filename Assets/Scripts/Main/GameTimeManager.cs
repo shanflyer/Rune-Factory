@@ -511,6 +511,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
             seasonValue = nowYearHour / totalYearHour;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
+            EnvironmentManger.instance.HideOrDisplayWeather(SetFixedSeason.hideWeather);
         }
         private void UpDataGameTimeAction()
         {

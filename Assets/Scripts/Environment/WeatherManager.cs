@@ -12,6 +12,7 @@ public struct Weather
     public float fog;
     public float wind;
     public float waterFall;
+    public float lightning;
 
     public static Weather Lerp(Weather weather0, Weather weather1,float value) 
     {
@@ -22,6 +23,7 @@ public struct Weather
             fog = math.lerp(weather0.fog, weather1.fog, value),
             wind = math.lerp(weather0.wind, weather1.wind, value),
             waterFall = math.lerp(weather0.waterFall, weather1.waterFall, value),
+            lightning = math.lerp(weather0.lightning, weather1.lightning, value),
         };
         return weather;
     }
@@ -126,17 +128,14 @@ public class WeatherManager : Singleton<WeatherManager>
         }
     }
      
-
+   
     void ShowWeather()
     {
         SetWeather setWeather = new SetWeather
         {
             weather = nowWeather
         };
-        GameActionManager.instance.QueueAction(setWeather);
-      //  Shader.SetGlobalFloat("_CloudValue", nowWeather.cloud);
-        //Shader.SetGlobalVector("_Wind", nowWeather.wind);
-       // Shader.SetGlobalFloat("_Fog",nowWeather.fog);
+        GameActionManager.instance.QueueAction(setWeather); 
     }
 
     

@@ -253,8 +253,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         int2 mapEndCoordinate = mapRoomData.endCoordinate;
 
         var mapStartPos = GameCommon.GetMapPos(mapStartCoordinate);
-        var mapEndPos = GameCommon.GetMapPos(mapEndCoordinate);
-
+        var mapEndPos = GameCommon.GetMapPos(mapEndCoordinate); 
         DisplaySky displaySky = new DisplaySky
         {
             display = mapRoomData.displaySky,
@@ -275,7 +274,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
         SetFixedSeason SetFixedSeason = new SetFixedSeason
         {
-            season = mapRoomData.fixedSeason
+            season = mapRoomData.fixedSeason,
+            hideWeather=mapRoomData.hideWeather
         };
         GameActionManager.instance.QueueAction(SetFixedSeason);
 
