@@ -363,7 +363,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     internal class Lightning
     {
         internal float lightningLight;
-        internal Color lightningColor;
+        internal Color lightningColor=>LightningData.color;
         internal SetFloatValue setLightningLight;
         public Lightning()
         {

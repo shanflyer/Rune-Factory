@@ -10,4 +10,6 @@ public class LightningData : ScriptableObject
     public float2 waitSoundTime;
     public int soundRandom;
     public AnimationCurve lightningCurve;
+    [ColorUsageAttribute(true, true)]
+    public Color color;
 }

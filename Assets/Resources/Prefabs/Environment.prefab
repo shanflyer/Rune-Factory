@@ -99,6 +99,7 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_isView: 0
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
@@ -354,6 +355,7 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_isView: 0
   m_LocalBounds:
     m_Center: {x: -0.00025177002, y: -0.00009918213, z: 0}
     m_Extent: {x: 100.49955, y: 100.5009, z: 0}
@@ -486,7 +488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Atlas: {fileID: 11400000, guid: ad2a85d44ad38415aa9230d9e3b37521, type: 3}
   FlareBatches:
-  - {fileID: 0}
+  - {fileID: 2773844039694876060}
   EditingAtlas: 0
   isVisible: 1
   Elements:
@@ -1434,7 +1436,7 @@ MonoBehaviour:
     Anamorphic: {x: 0, y: 0, z: 0}
     OffsetPostion: {x: 0, y: 0, z: 0}
     angle: 0
-    FinalAngle: 6.349299
+    FinalAngle: 48.795013
     useRandomAngle: 0
     useStarRotation: 0
     AngleRandom_Min: 0
@@ -1524,7 +1526,7 @@ MonoBehaviour:
     Anamorphic: {x: 0, y: 0, z: 0}
     OffsetPostion: {x: 0, y: 0, z: 0}
     angle: 0
-    FinalAngle: -6.0396495
+    FinalAngle: -27.262506
     useRandomAngle: 0
     useStarRotation: 0
     AngleRandom_Min: 0
@@ -3710,6 +3712,21 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.m_Scale.y
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886424984741899715, guid: 5d56f00776a08764ca58521c91beab72,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886424984741899715, guid: 5d56f00776a08764ca58521c91beab72,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886424984741899715, guid: 5d56f00776a08764ca58521c91beab72,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7245352141076102115, guid: 5d56f00776a08764ca58521c91beab72,
         type: 3}

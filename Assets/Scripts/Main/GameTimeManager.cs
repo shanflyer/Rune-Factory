@@ -533,6 +533,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 #if UNITY_EDITOR
     public bool runTime = true;
 #endif
+    public bool night => nowGameTime.night;
     public float SeasonValue => nowGameTime.SeasonValue;
     public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime.year,nowGameTime.Season,nowGameTime.day);
     public int2 nowHourMinute=> new int2(nowGameTime.hour, nowGameTime.minute);
