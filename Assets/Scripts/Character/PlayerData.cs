@@ -9,6 +9,7 @@ public class UserGameSaveDataList : IReferenceData
     public List<UserGameSaveData> userGameSaveDatas = new List<UserGameSaveData>();
 }
 
+ 
 public class UserGameSaveData : IReferenceData
 {
 
@@ -39,6 +40,11 @@ public class UserGameSaveData : IReferenceData
         shops.CopyData(userGameSaveData.shops);
         shopLists.CopyData(userGameSaveData.shopLists);
         saveTime = userGameSaveData.saveTime;
+
+        nextWeathers.Clear();
+        nowWeathers.Clear();
+        nextWeathers.AddRange(userGameSaveData.nextWeathers);
+        nowWeathers.AddRange(userGameSaveData.nowWeathers);
     }
 
     public string saveTime;
@@ -49,6 +55,9 @@ public class UserGameSaveData : IReferenceData
     public GameDateSaveData dateData;
     public IntCharacterSaveDataDictionary characterSaveDatas = new IntCharacterSaveDataDictionary();
     public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
+
+    public List<Weather> nowWeathers = new List<Weather>();
+    public List<Weather> nextWeathers = new List<Weather>();
 
     public FriendSaveData friendSaveData;
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();

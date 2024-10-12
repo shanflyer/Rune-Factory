@@ -1,12 +1,11 @@
-﻿ 
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
-using System.Collections;
-using System;
 
 [Serializable]
 public struct Weather
-{ 
+{
     public float cloud;
     public float temperature;
     public float fog;
@@ -14,7 +13,7 @@ public struct Weather
     public float waterFall;
     public float lightning;
 
-    public static Weather Lerp(Weather weather0, Weather weather1,float value) 
+    public static Weather Lerp(Weather weather0, Weather weather1, float value)
     {
         Weather weather = new Weather
         {
@@ -27,6 +26,7 @@ public struct Weather
         };
         return weather;
     }
+
     public bool IsSnow()
     {
         float seasonValue = GameTimeManager.instance.SeasonValue;
@@ -36,9 +36,9 @@ public struct Weather
 
     public float GetWeatherLight()
     {
-        float fogValue =(1- fog) * 0.25f + 0.75f;
-        float cloudValue = (1-cloud) * 0.25f + 0.75f;
-        float waterFallValue=(1- waterFall) * 0.3f + 0.7f;
+        float fogValue = (1 - fog) * 0.25f + 0.75f;
+        float cloudValue = (1 - cloud) * 0.25f + 0.75f;
+        float waterFallValue = (1 - waterFall) * 0.3f + 0.7f;
         if (waterFall > 0.5f)
         {
             return waterFallValue;
@@ -48,11 +48,12 @@ public struct Weather
             return fogValue * cloudValue;
         }
     }
+
     public float GetFlareLight()
     {
-        float fogValue =1.0f- fog*2;
+        float fogValue = 1.0f - fog * 2;
         fogValue = fogValue < 0 ? 0 : fogValue;
-         
+
         float cloudValue = 1.0f - cloud * 2;
         cloudValue = cloudValue < 0 ? 0 : cloudValue;
 
@@ -61,7 +62,7 @@ public struct Weather
 
         if (fogValue > cloudValue || fogValue > waterFallValue)
         {
-            if(cloudValue> waterFallValue)
+            if (cloudValue > waterFallValue)
             {
                 return waterFallValue;
             }
@@ -73,70 +74,78 @@ public struct Weather
         return fogValue;
     }
 }
+
 public class WeatherManager : Singleton<WeatherManager>
 {
-    Weather nowWeather;
-    bool ZeroWeather;
+    private List<Weather> nowDayWeathers = new List<Weather>();
+    private List<Weather> nextDayWeathers = new List<Weather>();
+
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<WeatherAction>(WeatherAction);
-
+        GameActionManager.instance.AddListener<CreatWeather>(CreatWeather);
     }
-    async void WeatherAction(WeatherAction weatherAction)
+
+    public void InitSaveWeather(List<Weather> nowDayWeathers, List<Weather> nextDayWeathers)
     {
-        WeatherData weatherData =await GameDataManager.instance.GetAsyncData<WeatherData>(weatherAction.weatherDataId);
-        if (weatherData != null)
+        this.nowDayWeathers = nowDayWeathers;
+        this.nextDayWeathers = nextDayWeathers;
+    }
+
+    private async void CreatWeather(CreatWeather creatWeather)
+    {
+        if (creatWeather.nowWeathers != null && creatWeather.nowWeathers.Count > 0)
         {
-            Weather nextWeather = new Weather
+            nowDayWeathers = await CreatWeather(creatWeather.nowWeathers);
+            GameDataSaveManager.instance.UserGameSaveData.nowWeathers = nowDayWeathers;
+        }
+        else
+        {
+            nowDayWeathers.Clear();
+            nowDayWeathers.AddRange(nextDayWeathers);
+            GameDataSaveManager.instance.UserGameSaveData.nowWeathers = nowDayWeathers;
+            RefreshWeather(GameTimeManager.instance.Hour);
+        }
+        if (creatWeather.nextWeather != null && creatWeather.nextWeather.Count > 0)
+        {
+            nextDayWeathers = await CreatWeather(creatWeather.nextWeather);
+            GameDataSaveManager.instance.UserGameSaveData.nextWeathers = nextDayWeathers;
+        }
+    }
+
+    private async Task<List<Weather>> CreatWeather(List<int> weatherDatas)
+    {
+        List<Weather> weathers = new List<Weather>();
+        for (int i = 0; i < weatherDatas.Count; i++)
+        {
+            WeatherData weatherData = await GameDataManager.instance.GetAsyncData<WeatherData>(weatherDatas[i]);
+            Weather weather = new Weather
             {
-                temperature = GameRandom.RandomFloat(weatherData.temperature),
                 cloud = GameRandom.RandomFloat(weatherData.cloud),
-                fog = GameRandom.RandomFloat(weatherData.fog),
-                waterFall = GameRandom.RandomFloat(weatherData.rainfall),
+                waterFall = GameRandom.RandomFloat(weatherData.waterFall),
                 wind = GameRandom.RandomFloat(weatherData.windStrength),
+                fog = GameRandom.RandomFloat(weatherData.fog),
+                lightning = GameRandom.RandomFloat(weatherData.lightning)
             };
-            if (!ZeroWeather)
-            {
-                ZeroWeather = true;
-                nowWeather = nextWeather;
-                ShowWeather();
-            }
-            else
-            {
-                var iEnumerator = LerpWeather(nextWeather);
-                GameObjectCurveController.instance.StartIEnumerator(iEnumerator);
-            }
-            
+            weathers.Add(weather);
         }
-    }
-    IEnumerator LerpWeather(Weather nextWeather)
-    {
-        float timeValue = 0;
-        while(timeValue<GameCommon.weatherLerpTime)
-        {
-            timeValue += Time.deltaTime;
-            float value = timeValue / GameCommon.weatherLerpTime;
-            nowWeather.cloud = math.lerp(nowWeather.cloud, nextWeather.cloud,value);
-            nowWeather.temperature=math.lerp(nowWeather.temperature,nextWeather.temperature,value);
-            nowWeather.fog=math.lerp(nowWeather.fog,nextWeather.fog,value); 
-            nowWeather.wind=math.lerp(nowWeather.wind,nextWeather.wind,value);
-            nowWeather.waterFall=math.lerp(nowWeather.waterFall,nextWeather.waterFall,value);
-
-            ShowWeather();
-            yield return 0;
-        }
-    }
-     
-   
-    void ShowWeather()
-    {
-        SetWeather setWeather = new SetWeather
-        {
-            weather = nowWeather
-        };
-        GameActionManager.instance.QueueAction(setWeather); 
+        return weathers;
     }
 
-    
+    private int nowIndex = -1;
+
+    public void RefreshWeather(int hour)
+    {
+        int hourIndex = (int)math.floor(hour / 6.0f);
+        if (hourIndex != nowIndex)
+        {
+            nowIndex = hourIndex;
+            Weather weather = nowDayWeathers[hourIndex];
+            SetWeather setWeather = new SetWeather
+            {
+                weather = weather,
+            };
+            GameActionManager.instance.QueueAction(setWeather);
+        }
+    }
 }

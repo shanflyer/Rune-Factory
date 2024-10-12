@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -71,8 +72,35 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         private Season season;
         private float seasonValue;
-        public int day = 1;
-        public int hour;
+        private float dayValue;
+
+        public int day 
+        {
+            get => _day;
+            set
+            {
+                _day = value;
+                dayValue = (((int)season-1) * 30+_day)/120.0f;
+            }
+        }
+        private int _day = 1;
+        public int hour
+        {
+            get => _hour;
+            set
+            {
+                if (_hour != value)
+                {
+                    _hour = value;
+                    if (_hour == 6)
+                    {
+                        CreateWeather();
+                    }
+                    WeatherManager.instance.RefreshWeather(value);
+                }
+            }
+        }
+        private int _hour;
         public int minute;
         public int mySecond;
         public Week week;
@@ -363,24 +391,50 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
         }
 
-        public async void SetSeasonWeather()
+        async void CreateWeather()
         {
-            GrowModelData growModelData = await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId);
-            float timeValue0 = seasonValue - (int)seasonValue;
-            float value0 = growModelData.curve.Evaluate(timeValue0);
-
-            GrowModelData growModelData1 = await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId1);
-            float value1 = growModelData1.curve.Evaluate(TimeValue);
-
-            int randomId = (int)value0 * 10 + (int)value1;
-            int weatherId = GameRandom.instance.GetSingleRandomValue(randomId);
-
-            WeatherAction weatherAction = new WeatherAction
+            CreatWeather creatWeather = new CreatWeather();
+            if (string.IsNullOrEmpty(GameDataSaveManager.instance.UserGameSaveData.saveTime))
             {
-                weatherDataId = weatherId,
-            };
-            GameActionManager.instance.QueueAction(weatherAction); 
+                creatWeather.nowWeathers = await SetSeasonWeather(true);
+            }
+            creatWeather.nextWeather= await SetSeasonWeather(false);
+
+            GameActionManager.instance.QueueAction(creatWeather);
+
+            async Task<List<int>> SetSeasonWeather(bool nowDay = true)
+            {
+                int hour = 6;
+                List<int> weaterDatas = new List<int>();
+                for (int i = 0; i < 8; i++)
+                {
+                    float timeValue = hour * 60 / totalMinute;
+                    float seasonValue = 0;
+
+                    if (!nowDay)
+                    {
+                        seasonValue = dayValue * 4;
+                    }
+                    else
+                    {
+                        seasonValue = dayValue + 0.0083f;
+                    }
+                    GrowModelData growModelData = await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId);
+                    float timeValue0 = seasonValue - (int)seasonValue;
+                    float value0 = growModelData.curve.Evaluate(timeValue0);
+
+                    GrowModelData growModelData1 = await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId1);
+                    float value1 = growModelData1.curve.Evaluate(timeValue);
+
+                    int randomId = (int)value0 * 10 + (int)value1;
+                    int weatherId = GameRandom.instance.GetSingleRandomValue(randomId);
+
+                    weaterDatas.Add(weatherId);
+                }
+                return weaterDatas;
+            }
         }
+         
 
         public GameTime()
         {
@@ -614,15 +668,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameActionManager.instance.AddListener<ClearOverrideEnvironment>(ClearOverrideEnvironment);
         GameActionManager.instance.AddListener<PlayerSleep>(PlayerSleep);
         GameActionManager.instance.AddListener<CheckGameTimeDate>(CheckGameTimeDate);
-        GameActionManager.instance.AddListener<SetFixedSeason>(SetFixedSeason);
-        GameActionManager.instance.AddListener<SetSeasonWeather>(SetSeasonWeather);
+        GameActionManager.instance.AddListener<SetFixedSeason>(SetFixedSeason); 
         // CreatData();
     }
 
-    void SetSeasonWeather(SetSeasonWeather setSeasonWeather)
-    {
-        nowGameTime.SetSeasonWeather();
-    }
+   
 
     void SetFixedSeason(SetFixedSeason SetFixedSeason)
     {
@@ -788,9 +838,9 @@ public class GameTimeManager : Singleton<GameTimeManager>
             nowGameTime = new GameTime
             {
                 Season = Season.春,
-                hour = 12
+                hour = 6
             };
-            nowGameTime.SetTime(12, 0);
+            nowGameTime.SetTime(6, 0);
             // StartTimeRun();
         }
     }

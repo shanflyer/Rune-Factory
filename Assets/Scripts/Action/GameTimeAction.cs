@@ -137,6 +137,12 @@ public struct SetMapOverrideEnvironment : GameAction
     }
 }
 
+public struct CreatWeather : GameAction
+{
+    public List<int> nowWeathers, nextWeather;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+}
 public struct SetWeather : GameAction
 {
     public Weather weather;

@@ -89,7 +89,7 @@ public class MyLight : MonoBehaviour
         set
         {
             _color = value;
-            float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
+            float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight*0.4f;
             if (light2D)
             {
                 light2D.color= blendWeatherLight?value* weatherLight : value;

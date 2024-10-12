@@ -149,6 +149,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 }
             } 
             FriendManager.instance.InitFriendSaveData(loadGameSaveData.friendSaveData);
+            WeatherManager.instance.InitSaveWeather(loadGameSaveData.nowWeathers, loadGameSaveData.nextWeathers);
         }
     }
 
@@ -156,8 +157,9 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadGameSaveData != null)
         {
-            GameTimeManager.instance.InitSaveDate(loadGameSaveData.dateData);
+            GameTimeManager.instance.InitSaveDate(loadGameSaveData.dateData); 
         }
+      
     }
   
     public bool IsZeroGameSave

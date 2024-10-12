@@ -5,14 +5,12 @@ using UnityEngine;
 public class WeatherData : ScriptableObject, IGameData
 {
     public int id;
-    public string weatherName;
-    public float2 temperature;
-    public float2 rainfall;
+    public string weatherName; 
+    public float2 waterFall;
     public float2 fog;
     public float2 windStrength; 
     public float2 cloud;
-    public int2 duration;
-
+    public float2 lightning;
     public string GetKey()
     {
         return id.ToString();

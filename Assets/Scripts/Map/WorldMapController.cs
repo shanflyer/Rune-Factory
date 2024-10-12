@@ -78,6 +78,7 @@ public class WorldMapController : MonoBehaviour
         var pastureManager = PastureManager.instance;
         var fisinghManager = FishingManager.instance;
         var fishController = FishController.instance;
+        var weatherManager = WeatherManager.instance;
 
         GameActionManager.instance.QueueAction(new ChangeWorld
         {
@@ -124,6 +125,7 @@ public class WorldMapController : MonoBehaviour
 
         GameDataSaveManager.instance.AfterInitMapLoadSaveData();
         GameDataSaveManager.instance.InitSaveDate();
+        WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
     }
     // Use this for initialization
     void Start()

@@ -41,6 +41,21 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<NewDay>(NewDay);
         GameActionManager.instance.AddListener<TryGetPlantFruit>(TryGetPlantFruit);
         GameActionManager.instance.AddListener<RefreshField>(RefreshField);
+        GameActionManager.instance.AddListener<SetWeather>(SetWeather);
+    }
+    void SetWeather(SetWeather setWeather)
+    {
+        if (setWeather.weather.waterFall > 0)
+        {
+            using(var e = fields.Values.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    e.Current.SetWaterField();
+                    GameDataSaveManager.instance.UserGameSaveData.SetFieldData(e.Current);
+                }
+            }
+        }
     }
     public void RefreshField(RefreshField refreshField)
     {
