@@ -18,8 +18,8 @@ public class GrowModelDataList: ScriptableObject, IDataArray<GrowModelData>
 [System.Serializable]
 public struct GrowModelData : IGameData
 {
-    public int id;
     public string name;
+    public int id; 
     public AnimationCurve curve;
 #if UNITY_EDITOR
     public void SetReferenceData()

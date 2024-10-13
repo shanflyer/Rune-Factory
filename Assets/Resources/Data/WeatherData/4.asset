@@ -10,12 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a19d03c379b04a429a0dd4a03b02823, type: 3}
-  m_Name: "\u6625"
+  m_Name: 4
   m_EditorClassIdentifier: 
-  id: 0
-  weatherName: 
-  temperature: 0
-  rainfall: 0
-  fog: 0
-  wind: 0
-  cloud: 0
+  id: 4
+  weatherName: "\u591A\u4E91"
+  waterFall:
+    x: 0
+    y: 0
+  fog:
+    x: 0
+    y: 0
+  windStrength:
+    x: -0.5
+    y: 0.5
+  cloud:
+    x: 0.1
+    y: 0.25
+  lightning:
+    x: 0
+    y: 0

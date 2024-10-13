@@ -95,7 +95,8 @@ public class WeatherManager : Singleton<WeatherManager>
         {
             WeatherReferenceData weatherReferenceData = new WeatherReferenceData
             {
-                time = $"{(6 * i).ToString("00")}:00",
+                time = $"{(3 * i+3).ToString("00")}:00",
+                night=i==0||i>4,
                 weather = nowDayWeathers[i]
             };
             weatherReferenceDatas.Add(weatherReferenceData);
@@ -109,16 +110,17 @@ public class WeatherManager : Singleton<WeatherManager>
         {
             WeatherReferenceData weatherReferenceData = new WeatherReferenceData
             {
-                time = $"{(6 * i).ToString("00")}:00",
+                time = $"{(3 * i + 3).ToString("00")}:00",
+                night = i == 0 || i > 4,
                 weather = nextDayWeathers[i]
             };
             weatherReferenceDatas.Add(weatherReferenceData);
         }
         return weatherReferenceDatas;
     }
-    public Sprite GetWeatherIcon(Weather weather)
+    public Sprite GetWeatherIcon(Weather weather, bool overrideNight = false, bool night = false)
     {
-       return  weatherIconData.GetWeatherIcon(weather);
+       return  weatherIconData.GetWeatherIcon(weather,overrideNight,night);
     }
     public void InitSaveWeather(List<Weather> nowDayWeathers, List<Weather> nextDayWeathers)
     {
@@ -171,7 +173,7 @@ public class WeatherManager : Singleton<WeatherManager>
     public void RefreshWeather(int hour)
     {
         int hourIndex = (int)math.floor(hour / 6.0f);
-        if (hourIndex != nowIndex)
+        if (hourIndex != nowIndex&& nowDayWeathers.Count>hourIndex)
         {
             nowIndex = hourIndex;
             Weather weather = nowDayWeathers[hourIndex];

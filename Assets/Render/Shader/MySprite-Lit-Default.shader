@@ -822,10 +822,10 @@ Shader "MySprite-Lit-Default"
                     //春季颜色
                     int springBlend=1-step(1,_SeasonValue);
                     float w_s=_SeasonValue;
-                    Unity_Remap_float(w_s,float2(0,0.25),float2(0,1),w_s); 
+                    Unity_Remap_float(w_s,float2(0,0.15),float2(0,1),w_s); 
                     int w_sBlend=1-step(0.5,w_s);
                     float springValue=_SeasonValue;
-                    Unity_Remap_float(springValue,float2(0.25,0.5),float2(0,1),springValue);
+                    Unity_Remap_float(springValue,float2(0.15,0.5),float2(0,1),springValue);
                     springValue=clamp(springValue,0,1);
                     float3 winterColor=(_PlantWinterColor*noiseValue+_PlantWinterColor1*(1-noiseValue))*mainValue; 
                     float3 springColor0=(_PlantWinterColor*noiseValue1+_PlantSpringColor*(1-noiseValue1))*mainValue; 
@@ -1005,11 +1005,11 @@ Shader "MySprite-Lit-Default"
                 int springBlend=1-step(1,_SeasonValue);
                 
                 float w_s=_SeasonValue;
-                Unity_Remap_float(w_s,float2(0,0.25),float2(0,1),w_s); 
+                Unity_Remap_float(w_s,float2(0,0.15),float2(0,1),w_s); 
                 int w_sBlend=1-step(0.5,w_s);
                 
                 float springValue=_SeasonValue;
-                Unity_Remap_float(springValue,float2(0.25,0.5),float2(0,1),springValue);
+                Unity_Remap_float(springValue,float2(0.15,0.5),float2(0,1),springValue);
                 springValue=clamp(springValue,0,1);
 
                 float3 winterColor=(_PlantWinterColor*noiseValue+_PlantWinterColor1*(1-noiseValue))*ColorValue; 

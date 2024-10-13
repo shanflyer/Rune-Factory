@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -76,7 +77,7 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         }
     }
 
-    public async void InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+    public async Task InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
     {
        
         if (componentData == null)
@@ -111,7 +112,7 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
                 var async = GameObject.InstantiateAsync(listPrefab);
                 await async;
                 T t = async.Result[0];
-               await t.InitData(componentData[i], SelectAction, toggleGroup);
+                await t.InitData(componentData[i], SelectAction, toggleGroup);
                 t.enabled = true;
                 t.transform.SetParent(parent);
                 t.transform.localScale = Vector3.one;

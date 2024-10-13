@@ -66,7 +66,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
             set
             {
-                season = value; InitSeasonData();
+                season = value; 
+                InitSeasonData();
             }
         }
 
@@ -200,6 +201,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
             dayEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.dayEnvironmentDataName);
             nightEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.nightEnvironmentDataName);
             SetLightValue();
+            if (waitCreatWeather)
+            {
+                CreateWeather();
+            }
         }
 
         private void SetLightValue()
@@ -391,10 +396,20 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
         }
 
+        bool waitCreatWeather = false;
         async void CreateWeather()
         {
+            if (SeasonData.season == Season.Default)
+            {
+                waitCreatWeather = true;
+                return;
+            }
+            else
+            {
+                waitCreatWeather = false;
+            }
             CreatWeather creatWeather = new CreatWeather();
-            if (string.IsNullOrEmpty(GameDataSaveManager.instance.UserGameSaveData.saveTime))
+            if (GameDataSaveManager.instance.UserGameSaveData.nowWeathers.Count==0)
             {
                 creatWeather.nowWeathers = await SetSeasonWeather(true);
             }

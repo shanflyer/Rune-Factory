@@ -37,15 +37,15 @@ public class WeatherPanel : GamePanel<IReferenceData>
         base.Close();
         CameraManager.instance.SetUICameraPostProcessing(false);
     }
-    public override Task InitData(string dataKey)
+    public override async Task InitData(string dataKey)
     {
         CameraManager.instance.SetUICameraPostProcessing(true);
         animation.Play();
         var nowWeatherReferences = WeatherManager.instance.GetNowWeatherReferenceDatas();
-        nowWeathers.InitListData(nowWeatherReferences);
-        var nextWeatherRefernces = WeatherManager.instance.GetNextWeatherReferenceDatas();
-        nextWeathers.InitListData(nextWeatherRefernces);
-        return base.InitData(dataKey);
+        await nowWeathers.InitListData(nowWeatherReferences);
+        var nextWeatherReferences = WeatherManager.instance.GetNextWeatherReferenceDatas();
+        await  nextWeathers.InitListData(nextWeatherReferences);
+        await base.InitData(dataKey);
     }
     public override void InitReferenceData(IReferenceData v)
     {

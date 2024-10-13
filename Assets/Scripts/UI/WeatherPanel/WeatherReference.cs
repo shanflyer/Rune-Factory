@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public struct WeatherReferenceData:IReferenceData
 {
     public string time;
+    public bool night;
     public Weather weather;
 }
 public class WeatherReference : UIObjReference<WeatherReferenceData>
@@ -20,10 +21,11 @@ public class WeatherReference : UIObjReference<WeatherReferenceData>
         timeText = FindChildGameObject<TextMeshProUGUI>("Time");
         weatherIcon = FindChildGameObject<Image>("icon");
     }
-    public override Task InitData(WeatherReferenceData t, SelectAction<WeatherReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async Task InitData(WeatherReferenceData t, SelectAction<WeatherReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
+        await base.InitData(t, SelectAction, toggleGroup);
         timeText.text = data.time;
-        weatherIcon.sprite = WeatherManager.instance.GetWeatherIcon(data.weather);
-        return base.InitData(t, SelectAction, toggleGroup);
+        
+        weatherIcon.sprite = WeatherManager.instance.GetWeatherIcon(data.weather,true,data.night); 
     }
 }

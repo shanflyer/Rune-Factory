@@ -27,7 +27,7 @@ public class WeatherIconData : ScriptableObject
             cloudIconDic[dayCloud[i]] = weatherIcons[i];
         }
     }
-    public Sprite GetWeatherIcon(Weather weather)
+    public Sprite GetWeatherIcon(Weather weather,bool overrideNight=false,bool night=false)
     {
         if (weather.waterFall > 0)
         {
@@ -44,6 +44,10 @@ public class WeatherIconData : ScriptableObject
                 waterFallIndex = waterFallIndex > 2 ? 2 : waterFallIndex;
             }
             int dayIndex = GameTimeManager.instance.night ? 1 : 0;
+            if (overrideNight)
+            {
+                dayIndex=night ? 1 : 0;
+            }
             waterFallIconDic.TryGetValue(snowIndex*100+dayIndex*10+waterFallIndex, out var Sprite);
             return Sprite;
         }
@@ -52,6 +56,10 @@ public class WeatherIconData : ScriptableObject
             int cloudIndex = (int)(weather.cloud*6.0f);
             cloudIndex = cloudIndex > 2 ? 2:cloudIndex;
             int dayIndex = GameTimeManager.instance.night ? 1 : 0;
+            if (overrideNight)
+            {
+                dayIndex = night ? 1 : 0;
+            }
             cloudIconDic.TryGetValue(dayIndex * 10 + cloudIndex, out var Sprite);
             return Sprite;
         }       
