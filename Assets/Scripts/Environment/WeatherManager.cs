@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEngine;
 
 [Serializable]
 public struct Weather
@@ -79,13 +80,46 @@ public class WeatherManager : Singleton<WeatherManager>
 {
     private List<Weather> nowDayWeathers = new List<Weather>();
     private List<Weather> nextDayWeathers = new List<Weather>();
-
-    public override void Init()
+    WeatherIconData weatherIconData;
+    public override async void Init()
     {
+        weatherIconData = await GameSourceManager.instance.GetSingleScriptableObject<WeatherIconData>("Data/WeatherIconData");
+        weatherIconData.InitData();
         base.Init();
         GameActionManager.instance.AddListener<CreatWeather>(CreatWeather);
     }
-
+    public List<WeatherReferenceData> GetNowWeatherReferenceDatas()
+    {
+        List<WeatherReferenceData> weatherReferenceDatas = new List<WeatherReferenceData>();
+        for(int i = 0; i < nowDayWeathers.Count; i++)
+        {
+            WeatherReferenceData weatherReferenceData = new WeatherReferenceData
+            {
+                time = $"{(6 * i).ToString("00")}:00",
+                weather = nowDayWeathers[i]
+            };
+            weatherReferenceDatas.Add(weatherReferenceData);
+        }
+        return weatherReferenceDatas;
+    }
+    public List<WeatherReferenceData> GetNextWeatherReferenceDatas()
+    {
+        List<WeatherReferenceData> weatherReferenceDatas = new List<WeatherReferenceData>();
+        for (int i = 0; i < nextDayWeathers.Count; i++)
+        {
+            WeatherReferenceData weatherReferenceData = new WeatherReferenceData
+            {
+                time = $"{(6 * i).ToString("00")}:00",
+                weather = nextDayWeathers[i]
+            };
+            weatherReferenceDatas.Add(weatherReferenceData);
+        }
+        return weatherReferenceDatas;
+    }
+    public Sprite GetWeatherIcon(Weather weather)
+    {
+       return  weatherIconData.GetWeatherIcon(weather);
+    }
     public void InitSaveWeather(List<Weather> nowDayWeathers, List<Weather> nextDayWeathers)
     {
         this.nowDayWeathers = nowDayWeathers;

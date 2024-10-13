@@ -1,11 +1,12 @@
 ﻿using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class CameraManager : Singleton<CameraManager>
 {
     public Camera mainCamera;
     public Camera uiCamera;
-
+    UniversalAdditionalCameraData universalAdditionalCameraData;
     [SerializeField]
     private UnityEngine.Rendering.Universal.PixelPerfectCamera pixelPerfectCamera;
 
@@ -25,7 +26,7 @@ public class CameraManager : Singleton<CameraManager>
         base.Init();
         mainCamera = Camera.main;
         uiCamera = mainCamera.transform.GetChild(0).GetComponent<Camera>();
-
+        universalAdditionalCameraData = uiCamera.GetComponent<UniversalAdditionalCameraData>();
         pixelPerfectCamera = mainCamera.GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();
         mixingCamera = mainCamera.transform.parent.GetComponentInChildren<CinemachineMixingCamera>();
         followCameras = new CinemachineCamera[3]
@@ -118,7 +119,10 @@ public class CameraManager : Singleton<CameraManager>
 
         return RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRT, screenPoint, uiCamera, out localPos);
     }
-
+    public void SetUICameraPostProcessing(bool ON)
+    {
+        universalAdditionalCameraData.renderPostProcessing = ON;
+    }
     public void MoveFixedCamera(Vector2 movePos)
     {
         fixedCamera.transform.Translate(movePos);

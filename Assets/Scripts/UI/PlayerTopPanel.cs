@@ -71,12 +71,11 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         HPValue = FindChildGameObject<TextMeshProUGUI>("HPValue");
         RPValue = FindChildGameObject<TextMeshProUGUI>("RPValue");
     }
-    WeatherIconData weatherIconData;
+    
     protected override async void Awake()
     {
         base.Awake();
-        weatherIconData = await GameSourceManager.instance.GetSingleScriptableObject<WeatherIconData>("Data/WeatherIconData");
-        weatherIconData.InitData();
+       
         playerButton.onClick.AddListener(async () =>
         {
             var characterInformation = CharacterManager.instance.controllerCharacter.GetInformation();
@@ -106,7 +105,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
     void SetWeather(SetWeather setWeather)
     {
-        weather.sprite = weatherIconData.GetWeatherIcon(setWeather.weather);
+        weather.sprite = WeatherManager.instance.GetWeatherIcon(setWeather.weather);
     }
     private void RefreshCharacterProperty(CharacterPropertyTrigger refreshCharacterProperty)
     {
