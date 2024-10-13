@@ -16,6 +16,7 @@ public class CameraManager : Singleton<CameraManager>
     private CinemachineConfiner2D confiner2D;
 
     private CinemachineCameraOffset[] CinemachineCameraOffsets;
+    AudioListener cameraAudioListener;
 
     //CinemachinePositionComposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
@@ -25,6 +26,7 @@ public class CameraManager : Singleton<CameraManager>
     {
         base.Init();
         mainCamera = Camera.main;
+        cameraAudioListener=mainCamera.GetComponent<AudioListener>();
         uiCamera = mainCamera.transform.GetChild(0).GetComponent<Camera>();
         universalAdditionalCameraData = uiCamera.GetComponent<UniversalAdditionalCameraData>();
         pixelPerfectCamera = mainCamera.GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();
@@ -55,6 +57,10 @@ public class CameraManager : Singleton<CameraManager>
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
     }
 
+    public void SetCameraListener(bool enable)
+    {
+        cameraAudioListener.enabled = enable;
+    }
     /// <summary>
     /// 世界坐标转换为屏幕坐标
     /// </summary>

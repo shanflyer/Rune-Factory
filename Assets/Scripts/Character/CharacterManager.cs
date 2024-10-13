@@ -457,6 +457,12 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 characterRuntionObjs.TryGetValue(controllerCharacter, out var _ControllerRuntimeObj);
                 ControllerRuntimeObj = _ControllerRuntimeObj;
+                if(!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
+                {
+                    audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
+                }
+                audioListener.enabled = true;
+                CameraManager.instance.SetCameraListener(false);
             }
         }
         get

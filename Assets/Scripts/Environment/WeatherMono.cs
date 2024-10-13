@@ -5,13 +5,17 @@ using UnityEngine;
 public struct WindData
 {
     public WindParticleData left, right;
+    public AudioSource audioSource;
+    float volume;
     public void InitParticle()
     {
         left.InitParticle();
         right.InitParticle();
+        volume = audioSource.volume;
     }
     public void SetValue(float value, bool immediatelyStop = false)
     {
+        audioSource.volume = volume * value;
         if (value == 0)
         {
             left.SetValue(0);
@@ -33,13 +37,12 @@ public struct WindData
 [Serializable]
 public struct WindParticleData
 {
-    public ParticleSystem wind, spring,summer,autumn,winter, smoke;
-
+    public ParticleSystem wind, spring,summer,autumn,winter, smoke; 
     ParticleSystem.EmissionModule windEmission;
     ParticleSystem.EmissionModule springEmission,summerEmission,autumnEmission,winterEmission;
     ParticleSystem.EmissionModule smokeEmission;
 
-    float windValue, springValue,summerValue,autumnValue,winterValue, smokeValue;
+    float windValue, springValue,summerValue,autumnValue,winterValue, smokeValue; 
     public void InitParticle()
     {
         windEmission = wind.emission;
@@ -63,6 +66,7 @@ public struct WindParticleData
         autumnEmission.enabled= false;
         winterEmission.enabled= false; 
         smokeEmission.enabled = false;
+
     }
     public void SetValue(float value, bool immediatelyStop = false)
     {
@@ -97,7 +101,7 @@ public struct WindParticleData
         windEmission.enabled =  value > 0;
         windEmission.rateOverTime = math.lerp(0, windValue, value);
         smokeEmission.enabled = value >= 0.25f;
-        float _value = (value - 0.25f) * 1.334f;
+        float _value = (value - 0.25f) * 1.334f; 
         
         smokeEmission.rateOverTime=math.lerp(0,smokeValue, _value);
     }
@@ -106,12 +110,13 @@ public struct WindParticleData
 public struct RainParticleData
 {
     public ParticleSystem rain,drop,clouds;
-
+    public AudioSource audioSource;
     ParticleSystem.EmissionModule rainEmission;
     ParticleSystem.EmissionModule dropEmission;
     ParticleSystem.EmissionModule cloudsEmission;
     ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime;
     float rainValue, dropValue, cloudsValue;
+    float volume;
     public void InitParticle()
     {
         rainEmission = rain.emission;
@@ -124,6 +129,7 @@ public struct RainParticleData
         velocityOverLifetime = rain.velocityOverLifetime;
         velocityOverLifetime.x = 0;
         rainEmission.enabled = dropEmission.enabled = cloudsEmission.enabled = false;
+        volume = audioSource.volume;
     }
     public void SetValue(float value, bool immediatelyStop = false)
     {
@@ -131,6 +137,7 @@ public struct RainParticleData
         rainEmission.rateOverTime = math.lerp(0, rainValue, value);
         dropEmission.rateOverTime=math.lerp(0, dropValue, value);
         cloudsEmission.rateOverTime=math.lerp(0,cloudsValue, value);
+        audioSource.volume = volume * value;
     }
     public void SetWindValue(float value, bool immediatelyStop = false)
     {
@@ -313,6 +320,7 @@ public class WeatherMono : MonoBehaviour,IGameData
         var snow = transform.Find("Snow").GetComponent<ParticleSystem>();
         snowData.snow = snow;
 
+        windData.audioSource = transform.Find("Wind").GetComponent<AudioSource>();
         ParticleSystem left = transform.Find("Wind/Left").GetComponent<ParticleSystem>();
         windData.left.wind = left;
         ParticleSystem leftSpring = transform.Find("Wind/Left/Spring").GetComponent<ParticleSystem>();
@@ -342,6 +350,7 @@ public class WeatherMono : MonoBehaviour,IGameData
 
         ParticleSystem rain = transform.Find("Rain").GetComponent<ParticleSystem>();
         rainParticle.rain = rain;
+        rainParticle.audioSource = rain.GetComponent<AudioSource>();
         ParticleSystem drop = transform.Find("Rain/Drop").GetComponent<ParticleSystem>();
         rainParticle.drop = drop;
         ParticleSystem clouds = transform.Find("Rain/Clouds").GetComponent<ParticleSystem>();
