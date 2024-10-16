@@ -32,6 +32,8 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
     float FootTime;
     [SerializeField]
     float2 direction;
+
+    public Collider2D collider => myShadow.PolygonCollider;
     public void Clear()
     {
         if (runtimeObj != null)

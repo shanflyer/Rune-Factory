@@ -38,7 +38,29 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     Light2D directionLight => skyEnviromentMono.DirectionLight;
 
     private Dictionary<int,MyLight> lights=new Dictionary<int, MyLight>();
-    private List<int> lightIds =new List<int>();  
+    private List<int> lightIds =new List<int>();
+
+    MyDic<int,Audio2DPolygon> audio2DPolygons = new MyDic<int,Audio2DPolygon>();
+
+    public void AddAudio2DPolygon(Audio2DPolygon audio2DPolygon)
+    {
+        int instanceID = audio2DPolygon.GetInstanceID();
+        audio2DPolygons.TrySetValue(instanceID, audio2DPolygon);
+        audio2DPolygon.RefreshAudio(CharacterManager.instance.ControllerRuntimeObj.collider);
+    }
+    public void RemoveAudio2DPolygon(Audio2DPolygon audio2DPolygon)
+    {
+        int instanceID = audio2DPolygon.GetInstanceID();
+        audio2DPolygons.Remove(instanceID); 
+    }
+    public void UpDataAudio2DPolygon()
+    {
+        for(int i = 0; i < audio2DPolygons.length; i++)
+        {
+            audio2DPolygons[i].RefreshAudio(CharacterManager.instance.ControllerRuntimeObj.collider);
+        }
+    }
+
     public void AddMyLight(MyLight myLight)
     {
         int instanceID = myLight.GetInstanceID();

@@ -958,7 +958,9 @@ public partial class Character
             refreshOperateCharacters.joinCharacters= NeighborhoodCharacters1.Except(NeighborhoodCharacters).ToHashSet<int>(); 
         }
         NeighborhoodCharacters = NeighborhoodCharacters1;
-        GameActionManager.instance.QueueAction(refreshOperateCharacters); 
+        GameActionManager.instance.QueueAction(refreshOperateCharacters);
+
+        EnvironmentManger.instance.UpDataAudio2DPolygon();
     }
 
     public async void SetNeighborhood(int characterId)

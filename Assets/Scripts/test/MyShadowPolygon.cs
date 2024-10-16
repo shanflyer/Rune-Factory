@@ -30,6 +30,8 @@ public class MyShadowPolygon : MonoBehaviour
     float shadowOffset;
     [SerializeField]
     Color color;
+
+    public PolygonCollider2D PolygonCollider => polygonCollider;
     private void OnEnable()
     {
         if (meshRenderer == null || meshRenderer.sharedMaterial == null)
