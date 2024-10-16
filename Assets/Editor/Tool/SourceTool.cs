@@ -47,33 +47,48 @@ public class SourceTool : MonoBehaviour
             AssetDatabase.StopAssetEditing();
         }
 
+
         void OpenDirectoryInfo(DirectoryInfo directoryInfo, string parentPath)
         {
+            HashSet<string> AudioTypes = new HashSet<string>
+           {
+            "BGM","BGS","ME","SE"
+            };
             var _dirs = directoryInfo.GetDirectories();
             var files = directoryInfo.GetFiles("*.mp3");
 
-            foreach (var f in files)
-            {
-                try
-                {
-                    var title = directoryInfo.Name;
 
-                    if (!sources.TryGetValue(title, out List<string> list))
-                    {
-                        list = new List<string>();
-                        sources[title] = list;
-                    }
-                    list.Add(f.Name.Split('.')[0]);
-                }
-                catch
+            if (files.Length > 0)
+            { 
+                bool isChild = !AudioTypes.Contains(directoryInfo.Name);
+                var title =!isChild ? directoryInfo.Name : directoryInfo.Parent.Name;
+                foreach (var f in files)
                 {
+                    try
+                    {
+                        if (!sources.TryGetValue(title, out List<string> list))
+                        {
+                            list = new List<string>();
+                            sources[title] = list;
+                        }
+                        string source = isChild ? $"{directoryInfo.Name}_{f.Name.Split('.')[0]}" : f.Name.Split('.')[0];
+                        list.Add(source);
+                    }
+                    catch
+                    {
+                    }
                 }
             }
-            foreach (var d in _dirs)
+            else
             {
-                string path = parentPath + "/" + d.Name;
-                OpenDirectoryInfo(d, path);
-            }
+                foreach (var d in _dirs)
+                {
+                    var files1 = d.GetFiles("*.mp3");
+                    string path = parentPath + "/" + d.Name;
+                     
+                    OpenDirectoryInfo(d, path);
+                }
+            } 
         }
 
         string property = "";

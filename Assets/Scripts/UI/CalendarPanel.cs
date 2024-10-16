@@ -41,8 +41,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
 
         dateReferences = new DisplayList<DateReference, GameDate>(dateReference, DatesParent.transform);
         returnButton.onClick.AddListener(() =>
-        {
-            AudioController.instance.PlayAudio(SE.Return);
+        { 
             Close();
         });
 
@@ -85,8 +84,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
         }
     }
     void ForwardMonth()
-    {
-        AudioController.instance.PlayAudio(SE.Book);
+    { 
          
         int seasonId = (int)season;
         if (seasonId > 1)
@@ -103,8 +101,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
         AfterDisplay(); 
     }
     void NextMonth()
-    {
-        AudioController.instance.PlayAudio(SE.Book);
+    { 
         int seasonId = (int)season;
         if (seasonId < 4)
         {

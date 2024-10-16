@@ -1,17 +1,17 @@
 
 public enum BGM
 {
-  b002,b003,b004,Bank,Battle,bgm002,Castle,cave_01,city,dark,Defeat,Fall,field,fire,frogen,guild,ice,linght,Marry,mountain,Move,Room0,Room1,Room2,Room4,shop,Sleep,Spring,Summer,Town1,tt2,Victory,water,wind,winter,
+    NUll, b002,b003,b004,Bank,Battle,bgm002,Castle,cave_01,city,dark,Defeat,Fall,field,fire,frogen,guild,ice,linght,Marry,mountain,Move,Room0,Room1,Room2,Room4,shop,Sleep,Spring,Summer,Town1,tt2,Victory,water,wind,winter,
 }
 public enum BGS
 {
-  Itemme,
+ NUll, Birds_inside,Birds_outside,Cave,Island_beach_no_seagulls,Island_beach_seagulls,Island_inside_no_seagulls,Island_inside_seagulls,Night_inside,Night_outside,Rain_cave,Rain_forest,Rain_house,Rain_outside,Rain_roof_layer,Rver_outside,Sea_outside_close,Swamp_inside,Swamp_outside,WE_Thunder_1,WE_Thunder_2,WE_Thunder_3,WE_Thunder_7,WE_Thunder_8,WE_Thunder_9,Wind_cave,Wind_forest,Wind_house,Wind_outside,
 }
 public enum ME
 {
-  Victory,
+    NUll, Itemme,Victory,
 }
 public enum SE
 {
-  Absorb1_01,Absorb2_01,arcaneimpact2_01,Attack3_01,Barrier_01,Blow3,bo,Book,Break_01,Break_21,c1,click,Click2,co,Coin,Crash_01,Damage,Darkness1,Darkness1_01,Darkness3_01,Darkness4_01,dowm0,Down1_01,Down3_01,Earth1_01,Earth5_01,estrike_dark_01,Explosion1_01,Explosion2_01,Fail,fe,fiechui,Fire1_01,Fire2_01,Fire3_01,fireimpact04_01,fireshot_hit_01_01,Fish,Flash2_01,foot,frostimpact02_01,Get,Heal,Heal3_01,Heal7_01,Horse,hose7,Ice,Ice4_01,Ice4_02,Ice5_01,Ice8_01,Ice8_02,iceChui,iceshot_01_01,iceshot_hit_01_01,In,Item,Item_x1,j2,Jump1_01,Key_01,Laser1_01,lightningloop_01,Machine_01,Magic,Magic1_01,Miss,Monster3_01,Open5_01,Out,Powerup_01,Recovery_01,Return,Run,s87,Saint1_01,Saint2_01,Saint4_01,Saint6,Sand_01,Sea,select,Shop,Skill1_01,Slash,Slash1,Slash10,Slash2,Slash4,Slash6,Sleep,Sleep_01,slessswd_02_01,spinspear_cast_01,sqrswda_02_01,sqrswda_hit_01_01,stormimpact03_01,Sword3,swordwave_01,Thunder10_01,Thunder2_01,Thunder3_01,Thunder6_01,Thunder9_01,Up1_01,Up2_01,Up3_01,waJue,Water1_01,water2,Water2_01,Water4_01,waterFull,watering,Whistle,Wind1_01,Wind2_01,Wind5_01,xb,
+    NUll, Farm_Dig_1,Farm_Dig_2,Farm_Handling_Hay_1_short,Farm_Handling_Hay_2_medium,Farm_Handling_Hay_3_long,Farm_Harvest_1,Farm_Harvest_2,Farm_Hoe_1,Farm_Hoe_2,Farm_Pitchfork,Farm_Rake,Farm_Scythe_1,Farm_Scythe_2,Farm_Seeds_1,Farm_Seeds_2,Farm_Seeds_3,Farm_Seeds_4,Farm_Watering_1,Farm_Watering_2,Farm_Watering_Loop,Footsteps_Concrete_1,Footsteps_Concrete_2,Footsteps_Forest_1,Footsteps_Forest_2,Footsteps_Grass_1,Footsteps_Grass_Running,Footsteps_Gravel_1,Footsteps_Gravel_Run,Footsteps_Sand,Footsteps_Snow,UI_Book_close_1,UI_Book_open_1_fast,UI_Book_open_2_slow,UI_Browse_01_loop,UI_Change_Tab_1,UI_Change_Tab_2,UI_Click_1,UI_Click_2,UI_Click_3,UI_Click_4,UI_Click_5,UI_Click_6,UI_Confirm_1,UI_Confirm_2,UI_Decline_1,UI_Deny_1,UI_Deny_2,UI_Dialogue_Loop_1,UI_Dialogue_Loop_2,UI_Equip_1,UI_Flip_page_once_1a,UI_Flip_page_once_1b,UI_Hover,UI_Hover_1,UI_Hover_2,UI_Hover_3,UI_Hover_4,UI_Menu_Close,UI_Menu_Open,UI_Notification_1,UI_Notification_2,UI_Notification_3,UI_Notification_4,UI_Pause_1,UI_Pause_2,UI_Pause_3,UI_Pause_4,UI_Prompt_1,UI_Prompt_2,UI_Return_1,UI_Return_2,UI_Return_3,UI_Return_4,UI_Rollback,UI_Start_1,UI_Start_2,UI_Start_game,UI_Typing_1,UI_Typing_2,UI_Unequip,UI_Upgrade,
 }

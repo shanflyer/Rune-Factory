@@ -110,7 +110,7 @@ public struct SetSeasonWeather : GameAction
 public struct SetFixedSeason : GameAction
 {
     public float season;
-    public bool hideWeather;
+    public WeatherDisplayType weatherDisplayType;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 }

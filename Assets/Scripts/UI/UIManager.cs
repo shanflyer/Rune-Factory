@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -23,7 +24,7 @@ public class UIManager : Singleton<UIManager>
         canvasGroup = parent.GetComponent<CanvasGroup>();
     }
 
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
 
@@ -36,6 +37,23 @@ public class UIManager : Singleton<UIManager>
         GameActionManager.instance.AddListener<HidePanel>(HidePanel);
         GameActionManager.instance.AddListener<HidePanels>(HidePanels);
         GameActionManager.instance.AddListener<HideAllPanel>(HideAllPanel);
+
+        Selectable.setStringAction = UIAudioForTag;
+
+        TagAudioDataList tagAudioDataList = await GameSourceManager.instance.GetScriptableObject<TagAudioDataList>("Data/TagAudioData");
+        tagUIAudioDic.Clear();
+        for(int i = 0; i < tagAudioDataList.tagAudioDatas.Count; i++)
+        {
+            tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audio;
+        }
+    }
+    Dictionary<string, SE> tagUIAudioDic = new Dictionary<string, SE>();
+    void UIAudioForTag(string tag)
+    {
+        if(tagUIAudioDic.TryGetValue(tag,out var se))
+        {
+            AudioController.instance.PlayAudio(se);
+        }
     }
     public void HideAllPanel(HideAllPanel hideAllPanel)
     {

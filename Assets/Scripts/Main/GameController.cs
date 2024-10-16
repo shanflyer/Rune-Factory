@@ -206,12 +206,7 @@ public class GameController : MonoBehaviour
   
     public void AddCrystal()
     {
-        if (Application.platform != RuntimePlatform.Android)
-        {
-            AudioController.instance.PlayAudio(SE.click);
-             
-        }
-
+        
     }
     // Start is called beforee the first frame update
     async void Start()

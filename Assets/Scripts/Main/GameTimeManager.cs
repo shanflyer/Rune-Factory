@@ -580,7 +580,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
             seasonValue = nowYearHour / totalYearHour;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
-            EnvironmentManger.instance.HideOrDisplayWeather(SetFixedSeason.hideWeather);
+            EnvironmentManger.instance.ChangeWeatherDisplayType(SetFixedSeason.weatherDisplayType);
+            WorldMapObjManager.instance.RefreshMapBGS();
         }
         private void UpDataGameTimeAction()
         {
@@ -603,6 +604,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public bool runTime = true;
 #endif
     public bool night => nowGameTime.night;
+    public float timeValue => nowGameTime.TimeValue;
     public float SeasonValue => nowGameTime.SeasonValue;
     public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime.year,nowGameTime.Season,nowGameTime.day);
     public int2 nowHourMinute=> new int2(nowGameTime.hour, nowGameTime.minute);
@@ -852,8 +854,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             nowGameTime = new GameTime
             {
-                Season = Season.春,
-                hour = 6
+                Season = Season.春, 
             };
             nowGameTime.SetTime(6, 0);
             // StartTimeRun();

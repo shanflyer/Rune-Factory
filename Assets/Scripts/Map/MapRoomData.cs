@@ -1,6 +1,7 @@
 ﻿ 
 using System;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -50,6 +51,19 @@ public class SpecialNpcBehaviorArea
     public int tempCreatId;
     public Direction fixedDirection;
 }
+[Serializable]
+public struct MapBGSData
+{
+    public BGS bgs;
+    public AnimationCurve timeCurve;
+    public AnimationCurve seasonCurve;
+    public AnimationCurve waterFallCurve;
+
+    public float GetValue(float seasonValue, float timeValue, float waterFallValue)
+    {
+        return seasonCurve.Evaluate(seasonValue) * timeCurve.Evaluate(timeValue) * waterFallCurve.Evaluate(waterFallValue);
+    }
+}
 
 public class MapRoomData : ScriptableObject, IGameData
 {
@@ -68,13 +82,28 @@ public class MapRoomData : ScriptableObject, IGameData
     public int skyBackGroundId;
     public int creatTempCharacterId;
     public float fixedSeason;
-    public bool hideWeather;
+    public WeatherDisplayType weatherDisplayType;
 
+    public List<MapBGSData> mapBGSDatas = new List<MapBGSData>();
+     
     public bool autoCreatTempNpc;
     public bool tempNpcPrewarm;
     public List<NpcBehaviorArea> npcBehaviorAreas = new List<NpcBehaviorArea>();
     public List<SpecialNpcBehaviorArea> specialNpcBehaviorAreas = new List<SpecialNpcBehaviorArea>();
 
+    public void SetBGS(float seasonValue,float timeValue,float waterFallValue)
+    {
+        for(int i=0;i<mapBGSDatas.Count;i++)
+        {
+            float value=mapBGSDatas[i].GetValue(seasonValue, timeValue, waterFallValue);
+            if (value >= 0)
+            {
+                AudioController.instance.PlayAudio(mapBGSDatas[i].bgs);
+                break;
+            }
+        }
+        AudioController.instance.PlayAudio(BGS.NUll);
+    }
     public bool CheckBoundary(int2 coordinate)
     {
         if (coordinate.x <= endCoordinate.x && coordinate.x >= startCoordinate.x

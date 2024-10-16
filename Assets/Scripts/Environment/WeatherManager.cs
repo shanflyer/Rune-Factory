@@ -169,7 +169,7 @@ public class WeatherManager : Singleton<WeatherManager>
     }
 
     private int nowIndex = -1;
-
+    public float nowWaterFall => nowDayWeathers[nowIndex].waterFall;
     public void RefreshWeather(int hour)
     {
         int hourIndex = (int)math.floor(hour / 6.0f);
@@ -181,7 +181,7 @@ public class WeatherManager : Singleton<WeatherManager>
             {
                 weather = weather,
             };
-            GameActionManager.instance.QueueAction(setWeather);
+            GameActionManager.instance.QueueAction(setWeather); 
         }
     }
 }

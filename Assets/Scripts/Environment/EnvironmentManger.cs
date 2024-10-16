@@ -22,7 +22,10 @@ public struct EnvironmentLightData
     public Color flareColor;
     public int sunValue;
 }
-
+public enum WeatherDisplayType
+{
+    Outside,Inside,Forest
+}
 public class EnvironmentManger : Singleton<EnvironmentManger>
 {
     public override bool NeedUpdata => true;
@@ -128,22 +131,22 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         GameObjectCurveController.instance.StartIEnumerator(lerp); 
     }
 
-    bool hideWeather;
-    public void HideOrDisplayWeather(bool hide)
+    WeatherDisplayType weatherDisplayType;
+    public void ChangeWeatherDisplayType(WeatherDisplayType weatherDisplayType)
     {
-        hideWeather = hide;
-        if (hide)
+        this.weatherDisplayType = weatherDisplayType;
+        
+        if (weatherDisplayType == WeatherDisplayType.Inside)
         {
-            Shader.SetGlobalFloat("_DampValue", 0);
-            skyEnviromentMono.SetWeather(default(Weather),lightning.lightningLight,true);
+            Shader.SetGlobalFloat("_DampValue", 0); 
         }
         else
-        {
+        { 
             Shader.SetGlobalFloat("_DampValue", nowWeather.waterFall > 0 && !nowWeather.IsSnow() ? 1 : 0);
-            skyEnviromentMono.SetWeather(nowWeather, lightning.lightningLight);
         }
-       
-    } 
+        skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
+    }
+   
     IEnumerator LerpWeather(Weather newWeather)
     {
         float timeValue = 0;
@@ -155,35 +158,32 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             float value = timeValue / 2.0f;
             nowWeather = Weather.Lerp(weather, newWeather, value);
             lightning.lightning = nowWeather.lightning;
-            if (!hideWeather)
+            skyEnviromentMono.SetWeather(nowWeather, lightning.lightningLight);
+            using (var e = windEffects.GetEnumerator())
             {
-                skyEnviromentMono.SetWeather(nowWeather, lightning.lightningLight);
-                using (var e = windEffects.GetEnumerator())
+                while (e.MoveNext())
                 {
-                    while (e.MoveNext())
-                    {
-                        e.Current.SetWindValue(nowWeather.wind);
-                    }
-                }
-
-                if (oldDamp && !newDamp)
-                {
-                    Shader.SetGlobalFloat("_DampValue", 1 - timeValue);
-                }
-                else if (!oldDamp && newDamp)
-                {
-                    Shader.SetGlobalFloat("_DampValue", timeValue);
-                }
-                else if (newDamp)
-                {
-                    Shader.SetGlobalFloat("_DampValue", 1);
-                }
-                else
-                {
-                    Shader.SetGlobalFloat("_DampValue", 0);
+                    e.Current.SetWindValue(nowWeather.wind);
                 }
             }
-           
+
+            if (oldDamp && !newDamp)
+            {
+                Shader.SetGlobalFloat("_DampValue", 1 - timeValue);
+            }
+            else if (!oldDamp && newDamp)
+            {
+                Shader.SetGlobalFloat("_DampValue", timeValue);
+            }
+            else if (newDamp)
+            {
+                Shader.SetGlobalFloat("_DampValue", 1);
+            }
+            else
+            {
+                Shader.SetGlobalFloat("_DampValue", 0);
+            }
+
             float weatherLightValue= nowWeather.GetWeatherLight();
             float flareLight = nowWeather.GetFlareLight();
             RefreshEnvironment(weatherLightValue, flareLight); 
@@ -199,7 +199,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         float weatherLightValue = nowWeather.GetWeatherLight();
         float flareLight = nowWeather.GetFlareLight();
         RefreshEnvironment(weatherLightValue, flareLight);
-        if (!hideWeather)
+        if (weatherDisplayType!=WeatherDisplayType.Inside)
         {
             skyEnviromentMono.SetWeather(nowWeather, lightning.lightningLight);
         }
@@ -400,13 +400,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 }
                 lightningLight = 0;
                 setLightningLight(lightningLight);
-                if (LightningData.soundRandom != 0)
+                if (LightningData.sounds!=null&&LightningData.sounds.Length>0)
                 {
-                   var data=GameRandom.instance.GetSingleRandomValue(LightningData.soundRandom);
-                    if (data >= 0)
-                    {
-                        AudioController.instance.PlayAudio((SE)data);
-                    }
+                    int index = GameRandom.RandomInt(0, LightningData.sounds.Length);
+                    AudioController.instance.PlayAudio(LightningData.sounds[index]);
                 }
                 LightningCD = 0;
                 waitLightningTime = 0;

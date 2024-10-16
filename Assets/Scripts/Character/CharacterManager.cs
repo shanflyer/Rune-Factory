@@ -79,6 +79,12 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
             ControllerRuntimeObj = characterRuntimeObj;
+            if (!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
+            {
+                audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
+            }
+            audioListener.enabled = true;
+            CameraManager.instance.SetCameraListener(false);
         }
     }
 
@@ -456,13 +462,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
                 }
                 characterRuntionObjs.TryGetValue(controllerCharacter, out var _ControllerRuntimeObj);
-                ControllerRuntimeObj = _ControllerRuntimeObj;
-                if(!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
-                {
-                    audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
-                }
-                audioListener.enabled = true;
-                CameraManager.instance.SetCameraListener(false);
+                ControllerRuntimeObj = _ControllerRuntimeObj; 
             }
         }
         get

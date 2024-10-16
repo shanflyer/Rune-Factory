@@ -39,15 +39,11 @@ public class StartEventPanel : GamePanel<IReferenceData>
     }
 
     void ClickXinStart()
-    {
-        AudioController.instance.PlayAudio(SE.Book);
-        AudioController.instance.PlayAudio(BGM.tt2);
-         
+    {  
         content.gameObject.SetActive(true);
     }
     void ClickXinEnd()
-    {
-        AudioController.instance.PlayAudio(SE.Book);
+    { 
         Close();
         GameActionManager.instance.QueueAction(new PlayFilm
         {

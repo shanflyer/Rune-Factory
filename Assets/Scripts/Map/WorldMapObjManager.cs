@@ -26,6 +26,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<RefreshMapPackageItemRender>(RefreshMapPackageItemRender);
         GameActionManager.instance.AddListener<RefreshMapItemDisplay>(RefreshMapItemDisplay);
         GameActionManager.instance.AddListener<ChangeMapItemObjLayer>(ChangeMapItemObjLayer);
+        GameActionManager.instance.AddListener<SetWeather>(SetWeather);
     }
 
     protected override void Clear()
@@ -206,8 +207,18 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         get; 
         set; 
     }
-    public MapRoomData displayMapRoomData { get; private set; }
-  
+    public MapRoomData displayMapRoomData;
+
+    float waterFall;
+    void SetWeather(SetWeather setWeather)
+    {
+        waterFall = setWeather.weather.waterFall;
+        RefreshMapBGS();
+    }
+    public void RefreshMapBGS()
+    {
+        displayMapRoomData.SetBGS(GameTimeManager.instance.SeasonValue, GameTimeManager.instance.timeValue, waterFall);
+    }
     private async Task<RuntimeObj> CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
     {
         if (mapRoomData != null)
@@ -275,7 +286,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         SetFixedSeason SetFixedSeason = new SetFixedSeason
         {
             season = mapRoomData.fixedSeason,
-            hideWeather=mapRoomData.hideWeather
+            weatherDisplayType=mapRoomData.weatherDisplayType
         };
         GameActionManager.instance.QueueAction(SetFixedSeason);
 

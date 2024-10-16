@@ -55,13 +55,11 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
      
 
     void NoButtonAction()
-    {
-        AudioController.instance.PlayAudio(SE.Return); 
+    { 
         Close();
     }
     void YesButtonAction()
-    {
-        AudioController.instance.PlayAudio(SE.click);
+    { 
         Close();
         UIManager.instance.CloseGamePanel<SelectCharacterPanel>(); 
         GameActionManager.instance.QueueAction(new PlayFilm

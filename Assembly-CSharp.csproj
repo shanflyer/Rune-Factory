@@ -103,6 +103,7 @@
     <Compile Include="Assets\Scripts\Main\GameNotificationManager.cs" />
     <Compile Include="Assets\Scripts\UI\HomeEquip\HomeEquipReference.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayDelayed.cs" />
+    <Compile Include="Assets\Scripts\test\TeatAudio.cs" />
     <Compile Include="Assets\Scripts\Fishing\FishData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetMaxParticles.cs" />
     <Compile Include="Assets\Scripts\Data\ManufactureData.cs" />
@@ -506,6 +507,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetString.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedVector3.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetVelocity.cs" />
+    <Compile Include="Assets\Test\Shader\TestShaderOut.cs" />
     <Compile Include="Assets\Scripts\Data\ShopDataList.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Demo\Scripts\ETFXSceneManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Physics\Linecast.cs" />
@@ -564,6 +566,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularDrag.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\SetInt.cs" />
     <Compile Include="Assets\Scripts\Scene\MyLight.cs" />
+    <Compile Include="Assets\Scripts\Data\TagAudioDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\Cooldown.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\ResetPath.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
@@ -911,6 +914,7 @@
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\MultiCameraDemo.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
+    <Compile Include="Assets\Test\Shader\TestComputeShader.cs" />
     <Compile Include="Assets\Scripts\Event\GameTimeEventManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetColor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
@@ -934,6 +938,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\GetComponent.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCBehaviorState.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedVector2.cs" />
+    <Compile Include="Assets\Test\Shader\ComputeShaderTest.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetRightVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Normalize.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt3.cs" />
@@ -1138,12 +1143,14 @@
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlareShader.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\White Spark.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
+    <None Include="Assets\Test\Shader\NewComputeShader21.compute" />
     <None Include="Assets\Render\Shader\ObjectScreenUV.shader" />
     <None Include="Assets\Render\Shader\MyColorMask.shader" />
     <None Include="Assets\Toon Fantasy Nature\Documentation\Usage Guidelines.txt" />
     <None Include="Assets\Render\Shader\MyShadowMask.shader" />
     <None Include="Assets\Test\NewImageEffectShader.shader" />
     <None Include="Assets\Render\Shader\MyTest.shader" />
+    <None Include="Assets\Test\Shader\ComputeShader0.compute" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Effect\Epic Toon FX\Prefabs\Interactive\Interactive FX.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
@@ -1170,12 +1177,14 @@
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonVegetation2D.shader" />
     <None Include="Assets\Render\Shader\Sun.shader" />
     <None Include="Assets\Render\Shader\Monster-Lit-Default.shader" />
+    <None Include="Assets\Test\Shader\TestShader11.compute" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster 4.txt" />
     <None Include="Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonOutline2D.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\DLL\Excel\Excel.dll" />
     <None Include="Assets\Hovl Studio\Archer skills pack\Shaders\Scroll.shader" />
+    <None Include="Assets\Test\Shader\ParticleShader.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster.txt" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\ToonCommonTree2D.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\AlienSun.txt" />
@@ -1202,6 +1211,7 @@
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\White Star.txt" />
     <None Include="Assets\Effect\ProFlares\ProFlares_ReadMe.txt" />
     <None Include="Assets\Effect\ProFlares\ExportedFlares\IslandDemoSun.txt" />
+    <None Include="Assets\Test\Shader\NewUnlitShader.shader" />
     <None Include="Assets\Render\Shader\UnityAction.cginc" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\DistantSun.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SciFiRed.txt" />

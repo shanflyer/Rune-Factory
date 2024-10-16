@@ -46,8 +46,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         MealSelcet.onValueChanged.AddListener((bool value) =>
         {
             if (value && gender != Gender.male)
-            {
-                AudioController.instance.PlayAudio(SE.select);
+            { 
                 gender = Gender.male;
                 PlayFilm playFilm = new PlayFilm
                 {
@@ -60,8 +59,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         FemealSelect.onValueChanged.AddListener((bool value) =>
         {
             if (value && gender != Gender.female)
-            {
-                AudioController.instance.PlayAudio(SE.select);
+            { 
                 gender = Gender.female;
                 PlayFilm playFilm = new PlayFilm
                 {
@@ -96,8 +94,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
         Ok.onClick.AddListener(OkButtonAction);
         Return.onClick.AddListener(async () =>
-        {
-            AudioController.instance.PlayAudio(SE.Return);
+        { 
             Close();
            await UIManager.instance.ShowGamePanel<ZeroPanel>();
         });
@@ -111,14 +108,12 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
     }
 
     private void SelectDate(int index)
-    {
-        AudioController.instance.PlayAudio(SE.select);
+    { 
         brothDate = index + 1;
     }
 
     private void SelectSeason(int index)
-    {
-        AudioController.instance.PlayAudio(SE.select);
+    { 
         index++;
         brothSeason = (Season)index;
     }
@@ -140,8 +135,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
             optionData.text = LanguageManage.SwitchStr(optionData.text);
         }
 
-        //DataSaveAndLoadTest.isJsonData = false;
-        AudioController.instance.PlayAudio(SE.click);
+        //DataSaveAndLoadTest.isJsonData = false; 
         gender = Gender.male;
         playerName = LanguageManage.SwitchStr("亚历克斯");
         brothSeason = Season.春;
@@ -152,9 +146,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
     }
 
     private async void OkButtonAction()
-    {
-        AudioController.instance.PlayAudio(SE.click);
-
+    { 
         GameDataSaveManager.instance.InitPlayerData(playerName, gender, brothSeason, brothDate);
         //DataSaveAndLoadTest.IniteZerodata();
        await UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel>(layer: 3);

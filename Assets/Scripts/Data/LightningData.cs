@@ -8,7 +8,7 @@ public class LightningData : ScriptableObject
     public float LightningTime;
     public float2 lightningSpeed;
     public float2 waitSoundTime;
-    public int soundRandom;
+    public BGS[] sounds; 
     public AnimationCurve lightningCurve;
     [ColorUsageAttribute(true, true)]
     public Color color;

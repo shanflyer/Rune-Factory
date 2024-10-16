@@ -23,7 +23,7 @@ namespace UnityEngine.UI
         protected static Selectable[] s_Selectables = new Selectable[10];
         protected static int s_SelectableCount = 0;
         private bool m_EnableCalled = false;
-
+        public static SetStringAction setStringAction;
         /// <summary>
         /// Copy of the array of all the selectable objects currently active in the scene.
         /// </summary>
@@ -417,6 +417,10 @@ namespace UnityEngine.UI
             get { return GetComponent<Animator>(); }
         }
 #endif
+        private void OnApplicationQuit()
+        {
+            setStringAction = null;
+        }
 
         protected override void Awake()
         {

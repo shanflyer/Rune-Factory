@@ -108,7 +108,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     public SetFloatValue setWindValue;
 
  
-
+   
    
     async void DisplaySky(DisplaySky displaySky)
     {
@@ -177,6 +177,11 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         CameraManager.instance.SetCameraOffset(new Vector2(0, cameraOffsetY));
     }
 
+    public void ChangeWeatherDisplayType(WeatherDisplayType weatherDisplayType)
+    {
+        weatherMono.HideWeather(weatherDisplayType == WeatherDisplayType.Inside);
+        weatherMono.ChangeWeatherAudio((int)weatherDisplayType);
+    }
     public void SetWeather(Weather weather,float lightningLight,bool immediatelyStop=false)
     { 
         if (weather.IsSnow())

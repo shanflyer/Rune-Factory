@@ -282,9 +282,16 @@ namespace UnityEngine.UI
             {
                 UISystemProfilerApi.AddMarker("Toggle.value", this);
                 onValueChanged.Invoke(m_IsOn);
-            }
-        }
 
+                if (m_IsOn)
+                {
+                    if (tag != "Untagged" && setStringAction != null)
+                    {
+                        setStringAction(tag);
+                    }
+                }
+            }
+        } 
         /// <summary>
         /// Play the appropriate effect.
         /// </summary>

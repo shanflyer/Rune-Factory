@@ -286,8 +286,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
 
         if (!costItemEnough)
-        {
-            AudioController.instance.PlayAudio(SE.Return);
+        { 
             ItemData costItemData =await GameDataManager.instance.GetAsyncData<ItemData>(costItem.dataId);
             GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("消耗物品不足"),
               $"{LanguageManage.SwitchStr("需消耗:")}{costItemData.name}*{costItem.count},{LanguageManage.SwitchStr("当前拥有;")}{nowCostItemCount}/n{LanguageManage.SwitchStr("无法制作！")}");
@@ -297,16 +296,14 @@ public class ManufacturePanel : GamePanel<Manufature>
             int totalCost = formulaCost * produceCount;
             int nowPower = CharacterManager.instance.player.CharacterProperty.Power;
             if (totalCost >= nowPower)
-            {
-                AudioController.instance.PlayAudio(SE.Return);
+            { 
                 GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("RP消耗过大"),
                   $"{LanguageManage.SwitchStr("需消耗RP:")}{totalCost},{LanguageManage.SwitchStr("超过拥有RP;")}"
                     + LanguageManage.SwitchStr("无法制作！"));
             }
             else
             {
-                string noticeStr = "";
-                AudioController.instance.PlayAudio(SE.Return);
+                string noticeStr = ""; 
                 if (outItem.dataId == GameCommon.defaultProduct)
                 {
                     noticeStr = LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");

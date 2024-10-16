@@ -6,12 +6,13 @@ using UnityEngine.Serialization;
 
 namespace UnityEngine.UI
 {
+    public delegate void SetStringAction(string str);
     /// <summary>
     /// A standard button that sends an event when clicked.
     /// </summary>
     [AddComponentMenu("UI/Button", 30)]
     public class Button : Selectable, IPointerClickHandler, ISubmitHandler
-    {
+    { 
         [Serializable]
         /// <summary>
         /// Function definition for a button click event.
@@ -68,6 +69,10 @@ namespace UnityEngine.UI
 
             UISystemProfilerApi.AddMarker("Button.onClick", this);
             m_OnClick.Invoke();
+            if (tag != "Untagged"&&setStringAction!=null)
+            {
+                setStringAction(tag);
+            }
         }
 
         /// <summary>
@@ -111,9 +116,9 @@ namespace UnityEngine.UI
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
-            Press();
+            Press(); 
         }
-
+        
         /// <summary>
         /// Call all registered ISubmitHandler.
         /// </summary>
@@ -171,5 +176,6 @@ namespace UnityEngine.UI
 
             DoStateTransition(currentSelectionState, false);
         }
+        
     }
 }
