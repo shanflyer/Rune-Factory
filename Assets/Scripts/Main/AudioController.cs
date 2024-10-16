@@ -4,11 +4,17 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
+using Unity.Mathematics;
 
 public enum AudioClearType
 {
     All,Oldest,NoClear
+}
+public struct AudioPlayData
+{
+    public AudioClip audioClip;
+    public float weight;
+    public bool loop;
 }
 public class AudioController : Singleton<AudioController>
 {
@@ -25,6 +31,9 @@ public class AudioController : Singleton<AudioController>
         StopBGS();
         StopME();
         StopSE();
+        meMixerDic.Clear();
+        bgsMixerDic.Clear();
+        bgmMixerDic.Clear();
         bgmGraph.Destroy();
         bgsGraph.Destroy();
         seGraph.Destroy();
@@ -81,6 +90,11 @@ public class AudioController : Singleton<AudioController>
     private PlayableGraph bgmGraph, bgsGraph, meGraph, seGraph;
     private AudioPlayableOutput bgmOut, bgsOut, meOut, seOut;
     private AudioMixerPlayable bgmMixer, bgsMixer, meMixer;
+
+    private Dictionary<string, AudioMixerPlayable> bgmMixerDic = new Dictionary<string, AudioMixerPlayable>();
+    private Dictionary<string, AudioMixerPlayable> bgsMixerDic = new Dictionary<string, AudioMixerPlayable>();
+    private Dictionary<string, AudioMixerPlayable> meMixerDic = new Dictionary<string, AudioMixerPlayable>();
+
     private BGM nowBGM;
     private BGS nowBGS;
     public async void PlayAudio(SE se, bool loop = false)
@@ -89,42 +103,60 @@ public class AudioController : Singleton<AudioController>
         PlaySE(audioClip, loop);
     }
 
-    public async void PlayAudio(ME me, bool loop = false)
+    public async void PlayAudio(ME me, bool loop = false, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string tag = "Default")
     {
         
         AudioClip audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.MEPath, me.ToString()));
-        PlayME(audioClip, loop);
+        PlayME(audioClip, loop,audioClearType,weight,isLerp,tag);
     }
      
-    public async void PlayAudio(BGM bgm, bool loop = true)
+    public async void PlayAudio(BGM bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string tag = "Default")
     {
         if (nowBGM != bgm)
         {
             nowBGM = bgm;
             AudioClip audioClip = await
             GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, bgm.ToString()));
-            PlayBGM(audioClip, loop);
+            PlayBGM(audioClip, loop,audioClearType,weight,isLerp,tag);
         } 
-    }
-
-    public async void PlayAudio(string bgm, bool loop = true)
-    {
-        AudioClip audioClip = await
-            GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, bgm));
-        PlayBGM(audioClip, loop);
-    }
-     
-    public async void PlayAudio(BGS bgs, bool loop = true)
+    } 
+    public async void PlayAudio(BGS bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string tag = "Default")
     {
         if (bgs != nowBGS)
         {
             nowBGS = bgs;
             AudioClip audioClip = await
-           GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, bgs.ToString()));
-            PlayBGS(audioClip, loop);
+            GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, bgs.ToString()));
+            PlayBGS(audioClip, loop, audioClearType,weight,isLerp,tag);
         } 
     }
+    public async void PlayAudio(List<float3> bgs, AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string tag = "Default")
+    {
+        if (bgs.Count > 0)
+        {
+            nowBGS = (BGS)(int)(bgs[bgs.Count - 1].x);
+        }
+        else
+        {
+            nowBGS = BGS.NUll;
+        }
+        List<AudioPlayData> audioPlayDatas = new List<AudioPlayData>();
+        for(int i = 0; i < bgs.Count; i++)
+        {
+            var b= (BGS)(int)(bgs[i].x);
+            AudioClip audioClip = await  GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, b.ToString()));
+            AudioPlayData audioPlayData = new AudioPlayData
+            {
+                audioClip = audioClip,
+                weight = bgs[i].y,
+                loop = bgs[i].z > 0
+            };
+            audioPlayDatas.Add(audioPlayData);
+        }
 
+       
+        PlayBGS(audioPlayDatas,audioClearType, isLerp, tag);
+    }
     private void PlaySE(AudioClip audioClip, bool loop = false)
     {
         try
@@ -143,63 +175,90 @@ public class AudioController : Singleton<AudioController>
     {
         seGraph.Stop();
     }
-    void PlayAudio(PlayableGraph playableGraph,AudioMixerPlayable audioMixer,AudioClip audioClip, bool loop = false, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false)
+    void PlayAudio(PlayableGraph playableGraph,AudioMixerPlayable audioMixer,Dictionary<string,AudioMixerPlayable> childMixers,AudioClip audioClip, bool loop = false,
+        AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false,string tag="Default")
     {
-        var count = audioMixer.GetInputCount();
+        if(!childMixers.TryGetValue(tag,out var childMixer))
+        {
+            childMixer = AudioMixerPlayable.Create(playableGraph);
+            childMixers.Add(tag, childMixer);
+            audioMixer.AddInput(childMixer, 0, 1);
+        }
+
+        var count = childMixer.GetInputCount();
         if (!isLerp)
         {
-            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
+            AudioClipPlayable audioClipPlayable =  AudioClipPlayable.Create(playableGraph, audioClip, loop);
             if (count > 0)
             {
                 if (audioClearType == AudioClearType.All)
                 {
                     for (int i = count - 1; i <= 0; i--)
                     {
-                        playableGraph.Disconnect(audioMixer, i);
+                        playableGraph.Disconnect(childMixer, i);
                     }
-                    audioMixer.SetInputCount(1);
-                    playableGraph.Connect(audioClipPlayable, 0, audioMixer, 0);
-                    audioMixer.SetInputWeight(0, weight);
+                    if (audioClip != null)
+                    {
+                        childMixer.SetInputCount(1);
+                        playableGraph.Connect(audioClipPlayable, 0, childMixer, 0);
+                        childMixer.SetInputWeight(0, weight);
+                    }
+                    else
+                    {
+                        childMixer.SetInputCount(0);
+                    }
+                  
                 }
                 else if (audioClearType == AudioClearType.Oldest)
-                {
-                    playableGraph.Disconnect(audioMixer, 0);
-                    if (count > 1)
+                { 
+                   
+                    if (audioClip != null)
                     {
-                        for (int i = 1; i < count; i++)
+                        if (count > 1)
                         {
-                            var playable = audioMixer.GetInput(i);
-                            float oldWeight = audioMixer.GetInputWeight(i);
-                            playableGraph.Disconnect(audioMixer, i);
-                            playableGraph.Connect(playable, 0, audioMixer, i - 1);
-                            audioMixer.SetInputWeight(i - 1, oldWeight);
+                            for (int i = count - 1; i >= 0; i--)
+                            {
+                                var playable = childMixer.GetInput(i);
+                                float oldWeight = childMixer.GetInputWeight(i);
+                                playableGraph.Disconnect(childMixer, i);
+                                playableGraph.Connect(playable, 0, childMixer, i + 1);
+                                childMixer.SetInputWeight(i + 1, oldWeight);
+                            }
                         }
+                        playableGraph.Connect(audioClipPlayable, 0, childMixer, 0);
+                        childMixer.SetInputWeight(0, weight);
                     }
-                    playableGraph.Connect(audioClipPlayable, 0, audioMixer, count - 1);
-                    audioMixer.SetInputWeight(count - 1, weight);
+                    else
+                    {
+                        childMixer.SetInputCount(count-1);
+                    }
+                       
                 }
                 else
                 {
-                    audioMixer.AddInput(audioClipPlayable, 0, weight);
+                    if (audioClip != null)
+                        childMixer.AddInput(audioClipPlayable, 0, weight);
                 }
             }
             else
             {
-                audioMixer.AddInput(audioClipPlayable, 0, weight);
-            } ;
+                if (audioClip != null)
+                    childMixer.AddInput(audioClipPlayable, 0, weight);
+            }
         }
         else
         {
             AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
             if (count > 0)
             {
-                audioMixer.AddInput(audioClipPlayable, 0, 0);
+                if (audioClip != null)
+                    childMixer.AddInput(audioClipPlayable, 0, 0);
                 if (audioClearType == AudioClearType.All)
                 {
                     List<float> startWeights = new List<float>();
                     for (int i = 0; i < count; i++)
                     {
-                        startWeights.Add(audioMixer.GetInputWeight(i));
+                        startWeights.Add(childMixer.GetInputWeight(i));
                     }
                     GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
                     IEnumerator LerpAudio()
@@ -210,28 +269,34 @@ public class AudioController : Singleton<AudioController>
                             timeValue += Time.deltaTime * 0.5f;
                             for (int i = 0; i < count; i++)
                             {
-                                audioMixer.SetInputWeight(i, startWeights[i] * (1 - timeValue));
+                                childMixer.SetInputWeight(i, startWeights[i] * (1 - timeValue));
                             }
-                            audioMixer.SetInputWeight(count, timeValue * weight);
+                            if (audioClip != null)
+                                childMixer.SetInputWeight(count, timeValue * weight);
 
                             yield return 0;
                         }
-                        for (int i = 0; i < count; i++)
+                       
+                        if (audioClip != null)
                         {
-                            playableGraph.Disconnect(audioMixer, i);
+                            childMixer.SetInputCount(1);
+                            childMixer.ConnectInput(0,audioClipPlayable,0);
+                            childMixer.SetInputWeight(0, weight);
                         }
-                        audioMixer.SetInputCount(1);
-                        audioMixer.SetInputWeight(0, weight);
+                        else
+                        {
+                            childMixer.SetInputCount(0);
+                        } 
                     }
 
                 }
                 else if (audioClearType == AudioClearType.Oldest)
                 {
-                    float oldWeight = audioMixer.GetInputWeight(0);
+                    float oldWeight = childMixer.GetInputWeight(0);
                     List<float> oldWeights = new List<float>();
                     for (int i = 1; i < count; i++)
                     {
-                        oldWeights.Add(audioMixer.GetInputWeight(i));
+                        oldWeights.Add(childMixer.GetInputWeight(i));
                     }
                     GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
                     IEnumerator LerpAudio()
@@ -240,28 +305,42 @@ public class AudioController : Singleton<AudioController>
                         while (timeValue < 1)
                         {
                             timeValue += Time.deltaTime * 0.5f;
-                            audioMixer.SetInputWeight(0, oldWeight * (1 - timeValue));
-                            audioMixer.SetInputWeight(1, timeValue * weight);
+                            childMixer.SetInputWeight(0, oldWeight * (1 - timeValue));
+                            childMixer.SetInputWeight(1, timeValue * weight);
                             yield return 0;
-                        }
-                        playableGraph.Disconnect(audioMixer, 0);
-                        audioMixer.SetInputCount(count);
-                        for (int i = 0; i < oldWeights.Count; i++)
+                        }  
+                       
+                        if (audioClip != null)
                         {
-                            audioMixer.SetInputWeight(i, oldWeights[i]);
+                            for (int i = count - 1; i >= 0; i--)
+                            {
+                                var playable = childMixer.GetInput(i);
+                                float oldWeight = childMixer.GetInputWeight(i);
+                                playableGraph.Disconnect(childMixer, i);
+                                playableGraph.Connect(playable, 0, childMixer, i + 1);
+                                childMixer.SetInputWeight(i + 1, oldWeight);
+                            }
+                            playableGraph.Connect(audioClipPlayable, 0, childMixer, 0);
+                            childMixer.SetInputWeight(0, weight);
                         }
-                        audioMixer.SetInputWeight(count - 1, weight);
+                        else
+                        {
+                            childMixer.SetInputCount(count-1);
+                        }
+                            
                     }
                 }
                 else
                 {
-                    audioMixer.AddInput(audioClipPlayable, 0, weight);
+                    if (audioClip != null)
+                        childMixer.AddInput(audioClipPlayable, 0, weight);
                 }
 
             }
             else
             {
-                audioMixer.AddInput(audioClipPlayable, 0, weight);
+                if (audioClip != null)
+                    childMixer.AddInput(audioClipPlayable, 0, weight);
             }
         }
 
@@ -291,30 +370,347 @@ public class AudioController : Singleton<AudioController>
             }
         }
     }
-
-
-    private void PlayME(AudioClip audioClip, bool loop = false, AudioClearType audioClearType=AudioClearType.NoClear,float weight=1, bool isLerp=false)
+    void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, List<AudioPlayData> audioClips,
+       AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string tag = "Default")
     {
-        PlayAudio(meGraph, meMixer, audioClip, loop, audioClearType, weight, isLerp);
+        if (!childMixers.TryGetValue(tag, out var childMixer))
+        {
+            childMixer = AudioMixerPlayable.Create(playableGraph);
+            childMixers.Add(tag, childMixer);
+            audioMixer.AddInput(childMixer, 0, 1);
+        }
+
+        var count = childMixer.GetInputCount();
+        if (!isLerp)
+        {
+           
+            if (count > 0)
+            {
+                if (audioClearType == AudioClearType.All)
+                {
+                    for (int i = count - 1; i <= 0; i--)
+                    {
+                        playableGraph.Disconnect(childMixer, i);
+                    }
+                    childMixer.SetInputCount(0);
+                    if (audioClips.Count > 0)
+                    {
+                        for (int i = 0; i < audioClips.Count; i++)
+                        {
+                            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                            childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                        }
+                    }
+
+                }
+                else if (audioClearType == AudioClearType.Oldest)
+                {
+                    if (count > audioClips.Count)
+                    {
+                        for(int i = 0; i < count - audioClips.Count; i++)
+                        {
+                            var playable = childMixer.GetInput(i);
+                            float weight = childMixer.GetInputWeight(i);
+                            playableGraph.Connect(playable, 0, childMixer, i + audioClips.Count);
+                            childMixer.SetInputWeight(i + audioClips.Count, weight);
+                        }
+                        if (audioClips.Count > 0)
+                        {
+                            for (int i = 0; i < audioClips.Count; i++)
+                            {
+                                AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                                playableGraph.Connect(audioClipPlayable, 0, childMixer, i);
+                                childMixer.SetInputWeight(i, audioClips[i].weight);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        childMixer.SetInputCount(audioClips.Count);
+                        if (audioClips.Count > 0)
+                        {
+                            for (int i = 0; i < audioClips.Count; i++)
+                            {
+                                AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                                childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                            }
+                        }
+
+                    }
+
+                   
+                     
+                }
+                else
+                {
+                    if (audioClips.Count > 0)
+                    {
+                        childMixer.SetInputCount(count + audioClips.Count);
+                        for (int i = count-1; i >=0; i--)
+                        {
+                            var playable = childMixer.GetInput(i);
+                            float weight = childMixer.GetInputWeight(i);
+                            playableGraph.Connect(playable, 0, childMixer, i + audioClips.Count);
+                            childMixer.SetInputWeight(i + audioClips.Count, weight);
+                        }
+                        for (int i = 0; i < audioClips.Count; i++)
+                        {
+                            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                            playableGraph.Connect(audioClipPlayable, 0, childMixer, i);
+                            childMixer.SetInputWeight(i, audioClips[i].weight);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (audioClips.Count > 0)
+                {
+                    for(int i = 0; i < audioClips.Count; i++)
+                    {
+                        AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                        childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                    }
+                }
+            }
+        }
+        else
+        { 
+            if (count > 0)
+            {
+                
+                if (audioClearType == AudioClearType.All)
+                {
+                    if (audioClips.Count > 0)
+                    {
+                        for (int i = 0; i < audioClips.Count; i++)
+                        {
+                            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                            childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                        }
+                    }
+                    List<float> startWeights = new List<float>();
+                    for (int i = 0; i < count; i++)
+                    {
+                        startWeights.Add(childMixer.GetInputWeight(i));
+                    }
+                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                    IEnumerator LerpAudio()
+                    {
+                        float timeValue = 0;
+                        while (timeValue < 1)
+                        {
+                            timeValue += Time.deltaTime * 0.5f;
+                            for (int i = 0; i < count; i++)
+                            {
+                                childMixer.SetInputWeight(i, startWeights[i] * (1 - timeValue));
+                            }
+                            if (audioClips.Count > 0)
+                            {
+                                for (int i = 0; i < audioClips.Count; i++)
+                                {
+                                    childMixer.SetInputWeight(count+i, timeValue * audioClips[i].weight);
+                                }
+                            }  
+                            yield return 0;
+                        }
+
+                        childMixer.SetInputCount(0);
+                        if (audioClips.Count > 0)
+                        {
+                            for (int i = 0; i < audioClips.Count; i++)
+                            {
+                                AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                                childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                            }
+                        }
+                    }
+
+                }
+                else if (audioClearType == AudioClearType.Oldest)
+                {
+                    if (audioClips.Count > 0)
+                    {
+                        for (int i = 0; i < audioClips.Count; i++)
+                        {
+                            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                            childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                        }
+                    }
+                    List<float> oldWeights = new List<float>();
+                    for (int i = 1; i < count; i++)
+                    {
+                        oldWeights.Add(childMixer.GetInputWeight(i));
+                    }
+                    List<AudioClipPlayable> audioClipPlayables = new List<AudioClipPlayable>();
+                    if (audioClips.Count > 0)
+                    { 
+                        for (int i = 0; i < audioClips.Count; i++)
+                        {
+                            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                            childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                            audioClipPlayables.Add(audioClipPlayable);
+                        }
+                    }
+                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                    IEnumerator LerpAudio()
+                    {
+                        float timeValue = 0;
+                        while (timeValue < 1)
+                        {
+                            timeValue += Time.deltaTime * 0.5f;
+
+                            for(int i = 0; i < audioClips.Count; i++)
+                            {
+                                if (i < count)
+                                {
+                                    childMixer.SetInputWeight(0, oldWeights[i] * (1 - timeValue));
+                                }
+                                childMixer.SetInputWeight(i+count, timeValue * audioClips[i].weight);
+                            } 
+                            yield return 0;
+                        }
+                        if (count > audioClips.Count)
+                        {
+                            for (int i = count - audioClips.Count; i>=0; i--)
+                            {
+                                var playable = childMixer.GetInput(i);
+                                float weight = childMixer.GetInputWeight(i);
+                                playableGraph.Connect(playable, 0, childMixer, i + audioClips.Count);
+                                childMixer.SetInputWeight(i + audioClips.Count, weight);
+                            }
+                            
+                        }
+                        if (audioClips.Count > 0)
+                        {
+                            for (int i = 0; i < audioClips.Count; i++)
+                            {
+                                AudioClipPlayable audioClipPlayable = audioClipPlayables[i];
+                                playableGraph.Connect(audioClipPlayable, 0, childMixer, i);
+                                childMixer.SetInputWeight(i, audioClips[i].weight);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (audioClips.Count > 0)
+                    {
+                        childMixer.SetInputCount(count + audioClips.Count);
+                        for(int i = count-1; i >= 0; i--)
+                        {
+                            var playable = childMixer.GetInput(i);
+                            float weight = childMixer.GetInputWeight(i);
+                            playableGraph.Connect(playable, 0, childMixer, i + audioClips.Count);
+                            childMixer.SetInputWeight(i + audioClips.Count, weight);
+                        }
+                        for (int i = 0; i < audioClips.Count; i++)
+                        {
+                            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                            playableGraph.Connect(audioClipPlayable, 0, childMixer, i);
+                            childMixer.SetInputWeight(i, audioClips[i].weight);
+                        }
+                        GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                        IEnumerator LerpAudio()
+                        {
+                            float timeValue = 0;
+                            while (timeValue < 1)
+                            {
+                                timeValue += Time.deltaTime * 0.5f;
+                                for (int i = 0; i < audioClips.Count; i++)
+                                { 
+                                    childMixer.SetInputWeight(i, timeValue * audioClips[i].weight);
+                                }
+
+                                yield return 0;
+                            }
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                if (audioClips.Count > 0)
+                {
+                    for (int i = 0; i < audioClips.Count; i++)
+                    {
+                        AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
+                        childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                    }
+                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                    IEnumerator LerpAudio()
+                    {
+                        float timeValue = 0;
+                        while (timeValue < 1)
+                        {
+                            timeValue += Time.deltaTime * 0.5f;
+                            for (int i = 0; i < audioClips.Count; i++)
+                            {
+                                childMixer.SetInputWeight(i, timeValue * audioClips[i].weight);
+                            }
+
+                            yield return 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!playableGraph.IsPlaying())
+        {
+            playableGraph.Play();
+        }
+        int rootCount = playableGraph.GetRootPlayableCount();
+        for (int i = 0; i < rootCount; i++)
+        {
+            var playable = playableGraph.GetRootPlayable(i);
+            try
+            {
+                var audioPlayable = (AudioClipPlayable)playable;
+                if (audioPlayable.IsNull())
+                {
+
+                }
+                else
+                {
+                    audioPlayable.Destroy();
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
+
+    private void PlayME(AudioClip audioClip, bool loop = false, AudioClearType audioClearType=AudioClearType.NoClear,float weight=1, bool isLerp=false, string tag = "Default")
+    {
+        PlayAudio(meGraph, meMixer,meMixerDic, audioClip, loop, audioClearType, weight, isLerp,tag);
+    }
+   
 
     public void StopME()
     {  
         meGraph.Stop();
     }
      
-    public void PlayBGM(AudioClip audioClip, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false)
-    { 
-        PlayAudio(bgmGraph, bgmMixer, audioClip, loop, audioClearType, weight, isLerp); 
+    public void PlayBGM(AudioClip audioClip, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false,string tag="Default")
+    {
+        PlayAudio(bgmGraph, bgmMixer,bgmMixerDic, audioClip, loop, audioClearType, weight, isLerp,tag); 
     }
 
     public void StopBgm()
     {
         bgmGraph.Stop();
-    } 
-    private void PlayBGS(AudioClip audioClip, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false)
+    }
+    private void PlayBGS(AudioClip audioClip, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string tag = "Default")
     {
-        PlayAudio(bgsGraph, bgsMixer, audioClip, loop, audioClearType, weight, isLerp);
+        PlayAudio(bgsGraph, bgsMixer, bgsMixerDic, audioClip, loop, audioClearType, weight, isLerp, tag);
+    }
+    private void PlayBGS(List<AudioPlayData> audioClips,AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string tag = "Default")
+    {
+        PlayAudio(bgsGraph, bgsMixer,bgsMixerDic, audioClips, audioClearType, isLerp, tag);
     }
 
     public void StopBGS()

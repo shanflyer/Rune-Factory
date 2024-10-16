@@ -5,7 +5,7 @@ public enum BGM
 }
 public enum BGS
 {
- NUll, Birds_inside,Birds_outside,Cave,Island_beach_no_seagulls,Island_beach_seagulls,Island_inside_no_seagulls,Island_inside_seagulls,Night_inside,Night_outside,Rain_cave,Rain_forest,Rain_house,Rain_outside,Rain_roof_layer,Rver_outside,Sea_outside_close,Swamp_inside,Swamp_outside,WE_Thunder_1,WE_Thunder_2,WE_Thunder_3,WE_Thunder_7,WE_Thunder_8,WE_Thunder_9,Wind_cave,Wind_forest,Wind_house,Wind_outside,
+ NUll, Birds_inside,Birds_outside,Cave,Island_beach_no_seagulls,Island_beach_seagulls,Island_inside_no_seagulls,Island_inside_seagulls,Night_inside,Night_outside,Rain_cave,Rain_forest,Rain_house,Rain_outside,Rain_roof_layer,Rver_outside, Sea_outside_close, Sea_inside_or_far, Swamp_inside,Swamp_outside,WE_Thunder_1,WE_Thunder_2,WE_Thunder_3,WE_Thunder_7,WE_Thunder_8,WE_Thunder_9,Wind_cave,Wind_forest,Wind_house,Wind_outside,
 }
 public enum ME
 {

@@ -93,16 +93,16 @@ public class MapRoomData : ScriptableObject, IGameData
 
     public void SetBGS(float seasonValue,float timeValue,float waterFallValue)
     {
+        List<float3> bgs=new List<float3>();
         for(int i=0;i<mapBGSDatas.Count;i++)
         {
             float value=mapBGSDatas[i].GetValue(seasonValue, timeValue, waterFallValue);
-            if (value >= 0)
+            if (value > 0)
             {
-                AudioController.instance.PlayAudio(mapBGSDatas[i].bgs);
-                break;
+                bgs.Add(new float3((int)mapBGSDatas[i].bgs, value, 1)); 
             }
         }
-        AudioController.instance.PlayAudio(BGS.NUll);
+        AudioController.instance.PlayAudio(bgs,AudioClearType.All,true,"Map");
     }
     public bool CheckBoundary(int2 coordinate)
     {

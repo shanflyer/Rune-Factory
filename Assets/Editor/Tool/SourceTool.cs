@@ -95,7 +95,7 @@ public class SourceTool : MonoBehaviour
 
         foreach (var source in sources)
         {
-            property = $"{property}\n{"public enum "}{source.Key}{"\r\n{\r\n  "}";
+            property = $"{property}\n{"public enum "}{source.Key}{"\r\n{\r\n  null,"}";
 
             foreach (var d in source.Value)
             {
