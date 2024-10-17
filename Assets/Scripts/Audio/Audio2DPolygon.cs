@@ -2,6 +2,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(PolygonCollider2D))]
 public class Audio2DPolygon : MonoBehaviour
 {
     [SerializeField]
@@ -14,15 +15,25 @@ public class Audio2DPolygon : MonoBehaviour
     float2 volumeMap;
     private void OnEnable()
     {
+        audioSource.mute = true;
+        audioSource.volume = 0;
+        audioSource.enabled = true;
+      
         EnvironmentManger.instance.AddAudio2DPolygon(this);
+        audioSource.Play();
     }
     private void OnDisable()
     {
-        EnvironmentManger.instance.RemoveAudio2DPolygon(this);
+        audioSource.mute = true;
+        if (!SingletonType.Cleared)
+        {
+            EnvironmentManger.instance.RemoveAudio2DPolygon(this);
+        }
+       
     }
     public void RefreshAudio(Collider2D collider)
     {
-      
+        audioSource.mute =false;
         if (collider != null)
         {
             var distance2D = polygonCollider.Distance(collider);
@@ -37,6 +48,10 @@ public class Audio2DPolygon : MonoBehaviour
             {
                 audioSource.volume = volumeMap.y;
             }
+        }
+        else
+        {
+            audioSource.volume = volumeMap.y;
         }
     }
     

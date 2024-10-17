@@ -492,6 +492,7 @@ public class CharacterManager : Singleton<CharacterManager>
             controllerRuntimeObj = value;
             if (value != null)
             {
+                EnvironmentManger.instance.UpDataAudio2DPolygon();
                 controllerTransform = controllerRuntimeObj.transform;
             }
         }

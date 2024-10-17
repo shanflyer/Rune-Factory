@@ -46,7 +46,15 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     {
         int instanceID = audio2DPolygon.GetInstanceID();
         audio2DPolygons.TrySetValue(instanceID, audio2DPolygon);
-        audio2DPolygon.RefreshAudio(CharacterManager.instance.ControllerRuntimeObj.collider);
+        try
+        {
+            audio2DPolygon.RefreshAudio(CharacterManager.instance.ControllerRuntimeObj.collider);
+        }
+        catch
+        {
+            audio2DPolygon.RefreshAudio(null);
+        }
+        
     }
     public void RemoveAudio2DPolygon(Audio2DPolygon audio2DPolygon)
     {

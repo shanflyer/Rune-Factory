@@ -217,6 +217,10 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     }
     public void RefreshMapBGS()
     {
+        if (displayMapRoomData == null)
+        {
+            return;
+        }
         displayMapRoomData.SetBGS(GameTimeManager.instance.SeasonValue, GameTimeManager.instance.timeValue, waterFall);
     }
     private async Task<RuntimeObj> CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
