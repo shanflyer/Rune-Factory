@@ -205,24 +205,50 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     public int displayMap 
     {
         get; 
-        set; 
+        set;
     }
-    public MapRoomData displayMapRoomData;
+    public MapRoomData DisplayMapRoomData
+    {
+        get => _displayMapRoomData;
+        set
+        {
+            _displayMapRoomData = value;
+            RefreshMapAudio(true);
+        }
+    }
+    private MapRoomData _displayMapRoomData;
 
     float waterFall;
+    float weatherValue; string bgmTag;
     void SetWeather(SetWeather setWeather)
     {
         waterFall = setWeather.weather.waterFall;
-        RefreshMapBGS();
+        float windValue =math.abs(setWeather.weather.wind)*0.5f;
+        float waterFallValue = waterFall;
+        float cloudValue=math.abs(setWeather.weather.cloud);
+
+        weatherValue = windValue > waterFallValue ? windValue : waterFallValue;
+        weatherValue = cloudValue > weatherValue ? cloudValue : weatherValue;
+
+        RefreshMapAudio();
     }
-    public void RefreshMapBGS()
+    public void RefreshMapAudio(bool checkBgmTag = false)
     {
-        if (displayMapRoomData == null)
+        if (DisplayMapRoomData == null)
         {
             return;
         }
-        displayMapRoomData.SetBGS(GameTimeManager.instance.SeasonValue, GameTimeManager.instance.timeValue, waterFall);
+        DisplayMapRoomData.SetBGS(GameTimeManager.instance.SeasonValue, GameTimeManager.instance.timeValue, waterFall);
+        if (checkBgmTag && bgmTag == DisplayMapRoomData.bgmTag)
+        {
+            return;
+        }
+        bgmTag = DisplayMapRoomData.bgmTag;
+        DisplayMapRoomData.SetBGM(GameTimeManager.instance.SeasonValue, GameTimeManager.instance.timeValue, weatherValue);
     }
+ 
+    
+   
     private async Task<RuntimeObj> CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
     {
         if (mapRoomData != null)
@@ -329,20 +355,20 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             return;
         }
         displayMap = mapId;
-        displayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
-        if (displayMapRoomData.autoCreatTempNpc)
+        DisplayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
+        if (DisplayMapRoomData.autoCreatTempNpc)
         {
             StartCreatTempCharacter startCreatTempCharacter = new StartCreatTempCharacter
             {
-                creatDataId = displayMapRoomData.creatTempCharacterId,
+                creatDataId = DisplayMapRoomData.creatTempCharacterId,
                 clearAll = true,
-                prewarm=displayMapRoomData.tempNpcPrewarm
+                prewarm=DisplayMapRoomData.tempNpcPrewarm
             };
             GameActionManager.instance.QueueAction(startCreatTempCharacter);
             
-            for(int i = 0; i < displayMapRoomData.specialNpcBehaviorAreas.Count; i++)
+            for(int i = 0; i < DisplayMapRoomData.specialNpcBehaviorAreas.Count; i++)
             {
-                var area = displayMapRoomData.specialNpcBehaviorAreas[i];
+                var area = DisplayMapRoomData.specialNpcBehaviorAreas[i];
                 StartCreatSpecialTempCharacter startCreatSpecialTempCharacter = new StartCreatSpecialTempCharacter
                 {
                     creatDataId = area.tempCreatId,
@@ -356,13 +382,13 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
             GameActionManager.instance.QueueAction(clearTempCharacter, true);
         } 
-        string dataId = displayMapRoomData.name;
-        SetMapOverrideEnvirmentData(displayMapRoomData);
+        string dataId = DisplayMapRoomData.name;
+        SetMapOverrideEnvirmentData(DisplayMapRoomData);
         if (!string.IsNullOrEmpty(dataId))
         {
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
             //Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
-            nowMapRoomObj =await CreatMapRunTime(displayMapRoomData, mapId);
+            nowMapRoomObj =await CreatMapRunTime(DisplayMapRoomData, mapId);
             // (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
             List<int> mapItems = WorldMapManager.instance.GetMapItems(mapId);

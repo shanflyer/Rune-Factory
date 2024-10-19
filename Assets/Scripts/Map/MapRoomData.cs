@@ -64,6 +64,20 @@ public struct MapBGSData
         return seasonCurve.Evaluate(seasonValue) * timeCurve.Evaluate(timeValue) * waterFallCurve.Evaluate(waterFallValue);
     }
 }
+[Serializable]
+public struct MapBGMData
+{
+    public string name;
+    public List<AudioClip> bgms;
+    public AnimationCurve timeCurve;
+    public AnimationCurve seasonCurve;
+    public AnimationCurve weatherCurve;
+    public AudioClip GetBGMValue(float seasonValue, float timeValue, float weatherValue,out float value)
+    {
+        value= seasonCurve.Evaluate(seasonValue) * timeCurve.Evaluate(timeValue) * weatherCurve.Evaluate(weatherValue);
+        return bgms[GameRandom.RandomInt(0, bgms.Count)];
+    }
+}
 
 public class MapRoomData : ScriptableObject, IGameData
 {
@@ -85,12 +99,28 @@ public class MapRoomData : ScriptableObject, IGameData
     public WeatherDisplayType weatherDisplayType;
 
     public List<MapBGSData> mapBGSDatas = new List<MapBGSData>();
+    public string bgmTag;
+    public List<MapBGMData> mapBGMDatas = new List<MapBGMData>();
      
     public bool autoCreatTempNpc;
     public bool tempNpcPrewarm;
     public List<NpcBehaviorArea> npcBehaviorAreas = new List<NpcBehaviorArea>();
     public List<SpecialNpcBehaviorArea> specialNpcBehaviorAreas = new List<SpecialNpcBehaviorArea>();
-
+    public void SetBGM(float seasonValue, float timeValue, float weatherValue)
+    {
+        AudioClip bgm=null;
+        float nowValue = 0;
+        for(int i=0;i<mapBGMDatas.Count;i++)
+        {
+            AudioClip _bgm = mapBGMDatas[i].GetBGMValue(seasonValue, timeValue, weatherValue, out var value);
+            if (value > nowValue)
+            {
+                bgm = _bgm;
+                nowValue = value;
+            }
+        }
+        AudioController.instance.PlayAudioBGM(bgm, true, AudioClearType.All, nowValue, true, "Map");
+    }
     public void SetBGS(float seasonValue,float timeValue,float waterFallValue)
     {
         List<float3> bgs=new List<float3>();

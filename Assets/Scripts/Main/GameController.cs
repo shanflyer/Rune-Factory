@@ -214,7 +214,6 @@ public class GameController : MonoBehaviour
         Shader.SetGlobalInt("_backColor", 1);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
-        AudioController.instance.PlayAudio(BGM.Town1);
         await UIManager.instance.ShowGamePanel<ZeroPanel>();
          
         GameTimeManager.instance.SetTime(12, 0);

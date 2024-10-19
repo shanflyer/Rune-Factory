@@ -553,7 +553,9 @@ public class GameCommon
 
     public static string AddString(string s0, string s1)
     {
+        s1 = s1.Replace("_", "/");
         var span = s1.AsSpan();
+      
         var builder = new StringBuilder(s0);
         builder.Append(span);
         return builder.ToString();

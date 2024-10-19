@@ -9,6 +9,78 @@ using Object = UnityEngine.Object;
 
 public class SourceTool : MonoBehaviour
 {
+    [MenuItem("Assets/音效工具/保存音效文件")]
+    public static void ReSaveAudioFile()
+    {
+      
+        List<string> clearStr = new List<string>
+        {
+            "&","'",","," -", " ","!","-","_","_"
+        }; 
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+            {
+                var path = AssetDatabase.GetAssetPath(obj);
+                if (obj is AudioClip)
+                {
+                    string newPath = path;
+                    for(int i = 0; i < clearStr.Count; i++)
+                    {
+                        newPath = path.Replace(clearStr[i], "");
+                    }
+                   
+                  AssetDatabase.MoveAsset(path, newPath);
+                }
+                 
+                if (System.IO.Directory.Exists(path))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(path);
+                    OpenDirectoryInfo(dir);
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+
+        void OpenDirectoryInfo(DirectoryInfo directoryInfo)
+        {
+           
+            var _dirs = directoryInfo.GetDirectories();
+            var files = directoryInfo.GetFiles("*.mp3");
+
+
+            if (files.Length > 0)
+            {
+                foreach(var file in files)
+                {
+                    var fileName = file.Name;
+                    var fullName=file.FullName;
+                    fullName = fullName.Replace(fileName, "");
+                    var oldPath = fileName;
+                    string newPath = oldPath;
+                    for (int i = 0; i < clearStr.Count; i++)
+                    {
+                        newPath = newPath.Replace(clearStr[i], "");
+                    }
+                  
+                    newPath = fullName + newPath;
+                    File.Move(file.FullName, newPath);
+                }
+            }
+            else
+            {
+                foreach (var d in _dirs)
+                { 
+                    OpenDirectoryInfo(d);
+                }
+            }
+        }
+    }
     [MenuItem("Assets/音效工具/刷新音效资源数据")]
     public static void RefreshAudioSourceEnum()
     {
@@ -95,7 +167,7 @@ public class SourceTool : MonoBehaviour
 
         foreach (var source in sources)
         {
-            property = $"{property}\n{"public enum "}{source.Key}{"\r\n{\r\n  null,"}";
+            property = $"{property}\n{"public enum "}{source.Key}{"\r\n{\r\n  NULL,"}";
 
             foreach (var d in source.Value)
             {

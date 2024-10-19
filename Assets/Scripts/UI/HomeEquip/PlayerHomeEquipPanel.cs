@@ -293,7 +293,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         }
 
         cameraValue.text = "x1"; 
-        mapData = WorldMapObjManager.instance.displayMapRoomData;
+        mapData = WorldMapObjManager.instance.DisplayMapRoomData;
         if (mapData.fixedCamera)
         {
             cameraValueIndex = 1;

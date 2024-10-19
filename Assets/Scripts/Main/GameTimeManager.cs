@@ -581,7 +581,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             seasonValue = nowYearHour / totalYearHour;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
             EnvironmentManger.instance.ChangeWeatherDisplayType(SetFixedSeason.weatherDisplayType);
-            WorldMapObjManager.instance.RefreshMapBGS();
+            WorldMapObjManager.instance.RefreshMapAudio();
         }
         private void UpDataGameTimeAction()
         {
