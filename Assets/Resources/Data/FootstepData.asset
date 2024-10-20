@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c57dfff4d59d2a47947c17252f894ca, type: 3}
+  m_Name: FootstepData
+  m_EditorClassIdentifier: 
+  footstepDatas:
+  - name: "\u77F3\u8DEF"
+    isOutSide: 0
+    index: 0
+    dryClip:
+    - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
+    - {fileID: 8300000, guid: 61569951ced3f674fb3192e9294ff0d5, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: 34d821959a97eae4fa6600d88dbbcc5a, type: 3}
+    - {fileID: 8300000, guid: feec1fa9b79fd1e48803819d7a85374e, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: 193f40e345dbf1449a1870d86c87ea7f, type: 3}
+    - {fileID: 8300000, guid: 3d9dd20e497f74443a645b4db99dc4ed, type: 3}
+  - name: "\u571F\u8DEF"
+    isOutSide: 1
+    index: 1
+    dryClip:
+    - {fileID: 8300000, guid: 5bc39f09c0af6394eb100dbdf79fe0a5, type: 3}
+    - {fileID: 8300000, guid: 8da71ca84c745c04684262217c6cf159, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: 822da0ebc176c5f46863f77f17e14e1c, type: 3}
+    - {fileID: 8300000, guid: e4a40e90326763e4a968af75c03ef71f, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: 05b8abeae8c561d4ba99ed618856b222, type: 3}
+    - {fileID: 8300000, guid: fc7066ebd1dbb524c94b6ad7e9bbd7f5, type: 3}
+  - name: "\u6C99\u6EE9"
+    isOutSide: 1
+    index: 2
+    dryClip:
+    - {fileID: 8300000, guid: 54e168f6e72b8fe4bad863f4175a9261, type: 3}
+    - {fileID: 8300000, guid: dcb4094547b716546abbb55ae1377bfa, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: b7ed0011ff00fb44f94006e0d5d7c34d, type: 3}
+    - {fileID: 8300000, guid: 4fdec84007cf4a645834987b7fca0f24, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: 05b8abeae8c561d4ba99ed618856b222, type: 3}
+    - {fileID: 8300000, guid: fc7066ebd1dbb524c94b6ad7e9bbd7f5, type: 3}
+  - name: "\u6728\u677F"
+    isOutSide: 1
+    index: 3
+    dryClip:
+    - {fileID: 8300000, guid: bf3952e97c4f6d643b576c46385d9d12, type: 3}
+    - {fileID: 8300000, guid: 5f7c408cb27cd6040b40909f043f432d, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: 21c6934b3841a374ba0721a5bf80c61e, type: 3}
+    - {fileID: 8300000, guid: 49295997aefb4f9449dea2697fe1e1ac, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: f339520bd1567284c80dcec5860c3704, type: 3}
+    - {fileID: 8300000, guid: 152770e53f90a2948b014153f38923bf, type: 3}
+  - name: "\u6D45\u8349"
+    isOutSide: 1
+    index: 4
+    dryClip:
+    - {fileID: 8300000, guid: 42135a1be9f47c340bca0a6958c817d3, type: 3}
+    - {fileID: 8300000, guid: f4c2e6ae020f6c447bcf85e8c1c87e8c, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: 13dd5b5abd5af224096b1066000d2bcc, type: 3}
+    - {fileID: 8300000, guid: c6d42f4ca93c567469cc5b9edb2fb0e9, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: b8c4e6bfc5567e945960c389209736e8, type: 3}
+    - {fileID: 8300000, guid: c086b722dec7cf043820aec5df3ec14f, type: 3}
+  - name: "\u6DF1\u8349"
+    isOutSide: 1
+    index: 5
+    dryClip:
+    - {fileID: 8300000, guid: aa2568fab9aeb444ab51a9ff33d278e4, type: 3}
+    - {fileID: 8300000, guid: 32bd2a63d99002d42ae92badbc042a30, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: 84810d76a8ec4484bac3c69d7186402b, type: 3}
+    - {fileID: 8300000, guid: 36f7cb1384a8fea4899f931101385ec4, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: 148009d6a916a7e43b49b3b0cbbb7a2e, type: 3}
+    - {fileID: 8300000, guid: efd803736d0f74f48a41df741d355827, type: 3}
+  - name: "\u666E\u901A\u77F3"
+    isOutSide: 0
+    index: 0
+    dryClip:
+    - {fileID: 8300000, guid: f2195896e3251c1469b7147b993339c7, type: 3}
+    - {fileID: 8300000, guid: aa535d06105757146a3ee8ba18d75938, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: f2195896e3251c1469b7147b993339c7, type: 3}
+    - {fileID: 8300000, guid: aa535d06105757146a3ee8ba18d75938, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: f2195896e3251c1469b7147b993339c7, type: 3}
+    - {fileID: 8300000, guid: aa535d06105757146a3ee8ba18d75938, type: 3}
+  - name: "\u5927\u7406\u77F3"
+    isOutSide: 0
+    index: 1
+    dryClip:
+    - {fileID: 8300000, guid: 77f4998c4da1202479be1896d2a834b3, type: 3}
+    - {fileID: 8300000, guid: e7bcf1f5581e2e54f9e11b18393e0f98, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: 77f4998c4da1202479be1896d2a834b3, type: 3}
+    - {fileID: 8300000, guid: e7bcf1f5581e2e54f9e11b18393e0f98, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: 77f4998c4da1202479be1896d2a834b3, type: 3}
+    - {fileID: 8300000, guid: e7bcf1f5581e2e54f9e11b18393e0f98, type: 3}
+  - name: "\u6728\u677F"
+    isOutSide: 0
+    index: 2
+    dryClip:
+    - {fileID: 8300000, guid: bf3952e97c4f6d643b576c46385d9d12, type: 3}
+    - {fileID: 8300000, guid: 5f7c408cb27cd6040b40909f043f432d, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: bf3952e97c4f6d643b576c46385d9d12, type: 3}
+    - {fileID: 8300000, guid: 5f7c408cb27cd6040b40909f043f432d, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: bf3952e97c4f6d643b576c46385d9d12, type: 3}
+    - {fileID: 8300000, guid: 5f7c408cb27cd6040b40909f043f432d, type: 3}
+  - name: "\u5730\u6BEF"
+    isOutSide: 0
+    index: 3
+    dryClip:
+    - {fileID: 8300000, guid: f3b042257fc2e1643afef76f908d7ba6, type: 3}
+    - {fileID: 8300000, guid: 7f799e667a7ad8943be932f95976ad00, type: 3}
+    wetClip:
+    - {fileID: 8300000, guid: f3b042257fc2e1643afef76f908d7ba6, type: 3}
+    - {fileID: 8300000, guid: 7f799e667a7ad8943be932f95976ad00, type: 3}
+    snowClip:
+    - {fileID: 8300000, guid: f3b042257fc2e1643afef76f908d7ba6, type: 3}
+    - {fileID: 8300000, guid: 7f799e667a7ad8943be932f95976ad00, type: 3}

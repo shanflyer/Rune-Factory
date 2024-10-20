@@ -12,7 +12,8 @@ using UnityEditor;
 
 public class GameController : MonoBehaviour
 {
-  
+    [SerializeField]
+    private AudioClip startBGM;
     public bool startPlay = true;
 #if UNITY_EDITOR
 
@@ -201,7 +202,10 @@ public class GameController : MonoBehaviour
         UIManager.instance.SetParent(UIParent);
 
         var audio = transform.Find("Audio");
-        AudioController.instance.SetAudioSource(audio.gameObject); 
+        AudioController.instance.SetAudioSource(audio.gameObject);
+
+        
+        
     }
   
     public void AddCrystal()
@@ -215,7 +219,7 @@ public class GameController : MonoBehaviour
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         await UIManager.instance.ShowGamePanel<ZeroPanel>();
-         
+        AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, tag: "Theme");
         GameTimeManager.instance.SetTime(12, 0);
         SwitchInputMap switchInputMap = new SwitchInputMap
         {

@@ -5,6 +5,7 @@ using UnityEngine.Audio;
 using UnityEngine.Playables;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.Entities.UniversalDelegates;
 
 public enum AudioClearType
 {
@@ -21,7 +22,14 @@ public class AudioController : Singleton<AudioController>
     public override async void Init()
     {
         base.Init();
-        audioMixer = await ExtensionsResources.LoadResourceAsync<AudioMixer>("AudioMixer");
+        audioMixer = await ExtensionsResources.LoadResourceAsync<AudioMixer>("Audio/AudioMixer");
+
+        float value= PlayerPrefs.GetFloat("MasterVolume", 1);
+        SetMasterVolume(value);
+        value = PlayerPrefs.GetFloat("BGMVolume", 1);
+        SetBGMVolume(value);
+        value = PlayerPrefs.GetFloat("SEVolume", 1);
+        SetSEVolume(value);
     }
 
     protected override void Clear()
@@ -43,6 +51,25 @@ public class AudioController : Singleton<AudioController>
         bgsOut= AudioPlayableOutput.Null;
         meOut= AudioPlayableOutput.Null;
         seOut = AudioPlayableOutput.Null;
+
+        if(!audioMixer.GetFloat("MasterVolume", out var value))
+        {
+            value = 0;
+        }
+        value=(value + 20) * 0.05f;
+        PlayerPrefs.SetFloat("MasterVolume", value);
+        if (!audioMixer.GetFloat("BGMVolume", out value))
+        {
+            value = 0;
+        }
+        value = (value + 20) * 0.05f;
+        PlayerPrefs.SetFloat("BGMVolume", value);
+        if (!audioMixer.GetFloat("SEVolume", out value))
+        {
+            value = 0;
+        }
+        value = (value + 20) * 0.05f;
+        PlayerPrefs.SetFloat("SEVolume", value);
     }
 
     public void SetAudioSource(GameObject audioObj)
@@ -166,7 +193,23 @@ public class AudioController : Singleton<AudioController>
         }
     }
 
-
+    public float3 GetAudioVolume()
+    {
+        float3 result = new float3(1, 1, 1);
+        if (audioMixer.GetFloat("MasterVolume", out var value))
+        {
+            result.x = (value+20)*0.05f;
+        } 
+        if (audioMixer.GetFloat("BGMVolume", out value))
+        {
+            result.y = (value + 20) * 0.05f;
+        } 
+        if (audioMixer.GetFloat("SEVolume", out value))
+        {
+            result.z = (value + 20) * 0.05f;
+        }
+        return result;
+    }
     public async void PlayAudio(BGS bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string tag = "Default")
     {
         if (bgs != nowBGS)
@@ -302,6 +345,7 @@ public class AudioController : Singleton<AudioController>
                     }
                     else
                     {
+                        playableGraph.Disconnect(childMixer, count - 1);
                         childMixer.SetInputCount(count-1);
                     }
                        
@@ -348,17 +392,16 @@ public class AudioController : Singleton<AudioController>
 
                             yield return 0;
                         }
-                       
-                        if (audioClip != null)
+                        for(int i = 0; i < childMixer.GetInputCount(); i++)
                         {
-                            childMixer.SetInputCount(1);
-                            childMixer.ConnectInput(0,audioClipPlayable,0);
-                            childMixer.SetInputWeight(0, weight);
+                            childMixer.DisconnectInput(i);
                         }
-                        else
-                        {
-                            childMixer.SetInputCount(0);
-                        } 
+                        childMixer.SetInputCount(0);
+                        if (audioClip != null)
+                        { 
+                            childMixer.AddInput(audioClipPlayable,0, weight); 
+                        }
+                        
                     }
 
                 }
@@ -397,6 +440,7 @@ public class AudioController : Singleton<AudioController>
                         }
                         else
                         {
+                            playableGraph.Disconnect(childMixer, count - 1);
                             childMixer.SetInputCount(count-1);
                         }
                             
@@ -792,16 +836,16 @@ public class AudioController : Singleton<AudioController>
 
     public void SetMasterVolume(float volume)    // 控制主音量的函数
     {
-        audioMixer.SetFloat("MasterVolume", -20 + 40 * volume);
+        audioMixer.SetFloat("MasterVolume", -20 + 20 * volume);
     }
 
     public void SetBGMVolume(float volume)    // 控制背景音乐音量的函数
     {
-        audioMixer.SetFloat("BGMVolume", -20 + 40 * volume);
+        audioMixer.SetFloat("BGMVolume", -20 + 20 * volume);
     }
 
     public void SetSEVolume(float volume)    // 控制音效音量的函数
     {
-        audioMixer.SetFloat("SEVolume", -20 + 40 * volume);
+        audioMixer.SetFloat("SEVolume", -20 + 20 * volume);
     }
 }

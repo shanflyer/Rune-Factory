@@ -1,10 +1,12 @@
+using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SetPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    private Slider bgmSlider, seSlider;
+    private Slider masterSlider, bgmSlider, seSlider;
 
     [SerializeField]
     private Button saveButton, returnButton;
@@ -12,6 +14,7 @@ public class SetPanel : GamePanel<IReferenceData>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
+        masterSlider = FindChildGameObject<Slider>("MasterSlider");
         bgmSlider = FindChildGameObject<Slider>("BGMSlider");
         seSlider = FindChildGameObject<Slider>("SESlider");
         saveButton = FindChildGameObject<Button>("SaveButton");
@@ -24,8 +27,11 @@ public class SetPanel : GamePanel<IReferenceData>
 
         returnButton.onClick.AddListener(() =>
         {
-            // AudioController.instance.PlayAudio(SE.Return);
             Close();
+        });
+        masterSlider.onValueChanged.AddListener((float value) =>
+        {
+            AudioController.instance.SetMasterVolume(value);
         });
         bgmSlider.onValueChanged.AddListener((float value) =>
         {
@@ -37,7 +43,14 @@ public class SetPanel : GamePanel<IReferenceData>
         });
         saveButton.onClick.AddListener(SaveSet);
     }
-
+    public override async Task InitData(string dataKey)
+    {
+       await base.InitData(dataKey);
+        float3 volume = AudioController.instance.GetAudioVolume();
+        masterSlider.SetValueWithoutNotify(volume.x);
+        bgmSlider.SetValueWithoutNotify(volume.y);
+        seSlider.SetValueWithoutNotify(volume.z);
+    }
     private async void SaveSet()
     {
         Close();
