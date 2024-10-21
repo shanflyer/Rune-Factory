@@ -17,6 +17,7 @@ public struct AudioPlayData
     public float weight;
     public bool loop;
 }
+public delegate void SetAudioAction(AudioClip audioClip);
 public class AudioController : Singleton<AudioController>
 {
     public override async void Init()

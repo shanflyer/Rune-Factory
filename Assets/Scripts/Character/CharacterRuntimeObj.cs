@@ -3,9 +3,12 @@ using UnityEngine;
 using BehaviorDesigner.Runtime;
 using static UnityEngine.ParticleSystem;
 using UnityEngine.UI;
+using UnityEngine.Playables;
+using UnityEngine.Audio;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+public delegate void SetFootStepAction(AudioClip audioClip,Color color);
 public class CharacterRuntimeObj:MonoBehaviour,IGameData
 {
     public RuntimeObj runtimeObj;
@@ -24,6 +27,8 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
     private Transform DirOther;
     [SerializeField]
     private ParticleSystem footStep;
+    [SerializeField]
+    private AudioSource audioSource;
     [SerializeField]
     bool isDisplayFootStep;
     [SerializeField]
@@ -136,7 +141,49 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         offset.z = 0;
         shadow.localPosition = offset;  
     }
-     
+    PlayableGraph playableGraph;
+    AudioPlayableOutput playableOutput;
+    AudioClipPlayable audioClipPlayable;
+     void Awake()
+    {
+        playableGraph = PlayableGraph.Create($"{gameObject.name}-FootStep");
+        playableOutput = AudioPlayableOutput.Create(playableGraph, $"{gameObject.name}-FootStep", audioSource);
+    }
+
+    public void SetPosition(Vector3 pos)
+    {
+        transform.position = pos;
+        if (gameObject.activeSelf)
+        {
+            EnvironmentManger.instance.AddCharacterGetFootStep(
+                new CharacterGetFootStep
+                {
+                    pos = pos,
+                    SetFootStepAction = SetFootStepAction
+                }
+                );
+        }
+    }
+    AudioClip stepAudioClip;
+    Color footStepColor;
+    void SetFootStepAction(AudioClip audioClip,Color color)
+    {
+        footStepColor = color;
+        if (stepAudioClip != audioClip)
+        { 
+            audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, false);
+            stepAudioClip = audioClip;
+        }
+    }
+   
+    void PlayFootStep()
+    {
+        if (!audioClipPlayable.IsNull())
+        {
+            playableOutput.SetSourcePlayable(audioClipPlayable);
+            playableGraph.Play();
+        } 
+    } 
     void Update()
     {
         if (isDisplayFootStep&& footStep&& speed>0)
@@ -156,6 +203,10 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
                 footStep.Emit(ep, 1);
                 waitFootTime = FootTime;
                 isLeftFoot=!isLeftFoot;
+
+                PlayFootStep();
+
+
             }
             waitFootTime -= Time.deltaTime;
         }

@@ -817,8 +817,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             MapCellController.instance.InitLinkMap(worldMapData.mapLines[index]);
             GameDataSaveManager.instance.UserGameSaveData.SetMapLineData(initMapLink.linkInstanceId, true);
         }
-    }
-
+    } 
     private WorldMapData worldMapData;
 
     public WorldMap GetWorldMap(int id)

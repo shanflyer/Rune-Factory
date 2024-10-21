@@ -8,26 +8,26 @@ public class FootstepDataList : ScriptableObject, IGameData
 {
     public FootstepData[] footstepDatas;
 
-    Dictionary<int3, List<AudioClip>> audioDic = new Dictionary<int3, List<AudioClip>>();
+    Dictionary<int3, FootstepSource> audioDic = new Dictionary<int3, FootstepSource>(); 
 
     public void Init()
     {
-        audioDic.Clear();
+        audioDic.Clear(); 
         for(int i = 0; i < footstepDatas.Length; i++)
         {
             audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 0), footstepDatas[i].dryClip);
             audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 1), footstepDatas[i].wetClip);
-            audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 2), footstepDatas[i].snowClip);
+            audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 2), footstepDatas[i].snowClip); 
         }
     }
-    public AudioClip GetAudioClip(int3 key)
+    public FootstepSource GetSource(int3 key)
     {
         audioDic.TryGetValue(key, out var audioClip);
-        return audioClip[GameRandom.RandomInt(0,audioClip.Count)];
+        return audioClip;
     }
     public string GetKey()
     {
-        return "FootstepData";
+        return "";
     }
 
     public void SetReferenceData()
@@ -35,12 +35,20 @@ public class FootstepDataList : ScriptableObject, IGameData
     }
 }
 [Serializable]
+public struct FootstepSource
+{
+    public Color footStepColor;
+    public List<AudioClip> clips;
+}
+
+[Serializable]
 public struct FootstepData
 {
     public string name;
     public bool isOutSide;
     public int index;
-    public List<AudioClip> dryClip;
-    public List<AudioClip> wetClip;
-    public List<AudioClip> snowClip;
+    public Color footStepColor;
+    public FootstepSource dryClip;
+    public FootstepSource wetClip;
+    public FootstepSource snowClip;
 }

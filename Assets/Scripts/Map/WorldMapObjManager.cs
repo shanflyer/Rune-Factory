@@ -207,6 +207,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         get; 
         set;
     }
+    public bool IsOutSideMap => DisplayMapRoomData.weatherDisplayType != WeatherDisplayType.Inside;
     public MapRoomData DisplayMapRoomData
     {
         get => _displayMapRoomData;
