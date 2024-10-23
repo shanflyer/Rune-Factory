@@ -25,12 +25,12 @@ public struct EnvironmentLightData
 }
 public struct CharacterFootStep
 {
-    public Vector2 screenPos;
+    public Transform transform; 
     public SetValue FootStepAction;
 } 
 public struct CharacterGetFootStep
 {
-    public Vector2 pos;
+    public Transform transform; 
     public SetFootStepAction SetFootStepAction;
 }
 
@@ -122,45 +122,50 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         bool isOutSide = WorldMapObjManager.instance.IsOutSideMap;
         bool isSnow = nowWeather.IsSnow();
         bool waterFall = nowWeather.waterFall > 0.2f;
-        int3 key = new int3(isOutSide ? 1 : 0, index, waterFall ? (isSnow ? 2 : 1) : 0);
+        int3 key = new int3(isOutSide ? 1 : 0, index, !isSnow ? (waterFall ? 1 :0) : 2);
         return FootstepDataList.GetSource(key); 
     }
    
     Lightning lightning;
 
-    public void AddCharacterGetFootStep(CharacterGetFootStep characterGetFootStep)
+    public void AddCharacterGetFootStep(int instanceId,CharacterGetFootStep characterGetFootStep)
     {
-        CharacterGetFootSteps.Add(characterGetFootStep);
+        if (!CharacterFootStepDic.ContainsKey(instanceId))
+        {
+            CharacterFootStep characterFootStep = new CharacterFootStep
+            {
+                transform = characterGetFootStep.transform,
+                FootStepAction = (int index) =>
+                    {
+                        // Debug.Log("foot result:" + index);
+                        try
+                        {
+                            FootstepSource footstepSource = GetMapFootStepSource(index);
+                            if (footstepSource.clips != null)
+                            {
+                                AudioClip audioClip = footstepSource.clips[GameRandom.RandomInt(0, footstepSource.clips.Count)];
+                                characterGetFootStep.SetFootStepAction(audioClip, footstepSource.footStepColor);
+                            }
+                        }
+                        catch { } 
+                    },
+            };
+            CharacterFootStepDic.Add(instanceId, characterFootStep);
+        }
     }
-    List<CharacterGetFootStep> CharacterGetFootSteps=new List<CharacterGetFootStep>();
+    public void RemoveCharacterGetFootStep(int instanceId)
+    {
+        CharacterFootStepDic.Remove(instanceId);
+    }
+
+    MyDic<int, CharacterFootStep> CharacterFootStepDic = new MyDic<int, CharacterFootStep>();
+
+     
     public List<CharacterFootStep> GetCharacterFootSteps()
     {
-        if(CharacterGetFootSteps!=null&& CharacterGetFootSteps.Count > 0)
-        {
-            List<CharacterFootStep> results = new List<CharacterFootStep>();
-            for (int i = 0; i < CharacterGetFootSteps.Count; i++)
-            {
-                var CharacterGetFootStep = CharacterGetFootSteps[i];
-
-               
-
-                CharacterFootStep CharacterFootStep = new CharacterFootStep
-                {
-                    screenPos = CameraManager.WorldPointToScreenPoint(CharacterGetFootStep.pos),
-                    FootStepAction = (int index) =>
-                    {
-                        FootstepSource footstepSource = GetMapFootStepSource(index);
-                        AudioClip audioClip = footstepSource.clips[GameRandom.RandomInt(0, footstepSource.clips.Count)];
-                        CharacterGetFootStep.SetFootStepAction(audioClip, footstepSource.footStepColor);
-                    },
-                };
-                results.Add(CharacterFootStep);
-            } 
-            return results; 
-        }
-
-        return null;
+       return CharacterFootStepDic.GetValueList(true);
     } 
+ 
     public override async void Init()
     {
         base.Init();
@@ -446,6 +451,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
     protected override void Clear()
     {
+        CharacterFootStepDic.Clear();
         base.Clear();
     }
 
@@ -525,8 +531,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
    
     protected override void UpData()
-    {
-        CharacterGetFootSteps.Clear();
+    { 
         if (lightning != null)
         {
             lightning.UpData();

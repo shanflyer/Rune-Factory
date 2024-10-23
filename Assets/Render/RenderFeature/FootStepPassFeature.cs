@@ -1,10 +1,14 @@
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System.Collections.Generic;
+using TMPro.Examples;
+using Unity.Mathematics;
 using UnityEngine.Rendering.RenderGraphModule;
 
 namespace UnityEngine.Rendering.Universal.Internal
 {
     public class FootStepPassFeature : ScriptableRendererFeature
     {
+        [System.Serializable]
         public class Settings
         {
             public TransparencySortMode m_transparencySortMode;
@@ -42,7 +46,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                 internal ComputeShader computeShader;
                 internal List<CharacterFootStep> characterFootSteps;
             }
-
+            [SerializeField]
             private Settings settings;
             private List<ShaderTagId> m_ShaderTagIdList = new List<ShaderTagId>();
             private RenderStateBlock m_RenderStateBlock;
@@ -128,33 +132,34 @@ namespace UnityEngine.Rendering.Universal.Internal
             {
                 context.cmd.ClearRenderTarget(data.clearFlag == ClearFlag.Depth || data.clearFlag == ClearFlag.All, data.clearFlag == ClearFlag.Color || data.clearFlag == ClearFlag.All, data.clearColor);
                 context.cmd.DrawRendererList(data.rendererList);
-
+ 
                 var kernelID = data.computeShader.FindKernel("CSMain");
                 data.computeShader.SetTexture(kernelID, "Result", data.textureHandle);
-                Vector4[] _uv = new Vector4[64];
+                Vector4[] pos = new Vector4[64];
                 for (int i = 0; i < data.characterFootSteps.Count; i++)
                 {
                     if (i < 64)
                     {
-                        _uv[i] = data.characterFootSteps[i].screenPos;
+                        Vector3 screenPos = CameraManager.WorldPointToScreenPoint(data.characterFootSteps[i].transform.position); 
+                        pos[i] = new Vector4((int)screenPos.x,(int)screenPos.y,0,0);
                     }
                 }
-                data.computeShader.SetVectorArray("uv", _uv);
+                data.computeShader.SetVectorArray("pos", pos);
                 data.computeShader.SetInt("trueCount", data.characterFootSteps.Count);
 
-                var appendBuffer = new ComputeBuffer(64, 1, ComputeBufferType.Append);
+                var appendBuffer = new ComputeBuffer(64, sizeof(int), ComputeBufferType.Append);
                 appendBuffer.SetCounterValue(0);
                 data.computeShader.SetBuffer(kernelID, "outFootTexIndex", appendBuffer);
                 data.computeShader.Dispatch(kernelID, Screen.width / 8, Screen.height / 8, 1);
 
-                var countBuffer = new ComputeBuffer(1, 4, ComputeBufferType.IndirectArguments);
+                var countBuffer = new ComputeBuffer(1, sizeof(int), ComputeBufferType.IndirectArguments);
                 ComputeBuffer.CopyCount(appendBuffer, countBuffer, 0);
 
                 int[] counter = new int[1] { 0 };
                 countBuffer.GetData(counter);
                 int count = counter[0];
 
-                // Debug.Log("count: " + count);
+               // Debug.Log("FootStepCount: " + count);
 
                 var outData = new int[count];
                 appendBuffer.GetData(outData);
@@ -173,17 +178,28 @@ namespace UnityEngine.Rendering.Universal.Internal
                 countBuffer.Release();
                 countBuffer.Dispose();
             }
-
+            private int BlitTextureID = Shader.PropertyToID("FootStepTex");
+            List<CharacterFootStep> characterFootSteps = new List<CharacterFootStep>();
             // RecordRenderGraph is where the RenderGraph handle can be accessed, through which render passes can be added to the graph.
             // FrameData is a context container through which URP resources can be accessed and managed.
             public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
             {
                 const string passName = "FootStepPass";
-                var characterFootSteps = EnvironmentManger.instance.GetCharacterFootSteps();
-                if (characterFootSteps == null || characterFootSteps.Count == 0)
+               
+                if (Application.isPlaying)
+                {
+                     characterFootSteps = EnvironmentManger.instance.GetCharacterFootSteps();
+                    if (characterFootSteps == null || characterFootSteps.Count == 0)
+                    {
+                         return;
+                    }
+                }
+                else
                 {
                     return;
                 }
+               
+               // Debug.Log("FootStepGraph: " + characterFootSteps.Count);
                 // This adds a raster render pass to the graph, specifying the name and the data type that will be passed to the ExecutePass function.
                 using (var builder = renderGraph.AddRasterRenderPass<PassData>(passName, out var passData))
                 {
@@ -195,6 +211,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                     passData.clearFlag = settings.clearFlag;
                     passData.clearColor = settings.clearColor;
                     passData.characterFootSteps = characterFootSteps;
+                    passData.computeShader = settings.computeShader;
 
                     SortingCriteria sortingCriteria = settings.opaque ? cameraData.defaultOpaqueSortFlags : SortingCriteria.CommonTransparent;
                     DrawingSettings drawSettings = RenderingUtils.CreateDrawingSettings(m_ShaderTagIdList, renderingData, cameraData, lightData, sortingCriteria);
@@ -213,9 +230,11 @@ namespace UnityEngine.Rendering.Universal.Internal
                     desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.None;
                     TextureHandle destination = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, "FootStepTex",
                         settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All);
+                    passData.textureHandle= destination;
 
                     builder.SetRenderAttachment(destination, 0);
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
+                    builder.SetGlobalTextureAfterPass(destination, BlitTextureID);
                 }
             }
 

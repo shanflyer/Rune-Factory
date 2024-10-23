@@ -22,7 +22,10 @@ public class FootstepDataList : ScriptableObject, IGameData
     }
     public FootstepSource GetSource(int3 key)
     {
-        audioDic.TryGetValue(key, out var audioClip);
+       if(!audioDic.TryGetValue(key, out var audioClip))
+        {
+            Debug.Log($"未找到脚步{key}");
+        }
         return audioClip;
     }
     public string GetKey()
@@ -47,7 +50,6 @@ public struct FootstepData
     public string name;
     public bool isOutSide;
     public int index;
-    public Color footStepColor;
     public FootstepSource dryClip;
     public FootstepSource wetClip;
     public FootstepSource snowClip;

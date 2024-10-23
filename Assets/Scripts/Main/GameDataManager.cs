@@ -264,6 +264,7 @@ public class GameDataManager : Singleton<GameDataManager>
             }
             else if(dataAsset is T t)
             {
+                t.Init();
                 dataDic = new Dictionary<string, IGameData>();
                 dataDic[key] = t;
                 allGameStaticDatas[type] = dataDic;

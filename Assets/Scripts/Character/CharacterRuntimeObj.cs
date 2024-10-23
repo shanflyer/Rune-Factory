@@ -5,13 +5,36 @@ using static UnityEngine.ParticleSystem;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 using UnityEngine.Audio;
+using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityAudioSource;
+using Unity.Entities.UniversalDelegates;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 public delegate void SetFootStepAction(AudioClip audioClip,Color color);
 public class CharacterRuntimeObj:MonoBehaviour,IGameData
 {
-    public RuntimeObj runtimeObj;
+    public RuntimeObj runtimeObj
+    {
+        get
+        {
+            return _runtimeObj;
+        }
+        set
+        {
+           
+            if (value != null)
+            {
+                EnvironmentManger.instance.AddCharacterGetFootStep(value.linkId, characterGetFootStep);
+            }
+            else
+            {
+                EnvironmentManger.instance.RemoveCharacterGetFootStep(runtimeObj.linkId);
+            }
+            _runtimeObj = value;
+        }
+    }
+    private RuntimeObj _runtimeObj;
     [SerializeField]
     private Transform body,equip,shadow; 
     public Animator Animator => animator;
@@ -139,52 +162,94 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         equip.localPosition = offset;
         offset = shadow.localPosition;
         offset.z = 0;
-        shadow.localPosition = offset;  
+        shadow.localPosition = offset;
+
+        if(runtimeObj!=null)
+            EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);
     }
-    PlayableGraph playableGraph;
-    AudioPlayableOutput playableOutput;
-    AudioClipPlayable audioClipPlayable;
-     void Awake()
+    void OnDisable()
     {
-        playableGraph = PlayableGraph.Create($"{gameObject.name}-FootStep");
-        playableOutput = AudioPlayableOutput.Create(playableGraph, $"{gameObject.name}-FootStep", audioSource);
+        if (runtimeObj != null&&!SingletonType.Cleared)
+            EnvironmentManger.instance.RemoveCharacterGetFootStep(runtimeObj.linkId);
+    }  
+    AudioPlayableOutput audioPlayableOutput;
+    AudioMixerPlayable audioMixerPlayable, leftMixerPlayable, rightMixerPlayable;
+    PlayableGraph singlePlayableGraph;
+    void Awake()
+    {
+        gameObject.TryGetComponent(out audioSource);
+        characterGetFootStep = new CharacterGetFootStep
+        {
+            transform = transform,
+            SetFootStepAction = SetFootStepAction
+        };
+         
+        singlePlayableGraph = PlayableGraph.Create($"{gameObject.name}-FootStep"); 
+        audioPlayableOutput = AudioPlayableOutput.Create(singlePlayableGraph, $"{gameObject.name}_Footstep", audioSource);
+        audioMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph); 
+         leftMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph);
+        audioMixerPlayable.AddInput(leftMixerPlayable, 0, 1);
+         rightMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph);
+        audioMixerPlayable.AddInput(rightMixerPlayable, 0, 1);
+
+        audioPlayableOutput.SetSourcePlayable(audioMixerPlayable);
+
+        singlePlayableGraph.Play();
     }
 
     public void SetPosition(Vector3 pos)
     {
-        transform.position = pos;
-        if (gameObject.activeSelf)
-        {
-            EnvironmentManger.instance.AddCharacterGetFootStep(
-                new CharacterGetFootStep
-                {
-                    pos = pos,
-                    SetFootStepAction = SetFootStepAction
-                }
-                );
-        }
+        transform.position = pos; 
     }
+    CharacterGetFootStep characterGetFootStep;
+   
     AudioClip stepAudioClip;
     Color footStepColor;
+    Dictionary<AudioClip, int> audioClipIndex = new Dictionary<AudioClip, int>();
     void SetFootStepAction(AudioClip audioClip,Color color)
     {
         footStepColor = color;
         if (stepAudioClip != audioClip)
-        { 
-            audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, false);
+        {  
             stepAudioClip = audioClip;
+            if (!audioClipIndex.ContainsKey(audioClip))
+            {
+                int inputCount = leftMixerPlayable.GetInputCount();
+                var leftAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, stepAudioClip, false);
+                leftMixerPlayable.AddInput(leftAudioClipPlayable, 0, 0);
+
+                var rightAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, stepAudioClip, false);
+                rightMixerPlayable.AddInput(rightAudioClipPlayable, 0, 0);
+                audioClipIndex[audioClip] = inputCount;
+            }  
         }
     }
-   
-    void PlayFootStep()
+     
+    void PlayFootStep(bool isLeft)
     {
-        if (!audioClipPlayable.IsNull())
+        if (stepAudioClip == null)
         {
-            playableOutput.SetSourcePlayable(audioClipPlayable);
-            playableGraph.Play();
-        } 
+            return;
+        }
+        Debug.Log($"播放:{stepAudioClip.name}");
+        if(audioClipIndex.TryGetValue(stepAudioClip,out var index))
+        {
+            if (isLeft)
+            {
+                leftMixerPlayable.SetInputWeight(index, 1);
+                var audioClipPlayable=leftMixerPlayable.GetInput(index);
+                audioClipPlayable.SetTime(0);
+            }
+            else
+            {
+                rightMixerPlayable.SetInputWeight(index, 1);
+                var audioClipPlayable = rightMixerPlayable.GetInput(index);
+                audioClipPlayable.SetTime(0);
+            }
+        }
+       
     } 
-    void Update()
+    void LateUpdate()
     {
         if (isDisplayFootStep&& footStep&& speed>0)
         {
@@ -193,6 +258,7 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
                 float angel = GameCommon.VectorAngle(Vector2.up, moveDirection);
                 //
                 EmitParams ep = new EmitParams();
+                ep.startColor = footStepColor;
                 Vector3 offSetPos = isLeftFoot ? leftFootPos :rightFootPos;
                 offSetPos.x *= moveDirection.y;
                 offSetPos.y *= -moveDirection.x;
@@ -201,12 +267,9 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
                 ep.startSize = isLeftFoot ? footStep.main.startSize.constant:-footStep.main.startSize.constant;
                 ep.rotation =180- angel;
                 footStep.Emit(ep, 1);
-                waitFootTime = FootTime;
-                isLeftFoot=!isLeftFoot;
-
-                PlayFootStep();
-
-
+                waitFootTime = FootTime; 
+                PlayFootStep(isLeftFoot);
+                isLeftFoot = !isLeftFoot;
             }
             waitFootTime -= Time.deltaTime;
         }

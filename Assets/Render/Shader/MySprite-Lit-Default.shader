@@ -1990,6 +1990,61 @@ Shader "MySprite-Lit-Default"
             }
             ENDHLSL
         }
+
+         Pass
+        {
+             Tags { "LightMode" = "GroundFoot" }
+
+            HLSLPROGRAM 
+            #pragma vertex  Vertex
+            #pragma fragment  Fragment 
+  
+            struct Attributes
+            {
+                float3 positionOS   : POSITION; 
+                float2 uv           : TEXCOORD0; 
+                
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS  : SV_POSITION; 
+                float2  uv          : TEXCOORD0; 
+                UNITY_VERTEX_OUTPUT_STEREO
+            }; 
+
+            Varyings  Vertex(Attributes v)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(v);
+
+                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(v.positionOS); 
+                o.uv = v.uv;
+                return o;
+            }
+ 
+
+            half4 Fragment(Varyings i) : SV_Target
+            {
+                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, i.uv);
+                int groundStep=1-step(moveValue.z,0);
+                moveValue.a*=mainTex.a;
+                
+                int grassStep=1-step(moveValue.x+moveValue.y,0);
+                int groundIndex=moveValue.z;
+
+                float outValue=grassStep*(moveValue.z+0.8)+moveValue.z;
+
+                return float4(outValue.xxx,moveValue.a);
+            }
+            ENDHLSL
+        }
     }
 
     Fallback "Sprites/Default"

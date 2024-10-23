@@ -178,6 +178,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\Inverter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\LookAt.cs" />
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\CheckSelfSurvival.cs" />
+    <Compile Include="Assets\Scripts\Environment\FootstepDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\SetString.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedTransformList.cs" />
     <Compile Include="Assets\Scripts\Main\FestivalManager.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Assets\Effect\ProFlares\Scripts\ProFlare.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForceAtPosition.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\SetRadius.cs" />
+    <Compile Include="Assets\Render\RenderFeature\FootStepPassFeature.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterInCommonMap.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterAddItem.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\CompareLayer.cs" />
@@ -694,7 +696,6 @@
     <Compile Include="Assets\Effect\ProFlares\Scripts\ProFlareBatch.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\MapItemPlayAnimationEvent.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedTransformToGameObject.cs" />
-    <Compile Include="Assets\Render\RenderFeature\BakerRenderPassFeature.cs" />
     <Compile Include="Assets\Scripts\Main\Singleton.cs" />
     <Compile Include="Assets\Render\RenderFeature\MyScreenRenderPassFeature.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPaused.cs" />
@@ -1178,7 +1179,7 @@
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonVegetation2D.shader" />
     <None Include="Assets\Render\Shader\Sun.shader" />
     <None Include="Assets\Render\Shader\Monster-Lit-Default.shader" />
-    <None Include="Assets\Test\Shader\TestShader11.compute" />
+    <None Include="Assets\Render\ComputeShader\FootStepComputeShader.compute" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster 4.txt" />
     <None Include="Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonOutline2D.shader" />

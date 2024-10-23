@@ -1,45 +1,49 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSMain
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
 Texture2D<float4> Result;
 AppendStructuredBuffer<int> outFootTexIndex;
-float2 uv[64];
+float3 pos[64];
 int trueCount;
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
+   
    for(int i=0;i<trueCount;i++)
-   { 
-      float x=uv[i].x; float y=uv[i].y;
+   {   
+      float x=pos[i].x; float y=pos[i].y;
       if(id.x==x&&id.y==y)
       {
+         int stepValue=1-step(Result[id.xy].z,0);
+
          int num5=step(0.9,Result[id.xy].z);
          int num4=step(0.7,Result[id.xy].z);
          int num3=step(0.5,Result[id.xy].z);
          int num2=step(0.3,Result[id.xy].z);
          int num1=step(0.1,Result[id.xy].z);
          int num0=1-num1;
-
+        
          if(num5!=0)
          {
-           outFootTexIndex.Append(5);
+           outFootTexIndex.Append(5*stepValue);
          }else  if(num4!=0)
          {
-          outFootTexIndex.Append(4);
+          outFootTexIndex.Append(4*stepValue);
          }else  if(num3!=0)
          {
-          outFootTexIndex.Append(3);
+          outFootTexIndex.Append(3*stepValue);
          }else  if(num2!=0)
          {
-          outFootTexIndex.Append(2);
+          outFootTexIndex.Append(2*stepValue);
          }else  if(num1!=0)
          {
-          outFootTexIndex.Append(1);
+          outFootTexIndex.Append(1*stepValue);
          }else{
-          outFootTexIndex.Append(0);
+          outFootTexIndex.Append(0*stepValue);
          } 
       }
    }

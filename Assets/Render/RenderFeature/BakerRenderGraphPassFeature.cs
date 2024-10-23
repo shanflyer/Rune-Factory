@@ -112,6 +112,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                         settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All);
                    
                     builder.SetRenderAttachment(destination, 0);
+                    builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
                     if (settings.afterRenderMaterial == null)
                     {

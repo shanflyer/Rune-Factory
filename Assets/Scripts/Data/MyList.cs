@@ -96,14 +96,22 @@ public class MyDic<K,T>
     {
         return keys[index];
     }
-    public List<T> GetValueList()
+    public List<T> GetValueList(bool native=false)
     {
+        if (native)
+        {
+            return list;
+        }
         List<T> result = new List<T>();
         result.AddRange(list);
         return result;
     }
-    public List<K> GetKeyList()
+    public List<K> GetKeyList(bool native = false)
     {
+        if (native)
+        {
+            return keys;
+        }
         List<K> result = new List<K>();
         result.AddRange(keys);
         return result;
