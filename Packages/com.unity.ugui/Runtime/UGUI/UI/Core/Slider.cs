@@ -265,6 +265,10 @@ namespace UnityEngine.UI
             set
             {
                 Set(value);
+                if (tag != "Untagged" && setStringAction != null)
+                {
+                    setStringAction(tag);
+                }
             }
         }
 

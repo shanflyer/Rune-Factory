@@ -776,6 +776,10 @@ namespace TMPro
         /// </summary>
         public void Show()
         {
+            if (tag != "Untagged" && setStringAction != null)
+            {
+                setStringAction(tag);
+            }
             if (m_Coroutine != null)
             {
                 StopCoroutine(m_Coroutine);
