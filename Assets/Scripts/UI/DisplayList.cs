@@ -17,7 +17,13 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         this.listPrefab = listPrefab;
         list = new List<T>();
     }
-
+    public void SelectIndex(int index)
+    {
+        if (index < dataCount)
+        {
+            list[index].Selected();
+        }
+    }
     public virtual void ClearSelect()
     {
         for (int i = 0; i < list.Count; i++)
@@ -66,6 +72,14 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         }
         return null;
     }
+    public T GetReference(int index)
+    {
+        if (index < dataCount)
+        {
+           return list[index];
+        }
+        return null;
+    }
     public async void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         for (int i = 0; i < list.Count; i++)
@@ -77,7 +91,7 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
         }
     }
 
-    public async Task InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+    public async Task InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null,bool Async=true)
     {
        
         if (componentData == null)
@@ -109,9 +123,18 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
             }
             else
             {
-                var async = GameObject.InstantiateAsync(listPrefab);
-                await async;
-                T t = async.Result[0];
+                T t;
+                if (Async)
+                {
+                    var async = GameObject.InstantiateAsync(listPrefab);
+                    await async;
+                    t = async.Result[0];
+                }
+                else
+                {
+                    t = GameObject.Instantiate(listPrefab);
+                }
+               
                 await t.InitData(componentData[i], SelectAction, toggleGroup);
                 t.enabled = true;
                 t.transform.SetParent(parent);

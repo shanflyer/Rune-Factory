@@ -17,8 +17,9 @@ public class DateReference : UIObjReference<GameDate>
     private Image backGround;
     [SerializeField]
     private Toggle selectToggle;
-
-    private GameDate gameDate;
+    [SerializeField]
+    private Transform today;
+     
     private void Awake()
     {
         selectToggle.onValueChanged.AddListener((bool value) =>
@@ -29,6 +30,15 @@ public class DateReference : UIObjReference<GameDate>
             }
         });
     }
+    public override void Selected()
+    {
+        base.Selected();
+        selectToggle.SetIsOnWithoutNotify(true);
+        if (SelectAction != null)
+        {
+            SelectAction(data, true);
+        }
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -36,15 +46,20 @@ public class DateReference : UIObjReference<GameDate>
         ValueText = FindChildGameObject<TextMeshProUGUI>("Value");
         festivalTips = FindChildGameObject<Image>("festivalTips");
         backGround = FindChildGameObject<Image>("backGround");
+        today = FindChildGameObject("Today");
     } 
-
+    public void DisplayToday()
+    {
+        today.localScale = Vector3.one;
+    }
     public override async Task InitData(GameDate t, SelectAction<GameDate> SelectAction = null, ToggleGroup toggleGroup = null)
     {
+        today.localScale = Vector3.zero;
        await base.InitData(t, SelectAction, toggleGroup);
         selectToggle.group = toggleGroup;
         ValueText.text = data.date.ToString();
-        festivalTips.enabled = gameDate.FestivaList.Count > 0;
-        backGround.color = (gameDate.date - 1) % 6 == 0 ? new Color(1, 0.76f, 0.64f) : Color.white; 
+        festivalTips.enabled = data.FestivaList.Count > 0;
+        backGround.color = (data.date - 1) % 6 == 0 ? new Color(1, 0.76f, 0.64f) : Color.white; 
 
     }
 

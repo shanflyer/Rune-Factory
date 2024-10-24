@@ -25,7 +25,7 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
     {
         
     }
-
+    public virtual void Selected() { }
     public virtual void OnEnable()
     {
         transform.localScale = Vector3.one;

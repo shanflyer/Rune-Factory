@@ -161,13 +161,13 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         return base.InitData(dataKey);
     }
 
-    public override void InitReferenceData(ShortcutPackage v)
+    public override async void InitReferenceData(ShortcutPackage v)
     {
         base.InitReferenceData(v);
         shortcutPackage = v;
         var items = v.GetShortcutItems();
 
-        itemList.InitListData(items, SelectShortcutItem,toggleGroup);
+        await itemList.InitListData(items, SelectShortcutItem,toggleGroup,Async:false);
         if (shortcutItem.Item.instanceId == 0)
         {
         }

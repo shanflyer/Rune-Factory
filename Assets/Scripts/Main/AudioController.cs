@@ -59,19 +59,19 @@ public class AudioController : Singleton<AudioController>
         {
             value = 0;
         }
-        value = (value + 40) * 0.05f;
+        value = (value + 40) * 0.025f;
         PlayerPrefs.SetFloat("MasterVolume", value);
         if (!audioMixer.GetFloat("BGMVolume", out value))
         {
             value = 0;
         }
-        value = (value + 40) * 0.05f;
+        value = (value + 40) * 0.025f;
         PlayerPrefs.SetFloat("BGMVolume", value);
         if (!audioMixer.GetFloat("SEVolume", out value))
         {
             value = 0;
         }
-        value = (value + 40) * 0.05f;
+        value = (value + 40) * 0.025f;
         PlayerPrefs.SetFloat("SEVolume", value);
     }
 
@@ -214,15 +214,15 @@ public class AudioController : Singleton<AudioController>
         float3 result = new float3(1, 1, 1);
         if (audioMixer.GetFloat("MasterVolume", out var value))
         {
-            result.x = (value + 40) * 0.05f;
+            result.x = (value + 40) * 0.025f;
         }
         if (audioMixer.GetFloat("BGMVolume", out value))
         {
-            result.y = (value + 240) * 0.05f;
+            result.y = (value + 40) * 0.025f;
         }
         if (audioMixer.GetFloat("SEVolume", out value))
         {
-            result.z = (value + 40) * 0.05f;
+            result.z = (value + 40) * 0.025f;
         }
         return result;
     }
@@ -283,7 +283,7 @@ public class AudioController : Singleton<AudioController>
             AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(seGraph, audioClip, loop);
             if(!seMixerDic.TryGetValue(Group,out var audioMixerPlayable))
             {
-                audioMixerPlayable = AudioMixerPlayable.Create(seGraph);
+                audioMixerPlayable = AudioMixerPlayable.Create(seGraph,1);
                 seMixerDic.Add(Group, audioMixerPlayable) ;
                 seMixer.AddInput(audioMixerPlayable, 0, 1);
             }
@@ -292,8 +292,8 @@ public class AudioController : Singleton<AudioController>
             {
                 oldAudioClip.Destroy();
             }
-            seGraph.Connect(audioMixerPlayable, 0, audioClipPlayable, 0);
-            seMixer.SetInputWeight(0, 1);
+            audioMixerPlayable.SetInputCount(0);
+            audioMixerPlayable.AddInput(audioClipPlayable, 0, 1);  
             seOut.SetSourcePlayable(audioClipPlayable);
             seGraph.Play();
         }

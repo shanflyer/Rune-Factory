@@ -84,7 +84,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         calendar.onClick.AddListener(async () =>
         {
-           await UIManager.instance.ShowGamePanel<CalendarPanel>(layer: 3);
+           await UIManager.instance.ShowGamePanel<CalendarPanel>();
         });
         goldAdd.onClick.AddListener(PayManager.instance.TryCreatGold);
         crystalAdd.onClick.AddListener(PayManager.instance.TryCreatMoney);
