@@ -131,7 +131,15 @@ public class AudioController : Singleton<AudioController>
         AudioClip audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
         PlaySE(audioClip, loop);
     }
-
+    public async void PlayAudio(string se, bool loop = false)
+    {
+        if (string.IsNullOrEmpty(se) || se == "Untagged")
+        {
+            return;
+        }
+        AudioClip audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se));
+        PlaySE(audioClip, loop);
+    }
     public async void PlayAudio(ME me, bool loop = false, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string tag = "Default")
     {
         

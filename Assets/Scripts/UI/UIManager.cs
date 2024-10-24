@@ -48,7 +48,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
     Dictionary<string, SE> tagUIAudioDic = new Dictionary<string, SE>();
-    void UIAudioForTag(string tag)
+    public void UIAudioForTag(string tag)
     {
         if(tagUIAudioDic.TryGetValue(tag,out var se))
         {

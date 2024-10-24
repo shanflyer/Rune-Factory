@@ -12,7 +12,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     public virtual void OnEnable()
     {
-
+        UIManager.instance.UIAudioForTag(tag);
     }
     public virtual void OnDisable()
     {
