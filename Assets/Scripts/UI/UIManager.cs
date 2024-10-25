@@ -52,7 +52,7 @@ public class UIManager : Singleton<UIManager>
     {
         if(tagUIAudioDic.TryGetValue(tag,out var se))
         {
-            AudioController.instance.PlayAudio(se,Group:"UI");
+            AudioController.instance.PlayAudio(se,Group:SEGroup.UI.ToString());
         }
     }
     public void HideAllPanel(HideAllPanel hideAllPanel)

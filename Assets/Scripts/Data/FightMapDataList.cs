@@ -46,7 +46,8 @@ public struct FightMapData : IGameData
     public List<int> items;
     public List<int> monsterDeploys;
     public List<int> endMonsterEvents;
-    public AudioClip exploreBGM,fightBGM;
+    private string exploreBGMStr, fightBGMStr,bossBGMStr;
+    public AudioClip exploreBGM,fightBGM,bossBGM;
     public bool skyDisplay;
     public bool displaySunlight;
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
@@ -60,6 +61,9 @@ public struct FightMapData : IGameData
     public void SetReferenceData()
     {
         fightMapObj = Resources.Load<GameObject>($"Prefabs/FightMap/{fightMapObjName}");
+        exploreBGM = Resources.Load<AudioClip>($"Audio/BGM/{exploreBGMStr}");
+        fightBGM = Resources.Load<AudioClip>($"Audio/BGM/Battle/{fightBGMStr}");
+        bossBGM = Resources.Load<AudioClip>($"Audio/BGM/Battle/{bossBGMStr}");
     }
 #endif
     public string GetKey()

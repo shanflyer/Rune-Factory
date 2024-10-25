@@ -143,7 +143,13 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(setFixedCamera);
 
             FightController.instance.CreatFightMap(nowFightMapData);
-            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, true);
+            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All,isLerp:true);
+             
+            AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 0);
+            AudioController.instance.SetBGSGroupValue(BGMGroup.Map.ToString(), 0);
+            AudioController.instance.SetBGSGroupValue(BGSGroup.Rain.ToString(), 0);
+            AudioController.instance.SetBGSGroupValue(BGSGroup.Wind.ToString(), 0);
+            AudioController.instance.SetBGSGroupValue(BGSGroup.Lightning.ToString(), 0);
 
             SetMapOverrideEnvironment setMapOverrideEnvironment = new SetMapOverrideEnvironment
             {
@@ -188,7 +194,14 @@ public class ExploreManager : Singleton<ExploreManager>
         if (nowFightMapData.id != nowChapter)
         {
             nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
-            AudioController.instance.PlayBGM(nowFightMapData.fightBGM, true);
+            if(nowStep== nowFightMapData.monsterDeploys.Count - 1)
+            {
+                AudioController.instance.PlayBGM(nowFightMapData.fightBGM, isLerp: true, audioClearType: AudioClearType.All, Group: BGMGroup.Battle.ToString());
+            }
+            else
+            {
+                AudioController.instance.PlayBGM(nowFightMapData.bossBGM, isLerp: true, audioClearType: AudioClearType.All, Group: BGMGroup.Battle.ToString());
+            } 
         }
         if (nowFightMapData.monsterDeploys.Count > nowStep)
         {
@@ -202,8 +215,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 FightManager.instance.CreatFightMonster(mosterDeploy);
             }
         }
-
-        
+         
         SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
         {
             fight = true,

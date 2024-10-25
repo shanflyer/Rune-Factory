@@ -8,6 +8,8 @@ using System;
 public class AdventureResultPanel: GamePanel<FightResult>
 {
     [SerializeField]
+    AudioClip successAudioClip, failedAudioClip;
+    [SerializeField]
     Transform SuccessTitle, FailureTitle;
     [SerializeField]
     Transform ItemsContent;
@@ -58,7 +60,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         ExploreEnd exploreEnd = new ExploreEnd();
         GameActionManager.instance.QueueAction(exploreEnd, true);
 
-      await  UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+        await  UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
         await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
         await UIManager.instance.ShowGamePanel<MainPanel>();
         await UIManager.instance.ShowGamePanel<ShortcutPanel>();
@@ -67,14 +69,16 @@ public class AdventureResultPanel: GamePanel<FightResult>
         // UIManager.instance.
     }
  
-    public override void InitReferenceData(FightResult fightResult)
+    public override async void InitReferenceData(FightResult fightResult)
     {
         base.InitReferenceData(fightResult);
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
 
-        itemList.InitListData(fightResult.getItems);
-        teamerList.InitListData(fightResult.fighterResults);
+        AudioController.instance.PlayAudioME(fightResult.victory ? successAudioClip : failedAudioClip, Group: MEGroup.Battle.ToString());
+
+        await itemList.InitListData(fightResult.getItems);
+        await teamerList.InitListData(fightResult.fighterResults);
         UIManager.instance.CloseGamePanel<FightPanel>();
     }
     

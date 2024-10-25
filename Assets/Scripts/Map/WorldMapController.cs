@@ -80,7 +80,7 @@ public class WorldMapController : MonoBehaviour
         var fishController = FishController.instance;
         var weatherManager = WeatherManager.instance;
 
-        AudioController.instance.PlayBGM(null,audioClearType:AudioClearType.All, isLerp: true, Group: "Theme");
+        AudioController.instance.PlayBGM(null,audioClearType:AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
 
         GameActionManager.instance.QueueAction(new ChangeWorld
         {

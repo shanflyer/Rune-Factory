@@ -3,33 +3,26 @@ using Unity.Mathematics;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Playables;
-using UnityEngine.Audio;
+using UnityEngine.Audio; 
 
 [Serializable]
 public struct WindData
 {
-    public WindParticleData left, right;
-    public AudioSource audioSource;
+    public WindParticleData left, right; 
     public List<AudioClip> audios;
-
-
-    PlayableGraph playableGraph;
-    AudioPlayableOutput audioPlayableOutput;
+     
     public void InitParticle()
     {
         left.InitParticle();
         right.InitParticle();  
-
-
-        playableGraph = PlayableGraph.Create("Wind");
-        audioPlayableOutput = AudioPlayableOutput.Create(playableGraph, "Wind",audioSource);
+         
     }
+
+    int nowIndex;
     public void ChangeAudio(int index)
     {
-        index = math.clamp(index,0, audios.Count - 1); 
-        AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audios[index], true);
-        audioPlayableOutput.SetSourcePlayable(audioClipPlayable);
-        playableGraph.Play();
+        nowIndex = math.clamp(index,0, audios.Count - 1);
+        AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All, Group: BGSGroup.Wind.ToString()); 
     }
     public void SetHide(bool hide)
     {
@@ -37,8 +30,8 @@ public struct WindData
         right.SetHide(hide);
     }
     public void SetValue(float value, bool immediatelyStop = false)
-    { 
-        audioSource.volume = value;
+    {
+        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:value, audioClearType: AudioClearType.All, Group: BGSGroup.Wind.ToString());
         if (value == 0)
         {
             left.SetValue(0);
@@ -57,9 +50,7 @@ public struct WindData
         }
     }
     public void Clear()
-    {
-        if (playableGraph.IsValid())
-            playableGraph.Destroy();
+    { 
     }
 }
 [Serializable]
@@ -145,24 +136,19 @@ public struct WindParticleData
 public struct RainParticleData
 {
     public ParticleSystem rain,drop,clouds;
-    public ParticleSystemRenderer rainRenderer, dropRenderer, cloudsRenderer;
-    public AudioSource audioSource;
+    public ParticleSystemRenderer rainRenderer, dropRenderer, cloudsRenderer; 
     ParticleSystem.EmissionModule rainEmission;
     ParticleSystem.EmissionModule dropEmission;
     ParticleSystem.EmissionModule cloudsEmission;
     ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime;
     float rainValue, dropValue, cloudsValue;
-
-    PlayableGraph playableGraph;
-    AudioPlayableOutput audioPlayableOutput;
+     
     public List<AudioClip> audios;
+    int nowIndex;
     public void ChangeAudio(int index)
     {
-        index = math.clamp(index, 0, audios.Count - 1);
-
-        AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audios[index], true);
-        audioPlayableOutput.SetSourcePlayable(audioClipPlayable);
-        playableGraph.Play();
+        nowIndex = math.clamp(index, 0, audios.Count - 1);
+        AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All, Group: BGSGroup.Rain.ToString()); 
         //audioSource.resource = audios[index];
        /// audioSource.Play();
     }
@@ -183,20 +169,15 @@ public struct RainParticleData
         velocityOverLifetime.x = 0;
         rainEmission.enabled = dropEmission.enabled = cloudsEmission.enabled = false; 
        // audioSource.mute = true;
-       // audioSource.Stop();
-
-        playableGraph=PlayableGraph.Create("Rain");
-        audioPlayableOutput = AudioPlayableOutput.Create(playableGraph, "Rain", audioSource);
+       // audioSource.Stop(); 
     }
     public void SetValue(float value, bool immediatelyStop = false)
-    {
-        audioSource.mute = false;
+    { 
         rainEmission.enabled=dropEmission.enabled=cloudsEmission.enabled = value > 0;
         rainEmission.rateOverTime = math.lerp(0, rainValue, value);
         dropEmission.rateOverTime=math.lerp(0, dropValue, value);
         cloudsEmission.rateOverTime=math.lerp(0,cloudsValue, value);
-
-        audioSource.volume = value;
+        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:value, audioClearType: AudioClearType.All, Group: BGSGroup.Rain.ToString()); 
 
         // 
         // audioSource.Play();
@@ -206,12 +187,7 @@ public struct RainParticleData
         velocityOverLifetime.x =- 3 * value;
     }
     public void Clear()
-    {
-        if (playableGraph.IsValid())
-        {
-            playableGraph.Destroy();
-        }
-        
+    {  
     }
 }
 [Serializable]
@@ -413,8 +389,7 @@ public class WeatherMono : MonoBehaviour,IGameData
         var snow = transform.Find("Snow").GetComponent<ParticleSystem>();
         snowData.snow = snow;
         snowData.snowRenderer = snow.GetComponent<ParticleSystemRenderer>();
-
-        windData.audioSource = transform.Find("Wind").GetComponent<AudioSource>();
+         
         ParticleSystem left = transform.Find("Wind/Left").GetComponent<ParticleSystem>();
         windData.left.wind = left;
         windData.left.windRenderer = left.GetComponent<ParticleSystemRenderer>();
@@ -464,8 +439,7 @@ public class WeatherMono : MonoBehaviour,IGameData
         ParticleSystem rain = transform.Find("Rain").GetComponent<ParticleSystem>();
         rainParticle.rain = rain;
         rainParticle.rainRenderer = rain.GetComponent<ParticleSystemRenderer>();
-
-        rainParticle.audioSource = rain.GetComponent<AudioSource>();
+         
         ParticleSystem drop = transform.Find("Rain/Drop").GetComponent<ParticleSystem>();
         rainParticle.drop = drop;
         rainParticle.dropRenderer = drop.GetComponent<ParticleSystemRenderer>();

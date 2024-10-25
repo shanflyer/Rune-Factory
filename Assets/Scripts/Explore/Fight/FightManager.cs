@@ -107,6 +107,12 @@ public class FightManager : Singleton<FightManager>
         GetItemIndexs.Clear();
         fightResult.fighterResults.Clear();
         fightResult.getItems.Clear();
+
+        AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 1);
+        AudioController.instance.SetBGSGroupValue(BGSGroup.Map.ToString(), 1);
+        AudioController.instance.SetBGSGroupValue(BGSGroup.Rain.ToString(), 1);
+        AudioController.instance.SetBGSGroupValue(BGSGroup.Wind.ToString(), 1);
+        AudioController.instance.SetBGSGroupValue(BGSGroup.Lightning.ToString(), 1); 
     }
 
     void EndNowRoundFight(EndNowRoundFight endNowRoundFight)

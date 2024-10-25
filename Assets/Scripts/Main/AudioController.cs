@@ -18,6 +18,22 @@ public struct AudioPlayData
     public bool loop;
 }
 
+public enum BGSGroup
+{
+    Default, Map, Lightning, Rain, Wind
+}
+public enum BGMGroup
+{
+    Default, Map, Battle, Theme
+}
+public enum MEGroup
+{
+    Default, Battle, 
+}
+public enum SEGroup
+{
+    Default, UI
+}
 public delegate void SetAudioAction(AudioClip audioClip);
 
 public class AudioController : Singleton<AudioController>
@@ -129,7 +145,7 @@ public class AudioController : Singleton<AudioController>
     private Dictionary<string, AudioMixerPlayable> seMixerDic = new Dictionary<string, AudioMixerPlayable>();
 
     private string nowBGM;
-    private BGS nowBGS;
+    private string nowBGS;
     private float bgsWeight, bgmWeight;
 
     public async void PlayAudio(SE se, bool loop = false,string Group="Default")
@@ -153,7 +169,10 @@ public class AudioController : Singleton<AudioController>
         AudioClip audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.MEPath, me.ToString()));
         PlayME(audioClip, loop, audioClearType, weight, isLerp, Group);
     }
-
+    public void PlayAudioME(AudioClip audioClip, bool loop = false, AudioClearType audioClearType = AudioClearType.All, float weight = 1, bool isLerp = false, string Group = "Default")
+    { 
+        PlayME(audioClip, loop, audioClearType, weight, isLerp, Group);
+    }
     public async void PlayAudio(BGM bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
         if (bgm == BGM.NULL)
@@ -190,7 +209,24 @@ public class AudioController : Singleton<AudioController>
             }
         }
     }
-
+    public void PlayAudioBGS(AudioClip bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1,
+        bool isLerp = false, string Group = "Default")
+    {
+        if ((bgs == null && nowBGS != "NULL") || (bgs != null && nowBGM != bgs.name))
+        {
+            bgsWeight = weight;
+            nowBGM = bgs.name;
+            PlayBGS(bgs, loop, audioClearType, weight, isLerp, Group);
+        }
+        else if (bgsWeight != weight)
+        {
+            if (bgsMixerDic.TryGetValue(Group, out var audioMixerPlayable))
+            {
+                SetPlayAudioWeight(audioMixerPlayable, bgs, weight);
+            }
+            bgsWeight = weight;
+        }
+    }
     public void PlayAudioBGM(AudioClip bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
         if ((bgm == null && nowBGM != "NULL") || (bgm != null && nowBGM != bgm.name))
@@ -229,35 +265,61 @@ public class AudioController : Singleton<AudioController>
 
     public async void PlayAudio(BGS bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
-        if (bgs != nowBGS)
+        if (bgs == BGS.NULL)
         {
-            bgsWeight = weight;
-            nowBGS = bgs;
-            AudioClip audioClip = await
-            GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, bgs.ToString()));
-            PlayBGS(audioClip, loop, audioClearType, weight, isLerp, Group);
-        }
-        else if (bgsWeight != weight)
-        {
-            if (bgsMixerDic.TryGetValue(Group, out var audioMixerPlayable))
+            if (nowBGS != "NULL")
             {
-                AudioClip audioClip = await
-                           GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, bgs.ToString()));
-                SetPlayAudioWeight(audioMixerPlayable, audioClip, weight);
+                bgsWeight = weight;
+                PlayBGS(null, loop, audioClearType, weight, isLerp, Group);
+                nowBGS = bgs.ToString();
             }
-            bgsWeight = weight;
         }
+        else
+        {
+            string bgsStr = bgs.ToString();
+            var strs = bgsStr.Split("_");
+            bgsStr = strs[strs.Length - 1];
+            if (bgsStr != nowBGS)
+            {
+                bgsWeight = weight;
+                nowBGS = bgsStr;
+                AudioClip audioClip = await
+                GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, bgs.ToString()));
+                PlayBGS(audioClip, loop, audioClearType, weight, isLerp, Group);
+            }
+            else if (bgsWeight != weight)
+            {
+                if (bgsMixerDic.TryGetValue(Group, out var audioMixerPlayable))
+                {
+                    AudioClip audioClip = await
+                               GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, bgs.ToString()));
+                    SetPlayAudioWeight(audioMixerPlayable, audioClip, weight);
+                }
+                bgsWeight = weight;
+            }
+        }
+        
     }
 
     public async void PlayAudio(List<float3> bgs, AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string Group = "Default")
     {
         if (bgs.Count > 0)
         {
-            nowBGS = (BGS)(int)(bgs[bgs.Count - 1].x);
+            BGS BGS  = (BGS)(int)(bgs[bgs.Count - 1].x);
+            if (BGS == BGS.NULL)
+            {
+                nowBGS = "NULL";
+            }
+            else
+            {
+                string bgsStr = BGS.ToString();
+                var strs = bgsStr.Split("_");
+                nowBGS = strs[strs.Length - 1]; 
+            } 
         }
         else
         {
-            nowBGS = BGS.NULL;
+            nowBGS = "NULL";
         }
         List<AudioPlayData> audioPlayDatas = new List<AudioPlayData>();
         for (int i = 0; i < bgs.Count; i++)
@@ -510,6 +572,20 @@ public class AudioController : Singleton<AudioController>
         }
     }
 
+    public void SetBGMGroupValue(string group,float value)
+    {
+        if(bgmMixerDic.TryGetValue(group,out var audioMixerPlayable))
+        {
+            bgmMixer.SetInputWeight(audioMixerPlayable, value);
+        }
+    }
+    public void SetBGSGroupValue(string group,float value)
+    {
+        if(bgsMixerDic.TryGetValue(group,out var audioMixerPlayable))
+        {
+            bgsMixer.SetInputWeight(audioMixerPlayable, value);
+        }
+    }
     private void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, List<AudioPlayData> audioClips,
        AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string Group = "Default")
     {

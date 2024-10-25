@@ -498,7 +498,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 if (LightningData.sounds!=null&&LightningData.sounds.Length>0)
                 {
                     int index = GameRandom.RandomInt(0, LightningData.sounds.Length);
-                    AudioController.instance.PlayAudio(LightningData.sounds[index]);
+                    AudioController.instance.PlayAudio(LightningData.sounds[index],audioClearType:AudioClearType.All,Group: BGSGroup.Lightning.ToString());
                 }
                 LightningCD = 0;
                 waitLightningTime = 0;
