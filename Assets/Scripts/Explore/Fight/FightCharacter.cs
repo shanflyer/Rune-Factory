@@ -69,7 +69,7 @@ public class FightCharacter : IReferenceData
 
     private float PerRoundTime = 0;
     private float waiteTime = 0;
-    public bool waiteEnd;
+    public bool waiteEnd { get; private set; }
 
     public float WaiteValue()
     {

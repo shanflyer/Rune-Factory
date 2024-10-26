@@ -12,5 +12,5 @@ public class TagAudioDataList : ScriptableObject
 public struct TagAudioData
 {
     public string tag;
-    public SE audio;
+    public AudioClip audioClip;
 }

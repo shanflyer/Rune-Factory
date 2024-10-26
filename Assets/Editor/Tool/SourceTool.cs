@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -9,6 +10,40 @@ using Object = UnityEngine.Object;
 
 public class SourceTool : MonoBehaviour
 {
+    [MenuItem("Assets/音效工具/改名音效文件")]
+    public static void ChangeNameReSaveAudioFile()
+    {
+
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+            {
+                var path = AssetDatabase.GetAssetPath(obj);
+                if (obj is AudioClip)
+                {
+                    var strs = obj.name.Split('_');
+                    try
+                    {
+                        int num = int.Parse(strs[0]);
+                        var newPath = path.Replace(strs[0], "");
+                        AssetDatabase.MoveAsset(path, newPath);
+                    }
+                    catch
+                    {
+                        continue;
+                    } 
+                    
+                }
+
+               
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        } 
+    }
     [MenuItem("Assets/音效工具/保存音效文件")]
     public static void ReSaveAudioFile()
     {
@@ -37,7 +72,7 @@ public class SourceTool : MonoBehaviour
                 if (System.IO.Directory.Exists(path))
                 {
                     DirectoryInfo dir = new DirectoryInfo(path);
-                    OpenDirectoryInfo(dir);
+                    OpenDirectoryInfo(dir, path);
                 }
             }
         }
@@ -47,7 +82,7 @@ public class SourceTool : MonoBehaviour
         }
 
 
-        void OpenDirectoryInfo(DirectoryInfo directoryInfo)
+        void OpenDirectoryInfo(DirectoryInfo directoryInfo,string parentPath)
         {
            
             var _dirs = directoryInfo.GetDirectories();
@@ -56,8 +91,22 @@ public class SourceTool : MonoBehaviour
 
             if (files.Length > 0)
             {
+                
                 foreach(var file in files)
                 {
+                    string path = $"{parentPath}/{file.Name}";
+                    var obj = AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+                    if (obj != null)
+                    {
+                        string newPath = path;
+                        for (int i = 0; i < clearStr.Count; i++)
+                        {
+                            newPath = path.Replace(clearStr[i], "");
+                        }
+
+                        AssetDatabase.MoveAsset(path, newPath);
+                    }
+                    /*
                     var fileName = file.Name;
                     var fullName=file.FullName;
                     fullName = fullName.Replace(fileName, "");
@@ -69,14 +118,14 @@ public class SourceTool : MonoBehaviour
                     }
                   
                     newPath = fullName + newPath;
-                    File.Move(file.FullName, newPath);
+                    File.Move(file.FullName, newPath);*/
                 }
             }
             else
             {
                 foreach (var d in _dirs)
                 { 
-                    OpenDirectoryInfo(d);
+                    OpenDirectoryInfo(d,parentPath+"/"+d.Name);
                 }
             }
         }

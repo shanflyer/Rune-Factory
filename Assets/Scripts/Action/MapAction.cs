@@ -503,6 +503,7 @@ public struct DisplayMap : GameAction
 {
     public int displayMap;
     public int actionId;
+    public bool fixedDisplay;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 

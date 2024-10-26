@@ -19,10 +19,12 @@ public struct WindData
     }
 
     int nowIndex;
+    float nowValue;
     public void ChangeAudio(int index)
     {
         nowIndex = math.clamp(index,0, audios.Count - 1);
-        AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All, Group: BGSGroup.Wind.ToString()); 
+        AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All, weight: math.abs(nowValue),
+            Group: BGSGroup.Wind.ToString()); 
     }
     public void SetHide(bool hide)
     {
@@ -31,7 +33,8 @@ public struct WindData
     }
     public void SetValue(float value, bool immediatelyStop = false)
     {
-        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:value, audioClearType: AudioClearType.All, Group: BGSGroup.Wind.ToString());
+        nowValue = value;
+        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:math.abs(value), audioClearType: AudioClearType.All, Group: BGSGroup.Wind.ToString());
         if (value == 0)
         {
             left.SetValue(0);
@@ -92,7 +95,7 @@ public struct WindParticleData
     public void SetHide(bool hide)
     {
         windRenderer.enabled = springRenderer.enabled = summerRenderer.enabled 
-            = autumnRenderer.enabled=windRenderer.enabled=smokeRenderer.enabled=!hide;
+            = autumnRenderer.enabled= winterRenderer.enabled=smokeRenderer.enabled=!hide;
     }
     public void SetValue(float value, bool immediatelyStop = false)
     {
@@ -145,10 +148,12 @@ public struct RainParticleData
      
     public List<AudioClip> audios;
     int nowIndex;
+    float nowValue;
     public void ChangeAudio(int index)
     {
         nowIndex = math.clamp(index, 0, audios.Count - 1);
-        AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All, Group: BGSGroup.Rain.ToString()); 
+        AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All,weight: nowValue,
+            Group: BGSGroup.Rain.ToString()); 
         //audioSource.resource = audios[index];
        /// audioSource.Play();
     }
@@ -172,12 +177,14 @@ public struct RainParticleData
        // audioSource.Stop(); 
     }
     public void SetValue(float value, bool immediatelyStop = false)
-    { 
+    {
+        nowValue = value;
         rainEmission.enabled=dropEmission.enabled=cloudsEmission.enabled = value > 0;
         rainEmission.rateOverTime = math.lerp(0, rainValue, value);
         dropEmission.rateOverTime=math.lerp(0, dropValue, value);
         cloudsEmission.rateOverTime=math.lerp(0,cloudsValue, value);
-        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:value, audioClearType: AudioClearType.All, Group: BGSGroup.Rain.ToString()); 
+        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:value, 
+            audioClearType: AudioClearType.All, Group: BGSGroup.Rain.ToString()); 
 
         // 
         // audioSource.Play();

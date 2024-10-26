@@ -145,9 +145,10 @@ public class AudioController : Singleton<AudioController>
     private Dictionary<string, AudioMixerPlayable> seMixerDic = new Dictionary<string, AudioMixerPlayable>();
 
     private string nowBGM;
-    private string nowBGS;
-    private float bgsWeight, bgmWeight;
-
+    private Dictionary<string, string> nowBGSs=new Dictionary<string, string>();
+    private Dictionary<string, float> bgsWeights = new Dictionary<string, float>();
+    private float bgmWeight;
+  
     public async void PlayAudio(SE se, bool loop = false,string Group="Default")
     {
         AudioClip audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
@@ -212,10 +213,21 @@ public class AudioController : Singleton<AudioController>
     public void PlayAudioBGS(AudioClip bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1,
         bool isLerp = false, string Group = "Default")
     {
+        if (nowBGSs.TryGetValue(Group, out var nowBGS))
+        {
+            nowBGS = "NULL";
+        }
+        if(bgsWeights.TryGetValue(Group,out var bgsWeight))
+        {
+            bgsWeight = 0;
+        }
+
         if ((bgs == null && nowBGS != "NULL") || (bgs != null && nowBGM != bgs.name))
         {
             bgsWeight = weight;
             nowBGM = bgs.name;
+            bgsWeights[Group] = bgsWeight;
+            nowBGSs[Group] = nowBGS;
             PlayBGS(bgs, loop, audioClearType, weight, isLerp, Group);
         }
         else if (bgsWeight != weight)
@@ -225,6 +237,7 @@ public class AudioController : Singleton<AudioController>
                 SetPlayAudioWeight(audioMixerPlayable, bgs, weight);
             }
             bgsWeight = weight;
+            bgsWeights[Group] = bgsWeight;
         }
     }
     public void PlayAudioBGM(AudioClip bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
@@ -265,6 +278,14 @@ public class AudioController : Singleton<AudioController>
 
     public async void PlayAudio(BGS bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
+        if (nowBGSs.TryGetValue(Group, out var nowBGS))
+        {
+            nowBGS = "NULL";
+        }
+        if (bgsWeights.TryGetValue(Group, out var bgsWeight))
+        {
+            bgsWeight = 0;
+        }
         if (bgs == BGS.NULL)
         {
             if (nowBGS != "NULL")
@@ -272,6 +293,9 @@ public class AudioController : Singleton<AudioController>
                 bgsWeight = weight;
                 PlayBGS(null, loop, audioClearType, weight, isLerp, Group);
                 nowBGS = bgs.ToString();
+
+                bgsWeights[Group] = bgsWeight;
+                nowBGSs[Group] = nowBGS;
             }
         }
         else
@@ -286,6 +310,8 @@ public class AudioController : Singleton<AudioController>
                 AudioClip audioClip = await
                 GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, bgs.ToString()));
                 PlayBGS(audioClip, loop, audioClearType, weight, isLerp, Group);
+                bgsWeights[Group] = bgsWeight;
+                nowBGSs[Group] = nowBGS;
             }
             else if (bgsWeight != weight)
             {
@@ -296,6 +322,7 @@ public class AudioController : Singleton<AudioController>
                     SetPlayAudioWeight(audioMixerPlayable, audioClip, weight);
                 }
                 bgsWeight = weight;
+                bgsWeights[Group] = bgsWeight; 
             }
         }
         
@@ -303,6 +330,10 @@ public class AudioController : Singleton<AudioController>
 
     public async void PlayAudio(List<float3> bgs, AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string Group = "Default")
     {
+        if (nowBGSs.TryGetValue(Group, out var nowBGS))
+        {
+            nowBGS = "NULL";
+        } 
         if (bgs.Count > 0)
         {
             BGS BGS  = (BGS)(int)(bgs[bgs.Count - 1].x);
@@ -336,9 +367,11 @@ public class AudioController : Singleton<AudioController>
         }
 
         PlayBGS(audioPlayDatas, audioClearType, isLerp, Group);
+        nowBGSs[Group] = nowBGS;
+        bgsWeights[Group] = 1;
     }
 
-    private void PlaySE(AudioClip audioClip, bool loop = false,string Group="Default")
+    public void PlaySE(AudioClip audioClip, bool loop = false,string Group="Default")
     {
         try
         {
@@ -402,7 +435,7 @@ public class AudioController : Singleton<AudioController>
             {
                 if (audioClearType == AudioClearType.All)
                 {
-                    for (int i = count - 1; i <= 0; i--)
+                    for (int i = count - 1; i >= 0; i--)
                     {
                         playableGraph.Disconnect(childMixer, i);
                     }

@@ -85,6 +85,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             audioListener.enabled = true;
             CameraManager.instance.SetCameraListener(false);
+           
         }
     }
 
@@ -698,7 +699,10 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         if (characterDataToInstances.TryGetValue(dataId, out var instance))
         {
-            return characters[instance];
+            if(characters.TryGetValue(instance,out var character))
+            {
+                return character;
+            } 
         }
         return null;
     }
@@ -1332,7 +1336,9 @@ public class CharacterManager : Singleton<CharacterManager>
                     transform.localPosition = pos;
                 }
             } 
-        } 
+        }
+
+        CharacterManager.SetShaderPlayerPos(ControllerRuntimeObj.transform.position);
     }
 
     public void SetCharacterAnimationSpeed(float speed, Character character)

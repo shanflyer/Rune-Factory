@@ -341,7 +341,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     private async void DisplayMap(DisplayMap displayMap)
     {
         RecycleMap();
-        await DisplayMap(displayMap.displayMap);
+        await DisplayMap(displayMap.displayMap,displayMap.fixedDisplay);
         if (displayMap.actionId != 0)
         {
             GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(displayMap.actionId);
@@ -349,9 +349,9 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    public async Task DisplayMap(int mapId)
+    public async Task DisplayMap(int mapId,bool fixedDisplay=false)
     {
-        if (displayMap == mapId)
+        if (!fixedDisplay &&displayMap == mapId)
         {
             return;
         }

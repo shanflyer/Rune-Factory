@@ -12,7 +12,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     public virtual void OnEnable()
     {
-        UIManager.instance.UIAudioForTag(tag);
+        
     }
     public virtual void OnDisable()
     {
@@ -88,6 +88,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     } 
     public override void Show(int layer = -1)
     {
+        UIManager.instance.UIAudioForTag(tag);
         base.Show();
         if (changeInputModel) 
         {

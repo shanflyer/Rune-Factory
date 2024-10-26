@@ -419,6 +419,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   hurtDisplay: 1
+--- !u!114 &854851829656873228
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
+  m_Name: AudioPlayableAsset
+  m_EditorClassIdentifier: 
+  m_Clip: {fileID: 8300000, guid: 1b8ca0b73d8b6c1409e196be322bd0f3, type: 3}
+  m_Loop: 0
+  m_bufferingTime: 0.1
+  m_ClipProperties:
+    volume: 1
 --- !u!114 &1893130202673463819
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -544,8 +561,8 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 0
     m_ClipIn: 0
-    m_Asset: {fileID: 4891073452269297814}
-    m_Duration: 0.6791836734693878
+    m_Asset: {fileID: 854851829656873228}
+    m_Duration: 3.0917006802721088
     m_TimeScale: 1
     m_ParentTrack: {fileID: 4260270865006925103}
     m_EaseInDuration: 0
@@ -609,7 +626,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: iceshot_hit_01_01
+    m_DisplayName: magic_spell_electro_01
   m_Markers:
     m_Objects: []
   matchDatas: []
@@ -617,23 +634,6 @@ MonoBehaviour:
     volume: 1
     stereoPan: 0
     spatialBlend: 0
---- !u!114 &4891073452269297814
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
-  m_Name: AudioPlayableAsset
-  m_EditorClassIdentifier: 
-  m_Clip: {fileID: 8300000, guid: 0a9206ba32c84194ab474fa72ce9d65d, type: 3}
-  m_Loop: 0
-  m_bufferingTime: 0.1
-  m_ClipProperties:
-    volume: 1
 --- !u!114 &8831111245295016258
 MonoBehaviour:
   m_ObjectHideFlags: 1

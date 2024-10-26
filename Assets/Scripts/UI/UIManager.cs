@@ -44,15 +44,15 @@ public class UIManager : Singleton<UIManager>
         tagUIAudioDic.Clear();
         for(int i = 0; i < tagAudioDataList.tagAudioDatas.Count; i++)
         {
-            tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audio;
+            tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audioClip;
         }
     }
-    Dictionary<string, SE> tagUIAudioDic = new Dictionary<string, SE>();
+    Dictionary<string, AudioClip> tagUIAudioDic = new Dictionary<string, AudioClip>();
     public void UIAudioForTag(string tag)
     {
         if(tagUIAudioDic.TryGetValue(tag,out var se))
         {
-            AudioController.instance.PlayAudio(se,Group:SEGroup.UI.ToString());
+            AudioController.instance.PlaySE(se,Group:SEGroup.UI.ToString());
         }
     }
     public void HideAllPanel(HideAllPanel hideAllPanel)

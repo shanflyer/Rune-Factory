@@ -184,7 +184,7 @@ public class ExploreManager : Singleton<ExploreManager>
     private async void ChapterStepAction(ChapterStepAction chapterStepAction)
     {
         UIManager.instance.CloseGamePanel<WarehousePanel>();
-        if (fightChapter.mapId != nowChapter)
+        if (fightChapter==null||fightChapter.mapId != nowChapter)
         {
             if (!fightChapters.TryGetValue(nowChapter, out fightChapter))
             {
