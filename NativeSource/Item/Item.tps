@@ -447,6 +447,8 @@
             <key type="filename">水晶球.png</key>
             <key type="filename">水晶石$Normal.png</key>
             <key type="filename">水晶石.png</key>
+            <key type="filename">水母$Normal.png</key>
+            <key type="filename">水母.png</key>
             <key type="filename">水母（红色）$Normal.png</key>
             <key type="filename">水母（红色）.png</key>
             <key type="filename">水母（蓝色）$Normal.png</key>
@@ -551,6 +553,8 @@
             <key type="filename">烤龙虾.png</key>
             <key type="filename">焦炭$Normal.png</key>
             <key type="filename">焦炭.png</key>
+            <key type="filename">煮蟹肉$Normal.png</key>
+            <key type="filename">煮蟹肉.png</key>
             <key type="filename">爆眼金鱼$Normal.png</key>
             <key type="filename">爆眼金鱼.png</key>
             <key type="filename">牛奶$Normal.png</key>
@@ -917,6 +921,8 @@
             <key type="filename">鲫鱼蔬菜汤.png</key>
             <key type="filename">鲮鱼$Normal.png</key>
             <key type="filename">鲮鱼.png</key>
+            <key type="filename">鲮鱼丸$Normal.png</key>
+            <key type="filename">鲮鱼丸.png</key>
             <key type="filename">鲯鳅鱼$Normal.png</key>
             <key type="filename">鲯鳅鱼.png</key>
             <key type="filename">鲶鱼$Normal.png</key>
