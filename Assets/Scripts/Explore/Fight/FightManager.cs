@@ -108,6 +108,7 @@ public class FightManager : Singleton<FightManager>
         fightResult.fighterResults.Clear();
         fightResult.getItems.Clear();
 
+        AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, Group: BGMGroup.Battle.ToString());
         AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 1);
         AudioController.instance.SetBGSGroupValue(BGSGroup.Map.ToString(), 1);
         AudioController.instance.SetBGSGroupValue(BGSGroup.Rain.ToString(), 1);
@@ -263,15 +264,21 @@ public class FightManager : Singleton<FightManager>
                     fightResult.getItems.Add(item);
                     GetItemIndexs.Add(itemId, fightResult.getItems.Count - 1);
                 }
-
+                /*
                 AddPackageItem addPackageItem = new AddPackageItem
                 {
                     packageId = 0,
                     itemDataId = itemId,
                     itemCount = count
                 };
-                GameActionManager.instance.QueueAction(addPackageItem);
+                GameActionManager.instance.QueueAction(addPackageItem);*/
             }
+            AddPackageItemList addPackageItemList = new AddPackageItemList
+            {
+                packageId = 0,
+                items = items
+            };
+            GameActionManager.instance.QueueAction(addPackageItemList);
             FightController.instance.DisplayDropItem(items, characterId);
             ExploreManager.instance.SetChapterFindItem(items);
             //获得经验
@@ -385,7 +392,7 @@ public class FightManager : Singleton<FightManager>
         RefreshFightPlayerInfo();
     }
 
-    public async void CreatFightMonster(MonsterDeploy monsterDeploy)
+    public async Task CreatFightMonster(MonsterDeploy monsterDeploy)
     {
         var beforeAction = await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.beforeActionId);
         if (beforeAction != null)
@@ -1086,10 +1093,10 @@ public class FightManager : Singleton<FightManager>
             };
             GameActionManager.instance.QueueAction(displayHurt, true);
         }
-        Debug.Log($"角色HP：{target.Name}--{hp}");
+        //Debug.Log($"角色HP：{target.Name}--{hp}");
         if (hp <= 0)
         {
-            Debug.Log($"角色死亡：{target is FightMonster}");
+           // Debug.Log($"角色死亡：{target is FightMonster}");
             CharacterDeath characterDeath = new CharacterDeath
             {
                 characterId = target.instanceId,

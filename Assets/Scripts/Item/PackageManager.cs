@@ -170,6 +170,7 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<ChangePackageInnstance>(ChangePackageInnstance);
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
         GameActionManager.instance.AddListener<RemovePackageItemInstance>(RemovePackageItemInstance);
+        GameActionManager.instance.AddListener<AddPackageItemList>(AddPackageItemList);
     }
 
     public bool GetPackageItemCounts(int packageId, out List<int2> items)
@@ -747,16 +748,52 @@ public class PackageManager : Singleton<PackageManager>
             });
         }
     }
-
-    private async void AddPackageItemAction(AddPackageItem addPackageItem)
+    private async void AddPackageItemList(AddPackageItemList addPackageItem)
     {
         if (addPackageItem.packageId == 0)
         {
             addPackageItem.packageId = CharacterManager.instance.controllerCharacter.characterPackage;
         }
-        
+
         if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
         {
+            bool success = true;
+            for(int i = 0; i < addPackageItem.items.Count; i++)
+            {
+                int intanceId = ItemManager.instance.CreatIntance();
+                int count = await gamePackage.SetItemInPackage(new Item
+                {
+                    instanceId = intanceId,
+                    dataId = addPackageItem.items[i].x,
+                    count = addPackageItem.items[i].y
+                });
+                if (count > 0)
+                {
+                    success = false;
+                }
+            }
+            if (addPackageItem.setResult != null)
+            {
+                addPackageItem.setResult(success);
+            }
+
+            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
+            GameActionManager.instance.QueueAction(new RefreshShortcut
+            {
+                packageId = gamePackage.instanceId
+            });
+        }
+    }
+   
+    private async void AddPackageItemAction(AddPackageItem addPackageItem)
+    {
+        if (addPackageItem.packageId == 0)
+        {
+            addPackageItem.packageId = CharacterManager.instance.controllerCharacter.characterPackage;
+        } 
+        if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
+        {
+
             int intanceId = ItemManager.instance.CreatIntance();
             int count = await gamePackage.SetItemInPackage(new Item
             {
@@ -769,13 +806,13 @@ public class PackageManager : Singleton<PackageManager>
                 addPackageItem.setValue(count);
             }
 
-            //gamePackages[addPackageItem.packageId] = gamePackage;
             RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
             GameActionManager.instance.QueueAction(new RefreshShortcut
             {
                 packageId = gamePackage.instanceId
             });
         }
+
     }
 
     private void RemoveRuntimePackage(RemoveRuntimePackage removeRuntimePackage)
@@ -1155,13 +1192,14 @@ public class PackageManager : Singleton<PackageManager>
 
                 if (groupCount > 1)//物体堆叠数量
                 {
-                    int index = nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;//空物体位置
+                    int index ;//空物体位置
                     if (indexDatas.Count > 0)
                     {
                         index = indexDatas[indexDatas.Count - 1];//旧物体最后一个未填满的位置
                     }
                     else
                     {
+                        index = nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;//空物体位置
                         Item newItem = new Item
                         {
                             instanceId = ItemManager.instance.CreatIntance(),
@@ -1211,7 +1249,7 @@ public class PackageManager : Singleton<PackageManager>
                         }
 
                         inCount -= setCount;//当前剩余数量
-                        if (caseCount <= items.Count)//背包格子是否还有空白
+                        if (caseCount <= itemCount)//背包格子是否还有空白
                         {
                             //oldCount += setCount - inCount;//????
                             // packageItemCounts[itemData.id] = oldCount;
@@ -1247,7 +1285,7 @@ public class PackageManager : Singleton<PackageManager>
                     int addCount = 0;
                     for (int i = 0; i < item.count; i++)
                     {
-                        if (caseCount <= items.Count)
+                        if (caseCount <= itemCount)
                         {
                             break;
                         }
@@ -1406,7 +1444,7 @@ public class PackageManager : Singleton<PackageManager>
                     packageItemCounts.Remove(items[index].dataId);
                 }
                 RefreshSelectItem();
-                items.RemoveAt(index);
+                items[index] = default(Item); 
             }
         }
 

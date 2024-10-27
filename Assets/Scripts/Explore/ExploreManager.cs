@@ -193,26 +193,28 @@ public class ExploreManager : Singleton<ExploreManager>
         }
         if (nowFightMapData.id != nowChapter)
         {
+            nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter); 
+        }
+        if (nowFightMapData.monsterDeploys.Count > nowStep)
+        {
             nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
-            if(nowStep== nowFightMapData.monsterDeploys.Count - 1)
+            if (nowStep == nowFightMapData.monsterDeploys.Count - 1)
             {
                 AudioController.instance.PlayBGM(nowFightMapData.fightBGM, isLerp: true, audioClearType: AudioClearType.All, Group: BGMGroup.Battle.ToString());
             }
             else
             {
                 AudioController.instance.PlayBGM(nowFightMapData.bossBGM, isLerp: true, audioClearType: AudioClearType.All, Group: BGMGroup.Battle.ToString());
-            } 
-        }
-        if (nowFightMapData.monsterDeploys.Count > nowStep)
-        {
+            }
+
             //当前阶段
             int deployId = nowFightMapData.monsterDeploys[nowStep];
             //怪物分布
-            var mosterDeploy = await GameDataManager.instance.GetAsyncData<MonsterDeploy>(deployId);
-            if (mosterDeploy.id == deployId)
+            var monsterDeploy = await GameDataManager.instance.GetAsyncData<MonsterDeploy>(deployId);
+            if (monsterDeploy.id == deployId)
             {
                 //创建怪物
-                FightManager.instance.CreatFightMonster(mosterDeploy);
+               await FightManager.instance.CreatFightMonster(monsterDeploy);
             }
         }
          
@@ -223,7 +225,7 @@ public class ExploreManager : Singleton<ExploreManager>
         };
         GameActionManager.instance.QueueAction(switchFunctionButton,true);
         FightManager.instance.cdTimeMoving = true;
-        GameTimerController.instance.DelayAction(200, () =>
+        GameTimerController.instance.DelayAction(500, () =>
         {
             TryStartAutoBehavior tryStartAutoBehavior = new TryStartAutoBehavior();
             GameActionManager.instance.QueueAction(tryStartAutoBehavior);
@@ -290,6 +292,7 @@ public class ExploreManager : Singleton<ExploreManager>
         }
         else
         {
+            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All, isLerp: true);
             RefreshFightChapter refreshFightChapter = new RefreshFightChapter
             {
                 id = nowChapter

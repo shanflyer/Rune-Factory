@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public struct AddItemValue : GameAction
@@ -226,7 +227,13 @@ public struct ChangePackageInnstance : GameAction
     }
 
 }
-
+public struct AddPackageItemList : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int packageId;
+    public List<int2> items; 
+}
 public struct AddPackageItem : GameAction
 {
     public SetValue setValue { get; set; }

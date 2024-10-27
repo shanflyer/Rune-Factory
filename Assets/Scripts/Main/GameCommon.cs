@@ -524,6 +524,10 @@ public class GameCommon
 
     public static Vector2 SetImageSize(Sprite sprite, Vector2 size)
     {
+        if (sprite == null)
+        {
+            return size;
+        }
         Vector2 spriteSize = sprite.rect.size;
         if (spriteSize.x > spriteSize.y)
         {

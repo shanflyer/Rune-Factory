@@ -214,7 +214,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         set
         {
             _displayMapRoomData = value;
-            RefreshMapAudio(true);
+           //RefreshMapAudio(true);
         }
     }
     private MapRoomData _displayMapRoomData;

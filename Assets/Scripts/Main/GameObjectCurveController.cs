@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public struct CurveMoveData
+public class CurveMoveData
 {
     public float waitTime;
     public float moveTime;
@@ -141,7 +141,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
                         {
                             curveMoveData.CurveEndAction.Invoke();
                         }
-                        curveMoveData.transform = null;
+                        curveMoveData.transform = null; 
                         endCount++;
                     }
                     else if (timeValue >= curveMoveData.waitTime)

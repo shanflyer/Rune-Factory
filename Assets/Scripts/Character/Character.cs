@@ -1088,7 +1088,7 @@ public partial class Character
                     for (int i = 1; i <= level; i++)
                     {
                         int skillId = professionData.GetLevelSkill(i);
-                        if (skillId != -1)
+                        if (skillId >0)
                         {
                             skills.Add(skillId);
                         } 
@@ -1097,7 +1097,7 @@ public partial class Character
                 else
                 {
                     int skillId = professionData.GetLevelSkill(level);
-                    if (skillId != -1)
+                    if (skillId >0)
                     {
                         skills.Add(skillId);
                     } 

@@ -231,7 +231,7 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         {
             return;
         }
-        Debug.Log($"播放:{stepAudioClip.name}");
+        //Debug.Log($"播放:{stepAudioClip.name}");
         if(audioClipIndex.TryGetValue(stepAudioClip,out var index))
         {
             if (isLeft)

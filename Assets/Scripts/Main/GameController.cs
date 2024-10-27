@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Collections;
 using System.Threading.Tasks;
+using UnityEngine.InputSystem;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -258,6 +259,10 @@ public class GameController : MonoBehaviour
         {
             _seasonValue = seasonValue;
             Shader.SetGlobalFloat("_SeasonValue", seasonValue);
+        }
+        if (Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            UIManager.instance.ShowGamePanel<AllItemPanel>();
         }
 #endif 
     }

@@ -13,7 +13,7 @@ Shader "MySprite-Lit-Default"
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
         _MoveMask("WaterMaskTex", 2D) ="black"{}
-        _DepthTex("DepthTex", 2D) ="gray"{}
+        _DepthTex("DepthTex", 2D) ="gray"{} 
         _WetValue("WetValue",Range(0,1))=0
         [Toggle]_shadowStep("ShadowStep",int)=0
         _LightBlend("LightBlend",float)=1 
@@ -369,8 +369,7 @@ Shader "MySprite-Lit-Default"
             half3 _PlantAutumnColor1;
             half3 _PlantWinterColor;
             half3 _PlantWinterColor1; 
-            float _PlantAutumnNoiseScale; 
-            
+            float _PlantAutumnNoiseScale;  
             
            // half4 _MainTex_TexelSize;
             //half4 _MainTex_ST;
@@ -1652,14 +1651,24 @@ Shader "MySprite-Lit-Default"
                 o.uv = attributes.uv;
 
                 float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
-                float stepPosZ=step(49,ObjPos.z);
+                float stepPosZ=1-step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
                 _objSortPos.y+=_objSortPos.z;
+
+               // int stepFixed=1-step(_FixedDepth,0);
+               // _objSortPos.y=(1-stepFixed)*_objSortPos.y+stepFixed*_FixedDepth; 
+
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 
-                float high=(1-stepPosZ)*(objWroldPos.y-ObjPos.y)*0.5;
+                float high=stepPosZ*(objWroldPos.y-ObjPos.y)*0.5;
                 float positionCSY=o.positionCS.y;  
-                worldClip.y=stepPosZ*positionCSY+(1-stepPosZ)*worldClip.y;  
+
+                //stepPosZ+=stepFixed;
+                stepPosZ=clamp(stepPosZ,0,1);
+ 
+                worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
+                 
+
                 worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
                 
                 o.screenUV.xy=half2(ComputeScreenPos(o.positionCS/o.positionCS.w).xy); 
@@ -1696,7 +1705,7 @@ Shader "MySprite-Lit-Default"
                 half depth=i.color.z+offset*clearColor;
                 half setpHigh=depthStep_G; 
 
-                 //return float4(depth.xxx,mainTex.a);
+                //return float4(i.color.zzz,mainTex.a);
 
                 half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 
