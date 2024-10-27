@@ -1,5 +1,4 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -26,53 +25,53 @@ public struct CharacterProperty
         string result = "";
         if (MaxHP != 0)
         {
-            string operatorStr = MaxHP > 0 ? "+" : "-";
+            string operatorStr = MaxHP > 0 ? "+" : "";
             result = $"{CharacterPropertyType.最大生命}{operatorStr}{MaxHP}  ";
         }
         if (HP != 0)
         {
-            string operatorStr = HP > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.生命}{operatorStr}{HP} ";
+            string operatorStr = HP > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.生命}{operatorStr}{HP} ";
         }
         if (MaxMP != 0)
         {
-            string operatorStr = MaxMP > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.最大法力}{operatorStr}{MaxMP} ";
+            string operatorStr = MaxMP > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.最大法力}{operatorStr}{MaxMP} ";
         }
         if (MP != 0)
         {
-            string operatorStr = MP > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.法力}{operatorStr}{MP}  ";
+            string operatorStr = MP > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.法力}{operatorStr}{MP}  ";
         }
         if (MaxPower != 0)
         {
-            string operatorStr = MaxPower > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.最大体力}{operatorStr}{MaxPower}";
+            string operatorStr = MaxPower > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.最大体力}{operatorStr}{MaxPower}";
         }
         if (Power != 0)
         {
-            string operatorStr = Power > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.体力}{operatorStr}{Power}  ";
+            string operatorStr = Power > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.体力}{operatorStr}{Power}  ";
         }
         if (AT != 0)
         {
-            string operatorStr = AT > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.攻击}{operatorStr}{AT}  ";
+            string operatorStr = AT > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.攻击}{operatorStr}{AT}  ";
         }
         if (DF != 0)
         {
-            string operatorStr = DF > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.防御}{operatorStr}{DF}  ";
+            string operatorStr = DF > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.防御}{operatorStr}{DF}  ";
         }
         if (Lucky != 0)
         {
-            string operatorStr = Lucky > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.幸运}{operatorStr}{Lucky}  ";
+            string operatorStr = Lucky > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.幸运}{operatorStr}{Lucky}  ";
         }
         if (Speed != 0)
         {
-            string operatorStr = Speed > 0 ? "+" : "-";
-            result = $"{CharacterPropertyType.敏捷}{operatorStr}{Speed}  ";
+            string operatorStr = Speed > 0 ? "+" : "";
+            result = $"{result}{CharacterPropertyType.敏捷}{operatorStr}{Speed}  ";
         }
         return result;
     }
