@@ -9,24 +9,23 @@ Shader "SampleBlur"
 
     SubShader
     {
-        Tags
-        {
-            "Queue"="Transparent"
-            "IgnoreProjector"="True"
-            "RenderType"="Transparent"
-            "PreviewType"="Plane"
-            "CanUseSpriteAtlas"="True"
-        }
+        Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
+        Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+        Cull Off
+        ZWrite Off
 
-        Stencil
-        {
-            Ref [_Stencil]
-            Comp [_StencilComp]
-            Pass [_StencilOp]
-            ReadMask [_StencilReadMask]
-            WriteMask [_StencilWriteMask]
-        }
-
+        HLSLINCLUDE 
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Assets/Render/Shader/UnityAction.cginc" 
+        CBUFFER_START(UnityPerMaterial)
+            half2 _BlurAmount; 
+                half4 _Color;
+                half4 _TextureSampleAdd;
+                half4 _ClipRect; 
+        CBUFFER_END 
+         TEXTURE2D(_MainTex);
+         SAMPLER(sampler_MainTex);
+        ENDHLSL
      
 
         Pass
@@ -35,12 +34,11 @@ Shader "SampleBlur"
                 HLSLPROGRAM
                 
                 // Pragmas
-                #pragma target 3.0
+                #pragma target 3.5
                 #pragma vertex vert
                 #pragma fragment frag
 
-                #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-                #include "Assets/Render/Shader/UnityAction.cginc" 
+             
 
                 #define FULLSCREEN_SHADERGRAPH
 
@@ -69,12 +67,8 @@ Shader "SampleBlur"
 
                     UNITY_VERTEX_OUTPUT_STEREO
                 };
-                TEXTURE2D(_MainTex);
-                SAMPLER(sampler_MainTex);
-                half2 _BlurAmount; 
-                half4 _Color;
-                half4 _TextureSampleAdd;
-                half4 _ClipRect; 
+               
+                
  
                // sampler2D _MyBlurTex;  
 
@@ -84,8 +78,8 @@ Shader "SampleBlur"
                     UNITY_SETUP_INSTANCE_ID(v);
                     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
                     OUT.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
-                    OUT.uv= OUT.vertex* 0.5 + 0.5; 
-                    OUT.uv.y = 1 - OUT.uv.y;
+                    OUT.uv=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy);
+                   // OUT.uv.y = 1 - OUT.uv.y;
                    // OUT.uv= OUT.uv*_ScreenSize.xy;
                     _BlurAmount.xy=_BlurAmount.xy/_ScreenSize.xy;
 

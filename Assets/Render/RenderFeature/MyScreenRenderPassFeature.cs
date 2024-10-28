@@ -63,7 +63,7 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
             desc.depthStencilFormat = GraphicsFormat.None;
             desc.width = (int)(desc.width * scale);
             desc.height= (int)(desc.height * scale);
-            TextureHandle outTexHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, blitTexture ? blitName : "TempScreenTex", false);
+            TextureHandle outTexHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, blitTexture ? blitName : $"{tagName}_TempScreenTex", false);
             using (var builder = renderGraph.AddRasterRenderPass<PassData>(blitTexture ?tagName:$"{tagName}/Copy", out var passData))
             {
                 passData.source = resourceData.activeColorTexture;

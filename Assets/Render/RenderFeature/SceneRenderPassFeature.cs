@@ -1,0 +1,117 @@
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering.RenderGraphModule;
+using UnityEngine.Experimental.Rendering;
+
+public class SceneRenderPassFeature : ScriptableRendererFeature
+{
+    public RenderPassEvent renderPassEvent;
+    public Material blurMaterial, blendBlurMaterial, cycleMaterial;  
+    class SceneRenderPass : ScriptableRenderPass
+    {
+        private string tagName="Test";
+        private Material blurMaterial, blendBlurMaterial, cycleMaterial; 
+        public SceneRenderPass( Material blurMaterial,Material blendBlurMaterial,Material cycleMaterial, string tagName, RenderPassEvent renderPassEvent)
+        {
+            this.renderPassEvent = renderPassEvent;
+            this.blurMaterial = blurMaterial;
+            this.blendBlurMaterial = blendBlurMaterial;
+            this.cycleMaterial = cycleMaterial;
+            this.tagName = tagName;
+        }
+        private class BlendPassData
+        {
+            internal TextureHandle blurSource;
+            internal TextureHandle source;
+            internal Material material;
+        }
+        private class PassData
+        {
+            internal TextureHandle source;
+            internal Material material; 
+        } 
+        static void ExecutePass(PassData data, RasterGraphContext context,bool blite=false)
+        {
+            data.material.mainTexture = data.source;
+            context.cmd.DrawProcedural(Matrix4x4.identity, data.material, 0, MeshTopology.Triangles, 3);
+
+        }
+        static void ExecuteBlendPass(BlendPassData data, RasterGraphContext context, bool blite = false)
+        {
+            data.material.mainTexture = data.source;
+            data.material.SetTexture("_BlurTex", data.blurSource);
+            context.cmd.DrawProcedural(Matrix4x4.identity, data.material, 0, MeshTopology.Triangles, 3);
+
+        }
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+           
+            if (blurMaterial==null||blendBlurMaterial==null||cycleMaterial==null)
+            {
+                return;
+            }
+            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+            UniversalResourceData resourceData = frameData.Get<UniversalResourceData>(); 
+
+            RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor;
+            desc.colorFormat = RenderTextureFormat.Default;
+            desc.depthStencilFormat = GraphicsFormat.None; 
+            TextureHandle BlurTexHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, $"BlurTex", false); 
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>("Blur", out var passData))
+            {
+                passData.source = resourceData.activeColorTexture;
+                passData.material = blurMaterial; 
+
+                builder.SetRenderAttachment(BlurTexHandle, 0);
+                builder.AllowPassCulling(false);
+                builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context,true));
+                 
+            }
+
+            
+            TextureHandle BlendTexHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, $"BlendTex", false);
+            using (var builder = renderGraph.AddRasterRenderPass<BlendPassData>("Blend", out var passData))
+            {
+                passData.source= resourceData.activeColorTexture;
+                passData.blurSource = BlurTexHandle;
+                passData.material = blendBlurMaterial;
+                builder.UseTexture(BlurTexHandle);
+                builder.SetRenderAttachment(BlendTexHandle, 0);
+                builder.AllowPassCulling(false);
+                builder.SetRenderFunc((BlendPassData data, RasterGraphContext context) => ExecuteBlendPass(data, context,true));
+
+            }
+
+             
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>("Cycle", out var passData))
+            {
+                passData.source = BlendTexHandle;
+                passData.material = cycleMaterial;
+                builder.UseTexture(BlendTexHandle);
+                builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
+                builder.AllowPassCulling(false);
+                builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
+
+            } 
+        }
+         
+        public override void OnCameraCleanup(CommandBuffer cmd)
+        {
+        }
+    }
+
+    SceneRenderPass m_ScriptablePass;
+
+    /// <inheritdoc/>
+    public override void Create()
+    {
+        m_ScriptablePass = new SceneRenderPass(blurMaterial,blendBlurMaterial,cycleMaterial,name,renderPassEvent); 
+    }
+     
+    public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+    {
+        if (InitCheckCamera(renderingData.cameraData.camera))
+            renderer.EnqueuePass(m_ScriptablePass);
+    }
+}

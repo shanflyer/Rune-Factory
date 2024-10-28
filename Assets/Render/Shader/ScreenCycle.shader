@@ -42,7 +42,7 @@ Shader "ScreenCycle"
             HLSLPROGRAM
             
             // Pragmas
-            #pragma target 3.0
+            #pragma target 3.5
             #pragma vertex vert
             #pragma fragment frag
 
@@ -72,8 +72,7 @@ Shader "ScreenCycle"
             {
                 v2f o;
                 o.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
-                o.uv= o.vertex* 0.5 + 0.5; 
-                o.uv.y = 1 - o.uv.y;
+                o.uv= half2(ComputeScreenPos(o.vertex / o.vertex.w).xy);
 
                 _CycleSize*=1-_CycleValue;
 

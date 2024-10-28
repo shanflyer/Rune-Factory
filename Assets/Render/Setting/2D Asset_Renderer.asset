@@ -161,9 +161,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkCameraTag: 1
   cameraTag: MainCamera
-  m_Active: 1
+  m_Active: 0
   renderPassEvent: 550
-  material: {fileID: 2100000, guid: da1f5db2cc22d5c41b53fa52ab3bbe6c, type: 2}
+  material: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
   blitName: 
   scale: 1
   blitTexture: 0
@@ -231,7 +231,7 @@ MonoBehaviour:
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
     overrideDepthState: 0
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     overrideStencilState: 0
     stencilStateData:
       overrideStencilState: 0
@@ -334,7 +334,6 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 6183544113875661279}
   - {fileID: 1508528712174735023}
-  - {fileID: -3485696397773553168}
   - {fileID: 8839455909964680641}
   - {fileID: -9033159978113863346}
   - {fileID: 1450699581313148266}
@@ -345,8 +344,10 @@ MonoBehaviour:
   - {fileID: -2393396154472095211}
   - {fileID: 5208366081940331415}
   - {fileID: 8718721150439679252}
+  - {fileID: -3485696397773553168}
+  - {fileID: 415541881704971235}
   - {fileID: -8019907935334722734}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14f041d91f9851a0cfc10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e5219515a2e7d5e0f2c8de971b3f3e5bd547481465a44bb11eff785293095f3990b390
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e5219515a2e7d5e0f2c8de971b3f3e5bd547481465a44bb11eff78f041d91f9851a0cfe37b52c8234dc4055293095f3990b390
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
@@ -422,6 +423,25 @@ MonoBehaviour:
     blitToCameraTarget: 0
     clearFlag: 0
     clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &415541881704971235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f493322df713241b83e64239c68aab, type: 3}
+  m_Name: SceneRenderPassFeature
+  m_EditorClassIdentifier: 
+  checkCameraTag: 1
+  cameraTag: MainCamera
+  m_Active: 1
+  renderPassEvent: 500
+  blurMaterial: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
+  blendBlurMaterial: {fileID: 2100000, guid: c977e7e7329827147b1592f00cfc74c8, type: 2}
+  cycleMaterial: {fileID: 2100000, guid: da1f5db2cc22d5c41b53fa52ab3bbe6c, type: 2}
 --- !u!114 &1450699581313148266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,8 +543,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkCameraTag: 1
   cameraTag: MainCamera
-  m_Active: 1
-  renderPassEvent: 550
+  m_Active: 0
+  renderPassEvent: 500
   material: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
   blitName: _BlurTex
   scale: 1
@@ -587,8 +607,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkCameraTag: 1
   cameraTag: MainCamera
-  m_Active: 1
-  renderPassEvent: 550
+  m_Active: 0
+  renderPassEvent: 500
   material: {fileID: 2100000, guid: c977e7e7329827147b1592f00cfc74c8, type: 2}
   blitName: 
   scale: 1

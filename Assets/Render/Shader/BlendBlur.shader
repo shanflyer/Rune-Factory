@@ -2,30 +2,48 @@ Shader "BlendBlur"
 {
     Properties
     {    _MainTex("Diffuse", 2D) = "white" {}
+         _BlurTex("_BlurTex", 2D) = "white" {}
         _BlurOffsetPos("_BlurOffsetPos",Range(0,0.5))=0
         _ReMapValue("_ReMapValue",vector)=(0,1,0,0)
          _BlurAmount("_BlurAmount", Vector) = (1, 1, 0, 0) 
+         _TestIndex("_TestIndex",int)=0
     }
 
     SubShader
     {
-        Tags
-        {
-            "Queue"="Transparent"
-            "IgnoreProjector"="True"
-            "RenderType"="Transparent"
-            "PreviewType"="Plane"
-            "CanUseSpriteAtlas"="True"
-        }
+        Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
+          Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+        Cull Off
+        ZWrite Off
 
-        Stencil
-        {
-            Ref [_Stencil]
-            Comp [_StencilComp]
-            Pass [_StencilOp]
-            ReadMask [_StencilReadMask]
-            WriteMask [_StencilWriteMask]
-        }
+        HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Assets/Render/Shader/UnityAction.cginc"
+ 
+        CBUFFER_START(UnityPerMaterial)
+             float _BlurOffsetPos;
+            float2 _ReMapValue;
+            half2 _BlurAmount; 
+            
+            int _TestIndex;
+        CBUFFER_END 
+        half3 _PlayerPos;
+         TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+            TEXTURE2D(_BlurTex);
+            SAMPLER(sampler_BlurTex);
+        
+            TEXTURE2D(_MyDepthTex);
+            SAMPLER(sampler_MyDepthTex); 
+
+            TEXTURE2D(_CharacterDepthTex);
+            SAMPLER(sampler_CharacterDepthTex); 
+
+            TEXTURE2D(_ObjDepthTex);
+            SAMPLER(sampler_ObjDepthTex); 
+        
+
+        ENDHLSL
 
      
 
@@ -60,8 +78,7 @@ Shader "BlendBlur"
             {
                 float4 vertex   : SV_POSITION; 
                 float2 playerUV:Normal;
-                float2 uv  : TEXCOORD0; 
-                float2 uv1  : TEXCOORD1; 
+                float2 uv  : TEXCOORD0;  
                 float4 uv01 : TEXCOORD2;
                 float4 uv23 : TEXCOORD3;
                 float4 uv45 : TEXCOORD4; 
@@ -69,24 +86,9 @@ Shader "BlendBlur"
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
-            float _BlurOffsetPos;
-            float2 _ReMapValue;
-            half2 _BlurAmount; 
-            half3 _PlayerPos;
+           
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-            TEXTURE2D(_BlurTex);
-            SAMPLER(sampler_BlurTex);
-        
-            TEXTURE2D(_MyDepthTex);
-            SAMPLER(sampler_MyDepthTex); 
-
-            TEXTURE2D(_CharacterDepthTex);
-            SAMPLER(sampler_CharacterDepthTex); 
-
-            TEXTURE2D(_ObjDepthTex);
-            SAMPLER(sampler_ObjDepthTex); 
+           
 
             v2f vert(appdata_t v)
             {
@@ -94,14 +96,13 @@ Shader "BlendBlur"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
                 OUT.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
-                OUT.uv= OUT.vertex* 0.5 + 0.5; 
-                OUT.uv.y = 1 - OUT.uv.y;
+                OUT.uv= half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy);
                // OUT.uv= OUT.uv*_ScreenSize.xy;
-                OUT.uv1=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy); 
+                //OUT.uv1=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy); 
 
-                OUT.uv01 =  OUT.uv1.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1);
-                OUT.uv23 =  OUT.uv1.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 2.0;
-                OUT.uv45 =  OUT.uv1.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 3.0;
+                OUT.uv01 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1);
+                OUT.uv23 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 2.0;
+                OUT.uv45 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 3.0;
 
                 float4 playerCS=TransformWorldToHClip(_PlayerPos);
                 OUT.playerUV=half2(ComputeScreenPos(playerCS/playerCS.w).xy); 
@@ -115,13 +116,21 @@ Shader "BlendBlur"
                // return half4(IN.uv.xy,0,1);
                 // uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
                 half4 color =   SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
-                half4 BlurColor=0.40 *SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv1);
+              
+                half4 BlurColor=0.40 *SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv);
+                  
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.xy); 
+               
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.zw); 
+                
                 BlurColor += 0.10 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv23.xy); 
+                
                 BlurColor += 0.10 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv23.zw); 
+                 
                 BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv45.xy); 
+               
                 BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv45.zw); 
+                 
 
                 half centerY=IN.playerUV.y;
                 //return half4(IN.playerUV.yyy,1);
@@ -137,15 +146,22 @@ Shader "BlendBlur"
                 Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
                 x=clamp(x,0,1)*step(centerY-_BlurOffsetPos,myDepthColor.x);
 
-                
+               // return half4(BlurColor.xyz,1) ;
 
 
                 float x1=myDepthColor.x;
                 Unity_Remap_float(x1,float2(centerY-_BlurOffsetPos,0),_ReMapValue.xy,x1);
                 x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
                 x+=x1;
+                
+                if(_TestIndex==1){
+                    return half4(x.xxx,1);
 
-                 //return half4(x.xxx,1);
+                }else if(_TestIndex==2){
+                    return half4(BlurColor.xyz,1) ;
+                }
+
+                 //
 
                 color=BlurColor*x+color*(1-x);
                 return color;
