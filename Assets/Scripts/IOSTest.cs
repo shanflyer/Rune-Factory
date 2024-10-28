@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 public class IOSTest : MonoBehaviour
 {
+#if UNITY_EDITOR
     private string url = "itms-apps://itunes.apple.com/cn/app/id1449447537";
     private string imagePath;
     private string imageDataString;
@@ -86,6 +87,6 @@ public class IOSTest : MonoBehaviour
     private static extern void SocialSharing(string body, string url, string imageDataString, string subject);
     [DllImport("__Internal")]
     private static extern void ShareWeb(string body, string url, string imagePath, string subject);
-
+#endif
 }
 

@@ -28,11 +28,12 @@ public class CellDebugDisplay : MonoBehaviour
             tilemap.SetTile(new Vector3Int(node.x, node.y, 0), tileBase);
         } 
     }
+#if UNITY_EDITOR
     public void RefreshDisplayMapCell()
     {
         tilemap.ClearAllTiles();
-        var roomCoordinate=MapCellController.instance.GetRoomCoordinate(WorldMapObjManager.instance.displayMap);
-        var cellData = MapCellController.instance.GetAllCellData(WorldMapObjManager.instance.displayMap); 
+        var roomCoordinate = MapCellController.instance.GetRoomCoordinate(WorldMapObjManager.instance.displayMap);
+        var cellData = MapCellController.instance.GetAllCellData(WorldMapObjManager.instance.displayMap);
         for (int i = 0; i < cellData.Count; i++)
         {
             var cell = cellData[i];
@@ -48,15 +49,17 @@ public class CellDebugDisplay : MonoBehaviour
         for (int i = 0; i < playerTrigger.triggerAreas.Length; i++)
         {
             var area = playerTrigger.triggerAreas[i];
-            foreach(var cell in area.cells)
+            foreach (var cell in area.cells)
             {
                 tilemap.SetTile(new Vector3Int(cell.x, cell.y, +roomCoordinate.z), triggerTile);
-            } 
+            }
         }
 
 
         tilemap.RefreshAllTiles();
     }
+#endif
+
 }
 [CustomEditor(typeof(CellDebugDisplay))]
 public class CellDebugDisplayEditor : Editor

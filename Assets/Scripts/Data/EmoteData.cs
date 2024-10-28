@@ -1,6 +1,8 @@
-﻿using UnityEditor;
+﻿
 using UnityEngine;
-
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class EmoteData : ScriptableObject, IGameData, IReferenceData
 {
     public int id;
@@ -18,10 +20,11 @@ public class EmoteData : ScriptableObject, IGameData, IReferenceData
     {
         return id.ToString();
     }
-
+#if UNITY_EDITOR
     public void SetReferenceData()
     {
         string sourcePath = "Assets/Animation/emotes/";
         animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"{sourcePath}{animationName}.anim");
     }
+#endif
 }

@@ -1,7 +1,7 @@
-﻿#if UNITY_EDITOR
-using Unity.Mathematics;
+﻿#if UNITY_EDITOR 
 using UnityEditor;
 #endif
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SkyBackGroundData : ScriptableObject, IGameData, IReferenceData

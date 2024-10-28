@@ -1,62 +1,64 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Threading.Tasks;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using Unity.Entities.UniversalDelegates;
-using UnityEngine.Analytics;
 
 public class ZeroPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Color cloudColor;
+    private Color cloudColor;
+
     [SerializeField]
-    Image titleIcon;
+    private Image titleIcon;
+
     [SerializeField]
-    Button start;
+    private Button start;
+
     [SerializeField]
-    Canvas[] canvaes; 
+    private Canvas[] canvaes;
+
     [SerializeField]
-    ParticleSystemRenderer systemRenderer;
+    private ParticleSystemRenderer systemRenderer;
+
     [SerializeField]
-    Transform selectPanel;
+    private Transform selectPanel;
+
     [SerializeField]
-    Button newButton, loadButton;
+    private Button newButton, loadButton;
 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         titleIcon = FindChildGameObject<Image>("Icon");
         start = FindChildGameObject<Button>("StartButton");
-        canvaes = GetComponentsInChildren<Canvas>(); 
+        canvaes = GetComponentsInChildren<Canvas>();
         systemRenderer = FindChildGameObject<ParticleSystemRenderer>("Cloud");
         selectPanel = FindChildGameObject("SelectPanel");
         newButton = FindChildGameObject<Button>("New");
         loadButton = FindChildGameObject<Button>("Load");
     }
+
     protected override async void Awake()
-    { 
+    {
         base.Awake();
         Shader.SetGlobalColor("_CloudColor", cloudColor);
         await InitTitleIcon();
         start.onClick.AddListener(ClickStart);
         newButton.onClick.AddListener(StartGame);
         loadButton.onClick.AddListener(LoadDataPanel);
-
     }
+
     public override void Show(int layer = -1)
     {
-        var uiLayer= LayerMask.NameToLayer("UI");
+        var uiLayer = LayerMask.NameToLayer("UI");
         for (int i = 0; i < canvaes.Length; i++)
         {
             canvaes[i].gameObject.layer = uiLayer;
             canvaes[i].enabled = true;
         }
-        systemRenderer.gameObject.layer= uiLayer; 
+        systemRenderer.gameObject.layer = uiLayer;
         base.Show(layer);
     }
+
     public override void Close()
     {
         var hideLayer = LayerMask.NameToLayer("Hide");
@@ -66,17 +68,18 @@ public class ZeroPanel : GamePanel<IReferenceData>
             canvaes[i].enabled = false;
         }
         systemRenderer.gameObject.layer = hideLayer;
-        
+
         base.Close();
     }
 
-    async Task InitTitleIcon()
-    { 
+    private async Task InitTitleIcon()
+    {
         LanguageSpriteObj title = await GameSourceManager.instance.GetSingleScriptableObject<LanguageSpriteObj>(DataPath.titlePath);
-        var sprite= title.GetSprite(LanguageManage.nowLanguage);
+        var sprite = title.GetSprite(LanguageManage.nowLanguage);
         titleIcon.sprite = sprite;
     }
-    void ClickStart()
+
+    private void ClickStart()
     {
         if (GameController.instance.startPlay)
         {
@@ -95,14 +98,16 @@ public class ZeroPanel : GamePanel<IReferenceData>
                 selectPanel.localScale = Vector3.one;
                 start.transform.localScale = Vector3.zero;
             }
-        } 
+        }
     }
-    async void LoadDataPanel()
+
+    private async void LoadDataPanel()
     {
         Close();
-       await  UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+        await UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
     }
-    async void StartGame()
+
+    private async void StartGame()
     {
         Close();
         PlayFilm playFilm = new PlayFilm
@@ -111,13 +116,13 @@ public class ZeroPanel : GamePanel<IReferenceData>
             assetName = "Default"
         };
         GameActionManager.instance.QueueAction(playFilm, true);
-        await UIManager.instance.ShowGamePanel<SelectCharacterPanel>(); 
+        await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
     }
+
     public override Task InitData(string dataKay)
     {
         selectPanel.localScale = Vector3.zero;
         start.transform.localScale = Vector3.one;
         return base.InitData(dataKay);
     }
-     
 }

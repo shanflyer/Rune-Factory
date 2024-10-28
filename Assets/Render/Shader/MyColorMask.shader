@@ -40,12 +40,7 @@ Shader "MyColorMask"
 
             #pragma vertex CombinedShapeLightVertex
             #pragma fragment CombinedShapeLightFragment
-
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_0 __
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_1 __
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_2 __
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
-            #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+ 
 
             struct Attributes
             {
@@ -60,8 +55,7 @@ Shader "MyColorMask"
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0; 
             };
-
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/LightingUtility.hlsl" 
+ 
             Varyings CombinedShapeLightVertex(Attributes v)
             {
                 Varyings o = (Varyings)0; 
@@ -72,8 +66,7 @@ Shader "MyColorMask"
  
                 return o;
             }
-
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/CombinedShapeLightShared.hlsl"
+ 
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {

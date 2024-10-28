@@ -6,9 +6,9 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-
 public struct TestData
 {
     public int index;
@@ -41,7 +41,7 @@ public class Test : MonoBehaviour
     public GameObject obj;
     public async void TestCreatObj()
     {
-      var AsyncInstantiateOperation = InstantiateAsync(prefab);
+        var AsyncInstantiateOperation = InstantiateAsync(prefab);
         await AsyncInstantiateOperation;
         obj = AsyncInstantiateOperation.Result[0];
     }
@@ -62,7 +62,7 @@ public class Test : MonoBehaviour
         string log = "zero:";
         for (int i = 0; i < testStruct.list.Count; i++)
         {
-            log+=(testStruct.list[i])+",";
+            log += (testStruct.list[i]) + ",";
         }
         Debug.Log(log);
 
@@ -113,7 +113,7 @@ public class Test : MonoBehaviour
     }
     public void StopEnableBehavior()
     {
-        behaviorTree.StopAllTaskCoroutines(); 
+        behaviorTree.StopAllTaskCoroutines();
     }
     public void InitDic()
     {
@@ -214,6 +214,9 @@ public class TestEditor : Editor
         {
             test.TestCreatObj();
         }
-      
+
     }
 }
+#endif
+
+

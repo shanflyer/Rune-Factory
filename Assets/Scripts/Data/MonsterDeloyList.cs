@@ -18,9 +18,12 @@ public class MonsterDeloyList : ScriptableObject, IGameData, IDataArray<MonsterD
     {
         return "MonsterDeloyList";
     }
+#if UNITY_EDITOR
     void IGameData.SetReferenceData()
-    { 
+    {
     }
+#endif
+
 }
 [System.Serializable]
 public struct MonsterDeploy:IGameData

@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEditor.Rendering.LookDev;
-using Unity.Mathematics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

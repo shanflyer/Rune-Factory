@@ -149,7 +149,7 @@ Shader "Toon/ToonCommonTree2d"
                VertexOutput o = (VertexOutput)0; 
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(v);
+                //UNITY_SKINNED_VERTEX_COMPUTE(v);
 
                 float4 clipPos = TransformObjectToHClip(v.positionOS.xyz);
 				
@@ -336,7 +336,7 @@ Shader "Toon/ToonCommonTree2d"
 				VertexOutput o = (VertexOutput)0; 
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(v);
+                //UNITY_SKINNED_VERTEX_COMPUTE(v);
 
 				
 

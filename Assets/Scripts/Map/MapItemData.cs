@@ -54,12 +54,11 @@ public class MapItemData : ScriptableObject, IGameData
         {
             objName = itemObj.name;
         }
-    }
+    } 
 
+#endif
     public string GetKey()
     {
         return id.ToString();
     }
-
-#endif
 }

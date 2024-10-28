@@ -28,6 +28,10 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
     {
         return "ShopDataList";
     }
+    public string GetKey()
+    {
+        return "";
+    }
 #if UNITY_EDITOR
     public EditorShopItemData[] shopItemDatas;
     public void SetReferenceData()
@@ -114,10 +118,7 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
         this.shopGroups = shopGroups.ToArray();
     }
 
-    public string GetKey()
-    {
-       return "";
-    }
+    
 #endif
     [SerializeField]
     private ShopGroup[] shopGroups;

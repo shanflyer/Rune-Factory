@@ -24,8 +24,9 @@ namespace UnityEngine.Timeline
 #if UNITY_EDITOR
         [SerializeField] public ExposedReference<Transform> targetParent;
 
+
+#endif
         private Transform _targetParent;
-#endif  
         public List<Transform> targets = new List<Transform>();
         [SerializeField] public bool muliPlayable = false;
         /// <summary>
@@ -179,7 +180,10 @@ namespace UnityEngine.Timeline
             var playables = new List<Playable>();
             List<GameObject> objInstances = new List<GameObject>();
             GameObject sourceObj = sourceGameObject.Resolve(graph.GetResolver());
+#if UNITY_EDITOR
             _targetParent = targetParent.Resolve(graph.GetResolver());
+#endif
+
             if (prefabGameObject != null)
             {
 

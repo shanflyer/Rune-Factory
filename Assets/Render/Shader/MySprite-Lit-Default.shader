@@ -3,7 +3,7 @@ Shader "MySprite-Lit-Default"
     Properties
     {
         _MainTex("Diffuse", 2D) = "white" {}
-        _MaskTex("Mask", 2D) = "white" {}
+       // _MaskTex("Mask", 2D) = "white" {}
         _WaterMaskTex("_MoveMask", 2D) = "black" {}
         _SnowTex("_SnowTex", 2D) = "black" {}
         _ZWrite("ZWrite", Float) = 0
@@ -288,10 +288,21 @@ Shader "MySprite-Lit-Default"
                 return  1-thresHold0;
             }
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-            TEXTURE2D(_MaskTex);
-            SAMPLER(sampler_MaskTex); 
+            Texture2D _MainTex;
+            SamplerState sampler_MainTex;  
+            Texture2D _DepthTex;
+            Texture2D _NormalMap;
+            Texture2D _MoveMask;
+            Texture2D _GrassTex;
+            Texture2D _SnowTex;
+            Texture2D _WaterNormalMap; 
+
+             TEXTURE2D(_WindNoiseTexture);
+            SAMPLER(sampler_WindNoiseTexture);
+            //TEXTURE2D(_MaskTex);
+           // SAMPLER(sampler_MaskTex);
+
+            
             TEXTURE2D(_MirrorTex);
             SAMPLER(sampler_MirrorTex); 
             TEXTURE2D(_ObjDepthTex);
@@ -304,23 +315,7 @@ Shader "MySprite-Lit-Default"
             SAMPLER(sampler_BackMaskTex);
 
             TEXTURE2D(_WaterMaskTex);
-            SAMPLER(sampler_WaterMaskTex);
-            TEXTURE2D(_WaterNormalMap);
-            SAMPLER(sampler_WaterNormalMap);
-            TEXTURE2D(_DepthTex);
-            SAMPLER(sampler_DepthTex);  
-            TEXTURE2D(_NormalMap);
-            SAMPLER(sampler_NormalMap); 
-            TEXTURE2D(_WindNoiseTexture);
-            SAMPLER(sampler_WindNoiseTexture);
-
-            TEXTURE2D(_MoveMask);
-            SAMPLER(sampler_MoveMask); 
-
-            TEXTURE2D(_GrassTex);
-            SAMPLER(sampler_GrassTex); 
-            TEXTURE2D(_SnowTex);
-            SAMPLER(sampler_SnowTex);
+            SAMPLER(sampler_WaterMaskTex); 
   
 
          half4 GlobalColor; 
@@ -370,10 +365,7 @@ Shader "MySprite-Lit-Default"
             half3 _PlantWinterColor;
             half3 _PlantWinterColor1; 
             float _PlantAutumnNoiseScale;  
-            
-           // half4 _MainTex_TexelSize;
-            //half4 _MainTex_ST;
-           // half4 _NormalMap_ST;  // Is this the right way to do this?
+             
             half4 _Color;
             half _WetValue;
             int _shadowStep;
@@ -489,14 +481,14 @@ Shader "MySprite-Lit-Default"
 
                 float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
                 float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
-                float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
+                float4 _WaveCol0 =_WaterNormalMap.Sample(sampler_MainTex,_TilingAndOffset0); 
                 _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
                 //波纹2
                 float angle1=radians(_WaveAngle1);
                 float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
                 float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
                 float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
-                float4 _WaveCol1= SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset1);
+                float4 _WaveCol1= _WaterNormalMap.Sample(sampler_MainTex, _TilingAndOffset1);
                 _WaveCol1.rgb = UnpackNormal(_WaveCol1);
                 
                 
@@ -580,7 +572,7 @@ Shader "MySprite-Lit-Default"
                 WindNoise0=pow(abs(WindNoise0), 2.5);
 				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
 
-                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
+                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
 
                 float windValue=lerp(1,2,abs(_WindValue));
                 //return float2(moveValue.x,moveValue.x);
@@ -670,7 +662,7 @@ Shader "MySprite-Lit-Default"
                 h*=_HightLightColor.xyz*c; 
 
                 _col+=d+water+h;  
-                half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, objUV);
+                half4 normal =_NormalMap.Sample(sampler_MainTex,objUV);
                 //half3 normalUnpacked = UnpackNormalRGBNoScale(normal);
                 float gv=normal.z;
                 //return normal.zzz;
@@ -801,10 +793,9 @@ Shader "MySprite-Lit-Default"
  
                 uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
                 //return half4(uv.xxx,1);
-                half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
-                const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, uv);
+                half4 main =_MainTex.Sample(sampler_MainTex,uv); 
 
-                const half4 grassTex=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask,uv);
+                const half4 grassTex=_MoveMask.Sample(sampler_MainTex,uv);
                 float mainValue=(main.y);
                
                 mainValue=clamp(mainValue,0,1);
@@ -878,8 +869,8 @@ Shader "MySprite-Lit-Default"
                // return float4(main.xyz,main.a);
 
                 
-
-                half4 snow = SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, uv);
+                     
+                half4 snow =_SnowTex.Sample(sampler_MainTex,uv);
                 //return snow;
                 half3 mainSnow=main.xyz*(1-snow.a)+snow.xyz*snow.a;
                 half snowA=main.a*(1-snow.a)+snow.a;
@@ -903,8 +894,8 @@ Shader "MySprite-Lit-Default"
 
                 if(_GrassBlend==1)
                 { 
-                    half4 _DepthColor = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, uv);
-                    half4 _GrassColor = SAMPLE_TEXTURE2D(_GrassTex, sampler_GrassTex, i.worldPos.zw);
+                    half4 _DepthColor =_DepthTex.Sample(sampler_MainTex,uv);
+                    half4 _GrassColor = _GrassTex.Sample(sampler_MainTex,i.worldPos.zw);
                     float GrassColorValue=_GrassColor.r*_GrassColor.g*0.6+_GrassColor.g*0.25; 
                     
                     //return float4(GrassColorValue.xxx,1);
@@ -942,10 +933,10 @@ Shader "MySprite-Lit-Default"
                 SurfaceData2D surfaceData;
                 InputData2D inputData;
 
-                InitializeSurfaceData(waterColor, main.a, mask, surfaceData);
+                InitializeSurfaceData(waterColor, main.a, 0, surfaceData);
                 InitializeInputData(i.uv, i.lightingUV, inputData); 
 
-                SETUP_DEBUG_TEXTURE_DATA_2D_NO_TS(inputData, i.positionWS, i.positionCS, _MainTex);
+                //SETUP_DEBUG_TEXTURE_DATA_2D_NO_TS(inputData, i.positionWS, i.positionCS, _MainTex);
 
                 result=CombinedShapeLightShared(surfaceData, inputData);
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor; 
@@ -986,7 +977,7 @@ Shader "MySprite-Lit-Default"
             half4 TreeFrag (Varyings IN) : SV_Target
 			{   
 				float2 ScreenUV = IN.lightingUV; 
-				float4 texColor =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv.xy );
+				float4 texColor = _MainTex.Sample(sampler_MainTex,IN.uv.xy);
   
 
                 float ColorValue=(texColor.r+texColor.g+texColor.b)/3; 
@@ -1056,7 +1047,7 @@ Shader "MySprite-Lit-Default"
                
                 //texColor.xyz=((1-IN.normal.y)*texColor.xyz+IN.normal.y)*(1-_NormalTex)+(_NormalTex)*texColor.xyz;
                   
-                float4 SnowColor =SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, IN.uv.xy );
+                float4 SnowColor =_SnowTex.Sample(sampler_MainTex,IN.uv.xy );
               
                 float normalY=IN.normal.y;
                   
@@ -1087,7 +1078,7 @@ Shader "MySprite-Lit-Default"
 
                 InitializeSurfaceData(texColor.xyz,Alpha, float4(0,0,0,0), surfaceData);
                 InitializeInputData(IN.uv.xy, ScreenUV, inputData);
-                SETUP_DEBUG_TEXTURE_DATA_2D_NO_TS(inputData,IN.positionWS, IN.positionCS, _MainTex);
+                //SETUP_DEBUG_TEXTURE_DATA_2D_NO_TS(inputData,IN.positionWS, IN.positionCS, _MainTex);
 
                 //SETUP_DEBUG_TEXTURE_DATA_2D(inputData, i.positionWS, i.positionCS, _MainTex);
                 float4 result=CombinedShapeLightShared(surfaceData, inputData); 
@@ -1158,7 +1149,7 @@ Shader "MySprite-Lit-Default"
                 float4 WindNoise0=pow(abs(SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63)) , 2.5);
 				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
 
-                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, uv);
+                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
                 float windValue=lerp(1,2,abs(_WindValue));
                 //return float2(moveValue.x,moveValue.x);
                 float value=moveValue.x*_WindNoiseValue*windValue;
@@ -1257,9 +1248,9 @@ Shader "MySprite-Lit-Default"
             half4 TreeFrag( Varyings IN: SV_Target0)
 			{ 
                half4 outNormalWS;
-               float4 texColor =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv.xy ); 
+               float4 texColor = _MainTex.Sample(sampler_MainTex,IN.uv.xy);  
                float3 normalWS = IN.normalWS;
-                float4 SnowColor =SAMPLE_TEXTURE2D(_SnowTex, sampler_SnowTex, IN.uv.xy );
+                float4 SnowColor =_SnowTex.Sample(sampler_MainTex,IN.uv.xy );
                 float normalY=IN.normalWS.y;
                 Unity_Remap_float(normalY,float2(0,1),_SnowRange.xy,normalY);
                 normalY=clamp(normalY,0,1);
@@ -1290,12 +1281,12 @@ Shader "MySprite-Lit-Default"
 
 
                 float2 uv=MoveUV(i.uv,i.lightingUV.xy,1-s_w);
-                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
+                half4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
+                half4 _NormalColor =_NormalMap.Sample(sampler_MainTex,i.uv);
 
                if(_GrassBlend==1)
                 {  
-                    half4 _GrassColor = SAMPLE_TEXTURE2D(_GrassTex, sampler_GrassTex, i.lightingUV.zw);
+                    half4 _GrassColor =_GrassTex.Sample(sampler_MainTex,i.lightingUV.zw);
                     float GrassColorValue=_GrassColor.r*_GrassColor.g*0.45; 
                     
                     //return float4(GrassColorValue.xxx,1);
@@ -1385,7 +1376,7 @@ Shader "MySprite-Lit-Default"
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 mainTex = i.color *_MainTex.Sample(sampler_MainTex,i.uv); 
 
                 #if defined(DEBUG_DISPLAY)
                     SurfaceData2D surfaceData;
@@ -1473,7 +1464,7 @@ Shader "MySprite-Lit-Default"
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 mainTex = i.color *_MainTex.Sample(sampler_MainTex,i.uv); 
                 mainTex.xyz=float3(1,1,1)*mainTex.a; 
                 #if defined(DEBUG_DISPLAY)
                     SurfaceData2D surfaceData;
@@ -1559,9 +1550,9 @@ Shader "MySprite-Lit-Default"
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
-                half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
+                float4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
+                float4 DepthTex =_DepthTex.Sample(sampler_MainTex,i.uv); 
+                half4 _NormalColor = _NormalMap.Sample(sampler_MainTex,i.uv);
 
                 float4 ObjDepthTex=SAMPLE_TEXTURE2D(_ObjDepthTex, sampler_ObjDepthTex, i.color.yz);
                  
@@ -1680,11 +1671,11 @@ Shader "MySprite-Lit-Default"
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                float4 DepthTex = SAMPLE_TEXTURE2D(_DepthTex, sampler_DepthTex, i.uv); 
+                float4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
+                float4 DepthTex =_DepthTex.Sample(sampler_MainTex,i.uv); 
                 float clipA=1-step(DepthTex.a,0);
                 DepthTex.xyz*=clipA;
-                half4 _NormalColor = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv);
+                half4 _NormalColor = _NormalMap.Sample(sampler_MainTex,i.uv);
                  
                 half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
                 half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
@@ -1785,7 +1776,7 @@ Shader "MySprite-Lit-Default"
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                float4 mainTex = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 mainTex = i.color *_MainTex.Sample(sampler_MainTex,i.uv); 
 
                 #if defined(DEBUG_DISPLAY)
                     SurfaceData2D surfaceData;
@@ -1874,14 +1865,14 @@ Shader "MySprite-Lit-Default"
 
                 float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
                 float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
-                float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
+                float4 _WaveCol0 =_WaterNormalMap.Sample(sampler_MainTex,_TilingAndOffset0); 
                 _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
                 //波纹2
                 float angle1=radians(_WaveAngle1);
                 float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
                 float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
                 float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
-                float4 _WaveCol1= SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset1);
+                float4 _WaveCol1= _WaterNormalMap.Sample(sampler_MainTex, _TilingAndOffset1);
                 _WaveCol1.rgb = UnpackNormal(_WaveCol1);
                 
                 
@@ -1992,8 +1983,8 @@ Shader "MySprite-Lit-Default"
 
             half4 Fragment(Varyings i) : SV_Target
             {
-                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, i.uv);
+                half4 mainTex = _MainTex.Sample(sampler_MainTex,i.uv); 
+                float4 moveValue=_MoveMask.Sample(sampler_MainTex,i.uv);
                 moveValue.a=mainTex.a;
                 return moveValue;
             }
@@ -2040,8 +2031,8 @@ Shader "MySprite-Lit-Default"
 
             half4 Fragment(Varyings i) : SV_Target
             {
-                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                float4 moveValue=SAMPLE_TEXTURE2D(_MoveMask,sampler_MoveMask, i.uv);
+                half4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv);  
+                float4 moveValue=_MoveMask.Sample(sampler_MainTex,i.uv);
                 int groundStep=1-step(moveValue.z,0);
                 moveValue.a*=mainTex.a;
                 

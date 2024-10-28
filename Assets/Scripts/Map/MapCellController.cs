@@ -1210,7 +1210,7 @@ public class MapCellController : Singleton<MapCellController>
         }
         return int3.zero;
     }
-
+#if UNITY_EDITOR
     public List<Vector3Int> GetAllCellData(int mapInstance)
     {
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
@@ -1219,7 +1219,7 @@ public class MapCellController : Singleton<MapCellController>
         }
         return null;
     }
-
+#endif 
     public MapTriggerAreas GetPlayerTrigger(int roomId)
     {
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))

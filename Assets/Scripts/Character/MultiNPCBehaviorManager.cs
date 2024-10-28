@@ -1,25 +1,23 @@
 ﻿using BehaviorDesigner.Runtime;
-using System;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
-using UnityEditor.Rendering;
-using UnityEngine;  
+using UnityEngine;
 
 public class MultiNPCGroup
 {
-    public int instanceId; 
+    public int instanceId;
     public MulitiBehaviorData mulitiBehaviorData;
-    public BehaviorTree behaviorTree; 
-    public MyDic<int,NPCBehaviorTempData> npcBehaviorTempDatas;
+    public BehaviorTree behaviorTree;
+    public MyDic<int, NPCBehaviorTempData> npcBehaviorTempDatas;
+
     //public int mapInstance;
-   // public int2 center;
+    // public int2 center;
     public MultiNPCGroup(int instanceId, MulitiBehaviorData mulitiBehaviorData)
     {
         this.instanceId = instanceId;
         this.mulitiBehaviorData = mulitiBehaviorData;
-       
     }
+
     public void InitBehavior(BehaviorTree behaviorTree, MyDic<int, NPCBehaviorTempData> npcBehaviorTempDatas)
     {
         this.npcBehaviorTempDatas = npcBehaviorTempDatas;
@@ -34,18 +32,20 @@ public class MultiNPCGroup
         behaviorTree.OnBehaviorEnd += BehaviorEndAction;
         behaviorTree.Start();
     }
+
     public bool IsHaveCharacter(int characterId)
     {
         return npcBehaviorTempDatas.ContainsKey(characterId);
     }
-    void BehaviorEndAction(Behavior behavior)
+
+    private void BehaviorEndAction(Behavior behavior)
     {
         if (mulitiBehaviorData.endAction == 0)
         {
             GameActionDataManager.instance.Action(mulitiBehaviorData.endAction);
         }
         if (mulitiBehaviorData.needRecoverSingleBehavior)
-        { 
+        {
             var npcs = npcBehaviorTempDatas.GetKeyList();
             var tempDatas = npcBehaviorTempDatas.GetValueList();
             for (int i = 0; i < npcs.Count; i++)
@@ -60,11 +60,11 @@ public class MultiNPCGroup
                 GameActionManager.instance.QueueAction(startCharacterBehavior, true);
                 if (tempData.targetCell.x > 0)
                 {
-                   character.MoveCrossMap(tempData.targetCell.z, tempData.targetCell.xy,
-                   tempData.moveEndAction,
-                   tempData.changeCoordinateAction,
-                   tempData.failedMoveAction);
-                } 
+                    character.MoveCrossMap(tempData.targetCell.z, tempData.targetCell.xy,
+                    tempData.moveEndAction,
+                    tempData.changeCoordinateAction,
+                    tempData.failedMoveAction);
+                }
             }
         }
         else
@@ -74,24 +74,23 @@ public class MultiNPCGroup
             {
                 Character character = CharacterManager.instance.GetCharacter(npcs[i]);
                 character.mulitGroup = 0;
-                if (NPCManager.instance.GetNPCFormInstance(npcs[i],out var npc))
+                if (NPCManager.instance.GetNPCFormInstance(npcs[i], out var npc))
                 {
                     npc.SetNowBehaviorTree();
                 }
             }
-           
         }
         npcBehaviorTempDatas.Clear();
         GameObject.Destroy(behaviorTree);
         MultiNPCBehaviorManager.instance.RemoveMulitGroup(instanceId);
     }
-    public void JoinInCharacter(int characterId,bool faceCenter)
+
+    public void JoinInCharacter(int characterId, bool faceCenter)
     {
         if (!npcBehaviorTempDatas.ContainsKey(characterId))
         {
             Character character = CharacterManager.instance.GetCharacter(characterId);
             character.mulitGroup = instanceId;
-
 
             NPCBehaviorTempData nPCBehaviorTempData = new NPCBehaviorTempData
             {
@@ -125,7 +124,6 @@ public class MultiNPCGroup
             if (minY < character.coordinate.y)
                 minY = character.coordinate.y;
 
-
             int2 center = new int2(minX + (maxX - minX) / 2, minY + (maxY - minY) / 2);
             if (faceCenter)
             {
@@ -147,10 +145,10 @@ public class MultiNPCGroup
             behaviorTree.SetVariable("GroupCharacters", sharedList);
         }
     }
+
     public void RemoveCharacter(int characterId)
     {
-
-        if(npcBehaviorTempDatas.TryGetValue(characterId, out var tempData))
+        if (npcBehaviorTempDatas.TryGetValue(characterId, out var tempData))
         {
             Character character = CharacterManager.instance.GetCharacter(characterId);
             character.mulitGroup = 0;
@@ -175,15 +173,17 @@ public class MultiNPCGroup
                 {
                     npc.SetNowBehaviorTree();
                 }
-            } 
+            }
             npcBehaviorTempDatas.Remove(character.instanceId);
         }
     }
+
     public void Destory()
     {
         BehaviorEndAction(null);
     }
 }
+
 public struct NPCBehaviorTempData
 {
     public int3 targetCell;
@@ -192,11 +192,13 @@ public struct NPCBehaviorTempData
     public Int3Action failedMoveAction;
     public BehaviorTree behaviorTree;
 }
-public class MultiNPCBehaviorManager:Singleton<MultiNPCBehaviorManager>
+
+public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
 {
     private MyInstance myInstance;
     private MyDic<int, MultiNPCGroup> mulitNpcGroups = new MyDic<int, MultiNPCGroup>();
     private GameObject obj;
+
     public override void Init()
     {
         base.Init();
@@ -213,9 +215,10 @@ public class MultiNPCBehaviorManager:Singleton<MultiNPCBehaviorManager>
         GameActionManager.instance.AddListener<CreatMultiNPCBehaviorGroup>(CreatMultiNPCBehaviorGroup);
         GameActionManager.instance.AddListener<DestoryMultiNPCBehaviorGroup>(DestoryMultiNPCBehaviorGroup);
     }
+
     public bool IsInMulitGroup(int characterId)
     {
-        for(int i = 0; i < mulitNpcGroups.length; i++)
+        for (int i = 0; i < mulitNpcGroups.length; i++)
         {
             if (mulitNpcGroups[i].IsHaveCharacter(characterId))
             {
@@ -225,15 +228,16 @@ public class MultiNPCBehaviorManager:Singleton<MultiNPCBehaviorManager>
         return false;
     }
 
-    void DestoryMultiNPCBehaviorGroup(DestoryMultiNPCBehaviorGroup destoryMultiNPCBehaviorGroup)
+    private void DestoryMultiNPCBehaviorGroup(DestoryMultiNPCBehaviorGroup destoryMultiNPCBehaviorGroup)
     {
-        if(mulitNpcGroups.TryGetValue(destoryMultiNPCBehaviorGroup.groupId,out var multiNPCGroup))
+        if (mulitNpcGroups.TryGetValue(destoryMultiNPCBehaviorGroup.groupId, out var multiNPCGroup))
         {
             multiNPCGroup.Destory();
-          //  multiNPCGroup.
+            //  multiNPCGroup.
         }
     }
-    async void CreatMultiNPCBehaviorGroup(CreatMultiNPCBehaviorGroup creatMultiNPCBehaviorGroup)
+
+    private async void CreatMultiNPCBehaviorGroup(CreatMultiNPCBehaviorGroup creatMultiNPCBehaviorGroup)
     {
         List<int> characters = creatMultiNPCBehaviorGroup.characters;
         int multiDataId = creatMultiNPCBehaviorGroup.dataId;
@@ -255,7 +259,6 @@ public class MultiNPCBehaviorManager:Singleton<MultiNPCBehaviorManager>
             if (character != null)
             {
                 mapInstance = character.mapInstance;
-
 
                 NPCBehaviorTempData nPCBehaviorTempData = new NPCBehaviorTempData
                 {
@@ -285,9 +288,7 @@ public class MultiNPCBehaviorManager:Singleton<MultiNPCBehaviorManager>
                 if (minY < character.coordinate.y)
                     minY = character.coordinate.y;
 
-
                 character.mulitGroup = groupInstance;
-
             }
         }
         int2 center = new int2(minX + (maxX - minX) / 2, minY + (maxY - minY) / 2);
@@ -310,30 +311,31 @@ public class MultiNPCBehaviorManager:Singleton<MultiNPCBehaviorManager>
         behaviorTree.PauseWhenDisabled = false;
         behaviorTree.StartWhenEnabled = false;
         MultiNPCGroup multiNPCGroup = new MultiNPCGroup(groupInstance, mulitiBehaviorData);
-       // multiNPCGroup.mapInstance = mapInstance;
-       // multiNPCGroup.center = center;
+        // multiNPCGroup.mapInstance = mapInstance;
+        // multiNPCGroup.center = center;
         multiNPCGroup.InitBehavior(behaviorTree, npcBehaviorTempDatas);
 
         mulitNpcGroups.Add(groupInstance, multiNPCGroup);
     }
-    
-    void JoinInMultiNPCBehaviorGroup(JoinInMultiNPCBehaviorGroup JoinInMultiNPCBehaviorGroup)
+
+    private void JoinInMultiNPCBehaviorGroup(JoinInMultiNPCBehaviorGroup JoinInMultiNPCBehaviorGroup)
     {
         if (mulitNpcGroups.TryGetValue(JoinInMultiNPCBehaviorGroup.groupId, out var multiNPCGroup))
         {
-            multiNPCGroup.JoinInCharacter(JoinInMultiNPCBehaviorGroup.characterId,JoinInMultiNPCBehaviorGroup.faceCenter);
+            multiNPCGroup.JoinInCharacter(JoinInMultiNPCBehaviorGroup.characterId, JoinInMultiNPCBehaviorGroup.faceCenter);
         }
     }
-    void LeaveMultiNPCBehaviorGroup(LeaveMultiNPCBehaviorGroup leaveMultiNPCBehaviorGroup)
+
+    private void LeaveMultiNPCBehaviorGroup(LeaveMultiNPCBehaviorGroup leaveMultiNPCBehaviorGroup)
     {
-        if(mulitNpcGroups.TryGetValue(leaveMultiNPCBehaviorGroup.groupId,out var multiNPCGroup))
+        if (mulitNpcGroups.TryGetValue(leaveMultiNPCBehaviorGroup.groupId, out var multiNPCGroup))
         {
             multiNPCGroup.RemoveCharacter(leaveMultiNPCBehaviorGroup.characterId);
         }
     }
+
     public void RemoveMulitGroup(int groupInstance)
     {
         mulitNpcGroups.Remove(groupInstance);
     }
-     
 }

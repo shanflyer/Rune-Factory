@@ -14,11 +14,16 @@ public class TaskScheduleModelDataList : ScriptableObject, IGameData,IDataArray<
     {
         return "TaskScheduleModelDataList";
     }
-#if UNITY_EDITOR
-    TaskScheduleModelEditorData[] TaskScheduleModelEditorDatas;
+    
 
     public TaskScheduleModelData[] DataList => taskScheduleModelDatas;
+    public string GetKey()
+    {
+        return "TaskScheduleModelDataList";
+    }
+#if UNITY_EDITOR
 
+    TaskScheduleModelEditorData[] TaskScheduleModelEditorDatas;
     public void SetReferenceData()
     {
         var growModelDataList = Resources.Load<GrowModelDataList>(DataPath.GetDataPath(typeof(GrowModelData)));
@@ -59,10 +64,7 @@ public class TaskScheduleModelDataList : ScriptableObject, IGameData,IDataArray<
         taskScheduleModelDatas = taskScheduleModelDataList.ToArray();
     }
 
-    public string GetKey()
-    {
-        return "TaskScheduleModelDataList";
-    }
+ 
 #endif
 }
 [Serializable]

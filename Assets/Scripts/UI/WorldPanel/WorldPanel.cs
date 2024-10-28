@@ -87,7 +87,7 @@ public class WorldPanel : GamePanel<MyInt>
         Close();
     }
 
-    private void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
+    private async void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
     {
         if (selected)
         {
@@ -108,8 +108,12 @@ public class WorldPanel : GamePanel<MyInt>
                 };
                 list.Add(mapItemReferenceData);
             }
-            fightMapItems.InitListData(list);
-            exploreButton.interactable = GameController.instance.test?true: chapterData.open;
+            await fightMapItems.InitListData(list);
+            exploreButton.interactable =
+#if UNITY_EDITOR
+                GameController.instance.test ? true :
+#endif 
+                chapterData.open;
         }
         else
         {
@@ -151,16 +155,21 @@ public class WorldPanel : GamePanel<MyInt>
                     var data = new UIFightChapterData
                     {
                         fightChapterId = fightMapData.id,
-                        season = GameController.instance.test ?true: fightMapData.season == selectSeason
+                        season =
+#if UNITY_EDITOR
+                       GameController.instance.test ? true :
+#endif  
+                        fightMapData.season == selectSeason
                     };
                     await seasonFightChapterList[index].InitData(data, SelectFightChapter);
-
+#if UNITY_EDITOR
                     if (GameController.instance.test)
                     {
                        // SelectFightChapter(data, true);
 
                     }
-                    else 
+                    else
+#endif
                     if (fightMapData.season == selectSeason && fightMapData.isOpen)
                     {
                        // SelectFightChapter(data, true);
