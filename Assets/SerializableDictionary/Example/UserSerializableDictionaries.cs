@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
- 
+[Serializable]
+public class StringLanguageSwitchDataDictionary : SerializableDictionary<string, LanguageSwitchData>
+{
+}
 [Serializable]
 public class StringListDictionary : SerializableDictionary<string, List<string>>
 {

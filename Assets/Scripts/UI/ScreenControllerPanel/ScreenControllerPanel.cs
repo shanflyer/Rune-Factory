@@ -41,7 +41,7 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
     private void SetPointerDown(PointerEventData eventData)
     {
         Vector2 size = panelRect.sizeDelta * 0.5f; 
-        JoyStick.anchoredPosition = eventData.position - size;
+        JoyStick.anchoredPosition = eventData.position ;
         MyJoyStick.OnPointerDown(eventData); 
     }
     void OnDrag(PointerEventData eventData)

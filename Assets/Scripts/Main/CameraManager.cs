@@ -8,7 +8,7 @@ public class CameraManager : Singleton<CameraManager>
     public Camera uiCamera;
     UniversalAdditionalCameraData universalAdditionalCameraData;
     [SerializeField]
-    private UnityEngine.Rendering.Universal.PixelPerfectCamera pixelPerfectCamera;
+    private PixelPerfectCamera pixelPerfectCamera, UIPixelPerfectCamera;
 
     private CinemachineMixingCamera mixingCamera;
     private CinemachineCamera fixedCamera;
@@ -29,7 +29,8 @@ public class CameraManager : Singleton<CameraManager>
         cameraAudioListener=mainCamera.GetComponent<AudioListener>();
         uiCamera = mainCamera.transform.GetChild(0).GetComponent<Camera>();
         universalAdditionalCameraData = uiCamera.GetComponent<UniversalAdditionalCameraData>();
-        pixelPerfectCamera = mainCamera.GetComponent<UnityEngine.Rendering.Universal.PixelPerfectCamera>();
+        pixelPerfectCamera = mainCamera.GetComponent<PixelPerfectCamera>();
+        UIPixelPerfectCamera= uiCamera.GetComponent<PixelPerfectCamera>();
         mixingCamera = mainCamera.transform.parent.GetComponentInChildren<CinemachineMixingCamera>();
         followCameras = new CinemachineCamera[3]
         {
@@ -173,12 +174,12 @@ public class CameraManager : Singleton<CameraManager>
 
     private void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
     {
-        pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue;
+        UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue; 
     }
 
     private void SetFixedCamera(SetFixedCamera setFixedCamera)
     {
-        pixelPerfectCamera.assetsPPU = setFixedCamera.pixelValue == 0 ? GameCommon.PixelCameraDefaultValue : setFixedCamera.pixelValue;
+        UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setFixedCamera.pixelValue == 0 ? GameCommon.PixelCameraDefaultValue : setFixedCamera.pixelValue;
         if (setFixedCamera.fixedCamera)
         {
             fixedView = true;

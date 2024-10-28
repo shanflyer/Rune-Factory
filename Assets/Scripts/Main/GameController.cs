@@ -14,6 +14,8 @@ using UnityEditor;
 public class GameController : MonoBehaviour
 {
     [SerializeField]
+    Material blurMaterial;
+    [SerializeField]
     private AudioClip startBGM;
     public bool startPlay = true;
 #if UNITY_EDITOR
@@ -167,8 +169,13 @@ public class GameController : MonoBehaviour
        
         instance = null;
     }
+    public void SetTestBlur(int index)
+    {
+        blurMaterial.SetInt("_TestIndex", index);
+    }
     private async void OnEnable()
     {  
+        Screen.SetResolution(Screen.width, Screen.height,true);
         instance = this;
         //GameObject.DontDestroyOnLoad(gameObject);
         var UIParent = transform.Find("UIController");

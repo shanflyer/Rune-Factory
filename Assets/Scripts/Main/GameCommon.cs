@@ -1134,7 +1134,7 @@ public static class DataPath
 {
     public static readonly Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
-        {typeof(LangLanguageSwitch),"Data/LangLanguageSwitchData" },
+        {typeof(LanguageSwitchDataList),"Data/LanguageSwitchData/LanguageSwitchDataList" },
         {typeof(FunctionData),"Data/FunctionDataList" },
         {typeof(GameEventData),"Data/GameEventData" },
         {typeof(GameRandomDataList),"Data/GameRandomData/GameRandomDataList" },
