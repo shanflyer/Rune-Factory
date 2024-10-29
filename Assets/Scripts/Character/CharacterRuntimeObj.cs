@@ -23,14 +23,14 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         set
         {
            
-            if (value != null)
+            /*if (value != null)
             {
                 EnvironmentManger.instance.AddCharacterGetFootStep(value.linkId, characterGetFootStep);
             }
             else
             {
                 EnvironmentManger.instance.RemoveCharacterGetFootStep(runtimeObj.linkId);
-            }
+            }*/
             _runtimeObj = value;
         }
     }
@@ -164,14 +164,14 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         offset.z = 0;
         shadow.localPosition = offset;
 
-        if(runtimeObj!=null)
-            EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);
+        /*if(runtimeObj!=null)
+            EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/
     }
     void OnDisable()
     {
-        if (runtimeObj != null&&!SingletonType.Cleared)
-            EnvironmentManger.instance.RemoveCharacterGetFootStep(runtimeObj.linkId);
-    }  
+        /*iif (runtimeObj != null&&!SingletonType.Cleared)
+            EnvironmentManger.instance.RemoveCharacterGetFootStep(runtimeObj.linkId); */
+    }
     AudioPlayableOutput audioPlayableOutput;
     AudioMixerPlayable audioMixerPlayable, leftMixerPlayable, rightMixerPlayable;
     PlayableGraph singlePlayableGraph;
@@ -200,6 +200,10 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
     public void SetPosition(Vector3 pos)
     {
         transform.position = pos; 
+    }
+    public void SetCoordinateAction(int2 coordinate,int mapInstance,int defaultGround)
+    {
+        EnvironmentManger.instance.GetNowFootStepData(characterGetFootStep, coordinate, mapInstance, defaultGround);
     }
     CharacterGetFootStep characterGetFootStep;
    

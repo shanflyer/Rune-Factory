@@ -84,6 +84,10 @@ public class MapRoomData : ScriptableObject, IGameData
     public string roomName;
     public List<int> barrierGrids=new List<int>();
 
+    public List<int> groundIndexes = new List<int>();
+    public List<int> groundGrids = new List<int>();
+    public int defaultGround;
+
     public List<MapItem> mapItems = new List<MapItem>();
     public int2 startCoordinate, endCoordinate;
     public GameObject mapObj;

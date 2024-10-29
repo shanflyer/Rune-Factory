@@ -13,21 +13,6 @@ MonoBehaviour:
   m_Name: FootstepDataList
   m_EditorClassIdentifier: 
   footstepDatas:
-  - name: "\u77F3\u8DEF"
-    isOutSide: 1
-    index: 0
-    dryClip:
-      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
-      clips:
-      - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
-    wetClip:
-      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.14901961}
-      clips:
-      - {fileID: 8300000, guid: 34d821959a97eae4fa6600d88dbbcc5a, type: 3}
-    snowClip:
-      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.29803923}
-      clips:
-      - {fileID: 8300000, guid: 193f40e345dbf1449a1870d86c87ea7f, type: 3}
   - name: "\u571F\u8DEF"
     isOutSide: 1
     index: 1
@@ -103,21 +88,21 @@ MonoBehaviour:
       footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.29803923}
       clips:
       - {fileID: 8300000, guid: c086b722dec7cf043820aec5df3ec14f, type: 3}
-  - name: "\u666E\u901A\u77F3"
-    isOutSide: 0
-    index: 0
+  - name: "\u77F3\u8DEF"
+    isOutSide: 1
+    index: 6
     dryClip:
       footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
       clips:
       - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
     wetClip:
-      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.14901961}
       clips:
-      - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
+      - {fileID: 8300000, guid: 34d821959a97eae4fa6600d88dbbcc5a, type: 3}
     snowClip:
-      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.29803923}
       clips:
-      - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
+      - {fileID: 8300000, guid: 193f40e345dbf1449a1870d86c87ea7f, type: 3}
   - name: "\u5927\u7406\u77F3"
     isOutSide: 0
     index: 1
@@ -163,3 +148,33 @@ MonoBehaviour:
       footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.14901961}
       clips:
       - {fileID: 8300000, guid: f3b042257fc2e1643afef76f908d7ba6, type: 3}
+  - name: "\u8349"
+    isOutSide: 0
+    index: 4
+    dryClip:
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
+      clips:
+      - {fileID: 8300000, guid: 42135a1be9f47c340bca0a6958c817d3, type: 3}
+    wetClip:
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
+      clips:
+      - {fileID: 8300000, guid: 42135a1be9f47c340bca0a6958c817d3, type: 3}
+    snowClip:
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.29803923}
+      clips:
+      - {fileID: 8300000, guid: 42135a1be9f47c340bca0a6958c817d3, type: 3}
+  - name: "\u666E\u901A\u77F3"
+    isOutSide: 0
+    index: 6
+    dryClip:
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
+      clips:
+      - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
+    wetClip:
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
+      clips:
+      - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
+    snowClip:
+      footStepColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.050980393}
+      clips:
+      - {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}

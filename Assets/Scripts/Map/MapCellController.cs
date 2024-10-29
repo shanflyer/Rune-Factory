@@ -6,8 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
-using static MapCellController;
+using UnityEngine; 
 
 [BurstCompile]
 public struct CharacterGrid : INativeData
@@ -501,11 +500,17 @@ public class MapCellController : Singleton<MapCellController>
         public readonly void Dispose()
         {
             mapObjBarriers.Dispose();
+            mapGroundIndexDatas.Dispose();
         }
-
+        public NativeHashMap<int, int> mapGroundIndexDatas;
         public NativeHashMap<int, int> mapObjBarriers;
         public int2 startCoordinate, endCoordinate;
 
+        public void AddGroundIndexData(int x,int y,int groundIndex)
+        {
+            int index = GetCoordinateIndex(x, y);
+            mapGroundIndexDatas[index] = groundIndex;
+        }
         public void AddBarrier(int x, int y)
         {
             int index = GetCoordinateIndex(x, y);
@@ -537,6 +542,7 @@ public class MapCellController : Singleton<MapCellController>
             }
         }
 
+        
         public int2 GetRandomCanWalkCell()
         {
             List<int> walkCells = new List<int>();
@@ -622,6 +628,21 @@ public class MapCellController : Singleton<MapCellController>
             int perRowGridCount = endCoordinate.y - startCoordinate.y + 1;
             int index = (coordinate.y - startCoordinate.y) + (coordinate.x - startCoordinate.x) * perRowGridCount;
             return index;
+        }
+
+        public int GetGroundIndex(int2 coordinate)
+        {
+            if (coordinate.x >= startCoordinate.x && coordinate.x <= endCoordinate.x &&
+          coordinate.y >= startCoordinate.y && coordinate.y <= endCoordinate.y)
+            {
+                int index = GetCoordinateIndex(coordinate);
+                
+                if (mapGroundIndexDatas.TryGetValue(index,out var groundIndex))
+                {
+                    return groundIndex;
+                } 
+            }
+            return -1;
         }
 
         public bool CheckWalkable(int index)
@@ -1234,6 +1255,7 @@ public class MapCellController : Singleton<MapCellController>
         RoomCellData roomCellData = new RoomCellData
         {
             mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.Persistent),
+            mapGroundIndexDatas= new NativeHashMap<int, int>(16, Allocator.Persistent),
             startCoordinate = mapRoomData.startCoordinate,
             endCoordinate = mapRoomData.endCoordinate,
         };
@@ -1254,6 +1276,24 @@ public class MapCellController : Singleton<MapCellController>
                 }
             }
         }
+
+        var groundGridCount = mapRoomData.groundGrids.Count / 4;
+        for(int j = 0; j < groundGridCount; j++)
+        {
+            int minX = mapRoomData.groundGrids[j * 4];
+            int minY = mapRoomData.groundGrids[j * 4 + 1];
+            int maxX = mapRoomData.groundGrids[j * 4 + 2];
+            int maxY = mapRoomData.groundGrids[j * 4 + 3];
+
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    roomCellData.AddGroundIndexData(x, y, mapRoomData.groundIndexes[j]);
+                }
+            }
+        }
+
         roomCellDatas.Add(roomCellData);
         RuntimeMapRoom runtimeMapRoom = new RuntimeMapRoom
         {
@@ -1497,7 +1537,14 @@ public class MapCellController : Singleton<MapCellController>
         }
         return outData;
     }
-
+    public int GetGroundIndex(int2 coordinate,int mapId)
+    {
+        if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
+        {
+            return roomCellDatas[runtimeMapRoom.roomCellDataIndex].GetGroundIndex(coordinate);
+        }
+        return -1;
+    }
     public bool CheckIsWalk(Vector2Int coordinate, int mapId)
     {
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))

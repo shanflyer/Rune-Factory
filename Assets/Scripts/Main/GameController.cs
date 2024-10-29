@@ -14,8 +14,6 @@ using UnityEditor;
 public class GameController : MonoBehaviour
 {
     [SerializeField]
-    Material blurMaterial;
-    [SerializeField]
     private AudioClip startBGM;
     public bool startPlay = true;
 #if UNITY_EDITOR
@@ -169,10 +167,7 @@ public class GameController : MonoBehaviour
        
         instance = null;
     }
-    public void SetTestBlur(int index)
-    {
-        blurMaterial.SetInt("_TestIndex", index);
-    }
+
     private async void OnEnable()
     {  
         Screen.SetResolution(Screen.width, Screen.height,true);
@@ -210,9 +205,7 @@ public class GameController : MonoBehaviour
         UIManager.instance.SetParent(UIParent);
 
         var audio = transform.Find("Audio");
-        AudioController.instance.SetAudioSource(audio.gameObject);
-
-        
+        AudioController.instance.SetAudioSource(audio.gameObject); 
         
     }
   
@@ -227,7 +220,11 @@ public class GameController : MonoBehaviour
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         await UIManager.instance.ShowGamePanel<ZeroPanel>();
-        AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, Group: BGMGroup.Theme.ToString());
+        GameTimerController.instance.DelayAction(500, () => 
+        {
+            AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, Group: BGMGroup.Theme.ToString());
+        });
+       
         GameTimeManager.instance.SetTime(12, 0);
         SwitchInputMap switchInputMap = new SwitchInputMap
         {

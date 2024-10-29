@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -7,13 +8,12 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
 {
     public override bool NeedUpdata => true;
     Material screenMat; 
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
-        UniversalRenderPipelineAsset universalRenderPipelineAsset = UniversalRenderPipeline.asset;
-        var Renderer2DData= universalRenderPipelineAsset.RendererDataList[0];
-        var rendererFeature= Renderer2DData.rendererFeatures.Find(r => r.name == "ScreenCycle");
-        screenMat = ((MyScreenRenderPassFeature)rendererFeature).material;
+      
+         
+        screenMat = await ExtensionsResources.LoadResourceAsync<Material>("Material/ScreenCycle");
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
     }
     protected override void Clear()

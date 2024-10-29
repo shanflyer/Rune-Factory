@@ -855,6 +855,13 @@ public partial class Character
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
         objCoordinate = coordinate;
+        if (mapInstance == WorldMapObjManager.instance.displayMap)
+        {
+            if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))
+            {
+                characterRuntimeObj.SetCoordinateAction(this.coordinate, mapInstance, WorldMapObjManager.instance.DisplayMapRoomData.defaultGround);
+            }
+        }
         if (CharacterManager.instance.controllerCharacter == this)
         {
             RefreshNeighborhood();
@@ -875,7 +882,13 @@ public partial class Character
         int3 newCoordinate = new int3(coordinate, mapInstance);
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, newCoordinate, instanceId, this is TempCharacter);
         objCoordinate = newCoordinate;
-
+        if (mapInstance == WorldMapObjManager.instance.displayMap)
+        {
+            if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
+            {
+                characterRuntimeObj.SetCoordinateAction(this.coordinate, mapInstance, WorldMapObjManager.instance.DisplayMapRoomData.defaultGround);
+            }
+        }
         if (CharacterManager.instance.controllerCharacter == this)
         {
             RefreshNeighborhood();

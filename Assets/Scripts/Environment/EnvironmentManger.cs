@@ -1,5 +1,4 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -127,6 +126,20 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     }
    
     Lightning lightning;
+    public void GetNowFootStepData(CharacterGetFootStep characterGetFootStep,int2 coordinate,int mapInstance,int defaultGround)
+    {
+        int groundIndex = MapCellController.instance.GetGroundIndex(coordinate, mapInstance);
+        if (groundIndex <= 0)
+        {
+            groundIndex = defaultGround;
+        }
+        FootstepSource footstepSource = GetMapFootStepSource(groundIndex);
+        if (footstepSource.clips != null)
+        {
+            AudioClip audioClip = footstepSource.clips[GameRandom.RandomInt(0, footstepSource.clips.Count)];
+            characterGetFootStep.SetFootStepAction(audioClip, footstepSource.footStepColor);
+        }
+    }
 
     public void AddCharacterGetFootStep(int instanceId,CharacterGetFootStep characterGetFootStep)
     {

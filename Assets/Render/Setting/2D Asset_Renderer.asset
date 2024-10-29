@@ -44,46 +44,6 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
---- !u!114 &-8019907935334722734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 560d874c8d6c5434db9b190f3838988b, type: 3}
-  m_Name: FootStepPassFeature
-  m_EditorClassIdentifier: 
-  checkCameraTag: 1
-  cameraTag: MainCamera
-  m_Active: 1
-  settings:
-    m_transparencySortMode: 3
-    m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
-    renderPassEvent: 400
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 393473
-    overrideMat: {fileID: 0}
-    ShaderTags:
-    - GroundFoot
-    clearFlag: 0
-    clearColor: {r: 0, g: 0, b: 0, a: 1}
-    computeShader: {fileID: 7200000, guid: ba04bda35d4746b4a9c4e2e353a8fb43, type: 3}
 --- !u!114 &-7700621039921025094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,26 +107,6 @@ MonoBehaviour:
     afterMaterial: {fileID: 2100000, guid: 5b104531ee088d84bab33c2a6680306a, type: 2}
     passIndex: 0
     renderPassEvent: 550
---- !u!114 &-3485696397773553168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
-  m_Name: ScreenCycle
-  m_EditorClassIdentifier: 
-  checkCameraTag: 1
-  cameraTag: MainCamera
-  m_Active: 0
-  renderPassEvent: 550
-  material: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
-  blitName: 
-  scale: 1
-  blitTexture: 0
 --- !u!114 &-2393396154472095211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,12 +282,8 @@ MonoBehaviour:
   - {fileID: -1919989437086517868}
   - {fileID: -7700621039921025094}
   - {fileID: -2393396154472095211}
-  - {fileID: 5208366081940331415}
-  - {fileID: 8718721150439679252}
-  - {fileID: -3485696397773553168}
   - {fileID: 415541881704971235}
-  - {fileID: -8019907935334722734}
-  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e5219515a2e7d5e0f2c8de971b3f3e5bd547481465a44bb11eff78f041d91f9851a0cfe37b52c8234dc4055293095f3990b390
+  m_RendererFeatureMap: df3184189c5cd055af0ea706df5eef14c10d2c11510eac7a4e713f11dcc4a3826a65fa4395eb211425f5ab33bb4f36f5185a9269e1cefb0194b5f48dc7d35ae5baaf9bbdf6e5219515a2e7d5e0f2c8dee37b52c8234dc405
   m_UseNativeRenderPass: 0
   m_renderLayerMask:
     serializedVersion: 2
@@ -529,26 +465,6 @@ MonoBehaviour:
     blitToCameraTarget: 0
     clearFlag: -1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
---- !u!114 &5208366081940331415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
-  m_Name: MyBlur
-  m_EditorClassIdentifier: 
-  checkCameraTag: 1
-  cameraTag: MainCamera
-  m_Active: 0
-  renderPassEvent: 500
-  material: {fileID: 2100000, guid: 36235e5443e412c48822ca9d0542eb4e, type: 2}
-  blitName: _BlurTex
-  scale: 1
-  blitTexture: 1
 --- !u!114 &6183544113875661279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,26 +509,6 @@ MonoBehaviour:
     blitToCameraTarget: 0
     clearFlag: 1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
---- !u!114 &8718721150439679252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
-  m_Name: BlendBlur
-  m_EditorClassIdentifier: 
-  checkCameraTag: 1
-  cameraTag: MainCamera
-  m_Active: 0
-  renderPassEvent: 500
-  material: {fileID: 2100000, guid: c977e7e7329827147b1592f00cfc74c8, type: 2}
-  blitName: 
-  scale: 1
-  blitTexture: 0
 --- !u!114 &8839455909964680641
 MonoBehaviour:
   m_ObjectHideFlags: 0

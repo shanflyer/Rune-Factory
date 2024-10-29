@@ -133,6 +133,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                 context.cmd.ClearRenderTarget(data.clearFlag == ClearFlag.Depth || data.clearFlag == ClearFlag.All, data.clearFlag == ClearFlag.Color || data.clearFlag == ClearFlag.All, data.clearColor);
                 context.cmd.DrawRendererList(data.rendererList);
  
+               
                 var kernelID = data.computeShader.FindKernel("CSMain");
                 data.computeShader.SetTexture(kernelID, "Result", data.textureHandle);
                 Vector4[] pos = new Vector4[64];

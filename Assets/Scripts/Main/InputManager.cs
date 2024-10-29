@@ -70,7 +70,7 @@ public class InputManager :Singleton<InputManager>
     void ShowPointerEffect(object obj)
     {
         var mouseScreenPos = (Vector2)obj;
-        Vector2 mousePos = CameraManager.instance.uiCamera.ScreenToWorldPoint(mouseScreenPos);
+        Vector2 mousePos = CameraManager.instance.mainCamera.ScreenToWorldPoint(mouseScreenPos);
         ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams();
         ep.position = mousePos;
         particleSystem.Emit(ep, 1);

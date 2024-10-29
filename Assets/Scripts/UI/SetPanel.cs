@@ -39,8 +39,6 @@ public class SetPanel : GamePanel<IReferenceData>
         });
         seSlider.onValueChanged.AddListener((float value) =>
         {
-            float index = value * 3;
-            GameController.instance.SetTestBlur((int)index);
             AudioController.instance.SetSEVolume(value);
         });
         saveButton.onClick.AddListener(SaveSet);

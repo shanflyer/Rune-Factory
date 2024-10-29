@@ -9,6 +9,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
+using System.IO;
 
 [ExecuteAlways]
 public class MapInstanceEditor : MonoBehaviour
@@ -22,6 +23,10 @@ public class MapInstanceEditor : MonoBehaviour
     private Tilemap tilemap;
     [SerializeField]
     private bool hideTilemap;
+
+    private Tilemap groundTilemap;
+    [SerializeField]
+    private bool hidegGroundTilemap;
 
     [SerializeField]
     private bool displayCoordinate;
@@ -109,9 +114,35 @@ public class MapInstanceEditor : MonoBehaviour
 
     private static TileBase _walkTile,_defaultTile;
     private static TileBase _barrierTile;
+
+    private static Dictionary<int, TileBase> groundTileBaseDic;
+    public static Dictionary<int, TileBase> GroundTileBaseDic
+    {
+        get
+        {
+            if (groundTileBaseDic == null)
+            {
+                groundTileBaseDic = new Dictionary<int, TileBase>();
+                string dirPath = "Assets/TileMap/Tiles/Ground";
+                DirectoryInfo directoryInfo = new DirectoryInfo(dirPath);
+                var files = directoryInfo.GetFiles("*.asset");
+                foreach(var file in files)
+                {
+                    TileBase tileBase=AssetDatabase.LoadAssetAtPath<TileBase>($"{dirPath}/{file.Name}");
+                    groundTileBaseDic.Add(int.Parse(tileBase.name), tileBase);
+                }
+
+            }
+            return groundTileBaseDic;
+        }
+    }
+
+
     public int id;
 
     List<TilemapRenderer> tilemapRenderers = new List<TilemapRenderer>();
+
+    List<TilemapRenderer> groundTilemapRenderers = new List<TilemapRenderer>();
 
     private GameObject coordinateDisplayParent;
     private TextMeshPro editorCoordinate
@@ -145,6 +176,7 @@ public class MapInstanceEditor : MonoBehaviour
         gameObject.name = mapRoomData.roomName;
 
         tilemapRenderers.Clear();
+        groundTilemapRenderers.Clear();
 
         if (groundParent == null)
         {
@@ -167,6 +199,9 @@ public class MapInstanceEditor : MonoBehaviour
                 GameObject MapTile = new GameObject("MapTile");
                 MapTile.transform.SetParent(Grid.transform, false);
 
+                GameObject GroundTile = new GameObject("GroundTile");
+                GroundTile.transform.SetParent(Grid.transform, false);
+
                 coordinateDisplayParent = new GameObject("CoordinateDisplay");
                 coordinateDisplayParent.transform.SetParent(transform, false);
 
@@ -177,6 +212,14 @@ public class MapInstanceEditor : MonoBehaviour
                 tilemapRenderers.Add(tilemapRenderer);
                 tilemapRenderer.sharedMaterial = material;
 
+
+                groundTilemap=GroundTile.AddComponent<Tilemap>();
+                var groundTilemapRenderer = GroundTile.AddComponent<TilemapRenderer>();
+                groundTilemap.color = new Color(1, 1, 1, 0.5f);
+                groundTilemapRenderers.Add(groundTilemapRenderer);
+                groundTilemapRenderer.sharedMaterial = material;
+                groundTilemapRenderer.enabled = !hidegGroundTilemap;
+
                 grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
                 tilemapRenderer.enabled = !hideTilemap;
 
@@ -186,6 +229,7 @@ public class MapInstanceEditor : MonoBehaviour
             }
             InitMapObj();
             InitMapTile();
+            InitGroundMapTile();
             InitMapArea();
         }
     }
@@ -342,6 +386,39 @@ public class MapInstanceEditor : MonoBehaviour
         mapRoomData.startCoordinate = minCoordinate;
         mapRoomData.endCoordinate = maxCoordinate;
 
+
+        var groundboundary = groundTilemap.cellBounds;
+        Dictionary<int, List<int2>> groundCells = new Dictionary<int, List<int2>>();
+       
+        for (int x = groundboundary.xMin; x <= groundboundary.xMax; x++)
+        {
+            for (int y = groundboundary.yMin; y <= groundboundary.yMax; y++)
+            {
+                var tile = groundTilemap.GetTile(new Vector3Int(x, y, 0));
+                if (tile)
+                {
+                    int index = int.Parse(tile.name);
+                    if(!groundCells.TryGetValue(index, out var _cells))
+                    {
+                        _cells = new List<int2>();
+                        groundCells.Add(index, _cells);
+                    }
+                     _cells.Add(new int2(x, y));
+                }
+            }
+        }
+
+        foreach(var groundCell in groundCells)
+        {
+            var grids= GameCommon.CellToGrid(groundCell.Value);
+            mapRoomData.groundGrids.AddRange(grids);
+            for(int i = 0; i < grids.Count / 4; i++)
+            {
+                mapRoomData.groundIndexes.Add(groundCell.Key);
+            }
+        }
+
+
         if (groundParent.childCount > 0)
         {
             string path = $"{prefabPath}{mapRoomData.roomName}{".prefab"}";
@@ -420,6 +497,39 @@ public class MapInstanceEditor : MonoBehaviour
         tilemap.SetTiles(poses1.ToArray(), tileBases1.ToArray());
     }
 
+    private void InitGroundMapTile()
+    {
+        groundTilemap.ClearAllTiles();
+           
+        int gridCount = mapRoomData.groundGrids.Count / 4; 
+        for (int i = 0; i < gridCount; i++)
+        {
+            int minX = mapRoomData.groundGrids[i * 4];
+            int minY = mapRoomData.groundGrids[i * 4 + 1];
+            int maxX = mapRoomData.groundGrids[i * 4 + 2];
+            int maxY = mapRoomData.groundGrids[i * 4 + 3];
+
+            List<Vector3Int> poses = new List<Vector3Int>();
+            List<TileBase> tileBases = new List<TileBase>();
+            int index = mapRoomData.groundIndexes[i];
+            if(GroundTileBaseDic.TryGetValue(index,out var tileBase))
+            {
+
+                for (int x = minX; x <= maxX; x++)
+                {
+                    for (int y = minY; y <= maxY; y++)
+                    {
+                        poses.Add(new Vector3Int(x, y));
+                        tileBases.Add(tileBase);
+
+                    }
+                }
+                groundTilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
+            }
+
+        } 
+    }
+
     private Vector3 oldPos;
     public bool UpDataPos;
 
@@ -432,6 +542,7 @@ public class MapInstanceEditor : MonoBehaviour
 
     }
     public int2 coordinate;
+    bool oldhideGroundTile;
     bool oldhideTilemap;
     bool oldDisplayCoordinate;
     private void Update()
@@ -451,7 +562,15 @@ public class MapInstanceEditor : MonoBehaviour
                 renderer.enabled = !hideTilemap;
             }
         }
-
+        if (oldhideGroundTile != hidegGroundTilemap)
+        {
+            oldhideGroundTile = hidegGroundTilemap;
+            groundTilemapRenderers.RemoveAll(t => t == null);
+            foreach (var renderer in groundTilemapRenderers)
+            {
+                renderer.enabled = !hidegGroundTilemap;
+            }
+        }
         if (UpDataPos)
         {
             if (oldPos != transform.position)

@@ -153,13 +153,7 @@ Shader "BlendBlur"
                 Unity_Remap_float(x1,float2(centerY-_BlurOffsetPos,0),_ReMapValue.xy,x1);
                 x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
                 x+=x1;
-                
-                if(_TestIndex==1){
-                    return half4(x.xxx,1);
-
-                }else if(_TestIndex==2){
-                    return half4(BlurColor.xyz,1) ;
-                }
+                 
 
                  //
 
