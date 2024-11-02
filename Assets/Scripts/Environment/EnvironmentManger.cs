@@ -362,16 +362,21 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             directionLight.intensity =math.lerp(natureLightData.intensity * weatherLightValue,1,lightning.lightningLight);
 
             Shader.SetGlobalColor("_DirectionColor", directionLight.color * directionLight.intensity);
-
+            Shader.SetGlobalVector("_Direction", natureLightData.direction);
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue+ lightning.lightningLight*0.5f);
         }
         else
         {
             if (directionLight)
             {
+                Color directionColor= Color.Lerp(overrideLightData.color, lightning.lightningColor, lightning.lightningLight);
+
                 directionLight.Direction = overrideLightData.direction;
-                directionLight.color = Color.Lerp(overrideLightData.color, lightning.lightningColor, lightning.lightningLight);
+                directionLight.color = directionColor;
                 directionLight.intensity = math.lerp(overrideLightData.intensity * weatherLightValue, 1, lightning.lightningLight);
+
+                Shader.SetGlobalVector("_Direction", overrideLightData.direction);
+                Shader.SetGlobalVector("_DirectionColor", directionColor);
             }
             if (globalLight)
             {

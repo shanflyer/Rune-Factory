@@ -51,7 +51,7 @@ public struct GlobalData
                 Shader.SetGlobalVector(dataName, vectorValue);
                 break;
             case ShaderDataType.COLOR:
-                Shader.SetGlobalColor(dataName, colorValue);
+                Shader.SetGlobalColor(dataName, colorValue* floatValue);
                 break;
         }
     }
