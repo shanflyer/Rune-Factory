@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6768245396380736402
 Transform:
   m_ObjectHideFlags: 0
@@ -9852,7 +9852,6 @@ MonoBehaviour:
       autumnRenderer: {fileID: 7979834524102634642}
       winterRenderer: {fileID: 3486377716161603150}
       smokeRenderer: {fileID: 4419737819008697137}
-    audioSource: {fileID: 4784001284593324724}
     audios:
     - {fileID: 8300000, guid: 542aa2ec23fbf4d4fb1d723c26a9e45c, type: 3}
     - {fileID: 8300000, guid: 8134d16af9a49a84bbe5ea7b89855eb8, type: 3}
@@ -9864,7 +9863,6 @@ MonoBehaviour:
     rainRenderer: {fileID: 1432087420426715915}
     dropRenderer: {fileID: 1502390049221975658}
     cloudsRenderer: {fileID: 6165320667279118266}
-    audioSource: {fileID: 1030180523562257087}
     audios:
     - {fileID: 8300000, guid: 441ac31fbc41ab24790c16973136db88, type: 3}
     - {fileID: 8300000, guid: 1fc1d85f84dfbe84fa64dd14b25a2223, type: 3}
@@ -14673,7 +14671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2474498471406783463
 Transform:
   m_ObjectHideFlags: 0
@@ -57906,7 +57904,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8985515513122038791
 Transform:
   m_ObjectHideFlags: 0
@@ -81916,6 +81914,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Fog
+      objectReference: {fileID: 0}
+    - target: {fileID: 5806243199235403221, guid: 34d43909b5c9de142b3c163231858f84,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
