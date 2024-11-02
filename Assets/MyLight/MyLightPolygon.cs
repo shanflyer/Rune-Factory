@@ -68,8 +68,13 @@ public class MyLightPolygon : MonoBehaviour
 
     Color oldColor;
     float oldIntensity = 1;
-    private void Update()
+ 
+    private void LateUpdate()
     {
+        if (meshFilter.sharedMesh == null)
+        {
+            CreateMesh();
+        }
         if (color != oldColor|| oldIntensity!=intensity)
         {
             oldColor = color;
@@ -84,7 +89,11 @@ public class MyLightPolygon : MonoBehaviour
         }
     }
     public void CreateMesh()
-    { 
+    {
+        Vector3 localScale = transform.localScale;
+        Vector3 localEulerAngle = transform.localEulerAngles;
+        transform.localScale = Vector3.one;
+        transform.localEulerAngles = Vector3.zero;
         try
         { 
 
@@ -234,6 +243,7 @@ public class MyLightPolygon : MonoBehaviour
             newMesh.uv2 = uv2;
             newMesh.RecalculateBounds();
             meshFilter.mesh = newMesh;
+            
              
         }
         catch(Exception e)
@@ -242,7 +252,8 @@ public class MyLightPolygon : MonoBehaviour
         }
         finally
         {
-             
+            transform.localScale = localScale;
+            transform.localEulerAngles = localEulerAngle;
         }
        
     }

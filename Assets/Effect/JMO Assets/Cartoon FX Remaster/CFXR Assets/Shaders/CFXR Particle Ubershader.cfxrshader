@@ -190,61 +190,13 @@ Shader "Cartoon FX/Remaster/Particle Ubershader"
 
 		Subshader
 		{
-			Pass
-			{
-				Name "BASE_URP"
-				Tags { "LightMode"="UniversalForward" }
-
-				CGPROGRAM
-
-				#pragma vertex vertex_program
-				#pragma fragment fragment_program
-				
-				#pragma target 2.0
-				
-				// #pragma multi_compile_instancing
-				// #pragma instancing_options procedural:ParticleInstancingSetup
-
-				#pragma multi_compile_fog
-				//#pragma multi_compile_fwdbase
-				//#pragma multi_compile SHADOWS_SCREEN
-
-				#pragma shader_feature_local _ _CFXR_SINGLE_CHANNEL
-				#pragma shader_feature_local _ _CFXR_DISSOLVE
-				#pragma shader_feature_local _ _CFXR_DISSOLVE_ALONG_UV_X
-				#pragma shader_feature_local _ _CFXR_UV_DISTORTION
-				#pragma shader_feature_local _ _CFXR_UV2_DISTORTION
-				#pragma shader_feature_local _ _CFXR_UV_DISTORTION_ADD
-				// #pragma shader_feature_local _ _CFXR_GRADIENTMAP
-				#pragma shader_feature_local _ _CFXR_SECONDCOLOR_LERP _CFXR_FONT_COLORS
-				#pragma shader_feature_local _ _CFXR_OVERLAYTEX_1X _CFXR_OVERLAYTEX_2X
-				#pragma shader_feature_local _ _CFXR_OVERLAYBLEND_A _CFXR_OVERLAYBLEND_RGB
-				#pragma shader_feature_local _ _CFXR_HDR_BOOST
-				#pragma shader_feature_local _ _CFXR_EDGE_FADING
-				#pragma shader_feature_local _ _CFXR_LIGHTING_DIRECT _CFXR_LIGHTING_INDIRECT _CFXR_LIGHTING_ALL
-				#pragma shader_feature_local _ _CFXR_LIGHTING_WPOS_OFFSET
-				#pragma shader_feature_local _ _CFXR_LIGHTING_BACK
-
-				// Using the same keywords as Unity's Standard Particle shader to minimize project-wide keyword usage
-				#pragma shader_feature_local _ _NORMALMAP
-				#pragma shader_feature_local _ _EMISSION
-				#pragma shader_feature_local _ _FLIPBOOK_BLENDING
-				#pragma shader_feature_local _ _FADING_ON
-				#pragma shader_feature_local _ _ALPHATEST_ON
-				#pragma shader_feature_local _ _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON _ALPHAMODULATE_ON _CFXR_ADDITIVE
-
-				#define CFXR_URP
-				#define CFXR_UBERSHADER
-				#include "CFXR_PASSES.cginc"
-
-				ENDCG
-			}
+			
 			
 			// Same as above with 'Universal2D' instead and DISABLE_SOFT_PARTICLES keyword
 			Pass
 			{
 				Name "BASE_URP"
-				Tags { "LightMode"="Universal2D" }
+				//Tags { "LightMode"="Universal2D" }
 
 				CGPROGRAM
 

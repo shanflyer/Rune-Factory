@@ -308,7 +308,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1047905406884586644, guid: c6b38f752d0babf48be05bf8699f7f02,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: fc54c0d7ce01d4a4c9200f899c67e3de, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: fc54c0d7ce01d4a4c9200f899c67e3de, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0
@@ -2173,6 +2173,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1793397152660608252, guid: 809491ab7becf5944aeacae58fa7bdad,
         type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1793397152660608252, guid: 809491ab7becf5944aeacae58fa7bdad,
+        type: 3}
       propertyPath: InitialModule.startColor.minColor.b
       value: 0.8018868
       objectReference: {fileID: 0}
@@ -2200,6 +2205,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4906073854965829741, guid: 809491ab7becf5944aeacae58fa7bdad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6631024218817228771, guid: 809491ab7becf5944aeacae58fa7bdad,
         type: 3}

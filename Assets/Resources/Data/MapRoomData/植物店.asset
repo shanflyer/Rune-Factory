@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: "\u690D\u7269\u5E97"
   barrierGrids: c0fffffff0fffffffffffffff1ffffffc0fffffff2ffffffc3fffffff3ffffffc0fffffff4ffffffc0ffffff1c000000c1fffffff9ffffffc2ffffff03000000c1ffffff04000000c1ffffff1c000000c2ffffff1a000000c9ffffff1c000000c7ffffff01000000e8ffffff03000000c9ffffff10000000cdffffff12000000caffffff0f000000ccffffff0f000000caffffff13000000ccffffff13000000caffffff1b000000ffffffff1c000000d2ffffff1a000000d7ffffff1a000000d6fffffffdffffffeafffffffdffffffd6fffffffeffffffe8ffffff00000000dafffffff2fffffffffffffff8ffffffdafffffff9ffffffecfffffffbffffffdafffffffcffffffebfffffffcffffffdaffffff04000000e8ffffff08000000daffffff09000000e7ffffff09000000dbffffff0a000000e0ffffff0a000000dbffffff13000000ffffffff1a000000dcffffff0b000000dfffffff0b000000dcffffff12000000ffffffff12000000e3ffffff11000000efffffff11000000ebffffff10000000eeffffff10000000f3fffffff9fffffffffffffffbfffffff4fffffffcfffffffffffffffcfffffffaffffff11000000ffffffff11000000fbffffff10000000ffffffff10000000fcffffff0f000000ffffffff0f000000fdffffff0e000000ffffffff0e000000fefffffffdffffffffffffff0d000000
-  groundIndexes: 02000000020000000200000002000000020000000200000002000000
-  groundGrids: c0fffffff0ffffffdbfffffff8ffffffc0fffffff9ffffffcdffffff07000000c0ffffff08000000c3ffffff1b000000c4ffffff1a000000d6ffffff1b000000ceffffff01000000dbffffff07000000d5fffffff9ffffffdbffffff00000000d7ffffff08000000dbffffff14000000
+  groundIndexes: 0200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000
+  groundGrids: c0fffffff0ffffffdbfffffff8ffffffc0fffffff9ffffffcdffffff07000000c0ffffff08000000c3ffffff1b000000c4ffffff1a000000d6ffffff1b000000ceffffff01000000dbffffff07000000d5fffffff9ffffffdbffffff00000000d7ffffff08000000dbffffff14000000c0fffffff0ffffffdbfffffff8ffffffc0fffffff9ffffffcdffffff07000000c0ffffff08000000c3ffffff1b000000c4ffffff1a000000d6ffffff1b000000ceffffff01000000dbffffff07000000d5fffffff9ffffffdbffffff00000000d7ffffff08000000dbffffff14000000
   defaultGround: 3
   mapItems:
   - id: 1070
@@ -23,6 +23,14 @@ MonoBehaviour:
     coordinate:
       x: -39
       y: 23
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1069
+    instanceId: 1069997
+    coordinate:
+      x: -51
+      y: 25
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -34,11 +42,11 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1072
-    instanceId: 1072035
+  - id: 1068
+    instanceId: 1068306
     coordinate:
-      x: -42
-      y: -16
+      x: -11
+      y: 8
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -58,19 +66,11 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1069
-    instanceId: 1069997
+  - id: 1072
+    instanceId: 1072035
     coordinate:
-      x: -51
-      y: 25
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1068
-    instanceId: 1068306
-    coordinate:
-      x: -11
-      y: 8
+      x: -42
+      y: -16
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []

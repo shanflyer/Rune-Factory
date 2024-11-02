@@ -379,6 +379,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Multiply.cs" />
     <Compile Include="Assets\Scripts\Character\PlayerData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Timeline\Pause.cs" />
+    <Compile Include="Assets\MyLight\MyShadowPolygon.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\RandomSelector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\ClampMagnitude.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedFloat.cs" />
@@ -389,7 +390,6 @@
     <Compile Include="Assets\Scripts\PlayerStore\SellItem.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChild.cs" />
     <Compile Include="Assets\Scripts\UI\NPCPanel\NPCReference.cs" />
-    <Compile Include="Assets\Scripts\test\MyShadowPolygon.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetUpVector.cs" />
     <Compile Include="Assets\Scripts\UI\FightPanel\FightPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetShadowBias.cs" />
@@ -1022,6 +1022,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPriority.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MoveRotation.cs" />
+    <Compile Include="Assets\MyLight\MyLightPolygon.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonUp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetLoop.cs" />
     <Compile Include="Assets\Scripts\Data\FunctionButtonData.cs" />
@@ -1123,12 +1124,13 @@
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - AFL.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\CreepyGreen.txt" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomGrass2D.shader" />
+    <None Include="Assets\MyLight\Material\DirectionLightMul.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\IceWorld.txt" />
     <None Include="Assets\Render\Shader\EffectBlendDepth.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-    <None Include="Assets\Hovl Studio\RPG VFX Bundle\Shaders\DissolveNoise.shader" />
+    <None Include="Assets\Effect\Hovl Studio\RPG VFX Bundle\Shaders\DissolveNoise.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Effect\ProFlares\Demos\Scenes\README.txt" />
     <None Include="Assets\Render\Shader\New\NewSampleBlur.shader" />
@@ -1137,8 +1139,9 @@
     <None Include="Assets\Render\Shader\MySprite-Lit-Default.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Basic\BasicAtlas\BasicsAtlas.txt" />
     <None Include="Assets\Effect\ProFlares\Demos\IslandDemoAtlas\IslandDemoAtlas.txt" />
+    <None Include="Assets\Render\Shader\SampleEffectAdd.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Easy Editor\CartoonFX Easy Editor Readme.txt" />
-    <None Include="Assets\Hovl Studio\Black mage spells\Shaders\Add_Fresnel.shader" />
+    <None Include="Assets\Effect\Hovl Studio\Black mage spells\Shaders\Add_Fresnel.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonVegetation.shader" />
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlareShader.shader" />
@@ -1156,14 +1159,14 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\Effect\FX Quest\!Readme.txt" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster 2.txt" />
-    <None Include="Assets\Hovl Studio\Render Pipelines support\Shaders\MyURP_Blend_CG.shader" />
-    <None Include="Assets\Hovl Studio\Black mage spells\Shaders\Lightning.shader" />
+    <None Include="Assets\Effect\Hovl Studio\Render Pipelines support\Shaders\MyURP_Blend_CG.shader" />
+    <None Include="Assets\Effect\Hovl Studio\Black mage spells\Shaders\Lightning.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomGrass.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Render\Shader\Color.shader" />
-    <None Include="Assets\Hovl Studio\Black mage spells\Shaders\Blend_LinePath.shader" />
+    <None Include="Assets\Effect\Hovl Studio\Black mage spells\Shaders\Blend_LinePath.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
     <None Include="Assets\Render\Shader\Cloud.shader" />
@@ -1180,13 +1183,14 @@
     <None Include="Assets\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonOutline2D.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\Render\Shader\SampleEffectMul.shader" />
     <None Include="Assets\DLL\Excel\Excel.dll" />
-    <None Include="Assets\Hovl Studio\Archer skills pack\Shaders\Scroll.shader" />
+    <None Include="Assets\Effect\Hovl Studio\Archer skills pack\Shaders\Scroll.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster.txt" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\ToonCommonTree2D.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\AlienSun.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\LastSunSet.txt" />
-    <None Include="Assets\Hovl Studio\Black mage spells\Shaders\Fire.shader" />
+    <None Include="Assets\Effect\Hovl Studio\Black mage spells\Shaders\Fire.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SciFiBlue.txt" />
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlaresLeavesShader.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SpaceSun.txt" />
@@ -1213,6 +1217,7 @@
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SciFiRed.txt" />
     <None Include="Assets\Render\Shader\BlendBlur.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\MyLight\Material\MyLightMul.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Basic\Flares\BasicSun.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
   </ItemGroup>

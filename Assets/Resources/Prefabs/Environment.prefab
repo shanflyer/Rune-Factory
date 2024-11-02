@@ -326,7 +326,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5333127339591942657}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
@@ -487,8 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Atlas: {fileID: 11400000, guid: ad2a85d44ad38415aa9230d9e3b37521, type: 3}
-  FlareBatches:
-  - {fileID: 2773844039694876060}
+  FlareBatches: []
   EditingAtlas: 0
   isVisible: 1
   Elements:
@@ -1436,7 +1435,7 @@ MonoBehaviour:
     Anamorphic: {x: 0, y: 0, z: 0}
     OffsetPostion: {x: 0, y: 0, z: 0}
     angle: 0
-    FinalAngle: 67.32884
+    FinalAngle: 8.5042715
     useRandomAngle: 0
     useStarRotation: 0
     AngleRandom_Min: 0
@@ -1526,7 +1525,7 @@ MonoBehaviour:
     Anamorphic: {x: 0, y: 0, z: 0}
     OffsetPostion: {x: 0, y: 0, z: 0}
     angle: 0
-    FinalAngle: -36.52942
+    FinalAngle: -7.1171355
     useRandomAngle: 0
     useStarRotation: 0
     AngleRandom_Min: 0
@@ -1842,7 +1841,7 @@ MonoBehaviour:
     type: 0
   thisTransform: {fileID: 4602450227006096239}
   thisGameObject: {fileID: 6470669501097101017}
-  LensPosition: {x: 0.67523813, y: 0.9935715, z: 20.567127}
+  LensPosition: {x: 0.69714284, y: 0.9935715, z: 20.567127}
   EditGlobals: 1
   GlobalScale: 200
   MultiplyScaleByTransformScale: 1
@@ -2139,7 +2138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4338133879217957747
 Transform:
   m_ObjectHideFlags: 0
@@ -3193,7 +3192,7 @@ MonoBehaviour:
     Anamorphic: {x: 0, y: 0, z: 0}
     OffsetPostion: {x: 0, y: 0, z: 0}
     angle: 0
-    FinalAngle: 67.32884
+    FinalAngle: 8.5042715
     useRandomAngle: 0
     useStarRotation: 0
     AngleRandom_Min: 0
@@ -3283,7 +3282,7 @@ MonoBehaviour:
     Anamorphic: {x: 0, y: 0, z: 0}
     OffsetPostion: {x: 0, y: 0, z: 0}
     angle: 0
-    FinalAngle: -36.52942
+    FinalAngle: -7.1171355
     useRandomAngle: 0
     useStarRotation: 0
     AngleRandom_Min: 0
@@ -3610,7 +3609,7 @@ MonoBehaviour:
   useBrightnessThreshold: 1
   BrightnessThreshold: 1
   overdrawDebug: 0
-  dirty: 0
+  dirty: 1
   cullingForRay2D: 0
   useCulling: 1
   cullFlaresAfterTime: 5
