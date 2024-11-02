@@ -130,6 +130,9 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         public PostProcessData postProcessData = null;
 
+        [SerializeField] TransparencySortMode m_transparencySortMode;
+        [SerializeField] Vector3 m_transparencySortAxis = new Vector3(0, 0, 1);
+
         const int k_LatestAssetVersion = 2;
         [SerializeField] int m_AssetVersion = 0;
         [SerializeField] LayerMask m_OpaqueLayerMask = -1;
@@ -171,7 +174,24 @@ namespace UnityEngine.Rendering.Universal
                 m_OpaqueLayerMask = value;
             }
         }
-
+        public TransparencySortMode transparencySortMode
+        {
+            get => m_transparencySortMode;
+            set
+            {
+                SetDirty();
+                m_transparencySortMode = value;
+            }
+        }
+        public Vector3 transparencySortAxis
+        {
+            get => m_transparencySortAxis;
+            set
+            {
+                SetDirty();
+                m_transparencySortAxis = value;
+            }
+        }
         /// <summary>
         /// Use this to configure how to filter transparent objects.
         /// </summary>

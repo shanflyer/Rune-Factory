@@ -44,6 +44,9 @@ namespace UnityEditor.Rendering.Universal
             public static readonly GUIContent intermediateTextureMode = EditorGUIUtility.TrTextContent("Intermediate Texture", "Controls when URP renders via an intermediate texture.");
         }
 
+        SerializedProperty m_transparencySortMode;
+        SerializedProperty m_transparencySortAxis;
+
         SerializedProperty m_OpaqueLayerMask;
         SerializedProperty m_TransparentLayerMask;
         SerializedProperty m_RenderingMode;
@@ -63,6 +66,9 @@ namespace UnityEditor.Rendering.Universal
 
         private void OnEnable()
         {
+            m_transparencySortMode = serializedObject.FindProperty("m_transparencySortMode");
+            m_transparencySortAxis = serializedObject.FindProperty("m_transparencySortAxis");
+
             m_OpaqueLayerMask = serializedObject.FindProperty("m_OpaqueLayerMask");
             m_TransparentLayerMask = serializedObject.FindProperty("m_TransparentLayerMask");
             m_RenderingMode = serializedObject.FindProperty("m_RenderingMode");
@@ -151,7 +157,8 @@ namespace UnityEditor.Rendering.Universal
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
+            m_transparencySortMode.intValue = (int)((TransparencySortMode)EditorGUILayout.EnumPopup("SortMode:", (TransparencySortMode)m_transparencySortMode.intValue));
+            m_transparencySortAxis.vector3Value = EditorGUILayout.Vector3Field("SortAxis:", m_transparencySortAxis.vector3Value);
             EditorGUILayout.Space();
 
             EditorGUILayout.LabelField(Styles.FilteringSectionLabel, EditorStyles.boldLabel);
