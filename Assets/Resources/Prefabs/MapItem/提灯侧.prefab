@@ -93,8 +93,8 @@ Transform:
   m_GameObject: {fileID: 2834266771037513780}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.206, y: -0.04, z: -0.57}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.039, y: -0.04, z: -0.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 284566355173604276}
@@ -5159,8 +5159,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
-  myLightBase: []
-  spriteRenderer: {fileID: 6385664943230305065}
+  myLightBase:
+  - {fileID: 3601793907405302939}
+  spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -10246,6 +10247,7 @@ GameObject:
   - component: {fileID: 907666561490288033}
   - component: {fileID: 3666556865839382626}
   - component: {fileID: 6385664943230305065}
+  - component: {fileID: 3601793907405302939}
   m_Layer: 19
   m_Name: MyLight
   m_TagString: Untagged
@@ -10340,3 +10342,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3601793907405302939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7110493536906693944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb9f8b531408e64f8f80dc988c77516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 6385664943230305065}
+  fixedColor: 0

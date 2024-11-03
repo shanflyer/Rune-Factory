@@ -80,7 +80,7 @@ public class MyLight : MonoBehaviour
                 {
                     if (myLightBase[i])
                     {
-                        myLightBase[i].Intensity = blendWeatherLight ? value * weatherLight : value;
+                        myLightBase[i].Value = blendWeatherLight ? value * weatherLight : value;
                     }
                 }
             }

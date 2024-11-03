@@ -99,7 +99,7 @@ Shader "Sky"
 
         Pass
         { 
-            Tags { "LightMode" = "Universal2D" }
+            //Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM
             

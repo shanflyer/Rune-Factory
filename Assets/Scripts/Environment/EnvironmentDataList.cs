@@ -26,14 +26,14 @@ public class EnvironmentDataList: ScriptableObject, IGameData, IDataArray<Enviro
 public struct EnvironmentData : IGameData
 {
     public string name;
+    [GradientUsageAttribute(hdr: true)]
     public Gradient Color;
     public Gradient GlobalColor;
     public Gradient CloudColor;
     public Gradient SkyTopColor, SkyBottomColor;
-    public AnimationCurve SkyHalfValue;
-    public AnimationCurve GlobalIntensity;
+    public AnimationCurve SkyHalfValue; 
     public AnimationCurve shadowValue;
-    public AnimationCurve directionXValue, directionYValue, directionZValue, intensity;
+    public AnimationCurve directionXValue, directionYValue;
     public AnimationCurve sunXValue, sunYValue,sunScaleValue;
     public Gradient flareColor;
     [GradientUsageAttribute(hdr:true)]

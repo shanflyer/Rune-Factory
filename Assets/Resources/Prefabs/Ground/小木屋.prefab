@@ -415,14 +415,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 0}
+  fixedColor: 0
   polygonCollider: {fileID: 2679401624496211572}
   meshFilter: {fileID: 512202517385380808}
-  meshRenderer: {fileID: 4255958342973011984}
   lerpLength: {x: 4, y: 3}
   lerpOffset: {x: 0, y: 0, z: 0}
   lerpValue: 0.2
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 1
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0.2, z: 0}
@@ -884,6 +886,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 5061004214617080287}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 1
   lerpCurve:
@@ -7825,7 +7828,7 @@ Transform:
   - {fileID: 4887109590972154707}
   - {fileID: 431966734960996365}
   - {fileID: 5621784660979590077}
-  - {fileID: 8636851929520496156}
+  - {fileID: 7546064879893287953}
   - {fileID: 1059473923019297160}
   - {fileID: 8444185687112963674}
   - {fileID: 5525354913540339039}
@@ -17987,14 +17990,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 0.95
+  value: 1
+  renderer: {fileID: 0}
+  fixedColor: 0
   polygonCollider: {fileID: 399164414978809064}
   meshFilter: {fileID: 7834933896229873981}
-  meshRenderer: {fileID: 1759421701517173073}
   lerpLength: {x: 2, y: 2}
   lerpOffset: {x: 0, y: 0, z: 0}
   lerpValue: 0
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 0.95
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0, z: 0}
@@ -19605,7 +19610,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e8e5b55b5a3a34479aca28c4bf426cf, type: 3}
---- !u!4 &8636851929520496156 stripped
+--- !u!4 &7546064879893287953 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2262285954572110346, guid: 2e8e5b55b5a3a34479aca28c4bf426cf,
     type: 3}
