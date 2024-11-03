@@ -5030,6 +5030,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -5097,7 +5098,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682127630350888721}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.269, y: 1.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5225,14 +5226,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 0}
   polygonCollider: {fileID: 7821595733619620550}
   meshFilter: {fileID: 6463583723037921116}
-  meshRenderer: {fileID: 2290301152141783406}
   lerpLength: {x: 2, y: 1.5}
   lerpOffset: {x: 0, y: -0.1, z: 0}
   lerpValue: -0.4
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 1
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0, z: 0}
@@ -5536,6 +5538,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 740048917653511458}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -5690,7 +5693,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2060791624164425948}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.293, y: 1.028, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5818,14 +5821,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 0}
   polygonCollider: {fileID: 7151542347841810500}
   meshFilter: {fileID: 1909281348816594526}
-  meshRenderer: {fileID: 9182816741629532489}
   lerpLength: {x: 2, y: 1.5}
   lerpOffset: {x: 0, y: -0.1, z: 0}
   lerpValue: -0.4
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 1
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0, z: 0}
@@ -5971,6 +5975,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 8730597648945768435}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -6151,6 +6156,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 8091256293381882884}
   autoLerpValue: 0
   lerpCurve:
@@ -6317,6 +6323,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 164424224590442124}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -6465,6 +6472,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 9135933851213177685}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -11415,6 +11423,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -11566,6 +11575,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3700161960596681318}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -11665,7 +11675,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3688918969566402509}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.227, y: 0.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11794,14 +11804,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 0}
   polygonCollider: {fileID: 264088982207745728}
   meshFilter: {fileID: 2630190079484093935}
-  meshRenderer: {fileID: 8502435475831927969}
   lerpLength: {x: 3, y: 1}
   lerpOffset: {x: 0, y: 0, z: 0}
   lerpValue: 0
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 1
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0, z: 0}
@@ -11916,6 +11927,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 7361789183508190888}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -12068,6 +12080,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3217569628439625466}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -12250,6 +12263,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 4665039963814487693}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -17230,6 +17244,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 3442157721653904792}
   autoLerpValue: 0
   lerpCurve:
@@ -17429,6 +17444,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 4545921118858161150}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -17496,7 +17512,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5933009131127605094}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.293, y: 0.357, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -17624,14 +17640,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 0}
   polygonCollider: {fileID: 5226747675795956881}
   meshFilter: {fileID: 2805617495743330399}
-  meshRenderer: {fileID: 7138711367929668138}
   lerpLength: {x: 3, y: 1.5}
   lerpOffset: {x: 0, y: -0.1, z: 0}
   lerpValue: -0.4
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 1
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0, z: 0}
@@ -22501,7 +22518,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6541019046269906113}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.039, y: 0.803, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -22629,14 +22646,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 0}
   polygonCollider: {fileID: 3764723706959041377}
   meshFilter: {fileID: 4496987021242060649}
-  meshRenderer: {fileID: 3437288150445569735}
   lerpLength: {x: 2, y: 1.5}
   lerpOffset: {x: 0, y: -0.1, z: 0}
   lerpValue: -0.4
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 1
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0, z: 0}
@@ -22751,6 +22769,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 8056887830967853078}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -23023,6 +23042,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 4973003113023752982}
   autoLerpValue: 0
   lerpCurve:
@@ -23089,6 +23109,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7387591057493864252}
+  - component: {fileID: 1739698684792252392}
   m_Layer: 0
   m_Name: Light
   m_TagString: Untagged
@@ -23122,6 +23143,127 @@ Transform:
   - {fileID: 4145862888631951083}
   m_Father: {fileID: 2282482122312493972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1739698684792252392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7977797239772096118}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blendWeatherLight: 0
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  light2D: {fileID: 0}
+  myLightBase:
+  - {fileID: 2583174063846289145}
+  - {fileID: 935368585333544834}
+  - {fileID: 6686526543430223479}
+  - {fileID: 5979443550695167050}
+  - {fileID: 1925183783019379820}
+  spriteRenderer: {fileID: 0}
+  autoLerpValue: 1
+  lerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.24
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.75
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.76
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  autoLerpColor: 0
+  lerpColor:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!1 &8073167279945728666
 GameObject:
   m_ObjectHideFlags: 0
@@ -23232,6 +23374,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 5929549469405055250}
   autoLerpValue: 0
   lerpCurve:
@@ -23401,6 +23544,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3279038168225349328}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -23707,6 +23851,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 8205172030285923068}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -23858,6 +24003,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 7851037624282239981}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:

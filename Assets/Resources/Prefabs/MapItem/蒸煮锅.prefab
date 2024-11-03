@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 7279655316165387839}
   - component: {fileID: 8516531527128968402}
   - component: {fileID: 8721175842117399993}
+  - component: {fileID: 2265754116028674679}
   m_Layer: 19
   m_Name: MyLight
   m_TagString: Untagged
@@ -323,7 +324,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1cccd65aaa134f0479883fd0fddcf51e, type: 3}
-  m_Color: {r: 0.99215686, g: 0.7199573, b: 0.023529433, a: 1}
+  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -333,6 +334,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2265754116028674679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4655644406039060470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb9f8b531408e64f8f80dc988c77516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 8721175842117399993}
 --- !u!1 &4772896724432102019
 GameObject:
   m_ObjectHideFlags: 0

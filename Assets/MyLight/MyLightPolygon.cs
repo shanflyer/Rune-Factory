@@ -2,35 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine; 
 using Unity.Mathematics;
-using System;
-using Unity.Entities.UniversalDelegates;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using System;  
 
 [RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
  [ExecuteAlways]
-public class MyLightPolygon : MonoBehaviour
+public class MyLightPolygon : MyLightBase
 {
     [SerializeField]
     PolygonCollider2D polygonCollider;
     [SerializeField]
-    MeshFilter meshFilter;
-    [SerializeField]
-    MeshRenderer meshRenderer; 
+    MeshFilter meshFilter; 
+    MeshRenderer meshRenderer=>renderer as MeshRenderer; 
     [SerializeField]
     Vector2 lerpLength;
     [SerializeField]
     Vector3 lerpOffset;
     [SerializeField]
     [Range(-10,1)]
-    float lerpValue; 
-    [SerializeField] 
-    Color color;
-    [SerializeField]
-    float intensity = 1;
+    float lerpValue;  
     [SerializeField]
     bool PiovotCenter = false;
     [SerializeField]
@@ -43,12 +34,13 @@ public class MyLightPolygon : MonoBehaviour
         if (meshRenderer == null || meshRenderer.sharedMaterial == null)
         {
             polygonCollider = GetComponent<PolygonCollider2D>();
-            meshFilter = GetComponent<MeshFilter>();
-            meshRenderer = GetComponent<MeshRenderer>();
+            meshFilter = GetComponent<MeshFilter>(); 
            // meshRenderer.sharedMaterial = Resources.Load<Material>("MyShadow");
         }
         //
     }
+
+ 
     private void Awake()
     {
         
@@ -61,33 +53,23 @@ public class MyLightPolygon : MonoBehaviour
     }
     private void OnTransformParentChanged()
     {
-        CreateMesh();
-        oldColor = color;
-        oldIntensity = intensity;
+        CreateMesh(); 
     }
-
-    Color oldColor;
-    float oldIntensity = 1;
- 
-    private void LateUpdate()
+    public override void RefreshColor()
     {
+        base.RefreshColor();
         if (meshFilter.sharedMesh == null)
         {
             CreateMesh();
         }
-        if (color != oldColor|| oldIntensity!=intensity)
+        var mesh = meshFilter.sharedMesh;
+        Color[] colors = mesh.colors;
+        for (int i = 0; i < colors.Length; i++)
         {
-            oldColor = color;
-            oldIntensity = intensity;
-            var mesh = meshFilter.sharedMesh;
-            Color[] colors = mesh.colors;
-            for(int i = 0; i < colors.Length; i++)
-            {
-                colors[i] = color* intensity; 
-            }
-            mesh.colors = colors;
+            colors[i] = lightColor;
         }
-    }
+        mesh.colors = colors;
+    } 
     public void CreateMesh()
     {
         Vector3 localScale = transform.localScale;
@@ -145,7 +127,7 @@ public class MyLightPolygon : MonoBehaviour
             for (int i = 0; i < meshIndexes.Length; i++)
             {
                 uv2[i] = uv2center;
-                colors[i] = color*intensity;
+                colors[i] = lightColor;
                 uv[i] = new Vector2(1, 1);
 
                 int index = meshIndexes[i];
@@ -172,10 +154,10 @@ public class MyLightPolygon : MonoBehaviour
                 uv[v_start + meshIndexes.Length * 2 + i * 2 + 1] = new Vector2(lerpValue, lerpValue);
                 uv2[v_start + meshIndexes.Length * 2 + i * 2 + 1] = uv2center;// vertices[index];
 
-                colors[v_start + i * 2] = color * intensity;
-                colors[v_start + meshIndexes.Length * 2 + i * 2] = color;
-                colors[v_start + i * 2+1] = color*intensity;
-                colors[v_start + meshIndexes.Length * 2 + i * 2 + 1] = color;
+                colors[v_start + i * 2] = lightColor;
+                colors[v_start + meshIndexes.Length * 2 + i * 2] = lightColor;
+                colors[v_start + i * 2+1] = lightColor;
+                colors[v_start + meshIndexes.Length * 2 + i * 2 + 1] = lightColor;
 
             }
             for (int i = 0; i < points.Length; i++)
@@ -257,26 +239,10 @@ public class MyLightPolygon : MonoBehaviour
         }
        
     }
-    
-}
-#if UNITY_EDITOR
-[CustomEditor(typeof(MyLightPolygon))]
-public class MyLightPolygonEditor : Editor
-{
-    public MyLightPolygon lightPolygon
+
+    public override void Test()
     {
-        get
-        {
-            return target as MyLightPolygon;
-        }
+        base.Test();
+        CreateMesh();
     }
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        if (GUILayout.Button("²âÊÔ"))
-        {
-            lightPolygon.CreateMesh();
-        }
-    }
-}
-#endif
+} 

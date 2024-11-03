@@ -20,7 +20,10 @@ public class MyLight : MonoBehaviour
     [SerializeField]
     public AnimationCurve psCurve;
     [SerializeField]
-    private Light2D light2D;
+    private Light2D light2D; 
+    [SerializeField]
+    MyLightBase[] myLightBase;
+
     [SerializeField]
     private SpriteRenderer spriteRenderer;
 
@@ -66,10 +69,20 @@ public class MyLight : MonoBehaviour
         set
         {
             _intensity = value;
+            float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
             if (light2D)
-            {
-                float weatherLight = EnvironmentManger.instance.weatherLight+ EnvironmentManger.instance.lightningLight;
+            { 
                 light2D.intensity = blendWeatherLight ? value * weatherLight : value;
+            }
+            if (myLightBase != null)
+            {
+                for (int i = 0; i < myLightBase.Length; i++)
+                {
+                    if (myLightBase[i])
+                    {
+                        myLightBase[i].Intensity = blendWeatherLight ? value * weatherLight : value;
+                    }
+                }
             }
         }
 
@@ -92,6 +105,17 @@ public class MyLight : MonoBehaviour
             if (light2D)
             {
                 light2D.color= blendWeatherLight?value* weatherLight : value;
+            }
+           
+            if (myLightBase != null)
+            {
+                for(int i = 0; i < myLightBase.Length; i++)
+                {
+                    if (myLightBase[i])
+                    {
+                        myLightBase[i].Color = blendWeatherLight ? value * weatherLight : value;
+                    } 
+                } 
             }
             if (spriteRenderer)
             {
@@ -134,11 +158,32 @@ public class MyLight : MonoBehaviour
     {
         if (autoLerpColor)
         {
-            light2D.color = lerpColor.Evaluate(value);
+            if (light2D)
+                light2D.color = lerpColor.Evaluate(value);
+              
+            if (myLightBase != null)
+            {
+                for(int i = 0; i < myLightBase.Length; i++)
+                {
+                    if (myLightBase[i])
+                        myLightBase[i].Color = lerpColor.Evaluate(value); 
+                }
+            }
+                
         }
        if(autoLerpValue)
         {
-            light2D.intensity = lerpCurve.Evaluate(value);
+            if (light2D)
+                light2D.intensity = lerpCurve.Evaluate(value);
+
+            if (myLightBase != null)
+            {
+                for (int i = 0; i < myLightBase.Length; i++)
+                {
+                    if (myLightBase[i])
+                        myLightBase[i].Value = lerpCurve.Evaluate(value);
+                }
+            }
         }
     }
 #endif

@@ -196,6 +196,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3298744866547915107}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -423,14 +424,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 0}
   polygonCollider: {fileID: 8369108607617852188}
   meshFilter: {fileID: 903325429401444927}
-  meshRenderer: {fileID: 667716793517691432}
   lerpLength: {x: 3, y: 3}
   lerpOffset: {x: 0, y: 0, z: 0}
   lerpValue: 0
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 1
   PiovotCenter: 0
   LerpPiovotCenter: 1
   normalOffset: {x: 0, y: 0.2, z: 0}
@@ -610,6 +612,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3583532235581394109}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -759,6 +762,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 8847999067316380437}
   autoLerpValue: 0
   lerpCurve:
@@ -908,6 +912,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 4743473047384126476}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -1178,6 +1183,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 4057611379721041187}
   autoLerpValue: 0
   lerpCurve:
@@ -1327,6 +1333,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3044257773663021391}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -1510,6 +1517,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 3655023135128207027}
   autoLerpValue: 0
   lerpCurve:
@@ -1558,6 +1566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4564444924258147420}
+  - component: {fileID: 6964710749114016995}
   m_Layer: 0
   m_Name: Light
   m_TagString: Untagged
@@ -1594,6 +1603,135 @@ Transform:
   - {fileID: 4868709379094294679}
   m_Father: {fileID: 7370131234242972428}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6964710749114016995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5031044926614184768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blendWeatherLight: 0
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  light2D: {fileID: 0}
+  myLightBase:
+  - {fileID: 20020973580557514}
+  - {fileID: 7674554554119599512}
+  - {fileID: 956937423017745300}
+  - {fileID: 8134385058164610652}
+  - {fileID: 1667989016852707408}
+  - {fileID: 3638800123342393316}
+  - {fileID: 6177067725511139816}
+  - {fileID: 2686109778988410558}
+  - {fileID: 7328250626330759648}
+  - {fileID: 1549829640023909210}
+  - {fileID: 6158617902616089604}
+  - {fileID: 8026373679748826504}
+  - {fileID: 3429139087381852886}
+  spriteRenderer: {fileID: 0}
+  autoLerpValue: 1
+  lerpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.24
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.75
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.76
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  autoLerpColor: 0
+  lerpColor:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!1 &5494711694379447812
 GameObject:
   m_ObjectHideFlags: 0
@@ -1704,6 +1842,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 3492729875696083084}
   autoLerpValue: 0
   lerpCurve:
@@ -1853,6 +1992,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3897223718170832220}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -2001,6 +2141,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 5979818665010927464}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -2184,6 +2325,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 2678027902216034523}
   autoLerpValue: 0
   lerpCurve:
@@ -2333,6 +2475,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 2144235176898632016}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -2482,6 +2625,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 5133170251227529225}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -2821,6 +2965,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 2966506764336305716}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -2970,6 +3115,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 3525358372250070447}
   autoLerpValue: 0
   lerpCurve:
@@ -3119,6 +3265,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 2400639911122103177}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -3299,6 +3446,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 3673876383484465619}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -3447,6 +3595,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 5546373554720294561}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -3596,6 +3745,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 4497666202461349028}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -3709,6 +3859,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 310475734013145402}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1667989016852707408 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1399189176720116074, guid: 47a6402d863e2b34d8afb7ce3260758e,
+    type: 3}
+  m_PrefabInstance: {fileID: 310475734013145402}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8134385058164610652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8407143069595395942, guid: 47a6402d863e2b34d8afb7ce3260758e,
+    type: 3}
+  m_PrefabInstance: {fileID: 310475734013145402}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1620368713510259791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3783,6 +3957,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1620368713510259791}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2686109778988410558 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3691349011318516465, guid: 13bbc77365a86604ea61739ad6cfd494,
+    type: 3}
+  m_PrefabInstance: {fileID: 1620368713510259791}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7328250626330759648 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8345057807574572463, guid: 13bbc77365a86604ea61739ad6cfd494,
+    type: 3}
+  m_PrefabInstance: {fileID: 1620368713510259791}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2174485045337215742
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3851,12 +4049,36 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47a6402d863e2b34d8afb7ce3260758e, type: 3}
+--- !u!114 &956937423017745300 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1399189176720116074, guid: 47a6402d863e2b34d8afb7ce3260758e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2174485045337215742}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2243677687940437301 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 76128366265206731, guid: 47a6402d863e2b34d8afb7ce3260758e,
     type: 3}
   m_PrefabInstance: {fileID: 2174485045337215742}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7674554554119599512 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8407143069595395942, guid: 47a6402d863e2b34d8afb7ce3260758e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2174485045337215742}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2790076205991070123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3925,12 +4147,36 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13bbc77365a86604ea61739ad6cfd494, type: 3}
+--- !u!114 &1549829640023909210 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3691349011318516465, guid: 13bbc77365a86604ea61739ad6cfd494,
+    type: 3}
+  m_PrefabInstance: {fileID: 2790076205991070123}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4138897035644458565 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2290088563202547694, guid: 13bbc77365a86604ea61739ad6cfd494,
     type: 3}
   m_PrefabInstance: {fileID: 2790076205991070123}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6158617902616089604 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8345057807574572463, guid: 13bbc77365a86604ea61739ad6cfd494,
+    type: 3}
+  m_PrefabInstance: {fileID: 2790076205991070123}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5103617944435714178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3999,12 +4245,36 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47a6402d863e2b34d8afb7ce3260758e, type: 3}
+--- !u!114 &3638800123342393316 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8407143069595395942, guid: 47a6402d863e2b34d8afb7ce3260758e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5103617944435714178}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5178514097334382409 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 76128366265206731, guid: 47a6402d863e2b34d8afb7ce3260758e,
     type: 3}
   m_PrefabInstance: {fileID: 5103617944435714178}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6177067725511139816 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1399189176720116074, guid: 47a6402d863e2b34d8afb7ce3260758e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5103617944435714178}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6654391741532630905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4073,9 +4343,33 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13bbc77365a86604ea61739ad6cfd494, type: 3}
+--- !u!114 &3429139087381852886 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8345057807574572463, guid: 13bbc77365a86604ea61739ad6cfd494,
+    type: 3}
+  m_PrefabInstance: {fileID: 6654391741532630905}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4868709379094294679 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2290088563202547694, guid: 13bbc77365a86604ea61739ad6cfd494,
     type: 3}
   m_PrefabInstance: {fileID: 6654391741532630905}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8026373679748826504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3691349011318516465, guid: 13bbc77365a86604ea61739ad6cfd494,
+    type: 3}
+  m_PrefabInstance: {fileID: 6654391741532630905}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
