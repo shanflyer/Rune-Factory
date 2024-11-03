@@ -16,13 +16,14 @@ public class MyLightBase : MonoBehaviour
     float value = 1; 
     [SerializeField]
     protected Renderer renderer;
+    [SerializeField]
+    bool fixedColor = false;
     public Color Color
     {
         get => color;
         set
-        {
-            
-            if (color != value)
+        { 
+            if (!fixedColor&&color != value)
             {
                 color = value;
                 RefreshColor();

@@ -189,12 +189,16 @@ public class MyLight : MonoBehaviour
 #endif
     private void Awake()
     {
-        mainModules = new ParticleSystem.MainModule[ps.Length];
-        for (int i = 0; i < ps.Length; i++)
+        if (ps!=null)
         {
-            var main = ps[i].main;
-            mainModules[i] = main;
+            mainModules = new ParticleSystem.MainModule[ps.Length];
+            for (int i = 0; i < ps.Length; i++)
+            {
+                var main = ps[i].main;
+                mainModules[i] = main;
+            }
         }
+      
     }
     private void OnDisable()
     {
