@@ -59,10 +59,6 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     SpriteRenderer sky;
     [SerializeField]
     SkyCloudData skyCloud;
-    [SerializeField]
-    private Light2D directionLight;
-    [SerializeField]
-    private Light2D globalLight;
 
     [SerializeField]
     SpriteRenderer bg,sea;
@@ -93,8 +89,6 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             return sun.transform;
         }
     }
-    public Light2D GlobalLight=>globalLight;
-    public Light2D DirectionLight=>directionLight;
     private void Awake()
     {
         skyCloud.InitParticle();
