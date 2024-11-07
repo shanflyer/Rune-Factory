@@ -137,6 +137,7 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_isView: 0
   m_LocalBounds:
     m_Center: {x: -0.0014999956, y: 0.030100018, z: 0}
     m_Extent: {x: 0.47759998, y: 0.53110003, z: 0}
@@ -168,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 0
   lerpPs: 0
   ps: []
   psCurve:
@@ -177,6 +179,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 1129238732163366760}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -373,6 +376,7 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_isView: 0
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
@@ -402,6 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 0
   lerpPs: 0
   ps: []
   psCurve:
@@ -411,6 +416,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 853069948548399153}
+  myLightBase: []
   spriteRenderer: {fileID: 0}
   autoLerpValue: 0
   lerpCurve:
@@ -637,6 +643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 0
   lerpPs: 0
   ps: []
   psCurve:
@@ -646,6 +653,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   light2D: {fileID: 0}
+  myLightBase: []
   spriteRenderer: {fileID: 8116559835294456666}
   autoLerpValue: 0
   lerpCurve:
