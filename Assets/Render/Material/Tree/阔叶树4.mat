@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\u9614\u53F6\u68114"
-  m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
+  m_Shader: {fileID: 4800000, guid: 2fe243079e6ef7c43993012940289b15, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -32,6 +32,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -128,6 +132,7 @@ Material:
     - _BlendValue: 1
     - _BlendVertexColor: 0
     - _BumpScale: 1
+    - _Character: 0
     - _ClipValue: 0.5
     - _Cutoff: 0.85
     - _Damp: 0

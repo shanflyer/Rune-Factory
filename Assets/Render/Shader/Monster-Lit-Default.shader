@@ -42,7 +42,8 @@ Shader "MyGame/Monster-Lit-Default"
                 half4 _NormalMap_ST;  // Is this the right way to do this?
                 half4 _Color;
             CBUFFER_END
-
+           TEXTURE2D(_LightingTex);
+            SAMPLER(sampler_LightingTex);
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
             TEXTURE2D(_MaskTex);
@@ -51,7 +52,7 @@ Shader "MyGame/Monster-Lit-Default"
 
         Pass
         {
-            Tags { "LightMode" = "Universal2D" }
+           // Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM
            // #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -60,12 +61,7 @@ Shader "MyGame/Monster-Lit-Default"
 
             #pragma vertex CombinedShapeLightVertex
             #pragma fragment CombinedShapeLightFragment
-
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_0 __
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_1 __
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_2 __
-            #pragma multi_compile USE_SHAPE_LIGHT_TYPE_3 __
-            #pragma multi_compile _ DEBUG_DISPLAY SKINNED_SPRITE
+ 
 
             struct Attributes
             {
@@ -87,59 +83,38 @@ Shader "MyGame/Monster-Lit-Default"
                 #endif
                 UNITY_VERTEX_OUTPUT_STEREO
             };
-
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/LightingUtility.hlsl"
  
-            #if USE_SHAPE_LIGHT_TYPE_0
-            SHAPE_LIGHT(0)
-            #endif
-
-            #if USE_SHAPE_LIGHT_TYPE_1
-            SHAPE_LIGHT(1)
-            #endif
-
-            #if USE_SHAPE_LIGHT_TYPE_2
-            SHAPE_LIGHT(2)
-            #endif
-
-            #if USE_SHAPE_LIGHT_TYPE_3
-            SHAPE_LIGHT(3)
-            #endif
 
             Varyings CombinedShapeLightVertex(Attributes v)
             {
                 Varyings o = (Varyings)0;
                 UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o); 
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
                 #if defined(DEBUG_DISPLAY)
                 o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = v.uv;
                 o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
 
                 o.color = v.color * _Color * unity_SpriteColor;
                 return o;
             }
-
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/CombinedShapeLightShared.hlsl"
-
+ 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
                 const half4 main = i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
 
-                SurfaceData2D surfaceData;
-                InputData2D inputData;
-
-                InitializeSurfaceData(main.rgb, main.a, mask, surfaceData);
-                InitializeInputData(i.uv, i.lightingUV, inputData);
-
-                half4 result=CombinedShapeLightShared(surfaceData, inputData);
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
+                lightCol.xyz*=4;
+                
+                half4 result=main;
+                result.xyz=main.xyz*lightCol.xyz;
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*main.xyz; 
+ 
                 float noise=1;
                 Unity_SimpleNoise_float(i.lightingUV,_NoiseValue,noise);
                 result.a*=step(noise,_NoiseAlpha);

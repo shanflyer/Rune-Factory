@@ -8,11 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\u677E\u68115"
-  m_Shader: {fileID: 4800000, guid: 7bbca2e1aa73d024d90fb64da46bdde0, type: 3}
+  m_Shader: {fileID: 4800000, guid: 2fe243079e6ef7c43993012940289b15, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _BACKBLEND_ON
+  - _SNOWBLEND_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -23,7 +25,15 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -51,6 +61,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MoveMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -73,6 +87,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _TextureSample:
         m_Texture: {fileID: 2800000, guid: b350a85546837c147a924ff576c0b371, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterNormalMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _WindNoiseTexture:
@@ -98,16 +116,21 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _BackBlend: 1
     - _BlendRmapMin: 0.155
     - _BlendValue: 0.621
+    - _BlendVertexColor: 0
     - _BumpScale: 1
     - _ClipValue: 0
     - _Cutoff: 0.85
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EnableExternalAlpha: 0
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _GrassBlend: 0
+    - _LightBlend: 1
     - _Metallic: 0
     - _Mode: 0
     - _NormalTex: 0
@@ -122,10 +145,13 @@ Material:
     - _ScaleValue: 0.5
     - _SeasonValue: 0
     - _SmoothnessTextureChannel: 0
+    - _SnowBlend: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _WetValue: 0
     - _WindJitter: 0.3
+    - _WindNoiseValue: 0
     - _WindScroll: 0.1
     - _WindValue: 1
     - _ZWrite: 1
@@ -141,6 +167,7 @@ Material:
     - _PlantSpringColor1: {r: 0, g: 0, b: 0, a: 1}
     - _PlantWinterColor: {r: 0, g: 0, b: 0, a: 1}
     - _PlantWinterColor1: {r: 0, g: 0, b: 0, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SnowColor: {r: 0.78653437, g: 0.9445154, b: 0.9528302, a: 1}
     - _SnowRange: {r: 0, g: 1, b: 0, a: 1}
   m_BuildTextureStacks: []
