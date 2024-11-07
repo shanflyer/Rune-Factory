@@ -42,7 +42,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private TextMeshProUGUI HPValue, RPValue;
-
+    [SerializeField]
+    private TextMeshProUGUI FPSText;
     [SerializeField]
     private Button playerButton;
 
@@ -66,6 +67,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         PlayerHead = FindChildGameObject<Image>("Head");
         PlayerName = FindChildGameObject<TextMeshProUGUI>("Name");
+
+        FPSText = FindChildGameObject<TextMeshProUGUI>("FPS");
         HPSlider = FindChildGameObject<Image>("HPSlider");
         RPSlider = FindChildGameObject<Image>("RPSlider");
         HPValue = FindChildGameObject<TextMeshProUGUI>("HPValue");
@@ -102,7 +105,10 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
     }
-
+    private void LateUpdate()
+    {
+        FPSText.text = $"FPS{1.0f / Time.smoothDeltaTime}"; 
+    }
     void SetWeather(SetWeather setWeather)
     {
         weather.sprite = WeatherManager.instance.GetWeatherIcon(setWeather.weather);

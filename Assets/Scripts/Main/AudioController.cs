@@ -996,7 +996,7 @@ public class AudioController : Singleton<AudioController>
         }
         else
         {
-            Debug.Log($"PlayBGS:{audioClip.name}");
+            //Debug.Log($"PlayBGS:{audioClip.name}");
         }
         PlayAudio(bgsGraph, bgsMixer, bgsMixerDic, audioClip, loop, audioClearType, weight, isLerp, Group);
     }

@@ -7,6 +7,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Collections;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -216,6 +217,7 @@ public class GameController : MonoBehaviour
     // Start is called beforee the first frame update
     async void Start()
     {
+       // GraphicsSettings.useScriptableRenderPipelineBatching = true;
         Shader.SetGlobalInt("_backColor", 1);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
@@ -238,7 +240,7 @@ public class GameController : MonoBehaviour
     { 
         Shader.SetGlobalVector("_WindDir", _WindDir);
         Shader.SetGlobalVector("_NoiseSet0", _NoiseSet0);
-        Shader.SetGlobalVector("_NoiseSet1", _NoiseSet1);
+        Shader.SetGlobalVector("_NoiseSet1", _NoiseSet1); 
     }
 
     void TestMoveAction(object obj)
@@ -251,6 +253,7 @@ public class GameController : MonoBehaviour
     }
     private void Update()
     {
+        //GraphicsSettings.useScriptableRenderPipelineBatching = false;
         SingletonType.instance.UpData();
 #if UNITY_EDITOR
         seasonValue += Time.deltaTime * testSeasonSpeed;
