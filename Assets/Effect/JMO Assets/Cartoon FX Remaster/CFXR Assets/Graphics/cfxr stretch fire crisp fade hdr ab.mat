@@ -14,13 +14,11 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHABLEND_ON
-  - _CFXR_DISSOLVE
   - _CFXR_HDR_BOOST
   - _CFXR_SECONDCOLOR_LERP
   - _CFXR_SINGLE_CHANNEL
   - _CFXR_UV_DISTORTION
   - _CFXR_UV_DISTORTION_ADD
-  - _FADING_ON
   m_InvalidKeywords:
   - _
   - _CFXR_DITHERED_SHADOWS_OFF
@@ -71,6 +69,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _BacklightTransmittance: 1
+    - _BlendSnow: 0
+    - _BlendWater: 0
     - _BlendingType: 0
     - _BumpScale: 1
     - _CFXR_DITHERED_SHADOWS: 0
@@ -104,7 +104,7 @@ Material:
     - _UVDistortionAdd: 1
     - _UseAlphaClip: 0
     - _UseBackLighting: 0
-    - _UseDissolve: 1
+    - _UseDissolve: 0
     - _UseDissolveOffsetUV: 0
     - _UseEF: 0
     - _UseEmission: 0
@@ -114,7 +114,7 @@ Material:
     - _UseLighting: 0
     - _UseLightingWorldPosOffset: 0
     - _UseNormalMap: 0
-    - _UseSP: 1
+    - _UseSP: 0
     - _UseSecondColor: 1
     - _UseUV2Distortion: 0
     - _UseUVDistortion: 1
