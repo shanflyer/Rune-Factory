@@ -8,12 +8,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\u677E\u68111"
-  m_Shader: {fileID: 4800000, guid: 2fe243079e6ef7c43993012940289b15, type: 3}
+  m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - SKINNED_SPRITE
   m_InvalidKeywords:
   - _BACKBLEND_ON
+  - _MOVESELFUV_ON
   - _SNOWBLEND_ON
   - _TREE3D_ON
   m_LightmapFlags: 4
@@ -55,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: b350a85546837c147a924ff576c0b371, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -83,7 +85,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SnowTex:
-        m_Texture: {fileID: 2800000, guid: a7481682352c7c7468cf4dfb999e8f6b, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureRamp:
@@ -148,6 +150,7 @@ Material:
     - _LightBlend: 1
     - _Metallic: 0
     - _Mode: 0
+    - _MoveSelfUV: 1
     - _NormalTex: 0
     - _OcclusionStrength: 1
     - _OutlineWidth: 0.0065
@@ -174,13 +177,14 @@ Material:
     - _WaveSpeed0: 0
     - _WaveSpeed1: 0
     - _WetValue: 0
-    - _WindJitter: 0.3
-    - _WindNoiseValue: 0
-    - _WindScroll: 0.1
+    - _WindJitter: 0.5
+    - _WindNoiseValue: 0.047
+    - _WindScroll: 0.15
     - _WindValue: 1
     - _ZWrite: 1
     - __dirty: 0
     - _shadowStep: 0
+    - seasonColorBlend: 0
     - waterNoiseScale: 0
     - waterValue: 0.2
     m_Colors:
@@ -191,8 +195,8 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
-    - _PlantAutumnColor0: {r: 0.003921569, g: 1, b: 0.6156863, a: 1}
-    - _PlantAutumnColor1: {r: 0.003921569, g: 1, b: 0.6156863, a: 1}
+    - _PlantAutumnColor0: {r: 0, g: 0.7830189, b: 0.4809092, a: 1}
+    - _PlantAutumnColor1: {r: 0.8962264, g: 0.55523163, b: 0.063412234, a: 1}
     - _PlantSpringColor: {r: 0.0047169924, g: 1, b: 0.6170626, a: 1}
     - _PlantSpringColor1: {r: 0.003921569, g: 1, b: 0.6156863, a: 1}
     - _PlantWinterColor: {r: 1, g: 1, b: 1, a: 1}

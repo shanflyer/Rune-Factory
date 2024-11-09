@@ -32,7 +32,10 @@ public class WindEffect : MonoBehaviour
 {
     public List<WindEffectData> effects=new List<WindEffectData>();
     public List<Animator> animators = new List<Animator>();
-
+    [SerializeField]
+    float windBlendValue = 1;
+    [SerializeField]
+    bool snowWind = true;
     private void Awake()
     {
         for(int i = 0; i < effects.Count; i++)
@@ -56,6 +59,16 @@ public class WindEffect : MonoBehaviour
     }
     public void SetWindValue(float windValue)
     {
+        windValue *= windBlendValue;
+        if (!snowWind)
+        {
+            float seasonValue = GameTimeManager.instance.SeasonValue;
+            bool snow = seasonValue >= 3 || seasonValue < 0.05f;
+            if(snow)
+            {
+                windValue = 0;
+            }
+        }
         for (int i = 0; i < effects.Count; i++)
         {
             effects[i].SetWindValue(windValue);

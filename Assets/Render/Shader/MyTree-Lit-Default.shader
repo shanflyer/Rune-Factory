@@ -154,6 +154,249 @@ Shader "MyTree-Lit-Default"
         
          
         ENDHLSL 
+         Pass
+        {
+            Tags { "LightMode" = "Universal2D" "Queue"="Transparent" "RenderType"="Transparent"}
+            
+            HLSLPROGRAM
+             
+
+            #pragma vertex CombinedShapeLightVertex
+            #pragma fragment CombinedShapeLightFragment
+ 
+            
+ 
+             
+            struct Attributes
+            {
+                float3 positionOS   : POSITION;
+                float3 normalOS : NORMAL;
+                float4 color        : COLOR;
+                float2 uv           : TEXCOORD0; 
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS  : SV_POSITION;
+                half4   color       : COLOR;
+                float2  uv          : TEXCOORD0;
+                half2   lightingUV  : TEXCOORD1; 
+                float4  worldPos : TEXCOORD4;
+                half2   fixScreenUV: TEXCOORD3;
+                float3 normal:NORMAL;
+                #if defined(DEBUG_DISPLAY)
+                    float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+ 
+           // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
+           
+            float2 MoveUV(float2 uv,float2 screenUV,float SnowMove,out float2 offset)
+            {
+                float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
+                screenUV+=offsetUv;
+
+                float2 panner63 = _WindScroll * 0.3 * _TimeParameters.x + screenUV;
+				float2 panner74 =_TimeParameters.x * _WindJitter * 0.5  + screenUV *2;
+
+                float4 WindNoise0=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63);
+                WindNoise0=pow(abs(WindNoise0), 2.5);
+				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
+
+                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
+
+                float windValue=lerp(1,2,abs(_WindValue));
+                //return float2(moveValue.x,moveValue.x);
+                float value=moveValue.x*_WindNoiseValue*windValue;
+                offset=WindNoise0.x*WindNoise1.x*value*SnowMove;
+                int stepWind=step(0,_WindValue);
+                offset.x=offset.x*stepWind-offset.x*(1-stepWind);
+
+                return offset+uv;
+            }
+
+            // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
+ 
+
+            float3 BlendLightCol(float3 col,float2 screenUV)
+            {
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,screenUV);
+                 col*=lightCol.xyz;
+                 return col;
+            }
+
+            
+            Varyings TreeVert(Attributes v)
+            {
+                Varyings o = (Varyings)0; 
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(v);
+
+                float4 clipPos = TransformObjectToHClip(v.positionOS.xyz);
+				 
+                float s_w=0;
+                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
+                s_w=clamp(s_w,0,1);
+
+                float s_w1=0;
+                Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                s_w1=clamp(s_w1,0,1);
+                s_w+=s_w1;          
+ 
+				float3 worldNormal = TransformObjectToWorldNormal(v.normalOS);  
+				o.uv.xy = v.uv.xy;   
+                Unity_Remap_float3(worldNormal,float2(-1,1),float2(0,1),o.normal); 
+               // Unity_Remap_float3(o.normal,float2(0.5,1),float2(0,1),worldNormal);  
+				float3 vertexValue = v.normalOS * _ScaleValue* min(clipPos.w , 1.5);
+
+                float3 worldPos = TransformObjectToWorld(v.positionOS.xyz); 
+				float2 appendResult60 = float2(worldPos.x , worldPos.z)* 0.1; 
+				float2 panner63 = _WindScroll * 0.3* _TimeParameters.x + appendResult60;
+				float2 panner74 = _TimeParameters.x * _WindJitter * 0.5+ appendResult60  * float2(2,2);
+
+                float4 WindNoise0=pow(SAMPLE_TEXTURE2D_LOD( _WindNoiseTexture,sampler_WindNoiseTexture, panner63,1) , 2.5);
+				float4 WindNoise1=SAMPLE_TEXTURE2D_LOD( _WindNoiseTexture,sampler_WindNoiseTexture, panner74,1); 
+				float4 WindScroll = WindNoise0*WindNoise1 * v.color;
+                float windValue=lerp(0.5,3,abs(_WindValue));
+                int stepWind=step(0,_WindValue);
+                windValue=-stepWind*windValue+(1-stepWind)*windValue;
+                vertexValue += WindScroll.rgb*windValue*(1-s_w); 
+		  
+                o.worldPos=half4(worldPos.xyz,1);
+                v.positionOS.xz += vertexValue; 
+                v.positionOS.y+=abs(vertexValue);
+				o.positionCS =TransformObjectToHClip(v.positionOS.xyz); //TransformWorldToHClip(worldPos); 
+                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+				return o;
+            }
+
+            
+            Varyings CombinedShapeLightVertex(Attributes v)
+            { 
+                 return TreeVert(v);
+            }
+ 
+
+            
+            half4 TreeFrag (Varyings IN) : SV_Target
+			{   
+				float2 ScreenUV = IN.lightingUV; 
+				float4 texColor = _MainTex.Sample(sampler_MainTex,IN.uv.xy);
+  
+
+                float ColorValue=(texColor.r+texColor.g+texColor.b)/3; 
+
+				Unity_Remap_float(ColorValue,float2(0,1),float2(_BlendRmapMin,1),ColorValue);
+				texColor.xyz=texColor.xyz*(1-_BlendValue)+_BlendColor*_BlendValue*ColorValue; 
+
+               
+
+                float noiseValue;
+                Unity_SimpleNoise_float(IN.worldPos.xy,_PlantAutumnNoiseScale,noiseValue); 
+                float noiseValue1;
+                Unity_SimpleNoise_float(IN.worldPos.xy,_PlantAutumnNoiseScale*2,noiseValue1); 
+                
+                int springBlend=1-step(1,_SeasonValue);
+                
+                float w_s=_SeasonValue;
+                Unity_Remap_float(w_s,float2(0,0.15),float2(0,1),w_s); 
+                int w_sBlend=1-step(0.5,w_s);
+                
+                float springValue=_SeasonValue;
+                Unity_Remap_float(springValue,float2(0.15,0.5),float2(0,1),springValue);
+                springValue=clamp(springValue,0,1);
+
+                float3 winterColor=(_PlantWinterColor*noiseValue+_PlantWinterColor1*(1-noiseValue))*ColorValue; 
+                float3 springColor0=(_PlantWinterColor*noiseValue1+_PlantSpringColor*(1-noiseValue1))*ColorValue; 
+                float3 springColor=(_PlantSpringColor*noiseValue+_PlantSpringColor1*(1-noiseValue))*ColorValue; 
+                springColor=(winterColor*(1-w_s)+springColor0*w_s)*w_sBlend
+                          +(1-w_sBlend)*(springColor0*(1-springValue)+springColor*springValue);
+
+                //return float4(springColor.xyz,texColor.a);
+
+                float s_s=_SeasonValue;
+                Unity_Remap_float(s_s,float2(1,1.25),float2(0,1),s_s);
+                s_s=clamp(s_s,0,1);
+                float3 summerColor=springColor*(1-s_s)+_BlendColor*s_s*ColorValue;
+
+                //return float4(summerColor.xyz,texColor.a);
+                
+                float s_a=_SeasonValue;
+                Unity_Remap_float(s_a,float2(2,2.25),float2(0,1),s_a);
+                s_a=clamp(s_a,0,1); 
+
+                float3 AutumnColor0=(_BlendColor*noiseValue1+_PlantAutumnColor0*(1-noiseValue1))*ColorValue; 
+                AutumnColor0=AutumnColor0*s_a+summerColor*(1-s_a);
+
+                float a_a=_SeasonValue;
+                Unity_Remap_float(a_a,float2(2.25,2.5),float2(0,1),a_a);
+                a_a=clamp(a_a,0,1); 
+ 
+                float3 AutumnColor=(_PlantAutumnColor0*noiseValue+_PlantAutumnColor1*(1-noiseValue))*ColorValue; 
+                AutumnColor=AutumnColor*a_a+AutumnColor0*(1-a_a);
+
+                float a_w=_SeasonValue;
+                Unity_Remap_float(a_w,float2(2.85,3.15),float2(0,1),a_w);
+                a_w=clamp(a_w,0,1); 
+                float3 winterColor0=(_PlantAutumnColor0*noiseValue1+_PlantWinterColor1*(1-noiseValue1))*ColorValue; 
+                winterColor0=winterColor0*a_w+AutumnColor*(1-a_w);
+
+                 float w_w=_SeasonValue;
+                Unity_Remap_float(w_w,float2(3.15,3.35),float2(0,1),w_w);
+                w_w=clamp(w_w,0,1); 
+                winterColor=winterColor*w_w+winterColor0*(1-w_w);
+ 
+                texColor.xyz=texColor.xyz*(1-_BlendValue)+winterColor*_BlendValue;  
+     
+               
+                //texColor.xyz=((1-IN.normal.y)*texColor.xyz+IN.normal.y)*(1-_NormalTex)+(_NormalTex)*texColor.xyz;
+                  
+                float4 SnowColor =_SnowTex.Sample(sampler_MainTex,IN.uv.xy );
+              
+                float normalY=IN.normal.y;
+                  
+                Unity_Remap_float(normalY,float2(0,1),_SnowRange.xy,normalY);
+                normalY=clamp(normalY,0,1);
+                float snowValue=normalY; 
+
+               
+                SnowColor=texColor*(1-snowValue)+SnowColor*snowValue; 
+                
+                float s_w=0;
+                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
+                s_w=clamp(s_w,0,1);
+
+                float s_w1=0;
+                Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
+                s_w1=clamp(s_w1,0,1);
+                s_w+=s_w1;
+                texColor=texColor*(1-s_w)+SnowColor*s_w*_SnowColor;
+
+               //texColor.xyz=BlendScreenCloudColor(texColor.xyz,IN.lightingUV);
+
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,IN.lightingUV);
+                 lightCol.xyz*=4;
+                //texColor.xyz*=lightCol.xyz;
+				float Alpha = texColor.a;  
+                clip(Alpha-_ClipValue); 
+              
+                return texColor;
+			}
+
+            half4 CombinedShapeLightFragment(Varyings i) : SV_Target
+            {  
+                return TreeFrag(i);
+            } 
+            ENDHLSL
+        }
         Pass
         {
             Tags { "LightMode" = "UniversalForward" "Queue"="Transparent" "RenderType"="Transparent"}
@@ -384,7 +627,7 @@ Shader "MyTree-Lit-Default"
 
                  half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,IN.lightingUV);
                  lightCol.xyz*=4;
-                //texColor.xyz*=lightCol.xyz;
+                 texColor.xyz*=lightCol.xyz;
 				float Alpha = texColor.a;  
                 clip(Alpha-_ClipValue); 
               
