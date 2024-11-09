@@ -711,12 +711,14 @@ Shader "MySprite-Lit-Default"
                 _light_value=(1-_light_value*0.5);
 
                 
+
+                
                // result.xyz=result.xyz*(1-snowValue.x)+snowValue;
 
 
                 half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
                 shadow.xyz*=_light_value;
-                half3 shadowColor=GlobalColor.xyz*shadow.r*GlobalColor.a; 
+                half3 shadowColor=GlobalColor.xyz*GlobalColor.a; 
 
                 half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
                 result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
@@ -1133,8 +1135,9 @@ Shader "MySprite-Lit-Default"
 
 
                 half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
+                //return float4(_light_value.xxx,1);
                 shadow.xyz*=_light_value;
-                half3 shadowColor=GlobalColor.xyz*shadow.r*GlobalColor.a; 
+                half3 shadowColor=GlobalColor.xyz*GlobalColor.a; 
 
                 half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
                 result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     

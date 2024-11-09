@@ -353,12 +353,16 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
              
             Shader.SetGlobalColor("_DirectionColor", Color.Lerp(natureLightData.color, lightning.lightningColor, lightning.lightningLight) * weatherLightValue);
             Shader.SetGlobalVector("_Direction", natureLightData.direction);
+            Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y / 90.0f);
+            Shader.SetGlobalVector("LightDirection", directionValue);
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue+ lightning.lightningLight*0.5f);
         }
         else
         {
             Color directionColor = Color.Lerp(overrideLightData.color, lightning.lightningColor, lightning.lightningLight); 
             Shader.SetGlobalVector("_Direction", overrideLightData.direction);
+            Vector2 directionValue = new Vector2(-overrideLightData.direction.x * math.PI * 0.5f, 1 - overrideLightData.direction.y / 90.0f);
+            Shader.SetGlobalVector("LightDirection", directionValue);
             Shader.SetGlobalVector("_DirectionColor", directionColor * weatherLightValue);
             Shader.SetGlobalColor("_GlobalColor", overrideLightData.globalColor);
             if (overSkyAndSun)
@@ -418,6 +422,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         overrideEnvironment = false;
         
         Shader.SetGlobalVector("_Direction", natureLightData.direction);
+        Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y / 90.0f);
+        Shader.SetGlobalVector("LightDirection", directionValue);
         Shader.SetGlobalVector("_DirectionColor", natureLightData.color);
         Shader.SetGlobalColor("_GlobalColor", natureLightData.globalColor);
 

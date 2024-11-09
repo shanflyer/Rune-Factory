@@ -47,13 +47,13 @@ Shader "MyShadow"
             SAMPLER(sampler_MainTex);
             half2 LightDirection;
             half _ShadowValue;
-
+            half4 GlobalColor;    
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
             CBUFFER_START( UnityPerMaterial )
                 half4 _MainTex_ST;
                 half4 _Color;
                 
-                half4 GlobalColor;    
+                
             CBUFFER_END
 
             Varyings UnlitVertex(Attributes attributes)

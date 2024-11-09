@@ -187,6 +187,7 @@ public class MyShadowPolygon : MonoBehaviour
     
 }
 #if UNITY_EDITOR
+/*
 [CustomEditor(typeof(MyShadowPolygon))]
 public class MyShadowPolygonEditor : Editor
 {
@@ -205,5 +206,5 @@ public class MyShadowPolygonEditor : Editor
             shadowPolygon.CreatMesh();
         }
     }
-}
+}*/
 #endif
