@@ -4,7 +4,7 @@ Shader "MySprite-Lit-Default"
     {
         _MainTex("Diffuse", 2D) = "white" {}
        // _MaskTex("Mask", 2D) = "white" {}
-        _WaterMaskTex("_MoveMask", 2D) = "black" {}
+        _MoveMask("_MoveMask", 2D) = "black" {}
         _SnowTex("_SnowTex", 2D) = "black" {}
         _ZWrite("ZWrite", Float) = 0
 
@@ -12,7 +12,7 @@ Shader "MySprite-Lit-Default"
 
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
-        _MoveMask("WaterMaskTex", 2D) ="black"{}
+        _WaterMaskTex("WaterMaskTex", 2D) ="black"{}
         _DepthTex("DepthTex", 2D) ="gray"{} 
         _WetValue("WetValue",Range(0,1))=0
         [Toggle]_shadowStep("ShadowStep",int)=0
@@ -123,8 +123,9 @@ Shader "MySprite-Lit-Default"
             Texture2D _MoveMask;
             //Texture2D _GrassTex;
             Texture2D _SnowTex;
-            Texture2D _WaterNormalMap; 
-
+            //exture2D _WaterNormalMap; 
+             TEXTURE2D(_WaterMaskTex);
+             SAMPLER(sampler_WaterMaskTex);
             TEXTURE2D(_WindNoiseTexture);
             SAMPLER(sampler_WindNoiseTexture);
 
@@ -145,8 +146,8 @@ Shader "MySprite-Lit-Default"
             TEXTURE2D(_BackMaskTex);
             SAMPLER(sampler_BackMaskTex);
 
-            TEXTURE2D(_WaterMaskTex);
-            SAMPLER(sampler_WaterMaskTex); 
+            TEXTURE2D(_WaterNormalMap);
+            SAMPLER(sampler_WaterNormalMap); 
   
 
          half4 GlobalColor; 
@@ -236,7 +237,11 @@ Shader "MySprite-Lit-Default"
             
                       
         CBUFFER_END 
-        
+        float My_SimpleNoise_float(float2 uv,float scale)
+        {
+                half4 col=SAMPLE_TEXTURE2D(_WindNoiseTexture,sampler_WindNoiseTexture,uv/scale);
+                return col.r;
+        }
          
         ENDHLSL 
 
@@ -283,7 +288,7 @@ Shader "MySprite-Lit-Default"
             {
                 float2 mirrorUV=screenUV; 
 
-                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
+                float3 _WaterMask=SAMPLE_TEXTURE2D(_WaterMaskTex,sampler_WaterMaskTex, uv.xy).xyz;
                 //水域范围
                 float stepMask=step(0.06,_WaterMask.r); 
 
@@ -306,17 +311,18 @@ Shader "MySprite-Lit-Default"
                 float2 waveValue0=float2(cos(angle0),sin(angle0))*_WaveSpeed0;  
 
                 float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
+  
                 float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
-                float4 _WaveCol0 =_WaterNormalMap.Sample(sampler_MainTex,_TilingAndOffset0); 
+                float4 _WaveCol0 =   SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
                 _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
                 //波纹2
                 float angle1=radians(_WaveAngle1);
                 float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
                 float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
                 float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
-                float4 _WaveCol1= _WaterNormalMap.Sample(sampler_MainTex, _TilingAndOffset1);
+                float4 _WaveCol1=  SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset1); 
                 _WaveCol1.rgb = UnpackNormal(_WaveCol1);
-                
+               
                 
                 //波纹叠加
                 float3 _endWave=_WaveCol0.xyz +_WaveCol1.xyz;   
@@ -688,11 +694,11 @@ Shader "MySprite-Lit-Default"
                 */
                 // waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
                 main.xyz=waterColor.xyz;
-               /*if(_Water==1)
+               if(_Water==1)
                 {
                     waterColor=WaterFragment(uv,i.lightingUV,main);
-                }*/
-               //return float4(waterColor.xyz,main.a);
+                }
+               return float4(waterColor.xyz,main.a);
  
 
                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
@@ -786,11 +792,11 @@ Shader "MySprite-Lit-Default"
             };
  
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
-            float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
+             float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
             {
                 float2 mirrorUV=screenUV; 
 
-                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
+                float3 _WaterMask=SAMPLE_TEXTURE2D(_WaterMaskTex,sampler_WaterMaskTex, uv.xy).xyz;
                 //水域范围
                 float stepMask=step(0.06,_WaterMask.r); 
 
@@ -813,17 +819,18 @@ Shader "MySprite-Lit-Default"
                 float2 waveValue0=float2(cos(angle0),sin(angle0))*_WaveSpeed0;  
 
                 float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
+  
                 float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
-                float4 _WaveCol0 =_WaterNormalMap.Sample(sampler_MainTex,_TilingAndOffset0); 
+                float4 _WaveCol0 =   SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
                 _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
                 //波纹2
                 float angle1=radians(_WaveAngle1);
                 float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
                 float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
                 float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
-                float4 _WaveCol1= _WaterNormalMap.Sample(sampler_MainTex, _TilingAndOffset1);
+                float4 _WaveCol1=  SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset1); 
                 _WaveCol1.rgb = UnpackNormal(_WaveCol1);
-                
+               
                 
                 //波纹叠加
                 float3 _endWave=_WaveCol0.xyz +_WaveCol1.xyz;   
@@ -939,15 +946,14 @@ Shader "MySprite-Lit-Default"
                 svalue/=2;  
 
 
-				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_DampNoise,_DampNoiseValue);
+				 _DampNoiseValue=My_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_DampNoise);
                 float3 d=float3(_DampNoiseValue,_DampNoiseValue,_DampNoiseValue);    
 
 
                 float3 water=float3(1-_DampNoiseValue,1-_DampNoiseValue,1-_DampNoiseValue);    
                 float waterValue=clamp((_DampValue-0.5),0,0.5)/0.5;      
 
-                 float _HighLightNoiseValue;	
-				Unity_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_HighLightNoise,_HighLightNoiseValue);
+                 float _HighLightNoiseValue=My_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_HighLightNoise);
                 float3 h=float3(_HighLightNoiseValue,_HighLightNoiseValue,_HighLightNoiseValue);
 
                 
@@ -1078,10 +1084,8 @@ Shader "MySprite-Lit-Default"
                
                 mainValue=clamp(mainValue,0,1);
 
-                 float noiseValue;
-                Unity_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale,noiseValue); 
-                float noiseValue1;
-                Unity_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale*2,noiseValue1); 
+                 float noiseValue=My_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale); 
+                float noiseValue1=My_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale*2); 
                 
                 int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z;
                  
@@ -1110,20 +1114,20 @@ Shader "MySprite-Lit-Default"
                 float3 waterColor=main.xyz*i.color.xyz;
               
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
-               waterColor=DampColor(waterColor,i.lightingUV,uv)*_DampBlend+(1-_DampBlend)*waterColor; 
+              // waterColor=DampColor(waterColor,i.lightingUV,uv)*_DampBlend+(1-_DampBlend)*waterColor; 
                
                 main.xyz=waterColor.xyz;
                 waterColor=WaterFragment(uv,i.lightingUV,main)*_Water+(1-_Water)*main;
-              
+             
  
 
                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
-                lightCol.xyz*=4;
+                lightCol.xyz*=4; 
 
                 result.xyz=waterColor.xyz*lightCol.xyz;
+              
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
-                result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor; 
- 
+                 
                 half _light_value=(lightCol.x+lightCol.y+lightCol.z)/3;
                 float globalValue=(_GlobalColor.x+_GlobalColor.y+_GlobalColor.z)/3;
                 
@@ -1134,24 +1138,20 @@ Shader "MySprite-Lit-Default"
  
 
 
-                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
-                //return float4(_light_value.xxx,1);
+                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV);  
+                  
                 shadow.xyz*=_light_value;
-                half3 shadowColor=GlobalColor.xyz*GlobalColor.a; 
+                half3 shadowColor=GlobalColor.xyz*GlobalColor.a*shadow.r;  
 
                 half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
                 result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
                 
+                /*
                 int stepBack=_BackBlend*_backColor;
                 half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
                 half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
                 result.xyz=(half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue))*stepBack+(1-stepBack)* result.xyz;
-                
-                /*if(_BackBlend&&_backColor)
-                {
-                  
-
-                }*/
+                */
                     
                 //result.xyz=waterColor.xyz; 
                 //clip(result.a-0.01);
@@ -1698,9 +1698,7 @@ Shader "MySprite-Lit-Default"
             {
                 float3 positionOS   : POSITION;
                 float4 color        : COLOR;
-                float2 uv           : TEXCOORD0; 
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                float2 uv           : TEXCOORD0;  
             };
 
             struct Varyings
@@ -1710,20 +1708,16 @@ Shader "MySprite-Lit-Default"
                 float2  uv          : TEXCOORD0;
                 half2   lightingUV  : TEXCOORD1; 
                 float4  worldPos : TEXCOORD4;
-                half2   fixScreenUV: TEXCOORD3;
-                #if defined(DEBUG_DISPLAY)
-                    float3  positionWS  : TEXCOORD2;
-                #endif
-                UNITY_VERTEX_OUTPUT_STEREO
+                half2   fixScreenUV: TEXCOORD3; 
             };
 
           
 
             float3 WaterFragment(float2 uv,float2 screenUV)
             {
-                float2 mirrorUV=screenUV; 
+                float2 mirrorUV=screenUV;  
 
-                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
+                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex,sampler_WaterMaskTex, uv.xy).xyz;
                 //水域范围
                 float stepMask=step(0.06,_WaterMask.r); 
 
@@ -1747,14 +1741,14 @@ Shader "MySprite-Lit-Default"
 
                 float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
                 float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
-                float4 _WaveCol0 =_WaterNormalMap.Sample(sampler_MainTex,_TilingAndOffset0); 
+                float4 _WaveCol0 = SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
                 _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
                 //波纹2
                 float angle1=radians(_WaveAngle1);
                 float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
                 float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
                 float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
-                float4 _WaveCol1= _WaterNormalMap.Sample(sampler_MainTex, _TilingAndOffset1);
+                float4 _WaveCol1= SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset1); 
                 _WaveCol1.rgb = UnpackNormal(_WaveCol1);
                 
                 
