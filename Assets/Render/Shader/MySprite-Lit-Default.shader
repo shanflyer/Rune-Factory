@@ -131,8 +131,8 @@ Shader "MySprite-Lit-Default"
             TEXTURE2D(_LightingTex);
             SAMPLER(sampler_LightingTex);
            
-            TEXTURE2D(_GrassTex);
-            SAMPLER(sampler_GrassTex); 
+           // TEXTURE2D(_GrassTex);
+           // SAMPLER(sampler_GrassTex); 
             
             TEXTURE2D(_MirrorTex);
             SAMPLER(sampler_MirrorTex); 
@@ -142,8 +142,8 @@ Shader "MySprite-Lit-Default"
             TEXTURE2D(_ShadowTex);
             SAMPLER(sampler_ShadowTex);
             
-            TEXTURE2D(_BackMaskTex);
-            SAMPLER(sampler_BackMaskTex);
+            //TEXTURE2D(_BackMaskTex);
+            //SAMPLER(sampler_BackMaskTex);
 
             TEXTURE2D(_WaterMaskTex);
             SAMPLER(sampler_WaterMaskTex); 
@@ -648,13 +648,13 @@ Shader "MySprite-Lit-Default"
                 main=main*(1-snowValue)+half4(mainSnow.xyz,snowA)*snowValue;
          
                 
-
+                /*
                 half4 _DepthColor =_DepthTex.Sample(sampler_MainTex,uv);
-                half4 _GrassColor =SAMPLE_TEXTURE2D(_GrassTex,sampler_GrassTex,i.worldPos.zw);// _GrassTex.Sample(sampler_MainTex,i.worldPos.zw);
-                float GrassColorValue=_GrassColor.r*_GrassColor.g*0.6+_GrassColor.g*0.25; 
+                half4 _GrassColor =SAMPLE_TEXTURE2D(_GrassTex,sampler_GrassTex,i.worldPos.zw);
+                float GrassColorValue=_GrassColor.r*_GrassColor.g*0.6+_GrassColor.g*0.25; */
                 
                 //return float4(GrassColorValue.xxx,1);
-                
+                /*
                 float HightValue=step(GrassColorValue,_DepthColor.r)*step(0.01,_DepthColor.r);
                 //return float4(HightValue.xxx,1);
                 main.a=main.a*HightValue*_GrassBlend+(1-_GrassBlend)*main.a; 
@@ -669,7 +669,7 @@ Shader "MySprite-Lit-Default"
                     float HightValue=step(GrassColorValue,_DepthColor.r)*step(0.01,_DepthColor.r);
                     //return float4(HightValue.xxx,1);
                     main.a=main.a*HightValue; 
-                }
+                }*/
                 
  
                 half4 result=main;
@@ -1092,7 +1092,8 @@ Shader "MySprite-Lit-Default"
                 half snowA=main.a*(1-snow.a)+snow.a;
                 half snowValue= s_w*_SnowBlend;
                 main=main*(1-snowValue)+half4(mainSnow.xyz,snowA)*snowValue;
-             
+              
+              /*
                 half4 _DepthColor =_DepthTex.Sample(sampler_MainTex,uv);
                 half4 _GrassColor =SAMPLE_TEXTURE2D(_GrassTex,sampler_GrassTex,i.worldPos.zw);
                 float GrassColorValue=_GrassColor.r*_GrassColor.g*0.5+_GrassColor.g*0.5; 
@@ -1100,7 +1101,7 @@ Shader "MySprite-Lit-Default"
                
                  
                 float HightValue=step(GrassColorValue,_DepthColor.g)*(1-step(_DepthColor.g,0));  
-                main.a=main.a*HightValue*_GrassBlend+(1-_GrassBlend)*main.a;  
+                main.a=main.a*HightValue*_GrassBlend+(1-_GrassBlend)*main.a;  */
                 
  
                 half4 result=main;
@@ -1142,10 +1143,11 @@ Shader "MySprite-Lit-Default"
                 half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
                 result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
                 
+                /*
                 int stepBack=_BackBlend*_backColor;
                 half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
                 half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
-                result.xyz=(half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue))*stepBack+(1-stepBack)* result.xyz;
+                result.xyz=(half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue))*stepBack+(1-stepBack)* result.xyz;*/
                 
                 /*if(_BackBlend&&_backColor)
                 {
