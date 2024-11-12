@@ -10,10 +10,12 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     Material screenMat; 
     public override async void Init()
     {
-        base.Init();
-      
-         
+        base.Init(); 
         screenMat = await ExtensionsResources.LoadResourceAsync<Material>("Material/ScreenCycle");
+        int width = Screen.width;
+        int heigh = Screen.height;
+
+        screenMat.SetFloat("_CycleSize", width > heigh ? width : heigh);
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
     }
     protected override void Clear()
@@ -46,7 +48,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
             GameActionManager.instance.QueueAction(new HideAllPanel { hide = true }, true);
         }
 
-            while (timeValue<= lerpTime)
+        while (timeValue <= lerpTime)
         {
             float value = math.lerp(minCycleValue, maxCycleValue, timeValue / lerpTime);
             SetScreenCycleValue(value);

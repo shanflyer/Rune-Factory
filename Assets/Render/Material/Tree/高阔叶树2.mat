@@ -12,10 +12,13 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - SKINNED_SPRITE
+  - BACKBLEND
+  - SEASONCOLORBLEND
+  - SNOWBLEND
   m_InvalidKeywords:
   - SEASONCOLORBLEND_ON
   - _BACKBLEND_ON
+  - _DampBlend
   - _PLANTAUTUMNBLEND_ON
   - _SNOWBLEND_ON
   - _TREE3D_ON
@@ -133,6 +136,7 @@ Material:
     - _BlendRmapMin: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
+    - _BlendingType: 0
     - _BumpScale: 1
     - _Character: 0
     - _ClipValue: 0.5
@@ -151,6 +155,7 @@ Material:
     - _LightBlend: 1
     - _Metallic: 0
     - _Mode: 0
+    - _Move: 0
     - _MoveSelfUV: 0
     - _NormalTex: 0
     - _OcclusionStrength: 1

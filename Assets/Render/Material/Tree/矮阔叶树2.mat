@@ -12,9 +12,11 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - SKINNED_SPRITE
+  - BACKBLEND
+  - SNOWBLEND
   m_InvalidKeywords:
   - _BACKBLEND_ON
+  - _DampBlend
   - _MOVESELFUV_ON
   - _PLANTAUTUMNBLEND_ON
   - _SNOWBLEND_ON
@@ -133,6 +135,7 @@ Material:
     - _BlendRmapMin: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
+    - _BlendingType: 0
     - _BumpScale: 1
     - _Character: 0
     - _ClipValue: 0.5
@@ -151,6 +154,7 @@ Material:
     - _LightBlend: 1
     - _Metallic: 0
     - _Mode: 0
+    - _Move: 0
     - _MoveSelfUV: 1
     - _NormalTex: 0
     - _OcclusionStrength: 1

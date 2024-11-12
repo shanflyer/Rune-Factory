@@ -53,7 +53,7 @@ Shader "BlendBlur"
             HLSLPROGRAM
             
             // Pragmas
-            #pragma target 3.0
+           // #pragma target 3.0
             #pragma vertex vert
             #pragma fragment frag
 
@@ -71,7 +71,7 @@ Shader "BlendBlur"
             {
                     uint vertexID : VERTEXID_SEMANTIC; 
                 float2 uv : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+               // UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
@@ -83,7 +83,7 @@ Shader "BlendBlur"
                 float4 uv23 : TEXCOORD3;
                 float4 uv45 : TEXCOORD4; 
 
-                UNITY_VERTEX_OUTPUT_STEREO
+               // UNITY_VERTEX_OUTPUT_STEREO
             };
 
            
@@ -93,8 +93,8 @@ Shader "BlendBlur"
             v2f vert(appdata_t v)
             {
                 v2f OUT;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
+               // UNITY_SETUP_INSTANCE_ID(v);
+               // UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
                 OUT.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
                 OUT.uv= half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy);
                // OUT.uv= OUT.uv*_ScreenSize.xy;
@@ -117,8 +117,8 @@ Shader "BlendBlur"
                 // uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
                 half4 color =   SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
               
-                half4 BlurColor=0.40 *SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv);
-                  
+                half4 BlurColor=1*SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv);
+                  /*
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.xy); 
                
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.zw); 
@@ -129,7 +129,7 @@ Shader "BlendBlur"
                  
                 BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv45.xy); 
                
-                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv45.zw); 
+                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv45.zw); */
                  
 
                 half centerY=IN.playerUV.y;

@@ -2,6 +2,15 @@ Shader "MySprite-Lit-Default"
 {
     Properties
     {
+        [Toggle(WATER)] _Water("Water",int)=0 
+        [Toggle(DAMPBLEND)]_DampBlend("_DampBlend",int)=0 
+        [Toggle(MOVE)] _Move("Move",int)=0 
+        [Toggle(GRASSBLEND)]_GrassBlend("_GrassBlend",int)=0
+        [Toggle(BACKBLEND)]_BackBlend("BackBlend",int)=1
+        [Toggle(SNOWBLEND)]_SnowBlend("_SnowBlend",int)=1
+        [Toggle(SEASONCOLORBLEND)]seasonColorBlend("seasonColorBlend",int)=0
+        [Toggle(SHADOWSTEP)]_shadowStep("ShadowStep",int)=0
+
         _MainTex("Diffuse", 2D) = "white" {}
        // _MaskTex("Mask", 2D) = "white" {}
         _MoveMask("_MoveMask", 2D) = "black" {}
@@ -14,20 +23,19 @@ Shader "MySprite-Lit-Default"
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WaterMaskTex("WaterMaskTex", 2D) ="black"{}
         _DepthTex("DepthTex", 2D) ="gray"{} 
-        _WetValue("WetValue",Range(0,1))=0
-        [Toggle]_shadowStep("ShadowStep",int)=0
+        _WetValue("WetValue",Range(0,1))=0 
         _LightBlend("LightBlend",float)=1 
-        [Toggle]_BackBlend("BackBlend",int)=1
+        
         [Toggle]_BlendVertexColor("BlendVertexColor",int)=0
 
-        _Water("Water",int)=0 
+       
 
         _WindNoiseTexture("Wind Noise Texture", 2D) = "white" {}
         _WindScroll("Wind Scroll", Range( 0 , 3)) = 0.1
 		_WindJitter("Wind Jitter", Range( 0 , 3)) = 0.1
         _WindNoiseValue("WindNoiseValue",Range(0,1))=0 
         [Toggle]_MoveSelfUV("_MoveSelfUV",int)=0
-        [Toggle]_GrassBlend("_GrassBlend",int)=0
+        
         
 
         _PlantSpringColor("_PlantSpringColor",color)=(0,0,0)
@@ -38,11 +46,11 @@ Shader "MySprite-Lit-Default"
         _PlantWinterColor1("_PlantWinterColor1",color)=(0,0,0)
         //_SeasonValue("_SeasonValue",Range(0,4))=0
         _PlantAutumnNoiseScale("_PlantAutumnNoiseScale",float)=1
-        [Toggle]seasonColorBlend("seasonColorBlend",int)=0
+       
 
-        [Toggle]_DampBlend("_DampBlend",int)=0 
+        
         [Toggle]_Damp("_Damp",int)=0
-        [Toggle]_SnowBlend("_SnowBlend",int)=1
+     
         
         //水面颜色
         [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
@@ -72,7 +80,7 @@ Shader "MySprite-Lit-Default"
         WaveScale1("WaveScale1", Vector) = (1, 1, 0, 0) 
  
 
-        [Title(water,Edge)] 
+       // [Title(water,Edge)] 
         //边缘颜色
         [HDR]EdgeColor("EdgeColor", Color) = (0.990566, 0.9765486, 0.9765486, 0)
         //边缘宽度
@@ -81,17 +89,6 @@ Shader "MySprite-Lit-Default"
         _EdgeWaveSpeed("EdgeWaveSpeed",Range(0,4))=0
         //边缘偏移
         _EdgeWaveOffset("EdgeWaveOffset",Range(0,0.5))=0
-
-        
-       
-        //[Toggle]_Tree3D("_Tree3D",int)=0
-         _BlendColor("BlendColor",Color)=(0,1,1,1)
-        _BlendValue("BlendValue",Range(0,1))=0
-		_BlendRmapMin("BlendRmapMin",Range(0,1))=0
-        _SnowRange("SnowRange",vector)=(0,1,0,1) 
-        _SnowColor("SnowColor",color)=(1,1,1,1)
-        _ScaleValue("ScaleValue", Range(0 , 2)) = 0.5 
-         _ClipValue("ClipValue",Range(0,2))=0.5
   
         
 
@@ -152,8 +149,7 @@ Shader "MySprite-Lit-Default"
 
          half4 GlobalColor; 
          half2 LightDirection;
-         half _ShadowValue;
-         int _backColor;
+         half _ShadowValue; 
 
         float _SnowValue;
         
@@ -173,23 +169,10 @@ Shader "MySprite-Lit-Default"
         float4 _NoiseSet0;
         float4 _NoiseSet1; 
         float _WindValue; 
-        CBUFFER_START(UnityPerMaterial)
-            int seasonColorBlend;
-            int _Character;
-			float3 _BlendColor;
-			float _BlendValue;
-			float _BlendRmapMin;
-            
-            float _ScaleValue;  
-            float _ClipValue;
-            int _Tree3D;
-            float4 _SnowRange;
-             half4 _SnowColor;
-           
-            int _DampBlend;
+        CBUFFER_START(UnityPerMaterial) 
+            int _Character;    
             int _Damp;
-            int _SnowBlend;
-            int _GrassBlend; 
+            
 
             half3 _PlantSpringColor1;
             half3 _PlantSpringColor;
@@ -200,91 +183,44 @@ Shader "MySprite-Lit-Default"
             float _PlantAutumnNoiseScale;  
              
             half4 _Color;
-            half _WetValue;
-            int _shadowStep;
-            int _Water;
+            half _WetValue; 
 
-            float _LightBlend;
-            int _BackBlend;
+            float _LightBlend; 
             int _BlendVertexColor;
 
             float _WindJitter;
 			float _WindScroll;
             float _WindNoiseValue;
             int _MoveSelfUV;
-            
-            half4 waterColor;
-            half _WaterZero;
-            half _WaterBottom;   
-            half _WaveAngle0;
-            half _WaveSpeed0;
-            half _WaveAngle1;
-            half _WaveSpeed1;  
-            half WaveColorValue;   
-            half waterNoiseScale;
-            half waterValue;   
-            half2 WaveScale0;
-            half2 WaveScale1; 
-            half4 EdgeColor;
-            half EdgeValue;  
-            half _WaterHigh;  
 
-            half _EdgeWaveSpeed;
-            half _EdgeWaveOffset;
+                half4 waterColor;
+                half _WaterZero;
+                half _WaterBottom;   
+                half _WaveAngle0;
+                half _WaveSpeed0;
+                half _WaveAngle1;
+                half _WaveSpeed1;  
+                half WaveColorValue;   
+                half waterNoiseScale;
+                half waterValue;   
+                half2 WaveScale0;
+                half2 WaveScale1; 
+                half4 EdgeColor;
+                half EdgeValue;  
+                half _WaterHigh;  
 
-
+                half _EdgeWaveSpeed;
+                half _EdgeWaveOffset;
              
-            
                       
         CBUFFER_END 
-        float My_SimpleNoise_float(float2 uv,float scale)
-        {
+            float My_SimpleNoise_float(float2 uv,float scale)
+            {
                 half4 col=SAMPLE_TEXTURE2D(_WindNoiseTexture,sampler_WindNoiseTexture,uv/scale);
                 return col.r;
-        }
-         
-        ENDHLSL 
-
-         Pass
-        {
-          Tags { "LightMode" = "Universal2D" "Queue"="Transparent" "RenderType"="Transparent"}
-             
-            HLSLPROGRAM
-             
-
-            #pragma vertex CombinedShapeLightVertex
-            #pragma fragment CombinedShapeLightFragment
- 
-            
- 
-             
-            struct Attributes
-            {
-                float3 positionOS   : POSITION;
-                float3 normalOS : NORMAL;
-                float4 color        : COLOR;
-                float2 uv           : TEXCOORD0; 
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            struct Varyings
-            {
-                float4  positionCS  : SV_POSITION;
-                half4   color       : COLOR;
-                float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
-                float4  worldPos : TEXCOORD4;
-                half2   fixScreenUV: TEXCOORD3;
-                float3 normal:NORMAL;
-                #if defined(DEBUG_DISPLAY)
-                    float3  positionWS  : TEXCOORD2;
-                #endif
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
- 
-            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
-            float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
+            }
+          #if WATER
+             float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
             {
                 float2 mirrorUV=screenUV; 
 
@@ -298,13 +234,13 @@ Shader "MySprite-Lit-Default"
                 _WaterHigh=_WaterHigh+_EdgeWaveOffset*edgeOffsetValue;
                  //return _EdgeWaveOffset*edgeOffsetValue;
 
-                
+                /*
                 float svalue =_ScreenParams.y/ 1920;
                 svalue=floor(svalue);
                 svalue=clamp(svalue,1,svalue);
                 svalue/=2;
                 float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
-                screenUV+=offsetUv;
+                screenUV+=offsetUv;*/
                 
                 //波纹1
                 float angle0=radians(_WaveAngle0);//转换角度为弧度
@@ -364,7 +300,7 @@ Shader "MySprite-Lit-Default"
                 _MainColor+=(1-waterColor.a)*_MainTexColor.xyz;
                 _MainColor.xyz*=_WaterMask.r;
 
-              endWaveColor=endWaveColor.xyz*_SunColor.xyz/sunValue;
+                endWaveColor=endWaveColor.xyz*_SunColor.xyz/sunValue;
 
                 float3 outWater=endWaveColor+_MainColor; 
                 outWater=clamp(outWater,0,1);   
@@ -387,43 +323,9 @@ Shader "MySprite-Lit-Default"
                 outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
                 return outWater;
             }
-
-            float2 MoveUV(float2 uv,float2 screenUV,float SnowMove,out float2 offset)
-            {
-                float svalue =_ScreenParams.y/ 1920;
-                svalue=floor(svalue);
-                svalue=clamp(svalue,1,svalue);
-                svalue/=2;
-                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
-                screenUV+=offsetUv;
-                screenUV=_MoveSelfUV*uv+(1-_MoveSelfUV)*screenUV;
-
-                float2 panner63 = _WindScroll * 0.3 * _TimeParameters.x + screenUV;
-				float2 panner74 =_TimeParameters.x * _WindJitter * 0.5  + screenUV *2;
-
-                float4 WindNoise0=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63);
-                WindNoise0=pow(abs(WindNoise0), 2.5);
-				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
-
-                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
-
-                float windValue=lerp(1,2,abs(_WindValue));
-                //return float2(moveValue.x,moveValue.x);
-                float value=moveValue.x*_WindNoiseValue*windValue;
-                offset=WindNoise0.x*WindNoise1.x*value*SnowMove;
-                int stepWind=step(0,_WindValue);
-                offset.x=offset.x*stepWind-offset.x*(1-stepWind);
-
-                return offset+uv;
-            }
-
-            // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
-            
-
-           
-            
-
-             float3 DampColor(float3 col,float2 uv,float2 objUV)
+          #endif
+          #if DAMPBLEND
+           float3 DampColor(float3 col,float2 uv,float2 objUV)
             {
                 float r=col.r*col.r;
                 float g=col.g*col.g;
@@ -494,94 +396,47 @@ Shader "MySprite-Lit-Default"
                  //result=lerp(col,result,_DampValue); 
                return result*(1-_Damp)+_col*_Damp; 
             }
-
-            float3 BlendLightCol(float3 col,float2 screenUV)
+          #endif
+          #if MOVE
+            float2 MoveUV(float2 uv,float2 screenUV,float SnowMove,out float2 offset)
             {
-                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,screenUV);
-                 col*=lightCol.xyz;
-                 return col;
+                float svalue =_ScreenParams.y/ 1920;
+                svalue=floor(svalue);
+                svalue=clamp(svalue,1,svalue);
+                svalue/=2;
+                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
+                screenUV+=offsetUv;
+                screenUV=_MoveSelfUV*uv+(1-_MoveSelfUV)*screenUV;
+
+                float2 panner63 = _WindScroll * 0.3 * _TimeParameters.x + screenUV;
+				float2 panner74 =_TimeParameters.x * _WindJitter * 0.5  + screenUV *2;
+
+                float4 WindNoise0=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63);
+                WindNoise0=pow(abs(WindNoise0), 2.5);
+				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
+
+                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
+
+                float windValue=lerp(1,2,abs(_WindValue));
+                //return float2(moveValue.x,moveValue.x);
+                float value=moveValue.x*_WindNoiseValue*windValue;
+                offset=WindNoise0.x*WindNoise1.x*value*SnowMove;
+                int stepWind=step(0,_WindValue);
+                offset.x=offset.x*stepWind-offset.x*(1-stepWind);
+
+                return offset+uv;
             }
-
-             
-
-            Varyings DefaultVertex(Attributes v)
+          #endif
+          #if SEASONCOLORBLEND 
+            float3 BlendSeasonColor(float3 main,float2 uv,float2 worldUV)
             {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(v);
-
-                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
-              
-                o.worldPos.xyz=TransformObjectToWorld(v.positionOS);
-                //half3 worldPos=o.worldPos.xyz;
-               // worldPos.z+=worldPos.y;
-               // o.positionCS =TransformWorldToHClip(worldPos);
-
-                o.positionCS = TransformObjectToHClip(v.positionOS);
-                float3 worldCS=o.worldPos.xyz;
-                worldCS.y=UNITY_MATRIX_M._m13;
-                //o.worldPos.w=o.worldPos.z;
-                //
-                
-                half4 worldPosCs=TransformWorldToHClip(worldCS.xyz);
-                half2 worldScreen=half2(ComputeScreenPos(worldPosCs / worldPosCs.w).xy);
-                o.worldPos.zw=worldScreen;
-               // half4 grassColor=  SAMPLE_TEXTURE2D_LOD(_GrassTex, sampler_GrassTex, worldScreen,0); 
-               // float GrassColorValue=abs(grassColor.r-0.5)/0.5;
-               // o.worldPos.w=GrassColorValue;
-
-                int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z; 
-                #if defined(DEBUG_DISPLAY)
-                    o.positionWS = TransformObjectToWorld(v.positionOS);
-                #endif
-                o.uv = v.uv;
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
-
-
-                half3 pos=TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
-                half4 carmeraPos=TransformWorldToHClip(pos); 
-
-                o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
-
-                o.color = v.color * _Color * unity_SpriteColor;
-                return o;
-            }
-
-            Varyings CombinedShapeLightVertex(Attributes v)
-            { 
-                return DefaultVertex(v);
-            }
- 
-
-            half4 DefaultFragment(Varyings i) : SV_Target
-            {
-                float2 uv=i.uv;
-                float2 offset;
-
-                float s_w=0;
-                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
-                s_w=clamp(s_w,0,1);
-
-                float s_w1=0;
-                Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
-                s_w1=clamp(s_w1,0,1);
-                s_w+=s_w1;
- 
-                uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
-                //return half4(uv.xxx,1);
-                half4 main =_MainTex.Sample(sampler_MainTex,uv); 
-              //  return float4(main.xyz,main.a);
-
                 const half4 grassTex=_MoveMask.Sample(sampler_MainTex,uv);
                 float mainValue=(main.y);
                
                 mainValue=clamp(mainValue,0,1);
 
-                 float noiseValue;
-                Unity_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale,noiseValue); 
-                float noiseValue1;
-                Unity_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale*2,noiseValue1); 
+                 float noiseValue=My_SimpleNoise_float(worldUV,_PlantAutumnNoiseScale); 
+                float noiseValue1=My_SimpleNoise_float(worldUV,_PlantAutumnNoiseScale*2); 
                 
                 int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z;
                 
@@ -640,129 +495,84 @@ Shader "MySprite-Lit-Default"
                 half _BlendValue=1-step(grassTex.g,0);
 
                 int seasonStep=1-step(seasonColorBlend,0);
-                main.xyz=main.xyz*(1-_BlendValue)*seasonStep+winterColor*_BlendValue*seasonStep+main.xyz*(1-seasonStep);    
+                return main.xyz*(1-_BlendValue)*seasonStep+winterColor*_BlendValue*seasonStep; 
                 
-                 //  return main;
-
-                
-                     
-                half4 snow =_SnowTex.Sample(sampler_MainTex,uv);
+            }
+          #endif
+          #if SNOWBLEND
+           float4 SnowColor(float4 main,float2 uv,float s_w)
+           {
+                 half4 snow =_SnowTex.Sample(sampler_MainTex,uv);
                 //return snow;
                 half3 mainSnow=main.xyz*(1-snow.a)+snow.xyz*snow.a;
                 half snowA=main.a*(1-snow.a)+snow.a;
-                half snowValue= s_w*_SnowBlend;
-                main=main*(1-snowValue)+half4(mainSnow.xyz,snowA)*snowValue;
-         
-                
-
+                half snowValue= s_w;
+                return main*(1-snowValue)+half4(mainSnow.xyz,snowA)*snowValue;
+           } 
+          #endif
+          #if GRASSBLEND
+           float4 GrassColor(float4 main,float2 uv,float2 posUV)
+           {
                 half4 _DepthColor =_DepthTex.Sample(sampler_MainTex,uv);
-                half4 _GrassColor =SAMPLE_TEXTURE2D(_GrassTex,sampler_GrassTex,i.worldPos.zw);// _GrassTex.Sample(sampler_MainTex,i.worldPos.zw);
-                float GrassColorValue=_GrassColor.r*_GrassColor.g*0.6+_GrassColor.g*0.25; 
-                
-                //return float4(GrassColorValue.xxx,1);
-                
-                float HightValue=step(GrassColorValue,_DepthColor.r)*step(0.01,_DepthColor.r);
-                //return float4(HightValue.xxx,1);
-                main.a=main.a*HightValue*_GrassBlend+(1-_GrassBlend)*main.a; 
-                if(_GrassBlend==1)
-                { 
-                    half4 _DepthColor =_DepthTex.Sample(sampler_MainTex,uv);
-                    half4 _GrassColor = _GrassTex.Sample(sampler_MainTex,i.worldPos.zw);
-                    float GrassColorValue=_GrassColor.r*_GrassColor.g*0.6+_GrassColor.g*0.25; 
-                    
-                    //return float4(GrassColorValue.xxx,1);
-                    
-                    float HightValue=step(GrassColorValue,_DepthColor.r)*step(0.01,_DepthColor.r);
-                    //return float4(HightValue.xxx,1);
-                    main.a=main.a*HightValue; 
-                }
-                
- 
-                half4 result=main;
-                
-                float singleValue=(main.x+main.y+main.z)/3;
-                float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
-                float3 waterColor=main.xyz*i.color.xyz;
-              
-                waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
+                half4 _GrassColor =SAMPLE_TEXTURE2D(_GrassTex,sampler_GrassTex,posUV);
+                float GrassColorValue=_GrassColor.r*_GrassColor.g*0.5+_GrassColor.g*0.5; 
+                GrassColorValue=GrassColorValue;
                
-               /*
-                if(_DampBlend>=1)
-                {
-                   waterColor=DampColor(waterColor,i.lightingUV,uv); 
-                } 
-                */
-                // waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
-                main.xyz=waterColor.xyz;
-               if(_Water==1)
-                {
-                    waterColor=WaterFragment(uv,i.lightingUV,main);
-                }
-               return float4(waterColor.xyz,main.a);
- 
-
-                half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
-                lightCol.xyz*=4;
-
-                result.xyz=waterColor.xyz;
-                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
-                result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor; 
- 
-                half _light_value=(lightCol.x+lightCol.y+lightCol.z)/3;
+                 
+                float HightValue=step(GrassColorValue,_DepthColor.g)*(1-step(_DepthColor.g,0));  
+                main.a=main.a*HightValue;  
+                 return main;
+           }
+          #endif
+          #if SHADOWSTEP
+           float4 ShadowColor(float4 result,float3 lightCol,float2 uv)
+           {
+                 half _light_value=(lightCol.x+lightCol.y+lightCol.z)/3;
                 float globalValue=(_GlobalColor.x+_GlobalColor.y+_GlobalColor.z)/3;
                 
                 
                 _light_value-=globalValue*_ShadowValue; 
                 _light_value=clamp(_light_value,0,1);
-                _light_value=(1-_light_value*0.5);
-
-                
-
-                
-               // result.xyz=result.xyz*(1-snowValue.x)+snowValue;
+                _light_value=(1-_light_value*0.5); 
 
 
-                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV); 
+                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex,uv); 
                 shadow.xyz*=_light_value;
                 half3 shadowColor=GlobalColor.xyz*GlobalColor.a; 
 
-                half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
-                result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
-                
-                /*if(_BackBlend&&_backColor)
-                {
-                    half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
-                    half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
-                    result.xyz=half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue);
-
-                }*/
-                    
-                //result.xyz=waterColor.xyz; 
-                //clip(result.a-0.01);
-
-                return result;
-            }
-          
-
-            half4 CombinedShapeLightFragment(Varyings i) : SV_Target
-            {  
-                 return DefaultFragment(i); 
-            } 
-            ENDHLSL
-        }
-
+                 result.xyz==shadowColor*result.xyz+result.xyz*(1-shadow.r);  
+                return result;  
+           } 
+          #endif
+          #if BACKBLEND
+           float3 BackColor(float3 main,float2 uv)
+           { 
+                half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, uv); 
+                half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
+                return half3(0,0.5,0.8)*backColorValue+main*(1-backColorValue); 
+           }
+          #endif  
          
+        ENDHLSL 
 
-        Pass
+         Pass
         {
-          Tags { "LightMode" = "UniversalForward" "Queue"="Transparent" "RenderType"="Transparent"}
+          Tags { "LightMode" = "Universal2D" "Queue"="Transparent" "RenderType"="Transparent"}
              
             HLSLPROGRAM
              
+            #pragma shader_feature_local _ WATER
+            #pragma shader_feature_local _ DAMPBLEND
+            #pragma shader_feature_local _ MOVE
+            #pragma shader_feature_local _ SEASONCOLORBLEND
+            #pragma shader_feature_local _ SNOWBLEND
+            #pragma shader_feature_local _ GRASSBLEND
+            #pragma shader_feature_local _ SHADOWSTEP
+            #pragma shader_feature_local _ BACKBLEND
 
             #pragma vertex CombinedShapeLightVertex
             #pragma fragment CombinedShapeLightFragment
-             #pragma multi_compile _ SKINNED_SPRITE 
+            
             
  
              
@@ -792,215 +602,10 @@ Shader "MySprite-Lit-Default"
             };
  
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
-             float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
-            {
-                float2 mirrorUV=screenUV; 
-
-                float3 _WaterMask=SAMPLE_TEXTURE2D(_WaterMaskTex,sampler_WaterMaskTex, uv.xy).xyz;
-                //水域范围
-                float stepMask=step(0.06,_WaterMask.r); 
-
-                half edgeOffsetValue=_SinTime.w*_EdgeWaveSpeed; 
-                edgeOffsetValue=abs(edgeOffsetValue); 
-                 edgeOffsetValue=clamp(edgeOffsetValue,0,1);
-                _WaterHigh=_WaterHigh+_EdgeWaveOffset*edgeOffsetValue;
-                 //return _EdgeWaveOffset*edgeOffsetValue;
-
-                
-                float svalue =_ScreenParams.y/ 1920;
-                svalue=floor(svalue);
-                svalue=clamp(svalue,1,svalue);
-                svalue/=2;
-                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
-                screenUV+=offsetUv;
-                
-                //波纹1
-                float angle0=radians(_WaveAngle0);//转换角度为弧度
-                float2 waveValue0=float2(cos(angle0),sin(angle0))*_WaveSpeed0;  
-
-                float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
-  
-                float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
-                float4 _WaveCol0 =   SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
-                _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
-                //波纹2
-                float angle1=radians(_WaveAngle1);
-                float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
-                float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
-                float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
-                float4 _WaveCol1=  SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset1); 
-                _WaveCol1.rgb = UnpackNormal(_WaveCol1);
-               
-                
-                //波纹叠加
-                float3 _endWave=_WaveCol0.xyz +_WaveCol1.xyz;   
-                //波纹r、g叠加
-                float waveBlendCol=_endWave[0]+_endWave[1]; 
-                waveBlendCol=clamp(waveBlendCol,0,1); 
-                waveBlendCol*=waterValue;
-                //噪声
-                float _waterNoise;
-                Unity_SimpleNoise_float(screenUV.xy, waterNoiseScale, _waterNoise);  
-                waveBlendCol*=_waterNoise;
-                
-
-                //波纹与边缘混合 
-                //映射水面深度
-                Unity_Remap_float(_WaterMask.r,float2(0,1),float2(_WaterZero,_WaterBottom),_WaterMask.r);
-                _WaterMask.r=clamp(_WaterMask.r,0,1);
-                
-
-                float _WaterMask1=step(_WaterHigh,_WaterMask.r);	 
-                float _WaterMask2=step(_WaterHigh+EdgeValue,_WaterMask.r); 
-                stepMask*=_WaterMask1;
-
-                float _EdgeMaskValue=_WaterMask.r;
-                Unity_Remap_float(_EdgeMaskValue,float2(_WaterHigh,_WaterHigh+EdgeValue),float2(0,1),_EdgeMaskValue);
-                
-                float edge=(_WaterMask1-_WaterMask2)*_EdgeMaskValue; 
-               
-
-               
-                //float3 edgeAddColor=edge*float3(0,1,1)*2; 
-                float3 endWaveColor=edge*EdgeColor.xyz*waveBlendCol+waveBlendCol*_WaterMask1.rrr;
-                endWaveColor=clamp(endWaveColor,0,1);
-                
-                half sunValue=(_SunColor.x+_SunColor.y+_SunColor.z)/3;
-
-                //主颜色
-                float3 _MainColor=waterColor.xyz*waterColor.a;	 
-                _MainColor+=(1-waterColor.a)*_MainTexColor.xyz;
-                _MainColor.xyz*=_WaterMask.r;
-
-              endWaveColor=endWaveColor.xyz*_SunColor.xyz/sunValue;
-
-                float3 outWater=endWaveColor+_MainColor; 
-                outWater=clamp(outWater,0,1);   
-                
-                outWater=outWater+waterColor.xyz*waterColor.a;
-               
-               float water_valueX=outWater.r;
-				float water_valueY=outWater.g;
-                Unity_Remap_float(water_valueX,float2(0,1),float2(-0,0.1),water_valueX);
-				Unity_Remap_float(water_valueY,float2(0,1),float2(-0.02,0.02),water_valueY);
-
-                mirrorUV.x+=water_valueX;
-                mirrorUV.y+=water_valueY;
- 
-                float3 MirrorTexColor= SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;  
-                float MirrorValue=(MirrorTexColor.x+MirrorTexColor.y+MirrorTexColor.z)/3;
-                //return MirrorTexColor;
-
-                outWater=outWater*(1-MirrorValue)+MirrorTexColor*MirrorValue;
-                outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
-                return outWater;
-            }
-
-            float2 MoveUV(float2 uv,float2 screenUV,float SnowMove,out float2 offset)
-            {
-                float svalue =_ScreenParams.y/ 1920;
-                svalue=floor(svalue);
-                svalue=clamp(svalue,1,svalue);
-                svalue/=2;
-                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
-                screenUV+=offsetUv;
-
-                float2 panner63 = _WindScroll * 0.3 * _TimeParameters.x + screenUV;
-				float2 panner74 =_TimeParameters.x * _WindJitter * 0.5  + screenUV *2;
-
-                float4 WindNoise0=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63);
-                WindNoise0=pow(abs(WindNoise0), 2.5);
-				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
-
-                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
-
-                float windValue=lerp(1,2,abs(_WindValue));
-                //return float2(moveValue.x,moveValue.x);
-                float value=moveValue.x*_WindNoiseValue*windValue;
-                offset=WindNoise0.x*WindNoise1.x*value*SnowMove;
-                int stepWind=step(0,_WindValue);
-                offset.x=offset.x*stepWind-offset.x*(1-stepWind);
-
-                return offset+uv;
-            }
+             
 
             // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
-            
-
-           
-            
-
-             float3 DampColor(float3 col,float2 uv,float2 objUV)
-            {
-                float r=col.r*col.r;
-                float g=col.g*col.g;
-                float b=col.b*col.b;
-                float3 _col=float3(r,g,b);
-                float3 col1=_col;
-                
-                float _DampNoiseValue;	 
-
-                 float svalue =_ScreenParams.y/ 1920;
-                svalue=floor(svalue);
-                svalue=clamp(svalue,1,svalue);
-                svalue/=2;  
-
-
-				 _DampNoiseValue=My_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_DampNoise);
-                float3 d=float3(_DampNoiseValue,_DampNoiseValue,_DampNoiseValue);    
-
-
-                float3 water=float3(1-_DampNoiseValue,1-_DampNoiseValue,1-_DampNoiseValue);    
-                float waterValue=clamp((_DampValue-0.5),0,0.5)/0.5;      
-
-                 float _HighLightNoiseValue=My_SimpleNoise_float(uv+_WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy,_HighLightNoise);
-                float3 h=float3(_HighLightNoiseValue,_HighLightNoiseValue,_HighLightNoiseValue);
-
-                
-
-                h*=(1-_DampNoiseValue);       
-                             
-                float dValue=1-waterValue;
-                d*=dValue;               
-				d*=d; 
-                d=clamp(d,0,1);
-
-               
-               
-                water*=waterValue;
-                water*=water;  
-                water=clamp(water,0,1);
-                //return water*_WaterColor;
-
-                h*=waterValue;
-                h*=step(_HighLighStep,h);
-                h*=h;
-
-                h=clamp(h,0,1);
-                
-                
-                float c=(col.r+col.g+col.b)/3; 
-
-                d*=_DampColor.xyz*c;
-                water*=_DampWaterColor.xyz*c;
-                h*=_HightLightColor.xyz*c; 
-
-                _col+=d+water+h;  
-                half4 normal =_NormalMap.Sample(sampler_MainTex,objUV);
-                //half3 normalUnpacked = UnpackNormalRGBNoScale(normal);
-                float gv=normal.z;
-                //return normal.zzz;
-                //float stepGv=step(0.5,gv);
-                //gv=stepGv+(1-stepGv)*gv; 
-                // return gv.xxx;
-                Unity_Remap_float(gv,float2(0,1),float2(0.2,1),gv);
-
-                float3 result=lerp(col,_col,clamp(_DampValue/0.5,0,1)*gv);
-                //return _DampValue.xxx;
-                 //result=lerp(col,result,_DampValue); 
-               return result*(1-_Damp)+_col*_Damp; 
-            }
-
+             
             float3 BlendLightCol(float3 col,float2 screenUV)
             {
                  half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,screenUV);
@@ -1037,7 +642,7 @@ Shader "MySprite-Lit-Default"
                // float GrassColorValue=abs(grassColor.r-0.5)/0.5;
                // o.worldPos.w=GrassColorValue;
 
-                int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z; 
+                
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
@@ -1063,9 +668,9 @@ Shader "MySprite-Lit-Default"
             half4 DefaultFragment(Varyings i) : SV_Target
             {
                 float2 uv=i.uv;
-                float2 offset;
-
+                
                 float s_w=0;
+                #if SNOWBLEND 
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
                 s_w=clamp(s_w,0,1);
 
@@ -1073,39 +678,27 @@ Shader "MySprite-Lit-Default"
                 Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
                 s_w1=clamp(s_w1,0,1);
                 s_w+=s_w1;
- 
+                #endif
+
+               
+                #if MOVE
+                float2 offset;
                 uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
+                #endif
+                
                 //return half4(uv.xxx,1);
                 half4 main =_MainTex.Sample(sampler_MainTex,uv); 
               //  return float4(main.xyz,main.a);
-
-                const half4 grassTex=_MoveMask.Sample(sampler_MainTex,uv);
-                float mainValue=(main.y);
-               
-                mainValue=clamp(mainValue,0,1);
-
-                 float noiseValue=My_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale); 
-                float noiseValue1=My_SimpleNoise_float(i.worldPos.xy,_PlantAutumnNoiseScale*2); 
+                #if SEASONCOLORBLEND
+                main.xyz=BlendSeasonColor(main.xyz,uv,i.worldPos.xy);
+                #endif
+                #if SNOWBLEND
+                main=SnowColor(main,uv,s_w);
+                #endif
                 
-                int seasonColorBlend=_PlantSpringColor.x+_PlantSpringColor.y+_PlantSpringColor.z;
-                 
-                      
-                half4 snow =_SnowTex.Sample(sampler_MainTex,uv);
-              // return snow;
-                half3 mainSnow=main.xyz*(1-snow.a)+snow.xyz*snow.a;
-                half snowA=main.a*(1-snow.a)+snow.a;
-                half snowValue= s_w*_SnowBlend;
-                main=main*(1-snowValue)+half4(mainSnow.xyz,snowA)*snowValue;
-             
-                half4 _DepthColor =_DepthTex.Sample(sampler_MainTex,uv);
-                half4 _GrassColor =SAMPLE_TEXTURE2D(_GrassTex,sampler_GrassTex,i.worldPos.zw);
-                float GrassColorValue=_GrassColor.r*_GrassColor.g*0.5+_GrassColor.g*0.5; 
-                GrassColorValue=GrassColorValue;
-               
-                 
-                float HightValue=step(GrassColorValue,_DepthColor.g)*(1-step(_DepthColor.g,0));  
-                main.a=main.a*HightValue*_GrassBlend+(1-_GrassBlend)*main.a;  
-                
+                #if GRASSBLEND
+                main=GrassColor(main,uv,i.worldPos.zw);
+                #endif 
  
                 half4 result=main;
                 
@@ -1114,47 +707,217 @@ Shader "MySprite-Lit-Default"
                 float3 waterColor=main.xyz*i.color.xyz;
               
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
-              // waterColor=DampColor(waterColor,i.lightingUV,uv)*_DampBlend+(1-_DampBlend)*waterColor; 
                
+               /*
+                if(_DampBlend>=1)
+                {
+                   waterColor=DampColor(waterColor,i.lightingUV,uv); 
+                } 
+                */
+                // waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
                 main.xyz=waterColor.xyz;
-                waterColor=WaterFragment(uv,i.lightingUV,main)*_Water+(1-_Water)*main;
+                #if WATER
+                 waterColor=WaterFragment(uv,i.fixScreenUV,main);
+                #endif
+               
+               return float4(waterColor.xyz,main.a);
+ 
+
+                half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
+                lightCol.xyz*=4;
+
+                result.xyz=waterColor.xyz;
+                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
+                result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor; 
+                
+                #if SHADOWSTEP
+                result=ShadowColor(result,lightCol.xyz,i.lightingUV);
+                #endif
+                   
+                
+               #if  BACKBLEND 
+                result.xyz=BackColor(result.xyz,i.lightingUV);
+                #endif
+                    
+                //result.xyz=waterColor.xyz; 
+                //clip(result.a-0.01);
+
+                return result;
+            }
+          
+
+            half4 CombinedShapeLightFragment(Varyings i) : SV_Target
+            {  
+                 return DefaultFragment(i); 
+            } 
+            ENDHLSL
+        }
+
+         
+
+        Pass
+        {
+          Tags { "LightMode" = "UniversalForward" "Queue"="Transparent" "RenderType"="Transparent"}
+             
+            HLSLPROGRAM
+             
+
+            #pragma vertex CombinedShapeLightVertex
+            #pragma fragment CombinedShapeLightFragment
+            #pragma multi_compile _ SKINNED_SPRITE 
+            #pragma shader_feature_local _ WATER
+            #pragma shader_feature_local _ DAMPBLEND
+            #pragma shader_feature_local _ MOVE
+            #pragma shader_feature_local _ SEASONCOLORBLEND
+            #pragma shader_feature_local _ SNOWBLEND
+            #pragma shader_feature_local _ GRASSBLEND
+            #pragma shader_feature_local _ SHADOWSTEP
+            #pragma shader_feature_local _ BACKBLEND
+             
+            struct Attributes
+            {
+                float3 positionOS   : POSITION;
+                float3 normalOS : NORMAL;
+                float4 color        : COLOR;
+                float2 uv           : TEXCOORD0; 
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS  : SV_POSITION;
+                half4   color       : COLOR;
+                float2  uv          : TEXCOORD0;
+                half2   lightingUV  : TEXCOORD1; 
+                float4  worldPos : TEXCOORD4;
+                half2   fixScreenUV: TEXCOORD3;
+                float3 normal:NORMAL;
+                #if defined(DEBUG_DISPLAY)
+                    float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+ 
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
+              
+            Varyings DefaultVertex(Attributes v)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(v);
+
+                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
+              
+                o.worldPos.xyz=TransformObjectToWorld(v.positionOS);
+                //half3 worldPos=o.worldPos.xyz;
+               // worldPos.z+=worldPos.y;
+               // o.positionCS =TransformWorldToHClip(worldPos);
+
+                o.positionCS = TransformObjectToHClip(v.positionOS);
+                float3 worldCS=o.worldPos.xyz;
+                worldCS.y=UNITY_MATRIX_M._m13;
+                //o.worldPos.w=o.worldPos.z;
+                //
+                
+                half4 worldPosCs=TransformWorldToHClip(worldCS.xyz);
+                half2 worldScreen=half2(ComputeScreenPos(worldPosCs / worldPosCs.w).xy);
+                o.worldPos.zw=worldScreen;
+               // half4 grassColor=  SAMPLE_TEXTURE2D_LOD(_GrassTex, sampler_GrassTex, worldScreen,0); 
+               // float GrassColorValue=abs(grassColor.r-0.5)/0.5;
+               // o.worldPos.w=GrassColorValue;
+ 
+                #if defined(DEBUG_DISPLAY)
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = v.uv;
+                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+
+                
+                half3 cameraOffsetPos=_WorldSpaceCameraPos.xyz-UNITY_MATRIX_M._m03_m13_m23; 
+                half3 pos=o.worldPos.xyz+cameraOffsetPos;
+
+                half4 carmeraPos=TransformWorldToHClip(pos); 
+
+                o.fixScreenUV=half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
+
+                o.color = v.color * _Color * unity_SpriteColor;
+                return o;
+            }
+
+            Varyings CombinedShapeLightVertex(Attributes v)
+            { 
+                return DefaultVertex(v);
+            }
+ 
+
+            half4 DefaultFragment(Varyings i) : SV_Target
+            {
+                float2 uv=i.uv;
+
+                float s_w=0;
+                #if SNOWBLEND 
+                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
+                s_w=clamp(s_w,0,1);
+
+                float s_w1=0;
+                Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
+                s_w1=clamp(s_w1,0,1);
+                s_w+=s_w1;
+                #endif
+
+               
+                #if MOVE
+                float2 offset;
+                uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
+                #endif
+               
+                //return half4(uv.xxx,1);
+                half4 main =_MainTex.Sample(sampler_MainTex,uv); 
+              //  return float4(main.xyz,main.a);
+
+                #if SEASONCOLORBLEND
+                main.xyz=BlendSeasonColor(main.xyz,uv,i.worldPos.xy);
+                #endif
+                #if SNOWBLEND
+                main=SnowColor(main,uv,s_w);
+                #endif
+                   
+ 
+                half4 result=main; 
+                float singleValue=(main.x+main.y+main.z)/3;
+                float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
+                float3 waterColor=main.xyz*i.color.xyz;
+              
+                waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
+                #if DAMPBLEND
+                waterColor=DampColor(waterColor,i.lightingUV,uv); 
+                #endif 
+
+                 main.xyz=waterColor.xyz;
+                #if WATER
+                 waterColor=WaterFragment(uv,i.fixScreenUV,main);
+                #endif
+
+                #if GRASSBLEND
+                main=GrassColor(main,uv,i.worldPos.zw);
+                #endif
              
  
 
                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
-                lightCol.xyz*=4; 
-
-                result.xyz=waterColor.xyz*lightCol.xyz;
-              
+                lightCol.xyz*=4;  
+                result.xyz=waterColor.xyz*lightCol.xyz; 
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
                  
-                half _light_value=(lightCol.x+lightCol.y+lightCol.z)/3;
-                float globalValue=(_GlobalColor.x+_GlobalColor.y+_GlobalColor.z)/3;
-                
-                
-                _light_value-=globalValue*_ShadowValue; 
-                _light_value=clamp(_light_value,0,1);
-                _light_value=(1-_light_value*0.5);
- 
+                #if SHADOWSTEP
+                result=ShadowColor(result,lightCol.xyz,i.lightingUV);
+                #endif 
 
-
-                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, i.lightingUV);  
-                  
-                shadow.xyz*=_light_value;
-                half3 shadowColor=GlobalColor.xyz*GlobalColor.a*shadow.r;  
-
-                half3 shadowResult=shadowColor*result.xyz+result.xyz*(1-shadow.r);  
-                result.xyz=result.xyz*(1-_shadowStep)+shadowResult*_shadowStep;     
-                
-                /*
-                int stepBack=_BackBlend*_backColor;
-                half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, i.lightingUV); 
-                half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
-                result.xyz=(half3(0,0.5,0.8)*backColorValue+result.xyz*(1-backColorValue))*stepBack+(1-stepBack)* result.xyz;
-                */
-                    
-                //result.xyz=waterColor.xyz; 
-                //clip(result.a-0.01);
+                #if  BACKBLEND 
+                result.xyz=BackColor(result.xyz,i.lightingUV);
+                #endif
 
                 return result;
             }
@@ -1178,6 +941,7 @@ Shader "MySprite-Lit-Default"
             #pragma fragment NormalsRenderingFragment
 
             #pragma multi_compile _ SKINNED_SPRITE 
+            #pragma shader_feature_local _ SNOWBLEND
 
             struct Attributes
             {
@@ -1285,11 +1049,9 @@ Shader "MySprite-Lit-Default"
                 half4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
                 half4 _NormalColor =_NormalMap.Sample(sampler_MainTex,i.uv);
                  
-                half4 snow =_SnowTex.Sample(sampler_MainTex,uv); 
-                half3 mainSnow=mainTex.xyz*(1-snow.a)+snow.xyz*snow.a;
-                half snowA=mainTex.a*(1-snow.a)+snow.a;
-                half snowValue= s_w*_SnowBlend;
-                mainTex=mainTex*(1-snowValue)+half4(mainSnow.xyz,snowA)*snowValue;
+                 #if SNOWBLEND
+                 mainTex=SnowColor(mainTex,uv,s_w);
+                 #endif 
 
                 half3 normalTS;
                 half4 result=half4(1,1,1,1);
@@ -1681,7 +1443,7 @@ Shader "MySprite-Lit-Default"
             }
             ENDHLSL
         }
-
+ 
         Pass
         {
             Name "Water" 
@@ -1691,6 +1453,7 @@ Shader "MySprite-Lit-Default"
              
             #pragma vertex CombinedShapeLightVertex
             #pragma fragment CombinedShapeLightFragment
+            #pragma shader_feature_local _ WATER
  
           
 
@@ -1713,7 +1476,39 @@ Shader "MySprite-Lit-Default"
 
           
 
-            float3 WaterFragment(float2 uv,float2 screenUV)
+             
+
+            Varyings CombinedShapeLightVertex(Attributes v)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                UNITY_SKINNED_VERTEX_COMPUTE(v);
+
+                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(v.positionOS);
+                o.worldPos.xyz=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos.w=o.worldPos.z;
+                o.worldPos.z+=o.worldPos.y;
+                #if defined(DEBUG_DISPLAY)
+                    o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = v.uv;
+                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+
+
+                half3 pos=TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
+                half4 carmeraPos=TransformWorldToHClip(pos);
+
+
+
+                o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
+
+                o.color = v.color * _Color * unity_SpriteColor;
+                return o;
+            }
+ 
+             float3 WaterFragment(float2 uv,float2 screenUV)
             {
                 float2 mirrorUV=screenUV;  
 
@@ -1776,46 +1571,11 @@ Shader "MySprite-Lit-Default"
                 return stepMask; 
                 
             } 
- 
-
-            Varyings CombinedShapeLightVertex(Attributes v)
-            {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(v);
-
-                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.worldPos.xyz=UNITY_MATRIX_M._m03_m13_m23;
-                o.worldPos.w=o.worldPos.z;
-                o.worldPos.z+=o.worldPos.y;
-                #if defined(DEBUG_DISPLAY)
-                    o.positionWS = TransformObjectToWorld(v.positionOS);
-                #endif
-                o.uv = v.uv;
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
-
-
-                half3 pos=TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
-                half4 carmeraPos=TransformWorldToHClip(pos);
-
-
-
-                o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
-
-                o.color = v.color * _Color * unity_SpriteColor;
-                return o;
-            }
- 
-
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                
-                float3  result=WaterFragment(i.uv,i.lightingUV);
-                 
-
+                float3  result=WaterFragment(i.uv,i.lightingUV); 
                 return float4(result.xyz,1);
+                
             }
             ENDHLSL
         }

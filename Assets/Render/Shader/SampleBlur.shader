@@ -34,7 +34,7 @@ Shader "SampleBlur"
                 HLSLPROGRAM
                 
                 // Pragmas
-                #pragma target 3.5
+               // #pragma target 3.0
                 #pragma vertex vert
                 #pragma fragment frag
 
@@ -52,7 +52,7 @@ Shader "SampleBlur"
                      uint vertexID : VERTEXID_SEMANTIC;
                     float4 color    : COLOR;
                     float2 uv : TEXCOORD0;
-                    UNITY_VERTEX_INPUT_INSTANCE_ID
+                   // UNITY_VERTEX_INPUT_INSTANCE_ID
                 };
 
                 struct v2f
@@ -65,23 +65,23 @@ Shader "SampleBlur"
                     float4 uv23 : TEXCOORD3;
                     float4 uv45 : TEXCOORD4; 
 
-                    UNITY_VERTEX_OUTPUT_STEREO
+                   // UNITY_VERTEX_OUTPUT_STEREO
                 };
                
-                
+                TEXTURE2D_X(_BlitTexture);  
  
                // sampler2D _MyBlurTex;  
 
                 v2f vert(appdata_t v)
                 {
                     v2f OUT;
-                    UNITY_SETUP_INSTANCE_ID(v);
-                    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
+                   // UNITY_SETUP_INSTANCE_ID(v);
+                    //UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
                     OUT.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
                     OUT.uv=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy);
                    // OUT.uv.y = 1 - OUT.uv.y;
                    // OUT.uv= OUT.uv*_ScreenSize.xy;
-                    _BlurAmount.xy=_BlurAmount.xy/_ScreenSize.xy;
+                   // _BlurAmount.xy=_BlurAmount.xy/_ScreenParams.xy;
 
                     OUT.uv01 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1);
                     OUT.uv23 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 2.0;
@@ -94,8 +94,8 @@ Shader "SampleBlur"
                 half4 frag(v2f IN) : SV_Target
                 {
                    // uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
-                    half4 color = 0.40 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
-                    //return color;
+                    half4 color = 1 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                    return color;
                     
                     color += 0.15 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv01.xy); 
                     color += 0.15 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv01.zw); 
@@ -103,9 +103,9 @@ Shader "SampleBlur"
                     color += 0.10 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,IN.uv23.zw); 
                     color += 0.05 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv45.xy); 
                     color += 0.05 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv45.zw); 
+                    color.a=1;
 
-
-                    color *= IN.color;
+                    //color *= IN.color;
 
                    
                     return color;

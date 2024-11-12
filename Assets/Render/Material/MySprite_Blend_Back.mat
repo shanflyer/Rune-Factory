@@ -11,11 +11,15 @@ Material:
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - BACKBLEND
+  - DAMPBLEND
+  - SNOWBLEND
   m_InvalidKeywords:
   - _BACKBLEND_ON
   - _BLENDVERTEXCOLOR_ON
   - _DAMPBLEND_ON
+  - _DampBlend
   - _SNOWBLEND_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -74,6 +78,8 @@ Material:
     - _BlendRmapMin: 0
     - _BlendValue: 0
     - _BlendVertexColor: 1
+    - _BlendingType: 0
+    - _Character: 0
     - _ClipValue: 0.5
     - _Comp: 8
     - _Damp: 0
@@ -84,6 +90,8 @@ Material:
     - _Fail: 0
     - _GrassBlend: 0
     - _LightBlend: 1
+    - _Move: 0
+    - _MoveSelfUV: 0
     - _NoiseAlpha: 1
     - _NoiseValue: 500
     - _Pass: 0
@@ -109,6 +117,7 @@ Material:
     - _WindValue: 1
     - _ZWrite: 0
     - _shadowStep: 0
+    - seasonColorBlend: 0
     - waterNoiseScale: 0
     - waterValue: 0.2
     m_Colors:
