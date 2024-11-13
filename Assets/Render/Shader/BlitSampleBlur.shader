@@ -1,4 +1,4 @@
-Shader "SampleBlur"
+Shader "BlitSampleBlur"
 {
     Properties
     { 
@@ -18,7 +18,7 @@ Shader "SampleBlur"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Assets/Render/Shader/UnityAction.cginc" 
         CBUFFER_START(UnityPerMaterial)
-            half4 _BlurAmount; 
+            int4 _BlurAmount; 
                 half4 _Color;
                 half4 _TextureSampleAdd;
                 half4 _ClipRect; 
@@ -81,27 +81,34 @@ Shader "SampleBlur"
                     OUT.uv=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy);
                    // OUT.uv.y = 1 - OUT.uv.y;
                    // OUT.uv= OUT.uv*_ScreenSize.xy;
-                    _BlurAmount.xyzw=_BlurAmount.xyzw/_ScreenParams.xyxy;
+                   // _BlurAmount.xy=_BlurAmount.xy/_ScreenParams.xy;
 
-                    OUT.uv01 =  OUT.uv.xyxy + _BlurAmount * float4(1, 1, -1, -1);
-                    OUT.uv23 =  OUT.uv.xyxy + _BlurAmount* float4(1, 1, -1, -1) * 2.0;
-                    OUT.uv45 =  OUT.uv.xyxy + _BlurAmount * float4(1, 1, -1, -1) * 3.0;
+                    OUT.uv01 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1);
+                    OUT.uv23 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 2.0;
+                    OUT.uv45 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 3.0;
 
                     OUT.color = v.color * _Color;
                     return OUT;
                 }
 
                 half4 frag(v2f IN) : SV_Target
-                { 
-                    half4 color =0.4 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv); 
-                    
-                    color += 0.15 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv01.xy); 
-                    color += 0.15 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv01.zw); 
-                    color += 0.10 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv23.xy); 
-                    color += 0.10 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,IN.uv23.zw); 
-                    color += 0.05 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv45.xy); 
-                    color += 0.05 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv45.zw);  
-                    color *= IN.color;
+                {
+                    int2 pixelCoords = int2(IN.uv.xy * _ScreenSize.xy);
+                    half4 color = 0.4* LOAD_TEXTURE2D_X_LOD(_BlitTexture, pixelCoords , 0);
+                    //int2 pixelCoords01=pixelCoords
+                    int4 pixelCoords1=pixelCoords.xyxy+_BlurAmount*int4(1, 1, -1, -1);
+                    int4 pixelCoords2=pixelCoords.xyxy+_BlurAmount*int4(1, 1, -1, -1)* 2.0;
+                    int4 pixelCoords3=pixelCoords.xyxy+_BlurAmount*int4(1, 1, -1, -1)* 3.0;
+
+                    color += 0.15 * LOAD_TEXTURE2D_X_LOD(_BlitTexture,  pixelCoords1.xy , 0);
+                    color += 0.15 * LOAD_TEXTURE2D_X_LOD(_BlitTexture,  pixelCoords1.zw , 0);
+                    color += 0.10 * LOAD_TEXTURE2D_X_LOD(_BlitTexture,  pixelCoords2.xy , 0); 
+                    color += 0.10 * LOAD_TEXTURE2D_X_LOD(_BlitTexture,  pixelCoords2.zw, 0);
+                    color += 0.05 * LOAD_TEXTURE2D_X_LOD(_BlitTexture,  pixelCoords3.xy , 0);
+                    color += 0.05 * LOAD_TEXTURE2D_X_LOD(_BlitTexture,  pixelCoords3.zw , 0);
+                    color.a=1;
+
+                    //color *= IN.color;
 
                    
                     return color;

@@ -55,8 +55,8 @@ public class FullScreenPassRendererFeatureEditor : Editor
         EditorGUILayout.PropertyField(m_FetchColorBufferProperty, k_FetchColorBufferGuiContent);
         EditorGUILayout.PropertyField(m_BindDepthStencilAttachmentProperty, k_BindDepthStencilAttachmentGuiContent);
         EditorGUILayout.PropertyField(m_PassMaterialProperty, k_PassMaterialGuiContent);
-        EditorGUILayout.PropertyField(m_ScalePrperty, k_ScaleGuiContent);
-        EditorGUILayout.PropertyField(m_blitTextureNameProperty, k_m_blitTextureNameContent);
+       // EditorGUILayout.PropertyField(m_ScalePrperty, k_ScaleGuiContent);
+        //EditorGUILayout.PropertyField(m_blitTextureNameProperty, k_m_blitTextureNameContent);
 
         if (AdvancedProperties.BeginGroup())
         {

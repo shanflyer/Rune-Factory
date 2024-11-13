@@ -160,7 +160,7 @@ public class GameController : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        Shader.SetGlobalInt("_backColor", 0);
+        //Shader.SetGlobalInt("_backColor", 0);
         if (!SingletonType.Cleared)
         {
             SingletonType.instance.ClearAll();
@@ -218,7 +218,7 @@ public class GameController : MonoBehaviour
     async void Start()
     {
        // GraphicsSettings.useScriptableRenderPipelineBatching = true;
-        Shader.SetGlobalInt("_backColor", 1);
+        //Shader.SetGlobalInt("_backColor", 1);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         await UIManager.instance.ShowGamePanel<ZeroPanel>();

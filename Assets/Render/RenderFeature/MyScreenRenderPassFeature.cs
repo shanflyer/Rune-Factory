@@ -43,7 +43,7 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
             else
             {
                 data.material.mainTexture = data.source;
-                context.cmd.DrawProcedural(Matrix4x4.identity, data.material, 0, MeshTopology.Triangles, 3); 
+                context.cmd.DrawProcedural(Matrix4x4.identity, data.material, 0, MeshTopology.Triangles, 3, 1);
             } 
         }
          
@@ -56,14 +56,13 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
             }
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
-         
 
-            RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor;
-            desc.colorFormat = RenderTextureFormat.Default;
-            desc.depthStencilFormat = GraphicsFormat.None;
-            desc.width = (int)(desc.width * scale);
-            desc.height= (int)(desc.height * scale);
-            TextureHandle outTexHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, blitTexture ? blitName : $"{tagName}_TempScreenTex", false);
+
+            var targetDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
+            targetDesc.name = blitTexture ? blitName : $"{tagName}_TempScreenTex";
+            targetDesc.clearBuffer = false;
+
+            TextureHandle outTexHandle = renderGraph.CreateTexture(targetDesc);
             using (var builder = renderGraph.AddRasterRenderPass<PassData>(blitTexture ?tagName:$"{tagName}/Copy", out var passData))
             {
                 passData.source = resourceData.activeColorTexture;
@@ -75,8 +74,8 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
                 {
                     passData.material = null;
                 }
-                   
 
+                builder.UseTexture(resourceData.activeColorTexture);
                 builder.SetRenderAttachment(outTexHandle, 0);
                 builder.AllowPassCulling(false);
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));

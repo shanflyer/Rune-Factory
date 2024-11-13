@@ -28,7 +28,7 @@ Shader "BlendBlur"
             int _TestIndex;
         CBUFFER_END 
         half3 _PlayerPos;
-         TEXTURE2D(_MainTex);
+            TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
             TEXTURE2D(_BlurTex);
             SAMPLER(sampler_BlurTex);
@@ -117,8 +117,8 @@ Shader "BlendBlur"
                 // uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
                 half4 color =   SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
               
-                half4 BlurColor=1*SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv);
-                  /*
+                half4 BlurColor=0.4*SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv);
+                
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.xy); 
                
                 BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.zw); 
@@ -129,7 +129,8 @@ Shader "BlendBlur"
                  
                 BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv45.xy); 
                
-                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv45.zw); */
+                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv45.zw);  
+               // return BlurColor;
                  
 
                 half centerY=IN.playerUV.y;
