@@ -5031,7 +5031,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -5229,7 +5229,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 2290301152141783406}
   fixedColor: 0
   polygonCollider: {fileID: 7821595733619620550}
   meshFilter: {fileID: 6463583723037921116}
@@ -5676,7 +5676,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 9182816741629532489}
   fixedColor: 0
   polygonCollider: {fileID: 7151542347841810500}
   meshFilter: {fileID: 1909281348816594526}
@@ -5806,7 +5806,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5861,7 +5861,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 8091256293381882884}
+  spriteRenderers:
+  - {fileID: 8091256293381882884}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -10830,7 +10831,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -11061,7 +11062,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8502435475831927969}
   fixedColor: 0
   polygonCollider: {fileID: 264088982207745728}
   meshFilter: {fileID: 2630190079484093935}
@@ -15990,7 +15991,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -16045,7 +16046,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 3442157721653904792}
+  spriteRenderers:
+  - {fileID: 3442157721653904792}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -16190,7 +16192,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -16388,7 +16390,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 7138711367929668138}
   fixedColor: 0
   polygonCollider: {fileID: 5226747675795956881}
   meshFilter: {fileID: 2805617495743330399}
@@ -21395,7 +21397,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 3437288150445569735}
   fixedColor: 0
   polygonCollider: {fileID: 3764723706959041377}
   meshFilter: {fileID: 4496987021242060649}
@@ -21584,7 +21586,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21639,7 +21641,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 4973003113023752982}
+  spriteRenderers:
+  - {fileID: 4973003113023752982}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -21740,7 +21743,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7977797239772096118}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
@@ -21761,7 +21764,7 @@ MonoBehaviour:
   - {fileID: 6686526543430223479}
   - {fileID: 5979443550695167050}
   - {fileID: 1925183783019379820}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -21910,7 +21913,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21965,7 +21968,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 5929549469405055250}
+  spriteRenderers:
+  - {fileID: 5929549469405055250}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -22235,7 +22239,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2

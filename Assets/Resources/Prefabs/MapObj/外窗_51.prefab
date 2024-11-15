@@ -156,7 +156,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 0.8
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 3820080477847164257}
   fixedColor: 0
   polygonCollider: {fileID: 8392805009119402334}
   meshFilter: {fileID: 5396724699590213678}
@@ -413,7 +413,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 1.3
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 995399762535701235}
   fixedColor: 0
   polygonCollider: {fileID: 294971620482175785}
   meshFilter: {fileID: 6649472279702707060}
@@ -453,6 +453,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 528732379378377041}
   - {fileID: 2614481038994075693}
   - {fileID: 8788396870216058203}
   m_Father: {fileID: 121221851001176365}
@@ -478,11 +479,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 4988580360791666099}
   - {fileID: 6365135975672282569}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -602,11 +602,11 @@ Transform:
   m_GameObject: {fileID: 4249600039227076232}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.005, y: -0.012, z: -0.33}
+  m_LocalPosition: {x: -0.0050001144, y: 0.07099991, z: -0.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3385121420778539172}
+  m_Father: {fileID: 8492691026079127409}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4643817556922148894
 SpriteRenderer:
@@ -631,7 +631,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -684,9 +684,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 4643817556922148894}
+  spriteRenderers:
+  - {fileID: 4643817556922148894}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -820,6 +820,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 172943503253177587}
-  - {fileID: 528732379378377041}
   m_Father: {fileID: 121221851001176365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

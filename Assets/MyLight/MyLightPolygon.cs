@@ -29,10 +29,12 @@ public class MyLightPolygon : MyLightBase
     [SerializeField]
     Vector3 normalOffset = Vector3.zero;
     public PolygonCollider2D PolygonCollider => polygonCollider;
-    private void OnEnable()
+
+    public override void OnEnable()
     {
         if (meshRenderer == null || meshRenderer.sharedMaterial == null)
         {
+            renderer = GetComponent<Renderer>();
             polygonCollider = GetComponent<PolygonCollider2D>();
             meshFilter = GetComponent<MeshFilter>(); 
            // meshRenderer.sharedMaterial = Resources.Load<Material>("MyShadow");

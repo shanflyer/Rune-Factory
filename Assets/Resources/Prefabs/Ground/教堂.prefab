@@ -160,7 +160,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 1.3
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 6820546952947381214}
   fixedColor: 0
   polygonCollider: {fileID: 5401174709152387312}
   meshFilter: {fileID: 5497714873389419109}
@@ -2039,7 +2039,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2092,9 +2092,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 4465830664849978448}
+  spriteRenderers:
+  - {fileID: 4465830664849978448}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -3899,7 +3899,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 0.8
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 4728118051307395220}
   fixedColor: 0
   polygonCollider: {fileID: 8483670427594489639}
   meshFilter: {fileID: 4434276166598020735}
@@ -3930,10 +3930,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 3354565176991677628}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -18282,11 +18281,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 2033222196316196580}
   - {fileID: 9050792518685347961}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -18632,7 +18630,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 0.8
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 3691669828002668485}
   fixedColor: 0
   polygonCollider: {fileID: 7566359551845740018}
   meshFilter: {fileID: 6278014128706916922}
@@ -22256,6 +22254,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8641281826797164253, guid: 97814735beb8b11469b8d634b17bcf38,
+        type: 3}
+      propertyPath: renderer
+      value: 
+      objectReference: {fileID: 6742382694417637317}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22264,6 +22267,12 @@ PrefabInstance:
 --- !u!4 &1233776134331588001 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7758349091583714092, guid: 97814735beb8b11469b8d634b17bcf38,
+    type: 3}
+  m_PrefabInstance: {fileID: 8841817037151026829}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6742382694417637317 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2820855257815523656, guid: 97814735beb8b11469b8d634b17bcf38,
     type: 3}
   m_PrefabInstance: {fileID: 8841817037151026829}
   m_PrefabAsset: {fileID: 0}
@@ -22330,6 +22339,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8641281826797164253, guid: 97814735beb8b11469b8d634b17bcf38,
+        type: 3}
+      propertyPath: renderer
+      value: 
+      objectReference: {fileID: 6638922933040115007}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22338,6 +22352,12 @@ PrefabInstance:
 --- !u!4 &1201529497686224731 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7758349091583714092, guid: 97814735beb8b11469b8d634b17bcf38,
+    type: 3}
+  m_PrefabInstance: {fileID: 8865197134739131511}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6638922933040115007 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2820855257815523656, guid: 97814735beb8b11469b8d634b17bcf38,
     type: 3}
   m_PrefabInstance: {fileID: 8865197134739131511}
   m_PrefabAsset: {fileID: 0}

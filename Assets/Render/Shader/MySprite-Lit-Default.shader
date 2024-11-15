@@ -666,9 +666,8 @@ Shader "MySprite-Lit-Default"
  
 
             half4 DefaultFragment(Varyings i) : SV_Target
-            {
-                float2 uv=i.uv;
-                
+            { 
+                float2 uv=i.uv; 
                 float s_w=0;
                 #if SNOWBLEND 
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
@@ -707,14 +706,8 @@ Shader "MySprite-Lit-Default"
                 float3 waterColor=main.xyz*i.color.xyz;
               
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
-               
-               /*
-                if(_DampBlend>=1)
-                {
-                   waterColor=DampColor(waterColor,i.lightingUV,uv); 
-                } 
-                */
-                // waterColor.xyz=BlendScreenCloudColor(waterColor.xyz,i.lightingUV);
+                 main.a=main.a*i.color.a*(1-_BlendVertexColor)+main.a*_BlendVertexColor;
+                
                 main.xyz=waterColor.xyz;
                 #if WATER
                  waterColor=WaterFragment(uv,i.fixScreenUV,main);
@@ -722,27 +715,7 @@ Shader "MySprite-Lit-Default"
                
                return float4(waterColor.xyz,main.a);
  
-
-                half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
-                lightCol.xyz*=4;
-
-                result.xyz=waterColor.xyz;
-                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
-                result.a=result.a*(1-_BlendVertexColor)*i.color.a+result.a*_BlendVertexColor; 
-                
-                #if SHADOWSTEP
-                result=ShadowColor(result,lightCol.xyz,i.lightingUV);
-                #endif
-                   
-                
-               #if  BACKBLEND 
-                result.xyz=BackColor(result.xyz,i.lightingUV);
-                #endif
-                    
-                //result.xyz=waterColor.xyz; 
-                //clip(result.a-0.01);
-
-                return result;
+ 
             }
           
 
@@ -854,8 +827,10 @@ Shader "MySprite-Lit-Default"
 
             half4 DefaultFragment(Varyings i) : SV_Target
             {
-                float2 uv=i.uv;
+               // return i.color;
 
+
+                float2 uv=i.uv; 
                 float s_w=0;
                 #if SNOWBLEND 
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
@@ -891,6 +866,7 @@ Shader "MySprite-Lit-Default"
                 float3 waterColor=main.xyz*i.color.xyz;
               
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
+                main.a=main.a*i.color.a*(1-_BlendVertexColor)+main.a*_BlendVertexColor;
                 #if DAMPBLEND
                 waterColor=DampColor(waterColor,i.lightingUV,uv); 
                 #endif 

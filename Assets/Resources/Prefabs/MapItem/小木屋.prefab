@@ -156,7 +156,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 7823807089402863827}
   fixedColor: 0
   polygonCollider: {fileID: 1843703439491568921}
   meshFilter: {fileID: 6593544760862772018}
@@ -354,7 +354,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 3442123213996574697}
   fixedColor: 0
   polygonCollider: {fileID: 7019068819268006303}
   meshFilter: {fileID: 6289078861067397401}
@@ -374,7 +374,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1605613789145941012}
   - component: {fileID: 308866362103897200}
-  - component: {fileID: 3463426796758090144}
   m_Layer: 0
   m_Name: "\u5916\u7A97\u8865_03 (8)"
   m_TagString: Untagged
@@ -395,7 +394,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 883848175985301695}
+  m_Father: {fileID: 5189839070895931325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &308866362103897200
 SpriteRenderer:
@@ -420,7 +419,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -452,68 +451,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3463426796758090144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1368348734218100744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blendWeatherLight: 0
-  lerpPs: 0
-  ps: []
-  psCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  light2D: {fileID: 0}
-  myLightBase: []
-  spriteRenderer: {fileID: 308866362103897200}
-  autoLerpValue: 0
-  lerpCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  autoLerpColor: 1
-  lerpColor:
-    serializedVersion: 2
-    key0: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key1: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 1}
-    key5: {r: 0, g: 0, b: 0, a: 1}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 15728
-    atime2: 16384
-    atime3: 49151
-    atime4: 49807
-    atime5: 65535
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 6
 --- !u!1 &1788167525104279829
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +461,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6925526669478128818}
   - component: {fileID: 447325888410080028}
-  - component: {fileID: 492432317658418561}
   m_Layer: 0
   m_Name: "\u5916\u7A97\u8865_03 (5)"
   m_TagString: Untagged
@@ -541,11 +477,11 @@ Transform:
   m_GameObject: {fileID: 1788167525104279829}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.142, y: 0.162, z: 0}
+  m_LocalPosition: {x: 0.14200002, y: 0.162, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 883848175985301695}
+  m_Father: {fileID: 5189839070895931325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &447325888410080028
 SpriteRenderer:
@@ -570,7 +506,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -602,68 +538,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &492432317658418561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788167525104279829}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blendWeatherLight: 0
-  lerpPs: 0
-  ps: []
-  psCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  light2D: {fileID: 0}
-  myLightBase: []
-  spriteRenderer: {fileID: 447325888410080028}
-  autoLerpValue: 0
-  lerpCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  autoLerpColor: 1
-  lerpColor:
-    serializedVersion: 2
-    key0: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key1: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 1}
-    key5: {r: 0, g: 0, b: 0, a: 1}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 15728
-    atime2: 16384
-    atime3: 49151
-    atime4: 49807
-    atime5: 65535
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 6
 --- !u!1 &2304950256154788377
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,7 +693,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 5106872052425264145}
   fixedColor: 0
   polygonCollider: {fileID: 7002768291594915614}
   meshFilter: {fileID: 1274962797176403071}
@@ -986,7 +860,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 719524131471952611}
   fixedColor: 0
   polygonCollider: {fileID: 7091896665395997949}
   meshFilter: {fileID: 2176457525012386025}
@@ -1238,7 +1112,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 4969046203490436029}
   fixedColor: 0
   polygonCollider: {fileID: 3280403546964003583}
   meshFilter: {fileID: 8699065057207307022}
@@ -1405,7 +1279,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8838990650269858368}
   fixedColor: 0
   polygonCollider: {fileID: 3840624049655738762}
   meshFilter: {fileID: 743181181695651513}
@@ -1460,6 +1334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5189839070895931325}
   - component: {fileID: 5116522574247519086}
+  - component: {fileID: 5289431549539378804}
   m_Layer: 0
   m_Name: 'Light '
   m_TagString: Untagged
@@ -1480,6 +1355,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2572244514621801509}
+  - {fileID: 5757542298919752507}
+  - {fileID: 1605613789145941012}
+  - {fileID: 6925526669478128818}
+  - {fileID: 6390257317079056509}
   - {fileID: 7113704509553815052}
   - {fileID: 963365741354049010}
   - {fileID: 4723115669871193649}
@@ -1508,7 +1388,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 4475897951316072029}
   - {fileID: 5820633614515955037}
@@ -1520,7 +1399,7 @@ MonoBehaviour:
   - {fileID: 7132838268829141849}
   - {fileID: 2021809147142570082}
   - {fileID: 331693220586559832}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -1613,6 +1492,72 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+--- !u!114 &5289431549539378804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3366495311168180944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blendWeatherLight: 0
+  lerpPs: 0
+  ps: []
+  psCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  myLightBase: []
+  spriteRenderers:
+  - {fileID: 6800400804381252898}
+  - {fileID: 4309668704200171396}
+  - {fileID: 308866362103897200}
+  - {fileID: 447325888410080028}
+  - {fileID: 8373903728337435}
+  autoLerpValue: 0
+  lerpCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  autoLerpColor: 1
+  lerpColor:
+    serializedVersion: 2
+    key0: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
+    key1: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 1}
+    key5: {r: 0, g: 0, b: 0, a: 1}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 15728
+    atime2: 16384
+    atime3: 49151
+    atime4: 49807
+    atime5: 65535
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 6
 --- !u!1 &3663555360325823605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1769,7 +1714,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 688439770212298490}
   fixedColor: 0
   polygonCollider: {fileID: 6014780726000862317}
   meshFilter: {fileID: 5040942514199246077}
@@ -1936,7 +1881,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 7797956714289893189}
   fixedColor: 0
   polygonCollider: {fileID: 5711733960140711477}
   meshFilter: {fileID: 1660559112566777901}
@@ -1976,11 +1921,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3516732215272016478}
-  - {fileID: 2572244514621801509}
-  - {fileID: 5757542298919752507}
-  - {fileID: 1605613789145941012}
-  - {fileID: 6925526669478128818}
-  - {fileID: 6390257317079056509}
   - {fileID: 6925488799031551862}
   m_Father: {fileID: 1168994283287210381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6680,7 +6620,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6390257317079056509}
   - component: {fileID: 8373903728337435}
-  - component: {fileID: 5410345105276783682}
   m_Layer: 0
   m_Name: "\u5916\u7A97\u8865_03 (6)"
   m_TagString: Untagged
@@ -6701,7 +6640,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 883848175985301695}
+  m_Father: {fileID: 5189839070895931325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8373903728337435
 SpriteRenderer:
@@ -6726,7 +6665,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6758,68 +6697,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5410345105276783682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6209684546973212379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blendWeatherLight: 0
-  lerpPs: 0
-  ps: []
-  psCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  light2D: {fileID: 0}
-  myLightBase: []
-  spriteRenderer: {fileID: 8373903728337435}
-  autoLerpValue: 0
-  lerpCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  autoLerpColor: 1
-  lerpColor:
-    serializedVersion: 2
-    key0: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key1: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 1}
-    key5: {r: 0, g: 0, b: 0, a: 1}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 15728
-    atime2: 16384
-    atime3: 49151
-    atime4: 49807
-    atime5: 65535
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 6
 --- !u!1 &6770747196787054050
 GameObject:
   m_ObjectHideFlags: 0
@@ -6830,7 +6707,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5757542298919752507}
   - component: {fileID: 4309668704200171396}
-  - component: {fileID: 3303280660346007240}
   m_Layer: 0
   m_Name: "\u5916\u7A97\u8865_03 (7)"
   m_TagString: Untagged
@@ -6851,7 +6727,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 883848175985301695}
+  m_Father: {fileID: 5189839070895931325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4309668704200171396
 SpriteRenderer:
@@ -6876,7 +6752,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6908,68 +6784,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3303280660346007240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6770747196787054050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blendWeatherLight: 0
-  lerpPs: 0
-  ps: []
-  psCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  light2D: {fileID: 0}
-  myLightBase: []
-  spriteRenderer: {fileID: 4309668704200171396}
-  autoLerpValue: 0
-  lerpCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  autoLerpColor: 1
-  lerpColor:
-    serializedVersion: 2
-    key0: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key1: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 1}
-    key5: {r: 0, g: 0, b: 0, a: 1}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 15728
-    atime2: 16384
-    atime3: 49151
-    atime4: 49807
-    atime5: 65535
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 6
 --- !u!1 &7316974827843090630
 GameObject:
   m_ObjectHideFlags: 0
@@ -7125,7 +6939,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8032795521556673103}
   fixedColor: 0
   polygonCollider: {fileID: 5339062105119797503}
   meshFilter: {fileID: 1507866615811683096}
@@ -7292,7 +7106,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8085522080203554070}
   fixedColor: 0
   polygonCollider: {fileID: 2162074856832801415}
   meshFilter: {fileID: 2438659951855336529}
@@ -7312,7 +7126,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2572244514621801509}
   - component: {fileID: 6800400804381252898}
-  - component: {fileID: 6014715582569263698}
   m_Layer: 0
   m_Name: "\u5916\u7A97\u8865_03 (4)"
   m_TagString: Untagged
@@ -7333,7 +7146,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 883848175985301695}
+  m_Father: {fileID: 5189839070895931325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6800400804381252898
 SpriteRenderer:
@@ -7358,7 +7171,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7390,68 +7203,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6014715582569263698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9118418374954365009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blendWeatherLight: 0
-  lerpPs: 0
-  ps: []
-  psCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  light2D: {fileID: 0}
-  myLightBase: []
-  spriteRenderer: {fileID: 6800400804381252898}
-  autoLerpValue: 0
-  lerpCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  autoLerpColor: 1
-  lerpColor:
-    serializedVersion: 2
-    key0: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key1: {r: 1.216786, g: 1.216786, b: 0.115968816, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 1}
-    key5: {r: 0, g: 0, b: 0, a: 1}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 65535
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 15728
-    atime2: 16384
-    atime3: 49151
-    atime4: 49807
-    atime5: 65535
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: -1
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 6
 --- !u!1001 &833856720097228995
 PrefabInstance:
   m_ObjectHideFlags: 0

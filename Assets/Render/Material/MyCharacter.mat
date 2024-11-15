@@ -11,9 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - GRASSBLEND
-  - SNOWBLEND
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _CHARACTER_ON
   - _GRASSBLEND_ON
@@ -85,7 +83,7 @@ Material:
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _Fail: 0
-    - _GrassBlend: 1
+    - _GrassBlend: 0
     - _LightBlend: 1
     - _Move: 0
     - _MoveSelfUV: 0
@@ -96,7 +94,7 @@ Material:
     - _PlantAutumnBlend: 0
     - _PlantAutumnNoiseScale: 1
     - _ScaleValue: 0.5
-    - _SnowBlend: 1
+    - _SnowBlend: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _Tree3D: 0

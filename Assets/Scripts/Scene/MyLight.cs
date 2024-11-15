@@ -18,14 +18,12 @@ public class MyLight : MonoBehaviour
 
 
     [SerializeField]
-    public AnimationCurve psCurve;
-    [SerializeField]
-    private Light2D light2D; 
+    public AnimationCurve psCurve; 
     [SerializeField]
     MyLightBase[] myLightBase;
 
     [SerializeField]
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer[] spriteRenderers;
 
     [SerializeField]
     private bool autoLerpValue;
@@ -71,10 +69,7 @@ public class MyLight : MonoBehaviour
         {
             _intensity = value;
             float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
-            if (light2D)
-            { 
-                light2D.intensity = blendWeatherLight ? value * weatherLight : value;
-            }
+            
             if (myLightBase != null)
             {
                 for (int i = 0; i < myLightBase.Length; i++)
@@ -103,10 +98,7 @@ public class MyLight : MonoBehaviour
         {
             _color = value;
             float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight*0.4f;
-            if (light2D)
-            {
-                light2D.color= blendWeatherLight?value* weatherLight : value;
-            }
+            
            
             if (myLightBase != null)
             {
@@ -118,13 +110,17 @@ public class MyLight : MonoBehaviour
                     } 
                 } 
             }
-            if (spriteRenderer)
+            if (spriteRenderers!=null)
             {
+                
                 Color color1 = _color;
                 float a = _color.a;
                 color1*= weatherLight;
                 color1.a=a;
-                spriteRenderer.color = blendWeatherLight ?color1: _color;
+                for(int i = 0; i < spriteRenderers.Length; i++)
+                {
+                    spriteRenderers[i].color= blendWeatherLight ? color1 : _color;
+                } 
             }
 
         }
@@ -135,16 +131,7 @@ public class MyLight : MonoBehaviour
     private void OnEnable()
     {
 #if UNITY_EDITOR
-        if (light2D == null)
-        {
-            light2D = GetComponent<Light2D>();
-            if(light2D!=null)
-                _intensity = light2D.intensity;
-        }
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = GetComponent<SpriteRenderer>();
-        }
+       
         if (ps == null)
         {
             ps = gameObject.GetComponentsInChildren<ParticleSystem>(true);
@@ -158,10 +145,7 @@ public class MyLight : MonoBehaviour
     public void Display(float value)
     {
         if (autoLerpColor)
-        {
-            if (light2D)
-                light2D.color = lerpColor.Evaluate(value);
-              
+        { 
             if (myLightBase != null)
             {
                 for(int i = 0; i < myLightBase.Length; i++)
@@ -170,13 +154,19 @@ public class MyLight : MonoBehaviour
                         myLightBase[i].Color = lerpColor.Evaluate(value); 
                 }
             }
-                
+
+            if (spriteRenderers != null)
+            { 
+                for (int i = 0; i < spriteRenderers.Length; i++)
+                {
+                    spriteRenderers[i].color = lerpColor.Evaluate(value);
+                }
+            }
+
         }
        if(autoLerpValue)
         {
-            if (light2D)
-                light2D.intensity = lerpCurve.Evaluate(value);
-
+             
             if (myLightBase != null)
             {
                 for (int i = 0; i < myLightBase.Length; i++)
@@ -218,33 +208,7 @@ public class MyLight : MonoBehaviour
             intensity = lerpCurve.Evaluate(timeValue);
         if (autoLerpColor)
             color = lerpColor.Evaluate(timeValue);
-        if (light2D)
-        {
-            if (autoLerpValue)
-            {
-                if (intensity == 0)
-                {
-                    light2D.enabled = false;
-                }
-                else
-                {
-                    light2D.enabled = true;
-                }
-            }
-            else if (autoLerpColor)
-            {
-                if (color.a == 0)
-                {
-                    light2D.enabled = false;
-                }
-                else
-                {
-                    light2D.enabled = true;
-                }
-            }
-
-               
-        }
+        
            
     }
 }

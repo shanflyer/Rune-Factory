@@ -30,7 +30,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6842658892784477646}
-  - {fileID: 9028195925569132830}
   m_Father: {fileID: 243363610048730810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1722654000114420145
@@ -62,11 +61,11 @@ Transform:
   m_GameObject: {fileID: 1722654000114420145}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.013999879, y: -0.20200002, z: -100}
+  m_LocalPosition: {x: 0.013999879, y: -0.119000144, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 243363610048730810}
+  m_Father: {fileID: 7336283237124102024}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &5212069784300900640
 PolygonCollider2D:
@@ -190,7 +189,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 1.2
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 6401041088522357053}
   fixedColor: 0
   polygonCollider: {fileID: 5212069784300900640}
   meshFilter: {fileID: 6763149396316030529}
@@ -314,11 +313,11 @@ Transform:
   m_GameObject: {fileID: 2522759047720225287}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0071, y: -0.0453, z: -0.33}
+  m_LocalPosition: {x: 0.002, y: 0.0762, z: -0.33000183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2347629611075974623}
+  m_Father: {fileID: 7336283237124102024}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6054539825811121937
 SpriteRenderer:
@@ -343,7 +342,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -396,9 +395,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 6054539825811121937}
+  spriteRenderers:
+  - {fileID: 6054539825811121937}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -466,7 +465,10 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.083, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 9028195925569132830}
+  - {fileID: 8153826712612378339}
+  - {fileID: 7431881518973101040}
   m_Father: {fileID: 243363610048730810}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1806732963643189460
@@ -490,11 +492,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 7351100823321397851}
   - {fileID: 7129873650114092237}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -619,8 +620,6 @@ Transform:
   - {fileID: 2347629611075974623}
   - {fileID: 5201942735256363141}
   - {fileID: 7336283237124102024}
-  - {fileID: 8153826712612378339}
-  - {fileID: 7431881518973101040}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7702594158770816238
@@ -652,11 +651,11 @@ Transform:
   m_GameObject: {fileID: 7702594158770816238}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.003, y: 0.035, z: -100}
+  m_LocalPosition: {x: 0.0029999912, y: 0.11800008, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 243363610048730810}
+  m_Father: {fileID: 7336283237124102024}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &9158496862690918566
 PolygonCollider2D:
@@ -779,7 +778,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 0.6
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 4688784936303399617}
   fixedColor: 0
   polygonCollider: {fileID: 9158496862690918566}
   meshFilter: {fileID: 2276921937065385685}

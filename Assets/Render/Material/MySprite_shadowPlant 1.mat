@@ -13,8 +13,10 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - DAMPBLEND
-  - SHADOWSTEP
+  - MOVE
+  - SEASONCOLORBLEND
   - SNOWBLEND
+  - WATER
   m_InvalidKeywords:
   - _DAMPBLEND_ON
   - _DampBlend
@@ -108,7 +110,7 @@ Material:
     - _HighLighStep: 0
     - _HighLightNoise: 50
     - _LightBlend: 1
-    - _Move: 0
+    - _Move: 1
     - _MoveSelfUV: 0
     - _NoiseAlpha: 1
     - _NoiseValue: 500
@@ -121,7 +123,7 @@ Material:
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _Tree3D: 0
-    - _Water: 0
+    - _Water: 1
     - _WaterBottom: 1.33
     - _WaterHigh: 0
     - _WaterResultA: 1.2
@@ -142,8 +144,8 @@ Material:
     - _WindScroll: 0.4
     - _WindValue: 1
     - _ZWrite: 0
-    - _shadowStep: 1
-    - seasonColorBlend: 0
+    - _shadowStep: 0
+    - seasonColorBlend: 1
     - waterNoiseScale: 136
     - waterValue: 0.242
     - waveA: 1

@@ -231,13 +231,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 8382019567911456877}
   - {fileID: 6836260138832863395}
   - {fileID: 5112370529995102904}
   - {fileID: 3301909616597376988}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -487,7 +486,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1.3
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 515264949058702263}
   fixedColor: 0
   polygonCollider: {fileID: 8176391370868371537}
   meshFilter: {fileID: 1122955162507415390}
@@ -685,7 +684,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1.1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 2183278382836803696}
   fixedColor: 0
   polygonCollider: {fileID: 7651474685175617244}
   meshFilter: {fileID: 4000666516762257050}
@@ -849,7 +848,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8342407635202865689}
   fixedColor: 0
   polygonCollider: {fileID: 5388254867754637037}
   meshFilter: {fileID: 3320483082903649620}
@@ -1013,7 +1012,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8835020471748521824}
   fixedColor: 0
   polygonCollider: {fileID: 2008275553825117602}
   meshFilter: {fileID: 5508942181057173584}
@@ -1146,7 +1145,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1199,9 +1198,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 1067412151928864584}
+  spriteRenderers:
+  - {fileID: 1067412151928864584}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2

@@ -117,6 +117,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1406056147963175631}
   - {fileID: 2959422823306969725}
   - {fileID: 341692664096297828}
   m_Father: {fileID: 5287977684783270171}
@@ -142,11 +143,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 8673995730830773684}
   - {fileID: 1586559396317815361}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -394,7 +394,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 0.6
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 5380778472748324865}
   fixedColor: 0
   polygonCollider: {fileID: 5938222167526236544}
   meshFilter: {fileID: 4551904447294879486}
@@ -430,12 +430,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2621630557498366574}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.002, y: -0.014, z: 0.012}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0020000935, y: -0.013999939, z: 0.012}
   m_LocalScale: {x: 0.9309, y: 1.0556, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5287977684783270171}
+  m_Father: {fileID: 8562116168600446181}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6515321977927278424
 SpriteRenderer:
@@ -460,7 +460,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -513,9 +513,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 6515321977927278424}
+  spriteRenderers:
+  - {fileID: 6515321977927278424}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -585,7 +585,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3882631398917582068}
-  - {fileID: 1406056147963175631}
   - {fileID: 8562116168600446181}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -805,7 +804,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 1.2
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 7248275974494382429}
   fixedColor: 0
   polygonCollider: {fileID: 1947558373087797866}
   meshFilter: {fileID: 2803694011438309724}

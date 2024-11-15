@@ -13,6 +13,10 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BACKBLEND
+  - DAMPBLEND
+  - MOVE
+  - SEASONCOLORBLEND
+  - SNOWBLEND
   m_InvalidKeywords:
   - _BACKBLEND_ON
   - _DampBlend
@@ -133,7 +137,7 @@ Material:
     - _ClipValue: 0.5
     - _Cutoff: 0.85
     - _Damp: 0
-    - _DampBlend: 0
+    - _DampBlend: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EdgeWaveOffset: 0
@@ -146,7 +150,7 @@ Material:
     - _LightBlend: 1
     - _Metallic: 0
     - _Mode: 0
-    - _Move: 0
+    - _Move: 1
     - _MoveSelfUV: 1
     - _NormalTex: 0
     - _OcclusionStrength: 1
@@ -160,7 +164,7 @@ Material:
     - _ScaleValue: 0
     - _SeasonValue: 0
     - _SmoothnessTextureChannel: 0
-    - _SnowBlend: 0
+    - _SnowBlend: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
@@ -180,7 +184,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     - _shadowStep: 0
-    - seasonColorBlend: 0
+    - seasonColorBlend: 1
     - waterNoiseScale: 0
     - waterValue: 0.2
     m_Colors:

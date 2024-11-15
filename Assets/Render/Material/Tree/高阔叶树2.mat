@@ -13,7 +13,10 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BACKBLEND
+  - DAMPBLEND
+  - MOVE
   - SEASONCOLORBLEND
+  - SKINNED_SPRITE
   - SNOWBLEND
   m_InvalidKeywords:
   - SEASONCOLORBLEND_ON
@@ -142,7 +145,7 @@ Material:
     - _ClipValue: 0.5
     - _Cutoff: 0.85
     - _Damp: 0
-    - _DampBlend: 0
+    - _DampBlend: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EdgeWaveOffset: 0
@@ -155,7 +158,7 @@ Material:
     - _LightBlend: 1
     - _Metallic: 0
     - _Mode: 0
-    - _Move: 0
+    - _Move: 1
     - _MoveSelfUV: 0
     - _NormalTex: 0
     - _OcclusionStrength: 1

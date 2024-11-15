@@ -423,6 +423,7 @@ namespace UnityEngine.Rendering.Universal
         // Show on-screen warning about invalid render resolutions.
         void OnGUI()
         {
+            /*
             Color oldColor = GUI.color;
             GUI.color = Color.red;
 
@@ -444,7 +445,7 @@ namespace UnityEngine.Rendering.Universal
                 GUILayout.Box("Target resolution is smaller than the reference resolution. Image may appear stretched or cropped.");
             }
 
-            GUI.color = oldColor;
+            GUI.color = oldColor;*/
         }
 
 #endif

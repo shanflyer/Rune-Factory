@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ScreenShotAction : MonoBehaviour
 {
@@ -14,13 +15,12 @@ public class ScreenShotAction : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        /*
-        if (Input.GetKeyDown(KeyCode.S))
+    { 
+        if (Keyboard.current.sKey.wasPressedThisFrame)
         {
             shotnum++;
             ScreenCapture.CaptureScreenshot("Shot" + System.DateTime.Now.Day + System.DateTime.Now.Hour + System.DateTime.Now.Minute + System.DateTime.Now.Second + shotnum + ".png");
-        };*/
+        }; 
     }
 #endif
 

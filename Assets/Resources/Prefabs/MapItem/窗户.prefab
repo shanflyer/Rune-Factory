@@ -151,7 +151,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4836172322032965253}
-  - {fileID: 1228809898000781528}
   m_Father: {fileID: 2903638461234220425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5244878064701045330
@@ -550,11 +549,11 @@ Transform:
   m_GameObject: {fileID: 7767758494001618953}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.002, y: 0.088, z: -0.09}
+  m_LocalPosition: {x: -0.002, y: 0.171, z: -0.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2611240508205418275}
+  m_Father: {fileID: 1983004093352919585}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8496108473650112056
 SpriteRenderer:
@@ -579,7 +578,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -632,9 +631,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase: []
-  spriteRenderer: {fileID: 8496108473650112056}
+  spriteRenderers:
+  - {fileID: 8496108473650112056}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -703,6 +702,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1228809898000781528}
   - {fileID: 3457246278467410341}
   - {fileID: 4492659592134063815}
   m_Father: {fileID: 2903638461234220425}
@@ -728,11 +728,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 2939634713882898741}
   - {fileID: 1586131149803394907}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
