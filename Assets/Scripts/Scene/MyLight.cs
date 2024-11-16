@@ -68,7 +68,9 @@ public class MyLight : MonoBehaviour
         set
         {
             _intensity = value;
-            float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
+            float weatherLight = 0;
+            if (Application.isPlaying)
+                weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
             
             if (myLightBase != null)
             {
@@ -97,7 +99,9 @@ public class MyLight : MonoBehaviour
         set
         {
             _color = value;
-            float weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight*0.4f;
+            float weatherLight = 0;
+            if (Application.isPlaying)
+                weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight*0.4f;
             
            
             if (myLightBase != null)

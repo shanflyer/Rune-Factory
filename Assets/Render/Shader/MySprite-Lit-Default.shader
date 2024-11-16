@@ -536,11 +536,11 @@ Shader "MySprite-Lit-Default"
                 _light_value=(1-_light_value*0.5); 
 
 
-                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex,uv); 
-                shadow.xyz*=_light_value;
-                half3 shadowColor=GlobalColor.xyz*GlobalColor.a; 
-
-                 result.xyz==shadowColor*result.xyz+result.xyz*(1-shadow.r);  
+                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex,uv);  
+                shadow.xyz*=_light_value; 
+                half3 shadowColor=GlobalColor.xyz*GlobalColor.a*0.5; 
+ 
+                 result.xyz=shadowColor*result.xyz*shadow.r+result.xyz*(1-shadow.r);  
                 return result;  
            } 
           #endif
@@ -917,6 +917,7 @@ Shader "MySprite-Lit-Default"
             #pragma fragment NormalsRenderingFragment
 
             #pragma multi_compile _ SKINNED_SPRITE 
+            #pragma shader_feature_local _ MOVE 
             #pragma shader_feature_local _ SNOWBLEND
 
             struct Attributes
@@ -942,32 +943,7 @@ Shader "MySprite-Lit-Default"
                 //half3   screenUV : TEXCOORD4;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
-            
-             float2 MoveUV(float2 uv,float2 screenUV,float SnowMove)
-            {
-                float svalue =_ScreenParams.y/ 1920;
-                svalue=floor(svalue);
-                svalue=clamp(svalue,1,svalue);
-                svalue/=2;
-                float2 offsetUv= _WorldSpaceCameraPos.xy*svalue*800/_ScreenParams.xy;
-                screenUV+=offsetUv;
-
-                float2 panner63 = _WindScroll * 0.3 * _TimeParameters.x + screenUV;
-				float2 panner74 =_TimeParameters.x * _WindJitter * 0.5  + screenUV *2;
-
-                float4 WindNoise0=pow(abs(SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner63)) , 2.5);
-				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
-
-                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
-                float windValue=lerp(1,2,abs(_WindValue));
-                //return float2(moveValue.x,moveValue.x);
-                float value=moveValue.x*_WindNoiseValue*windValue;
-                float  offset=WindNoise0.x*WindNoise1.x*value*SnowMove;
-                int stepWind=step(0,_WindValue);
-                offset.x=offset.x*stepWind-offset.x*(1-stepWind);
-
-                return offset+uv;
-            }
+             
             
             Varyings DefaultVert(Attributes attributes)
             {
@@ -1011,25 +987,32 @@ Shader "MySprite-Lit-Default"
            
             half4 DefaultFrag(Varyings i) : SV_Target
             { 
+                float2 uv=i.uv; 
                 float s_w=0;
+                #if SNOWBLEND 
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
                 s_w=clamp(s_w,0,1);
 
                 float s_w1=0;
-                Unity_Remap_float(_SeasonValue,float2(0.05,0),float2(0,1),s_w1);
+                Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
                 s_w1=clamp(s_w1,0,1);
                 s_w+=s_w1;
+                #endif
 
+               
+                #if MOVE
+                float2 offset;
+                uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
+                #endif
 
-                float2 uv=MoveUV(i.uv,i.lightingUV.xy,1-s_w);
-                half4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
-                half4 _NormalColor =_NormalMap.Sample(sampler_MainTex,i.uv);
-                 
+                half4 mainTex =_MainTex.Sample(sampler_MainTex,uv); 
+                half4 _NormalColor =_NormalMap.Sample(sampler_MainTex,uv);
+                // _NormalColor.b=1-_NormalColor.b;
                  #if SNOWBLEND
                  mainTex=SnowColor(mainTex,uv,s_w);
                  #endif 
 
-                half3 normalTS;
+                half3 normalTS=_NormalColor.xyz;
                 half4 result=half4(1,1,1,1);
                 normalTS = UnpackNormal(_NormalColor);
                 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);

@@ -6,6 +6,8 @@ Shader "MyShadowMask"
         _DirValue("Dir",float)=1
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         _Color ("Tint", Color) = (1,1,1,1) 
+        _Scale("Scale",float)=2
+        [Toggle]_FilpColor("FilpColor",int)=0
     }
 
     SubShader
@@ -17,7 +19,7 @@ Shader "MyShadowMask"
         ZWrite Off
         Pass
         {
-            Tags {"LightMode" = "Universal2D" "Queue"="Transparent" "RenderType"="Transparent"}
+            Tags { "Queue"="Transparent" "RenderType"="Transparent"}
 
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -45,7 +47,8 @@ Shader "MyShadowMask"
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
-
+            
+            half2 _Direction;
             half2 LightDirection;
             half4 GlobalColor;   
 
@@ -54,6 +57,8 @@ Shader "MyShadowMask"
                 half4 _MainTex_ST;
                 half4 _Color;
                 half _DirValue;
+                half _Scale;
+                int _FilpColor;
                 
             CBUFFER_END
 
@@ -62,7 +67,7 @@ Shader "MyShadowMask"
                 Varyings o = (Varyings)0;  
                 float4x4 m_Data=UNITY_MATRIX_M;
 
-                m_Data[0][0]=UNITY_MATRIX_M[0][0]*LightDirection.y;
+                m_Data[0][0]=UNITY_MATRIX_M[0][0]*(1-_Direction.y)*_Scale;
                 float3 worldPos=mul(m_Data, float4(attributes.positionOS, 1.0));
                 
                 o.positionCS = TransformWorldToHClip(worldPos);
@@ -77,7 +82,8 @@ Shader "MyShadowMask"
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
-                const half4 main =  SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv); 
+                half4 main =  SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv); 
+                main.r=main.r*(1-_FilpColor)+(1-main.r)*_FilpColor;
                 float aplhaValue=0;
                 Unity_Remap_float(main.r,float2(i.uv2.x-0.2,i.uv2.x),float2(0,1),aplhaValue);
                 

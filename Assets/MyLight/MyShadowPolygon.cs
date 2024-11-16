@@ -9,7 +9,7 @@ using UnityEditor;
 [RequireComponent(typeof(PolygonCollider2D))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
-//[ExecuteAlways]
+[ExecuteAlways]
 public class MyShadowPolygon : MonoBehaviour
 {
     [SerializeField]
@@ -39,7 +39,7 @@ public class MyShadowPolygon : MonoBehaviour
             meshRenderer = GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = Resources.Load<Material>("MyShadow");
         }
-        //CreatMesh();
+        CreatMesh();
     }
     private void Awake()
     {
@@ -186,8 +186,7 @@ public class MyShadowPolygon : MonoBehaviour
     }
     
 }
-#if UNITY_EDITOR
-/*
+#if UNITY_EDITOR 
 [CustomEditor(typeof(MyShadowPolygon))]
 public class MyShadowPolygonEditor : Editor
 {
@@ -206,5 +205,5 @@ public class MyShadowPolygonEditor : Editor
             shadowPolygon.CreatMesh();
         }
     }
-}*/
+}
 #endif
