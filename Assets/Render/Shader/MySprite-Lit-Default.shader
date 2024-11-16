@@ -1283,12 +1283,12 @@ Shader "MySprite-Lit-Default"
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
-                _objSortPos.y+=_objSortPos.z;
-
-               // int stepFixed=1-step(_FixedDepth,0);
-               // _objSortPos.y=(1-stepFixed)*_objSortPos.y+stepFixed*_FixedDepth; 
+               // _objSortPos.y+=_objSortPos.z;
+ 
 
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 
+             
+
                 float high=stepPosZ*(objWroldPos.y-ObjPos.y)*0.5;
                 float positionCSY=o.positionCS.y;   
                 //stepPosZ+=stepFixed; 
@@ -1311,24 +1311,27 @@ Shader "MySprite-Lit-Default"
                 DepthTex.xyz*=clipA;
                 half4 _NormalColor = _NormalMap.Sample(sampler_MainTex,i.uv);
                  
-                half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
+                half depthStep_R=1-step(abs(DepthTex.r-0.5),0.01);
                 half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
-                half depthStep_B=step(0.01,abs(DepthTex.b-0.5));
-                half depthStep_ZeroB=step(0.01,DepthTex.b);
+                half depthStep_B=1-step(abs(DepthTex.b-0.5),0.01);
+                half depthStep_ZeroB=1-step(DepthTex.b,0);
                 half stepDepthOne=step(1,DepthTex.b);
+                 depthStep_ZeroB*=(1-stepDepthOne);
 
                 int clearColor=1-step(DepthTex.b,0)*step(DepthTex.r,0)*step(DepthTex.g,0);
 
                 half otherStep=depthStep_R*depthStep_G+depthStep_B; 
-                otherStep=clamp(otherStep,0,1)*depthStep_ZeroB;
-               
+                
+                otherStep=clamp(otherStep,0,1)*depthStep_ZeroB; 
+              
 
                 half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*(1-stepDepthOne)*otherStep; 
                 half offset=depthValue*512*4/_ScreenParams.y;
-
-               
-                half depth=i.color.z+offset*clearColor;
+                  
+                half depth=i.color.z  +offset*clearColor;
                 half setpHigh=depthStep_G; 
+                 //return float4(i.color.zzz,mainTex.a);
+               
 
                 //return float4(i.color.zzz,mainTex.a);
 
@@ -1336,7 +1339,7 @@ Shader "MySprite-Lit-Default"
                 
                 mainTex.xyz=half3(depth,high,_NormalColor.g*0.5+stepDepthOne)*(1-_Character);
                
-                
+                // mainTex.xyz=depth.xxx;
 
                 half absUv=length(i.screenUV-i.color.yz);
                 int stepMul=step(absUv,0.001)*_Character;

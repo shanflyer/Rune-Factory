@@ -1525,8 +1525,8 @@ public class MapCellController : Singleton<MapCellController>
                 pathCells = pathCells
             };
 
-            // findPath.Schedule().Complete();
-            findPath.Run();
+            findPath.Schedule().Complete();
+           // findPath.Run();
 
             for (int i = 0; i < findPath.pathCells.Length; i++)
             {
