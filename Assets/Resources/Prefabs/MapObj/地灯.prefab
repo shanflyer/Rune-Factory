@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3211182311973786598}
   - component: {fileID: 342295805599297182}
   - component: {fileID: 1418609969269924848}
+  - component: {fileID: 2566497805844876443}
   m_Layer: 19
   m_Name: Mask
   m_TagString: Untagged
@@ -157,6 +158,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2566497805844876443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450895879219425882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb9f8b531408e64f8f80dc988c77516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 1
+  value: 1
+  renderer: {fileID: 1418609969269924848}
+  fixedColor: 0
 --- !u!1 &2733322669585462302
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +324,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1cccd65aaa134f0479883fd0fddcf51e, type: 3}
-  m_Color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -330,7 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 8401068683031438233}
   fixedColor: 0
 --- !u!114 &1008374329480113766
@@ -354,10 +372,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 2849614536884057026}
-  spriteRenderer: {fileID: 8401068683031438233}
+  - {fileID: 2566497805844876443}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2

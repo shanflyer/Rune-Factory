@@ -537,7 +537,7 @@ Transform:
   m_GameObject: {fileID: 8482205767104178098}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.05, y: -0.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -589,10 +589,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.24051738, y: -0.2629223}
-      - {x: -0.391388, y: -0.24381647}
-      - {x: -0.39448446, y: -0.51063603}
-      - {x: 0.23676848, y: -0.51924515}
+    - - {x: 0.069138646, y: 0.04758936}
+      - {x: -0.1803897, y: 0.06952515}
+      - {x: -0.1720733, y: -0.050388753}
+      - {x: 0.063928366, y: -0.051876664}
   m_UseDelaunayMesh: 0
 --- !u!23 &7483706755739146696
 MeshRenderer:
@@ -663,7 +663,7 @@ MonoBehaviour:
   meshFilter: {fileID: 2732295468484085604}
   meshRenderer: {fileID: 7483706755739146696}
   scale: 1
-  shadowLength: 0.1
-  shadow2Length: 0.1
+  shadowLength: 0.8
+  shadow2Length: 0.2
   shadowOffset: 0.1
   color: {r: 0.6, g: 0, b: 0, a: 0}

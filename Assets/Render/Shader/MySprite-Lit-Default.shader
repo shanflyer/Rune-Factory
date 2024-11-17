@@ -415,8 +415,7 @@ Shader "MySprite-Lit-Default"
                 WindNoise0=pow(abs(WindNoise0), 2.5);
 				float4 WindNoise1=SAMPLE_TEXTURE2D( _WindNoiseTexture,sampler_WindNoiseTexture, panner74);
 
-                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
-
+                half4 moveValue=_MoveMask.Sample(sampler_MainTex,uv); 
                 float windValue=lerp(1,2,abs(_WindValue));
                 //return float2(moveValue.x,moveValue.x);
                 float value=moveValue.x*_WindNoiseValue*windValue;
@@ -525,7 +524,7 @@ Shader "MySprite-Lit-Default"
            }
           #endif
           #if SHADOWSTEP
-           float4 ShadowColor(float4 result,float3 lightCol,float2 uv)
+           float4 ShadowColor(float4 result,float3 lightCol,float2 ScrennUv,float2 uv)
            {
                  half _light_value=(lightCol.x+lightCol.y+lightCol.z)/3;
                 float globalValue=(_GlobalColor.x+_GlobalColor.y+_GlobalColor.z)/3;
@@ -536,11 +535,21 @@ Shader "MySprite-Lit-Default"
                 _light_value=(1-_light_value*0.5); 
 
 
-                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex,uv);  
+                half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex,ScrennUv);  
                 shadow.xyz*=_light_value; 
                 half3 shadowColor=GlobalColor.xyz*GlobalColor.a*0.5; 
- 
-                 result.xyz=shadowColor*result.xyz*shadow.r+result.xyz*(1-shadow.r);  
+                float4 moveValue=_MoveMask.Sample(sampler_MainTex,uv);
+
+                int moveAStep=1-step(moveValue.a,0);
+                int moveYStep=1-step(moveValue.y,0);
+                int moveZStep=1-step(moveValue.z,0);
+                int moveXStep=1-step(moveValue.x,0);
+                //return moveYStep.xxxx;
+                int moveStep=moveYStep+(1-moveAStep)+moveXStep+moveZStep;
+                moveStep=clamp(moveStep,0,1);
+                shadow*=moveStep;
+
+                result.xyz=shadowColor*result.xyz*shadow.r+result.xyz*(1-shadow.r);  
                 return result;  
            } 
           #endif
@@ -888,7 +897,7 @@ Shader "MySprite-Lit-Default"
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
                  
                 #if SHADOWSTEP
-                result=ShadowColor(result,lightCol.xyz,i.lightingUV);
+                result=ShadowColor(result,lightCol.xyz,i.lightingUV,i.uv);
                 #endif 
 
                 #if  BACKBLEND 

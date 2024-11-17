@@ -12,8 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - DAMPBLEND
-  - WATER
+  - SHADOWSTEP
   m_InvalidKeywords:
   - _DAMPBLEND_ON
   - _DampBlend
@@ -83,7 +82,7 @@ Material:
     - _ClipValue: 0.5
     - _Comp: 8
     - _Damp: 0
-    - _DampBlend: 1
+    - _DampBlend: 0
     - _DampNoise: 50
     - _DampValue: 0
     - _EdgeWaveOffset: 0
@@ -106,7 +105,7 @@ Material:
     - _SnowBlend: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _Water: 1
+    - _Water: 0
     - _WaterBottom: 1
     - _WaterHigh: 0
     - _WaterZero: 0
@@ -119,7 +118,7 @@ Material:
     - _WindNoiseValue: 0
     - _WindScroll: 0.1
     - _ZWrite: 0
-    - _shadowStep: 0
+    - _shadowStep: 1
     - seasonColorBlend: 0
     - waterNoiseScale: 0
     - waterValue: 0.2

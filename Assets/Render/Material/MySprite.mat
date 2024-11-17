@@ -13,7 +13,6 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BACKBLEND
-  - DAMPBLEND
   - SKINNED_SPRITE
   - SNOWBLEND
   m_InvalidKeywords:
@@ -39,10 +38,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MaskTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -74,27 +69,19 @@ Material:
     m_Floats:
     - EdgeValue: 0.1
     - _BackBlend: 1
-    - _BlendRmapMin: 0
-    - _BlendValue: 0
     - _BlendVertexColor: 0
-    - _BlendingType: 0
     - _Character: 0
-    - _ClipValue: 0.5
     - _Damp: 0
-    - _DampBlend: 1
+    - _DampBlend: 0
     - _EdgeWaveOffset: 0
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
-    - _FixedDepth: 1000
     - _GrassBlend: 0
     - _LightBlend: 1
     - _Move: 0
     - _MoveSelfUV: 0
-    - _PlantAutumnBlend: 0
     - _PlantAutumnNoiseScale: 1
-    - _ScaleValue: 0.5
     - _SnowBlend: 1
-    - _Tree3D: 0
     - _Water: 0
     - _WaterBottom: 1
     - _WaterHigh: 0
@@ -116,7 +103,6 @@ Material:
     - EdgeColor: {r: 0.990566, g: 0.9765486, b: 0.9765486, a: 0}
     - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
     - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
-    - _BlendColor: {r: 0, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _PlantAutumnColor0: {r: 0, g: 0, b: 0, a: 1}
     - _PlantAutumnColor1: {r: 1, g: 1, b: 1, a: 1}
@@ -125,8 +111,6 @@ Material:
     - _PlantWinterColor: {r: 0, g: 0, b: 0, a: 1}
     - _PlantWinterColor1: {r: 0, g: 0, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SnowColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SnowRange: {r: 0, g: 1, b: 0, a: 1}
     - waterColor: {r: 0, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
