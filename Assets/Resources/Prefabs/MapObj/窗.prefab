@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2553888601780103965}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.172, y: -1.023, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -157,6 +157,7 @@ MonoBehaviour:
   intensity: 0.95
   value: 1
   renderer: {fileID: 0}
+  fixedColor: 0
   polygonCollider: {fileID: 3362794139507888376}
   meshFilter: {fileID: 8560524520451112003}
   lerpLength: {x: 0.6, y: 0.6}
@@ -186,11 +187,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 8407143069595395942}
   - {fileID: 1399189176720116074}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -441,6 +441,7 @@ MonoBehaviour:
   intensity: 1
   value: 1
   renderer: {fileID: 0}
+  fixedColor: 0
   polygonCollider: {fileID: 4780414227488933061}
   meshFilter: {fileID: 5359996799558854805}
   lerpLength: {x: 3, y: 4}

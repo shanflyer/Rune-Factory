@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 0
   lerpPs: 0
   ps: []
   psCurve:
@@ -141,8 +142,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
-  spriteRenderer: {fileID: 2992145161227584153}
+  myLightBase: []
+  spriteRenderers: []
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -206,7 +207,7 @@ Transform:
   m_GameObject: {fileID: 2436417702689561489}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.356, y: 5.313, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -404,6 +405,7 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_isView: 0
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
@@ -433,6 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 0
   lerpPs: 0
   ps: []
   psCurve:
@@ -441,8 +444,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 828036268577933850}
-  spriteRenderer: {fileID: 0}
+  myLightBase: []
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -623,6 +626,7 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_isView: 0
   m_LocalBounds:
     m_Center: {x: 0.0036500096, y: 0.30014998, z: 0}
     m_Extent: {x: 0.71075, y: 0.70255, z: 0}
@@ -666,6 +670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aff1c9023c29e498450d03f48b4c8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendWeatherLight: 0
   lerpPs: 0
   ps: []
   psCurve:
@@ -674,8 +679,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 2410903024461531313}
-  spriteRenderer: {fileID: 0}
+  myLightBase: []
+  spriteRenderers: []
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2

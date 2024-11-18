@@ -201,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 1642806333518830087}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.539, y: 0.08, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -547,11 +547,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  light2D: {fileID: 0}
   myLightBase:
   - {fileID: 5716482474444990772}
   - {fileID: 2469174590683280963}
-  spriteRenderer: {fileID: 0}
+  spriteRenderers: []
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2

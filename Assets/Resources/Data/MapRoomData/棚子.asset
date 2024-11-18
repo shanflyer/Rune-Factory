@@ -14,20 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: "\u68DA\u5B50"
   barrierGrids: f0fffffff8ffffff0f000000f9fffffff0fffffffafffffffcfffffffbfffffff0fffffffcfffffffafffffffcfffffff0fffffffdfffffff0ffffff0b000000f1ffffff0b0000000f0000000b000000feffffff020000000100000002000000ffffffff01000000000000000100000003000000faffffff0f000000fbffffff05000000fcffffff0f000000fcffffff0f000000fdffffff0f0000000a000000
-  groundIndexes: 0400000004000000
-  groundGrids: f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000
+  groundIndexes: 04000000040000000400000004000000
+  groundGrids: f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000
   defaultGround: 2
   mapItems:
-  - id: 1096
-    instanceId: 1096273
-    coordinate:
-      x: 11
-      y: -3
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas:
-    - name: PackageId
-      value: 12
   - id: 1094
     instanceId: 1094123
     coordinate:
@@ -38,6 +28,16 @@ MonoBehaviour:
     eventReferenceDatas:
     - name: PackageId
       value: 10
+  - id: 1096
+    instanceId: 1096273
+    coordinate:
+      x: 11
+      y: -3
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas:
+    - name: PackageId
+      value: 12
   startCoordinate:
     x: -16
     y: -8

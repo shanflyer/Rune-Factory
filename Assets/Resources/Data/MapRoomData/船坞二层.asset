@@ -14,23 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: "\u8239\u575E\u4E8C\u5C42"
   barrierGrids: ebfffffff4fffffffcffffff1f000000ebffffff20000000f6ffffff21000000ebffffff22000000ecffffff32000000edffffff2a000000efffffff32000000f0ffffff2d000000f0ffffff32000000f1ffffff2e000000f4ffffff32000000f5ffffff2f000000f7ffffff32000000f8ffffff300000001d00000032000000fcffffff270000000000000028000000fdffffff26000000ffffffff26000000fdffffff2f0000001d0000002f000000fffffffff4ffffff1d000000fdfffffffffffffffeffffff0d000000ffffffffffffffff04000000080000001f00000007000000230000001d0000002b00000008000000200000001d000000220000000900000007000000100000001f0000000b0000000600000010000000060000000b0000002c0000001d0000002e00000011000000080000001d0000001f00000015000000070000001d0000000700000017000000feffffff1d00000006000000
-  groundIndexes: 03000000030000000300000003000000
-  groundGrids: f4ffffff22000000090000002d0000000c000000fcffffff1700000006000000f4ffffff22000000090000002d0000000c000000fcffffff1700000006000000
+  groundIndexes: 030000000300000003000000030000000300000003000000
+  groundGrids: f4ffffff22000000090000002d0000000c000000fcffffff1700000006000000f4ffffff22000000090000002d0000000c000000fcffffff1700000006000000f4ffffff22000000090000002d0000000c000000fcffffff1700000006000000
   defaultGround: 2
   mapItems:
-  - id: 1152
-    instanceId: 1152890
-    coordinate:
-      x: -7
-      y: 42
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1001
     instanceId: 1001440
     coordinate:
       x: -14
       y: 40
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1150
+    instanceId: 1150150
+    coordinate:
+      x: -7
+      y: 32
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1150
+    instanceId: 1150095
+    coordinate:
+      x: 18
+      y: -4
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -50,14 +58,6 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1150
-    instanceId: 1150150
-    coordinate:
-      x: -7
-      y: 32
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
   - id: 1137
     instanceId: 1137889
     coordinate:
@@ -74,11 +74,11 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1150
-    instanceId: 1150095
+  - id: 1152
+    instanceId: 1152890
     coordinate:
-      x: 18
-      y: -4
+      x: -7
+      y: 42
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []

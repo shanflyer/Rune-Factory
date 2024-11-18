@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3660583462298262991}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.128, y: -2.74, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -152,14 +152,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 0.95
+  value: 1
+  renderer: {fileID: 0}
+  fixedColor: 0
   polygonCollider: {fileID: 6254512683426716246}
   meshFilter: {fileID: 3592312475956136174}
-  meshRenderer: {fileID: 364045126048292560}
   lerpLength: {x: 0.6, y: 0.6}
   lerpOffset: {x: 0, y: 0, z: 0}
   lerpValue: 0
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 0.95
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0, z: 0}
@@ -317,14 +319,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79883372390229243b7dfb5f149fb30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
+  intensity: 0.7
+  value: 1
+  renderer: {fileID: 0}
+  fixedColor: 0
   polygonCollider: {fileID: 3916910118067226402}
   meshFilter: {fileID: 2271924281542382877}
-  meshRenderer: {fileID: 2538451718303137065}
   lerpLength: {x: 3, y: 3}
   lerpOffset: {x: 0, y: 0, z: 0}
   lerpValue: -0.8
-  color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
-  intensity: 0.7
   PiovotCenter: 0
   LerpPiovotCenter: 0
   normalOffset: {x: 0, y: 0.2, z: 0}
