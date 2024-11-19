@@ -186,38 +186,7 @@ public class MyLightPolygon : MyLightBase
                 ts[t_start + i * 6 + 5] = index2;
             }
 
-
-                /*
-                for (int i = 0; i < meshIndexes.Length; i++)
-                {
-                    Vector3 normalized = vertices[meshIndexes[i]].normalized;
-                    Vector3 newPoint = vertices[meshIndexes[i]]+ lerpLength* normalized;
-                    vertices[v_start+i] = newPoint; 
-                    uv[meshIndexes[i]] = new Vector2(1, 1); 
-                    uv[v_start + i] = new Vector2(lerpValue, lerpValue);
-                    uv2[meshIndexes[i]] = Vector3.zero;
-                    uv2[v_start + i] = vertices[meshIndexes[i]];
-                    colors[i] = color;
-                    colors[v_start + i] = color;
-                }
-                for(int i = 0; i < points.Length; i++)
-                {
-                    int index0 = v_start + i;
-                    int index1 = index0 + 1;
-                    if(i>=points.Length-1)
-                    {
-                        index1 = v_start;
-                    }
-                    int index2 = meshIndexes[i];
-                    int index3= meshIndexes[i<points.Length-1? i+1:0];
-
-                    ts[t_start + i * 6] = index0;
-                    ts[t_start + i * 6 + 1] = index3;
-                    ts[t_start + i * 6 + 2] = index1;
-                    ts[t_start + i * 6 + 3] = index3;
-                    ts[t_start + i * 6 + 4] = index0;
-                    ts[t_start + i * 6 + 5] = index2;
-                }*/
+             
             var newMesh = new Mesh();
             newMesh.Clear();
             newMesh.vertices = vertices;

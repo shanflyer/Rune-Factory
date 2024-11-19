@@ -48,13 +48,21 @@ public class MyLight : MonoBehaviour
         set
         {
             _psValue = value;
-            for(int i = 0; i < mainModules.Length; i++)
+            try
             {
-               
-                Color mainColor = mainModules[i].startColor.color;
-                mainColor.a = value;
-                mainModules[i].startColor = mainColor;
+                for (int i = 0; i < mainModules.Length; i++)
+                {
+
+                    Color mainColor = mainModules[i].startColor.color;
+                    mainColor.a = value;
+                    mainModules[i].startColor = mainColor;
+                }
             }
+            catch
+            {
+
+            }
+            
         }
     }
 

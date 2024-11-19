@@ -8,6 +8,7 @@ Shader "MyShadow"
         _Color ("Tint", Color) = (1,1,1,1)  
         _DirIndex("DirIndex",int)=0
         _ClearDir("_ClearDir",int)=0
+        [Toggle]_HoldScale("_HoldScale",int)=0
     }
 
     SubShader
@@ -58,6 +59,7 @@ Shader "MyShadow"
                 int _SpriteShadow;
                 int _DirIndex;
                 int _ClearDir;
+                int _HoldScale;
             CBUFFER_END
 
             Varyings UnlitVertex(Attributes attributes)
@@ -70,7 +72,10 @@ Shader "MyShadow"
                 float lightAngleValue=sin(LightDirection.x);
                // lightAngleValue=(1-abs(_DirIndex))*lightAngleValue+clamp(lightAngleValue,0,1)*step(1,_DirIndex)+clamp(lightAngleValue,-1,0)*step(1,-_DirIndex);
                 m_Data[0][0]+=m_Data[0][0]*abs(lightAngleValue)*0.5*LightDirection.y;
-
+                float scaleY=1;
+                Unity_Remap_float(_Direction.y,float2(0,1),float2(1,0.75),scaleY);
+                scaleY=scaleY*(1-_HoldScale)+_HoldScale;
+                m_Data[1][1]*=scaleY;
                 float3 worldPos=mul(m_Data, float4(attributes.positionOS, 1.0));
                 float length=attributes.uv2.x*LightDirection.y;
                 length+=  length*abs(lightAngleValue)*0.5*LightDirection.y;

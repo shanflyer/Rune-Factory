@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
+using Unity.Mathematics;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -29,6 +32,7 @@ public class MyShadowPolygon : MonoBehaviour
     [SerializeField]
     Color color;
 
+     
     public PolygonCollider2D PolygonCollider => polygonCollider;
     private void OnEnable()
     {
@@ -184,7 +188,8 @@ public class MyShadowPolygon : MonoBehaviour
         }
        
     }
-    
+     
+
 }
 #if UNITY_EDITOR 
 [CustomEditor(typeof(MyShadowPolygon))]
@@ -204,6 +209,7 @@ public class MyShadowPolygonEditor : Editor
         {
             shadowPolygon.CreatMesh();
         }
+        
     }
 }
 #endif

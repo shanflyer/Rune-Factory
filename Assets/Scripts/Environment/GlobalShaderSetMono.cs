@@ -244,6 +244,12 @@ public class GlobalShaderSetMono : MonoBehaviour
             Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y / 90.0f);
             Shader.SetGlobalVector("LightDirection", directionValue);
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue );
+
+            var MySpriteShadows = FindObjectsByType<MySpriteShadow>(FindObjectsSortMode.InstanceID);
+            for (int i = 0; i < MySpriteShadows.Length; i++)
+            {
+                MySpriteShadows[i].SetDirectionAngle(natureLightData.direction.x );
+            }
         }
 
         var MyLights = FindObjectsByType<MyLight>(FindObjectsSortMode.InstanceID);
@@ -251,6 +257,8 @@ public class GlobalShaderSetMono : MonoBehaviour
         {
             MyLights[i].LerpTimeValue(dayValue);
         }
+
+        
     }
 } 
 public enum ShaderDataType
