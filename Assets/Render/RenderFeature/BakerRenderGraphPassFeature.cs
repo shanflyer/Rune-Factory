@@ -102,14 +102,18 @@ namespace UnityEngine.Rendering.Universal.Internal
                      
                     builder.UseRendererList(passData.rendererList);
 
-                    RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor;
-                    desc.width = (int)(settings.blitScale * desc.width);
-                    desc.height = (int)(settings.blitScale * desc.height);
 
-                    desc.colorFormat = RenderTextureFormat.Default;
-                    desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.None;
-                    TextureHandle destination = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc,settings.afterRenderMaterial!=null? $"{passName}_destination":settings.textureName,
-                        settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All);
+                    RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor; 
+
+                    var targetDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
+                    targetDesc.name = settings.afterRenderMaterial != null ? $"{passName}_destination" : settings.textureName;
+                    targetDesc.clearBuffer = settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All;
+                    targetDesc.clearColor=settings.clearColor;
+                    targetDesc.width= (int)(settings.blitScale * desc.width);
+                    targetDesc.height= (int)(settings.blitScale * desc.height);
+
+                    TextureHandle destination = renderGraph.CreateTexture(targetDesc);
+                     
                    
                     builder.SetRenderAttachment(destination, 0);
                     builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
