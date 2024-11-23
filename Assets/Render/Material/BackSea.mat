@@ -7,11 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SkySea
+  m_Name: BackSea
   m_Shader: {fileID: 4800000, guid: f0239f0e1f2bbd345a1cb059fda250e9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - MAINTEXCOL
   - WATER
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -54,7 +55,7 @@ Material:
     - _EdgeWaveOffset: 0
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
-    - _MainTexCol: 0
+    - _MainTexCol: 1
     - _Water: 1
     - _WaterBottom: 1.33
     - _WaterHigh: 0.17
@@ -73,7 +74,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _bottomColor: {r: 0.027450982, g: 0.2627451, b: 0.6862745, a: 1}
-    - _topColor: {r: 0.05490196, g: 0.20392157, b: 0.2627451, a: 1}
+    - _topColor: {r: 0, g: 0.38554645, b: 0.5377358, a: 1}
     - waterColor: {r: 0.056069776, g: 0.20390359, b: 0.26415092, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

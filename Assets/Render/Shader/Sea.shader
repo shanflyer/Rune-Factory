@@ -1,19 +1,9 @@
-Shader "Sky"
+Shader "Sea"
 {
     Properties
-    {
-        _MainTex("Diffuse", 2D) = "white" {}
+    {  
 
-        _WaterMaskTex("WaterMaskTex", 2D) ="black" {}
-        _DepthTex("DepthTex", 2D) ="gray"{} 
-
-        _topColor("topColor", Color) = (1,1,1,1)
-        _bottomColor("bottomColor", Color) = (1,1,1,1)
-        _halfValue("halfValue",float)=0.5
-
-        _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
-        [Toggle(WATER)] _Water("Water",int)=0
-        [Toggle(MAINTEXCOL)] _MainTexCol("MainTexCol",int)=0
+        _WaterNormalMap("WaterNormalMap", 2D) = "bump" {}  
         //水面颜色
         [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
         //初始透明
@@ -64,7 +54,7 @@ Shader "Sky"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl" 
-         #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+
         #include "Assets/Render/Shader/UnityAction.cginc"
 
          half4 _SkyTopColor;
@@ -72,8 +62,7 @@ Shader "Sky"
          half _SkyHalfValue;
          half4 _SunColor;
          half _CloudValue;
-        CBUFFER_START(UnityPerMaterial)
-            int _Water;
+        CBUFFER_START(UnityPerMaterial) 
             half4 waterColor;
             half _WaterZero;
             half _WaterBottom;   
@@ -94,8 +83,6 @@ Shader "Sky"
             half _EdgeWaveOffset;
             
         CBUFFER_END  
-        TEXTURE2D(_MainTex);
-        SAMPLER(sampler_MainTex);
         TEXTURE2D(_WaterMaskTex);
         SAMPLER(sampler_WaterMaskTex);
         TEXTURE2D(_WaterNormalMap);
@@ -103,8 +90,6 @@ Shader "Sky"
 
         TEXTURE2D(_MirrorTex);
         SAMPLER(sampler_MirrorTex);  
-        TEXTURE2D(_DepthTex);
-        SAMPLER(sampler_DepthTex); 
         ENDHLSL
 
         Pass
@@ -114,11 +99,9 @@ Shader "Sky"
             HLSLPROGRAM
             
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
-       
+
             #pragma vertex CombinedShapeLightVertex
             #pragma fragment CombinedShapeLightFragment
-            #pragma shader_feature_local _ WATER
-            #pragma shader_feature_local _ MAINTEXCOL
  
 
             struct Attributes
@@ -162,7 +145,11 @@ Shader "Sky"
             float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
             { 
                 float2 sunUV=screenUV;
-               
+                float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz; 
+                return _WaterMask;
+                //水域范围
+                float stepMask=1-step(_WaterMask.r,0); 
+
                 half edgeOffsetValue=_SinTime.w*_EdgeWaveSpeed; 
                 edgeOffsetValue=abs(edgeOffsetValue); 
                  edgeOffsetValue=clamp(edgeOffsetValue,0,1);
@@ -205,8 +192,25 @@ Shader "Sky"
                 Unity_SimpleNoise_float(uv.xy, waterNoiseScale, _waterNoise);  
                 waveBlendCol*=_waterNoise;
                 
- 
-                float3 endWaveColor=waveBlendCol;
+
+                //波纹与边缘混合 
+                //映射水面深度
+                Unity_Remap_float(_WaterMask.r,float2(0,1),float2(_WaterZero,_WaterBottom),_WaterMask.r);
+                _WaterMask.r=clamp(_WaterMask.r,0,1);
+                
+
+                float _WaterMask1=step(_WaterHigh,_WaterMask.r);	 
+                float _WaterMask2=step(_WaterHigh+EdgeValue,_WaterMask.r); 
+                stepMask*=_WaterMask1;
+
+                float _EdgeMaskValue=_WaterMask.r;
+                Unity_Remap_float(_EdgeMaskValue,float2(_WaterHigh,_WaterHigh+EdgeValue),float2(0,1),_EdgeMaskValue);
+                
+                float edge=(_WaterMask1-_WaterMask2)*_EdgeMaskValue; 
+                
+                
+                //float3 edgeAddColor=edge*float3(0,1,1)*2; 
+                float3 endWaveColor=edge*EdgeColor*waveBlendCol+waveBlendCol*_WaterMask1.rrr;
                 endWaveColor=clamp(endWaveColor,0,1); 
                 float endWaveColorValue=endWaveColor.x; 
                 endWaveColorValue=clamp(endWaveColorValue,0,1); 
@@ -230,13 +234,17 @@ Shader "Sky"
                 
                  Unity_Remap_float(endWaveColorValue,float2(0,0.15),float2(0.06,1),endWaveColorValue);
                   
-                 MirrorTexColor=MirrorTexColor*endWaveColorValue; 
+                 MirrorTexColor=MirrorTexColor*endWaveColorValue;
+                //return float4(MirrorTexColor.xyz,1);
 
+
+                //return float4(MirrorTexColor.xyz,1);
+                
 
                 //主颜色
                 float3 _MainColor=waterColor.xyz*waterColor.a;	 
                 _MainColor+=(1-waterColor.a)*_MainTexColor.xyz;
-                //_MainColor.xyz*=_WaterMask.r;
+                _MainColor.xyz*=_WaterMask.r;
 
                  endWaveColor=endWaveColor.xyz*(1-MirrorValue)*_SunColor.xyz+MirrorValue*MirrorTexColor;
 
@@ -244,22 +252,16 @@ Shader "Sky"
                 outWater=clamp(outWater,0,1);    
                 outWater=outWater+waterColor.xyz*waterColor.a; 
                 outWater*=1-0.25*_CloudValue;
-                //return outWater;
 
-               
+                outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
                 return outWater;
             }
  
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                float4 result=float4(1,1,1,1);
-                float stepMask=1;
-                #if MAINTEXCOL
-                 float3 _WaterMask= SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex,i.uv).xyz;  
-                 stepMask=1-step(_WaterMask.r,0); 
-                 result= SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);  
-                #else 
+
+                
                 float colorValue0=0;
                 Unity_Remap_float(i.uv.y,float2(0,_SkyHalfValue),float2(0,0.5),colorValue0);
                 float colorValue1=0;
@@ -267,134 +269,20 @@ Shader "Sky"
                 float setpValue=step(_SkyHalfValue,i.uv.y);
 
                 float value=colorValue0*(1-setpValue)+colorValue1*setpValue; 
-                
+                float4 result=float4(1,1,1,1);
                 result.xyz=_SkyBottomColor.xyz+(_SkyTopColor.xyz-_SkyBottomColor.xyz)*value;
-                #endif 
-               
-                 #if WATER
-                 float3 waterColor=WaterFragment(i.uv,i.lightingUV,result);
-                 result.xyz=waterColor*stepMask+(1-stepMask)*result.xyz;
-                 #endif
-                 
+                
+                float3 waterColor=WaterFragment(i.uv,i.lightingUV,result);
+                result.xyz=waterColor;
+                
 
                 return result;
             }
             ENDHLSL
         }
 
-        Pass
-        {
-            Tags { "LightMode" = "ObjDepth" "Queue"="Transparent" "RenderType"="Transparent"} 
-            HLSLPROGRAM 
-
-            #pragma vertex UnlitVertex
-            #pragma fragment UnlitFragment  
-
-            struct Attributes
-            {
-                float3 positionOS   : POSITION; 
-                float2 uv           : TEXCOORD0; 
-            };
-
-            struct Varyings
-            {
-                float4  positionCS      : SV_POSITION;
-                float3  color           : COLOR;
-                float2  uv              : TEXCOORD0;
-                float2  screenUV        : TEXCOORD1; 
-            };
-            
-            
-
-            Varyings UnlitVertex(Attributes attributes)
-            {
-                Varyings o = (Varyings)0; 
-
-                attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
-                float3 objWroldPos=TransformObjectToWorld(attributes.positionOS); 
-                o.uv = attributes.uv;
-
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
-                float stepPosZ=1-step(100,ObjPos.z);
-
-                float3 _objSortPos=ObjPos; 
-               // _objSortPos.y+=_objSortPos.z;
- 
-
-                float4 worldClip=TransformWorldToHClip(_objSortPos); 
-             
-
-                float high=stepPosZ*(objWroldPos.y-ObjPos.y)*0.5;
-                float positionCSY=o.positionCS.y;   
-                //stepPosZ+=stepFixed; 
-              
-                stepPosZ=clamp(stepPosZ,0,1);
-                worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
-                worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
-                o.screenUV.xy=half2(ComputeScreenPos(o.positionCS/o.positionCS.w).xy); 
-                 o.color.x=clamp(high,0,1);    
-                 o.color.yz=worldClip.xy; 
-               
-                return o;
-            }
-
-            float4 UnlitFragment(Varyings i) : SV_Target
-            {
-                float4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
-                float4 DepthTex =_DepthTex.Sample(sampler_MainTex,i.uv); 
-                float clipA=1-step(DepthTex.a,0);
-                DepthTex.xyz*=clipA; 
-                 
-                half depthStep_R=1-step(abs(DepthTex.r-0.5),0.01);
-                half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
-                half depthStep_B=1-step(abs(DepthTex.b-0.5),0.01);
-                half depthStep_ZeroB=1-step(DepthTex.b,0);
-                half stepDepthOne=step(1,DepthTex.b);
-                 depthStep_ZeroB*=(1-stepDepthOne);
-
-                int clearColor=1-step(DepthTex.b,0)*step(DepthTex.r,0)*step(DepthTex.g,0);
-
-                half otherStep=depthStep_R*depthStep_G+depthStep_B; 
-                
-                otherStep=clamp(otherStep,0,1)*depthStep_ZeroB; 
-              
-
-                half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*(1-stepDepthOne)*otherStep; 
-                half offset=depthValue*512*4/_ScreenParams.y;
-                  
-                half depth=i.color.z  +offset*clearColor;
-                half setpHigh=depthStep_G; 
-                 //return float4(i.color.zzz,mainTex.a);
-               
-
-                //return float4(i.color.zzz,mainTex.a);
-
-                half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
-                
-                mainTex.xyz=half3(depth,high,0.5+stepDepthOne);
-               
-                // mainTex.xyz=depth.xxx;
-
-                half absUv=length(i.screenUV-i.color.yz); 
-                
-
-                mainTex.a=mainTex.a*(1-stepDepthOne)+DepthTex.a*stepDepthOne;
-
-                //return mainTex.aaaa;
-                //clip(mainTex.a);
-
-               // mainTex.xyz=otherStep.xxx;
-                
-
-                return mainTex;
-                
-            }
-            ENDHLSL
-        }
-
          
     }
-         
+
     Fallback "Sprites/Default"
 }

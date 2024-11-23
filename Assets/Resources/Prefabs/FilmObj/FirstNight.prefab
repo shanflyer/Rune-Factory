@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4983793734509080954}
   - component: {fileID: 3963054611755750556}
   - component: {fileID: 8147069775736449583}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,6 +111,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -175,7 +178,7 @@ GameObject:
   - component: {fileID: 6599775230871233942}
   - component: {fileID: 3779076477473988561}
   - component: {fileID: 1170394599931095680}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: "\u8001\u7237\u7237"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +275,7 @@ GameObject:
   - component: {fileID: 8427514394060882849}
   - component: {fileID: 114558674675760245}
   - component: {fileID: 7715361736715021353}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +347,7 @@ GameObject:
   - component: {fileID: 5732065839268904866}
   - component: {fileID: 5987172715796611697}
   - component: {fileID: 5161638405659425431}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: "\u4E3B\u89D2\u7537"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -480,6 +483,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -512,7 +518,7 @@ SpriteRenderer:
   m_Size: {x: 0.39, y: 0.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!1 &3291875467427073563
@@ -635,6 +641,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -667,7 +676,7 @@ SpriteRenderer:
   m_Size: {x: 0.39, y: 0.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!1 &6501261672681642179
@@ -680,7 +689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7754033700742629788}
   - component: {fileID: 5032740749233815244}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -719,6 +728,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -803,6 +815,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -835,7 +850,7 @@ SpriteRenderer:
   m_Size: {x: 0.39, y: 0.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!1 &7745705143710338670
@@ -850,7 +865,7 @@ GameObject:
   - component: {fileID: 2348320829672432709}
   - component: {fileID: 4845751885324670283}
   - component: {fileID: 3702567454565520954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: "\u4E3B\u89D2\u5973"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -966,7 +981,7 @@ GameObject:
   - component: {fileID: 7577305670717948439}
   - component: {fileID: 4870234770322161471}
   - component: {fileID: 6788210145126514806}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1064,6 +1079,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1126,7 +1144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9110219581460793877}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Equip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1162,7 +1180,7 @@ GameObject:
   - component: {fileID: 598941760828869683}
   - component: {fileID: 1404422478126538898}
   - component: {fileID: 6894352252958130740}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1260,6 +1278,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

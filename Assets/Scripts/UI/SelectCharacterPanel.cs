@@ -104,6 +104,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     public override Task InitData(string dataKay)
     {
+        Shader.SetGlobalVector("_PlayerPos", Vector3.zero);
         return base.InitData(dataKay);
     }
 
