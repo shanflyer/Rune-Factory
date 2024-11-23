@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5862679756677948953}
+  - component: {fileID: -9183573205890522943}
   m_Layer: 0
   m_Name: "\u6C34\u5751"
   m_TagString: Untagged
@@ -33,6 +34,20 @@ Transform:
   - {fileID: 5903986139613839111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-9183573205890522943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140896864054830638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 3068821199616159233}
 --- !u!1 &1967579632068383333
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,9 +254,9 @@ Tilemap:
       e33: 1
   m_TileColorArray:
   - m_RefCount: 12
-    m_Data: {r: 0.970297, g: 0.5889268, b: 0.7159289, a: 1}
+    m_Data: {r: 0.8262195, g: 0.56065845, b: 0.6154119, a: 1}
   - m_RefCount: 0
-    m_Data: {r: 1.34586e-40, g: 1.34586e-40, b: 1.34586e-40, a: 1.34586e-40}
+    m_Data: {r: 1.34326e-40, g: 1.34326e-40, b: 1.34326e-40, a: 1.34326e-40}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -597,6 +597,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6062349947284038313}
+  - component: {fileID: -8540493353012421993}
   m_Layer: 0
   m_Name: "\u81EA\u5B85"
   m_TagString: Untagged
@@ -622,6 +623,33 @@ Transform:
   - {fileID: 696762665871921898}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8540493353012421993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2770378941523514542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 411918512547983508}
+  - {fileID: 3970016079723270286}
+  - {fileID: 3154990095592529433}
+  - {fileID: 3621041034927966965}
+  - {fileID: 6483600573394029141}
+  - {fileID: 3554584956833587186}
+  - {fileID: 2766821967955835397}
+  - {fileID: 732581745837038890}
+  - {fileID: 3518467751770007977}
+  - {fileID: 689441181460339603}
+  - {fileID: 342098630381418019}
+  - {fileID: 1003386311323824492}
+  - {fileID: 7761599273501712724}
+  - {fileID: 1234735935860895755}
 --- !u!1 &2807165934536295427
 GameObject:
   m_ObjectHideFlags: 0

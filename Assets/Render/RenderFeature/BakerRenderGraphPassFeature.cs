@@ -249,6 +249,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             public Color clearColor = Color.black;
         }
 
+        public int VolumeLevel = 0;
         public Settings settings = new Settings();
         private BakerRenderGraphPass m_ScriptablePass;
 
@@ -264,6 +265,10 @@ namespace UnityEngine.Rendering.Universal.Internal
         // This method is called when setting up the renderer once per-camera.
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
+            if (GameVolumeManager.instance.volumeLevel < VolumeLevel)
+            {
+                return;
+            }
             if (InitCheckCamera(renderingData.cameraData.camera))
                 renderer.EnqueuePass(m_ScriptablePass);
         }

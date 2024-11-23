@@ -251,6 +251,10 @@ public class GameController : MonoBehaviour
              
         } 
     }
+    private void LateUpdate()
+    {
+        SingletonType.instance.LateUpData();
+    }
     private void Update()
     {
         //GraphicsSettings.useScriptableRenderPipelineBatching = false;

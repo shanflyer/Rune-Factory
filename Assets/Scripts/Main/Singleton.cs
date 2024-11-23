@@ -24,6 +24,10 @@ public class Singleton<T> where T : Singleton<T>
                     {
                         SingletonType.instance.AddUpDataAction(_instance.UpData);
                     }
+                    if (_instance.NeedLateUpdata)
+                    {
+                        SingletonType.instance.AddUpDataAction(_instance.LateUpData);
+                    }
                 } 
             }
             return _instance;
@@ -35,7 +39,15 @@ public class Singleton<T> where T : Singleton<T>
     {
         get;
     }
+    public virtual bool NeedLateUpdata
+    {
+        get;
+    }
     protected virtual void UpData()
+    {
+
+    }
+    protected virtual void LateUpData()
     {
 
     }
@@ -48,7 +60,11 @@ public class Singleton<T> where T : Singleton<T>
         if (NeedUpdata)
         {
             SingletonType.instance.RemoveUpDataAction(_instance.UpData);
-        } 
+        }
+        if (NeedLateUpdata)
+        {
+            SingletonType.instance.RemoveLateUpDataAction(_instance.LateUpData);
+        }
         _instance = null;
     } 
 }
@@ -57,7 +73,7 @@ public class SingletonType : Singleton<SingletonType>
 {
     public HashSet<SingletonClear> TypeClears = new HashSet<SingletonClear>();
     public List<Action> singleUpdatas = new List<Action>();
-
+    public List<Action> singleLateUpdatas = new List<Action>();
     public override void Init()
     {
         base.Init();
@@ -75,6 +91,20 @@ public class SingletonType : Singleton<SingletonType>
         if (singleUpdatas.Contains(action))
         {
             singleUpdatas.Remove(action);
+        }
+    }
+    public void AddLateUpDataAction(Action action)
+    {
+        if (!singleLateUpdatas.Contains(action))
+        {
+            singleLateUpdatas.Add(action);
+        }
+    }
+    public void RemoveLateUpDataAction(Action action)
+    {
+        if (singleLateUpdatas.Contains(action))
+        {
+            singleLateUpdatas.Remove(action);
         }
     }
     public void AddType(SingletonClear typeClear)
@@ -110,6 +140,13 @@ public class SingletonType : Singleton<SingletonType>
         for(int i = 0; i < singleUpdatas.Count; i++)
         {
             singleUpdatas[i].Invoke();
+        }
+    }
+    public void LateUpData()
+    {
+        for (int i = 0; i < singleLateUpdatas.Count; i++)
+        {
+            singleLateUpdatas[i].Invoke();
         }
     }
 }

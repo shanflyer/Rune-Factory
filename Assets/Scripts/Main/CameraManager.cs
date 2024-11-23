@@ -20,6 +20,7 @@ public class CameraManager : Singleton<CameraManager>
 
     //CinemachinePositionComposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
+    public override bool NeedLateUpdata => true;
     public bool fixedView { get; private set; }
     
     public override void Init()
@@ -56,6 +57,7 @@ public class CameraManager : Singleton<CameraManager>
 
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
+         
     }
 
     public void SetCameraListener(bool enable)
@@ -247,4 +249,25 @@ public class CameraManager : Singleton<CameraManager>
             EnvironmentManger.instance.SetCameraPos(oldCameraPos);
         }
     }
+
+    public void AddTestRender(Renderer renderer)
+    {
+        TestRenderers.Add(renderer.GetInstanceID(),renderer);
+    }
+    public void RemoveTestRender(Renderer renderer)
+    {
+        TestRenderers.Remove(renderer.GetInstanceID());
+    }
+    MyDic<int,Renderer> TestRenderers = new MyDic<int, Renderer>();
+    protected override void LateUpData()
+    {
+        base.LateUpData();
+        var planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+        for(int i = 0; i < TestRenderers.length; i++)
+        {
+            var renderer = TestRenderers[i];
+            renderer.enabled = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+        }
+    }
+
 }

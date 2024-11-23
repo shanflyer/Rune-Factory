@@ -260,6 +260,17 @@ public class GlobalShaderSetMono : MonoBehaviour
 
         
     }
+
+    Plane[] planes;
+    [SerializeField]
+    SpriteRenderer spriteRenderer;
+    public void TestCameraRect()
+    {
+        planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+        bool result = GeometryUtility.TestPlanesAABB(planes, spriteRenderer.bounds);
+        Debug.Log($"TestPlanesAABB:{result}");
+
+    }
 } 
 public enum ShaderDataType
 {
@@ -315,6 +326,10 @@ public class GlobalShaderSetMonoEditor : Editor
         if (GUILayout.Button("…Ë÷√lightValue"))
         {
             globalShaderSetMono.TestLightValue();
+        }
+        if (GUILayout.Button("≤‚ ‘œ‡ª˙"))
+        {
+            globalShaderSetMono.TestCameraRect();
         }
     }
 }

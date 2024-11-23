@@ -13,7 +13,7 @@ public class MySpriteShadow : MonoBehaviour
     }
     private void OnDisable()
     {
-        if (Application.isPlaying)
+        if (Application.isPlaying&&!SingletonType.Cleared)
             EnvironmentManger.instance.RemoveMyShadow(this);
     }
     public void SetDirectionAngle(float directionX)

@@ -3,6 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Experimental.Rendering;
+using Unity.Mathematics;
 
 public class MyScreenRenderPassFeature : ScriptableRendererFeature
 {
@@ -11,6 +12,7 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
     public string blitName;
     public float scale = 1;
     public bool blitTexture = false;
+    public int2 VolumeLevel;
     class MyScreenRenderPass : ScriptableRenderPass
     {
         private string tagName="Test";
@@ -114,7 +116,8 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
      
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (InitCheckCamera(renderingData.cameraData.camera))
+        int level = GameVolumeManager.instance.volumeLevel; 
+        if (level >= VolumeLevel.x && level <= VolumeLevel.y&&InitCheckCamera(renderingData.cameraData.camera))
             renderer.EnqueuePass(m_ScriptablePass);
     }
 }

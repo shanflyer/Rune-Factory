@@ -3,20 +3,65 @@ using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class GameVolumeManager : Singleton<GameVolumeManager>
 {
     public override bool NeedUpdata => true;
-    Material screenMat; 
+    Material screenMat;
+    MyDic<int, GameVolumeObject> volumeObjects = new MyDic<int, GameVolumeObject>();
     public override async void Init()
     {
         base.Init(); 
         screenMat = await ExtensionsResources.LoadResourceAsync<Material>("Material/ScreenCycle");
         int width = Screen.width;
         int heigh = Screen.height;
+        volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 1);
 
         screenMat.SetFloat("_CycleSize", width > heigh ? width : heigh);
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
+    }
+    private int _volumeLevel;
+    public int volumeLevel
+    {
+        set
+        {
+            _volumeLevel = value;
+            for(int i = 0; i < volumeObjects.length; i++)
+            {
+                volumeObjects[i].SetVolumeLevel(value);
+            }
+            PlayerPrefs.SetInt("VolumeLevel", value);
+            switch (value)
+            {
+                case 0:
+                    ScalableBufferManager.ResizeBuffers(0.5f, 0.5f);
+                    break;
+                case 1:
+                    ScalableBufferManager.ResizeBuffers(0.75f, 0.75f);
+                    break;
+                case 2:
+                    ScalableBufferManager.ResizeBuffers(1f, 1f);
+                    break;
+            }
+        }
+        get
+        {
+            return _volumeLevel;
+        }
+    }
+
+    public void AddVolumeObject(GameVolumeObject volumeObject)
+    {
+        int instanceID = volumeObject.GetInstanceID();
+        volumeObjects.Add(instanceID, volumeObject);
+        volumeObject.SetVolumeLevel(volumeLevel);
+
+    }
+    public void RemoveVolumeObject(GameVolumeObject volumeObject)
+    {
+        int instanceID = volumeObject.GetInstanceID();
+        volumeObjects.Remove(instanceID);
     }
     protected override void Clear()
     {

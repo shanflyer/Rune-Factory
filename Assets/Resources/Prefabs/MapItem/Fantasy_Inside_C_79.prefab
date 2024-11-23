@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4474462883617391837}
   - component: {fileID: 5142184406564119914}
+  - component: {fileID: -7849978571004900305}
   m_Layer: 0
   m_Name: Fantasy_Inside_C_79
   m_TagString: Untagged
@@ -88,6 +89,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!114 &-7849978571004900305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2741128119204650783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 5142184406564119914}
+  - {fileID: 8988260183758760922}
 --- !u!1 &6325708435573199302
 GameObject:
   m_ObjectHideFlags: 0

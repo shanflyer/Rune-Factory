@@ -244,3 +244,139 @@ public class MyDic<K,T>
         indexDic.Clear();
     }
 }
+
+public class MySet<T>
+{
+    private List<T> list; 
+    private Dictionary<T, int> indexDic;
+    public int length { get; private set; }
+    public T this[int index]
+    {
+        get { return list[index]; }
+    }
+    public MySet()
+    {
+        list = new List<T>();
+        indexDic = new Dictionary<T, int>(); 
+        length = 0;
+    }
+    public T GetValueForIndex(int index)
+    {
+        return list[index];
+    }
+ 
+    public List<T> GetValueList(bool native = false)
+    {
+        if (native)
+        {
+            return list;
+        }
+        List<T> result = new List<T>();
+        result.AddRange(list);
+        return result;
+    }
+    
+    public bool Contains(T t)
+    {
+        return indexDic.ContainsKey(t);
+    }
+    public void TrySetValue(T t)
+    {
+        bool ishave = indexDic.TryGetValue(t, out int index);
+        if (ishave)
+        {
+            list[index] = t;
+        }
+        else
+        {
+            Add( t);
+        }
+    }
+    
+    public void Add(T item)
+    {
+        if (list.Count > length)
+        {
+            list[length] = item;
+        }
+        else
+        {
+            list.Add(item); 
+        }
+        indexDic.Add(item, length);
+        length++;
+    }
+    public void RemoveAt(int index)
+    {
+        if (length > index)
+        {
+            if (length == 1)
+            {
+                length = 0;
+                list.Clear(); 
+                indexDic.Clear();
+            }
+            else if (index == list.Count - 1)
+            {
+                indexDic.Remove(list[index]);
+                list.RemoveAt(length - 1);  
+                length--;
+            }
+            else
+            {
+                indexDic.Remove(list[index]);
+                indexDic[list[length - 1]] = index;
+                list[index] = list[length - 1];
+                list.RemoveAt(length - 1);  
+                length--;
+            }
+        }
+        else
+        {
+            throw new IndexOutOfRangeException();
+        }
+    }
+    public void Remove(T t)
+    {
+        if (!indexDic.ContainsKey(t))
+        {
+            return;
+        }
+        int index = indexDic[t];
+        indexDic.Remove(t);
+
+        if (length > index)
+        {
+            if (length == 1)
+            {
+                length = 0;
+                list.Clear(); 
+                indexDic.Clear();
+            }
+            else if (index == list.Count - 1)
+            {
+                list.RemoveAt(length - 1);  
+                length--;
+            }
+            else
+            {
+               
+                indexDic[list[length - 1]] = index;
+                list[index] = list[length - 1];
+                list.RemoveAt(length - 1);  
+                length--;
+            }
+        }
+        else
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+    }
+    public void Clear()
+    {
+        length = 0;
+        list.Clear(); 
+        indexDic.Clear();
+    }
+}

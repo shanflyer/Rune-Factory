@@ -836,10 +836,12 @@ Shader "MySprite-Lit-Default"
 
             half4 DefaultFragment(Varyings i) : SV_Target
             {
-               // return i.color;
+               float2 uv=i.uv; 
+               half4 main =_MainTex.Sample(sampler_MainTex,uv); 
+              //return float4(main.xyz,main.a);
 
 
-                float2 uv=i.uv; 
+               
                 float s_w=0;
                 #if SNOWBLEND 
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
@@ -858,8 +860,7 @@ Shader "MySprite-Lit-Default"
                 #endif
                
                 //return half4(uv.xxx,1);
-                half4 main =_MainTex.Sample(sampler_MainTex,uv); 
-              //  return float4(main.xyz,main.a);
+                
 
                 #if SEASONCOLORBLEND
                 main.xyz=BlendSeasonColor(main.xyz,uv,i.worldPos.xy);

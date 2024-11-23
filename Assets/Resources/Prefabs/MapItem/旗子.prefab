@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 6244751498757823899}
   - component: {fileID: 1638196679028506780}
   - component: {fileID: 2767780085930084909}
+  - component: {fileID: 2838171022071182287}
   m_Layer: 0
   m_Name: "\u65D7\u5B50"
   m_TagString: Untagged
@@ -457,6 +458,21 @@ MonoBehaviour:
   - {fileID: 1638196679028506780}
   windBlendValue: 1
   snowWind: 1
+--- !u!114 &2838171022071182287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4861626375390465734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 7923267124626432693}
+  - {fileID: 2018940919233477799}
 --- !u!1 &5517292508583577392
 GameObject:
   m_ObjectHideFlags: 0

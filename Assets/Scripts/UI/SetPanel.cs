@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,8 @@ public class SetPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Button saveButton, returnButton;
-
+    [SerializeField]
+    private Toggle level0, level1, level2;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -18,7 +20,10 @@ public class SetPanel : GamePanel<IReferenceData>
         bgmSlider = FindChildGameObject<Slider>("BGMSlider");
         seSlider = FindChildGameObject<Slider>("SESlider");
         saveButton = FindChildGameObject<Button>("SaveButton");
-        returnButton = FindChildGameObject<Button>("ReturnButton");
+        returnButton = FindChildGameObject<Button>("ReturnButton"); 
+        level0 = FindChildGameObject<Toggle>("Level0");
+        level1 = FindChildGameObject<Toggle>("Level1");
+        level2 = FindChildGameObject<Toggle>("Level2");
     }
 
     protected override void Awake()
@@ -36,12 +41,35 @@ public class SetPanel : GamePanel<IReferenceData>
         bgmSlider.onValueChanged.AddListener((float value) =>
         {
             AudioController.instance.SetBGMVolume(value);
-        });
+        }); 
+
         seSlider.onValueChanged.AddListener((float value) =>
         {
             AudioController.instance.SetSEVolume(value);
         });
         saveButton.onClick.AddListener(SaveSet);
+
+        level0.onValueChanged.AddListener((bool value) =>
+        {
+            if (value)
+            {
+                GameVolumeManager.instance.volumeLevel = 0; 
+            }
+        });
+        level1.onValueChanged.AddListener((bool value) =>
+        {
+            if (value)
+            {
+                GameVolumeManager.instance.volumeLevel = 1;
+            }
+        });
+        level2.onValueChanged.AddListener((bool value) =>
+        {
+            if (value)
+            {
+                GameVolumeManager.instance.volumeLevel = 2;
+            }
+        });
     }
     public override async Task InitData(string dataKey)
     {
@@ -50,6 +78,20 @@ public class SetPanel : GamePanel<IReferenceData>
         masterSlider.SetValueWithoutNotify(volume.x);
         bgmSlider.SetValueWithoutNotify(volume.y);
         seSlider.SetValueWithoutNotify(volume.z);
+
+        int volumeLevel = GameVolumeManager.instance.volumeLevel;
+        switch (volumeLevel)
+        {
+            case 0:
+                level0.SetIsOnWithoutNotify(true);
+                break;
+            case 1:
+                level1.SetIsOnWithoutNotify(true);
+                break;
+            case 2:
+                level2.SetIsOnWithoutNotify(true);
+                break;
+        }
     }
     private async void SaveSet()
     {

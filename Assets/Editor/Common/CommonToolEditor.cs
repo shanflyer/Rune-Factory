@@ -131,6 +131,11 @@ public class CommonToolEditor : MyEditor
         {
             SetSprite();
         }
+
+        if (GUILayout.Button("刷新TestRender"))
+        {
+            UpdateObjTestRender();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -148,7 +153,50 @@ public class CommonToolEditor : MyEditor
         {
             Shader.DisableKeyword("USE_SHAPE_LIGHT_TYPE_3");
         }*/
+
     }
+    private void UpdateObjTestRender()
+    {
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            string MapPath = "Assets/Resources/Prefabs/Ground";
+            string ObjPath = "Assets/Resources/Prefabs/MapItem";
+            DirectoryInfo directoryInfo = new DirectoryInfo(MapPath);
+            var files = directoryInfo.GetFiles("*.Prefab");
+            foreach (var file in files)
+            {
+                GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>($"{MapPath}/{file.Name}");
+                if (!obj.TryGetComponent(out TestRenderGroup testRenderGroup))
+                {
+                    testRenderGroup = obj.AddComponent<TestRenderGroup>();
+                }
+                testRenderGroup.GetRenders();
+                EditorUtility.SetDirty(obj);
+            }
+
+            DirectoryInfo directoryInfo1 = new DirectoryInfo(ObjPath);
+            var files1 = directoryInfo1.GetFiles("*.Prefab");
+            foreach (var file in files1)
+            {
+                GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>($"{ObjPath}/{file.Name}");
+                if (!obj.TryGetComponent(out TestRenderGroup testRenderGroup))
+                {
+                    testRenderGroup = obj.AddComponent<TestRenderGroup>();
+                }
+                testRenderGroup.GetRenders();
+                EditorUtility.SetDirty(obj);
+            }
+            AssetDatabase.Refresh();
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+       
+    }
+
+
     string oldSourcePath = "";
     string newSourecePath = "";
 

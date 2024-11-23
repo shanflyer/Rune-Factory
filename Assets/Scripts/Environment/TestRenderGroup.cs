@@ -1,0 +1,51 @@
+﻿using System.Collections;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+public class TestRenderGroup : MonoBehaviour
+{
+    [SerializeField]
+   Renderer[] renderers;
+
+    private void OnEnable()
+    {
+        for(int i = 0; i < renderers.Length; i++)
+        {
+            CameraManager.instance.AddTestRender(renderers[i]);
+        }
+    }
+    private void OnDisable()
+    {
+        if (!SingletonType.Cleared)
+        {
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                CameraManager.instance.RemoveTestRender(renderers[i]);
+            }
+
+        }
+    }
+    public void GetRenders()
+    {
+        renderers = GetComponentsInChildren<Renderer>();
+    }
+}
+#if UNITY_EDITOR
+[CustomEditor(typeof(TestRenderGroup))]
+public class TestRenderGroupEditor :Editor
+{
+    public TestRenderGroup TestRenderGroup
+    {
+        get => target as TestRenderGroup;
+    }
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        if (GUILayout.Button("获取Renderers"))
+        {
+            TestRenderGroup.GetRenders();
+        }
+    }
+}
+#endif
