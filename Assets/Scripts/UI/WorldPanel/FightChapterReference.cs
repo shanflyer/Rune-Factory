@@ -55,7 +55,7 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
     public override async Task InitData(UIFightChapterData t, SelectAction<UIFightChapterData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
        await base.InitData(t, SelectAction, toggleGroup);
-        FightChapter fightChapter = ExploreManager.instance.GetFigehtChapter(data.fightChapterId);
+        FightChapter fightChapter = ExploreManager.instance.GetFightChapter(data.fightChapterId);
         if (data.season)
         {
             activeObj.localScale = Vector3.one;

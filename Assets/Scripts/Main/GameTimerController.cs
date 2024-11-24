@@ -9,6 +9,8 @@ using UnityEngine;
 public class GameTimerController : Singleton<GameTimerController>
 {
     private ConcurrentDictionary<Action, CancellationTokenSource> waitTasks = new ConcurrentDictionary<Action, CancellationTokenSource>();
+    private Dictionary<Action,IEnumerator> waitIenumerators= new Dictionary<Action,IEnumerator>();
+
 
     Queue<Action> activeActions = new Queue<Action>();
     public override bool NeedUpdata => true;
@@ -31,6 +33,12 @@ public class GameTimerController : Singleton<GameTimerController>
         {
             return;
         }
+        if (waitIenumerators.TryGetValue(action, out var enumerator))
+        {
+            GameController.instance.StopCoroutine(enumerator);
+        }
+        return;
+
         try
         {
             if (waitTasks.TryRemove(action, out var tokenSource))
@@ -47,13 +55,20 @@ public class GameTimerController : Singleton<GameTimerController>
     }
     public void DelayAction(int delay, Action action)
     {
+        if(waitIenumerators.TryGetValue(action,out var enumerator))
+        {
+            GameController.instance.StopCoroutine(enumerator);
+        }
+        enumerator = WaitAction(delay, action);
+        GameController.instance.StartCoroutine(enumerator);
+        waitIenumerators[action] = enumerator;
+        return;
+
         if (waitTasks.TryRemove(action, out var tokenSource))
         {
             tokenSource.Cancel();
             tokenSource.Dispose();
-        }
-        //Debug.Log($"新增延时{action.Target}");
-
+        } 
         var tokenSource2 = new CancellationTokenSource();
         CancellationToken ct = tokenSource2.Token;
         Task task = Task.Factory.StartNew(async () =>
@@ -66,8 +81,20 @@ public class GameTimerController : Singleton<GameTimerController>
            // waitTasks.Remove(action);
             tokenSource2.Dispose();
         }, tokenSource2.Token);
-        waitTasks.TryAdd(action, tokenSource2);
-        //waitTasks[action] = tokenSource2;
+        waitTasks.TryAdd(action, tokenSource2); 
+    }
+
+    IEnumerator WaitAction(int delay, Action action)
+    {
+        float waitTime = delay * 0.001f;
+        float timeValue = 0; 
+        while (timeValue<waitTime)
+        {
+            timeValue += Time.deltaTime;
+            
+            yield return 0;
+        }
+        action.Invoke();
     }
 
     protected override void UpData()

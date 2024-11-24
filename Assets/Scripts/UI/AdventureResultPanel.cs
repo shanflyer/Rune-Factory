@@ -55,6 +55,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         };
         GameActionManager.instance.QueueAction(displayMap,true);*/
 
+
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
 
         ExploreEnd exploreEnd = new ExploreEnd();

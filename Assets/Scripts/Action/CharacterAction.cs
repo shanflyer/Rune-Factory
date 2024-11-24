@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -238,6 +239,7 @@ public struct JoinTeam : GameAction
 {
     public int characterId;
     public int teamCharacterId;
+    public bool holdDisplay;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
@@ -863,14 +865,30 @@ public struct CreatTeamPlayer : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public List<int> players;
-
+    public bool holdDisplay;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         players = new List<int>();
-        for (int i = 0; i < parameters.Count; i++)
+        if (parameters.Count > 1)
         {
-            players.Add(int.Parse(parameters[i].value));
-        }
+            try
+            {
+                holdDisplay = int.Parse(parameters[0].value)==1;
+
+                for (int i = 1; i < parameters.Count; i++)
+                {
+                    players.Add(int.Parse(parameters[i].value));
+                }
+            }
+            catch
+            {
+                holdDisplay = false;
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    players.Add(int.Parse(parameters[i].value));
+                }
+            }
+        } 
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

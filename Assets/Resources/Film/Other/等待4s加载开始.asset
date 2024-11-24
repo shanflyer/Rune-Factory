@@ -15,17 +15,23 @@ MonoBehaviour:
   id: 0
   typeName: WaitAction
   _parameters:
-  - value: 5000
+  - value: 4000
     parameters:
     - value: CreatTeamPlayer
       parameters:
+      - value: 1
+        parameters: []
       - value: 0
         parameters: []
       - value: 3
         parameters: []
       - value: 4
         parameters: []
-    - value: EnterChapter
+    - value: PauseFilm
       parameters:
-      - value: 4000
+      - value: "\u89D2\u8272\u9009\u62E9"
+        parameters: []
+    - value: Talk
+      parameters:
+      - value: 1400
         parameters: []

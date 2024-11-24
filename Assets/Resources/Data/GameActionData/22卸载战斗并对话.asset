@@ -15,10 +15,6 @@ MonoBehaviour:
   id: 22
   typeName: ActionList
   _parameters:
-  - value: ClosePanelAction
-    parameters:
-    - value: AdventureResultPanel
-      parameters: []
   - value: WaitAction
     parameters:
     - value: 4
@@ -33,5 +29,9 @@ MonoBehaviour:
         parameters:
         - value: 1406
           parameters: []
+  - value: ClosePanelAction
+    parameters:
+    - value: AdventureResultPanel
+      parameters: []
   - value: ExploreEnd
     parameters: []

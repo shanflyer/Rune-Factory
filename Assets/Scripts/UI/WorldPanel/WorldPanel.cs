@@ -92,7 +92,7 @@ public class WorldPanel : GamePanel<MyInt>
         if (selected)
         {
             selectFightChapterId = uIFightChapterData.fightChapterId;
-            var chapterData = ExploreManager.instance.GetFigehtChapter(uIFightChapterData.fightChapterId);
+            var chapterData = ExploreManager.instance.GetFightChapter(uIFightChapterData.fightChapterId);
 
             exploreValue.text = $"Ì½Ë÷¶È:{chapterData.completeValue}%";
 

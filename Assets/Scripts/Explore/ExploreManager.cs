@@ -21,14 +21,14 @@ public class ExploreManager : Singleton<ExploreManager>
 {
     private Dictionary<int,FightChapter> fightChapters = new Dictionary<int, FightChapter>();
 
-    public int NowCharpter => nowChapter;
+    public int NowChapter => nowChapter;
 
     private int nowChapter;
     private FightMapData nowFightMapData;
     private FightChapter fightChapter;
     private int nowStep;
-    public bool isExplore => NowCharpter != 0;
-    public FightChapter GetFigehtChapter(int id)
+    public bool isExplore => NowChapter != 0;
+    public FightChapter GetFightChapter(int id)
     { 
         if(fightChapters.TryGetValue(id,out var fightChapter))
         {
@@ -107,6 +107,8 @@ public class ExploreManager : Singleton<ExploreManager>
     }
     void ExploreEnd(ExploreEnd exploreEnd)
     {
+        GameActionDataManager.instance.Action(nowFightMapData.endActionId);
+
         fightChapter = default(FightChapter);
         nowFightMapData=default(FightMapData);
         nowChapter = 0;
@@ -163,7 +165,7 @@ public class ExploreManager : Singleton<ExploreManager>
 
             GameTimerController.instance.DelayAction(100, async () =>
             {
-                await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowCharpter.ToString(), layer: 2);
+                await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowChapter.ToString(), layer: 2);
                 UIManager.instance.CloseGamePanel<PlayerTopPanel>();
                 UIManager.instance.CloseGamePanel<MainPanel>();
                 UIManager.instance.CloseGamePanel<ShortcutPanel>();

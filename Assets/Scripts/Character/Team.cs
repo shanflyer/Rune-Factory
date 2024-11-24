@@ -168,7 +168,7 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.AddListener<TryTeamLeaderSetCoordinate>(TryTeamLeaderSetCoordinate);
         GameActionManager.instance.AddListener<TryTeamLeaderStop>(TryTeamLeaderStop);
         GameActionManager.instance.AddListener<LeaveTeam>(LeaveTeam);
-        GameActionManager.instance.AddListener<CreatTeamPlayer>(CreatTeam);
+        GameActionManager.instance.AddListener<CreatTeamPlayer>(CreateTeam);
         GameActionManager.instance.AddListener<CheckIsNotInTeam>(CheckInTeam);
     }
     private void CheckInTeam(CheckIsNotInTeam checkInTeam)
@@ -219,11 +219,11 @@ public class TeamManager : Singleton<TeamManager>
         }
     }
 
-    private void CreatTeam(CreatTeamPlayer creatTeamPlayer)
+    private void CreateTeam(CreatTeamPlayer createTeamPlayer)
     {
-        for (int i = 0; i < creatTeamPlayer.players.Count; i++)
+        for (int i = 0; i < createTeamPlayer.players.Count; i++)
         {
-            int id = creatTeamPlayer.players[i];
+            int id = createTeamPlayer.players[i];
             if (id == CharacterManager.instance.controllerCharacter.instanceId || id == 0)
             {
                 continue;
@@ -231,7 +231,8 @@ public class TeamManager : Singleton<TeamManager>
             JoinTeam joinTeam = new JoinTeam
             {
                 characterId = id,
-                teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId
+                teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId,
+                holdDisplay=createTeamPlayer.holdDisplay
             };
             GameActionManager.instance.QueueAction(joinTeam, true);
         }
@@ -241,7 +242,7 @@ public class TeamManager : Singleton<TeamManager>
     {
         if (teams.TryGetValue(joinTeam.teamCharacterId, out var team))
         {
-            bool result = team.AddCharacter(joinTeam.characterId);
+            bool result = team.AddCharacter(joinTeam.characterId, joinTeam.holdDisplay);
             if (joinTeam.setResult != null)
                 joinTeam.setResult(result);
             return;
@@ -250,7 +251,7 @@ public class TeamManager : Singleton<TeamManager>
         {
             if (t.Value.CheckCharacter(joinTeam.teamCharacterId))
             {
-                bool result = t.Value.AddCharacter(joinTeam.characterId);
+                bool result = t.Value.AddCharacter(joinTeam.characterId, joinTeam.holdDisplay);
                 if (joinTeam.setResult != null)
                     joinTeam.setResult(result);
                 return;
@@ -262,7 +263,7 @@ public class TeamManager : Singleton<TeamManager>
             Team team1 = new Team(character);
             teams.Add(character.instanceId, team1);
 
-            bool result = team1.AddCharacter(joinTeam.characterId);
+            bool result = team1.AddCharacter(joinTeam.characterId,joinTeam.holdDisplay);
             if (joinTeam.setResult != null)
                 joinTeam.setResult(result);
             return;
@@ -277,8 +278,9 @@ public class TeamManager : Singleton<TeamManager>
     }
 
     protected override void Clear()
-    {
+    { 
         base.Clear();
+        teams.Clear(); 
     }
 }
 
@@ -355,7 +357,7 @@ public class Team
         return characterInstances.Contains(characterId);
     }
 
-    public bool AddCharacter(int characterId)
+    public bool AddCharacter(int characterId,bool holdDisplay)
     {
         if (characterInstances.Add(characterId))
         {
@@ -368,7 +370,7 @@ public class Team
                 Character forwardCharacter = Teamers[Teamers.Count - 1].character;
                 List<float4> coordinates;
                 float4 targetCoordinate = SetLastCoordianteAndDircet(forwardCharacter, out coordinates);
-                teamer.SetNowCoordinate(targetCoordinate.xy, targetCoordinate.zw);
+                teamer.SetNowCoordinate(targetCoordinate.xy, targetCoordinate.zw,holdDisplay);
                 // teamer.character.SetDirection(direction);
                 // teamer.character.SetCellOffset(forwardCharacter.GetCellOffset());
 
@@ -536,7 +538,7 @@ public class Team
                         nextCharacter.index--;
                         var forwardCharacter = Teamers[i - 1];
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
-                        nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
+                        nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection,false);
                        await CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character);
                     }
                 }
@@ -605,11 +607,15 @@ public class Teamer
     public Character character;
     public Teamer nextTeamer;
 
-    public async void SetNowCoordinate(float2 nowCoordinate, float2 directionValue)
+    public async void SetNowCoordinate(float2 nowCoordinate, float2 directionValue,bool holdDisplay)
     {
         this.nowCoordinate = (int2)nowCoordinate;
         character.SetCoordinate(this.nowCoordinate);
-       await CharacterManager.instance.RefreshNpcRuntimeObj(character);
+        if (!holdDisplay)
+        {
+            await CharacterManager.instance.RefreshNpcRuntimeObj(character);
+        }
+       
         character.moveDirection = directionValue;
         direction = directionValue;
     }

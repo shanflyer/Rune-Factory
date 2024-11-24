@@ -1278,7 +1278,8 @@ public class CharacterManager : Singleton<CharacterManager>
         CharacterRuntimeObj characterRuntimeObj;
         if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
         {
-            if (character.mapInstance != WorldMapObjManager.instance.displayMap|| ExploreManager.instance.isExplore)
+            if (character.mapInstance != WorldMapObjManager.instance.displayMap
+                || ExploreManager.instance.isExplore)
             {
                 RecycleCharacterObj(character);
                 if (character == controllerCharacter)
