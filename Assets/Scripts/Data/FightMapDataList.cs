@@ -40,7 +40,8 @@ public struct FightMapData : IGameData
     public string fightMapObjName;
     public string exploreBGMName, fightBGMName;
 
-    public Season season; 
+    public Season season;
+    public WeatherDisplayType weatherDisplayType;
     public float cycleSize;   
     public GameObject fightMapObj;
     public List<int> items;
@@ -49,6 +50,7 @@ public struct FightMapData : IGameData
     private string exploreBGMStr, fightBGMStr,bossBGMStr,footStepStr;
     public AudioClip exploreBGM,fightBGM,bossBGM;
     public AudioClip footStepAudioClip;
+    public bool clearWeather;
     public bool skyDisplay;
     public bool displaySunlight;
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;

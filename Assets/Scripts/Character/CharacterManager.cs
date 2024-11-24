@@ -30,7 +30,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public Player player;
     //private Vector2 playerMoveDirction;
 
-    void SetPlayerNeighboor()
+    void SetPlayerNeighbor()
     {
 
     }
@@ -49,7 +49,14 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         myInstance.RemoveInstance(id);
     }
-
+    protected override void Clear()
+    {
+        base.Clear();
+        RecycleCharacter();
+        characterDataToInstances.Clear();
+        tempInstances.Clear();
+        characters.Clear();
+    }
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
 
@@ -64,7 +71,7 @@ public class CharacterManager : Singleton<CharacterManager>
         FishController.instance.RecycleFisherObj(character.instanceId);
     }
 
-    private async Task CreatCharacterObjAsync(Character character, bool controller = false)
+    private async Task CreateCharacterObjAsync(Character character, bool controller = false)
     {
         var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
         CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
@@ -96,11 +103,11 @@ public class CharacterManager : Singleton<CharacterManager>
 
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
         GameActionManager.instance.AddListener<ChangeCharacterProperty>(ChangeCharacterValue);
-        GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordiante);
+        GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordinate);
 
-        GameActionManager.instance.AddListener<CreatCharacter>(CreatCharacter);
-        GameActionManager.instance.AddListener<CreatTempCharacter>(CreatTempCharacter);
-        GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
+        GameActionManager.instance.AddListener<CreatCharacter>(CreateCharacter);
+        GameActionManager.instance.AddListener<CreatTempCharacter>(CreateTempCharacter);
+        GameActionManager.instance.AddListener<DestoryCharacter>(DestroyCharacter);
          
         GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
         GameActionManager.instance.AddListener<InitInputAction>(InitInputAction);
@@ -316,7 +323,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
                     characterRuntionObjs.Remove(character);
 
-                   await CreatCharacterObjAsync(character);
+                   await CreateCharacterObjAsync(character);
                 }
             }
         }
@@ -513,7 +520,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async Task CreatPlayer(int id, int bag, int instanceId = 0)
+    public async Task CreatePlayer(int id, int bag, int instanceId = 0)
     {
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         if (instanceId == 0)
@@ -530,14 +537,14 @@ public class CharacterManager : Singleton<CharacterManager>
     /// 销毁角色
     /// </summary>
     /// <param name="DestoryTempCharacter"></param>
-    private void DestoryCharacter(DestoryCharacter destoryCharacter)
+    private void DestroyCharacter(DestoryCharacter destoryCharacter)
     {
         if (characters.TryGetValue(destoryCharacter.characterId, out var character))
         {
             RemoveCharacter(character);
         }
     }
-    void DestoryCharacter(int destoryCharacter)
+    void DestroyCharacter(int destoryCharacter)
     {
         if (characters.TryGetValue(destoryCharacter, out var character))
         {
@@ -584,7 +591,7 @@ public class CharacterManager : Singleton<CharacterManager>
     /// 创建消费者
     /// </summary>
     /// <param name="creatTempCharacter"></param>
-    private async void CreatTempCharacter(CreatTempCharacter creatTempCharacter)
+    private async void CreateTempCharacter(CreatTempCharacter creatTempCharacter)
     {
         var tempCharacterData = await GameDataManager.instance.GetAsyncData<TempCharacterData>(creatTempCharacter.characterId);
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
@@ -604,12 +611,12 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void CreatCharacter(CreatCharacter creatCharacter)
+    private async void CreateCharacter(CreatCharacter creatCharacter)
     {
         Character character;
         if (creatCharacter.isPlayer)
         {
-            await CreatPlayer(creatCharacter.characterId, 0);
+            await CreatePlayer(creatCharacter.characterId, 0);
             character = player;
         }
         else
@@ -624,10 +631,13 @@ public class CharacterManager : Singleton<CharacterManager>
             character = new Character(characterData, professionData, instanceId);
             AddCharacter(character);
         }
-
-        character.SetObjCoordinate(creatCharacter.mapInstance,
+        if (creatCharacter.mapInstance != 0)
+        {
+            character.SetObjCoordinate(creatCharacter.mapInstance,
             new int2(creatCharacter.coordinateX, creatCharacter.coordinateY));
-        RefreshNpcRuntimeObj(character, creatCharacter.controller);
+            RefreshNpcRuntimeObj(character, creatCharacter.controller);
+        }
+        
         if (creatCharacter.controller)
         {
             controllerCharacter = character;
@@ -728,7 +738,9 @@ public class CharacterManager : Singleton<CharacterManager>
         return character;
     }
 
-    private async void SetCharacterCoordiante(SetCharacterCoordinate setCharacterCoordinate)
+    
+
+    private async void SetCharacterCoordinate(SetCharacterCoordinate setCharacterCoordinate)
     {
         Character character = GetCharacter(setCharacterCoordinate.characterId);
         character.RemoveMove();
@@ -813,7 +825,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else if (character.mapInstance == WorldMapObjManager.instance.displayMap)
         {
-          await  CreatCharacterObjAsync(character);
+          await  CreateCharacterObjAsync(character);
         }
     }
 
@@ -1199,7 +1211,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return null;
     }
 
-    private async void CreatPlayer(CharacterSaveData characterSaveData)
+    private async void CreatePlayer(CharacterSaveData characterSaveData)
     {
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterSaveData.dataId);
         ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
@@ -1214,7 +1226,7 @@ public class CharacterManager : Singleton<CharacterManager>
         characterRuntionObjs.Add(player, runtimeObj); */
     }
   
-    public async Task CreatNpc(MapNpcData mapNpcData)
+    public async Task CreateNpc(MapNpcData mapNpcData)
     {
         if (NPCManager.instance.GetNPC(mapNpcData.dataId, out var npc))
         {
@@ -1292,7 +1304,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance == WorldMapObjManager.instance.displayMap)
             {
-                await CreatCharacterObjAsync(character); 
+                await CreateCharacterObjAsync(character); 
             }
         } 
     }
@@ -1320,14 +1332,14 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 if(character is TempCharacter tempCharacter)
                 {
-                    DestoryCharacter(character.instanceId);
+                    DestroyCharacter(character.instanceId);
                 }
             }
             else
             {
                 if (!characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
-                    await CreatCharacterObjAsync(character);
+                    await CreateCharacterObjAsync(character);
                 }
                 else
                 {

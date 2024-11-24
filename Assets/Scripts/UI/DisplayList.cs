@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -94,7 +95,7 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
     public async Task InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null,bool Async=true)
     {
        
-        if (componentData == null)
+        if (componentData == null||componentData.Count==0)
         {
             for (int i = 0; i < list.Count; i++)
             {
@@ -124,22 +125,30 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
             else
             {
                 T t;
+                /*
                 if (Async)
                 {
                     var async = GameObject.InstantiateAsync(listPrefab);
                     await async;
                     t = async.Result[0];
                 }
-                else
+                else*/
                 {
                     t = GameObject.Instantiate(listPrefab);
                 }
+                try
+                {
+                    await t.InitData(componentData[i], SelectAction, toggleGroup);
+                    t.enabled = true;
+                    t.transform.SetParent(parent);
+                    t.transform.localScale = Vector3.one;
+                    list.Add(t);
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError($"i:{i}-count:{componentData.Count}--{e}");
+                }
                
-                await t.InitData(componentData[i], SelectAction, toggleGroup);
-                t.enabled = true;
-                t.transform.SetParent(parent);
-                t.transform.localScale = Vector3.one;
-                list.Add(t);
             }
         }
     }

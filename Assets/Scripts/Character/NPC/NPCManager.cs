@@ -853,7 +853,7 @@ public class NPCManager : Singleton<NPCManager>
     public override void Init()
     {
         base.Init();
-        npcs.Clear(); CreatZeroNPC();
+        npcs.Clear(); CreateZeroNPC();
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<TryContinueBehavior>(TryContinueBehavior);
@@ -953,7 +953,7 @@ public class NPCManager : Singleton<NPCManager>
         return nPCList;
     }
 
-    async void CreatZeroNPC()
+    async void CreateZeroNPC()
     {
         var NPCDatas = await GameDataManager.instance.GetAllAsyncData<NPCData>();
         for (int i = 0; i < NPCDatas.Count; i++)
@@ -966,6 +966,17 @@ public class NPCManager : Singleton<NPCManager>
                 npcs.Add(npc.Key, npc);
                 instanceDatas[instanceId] = NPCData.id;
                 FriendManager.instance.ZeroFriendShip(NPCData.id, NPCData.zeroFriendShipLevel);
+
+                Character character = CharacterManager.instance.GetCharacter(instanceId);
+                if (character==null)
+                {
+                    CreatCharacter creatCharacter = new CreatCharacter
+                    {
+                        characterId = NPCData.linkCharacterId,
+                        instanceId = instanceId,
+                    };
+                    GameActionManager.instance.QueueAction(creatCharacter);
+                }
             }
         }
         var shopManager = ShopManager.instance;

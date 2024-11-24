@@ -265,7 +265,7 @@ namespace UnityEngine.Rendering.Universal.Internal
         // This method is called when setting up the renderer once per-camera.
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            if (GameVolumeManager.instance.volumeLevel < VolumeLevel)
+            if (Application.isPlaying&& GameVolumeManager.instance.volumeLevel < VolumeLevel)
             {
                 return;
             }

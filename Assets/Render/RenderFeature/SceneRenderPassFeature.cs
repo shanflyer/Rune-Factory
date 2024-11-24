@@ -125,7 +125,7 @@ public class SceneRenderPassFeature : ScriptableRendererFeature
      
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (GameVolumeManager.instance.volumeLevel == 0)
+        if (!Application.isPlaying&&GameVolumeManager.instance.volumeLevel == 0)
         {
             return;
         }

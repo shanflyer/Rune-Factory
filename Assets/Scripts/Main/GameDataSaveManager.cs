@@ -57,7 +57,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
             PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
 
-            await CharacterManager.instance.CreatPlayer((int)loadGameSaveData.playerData.gender, 0, loadGameSaveData.playerData.instanceId);
+            await CharacterManager.instance.CreatePlayer((int)loadGameSaveData.playerData.gender, 0, loadGameSaveData.playerData.instanceId);
 
             using(var e = loadGameSaveData.storeCounters.Values.GetEnumerator())
             {
@@ -273,7 +273,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         };
         UserGameSaveData.playerData.dataId = (int)gender;
         //NPCManager.instance.CreatZeroNPC();
-       await CharacterManager.instance.CreatPlayer((int)gender, 0);
+       await CharacterManager.instance.CreatePlayer((int)gender, 0);
     }
     static JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
     {

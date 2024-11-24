@@ -47,7 +47,7 @@ public class FightManager : Singleton<FightManager>
 
         maxRoundCount = Enum.GetValues(typeof(FightRoundType)).Length;
 
-        GameActionManager.instance.AddListener<CreatFightPlayer>(CreatFightPlayer);
+        GameActionManager.instance.AddListener<CreatFightPlayer>(CreateFightPlayer);
         GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
         GameActionManager.instance.AddListener<NextActionSkillEstimate>(NextActionSkillEstimate);
 
@@ -315,7 +315,7 @@ public class FightManager : Singleton<FightManager>
         return results;
     }
 
-    private void CreatFightPlayer(CreatFightPlayer creatFightPlayer)
+    private void CreateFightPlayer(CreatFightPlayer creatFightPlayer)
     { 
         playerDic.Clear();
         for (int i = 0; i < creatFightPlayer.players.Count; i++)
@@ -361,7 +361,7 @@ public class FightManager : Singleton<FightManager>
     }
 
     
-    public void CreatFightPlayer()
+    public void CreateFightPlayer()
     {
         /*
         var player = CharacterManager.instance.player;
@@ -392,7 +392,7 @@ public class FightManager : Singleton<FightManager>
         RefreshFightPlayerInfo();
     }
 
-    public async Task CreatFightMonster(MonsterDeploy monsterDeploy)
+    public async Task CreateFightMonster(MonsterDeploy monsterDeploy)
     {
         var beforeAction = await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.beforeActionId);
         if (beforeAction != null)
@@ -432,7 +432,7 @@ public class FightManager : Singleton<FightManager>
             }
             verticalMonsters.Add(fightMonster.instanceId);
 
-            FightController.instance.CreatFightMonster(monsterData, fightMonster.instanceId, fightMonster.fightPos);
+            FightController.instance.CreateFightMonster(monsterData, fightMonster.instanceId, fightMonster.fightPos);
 
             GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
         }

@@ -138,26 +138,10 @@ public class GameController : MonoBehaviour
     int mapInstance;
     [SerializeField]
     int2 coordinate;
-    async void ZeroWorld(ZeroWorld zeroWorld)
-    {
-        GameActionManager.instance.QueueAction(new ChangeWorld
-        {
-            worldName = worldName,
-            displayMap = mapInstance
-        });
-        /* GameActionManager.instance.QueueAction(new CreatCharacter
-          {
-              characterId = characterId,
-              mapInstance = mapInstance,
-              coordinateX = coordinate.x,
-              coordinateY = coordinate.y,
-              controller = true
-          });
-          GameActionManager.instance.QueueAction(new CreatDefaultNPC());
-        */
-        await UIManager.instance.ShowGamePanel<MainPanel>();
-        InputManager.instance.SwitchInputMap(false);
-    }
+
+    public int MapInstance => mapInstance;
+    public int2 Coordinate => coordinate;
+    
     private void OnApplicationQuit()
     {
         //Shader.SetGlobalInt("_backColor", 0);

@@ -460,6 +460,10 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     public void RecycleMap()
     {
+        if (nowMapRoomObj == null || nowMapRoomObj.obj == null)
+        {
+            return;
+        }
         GameRuntimeObjManager.instance.RecycleRuntimeObj(nowMapRoomObj);
 
         foreach (var runTimeMapItemData in nowRuntimeMapItemObjs)

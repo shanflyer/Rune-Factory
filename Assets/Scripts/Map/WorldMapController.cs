@@ -23,11 +23,7 @@ public class WorldMapController : MonoBehaviour
     [SerializeField]
     string worldName;
     [SerializeField]
-    int characterId;
-    [SerializeField]
-    int mapInstance;
-    [SerializeField]
-    int2 coordinate;
+    int characterId; 
     private void OnEnable()
     {
         instance = this;
@@ -85,7 +81,7 @@ public class WorldMapController : MonoBehaviour
         GameActionManager.instance.QueueAction(new ChangeWorld
         {
             worldName = worldName,
-            displayMap = mapInstance
+            displayMap =GameController.instance.MapInstance
         },true);
         
          
@@ -102,7 +98,7 @@ public class WorldMapController : MonoBehaviour
             SetCharacterCoordinate setCharacterCoordinate=new SetCharacterCoordinate 
             { 
                 characterId = characterId,
-                coordinate =new int3(coordinate, mapInstance),  
+                coordinate =new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),  
             };
             GameActionManager.instance.QueueAction(setCharacterCoordinate);
             /*

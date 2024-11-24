@@ -749,7 +749,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 3.0666666
-        value: {x: -0.214, y: -0.543, z: -0.37}
+        value: {x: -0.45, y: -0.59, z: -0.36}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -774,7 +774,7 @@ AnimationClip:
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 3.0666666
-        value: {x: -0.214, y: -0.5, z: -0.36}
+        value: {x: -0.45, y: -0.59, z: -0.36}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1162,7 +1162,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.0666666
-        value: -0.214
+        value: -0.45
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1192,7 +1192,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.0666666
-        value: -0.543
+        value: -0.59
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1222,7 +1222,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.0666666
-        value: -0.37
+        value: -0.36
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1252,7 +1252,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.0666666
-        value: -0.214
+        value: -0.45
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1282,7 +1282,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 3.0666666
-        value: -0.5
+        value: -0.59
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1839,7 +1839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: 543f5da3f55a61b4bbc4861225408ac9, type: 2}
+  m_Clip: {fileID: 7400000, guid: 06035eac7a71ebc4399f3994e21779f4, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -1938,7 +1938,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
-    m_DisplayName: Idle_Right
+    m_DisplayName: Set_Right
   - m_Version: 1
     m_Start: 0
     m_ClipIn: 0
@@ -2108,7 +2108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: 5b69609b5d2db624687ddb061f78795c, type: 2}
+  m_Clip: {fileID: 7400000, guid: fbefbfc08bd733b48b69fef9011ba481, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -2174,7 +2174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: 65aa0fcd6f62a9b4e8a084e399adf2de, type: 2}
+  m_Clip: {fileID: 7400000, guid: 3c1a8c5f74185df42a8bb7303bfa9ce0, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -2295,7 +2295,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
-    m_DisplayName: Idle_Right
+    m_DisplayName: Set_Right
   - m_Version: 1
     m_Start: 0
     m_ClipIn: 0
@@ -2552,7 +2552,6 @@ MonoBehaviour:
   m_Retroactive: 0
   m_EmitOnce: 0
   gameActionDatas:
-  - {fileID: 11400000, guid: 442ef8b7736ec2248a3ff7f3893d00c1, type: 2}
   - {fileID: 11400000, guid: 552e832f5f4ebce41b08dda3c3a810b5, type: 2}
 --- !u!114 &8461563532406133854
 MonoBehaviour:

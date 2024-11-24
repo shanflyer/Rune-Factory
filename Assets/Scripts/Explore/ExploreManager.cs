@@ -142,7 +142,7 @@ public class ExploreManager : Singleton<ExploreManager>
             };
             GameActionManager.instance.QueueAction(setFixedCamera);
 
-            FightController.instance.CreatFightMap(nowFightMapData);
+            FightController.instance.CreateFightMap(nowFightMapData);
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All,isLerp:true);
              
             AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 0);
@@ -159,7 +159,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 nightEnvironmentDataName = nowFightMapData.nightEnvironmentDataName
             };
             GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true); 
-            FightManager.instance.CreatFightPlayer();
+            FightManager.instance.CreateFightPlayer();
 
             GameTimerController.instance.DelayAction(100, async () =>
             {
@@ -214,7 +214,7 @@ public class ExploreManager : Singleton<ExploreManager>
             if (monsterDeploy.id == deployId)
             {
                 //创建怪物
-               await FightManager.instance.CreatFightMonster(monsterDeploy);
+               await FightManager.instance.CreateFightMonster(monsterDeploy);
             }
         }
          

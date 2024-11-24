@@ -844,7 +844,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             nowGameTime = new GameTime
             {
-                Season = Season.春, 
+                Season = Season.夏, 
             };
             nowGameTime.SetTime(6, 0);
             // StartTimeRun();

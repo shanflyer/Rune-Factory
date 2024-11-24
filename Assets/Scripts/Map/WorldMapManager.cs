@@ -864,7 +864,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 {
                     if (datas[i].datas[j].initialBegin)
                     {
-                       await CharacterManager.instance.CreatNpc(datas[i].datas[j]);
+                       await CharacterManager.instance.CreateNpc(datas[i].datas[j]);
                     }
                 }
             }

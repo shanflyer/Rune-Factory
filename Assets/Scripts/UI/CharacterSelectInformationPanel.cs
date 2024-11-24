@@ -61,6 +61,8 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
     void YesButtonAction()
     { 
         Close();
+        var teamManager = TeamManager.instance;
+        var npcManager = NPCManager.instance;
         UIManager.instance.CloseGamePanel<SelectCharacterPanel>(); 
         GameActionManager.instance.QueueAction(new PlayFilm
         {

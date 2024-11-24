@@ -116,7 +116,7 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
      
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        int level = GameVolumeManager.instance.volumeLevel; 
+        int level = !Application.isPlaying ?3:GameVolumeManager.instance.volumeLevel; 
         if (level >= VolumeLevel.x && level <= VolumeLevel.y&&InitCheckCamera(renderingData.cameraData.camera))
             renderer.EnqueuePass(m_ScriptablePass);
     }
