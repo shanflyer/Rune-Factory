@@ -3,7 +3,22 @@ using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
+public struct SetCharacterStopCreate : GameAction
+{
+    public bool hide;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null,
+    SetValue setValue = null, bool immediately = false)
+    { 
+        if (parameters.Count >1)
+            hide = bool.Parse(parameters[2].value);
+         
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RefreshOperateCharacter : GameAction
 {
     public int characterId;
@@ -621,6 +636,18 @@ public struct SetFightCharacterAnimator : GameAction
     }
 }
 
+public struct SetPlayerShaderPos : GameAction
+{
+    public Vector3 pos;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        pos = GameCommon.StringToVector3(parameters[0].value);
+    }
+}
+
 public struct StopTempCharacterCreat : GameAction
 {
     public SetValue setValue { get; set; }
@@ -628,6 +655,7 @@ public struct StopTempCharacterCreat : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+       
     }
 }
 public struct ClearTempCharacter : GameAction

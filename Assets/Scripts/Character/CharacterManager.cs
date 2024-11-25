@@ -21,7 +21,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public const float moveSpeed = 15f;
     public const float updataMoveSpeed = 1f;
-
+    public bool hideCharacter { get; private set; }
     private MyInstance myInstance;
     private MyDic<int, Character> characters = new MyDic<int, Character>();
     private Dictionary<int, int> characterDataToInstances = new Dictionary<int, int>();
@@ -73,6 +73,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private async Task CreateCharacterObjAsync(Character character, bool controller = false)
     {
+        if (hideCharacter)
+            return;
         var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
         CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
         characterRuntimeObj.runtimeObj = runtimeObj;
@@ -136,6 +138,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
         GameActionManager.instance.AddListener<TempCharacterTalk>(TempCharacterTalk);
         GameActionManager.instance.AddListener<SetTempCharacterTarget>(SetTempCharacterTarget);
+        GameActionManager.instance.AddListener<SetCharacterStopCreate>(SetCharacterStopCreate);
     }
     void SetTempCharacterTarget(SetTempCharacterTarget setTempCharacterTarget)
     {
@@ -738,7 +741,10 @@ public class CharacterManager : Singleton<CharacterManager>
         return character;
     }
 
-    
+    void SetCharacterStopCreate(SetCharacterStopCreate setCharacterStopCreate)
+    {
+        hideCharacter = setCharacterStopCreate.hide;
+    }
 
     private async void SetCharacterCoordinate(SetCharacterCoordinate setCharacterCoordinate)
     {

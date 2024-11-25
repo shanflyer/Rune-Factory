@@ -108,7 +108,7 @@ public class ExploreManager : Singleton<ExploreManager>
     void ExploreEnd(ExploreEnd exploreEnd)
     {
         GameActionDataManager.instance.Action(nowFightMapData.endActionId);
-
+        UIManager.instance.CloseGamePanel<FightPanel>();
         fightChapter = default(FightChapter);
         nowFightMapData=default(FightMapData);
         nowChapter = 0;

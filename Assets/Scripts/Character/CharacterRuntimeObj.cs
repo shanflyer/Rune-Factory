@@ -1,18 +1,17 @@
-﻿using Unity.Mathematics;
-using UnityEngine;
-using BehaviorDesigner.Runtime;
-using static UnityEngine.ParticleSystem;
-using UnityEngine.UI;
-using UnityEngine.Playables;
-using UnityEngine.Audio;
+﻿using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityAudioSource;
-using Unity.Entities.UniversalDelegates;
+using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Playables;
+using static UnityEngine.ParticleSystem;
+
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
-public delegate void SetFootStepAction(AudioClip audioClip,Color color);
-public class CharacterRuntimeObj:MonoBehaviour,IGameData
+
+public delegate void SetFootStepAction(AudioClip audioClip, Color color);
+
+public class CharacterRuntimeObj : MonoBehaviour, IGameData
 {
     public RuntimeObj runtimeObj
     {
@@ -22,7 +21,6 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         }
         set
         {
-           
             /*if (value != null)
             {
                 EnvironmentManger.instance.AddCharacterGetFootStep(value.linkId, characterGetFootStep);
@@ -34,38 +32,53 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
             _runtimeObj = value;
         }
     }
+
     private RuntimeObj _runtimeObj;
+
     [SerializeField]
-    private Transform body,equip,shadow; 
+    private Transform body, equip, shadow;
+
     public Animator Animator => animator;
+
     [SerializeField]
     private Animator animator;
+
     [SerializeField]
     private MyShadowPolygon myShadow;
+
     [SerializeField]
     private SpriteRenderer equipRenderer;
+
     [SerializeField]
     private BehaviorTree behaviorTree;
+
     [SerializeField]
     private Transform DirOther;
+
     [SerializeField]
     private ParticleSystem footStep;
+
     [SerializeField]
     private AudioSource audioSource;
+
     [SerializeField]
-    bool isDisplayFootStep;
+    private bool isDisplayFootStep;
+
     [SerializeField]
-    Vector3 leftFootPos, rightFootPos;
+    private Vector3 leftFootPos, rightFootPos;
+
     [SerializeField]
-    float FootTime;
+    private float FootTime;
+
     [SerializeField]
-    float2 direction;
+    private float2 direction;
 
     public Collider2D collider => myShadow.PolygonCollider;
+
     public void Clear()
     {
         if (runtimeObj != null)
-        {  
+        {
             behaviorTree.DisableBehavior();
             behaviorTree.enabled = false;
             behaviorTree.ExternalBehavior = null;
@@ -76,25 +89,28 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
             equip.Translate(offset);
             shadow.Translate(offset);
 
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj,false);
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj, false);
         }
     }
-    public void SetAnimationFloat(int hashParameter,float value)
+
+    public void SetAnimationFloat(int hashParameter, float value)
     {
         if (animator)
         {
             animator.SetFloat(hashParameter, value);
-            if(hashParameter== CharacterAnimatorParameter.Speed)
+            if (hashParameter == CharacterAnimatorParameter.Speed)
             {
                 this.speed = value;
             }
         }
     }
+
     public void SetEquipSprite(Sprite sprite)
     {
         equipRenderer.sprite = sprite;
         equipRenderer.enabled = sprite != null;
     }
+
     public void SetEnableBehavior(int instanceId, ExternalBehaviorTree externalBehaviorTree)
     {
         behaviorTree.ExternalBehavior = externalBehaviorTree;
@@ -102,20 +118,24 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = instanceId });
         behaviorTree.EnableBehavior();
     }
+
     public string GetKey()
     {
         return gameObject.name;
     }
+
     public void SetFootStepON(bool on)
     {
-        var emission= footStep.emission;
+        var emission = footStep.emission;
         emission.enabled = on;
     }
+
     [SerializeField]
-    Vector2 moveDirection;
+    private Vector2 moveDirection;
+
     [SerializeField]
-    float speed; 
-     
+    private float speed;
+
     public void SetAnimationDirection(float2 moveDirection, Direction direction)
     {
         this.moveDirection = moveDirection;
@@ -148,15 +168,15 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         this.speed = animationSpeed;
     }
 
-    float waitFootTime = 0;
-    bool isLeftFoot;
-    void OnEnable()
+    private float waitFootTime = 0;
+    private bool isLeftFoot;
+
+    private void OnEnable()
     {
         waitFootTime = 0;
         isLeftFoot = false;
 
-
-        body.localScale = Vector3.one; 
+        body.localScale = Vector3.one;
         Vector3 offset = equip.localPosition;
         offset.z = 0;
         equip.localPosition = offset;
@@ -167,15 +187,18 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         /*if(runtimeObj!=null)
             EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/
     }
-    void OnDisable()
+
+    private void OnDisable()
     {
         /*iif (runtimeObj != null&&!SingletonType.Cleared)
             EnvironmentManger.instance.RemoveCharacterGetFootStep(runtimeObj.linkId); */
     }
-    AudioPlayableOutput audioPlayableOutput;
-    AudioMixerPlayable audioMixerPlayable, leftMixerPlayable, rightMixerPlayable;
-    PlayableGraph singlePlayableGraph;
-    void Awake()
+
+    private AudioPlayableOutput audioPlayableOutput;
+    private AudioMixerPlayable audioMixerPlayable, leftMixerPlayable, rightMixerPlayable;
+    private PlayableGraph singlePlayableGraph;
+
+    private void Awake()
     {
         gameObject.TryGetComponent(out audioSource);
         characterGetFootStep = new CharacterGetFootStep
@@ -183,13 +206,13 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
             transform = transform,
             SetFootStepAction = SetFootStepAction
         };
-         
-        singlePlayableGraph = PlayableGraph.Create($"{gameObject.name}-FootStep"); 
+
+        singlePlayableGraph = PlayableGraph.Create($"{gameObject.name}-FootStep");
         audioPlayableOutput = AudioPlayableOutput.Create(singlePlayableGraph, $"{gameObject.name}_Footstep", audioSource);
-        audioMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph); 
-         leftMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph);
+        audioMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph);
+        leftMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph);
         audioMixerPlayable.AddInput(leftMixerPlayable, 0, 1);
-         rightMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph);
+        rightMixerPlayable = AudioMixerPlayable.Create(singlePlayableGraph);
         audioMixerPlayable.AddInput(rightMixerPlayable, 0, 1);
 
         audioPlayableOutput.SetSourcePlayable(audioMixerPlayable);
@@ -199,22 +222,25 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
 
     public void SetPosition(Vector3 pos)
     {
-        transform.position = pos; 
+        transform.position = pos;
     }
-    public void SetCoordinateAction(int2 coordinate,int mapInstance,int defaultGround)
+
+    public void SetCoordinateAction(int2 coordinate, int mapInstance, int defaultGround)
     {
         EnvironmentManger.instance.GetNowFootStepData(characterGetFootStep, coordinate, mapInstance, defaultGround);
     }
-    CharacterGetFootStep characterGetFootStep;
-   
-    AudioClip stepAudioClip;
-    Color footStepColor;
-    Dictionary<AudioClip, int> audioClipIndex = new Dictionary<AudioClip, int>();
-    void SetFootStepAction(AudioClip audioClip,Color color)
+
+    private CharacterGetFootStep characterGetFootStep;
+
+    private AudioClip stepAudioClip;
+    private Color footStepColor;
+    private Dictionary<AudioClip, int> audioClipIndex = new Dictionary<AudioClip, int>();
+
+    private void SetFootStepAction(AudioClip audioClip, Color color)
     {
         footStepColor = color;
         if (stepAudioClip != audioClip)
-        {  
+        {
             stepAudioClip = audioClip;
             if (!audioClipIndex.ContainsKey(audioClip))
             {
@@ -225,23 +251,23 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
                 var rightAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, stepAudioClip, false);
                 rightMixerPlayable.AddInput(rightAudioClipPlayable, 0, 0);
                 audioClipIndex[audioClip] = inputCount;
-            }  
+            }
         }
     }
-     
-    void PlayFootStep(bool isLeft)
+
+    private void PlayFootStep(bool isLeft)
     {
         if (stepAudioClip == null)
         {
             return;
         }
         //Debug.Log($"播放:{stepAudioClip.name}");
-        if(audioClipIndex.TryGetValue(stepAudioClip,out var index))
+        if (audioClipIndex.TryGetValue(stepAudioClip, out var index))
         {
             if (isLeft)
             {
                 leftMixerPlayable.SetInputWeight(index, 1);
-                var audioClipPlayable=leftMixerPlayable.GetInput(index);
+                var audioClipPlayable = leftMixerPlayable.GetInput(index);
                 audioClipPlayable.SetTime(0);
             }
             else
@@ -251,11 +277,11 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
                 audioClipPlayable.SetTime(0);
             }
         }
-       
-    } 
-    void LateUpdate()
+    }
+
+    private void LateUpdate()
     {
-        if (isDisplayFootStep&& footStep&& speed>0)
+        if (isDisplayFootStep && footStep && speed > 0)
         {
             if (waitFootTime <= 0)
             {
@@ -263,22 +289,24 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
                 //
                 EmitParams ep = new EmitParams();
                 ep.startColor = footStepColor;
-                Vector3 offSetPos = isLeftFoot ? leftFootPos :rightFootPos;
+                Vector3 offSetPos = isLeftFoot ? leftFootPos : rightFootPos;
                 offSetPos.x *= moveDirection.y;
                 offSetPos.y *= -moveDirection.x;
 
                 ep.position = transform.position + offSetPos;
-                ep.startSize = isLeftFoot ? footStep.main.startSize.constant:-footStep.main.startSize.constant;
-                ep.rotation =180- angel;
+                ep.startSize = isLeftFoot ? footStep.main.startSize.constant : -footStep.main.startSize.constant;
+                ep.rotation = 180 - angel;
                 footStep.Emit(ep, 1);
-                waitFootTime = FootTime; 
+                waitFootTime = FootTime;
                 PlayFootStep(isLeftFoot);
                 isLeftFoot = !isLeftFoot;
             }
             waitFootTime -= Time.deltaTime;
         }
     }
+
 #if UNITY_EDITOR
+
     public void SetReferenceData()
     {
         animator = gameObject.GetComponentInChildren<Animator>();
@@ -292,13 +320,10 @@ public class CharacterRuntimeObj:MonoBehaviour,IGameData
         if (DirOther)
         {
             var footStepTrans = DirOther.Find("脚印");
-            if(footStepTrans)
+            if (footStepTrans)
                 footStep = footStepTrans.GetComponent<ParticleSystem>();
         }
-       
     }
 
 #endif
-
 }
- 

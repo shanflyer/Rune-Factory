@@ -20,6 +20,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
 
         screenMat.SetFloat("_CycleSize", width > heigh ? width : heigh);
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
+        GameActionManager.instance.AddListener<SetPlayerShaderPos>(SetPlayerShaderPos);
     }
     private int _volumeLevel;
     public int volumeLevel
@@ -51,6 +52,10 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         }
     }
 
+    private void SetPlayerShaderPos(SetPlayerShaderPos SetPlayerShaderPos)
+    {
+        Shader.SetGlobalVector("_PlayerPos", SetPlayerShaderPos.pos);
+    }
     public void AddVolumeObject(GameVolumeObject volumeObject)
     {
         int instanceID = volumeObject.GetInstanceID();
