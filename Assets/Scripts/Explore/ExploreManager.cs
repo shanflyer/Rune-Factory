@@ -162,10 +162,10 @@ public class ExploreManager : Singleton<ExploreManager>
             };
             GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true); 
             FightManager.instance.CreateFightPlayer();
-
+             
             GameTimerController.instance.DelayAction(100, async () =>
             {
-                await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowChapter.ToString(), layer: 2);
+                await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowChapter.ToString(), layer: 2); 
                 UIManager.instance.CloseGamePanel<PlayerTopPanel>();
                 UIManager.instance.CloseGamePanel<MainPanel>();
                 UIManager.instance.CloseGamePanel<ShortcutPanel>();

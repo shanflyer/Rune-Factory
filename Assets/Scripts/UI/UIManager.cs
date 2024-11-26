@@ -115,6 +115,7 @@ public class UIManager : Singleton<UIManager>
     {
         var type = typeof(T);
         var gamePanel = await ShowGamePanel(type, dataKey, layer, parent);
+        Debug.Log($"ShowPanel:{type}");
         return (T)gamePanel;
     }
 
@@ -122,6 +123,7 @@ public class UIManager : Singleton<UIManager>
     {
         var type = typeof(T);
         var gamePanel = await ShowGamePanel(type, data, layer, parent);
+        Debug.Log($"ShowPanel:{type}");
         return (T)gamePanel;
     }
 
@@ -197,6 +199,7 @@ public class UIManager : Singleton<UIManager>
 
     private async void OpenPanel(OpenPanelAction openPanelEvent)
     {
+        Debug.Log($"OpenPanelAction :{openPanelEvent.type}");
         await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
     }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -170,6 +171,7 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.AddListener<LeaveTeam>(LeaveTeam);
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreateTeam);
         GameActionManager.instance.AddListener<CheckIsNotInTeam>(CheckInTeam);
+        GameActionManager.instance.AddListener<DestroyTeam>(DestroyTeam);
     }
     private void CheckInTeam(CheckIsNotInTeam checkInTeam)
     {
@@ -218,7 +220,19 @@ public class TeamManager : Singleton<TeamManager>
             team.TeamLeaderMove(tryTeamLeaderMove.length);
         }
     }
-
+    private async void DestroyTeam(DestroyTeam destroyTeam)
+    {
+        int id = destroyTeam.teamCharacterId;
+        if (id == 0)
+        {
+            id = CharacterManager.instance.controllerCharacter.instanceId;
+        }
+        if (teams.TryGetValue(id, out var team))
+        {
+            await team.Clear();
+            teams.Remove(id);
+        }
+    }
     private void CreateTeam(CreatTeamPlayer createTeamPlayer)
     {
         for (int i = 0; i < createTeamPlayer.players.Count; i++)
@@ -512,6 +526,14 @@ public class Team
         //  CharacterManager.instance.RefreshNpcRuntimeObj(nowCharacter);
     }
 
+    public async Task Clear()
+    {
+        var characterIds = characterInstances.ToList();
+        for(int i = 0; i < characterIds.Count; i++)
+        {
+           await RemoveCharacter(characterIds[i]);
+        }
+    }
     public async Task<bool> RemoveCharacter(int characterid)
     {
         bool isLeader = leader.instanceId == characterid;

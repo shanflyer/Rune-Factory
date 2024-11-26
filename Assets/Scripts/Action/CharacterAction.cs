@@ -249,7 +249,20 @@ public struct LeaveTeam : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct DestroyTeam : GameAction
+{
+    public int teamCharacterId;
+    public bool holdDisplay;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    { 
+        if (parameters.Count > 0)
+            teamCharacterId = int.Parse(parameters[0].value); 
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct JoinTeam : GameAction
 {
     public int characterId;

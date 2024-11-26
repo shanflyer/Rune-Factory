@@ -39,7 +39,7 @@ MonoBehaviour:
           parameters: []
       - value: SetPlayerShaderPos
         parameters:
-        - value: 0,0
+        - value: -0.28-0.2
           parameters: []
   - value: WaitAction
     parameters:
@@ -52,8 +52,4 @@ MonoBehaviour:
   - value: SetCharacterStopCreate
     parameters:
     - value: 0
-      parameters:
-      - value: StopFilm
-        parameters:
-        - value: "\u89D2\u8272\u9009\u62E9"
-          parameters: []
+      parameters: []

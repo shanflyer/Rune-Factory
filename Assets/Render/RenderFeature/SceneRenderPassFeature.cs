@@ -6,12 +6,14 @@ using UnityEngine.Experimental.Rendering;
 
 public class SceneRenderPassFeature : ScriptableRendererFeature
 {
+    public int VolumeLevel;
     public RenderPassEvent renderPassEvent;
     public Material blurMaterial, blendBlurMaterial, cycleMaterial;  
     class SceneRenderPass : ScriptableRenderPass
     {
         private string tagName="Test";
-        private Material blurMaterial, blendBlurMaterial, cycleMaterial; 
+        private Material blurMaterial, blendBlurMaterial, cycleMaterial;
+        public int VolumeLevel = 0;
         public SceneRenderPass( Material blurMaterial,Material blendBlurMaterial,Material cycleMaterial, string tagName, RenderPassEvent renderPassEvent)
         {
             this.renderPassEvent = renderPassEvent;
@@ -125,7 +127,7 @@ public class SceneRenderPassFeature : ScriptableRendererFeature
      
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (!Application.isPlaying&&GameVolumeManager.instance.volumeLevel == 0)
+        if (Application.isPlaying && GameVolumeManager.instance.volumeLevel < VolumeLevel)
         {
             return;
         }
