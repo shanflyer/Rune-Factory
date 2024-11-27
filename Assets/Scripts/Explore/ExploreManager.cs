@@ -185,6 +185,7 @@ public class ExploreManager : Singleton<ExploreManager>
     //探索阶段
     private async void ChapterStepAction(ChapterStepAction chapterStepAction)
     {
+        Debug.Log("ChapterStepAction!!!");
         UIManager.instance.CloseGamePanel<WarehousePanel>();
         if (fightChapter==null||fightChapter.mapId != nowChapter)
         {

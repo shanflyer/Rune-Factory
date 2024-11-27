@@ -417,7 +417,7 @@ public class FightManager : Singleton<FightManager>
             FightMonster fightMonster = new FightMonster(monsterData, myInstance.CreatInstanceId(), new int2(col, raw));   
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
-
+            Debug.Log($"singleMonsterDic.Count{singleMonsterDic.Count}--fightMonster.instanceId}}{fightMonster.instanceId}--fightMonster.fightPos{fightMonster.fightPos}");
             singleMonsterDic.Add(fightMonster.fightPos, fightMonster.instanceId);
             if (!horizontalMonsterDic.TryGetValue(fightMonster.fightPos.y, out var horizontalMonsters))
             {

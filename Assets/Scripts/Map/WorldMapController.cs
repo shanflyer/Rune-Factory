@@ -32,10 +32,104 @@ public class WorldMapController : MonoBehaviour
         {
             eventSystemObj.SetActive(false);
         }
+        //Init();
+        GameActionManager.instance.AddListener<StartWorldInit>(StartWorldInit);
+    }
+    void StartWorldInit(StartWorldInit startWorldInit)
+    {
         Init();
+    }
+    IEnumerator InitIEnumerator()
+    { 
+        var teamManager = TeamManager.instance;
+        yield return 0;
+        var npcManager = NPCManager.instance;
+        yield return 0;
+        var gameEventManager = GameEventManager.instance;
+        yield return 0;
+        var tempCharacterManager = TempCharacterManager.instance;
+        yield return 0;
+        var characterManager = CharacterManager.instance;
+        yield return 0;
+        var gameManager = GameManager.instance;
+        yield return 0;
+        var playerStoreManager = PlayerStoreManager.instance;
+        yield return 0;
+        var talkManager = TalkManager.instance;
+        yield return 0;
+        var farmManager = FarmManager.instance;
+        yield return 0;
+        var tempMapItemController = TempMapItemController.instance;
+        yield return 0;
+        var festivalManager = FestivalManager.instance;
+        yield return 0;
+        var gameTimeEventManager = GameTimeEventManager.instance;
+        yield return 0;
+        var gameVolumeMangaer = GameVolumeManager.instance;
+        yield return 0;
+        var timeLineManager = TimeLineManger.instance;
+        yield return 0;
+        var emote = EmoteManager.instance;
+        yield return 0;
+        var homeEquipManager = HomeEquipManager.instance;
+        yield return 0;
+        var manufatureManager = ManufatureManager.instance;
+        yield return 0;
+        var pastureManager = PastureManager.instance;
+        yield return 0;
+        var fisinghManager = FishingManager.instance;
+        yield return 0;
+        var fishController = FishController.instance;
+        yield return 0;
+        var weatherManager = WeatherManager.instance;
+        yield return 0;
+        AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
+        yield return 0;
+        GameActionManager.instance.QueueAction(new ChangeWorld
+        {
+            worldName = worldName,
+            displayMap = GameController.instance.MapInstance
+        }, true);
+
+        yield return 0;
+        InputManager.instance.SwitchInputMap(false);
+        GameActionManager.instance.QueueAction(new InitInputAction());
+        yield return 0;
+        var environmentManger = EnvironmentManger.instance;
+        GameTimeManager.instance.ZeroGameTime();
+        yield return 0;
+
+        //if (GameController.instance == null||GameController.instance.startPlay)
+        {
+            GameTimeManager.instance.StartTimeRun();
+            SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+            {
+                characterId = characterId,
+                coordinate = new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),
+            };
+            GameActionManager.instance.QueueAction(setCharacterCoordinate);
+            if (GameController.instance.startPlay)
+            {
+                yield return 0;
+                UIManager.instance.ShowGamePanel<MainPanel>();
+                yield return 0;
+                UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+            }
+          
+        }
+        yield return 0;
+        if (GameController.instance.startPlay)
+        {
+            GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
+        }
+        yield return 0;
+        GameDataSaveManager.instance.AfterInitMapLoadSaveData();
+        yield return 0;
+        GameDataSaveManager.instance.InitSaveDate();
+        yield return 0;
+        WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
        
     }
-
     public async void Init()
     {
         if (Camera.main == null)
@@ -53,6 +147,8 @@ public class WorldMapController : MonoBehaviour
 
         await GameDataSaveManager.instance.InitLoadSaveData();
 
+        GameController.instance.StartCoroutine(InitIEnumerator());
+        /*
         var teamManager = TeamManager.instance;
         var npcManager = NPCManager.instance;
 
@@ -101,16 +197,7 @@ public class WorldMapController : MonoBehaviour
                 coordinate =new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),  
             };
             GameActionManager.instance.QueueAction(setCharacterCoordinate);
-            /*
-            GameActionManager.instance.QueueAction(new CreatCharacter
-            {
-                characterId = characterId,
-                mapInstance = mapInstance,
-                coordinateX = coordinate.x,
-                coordinateY = coordinate.y,
-                controller = true,
-                isPlayer=true,
-            });*/
+           
             await UIManager.instance.ShowGamePanel<MainPanel>(); 
            
            await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
@@ -123,7 +210,7 @@ public class WorldMapController : MonoBehaviour
 
         GameDataSaveManager.instance.AfterInitMapLoadSaveData();
         GameDataSaveManager.instance.InitSaveDate();
-        WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
+        WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);*/
     }
     // Use this for initialization
     void Start()

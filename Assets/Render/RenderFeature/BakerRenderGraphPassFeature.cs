@@ -116,7 +116,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                      
                    
                     builder.SetRenderAttachment(destination, 0);
-                    builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
+                    //builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
                     if (settings.afterRenderMaterial == null)
                     {

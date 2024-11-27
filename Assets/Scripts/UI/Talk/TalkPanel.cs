@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -55,23 +56,30 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         {
             NPCTalkOperateData.endAction();
         }
-        TryContinueBehavior tryContinueBehavior = new TryContinueBehavior
+        if (!SingletonType.Cleared)
         {
-            characterId = NPCTalkOperateData.characterId
-        };
-        GameActionManager.instance.QueueAction(tryContinueBehavior);
+            TryContinueBehavior tryContinueBehavior = new TryContinueBehavior
+            {
+                characterId = NPCTalkOperateData.characterId
+            };
+            GameActionManager.instance.QueueAction(tryContinueBehavior);
+        }
+     
         base.Close();
     }
 
     private async void NextAction()
     {
+        Debug.Log("Talk:NextAction!!!");
+        nextButton.interactable = false;
         var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(talkData.actionId.ToString());
         if (actionData != null)
         {
             actionData.Action();
         }
         talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkData.nexTalkId);
-        InitData();
+        await TalkAction();
+        nextButton.interactable = true;
     }
 
     private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, bool selected = true)
@@ -120,8 +128,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private bool runNextTalkEvent = false;
     private int talkId;
-
-    private async void InitData()
+    async Task TalkAction()
     {
         if (talkData == null)
         {
@@ -218,6 +225,10 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
             NPCFunctionParent.localScale = NPCTalkOperateData.displayFunction ? Vector3.one : Vector3.zero;
         }
+    }
+    private async void InitData()
+    {
+        await TalkAction();
     }
 
     public override void SetPanelUISerializeObj()

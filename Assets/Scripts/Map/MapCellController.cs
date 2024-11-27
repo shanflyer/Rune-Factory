@@ -1395,7 +1395,7 @@ public class MapCellController : Singleton<MapCellController>
             switch (saveValue)
             {
                 case -1:
-                    isInit = mapLine.zeroInit;
+                    isInit =GameController.instance.startPlay?true: mapLine.zeroInit;
                     break;
 
                 case 0:

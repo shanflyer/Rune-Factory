@@ -844,6 +844,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         var displayRoom = worldMapData.worldMapDic[displayMap];
         await CreatRoomRuntime(displayRoom, true, displayMap);
 
+         
         foreach (var room in worldMapData.worldMapDic.Values)
         {
             if (room.id != displayMap)
@@ -870,7 +871,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             }
 
             NPCManager.instance.InitNPCBehavior();
-        });
+        }); 
         // return true;
 
         //WorldMapObjManager.instance.DefaultDisplayMap(displayMap);

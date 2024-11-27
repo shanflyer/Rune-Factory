@@ -86,6 +86,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
         if (controller || character == controllerCharacter)
         {
+            SetShaderPlayerPos(characterRuntimeObj.transform.position);
             CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
             ControllerRuntimeObj = characterRuntimeObj;
             if (!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
