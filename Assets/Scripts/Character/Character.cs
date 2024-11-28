@@ -1210,6 +1210,8 @@ public partial class Character
         {
             if (enter)
             {
+                Debug.Log($"进入触发：{reference}");
+
                 oldOperateItem = reference;
                 ShowMapObjTips showMapObjTips = new ShowMapObjTips
                 {
@@ -1225,6 +1227,7 @@ public partial class Character
             }
             else
             {
+                Debug.Log($"离开触发：{reference}");
                 if (oldOperateItem == reference)
                 {
                     oldOperateItem = -1;

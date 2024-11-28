@@ -1358,7 +1358,7 @@ public class CharacterManager : Singleton<CharacterManager>
             } 
         }
 
-        CharacterManager.SetShaderPlayerPos(ControllerRuntimeObj.transform.position);
+        //CharacterManager.SetShaderPlayerPos(ControllerRuntimeObj.transform.position);
     }
 
     public void SetCharacterAnimationSpeed(float speed, Character character)

@@ -116,7 +116,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                      
                    
                     builder.SetRenderAttachment(destination, 0);
-                    //builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
+                    builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
                     if (settings.afterRenderMaterial == null)
                     {
@@ -144,13 +144,31 @@ namespace UnityEngine.Rendering.Universal.Internal
                 {
                     UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
                     UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+
+
+                    RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor;
+
+                    var targetDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
+                    if (!settings.blitToCameraTarget)
+                    {
+                        targetDesc.name = settings.textureName;
+                    }
+                   
+                    targetDesc.clearBuffer = settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All;
+                    targetDesc.clearColor = settings.clearColor;
+                    targetDesc.width = (int)(settings.blitScale * desc.width);
+                    targetDesc.height = (int)(settings.blitScale * desc.height);
+
+                    TextureHandle outTexHandle = settings.blitToCameraTarget ? resourceData.activeColorTexture : renderGraph.CreateTexture(targetDesc);
+
+                    /*
                     RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor;
                     desc.width = (int)(settings.blitScale * desc.width);
                     desc.height = (int)(settings.blitScale * desc.height);
                     desc.colorFormat = RenderTextureFormat.Default;
                     desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.None;
                     TextureHandle outTexHandle =settings.blitToCameraTarget?resourceData.activeColorTexture: UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, settings.textureName,
-                    false);
+                    false);*/
                     var customData = frameData.Get<MyCustomData>();
 
                     passData.material = settings.afterRenderMaterial;
@@ -158,6 +176,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 
                     builder.UseTexture(customData.textureToTransfer);
                     builder.SetRenderAttachment(outTexHandle, 0);
+                    builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
                     passData.outTexHandle = customData.textureToTransfer;
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) => OutExecutePass(data, context));

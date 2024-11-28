@@ -328,11 +328,11 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 0
-  m_RenderingMode: 2
+  m_RenderingMode: 0
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
-  m_DepthAttachmentFormat: 0
-  m_DepthTextureFormat: 0
+  m_CopyDepthMode: 0
+  m_DepthAttachmentFormat: 151
+  m_DepthTextureFormat: 151
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
 --- !u!114 &456928630779868892
@@ -492,7 +492,7 @@ MonoBehaviour:
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
     overrideDepthState: 0
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     overrideStencilState: 0
     stencilStateData:
       overrideStencilState: 0
@@ -502,7 +502,7 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     opaque: 0
-    renderPassEvent: 210
+    renderPassEvent: 250
     layerMask:
       serializedVersion: 2
       m_Bits: 128

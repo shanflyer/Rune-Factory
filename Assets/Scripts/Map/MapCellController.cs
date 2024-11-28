@@ -453,7 +453,15 @@ public class MapCellController : Singleton<MapCellController>
             var cells = GameCommon.GridToCells(linkMapCell.girds);
             for (int i = 0; i < cells.Count; i++)
             {
-                linkMapIndexs.Add(cells[i], linkMaps.Length - 1);
+                try
+                {
+                    linkMapIndexs.Add(cells[i], linkMaps.Length - 1);
+                }
+                catch
+                {
+                    Debug.LogError($"linkMapCell{linkMapCell.targetCell}--{cells[i]}--old{linkMapIndexs[cells[i]]}");
+                }
+               
             }
             neighbourMaps.TryGetValue(linkMapCell.targetCell.z, out var num);
             num++;
@@ -1395,7 +1403,15 @@ public class MapCellController : Singleton<MapCellController>
             switch (saveValue)
             {
                 case -1:
-                    isInit =GameController.instance.startPlay?true: mapLine.zeroInit;
+                    if (GameController.instance.startPlay&&(mapLine.map0==405||mapLine.map1==405))
+                    {
+                        isInit = true;
+                    }
+                    else
+                    {
+                        isInit = mapLine.zeroInit;
+                    }
+                   
                     break;
 
                 case 0:

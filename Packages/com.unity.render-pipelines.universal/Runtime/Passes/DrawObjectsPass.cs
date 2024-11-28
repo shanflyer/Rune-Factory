@@ -247,9 +247,13 @@ namespace UnityEngine.Rendering.Universal.Internal
                 }
 #endif
             DrawingSettings drawSettings = RenderingUtils.CreateDrawingSettings(m_ShaderTagIdList, renderingData, cameraData, lightData, sortFlags);
-            var sortSettings = drawSettings.sortingSettings;
-            GetTransparencySortingMode(camera, ref sortSettings);
-            drawSettings.sortingSettings = sortSettings;
+            if (!m_IsOpaque)
+            {
+                var sortSettings = drawSettings.sortingSettings;
+                GetTransparencySortingMode(camera, ref sortSettings);
+                drawSettings.sortingSettings = sortSettings;
+            }
+          
             if (cameraData.renderer.useDepthPriming && m_IsOpaque && (cameraData.renderType == CameraRenderType.Base || cameraData.clearDepth))
             {
                 m_RenderStateBlock.depthState = new DepthState(false, CompareFunction.Equal);

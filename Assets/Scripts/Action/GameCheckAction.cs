@@ -52,7 +52,19 @@ public struct CheckGameTimeDate : GameAction
         {
             day = int.Parse(parameters[0].value);
         }
-       
+        if (source != 0 && source != int.MinValue)
+        {
+            year = source;
+        }
+        if (target != 0 && target != int.MinValue)
+        {
+            momth = target;
+        }
+        if (value > 0)
+        {
+            day = value;
+        }
+
         this.setResult = setResult;
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
