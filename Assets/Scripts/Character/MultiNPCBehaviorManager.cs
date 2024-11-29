@@ -194,8 +194,7 @@ public struct NPCBehaviorTempData
 }
 
 public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
-{
-    private MyInstance myInstance;
+{ 
     private MyDic<int, MultiNPCGroup> mulitNpcGroups = new MyDic<int, MultiNPCGroup>();
     private GameObject obj;
 
@@ -207,8 +206,7 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
         {
             obj = new GameObject("MultiNPCBehaviorManager");
         }
-
-        myInstance = new MyInstance();
+         
         mulitNpcGroups.Clear();
         GameActionManager.instance.AddListener<JoinInMultiNPCBehaviorGroup>(JoinInMultiNPCBehaviorGroup);
         GameActionManager.instance.AddListener<LeaveMultiNPCBehaviorGroup>(LeaveMultiNPCBehaviorGroup);
@@ -243,7 +241,7 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
         int multiDataId = creatMultiNPCBehaviorGroup.dataId;
         bool faceCenter = creatMultiNPCBehaviorGroup.faceCenter;
 
-        int groupInstance = myInstance.CreatInstanceId();
+        int groupInstance = MyInstance.instance.uid;
         var mulitiBehaviorData = await GameDataManager.instance.GetAsyncData<MulitiBehaviorData>(multiDataId);
 
         int maxX = int.MinValue;

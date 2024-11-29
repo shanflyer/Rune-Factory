@@ -4,8 +4,7 @@ using Unity.Mathematics;
 
 public class FishingManager : Singleton<FishingManager>
 {
-    private Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>();
-    private MyInstance myInstance;
+    private Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>(); 
 
     public override async void Init()
     {
@@ -26,11 +25,7 @@ public class FishingManager : Singleton<FishingManager>
 
     protected override void Clear()
     {
-        base.Clear();
-        if (myInstance != null)
-        {
-            myInstance.Clear();
-        }
+        base.Clear(); 
         if (!SingletonType.Cleared)
         {
             GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);

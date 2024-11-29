@@ -181,7 +181,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         return 0;
     }
-    public void InitMapInstanceData(MyInstance myInstance)
+    public void InitMapInstanceData()
     {
         if (loadGameSaveData!=null)
         { 
@@ -189,7 +189,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 while (e.MoveNext())
                 {
-                    myInstance.AddInstance(e.Current);
+                   MyInstance.instance.AddInstance(e.Current);
                 }
             } 
         }

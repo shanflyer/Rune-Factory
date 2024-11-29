@@ -26,8 +26,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
 
     private Dictionary<int, IEnumerator> objectMoveIEnumerator = new Dictionary<int, IEnumerator>();
     private Dictionary<int, IEnumerator> runIEnumerator = new Dictionary<int, IEnumerator>();
-    private Dictionary<int, IEnumerator> pauseEnumerator = new Dictionary<int, IEnumerator>();
-    private MyInstance myInstance;
+    private Dictionary<int, IEnumerator> pauseEnumerator = new Dictionary<int, IEnumerator>(); 
 
     private MonoBehaviour UpDataComponent;
 
@@ -94,14 +93,12 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
 
     protected override void Clear()
     {
-        base.Clear();
-        myInstance.Clear();
+        base.Clear(); 
     }
 
     public override void Init()
     {
-        base.Init();
-        myInstance = new MyInstance();
+        base.Init(); 
     }
 
     private void SetCurvePosCurveMoveDataAction(float timeValue, CurveMoveData curveMoveData)
@@ -215,7 +212,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
 
     public int Line(float speed, Vector2 startPos, Vector2 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
     {
-        int instanceId = myInstance.CreatInstanceId();
+        int instanceId = MyInstance.instance.uid;
         IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) =>
         {
             Vector2 pos = startPos + (targetPos - startPos) * timeValue;
@@ -231,7 +228,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             }
             runIEnumerator.Remove(instanceId);
             pauseEnumerator.Remove(instanceId);
-            myInstance.RemoveInstance(instanceId);
+            MyInstance.instance.RemoveInstance(instanceId);
         }
 
         UpDataComponent.StartCoroutine(enumerator);

@@ -47,8 +47,7 @@ public class MapItemEditor : MyEditor
 
     private MapItemDataObj _selectMapItemDataObj;
     private Tilemap ground, collider, trigger;
-    private Transform singleItemParent;
-    private MyInstance myInstance;
+    private Transform singleItemParent; 
     private TileBase colliderTile, triggerTile, playerTriggerTile;
 
     private new void OnDestroy()
@@ -63,8 +62,7 @@ public class MapItemEditor : MyEditor
         foreach (Transform child in singleItemParent)
         {
             DestroyImmediate(child.gameObject);
-        }
-        myInstance = null;
+        } 
         _Instance = null;
     }
 
@@ -103,8 +101,7 @@ public class MapItemEditor : MyEditor
         }
 
         mapItemsPanel = CreateInstance<CommonEditor>();
-        mapItemsPanel.InitData(Instance, null);
-        myInstance = new MyInstance();
+        mapItemsPanel.InitData(Instance, null); 
 
         var MapEditor = GameObject.Find("MapEditor");
         if (MapEditor == null)
@@ -182,7 +179,7 @@ public class MapItemEditor : MyEditor
 
         MapItemData mapItemData = ScriptableObject.CreateInstance<MapItemData>();
 
-        mapItemData.id = myInstance.CreatInstanceId();
+        mapItemData.id = MyInstance.instance.uid;
         mapItemData.name = mapItemData.id.ToString();
         mapItemData.itemName = "NewMapObj";
         mapItemData.itemObj = selectItem;

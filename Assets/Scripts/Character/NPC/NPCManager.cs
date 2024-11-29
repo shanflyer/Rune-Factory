@@ -961,7 +961,7 @@ public class NPCManager : Singleton<NPCManager>
             var NPCData = NPCDatas[i];
             if (NPCData.zeroCreate)
             {
-                int instanceId = CharacterManager.instance.GetCharacterInstance();
+                int instanceId = MyInstance.instance.uid;
                 NPC npc = new NPC(instanceId, NPCData);
                 npcs.Add(npc.Key, npc);
                 instanceDatas[instanceId] = NPCData.id;

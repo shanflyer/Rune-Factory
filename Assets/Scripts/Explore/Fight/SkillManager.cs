@@ -5,8 +5,7 @@ using UnityEngine;
 using UnityEngine.TextCore.Text;
 
 public class SkillManager : Singleton<SkillManager>
-{
-    MyInstance myInstance = new MyInstance();
+{ 
     SkillRuntime useItemRuntime;
     public override void Init()
     {
@@ -17,21 +16,21 @@ public class SkillManager : Singleton<SkillManager>
         base.Clear();
     }
    
-    public async Task<SkillRuntime> CreatSkillRuntime(int skillId)
+    public async Task<SkillRuntime> CreateSkillRuntime(int skillId)
     {
         SkillData skillData=await GameDataManager.instance.GetAsyncData<SkillData>(skillId);
-        SkillRuntime skillRuntime = new SkillRuntime(skillData, myInstance.CreatInstanceId()); 
+        SkillRuntime skillRuntime = new SkillRuntime(skillData, MyInstance.instance.uid); 
         return skillRuntime;
     }
 
-    public async Task<BuffRuntime> CreatBuffRuntime(int buffId,FightCharacter fightCharacter)
+    public async Task<BuffRuntime> CreateBuffRuntime(int buffId,FightCharacter fightCharacter)
     {
         BuffData buffData = await GameDataManager.instance.GetAsyncData<BuffData>(buffId);
         int randomValue = GameRandom.RandomInt(0, 100);
         randomValue = FightManager.instance.GetAttributeTypeRandomValue(buffData.attributeType, fightCharacter.AttackAttributeType, randomValue);
         if (randomValue < buffData.probability)
         {
-            BuffRuntime buffRuntime = new BuffRuntime(buffData, myInstance.CreatInstanceId(), fightCharacter.instanceId);
+            BuffRuntime buffRuntime = new BuffRuntime(buffData, MyInstance.instance.uid, fightCharacter.instanceId);
             return buffRuntime;
         }
         return null;      

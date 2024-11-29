@@ -14,8 +14,7 @@ public enum HurtResultType
 }
 
 public class FightManager : Singleton<FightManager>
-{
-    private MyInstance myInstance = new MyInstance();
+{ 
     public override bool NeedUpdata => true;
     private Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     private List<int> fightPlayers = new List<int>();
@@ -79,7 +78,7 @@ public class FightManager : Singleton<FightManager>
     async void CreatUseItemSkill()
     {
         int skillId = 1000;
-        useItemSkillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+        useItemSkillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
     }
     public List<FightCharacter> GetAllFightCharacters()
     {
@@ -101,8 +100,7 @@ public class FightManager : Singleton<FightManager>
         return _fightCharacters;
     }
     private void ExploreEnd(ExploreEnd exploreEnd)
-    {
-        myInstance.Clear();
+    { 
         ClearCharacter();
         GetItemIndexs.Clear();
         fightResult.fighterResults.Clear();
@@ -130,8 +128,7 @@ public class FightManager : Singleton<FightManager>
     }
 
     protected override void Clear()
-    {
-        myInstance.Clear();
+    { 
         useItemSkillRuntime = null;
         ClearCharacter();
         GetItemIndexs.Clear();
@@ -142,6 +139,10 @@ public class FightManager : Singleton<FightManager>
     {
         fightCharacters.Clear();
         fightPlayers.Clear();
+        for(int i = 0; i < fightMonsters.Count; i++)
+        {
+            MyInstance.instance.RemoveInstance(fightMonsters[i]);
+        }
         fightMonsters.Clear();
         playerDic.Clear();
         singleMonsterDic.Clear();
@@ -213,8 +214,15 @@ public class FightManager : Singleton<FightManager>
                       horizontalMonsterDic.Remove(monster.fightPos.y);
                       verticalMonsterDic.Remove(monster.fightPos.x);
 
-                      fightMonsters.Remove(characterDeath.characterId);
-                      fightCharacters.Remove(characterDeath.characterId);
+                      if (fightMonsters.Remove(characterDeath.characterId))
+                      {
+                          MyInstance.instance.RemoveInstance(characterDeath.characterId);
+                      }
+                      else
+                      {
+                          fightCharacters.Remove(characterDeath.characterId);
+                      }
+                       
                       FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
                       GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
                   }
@@ -414,7 +422,7 @@ public class FightManager : Singleton<FightManager>
             int raw = i - col * 3 - 1;
 
             MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(characterId);
-            FightMonster fightMonster = new FightMonster(monsterData, myInstance.CreatInstanceId(), new int2(col, raw));   
+            FightMonster fightMonster = new FightMonster(monsterData, MyInstance.instance.uid, new int2(col, raw));   
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
             Debug.Log($"singleMonsterDic.Count{singleMonsterDic.Count}--fightMonster.instanceId}}{fightMonster.instanceId}--fightMonster.fightPos{fightMonster.fightPos}");
@@ -1017,7 +1025,7 @@ public class FightManager : Singleton<FightManager>
                 if (nowUsedItem.dataId != 0)
                 {
                     ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(nowUsedItem.dataId);
-                    target.CreatBuffRuntime(itemData.typeValue);
+                    target.CreateBuffRuntime(itemData.typeValue);
                     ItemUseAction itemUseAction = new ItemUseAction
                     {
                         itemId = nowUsedItem.dataId,
@@ -1062,7 +1070,7 @@ public class FightManager : Singleton<FightManager>
                 FightHPChange(addHp, target, isDisplayHurt, HurtResultType.Default);
                 break;
             case FightType.buff:
-                target.CreatBuffRuntime(actionValue);
+                target.CreateBuffRuntime(actionValue);
                 break;
         }
 
@@ -1459,8 +1467,10 @@ public class FightManager : Singleton<FightManager>
                 int characterId = fightMonsters[i];
                 fightCharacters.Remove(characterId);
                 FightController.instance.RemoveFightPlayerRuntime(characterId);
-            }
-            fightMonsters.Clear();
+                MyInstance.instance.RemoveInstance(characterId);
+            } 
+            fightMonsters.Clear(); 
+
             singleMonsterDic.Clear();
             horizontalMonsterDic.Clear();
             verticalMonsterDic.Clear();

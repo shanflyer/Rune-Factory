@@ -9,8 +9,7 @@ public class PastureManager : Singleton<PastureManager>
     private Dictionary<int, Pasture> pastures = new Dictionary<int, Pasture>();
     private Dictionary<int, Animal> animals = new Dictionary<int, Animal>();
 
-    private Dictionary<int, int> pastureLinkItems = new Dictionary<int, int>();
-    private MyInstance myInstance = new MyInstance();
+    private Dictionary<int, int> pastureLinkItems = new Dictionary<int, int>(); 
 
     protected override void Clear()
     {
@@ -494,7 +493,7 @@ public class PastureManager : Singleton<PastureManager>
                                 {
                                     Pasture pasture = new Pasture
                                     {
-                                        instanceId = myInstance.CreatInstanceId(),
+                                        instanceId = MyInstance.instance.uid,
                                         name = string.IsNullOrEmpty(tryCreatPasture.pastureName) ? pastureData.pastureName : tryCreatPasture.pastureName,
                                         pastureState = PastureState.平常,
                                         linkItem = instanceId,

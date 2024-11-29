@@ -36,13 +36,10 @@ public struct Equipment : IReferenceData
 }
 
 public class ItemManager:Singleton<ItemManager>
-{ 
-    private MyInstance myInstance;
-
+{  
     public override void Init()
     {
-        base.Init();
-        myInstance = new MyInstance();
+        base.Init(); 
     }
     public Item CreatItem(ItemData data, int count)
     {
@@ -50,7 +47,7 @@ public class ItemManager:Singleton<ItemManager>
         {
             dataId = data.id,
             count = count,
-            instanceId = CreatIntance()
+            instanceId = MyInstance.instance.uid
         };
         return item;
     }
@@ -61,24 +58,12 @@ public class ItemManager:Singleton<ItemManager>
         {
             dataId = dataId,
             count = count,
-            instanceId = CreatIntance()
+            instanceId = MyInstance.instance.uid
         };
         return item;
     }
 
-    public int CreatIntance()
-    {
-        return myInstance.CreatInstanceId();
-    }
-
-    public void AddInstanceId(int instanceId)
-    {
-        myInstance.AddInstance(instanceId);
-    }
-    public void DeleteItem(int intanceId)
-    {
-        myInstance.RemoveInstance(intanceId); 
-    }
+   
 
     public async Task BuyActionAsync(ShopItemData selectShopItemData, int buyCount)
     {

@@ -139,9 +139,9 @@ public class FightCharacter : IReferenceData
                 break;
         }
     }
-    public async void CreatBuffRuntime(int buffId)
+    public async void CreateBuffRuntime(int buffId)
     {
-        var buffRuntime = await SkillManager.instance.CreatBuffRuntime(buffId,this);
+        var buffRuntime = await SkillManager.instance.CreateBuffRuntime(buffId,this);
         if (buffRuntime == null)
         {
             return;
@@ -155,6 +155,7 @@ public class FightCharacter : IReferenceData
                 {
                     RemoveBuffAction(oldBuffRuntime);
                     buffRuntimes.RemoveAt(i);
+                    MyInstance.instance.RemoveInstance(buffRuntimes[i].instanceId);
                 }
             }
         }
@@ -198,6 +199,7 @@ public class FightCharacter : IReferenceData
                             {
                                 RemoveBuffAction(buffRuntimes[i]);
                                 buffRuntimes.RemoveAt(i);
+                                MyInstance.instance.RemoveInstance(buffRuntimes[i].instanceId);
                             }
                         }
                     }
@@ -321,7 +323,7 @@ public class FightPlayer : FightCharacter
         for (int i = 0; i < character.skills.Count; i++)
         {
             int skillId = character.skills[i];
-            SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+            SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
             skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
         }
         equipSkill = 0;
@@ -333,7 +335,7 @@ public class FightPlayer : FightCharacter
 
             if (skillId != 0)
             {
-                SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+                SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
                 skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
 
                 equipSkill = skillRuntime.instanceId;
@@ -345,7 +347,7 @@ public class FightPlayer : FightCharacter
             int skillId = clothes.typeValue;
             if (skillId != 0)
             {
-                SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+                SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
                 skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
             }
         }
@@ -355,7 +357,7 @@ public class FightPlayer : FightCharacter
             int skillId = shoes.typeValue;
             if (skillId != 0)
             {
-                SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+                SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
                 skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
             }
         }
@@ -443,7 +445,7 @@ public class FightMonster : FightCharacter
             for (int i = 0; i < monsterData.skills.Count; i++)
             {
                 int skillId = monsterData.skills[i];
-                SkillRuntime skillRuntime = await SkillManager.instance.CreatSkillRuntime(skillId);
+                SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
                 skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
             }
         }

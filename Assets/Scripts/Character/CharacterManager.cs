@@ -21,8 +21,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public const float moveSpeed = 15f;
     public const float updataMoveSpeed = 1f;
-    public bool hideCharacter { get; private set; }
-    private MyInstance myInstance;
+    public bool hideCharacter { get; private set; } 
     private MyDic<int, Character> characters = new MyDic<int, Character>();
     private Dictionary<int, int> characterDataToInstances = new Dictionary<int, int>();
     private HashSet<int> tempInstances = new HashSet<int>();
@@ -40,15 +39,8 @@ public class CharacterManager : Singleton<CharacterManager>
         return characters.GetValueList();
     }
 
-    public int GetCharacterInstance()
-    {
-        return myInstance.CreatInstanceId();
-    }
-
-    public void RemoveInstance(int id)
-    {
-        myInstance.RemoveInstance(id);
-    }
+ 
+ 
     protected override void Clear()
     {
         base.Clear();
@@ -101,8 +93,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public override void Init()
     {
-        base.Init();
-        myInstance = new MyInstance();
+        base.Init(); 
 
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
         GameActionManager.instance.AddListener<ChangeCharacterProperty>(ChangeCharacterValue);
@@ -529,7 +520,7 @@ public class CharacterManager : Singleton<CharacterManager>
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         if (instanceId == 0)
         {
-            instanceId = myInstance.CreatInstanceId();
+            instanceId = MyInstance.instance.uid;
         }
         ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
         player = new Player(playerData, instanceId, professionData);
@@ -589,6 +580,7 @@ public class CharacterManager : Singleton<CharacterManager>
         MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId, this is TempCharacter);
         CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
         characters.Remove(character.instanceId);
+        MyInstance.instance.RemoveInstance(character.instanceId);
     }
 
     /// <summary>
@@ -601,7 +593,7 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
         int level = TempCharacterManager.instance.level;
         var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-        TempCharacter character = new TempCharacter(characterData, professionData, myInstance.CreatInstanceId(), tempCharacterData);
+        TempCharacter character = new TempCharacter(characterData, professionData, MyInstance.instance.uid, tempCharacterData);
 
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
@@ -628,7 +620,7 @@ public class CharacterManager : Singleton<CharacterManager>
             int instanceId = creatCharacter.instanceId;
             if (instanceId == 0)
             {
-                instanceId = myInstance.CreatInstanceId();
+                instanceId = MyInstance.instance.uid;
             }
             var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
             var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);

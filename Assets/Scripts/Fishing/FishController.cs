@@ -3,16 +3,14 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class FishController : Singleton<FishController>
-{
-    private MyInstance myInstance;
+{ 
     Dictionary<int, FisherRuntime> Fishers = new Dictionary<int, FisherRuntime>();
     public override bool NeedUpdata => true;
     private FishTool fishTool;
 
     public override async void Init()
     {
-        base.Init();
-        myInstance = new MyInstance();
+        base.Init(); 
         GameActionManager.instance.AddListener<PlayFishWater>(PlayFishWater);
         GameActionManager.instance.AddListener<CreatFisher>(CreatFisher);
         GameActionManager.instance.AddListener<RecycleFisher>(RecycleFisher);
@@ -121,8 +119,7 @@ public class FishController : Singleton<FishController>
     }
     protected override void Clear()
     {
-        base.Clear();
-        myInstance.Clear();
+        base.Clear(); 
     }
 
     private void PlayFishWater(PlayFishWater playFishWater)

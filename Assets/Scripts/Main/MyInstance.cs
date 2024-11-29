@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Collections.Generic; 
 
-public class MyInstance  
+public class MyInstance:Singleton<MyInstance>  
 {
     HashSet<int> instanceIds = new HashSet<int>();
-    public int CreatInstanceId()
-    {
-        Guid guid = Guid.NewGuid();
-        int id=guid.GetHashCode();
-        while (instanceIds.Contains(id))
+    Random random = new Random();
+
+    public int  uid => CreateInstanceId();
+    private int CreateInstanceId()
+    { 
+        while (true)
         {
-            guid = Guid.NewGuid();
-            id = guid.GetHashCode();
-        }
-        instanceIds.Add(id);
-        return id;
+            Guid guid = Guid.NewGuid();
+            int index = random.Next(0, 12);
+            int id = BitConverter.ToInt32(guid.ToByteArray(), index);
+            if(!instanceIds.Contains(id))
+            {
+                instanceIds.Add(id);
+                return id; 
+            }
+        } 
     }
     public void AddInstance(int id)
     {
@@ -25,8 +29,8 @@ public class MyInstance
     public void RemoveInstance(int id)
     {
         instanceIds.Remove(id);
-    }
-    public void Clear()
+    } 
+    protected override void Clear()
     {
         instanceIds.Clear();
     }

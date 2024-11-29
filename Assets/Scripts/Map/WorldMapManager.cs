@@ -24,22 +24,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
      }*/
 
     private Dictionary<int2, int> editorItemRemapInstanceIds = new Dictionary<int2, int>();
-
-    private MyInstance mapItemInstance;
-    private MyInstance mapRoomInstance;
-
-    public int GetInstanceFromItem()
-    {
-        return mapItemInstance.CreatInstanceId();
-    }
+     
+ 
 
     public override void Init()
     {
         base.Init();
-        runtimeMapItems = new Dictionary<int, RuntimeMapItem>();
-
-        mapItemInstance = new MyInstance();
-        GameDataSaveManager.instance.InitMapInstanceData(mapItemInstance);
+        runtimeMapItems = new Dictionary<int, RuntimeMapItem>(); 
+        GameDataSaveManager.instance.InitMapInstanceData();
 
         GameActionManager.instance.AddListener<RemoveMapItemCollider>(RemoveMapItemCollider);
         GameActionManager.instance.AddListener<ReSetMapItemCollider>(ReSetMapItemCollider);
@@ -262,7 +254,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         int instanceId = creatRoom.instance;
         if (instanceId == 0)
         {
-            instanceId = mapRoomInstance.CreatInstanceId();
+            instanceId = MyInstance.instance.uid;
         }
 
         var MapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(creatRoom.roomId);
@@ -451,7 +443,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (instanceId == 0)
         {
             isInSaveData = false;
-            instanceId = mapItemInstance.CreatInstanceId();
+            instanceId = MyInstance.instance.uid;
         }
 
         if (mapItem.instanceId != 0)

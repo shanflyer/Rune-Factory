@@ -261,6 +261,15 @@ public class GlobalShaderSetMono : MonoBehaviour
         
     }
 
+    public void TestGUID()
+    {
+        byte[] buffer=Guid.NewGuid().ToByteArray();
+        var value0=BitConverter.ToInt64(buffer, 0);
+        var value1 = BitConverter.ToInt32(buffer,11);
+        Debug.Log($"value0:{value0}--value1{value1}");
+    }
+
+
     Plane[] planes;
     [SerializeField]
     SpriteRenderer spriteRenderer;
@@ -319,6 +328,10 @@ public class GlobalShaderSetMonoEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+        if (GUILayout.Button("≤‚ ‘GUID"))
+        {
+            globalShaderSetMono.TestGUID();
+        }
         if (GUILayout.Button("…Ë÷√"))
         {
             globalShaderSetMono.SetGlobalShaderValue();

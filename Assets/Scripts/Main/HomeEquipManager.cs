@@ -107,7 +107,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
     {
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
-        HomeEquip homeEquip = new HomeEquip(creatHomeEquip.instanceId == 0 ? WorldMapManager.instance.GetInstanceFromItem() : creatHomeEquip.instanceId,
+        HomeEquip homeEquip = new HomeEquip(creatHomeEquip.instanceId == 0 ? MyInstance.instance.uid : creatHomeEquip.instanceId,
            creatHomeEquip.instanceId, creatHomeEquip.characterId, homeEquipmentData);
          
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
