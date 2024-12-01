@@ -51,7 +51,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         wakeUpTimeEvents.Clear();
     }
 
-    private void CheckGameTimeEventNewDay(NewDay NewDay)
+    private async void CheckGameTimeEventNewDay(NewDay NewDay)
     {
         newDayActionIndex++;
         List<int> deathEvents = new List<int>();
@@ -59,8 +59,9 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         {
             if (gameTimeEvent.triggerValue == newDayActionIndex)
             {
-                GameActionDataManager.instance.Action(gameTimeEvent.actionValue);
+                await GameEventManager.instance.AddGameEvent(gameTimeEvent.actionValue);
                 deathEvents.Add(gameTimeEvent.id);
+                gameTimeEvent.nowActionIndex = newDayActionIndex;
             }
         }
         for (int i = 0; i < deathEvents.Count; i++)
@@ -69,15 +70,16 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         }
     }
 
-    private void PlayerWakeUp(PlayerWakeUp PlayerWakeUp)
+    private async void PlayerWakeUp(PlayerWakeUp PlayerWakeUp)
     {
         newWakeUpActionIndex++;
         List<int> deathEvents = new List<int>();
         foreach (var  gameTimeEvent in wakeUpTimeEvents.Values)
         {
             if (gameTimeEvent.triggerValue == newWakeUpActionIndex)
-            {
-                GameActionDataManager.instance.Action(gameTimeEvent.actionValue);
+            { 
+               await GameEventManager.instance.AddGameEvent(gameTimeEvent.actionValue);
+                gameTimeEvent.nowActionIndex = newWakeUpActionIndex;
                 deathEvents.Add(gameTimeEvent.id);
             }
         }

@@ -138,10 +138,11 @@ public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceD
                 }
                 try
                 {
-                    await t.InitData(componentData[i], SelectAction, toggleGroup);
+                   
                     t.enabled = true;
                     t.transform.SetParent(parent);
                     t.transform.localScale = Vector3.one;
+                    await t.InitData(componentData[i], SelectAction, toggleGroup);
                     list.Add(t);
                 }
                 catch(Exception e)

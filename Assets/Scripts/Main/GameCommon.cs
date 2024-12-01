@@ -505,9 +505,16 @@ public class GameCommon
         int3 int3 = new int3();
         try
         {
-            if (str.Length > 5)
+            if (str[0] =='i')
             {
                 str = str.Substring(5, str.Length - 6);
+                var strs = str.Split(',');
+                int3.x = int.Parse(strs[0]);
+                int3.y = int.Parse(strs[1]);
+                int3.z = int.Parse(strs[2]);
+            }
+            else
+            {
                 var strs = str.Split(',');
                 int3.x = int.Parse(strs[0]);
                 int3.y = int.Parse(strs[1]);

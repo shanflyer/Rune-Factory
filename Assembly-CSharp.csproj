@@ -262,6 +262,7 @@
     <Compile Include="Assets\Scripts\Behavior\Round\CheckNowFightCharacterActionEnd.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
     <Compile Include="Assets\Scripts\UI\MiniPackagePanel.cs" />
+    <Compile Include="Assets\Scripts\Action\OtherAction.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\Zoom.cs" />
     <Compile Include="Assets\MyLight\MyLightSprite.cs" />
     <Compile Include="Assets\Scripts\Behavior\Other\CharacterTalk.cs" />
@@ -629,6 +630,7 @@
     <Compile Include="Assets\Scripts\UI\CharacterButtonPanel\CharacterButtonReference.cs" />
     <Compile Include="Assets\Scripts\UI\WorldPanel\WorldPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetTrigger.cs" />
+    <Compile Include="Assets\Scripts\GameGuide\GameGuideManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Round\GetReadyFightCharacters.cs" />
     <Compile Include="Assets\Scripts\Data\LightningData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedVector4.cs" />
@@ -922,6 +924,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\Scripts\Event\GameTimeEventManager.cs" />
+    <Compile Include="Assets\Scripts\GameGuide\GameGuideData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetColor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetTimeScale.cs" />
@@ -1086,12 +1089,14 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObjectList.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Scripts\ETFXPitchRandomizer.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />
+    <Compile Include="Assets\Scripts\UI\GameGuidePanel\GameGuidePanel.cs" />
     <Compile Include="Assets\Scripts\UI\StartEventPanel.cs" />
     <Compile Include="Assets\Scripts\UI\NPCPanel\NPCPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetRotation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\RandomSequence.cs" />
     <Compile Include="Assets\Scripts\Behavior\CharacterGroup\CheckCharacterInGroup.cs" />
     <Compile Include="Assets\Scripts\Main\AudioController.cs" />
+    <Compile Include="Assets\Scripts\GameGuide\GuideButton.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Wait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Lerp.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\RotateTransform.cs" />

@@ -38,7 +38,7 @@ public class UIManager : Singleton<UIManager>
         GameActionManager.instance.AddListener<HidePanels>(HidePanels);
         GameActionManager.instance.AddListener<HideAllPanel>(HideAllPanel);
 
-        Selectable.setStringAction = UIAudioForTag;
+        Selectable.setStringAction = UIAudioForTag; 
 
         TagAudioDataList tagAudioDataList = await GameSourceManager.instance.GetScriptableObject<TagAudioDataList>("Data/TagAudioData");
         tagUIAudioDic.Clear();
@@ -47,6 +47,10 @@ public class UIManager : Singleton<UIManager>
             tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audioClip;
         }
     }
+
+     
+
+
     Dictionary<string, AudioClip> tagUIAudioDic = new Dictionary<string, AudioClip>();
     public void UIAudioForTag(string tag)
     {

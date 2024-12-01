@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 namespace UnityEngine.UI
 {
     public delegate void SetStringAction(string str);
+    public delegate void SetIntSelectableAction(int id,Selectable selectable);
     /// <summary>
     /// A standard button that sends an event when clicked.
     /// </summary>

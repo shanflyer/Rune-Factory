@@ -22,8 +22,11 @@ namespace UnityEngine.UI
     {
         protected static Selectable[] s_Selectables = new Selectable[10];
         protected static int s_SelectableCount = 0;
+        protected int m_setUid;
+        public int m_guid;
         private bool m_EnableCalled = false;
         public static SetStringAction setStringAction;
+        public static SetIntSelectableAction setIntAction,removeIntAction;
         /// <summary>
         /// Copy of the array of all the selectable objects currently active in the scene.
         /// </summary>
@@ -496,10 +499,27 @@ namespace UnityEngine.UI
         {
             OnSetProperty();
         }
-
+        public void InitListSelectable(int index)
+        {
+            if (m_setUid != 0&& setIntAction != null)
+            {
+                m_guid = m_setUid + index;
+                setIntAction(m_guid, this);
+            } 
+        }
         // Select on enable and add to the list.
         protected override void OnEnable()
         {
+            if (m_setUid != 0)
+            {
+                if(m_guid == 0)
+                    m_guid = m_setUid;
+
+                if (m_guid > 0 && setIntAction != null)
+                {
+                    setIntAction(m_guid, this);
+                }
+            }
             //Check to avoid multiple OnEnable() calls for each selectable
             if (m_EnableCalled)
                 return;
@@ -549,6 +569,14 @@ namespace UnityEngine.UI
         // Remove from the list.
         protected override void OnDisable()
         {
+            if (m_setUid != 0)
+            { 
+
+                if (m_guid > 0&& removeIntAction!=null)
+                {
+                    removeIntAction(m_guid, this);
+                }
+            }
             //Check to avoid multiple OnDisable() calls for each selectable
             if (!m_EnableCalled)
                 return;
@@ -1211,7 +1239,7 @@ namespace UnityEngine.UI
                 EventSystem.current.SetSelectedGameObject(gameObject, eventData);
 
             isPointerDown = true;
-            EvaluateAndTransitionToSelectionState();
+            EvaluateAndTransitionToSelectionState();  
         }
 
         /// <summary>

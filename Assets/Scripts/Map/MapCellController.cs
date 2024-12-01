@@ -455,7 +455,7 @@ public class MapCellController : Singleton<MapCellController>
             {
                 try
                 {
-                    linkMapIndexs.Add(cells[i], linkMaps.Length - 1);
+                    linkMapIndexs[cells[i]]=linkMaps.Length - 1;
                 }
                 catch
                 {

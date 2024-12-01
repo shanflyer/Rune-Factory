@@ -15,6 +15,7 @@ namespace UnityEditor.UI
     public class SelectableEditor : Editor
     {
         SerializedProperty m_Script;
+        SerializedProperty m_setUid, m_guid;
         SerializedProperty m_InteractableProperty;
         SerializedProperty m_TargetGraphicProperty;
         SerializedProperty m_TransitionProperty;
@@ -40,6 +41,8 @@ namespace UnityEditor.UI
         protected virtual void OnEnable()
         {
             m_Script                = serializedObject.FindProperty("m_Script");
+            m_setUid = serializedObject.FindProperty("m_setUid");
+            m_guid = serializedObject.FindProperty("m_guid");
             m_InteractableProperty  = serializedObject.FindProperty("m_Interactable");
             m_TargetGraphicProperty = serializedObject.FindProperty("m_TargetGraphic");
             m_TransitionProperty    = serializedObject.FindProperty("m_Transition");
@@ -98,7 +101,8 @@ namespace UnityEditor.UI
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
+            EditorGUILayout.PropertyField(m_setUid);
+            EditorGUILayout.PropertyField(m_guid);
             EditorGUILayout.PropertyField(m_InteractableProperty);
 
             var trans = GetTransition(m_TransitionProperty);

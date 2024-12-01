@@ -42,7 +42,7 @@ public class AudioController : Singleton<AudioController>
     {
         base.Init();
         audioMixer = await ExtensionsResources.LoadResourceAsync<AudioMixer>("Audio/AudioMixer");
-
+        lerpIEnumeratorDic.Clear();
         float value = PlayerPrefs.GetFloat("MasterVolume", 1);
         SetMasterVolume(value);
         value = PlayerPrefs.GetFloat("BGMVolume", 1);
@@ -54,6 +54,7 @@ public class AudioController : Singleton<AudioController>
     protected override void Clear()
     {
         base.Clear();
+        lerpIEnumeratorDic.Clear();
         StopBgm();
         StopBGS();
         StopME();
@@ -416,6 +417,7 @@ public class AudioController : Singleton<AudioController>
         }
     }
 
+    Dictionary<PlayableGraph, IEnumerator> lerpIEnumeratorDic = new Dictionary<PlayableGraph, IEnumerator>();
     private void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, AudioClip audioClip, bool loop = false,
         AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
@@ -494,8 +496,16 @@ public class AudioController : Singleton<AudioController>
                 
                 if (audioClearType == AudioClearType.All)
                 {
-                   
-                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio(childMixer,audioClip));
+                    if (lerpIEnumeratorDic.TryGetValue(playableGraph, out var enumerator))
+                    {
+                        GameObjectCurveController.instance.StopIEnumerator(enumerator);
+                        lerpIEnumeratorDic.Remove(playableGraph);
+                    }
+
+                    enumerator = LerpAudio(childMixer, audioClip);
+                    lerpIEnumeratorDic.Add(playableGraph, enumerator);
+                    GameObjectCurveController.instance.StartIEnumerator(enumerator);
+
                     IEnumerator LerpAudio(AudioMixerPlayable childMixer,AudioClip audioClip)
                     {
                         AudioClipPlayable audioClipPlayable = default(AudioClipPlayable);
@@ -540,6 +550,8 @@ public class AudioController : Singleton<AudioController>
                         {
                             childMixer.AddInput(audioClipPlayable, 0, weight);
                         }
+
+                        lerpIEnumeratorDic.Remove(playableGraph);
                     }
                 }
                 else if (audioClearType == AudioClearType.Oldest)
@@ -551,7 +563,16 @@ public class AudioController : Singleton<AudioController>
                     {
                         oldWeights.Add(childMixer.GetInputWeight(i));
                     }
-                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio(childMixer,audioClip,oldWeight,weight));
+
+                    if (lerpIEnumeratorDic.TryGetValue(playableGraph, out var enumerator))
+                    {
+                        GameObjectCurveController.instance.StopIEnumerator(enumerator);
+                        lerpIEnumeratorDic.Remove(playableGraph);
+                    }
+                    enumerator = LerpAudio(childMixer, audioClip, oldWeight, weight);
+                    lerpIEnumeratorDic.Add(playableGraph, enumerator);
+                    GameObjectCurveController.instance.StartIEnumerator(enumerator);
+                     
                     IEnumerator LerpAudio(AudioMixerPlayable childMixer, AudioClip audioClip,
                         float oldWeight,float Weight)
                     {
@@ -592,6 +613,8 @@ public class AudioController : Singleton<AudioController>
                             playableGraph.Disconnect(childMixer, count - 1);
                             childMixer.SetInputCount(count - 1);
                         }
+
+                        lerpIEnumeratorDic.Remove(playableGraph);
                     }
                 }
                 else

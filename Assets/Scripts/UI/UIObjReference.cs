@@ -19,7 +19,7 @@ public delegate void SelectAction<T>(T t, bool selected = true) where T : IRefer
 public class UIObjReference<T> : BaseReference where T : IReferenceData
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
-
+    public Selectable guideSelectable;
     public virtual void ClearData() { }
     public virtual void ClearSelect()
     {
@@ -72,6 +72,8 @@ public class UIObjReference<T> : BaseReference where T : IReferenceData
 
     public virtual async Task InitData(T t, SelectAction<T> SelectAction = null, ToggleGroup toggleGroup = null)
     {
+        if (guideSelectable != null)
+            guideSelectable.InitListSelectable(transform.GetSiblingIndex());
         data = t;
         if (SelectAction != null)
         {

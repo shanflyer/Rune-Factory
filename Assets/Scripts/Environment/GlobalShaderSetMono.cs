@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using static EnvironmentManger;
 using Unity.Mathematics;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -24,6 +25,7 @@ public class GlobalShaderSetMono : MonoBehaviour
     {
         SetGlobalShaderValue();
     }
+    public Selectable selectable;
     public float dayValue;
     public EnvironmentDataList environmentDataList;
     public string dayName, nightName, dawnName, duskName;

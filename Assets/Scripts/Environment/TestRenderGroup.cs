@@ -45,6 +45,8 @@ public class TestRenderGroupEditor :Editor
         if (GUILayout.Button("获取Renderers"))
         {
             TestRenderGroup.GetRenders();
+            EditorUtility.SetDirty(TestRenderGroup);
+            AssetDatabase.SaveAssets();
         }
     }
 }

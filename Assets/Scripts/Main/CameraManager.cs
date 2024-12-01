@@ -206,7 +206,7 @@ public class CameraManager : Singleton<CameraManager>
             confiner2D.InvalidateBoundingShapeCache();
         }
         else
-        {
+        { 
             fixedView = false;
             int flowCameraIndex = (int)setFixedCamera.flowCameraType;
             followCameras[flowCameraIndex].Follow = null;

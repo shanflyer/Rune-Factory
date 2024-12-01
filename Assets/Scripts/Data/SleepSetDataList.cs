@@ -21,12 +21,16 @@ public class SleepSetDataList : ScriptableObject, IGameData, IDataArray<SleepSet
     {
         return "SleepSetDataList";
     }
-    public List<SleepSetData> GetNowSleepSetData(int hour)
+    public List<SleepSetData> GetNowSleepSetData(int hour,int gameDay)
     {
         List<SleepSetData> nowSleepSetDatas = new List<SleepSetData>();
         for(int i = 0; i < DataList.Length; i++)
         {
             SleepSetData sleepSetData = DataList[i];
+            if (sleepSetData.gameDay > gameDay)
+            {
+                continue;
+            }
             if (!sleepSetData.SleepToTime)
             {
                 nowSleepSetDatas.Add(sleepSetData);
@@ -65,6 +69,7 @@ public struct SleepSetData : IReferenceData, IGameData
 {
     public string text;
     public bool SleepToTime;
+    public int gameDay;
     public int hour;
     public int minute; 
     public string iconName;

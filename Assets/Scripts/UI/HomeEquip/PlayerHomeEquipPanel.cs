@@ -330,7 +330,11 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
     public override void Close()
     {
-        base.Close();
+        base.Close(); 
+        if (SingletonType.Cleared)
+        {
+            return;
+        }
         hidePanels.hide = false;
         GameActionManager.instance.QueueAction(hidePanels, true);
         for (int i = 0; i < data.homeEquips.Count; i++)

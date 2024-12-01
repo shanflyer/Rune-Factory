@@ -294,11 +294,20 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void DisplayOrHideCharacter(DisplayOrHideCharacter displayOrHideCharacter)
     {
-        var character = GetCharacterForDataId(displayOrHideCharacter.characterId);
-        if (character == null)
+        Character character=null;
+        if (displayOrHideCharacter.characterId == 0||displayOrHideCharacter.characterId==int.MinValue)
         {
-            characters.TryGetValue(displayOrHideCharacter.characterId, out character);
+            character = controllerCharacter;
         }
+        else
+        {
+            character = GetCharacterForDataId(displayOrHideCharacter.characterId);
+            if (character == null)
+            {
+                characters.TryGetValue(displayOrHideCharacter.characterId, out character);
+            }
+        }
+        
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.gameObject.SetActive(displayOrHideCharacter.display);
@@ -716,7 +725,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public Character GetCharacter(int characterId)
     {
         Character character = null;
-        if (characterId == 0)
+        if (characterId == 0||characterId==1||characterId==int.MinValue)
         {
             character = player;
         }

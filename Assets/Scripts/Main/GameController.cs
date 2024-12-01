@@ -8,6 +8,7 @@ using Unity.Collections;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,7 +19,7 @@ public class GameController : MonoBehaviour
     private AudioClip startBGM;
     public bool startPlay = true;
 #if UNITY_EDITOR
-
+    public Selectable selectable;
     public Weather weather;
 
     public bool test = false;
@@ -263,6 +264,11 @@ public class GameController : MonoBehaviour
     }
 #if UNITY_EDITOR
     public Transform testObj;
+    public void TestInstanceId()
+    {
+        int instanceId = selectable.GetInstanceID();
+        Debug.LogWarning($"instanceId:{instanceId}");
+    }
     public void Test()
     {
         Vector2 pos = Camera.main.WorldToScreenPoint(testObj.position);
@@ -322,6 +328,10 @@ public class GameControllerEditor : Editor
         if (GUILayout.Button("SetWeather"))
         {
             gameController.SetWeatherTest();
+        }
+        if (GUILayout.Button("TestInstance"))
+        {
+            gameController.TestInstanceId();
         }
     }
 }

@@ -353,7 +353,7 @@ public class PackageManager : Singleton<PackageManager>
     }
 
     private async void CreatPackage(CreatPackage creatPackage)
-    {
+    { 
         int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level, creatPackage.instanceId);
         if (instanceId == -1)
         {

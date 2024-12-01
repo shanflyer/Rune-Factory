@@ -604,6 +604,16 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public Week Week => nowGameTime.week;
     public int Day => nowGameTime.day;
 
+    public int GameDay
+    {
+        get
+        {
+            int d_year = Year-1;
+            int d_season = (int)Season - (int)Season.夏;
+            int d_day = Day - 1;
+            return (d_year*4+d_season)*30+d_day;
+        }
+    }
     public int Hour
     {
         get
@@ -675,12 +685,16 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameActionManager.instance.AddListener<ClearOverrideEnvironment>(ClearOverrideEnvironment);
         GameActionManager.instance.AddListener<PlayerSleep>(PlayerSleep);
         GameActionManager.instance.AddListener<CheckGameTimeDate>(CheckGameTimeDate);
-        GameActionManager.instance.AddListener<SetFixedSeason>(SetFixedSeason); 
+        GameActionManager.instance.AddListener<SetFixedSeason>(SetFixedSeason);
+        GameActionManager.instance.AddListener<TimeRun>(TimeRun);
         // CreatData();
     }
 
    
-
+    void TimeRun(TimeRun TimeRun)
+    {
+        runTime = TimeRun.run;
+    }
     void SetFixedSeason(SetFixedSeason SetFixedSeason)
     {
         nowGameTime.SetFixedSeason(SetFixedSeason);
