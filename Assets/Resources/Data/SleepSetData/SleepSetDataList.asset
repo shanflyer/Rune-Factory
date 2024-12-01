@@ -15,33 +15,37 @@ MonoBehaviour:
   sleepSetDatas:
   - text: "\u7761\u77202\u5C0F\u65F6"
     SleepToTime: 0
+    gameDay: 1
     hour: 2
     minute: 0
-    iconName: 
+    iconName: SleepTime
     icon: {fileID: 21300000, guid: 7846f71e606e3ca418511282712f84f0, type: 3}
     startHour: 0
     endHour: 0
   - text: "\u7761\u77206\u5C0F\u65F6"
     SleepToTime: 0
+    gameDay: 1
     hour: 6
     minute: 0
-    iconName: 
+    iconName: SleepTime
     icon: {fileID: 21300000, guid: 7846f71e606e3ca418511282712f84f0, type: 3}
     startHour: 0
     endHour: 0
   - text: "\u7761\u5230\u65E9\u4E0A7\u70B9"
     SleepToTime: 1
+    gameDay: 0
     hour: 7
     minute: 0
-    iconName: 
-    icon: {fileID: 21300000, guid: 7846f71e606e3ca418511282712f84f0, type: 3}
+    iconName: SleepSun
+    icon: {fileID: 21300000, guid: 888e558addf049b438838f99871f3ce0, type: 3}
     startHour: 19
     endHour: 7
   - text: "\u7761\u5230\u665A\u4E0A7\u70B9"
     SleepToTime: 1
+    gameDay: 1
     hour: 19
     minute: 0
-    iconName: 
-    icon: {fileID: 21300000, guid: 7846f71e606e3ca418511282712f84f0, type: 3}
+    iconName: SleepMoon
+    icon: {fileID: 21300000, guid: 14d639118e55b0b409ab8b671bbdf4cc, type: 3}
     startHour: 7
     endHour: 19

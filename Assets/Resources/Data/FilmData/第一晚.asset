@@ -21,9 +21,24 @@ MonoBehaviour:
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u8001\u7237\u7237"
+  - asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u5973"
+    - "Character/\u8001\u7237\u7237"
+  - asset: {fileID: 11400000, guid: 50ce1453c91bd4f4380fbd01a5cdfda5, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u5973"
+    - "Character/\u8001\u7237\u7237"
+    - Camera/Mixing Camera
   timelineAssets:
     m_keys:
     - FirstNight
+    - FirstDay
+    - "\u7B2C\u4E00\u6B21\u5546\u5E97"
     m_values:
     - asset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
       pathes:
@@ -31,3 +46,16 @@ MonoBehaviour:
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u8001\u7237\u7237"
+    - asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u5973"
+      - "Character/\u8001\u7237\u7237"
+    - asset: {fileID: 11400000, guid: 50ce1453c91bd4f4380fbd01a5cdfda5, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u5973"
+      - "Character/\u8001\u7237\u7237"
+      - Camera/Mixing Camera
