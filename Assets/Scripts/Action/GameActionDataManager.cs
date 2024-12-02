@@ -11,7 +11,7 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
 
     public void GameAction(string typeName, List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-        Debug.Log($"GameAction:{typeName}");
+       // Debug.Log($"GameAction:{typeName}");
         if (gameActionDataDelegates.TryGetValue(typeName, out var actionInit))
         {
             actionInit.Invoke(parameters, source, target, value, setResult, setValue);

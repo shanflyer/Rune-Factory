@@ -2,7 +2,7 @@
 
 public struct GameGuideAction : GameAction
 {
-    public string guidKey;
+    public int guidKey;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
@@ -10,7 +10,12 @@ public struct GameGuideAction : GameAction
     {
         if (parameters.Count > 0)
         {
-            guidKey = parameters[0].value;
+            guidKey = int.Parse(parameters[0].value);
         }
+        if (source != 0 && source != int.MinValue)
+        {
+            guidKey = source;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }

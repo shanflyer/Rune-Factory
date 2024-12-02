@@ -118,6 +118,13 @@ public class GameController : MonoBehaviour
 
     public float _CloudValue;
 
+    public GameActionData gameActionData;
+
+    public void TestGameAction()
+    {
+        gameActionData.Action();
+    }
+
 #endif
     [SerializeField]
     private Vector4 _WindDir, _NoiseSet0, _NoiseSet1;
@@ -185,6 +192,7 @@ public class GameController : MonoBehaviour
         var festivalManager = FestivalManager.instance;
         var gameTimeEventManager = GameTimeEventManager.instance;
         var teamManager = TeamManager.instance;
+        var gameGuideManager = GameGuideManager.instance;
        GameTimeManager.instance.ZeroGameTime();
          
         FilmController.instance.SetParent(filmParent);
@@ -332,6 +340,10 @@ public class GameControllerEditor : Editor
         if (GUILayout.Button("TestInstance"))
         {
             gameController.TestInstanceId();
+        }
+        if (GUILayout.Button("TestAction"))
+        {
+            gameController.TestGameAction();
         }
     }
 }

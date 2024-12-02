@@ -44,6 +44,10 @@ public class GameGuideManager:Singleton<GameGuideManager>
                     UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
                 });
             }
+            else
+            {
+                UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+            }
         }
         else
         {
@@ -59,7 +63,14 @@ public class GameGuideManager:Singleton<GameGuideManager>
     { 
         if(guidSelectableDic.TryGetValue(nowGuideSelectableId,out var selectable))
         {
-            selectable.OnPointerDown(eventData);
+            if(selectable is Button button)
+            {
+                button.OnPointerClick(eventData);
+            }else if(selectable is Toggle toggle)
+            {
+                toggle.OnPointerClick(eventData);
+            }
+             
             ShowGuide();
         } 
     }
@@ -69,8 +80,10 @@ public class GameGuideManager:Singleton<GameGuideManager>
         size = Vector3.zero;
         if(guidSelectableDic.TryGetValue(guid,out var selectable))
         {
-            pos = selectable.transform.position;
-            size = (selectable.transform as RectTransform).sizeDelta;
+            nowGuideSelectableId = guid;
+            RectTransform rectTransform = selectable.transform as RectTransform;
+            pos = rectTransform.position;
+            size = rectTransform.sizeDelta; 
             return true;
         }
         return false;

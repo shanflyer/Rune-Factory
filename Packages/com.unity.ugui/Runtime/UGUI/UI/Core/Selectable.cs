@@ -22,6 +22,7 @@ namespace UnityEngine.UI
     {
         protected static Selectable[] s_Selectables = new Selectable[10];
         protected static int s_SelectableCount = 0;
+        [SerializeField]
         protected int m_setUid;
         public int m_guid;
         private bool m_EnableCalled = false;

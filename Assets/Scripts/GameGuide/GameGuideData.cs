@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(menuName ="Data/指引数据")]
 public class GameGuideData : ScriptableObject,IGameData
 {
+    public int id;
     public List<GuidStepData> guidStepDatas = new List<GuidStepData>();
 
     int stepIndex = 0;
@@ -28,9 +29,12 @@ public class GameGuideData : ScriptableObject,IGameData
 
     public string GetKey()
     {
-        return name;
+        return id.ToString();
     }
-
+    public override string ToString()
+    {
+        return id.ToString();
+    }
     public void SetReferenceData()
     { 
     }

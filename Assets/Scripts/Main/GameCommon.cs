@@ -1200,7 +1200,8 @@ public static class DataPath
         {typeof(TaskScheduleModelData),"Data/TaskScheduleModelDataList/TaskScheduleModelDataList" },
         {typeof(NPCBehaviorData),"Data/NPCBehaviorData" },
         {typeof(MulitiBehaviorData),"Data/MulitiBehaviorData" },
-        {typeof(FootstepDataList),"Data/FootstepDataList" }
+        {typeof(FootstepDataList),"Data/FootstepDataList" },
+        {typeof(GameGuideData),"Data/GameGuideData" }
     };
 
     public static string GetDataPath(Type type)

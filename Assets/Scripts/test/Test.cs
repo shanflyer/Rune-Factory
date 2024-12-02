@@ -95,6 +95,15 @@ public class Test : MonoBehaviour
     public int2 testKey;
     public BehaviorTree behaviorTree;
 
+    public RectTransform transform0;
+    public RectTransform transform1;
+
+    public void TestTransform()
+    {
+        transform1.position = transform0.position;
+        transform1.sizeDelta = transform0.sizeDelta;
+    }
+
     public void TestBehavior()
     {
         behaviorTree.OnBehaviorEnd += (Behavior behavior) =>
@@ -214,7 +223,10 @@ public class TestEditor : Editor
         {
             test.TestCreatObj();
         }
-
+        if (GUILayout.Button("TestTransform"))
+        {
+            test.TestTransform();
+        }
     }
 }
 #endif
