@@ -21,11 +21,23 @@ MonoBehaviour:
       parameters: []
   - value: DisplayOrHideCharacter
     parameters:
-    - value: 1
+    - value: 0
       parameters: []
     - value: true
       parameters: []
   - value: SetFixedCamera
+    parameters:
+    - value: false
+      parameters: []
+  - value: OpenPanelAction
+    parameters:
+    - value: ScreenControllerPanel
+      parameters: []
+  - value: TimeRun
+    parameters:
+    - value: true
+      parameters: []
+  - value: SetCharacterStopCreate
     parameters:
     - value: false
       parameters: []

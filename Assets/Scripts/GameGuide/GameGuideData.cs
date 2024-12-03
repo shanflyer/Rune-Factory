@@ -5,8 +5,9 @@ using UnityEngine;
 public class GameGuideData : ScriptableObject,IGameData
 {
     public int id;
+    public string guideName;
     public List<GuidStepData> guidStepDatas = new List<GuidStepData>();
-
+    public int endAction;
     int stepIndex = 0;
     public void Zero()
     {
@@ -17,6 +18,10 @@ public class GameGuideData : ScriptableObject,IGameData
         stepData = null;
         if (stepIndex >= guidStepDatas.Count)
         {
+            if (endAction != 0)
+            {
+                GameActionDataManager.instance.Action(endAction);
+            }
             return false;
         }
         else

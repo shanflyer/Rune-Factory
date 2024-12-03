@@ -152,7 +152,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     private async void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
     {
         if (runtimeStoreCounters.TryGetValue(storeCounterSetSelectItemAction.targetObj,out var runtimeStoreCounter))
-        {
+        { 
             var storeData = runtimeStoreCounter.storeCounterData;
             var itemMatchData = new ItemMatchData
             {

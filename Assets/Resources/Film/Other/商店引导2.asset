@@ -15,11 +15,23 @@ MonoBehaviour:
   id: 0
   typeName: ActionList
   _parameters:
-  - value: Talk
-    parameters:
-    - value: 1420
-      parameters: []
   - value: PauseFilm
     parameters:
-    - value: FirstNight
+    - value: "\u7B2C\u4E00\u665A"
+      parameters: []
+  - value: SetCharacterCoordinate
+    parameters:
+    - value: 0
+      parameters: []
+    - value: 21,-20,547
+      parameters: []
+  - value: DisplayOrHideCharacter
+    parameters:
+    - value: 0
+      parameters: []
+    - value: false
+      parameters: []
+  - value: GameGuideAction
+    parameters:
+    - value: 2
       parameters: []

@@ -81,7 +81,7 @@ public class CharacterMove : Action
             {
                 if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, MoveEndAction,failedMoveAction:FailedMoveAction))
                 {
-                    Debug.Log("MoveCrossMapFailure");
+                   // Debug.Log("MoveCrossMapFailure");
                      taskStatus = TaskStatus.Failure;
                 }
             }

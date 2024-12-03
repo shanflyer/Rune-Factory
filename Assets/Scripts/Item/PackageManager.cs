@@ -533,17 +533,26 @@ public class PackageManager : Singleton<PackageManager>
         {
             PackageData packageData = gamePackage.OutGamePackageData();
             packageList.packageDatas.Add(packageData);
-
+        
             GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(openPackage.selectActionId);
             if (gameActionData != null)
             {
                 gameActionData.Action(packageId, target: openPackage.targetObj);
             }
+
             if (openPackage.isMiniShow)
             {
                 var miniPackagePanel = await UIManager.instance.ShowGamePanel<MiniPackagePanel, PackageList>(packageList);
 
-                if (openPackage.selectActionId == 0 &&
+                if (gameActionData != null)
+                {
+                    miniPackagePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
+                }
+                else
+                {
+
+                }
+                    if (openPackage.selectActionId == 0 &&
                     openPackage.selectAction != null)
                 {
                     miniPackagePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
