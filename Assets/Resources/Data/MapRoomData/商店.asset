@@ -1037,5 +1037,23 @@ MonoBehaviour:
       m_RotationOrder: 4
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
-  npcBehaviorAreas: []
+  npcBehaviorAreas:
+  - Name: 31
+    pos:
+      x: 8
+      y: -27
+    grids: fdffffffffffffff0200000001000000
+    behaviorAreaType: 2
+  - Name: 32
+    pos:
+      x: -3
+      y: 4
+    grids: eafffffff8fffffff1fffffffdffffffeeffffff11000000fbffffff11000000eeffffff12000000f3ffffff12000000efffffffedfffffff1fffffff5fffffff0ffffff0e000000fbffffff10000000f2ffffff09000000fbffffff0d000000f4fffffffafffffffdffffff00000000f5ffffff12000000f8ffffff12000000faffffff01000000fdffffff06000000fcffffff0b000000fcffffff0d00000001000000fcffffff060000000100000002000000f6ffffff0f000000f9ffffff02000000faffffff0b000000faffffff09000000edffffff0f000000f1ffffff09000000fbffffff18000000ffffffff09000000000000000f000000020000000b000000030000000f000000080000000c000000f5ffffff0f000000f5ffffff10000000f8ffffff19000000faffffff15000000edffffff1c000000eeffffff19000000fdffffff1d00000001000000
+    behaviorAreaType: 1
+  - Name: 30
+    pos:
+      x: 7
+      y: -26
+    grids: feffffffffffffff0300000001000000
+    behaviorAreaType: 0
   specialNpcBehaviorAreas: []
