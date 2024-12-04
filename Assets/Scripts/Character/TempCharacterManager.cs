@@ -223,6 +223,15 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         {
             return;
         }
+        if (startCreatTempCharacter.overrideMaxCount > 0)
+        {
+            maxTempCount = startCreatTempCharacter.overrideMaxCount;
+        }
+        else
+        {
+            maxTempCount = NowTempCharacterCreatData.maxCharacterCount;
+        }
+
         if (NowTempCharacterCreatData.gameTimeKeyTempCharacterDic.TryGetValue(GameTimeManager.instance.nowHourMinute, out var tempId))
         {
             if (tempRandomId != tempId)
@@ -234,16 +243,17 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         tempCharacters = new MyList<int>(tempList);
         if (startCreatTempCharacter.prewarm)
         {
-            int zeroCount = NowTempCharacterCreatData.maxCharacterCount / 2;
+            int zeroCount = maxTempCount / 2;
             int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
             for (int i = 0; i < zeroCount; i++)
             {
-              //  CreatCharacter(nowTimeKey, BehaviorAreaType.聚集);
+               CreatCharacter(nowTimeKey, BehaviorAreaType.聚集);
             }
         }
         CreatTempCharacter();
     }
 
+    private int maxTempCount;
     private TempCharacterCreatData NowTempCharacterCreatData;
     private MyList<int> tempCharacters;
 
@@ -296,7 +306,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         // Debug.Log($"creatCD:{nowCd}");
         creatTempDelegate = CreatTempCharacter;
         GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
-        if (totalCharacterCount < NowTempCharacterCreatData.maxCharacterCount)
+        if (totalCharacterCount < maxTempCount)
         {
             CreatCharacter(nowTimeKey, BehaviorAreaType.创建);
         } 

@@ -31,6 +31,10 @@ public class ItemResultPanel :GamePanel<ItemResultInfo>
     public override void Close()
     {
         base.Close();
+        if (data.actionId != 0)
+        {
+            GameActionDataManager.instance.Action(data.actionId);
+        }
         icon.enabled=false;
         effect.SetActive(false);
     }
@@ -56,4 +60,5 @@ public struct ItemResultInfo : IReferenceData
 {
     public Sprite icon;
     public string info0, info1;
+    public int actionId;
 }

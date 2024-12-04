@@ -9,8 +9,20 @@ public class GameManager : Singleton<GameManager>
         base.Init();
         GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
         GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
+        GameActionManager.instance.AddListener<ShowItemResult>(ShowItemResult);
     }
-
+    async void ShowItemResult(ShowItemResult showItemResult)
+    {
+        ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(showItemResult.item);
+        ItemResultInfo itemResultInfo = new ItemResultInfo
+        {
+            actionId = showItemResult.action,
+            icon = itemData.icon,
+            info0 = showItemResult.info,
+            info1 = ""
+        };
+        UIManager.instance.ShowGamePanel<ItemResultPanel,ItemResultInfo>(itemResultInfo);
+    }
     public async void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
     {
         TwoSelectData twoSelectData = new TwoSelectData

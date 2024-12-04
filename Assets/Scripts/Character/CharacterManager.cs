@@ -1117,7 +1117,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         
                         if (afterAction != 0)
                         {
-                            var dataAction = await GameDataManager.instance.GetAsyncData<GameActionData>();
+                            var dataAction = await GameDataManager.instance.GetAsyncData<GameActionData>(afterAction);
                             if (dataAction)
                             {
                                 dataAction.Action();

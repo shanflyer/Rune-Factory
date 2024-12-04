@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554efa8e63f5dfb409790cda234c470d, type: 3}
+  m_Name: "\u690D\u7269\u5E97\u7535\u5F71"
+  m_EditorClassIdentifier: 
+  FilmName: "\u690D\u7269\u5E97\u7535\u5F71"
+  FilmObj: {fileID: 3291875467427073563, guid: f4e97fdeef7a66b4f9c8c0e41decfadf, type: 3}
+  TimelineAssets:
+  - asset: {fileID: 11400000, guid: 1019308660f1d72429607127da870214, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u5973"
+    - "Character/\u8001\u7237\u7237"
+    - "Character/\u739B\u5FB7\u7433"
+  timelineAssets:
+    m_keys:
+    - "\u8D2D\u4E70\u79CD\u5B50"
+    m_values:
+    - asset: {fileID: 11400000, guid: 1019308660f1d72429607127da870214, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u5973"
+      - "Character/\u8001\u7237\u7237"
+      - "Character/\u739B\u5FB7\u7433"

@@ -42,11 +42,15 @@ public class GameEventManager : Singleton<GameEventManager>
        // Object.DontDestroyOnLoad(obj);
         GameActionManager.instance.AddListener<ResetGameEvent>(ResetGameEvent);
         GameActionManager.instance.AddListener<RemoveGameEvent>(RemoveGameEvent);
+        GameActionManager.instance.AddListener<SampleGameEvent>(SampleGameEvent);
     }
 
     private GameObject obj;
     private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
-
+    void SampleGameEvent(SampleGameEvent sampleGameEvent)
+    {
+        AddGameEvent(sampleGameEvent.eventId);
+    }
     private void RemoveGameEvent(RemoveGameEvent removeGameEvent)
     {
         RemoveGameEvent(removeGameEvent.eventId);

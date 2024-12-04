@@ -1,6 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 
+public struct ShowItemResult : GameAction
+{
+    public int item;
+    public string info;
+    public int action;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 1)
+        {
+            item = int.Parse(parameters[0].value);
+        }
+        if (parameters.Count >= 2)
+        {
+            info = parameters[1].value;
+        }
+        if (parameters.Count >= 3)
+        {
+            action = int.Parse(parameters[2].value);
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct OpenOrCloseInputMap : GameAction
 {
     public bool open;

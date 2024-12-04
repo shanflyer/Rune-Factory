@@ -10,13 +10,31 @@ using UnityEngine.UI;
 public class GameGuideManager:Singleton<GameGuideManager>
 {
     Dictionary<int, Selectable> guidSelectableDic = new Dictionary<int, Selectable>();
+    HashSet<int> endGuide = new HashSet<int>();
     public override void Init()
     {
         base.Init();
         Selectable.setIntAction = SetIntAction;
         Selectable.removeIntAction = RemoveIntAction;
+        endGuide.Clear();
 
         GameActionManager.instance.AddListener<GameGuideAction>(GameGuideAction);
+        GameActionManager.instance.AddListener<CheckGameGuideAction>(CheckGameGuideAction);
+    }
+    void CheckGameGuideAction(CheckGameGuideAction CheckGameGuideAction)
+    {
+        if (CheckGameGuideAction.setResult != null)
+        {
+            if (CheckGameGuideAction.isEnd)
+            {
+                CheckGameGuideAction.setResult(endGuide.Contains(CheckGameGuideAction.guidKey));
+            }
+            else
+            {
+                CheckGameGuideAction.setResult(!endGuide.Contains(CheckGameGuideAction.guidKey));
+            }
+           
+        }
     }
     void SetIntAction(int id,Selectable selectable)
     {
@@ -51,6 +69,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
         else
         {
+            endGuide.Add(nowGameGuideData.id);
             nowGameGuideData = null;
             UIManager.instance.CloseGamePanel<GameGuidePanel>();
         }

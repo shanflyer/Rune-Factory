@@ -740,6 +740,7 @@ public struct StartCreatTempCharacter : GameAction
     public int creatDataId;
     public bool clearAll;
     public bool prewarm;
+    public int overrideMaxCount;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -1113,11 +1114,15 @@ public struct DisplayOrHideCharacter : GameAction
             characterId = int.Parse(parameters[0].value);
             display = bool.Parse(parameters[1].value);
         }
-        if (source != 0)
+        else
         {
-            characterId = source;
-        }
-        display = target == 1;
+            if (source != 0)
+            {
+                characterId = source;
+            }
+
+            display = target == 1;
+        } 
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

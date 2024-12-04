@@ -1387,7 +1387,7 @@ public class MapCellController : Singleton<MapCellController>
                     }
                     else
                     {
-                        action.Invoke(newMap);
+                        action.Invoke(newMap, changeAction.y);
                     }
                 }
             }

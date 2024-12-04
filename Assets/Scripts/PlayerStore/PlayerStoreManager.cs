@@ -43,6 +43,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 StartCreatTempCharacter startCreatTempCharacter = new StartCreatTempCharacter
                 {
                     creatDataId = 1,
+                    overrideMaxCount= runtimeStoreCounters.Count==0?2:runtimeStoreCounters.Count*2,
                 };
                 GameActionManager.instance.QueueAction(startCreatTempCharacter,true);
             }

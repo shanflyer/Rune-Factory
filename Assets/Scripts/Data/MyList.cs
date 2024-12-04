@@ -173,6 +173,7 @@ public class MyDic<K,T>
             }
             else if (index == list.Count - 1)
             {
+                indexDic.Remove(keys[length - 1]);
                 list.RemoveAt(length - 1);
                 keys.RemoveAt(length - 1);
 
@@ -180,6 +181,7 @@ public class MyDic<K,T>
             }
             else
             {
+                indexDic.Remove(keys[index]);
                 list[index] = list[length - 1];
                 keys[index] = keys[length - 1];
                 indexDic[keys[index]] = index;
@@ -214,13 +216,14 @@ public class MyDic<K,T>
             }
             else if (index == list.Count - 1)
             {
+                indexDic.Remove(keys[length - 1]);
                 list.RemoveAt(length - 1);
-                keys.RemoveAt(length - 1);
-
+                keys.RemoveAt(length - 1); 
                 length--;
             }
             else
             {
+                indexDic.Remove(keys[index]);
                 list[index] = list[length - 1];
                 keys[index] = keys[length - 1];
                 indexDic[keys[index]] = index;
