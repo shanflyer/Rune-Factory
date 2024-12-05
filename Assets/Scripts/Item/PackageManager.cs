@@ -171,8 +171,15 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
         GameActionManager.instance.AddListener<RemovePackageItemInstance>(RemovePackageItemInstance);
         GameActionManager.instance.AddListener<AddPackageItemList>(AddPackageItemList);
+        GameActionManager.instance.AddListener<SortPackageItem>(SortPackageItem);
     }
-
+    void SortPackageItem(SortPackageItem sortPackageItem)
+    {
+        if (gamePackages.TryGetValue(sortPackageItem.packageId, out var gamePackage))
+        {
+            gamePackage.SortItem(sortPackageItem.itemId, sortPackageItem.index);
+        }
+    }
     public bool GetPackageItemCounts(int packageId, out List<int2> items)
     {
         items = null;
@@ -1021,6 +1028,37 @@ public class PackageManager : Singleton<PackageManager>
 
         public int SelectItem;
 
+        public void SortItem(int itemId,int index)
+        {
+            if(index< items.Count && packageItemIndexDatas.TryGetValue(itemId,out var list))
+            {
+                int oldIndex = list[list.Count - 1];
+                Item item = items[oldIndex];
+                if (nullItems.Contains(index))
+                {
+                    Queue<int> newNullItems = new Queue<int>();
+                    foreach(var i in nullItems)
+                    {
+                        if (i != index)
+                        {
+                            nullItems.Enqueue(i);
+                        }
+                    }
+                    newNullItems.Enqueue(oldIndex);
+                    nullItems = newNullItems; 
+                }
+                else
+                {
+                    Item item0 = items[index];
+                    var list0 = packageItemIndexDatas[item0.dataId];
+                    list0.Remove(index);
+                    list0.Add(oldIndex);
+                    items[oldIndex] = item0;
+                }
+                items[index] = item;
+                list[list.Count - 1] = index;
+            }
+        }
         public void InitSaveItemList(List<Item> items)
         {
             this.items = new List<Item>();

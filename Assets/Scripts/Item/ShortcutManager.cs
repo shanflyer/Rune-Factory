@@ -23,12 +23,26 @@ public class ShortcutManager : Singleton<ShortcutManager>
         GameActionManager.instance.AddListener<RemoveShortcutItem>(RemoveShortcutItem);
         GameActionManager.instance.AddListener<SetShortcutItem>(SetShortcutItem);
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcutAsync);
+        GameActionManager.instance.AddListener<SortShortcutItem>(SortShortcutItem);
     }
     protected override void Clear()
     {
         base.Clear();
     }
-
+    void SortShortcutItem(SortShortcutItem sortShortcutItem)
+    {
+        if (ExploreManager.instance.isExplore)
+        {
+            return;
+        }
+        var shortcutPackage = GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+        shortcutPackage.ChangeItem(sortShortcutItem.itemId, sortShortcutItem.index);
+        RefreshShortcut refreshShortcut = new RefreshShortcut
+        {
+            packageId = CharacterManager.instance.controllerCharacter.characterPackage
+        };
+        GameActionManager.instance.QueueAction(refreshShortcut);
+    }
     async void RefreshShortcutAsync(RefreshShortcut refreshShortcut)
     {
         if (ExploreManager.instance.isExplore)
@@ -138,7 +152,25 @@ public class ShortcutPackage : IReferenceData, INativeData
     public Item[] items;
     public HashSet<int> haveItems = new HashSet<int>();
     public int Key => characterId;
-
+    public void ChangeItem(int itemId, int index)
+    {
+        int oldIndex = -1;
+        for(int i = 0; i < items.Length; i++)
+        {
+            if (items[i].dataId == itemId)
+            {
+                oldIndex = i;
+                break;
+            }
+        }
+        if (oldIndex != -1 && oldIndex != index)
+        {
+            Item oldItem = items[oldIndex];
+            items[oldIndex] = items[index];
+            items[index] = oldItem;
+        }
+       
+    }
     public List<ShortcutItem> GetShortcutItems()
     {
         List<ShortcutItem> shortcutItems = new List<ShortcutItem>();
@@ -178,6 +210,7 @@ public class ShortcutPackage : IReferenceData, INativeData
         }
         return false;
     }
+   
     public void Dispose()
     { 
     }

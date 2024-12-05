@@ -61,7 +61,18 @@ public struct RefreshShortcut : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct SortShortcutItem : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int itemId;
+    public int index;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RemoveShortcutItem : GameAction
 {
     public SetValue setValue { get; set; }
@@ -98,7 +109,25 @@ public struct RefreshItemValue : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-
+public struct SortPackageItem : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int packageId;
+    public int itemId;
+    public int index;
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 2)
+        {
+            packageId = int.Parse(parameters[0].value);
+            itemId = int.Parse(parameters[1].value);
+            index = int.Parse(parameters[2].value);
+        }
+       
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct OpenPackage : GameAction
 {
     public SetValue setValue { get; set; }

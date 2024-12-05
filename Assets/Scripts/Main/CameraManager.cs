@@ -1,4 +1,5 @@
-﻿using Unity.Cinemachine;
+﻿using System;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -262,6 +263,13 @@ public class CameraManager : Singleton<CameraManager>
     protected override void LateUpData()
     {
         base.LateUpData();
+        if (mixingCamera.Weight2 == 1)
+        {
+            Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
+        }
+        
+
+
         var planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
         for(int i = 0; i < TestRenderers.length; i++)
         {
