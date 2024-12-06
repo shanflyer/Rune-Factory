@@ -65,6 +65,7 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
                         shopDatas = new List<ShopData>(),
                         mapInstance=shopItemData.mapInstance,
                         mapItem=shopItemData.mapItem,
+                        bindCharacters=shopItemData.bindCharacters,
                     };
                     shopGroups.Add(shopGroup);
                     groupIndex = shopGroups.Count - 1;

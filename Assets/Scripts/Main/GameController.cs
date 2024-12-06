@@ -153,7 +153,7 @@ public class GameController : MonoBehaviour
     private void OnApplicationQuit()
     {
         //Shader.SetGlobalInt("_backColor", 0);
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared&& SingletonType.instance!=null)
         {
             SingletonType.instance.ClearAll();
         }

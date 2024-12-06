@@ -193,7 +193,11 @@ public class FilmController : Singleton<FilmController>
                 await asyncInstantiateOperation;
                 GameObject filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
-                playableDirector.stopped += (PlayableDirector) => { UIManager.instance.CloseGamePanel<FilmPanel>(); };
+                playableDirector.stopped += (PlayableDirector) => 
+                {
+                    if(UIManager.instance!=null)
+                        UIManager.instance.CloseGamePanel<FilmPanel>();
+                };
                 BindFilm(filmData.GetTimeLineAsset(assetName), playableDirector);
                 Film film = new Film
                 {

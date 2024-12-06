@@ -95,7 +95,11 @@ public class ShopManager : Singleton<ShopManager>
             if(NPCManager.instance.GetNPCFormInstance(tryVisitShop.CharacterId,out var NPC))
             {
                 shopName = NPC.shopName;
-            } 
+            }
+            else if (NPCManager.instance.GetNPC(tryVisitShop.CharacterId, out NPC))
+            { 
+                shopName = NPC.shopName;
+            }
         } 
         if(shopListDic.TryGetValue(shopName, out var shopList))
         {
@@ -133,7 +137,7 @@ public class Shop:IReferenceData
         return false;
     }
     int friendLevel = 0;
-    public async void RefreshOpenItem()
+    public async void RefreshOpenItem(bool show = false)
     {
         if (this.bindCharacters != null)
         {
@@ -150,11 +154,15 @@ public class Shop:IReferenceData
         {  
             if (shopItemDatas[i].openFriendLevel <= friendLevel)
             {
-                openShopItems.Add(shopItemDatas[i].item, shopItemDatas[i]);
-                openShopItems.RemoveAt(shopItemDatas[i].item);
+                int item = shopItemDatas[i].item;
+                openShopItems.Add(item, shopItemDatas[i]);
+                shopItemDatas.Remove(item);
 
-                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemDatas[i].item);
-                InformationController.instance.AddInformation($"{itemData}已经开始售卖!");
+                if (show)
+                {
+                    ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item);
+                    InformationController.instance.AddInformation($"{itemData}已经开始售卖!");
+                } 
             } 
         }
     }
@@ -163,6 +171,7 @@ public class Shop:IReferenceData
     {
         this.shopData=shopData;
         shopItemDatas.Clear();
+        this.bindCharacters = bindCharacters;
         for (int i = 0; i < shopData.shopItem.Count; i++)
         {
 
@@ -176,7 +185,7 @@ public class Shop:IReferenceData
             }
         }
 
-       // RefreshOpenItem(); 
+        RefreshOpenItem(true); 
     }
     public List<ShopItemData> GetOpenShopItem()
     {

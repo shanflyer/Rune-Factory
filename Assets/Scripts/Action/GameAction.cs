@@ -774,10 +774,12 @@ public struct Talk : GameAction
         {
             characterId = -1;
         }
+        displayFunction = false;
         if (parameters.Count >= 3)
         {
             displayFunction = bool.Parse(parameters[2].value);
         }
+        fixedFunctions = null;
         if (parameters.Count >= 4)
         {
             fixedFunctions = GameCommon.StringToListInt(parameters[3].value);

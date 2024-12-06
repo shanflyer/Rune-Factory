@@ -18,6 +18,7 @@ public struct ShowItemResult : GameAction
         {
             info = parameters[1].value;
         }
+        action = 0;
         if (parameters.Count >= 3)
         {
             action = int.Parse(parameters[2].value);
