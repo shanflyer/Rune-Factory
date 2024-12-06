@@ -499,7 +499,20 @@ public class GameCommon
 
         return vector3;
     }
-
+    public static List<int> StringToListInt(string str)
+    {
+        List<int> result = new List<int>();
+        try
+        {
+            var strs = str.Split(',');
+            for(int i = 0; i < strs.Length; i++)
+            {
+                result.Add(int.Parse(strs[i]));
+            }
+        }
+        catch { }
+        return result;
+    }
     public static int3 StringToInt3(string str)
     {
         int3 int3 = new int3();

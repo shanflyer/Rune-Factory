@@ -59,3 +59,27 @@ MonoBehaviour:
           parameters: []
         - value: "\u7B2C\u4E00\u6B21\u5546\u5E97"
           parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 600
+      parameters:
+      - value: OpenPanelAction
+        parameters:
+        - value: FilmPanel
+          parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 600
+      parameters:
+      - value: ClosePanelAction
+        parameters:
+        - value: MainPanel
+          parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 600
+      parameters:
+      - value: ClosePanelAction
+        parameters:
+        - value: PlayerTopPanel
+          parameters: []

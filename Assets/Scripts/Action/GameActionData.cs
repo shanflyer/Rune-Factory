@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/GameActionData")]
@@ -19,6 +20,7 @@ public class GameActionData : ScriptableObject, IGameData
 
     public void Action(int source = 0, int target = 0, int value = 0, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        Debug.Log($"Action:{name}");
         GameActionDataManager.instance.GameAction(typeName, _parameters, source, target, value, setResult, setValue);
     }
 

@@ -14,6 +14,9 @@ public class MyReciver : MonoBehaviour,INotificationReceiver
             for(int i = 0; i < myMarker.gameActionDatas.Count; i++)
             {
                 var data = myMarker.gameActionDatas[i];
+#if UNITY_EDITOR
+                Debug.Log($"film Action:{data.name}");
+#endif
                 data.Action();
             }
         }

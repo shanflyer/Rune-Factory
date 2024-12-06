@@ -40,7 +40,7 @@ public class FilmController : Singleton<FilmController>
                 else
                 {
                     film.playableDirector.transform.localScale = Vector3.one;
-                    film.playableDirector.Play();
+                    film.playableDirector.Play(); 
                 }
             }
             else
@@ -56,7 +56,7 @@ public class FilmController : Singleton<FilmController>
         if (assetData.asset == null)
         {
             playableDirector.transform.localScale = Vector3.one;
-            playableDirector.Stop();
+            //playableDirector.Stop();
             playableDirector.time = 0;
             playableDirector.Play();
             return;
@@ -110,7 +110,7 @@ public class FilmController : Singleton<FilmController>
             }
         }
         playableDirector.transform.localScale = Vector3.one;
-        playableDirector.Stop();
+        //playableDirector.Stop();
         playableDirector.time = 0;
         playableDirector.Play();
     }
@@ -193,6 +193,7 @@ public class FilmController : Singleton<FilmController>
                 await asyncInstantiateOperation;
                 GameObject filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
+                playableDirector.stopped += (PlayableDirector) => { UIManager.instance.CloseGamePanel<FilmPanel>(); };
                 BindFilm(filmData.GetTimeLineAsset(assetName), playableDirector);
                 Film film = new Film
                 {
@@ -214,6 +215,7 @@ public class FilmController : Singleton<FilmController>
                 await asyncInstantiateOperation;
                 var filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
+                playableDirector.stopped += (PlayableDirector) => { UIManager.instance.CloseGamePanel<FilmPanel>(); };
                 Film film = new Film
                 {
                     obj = filmObj,

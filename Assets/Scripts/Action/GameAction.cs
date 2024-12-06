@@ -759,6 +759,7 @@ public struct Talk : GameAction
     public int talkId, characterId;
     public bool displayFunction;
     public int nextTalkEventId;
+    public List<int> fixedFunctions;
     public Action endAction;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -776,6 +777,10 @@ public struct Talk : GameAction
         if (parameters.Count >= 3)
         {
             displayFunction = bool.Parse(parameters[2].value);
+        }
+        if (parameters.Count >= 4)
+        {
+            fixedFunctions = GameCommon.StringToListInt(parameters[3].value);
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }

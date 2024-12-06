@@ -29,11 +29,11 @@ public class TalkManager : Singleton<TalkManager>
 
     private void Talk(Talk talk)
     {
-        Talk(talk.talkId, talk.characterId, talk.displayFunction, talk.endAction, talk.nextTalkEventId);
+        Talk(talk.talkId, talk.characterId, talk.displayFunction, talk.endAction, talk.nextTalkEventId,talk.fixedFunctions);
     }
 
     async void Talk(int talkId, int characterId = -1,
-        bool displayFunction = false, Action endAction = null, int nextTalkEventId = 0)
+        bool displayFunction = false, Action endAction = null, int nextTalkEventId = 0,List<int> fixedFunctions=null)
     {
         TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkId);
         NPCTalkOperateData NPCTalkOperateData = new NPCTalkOperateData
@@ -50,11 +50,22 @@ public class TalkManager : Singleton<TalkManager>
         {
             functionIds = NPC.functions;
           
+        }else if (NPCManager.instance.GetNPC(characterId, out  NPC))
+        {
+            functionIds = NPC.functions;
         }
         else if(PastureManager.instance.GetAnimal(characterId,out var animal))
         {
             functionIds = animal.animalData.functionIds;
         }
+        if (fixedFunctions != null)
+        {
+            for(int i = 0; i < fixedFunctions.Count; i++)
+            {
+                NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(fixedFunctions[i]);
+                NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+            }
+        }else
         if (functionIds != null)
         {
             for (int i = 0; i < functionIds.Count; i++)
@@ -62,7 +73,8 @@ public class TalkManager : Singleton<TalkManager>
                 int funtionId = functionIds[i];
                 if (funtionId == GameCommon.setTeamerFunctionId && TeamManager.instance.playerTeam.CheckCharacter(characterId))
                 {
-
+                    NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
+                    NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
                 }
                 else
                 {

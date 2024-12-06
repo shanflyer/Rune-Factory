@@ -80,7 +80,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 runtimeStoreCounter.itemData=null;
                 runtimeStoreCounter.count = 0;
             } 
-            if (runtimeObj.obj != null)
+            if (runtimeObj!=null&&runtimeObj.obj != null)
             {
                 (runtimeObj.obj as SellItem).SetItemCount(runtimeStoreCounter.count);
             }

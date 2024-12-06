@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PackageManager : Singleton<PackageManager>
 {
@@ -175,10 +176,15 @@ public class PackageManager : Singleton<PackageManager>
     }
     void SortPackageItem(SortPackageItem sortPackageItem)
     {
+       
         if (gamePackages.TryGetValue(sortPackageItem.packageId, out var gamePackage))
         {
             gamePackage.SortItem(sortPackageItem.itemId, sortPackageItem.index);
         }
+        else if (gamePackages.TryGetValue(CharacterManager.instance.controllerCharacter.characterPackage, out gamePackage))
+         { 
+            gamePackage.SortItem(sortPackageItem.itemId, sortPackageItem.index);
+        } 
     }
     public bool GetPackageItemCounts(int packageId, out List<int2> items)
     {
@@ -1032,6 +1038,11 @@ public class PackageManager : Singleton<PackageManager>
         {
             if(index< items.Count && packageItemIndexDatas.TryGetValue(itemId,out var list))
             {
+                if (list.Contains(index))
+                {
+                    return;
+                }
+
                 int oldIndex = list[list.Count - 1];
                 Item item = items[oldIndex];
                 if (nullItems.Contains(index))

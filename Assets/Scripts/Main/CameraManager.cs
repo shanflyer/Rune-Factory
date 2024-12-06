@@ -263,7 +263,7 @@ public class CameraManager : Singleton<CameraManager>
     protected override void LateUpData()
     {
         base.LateUpData();
-        if (mixingCamera.Weight2 == 1)
+        if (mixingCamera.Weight3 == 1)
         {
             Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
         }
