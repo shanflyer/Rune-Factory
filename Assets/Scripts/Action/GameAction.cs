@@ -77,6 +77,22 @@ public struct SetCameraPixelValue : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct SetCameraConfiner2D : GameAction
+{
+    public bool enable;
+    public SetValue setValue { get; set; } 
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            enable = bool.Parse(parameters[0].value);
+        }
+         
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct SetFixedCamera : GameAction
 {
     public SetValue setValue { get; set; }
@@ -706,7 +722,7 @@ public struct JumpFilm : GameAction
             filmName = parameters[0].value;
             jumpTime = float.Parse(parameters[1].value);
         }
-        GameActionManager.instance.QueueAction(this, immediately);
+        GameActionManager.instance.QueueAction(this, true);
     }
 }
 
@@ -883,7 +899,7 @@ public struct DisplayFilm : GameAction
         {
             path = parameters[1].value;
         }
-        GameActionManager.instance.QueueAction(this, immediately);
+        GameActionManager.instance.QueueAction(this, true);
     }
 }
 
@@ -904,7 +920,7 @@ public struct HideFilm : GameAction
         {
             path = parameters[1].value;
         }
-        GameActionManager.instance.QueueAction(this, immediately);
+        GameActionManager.instance.QueueAction(this, true);
     }
 }
 
@@ -920,7 +936,7 @@ public struct StopFilm : GameAction
         {
             filmName = parameters[0].value;
         }
-        GameActionManager.instance.QueueAction(this, immediately);
+        GameActionManager.instance.QueueAction(this, true);
     }
 }
 
@@ -941,7 +957,7 @@ public struct PlayFilm : GameAction
         {
             assetName = parameters[1].value;
         }
-        GameActionManager.instance.QueueAction(this, immediately);
+        GameActionManager.instance.QueueAction(this, true);
     }
 }
 
@@ -958,7 +974,7 @@ public struct PauseFilm : GameAction
             filmName = parameters[0].value;
         }
 
-        GameActionManager.instance.QueueAction(this, immediately);
+        GameActionManager.instance.QueueAction(this, true);
     }
 }
 

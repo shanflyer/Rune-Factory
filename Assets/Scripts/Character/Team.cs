@@ -254,6 +254,10 @@ public class TeamManager : Singleton<TeamManager>
 
     private void JoinTeam(JoinTeam joinTeam)
     {
+        if(joinTeam.teamCharacterId==0|| joinTeam.teamCharacterId == int.MinValue)
+        {
+            joinTeam.teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId;
+        }
         if (teams.TryGetValue(joinTeam.teamCharacterId, out var team))
         {
             bool result = team.AddCharacter(joinTeam.characterId, joinTeam.holdDisplay);

@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: "33\u7B2C\u4E00\u665A\u7EE7\u7EED"
   m_EditorClassIdentifier: 
   id: 33
-  typeName: PlayFilm
+  typeName: ActionList
   _parameters:
-  - value: "\u7B2C\u4E00\u665A"
-    parameters: []
+  - value: PlayFilm
+    parameters:
+    - value: "\u7B2C\u4E00\u665A"
+      parameters: []
+  - value: ClosePanelAction
+    parameters:
+    - value: OperateButtonPanel
+      parameters: []

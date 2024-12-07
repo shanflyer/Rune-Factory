@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: "83\u5BF9\u8BDD"
   m_EditorClassIdentifier: 
   id: 83
-  typeName: Talk
+  typeName: WaitAction
   _parameters:
-  - value: 1431
-    parameters: []
+  - value: 1000
+    parameters:
+    - value: Talk
+      parameters:
+      - value: 1432
+        parameters: []

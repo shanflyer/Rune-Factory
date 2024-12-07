@@ -120,6 +120,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         data = default(ShortcutItem);
         icon.enabled = false;
         count.enabled = false;
+        UseButton.transform.localScale = Vector3.zero;
     }
     ItemData itemData;
     public override async Task InitData(ShortcutItem t, SelectAction<ShortcutItem> SelectAction = null, ToggleGroup toggleGroup = null)
@@ -151,6 +152,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             // toggle.graphic.enabled = false;
             icon.enabled = false;
             count.enabled = false;
+            UseButton.transform.localScale = Vector3.zero;
         }
     }
 }

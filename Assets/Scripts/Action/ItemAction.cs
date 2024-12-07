@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public struct AddItemValue : GameAction
 {
@@ -70,6 +71,19 @@ public struct SortShortcutItem : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        if (parameters.Count >= 2)
+        {
+            itemId = int.Parse(parameters[0].value);
+            index = int.Parse(parameters[1].value);
+        }
+        if (source != 0 && source != int.MinValue)
+        {
+            itemId = source;
+        }
+        if (target != 0 && target != int.MinValue)
+        {
+            index = target;
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -82,6 +96,19 @@ public struct RemoveShortcutItem : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
+        if (parameters.Count >= 2)
+        {
+            characterId = int.Parse(parameters[0].value);
+            index = int.Parse(parameters[1].value);
+        }
+        if (source != 0 && source != int.MinValue)
+        {
+            characterId = source;
+        }
+        if(target!=0&&target!=int.MinValue)
+        {
+            index = target;
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

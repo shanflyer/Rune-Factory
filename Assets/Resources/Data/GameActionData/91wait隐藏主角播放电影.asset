@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Name: "91wait\u9690\u85CF\u4E3B\u89D2\u64AD\u653E\u7535\u5F71"
+  m_EditorClassIdentifier: 
+  id: 91
+  typeName: WaitAction
+  _parameters:
+  - value: 1000
+    parameters:
+    - value: DisplayOrHideCharacter
+      parameters:
+      - value: 0
+        parameters: []
+      - value: false
+        parameters: []
+    - value: PlayFilm
+      parameters:
+      - value: "\u7B2C\u4E00\u665A"
+        parameters: []
+    - value: ClosePanelAction
+      parameters:
+      - value: OperateButtonPanel
+        parameters: []

@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: "80\u8BBE\u7F6E\u5FEB\u6377\u680F\u540E\u7EE7\u7EED\u5BF9\u8BDD"
   m_EditorClassIdentifier: 
   id: 80
-  typeName: Talk
+  typeName: ActionList
   _parameters:
-  - value: 1429
-    parameters: []
+  - value: Talk
+    parameters:
+    - value: 1430
+      parameters: []
+  - value: OpenPanelAction
+    parameters:
+    - value: FilmPanel
+      parameters: []

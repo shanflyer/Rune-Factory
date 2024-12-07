@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: "81\u5BF9\u8BDD"
   m_EditorClassIdentifier: 
   id: 81
-  typeName: Talk
+  typeName: ActionList
   _parameters:
-  - value: 1430
-    parameters: []
+  - value: Talk
+    parameters:
+    - value: 1431
+      parameters: []
+  - value: ClosePanelAction
+    parameters:
+    - value: OperateButtonPanel
+      parameters: []

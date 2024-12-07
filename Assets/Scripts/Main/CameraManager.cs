@@ -58,9 +58,13 @@ public class CameraManager : Singleton<CameraManager>
 
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
+        GameActionManager.instance.AddListener<SetCameraConfiner2D>(SetCameraConfiner2D);
          
     }
-
+    void SetCameraConfiner2D(SetCameraConfiner2D SetCameraConfiner2D)
+    {
+        confiner2D.enabled = SetCameraConfiner2D.enable;
+    }
     public void SetCameraListener(bool enable)
     {
         cameraAudioListener.enabled = enable;

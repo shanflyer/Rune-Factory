@@ -694,6 +694,10 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public bool GetRuntimeCharacterObj(int instanceId, out CharacterRuntimeObj characterRuntimeObj)
     {
+        if (instanceId == 0)
+        {
+            instanceId = controllerCharacter.instanceId;
+        }
         if (characters.TryGetValue(instanceId, out Character character))
         {
             if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))

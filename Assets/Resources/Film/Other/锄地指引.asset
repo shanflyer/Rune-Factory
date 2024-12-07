@@ -21,17 +21,51 @@ MonoBehaviour:
       parameters: []
   - value: SortShortcutItem
     parameters:
-    - value: 2000
+    - value: 1101
       parameters: []
     - value: 0
-      parameters: []
-  - value: SortShortcutItem
-    parameters:
-    - value: 2001
-      parameters: []
-    - value: 1
       parameters: []
   - value: GameGuideAction
     parameters:
     - value: 5
+      parameters: []
+  - value: SetCharacterCoordinate
+    parameters:
+    - value: 0
+      parameters: []
+    - value: 759
+      parameters:
+      - value: -21
+        parameters: []
+      - value: 2
+        parameters: []
+  - value: DisplayOrHideCharacter
+    parameters:
+    - value: 0
+      parameters: []
+    - value: true
+      parameters: []
+  - value: SetCharacterAnimator
+    parameters:
+    - value: 0
+      parameters: []
+    - value: Dir_Y
+      parameters: []
+    - value: 2
+      parameters: []
+    - value: 0
+      parameters: []
+  - value: SetCharacterAnimator
+    parameters:
+    - value: 0
+      parameters: []
+    - value: Dir_X
+      parameters: []
+    - value: 2
+      parameters: []
+    - value: -1
+      parameters: []
+  - value: ClosePanelAction
+    parameters:
+    - value: FilmPanel
       parameters: []

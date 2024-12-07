@@ -31,14 +31,6 @@ MonoBehaviour:
     parameters:
     - value: 900
       parameters:
-      - value: DisplayMap
-        parameters:
-        - value: 874
-          parameters: []
-      - value: SetPlayerShaderPos
-        parameters:
-        - value: -0.28-0.2
-          parameters: []
       - value: StopFilm
         parameters:
         - value: "\u7B2C\u4E00\u665A"
@@ -47,5 +39,41 @@ MonoBehaviour:
         parameters:
         - value: "\u7B2C\u4E00\u665A"
           parameters: []
-        - value: "\u6218\u6597\u5F15\u5BFC"
+        - value: "\u63A2\u7D22\u5F15\u5BFC"
+          parameters: []
+      - value: LerpScreenCycleValue
+        parameters:
+        - value: 1
+          parameters: []
+        - value: 0
+          parameters: []
+        - value: 0.8
+          parameters: []
+        - value: 2.72
+          parameters: []
+        - value: 2.68
+          parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 600
+      parameters:
+      - value: DisplayMap
+        parameters:
+        - value: 874
+          parameters: []
+      - value: SetCharacterCoordinate
+        parameters:
+        - value: 0
+          parameters: []
+        - value: 874
+          parameters:
+          - value: 34
+            parameters: []
+          - value: 40
+            parameters: []
+      - value: DisplayOrHideCharacter
+        parameters:
+        - value: 0
+          parameters: []
+        - value: false
           parameters: []

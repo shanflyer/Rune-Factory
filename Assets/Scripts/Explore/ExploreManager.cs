@@ -144,6 +144,19 @@ public class ExploreManager : Singleton<ExploreManager>
             };
             GameActionManager.instance.QueueAction(setFixedCamera);
 
+            SetCameraConfiner2D SetCameraConfiner2D = new SetCameraConfiner2D
+            {
+                enable = false
+            };
+            GameActionManager.instance.QueueAction(SetCameraConfiner2D);
+
+            SetPlayerShaderPos setPlayerShaderPos = new SetPlayerShaderPos
+            {
+                pos = new Vector3(0, -0.5f, 0)
+            };
+            GameActionManager.instance.QueueAction(setPlayerShaderPos);
+
+
             FightController.instance.CreateFightMap(nowFightMapData);
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All,isLerp:true);
              

@@ -168,8 +168,20 @@ public class ShortcutPackage : IReferenceData, INativeData
             Item oldItem = items[oldIndex];
             items[oldIndex] = items[index];
             items[index] = oldItem;
+        } 
+    }
+    public bool CheckItem(int itemId,out int itemInstance)
+    {
+        itemInstance = 0;
+        for(int i = 0; i < items.Length; i++)
+        {
+            if (items[i].dataId == itemId)
+            {
+                itemInstance = items[i].instanceId;
+                return true;
+            }
         }
-       
+        return false;
     }
     public List<ShortcutItem> GetShortcutItems()
     {
