@@ -7,12 +7,14 @@ public class FilmPanel : GamePanel<IReferenceData>
     {
         UIManager.instance.CloseGamePanel<PlayerTopPanel>();
         UIManager.instance.CloseGamePanel<MainPanel>();
+        UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
         return base.InitData(dataKey);
     }
     public override void Close()
     {
         UIManager.instance.ShowGamePanel<PlayerTopPanel>();
         UIManager.instance.ShowGamePanel<MainPanel>();
+        UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         base.Close();
     }
 }

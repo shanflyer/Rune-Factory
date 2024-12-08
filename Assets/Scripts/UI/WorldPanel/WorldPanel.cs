@@ -147,6 +147,10 @@ public class WorldPanel : GamePanel<MyInt>
         for (int i = 0; i < fightMapDatas.Count; i++)
         {
             var fightMapData = fightMapDatas[i];
+            if (string.IsNullOrEmpty(fightMapData.fightMapObjName))
+            {
+                continue;
+            }
             if (fightMapData.season != Season.Default)
             {
                 if (seasonQueue.TryGetValue(fightMapData.season, out var ints))

@@ -21,7 +21,7 @@ public class ShopManager : Singleton<ShopManager>
            for(int i = 0; i < shopList.shops.length; i++)
             {
                 var shop = shopList.shops[i];
-                shop.RefreshOpenItem();
+                shop.RefreshOpenItem(true);
             }
         }
     }
@@ -161,7 +161,7 @@ public class Shop:IReferenceData
                 if (show)
                 {
                     ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item);
-                    InformationController.instance.AddInformation($"{itemData}已经开始售卖!");
+                    InformationController.instance.AddInformation($"{itemData.itemName}已经开始售卖!");
                 } 
             } 
         }
@@ -185,7 +185,7 @@ public class Shop:IReferenceData
             }
         }
 
-        RefreshOpenItem(true); 
+        RefreshOpenItem(false); 
     }
     public List<ShopItemData> GetOpenShopItem()
     {

@@ -102,12 +102,19 @@ public class WorldMapController : MonoBehaviour
         //if (GameController.instance == null||GameController.instance.startPlay)
         {
             GameTimeManager.instance.StartTimeRun();
-            SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+            if (GameGuideManager.instance.endGuideFilmIndex <= 0)
             {
-                characterId = characterId,
-                coordinate = new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),
-            };
-            GameActionManager.instance.QueueAction(setCharacterCoordinate);
+                SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+                {
+                    characterId = characterId,
+                    coordinate = new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),
+                };
+                GameActionManager.instance.QueueAction(setCharacterCoordinate);
+            }
+            else
+            {
+                GameGuideManager.instance.SetGameGuidFilmDataAction(characterId);
+            } 
             if (GameController.instance.startPlay)
             {
                 yield return 0;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,6 +12,36 @@ public class GameGuideManager:Singleton<GameGuideManager>
 {
     Dictionary<int, Selectable> guidSelectableDic = new Dictionary<int, Selectable>();
     HashSet<int> endGuide = new HashSet<int>();
+    public int endGuideFilmIndex
+    {
+        get
+        {
+            return GameDataSaveManager.instance.UserGameSaveData.endGuideFilmIndex;
+        }
+        set
+        {
+            GameDataSaveManager.instance.UserGameSaveData.endGuideFilmIndex = endGuideFilmIndex;
+        }
+    }
+    public async Task<GameGuideFilmData> GetGameGuideFilmData()
+    {
+        if (endGuideFilmIndex > 0)
+        {
+            return await GameDataManager.instance.GetAsyncData<GameGuideFilmData>(endGuideFilmIndex);
+        }
+        return null;
+    }
+    public async void SetGameGuidFilmDataAction(int characterId)
+    {
+        var data=await GetGameGuideFilmData();
+        SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+        {
+            characterId = characterId,
+            coordinate = data.fixedMap
+        };
+        GameActionManager.instance.QueueAction(setCharacterCoordinate);
+        GameActionDataManager.instance.Action(data.beforeEventId);
+    }
     public override void Init()
     {
         base.Init();
@@ -20,6 +51,19 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
         GameActionManager.instance.AddListener<GameGuideAction>(GameGuideAction);
         GameActionManager.instance.AddListener<CheckGameGuideAction>(CheckGameGuideAction);
+        GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
+        GameActionManager.instance.AddListener<CheckGuideFilmIndex>(CheckGuideFilmIndex);
+    }
+    void CheckGuideFilmIndex(CheckGuideFilmIndex checkGuideFilmIndex)
+    {
+        if (checkGuideFilmIndex.setResult != null)
+        {
+            checkGuideFilmIndex.setResult(endGuideFilmIndex < checkGuideFilmIndex.id);
+        }
+    }
+    void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction saveGuideFilmIndexAction)
+    {
+        endGuideFilmIndex = saveGuideFilmIndexAction.id;
     }
     void CheckGameGuideAction(CheckGameGuideAction CheckGameGuideAction)
     {

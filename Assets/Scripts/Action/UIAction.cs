@@ -92,13 +92,10 @@ public struct OpenPanelAction : GameAction
             type = Type.GetType(parameters[0].value);
             dataId = parameters[1].value;
         }
-        else
+        else if (parameters.Count >= 1)
         {
-            if (parameters.Count >= 1)
-            {
-                type = Type.GetType(parameters[0].value);
-                dataId = source.ToString();
-            }
+            type = Type.GetType(parameters[0].value);
+            dataId = source.ToString();
         }
         if (target != 0 && target != int.MinValue)
         {

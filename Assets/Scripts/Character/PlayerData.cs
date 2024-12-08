@@ -45,10 +45,14 @@ public class UserGameSaveData : IReferenceData
         nowWeathers.Clear();
         nextWeathers.AddRange(userGameSaveData.nextWeathers);
         nowWeathers.AddRange(userGameSaveData.nowWeathers);
+
+        endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
     }
 
     public string saveTime;
     public int index;
+
+    public int endGuideFilmIndex=-1;
 
     public CharacterSaveData playerData=new CharacterSaveData();
     public OtherSaveData otherSaveData=new OtherSaveData();

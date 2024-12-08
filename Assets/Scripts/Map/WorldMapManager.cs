@@ -792,6 +792,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private void DeleteMapLink(DeleteMapLink DeleteMapLink)
     {
+        initMapLineSet.Remove(DeleteMapLink.linkInstanceId);
         int index = worldMapData.mapLines.FindIndex(m => m.instanceId == DeleteMapLink.linkInstanceId);
         if (index >= 0)
         {
@@ -800,9 +801,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
             GameDataSaveManager.instance.UserGameSaveData.SetMapLineData(DeleteMapLink.linkInstanceId, false);
         }
     }
-
+    HashSet<int> initMapLineSet = new HashSet<int>();
     private void InitMapLink(InitMapLink initMapLink)
     {
+        if (initMapLineSet.Contains(initMapLink.linkInstanceId))
+        {
+            return;
+        }
+        initMapLineSet.Add(initMapLink.linkInstanceId);
         int index = worldMapData.mapLines.FindIndex(m => m.instanceId == initMapLink.linkInstanceId);
         if (index >= 0 && !worldMapData.mapLines[index].zeroInit)
         {

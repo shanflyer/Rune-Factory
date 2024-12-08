@@ -80,6 +80,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     HomeEquipManager.instance.CreatHomeEquip(e.Current);
                 }
             } 
+             
         }
     }
     public void InitMapItemSaveData(int instanceId)

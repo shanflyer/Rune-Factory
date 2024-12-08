@@ -150,6 +150,12 @@ public class ExploreManager : Singleton<ExploreManager>
             };
             GameActionManager.instance.QueueAction(SetCameraConfiner2D);
 
+            SetFixedPlayerShaderPos setFixedPlayerShaderPos = new SetFixedPlayerShaderPos
+            {
+                fixedPos = true
+            };
+            GameActionManager.instance.QueueAction(setFixedPlayerShaderPos);
+
             SetPlayerShaderPos setPlayerShaderPos = new SetPlayerShaderPos
             {
                 pos = new Vector3(0, -0.5f, 0)

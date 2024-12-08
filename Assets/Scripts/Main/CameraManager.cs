@@ -55,7 +55,7 @@ public class CameraManager : Singleton<CameraManager>
              //followCameras[1].GetCinemachineComponent<CinemachinePositionComposer>(),
             //  followCameras[2].GetCinemachineComponent<CinemachinePositionComposer>()
          };*/
-
+        GameActionManager.instance.AddListener<SetFixedPlayerShaderPos>(SetFixedPlayerShaderPos);
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
         GameActionManager.instance.AddListener<SetCameraConfiner2D>(SetCameraConfiner2D);
@@ -241,7 +241,11 @@ public class CameraManager : Singleton<CameraManager>
             confiner2D.InvalidateBoundingShapeCache();
         }
     }
-
+    void SetFixedPlayerShaderPos(SetFixedPlayerShaderPos setFixedPlayerShaderPos)
+    {
+        fixedPlayerShaderPos = setFixedPlayerShaderPos.fixedPos;
+    }
+    bool fixedPlayerShaderPos = false;
    // private bool fixedView = false;
     public Vector3 oldCameraPos { get; private set; }
 
@@ -266,14 +270,12 @@ public class CameraManager : Singleton<CameraManager>
     MyDic<int,Renderer> TestRenderers = new MyDic<int, Renderer>();
     protected override void LateUpData()
     {
-        base.LateUpData();
-        if (mixingCamera.Weight3 == 1)
+        base.LateUpData(); 
+        if (!fixedPlayerShaderPos&&mixingCamera.Weight3 == 1)
         {
             Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
         }
-        
-
-
+         
         var planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
         for(int i = 0; i < TestRenderers.length; i++)
         {

@@ -76,6 +76,10 @@ public class GetACoordinateForCharacter : Action
          
         if (MapCellController.instance.GetCoordinates(mapInstance, coordinate, minRange.Value, maxRange.Value, isWalkable.Value, out var rangeCoordinates))
         {
+            if (rangeCoordinates.Count == 0)
+            {
+                return TaskStatus.Failure;
+            }
             GameRandomData gameRandomData = new GameRandomData
             {
                 id = -1,
@@ -96,7 +100,7 @@ public class GetACoordinateForCharacter : Action
                 gameRandomData.randomItems.Add(randomItem);
             }
             gameRandomData.Pretreatment();
-
+           
             var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, randomResultCount: resultCount.Value);
             if (randomResults.Count == 0)
             {
