@@ -20,21 +20,28 @@ public class SkillActionPanel :GamePanel<IReferenceData>
             ManualSkillAction manualSkillAction = new ManualSkillAction();
             GameActionManager.instance.QueueAction(manualSkillAction, true);
             Debug.Log($"ÉèÖÃÔÝÍ£true");
-            SkillPauseAction skillPauseAction = new SkillPauseAction
+            if (FightManager.instance.isFight)
             {
-                pause = true,
-            };
-            GameActionManager.instance.QueueAction(skillPauseAction, true);
+                SkillPauseAction skillPauseAction = new SkillPauseAction
+                {
+                    pause = true,
+                };
+                GameActionManager.instance.QueueAction(skillPauseAction, true);
+            }
+              
             Close();
         });
         CancleButton.onClick.AddListener(() => 
         {
             Debug.Log($"È¡ÏûÔÝÍ£false");
-            SkillPauseAction skillPauseAction = new SkillPauseAction
+            if (FightManager.instance.isFight)
             {
-                pause = false,
-            };
-            GameActionManager.instance.QueueAction(skillPauseAction, true);
+                SkillPauseAction skillPauseAction = new SkillPauseAction
+                {
+                    pause = false,
+                };
+                GameActionManager.instance.QueueAction(skillPauseAction, true);
+            } 
             NoSelectSkillAction noSelectSkillAction = new NoSelectSkillAction();
             GameActionManager.instance.QueueAction(noSelectSkillAction, true);
             Close();

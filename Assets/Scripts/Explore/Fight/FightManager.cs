@@ -58,6 +58,8 @@ public class FightManager : Singleton<FightManager>
         GameActionManager.instance.AddListener<StopAllCharacterAutoFight>(StopAllCharacterAutoFight);
         GameActionManager.instance.AddListener<SkillPauseAction>(SkillPauseAction);
         GameActionManager.instance.AddListener<NoSelectSkillAction>(NoSelectSkillAction);
+        GameActionManager.instance.AddListener<EndNowRoundFight>(EndNowRoundFight);
+        GameActionManager.instance.AddListener<SwitchFunctionButton>(SwitchFunctionButton);
 
         fightResult = new FightResult
         {
@@ -71,6 +73,11 @@ public class FightManager : Singleton<FightManager>
     { get { return fightResult; } }
     private FightResult fightResult;
 
+    public bool isFight { get; private set; }
+    void SwitchFunctionButton(SwitchFunctionButton switchFunctionButton)
+    {
+        isFight = switchFunctionButton.fight;
+    }
     void NoSelectSkillAction(NoSelectSkillAction noSelectSkillAction)
     {
         nowUsedItem = default(Item);
@@ -116,10 +123,11 @@ public class FightManager : Singleton<FightManager>
 
     void EndNowRoundFight(EndNowRoundFight endNowRoundFight)
     {
+        /*
        foreach(var fightcharacter in fightCharacters)
         {
             fightcharacter.Value.ClearBuff();
-        }
+        }*/
     }
     void SkillPauseAction(SkillPauseAction skillPauseAction)
     {
@@ -347,6 +355,7 @@ public class FightManager : Singleton<FightManager>
             playerDic.Add(i, fightPlayer.instanceId);
         }
         CreatUseItemSkill();
+       
     }
 
     public bool GetFightCharacter(int id, out FightCharacter fightCharacter)
@@ -398,6 +407,7 @@ public class FightManager : Singleton<FightManager>
             GameActionManager.instance.QueueAction(CreatFightPlayer, true);
         }
         RefreshFightPlayerInfo();
+        isFight = false;
     }
 
     public async Task CreateFightMonster(MonsterDeploy monsterDeploy)

@@ -675,7 +675,7 @@ Shader "MySprite-Lit-Default"
  
 
             half4 DefaultFragment(Varyings i) : SV_Target
-            { 
+            {  
                 float2 uv=i.uv; 
                 float s_w=0;
                 #if SNOWBLEND 
