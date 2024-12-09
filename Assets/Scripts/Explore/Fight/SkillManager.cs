@@ -23,14 +23,14 @@ public class SkillManager : Singleton<SkillManager>
         return skillRuntime;
     }
 
-    public async Task<BuffRuntime> CreateBuffRuntime(int buffId,FightCharacter fightCharacter)
+    public async Task<BuffRuntime> CreateBuffRuntime(int buffId,FightCharacter fightCharacter,int overrideLifeTime=-1)
     {
         BuffData buffData = await GameDataManager.instance.GetAsyncData<BuffData>(buffId);
         int randomValue = GameRandom.RandomInt(0, 100);
         randomValue = FightManager.instance.GetAttributeTypeRandomValue(buffData.attributeType, fightCharacter.AttackAttributeType, randomValue);
         if (randomValue < buffData.probability)
         {
-            BuffRuntime buffRuntime = new BuffRuntime(buffData, MyInstance.instance.uid, fightCharacter.instanceId);
+            BuffRuntime buffRuntime = new BuffRuntime(buffData, MyInstance.instance.uid, fightCharacter.instanceId, overrideLifeTime);
             return buffRuntime;
         }
         return null;      
@@ -42,6 +42,10 @@ public class SkillRuntime
     public SkillData skillData;  
     private int skillCd;
 
+    public void ReBlindData(SkillData skillData)
+    {
+        this.skillData = skillData;
+    }
     public SkillRuntime(SkillData skillData,int instanceId)
     {
         this.skillData = skillData;
@@ -79,10 +83,20 @@ public class BuffRuntime
     private int nowActionIndex;
     private RuntimeObj runtimeObj;
     private BuffActionBehavior buffActionBehavior;
-    public BuffRuntime(BuffData buffData,int instanceId,int characterId)
+
+    private int lifeTime;
+    public BuffRuntime(BuffData buffData,int instanceId,int characterId,int overrideLifeTime=-1)
     {
         this.instanceId = instanceId;
-        this.buffData = buffData; 
+        this.buffData = buffData;
+        if (overrideLifeTime > -1)
+        {
+            lifeTime = overrideLifeTime;
+        }
+        else
+        {
+            lifeTime = buffData.lifeTime;
+        }
         Vector3 pos=FightController.instance.GetPosForCharacterId(characterId);
         if (buffData.buffObj!= null)
         {
@@ -124,7 +138,7 @@ public class BuffRuntime
     public bool BuffActionEnd()
     {
         nowActionIndex++;
-        if (nowActionIndex >= buffData.lifeTime)
+        if (nowActionIndex >= lifeTime)
         {
             buffActionBehavior.StopParticle();
             return true;

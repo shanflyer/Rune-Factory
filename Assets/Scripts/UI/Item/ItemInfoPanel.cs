@@ -137,7 +137,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                 type.text = $"[{itemData.type}]";
                 MoneyIcon.enabled = true;
                 MoneyValue.text = $"{itemData.sellPrice}";
-                Property.text = itemData.property.ToString();
+                Property.text = itemData.GetProperty();
                 Info.text = itemData.info;
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
                 InfoItemValue.fillAmount = v.item.value;

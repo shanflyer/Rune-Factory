@@ -205,7 +205,7 @@ public class ShopPanel : GamePanel<ShopList>
         {
             selectItemName.text = $"+ {itemData.itemName} +";
             selectItemInfo.text = itemData.info;
-            selectItemProperty.text = itemData.property.ToString();
+            selectItemProperty.text = itemData.GetProperty();
             selectItemIcon.sprite = itemData.icon;
             selectItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(itemData.icon, new Vector2(32, 32));
             selectMoneyValue.text = (itemData.shopPrice * shopItemData.priceValue *0.01f).ToString("0");

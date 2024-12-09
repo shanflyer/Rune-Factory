@@ -972,7 +972,7 @@ public class PackageManager : Singleton<PackageManager>
     {
         if (gamePackages.TryGetValue(itemUseEvent.packageId, out GamePackage gamePackage))
         {
-            if (await UsetItemAction(itemUseEvent.itemId))
+            if (await UsetItemAction(itemUseEvent.itemId,itemUseEvent.itemInstance))
             {
                 gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
                 //gamePackages[itemUseEvent.packageId] = gamePackage;
@@ -982,21 +982,50 @@ public class PackageManager : Singleton<PackageManager>
                     packageId = gamePackage.instanceId
                 });
             }
+            else
+            {
+                InformationController.instance.AddInformation("什么也没发生", true, true);
+            }
         }
     }
 
-    private async Task<bool> UsetItemAction(int itemId)
+    private async Task<bool> UsetItemAction(int itemId,int itemInstance)
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.ToString());
         if (itemData != null )
         {
-            if(itemData.useEventId!=null)
+            if (ExploreManager.instance.isExplore&& itemData.sceneType==SceneType.城镇)
             {
-                for (int i = 0; i < itemData.useEventId.Count; i++)
+                return true;
+            }
+            if (!ExploreManager.instance.isExplore && itemData.sceneType == SceneType.战斗)
+            {
+                return true;
+            }
+            if (itemData.useEventId!=0)
+            {
+                List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
                 {
-                    GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(itemData.useEventId[i].ToString());
-                    gameActionData.Action(immediately: true);
-                }
+                   new EventReferenceData
+                   {
+                       name="CharacterId",
+                       valueType=ReferenceValueType.Int,
+                       value=CharacterManager.instance.controllerCharacter.instanceId
+                   },
+                   new EventReferenceData
+                   {
+                       name="SelectItem",
+                       valueType=ReferenceValueType.Int,
+                       value=itemId
+                   },
+                    new EventReferenceData
+                   {
+                       name="ItemInstance",
+                       valueType=ReferenceValueType.Int,
+                       value=itemInstance
+                   },
+                };
+                GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas); 
             }
            
             return true;

@@ -139,9 +139,9 @@ public class FightCharacter : IReferenceData
                 break;
         }
     }
-    public async void CreateBuffRuntime(int buffId)
+    public async void CreateBuffRuntime(int buffId,int overrideLifeTime=-1)
     {
-        var buffRuntime = await SkillManager.instance.CreateBuffRuntime(buffId,this);
+        var buffRuntime = await SkillManager.instance.CreateBuffRuntime(buffId,this,overrideLifeTime);
         if (buffRuntime == null)
         {
             return;

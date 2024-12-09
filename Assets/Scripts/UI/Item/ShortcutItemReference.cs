@@ -77,7 +77,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             }
             if (value&& itemData!=null)
             { 
-                UseButton.transform.localScale = itemData.useEventId.Count > 0 ? Vector3.one : Vector3.zero;
+                UseButton.transform.localScale = itemData.useEventId!=0 ? Vector3.one : Vector3.zero;
             }
             else
             {

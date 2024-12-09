@@ -284,7 +284,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 ItemName.text = $"+ {itemData.itemName} +";
                 Type.text = itemData.type.ToString();
                 Info.text = itemData.info;
-                Property.text = itemData.property.ToString();
+                Property.text = itemData.GetProperty();
                 Price.text = itemData.sellPrice.ToString();
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
                 InfoItemValue.fillAmount = item.value;

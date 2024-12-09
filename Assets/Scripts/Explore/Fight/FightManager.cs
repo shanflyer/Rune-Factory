@@ -26,15 +26,22 @@ public class FightManager : Singleton<FightManager>
 
     private SkillRuntime useItemSkillRuntime;
     private Item nowUsedItem;
-    public void TryUseItem(Item item)
+    public async void TryUseItem(Item item)
     {
         nowUsedItem = item;
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+        if (itemData.fightUseSkill != 0)
+        {
+            var skillData = await GameDataManager.instance.GetAsyncData<SkillData>(itemData.fightUseSkill);
+            useItemSkillRuntime.ReBlindData(skillData);
+        }
         SelectSkillAction selectSkillAction = new SelectSkillAction
         {
             skillRuntime = useItemSkillRuntime,
             ActionCharacter = CharacterManager.instance.controllerCharacter.instanceId,
         };
         GameActionManager.instance.QueueAction(selectSkillAction, true);
+
     }
     public float GetUseItemCd()
     {
@@ -48,7 +55,8 @@ public class FightManager : Singleton<FightManager>
 
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreateFightPlayer);
         GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
-        GameActionManager.instance.AddListener<NextActionSkillEstimate>(NextActionSkillEstimate);
+        GameActionManager.instance.AddListener<NextActionSkillEstimate>(NextActionSkillEstimate); 
+        GameActionManager.instance.AddListener<AddBuffAction>(AddBuffAction);
 
         deathTimeLineData = await GameSourceManager.instance.GetScriptableObject<MyTimeLineData>(DataPath.MonsterDeathPath);
         GameActionManager.instance.AddListener<CharacterDeath>(CharacterDeath);
@@ -987,6 +995,18 @@ public class FightManager : Singleton<FightManager>
         }
         return result;
     }
+
+    void AddBuffAction(AddBuffAction addBuffAction)
+    {
+        if (!ExploreManager.instance.isExplore)
+        {
+            return;
+        }
+        if(GetFightCharacter(addBuffAction.characterId,out var fightCharacter))
+        {
+            fightCharacter.CreateBuffRuntime(addBuffAction.buffDataId, addBuffAction.overrideLifeTime);
+        }
+    }
     private void NextActionSkillEstimate(NextActionSkillEstimate nextActionSkillEstimate)
     {
         int skillId = nextActionSkillEstimate.skillId;
@@ -1034,10 +1054,11 @@ public class FightManager : Singleton<FightManager>
             case FightType.使用道具:
                 if (nowUsedItem.dataId != 0)
                 {
-                    ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(nowUsedItem.dataId);
-                    target.CreateBuffRuntime(itemData.typeValue);
+                   // ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(nowUsedItem.dataId);
+                    //target.CreateBuffRuntime(itemData.typeValue);
                     ItemUseAction itemUseAction = new ItemUseAction
                     {
+                        itemInstance=nowUsedItem.instanceId,
                         itemId = nowUsedItem.dataId,
                         itemCount = 1,
                         packageId = nowUsedItem.packageId

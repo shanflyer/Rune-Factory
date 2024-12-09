@@ -445,6 +445,7 @@ public struct ItemUseAction : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
     public int packageId;
+    public int itemInstance;
     public int itemId;
     public int itemCount;
 

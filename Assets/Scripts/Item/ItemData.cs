@@ -27,6 +27,10 @@ public enum ShopMoneyType
     金币 = 1,
     红晶 = 2
 }
+public enum SceneType
+{
+    全部,战斗, 城镇,
+}
 public class ItemData : ScriptableObject, IGameData
 {
     public int id;
@@ -46,8 +50,11 @@ public class ItemData : ScriptableObject, IGameData
     public int equipLevel;
     public List<int> dropEventId = new List<int>();
     public List<int> checkEventId = new List<int>();
-    public List<int> useEventId = new List<int>();
+    public int useEventId;
+    public int fightUseSkill;
     public List<int> equipEventId = new List<int>();
+    public SceneType sceneType;
+    public bool showProperty;
     public int groupCount;
     public ShopMoneyType shopMoneyType;
     public int shopPrice, sellPrice;
@@ -55,8 +62,19 @@ public class ItemData : ScriptableObject, IGameData
     [NonSerialized]
     public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky, Speed, Other;
 #endif
-    public CharacterProperty property;
-
+    private CharacterProperty property;
+    public CharacterProperty Property => property;
+    public string GetProperty()
+    {
+        if(showProperty)
+        {
+            return property.ToString();
+        }
+        else
+        {
+            return "";
+        }
+    }
     public override string ToString()
     {
         return id.ToString();

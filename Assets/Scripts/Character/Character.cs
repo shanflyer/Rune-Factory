@@ -522,7 +522,7 @@ public partial class Character
         ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId);
         if (oldItemData != null)
         { 
-            EquipmentProperty = EquipmentProperty - oldItemData.property;
+            EquipmentProperty = EquipmentProperty - oldItemData.Property;
         }
         
         GameActionManager.instance.QueueAction(new RefreshEquip
@@ -556,7 +556,7 @@ public partial class Character
                 equip.headgear = Equip;
                 break;
         }
-        EquipmentProperty = EquipmentProperty + itemData.property;
+        EquipmentProperty = EquipmentProperty + itemData.Property;
     }
     public async void ChangeEquip(ItemData itemData, int packageId)
     {
@@ -593,7 +593,7 @@ public partial class Character
         {
             item.count = 1;
             item.dataId = oldItemData.id;
-            EquipmentProperty = EquipmentProperty - oldItemData.property;
+            EquipmentProperty = EquipmentProperty - oldItemData.Property;
         }
          
         
@@ -603,7 +603,7 @@ public partial class Character
         }
         if (itemData != null)
         {
-            EquipmentProperty = EquipmentProperty + itemData.property;
+            EquipmentProperty = EquipmentProperty + itemData.Property;
         }
         GameActionManager.instance.QueueAction(new RefreshEquip
         {

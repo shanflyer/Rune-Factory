@@ -1023,7 +1023,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     selectItemName.text = itemData.itemName;
                     ItemType.text = itemData.type.ToString();
                     itemInfo.text = itemData.info;
-                    itemProperty.text = itemData.property.ToString();
+                    itemProperty.text = itemData.GetProperty();
                     moneyValue.text = itemData.sellPrice.ToString();
                     ItemIcon.sprite = itemData.icon;
 
