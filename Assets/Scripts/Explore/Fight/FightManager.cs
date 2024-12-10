@@ -1004,7 +1004,7 @@ public class FightManager : Singleton<FightManager>
         }
         if(GetFightCharacter(addBuffAction.characterId,out var fightCharacter))
         {
-            fightCharacter.CreateBuffRuntime(addBuffAction.buffDataId, addBuffAction.overrideLifeTime);
+            fightCharacter.CreateBuffRuntime(addBuffAction.buffDataId,addBuffAction.overrideAddValue,addBuffAction.overrideMulValue, addBuffAction.overrideLifeTime);
         }
     }
     private void NextActionSkillEstimate(NextActionSkillEstimate nextActionSkillEstimate)
@@ -1101,7 +1101,7 @@ public class FightManager : Singleton<FightManager>
                 FightHPChange(addHp, target, isDisplayHurt, HurtResultType.Default);
                 break;
             case FightType.buff:
-                target.CreateBuffRuntime(actionValue);
+                target.CreateBuffRuntime(actionValue, int2.zero, int2.zero);
                 break;
         }
 

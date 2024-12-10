@@ -99,26 +99,26 @@ public class FightCharacter : IReferenceData
     }
     void AddBuffAction(BuffRuntime buffRuntime)
     {
-        switch (buffRuntime.buffData.buffactionType)
+        switch (buffRuntime.BuffActionType)
         {
             case BuffActionType.属性改变:
-                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.addActionValue.x, buffRuntime.buffData.addActionValue.y);
-                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.mulActionValue.x, buffRuntime.buffData.mulActionValue.y);
+                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.addActionValue.x, buffRuntime.addActionValue.y);
+                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.mulActionValue.x, buffRuntime.mulActionValue.y);
                 break;
             case BuffActionType.伤害:
-                int hurt = GameRandom.RandomInt(buffRuntime.buffData.addActionValue.x, buffRuntime.buffData.addActionValue.y);
+                int hurt = GameRandom.RandomInt(buffRuntime.addActionValue.x, buffRuntime.addActionValue.y);
                 if (hurt > 0)
                 {
-                    int value = GameRandom.RandomInt(buffRuntime.buffData.mulActionValue.x, buffRuntime.buffData.mulActionValue.y);
+                    int value = GameRandom.RandomInt(buffRuntime.mulActionValue.x, buffRuntime.mulActionValue.y);
                     hurt = (int)(characterProperty.MaxHP * (value * 0.01f));
                 }
                 FightManager.instance.FightHPChange(-hurt, this, true, HurtResultType.Default);
                 break;
             case BuffActionType.回复:
-                int addHP = GameRandom.RandomInt(buffRuntime.buffData.addActionValue.x, buffRuntime.buffData.addActionValue.y);
+                int addHP = GameRandom.RandomInt(buffRuntime.addActionValue.x, buffRuntime.addActionValue.y);
                 if (addHP <= 0)
                 {
-                    int value = GameRandom.RandomInt(buffRuntime.buffData.mulActionValue.x, buffRuntime.buffData.mulActionValue.y);
+                    int value = GameRandom.RandomInt(buffRuntime.mulActionValue.x, buffRuntime.mulActionValue.y);
                     addHP = (int)(characterProperty.MaxHP * (value * 0.01f));
                 }
                 FightManager.instance.FightHPChange(addHP, this, true, HurtResultType.Default);
@@ -127,11 +127,11 @@ public class FightCharacter : IReferenceData
     }
     void RemoveBuffAction(BuffRuntime buffRuntime)
     {
-        switch (buffRuntime.buffData.buffactionType)
+        switch (buffRuntime.BuffActionType)
         {
             case BuffActionType.属性改变:
-                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.addActionValue.x, -buffRuntime.buffData.addActionValue.y);
-                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.buffData.mulActionValue.x, -buffRuntime.buffData.mulActionValue.y);
+                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.addActionValue.x, -buffRuntime.addActionValue.y);
+                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.mulActionValue.x, -buffRuntime.mulActionValue.y);
                 break;
             case BuffActionType.伤害:
                 break;
@@ -139,9 +139,10 @@ public class FightCharacter : IReferenceData
                 break;
         }
     }
-    public async void CreateBuffRuntime(int buffId,int overrideLifeTime=-1)
+   
+    public async void CreateBuffRuntime(int buffId, int2 overrideAddValue, int2 overrideMulValue, int overrideLifeTime = -1)
     {
-        var buffRuntime = await SkillManager.instance.CreateBuffRuntime(buffId,this,overrideLifeTime);
+        var buffRuntime = await SkillManager.instance.CreateBuffRuntime(buffId,this,overrideAddValue,overrideMulValue, overrideLifeTime);
         if (buffRuntime == null)
         {
             return;
@@ -151,7 +152,7 @@ public class FightCharacter : IReferenceData
             for (int i = buffRuntimes.Count - 1; i >= 0; i--)
             {
                 var oldBuffRuntime = buffRuntimes[i];
-                if (buffRuntime.buffData.coverBuffs.Contains(oldBuffRuntime.buffData.id))
+                if (buffRuntime.CheckCoverBuff(oldBuffRuntime.id))
                 {
                     RemoveBuffAction(oldBuffRuntime);
                     buffRuntimes.RemoveAt(i);
@@ -160,7 +161,7 @@ public class FightCharacter : IReferenceData
             }
         }
         AddBuffAction(buffRuntime);
-        if (buffRuntime.buffData.lifeTime > 0)
+        if (buffRuntime.lifeTime > 0)
         { 
             buffRuntimes.Add(buffRuntime);
         }

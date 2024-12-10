@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -23,14 +24,14 @@ public class SkillManager : Singleton<SkillManager>
         return skillRuntime;
     }
 
-    public async Task<BuffRuntime> CreateBuffRuntime(int buffId,FightCharacter fightCharacter,int overrideLifeTime=-1)
+    public async Task<BuffRuntime> CreateBuffRuntime(int buffId,FightCharacter fightCharacter, int2 overrideAddValue, int2 overrideMulValue, int overrideLifeTime = -1)
     {
         BuffData buffData = await GameDataManager.instance.GetAsyncData<BuffData>(buffId);
         int randomValue = GameRandom.RandomInt(0, 100);
         randomValue = FightManager.instance.GetAttributeTypeRandomValue(buffData.attributeType, fightCharacter.AttackAttributeType, randomValue);
         if (randomValue < buffData.probability)
         {
-            BuffRuntime buffRuntime = new BuffRuntime(buffData, MyInstance.instance.uid, fightCharacter.instanceId, overrideLifeTime);
+            BuffRuntime buffRuntime = new BuffRuntime(buffData, MyInstance.instance.uid, fightCharacter.instanceId, overrideAddValue, overrideMulValue, overrideLifeTime);
             return buffRuntime;
         }
         return null;      
@@ -79,13 +80,22 @@ public class SkillRuntime
 public class BuffRuntime
 {
     public int instanceId;
-    public BuffData buffData;
+    private BuffData buffData;
     private int nowActionIndex;
     private RuntimeObj runtimeObj;
     private BuffActionBehavior buffActionBehavior;
 
-    private int lifeTime;
-    public BuffRuntime(BuffData buffData,int instanceId,int characterId,int overrideLifeTime=-1)
+    public int id => buffData.id;
+    public BuffActionType BuffActionType => buffData.buffactionType;
+    public AttributeType AttributeType => buffData.attributeType;
+    public int lifeTime { get; private set; }
+    public int2 addActionValue { get; private set; }
+    public int2 mulActionValue { get; private set; }
+    public bool CheckCoverBuff(int buffId)
+    {
+        return buffData.coverBuffs.Contains(buffId);
+    }
+    public BuffRuntime(BuffData buffData, int instanceId, int characterId, int overrideLifeTime = -1)
     {
         this.instanceId = instanceId;
         this.buffData = buffData;
@@ -97,6 +107,56 @@ public class BuffRuntime
         {
             lifeTime = buffData.lifeTime;
         }
+        mulActionValue = buffData.mulActionValue;
+        addActionValue = buffData.addActionValue;
+
+        Vector3 pos = FightController.instance.GetPosForCharacterId(characterId);
+        if (buffData.buffObj != null)
+        {
+            InitRuntimeObj();
+            async void InitRuntimeObj()
+            {
+                runtimeObj = await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
+                buffActionBehavior = runtimeObj.obj as BuffActionBehavior;
+                if (buffActionBehavior)
+                {
+                    buffActionBehavior.stopAction = ParticleSystemStopAction;
+                    buffActionBehavior.transform.position = pos;
+                    buffActionBehavior.PlayParticle();
+                }
+            }
+
+        }
+    }
+    public BuffRuntime(BuffData buffData, int instanceId, int characterId,  int2 overrideAddValue,int2 overrideMulValue, int overrideLifeTime = -1)
+    {
+        this.instanceId = instanceId;
+        this.buffData = buffData;
+        if (overrideLifeTime > -1)
+        {
+            lifeTime = overrideLifeTime;
+        }
+        else
+        {
+            lifeTime = buffData.lifeTime;
+        }
+        if (overrideMulValue.Equals(int2.zero))
+        {
+            mulActionValue = overrideMulValue;
+        }
+        else
+        {
+            mulActionValue = buffData.mulActionValue;
+        }
+        if (overrideAddValue.Equals(int2.zero))
+        {
+            addActionValue = overrideAddValue;
+        }
+        else
+        {
+            addActionValue = buffData.addActionValue;
+        }
+
         Vector3 pos=FightController.instance.GetPosForCharacterId(characterId);
         if (buffData.buffObj!= null)
         {

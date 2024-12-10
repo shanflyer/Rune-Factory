@@ -131,12 +131,18 @@ public class GameCommon
         {Direction.DOWN,new Vector2(0,-0.39f)},
     };
 
+    public const int AddATBuff = 11;
+    public const int AddDFBuff = 12;
+    public const int AddSpeedBuff = 13;
+    public const int AddLuckyBuff = 14;
+
     public const int BlueObjLayer = 13;
     public const int GreenObjLayer = 14;
     public const int RedObjLayer = 15;
 
     public const int ManufatureWorkingEmote = 72;
     public const int ManufatureWorkendEnote = 14;
+      
 
     public const int PixelCameraDefaultValue = 400;
     public const int setTeamerFunctionId = 4;

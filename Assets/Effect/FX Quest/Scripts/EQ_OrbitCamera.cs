@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 #endregion
 
@@ -99,20 +100,21 @@ public class EQ_OrbitCamera : MonoBehaviour
 	{
 		// mousewheel deadZone
 		float deadZone = 0.01f; 
- 
-		if (Input.GetMouseButton(0))
+        if(Mouse.current.leftButton.isPressed) 
 		{
-		   mouseX += Input.GetAxis("Mouse X") * X_MouseSensitivity;
-		   mouseY -= Input.GetAxis("Mouse Y") * Y_MouseSensitivity;
+			var mousePos=Mouse.current.position.value;
+		   mouseX += mousePos.x* X_MouseSensitivity;
+		   mouseY -= mousePos.y* Y_MouseSensitivity;
 		}
 	 
 		// this is where the mouseY is limited - Helper script
 		mouseY = ClampAngle(mouseY, Y_MinLimit, Y_MaxLimit);
- 
+
+		var sV=Mouse.current.scroll.value;
 		// get Mouse Wheel Input
-		if (Input.GetAxis("Mouse ScrollWheel") < -deadZone || Input.GetAxis("Mouse ScrollWheel") > deadZone)
+		if (sV.y < -deadZone || sV.y > deadZone)
 		{
-		   desiredDistance = Mathf.Clamp(Distance - (Input.GetAxis("Mouse ScrollWheel") * MouseWheelSensitivity), 
+		   desiredDistance = Mathf.Clamp(Distance - (sV.y * MouseWheelSensitivity), 
 													 DistanceMin, DistanceMax);
 		}
 	}

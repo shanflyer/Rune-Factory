@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections.Generic;
+using Unity.Mathematics;
 
 public struct SetChapterFight : GameAction
 {
@@ -60,6 +61,8 @@ public struct AddBuffAction : GameAction
     public int characterId;
     public int buffDataId;
     public int overrideLifeTime;
+    public int2 overrideAddValue;
+    public int2 overrideMulValue;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
