@@ -431,6 +431,7 @@ public class AudioController : Singleton<AudioController>
         var count = childMixer.GetInputCount();
         if (!isLerp)
         {
+            TryEndLerpAudioIEnumerator(playableGraph);
             AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
 
             if (count > 0)
@@ -672,6 +673,25 @@ public class AudioController : Singleton<AudioController>
             bgsMixer.SetInputWeight(audioMixerPlayable, value);
         }
     }
+
+    Dictionary<PlayableGraph, IEnumerator> lerpAudioIEnumeratorDic = new Dictionary<PlayableGraph, IEnumerator>();
+    void SetLerpAudioIEnumerator(PlayableGraph playableGraph,IEnumerator enumerator)
+    {
+        if(lerpAudioIEnumeratorDic.TryGetValue(playableGraph,out var oldEnumerator))
+        {
+            while (oldEnumerator.MoveNext()) { } 
+        }
+        lerpAudioIEnumeratorDic.Add(playableGraph, enumerator);
+    }
+    void TryEndLerpAudioIEnumerator(PlayableGraph playableGraph)
+    {
+        if (lerpAudioIEnumeratorDic.TryGetValue(playableGraph, out var oldEnumerator))
+        {
+            while (oldEnumerator.MoveNext()) { }
+        } 
+    }
+
+
     private void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, List<AudioPlayData> audioClips,
        AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string Group = "Default")
     {
@@ -685,6 +705,7 @@ public class AudioController : Singleton<AudioController>
         var count = childMixer.GetInputCount();
         if (!isLerp)
         {
+            TryEndLerpAudioIEnumerator(playableGraph) ;
             if (count > 0)
             {
                 if (audioClearType == AudioClearType.All)
@@ -789,7 +810,9 @@ public class AudioController : Singleton<AudioController>
                     {
                         startWeights.Add(childMixer.GetInputWeight(i));
                     }
-                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                    var enumerator = LerpAudio();
+                    GameObjectCurveController.instance.StartIEnumerator(enumerator);
+                    SetLerpAudioIEnumerator(playableGraph,enumerator);
                     IEnumerator LerpAudio()
                     {
                         float timeValue = 0;
@@ -819,6 +842,7 @@ public class AudioController : Singleton<AudioController>
                                 childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
                             }
                         }
+                        lerpAudioIEnumeratorDic.Remove(playableGraph);
                     }
                 }
                 else if (audioClearType == AudioClearType.Oldest)
@@ -846,7 +870,9 @@ public class AudioController : Singleton<AudioController>
                             audioClipPlayables.Add(audioClipPlayable);
                         }
                     }
-                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                    var enumerator = LerpAudio();
+                    GameObjectCurveController.instance.StartIEnumerator(enumerator);
+                    SetLerpAudioIEnumerator(playableGraph, enumerator); 
                     IEnumerator LerpAudio()
                     {
                         float timeValue = 0;
@@ -883,6 +909,7 @@ public class AudioController : Singleton<AudioController>
                                 childMixer.SetInputWeight(i, audioClips[i].weight);
                             }
                         }
+                        lerpAudioIEnumeratorDic.Remove(playableGraph);
                     }
                 }
                 else
@@ -903,7 +930,9 @@ public class AudioController : Singleton<AudioController>
                             playableGraph.Connect(audioClipPlayable, 0, childMixer, i);
                             childMixer.SetInputWeight(i, audioClips[i].weight);
                         }
-                        GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                        var enumerator = LerpAudio();
+                        GameObjectCurveController.instance.StartIEnumerator(enumerator);
+                        SetLerpAudioIEnumerator(playableGraph, enumerator); 
                         IEnumerator LerpAudio()
                         {
                             float timeValue = 0;
@@ -917,6 +946,7 @@ public class AudioController : Singleton<AudioController>
 
                                 yield return 0;
                             }
+                            lerpAudioIEnumeratorDic.Remove(playableGraph);
                         }
                     }
                 }
@@ -930,7 +960,9 @@ public class AudioController : Singleton<AudioController>
                         AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
                         childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
                     }
-                    GameObjectCurveController.instance.StartIEnumerator(LerpAudio());
+                    var enumerator = LerpAudio();
+                    GameObjectCurveController.instance.StartIEnumerator(enumerator);
+                    SetLerpAudioIEnumerator(playableGraph, enumerator); 
                     IEnumerator LerpAudio()
                     {
                         float timeValue = 0;
@@ -944,6 +976,7 @@ public class AudioController : Singleton<AudioController>
 
                             yield return 0;
                         }
+                        lerpAudioIEnumeratorDic.Remove(playableGraph);
                     }
                 }
             }

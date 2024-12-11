@@ -70,25 +70,32 @@ public class CharacterManager : Singleton<CharacterManager>
         var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
         CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
         characterRuntimeObj.runtimeObj = runtimeObj;
-        characterRuntionObjs.Add(character, characterRuntimeObj);
-        characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction);
-        characterRuntimeObj.enabled = true;
-        //Vector2 pos = GameCommon.GetMapPos(character.coordinate);
-        //transform.position = pos;
-
-        if (controller || character == controllerCharacter)
+        if (characterRuntionObjs.TryAdd(character, characterRuntimeObj))
         {
-            SetShaderPlayerPos(characterRuntimeObj.transform.position);
-            CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
-            ControllerRuntimeObj = characterRuntimeObj;
-            if (!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
+            characterRuntimeObj.SetAnimationDirection(character.moveDirection, character.direction);
+            characterRuntimeObj.enabled = true;
+            //Vector2 pos = GameCommon.GetMapPos(character.coordinate);
+            //transform.position = pos;
+
+            if (controller || character == controllerCharacter)
             {
-                audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
+                SetShaderPlayerPos(characterRuntimeObj.transform.position);
+                CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
+                ControllerRuntimeObj = characterRuntimeObj;
+                if (!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
+                {
+                    audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
+                }
+                audioListener.enabled = true;
+                CameraManager.instance.SetCameraListener(false); 
             }
-            audioListener.enabled = true;
-            CameraManager.instance.SetCameraListener(false);
-           
         }
+        else
+        {
+            characterRuntimeObj.Clear();
+        }
+         
+       
     }
 
     public override void Init()
