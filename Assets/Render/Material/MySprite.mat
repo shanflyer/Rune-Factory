@@ -11,9 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - BACKBLEND
-  - SNOWBLEND
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _BACKBLEND_ON
   - _DampBlend
@@ -67,7 +65,7 @@ Material:
     m_Ints: []
     m_Floats:
     - EdgeValue: 0.1
-    - _BackBlend: 1
+    - _BackBlend: 0
     - _BlendVertexColor: 0
     - _Character: 0
     - _Damp: 0
@@ -76,11 +74,11 @@ Material:
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _GrassBlend: 0
-    - _LightBlend: 1
+    - _LightBlend: 0
     - _Move: 0
     - _MoveSelfUV: 0
     - _PlantAutumnNoiseScale: 1
-    - _SnowBlend: 1
+    - _SnowBlend: 0
     - _Water: 0
     - _WaterBottom: 1
     - _WaterHigh: 0

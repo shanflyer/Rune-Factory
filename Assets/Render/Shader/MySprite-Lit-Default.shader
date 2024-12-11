@@ -90,10 +90,7 @@ Shader "MySprite-Lit-Default"
         //边缘偏移
         _EdgeWaveOffset("EdgeWaveOffset",Range(0,0.5))=0
   
-        
-
-        // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
-        [HideInInspector] _Color("Tint", Color) = (1,1,1,1)
+         
         [HideInInspector] _RendererColor("RendererColor", Color) = (1,1,1,1)
         [HideInInspector] _AlphaTex("External Alpha", 2D) = "white" {}
         [HideInInspector] _EnableExternalAlpha("Enable External Alpha", Float) = 0
@@ -181,8 +178,7 @@ Shader "MySprite-Lit-Default"
             half3 _PlantWinterColor;
             half3 _PlantWinterColor1; 
             float _PlantAutumnNoiseScale;  
-             
-            half4 _Color;
+              
             half _WetValue; 
 
             float _LightBlend; 
@@ -664,7 +660,7 @@ Shader "MySprite-Lit-Default"
 
                 o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
 
-                o.color = v.color * _Color * unity_SpriteColor;
+                o.color = v.color *   unity_SpriteColor;
                 return o;
             }
 
@@ -824,7 +820,7 @@ Shader "MySprite-Lit-Default"
 
                 o.fixScreenUV=half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
 
-                o.color = v.color * _Color * unity_SpriteColor;
+                o.color = v.color *  unity_SpriteColor;
                 return o;
             }
 
@@ -837,10 +833,8 @@ Shader "MySprite-Lit-Default"
             half4 DefaultFragment(Varyings i) : SV_Target
             {
                float2 uv=i.uv; 
-               half4 main =_MainTex.Sample(sampler_MainTex,uv); 
-              //return float4(main.xyz,main.a);
-
-
+               half4 main =_MainTex.Sample(sampler_MainTex,uv);  
+ 
                
                 float s_w=0;
                 #if SNOWBLEND 
@@ -870,11 +864,12 @@ Shader "MySprite-Lit-Default"
                 #endif
                    
  
-                half4 result=main; 
+                half4 result; 
                 float singleValue=(main.x+main.y+main.z)/3;
                 float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
                 float3 waterColor=main.xyz*i.color.xyz;
-              
+
+               
                 waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
                 main.a=main.a*i.color.a*(1-_BlendVertexColor)+main.a*_BlendVertexColor;
                 #if DAMPBLEND
@@ -888,15 +883,14 @@ Shader "MySprite-Lit-Default"
 
                 #if GRASSBLEND
                 main=GrassColor(main,uv,i.worldPos.zw);
-                #endif
-             
- 
-
+                #endif 
+              
                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
                 lightCol.xyz*=4;  
                 result.xyz=waterColor.xyz*lightCol.xyz; 
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
-                 
+                result.a=main.a;
+              
                 #if SHADOWSTEP
                 result=ShadowColor(result,lightCol.xyz,i.lightingUV,i.uv);
                 #endif 
@@ -1102,7 +1096,7 @@ Shader "MySprite-Lit-Default"
                     o.positionWS = worldPos;
                 #endif
                 o.uv = attributes.uv;
-                o.color = attributes.color * _Color * unity_SpriteColor;
+                o.color = attributes.color * unity_SpriteColor;
                 return o;
             }
 
@@ -1400,7 +1394,7 @@ Shader "MySprite-Lit-Default"
                     o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
                 o.uv = attributes.uv;
-                o.color = attributes.color * _Color * unity_SpriteColor;
+                o.color = attributes.color *   unity_SpriteColor;
                 return o;
             }
 
@@ -1476,7 +1470,7 @@ Shader "MySprite-Lit-Default"
 
                 o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
 
-                o.color = v.color * _Color * unity_SpriteColor;
+                o.color = v.color *  unity_SpriteColor;
                 return o;
             }
  

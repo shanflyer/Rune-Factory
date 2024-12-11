@@ -100,12 +100,16 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
                 ActionCharacter = fightPlayer.instanceId,
             };
             GameActionManager.instance.QueueAction(selectSkillAction,true);
-            SkillPauseAction skillPauseAction = new SkillPauseAction
+            if (FightManager.instance.isFight)
             {
-                pause = true,
-            };
-            Debug.Log($"…Ë÷√‘›Õ£true1");
-            GameActionManager.instance.QueueAction(skillPauseAction, true);
+                SkillPauseAction skillPauseAction = new SkillPauseAction
+                {
+                    pause = true,
+                };
+                Debug.Log($"…Ë÷√‘›Õ£true1");
+                GameActionManager.instance.QueueAction(skillPauseAction, true);
+            }
+         
         }
        
     }
@@ -174,7 +178,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
             Null.gameObject.SetActive(false);
 
             CharacterInformationData characterInformationData = character.GetInformation();
-            CharacterProperty characterProperty = characterInformationData.characterProperty;
+            CharacterProperty characterProperty = fightPlayer.characterProperty;
             NameText.text = characterInformationData.name;
             LevelText.text = $"Lv.{characterInformationData.level}";
             HPText.text = $"HP,{characterProperty.HP}/{characterProperty.MaxHP}";

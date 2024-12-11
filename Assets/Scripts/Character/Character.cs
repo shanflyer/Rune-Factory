@@ -20,6 +20,61 @@ public struct CharacterProperty
     public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky,Speed;
     public int Other;
 
+    public string GetItemProperty()
+    {
+        string result = "";
+       
+        if (HP != 0)
+        {
+            string operatorStr = HP > 0 ? "+" : "-";
+            result = $"{result}{CharacterPropertyType.生命}{operatorStr}{HP} ";
+        }
+       
+        if (MP != 0)
+        {
+            string operatorStr = MP > 0 ? "+" : "-";
+            result = $"{result}{CharacterPropertyType.法力}{operatorStr}{MP}  ";
+        } 
+        if (Power != 0)
+        {
+            string operatorStr = Power > 0 ? "+" : "-";
+            result = $"{result}{CharacterPropertyType.体力}{operatorStr}{Power}  ";
+        }
+        if (Other != 0)
+        {
+            if (string.IsNullOrEmpty(result))
+            {
+                result = $"战斗时 ";
+            }
+            else
+            {
+                result = $"{result}\n战斗时 ";
+            }
+          
+            if (AT != 0)
+            {
+                string operatorStr = AT > 0 ? "+" : "";
+                result = $"{result}{CharacterPropertyType.攻击}{operatorStr}{AT} ";
+            }
+            if (DF != 0)
+            {
+                string operatorStr = DF > 0 ? "+" : "";
+                result = $"{result}{CharacterPropertyType.防御}{operatorStr}{DF} ";
+            }
+            if (Lucky != 0)
+            {
+                string operatorStr = Lucky > 0 ? "+" : "";
+                result = $"{result}{CharacterPropertyType.幸运}{operatorStr}{Lucky} ";
+            }
+            if (Speed != 0)
+            {
+                string operatorStr = Speed > 0 ? "+" : "";
+                result = $"{result}{CharacterPropertyType.敏捷}{operatorStr}{Speed} ";
+            }
+            result= $"{result}{Other}回合";
+        } 
+        return result;
+    }
     public override string ToString()
     {
         string result = "";

@@ -368,6 +368,10 @@ public class FightManager : Singleton<FightManager>
 
     public bool GetFightCharacter(int id, out FightCharacter fightCharacter)
     {
+        if (id == 0)
+        {
+            id = CharacterManager.instance.controllerCharacter.instanceId;
+        }
         if (fightCharacters.TryGetValue(id, out fightCharacter))
         {
             return true;

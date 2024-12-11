@@ -76,6 +76,8 @@ namespace UnityEngine.Timeline
                 {
                     m_Instance = Object.Instantiate(prefabGameObject, parentTransform, false);
                 }
+                m_Instance.transform.localPosition = Vector3.zero;
+                m_Instance.transform.localRotation = Quaternion.identity;
                 m_Instance.name = prefabGameObject.name + " [Timeline]";
                 m_Instance.SetActive(false);
                 SetHideFlagsRecursive(m_Instance);

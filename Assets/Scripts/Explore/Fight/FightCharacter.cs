@@ -93,9 +93,12 @@ public class FightCharacter : IReferenceData
 
     public void Reset()
     {
-        fightStatus = FightStatus.准备;
-        waiteTime = 0;
-        waiteEnd = false;
+        if (FightManager.instance.isFight)
+        {
+            fightStatus = FightStatus.准备;
+            waiteTime = 0;
+            waiteEnd = false;
+        } 
     }
     void AddBuffAction(BuffRuntime buffRuntime)
     {
@@ -138,6 +141,7 @@ public class FightCharacter : IReferenceData
             case BuffActionType.回复:
                 break;
         }
+        buffRuntime.RemoveBuff();
     }
    
     public async void CreateBuffRuntime(int buffId, int2 overrideAddValue, int2 overrideMulValue, int overrideLifeTime = -1)
@@ -152,11 +156,12 @@ public class FightCharacter : IReferenceData
             for (int i = buffRuntimes.Count - 1; i >= 0; i--)
             {
                 var oldBuffRuntime = buffRuntimes[i];
+               
                 if (buffRuntime.CheckCoverBuff(oldBuffRuntime.id))
                 {
-                    RemoveBuffAction(oldBuffRuntime);
                     buffRuntimes.RemoveAt(i);
-                    MyInstance.instance.RemoveInstance(buffRuntimes[i].instanceId);
+                    MyInstance.instance.RemoveInstance(oldBuffRuntime.instanceId);
+                    RemoveBuffAction(oldBuffRuntime); 
                 }
             }
         }
@@ -165,6 +170,7 @@ public class FightCharacter : IReferenceData
         { 
             buffRuntimes.Add(buffRuntime);
         }
+        GameActionManager.instance.QueueAction(new RefreshCharacter { id = instanceId });
     }
     public void UpData(float timeValue)
     {
@@ -195,14 +201,16 @@ public class FightCharacter : IReferenceData
                     {
                         for (int i = buffRuntimes.Count - 1; i >= 0; i--)
                         {
-                            buffRuntimes[i].BuffPerAction(instanceId);
-                            if (buffRuntimes[i].BuffActionEnd())
+                            var buffRuntime = buffRuntimes[i];
+                            buffRuntime.BuffPerAction(instanceId);
+                            if (buffRuntime.BuffActionEnd())
                             {
-                                RemoveBuffAction(buffRuntimes[i]);
-                                buffRuntimes.RemoveAt(i);
-                                MyInstance.instance.RemoveInstance(buffRuntimes[i].instanceId);
-                            }
+                                MyInstance.instance.RemoveInstance(buffRuntime.instanceId);
+                                RemoveBuffAction(buffRuntime);
+                                buffRuntimes.RemoveAt(i); 
+                            } 
                         }
+                        GameActionManager.instance.QueueAction(new RefreshCharacter { id = instanceId });
                     }
                    
                 }

@@ -984,7 +984,7 @@ public class PackageManager : Singleton<PackageManager>
             }
             else
             {
-                InformationController.instance.AddInformation("什么也没发生", true, true);
+               
             }
         }
     }
@@ -996,10 +996,12 @@ public class PackageManager : Singleton<PackageManager>
         {
             if (ExploreManager.instance.isExplore&& itemData.sceneType==SceneType.城镇)
             {
+                InformationController.instance.AddInformation("什么也没发生", true, true);
                 return true;
             }
             if (!ExploreManager.instance.isExplore && itemData.sceneType == SceneType.战斗)
             {
+                InformationController.instance.AddInformation("什么也没发生", true, true);
                 return true;
             }
             if (itemData.useEventId!=0)

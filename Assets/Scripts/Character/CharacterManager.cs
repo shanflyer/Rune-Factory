@@ -778,6 +778,10 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void ChangeCharacterValue(ChangeCharacterProperty changeCharacterProperty)
     {
+        if (changeCharacterProperty.characterId == 0)
+        {
+            changeCharacterProperty.characterId = controllerCharacter.instanceId;
+        }
         if (characters.TryGetValue(changeCharacterProperty.characterId, out Character character))
         {
             character.AddProperty(changeCharacterProperty);
@@ -835,7 +839,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
             }
         }
-        else if (character.mapInstance == WorldMapObjManager.instance.displayMap)
+        else if (character.mapInstance == WorldMapObjManager.instance.displayMap&&!ExploreManager.instance.isExplore)
         {
           await  CreateCharacterObjAsync(character);
         }
@@ -1315,7 +1319,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
-            if (character.mapInstance == WorldMapObjManager.instance.displayMap)
+            if (character.mapInstance == WorldMapObjManager.instance.displayMap && !ExploreManager.instance.isExplore)
             {
                 await CreateCharacterObjAsync(character); 
             }
@@ -1337,7 +1341,7 @@ public class CharacterManager : Singleton<CharacterManager>
         for(int i = characters.length-1; i >=0; i--)
         {
             var character = characters[i];
-            if (character.mapInstance != WorldMapObjManager.instance.displayMap)
+            if (character.mapInstance != WorldMapObjManager.instance.displayMap||ExploreManager.instance.isExplore)
             {
                 if(characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {

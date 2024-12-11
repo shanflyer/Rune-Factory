@@ -62,6 +62,7 @@ public class ItemData : ScriptableObject, IGameData
     [NonSerialized]
     public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky, Speed, Other;
 #endif
+    [SerializeField]
     private CharacterProperty property;
     public CharacterProperty Property => property;
     public string GetProperty()
@@ -72,7 +73,8 @@ public class ItemData : ScriptableObject, IGameData
         }
         else
         {
-            return "";
+
+            return property.GetItemProperty() ;
         }
     }
     public override string ToString()
