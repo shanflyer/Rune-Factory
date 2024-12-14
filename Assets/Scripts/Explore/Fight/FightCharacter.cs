@@ -14,6 +14,49 @@ public enum FightCharacterStaues
     正常, 死亡, 濒死
 }
 
+public class BuffProperty
+{
+    public int dataId;
+    public List<BuffRuntime> buffs=new List<BuffRuntime>();
+    private CharacterProperty addProperty;
+    private CharacterProperty mulProperty;
+
+    public CharacterProperty AddProperty=>addProperty;
+    public CharacterProperty MulProperty=>mulProperty;
+
+    public BuffProperty(BuffRuntime buffRuntime)
+    {
+        dataId = buffRuntime.id;
+        Add(buffRuntime);
+    }
+    public void Add(BuffRuntime buffRuntime)
+    {
+        buffs.Add(buffRuntime);
+        RefreshProperty();
+        buffRuntime.Hide(false);
+    }
+    void RefreshProperty()
+    {
+        addProperty = default(CharacterProperty);
+        mulProperty = default(CharacterProperty);
+        for (int i = 0; i < buffs.Count; i++)
+        {
+            var buff = buffs[i];
+            buff.Hide(true);
+            addProperty.AddOverrideProperty((CharacterPropertyType)buff.addActionValue.x, buff.addActionValue.y);
+            mulProperty.AddOverrideProperty((CharacterPropertyType)buff.mulActionValue.x, buff.mulActionValue.y);
+        }
+    }
+    public void Remove(BuffRuntime buffRuntime)
+    {
+        buffs.Remove(buffRuntime);
+        RefreshProperty();
+        if (buffs.Count > 0)
+        {
+            buffs[buffs.Count - 1].Hide(false);
+        }
+    }
+}
 public class FightCharacter : IReferenceData
 {
     public FightStatus fightStatus = FightStatus.准备;
@@ -37,6 +80,7 @@ public class FightCharacter : IReferenceData
     public CharacterProperty buffAddProperty;
     public CharacterProperty buffMulProperty;
     public List<BuffRuntime> buffRuntimes { get; set; } 
+    Dictionary<int, BuffProperty> BuffPropertys=new Dictionary<int, BuffProperty>();
     public virtual bool IsEquipSkill(int skillId)
     {
         return false;
@@ -48,6 +92,7 @@ public class FightCharacter : IReferenceData
             buffRuntimes[i].RemoveBuff();
         }
         buffRuntimes.Clear();
+        BuffPropertys.Clear();
     }
     public virtual bool CheckAction()
     { return false; }
@@ -100,13 +145,26 @@ public class FightCharacter : IReferenceData
             waiteEnd = false;
         } 
     }
+
+    MyDic<int, BuffProperty> buffPropertyDic = new MyDic<int, BuffProperty>();
+
     void AddBuffAction(BuffRuntime buffRuntime)
     {
         switch (buffRuntime.BuffActionType)
         {
             case BuffActionType.属性改变:
-                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.addActionValue.x, buffRuntime.addActionValue.y);
-                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.mulActionValue.x, buffRuntime.mulActionValue.y);
+                if(!buffPropertyDic.TryGetValue(buffRuntime.id,out var buffProperty))
+                {
+                    buffProperty = new BuffProperty(buffRuntime);
+                }
+                buffProperty.Add(buffRuntime);
+                buffAddProperty = default(CharacterProperty);
+                buffMulProperty = CharacterProperty.FullPercent;
+                for(int i = 0; i < buffPropertyDic.length; i++)
+                {
+                    buffAddProperty += buffPropertyDic[i].AddProperty;
+                    buffMulProperty += buffPropertyDic[i].MulProperty;
+                }
                 break;
             case BuffActionType.伤害:
                 int hurt = GameRandom.RandomInt(buffRuntime.addActionValue.x, buffRuntime.addActionValue.y);
@@ -116,6 +174,7 @@ public class FightCharacter : IReferenceData
                     hurt = (int)(characterProperty.MaxHP * (value * 0.01f));
                 }
                 FightManager.instance.FightHPChange(-hurt, this, true, HurtResultType.Default);
+                buffRuntime.Hide(false);
                 break;
             case BuffActionType.回复:
                 int addHP = GameRandom.RandomInt(buffRuntime.addActionValue.x, buffRuntime.addActionValue.y);
@@ -125,6 +184,7 @@ public class FightCharacter : IReferenceData
                     addHP = (int)(characterProperty.MaxHP * (value * 0.01f));
                 }
                 FightManager.instance.FightHPChange(addHP, this, true, HurtResultType.Default);
+                buffRuntime.Hide(false);
                 break;
         }
     }
@@ -133,8 +193,14 @@ public class FightCharacter : IReferenceData
         switch (buffRuntime.BuffActionType)
         {
             case BuffActionType.属性改变:
-                buffAddProperty.AddProperty((CharacterPropertyType)buffRuntime.addActionValue.x, -buffRuntime.addActionValue.y);
-                buffMulProperty.AddProperty((CharacterPropertyType)buffRuntime.mulActionValue.x, -buffRuntime.mulActionValue.y);
+                if (buffPropertyDic.TryGetValue(buffRuntime.id, out var buffProperty))
+                {
+                    buffProperty.Remove(buffRuntime);
+                    if (buffProperty.buffs.Count == 0)
+                    {
+                        buffPropertyDic.Remove(buffRuntime.id);
+                    }
+                }
                 break;
             case BuffActionType.伤害:
                 break;
@@ -151,12 +217,12 @@ public class FightCharacter : IReferenceData
         {
             return;
         }
+        buffRuntime.Hide(true);
         if (buffRuntimes != null && buffRuntimes.Count > 0)
         {
             for (int i = buffRuntimes.Count - 1; i >= 0; i--)
             {
-                var oldBuffRuntime = buffRuntimes[i];
-               
+                var oldBuffRuntime = buffRuntimes[i]; 
                 if (buffRuntime.CheckCoverBuff(oldBuffRuntime.id))
                 {
                     buffRuntimes.RemoveAt(i);

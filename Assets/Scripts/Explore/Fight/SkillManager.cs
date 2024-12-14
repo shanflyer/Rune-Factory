@@ -175,6 +175,16 @@ public class BuffRuntime
             
         } 
     } 
+   
+    public void Hide(bool hide)
+    {
+        if (buffActionBehavior)
+        {
+            Vector3 localPos = buffActionBehavior.transform.localPosition;
+            localPos.z = hide ? -999999 : 0;
+            buffActionBehavior.transform.localPosition = localPos;
+        } 
+    }
     void ParticleSystemStopAction()
     {
         if (runtimeObj != null)

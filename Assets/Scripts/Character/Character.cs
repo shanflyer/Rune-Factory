@@ -288,7 +288,7 @@ public struct CharacterProperty
     {
         return start + (end - start) * LerpValue;
     }
-    public void AddProperty(CharacterPropertyType propertyType,int value)
+    public void AddProperty(CharacterPropertyType propertyType, int value)
     {
         switch (propertyType)
         {
@@ -332,6 +332,111 @@ public struct CharacterProperty
                 break;
             case CharacterPropertyType.自定义值:
                 Other += value;
+                break;
+        }
+    }
+    public void AddOverrideProperty(CharacterPropertyType propertyType,int value)
+    {
+        switch (propertyType)
+        {
+            case CharacterPropertyType.体力:
+                if (value < 0)
+                {
+                    Power += value;
+                }
+                else
+                {
+                    Power = Power > value ? Power : value;
+                }
+               
+                break;
+
+            case CharacterPropertyType.生命:
+                if (value < 0)
+                {
+                    HP += value;
+                }
+                else
+                    HP =HP> value?HP:value;
+                break;
+
+            case CharacterPropertyType.法力:
+                if (value < 0)
+                {
+                    MP += value;
+                }
+                else
+                    MP =MP> value?MP:value;
+                break;
+
+            case CharacterPropertyType.最大体力:
+                if (value < 0)
+                {
+                    MaxPower += value;
+                }
+                else
+                    MaxPower =MaxPower> value?MaxPower:value;
+                break;
+
+            case CharacterPropertyType.最大法力:
+                if (value < 0)
+                {
+                    MaxMP += value;
+                }
+                else
+                    MaxMP =MaxMP> value?MaxMP:value;
+                break;
+
+            case CharacterPropertyType.最大生命:
+                if (value < 0)
+                {
+                    MaxHP += value;
+                }
+                else
+                    MaxHP = MaxHP > value ? MaxHP : value;
+                break;
+
+            case CharacterPropertyType.攻击:
+                if (value < 0)
+                {
+                    AT += value;
+                }
+                else
+                    AT = AT > value ? AT : value;
+                break;
+
+            case CharacterPropertyType.防御:
+                if (value < 0)
+                {
+                    DF += value;
+                }
+                else
+                    DF = DF > value ? DF : value;
+                break;
+
+            case CharacterPropertyType.幸运:
+                if (value < 0)
+                {
+                    Lucky += value;
+                }
+                else
+                    Lucky = Lucky > value ? Lucky : value;
+                break;
+            case CharacterPropertyType.敏捷:
+                if (value < 0)
+                {
+                    Speed += value;
+                }
+                else
+                    Speed = Speed > value ? Speed : value;
+                break;
+            case CharacterPropertyType.自定义值:
+                if (value < 0)
+                {
+                    Other += value;
+                }
+                else
+                    Other = Other > value ? Other : value;
                 break;
         }
     }
