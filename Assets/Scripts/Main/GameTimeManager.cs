@@ -98,6 +98,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         CreateWeather();
                     }
                     WeatherManager.instance.RefreshWeather(value);
+                    GameActionManager.instance.QueueAction(new NewHour());
                 }
             }
         }

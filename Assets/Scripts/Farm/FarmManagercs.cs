@@ -39,9 +39,11 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<TryCreatPlant>(TryCreatPlant);
         GameActionManager.instance.AddListener<SetWaterField>(SetWaterField);
         GameActionManager.instance.AddListener<NewDay>(NewDay);
+        GameActionManager.instance.AddListener<NewHour>(NewHour);
         GameActionManager.instance.AddListener<TryGetPlantFruit>(TryGetPlantFruit);
         GameActionManager.instance.AddListener<RefreshField>(RefreshField);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
+        GameActionManager.instance.AddListener<TrySicklePlant>(TrySicklePlant);
     }
     void SetWeather(SetWeather setWeather)
     {
@@ -85,7 +87,7 @@ public class FarmManager : Singleton<FarmManager>
                 {
                     instaceId = fieldSaveData.PlantinstaceId,
                     PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId),
-                    growthDay = fieldSaveData.growthDay,
+                    growthHour = fieldSaveData.growthHour,
                     growthStage = fieldSaveData.growthStage,
                     plantState = fieldSaveData.plantState,
                     nowCycle = fieldSaveData.nowCycle,
@@ -282,7 +284,22 @@ public class FarmManager : Singleton<FarmManager>
             data.Value.NewDay(); 
         }
     }
-
+    private void NewHour(NewHour newHour)
+    {
+        foreach (var data in fields)
+        {
+            data.Value.NewHour();
+        }
+    }
+    private async void TrySicklePlant(TrySicklePlant trySicklePlant)
+    {
+        if (fields.TryGetValue(trySicklePlant.fieldId, out var field))
+        {
+            bool result = await field.TrySicklePlant();
+            trySicklePlant.setResult(result);
+        }
+        trySicklePlant.setResult(false);
+    }
     private async void TryGetPlantFruit(TryGetPlantFruit tryGetPlantFruit)
     {
         if (fields.TryGetValue(tryGetPlantFruit.fieldId, out var field))
@@ -308,7 +325,27 @@ public class Field
     public FieldState fieldState;
     public bool isSetWater;
     public Plant plant;
+    public async Task<bool> TrySicklePlant()
+    {
+        if (plant != null)
+        {
+            bool result = await plant.GetSicklePlant();
+             
+            plant.RefreshPlant();
+            GameActionManager.instance.QueueAction(new DeleteMapItem
+            {
+                mapItemInstanceId = plant.instaceId,
+                triggerClear = true
+            });
+            plant = null;
 
+            RefreshField();
+
+            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
+            return result;
+        }
+        return false;
+    }
     public async Task<bool> TryGetPlantFruit()
     {
         if (plant != null)
@@ -373,7 +410,13 @@ public class Field
         };
         GameActionManager.instance.QueueAction(setItemAnimation);
     }
-
+    public void NewHour()
+    {
+        if (plant != null&&plant.plantState==PlantState.正常&&!plant.setWater)
+        {
+            plant.Grow();
+        }
+    }
     public void NewDay()
     {
         isSetWater = false;
@@ -385,11 +428,7 @@ public class Field
                     if (!plant.setWater)
                     {
                         plant.plantState = PlantState.干旱;
-                    }
-                    else
-                    {
-                        plant.Grow();
-                    }
+                    } 
                     break;
 
                 case PlantState.干旱:
@@ -463,7 +502,8 @@ public class Plant
     public int field;
     public PlantData PlantData;
     public int growthStage;
-    public int growthDay;
+    //public int growthDay;
+    public int growthHour;
     public bool setWater;
     public PlantState plantState;
     public int nowCycle;
@@ -501,19 +541,15 @@ public class Plant
 
     public void Grow()
     {
-        if (plantState == PlantState.死亡 || plantState == PlantState.枯死)
-        {
-            return;
-        }
-        growthDay++;
+        growthHour++;
         var growthStateData = PlantData.growthStages[growthStage];
-        if (growthDay >= growthStateData.growthDay)
+        if (growthHour >= growthStateData.growthHour)
         {
             int index = growthStage + 1;
             if (index < PlantData.growthStages.Count - 1)
             {
                 growthStage = index;
-                growthDay = 0;
+                growthHour = 0;
             }
             else if (index >= PlantData.growthStages.Count)
             {
@@ -552,7 +588,7 @@ public class Plant
                 else
                 {
                     growthStage++;
-                    growthDay = 0;
+                    growthHour = 0;
                     nowCycle++;
                 }
 
@@ -563,6 +599,27 @@ public class Plant
             return false;
         }
         return false;
+    }
+
+    public async Task<bool> GetSicklePlant()
+    {
+        var growthStateData = PlantData.growthStages[growthStage];
+        if (growthStateData.productValue>0)
+        {
+            if (await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage,
+                GameCommon.grassItem, growthStateData.productValue))
+            {
+                Item item = new Item
+                {
+                    dataId = GameCommon.grassItem,
+                    count = GameCommon.grassItem
+                }; 
+                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage); 
+            }
+             
+        }
+        plantState = PlantState.死亡;
+        return true;
     }
 
     public void Dispose()

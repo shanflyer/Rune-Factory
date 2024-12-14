@@ -36,15 +36,15 @@ public class PlantData : ScriptableObject, IGameData
         {
             var dataStr = strs[i].Split(',');
             
-            if (dataStr.Length >= 5)
+            if (dataStr.Length >= 3)
             {
                 GrowthStage growthStage = new GrowthStage
                 {
                     stageName = dataStr[0],
-                    stage = int.Parse(dataStr[1]),
-                    growthDay = int.Parse(dataStr[2]),
-                    productValue = int.Parse(dataStr[3]),
-                    stageObj = int.Parse(dataStr[4]),
+                    growthHour = int.Parse(dataStr[1]),
+                    productValue = int.Parse(dataStr[2]),
+                    stageObj =i,
+                    stage = i
                 };
                 growthStages.Add(growthStage);
             }
@@ -67,7 +67,7 @@ public struct GrowthStage
     /// <summary>
     /// 生长周期
     /// </summary>
-    public int growthDay;
+    public int growthHour;
     /// <summary>
     /// 产出？？
     /// </summary>

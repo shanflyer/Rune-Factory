@@ -16,9 +16,8 @@ public class AnimalData : ScriptableObject, IGameData
     public int age;
     public List<int> foods=new List<int>();
     public int produceCycle;
-    public int product;
     public int productCount;
-    public int cycleStage;
+    public int productCD;
     public int getFoodEmote;
     public int hungerEmote;
     public int productEmote;
@@ -46,15 +45,15 @@ public class AnimalData : ScriptableObject, IGameData
         {
             var dataStr = strs[i].Split(',');
 
-            if (dataStr.Length >= 5)
+            if (dataStr.Length >= 4)
             {
                 GrowthStage growthStage = new GrowthStage
                 {
                     stageName = dataStr[0],
-                    stage = int.Parse(dataStr[1]),
-                    growthDay = int.Parse(dataStr[2]),
-                    productValue = int.Parse(dataStr[3]),
-                    stageObj = int.Parse(dataStr[4]),
+                    stage = i,
+                    growthHour = int.Parse(dataStr[1]),
+                    productValue = int.Parse(dataStr[2]),
+                    stageObj = int.Parse(dataStr[3]),
                 };
                 growthStages.Add(growthStage);
             }

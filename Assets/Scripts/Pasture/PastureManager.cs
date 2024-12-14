@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Unity.Mathematics;
@@ -585,7 +586,7 @@ public class PastureManager : Singleton<PastureManager>
             growthStage = animalSaveData.growthStage,
             growthDay=animalSaveData.growthDay,
             setFood=animalSaveData.setFood,
-            nowCycle=animalSaveData.nowCycle, 
+            nowCD =animalSaveData.nowCD, 
         };
         if (pastures.TryGetValue(animal.pasture, out var pasture))
          {
@@ -701,7 +702,8 @@ public enum AnimalState
     饥饿 = 1,
     高兴 = 2,
     悲伤 = 3,
-    死亡 = 4
+    死亡 = 4,
+    衰老=5
 }
 
 [System.Serializable]
@@ -747,7 +749,7 @@ public class Animal
     public int growthDay;
     public bool setFood;
     public AnimalState animalState;
-    public int nowCycle;
+    public int nowCD;
     public int linkCharacterData;
     public int Key => instaceId;
 
@@ -785,31 +787,38 @@ public class Animal
             }
             return;
         }
-
+        var growthStateData = animalData.growthStages[growthStage];
         if (animalState != AnimalState.死亡)
         {
-            Team team = TeamManager.instance.GetTeam(instaceId);
-            if (animalState != AnimalState.饥饿)
-            {
+            nowCD++;
+             Team team = TeamManager.instance.GetTeam(instaceId);
+            if (animalState != AnimalState.饥饿&& nowCD >= animalData.productCD)
+            { 
                 if (team != null)
                 {
-                    AddPackageItem addPackageItem = new AddPackageItem
+                    if(growthStateData.productValue != 0) 
                     {
-                        packageId = team.leader.characterPackage,
-                        itemDataId = animalData.product,
-                        itemCount = animalData.productCount
-                    };
-                    GameActionManager.instance.QueueAction(addPackageItem);
+                        AddPackageItem addPackageItem = new AddPackageItem
+                        {
+                            packageId = team.leader.characterPackage,
+                            itemDataId = growthStateData.productValue,
+                            itemCount = animalData.productCount
+                        };
+                        GameActionManager.instance.QueueAction(addPackageItem);
+                        nowCD=0;
+                    }
+                   
                 }
-                else
+                else if(growthStateData.productValue != 0)
                 {
                     TrySetItemToPastureBox trySetItemToPastureBox = new TrySetItemToPastureBox
                     {
-                        itemId = animalData.product,
+                        itemId = growthStateData.productValue,
                         itemCount = animalData.productCount,
                         pastureId = pasture,
                     };
                     GameActionManager.instance.QueueAction(trySetItemToPastureBox);
+                    nowCD = 0;
                 }
 
                 ShowEmote showEmote = new ShowEmote
@@ -835,9 +844,8 @@ public class Animal
                 GameActionManager.instance.QueueAction(animalCostFood, true);
             }
         }
-        growthDay++;
-        var growthStateData = animalData.growthStages[growthStage];
-        if (growthDay >= growthStateData.growthDay)
+        growthDay++; 
+        if (growthDay >= growthStateData.growthHour)
         {
             int index = growthStage + 1;
             if (index < animalData.growthStages.Count - 1)
@@ -859,13 +867,14 @@ public class Animal
             }
             else
             {
-                animalState = AnimalState.死亡;
-                InformationController.instance.AddInformation($"+{name}+已死亡!");
+                animalState = AnimalState.衰老;
+                InformationController.instance.AddInformation($"+{name}+已衰老!");
+                /*
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {
                     animalId = instaceId,
                 };
-                GameActionManager.instance.QueueAction(tryDeleteAnimal);
+                GameActionManager.instance.QueueAction(tryDeleteAnimal);*/
             }
         }
     }

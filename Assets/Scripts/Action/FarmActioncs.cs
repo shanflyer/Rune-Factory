@@ -40,7 +40,17 @@ public struct RefreshPlant : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct TrySicklePlant : GameAction
+{
+    public int fieldId;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TryGetPlantFruit : GameAction
 {
     public int fieldId;
@@ -49,6 +59,10 @@ public struct TryGetPlantFruit : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        if (source != 0 && source != int.MinValue)
+        {
+            fieldId = source;
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

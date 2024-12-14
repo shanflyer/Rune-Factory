@@ -179,6 +179,7 @@ public class GameCommon
 
     public static int defaultOperateId = 0;
     public static int defaultPlayerTalkTime = 2000;
+    public static int grassItem = 100;
 
     public const int fishSuccessEmote = 61;
     public const int fishFailedmote = 24;

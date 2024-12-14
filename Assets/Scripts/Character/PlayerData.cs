@@ -401,7 +401,7 @@ public class AnimalSaveData
     public int growthDay;
     public bool setFood;
     public AnimalState animalState;
-    public int nowCycle;
+    public int nowCD;
     public int linkCharacterData;
 
     public AnimalSaveData() { }
@@ -414,7 +414,7 @@ public class AnimalSaveData
         growthDay = animalSaveData.growthDay;
         setFood = animalSaveData.setFood;
         animalState = animalSaveData.animalState;
-        nowCycle = animalSaveData.nowCycle;
+        nowCD = animalSaveData.nowCD;
         linkCharacterData = animalSaveData.linkCharacterData;
         dataId = animalSaveData.dataId;
     }
@@ -432,7 +432,7 @@ public class AnimalSaveData
         growthDay = animal.growthDay;
         setFood = animal.setFood;
         animalState = animal.animalState;
-        nowCycle = animal.nowCycle;
+        nowCD = animal.nowCD;
         linkCharacterData = animal.linkCharacterData;
         dataId = animal.animalData.id;
     }
@@ -541,7 +541,7 @@ public class FieldSaveData
     public int PlantinstaceId;
     public int PlantDataId;
     public int growthStage;
-    public int growthDay;
+    public int growthHour;
     public PlantState plantState;
     public int nowCycle;
     public FieldSaveData() { }
@@ -556,7 +556,7 @@ public class FieldSaveData
         PlantinstaceId = fieldSaveData.PlantinstaceId;
         PlantDataId = fieldSaveData.PlantDataId;
         growthStage = fieldSaveData.growthStage;
-        growthDay = fieldSaveData.growthDay;
+        growthHour = fieldSaveData.growthHour;
         plantState = fieldSaveData.plantState;
         nowCycle = fieldSaveData.nowCycle;
         coordinate = fieldSaveData.coordinate;
@@ -584,7 +584,7 @@ public class FieldSaveData
             PlantinstaceId = field.plant.instaceId;
             PlantDataId = field.plant.PlantData.id;
             growthStage = field.plant.growthStage;
-            growthDay = field.plant.growthDay;
+            growthHour = field.plant.growthHour;
             plantState = field.plant.plantState;
             nowCycle = field.plant.nowCycle;
         }
