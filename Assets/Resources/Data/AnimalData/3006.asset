@@ -19,29 +19,28 @@ MonoBehaviour:
   age: 1
   foods: 64000000
   produceCycle: 2
-  product: 1001
-  productCount: 1
-  cycleStage: 1
+  productCount: 7
+  productCD: 4
   getFoodEmote: 8
   hungerEmote: 24
   productEmote: 14
   behavior: "\u52A8\u7269"
   externalBehavior: {fileID: 0}
-  GrowthStageStr: "\u5E7C\u7EF5\u7F8A,0,1,0,3006|\u7EF5\u7F8A,1,100,0,3007|\u7EF5\u7F8A,2,100,0,3007"
+  GrowthStageStr: "\u5E7C\u7EF5\u7F8A,10,0,3006|\u7EF5\u7F8A,170,283,3007|\u7EF5\u7F8A,100,0,3007"
   growthStages:
   - stageName: "\u5E7C\u7EF5\u7F8A"
     stage: 0
-    growthDay: 1
+    growthHour: 10
     productValue: 0
     stageObj: 3006
   - stageName: "\u7EF5\u7F8A"
     stage: 1
-    growthDay: 100
-    productValue: 0
+    growthHour: 170
+    productValue: 283
     stageObj: 3007
   - stageName: "\u7EF5\u7F8A"
     stage: 2
-    growthDay: 100
+    growthHour: 100
     productValue: 0
     stageObj: 3007
   functionIds: 04000000090000000a0000000b000000

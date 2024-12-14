@@ -15,20 +15,12 @@ MonoBehaviour:
   id: 5
   pondName: "\u5C71\u5730\u6E56"
   showValue: 1
-  fishRandomIds:
-  - x: 1
-    y: 40001
-  - x: 2
-    y: 40001
-  - x: 3
-    y: 40001
-  - x: 4
-    y: 40001
-  maxFishCount: 20
-  produceCD: 2000
+  waitFishingCd:
+    x: 2000
+    y: 6000
   seasonRandomValue:
     m_keys: 01000000020000000300000004000000
-    m_values: 419c0000419c0000419c0000419c0000
+    m_values: 419c0000a59c0000099d00006d9d0000
   linkMapItem:
     x: 2355
     y: 1098337

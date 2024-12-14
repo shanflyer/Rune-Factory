@@ -16,39 +16,39 @@ MonoBehaviour:
   plantName: "\u841D\u535C"
   seed: 1104
   fruit: 1004
-  fruitCount: 2
+  fruitCount: 4
   pickTimes: 1
-  cycleStage: 1
+  cycleStage: 3
   mapItem: 8004
-  GrowthStageStr: "\u840C\u82BD,0,1,0,0|\u5C0F\u82D7,1,1,0,1|\u5927\u82D7,2,1,0,2|\u7ED3\u679C,3,1,0,3|\u6210\u719F,4,1,0,4|\u5149\u6746,5,1,0,5"
+  GrowthStageStr: "\u840C\u82BD,24,0|\u5C0F\u82D7,24,0|\u5927\u82D7,24,1|\u7ED3\u679C,24,2|\u6210\u719F,24,2|\u5149\u6746,0,0"
   growthStages:
   - stageName: "\u840C\u82BD"
     stage: 0
-    growthDay: 1
+    growthHour: 24
     productValue: 0
     stageObj: 0
   - stageName: "\u5C0F\u82D7"
     stage: 1
-    growthDay: 1
+    growthHour: 24
     productValue: 0
     stageObj: 1
   - stageName: "\u5927\u82D7"
     stage: 2
-    growthDay: 1
-    productValue: 0
+    growthHour: 24
+    productValue: 1
     stageObj: 2
   - stageName: "\u7ED3\u679C"
     stage: 3
-    growthDay: 1
-    productValue: 0
+    growthHour: 24
+    productValue: 2
     stageObj: 3
   - stageName: "\u6210\u719F"
     stage: 4
-    growthDay: 1
-    productValue: 0
+    growthHour: 24
+    productValue: 2
     stageObj: 4
   - stageName: "\u5149\u6746"
     stage: 5
-    growthDay: 1
+    growthHour: 0
     productValue: 0
     stageObj: 5
