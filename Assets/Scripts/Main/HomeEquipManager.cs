@@ -173,7 +173,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             case HomeEquipFunc.装饰:
                 break;
         }
-         
+         homeEquips.Add(homeEquip.instanceId, homeEquip);
         if (creatHomeEquip.setResult != null)
         {
             creatHomeEquip.setResult(true);
@@ -318,8 +318,13 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             {
                 mapItemInstanceId = homeEquip.mapItemInstance,
                 mapInstance = homeEquip.mapInstance,
-                coordinate = homeEquip.coordinate
+                coordinate = homeEquip.coordinate,
+                setValue = SetMapItem
             };
+            void SetMapItem(int itemInstance)
+            {
+                homeEquip.mapItemInstance = itemInstance;
+            }
             GameActionManager.instance.QueueAction(moveMapItem, true);
         }
         else

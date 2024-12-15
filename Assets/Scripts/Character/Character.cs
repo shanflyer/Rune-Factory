@@ -912,7 +912,11 @@ public partial class Character
             }
         }
     }
-
+    public void SetDirection(Direction direction)
+    {
+        this.direction = direction;
+        moveDirection=GameCommon.GetDirectValue(direction);
+    }
   
     private float _nowSpeed;
 

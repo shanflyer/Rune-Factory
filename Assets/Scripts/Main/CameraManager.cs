@@ -145,9 +145,10 @@ public class CameraManager : Singleton<CameraManager>
     public void SetConfiner2DCollider(Collider2D collider2D)
     {
         confiner2D.enabled = false;
-        confiner2D.BoundingShape2D = collider2D;
+        confiner2D.BoundingShape2D = collider2D; 
         confiner2D.enabled = true;
         confiner2D.InvalidateBoundingShapeCache();
+        confiner2D.InvalidateLensCache();
         /*
         GameTimerController.instance.DeleyActionMain(100, () =>
         {
@@ -177,11 +178,15 @@ public class CameraManager : Singleton<CameraManager>
             followCameras[i].Follow = target;
             followCameras[i].Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
         }
+        confiner2D.enabled = true;
+        confiner2D.InvalidateBoundingShapeCache();
+        confiner2D.InvalidateLensCache();
     }
 
     private void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
     {
-        UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue; 
+        UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue;
+        confiner2D.InvalidateLensCache();
     }
 
     private void SetFixedCamera(SetFixedCamera setFixedCamera)
@@ -209,6 +214,7 @@ public class CameraManager : Singleton<CameraManager>
             }
             confiner2D.enabled = true;
             confiner2D.InvalidateBoundingShapeCache();
+            confiner2D.InvalidateLensCache();
         }
         else
         { 
@@ -239,6 +245,7 @@ public class CameraManager : Singleton<CameraManager>
             }
             confiner2D.enabled = true;
             confiner2D.InvalidateBoundingShapeCache();
+            confiner2D.InvalidateLensCache();
         }
     }
     void SetFixedPlayerShaderPos(SetFixedPlayerShaderPos setFixedPlayerShaderPos)

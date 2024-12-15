@@ -14,39 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: "\u5367\u5BA4"
   barrierGrids: e8fffffff0ffffff0c000000f1ffffffe8fffffff2ffffffe9ffffff14000000eaffffff0d0000000c00000014000000fffffffff2ffffff0c000000f8ffffff00000000f9ffffff0c000000f9ffffff00000000040000000c0000000c0000000b000000faffffff0c00000003000000
-  groundIndexes: 030000000300000003000000030000000300000003000000030000000300000003000000
-  groundGrids: edffffff01000000faffffff0a000000edffffff0b000000edffffff0b000000f3ffffff0b000000faffffff0b000000edffffff01000000faffffff0a000000edffffff0b000000edffffff0b000000f3ffffff0b000000faffffff0b000000edffffff01000000faffffff0a000000edffffff0b000000edffffff0b000000f3ffffff0b000000faffffff0b000000
+  groundIndexes: 030000000300000003000000030000000300000003000000030000000300000003000000030000000300000003000000
+  groundGrids: edffffff01000000faffffff0a000000edffffff0b000000edffffff0b000000f3ffffff0b000000faffffff0b000000edffffff01000000faffffff0a000000edffffff0b000000edffffff0b000000f3ffffff0b000000faffffff0b000000edffffff01000000faffffff0a000000edffffff0b000000edffffff0b000000f3ffffff0b000000faffffff0b000000edffffff01000000faffffff0a000000edffffff0b000000edffffff0b000000f3ffffff0b000000faffffff0b000000
   defaultGround: 2
   mapItems:
-  - id: 1008
-    instanceId: 1008718
+  - id: 1007
+    instanceId: 1007199
     coordinate:
-      x: -8
-      y: -7
+      x: -20
+      y: -10
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1011
-    instanceId: 1011238
+  - id: 1009
+    instanceId: 1009838
     coordinate:
       x: 4
-      y: 6
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1001
-    instanceId: 1001316
-    coordinate:
-      x: -16
-      y: 8
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1011
-    instanceId: 1011683
-    coordinate:
-      x: -10
-      y: 14
+      y: -4
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -58,51 +42,19 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
+  - id: 1001
+    instanceId: 1001316
+    coordinate:
+      x: -16
+      y: 8
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
   - id: 1016
     instanceId: 1016986
     coordinate:
       x: -12
       y: -12
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1010
-    instanceId: 1010914
-    coordinate:
-      x: -21
-      y: 9
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1169
-    instanceId: 1169555
-    coordinate:
-      x: -12
-      y: -2
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1012
-    instanceId: 1012290
-    coordinate:
-      x: -21
-      y: 0
-    animationKey: 0
-    blindHomeEquipment: 2108
-    eventReferenceDatas: []
-  - id: 1009
-    instanceId: 1009838
-    coordinate:
-      x: 4
-      y: -4
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1003
-    instanceId: 1003191
-    coordinate:
-      x: -4
-      y: 7
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -114,19 +66,11 @@ MonoBehaviour:
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
-  - id: 1002
-    instanceId: 1002790
+  - id: 1010
+    instanceId: 1010914
     coordinate:
-      x: 8
-      y: 4
-    animationKey: 0
-    blindHomeEquipment: 0
-    eventReferenceDatas: []
-  - id: 1007
-    instanceId: 1007199
-    coordinate:
-      x: -20
-      y: -10
+      x: -21
+      y: 9
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []
@@ -135,6 +79,54 @@ MonoBehaviour:
     coordinate:
       x: -4
       y: 10
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1002
+    instanceId: 1002790
+    coordinate:
+      x: 8
+      y: 4
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1169
+    instanceId: 1169555
+    coordinate:
+      x: -12
+      y: -2
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1008
+    instanceId: 1008718
+    coordinate:
+      x: -8
+      y: -7
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1011
+    instanceId: 1011683
+    coordinate:
+      x: -10
+      y: 14
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1003
+    instanceId: 1003191
+    coordinate:
+      x: -4
+      y: 7
+    animationKey: 0
+    blindHomeEquipment: 0
+    eventReferenceDatas: []
+  - id: 1011
+    instanceId: 1011238
+    coordinate:
+      x: 4
+      y: 6
     animationKey: 0
     blindHomeEquipment: 0
     eventReferenceDatas: []

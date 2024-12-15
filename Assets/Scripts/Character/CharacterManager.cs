@@ -87,7 +87,12 @@ public class CharacterManager : Singleton<CharacterManager>
                     audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
                 }
                 audioListener.enabled = true;
-                CameraManager.instance.SetCameraListener(false); 
+                CameraManager.instance.SetCameraListener(false);
+                RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
+                {
+                    characterId = character.instanceId,
+                };
+                GameActionManager.instance.QueueAction(refreshMapTempCharacter);
             }
         }
         else
@@ -130,6 +135,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetCharacterRandomPos>(SetCharacterRandomPos);
         GameActionManager.instance.AddListener<SetCharacterRandomCoordinate>(SetCharacterRandomCoordinate);
         GameActionManager.instance.AddListener<ChangeCharacterNewMap>(ChangeCharacterNewMap);
+        GameActionManager.instance.AddListener<RefreshCharacterPos>(RefreshCharacterPos);
 
         GameActionManager.instance.AddListener<VisitNPC>(VisitNPC);
         GameActionManager.instance.AddListener<DisplayCharacterItemRenderer>(DisplayCharacterItemRenderer);
@@ -277,7 +283,26 @@ public class CharacterManager : Singleton<CharacterManager>
             SetCharacterRandomPos.setResult(false);
         }
     }
+    void RefreshCharacterPos(RefreshCharacterPos RefreshCharacterPos)
+    {
+        if (characters.TryGetValue(RefreshCharacterPos.characterId, out var character))
+        {
+            if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+            {
+                characterRuntimeObj.transform.position = GameCommon.GetMapPos(character.coordinate);
+                if (RefreshCharacterPos.setResult != null)
+                {
+                    RefreshCharacterPos.setResult(true);
+                }
+                character.StopMove();
+            }
+        }
+        if (RefreshCharacterPos.setResult != null)
+        {
+            RefreshCharacterPos.setResult(false);
+        }
 
+    }
     private void SetCharacterTempPos(SetCharacterTempPos setCharacterTempPos)
     {
         if (characters.TryGetValue(setCharacterTempPos.characterId, out var character))
@@ -1010,6 +1035,16 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             return;
         }
+        if (character.linkItem != 0)
+        {
+            TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter = new TryRemoveLinkMapItemCharacter
+            {
+                linkInstanceId = character.instanceId,
+                mapItemInstanceId = character.linkItem
+            };
+            GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter);            
+        }
+       
 
         Vector2Int offsetCoordinate = Vector2Int.zero;
 
@@ -1322,6 +1357,11 @@ public class CharacterManager : Singleton<CharacterManager>
                     SetShaderPlayerPos(pos);
                     CameraManager.instance.SetFollowTarget(transform);
                 }
+                RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
+                {
+                    characterId = character.instanceId,
+                };
+                GameActionManager.instance.QueueAction(refreshMapTempCharacter);
             }
         }
         else

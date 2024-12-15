@@ -30,7 +30,10 @@ public class MapItemData : ScriptableObject, IGameData
     public int defaultExit, defaultEnter;
     public bool displayTips = true;
     public string playerOperateInfo;
-  
+
+    public Vector2 offsetLinkPos;
+    public Vector2 leftLinkPos, rightLinkPos;
+    public Direction linkDirection;
     public string GetName()
     {
         return itemName;

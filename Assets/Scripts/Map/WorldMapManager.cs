@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class WorldMapManager : Singleton<WorldMapManager>
 {
@@ -24,13 +25,13 @@ public class WorldMapManager : Singleton<WorldMapManager>
      }*/
 
     private Dictionary<int2, int> editorItemRemapInstanceIds = new Dictionary<int2, int>();
-     
- 
+
+
 
     public override void Init()
     {
         base.Init();
-        runtimeMapItems = new Dictionary<int, RuntimeMapItem>(); 
+        runtimeMapItems = new Dictionary<int, RuntimeMapItem>();
         GameDataSaveManager.instance.InitMapInstanceData();
 
         GameActionManager.instance.AddListener<RemoveMapItemCollider>(RemoveMapItemCollider);
@@ -52,6 +53,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<TrySetMapItem>(TrySetMapItem);
         GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
         GameActionManager.instance.AddListener<CheckMapEditorItemLinkCharacter>(CheckMapEditorItemLinkCharacter);
+        GameActionManager.instance.AddListener<RefreshMapTempCharacter>(RefreshMapTempCharacter);
+        GameActionManager.instance.AddListener<TryLinkMapItemCharacter>(TryLinkMapItemCharacter);
+        GameActionManager.instance.AddListener<TryRemoveLinkMapItemCharacter>(TryRemoveLinkMapItemCharacter);
     }
     public int2 GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance)
     {
@@ -63,11 +67,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     public int2 GetItemCommonCenterTriggerCellForEditorInstance(int roomId, int itemEditorInstance)
     {
-        if(editorItemRemapInstanceIds.TryGetValue(new int2(roomId,itemEditorInstance),out var itemInstanceId))
+        if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
         {
             return MapCellController.instance.GetItemCommonCenterTriggerCell(roomId, itemInstanceId);
         }
-        return new int2(int.MinValue, int.MinValue); 
+        return new int2(int.MinValue, int.MinValue);
     }
     private void SetMapEditorItemLinkCharacter(SetMapEditorItemLinkCharacter SetMapEditorItemLinkCharacter)
     {
@@ -104,7 +108,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     public void CheckMapEditorItemLinkCharacter(CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter)
     {
         int2 editorKey = new int2(checkMapEditorItemLinkCharacter.mapId, checkMapEditorItemLinkCharacter.itemEditorId);
-        bool result= CanLinkRuntimeMapItem(editorKey, checkMapEditorItemLinkCharacter.characterId);
+        bool result = CanLinkRuntimeMapItem(editorKey, checkMapEditorItemLinkCharacter.characterId);
         if (checkMapEditorItemLinkCharacter.setResult != null)
         {
             checkMapEditorItemLinkCharacter.setResult(result);
@@ -117,8 +121,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             if (GetRuntimeMapItem(instanceId, out var runtimeMapItem))
             {
-               
-                if (runtimeMapItem.linkCharacter <=0|| runtimeMapItem.linkCharacter==linkCharacterId)
+
+                if (runtimeMapItem.linkCharacter <= 0 || runtimeMapItem.linkCharacter == linkCharacterId)
                 {
                     return true;
                 }
@@ -168,6 +172,118 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return false;
     }
 
+    void RefreshMapTempCharacter(RefreshMapTempCharacter refreshMapTempCharacter)
+    {
+        Character character = CharacterManager.instance.GetCharacter(refreshMapTempCharacter.characterId);
+        if (character != null&&character.linkItem!=0)
+        {
+           if(CharacterManager.instance.GetRuntimeCharacterObj(character.instanceId,out var characterRuntimeObj)&&
+                GetRuntimeMapItem(character.linkItem, out var runtimeMapItem))
+            {
+                SetCharacterTempPos setCharacterTempPos = new SetCharacterTempPos
+                {
+                    characterId = character.instanceId,
+                };
+                if (runtimeMapItem.leftCharacter == character.instanceId)
+                {
+                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.leftLinkPos + runtimeMapItem.pos;
+                    GameActionManager.instance.QueueAction(setCharacterTempPos);
+                }
+                else if (runtimeMapItem.rightCharacter == character.instanceId)
+                {
+                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.rightLinkPos+ runtimeMapItem.pos;
+                    GameActionManager.instance.QueueAction(setCharacterTempPos);
+                }
+                else if (runtimeMapItem.linkCharacter == character.instanceId)
+                {
+                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.offsetLinkPos + runtimeMapItem.pos;
+                    GameActionManager.instance.QueueAction(setCharacterTempPos);
+                }
+                character.SetDirection(runtimeMapItem.mapItemData.linkDirection);
+            }
+        }
+
+       
+    }
+    private void TryLinkMapItemCharacter(TryLinkMapItemCharacter tryLinkMapItemCharacter)
+    {
+        if (GetRuntimeMapItem(tryLinkMapItemCharacter.mapItemInstanceId, out var runtimeMapItem))
+        {
+            Character character =CharacterManager.instance.controllerCharacter;
+            if (runtimeMapItem.linkCharacter != 0)
+            {
+                character = CharacterManager.instance.GetCharacter(runtimeMapItem.linkCharacter); 
+            }
+            if (runtimeMapItem.leftCharacter == 0)
+            {
+                runtimeMapItem.leftCharacter = character.instanceId;
+                character.linkItem = runtimeMapItem.instanceId ; 
+            }
+            else if (runtimeMapItem.rightCharacter == 0)
+            {
+                runtimeMapItem.rightCharacter = character.instanceId;
+                character.linkItem = runtimeMapItem.instanceId;
+            }
+            else if (runtimeMapItem.linkCharacter == 0)
+            {
+                runtimeMapItem.linkCharacter = character.instanceId;
+                character.linkItem = runtimeMapItem.instanceId;
+            }
+            RefreshMapTempCharacter RefreshMapTempCharacter = new RefreshMapTempCharacter
+            {
+                characterId = character.instanceId,
+            };
+            GameActionManager.instance.QueueAction(RefreshMapTempCharacter);
+        }
+    }
+    void TryRemoveLinkMapItemCharacter(TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter)
+    {
+        if (GetRuntimeMapItem(tryRemoveLinkMapItemCharacter.mapItemInstanceId, out var runtimeMapItem))
+        {
+            Character character = CharacterManager.instance.controllerCharacter;
+            if (runtimeMapItem.linkCharacter != 0)
+            {
+                character = CharacterManager.instance.GetCharacter(runtimeMapItem.linkCharacter);
+            }
+            if (runtimeMapItem.leftCharacter == character.instanceId)
+            {
+                runtimeMapItem.leftCharacter = 0;
+                character.linkItem = 0;
+            }
+            else if (runtimeMapItem.rightCharacter == character.instanceId)
+            {
+                runtimeMapItem.rightCharacter = 0;
+                character.linkItem = 0;
+            }
+            else if (runtimeMapItem.linkCharacter == character.instanceId)
+            {
+                runtimeMapItem.linkCharacter = 0;
+                character.linkItem = 0;
+            }
+            RefreshCharacterPos refreshCharacterPos = new RefreshCharacterPos
+            {
+                characterId = character.instanceId,
+            };
+            GameActionManager.instance.QueueAction(refreshCharacterPos);
+            SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+            {
+                characterId = character.instanceId,
+                parameterType = ParameterType.BOOL,
+                parameter = "Set",
+                boolValue = false
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimator);
+            SetCharacterAnimator setCharacterAnimator1 = new SetCharacterAnimator
+            {
+                characterId = character.instanceId,
+                parameterType = ParameterType.INT,
+                parameter = "State",
+                intValue=0
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimator1);
+            // runtimeMapItems.SetData(runtimeMapItem);
+        }
+    }
     private void SetMapItemLinkCharacter(SetMapItemLinkCharacter SetMapItemLinkCharacter)
     {
         if (GetRuntimeMapItem(SetMapItemLinkCharacter.mapItemInstanceId, out var runtimeMapItem))
@@ -439,16 +555,21 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private async Task<int> AddMapItem(MapItem mapItem, int mapId)
     {
         bool isInSaveData = true;
-        int instanceId = GameDataSaveManager.instance.GetSaveMapInstance(new int2(mapId, mapItem.instanceId));
+        int instanceId = 0;
+        if (mapItem.instanceId!=0)
+        {
+            instanceId = GameDataSaveManager.instance.GetSaveMapInstance(new int2(mapId, mapItem.instanceId)); 
+        }
         if (instanceId == 0)
         {
             isInSaveData = false;
             instanceId = MyInstance.instance.uid;
         }
 
-        if (mapItem.instanceId != 0)
+        int2 key = new int2(mapId, mapItem.instanceId);
+        if (mapItem.instanceId != 0&&!editorItemRemapInstanceIds.ContainsKey(key))
         {
-            editorItemRemapInstanceIds.Add(new int2(mapId, mapItem.instanceId), instanceId);
+            editorItemRemapInstanceIds.Add(key, instanceId);
         }
         RuntimeMapItem runtimeMapItem = new RuntimeMapItem(instanceId, mapItem.instanceId, await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id),
             mapId, mapItem.coordinate, mapItem.animationKey);
@@ -545,7 +666,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             id = addMapItem.dataId,
             coordinate = addMapItem.coordinate,
-            instanceId = addMapItem.instanceId
+            instanceId= addMapItem.instanceId
         };
 
         int instanceId = await AddMapItem(mapItem, addMapItem.mapId);
@@ -597,7 +718,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 mapItemInstanceId = TrySetMapItem.mapItemInstanceId,
                 noneTryAdd = newItem,
                 dataId = TrySetMapItem.dataId,
+                setValue=TrySetMapItem.setValue
             };
+
             MoveMapItem(mapItem);
             if (TrySetMapItem.setResult != null)
             {
@@ -666,9 +789,17 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 dataId = moveMapItem.dataId,
                 mapId = moveMapItem.mapInstance,
                 coordinate = moveMapItem.coordinate,
-                instanceId = moveMapItem.mapItemInstanceId
+                instanceId = moveMapItem.mapItemInstanceId,
+                setValue=LinkHomeEquipId
             };
             AddMapItem(addMapItem);
+            void LinkHomeEquipId(int instance)
+            {
+                if (moveMapItem.setValue != null)
+                {
+                    moveMapItem.setValue(instance);
+                }
+            }
         }
         SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
         {
@@ -930,8 +1061,9 @@ public class RuntimeMapItem : INativeData
     public int2 coordinate;
     public int2 animationKey { get; private set; }
     public int linkCharacter;
+    public int leftCharacter, rightCharacter;
     public int2 editorKey { get => new int2(mapInstanceId, editorInstanceId); }
-
+    public Vector2 pos => GameCommon.GetMapPos(coordinate);
     public RuntimeMapItem(int instanceId, int editorInstanceId, MapItemData mapItemData, int mapInstanceId, int2 coordinate, int2 animationKey)
     {
         this.instanceId = instanceId;
@@ -942,6 +1074,15 @@ public class RuntimeMapItem : INativeData
         this.animationKey = animationKey;
         operateDatas = new NativeHashSet<int>(8, Allocator.Persistent);
         EventReferenceData = new NativeHashMap<FixedString128Bytes, int>(2, Allocator.Persistent);
+
+        if (mapItemData.leftLinkPos == Vector2.zero)
+        {
+            leftCharacter = -1;
+        }
+        if (mapItemData.rightLinkPos == Vector2.zero)
+        {
+            rightCharacter = -1;
+        }
     }
 
     public void SetAnimationKey(int2 animationKey)

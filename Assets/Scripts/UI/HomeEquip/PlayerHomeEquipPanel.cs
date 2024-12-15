@@ -431,7 +431,15 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                 ActionName.text ="ÊÕ»Ø";
                                 ActionImage.sprite = unSetSprite;
                             }
+                        },
+                        setValue=(int instance) =>
+                        {
+                            if (SelectHomeEquip.mapItemInstance != 0)
+                            {
+                                SelectHomeEquip.mapItemInstance = instance;
+                            }
                         }
+                        
                     };
                     GameActionManager.instance.QueueAction(trySetMapItem, true);
                 }
@@ -473,6 +481,13 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                             selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
                                         });
                                     }); 
+                                }
+                            },
+                            setValue = (int instance) =>
+                            {
+                                if (SelectHomeEquip.mapItemInstance != 0)
+                                {
+                                    SelectHomeEquip.mapItemInstance = instance;
                                 }
                             }
                         };

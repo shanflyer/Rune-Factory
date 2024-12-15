@@ -352,7 +352,7 @@ public class MapItemEditor : MyEditor
             Init();
         }
 
-        mapItemsPanel.DisplayCommonObjList<MapItemDataObj>(300, 360, mapItemDataObjs, 3, false);
+        mapItemsPanel.DisplayCommonObjList<MapItemDataObj>(400, 360, mapItemDataObjs, 4, false);
 
         EditorGUILayout.BeginHorizontal();
         DrawButton("新建地图物体", NewMapItem, 100);

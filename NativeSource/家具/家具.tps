@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.3.0</string>
+        <string>7.5.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -175,15 +175,26 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">冰箱.png</key>
             <key type="filename">冷餐台.png</key>
+            <key type="filename">双人床(古典).png</key>
             <key type="filename">双人床.png</key>
+            <key type="filename">壁炉.png</key>
             <key type="filename">服饰架.png</key>
             <key type="filename">木箱.png</key>
             <key type="filename">柜台.png</key>
             <key type="filename">柴墩.png</key>
+            <key type="filename">武器架.png</key>
             <key type="filename">武器柜台.png</key>
+            <key type="filename">沙发(红).png</key>
+            <key type="filename">沙发(蓝).png</key>
             <key type="filename">沙发.png</key>
             <key type="filename">炖煮锅.png</key>
             <key type="filename">烤炉.png</key>
+            <key type="filename">盆栽1.png</key>
+            <key type="filename">盆栽2.png</key>
+            <key type="filename">盆栽3.png</key>
+            <key type="filename">盆栽4.png</key>
+            <key type="filename">盆栽5.png</key>
+            <key type="filename">盆栽6.png</key>
             <key type="filename">绘写台.png</key>
             <key type="filename">缝纫机.png</key>
             <key type="filename">酿造桶.png</key>
