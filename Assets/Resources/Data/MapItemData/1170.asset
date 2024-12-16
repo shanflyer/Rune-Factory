@@ -17,8 +17,8 @@ MonoBehaviour:
   objName: 
   itemObj: {fileID: 1816396785548023389, guid: ed760ae5e14e5a44abcaabdc0686f94e, type: 3}
   colliderGrids: fcfffffffeffffff0400000007000000
-  triggerGrids: fbfffffffefffffffbffffff07000000fcfffffffdffffff04000000fdffffff05000000feffffff0500000007000000
-  playerTriggerGrids: fafffffffefffffffbffffff06000000fbfffffffdffffff05000000fdfffffffcfffffffcffffff04000000fcffffff05000000feffffff0600000006000000
+  triggerGrids: fbfffffffeffffff0500000007000000fcfffffffdffffff04000000fdffffff
+  playerTriggerGrids: fafffffffeffffff0600000006000000fbfffffffdffffff05000000fdfffffffcfffffffcffffff04000000fcffffff
   playerTriggerEvent: 0
   operateIds: 
   creatAction: {fileID: 0}
@@ -26,3 +26,7 @@ MonoBehaviour:
   defaultEnter: 0
   displayTips: 1
   playerOperateInfo: 
+  offsetLinkPos: {x: 0, y: 0}
+  leftLinkPos: {x: 0, y: 0}
+  rightLinkPos: {x: 0, y: 0}
+  linkDirection: 0

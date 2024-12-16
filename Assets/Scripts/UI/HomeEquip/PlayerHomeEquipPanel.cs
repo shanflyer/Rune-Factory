@@ -418,11 +418,15 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                             }
                             else
                             {
-                                if(WorldMapObjManager.instance.GetRuntimeMapItemObj(SelectHomeEquip.instanceId, out var mapItemRuntimeObj))
+                                GameTimerController.instance.DelayAction(500, () =>
                                 {
-                                    selectMapItemRuntimeObj= mapItemRuntimeObj;
-                                    selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
-                                }
+                                    if (WorldMapObjManager.instance.GetRuntimeMapItemObj(SelectHomeEquip.instanceId, out var mapItemRuntimeObj))
+                                    {
+                                        selectMapItemRuntimeObj = mapItemRuntimeObj;
+                                        selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
+                                    }
+                                });
+                               
                                 SelectHomeEquip.mapInstance=WorldMapObjManager.instance.displayMap;
                                 SelectHomeEquip.coordinate=coordinate;
                                 EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
@@ -434,7 +438,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                         },
                         setValue=(int instance) =>
                         {
-                            if (SelectHomeEquip.mapItemInstance != 0)
+                            if (SelectHomeEquip.mapItemInstance == 0)
                             {
                                 SelectHomeEquip.mapItemInstance = instance;
                             }

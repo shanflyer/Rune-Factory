@@ -266,8 +266,7 @@ public class MySet<T>
     public T GetValueForIndex(int index)
     {
         return list[index];
-    }
- 
+    } 
     public List<T> GetValueList(bool native = false)
     {
         if (native)

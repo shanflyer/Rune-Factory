@@ -107,8 +107,20 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
     {
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
-        HomeEquip homeEquip = new HomeEquip(creatHomeEquip.instanceId == 0 ? MyInstance.instance.uid : creatHomeEquip.instanceId,
-           creatHomeEquip.instanceId, creatHomeEquip.characterId, homeEquipmentData);
+        int instanceId = creatHomeEquip.instanceId == 0 ? MyInstance.instance.uid : creatHomeEquip.instanceId;
+        HomeEquip homeEquip = new HomeEquip(instanceId, instanceId, creatHomeEquip.characterId, homeEquipmentData);
+
+        if (creatHomeEquip.instanceId == 0)
+        {
+            AddMapItem addMapItem = new AddMapItem
+            {
+                instanceId = creatHomeEquip.instanceId,
+                dataId=homeEquipmentData.mapItemDataId,
+                mapId = -1,
+                fixeInstanceId= instanceId
+            };
+            GameActionManager.instance.QueueAction(addMapItem); 
+        }
          
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
         {
@@ -384,7 +396,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     characterId = CharacterManager.instance.controllerCharacter.instanceId, 
                     equipDataId = itemData.typeValue
                 };
-                GameActionManager.instance.QueueAction(CreatHomeEquip);
+                GameActionManager.instance.QueueAction(CreatHomeEquip); 
 
                 InformationController.instance.AddInformation($"成功购买1个+ {itemData.itemName} +");
                 if (selectShopItemData.buyAction != 0)

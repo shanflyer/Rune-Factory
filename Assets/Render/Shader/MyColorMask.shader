@@ -5,6 +5,7 @@ Shader "MyColorMask"
         _MainTex("Diffuse", 2D) = "white" {}
          _BColor("Color", Color) = (1,1,1,1) 
 		 _Speed("Speed",float)=1
+         _SpeedMul("SpeedMul",float)=0
     }
 
     SubShader
@@ -23,6 +24,7 @@ Shader "MyColorMask"
             half4 _MainTex_ST;      
 			half4 _BColor;
 			half _Speed;
+            half _SpeedMul;
         CBUFFER_END 
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex); 
@@ -62,7 +64,8 @@ Shader "MyColorMask"
  
                 o.positionCS = TransformObjectToHClip(v.positionOS);  
                 o.uv =v.uv;  
-				o.color=_BColor;//*abs(sin(_Time.y*_Speed));
+                float4 speedColor=_BColor*abs(sin(_Time.y*_Speed));
+				o.color=_BColor*(1-_SpeedMul)+speedColor*_SpeedMul;
  
                 return o;
             }
