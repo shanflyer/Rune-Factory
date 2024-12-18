@@ -212,9 +212,9 @@ public class CameraManager : Singleton<CameraManager>
                     fixedCamera.transform.position = followCameras[0].transform.position;
                 }
             }
-            confiner2D.enabled = true;
-            confiner2D.InvalidateBoundingShapeCache();
-            confiner2D.InvalidateLensCache();
+            confiner2D.enabled = false;
+            //confiner2D.InvalidateBoundingShapeCache();
+           // confiner2D.InvalidateLensCache();
         }
         else
         { 

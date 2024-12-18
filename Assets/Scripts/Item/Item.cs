@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -69,7 +69,7 @@ public class ItemManager:Singleton<ItemManager>
     {
         if (!await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
         {
-            GameNotificationManager.instance.DisplayTips($"¿Õ¼ä²»×ã", "±³°üÎŞ·¨·ÅÏÂÕâÃ´¶à¶«Î÷");
+            GameNotificationManager.instance.DisplayTips($"ç©ºé—´ä¸è¶³", "èƒŒåŒ…æ— æ³•æ”¾ä¸‹è¿™ä¹ˆå¤šä¸œè¥¿");
             return;
         }
 
@@ -77,7 +77,7 @@ public class ItemManager:Singleton<ItemManager>
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;
-            PayManager.instance.PayAction("¹ºÂò", $"¹ºÂò{buyCount}¸ö+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
+            PayManager.instance.PayAction("è´­ä¹°", $"è´­ä¹°{buyCount}ä¸ª+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
                 if (!result)
                 {
@@ -89,7 +89,7 @@ public class ItemManager:Singleton<ItemManager>
                     count = buyCount
                 }, CharacterManager.instance.controllerCharacter.characterPackage);
 
-                InformationController.instance.AddInformation($"³É¹¦¹ºÂò{buyCount}¸ö+ {itemData.itemName} +");
+                InformationController.instance.AddInformation($"æˆåŠŸè´­ä¹°{buyCount}ä¸ª+ {itemData.itemName} +");
                 if (selectShopItemData.buyAction != 0)
                 {
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);

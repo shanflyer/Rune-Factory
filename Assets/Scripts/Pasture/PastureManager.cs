@@ -601,7 +601,8 @@ public class PastureManager : Singleton<PastureManager>
                 characterId = animalData.linkCharacter,
                 mapInstance = pasture.linkRoom,
                 coordinateX = nextCoordinate.x,
-                coordinateY = nextCoordinate.y, 
+                coordinateY = nextCoordinate.y,
+                hideData = true
             };
             GameActionManager.instance.QueueAction(creatCharacter);
             RefreshPasture refreshPasture = new RefreshPasture
@@ -633,7 +634,8 @@ public class PastureManager : Singleton<PastureManager>
             mapInstance = tryCreatAnimal.roomId,
             coordinateX = tryCreatAnimal.coordinate.x,
             coordinateY = tryCreatAnimal.coordinate.y,
-            setValue = SetAnimalInstanceId
+            setValue = SetAnimalInstanceId,
+            hideData=true
         };
         void SetAnimalInstanceId(int value)
         {
@@ -641,7 +643,7 @@ public class PastureManager : Singleton<PastureManager>
             {
                 animal.instaceId = value;
                 animals.Add(animal.instaceId, animal);
-                if (pasture.pastureData != null)
+                if (pasture!=null&&pasture.pastureData != null)
                 {
                     pasture.animals.Add(animal.instaceId);
 

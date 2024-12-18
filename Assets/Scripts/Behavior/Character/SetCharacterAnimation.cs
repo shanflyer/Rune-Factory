@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 
 [TaskCategory("Game/Character")]
-[TaskName("ÉèÖÃ½ÇÉ«¶¯»­")]
+[TaskName("è®¾ç½®è§’è‰²åŠ¨ç”»")]
 
 public class SetCharacterAnimation : Action
 {

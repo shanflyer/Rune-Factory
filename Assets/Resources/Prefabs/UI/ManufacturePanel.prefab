@@ -169,6 +169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -850,6 +852,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -901,6 +905,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   toggle: {fileID: 6472570426607399200}
   icon: {fileID: 3204981672440089404}
   ItemValueBg: {fileID: 0}
@@ -1073,6 +1078,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -1132,7 +1139,7 @@ RectTransform:
   m_GameObject: {fileID: 473228806426390344}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2769865121213599125}
@@ -1274,6 +1281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -6177,7 +6186,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 2
@@ -7076,6 +7085,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -8328,6 +8339,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -8379,6 +8392,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   toggle: {fileID: 3725489465473076351}
   icon: {fileID: 5142982433573461046}
   ItemValueBg: {fileID: 0}
@@ -8477,6 +8491,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -8997,6 +9013,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -10427,22 +10445,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1310062958271187131
-Transform:
+--- !u!224 &1310062958271187131
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4129967832458923668}
-  serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 177.40001, y: 13.568405, z: 80000}
+  m_LocalPosition: {x: 0, y: 0, z: -14.8}
   m_LocalScale: {x: 200, y: 200, z: 200}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5519161852857119295}
   m_Father: {fileID: 6085156837083093374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 163, y: -185}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!198 &8103463045864037760
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -15268,7 +15290,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -15504,6 +15526,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -15555,6 +15579,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   toggle: {fileID: 3406371905705213143}
   icon: {fileID: 2221038973767683988}
   ItemValueBg: {fileID: 0}
@@ -15959,6 +15984,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -16894,6 +16921,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -16945,6 +16974,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   toggle: {fileID: 2747496726107799793}
   typeName: {fileID: 793214337831218345}
 --- !u!1 &5521480795416599579
@@ -17921,6 +17951,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -17972,6 +18004,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   toggle: {fileID: 5116998402855124823}
   icon: {fileID: 5880073010187892697}
   ItemValueBg: {fileID: 0}
@@ -18223,6 +18256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -18671,6 +18706,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -18722,6 +18759,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   toggle: {fileID: 2697742371463670256}
   icon: {fileID: 1006512673121228768}
   ItemValueBg: {fileID: 0}
@@ -19036,6 +19074,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -19201,7 +19241,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &7676735703249215796
 MonoBehaviour:
@@ -19311,6 +19351,7 @@ MonoBehaviour:
   timeValue: {fileID: 850296143000904735}
   timeSlider: {fileID: 129258685690741449}
   outEffect: {fileID: 8103463045864037760}
+  InfoItemValueImage: {fileID: 7505374467281603209}
 --- !u!1 &7196019016473420808
 GameObject:
   m_ObjectHideFlags: 0
@@ -24331,7 +24372,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 2
@@ -24627,6 +24668,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -24678,6 +24721,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   toggle: {fileID: 19037962576554431}
   icon: {fileID: 108139989377971015}
   ItemValueBg: {fileID: 0}
@@ -25048,6 +25092,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -25563,6 +25609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -25963,6 +26011,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0

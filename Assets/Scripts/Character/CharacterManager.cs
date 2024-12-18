@@ -666,7 +666,7 @@ public class CharacterManager : Singleton<CharacterManager>
             var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
             var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
             character = new Character(characterData, professionData, instanceId);
-            AddCharacter(character);
+            AddCharacter(character,creatCharacter.hideData);
         }
         if (creatCharacter.mapInstance != 0)
         {
@@ -690,16 +690,20 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private void AddCharacter(Character character)
+    private void AddCharacter(Character character,bool hideData=false)
     {
-        if (character is TempCharacter)
+        if (!hideData)
         {
-            tempInstances.Add(character.instanceId);
+            if (character is TempCharacter)
+            {
+                tempInstances.Add(character.instanceId);
+            }
+            else
+            {
+                characterDataToInstances.Add(character.dataId, character.instanceId);
+            }
         }
-        else
-        {
-            characterDataToInstances.Add(character.dataId, character.instanceId);
-        }
+       
         characters.TrySetValue(character.instanceId,character);
     }
 

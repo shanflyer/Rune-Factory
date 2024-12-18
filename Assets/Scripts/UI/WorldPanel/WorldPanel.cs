@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,7 +75,7 @@ public class WorldPanel : GamePanel<MyInt>
     {
         if (CharacterManager.instance.controllerCharacter.CharacterProperty.Power < GameCommon.exploreCostPower)
         {
-            InformationController.instance.AddInformation("ÌåÁ¦²»×ã£¬ÎÞ·¨½øÐÐÌ½Ë÷£¡", true, true);
+            InformationController.instance.AddInformation("ä½“åŠ›ä¸è¶³ï¼Œæ— æ³•è¿›è¡ŒæŽ¢ç´¢ï¼", true, true);
             return;
         } 
 
@@ -94,7 +94,7 @@ public class WorldPanel : GamePanel<MyInt>
             selectFightChapterId = uIFightChapterData.fightChapterId;
             var chapterData = ExploreManager.instance.GetFightChapter(uIFightChapterData.fightChapterId);
 
-            exploreValue.text = $"Ì½Ë÷¶È:{chapterData.completeValue}%";
+            exploreValue.text = $"æŽ¢ç´¢åº¦:{chapterData.completeValue}%";
 
             List<MapItemReferenceData> list = new List<MapItemReferenceData>();
             for (int i = 0; i < chapterData.haveItems.Count; i++)
@@ -122,7 +122,7 @@ public class WorldPanel : GamePanel<MyInt>
                 selectFightChapterId = -1;
             }
             fightMapItems.ClearAll();
-            exploreValue.text = $"Ì½Ë÷¶È:--%";
+            exploreValue.text = $"æŽ¢ç´¢åº¦:--%";
             exploreButton.interactable = false;
         }
     }

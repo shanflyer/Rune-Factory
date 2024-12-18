@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.3.0</string>
+        <string>7.5.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -995,6 +995,24 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">奶牛.png</key>
+            <key type="filename">家兔.png</key>
+            <key type="filename">猪.png</key>
+            <key type="filename">绵羊.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>11,9,21,18</rect>
+                <key>scale9Paddings</key>
+                <rect>11,9,21,18</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">干草$Normal.png</key>
             <key type="filename">干草.png</key>
             <key type="filename">牧草$Normal.png</key>
@@ -1010,6 +1028,37 @@
                 <rect>8,8,17,16</rect>
                 <key>scale9Paddings</key>
                 <rect>8,8,17,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">母鸡.png</key>
+            <key type="filename">鸭子.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9Paddings</key>
+                <rect>4,4,8,8</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">马.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>15,16,30,32</rect>
+                <key>scale9Paddings</key>
+                <rect>15,16,30,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
