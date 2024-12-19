@@ -102,7 +102,7 @@ public class PastureManager : Singleton<PastureManager>
                 displayFunction = true,
                 fixedFunctions = new List<int>
                     {
-                        9,10,11
+                        9,10,11,12
                     },
 
             };

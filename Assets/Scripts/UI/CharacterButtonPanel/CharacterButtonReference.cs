@@ -8,7 +8,8 @@ public class CharacterButtonReference : UIObjReference<MyInt>
     Button button;
     [SerializeField]
     Image icon;
-
+    [SerializeField]
+    Vector2 iconSize = new Vector2(48, 48);
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -33,7 +34,7 @@ public class CharacterButtonReference : UIObjReference<MyInt>
         Character character = CharacterManager.instance.GetCharacter(t.value);
         if(character != null)
         {
-            character.characterData.head.SetImageSprite(icon);
+            character.characterData.head.SetImageSprite(icon, iconSize,Vector2.zero);
         }
         return base.InitData(t, SelectAction, toggleGroup);
     }

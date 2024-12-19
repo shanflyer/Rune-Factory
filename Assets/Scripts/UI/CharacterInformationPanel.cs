@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -390,5 +391,21 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             State.transform.localScale = Vector3.zero;
             Friendship.localScale = Vector3.zero;
         }
+    }
+    public override Task InitData(string dataKey)
+    {
+        int characerId = int.Parse(dataKey);
+        Character character = CharacterManager.instance.GetCharacter(characerId);
+        if (character != null)
+        {
+            CharacterInformationData characterInformationData = character.GetInformation();
+            InitReferenceData(characterInformationData);
+        }
+        else
+        {
+            Close();
+        }
+        
+        return base.InitData(dataKey);
     }
 }

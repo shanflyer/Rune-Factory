@@ -352,7 +352,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.dataId != ChangeCharacter.newDataId)
             {
-                character.dataId = ChangeCharacter.newDataId;
+                character.ChangeData(ChangeCharacter.newDataId);
                 if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);

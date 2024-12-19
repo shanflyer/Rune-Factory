@@ -771,6 +771,18 @@ public partial class Character
         },true);
     }
 
+    public async void ChangeData(int dataId)
+    {
+        if (this.dataId != dataId)
+        {
+            this.dataId = dataId;
+
+            characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(dataId);
+
+            this.professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
+            ProfessionProperty = professionData.GetLevelProperty(level);
+        }
+    }
     public CharacterEquipAndPropertyData CharacterEquipAndPropertyData
     {
         get
