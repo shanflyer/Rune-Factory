@@ -1124,6 +1124,7 @@ public partial class Character
     {
         RefreshOperateCharacters refreshOperateCharacters = new RefreshOperateCharacters();
         var NeighborhoodCharacters1 = MapCellController.instance.GetCharacters(objCoordinate);
+        
         if (NeighborhoodCharacters1 == null)
         {
             refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters;

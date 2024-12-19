@@ -308,6 +308,7 @@ public class Team
     public Character leader => Teamers[0].character;
     public List<Teamer> Teamers = new List<Teamer>();
     private HashSet<int> characterInstances = new HashSet<int>();
+    public HashSet<int> TeamCharacters => characterInstances;
 
     private int3 lastCoordinate
     {

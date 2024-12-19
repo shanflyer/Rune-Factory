@@ -272,14 +272,14 @@ public class UserGameSaveData : IReferenceData
 
     public void SetAnimalData(Animal animal)
     {
-        if (animals.TryGetValue(animal.instaceId, out var animalSaveData))
+        if (animals.TryGetValue(animal.instanceId, out var animalSaveData))
         {
             animalSaveData.SetAnimal(animal);
         }
         else
         {
             animalSaveData = new AnimalSaveData(animal);
-            animals.Add(animal.instaceId, animalSaveData);
+            animals.Add(animal.instanceId, animalSaveData);
         }
     }
 
@@ -425,7 +425,7 @@ public class AnimalSaveData
 
     public void SetAnimal(Animal animal)
     {
-        instaceId = animal.instaceId;
+        instaceId = animal.instanceId;
         name = animal.name;
         pasture = animal.pasture;
         growthStage = animal.growthStage;

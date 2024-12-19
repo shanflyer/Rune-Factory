@@ -159,10 +159,15 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         public void SetTime(int hour, int minute)
         {
+            if (this.hour != hour)
+            {
+                GameActionManager.instance.QueueAction(newHour);
+            }
             if (hour > 0)
                 this.hour = hour;
             if (minute > 0)
                 this.minute = minute;
+             
             TimeInit();
             UpDataGameTimeAction();
         }
@@ -448,6 +453,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             minute = 0;
             week = Week.SunDay;
             newDay = new NewDay();
+            newHour = new NewHour();
         }
 
         public int GetTimeKey()
@@ -488,6 +494,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
 
         private NewDay newDay;
+        private NewHour newHour;
 
         private bool minuteRefresh = false;
 
@@ -500,6 +507,9 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 minute += mySecond / 20;
                 mySecond = mySecond % 20;
             }
+
+            int oldhour = hour;
+
             if (minute >= 60)
             {
                 hour += minute / 60;
@@ -551,6 +561,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
             int x = day % 6;
             week = (Week)x;
             SetLightValue();
+
+            if (oldhour != hour)
+            {
+                GameActionManager.instance.QueueAction(newHour);
+            }
 
             if (dayRefresh)
             {

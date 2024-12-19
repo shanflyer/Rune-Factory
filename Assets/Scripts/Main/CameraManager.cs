@@ -268,7 +268,7 @@ public class CameraManager : Singleton<CameraManager>
 
     public void AddTestRender(Renderer renderer)
     {
-        TestRenderers.Add(renderer.GetInstanceID(),renderer);
+        TestRenderers.TrySetValue(renderer.GetInstanceID(),renderer);
     }
     public void RemoveTestRender(Renderer renderer)
     {

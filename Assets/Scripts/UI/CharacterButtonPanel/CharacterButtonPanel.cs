@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -78,7 +79,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                 AddFriendShipValue addFriendShipValue = new AddFriendShipValue
                 {
                     characterId = character.instanceId,
-                    friendAddType = FriendAddType.�Ի�,
+                    friendAddType = FriendAddType.对话,
                     value = 1
                 };
                 GameActionManager.instance.QueueAction(addFriendShipValue);
@@ -100,14 +101,15 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
 
     void RefreshOperateCharacters(RefreshOperateCharacters refreshOperateCharacters)
     {
-        bool refresh = false;
+        bool refresh = false; 
+        refreshOperateCharacters.joinCharacters.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters); 
         if (refreshOperateCharacters.joinCharacters != null)
-        {
+        { 
             refresh = true;
             characters.UnionWith(refreshOperateCharacters.joinCharacters);
         }
         if (refreshOperateCharacters.leaveCharacters != null)
-        {
+        { 
             refresh = true;
             characters.ExceptWith(refreshOperateCharacters.leaveCharacters);
         }
@@ -118,10 +120,14 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
             {
                 while (e.MoveNext())
                 {
+                    if (PastureManager.instance.CheckAnimal(e.Current))
+                    {
+                        continue;
+                    }
                     nowCharacters.Add(new MyInt { value = e.Current });
                 }
             }
-            switch (characters.Count)
+            switch (nowCharacters.Count)
             {
                 case 0:
                     characterButtonParent.gameObject.SetActive(false);
@@ -157,7 +163,11 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         int oldCount = characters.Count;
         if (refreshOperateCharacter.join)
         {
-            characters.Add(refreshOperateCharacter.characterId);
+            if (!PastureManager.instance.CheckAnimal(refreshOperateCharacter.characterId))
+            {
+                characters.Add(refreshOperateCharacter.characterId);
+            }
+           
         }
         else
         {

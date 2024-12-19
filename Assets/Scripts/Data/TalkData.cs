@@ -18,7 +18,7 @@ public class TalkData : ScriptableObject, IGameData, IReferenceData
     public TalkSource talkSource;
     public string talkerName;
     public string talkerIconPath;
-    public Sprite talkerIcon;
+    public SpriteResourceRenference talkerIcon;
     public TalkerDir talkerDir;
     public bool clearTalkIcon;
     public string text;
@@ -59,7 +59,7 @@ public class TalkData : ScriptableObject, IGameData, IReferenceData
         sources.TryGetValue(talkerIconPath, out talkerIconRenference);
         if (talkerIconRenference != null)
         {
-            talkerIcon = talkerIconRenference.sprite;
+            talkerIcon = talkerIconRenference;
         }
     }
 

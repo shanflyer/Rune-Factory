@@ -15,8 +15,7 @@ public struct CharacterResponseData : IReferenceData
 }
 
 public class CharacterResponsePanel : GamePanel<CharacterResponseData>
-{
-    public override bool pluralUI => true;
+{ 
 
     [SerializeField]
     private TextMeshProUGUI TalkValue;

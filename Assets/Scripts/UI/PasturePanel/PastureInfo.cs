@@ -72,18 +72,26 @@ public class PastureInfo : UIObjReference<Pasture>
         data = t;
         P0.enabled = P1.enabled = P2.enabled = false;
         toggle.SetIsOnWithoutNotify(false);
-        switch (data.level)
+        if (data == null)
         {
-            case 0:
-                P0.enabled = true;
-                break;
-            case 1:
-                P1.enabled = true;
-                break;
-            case 2:
-                P2.enabled = true;
-                break;
-        } 
+            P0.enabled = true;
+        }
+        else
+        {
+            switch (data.level)
+            {
+                case 0:
+                    P0.enabled = true;
+                    break;
+                case 1:
+                    P1.enabled = true;
+                    break;
+                case 2:
+                    P2.enabled = true;
+                    break;
+            }
+        }
+       
         return base.InitData(t, SelectAction, toggleGroup);
     }
 

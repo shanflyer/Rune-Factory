@@ -19,8 +19,7 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
     CostItem costItem;
     [SerializeField]
     Transform costParent;
-    DisplayList<CostItem,MyInt3> costItems;
-    public override bool pluralUI => true;
+    DisplayList<CostItem,MyInt3> costItems; 
 
     public override void OnEnable()
     {

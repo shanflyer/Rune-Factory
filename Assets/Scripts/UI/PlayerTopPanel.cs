@@ -104,6 +104,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
+
+        UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
     }
     private void LateUpdate()
     {
@@ -142,7 +144,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         RefreshPlayerGold(default(RefreshPlayerGold));
         NewDay(default(NewDay));
-
+       
         return base.InitData(dataKay);
     }
 
@@ -155,7 +157,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     {
         RefreshPlayerGold(default(RefreshPlayerGold));
         NewDay(default(NewDay));
-        base.InitReferenceData(v);
+        base.InitReferenceData(v); 
     }
 
     private void RefreshPlayerGold(RefreshPlayerGold updateMoney)

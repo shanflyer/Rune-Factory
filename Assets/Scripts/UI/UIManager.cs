@@ -12,6 +12,16 @@ public class UIManager : Singleton<UIManager>
     private Transform canvasParent;
     private CanvasGroup canvasGroup;
 
+    static HashSet<Type> pluralUISet = new HashSet<Type>
+    {
+        { typeof(CharacterResponsePanel)},
+        {typeof(ItemCostSelectPanel) },
+        {typeof(CostSelectPanel) }
+    };
+    public static bool IsPluralUI(Type type)
+    {
+        return pluralUISet.Contains(type);
+    }
     //private Canvas canvas;
     public void InitClosePanelParent(BaseReference baseReference)
     {
@@ -120,7 +130,7 @@ public class UIManager : Singleton<UIManager>
         var type = typeof(T);
         var gamePanel = await ShowGamePanel(type, dataKey, layer, parent);
         Debug.Log($"ShowPanel:{type}");
-        return (T)gamePanel;
+        return  gamePanel as T;
     }
 
     public async Task<T> ShowGamePanel<T, V>(V data, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
@@ -129,10 +139,10 @@ public class UIManager : Singleton<UIManager>
         var gamePanel = await ShowGamePanel(type, data, layer, parent);
         Debug.Log($"ShowPanel:{type}");
         return (T)gamePanel;
-    }
-
+    } 
+   
     private async Task<GamePanel<V>> ShowGamePanel<V>(Type type, V data, int layer = -1, Transform parent = null) where V : IReferenceData
-    {
+    { 
         if (!gamePanels.TryGetValue(type, out BaseReference panel) || panel == null)
         {
             string path = $"{DataPath.UIPath}{type}";
@@ -152,7 +162,7 @@ public class UIManager : Singleton<UIManager>
                 gamePanel = (GamePanel<V>)gamePanelComponent;
             }
 
-            if (gamePanel.pluralUI == false)
+            if (!IsPluralUI(type))
                 gamePanels[type] = gamePanel;
 
             gamePanel.Show(layer);
@@ -207,9 +217,21 @@ public class UIManager : Singleton<UIManager>
         await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
     }
 
+    HashSet<Type> openedPanels = new HashSet<Type>();
     private async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null)
     {
-        if (!gamePanels.TryGetValue(type, out BaseReference gamePanel) || gamePanel == null || gamePanel.pluralUI)
+        if (!IsPluralUI(type))
+        {
+            if (openedPanels.Contains(type))
+            {
+                return null;
+            }
+            else
+            {
+                openedPanels.Add(type);
+            }
+        }
+        if (!gamePanels.TryGetValue(type, out BaseReference gamePanel) || gamePanel == null || IsPluralUI(type))
         {
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path); 
@@ -227,7 +249,7 @@ public class UIManager : Singleton<UIManager>
             {
                 gamePanel = (BaseReference)gamePanelComponent;
             }
-            if (gamePanel.pluralUI == false)
+            if (!IsPluralUI(type))
             {
                 gamePanels[type] = gamePanel;
             }
@@ -245,6 +267,10 @@ public class UIManager : Singleton<UIManager>
     public void CloseGamePanel<T>()
     {
         var type = typeof(T);
+        if (!IsPluralUI(type))
+        {
+            openedPanels.Remove(type);
+        }
         if (gamePanels.TryGetValue(type, out BaseReference gamePanel))
         {
             if (gamePanel == null)
@@ -264,6 +290,10 @@ public class UIManager : Singleton<UIManager>
     {
         if (gamePanels.TryGetValue(closePanelEvent.type, out BaseReference gamePanel))
         {
+            if (!IsPluralUI(closePanelEvent.type))
+            {
+                openedPanels.Remove(closePanelEvent.type);
+            }
             if (gamePanel == null)
             {
                 gamePanels.Remove(closePanelEvent.type);

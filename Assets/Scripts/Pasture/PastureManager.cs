@@ -213,7 +213,7 @@ public class PastureManager : Singleton<PastureManager>
                 {
                     SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
                     {
-                        characterId = animal.instaceId,
+                        characterId = animal.instanceId,
                         coordinate = new int3(nextCoordinate.xy, pasture.linkRoom)
                     };
                     GameActionManager.instance.QueueAction(setCharacterCoordinate, true);
@@ -221,7 +221,7 @@ public class PastureManager : Singleton<PastureManager>
             }
             else
             {
-                TryDeleteAnimal(new TryDeleteAnimal { animalId = animal.instaceId });
+                TryDeleteAnimal(new TryDeleteAnimal { animalId = animal.instanceId });
             }
         }
     }
@@ -244,7 +244,7 @@ public class PastureManager : Singleton<PastureManager>
                     {
                         SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
                         {
-                            characterId = animal.instaceId,
+                            characterId = animal.instanceId,
                             coordinate = new int3(nextCoordinate.xy, pasture.linkRoom)
                         };
                         GameActionManager.instance.QueueAction(setCharacterCoordinate, true);
@@ -578,7 +578,7 @@ public class PastureManager : Singleton<PastureManager>
         Animal animal = new Animal
         {
             name = animalSaveData.name,
-            instaceId=animalSaveData.instaceId,
+            instanceId=animalSaveData.instaceId,
             animalState = animalSaveData.animalState,
             animalData = animalData,
             linkCharacterData = animalSaveData.linkCharacterData,
@@ -593,7 +593,7 @@ public class PastureManager : Singleton<PastureManager>
             int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
             if (nextCoordinate.x != int.MinValue)
             {
-                pasture.animals.Add(animal.instaceId);
+                pasture.animals.Add(animal.instanceId);
             }
 
             CreatCharacter creatCharacter = new CreatCharacter
@@ -620,32 +620,33 @@ public class PastureManager : Singleton<PastureManager>
             name = animalData.animalName,
             animalState = AnimalState.正常,
             animalData = animalData,
-            linkCharacterData = animalData.linkCharacter
+            linkCharacterData = animalData.linkCharacter,
+            instanceId=MyInstance.instance.uid
         };
 
         if (pastures.TryGetValue(tryCreatAnimal.roomId, out var pasture))
         {
             animal.pasture = pasture.instanceId;
         }
-
+        animals.Add(animal.instanceId, animal);
         CreatCharacter creatCharacter = new CreatCharacter
         {
             characterId = animalData.linkCharacter,
             mapInstance = tryCreatAnimal.roomId,
             coordinateX = tryCreatAnimal.coordinate.x,
             coordinateY = tryCreatAnimal.coordinate.y,
+            instanceId=animal.instanceId,
             setValue = SetAnimalInstanceId,
             hideData=true
         };
         void SetAnimalInstanceId(int value)
         {
             if (value != 0)
-            {
-                animal.instaceId = value;
-                animals.Add(animal.instaceId, animal);
+            { 
+              
                 if (pasture!=null&&pasture.pastureData != null)
                 {
-                    pasture.animals.Add(animal.instaceId);
+                    pasture.animals.Add(animal.instanceId);
 
                     RefreshPasture refreshPasture = new RefreshPasture
                     {
@@ -656,7 +657,7 @@ public class PastureManager : Singleton<PastureManager>
 
                 if (animalData.externalBehavior != null)
                 {
-                    CharacterBehaviorManager.instance.AddBehavior(animal.instaceId, animalData.externalBehavior);
+                    CharacterBehaviorManager.instance.AddBehavior(animal.instanceId, animalData.externalBehavior);
                 }
 
                 GameDataSaveManager.instance.UserGameSaveData.SetAnimalData(animal);
@@ -673,7 +674,7 @@ public class PastureManager : Singleton<PastureManager>
         {
             if (pastures.TryGetValue(animal.pasture, out var pasture))
             {
-                pasture.animals.Remove(animal.instaceId);
+                pasture.animals.Remove(animal.instanceId);
 
                 RefreshPasture refreshPasture = new RefreshPasture
                 {
@@ -686,7 +687,7 @@ public class PastureManager : Singleton<PastureManager>
 
             DestoryCharacter destoryCharacter = new DestoryCharacter
             {
-                characterId = animal.instaceId,
+                characterId = animal.instanceId,
                 isTemp = false
             };
             GameActionManager.instance.QueueAction(destoryCharacter);
@@ -743,7 +744,7 @@ public class Pasture : IReferenceData
 
 public class Animal
 {
-    public int instaceId;
+    public int instanceId;
     public string name;
     public int pasture;
     public AnimalData animalData;
@@ -753,7 +754,7 @@ public class Animal
     public AnimalState animalState;
     public int nowCD;
     public int linkCharacterData;
-    public int Key => instaceId;
+    public int Key => instanceId;
 
     public Animal()
     {
@@ -783,7 +784,7 @@ public class Animal
                 InformationController.instance.AddInformation($"+{name}+已死亡!");
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {
-                    animalId = instaceId,
+                    animalId = instanceId,
                 };
                 GameActionManager.instance.QueueAction(tryDeleteAnimal);
             }
@@ -793,7 +794,7 @@ public class Animal
         if (animalState != AnimalState.死亡)
         {
             nowCD++;
-             Team team = TeamManager.instance.GetTeam(instaceId);
+             Team team = TeamManager.instance.GetTeam(instanceId);
             if (animalState != AnimalState.饥饿&& nowCD >= animalData.productCD)
             { 
                 if (team != null)
@@ -827,7 +828,7 @@ public class Animal
                 {
                     emoteId = animalData.productEmote,
                     entityType = EntityType.角色,
-                    id = instaceId
+                    id = instanceId
                 };
                 GameActionManager.instance.QueueAction(showEmote);
             }
@@ -860,7 +861,7 @@ public class Animal
                 {
                     ChangeCharacter changeCharacter = new ChangeCharacter
                     {
-                        instanceId = instaceId,
+                        instanceId = instanceId,
                         newDataId = stageValue
                     };
                     GameActionManager.instance.QueueAction(changeCharacter);
@@ -895,7 +896,7 @@ public class Animal
                 animalState = AnimalState.死亡;
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {
-                    animalId = instaceId,
+                    animalId = instanceId,
                 };
                 GameActionManager.instance.QueueAction(tryDeleteAnimal);
             }

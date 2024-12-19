@@ -115,7 +115,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             if (!SingletonType.Cleared)
                 InputManager.instance.SwitchInputMap(false);
         } 
-        if (pluralUI)
+        if (UIManager.IsPluralUI(this.GetType()))
         {
             if (this!=null&&gameObject!=null)
             {

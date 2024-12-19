@@ -36,7 +36,8 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     [SerializeField]
     private Button closeButton;
-
+    [SerializeField]
+    Vector2 headSize = new Vector2(320, 320);
     private DisplayList<NPCFunctionReference, NPCFunctionData> NPCFunctionList;
 
     private TalkData talkData;
@@ -162,7 +163,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             talkValue.text = talkData.text;
             talkId = talkData.id;
             var talkerName = talkData.talkerName;
-            Sprite talkerIcon = talkData.talkerIcon;
+            var talkerIcon = talkData.talkerIcon;
             switch (talkData.talkSource)
             {
                 case TalkSource.Player:
@@ -180,7 +181,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     else
                     {
                         talkerName = character.name;
-                        talkerIcon = character.characterData.head.sprite;
+                        talkerIcon = character.characterData.head;
                     }
                     break;
 
@@ -194,8 +195,10 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     leftNameBg.gameObject.SetActive(true);
                     rightNameBg.gameObject.SetActive(false);
                     leftHead.color = Color.white;
-                    leftHead.sprite = talkerIcon;
-                    leftHead.SetNativeSize();
+
+                    talkerIcon.SetImageSprite(leftHead, headSize);
+                    //leftHead.sprite = talkerIcon;
+                    //leftHead.SetNativeSize(); 
                     rightHead.color = new Color(0.5f, 0.5f, 0.5f);
                     leftHead.enabled = true;
                     rightHead.enabled = !talkData.clearTalkIcon;
@@ -206,8 +209,9 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     leftNameBg.gameObject.SetActive(false);
                     rightNameBg.gameObject.SetActive(true);
                     rightHead.color = Color.white;
-                    rightHead.sprite = talkerIcon;
-                    rightHead.SetNativeSize();
+                    talkerIcon.SetImageSprite(rightHead, headSize);
+                    //rightHead.sprite = talkerIcon;
+                    //rightHead.SetNativeSize();
                     leftHead.color = new Color(0.5f, 0.5f, 0.5f);
                     rightHead.enabled = true;
                     leftHead.enabled = !talkData.clearTalkIcon;
@@ -235,8 +239,8 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
     {
         base.SetPanelUISerializeObj();
 
-        rightHead = FindChildGameObject<Image>("RightHead");
-        leftHead = FindChildGameObject<Image>("LeftHead");
+        rightHead = FindChildGameObject<Image>("RightHeadIcon");
+        leftHead = FindChildGameObject<Image>("LeftHeadIcon");
 
         rightNameBg = FindChildGameObject("RightName");
         leftNameBg = FindChildGameObject("LeftName");

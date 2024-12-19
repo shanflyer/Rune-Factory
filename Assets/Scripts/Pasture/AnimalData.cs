@@ -1,6 +1,7 @@
 ﻿using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -21,6 +22,7 @@ public class AnimalData : ScriptableObject, IGameData
     public int getFoodEmote;
     public int hungerEmote;
     public int productEmote;
+    public int2 talkId;
     public string behavior;
     public ExternalBehaviorTree externalBehavior;
 

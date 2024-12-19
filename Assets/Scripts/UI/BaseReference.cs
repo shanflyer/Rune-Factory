@@ -13,8 +13,7 @@ public class BaseReference : MonoBehaviour
     public Canvas canvas;
     [SerializeField]
     public GraphicRaycaster raycaster;
-    public bool show;
-    public virtual bool pluralUI { get; }
+    public bool show; 
     public virtual bool changeInputModel { get=>true; }
     public virtual void SetPanelUISerializeObj()
     {

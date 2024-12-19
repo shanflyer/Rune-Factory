@@ -23,8 +23,7 @@ public class CostSelectPanel : GamePanel<CostEventData>
     private Button yesButton, noButton;
 
     private CostEventData CostEventData;
-
-    public override bool pluralUI => true;
+     
 
     public override void OnEnable()
     {

@@ -49,6 +49,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     [SerializeField]
     private Button visitButton, closeButton;
     [SerializeField]
+    Image BackGround;
+
+    [SerializeField]
+    Vector2 headSize = new Vector2(150, 150);
+    [SerializeField]
     private float infoOffsetY =330f;
 
     private async void SelectEquipReference(Equipment equipment, bool selected = false)
@@ -189,6 +194,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
+        BackGround = GetComponent<Image>();
         characterHead = FindChildGameObject<Image>("HeadValue");
         Attribute = FindChildGameObject<Image>("Attribute");
         CharacterName = FindChildGameObject<TextMeshProUGUI>("CharacterName");
@@ -264,13 +270,17 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             SpeedDown.enabled = true;
     }
      
-
+    public void HideBackGround(bool hide)
+    {
+        BackGround.enabled = !hide;
+    }
+    
     public override async void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
         data = v;
-        v.head.SetImageSprite(characterHead);
-
+        v.head.SetImageSprite(characterHead, headSize,Vector2.zero);
+        HideBackGround(false);
         characterId = v.characterId;
         CharacterName.text = v.name;
         if (v.isNpc)

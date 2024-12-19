@@ -8,6 +8,8 @@ public class AnimalReference : UIObjReference<MyInt>
     Toggle toggle;
     [SerializeField]
     Image icon;
+    [SerializeField]
+    Vector2 iconSize = new Vector2(48, 48);
     public override void SelectDefault()
     {
         base.SelectDefault();
@@ -22,7 +24,7 @@ public class AnimalReference : UIObjReference<MyInt>
     {
         base.SetPanelUISerializeObj();
         toggle = GetComponent<Toggle>();
-        icon = FindChildGameObject<Image>("Icon");
+        icon = FindChildGameObject<Image>("NPCImage");
     }
     private void Awake()
     {
@@ -39,8 +41,6 @@ public class AnimalReference : UIObjReference<MyInt>
         await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         Character character = CharacterManager.instance.GetCharacter(data.value);
-        character.characterData.head.SetImageSprite(icon);
-        //icon.sprite = character.characterData.icon.sprite;
-        icon.rectTransform.sizeDelta= GameCommon.SetImageSize(icon.sprite, new Vector2(48, 48)); 
+        character.characterData.head.SetImageSprite(icon, iconSize,Vector2.zero); 
     }
 }

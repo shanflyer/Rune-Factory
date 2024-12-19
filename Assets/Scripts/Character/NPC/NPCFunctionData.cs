@@ -15,7 +15,9 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     public Sprite icon;
     public bool closeTalk;
     public int checkAction;
+    [Header("交互事件")]
     public int OperateAction;
+    [Header("显示时Action")]
     public GameActionData GameActionData;
     public string GetKey()
     {

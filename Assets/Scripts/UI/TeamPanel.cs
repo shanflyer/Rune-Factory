@@ -52,39 +52,59 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         Character character = CharacterManager.instance.GetCharacter(SelectCharacterId);
         if (character != null)
         {
-            EventReferenceData eventReferenceData = new EventReferenceData
+            if (PastureManager.instance.GetAnimal(character.instanceId, out var animal))
             {
-                name = "CharacterId",
-                value = SelectCharacterId
-            };
-            EventReferenceData targetReferenceData = new EventReferenceData
-            {
-                name = "TargetCharacter",
-                value = CharacterManager.instance.controllerCharacter.instanceId
-            };
-
-            int nextTalkEventId = 0; int eventId = 0;
-            if (character is TempCharacter tempCharacter)
-            {
-                nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
-                eventId = tempCharacter.tempCharacterData.tempTalkEventId;
+                Talk talk = new Talk
+                {
+                    characterId = character.instanceId,
+                    talkId =animal.growthStage<1? animal.animalData.talkId.x:animal.animalData.talkId.y,
+                    displayFunction = true,
+                    fixedFunctions = new List<int>
+                    {
+                        9,10,11
+                    },
+                   
+                };
+                GameActionManager.instance.QueueAction(talk);
             }
-            else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
+            else
             {
-                nextTalkEventId = NPC.nextTalkEventId;
-                eventId = NPC.playerOperateEventId;
-            }
+                EventReferenceData eventReferenceData = new EventReferenceData
+                {
+                    name = "CharacterId",
+                    value = SelectCharacterId
+                };
+                EventReferenceData targetReferenceData = new EventReferenceData
+                {
+                    name = "TargetCharacter",
+                    value = CharacterManager.instance.controllerCharacter.instanceId
+                };
 
-            EventReferenceData NextTalkReferenceData = new EventReferenceData
-            {
-                name = "NextTalkEventId",
-                value = nextTalkEventId
-            };
-            bool temp = character is TempCharacter;
-           await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
+                int nextTalkEventId = 0; int eventId = 0;
+                if (character is TempCharacter tempCharacter)
+                {
+                    nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
+                    eventId = tempCharacter.tempCharacterData.tempTalkEventId;
+                }
+                else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
+                {
+                    nextTalkEventId = NPC.nextTalkEventId;
+                    eventId = NPC.playerOperateEventId;
+                }
+
+                EventReferenceData NextTalkReferenceData = new EventReferenceData
+                {
+                    name = "NextTalkEventId",
+                    value = nextTalkEventId
+                };
+                bool temp = character is TempCharacter;
+                await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
             {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
             });
+
+            }
+            
         }
     }
     void LeaveAction()
@@ -115,8 +135,8 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     public override void Close()
     {
         base.Close();
-        UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
-        
+        SelectCharacterId = 0;
+        UIManager.instance.CloseGamePanel<CharacterInformationPanel>(); 
     }
     void RefreshTeam(RefreshTeam refreshTeam)
     {
@@ -143,12 +163,13 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         {
             operatePanel.gameObject.SetActive(true);
         }
-      await  UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+       var panel= await  UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+        panel.HideBackGround(true);
     }
-    public override void InitReferenceData(CharacterInformationDataList v)
+    public override async void InitReferenceData(CharacterInformationDataList v)
     {
         base.InitReferenceData(v);
-        teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup);
-        teamerList.Select(v.characterInformationDatas[0]);
+        await teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup);
+        //teamerList.Select(v.characterInformationDatas[0]); 
     }
 }

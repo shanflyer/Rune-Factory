@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro; 
@@ -102,7 +102,7 @@ public class PasturePanel : GamePanel<MyListInt>
         if (selected)
         {
             selectPasture = pasture;
-            if (pasture.instanceId != 0)
+            if (pasture!=null)
             {
                 pastureNameText.text = pasture.name.ToString();
 
@@ -123,7 +123,7 @@ public class PasturePanel : GamePanel<MyListInt>
             }
             else
             {
-                pastureNameText.text = "ªŸªµµƒƒ¡≥°";
+                pastureNameText.text = "ÊØÅÂùèÁöÑÁâßÂú∫";
                 foodCaseText.text = "--/--";
                 waterCaseText.text= "--/--";
                 productCaseText.text = "--/--";
@@ -132,7 +132,7 @@ public class PasturePanel : GamePanel<MyListInt>
             }
          
         }
-        else if(selectPasture.instanceId==pasture.instanceId)
+        else if(selectPasture==pasture)
         {
             SetButton.interactable = false;
         }
@@ -143,7 +143,7 @@ public class PasturePanel : GamePanel<MyListInt>
     {
         return base.InitData(dataKey);
     }
-    
+    Vector2 animalIconSize = new Vector2(48, 48);
     void SelectAnimal(MyInt myInt,bool select)
     {
         if (select)
@@ -152,11 +152,11 @@ public class PasturePanel : GamePanel<MyListInt>
             if (animalId != 0)
             {
                 Character character = CharacterManager.instance.GetCharacter(animalId);
-                character.characterData.head.SetImageSprite(animalIcon);
+                character.characterData.head.SetImageSprite(animalIcon, animalIconSize,Vector2.zero);
                 //animalIcon.sprite = character.characterData.icon.sprite;
                 animalNameText.text = character.name;
                 SetButton.transform.localScale = Vector3.one;
-                animalIcon.enabled = true;
+                animalIcon.enabled = false;
                 animalNameText.enabled = true;
             }
             else
@@ -227,7 +227,7 @@ public class PasturePanel : GamePanel<MyListInt>
 
         for (int i = 0; i < pastureInfos.Length; i++)
         {
-            pastureInfos[i].InitData(default(Pasture), SelectPasture);
+            pastureInfos[i].InitData(null, SelectPasture);
         }
         var allPastures = PastureManager.instance.GetAllPasture();
         for(int i = 0; i < allPastures.Count; i++)

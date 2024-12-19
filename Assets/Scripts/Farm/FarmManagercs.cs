@@ -412,7 +412,7 @@ public class Field
     }
     public void NewHour()
     {
-        if (plant != null&&plant.plantState==PlantState.正常&&!plant.setWater)
+        if (plant != null&&plant.plantState==PlantState.正常&&plant.setWater)
         {
             plant.Grow();
         }

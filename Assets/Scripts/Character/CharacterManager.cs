@@ -479,7 +479,7 @@ public class CharacterManager : Singleton<CharacterManager>
         InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_Move, MoveAction, true);
     }
 
-    public Sprite PlayerHead => controllerCharacter.characterData.head.sprite;
+    public SpriteResourceRenference PlayerHead => controllerCharacter.characterData.head;
     private Character _controllerCharacter;
 
     public Character controllerCharacter
@@ -501,7 +501,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 if (SceneManager.instance.Now == "World")
                 {
                      UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-                     UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+                     //UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
                     var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId);
                     UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
                 }
@@ -647,7 +647,10 @@ public class CharacterManager : Singleton<CharacterManager>
             creatTempCharacter.setValue(character.instanceId);
         }
     }
+    public void AddAnimal()
+    {
 
+    }
     private async void CreateCharacter(CreatCharacter creatCharacter)
     {
         Character character;

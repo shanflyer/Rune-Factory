@@ -140,7 +140,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!114 &1819430955844683997
 MonoBehaviour:
@@ -391,6 +391,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   movementRange: 100
   JoyBg: {fileID: 2803394647056648114}
   JoyStickImage: {fileID: 5119257082330570498}

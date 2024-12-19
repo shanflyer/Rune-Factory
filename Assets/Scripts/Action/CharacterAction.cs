@@ -809,7 +809,7 @@ public struct CreatTempCharacter : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
-
+ 
 public struct CreatCharacter : GameAction
 {
     public SetValue setValue { get; set; }
