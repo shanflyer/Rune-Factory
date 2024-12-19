@@ -288,7 +288,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             State.text = v.NPCState.ToString();
             State.color = NPC.GetStateColor(v.NPCState);
         }
-        else
+        if (v.isAnimal)
         {
             State.text = v.animalState.ToString();
             State.color = Animal.GetStateColor(v.animalState);
@@ -341,44 +341,54 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             characterId = characterId,
             dataId = v.equip.weapon.x,
             itemValue = v.equip.weapon.y / 100.0f,
-            ItemType = ItemType.ÎäÆ÷
-        }, SelectEquipReference); ;
+            ItemType = ItemType.ÎäÆ÷,
+            hide= v.isAnimal
+      }, SelectEquipReference); ;
       await  ClothesBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.clothes.x,
             itemValue = v.equip.clothes.y / 100.0f,
-            ItemType = ItemType.·À¾ß
-        }, SelectEquipReference);
+            ItemType = ItemType.·À¾ß,
+             hide = v.isAnimal
+      }, SelectEquipReference);
 
       await  ShoesBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.headgear.x,
             itemValue = v.equip.headgear.y / 100.0f,
-            ItemType = ItemType.Ã±×Ó
-        }, SelectEquipReference); ;
+            ItemType = ItemType.Ã±×Ó,
+          hide = v.isAnimal
+      }, SelectEquipReference); ;
 
       await  HeadgearBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.shoes.x,
             itemValue = v.equip.shoes.y / 100.0f,
-            ItemType = ItemType.Ð¬×Ó
-        }, SelectEquipReference);
+            ItemType = ItemType.Ð¬×Ó,
+          hide = v.isAnimal
+      }, SelectEquipReference);
 
+       
+        if (v.isAnimal)
+        {
+            Visit.localScale = Vector3.zero;
+            State.transform.localScale = Vector3.one;
+            Friendship.localScale = Vector3.zero;
+        }else
         if (v.isNpc)
         {
-           Visit.localScale = Vector3.one;
-            State.transform.localScale = Vector3.one;
-        }else if (v.isAnimal)
-        {
-            State.transform.localScale = Vector3.one;
+            Visit.localScale = Vector3.one;
+            State.transform.localScale = Vector3.one; 
+            Friendship.localScale = Vector3.one;
         }
         else
         {
             Visit.localScale = Vector3.zero;
             State.transform.localScale = Vector3.zero;
+            Friendship.localScale = Vector3.zero;
         }
     }
 }

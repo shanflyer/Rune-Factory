@@ -32,9 +32,9 @@ public class PastureInfo : UIObjReference<Pasture>
         if (!SingletonType.Cleared)
             GameActionManager.instance.RemoveListener<RefreshPasture>(RefreshPasture);
     }
-     void RefreshPasture(RefreshPasture refreshPasturee)
+     void RefreshPasture(RefreshPasture refreshPasture)
     {
-        if (data.instanceId == refreshPasturee.instanceId)
+        if (data!=null&&data.instanceId == refreshPasture.instanceId)
         {
            if(PastureManager.instance.GetPasture(data.instanceId,out data))
             {

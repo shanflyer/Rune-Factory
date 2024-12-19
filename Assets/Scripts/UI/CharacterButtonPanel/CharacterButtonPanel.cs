@@ -52,50 +52,58 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         {
             if (character.isInTeam)
             {
-                return;
+               // return;
             }
-            EventReferenceData eventReferenceData = new EventReferenceData
+           
+            if (!PastureManager.instance.TalkAnimal(character.instanceId))
             {
-                name = "CharacterId",
-                value = seletCharacter.value
-            };
-            EventReferenceData targetReferenceData = new EventReferenceData
-            {
-                name = "TargetCharacter",
-                value = CharacterManager.instance.controllerCharacter.instanceId
-            };
-
-            int nextTalkEventId = 0;
-            int eventId = 0;
-            if (character is TempCharacter tempCharacter)
-            {
-                nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
-                eventId = tempCharacter.tempCharacterData.tempTalkEventId;
-            }
-            else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
-            {
-                nextTalkEventId = NPC.nextTalkEventId;
-                eventId = NPC.playerOperateEventId;
-                AddFriendShipValue addFriendShipValue = new AddFriendShipValue
+                EventReferenceData eventReferenceData = new EventReferenceData
                 {
-                    characterId = character.instanceId,
-                    friendAddType = FriendAddType.对话,
-                    value = 1
+                    name = "CharacterId",
+                    value = seletCharacter.value
                 };
-                GameActionManager.instance.QueueAction(addFriendShipValue);
-            }
+                EventReferenceData targetReferenceData = new EventReferenceData
+                {
+                    name = "TargetCharacter",
+                    value = CharacterManager.instance.controllerCharacter.instanceId
+                };
 
-            EventReferenceData NextTalkReferenceData = new EventReferenceData
-            {
-                name = "NextTalkEventId",
-                value = nextTalkEventId
-            };
+                int nextTalkEventId = 0;
+                int eventId = 0;
 
 
-           await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
+                if (character is TempCharacter tempCharacter)
+                {
+                    nextTalkEventId = tempCharacter.tempCharacterData.nextTalkEventId;
+                    eventId = tempCharacter.tempCharacterData.tempTalkEventId;
+                }
+                else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var NPC))
+                {
+                    nextTalkEventId = NPC.nextTalkEventId;
+                    eventId = NPC.playerOperateEventId;
+                    AddFriendShipValue addFriendShipValue = new AddFriendShipValue
+                    {
+                        characterId = character.instanceId,
+                        friendAddType = FriendAddType.对话,
+                        value = 1
+                    };
+                    GameActionManager.instance.QueueAction(addFriendShipValue);
+                }
+
+                EventReferenceData NextTalkReferenceData = new EventReferenceData
+                {
+                    name = "NextTalkEventId",
+                    value = nextTalkEventId
+                };
+
+
+                await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });
+            }
+
+           
         }
     }
 
@@ -119,11 +127,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
             using (var e = characters.GetEnumerator())
             {
                 while (e.MoveNext())
-                {
-                    if (PastureManager.instance.CheckAnimal(e.Current))
-                    {
-                        continue;
-                    }
+                { 
                     nowCharacters.Add(new MyInt { value = e.Current });
                 }
             }
@@ -163,7 +167,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         int oldCount = characters.Count;
         if (refreshOperateCharacter.join)
         {
-            if (!PastureManager.instance.CheckAnimal(refreshOperateCharacter.characterId))
+            //if (!PastureManager.instance.CheckAnimal(refreshOperateCharacter.characterId))
             {
                 characters.Add(refreshOperateCharacter.characterId);
             }

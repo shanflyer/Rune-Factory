@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro; 
 using UnityEngine;
@@ -119,7 +120,7 @@ public class PasturePanel : GamePanel<MyListInt>
                 productCaseText.text = $"{productCount}/{productCase}";
 
                 animalCaseText.text = $"{pasture.animals.Count}/{pasture.animalCase}";
-                SetButton.interactable = true;
+                SetButton.interactable = pasture.animals.Count< pasture.animalCase;
             }
             else
             {
@@ -194,7 +195,7 @@ public class PasturePanel : GamePanel<MyListInt>
         }
         animals.InitListData(animalDatas, SelectAnimal);
 
-        if (animalList.intList.Count == 0)
+        if (animalDatas.Count == 0)
         {
             SetButton.transform.localScale = Vector3.zero;
             animalIcon.enabled = false;

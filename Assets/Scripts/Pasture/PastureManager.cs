@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PastureManager : Singleton<PastureManager>
 {
@@ -90,6 +91,26 @@ public class PastureManager : Singleton<PastureManager>
         return animals.ContainsKey(id);
     }
 
+    public bool TalkAnimal(int instanceId)
+    {
+        if(GetAnimal(instanceId,out var animal))
+        {
+            Talk talk = new Talk
+            {
+                characterId = instanceId,
+                talkId = animal.growthStage < 1 ? animal.animalData.talkId.x : animal.animalData.talkId.y,
+                displayFunction = true,
+                fixedFunctions = new List<int>
+                    {
+                        9,10,11
+                    },
+
+            };
+            GameActionManager.instance.QueueAction(talk);
+            return true;
+        }
+        return false;
+    }
     public bool GetAnimal(int id, out Animal animal)
     {
         return animals.TryGetValue(id, out animal);

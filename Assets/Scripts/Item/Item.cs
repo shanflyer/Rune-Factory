@@ -33,6 +33,7 @@ public struct Equipment : IReferenceData
     public int dataId;
     public float itemValue;
     public ItemType ItemType;
+    public bool hide;
 }
 
 public class ItemManager:Singleton<ItemManager>

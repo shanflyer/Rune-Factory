@@ -1030,7 +1030,7 @@ public partial class Character
         {
             RefreshNeighborhood();
         }
-        else if(!(this is TempCharacter))
+        else if (!(this is TempCharacter) && !TeamManager.instance.playerTeam.CheckCharacter(instanceId))
         {
             CharacterManager.instance.controllerCharacter.TryRefreshNeighborhood(this);
         }
@@ -1057,7 +1057,7 @@ public partial class Character
         {
             RefreshNeighborhood();
         }
-        else if (!(this is TempCharacter))
+        else if (!(this is TempCharacter)||!TeamManager.instance.playerTeam.CheckCharacter(instanceId))
         {
             CharacterManager.instance.controllerCharacter.TryRefreshNeighborhood(this);
         }
@@ -1124,7 +1124,8 @@ public partial class Character
     {
         RefreshOperateCharacters refreshOperateCharacters = new RefreshOperateCharacters();
         var NeighborhoodCharacters1 = MapCellController.instance.GetCharacters(objCoordinate);
-        
+        NeighborhoodCharacters1.Remove(instanceId);
+        NeighborhoodCharacters1.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
         if (NeighborhoodCharacters1 == null)
         {
             refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters;

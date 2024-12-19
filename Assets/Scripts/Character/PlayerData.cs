@@ -537,6 +537,7 @@ public class FieldSaveData
     public int editorInstanceId;
     public FieldState fieldState;
     public bool isSetWater;
+    public int waterHour;
 
     public int PlantinstaceId;
     public int PlantDataId;
@@ -552,6 +553,7 @@ public class FieldSaveData
         editorInstanceId = fieldSaveData.editorInstanceId;
         fieldState = fieldSaveData.fieldState;
         isSetWater = fieldSaveData.isSetWater;
+        waterHour = fieldSaveData.waterHour;
 
         PlantinstaceId = fieldSaveData.PlantinstaceId;
         PlantDataId = fieldSaveData.PlantDataId;
@@ -574,6 +576,7 @@ public class FieldSaveData
         fieldState = field.fieldState;
         isSetWater = field.isSetWater;
         coordinate = field.coordinate;
+        waterHour = field.waterHour;
         if (field.plant == null)
         {
             PlantinstaceId = 0;

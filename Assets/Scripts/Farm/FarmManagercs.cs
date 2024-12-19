@@ -279,10 +279,11 @@ public class FarmManager : Singleton<FarmManager>
 
     private void NewDay(NewDay newDay)
     {
+        /*
         foreach (var data in fields)
         {
             data.Value.NewDay(); 
-        }
+        }*/
     }
     private void NewHour(NewHour newHour)
     {
@@ -325,6 +326,7 @@ public class Field
     public FieldState fieldState;
     public bool isSetWater;
     public Plant plant;
+    public int waterHour;
     public async Task<bool> TrySicklePlant()
     {
         if (plant != null)
@@ -412,10 +414,51 @@ public class Field
     }
     public void NewHour()
     {
+        waterHour++;
+        if (waterHour >= 24)
+        {
+            isSetWater = false;
+            if (plant != null)
+            {
+                switch (plant.plantState)
+                {
+                    case PlantState.正常:
+                        if (!plant.setWater)
+                        {
+                            plant.plantState = PlantState.干旱;
+                        }
+                        break;
+
+                    case PlantState.干旱:
+                        plant.plantState = PlantState.枯死;
+                        break;
+
+                    case PlantState.死亡:
+                        DeleteMapItem deleteMapItem = new DeleteMapItem
+                        {
+                            mapItemInstanceId = plant.instaceId,
+                            triggerClear = true
+                        };
+                        GameActionManager.instance.QueueAction(deleteMapItem);
+                        plant = null;
+                        fieldState = FieldState.待平整;
+                        break;
+                }
+
+                if (plant != null)
+                {
+                    plant.setWater = false;
+                    plant.RefreshPlant();
+                }
+            }
+            RefreshField();  
+        }
+       
         if (plant != null&&plant.plantState==PlantState.正常&&plant.setWater)
         {
             plant.Grow();
         }
+        GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
     }
     public void NewDay()
     {
@@ -460,6 +503,10 @@ public class Field
 
     public void SetWaterField()
     {
+        if (!isSetWater)
+        {
+            waterHour = 0;
+        }
         isSetWater = true;
         if (plant != null)
         {

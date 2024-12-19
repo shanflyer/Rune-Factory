@@ -20,6 +20,8 @@ public class EquipBoxReference:UIObjReference<Equipment>
     Transform itemValueBg;
     [SerializeField]
     Image itemValue;
+    [SerializeField]
+    Image hideMask;
 
     private void Awake()
     {
@@ -40,6 +42,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
         clickButton = GetComponent<Button>();
         itemValueBg = FindChildGameObject("ItemValueBg");
         itemValue = FindChildGameObject<Image>("ItemValue");
+        hideMask = FindChildGameObject<Image>("Hide");
     }
     public override async Task InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
     {
@@ -63,5 +66,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
             itemValueBg.localScale = Vector3.zero;
             itemValue.fillAmount = t.itemValue;
         }
+        hideMask.gameObject.SetActive(!t.hide);
+        clickButton.interactable = !t.hide;
     }
 }

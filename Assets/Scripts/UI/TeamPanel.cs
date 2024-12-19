@@ -52,23 +52,8 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         Character character = CharacterManager.instance.GetCharacter(SelectCharacterId);
         if (character != null)
         {
-            if (PastureManager.instance.GetAnimal(character.instanceId, out var animal))
-            {
-                Talk talk = new Talk
-                {
-                    characterId = character.instanceId,
-                    talkId =animal.growthStage<1? animal.animalData.talkId.x:animal.animalData.talkId.y,
-                    displayFunction = true,
-                    fixedFunctions = new List<int>
-                    {
-                        9,10,11
-                    },
-                   
-                };
-                GameActionManager.instance.QueueAction(talk);
-            }
-            else
-            {
+            if (!PastureManager.instance.TalkAnimal(character.instanceId))
+            { 
                 EventReferenceData eventReferenceData = new EventReferenceData
                 {
                     name = "CharacterId",
@@ -154,22 +139,25 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     int SelectCharacterId = 0;
     async void SelectAction(CharacterInformationData characterInformationData,bool select)
     {
-        SelectCharacterId = characterInformationData.characterId;
-        if (characterInformationData.characterId == CharacterManager.instance.controllerCharacter.instanceId)
+        if (select)
         {
-            operatePanel.gameObject.SetActive(false);
-        }
-        else
-        {
-            operatePanel.gameObject.SetActive(true);
-        }
-       var panel= await  UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
-        panel.HideBackGround(true);
+            SelectCharacterId = characterInformationData.characterId;
+            if (characterInformationData.characterId == CharacterManager.instance.controllerCharacter.instanceId)
+            {
+                operatePanel.gameObject.SetActive(false);
+            }
+            else
+            {
+                operatePanel.gameObject.SetActive(true);
+            }
+            var panel = await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+            panel.HideBackGround(true);
+        } 
     }
     public override async void InitReferenceData(CharacterInformationDataList v)
     {
         base.InitReferenceData(v);
         await teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup);
-        //teamerList.Select(v.characterInformationDatas[0]); 
+        teamerList.Select(v.characterInformationDatas[0]); 
     }
 }

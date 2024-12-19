@@ -261,6 +261,15 @@ public class TeamManager : Singleton<TeamManager>
         if (teams.TryGetValue(joinTeam.teamCharacterId, out var team))
         {
             bool result = team.AddCharacter(joinTeam.characterId, joinTeam.holdDisplay);
+            if (result)
+            {
+                RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                {
+                    characterId = joinTeam.characterId,
+                    join = false
+                };
+                GameActionManager.instance.QueueAction(refreshOperateCharacter);
+            }
             if (joinTeam.setResult != null)
                 joinTeam.setResult(result);
             return;
@@ -270,6 +279,15 @@ public class TeamManager : Singleton<TeamManager>
             if (t.Value.CheckCharacter(joinTeam.teamCharacterId))
             {
                 bool result = t.Value.AddCharacter(joinTeam.characterId, joinTeam.holdDisplay);
+                if (result)
+                {
+                    RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                    {
+                        characterId = joinTeam.teamCharacterId,
+                        join = false
+                    };
+                    GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                }
                 if (joinTeam.setResult != null)
                     joinTeam.setResult(result);
                 return;
@@ -282,6 +300,15 @@ public class TeamManager : Singleton<TeamManager>
             teams.Add(character.instanceId, team1);
 
             bool result = team1.AddCharacter(joinTeam.characterId,joinTeam.holdDisplay);
+            if (result)
+            {
+                RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                {
+                    characterId = joinTeam.teamCharacterId,
+                    join = false
+                };
+                GameActionManager.instance.QueueAction(refreshOperateCharacter);
+            }
             if (joinTeam.setResult != null)
                 joinTeam.setResult(result);
             return;

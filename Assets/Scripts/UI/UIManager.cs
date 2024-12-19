@@ -140,9 +140,16 @@ public class UIManager : Singleton<UIManager>
         Debug.Log($"ShowPanel:{type}");
         return (T)gamePanel;
     } 
-   
+   public bool RemoveGamePanel(Type type)
+    {
+        return openedPanels.Remove(type);
+    }
     private async Task<GamePanel<V>> ShowGamePanel<V>(Type type, V data, int layer = -1, Transform parent = null) where V : IReferenceData
-    { 
+    {
+        if (openedPanels.Contains(type))
+        {
+            return null;
+        }
         if (!gamePanels.TryGetValue(type, out BaseReference panel) || panel == null)
         {
             string path = $"{DataPath.UIPath}{type}";
