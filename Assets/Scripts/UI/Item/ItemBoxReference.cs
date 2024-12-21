@@ -137,6 +137,7 @@ public class ItemBoxReference : UIObjReference<Item>
             count.text = item.count.ToString();
             count.enabled = item.count > 0;
             toggle.enabled = true;
+            //toggle.graphic.enabled = true;
             if (ItemValueBg)
                 ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
             if (ItemValue)
@@ -148,7 +149,7 @@ public class ItemBoxReference : UIObjReference<Item>
                 ItemValueBg.transform.localScale = Vector3.zero;
             toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = item.instanceId == -1;
-            toggle.graphic.enabled = item.instanceId == -1;
+            //toggle.graphic.enabled = item.instanceId == -1;
             icon.enabled = false;
             count.enabled = false;
             if (LockMask)

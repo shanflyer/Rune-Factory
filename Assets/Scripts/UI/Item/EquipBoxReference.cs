@@ -66,7 +66,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
             itemValueBg.localScale = Vector3.zero;
             itemValue.fillAmount = t.itemValue;
         }
-        hideMask.gameObject.SetActive(!t.hide);
+        hideMask.gameObject.SetActive(t.hide);
         clickButton.interactable = !t.hide;
     }
 }

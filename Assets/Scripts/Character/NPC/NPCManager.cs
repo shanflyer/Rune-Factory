@@ -37,6 +37,14 @@ public struct CharacterInformationData : IReferenceData
     public Equip equip;
     public int friendValue;
     public AttributeType attributeType;
+    public bool Equals(IReferenceData other)
+    {
+        if(other is CharacterInformationData informationData)
+        {
+            return informationData.characterId == characterId;
+        }
+            return false;
+    }
 }
 
 public class TempCharacter : Character

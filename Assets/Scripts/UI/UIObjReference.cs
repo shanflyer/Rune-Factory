@@ -8,7 +8,7 @@ public interface IReferenceData
 {
     public bool Equals(IReferenceData other)
     {
-        return true;
+        return this == other;
     }
 }
 

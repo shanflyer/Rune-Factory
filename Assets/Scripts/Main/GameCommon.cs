@@ -177,6 +177,15 @@ public class GameCommon
         1001,2001
     };
 
+
+    //土地
+    public const int SmoothField = 10;//锄地
+    public const int Seeding = 20;//播种
+    public const int Watering = 21;//浇水
+    public const int Harvesting = 22;//收获
+    public const int Reaping = 26;//收割
+    public const int Eradicate = 27;//铲除
+
     public static int defaultOperateId = 0;
     public static int defaultPlayerTalkTime = 2000;
     public static int grassItem = 100;

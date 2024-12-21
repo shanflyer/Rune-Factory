@@ -13,6 +13,8 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BACKBLEND
+  - DAMPBLEND
+  - SNOWBLEND
   m_InvalidKeywords:
   - _BACKBLEND_ON
   - _BLENDVERTEXCOLOR_ON
@@ -81,7 +83,7 @@ Material:
     - _ClipValue: 0.5
     - _Comp: 8
     - _Damp: 0
-    - _DampBlend: 0
+    - _DampBlend: 1
     - _EdgeWaveOffset: 0
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
@@ -96,7 +98,7 @@ Material:
     - _PlantAutumnBlend: 0
     - _PlantAutumnNoiseScale: 1
     - _ScaleValue: 0.5
-    - _SnowBlend: 0
+    - _SnowBlend: 1
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _Tree3D: 0

@@ -48,6 +48,12 @@ public struct TrySicklePlant : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        if (source != 0 && source != int.MinValue)
+        {
+            fieldId = source;
+        }
+        this.setResult = setResult;
+        this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -103,7 +109,24 @@ public struct TrySmoothField : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct CheckPlant : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int instanceId;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+       
+        if (source != 0)
+        {
+            instanceId = source;
+        }
+        this.setValue = setValue;
+        this.setResult = setResult;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct CheckFieldState : GameAction
 {
     public SetValue setValue { get; set; }
@@ -112,11 +135,12 @@ public struct CheckFieldState : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-        GameActionManager.instance.QueueAction(this, immediately);
+        
         if (source != 0)
         {
             instanceid = source;
         }
+        GameActionManager.instance.QueueAction(this, immediately);
     }
 }
 

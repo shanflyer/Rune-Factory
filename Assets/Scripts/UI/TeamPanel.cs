@@ -141,6 +141,11 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     {
         if (select)
         {
+            var panel = await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+            if (panel == null)
+            {
+                return;
+            }
             SelectCharacterId = characterInformationData.characterId;
             if (characterInformationData.characterId == CharacterManager.instance.controllerCharacter.instanceId)
             {
@@ -149,10 +154,15 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
             else
             {
                 operatePanel.gameObject.SetActive(true);
-            }
-            var panel = await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+            } 
             panel.HideBackGround(true);
-        } 
+        }
+        else if(SelectCharacterId != characterInformationData.characterId)
+        {
+            SelectCharacterId = 0;
+            operatePanel.gameObject.SetActive(false);
+          //  UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
+        }
     }
     public override async void InitReferenceData(CharacterInformationDataList v)
     {

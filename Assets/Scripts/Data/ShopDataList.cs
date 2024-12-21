@@ -104,7 +104,8 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
                     type=shopItemData.shopItemType,
                     payType=shopItemData.payType,
                     priceValue=shopItemData.priceValue,
-                    openFriendLevel=shopItemData.openFriendLevel
+                    openFriendLevel=shopItemData.openFriendLevel,
+                    buyLimitOne=shopItemData.buyLimitOne
                 }
                 );
 

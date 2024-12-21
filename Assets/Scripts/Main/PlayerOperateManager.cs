@@ -127,38 +127,8 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 {
                     CharacterManager.instance.controllerCharacter.SetNeighborhood(runtimMapItem.linkCharacter);
                 }
-                
-                //物体交互
-                int operateDataLength = runtimMapItem.operateDatas.Count;
-                OperateDataList operateDataList = new OperateDataList
-                {
-                    OperateDatas = new List<OperateDataReferenceData>(),
-                    eventReferenceDatas=new List<EventReferenceData>()
-                };
-               foreach(var data in runtimMapItem.EventReferenceData)
-                {
-                    EventReferenceData EventReferenceData = new EventReferenceData
-                    {
-                        name = data.Key.ToString(),
-                        value = data.Value,
-                        valueType = ReferenceValueType.Int
-                    };
-                    operateDataList.eventReferenceDatas.Add(EventReferenceData);
-                } 
 
-                if (operateDataLength > 0)
-                {
-                    foreach (var id in runtimMapItem.operateDatas)
-                    {
-                        OperateData operateData = await GameDataManager.instance.GetAsyncData<OperateData>(id);
-                        operateDataList.OperateDatas.Add(new OperateDataReferenceData
-                        {
-                            targetItem = runtimMapItem.instanceId,
-                            operateData = operateData,
-                        });
-                    }
-                }
-               await UIManager.instance.ShowGamePanel<OperateButtonPanel, OperateDataList>(operateDataList);
+                runtimMapItem.RefreshItemOperate();
             }
         }
     }

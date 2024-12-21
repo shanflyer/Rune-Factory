@@ -942,7 +942,7 @@ public class PackageManager : Singleton<PackageManager>
         return false;
     }
 
-    public async Task<int> SetItemInPackage(Item item, int packageId)
+    public async Task<int> SetItemInPackage(Item item, int packageId,bool display=false)
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
@@ -1248,7 +1248,7 @@ public class PackageManager : Singleton<PackageManager>
             RefreshSelectItem();
         }
 
-        public async Task<int> SetItemInPackage(Item item)
+        public async Task<int> SetItemInPackage(Item item, bool display = false)
         {
             if (caseCount < itemCount)
             {
@@ -1342,6 +1342,11 @@ public class PackageManager : Singleton<PackageManager>
                         {
                             //oldCount += setCount - inCount;//????
                             // packageItemCounts[itemData.id] = oldCount;
+
+                            if (display)
+                            {
+                                InformationController.instance.AddInformation($"获得[{itemData.name}] {item.count - inCount}个");
+                            }
                             return inCount;
                         }
                         index = nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;
@@ -1409,10 +1414,19 @@ public class PackageManager : Singleton<PackageManager>
                         count += addCount;
                         packageItemCounts[itemData.id] = count;
                     }
-                    return item.count - addCount;
+
+                    int outCount= item.count - addCount;
+                    if (display)
+                    {
+                        InformationController.instance.AddInformation($"获得[{itemData.name}] {outCount}个");
+                    }
+                    return outCount;
                 }
             }
-
+            if (display)
+            {
+                InformationController.instance.AddInformation($"获得[{itemData.name}] {item.count}个");
+            }
             return 0;
         }
 

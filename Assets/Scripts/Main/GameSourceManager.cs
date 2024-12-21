@@ -95,6 +95,16 @@ public class GameSourceManager:Singleton<GameSourceManager>
         prefabs.Add(path, obj);
         return obj.GetComponentInChildren<T>();
     }
+    public GameObject GetPrefabImmediately(string path)
+    {
+        if (prefabs.TryGetValue(path, out GameObject obj))
+        {
+            return obj;
+        }
+        obj =  ExtensionsResources.LoadResource<GameObject>(path);
+        prefabs[path] = obj;
+        return obj;
+    }
     public async Task<GameObject> GetPrefab(string path)
     {
         if(prefabs.TryGetValue(path,out GameObject obj))

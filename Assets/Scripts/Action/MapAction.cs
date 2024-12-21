@@ -908,6 +908,13 @@ public struct TrySetMapItem : GameAction
     public int2 coordinate;
     public int dataId;
 }
+public struct ResetOperateData : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public int mapItemInstanceId; 
+    public List<int> operates;
+}
 public struct MoveMapItem : GameAction
 {
     public SetValue setValue { get; set; }

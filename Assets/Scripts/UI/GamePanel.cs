@@ -110,7 +110,12 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     public override void Close()
     {
         base.Close();
-        UIManager.instance.RemoveGamePanel(this.GetType());
+        if (SingletonType.Cleared)
+        {
+            Destroy(this);
+        }
+        if (!SingletonType.Cleared)
+            UIManager.instance.RemoveGamePanel(this.GetType());
         if (changeInputModel)
         {
             if (!SingletonType.Cleared)

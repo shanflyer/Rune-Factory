@@ -281,7 +281,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         base.InitReferenceData(v);
         data = v;
         v.head.SetImageSprite(characterHead, headSize,Vector2.zero);
-        HideBackGround(false);
+        HideBackGround(UIManager.instance.GamePanelIsShow<TeamPanel>());
         characterId = v.characterId;
         CharacterName.text = v.name;
         if (v.isNpc)

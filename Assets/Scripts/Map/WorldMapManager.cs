@@ -55,6 +55,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<RefreshMapTempCharacter>(RefreshMapTempCharacter);
         GameActionManager.instance.AddListener<TryLinkMapItemCharacter>(TryLinkMapItemCharacter);
         GameActionManager.instance.AddListener<TryRemoveLinkMapItemCharacter>(TryRemoveLinkMapItemCharacter);
+        GameActionManager.instance.AddListener<ResetOperateData>(ResetOperateData);
     }
     public int2 GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance)
     {
@@ -451,6 +452,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
     }
 
+   
     public int GetInstanceFromEditorId(int2 editorKey)
     {
         if (editorItemRemapInstanceIds.TryGetValue(editorKey, out var instanceid))
@@ -748,7 +750,17 @@ public class WorldMapManager : Singleton<WorldMapManager>
             }
         }
     }
-
+    void ResetOperateData(ResetOperateData resetOperateData)
+    {
+        if (runtimeMapItems.TryGetValue(resetOperateData.mapItemInstanceId, out var runtimeMapItem))
+        {
+            runtimeMapItem.ResetOperateData(resetOperateData.operates);
+            if(CharacterManager.instance.controllerCharacter.OperateItem== resetOperateData.mapItemInstanceId)
+            {
+                runtimeMapItem.RefreshItemOperate();
+            }
+        }
+    }
     private void MoveMapItem(MoveMapItem moveMapItem)
     {
         if (runtimeMapItems.TryGetValue(moveMapItem.mapItemInstanceId, out var runtimeMapItem))
@@ -1136,6 +1148,50 @@ public class RuntimeMapItem : INativeData
 
     public NativeHashSet<int> operateDatas;
     public NativeHashMap<FixedString128Bytes, int> EventReferenceData;
+
+    public async void RefreshItemOperate()
+    {
+        //物体交互
+        int operateDataLength =operateDatas.Count;
+        OperateDataList operateDataList = new OperateDataList
+        {
+            OperateDatas = new List<OperateDataReferenceData>(),
+            eventReferenceDatas = new List<EventReferenceData>()
+        };
+        foreach (var data in EventReferenceData)
+        {
+            EventReferenceData EventReferenceData = new EventReferenceData
+            {
+                name = data.Key.ToString(),
+                value = data.Value,
+                valueType = ReferenceValueType.Int
+            };
+            operateDataList.eventReferenceDatas.Add(EventReferenceData);
+        }
+
+        if (operateDataLength > 0)
+        {
+            foreach (var id in operateDatas)
+            {
+                OperateData operateData = await GameDataManager.instance.GetAsyncData<OperateData>(id);
+                operateDataList.OperateDatas.Add(new OperateDataReferenceData
+                {
+                    targetItem =instanceId,
+                    operateData = operateData,
+                });
+            }
+        }
+        UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+    }
+    public void ResetOperateData(List<int> newOperates)
+    {
+        operateDatas.Clear();
+        for(int i = 0; i < newOperates.Count; i++)
+        {
+            operateDatas.Add(newOperates[i]);
+        }  
+    }
+    
     public int Key => instanceId;
 
     public void Dispose()

@@ -44,6 +44,7 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<RefreshField>(RefreshField);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
         GameActionManager.instance.AddListener<TrySicklePlant>(TrySicklePlant);
+        GameActionManager.instance.AddListener<CheckPlant>(CheckPlant);
     }
     void SetWeather(SetWeather setWeather)
     {
@@ -160,7 +161,16 @@ public class FarmManager : Singleton<FarmManager>
             checkFieldState.setValue((int)field.fieldState);
         }
     }
-
+    private void CheckPlant(CheckPlant checkPlant)
+    {
+        if(fields.TryGetValue(checkPlant.instanceId,out var field))
+        {
+            if (checkPlant.setResult != null)
+            {
+                checkPlant.setResult(field.plant != null);
+            }
+        }
+    }
     private void TrySmoothField(TrySmoothField TrySmoothField)
     {
         if (fields.TryGetValue(TrySmoothField.fieldId, out var field))
@@ -252,6 +262,7 @@ public class FarmManager : Singleton<FarmManager>
                 creatPlant.setResult(true);
 
                 GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+                field.RefreshField();
             }
 
             GameActionManager.instance.QueueAction(addMapItem);
@@ -266,7 +277,7 @@ public class FarmManager : Singleton<FarmManager>
     {
         if (fields.TryGetValue(setWaterField.fieldId, out var field))
         {
-            field.SetWaterField();
+            field.SetWaterField(true);
 
             GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
             setWaterField.setResult(true);
@@ -297,9 +308,11 @@ public class FarmManager : Singleton<FarmManager>
         if (fields.TryGetValue(trySicklePlant.fieldId, out var field))
         {
             bool result = await field.TrySicklePlant();
-            trySicklePlant.setResult(result);
+            if(trySicklePlant.setResult!=null)
+                trySicklePlant.setResult(result);
         }
-        trySicklePlant.setResult(false);
+        if (trySicklePlant.setResult != null)
+            trySicklePlant.setResult(false);
     }
     private async void TryGetPlantFruit(TryGetPlantFruit tryGetPlantFruit)
     {
@@ -404,6 +417,56 @@ public class Field
 
     public void RefreshField()
     {
+        List<int> Operates = new List<int>();
+        switch (fieldState)
+        {
+            case FieldState.待平整:
+                Operates.Add(GameCommon.SmoothField);
+                Operates.Add(GameCommon.Watering);
+                break;
+            case FieldState.已平整:
+               
+                
+                if (plant == null)
+                {
+                    Operates.Add(GameCommon.Seeding);
+                }
+                else 
+                {
+                    switch (plant.plantState)
+                    { 
+                        case PlantState.成熟:
+                            Operates.Add(GameCommon.Harvesting);
+                            Operates.Add(GameCommon.Reaping);
+                            break;
+                        case PlantState.干旱:
+                        case PlantState.正常:
+                            Operates.Add(GameCommon.Watering);
+                            Operates.Add(GameCommon.Eradicate);
+                            if (plant.growthStage >= 2)
+                                Operates.Add(GameCommon.Reaping);
+                            break;
+                        case PlantState.枯死:
+                            Operates.Add(GameCommon.Eradicate);
+                            if (plant.growthStage >= 2)
+                                Operates.Add(GameCommon.Reaping);
+                            break;
+                        case PlantState.死亡:
+                            Operates.Add(GameCommon.SmoothField);
+                            break;
+                        
+                    }
+                }
+                break;
+        }
+
+        ResetOperateData resetOperateData = new ResetOperateData
+        {
+            mapItemInstanceId = instanceId,
+            operates = Operates
+        };
+        GameActionManager.instance.QueueAction(resetOperateData);
+
         SetItemAnimation setItemAnimation = new SetItemAnimation
         {
             keyX = (int)fieldState,
@@ -417,6 +480,7 @@ public class Field
         waterHour++;
         if (waterHour >= 24)
         {
+            waterHour = 0;
             isSetWater = false;
             if (plant != null)
             {
@@ -501,12 +565,10 @@ public class Field
         GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
     }
 
-    public void SetWaterField()
-    {
-        if (!isSetWater)
-        {
-            waterHour = 0;
-        }
+    public void SetWaterField(bool isNotify=false)
+    { 
+        waterHour = 0;
+        bool isRefresh = !isSetWater;
         isSetWater = true;
         if (plant != null)
         {
@@ -520,12 +582,14 @@ public class Field
                     break;
 
                 case PlantState.枯死:
-                    // GameNotificationManager.instance.DisplayTips("提示", "植物已经死亡，请先铲除!");
-                    // setWaterField.setResult(false);
+                    if (isNotify)
+                        GameNotificationManager.instance.DisplayTips("提示", "植物已经死亡，请铲除!");
+                     //setWaterField.setResult(false);
                     break;
 
                 case PlantState.死亡:
-                    //GameNotificationManager.instance.DisplayTips("提示", "请先平整土地!");
+                    if (isNotify)
+                        GameNotificationManager.instance.DisplayTips("提示", "请平整土地!");
                     // setWaterField.setResult(false);
                     break;
 
@@ -535,6 +599,7 @@ public class Field
             }
             plant.RefreshPlant();
         }
+        RefreshField();
     }
 }
 
@@ -639,7 +704,7 @@ public class Plant
                     nowCycle++;
                 }
 
-                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage);
+                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage,true);
                 return true;
             }
 
@@ -659,9 +724,9 @@ public class Plant
                 Item item = new Item
                 {
                     dataId = GameCommon.grassItem,
-                    count = GameCommon.grassItem
+                    count = growthStateData.productValue
                 }; 
-                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage); 
+                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage,true); 
             }
              
         }
