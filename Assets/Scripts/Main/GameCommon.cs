@@ -156,7 +156,7 @@ public class GameCommon
     public const Season zeroSeasom = Season.春;
     public const int zeroDay = 1;
     public const float sleepCostTime = 8.0f;
-    public const int shortcutItemCount = 5;
+    public const int shortcutItemCount = 6;
 
     public const float freedomMoveValue = 1.2f;
 

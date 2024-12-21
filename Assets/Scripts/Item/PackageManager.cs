@@ -286,7 +286,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             if (gamePackages.TryGetValue(character.characterPackage, out var gamePackage))
             {
-                float value = gamePackage.AddItemValue(addItemValue.selectItem, addItemValue.value * 0.01f);
+                int value = gamePackage.AddItemValue(addItemValue.selectItem, addItemValue.value);
                 if (value >= 0)
                 {
                     RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
@@ -302,6 +302,7 @@ public class PackageManager : Singleton<PackageManager>
                         return;
                     }
                 }
+
             }
         }
         if (addItemValue.setResult != null)
@@ -317,7 +318,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             if (gamePackages.TryGetValue(character.characterPackage, out var gamePackage))
             {
-                float value = gamePackage.SetItemValue(setItemValue.selectItem, setItemValue.value * 0.01f);
+                int value = gamePackage.SetItemValue(setItemValue.selectItem, setItemValue.value);
                 if (value >= 0)
                 {
                     RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
@@ -401,7 +402,7 @@ public class PackageManager : Singleton<PackageManager>
             Item item = GetItemFromInstanceId(character.characterPackage, CheckCharacterItemValue.itemId);
             if (item.instanceId != 0)
             {
-                if (item.value * 100 >= CheckCharacterItemValue.itemValue)
+                if (item.value  >= CheckCharacterItemValue.itemValue)
                 {
                     if (CheckCharacterItemValue.setResult != null)
                     {
@@ -430,7 +431,7 @@ public class PackageManager : Singleton<PackageManager>
                     int totalValue = 0;
                     for (int i = 0; i < items.Count; i++)
                     {
-                        totalValue += (int)items[i].value * 100;
+                        totalValue += items[i].value;
                     }
                     if (totalValue >= checkItemValue.itemValue)
                     {
@@ -449,7 +450,7 @@ public class PackageManager : Singleton<PackageManager>
             }
             else
             {
-                if (item.value >= checkItemValue.itemValue * 0.01f)
+                if (item.value >= checkItemValue.itemValue)
                 {
                     if (checkItemValue.setResult != null)
                     {
@@ -686,6 +687,14 @@ public class PackageManager : Singleton<PackageManager>
             return await gamePackage.CheckPackageTryItemIn(itemDataId, count);
         }
         return false;
+    }
+    public int GetPackageItemValue(int packageId, int itemDataId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return gamePackage.GetItemValue(itemDataId);
+        }
+        return -1;
     }
 
     public int GetPackageItemCount(int packageId, int itemDataId)
@@ -994,18 +1003,23 @@ public class PackageManager : Singleton<PackageManager>
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.ToString());
         if (itemData != null )
         {
-            if (ExploreManager.instance.isExplore&& itemData.sceneType==SceneType.城镇)
+            if (itemData.useEventId == 0)
             {
-                InformationController.instance.AddInformation("什么也没发生", true, true);
-                return true;
+                InformationController.instance.AddInformation("这件物品不能自由使用", true, true);
+                return false;
             }
-            if (!ExploreManager.instance.isExplore && itemData.sceneType == SceneType.战斗)
+            else
             {
-                InformationController.instance.AddInformation("什么也没发生", true, true);
-                return true;
-            }
-            if (itemData.useEventId!=0)
-            {
+                if (ExploreManager.instance.isExplore && itemData.sceneType == SceneType.城镇)
+                {
+                    InformationController.instance.AddInformation("什么也没发生", true, true);
+                    return true;
+                }
+                if (!ExploreManager.instance.isExplore && itemData.sceneType == SceneType.战斗)
+                {
+                    InformationController.instance.AddInformation("什么也没发生", true, true);
+                    return true;
+                }
                 List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
                 {
                    new EventReferenceData
@@ -1027,10 +1041,11 @@ public class PackageManager : Singleton<PackageManager>
                        value=itemInstance
                    },
                 };
-                GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas); 
+                GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
+
+                return true;
             }
            
-            return true;
         }
         return false;
     }
@@ -1161,13 +1176,13 @@ public class PackageManager : Singleton<PackageManager>
             SelectItem = 0;
         }
 
-        public float SetItemValue(int instanceId, float value)
+        public int SetItemValue(int instanceId, int value)
         {
             int index = items.FindIndex(item => item.instanceId == instanceId);
             if (index >= 0)
             {
                 var item = items[index];
-                item.value = value;
+                item.SetValue(value);
                 items[index] = item;
                 return item.value;
             }
@@ -1177,16 +1192,16 @@ public class PackageManager : Singleton<PackageManager>
             }
         }
 
-        public float AddItemValue(int instanceId, float value)
+        public int AddItemValue(int instanceId, int value)
         {
             int index = items.FindIndex(item => item.instanceId == instanceId);
             if (index >= 0)
             {
                 var item = items[index];
-                item.value += value;
+                item.ChangeValue(value);
                 if (item.value < 0)
                 {
-                    item.value = 0;
+                    item.SetValue(0);
                 }
                 items[index] = item;
                 return item.value;
@@ -1295,10 +1310,10 @@ public class PackageManager : Singleton<PackageManager>
                             dataId = itemData.id,
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
-                            itemType = itemData.type,
-                            value = item.value,
+                            itemType = itemData.type, 
                             count = 0
                         };
+                        newItem.SetValue(item.value);
                         if (items.Count <= index)
                         {
                             items.Add(newItem);
@@ -1357,10 +1372,10 @@ public class PackageManager : Singleton<PackageManager>
                             dataId = itemData.id,
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
-                            itemType = itemData.type,
-                            value = item.value,
+                            itemType = itemData.type, 
                             count = 0
                         };
+                        item1.SetValue(item.value);
 
                         if (items.Count <= index)
                         {
@@ -1390,10 +1405,10 @@ public class PackageManager : Singleton<PackageManager>
                             dataId = itemData.id,
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
-                            itemType = itemData.type,
-                            value = item.value,
+                            itemType = itemData.type, 
                             count = 1
                         };
+                        item1.SetValue(item.value);
                         int index = items.Count;
                         if (nullItems.Count > 0)
                         {
@@ -1587,7 +1602,20 @@ public class PackageManager : Singleton<PackageManager>
             }
             return false;
         }
-
+        public int GetItemValue(int itemDataId)
+        {
+            Item item = GetItemFromInstanceId(itemDataId);
+            if (item.instanceId == itemDataId)
+            {
+                return item.value;
+            }
+            var items = GetItemFromDataId(itemDataId);
+            if (items.Count > 0)
+            {
+                return items[0].value;
+            }
+            return 0;
+        }
         public int GetItemCount(int itemDataId)
         {
             if (packageItemCounts.TryGetValue(itemDataId, out int itemCount))

@@ -9,22 +9,57 @@ public struct Item : IReferenceData
     public int packageId;
     public int dataId;
     public int count;
-    public float value;
+    public int value { get; private set; }
     public bool isFresh;
     public ItemType itemType;
     public bool locked;
-
-    public Item(int dataId, int count, float value = 1, int packageId = 0)
+    public bool singleItem;
+    public Item(int dataId, int count,  int packageId = 0)
     {
         this.dataId = dataId;
         this.count = count;
         instanceId = 0;
         this.packageId = packageId;
-        this.value = value;
         itemType = ItemType.Default;
         isFresh = false;
         locked = false;
-    } 
+        value = 1;
+        maxValue = 1;
+        singleItem = false;
+        InitValue();
+    }
+    int maxValue;
+    
+    public void SetValue(int value)
+    {
+        this.value = value;
+        if (this.value > maxValue)
+        {
+            this.value = maxValue;
+        }
+    }
+    public void ChangeValue(int value)
+    {
+        this.value = this.value+value;
+        if (this.value > maxValue)
+        {
+            this.value = maxValue;
+        }
+    }
+    async void InitValue()
+    {
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(dataId);
+        if (itemData != null)
+        {
+            singleItem = itemData.groupCount <= 1;
+            if(itemData.itemValue)
+                maxValue = value = itemData.Property.Other;
+        }
+    }
+    public float GetValue()
+    {
+        return value /(float)maxValue;
+    }
 }
 
 public struct Equipment : IReferenceData

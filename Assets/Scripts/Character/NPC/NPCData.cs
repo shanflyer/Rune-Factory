@@ -14,6 +14,7 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public bool hide;
     public string text;
     public List<int> functionIds;
+    public List<int> friendLevels;
     public string shopName;
     public int playerOperateEventId;
     public int nextTalkEventId;

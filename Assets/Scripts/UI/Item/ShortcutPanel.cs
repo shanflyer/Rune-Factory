@@ -83,6 +83,8 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
 
     [SerializeField]
     private ShortcutItemReference ShortcutItemReference;
+    [SerializeField]
+    private Button useButton, unEquipButton;
 
     public override void OnEnable()
     {
@@ -127,6 +129,28 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                 GameActionManager.instance.QueueAction(openPackage, true);
             }
         });
+        useButton.onClick.AddListener(UseItemAction);
+        unEquipButton.onClick.AddListener(UnEquipAction);
+    }
+    void UseItemAction()
+    {
+        ItemUseAction itemUseAction = new ItemUseAction
+        {
+            itemId = selectPackageItem.dataId,
+            itemCount = 1,
+            packageId = selectPackageItem.packageId
+        };
+        GameActionManager.instance.QueueAction(itemUseAction, true);
+    }
+    void UnEquipAction()
+    {
+        RemoveShortcutItem removeShortcutItem = new RemoveShortcutItem
+        {
+            characterId = CharacterManager.instance.controllerCharacter.instanceId,
+            index = selectShortIndex
+        };
+        GameActionManager.instance.QueueAction(removeShortcutItem);
+        unEquipButton.interactable = false;
     }
 
     private Item selectPackageItem;
@@ -150,12 +174,15 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         bagButton = FindChildGameObject<Button>("BagButtpn");
         toggleGroup = FindChildGameObject<ToggleGroup>("ItemList");
         ShortcutItemReference = FindChildGameObject<ShortcutItemReference>("ItemBoxReference");
+        unEquipButton = FindChildGameObject<Button>("UnSetButton");
+        useButton = FindChildGameObject<Button>("UseButton");
     }
 
     private ShortcutPackage shortcutPackage;
 
     public override Task InitData(string dataKey)
     {
+        useButton.interactable = unEquipButton.interactable = false;
         var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
         InitReferenceData(shortcutPackage);
         return base.InitData(dataKey);
@@ -163,6 +190,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
 
     public override async void InitReferenceData(ShortcutPackage v)
     {
+        useButton.interactable = unEquipButton.interactable = false;
         base.InitReferenceData(v);
         shortcutPackage = v;
         var items = v.GetShortcutItems();
@@ -201,7 +229,8 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
             selectShortIndex = item.index;
             shortcutItem = item;
             selectPackageItem = item.Item;
-
+            unEquipButton.interactable = selectPackageItem.dataId != 0;
+            useButton.interactable = selectPackageItem.dataId != 0;
             SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
             {
                 packageId = shortcutPackage.packagerId,

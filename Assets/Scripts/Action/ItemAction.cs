@@ -129,7 +129,7 @@ public struct RefreshItemValue : GameAction
     public SetResult setResult { get; set; }
     public int characterId;
     public int itemId;
-    public float itemValue;
+    public int itemValue;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {

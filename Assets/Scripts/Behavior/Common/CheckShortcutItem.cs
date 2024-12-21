@@ -1,13 +1,14 @@
 ﻿using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
- 
+using System.Collections.Generic;
+
 [TaskCategory("NewGame/Common")]
 [TaskName("检查快捷栏的道具")]
 public class CheckShortcutItem : Action
 {
     public SharedInt characterId; 
     public SharedInt checkValue; 
-    public  SharedInt outItemInstance;
+    public  SharedIntList outItemInstance;
     private Character character;
     private ShortcutPackage shortcutPackage;
     public override async void OnStart()
@@ -29,7 +30,7 @@ public class CheckShortcutItem : Action
     {
         if (shortcutPackage!=null)
         {
-            int itemInstance = 0;
+            List<int> itemInstance = new List<int>();
             if (shortcutPackage.CheckItem(checkValue.Value,out itemInstance))
             {
                 outItemInstance.SetValue(itemInstance);

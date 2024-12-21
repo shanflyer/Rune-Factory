@@ -69,13 +69,14 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 {
                     itemType = equipment.ItemType,
                     instanceId = equipment.characterId,
-                    dataId = equipment.dataId,
-                    value = equipment.itemValue,  
+                    dataId = equipment.dataId, 
                 },
+                
                 ActionName = isController ? "п╤об" : null,
                 action = SelectAction,
                 OffsetPos=infoOffsetY
             };
+            itemInfo.item.SetValue((int)equipment.itemValue * 100);
             void SelectAction(Item item, bool selected = true)
             {
                 Character character = CharacterManager.instance.GetCharacter(equipment.characterId); 

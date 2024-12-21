@@ -167,7 +167,7 @@ public struct TryGetAnimalFoodFromPasture : GameAction
         }
         if (parameters.Count > 1)
         {
-            item.value = int.Parse(parameters[1].value);
+            item.SetValue(int.Parse(parameters[1].value));
         }
         if (parameters.Count > 2)
         {
@@ -179,7 +179,7 @@ public struct TryGetAnimalFoodFromPasture : GameAction
         }
         if (target != 0)
         {
-            item.value = target;
+            item.SetValue(target);
         }
         if (value != 0)
         {
@@ -204,7 +204,7 @@ public struct TrySetAnimalFoodToPasture : GameAction
         }
         if (parameters.Count > 1)
         {
-            item.value = int.Parse(parameters[1].value);
+            item.SetValue(int.Parse(parameters[1].value));
         }
         if (parameters.Count > 2)
         {
@@ -216,7 +216,7 @@ public struct TrySetAnimalFoodToPasture : GameAction
         }
         if (target != 0)
         {
-            item.value = target;
+            item.SetValue(target);
         }
         if (value != 0)
         {
@@ -241,7 +241,7 @@ public struct TryGetItemFromPastureBox : GameAction
         }
         if (parameters.Count > 1)
         {
-            item.value = int.Parse(parameters[1].value);
+            item.SetValue(int.Parse(parameters[1].value));
         }
         if (parameters.Count > 2)
         {
@@ -253,7 +253,7 @@ public struct TryGetItemFromPastureBox : GameAction
         }
         if (target != 0)
         {
-            item.value = target;
+            item.SetValue(target);
         }
         if (value != 0)
         {

@@ -185,6 +185,10 @@
             <key type="filename">Sickle.png</key>
             <key type="filename">Waterpot$Normal.png</key>
             <key type="filename">Waterpot.png</key>
+            <key type="filename">Waterpot1$Normal.png</key>
+            <key type="filename">Waterpot1.png</key>
+            <key type="filename">Waterpot2$Normal.png</key>
+            <key type="filename">Waterpot2.png</key>
             <key type="filename">default$Normal.png</key>
             <key type="filename">default.png</key>
             <key type="filename">丁鱼$Normal.png</key>

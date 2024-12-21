@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Android.Gradle.Manifest;
 using Unity.Collections; 
 
 public class ShortcutManager : Singleton<ShortcutManager>
@@ -24,6 +25,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
         GameActionManager.instance.AddListener<SetShortcutItem>(SetShortcutItem);
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcutAsync);
         GameActionManager.instance.AddListener<SortShortcutItem>(SortShortcutItem);
+        GameActionManager.instance.AddListener<RefreshItemValue>(RefreshItemValue);
     }
     protected override void Clear()
     {
@@ -65,7 +67,17 @@ public class ShortcutManager : Singleton<ShortcutManager>
                         shortcutPackage.items[i] = default(Item);
                     }
                     else
-                    {
+                    { 
+                        if (item.instanceId != 0)
+                        {
+                            item.SetValue(PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.instanceId));
+                        }
+                        else
+                        {
+                            item.SetValue(PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.dataId));
+                        }
+                        
+
                         item.count = itemCount;
                         shortcutPackage.items[i] = item;
                         shortcutPackage.haveItems.Add(shortcutPackage.items[i].instanceId);
@@ -92,6 +104,14 @@ public class ShortcutManager : Singleton<ShortcutManager>
                shortcutPanel.InitReferenceData(shortcutPackage);
             }    
         }
+    }
+    void RefreshItemValue(RefreshItemValue refreshItemValue)
+    {
+        if (shortcutPackages.TryGetValue(refreshItemValue.characterId, out var shortcutPackage))
+        {
+            shortcutPackage.SetItemValue(refreshItemValue.itemId, refreshItemValue.itemValue);
+        }
+        
     }
     async void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
     {
@@ -178,6 +198,67 @@ public class ShortcutPackage : IReferenceData, INativeData
             if (items[i].dataId == itemId)
             {
                 itemInstance = items[i].instanceId;
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool CheckItem(int itemId, out List<int> itemInstances)
+    {
+        itemInstances = new List<int>();
+        bool result = false;
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i].dataId == itemId)
+            {
+                itemInstances.Add(items[i].instanceId);
+                result = true;
+            }
+        }
+        return result;
+    }
+    public void SetItemValue(int instanceId,int itemValue)
+    {
+        for(int i = 0; i < items.Length; i++)
+        {
+            if (items[i].instanceId == instanceId)
+            {
+                items[i].SetValue(itemValue);
+            }
+        }
+    }
+
+    public bool TryChangeItemValue(int itemId,int value)
+    {
+        for(int i=0;i<items.Length; i++)
+        {
+            if (items[i].dataId == itemId && items[i].value>=value)
+            {
+                AddItemValue addItemValue = new AddItemValue
+                {
+                    characterId = Key,
+                    selectItem = items[i].instanceId,
+                    value = value
+                };
+                GameActionManager.instance.QueueAction(addItemValue);
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool TrySetItemValue(int itemId, int value)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i].dataId == itemId && items[i].value >= value)
+            {
+                SetItemValue addItemValue = new SetItemValue
+                {
+                    characterId = Key,
+                    selectItem = items[i].instanceId,
+                    value = value
+                };
+                GameActionManager.instance.QueueAction(addItemValue);
                 return true;
             }
         }

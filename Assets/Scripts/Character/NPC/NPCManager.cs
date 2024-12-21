@@ -240,9 +240,26 @@ public class NPC : IReferenceData
     {
         return Character.GetInformation();
     }
-
+    public int friendLevel=>FriendManager.instance.GetFriendShipLevel(npcData.id);
     private NPCBehaviorData NPCBehaviorData;
-    public List<int> functions => npcData.functionIds;
+    public List<int> functions
+    {
+        get
+        {
+            List<int> _functions = new List<int>();
+            int nowLevel = friendLevel;
+            for(int i = 0; i < npcData.functionIds.Count; i++)
+            {
+                int level = npcData.friendLevels[i];
+                if (nowLevel >= level)
+                {
+                    _functions.Add(npcData.functionIds[i]);
+                }
+            }
+
+            return _functions;
+        }
+    }
     public List<int> likeItems => NPCBehaviorData.likeItems;
     public string shopName => npcData.shopName;
 

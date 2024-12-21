@@ -17,16 +17,13 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     private Image ItemValue;
     [SerializeField]
     private TextMeshProUGUI count;
-    [SerializeField]
-    Button UseButton, UnSetButton;
-    [SerializeField]
-    Image setImage;
+
 
     public override void ClearSelect()
     {
         base.ClearSelect();
         toggle.SetIsOnWithoutNotify(false);
-        setImage.transform.localScale = UnSetButton.transform.localScale = UseButton.transform.localScale = Vector3.zero;
+       
     }
     public override void SetPanelUISerializeObj()
     {
@@ -36,9 +33,6 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         count = FindChildGameObject<TextMeshProUGUI>("count");
         ItemValue = FindChildGameObject<Image>("ItemValue");
         ItemValueBg = FindChildGameObject("ItemValueBg");
-        UseButton = FindChildGameObject<Button>("UseButton");
-        UnSetButton = FindChildGameObject<Button>("UnSetButton");
-        setImage = FindChildGameObject<Image>("setImage");
     }
     public override void SelectDefault()
     {
@@ -63,64 +57,16 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     {
         if (refreshItemValue.itemId == data.Item.instanceId)
         {
-            ItemValue.fillAmount = refreshItemValue.itemValue;
+            data.Item.SetValue(refreshItemValue.itemValue);
+            ItemValue.fillAmount = data.Item.GetValue();
         }
-    }
-    private void Awake()
-    {
-        toggle.onValueChanged.AddListener((bool value) =>
-        {
-            setImage.transform.localScale= setImage.transform.localScale = UnSetButton.transform.localScale = value ? Vector3.one : Vector3.zero;
-            if (SelectAction != null)
-            {
-                SelectAction.Invoke(data,value);
-            }
-            if (value&& itemData!=null)
-            { 
-                UseButton.transform.localScale = itemData.useEventId!=0 ? Vector3.one : Vector3.zero;
-            }
-            else
-            {
-                UseButton.transform.localScale = Vector3.zero;
-            }
-        });
-        UseButton.onClick.AddListener(() =>
-        {
-            if(itemData!=null)
-            {
-                ItemUseAction itemUseAction = new ItemUseAction
-                {
-                    itemCount = 0,
-                    packageId = CharacterManager.instance.controllerCharacter.characterPackage,
-                    itemId = itemData.id
-                };
-                GameActionManager.instance.QueueAction(itemUseAction, true);
-
-            }
-        });
-        UseButton.transform.localScale = Vector3.zero;
-        UnSetButton.onClick.AddListener(UnSetAction);
-        UnSetButton.transform.localScale = Vector3.zero;
-        setImage.transform.localScale = Vector3.zero;
-    }
-
-    void UnSetAction()
-    {
-        RemoveShortcutItem removeShortcutItem = new RemoveShortcutItem
-        {
-            characterId = CharacterManager.instance.controllerCharacter.instanceId,
-            index = data.index
-        };
-        GameActionManager.instance.QueueAction(removeShortcutItem);
-        UnSetButton.transform.localScale=UseButton.transform.localScale=setImage.transform.localScale = Vector3.zero;
     }
     public override void ClearData()
     {
         base.ClearData();
         data = default(ShortcutItem);
         icon.enabled = false;
-        count.enabled = false;
-        UseButton.transform.localScale = Vector3.zero;
+        count.enabled = false; 
     }
     ItemData itemData;
     public override async Task InitData(ShortcutItem t, SelectAction<ShortcutItem> SelectAction = null, ToggleGroup toggleGroup = null)
@@ -141,18 +87,17 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             count.enabled = data.Item.count > 0;
             toggle.enabled = true;
             ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-            ItemValue.fillAmount = data.Item.value; 
+            ItemValue.fillAmount = data.Item.GetValue(); 
 
         }
         else
         {
-            ItemValueBg.transform.localScale = UseButton.transform.localScale =setImage.transform.localScale= Vector3.zero; 
+            ItemValueBg.transform.localScale = Vector3.zero; 
             toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = false;
             // toggle.graphic.enabled = false;
             icon.enabled = false;
-            count.enabled = false;
-            UseButton.transform.localScale = Vector3.zero;
+            count.enabled = false; 
         }
     }
 }

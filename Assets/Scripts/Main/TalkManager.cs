@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class TalkManager : Singleton<TalkManager>
@@ -58,9 +59,12 @@ public class TalkManager : Singleton<TalkManager>
         {
             functionIds = animal.animalData.functionIds;
         }
+
+        bool[] functionCheckResult = new bool[functionIds.Count]; 
         if (fixedFunctions != null)
         {
-            for(int i = 0; i < fixedFunctions.Count; i++)
+            functionCheckResult = null;
+            for (int i = 0; i < fixedFunctions.Count; i++)
             {
                 NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(fixedFunctions[i]);
                 NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
@@ -70,32 +74,58 @@ public class TalkManager : Singleton<TalkManager>
         {
             for (int i = 0; i < functionIds.Count; i++)
             {
-                int funtionId = functionIds[i];
-                if (funtionId == GameCommon.setTeamerFunctionId && TeamManager.instance.playerTeam.CheckCharacter(characterId))
+                int functionId = functionIds[i]; 
+                if (functionId == GameCommon.setTeamerFunctionId && TeamManager.instance.playerTeam.CheckCharacter(characterId))
                 {
-                    NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
+                    NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(functionId);
                     NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                    functionCheckResult[i] = true;
+                    ShowTalkAsync();
                 }
                 else
                 {
-                    NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(funtionId);
+                    NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(functionId);
+                    int index = i;
                     if (nPCFunctionData.GameActionData != null)
                     {
                         nPCFunctionData.GameActionData.Action(characterId, setResult: (bool value) =>
-                        {
-                            if(value)
+                        { 
+                            if (value)
+                            {
                                 NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                            }
+                            functionCheckResult[index] = true;
+                            ShowTalkAsync();
+
                         },immediately:true);
                     }
                     else
                     {
                         NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
+                        functionCheckResult[index] = true;
+                        ShowTalkAsync();
                     }
                    
                 }
             }
         }
+        async Task ShowTalkAsync()
+        {
+            for(int i = 0; i < functionCheckResult.Length; i++)
+            {
+                if (!functionCheckResult[i])
+                {
+                    return;
+                }
+            }
+            await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+        }
 
-       await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+        if (functionCheckResult == null)
+        {
+            await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+        }
+        
+       
     }
 }
