@@ -10,6 +10,7 @@ Shader "MySprite-Lit-Default"
         [Toggle(SNOWBLEND)]_SnowBlend("_SnowBlend",int)=1
         [Toggle(SEASONCOLORBLEND)]seasonColorBlend("seasonColorBlend",int)=0
         [Toggle(SHADOWSTEP)]_shadowStep("ShadowStep",int)=0
+        [Toggle(LIGHTMASK)]_LightMask("LightMask",int)=0
 
         _MainTex("Diffuse", 2D) = "white" {}
        // _MaskTex("Mask", 2D) = "white" {}
@@ -22,6 +23,7 @@ Shader "MySprite-Lit-Default"
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WaterMaskTex("WaterMaskTex", 2D) ="black"{}
+        _MaskTex("_Mask",2D)="black"{}
         _DepthTex("DepthTex", 2D) ="gray"{} 
         _WetValue("WetValue",Range(0,1))=0 
         _LightBlend("LightBlend",float)=1 
@@ -114,10 +116,11 @@ Shader "MySprite-Lit-Default"
             SamplerState sampler_MainTex;  
             Texture2D _DepthTex;
             Texture2D _NormalMap;
-            Texture2D _MoveMask;
-            //Texture2D _GrassTex;
+            Texture2D _MoveMask; 
             Texture2D _SnowTex;
             //exture2D _WaterNormalMap; 
+            TEXTURE2D(_MaskTex;);
+             SAMPLER(sampler_MaskTex;);
              TEXTURE2D(_WaterMaskTex);
              SAMPLER(sampler_WaterMaskTex);
             TEXTURE2D(_WindNoiseTexture);
@@ -751,6 +754,7 @@ Shader "MySprite-Lit-Default"
             #pragma shader_feature_local _ GRASSBLEND
             #pragma shader_feature_local _ SHADOWSTEP
             #pragma shader_feature_local _ BACKBLEND
+            #pragma shader_feature_local _ LIGHTMASK
              
             struct Attributes
             {
@@ -887,6 +891,12 @@ Shader "MySprite-Lit-Default"
               
                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
                 lightCol.xyz*=4;  
+                
+                #if LIGHTMASK 
+                half4 lightMakColor=SAMPLE_TEXTURE2D(_MaskTex,sampler_MaskTex,uv); 
+                lightCol.xyz=lightCol.xyz*(1-lightMakColor.a)+lightMakColor.xyz*lightMakColor.a;
+                #endif
+
                 result.xyz=waterColor.xyz*lightCol.xyz; 
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
                 result.a=main.a;
@@ -898,6 +908,9 @@ Shader "MySprite-Lit-Default"
                 #if  BACKBLEND 
                 result.xyz=BackColor(result.xyz,i.lightingUV);
                 #endif
+
+                
+               
 
                 return result;
             }

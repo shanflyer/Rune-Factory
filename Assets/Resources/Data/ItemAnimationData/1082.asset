@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307d7a19f43be594fbf3febbd1e10676, type: 3}
   m_Name: 1082
   m_EditorClassIdentifier: 
+  nativeAnimator: 0
   animationStateDatas:
   - stateName: "\u65CB\u8F6C"
     key:
       x: 0
       y: 0
+    parameterName: 
+    transitionDuration: 0
     clips:
     - {fileID: 7400000, guid: 3048b45df7269014d86655777c77805e, type: 2}
   animationStateDataDic:
@@ -28,5 +31,7 @@ MonoBehaviour:
       key:
         x: 0
         y: 0
+      parameterName: 
+      transitionDuration: 0
       clips:
       - {fileID: 7400000, guid: 3048b45df7269014d86655777c77805e, type: 2}

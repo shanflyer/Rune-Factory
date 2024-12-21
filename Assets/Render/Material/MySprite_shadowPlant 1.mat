@@ -45,6 +45,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MaskTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -110,6 +114,7 @@ Material:
     - _HighLighStep: 0
     - _HighLightNoise: 50
     - _LightBlend: 1
+    - _LightMask: 0
     - _Move: 1
     - _MoveSelfUV: 0
     - _NoiseAlpha: 1

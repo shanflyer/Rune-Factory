@@ -222,6 +222,7 @@ public class FarmManager : Singleton<FarmManager>
             // RefreshField(refreshField);
 
             GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+            field.RefreshField();
         }
         else
         {
@@ -622,14 +623,14 @@ public class Plant
 
     public int Key => instaceId;
 
-    public void RefreshPlant()
+    public void RefreshPlant(bool isWater=false)
     {
         int keyY = 0;
         switch (plantState)
         {
             case PlantState.正常:
-            case PlantState.成熟:
-                keyY = 0;
+            case PlantState.成熟: 
+                keyY =isWater?3: 0;
                 break;
 
             case PlantState.干旱:

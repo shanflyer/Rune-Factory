@@ -501,6 +501,10 @@ public class CommonToolEditor : MyEditor
                         var bindings = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
                         foreach (var binding in bindings)
                         {
+                            if (binding.propertyName != "m_Sprite")
+                            {
+                                continue;
+                            }
                             var keyframes = AnimationUtility.GetObjectReferenceCurve(animationClip, binding);
                             for (int j = 0; j < keyframes.Length; j++)
                             {
@@ -537,7 +541,7 @@ public class CommonToolEditor : MyEditor
 
         string plantDataPath = "Data/PlantData";
         string itemAnimationDataPath = "Assets/Resources/Data/ItemAnimationData/";
-        string plantAnimationData = "Assets/Resources/Data/ItemAnimationData/8000.asset";
+        string plantAnimationData = "Assets/Resources/Data/ItemAnimationData/8019.asset";
 
         ItemAnimationData itemAnimationData = AssetDatabase.LoadAssetAtPath<ItemAnimationData>(plantAnimationData);
 

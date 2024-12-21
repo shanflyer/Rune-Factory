@@ -12,23 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307d7a19f43be594fbf3febbd1e10676, type: 3}
   m_Name: 820000
   m_EditorClassIdentifier: 
+  nativeAnimator: 0
   animationStateDatas:
   - stateName: "\u672A\u5F00\u57A6"
     key:
       x: 0
       y: 0
+    parameterName: 
+    transitionDuration: 0
     clips:
     - {fileID: 7400000, guid: 7b779245811af6e4888dbb1cb13c830e, type: 2}
   - stateName: "\u5F00\u57A6"
     key:
       x: 1
       y: 0
+    parameterName: 
+    transitionDuration: 0
     clips:
     - {fileID: 7400000, guid: 119142f4a8c4b60449e7767884c967ed, type: 2}
   - stateName: "\u6D47\u6C34"
     key:
       x: 2
       y: 0
+    parameterName: 
+    transitionDuration: 0
     clips:
     - {fileID: 7400000, guid: 4bd55708255bf3f4ca0344b1dde4ab8f, type: 2}
   animationStateDataDic:
@@ -44,17 +51,23 @@ MonoBehaviour:
       key:
         x: 0
         y: 0
+      parameterName: 
+      transitionDuration: 0
       clips:
       - {fileID: 7400000, guid: 7b779245811af6e4888dbb1cb13c830e, type: 2}
     - stateName: "\u5F00\u57A6"
       key:
         x: 1
         y: 0
+      parameterName: 
+      transitionDuration: 0
       clips:
       - {fileID: 7400000, guid: 119142f4a8c4b60449e7767884c967ed, type: 2}
     - stateName: "\u6D47\u6C34"
       key:
         x: 2
         y: 0
+      parameterName: 
+      transitionDuration: 0
       clips:
       - {fileID: 7400000, guid: 4bd55708255bf3f4ca0344b1dde4ab8f, type: 2}

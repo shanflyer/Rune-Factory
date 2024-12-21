@@ -41,6 +41,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MaskTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -86,6 +90,7 @@ Material:
     - _EnableExternalAlpha: 0
     - _GrassBlend: 0
     - _LightBlend: 1
+    - _LightMask: 0
     - _Move: 0
     - _MoveSelfUV: 0
     - _PlantAutumnBlend: 0
