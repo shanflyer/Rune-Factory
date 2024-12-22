@@ -42,36 +42,41 @@ public struct CharacterProperty
         }
         if (Other != 0)
         {
-            if (string.IsNullOrEmpty(result))
+            bool nullValue = AT == 0 && DF == 0 && Lucky == 0 && Speed == 0;
+
+            if (!nullValue)
             {
-                result = $"战斗时 ";
-            }
-            else
-            {
-                result = $"{result}\n战斗时 ";
-            }
-          
-            if (AT != 0)
-            {
-                string operatorStr = AT > 0 ? "+" : "";
-                result = $"{result}{CharacterPropertyType.攻击}{operatorStr}{AT} ";
-            }
-            if (DF != 0)
-            {
-                string operatorStr = DF > 0 ? "+" : "";
-                result = $"{result}{CharacterPropertyType.防御}{operatorStr}{DF} ";
-            }
-            if (Lucky != 0)
-            {
-                string operatorStr = Lucky > 0 ? "+" : "";
-                result = $"{result}{CharacterPropertyType.幸运}{operatorStr}{Lucky} ";
-            }
-            if (Speed != 0)
-            {
-                string operatorStr = Speed > 0 ? "+" : "";
-                result = $"{result}{CharacterPropertyType.敏捷}{operatorStr}{Speed} ";
-            }
-            result= $"{result}{Other}回合";
+                if (string.IsNullOrEmpty(result))
+                {
+                    result = $"战斗时 ";
+                }
+                else
+                {
+                    result = $"{result}\n战斗时 ";
+                }
+
+                if (AT != 0)
+                {
+                    string operatorStr = AT > 0 ? "+" : "";
+                    result = $"{result}{CharacterPropertyType.攻击}{operatorStr}{AT} ";
+                }
+                if (DF != 0)
+                {
+                    string operatorStr = DF > 0 ? "+" : "";
+                    result = $"{result}{CharacterPropertyType.防御}{operatorStr}{DF} ";
+                }
+                if (Lucky != 0)
+                {
+                    string operatorStr = Lucky > 0 ? "+" : "";
+                    result = $"{result}{CharacterPropertyType.幸运}{operatorStr}{Lucky} ";
+                }
+                if (Speed != 0)
+                {
+                    string operatorStr = Speed > 0 ? "+" : "";
+                    result = $"{result}{CharacterPropertyType.敏捷}{operatorStr}{Speed} ";
+                }
+                result = $"{result}{Other}回合";
+            } 
         } 
         return result;
     }

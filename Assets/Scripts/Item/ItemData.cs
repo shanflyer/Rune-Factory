@@ -42,6 +42,7 @@ public class ItemData : ScriptableObject, IGameData
     public AttributeType attributeType;
     public Sprite icon;
     public string info;
+    public string useInfo;
     public ItemType type;
     public int otherType;
     public int typeValue;

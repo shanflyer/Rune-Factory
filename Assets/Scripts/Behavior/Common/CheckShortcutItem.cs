@@ -7,8 +7,7 @@ using System.Collections.Generic;
 public class CheckShortcutItem : Action
 {
     public SharedInt characterId; 
-    public SharedInt checkValue; 
-    public  SharedIntList outItemInstance;
+    public SharedIntList checkValue;  
     private Character character;
     private ShortcutPackage shortcutPackage;
     public override async void OnStart()
@@ -29,17 +28,15 @@ public class CheckShortcutItem : Action
     public override TaskStatus OnUpdate()
     {
         if (shortcutPackage!=null)
-        {
-            List<int> itemInstance = new List<int>();
-            if (shortcutPackage.CheckItem(checkValue.Value,out itemInstance))
+        { 
+            for(int i = 0; i < checkValue.Value.Count; i++)
             {
-                outItemInstance.SetValue(itemInstance);
-                return TaskStatus.Success;
+                if (shortcutPackage.CheckItem(checkValue.Value[i],out List<int> item))
+                {
+                    return TaskStatus.Success;
+                }
             }
-            else
-            {
-                return TaskStatus.Failure;
-            }
+           
         }
         return TaskStatus.Failure;
     }

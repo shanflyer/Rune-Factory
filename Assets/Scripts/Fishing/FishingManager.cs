@@ -58,7 +58,7 @@ public class FishingManager : Singleton<FishingManager>
                     dataId = fishData.itemId,
                     count = 1, 
                 };
-                item.SetValue(randomResult.y);
+                item = await Item.SetValue(item, randomResult.y);
                 Character character = CharacterManager.instance.GetCharacter(fishingIsSuccess.characterId);
                 int count = await PackageManager.instance.SetItemInPackage(item, character.characterPackage);
                 if (count <= 0)

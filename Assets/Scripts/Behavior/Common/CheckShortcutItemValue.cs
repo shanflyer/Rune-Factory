@@ -8,7 +8,7 @@ public class CheckShortcutItemValue : Action
 {
     public SharedInt characterId;
     public SharedInt checkValue; 
-    public SharedInt checkItem; 
+    public SharedIntList checkItem; 
    
     public override TaskStatus OnUpdate()
     {
@@ -18,10 +18,14 @@ public class CheckShortcutItemValue : Action
 
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i].value >= checkValue.Value)
+            if (checkItem.Value.Contains(items[i].dataId))
             {
-                return TaskStatus.Success;
+                if (items[i].value >= checkValue.Value)
+                {
+                    return TaskStatus.Success;
+                }
             }
+          
         }
         return TaskStatus.Failure;
     }

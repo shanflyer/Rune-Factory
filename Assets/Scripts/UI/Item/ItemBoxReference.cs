@@ -141,7 +141,7 @@ public class ItemBoxReference : UIObjReference<Item>
             if (ItemValueBg)
                 ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
             if (ItemValue)
-                ItemValue.fillAmount = item.GetValue();
+                ItemValue.fillAmount =await item.GetValue();
         }
         else
         {

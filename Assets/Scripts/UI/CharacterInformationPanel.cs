@@ -76,7 +76,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 action = SelectAction,
                 OffsetPos=infoOffsetY
             };
-            itemInfo.item.SetValue((int)equipment.itemValue * 100);
+            itemInfo.item=await Item.SetValue(itemInfo.item,(int)equipment.itemValue * 100);
             void SelectAction(Item item, bool selected = true)
             {
                 Character character = CharacterManager.instance.GetCharacter(equipment.characterId); 

@@ -8,12 +8,12 @@ public class SetShortcutItemValue : Action
 {
     public SharedInt characterId;
     public SharedInt value;
-    public SharedInt item;
+    public SharedIntList item;
 
     public override TaskStatus OnUpdate()
     {
         ShortcutPackage shortcutPackage = ShortcutManager.instance.GetShortcutPackage(characterId.Value);
-        shortcutPackage.TrySetItemValue(item.Value, item.Value);
-        return TaskStatus.Failure;
+        shortcutPackage.TrySetItemValue(item.Value, value.Value);
+        return TaskStatus.Success;
     }
 }

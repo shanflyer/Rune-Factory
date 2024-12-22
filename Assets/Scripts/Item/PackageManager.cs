@@ -279,14 +279,14 @@ public class PackageManager : Singleton<PackageManager>
         return default(Item);
     }
 
-    private void AddItemValue(AddItemValue addItemValue)
+    private async void AddItemValue(AddItemValue addItemValue)
     {
         Character character = CharacterManager.instance.GetCharacter(addItemValue.characterId);
         if (character != null)
         {
             if (gamePackages.TryGetValue(character.characterPackage, out var gamePackage))
             {
-                int value = gamePackage.AddItemValue(addItemValue.selectItem, addItemValue.value);
+                int value =await gamePackage.AddItemValue(addItemValue.selectItem, addItemValue.value);
                 if (value >= 0)
                 {
                     RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
@@ -311,14 +311,14 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private void SetItemValue(SetItemValue setItemValue)
+    private async void SetItemValue(SetItemValue setItemValue)
     {
         Character character = CharacterManager.instance.GetCharacter(setItemValue.characterId);
         if (character != null)
         {
             if (gamePackages.TryGetValue(character.characterPackage, out var gamePackage))
             {
-                int value = gamePackage.SetItemValue(setItemValue.selectItem, setItemValue.value);
+                int value =await gamePackage.SetItemValue(setItemValue.selectItem, setItemValue.value);
                 if (value >= 0)
                 {
                     RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
@@ -705,7 +705,14 @@ public class PackageManager : Singleton<PackageManager>
         }
         return -1;
     }
-
+    public int GetPackageItemCountForInstance(int packageId, int instanceId)
+    {
+        if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
+        {
+            return gamePackage.GetItemCountForInstance(instanceId);
+        }
+        return -1;
+    }
     public void ClearPackageItem(int packageId, int itemDataId)
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
@@ -1042,7 +1049,11 @@ public class PackageManager : Singleton<PackageManager>
                    },
                 };
                 GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
-
+                if (!string.IsNullOrEmpty(itemData.useInfo))
+                {
+                    InformationController.instance.AddInformation(itemData.useInfo, true, true);
+                }
+              
                 return true;
             }
            
@@ -1176,13 +1187,13 @@ public class PackageManager : Singleton<PackageManager>
             SelectItem = 0;
         }
 
-        public int SetItemValue(int instanceId, int value)
+        public async Task<int> SetItemValue(int instanceId, int value)
         {
             int index = items.FindIndex(item => item.instanceId == instanceId);
             if (index >= 0)
             {
                 var item = items[index];
-                item.SetValue(value);
+                item=await Item.SetValue(item,value);
                 items[index] = item;
                 return item.value;
             }
@@ -1192,17 +1203,14 @@ public class PackageManager : Singleton<PackageManager>
             }
         }
 
-        public int AddItemValue(int instanceId, int value)
+        public async Task<int> AddItemValue(int instanceId, int value)
         {
             int index = items.FindIndex(item => item.instanceId == instanceId);
             if (index >= 0)
             {
                 var item = items[index];
-                item.ChangeValue(value);
-                if (item.value < 0)
-                {
-                    item.SetValue(0);
-                }
+                item=await Item.ChangeValue(item,value);
+              
                 items[index] = item;
                 return item.value;
             }
@@ -1313,7 +1321,7 @@ public class PackageManager : Singleton<PackageManager>
                             itemType = itemData.type, 
                             count = 0
                         };
-                        newItem.SetValue(item.value);
+                        newItem=await Item.SetValue(newItem,item.value);
                         if (items.Count <= index)
                         {
                             items.Add(newItem);
@@ -1375,7 +1383,7 @@ public class PackageManager : Singleton<PackageManager>
                             itemType = itemData.type, 
                             count = 0
                         };
-                        item1.SetValue(item.value);
+                        item1=await Item.SetValue(item1,item.value);
 
                         if (items.Count <= index)
                         {
@@ -1408,7 +1416,7 @@ public class PackageManager : Singleton<PackageManager>
                             itemType = itemData.type, 
                             count = 1
                         };
-                        item1.SetValue(item.value);
+                        item1 = await Item.SetValue(item1, item.value);
                         int index = items.Count;
                         if (nullItems.Count > 0)
                         {
@@ -1610,7 +1618,7 @@ public class PackageManager : Singleton<PackageManager>
                 return item.value;
             }
             var items = GetItemFromDataId(itemDataId);
-            if (items.Count > 0)
+            if (items!=null&&items.Count > 0)
             {
                 return items[0].value;
             }
@@ -1623,6 +1631,11 @@ public class PackageManager : Singleton<PackageManager>
                 return itemCount;
             }
             return 0;
+        }
+        public int GetItemCountForInstance(int itemInstanceId)
+        {
+            Item item = GetItemFromInstanceId(itemInstanceId);
+            return item.count;
         }
     }
 }

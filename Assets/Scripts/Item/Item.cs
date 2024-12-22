@@ -12,8 +12,7 @@ public struct Item : IReferenceData
     public int value { get; private set; }
     public bool isFresh;
     public ItemType itemType;
-    public bool locked;
-    public bool singleItem;
+    public bool locked; 
     public Item(int dataId, int count,  int packageId = 0)
     {
         this.dataId = dataId;
@@ -23,42 +22,43 @@ public struct Item : IReferenceData
         itemType = ItemType.Default;
         isFresh = false;
         locked = false;
-        value = 1;
-        maxValue = 1;
-        singleItem = false;
-        InitValue();
-    }
-    int maxValue;
+        value = 100;  
+    } 
     
-    public void SetValue(int value)
-    {
-        this.value = value;
-        if (this.value > maxValue)
-        {
-            this.value = maxValue;
-        }
-    }
-    public void ChangeValue(int value)
-    {
-        this.value = this.value+value;
-        if (this.value > maxValue)
-        {
-            this.value = maxValue;
-        }
-    }
-    async void InitValue()
+   public async Task<bool> IsSingleItem()
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(dataId);
-        if (itemData != null)
-        {
-            singleItem = itemData.groupCount <= 1;
-            if(itemData.itemValue)
-                maxValue = value = itemData.Property.Other;
-        }
+        return itemData.groupCount == 1;
     }
-    public float GetValue()
+    public async Task<float> GetValue()
     {
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(dataId);
+        int maxValue = itemData.Property.Other;
         return value /(float)maxValue;
+    }
+    public static async Task<Item> SetValue(Item item,int value)
+    {
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+        item.value = value;
+        if (item.value > itemData.Property.Other)
+        {
+            item.value = itemData.Property.Other;
+        }
+        return item;
+    }
+    public static async Task<Item> ChangeValue(Item item, int value)
+    {
+        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+        item.value += value;
+        if (item.value > itemData.Property.Other)
+        {
+            item.value = itemData.Property.Other;
+        }
+        if (item.value < 0)
+        {
+            item.value = 0;
+        }
+        return item;
     }
 }
 

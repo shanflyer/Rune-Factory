@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -67,7 +67,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 waiteSetHomeEquip = !waiteSetHomeEquip;
                 if (waiteSetHomeEquip)
                 {
-                    ActionName.text = "取消";
+                    ActionName.text = "鍙栨秷";
                     var renference = EquipBoxs.GetReference(SelectHomeEquip);
                     if (renference)
                     {
@@ -76,7 +76,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 }
                 else
                 {
-                    ActionName.text = "布置";
+                    ActionName.text = "甯冪疆";
                    var renference= EquipBoxs.GetReference(SelectHomeEquip);
                     if (renference)
                     {
@@ -147,7 +147,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             SelectHomeEquip.mapInstance = -1;
             EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
             selectMapItemRuntimeObj = null;
-            ActionName.text = "布置";
+            ActionName.text = "甯冪疆";
             ActionImage.sprite = setSprite;
             var homeEquipmentData =SelectHomeEquip.homeEquipmentData;
             ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
@@ -173,7 +173,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 {
                     instanceId = SelectHomeEquip.instanceId,
                     dataId = SelectHomeEquip.equipDataId,
-                    itemType = ItemType.家具,
+                    itemType = ItemType.瀹跺叿,
                 } ,
                 showClose = true,
                 OffsetPos = infoOffsetY, 
@@ -363,7 +363,19 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     }
     bool canMoveCamera = false;
 
-    MapItemRuntimeObj selectMapItemRuntimeObj;
+    MapItemRuntimeObj selectMapItemRuntimeObj
+    {
+        get
+        {
+            return _selectMapItemRuntimeObj;
+        }
+        set
+        {
+            cancleSelectButton.interactable = value != null;
+            _selectMapItemRuntimeObj = value;
+        }
+    }
+    MapItemRuntimeObj _selectMapItemRuntimeObj;
     TempMapItem TempMapItem;
     void MousePos(object obj)
     {
@@ -432,7 +444,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                 EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
 
                                 waiteSetHomeEquip = false;
-                                ActionName.text ="收回";
+                                ActionName.text ="鏀跺洖";
                                 ActionImage.sprite = unSetSprite;
                             }
                         },
@@ -533,7 +545,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 SelectHomeEquip = HomeEquip;
                 HomeEquipmentData homeEquipmentData = HomeEquip.homeEquipmentData;
                 ItemName.text = $"{homeEquipmentData.equipmentName}"; 
-                ActionName.text = HomeEquip.mapInstance <= 0 ? "布置" : "收回";
+                ActionName.text = HomeEquip.mapInstance <= 0 ? "甯冪疆" : "鏀跺洖";
                 ActionImage.sprite = HomeEquip.mapInstance <= 0 ? setSprite : unSetSprite;
                 InfoButton.transform.localScale =  Vector3.one;
 

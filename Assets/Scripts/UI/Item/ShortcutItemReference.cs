@@ -18,7 +18,16 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     [SerializeField]
     private TextMeshProUGUI count;
 
-
+    private void Awake()
+    {
+        toggle.onValueChanged.AddListener((bool value) =>
+        {
+            if(SelectAction != null)
+            {
+                SelectAction(data, value);
+            }
+        });
+    }
     public override void ClearSelect()
     {
         base.ClearSelect();
@@ -53,12 +62,12 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         if (!SingletonType.Cleared)
             GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
     }
-    void RefreshItemValue(RefreshItemValue refreshItemValue)
+    async void RefreshItemValue(RefreshItemValue refreshItemValue)
     {
         if (refreshItemValue.itemId == data.Item.instanceId)
         {
-            data.Item.SetValue(refreshItemValue.itemValue);
-            ItemValue.fillAmount = data.Item.GetValue();
+            data.Item=await Item.SetValue(data.Item,refreshItemValue.itemValue);
+            ItemValue.fillAmount =await data.Item.GetValue();
         }
     }
     public override void ClearData()
@@ -87,7 +96,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             count.enabled = data.Item.count > 0;
             toggle.enabled = true;
             ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-            ItemValue.fillAmount = data.Item.GetValue(); 
+            ItemValue.fillAmount =await data.Item.GetValue(); 
 
         }
         else

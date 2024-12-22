@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 
 public struct GetPastureLevel : GameAction
@@ -159,7 +160,7 @@ public struct TryGetAnimalFoodFromPasture : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public async void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 0)
         {
@@ -167,7 +168,7 @@ public struct TryGetAnimalFoodFromPasture : GameAction
         }
         if (parameters.Count > 1)
         {
-            item.SetValue(int.Parse(parameters[1].value));
+            item=await Item.SetValue(item,int.Parse(parameters[1].value));
         }
         if (parameters.Count > 2)
         {
@@ -179,7 +180,7 @@ public struct TryGetAnimalFoodFromPasture : GameAction
         }
         if (target != 0)
         {
-            item.SetValue(target);
+            item = await Item.SetValue(item, target);
         }
         if (value != 0)
         {
@@ -196,7 +197,7 @@ public struct TrySetAnimalFoodToPasture : GameAction
     public int pastureId;
     public Item item;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public async Task Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 0)
         {
@@ -204,7 +205,7 @@ public struct TrySetAnimalFoodToPasture : GameAction
         }
         if (parameters.Count > 1)
         {
-            item.SetValue(int.Parse(parameters[1].value));
+            item = await Item.SetValue(item, int.Parse(parameters[1].value));
         }
         if (parameters.Count > 2)
         {
@@ -216,7 +217,7 @@ public struct TrySetAnimalFoodToPasture : GameAction
         }
         if (target != 0)
         {
-            item.SetValue(target);
+            item = await Item.SetValue(item, target);
         }
         if (value != 0)
         {
@@ -233,7 +234,7 @@ public struct TryGetItemFromPastureBox : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public async void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count > 0)
         {
@@ -241,7 +242,7 @@ public struct TryGetItemFromPastureBox : GameAction
         }
         if (parameters.Count > 1)
         {
-            item.SetValue(int.Parse(parameters[1].value));
+            item = await Item.SetValue(item, int.Parse(parameters[1].value));
         }
         if (parameters.Count > 2)
         {
@@ -253,7 +254,7 @@ public struct TryGetItemFromPastureBox : GameAction
         }
         if (target != 0)
         {
-            item.SetValue(target);
+            item = await Item.SetValue(item, target);
         }
         if (value != 0)
         {

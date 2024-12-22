@@ -59,8 +59,8 @@ public class ShortcutManager : Singleton<ShortcutManager>
                 var item = shortcutPackage.items[i];
                 if (item.dataId != 0)
                 {
-                    int itemCount = PackageManager.instance.GetPackageItemCount(
-                        CharacterManager.instance.controllerCharacter.characterPackage, item.dataId);
+                    int itemCount =await item.IsSingleItem()?PackageManager.instance.GetPackageItemCountForInstance(CharacterManager.instance.controllerCharacter.characterPackage, item.instanceId):
+                    PackageManager.instance.GetPackageItemCount(CharacterManager.instance.controllerCharacter.characterPackage, item.dataId);
                     if (itemCount <= 0)
                     {
                         shortcutPackage.haveItems.Remove(shortcutPackage.items[i].instanceId);
@@ -70,11 +70,11 @@ public class ShortcutManager : Singleton<ShortcutManager>
                     { 
                         if (item.instanceId != 0)
                         {
-                            item.SetValue(PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.instanceId));
+                            item = await Item.SetValue(item, PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.instanceId));
                         }
                         else
                         {
-                            item.SetValue(PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.dataId));
+                            item = await Item.SetValue(item, PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.dataId));
                         }
                         
 
@@ -217,22 +217,22 @@ public class ShortcutPackage : IReferenceData, INativeData
         }
         return result;
     }
-    public void SetItemValue(int instanceId,int itemValue)
+    public async void SetItemValue(int instanceId,int itemValue)
     {
         for(int i = 0; i < items.Length; i++)
         {
             if (items[i].instanceId == instanceId)
             {
-                items[i].SetValue(itemValue);
+                items[i]=await Item.SetValue(items[i],itemValue);
             }
         }
     }
 
-    public bool TryChangeItemValue(int itemId,int value)
+    public bool TryChangeItemValue(List<int> itemIds,int value)
     {
         for(int i=0;i<items.Length; i++)
         {
-            if (items[i].dataId == itemId && items[i].value>=value)
+            if (itemIds.Contains(items[i].dataId))
             {
                 AddItemValue addItemValue = new AddItemValue
                 {
@@ -258,11 +258,28 @@ public class ShortcutPackage : IReferenceData, INativeData
                     selectItem = items[i].instanceId,
                     value = value
                 };
-                GameActionManager.instance.QueueAction(addItemValue);
-                return true;
+                GameActionManager.instance.QueueAction(addItemValue); 
             }
         }
-        return false;
+        return true;
+    }
+    public bool TrySetItemValue(List<int> itemIds, int value)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (itemIds.Contains(items[i].dataId))
+            {
+                SetItemValue addItemValue = new SetItemValue
+                {
+                    characterId = Key,
+                    selectItem = items[i].instanceId,
+                    value = value
+                };
+                GameActionManager.instance.QueueAction(addItemValue);
+             
+            }
+        }
+        return true;
     }
     public List<ShortcutItem> GetShortcutItems()
     {
@@ -282,7 +299,7 @@ public class ShortcutPackage : IReferenceData, INativeData
     {
         if (index <= items.Length)
         {
-            haveItems.Add(items[index - 1].instanceId);
+            haveItems.Remove(items[index - 1].instanceId);
             items[index-1] = default(Item); 
         }
     }
