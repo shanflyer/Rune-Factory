@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SellItem : GamePanel<Item>
@@ -9,6 +10,11 @@ public class SellItem : GamePanel<Item>
     [SerializeField]
     private TextMeshPro count;
 
+    private Vector3 defaultOffset;
+    public void SetDefaultOffset(Vector3 offset)
+    {
+        defaultOffset = offset;
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -76,16 +82,33 @@ public class SellItem : GamePanel<Item>
         item = v;
         ShopItemDisplayData shopItemDisplayData = await GameDataManager.instance.GetAsyncData<ShopItemDisplayData>(item.dataId);
         if (shopItemDisplayData == null)
-        {
+        { 
+            transform.localPosition = defaultOffset; 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+            icon.size = new Vector2(0.32f, 0.32f);
             if (itemData != null)
             {
                 icon.sprite = itemData.icon;
             }
         }
         else
-        {
-            icon.sprite = shopItemDisplayData.GetItemSprie(item.count);
+        { 
+            Vector3 offsetPos = shopItemDisplayData.offset;
+            transform.localPosition = offsetPos; 
+            if (shopItemDisplayData.itemCounts == null || shopItemDisplayData.itemCounts.Count == 0)
+            {
+                ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+                if (itemData != null)
+                {
+                    icon.sprite = itemData.icon;
+                }
+            }
+            else
+            {
+                icon.sprite = shopItemDisplayData.GetItemSprite(item.count);
+            }
+            float size = 0.32f * shopItemDisplayData.scale;
+            icon.size = new Vector2(size, size);
         }
         count.text = item.count.ToString();
 

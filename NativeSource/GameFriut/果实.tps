@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.1.0</string>
+        <string>7.5.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Crop</enum>
+            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -173,123 +173,331 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">丁鱼0$Normal.png</key>
+            <key type="filename">丁鱼0.png</key>
+            <key type="filename">兰寿金鱼0$Normal.png</key>
+            <key type="filename">兰寿金鱼0.png</key>
+            <key type="filename">孔雀鱼0$Normal.png</key>
+            <key type="filename">孔雀鱼0.png</key>
+            <key type="filename">小龙虾0$Normal.png</key>
+            <key type="filename">小龙虾0.png</key>
+            <key type="filename">手套蟹0$Normal.png</key>
+            <key type="filename">手套蟹0.png</key>
+            <key type="filename">斑马狮子鱼0$Normal.png</key>
+            <key type="filename">斑马狮子鱼0.png</key>
+            <key type="filename">条石鲷0$Normal.png</key>
+            <key type="filename">条石鲷0.png</key>
+            <key type="filename">桃花鱼0$Normal.png</key>
+            <key type="filename">桃花鱼0.png</key>
+            <key type="filename">梭鲈0$Normal.png</key>
+            <key type="filename">梭鲈0.png</key>
+            <key type="filename">樱桃鲑鱼0$Normal.png</key>
+            <key type="filename">樱桃鲑鱼0.png</key>
+            <key type="filename">比目鱼0$Normal.png</key>
+            <key type="filename">比目鱼0.png</key>
+            <key type="filename">水母0$Normal.png</key>
+            <key type="filename">水母0.png</key>
+            <key type="filename">沙丁鱼0$Normal.png</key>
+            <key type="filename">沙丁鱼0.png</key>
+            <key type="filename">河豚鱼0$Normal.png</key>
+            <key type="filename">河豚鱼0.png</key>
+            <key type="filename">洞穴天使鱼0$Normal.png</key>
+            <key type="filename">洞穴天使鱼0.png</key>
+            <key type="filename">海鳗0$Normal.png</key>
+            <key type="filename">海鳗0.png</key>
+            <key type="filename">章鱼0$Normal.png</key>
+            <key type="filename">章鱼0.png</key>
+            <key type="filename">竹荚鱼0$Normal.png</key>
+            <key type="filename">竹荚鱼0.png</key>
+            <key type="filename">红鲷鱼0$Normal.png</key>
+            <key type="filename">红鲷鱼0.png</key>
+            <key type="filename">线鱼0$Normal.png</key>
+            <key type="filename">线鱼0.png</key>
+            <key type="filename">蓝蟹0$Normal.png</key>
+            <key type="filename">蓝蟹0.png</key>
+            <key type="filename">虹鳟鱼0$Normal.png</key>
+            <key type="filename">虹鳟鱼0.png</key>
+            <key type="filename">金枪鱼0$Normal.png</key>
+            <key type="filename">金枪鱼0.png</key>
+            <key type="filename">金鳟鱼0$Normal.png</key>
+            <key type="filename">金鳟鱼0.png</key>
+            <key type="filename">银龙鱼0$Normal.png</key>
+            <key type="filename">银龙鱼0.png</key>
+            <key type="filename">锦鲤0$Normal.png</key>
+            <key type="filename">锦鲤0.png</key>
+            <key type="filename">霓虹脂鲤0$Normal.png</key>
+            <key type="filename">霓虹脂鲤0.png</key>
+            <key type="filename">鲑鱼0$Normal.png</key>
+            <key type="filename">鲑鱼0.png</key>
+            <key type="filename">鲤鱼0$Normal.png</key>
+            <key type="filename">鲤鱼0.png</key>
+            <key type="filename">鲫鱼0$Normal.png</key>
+            <key type="filename">鲫鱼0.png</key>
+            <key type="filename">鲮鱼0$Normal.png</key>
+            <key type="filename">鲮鱼0.png</key>
+            <key type="filename">鲯鳅鱼0$Normal.png</key>
+            <key type="filename">鲯鳅鱼0.png</key>
+            <key type="filename">鲶鱼0$Normal.png</key>
+            <key type="filename">鲶鱼0.png</key>
+            <key type="filename">鲷鱼0$Normal.png</key>
+            <key type="filename">鲷鱼0.png</key>
+            <key type="filename">龙虾0$Normal.png</key>
+            <key type="filename">龙虾0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,13,26,26</rect>
+                <key>scale9Paddings</key>
+                <rect>13,13,26,26</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">南瓜_01$Normal.png</key>
             <key type="filename">南瓜_01.png</key>
+            <key type="filename">南瓜_02$Normal.png</key>
             <key type="filename">南瓜_02.png</key>
+            <key type="filename">南瓜_03$Normal.png</key>
             <key type="filename">南瓜_03.png</key>
+            <key type="filename">南瓜种子$Normal.png</key>
             <key type="filename">南瓜种子.png</key>
+            <key type="filename">卷心菜_01$Normal.png</key>
             <key type="filename">卷心菜_01.png</key>
+            <key type="filename">卷心菜_02$Normal.png</key>
             <key type="filename">卷心菜_02.png</key>
+            <key type="filename">卷心菜_03$Normal.png</key>
             <key type="filename">卷心菜_03.png</key>
+            <key type="filename">卷心菜种子$Normal.png</key>
             <key type="filename">卷心菜种子.png</key>
+            <key type="filename">咖啡_01$Normal.png</key>
             <key type="filename">咖啡_01.png</key>
+            <key type="filename">咖啡_02$Normal.png</key>
             <key type="filename">咖啡_02.png</key>
+            <key type="filename">咖啡_03$Normal.png</key>
             <key type="filename">咖啡_03.png</key>
+            <key type="filename">咖啡种子$Normal.png</key>
             <key type="filename">咖啡种子.png</key>
+            <key type="filename">啤酒花_01$Normal.png</key>
             <key type="filename">啤酒花_01.png</key>
+            <key type="filename">啤酒花_02$Normal.png</key>
             <key type="filename">啤酒花_02.png</key>
+            <key type="filename">啤酒花_03$Normal.png</key>
             <key type="filename">啤酒花_03.png</key>
+            <key type="filename">啤酒花种子$Normal.png</key>
             <key type="filename">啤酒花种子.png</key>
+            <key type="filename">土豆_01$Normal.png</key>
             <key type="filename">土豆_01.png</key>
+            <key type="filename">土豆_02$Normal.png</key>
             <key type="filename">土豆_02.png</key>
+            <key type="filename">土豆_03$Normal.png</key>
             <key type="filename">土豆_03.png</key>
+            <key type="filename">土豆种子$Normal.png</key>
             <key type="filename">土豆种子.png</key>
+            <key type="filename">大蒜_01$Normal.png</key>
             <key type="filename">大蒜_01.png</key>
+            <key type="filename">大蒜_02$Normal.png</key>
             <key type="filename">大蒜_02.png</key>
+            <key type="filename">大蒜_03$Normal.png</key>
             <key type="filename">大蒜_03.png</key>
+            <key type="filename">大蒜种子$Normal.png</key>
             <key type="filename">大蒜种子.png</key>
+            <key type="filename">大麦_01$Normal.png</key>
             <key type="filename">大麦_01.png</key>
+            <key type="filename">大麦_02$Normal.png</key>
             <key type="filename">大麦_02.png</key>
+            <key type="filename">大麦_03$Normal.png</key>
             <key type="filename">大麦_03.png</key>
+            <key type="filename">大麦种子$Normal.png</key>
             <key type="filename">大麦种子.png</key>
+            <key type="filename">奇异果_01$Normal.png</key>
             <key type="filename">奇异果_01.png</key>
+            <key type="filename">奇异果_02$Normal.png</key>
             <key type="filename">奇异果_02.png</key>
+            <key type="filename">奇异果_03$Normal.png</key>
             <key type="filename">奇异果_03.png</key>
+            <key type="filename">奇异果种子$Normal.png</key>
             <key type="filename">奇异果种子.png</key>
+            <key type="filename">椰子_01$Normal.png</key>
             <key type="filename">椰子_01.png</key>
+            <key type="filename">椰子_02$Normal.png</key>
             <key type="filename">椰子_02.png</key>
+            <key type="filename">椰子_03$Normal.png</key>
             <key type="filename">椰子_03.png</key>
+            <key type="filename">玉米_01$Normal.png</key>
             <key type="filename">玉米_01.png</key>
+            <key type="filename">玉米_02$Normal.png</key>
             <key type="filename">玉米_02.png</key>
+            <key type="filename">玉米_03$Normal.png</key>
             <key type="filename">玉米_03.png</key>
+            <key type="filename">玉米种子$Normal.png</key>
             <key type="filename">玉米种子.png</key>
+            <key type="filename">甜菜_01$Normal.png</key>
             <key type="filename">甜菜_01.png</key>
+            <key type="filename">甜菜_02$Normal.png</key>
             <key type="filename">甜菜_02.png</key>
+            <key type="filename">甜菜_03$Normal.png</key>
             <key type="filename">甜菜_03.png</key>
+            <key type="filename">甜菜种子$Normal.png</key>
             <key type="filename">甜菜种子.png</key>
+            <key type="filename">番茄_01$Normal.png</key>
             <key type="filename">番茄_01.png</key>
+            <key type="filename">番茄_02$Normal.png</key>
             <key type="filename">番茄_02.png</key>
+            <key type="filename">番茄_03$Normal.png</key>
             <key type="filename">番茄_03.png</key>
+            <key type="filename">番茄种子$Normal.png</key>
             <key type="filename">番茄种子.png</key>
+            <key type="filename">紫甘蓝_01$Normal.png</key>
             <key type="filename">紫甘蓝_01.png</key>
+            <key type="filename">紫甘蓝_02$Normal.png</key>
             <key type="filename">紫甘蓝_02.png</key>
+            <key type="filename">紫甘蓝_03$Normal.png</key>
             <key type="filename">紫甘蓝_03.png</key>
+            <key type="filename">紫甘蓝种子$Normal.png</key>
             <key type="filename">紫甘蓝种子.png</key>
+            <key type="filename">红薯_01$Normal.png</key>
             <key type="filename">红薯_01.png</key>
+            <key type="filename">红薯_02$Normal.png</key>
             <key type="filename">红薯_02.png</key>
+            <key type="filename">红薯_03$Normal.png</key>
             <key type="filename">红薯_03.png</key>
+            <key type="filename">红薯种子$Normal.png</key>
             <key type="filename">红薯种子.png</key>
+            <key type="filename">胡萝卜_01$Normal.png</key>
             <key type="filename">胡萝卜_01.png</key>
+            <key type="filename">胡萝卜_02$Normal.png</key>
             <key type="filename">胡萝卜_02.png</key>
+            <key type="filename">胡萝卜_03$Normal.png</key>
             <key type="filename">胡萝卜_03.png</key>
+            <key type="filename">胡萝卜种子$Normal.png</key>
             <key type="filename">胡萝卜种子.png</key>
+            <key type="filename">芜菁_01$Normal.png</key>
             <key type="filename">芜菁_01.png</key>
+            <key type="filename">芜菁_02$Normal.png</key>
             <key type="filename">芜菁_02.png</key>
+            <key type="filename">芜菁_03$Normal.png</key>
             <key type="filename">芜菁_03.png</key>
+            <key type="filename">芜菁种子$Normal.png</key>
             <key type="filename">芜菁种子.png</key>
+            <key type="filename">芦笋_01$Normal.png</key>
             <key type="filename">芦笋_01.png</key>
+            <key type="filename">芦笋_02$Normal.png</key>
             <key type="filename">芦笋_02.png</key>
+            <key type="filename">芦笋_03$Normal.png</key>
             <key type="filename">芦笋_03.png</key>
+            <key type="filename">芦笋种子$Normal.png</key>
             <key type="filename">芦笋种子.png</key>
+            <key type="filename">茄子_01$Normal.png</key>
             <key type="filename">茄子_01.png</key>
+            <key type="filename">茄子_02$Normal.png</key>
             <key type="filename">茄子_02.png</key>
+            <key type="filename">茄子_03$Normal.png</key>
             <key type="filename">茄子_03.png</key>
+            <key type="filename">茄子种子$Normal.png</key>
             <key type="filename">茄子种子.png</key>
+            <key type="filename">草莓_01$Normal.png</key>
             <key type="filename">草莓_01.png</key>
+            <key type="filename">草莓_02$Normal.png</key>
             <key type="filename">草莓_02.png</key>
+            <key type="filename">草莓_03$Normal.png</key>
             <key type="filename">草莓_03.png</key>
+            <key type="filename">草莓种子$Normal.png</key>
             <key type="filename">草莓种子.png</key>
+            <key type="filename">菠萝_01$Normal.png</key>
             <key type="filename">菠萝_01.png</key>
+            <key type="filename">菠萝_02$Normal.png</key>
             <key type="filename">菠萝_02.png</key>
+            <key type="filename">菠萝_03$Normal.png</key>
             <key type="filename">菠萝_03.png</key>
+            <key type="filename">菠萝种子$Normal.png</key>
             <key type="filename">菠萝种子.png</key>
+            <key type="filename">萝卜_01$Normal.png</key>
             <key type="filename">萝卜_01.png</key>
+            <key type="filename">萝卜_02$Normal.png</key>
             <key type="filename">萝卜_02.png</key>
+            <key type="filename">萝卜_03$Normal.png</key>
             <key type="filename">萝卜_03.png</key>
+            <key type="filename">萝卜种子$Normal.png</key>
             <key type="filename">萝卜种子.png</key>
+            <key type="filename">葡萄_01$Normal.png</key>
             <key type="filename">葡萄_01.png</key>
+            <key type="filename">葡萄_02$Normal.png</key>
             <key type="filename">葡萄_02.png</key>
+            <key type="filename">葡萄_03$Normal.png</key>
             <key type="filename">葡萄_03.png</key>
+            <key type="filename">葡萄种子$Normal.png</key>
             <key type="filename">葡萄种子.png</key>
+            <key type="filename">葱_01$Normal.png</key>
             <key type="filename">葱_01.png</key>
+            <key type="filename">葱_02$Normal.png</key>
             <key type="filename">葱_02.png</key>
+            <key type="filename">葱_03$Normal.png</key>
             <key type="filename">葱_03.png</key>
+            <key type="filename">葱种子$Normal.png</key>
             <key type="filename">葱种子.png</key>
+            <key type="filename">蓝莓_01$Normal.png</key>
             <key type="filename">蓝莓_01.png</key>
+            <key type="filename">蓝莓_02$Normal.png</key>
             <key type="filename">蓝莓_02.png</key>
+            <key type="filename">蓝莓_03$Normal.png</key>
             <key type="filename">蓝莓_03.png</key>
+            <key type="filename">蓝莓种子$Normal.png</key>
             <key type="filename">蓝莓种子.png</key>
+            <key type="filename">西兰花_01$Normal.png</key>
             <key type="filename">西兰花_01.png</key>
+            <key type="filename">西兰花_02$Normal.png</key>
             <key type="filename">西兰花_02.png</key>
+            <key type="filename">西兰花_03$Normal.png</key>
             <key type="filename">西兰花_03.png</key>
+            <key type="filename">西兰花种子$Normal.png</key>
             <key type="filename">西兰花种子.png</key>
+            <key type="filename">西瓜_01$Normal.png</key>
             <key type="filename">西瓜_01.png</key>
+            <key type="filename">西瓜_02$Normal.png</key>
             <key type="filename">西瓜_02.png</key>
+            <key type="filename">西瓜_03$Normal.png</key>
             <key type="filename">西瓜_03.png</key>
+            <key type="filename">西瓜种子$Normal.png</key>
             <key type="filename">西瓜种子.png</key>
+            <key type="filename">豌豆_01$Normal.png</key>
             <key type="filename">豌豆_01.png</key>
+            <key type="filename">豌豆_02$Normal.png</key>
             <key type="filename">豌豆_02.png</key>
+            <key type="filename">豌豆_03$Normal.png</key>
             <key type="filename">豌豆_03.png</key>
+            <key type="filename">豌豆种子$Normal.png</key>
             <key type="filename">豌豆种子.png</key>
+            <key type="filename">辣椒_01$Normal.png</key>
             <key type="filename">辣椒_01.png</key>
+            <key type="filename">辣椒_02$Normal.png</key>
             <key type="filename">辣椒_02.png</key>
+            <key type="filename">辣椒_03$Normal.png</key>
             <key type="filename">辣椒_03.png</key>
+            <key type="filename">辣椒种子$Normal.png</key>
             <key type="filename">辣椒种子.png</key>
+            <key type="filename">香蕉_01$Normal.png</key>
             <key type="filename">香蕉_01.png</key>
+            <key type="filename">香蕉_02$Normal.png</key>
             <key type="filename">香蕉_02.png</key>
+            <key type="filename">香蕉_03$Normal.png</key>
             <key type="filename">香蕉_03.png</key>
+            <key type="filename">鸡蛋_01$Normal.png</key>
+            <key type="filename">鸡蛋_01.png</key>
+            <key type="filename">鸡蛋_02$Normal.png</key>
+            <key type="filename">鸡蛋_02.png</key>
+            <key type="filename">鸡蛋_03$Normal.png</key>
+            <key type="filename">鸡蛋_03.png</key>
+            <key type="filename">黄瓜_01$Normal.png</key>
             <key type="filename">黄瓜_01.png</key>
+            <key type="filename">黄瓜_02$Normal.png</key>
             <key type="filename">黄瓜_02.png</key>
+            <key type="filename">黄瓜_03$Normal.png</key>
             <key type="filename">黄瓜_03.png</key>
+            <key type="filename">黄瓜种子$Normal.png</key>
             <key type="filename">黄瓜种子.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -327,13 +535,13 @@
         <key>commonDivisorY</key>
         <uint>1</uint>
         <key>packNormalMaps</key>
-        <false/>
-        <key>autodetectNormalMaps</key>
         <true/>
+        <key>autodetectNormalMaps</key>
+        <false/>
         <key>normalMapFilter</key>
         <string></string>
         <key>normalMapSuffix</key>
-        <string></string>
+        <string>$Normal</string>
         <key>normalMapSheetFileName</key>
         <filename></filename>
         <key>exporterProperties</key>

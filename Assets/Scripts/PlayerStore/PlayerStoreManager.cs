@@ -314,6 +314,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 transform.gameObject.SetActive(true);
                 transform.SetParent(displayStoreCounter.transform, false);
                 transform.localPosition = storeCounterData.offset;
+                nowSellItem.SetDefaultOffset(storeCounterData.offset);
             }
             else
             {

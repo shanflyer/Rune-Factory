@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ShopItemDisplayData : ScriptableObject, IGameData, IReferenceData
 {
     public int id;
     public string itemName;
+    public Vector3 offset;
+    public float scale;
     public List<int> itemCounts = new List<int>();
     public List<string> sourceName = new List<string>();
     public List<Sprite> itemSprites = new List<Sprite>();
 
-    public Sprite GetItemSprie(int count)
+    public Sprite GetItemSprite(int count)
     {
         for (int i = itemCounts.Count; i > 0; i--)
         {
