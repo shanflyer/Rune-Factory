@@ -136,13 +136,18 @@ public class GameCommon
     public const int AddSpeedBuff = 13;
     public const int AddLuckyBuff = 14;
 
+    public static float2 fishWaitCD = new float2(4.0f, 12.0f);
+    public static float2 autoCustomerCD = new float2(4.0f, 20.0f);
+    public const int MyPlayerStore = 547;
+    public const int timeStoreCurveData = 12;
+    public const int weatherStoreCurveData = 13;
+
     public const int BlueObjLayer = 13;
     public const int GreenObjLayer = 14;
     public const int RedObjLayer = 15;
 
     public const int ManufatureWorkingEmote = 72;
-    public const int ManufatureWorkendEnote = 14;
-      
+    public const int ManufatureWorkendEnote = 14;      
 
     public const int PixelCameraDefaultValue = 400;
     public const int setTeamerFunctionId = 4;
@@ -177,6 +182,9 @@ public class GameCommon
         1001,2001
     };
 
+    //钓鱼
+    public const int GetFish = 41;//收竿
+    public const int StartFish = 40;//钓鱼
 
     //土地
     public const int SmoothField = 10;//锄地
@@ -250,7 +258,7 @@ public class GameCommon
     public const float ScreenHalfSizeX = 960;
     public const float ScreenHalfSizeY = 540;
 
-    public const int fishingGameTime = 3000;
+    public const int fishingGameTime = 15000;
 
     public const string characterTriggerRenferenceName = "CharacterId";
     public const string triggerRenferenceName = "Reference";

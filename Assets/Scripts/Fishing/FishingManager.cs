@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine.TextCore.Text;
 
 public class FishingManager : Singleton<FishingManager>
 {
@@ -38,6 +39,43 @@ public class FishingManager : Singleton<FishingManager>
     private async void FishingIsSuccess(FishingIsSuccess fishingIsSuccess)
     {
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == fishingIsSuccess.characterId;
+        if (isController)
+        {
+           int itemInstance= WorldMapManager.instance.GetInstanceFromEditorId(fishingIsSuccess.pondData.linkMapItem);
+
+            RemoveMapItemOperate removeOperateData = new RemoveMapItemOperate
+            {
+                mapItemId = itemInstance,
+                removeOperateId = GameCommon.GetFish
+            };
+            GameActionManager.instance.QueueAction(removeOperateData);
+            AddMapItemOperate addOperateData = new AddMapItemOperate
+            {
+                mapItemId = itemInstance,
+                addeOperateId = GameCommon.StartFish
+            };
+            GameActionManager.instance.QueueAction(addOperateData);
+
+            ShowMapObjTips ShowMapObjTips = new ShowMapObjTips
+            {
+                id = itemInstance,
+            };
+            GameActionManager.instance.QueueAction(ShowMapObjTips);
+
+            UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+        }
+
+        if(waitFishers.TryGetValue(fishingIsSuccess.characterId,out var action))
+        {
+            GameTimerController.instance.RemoveWaiter(action);
+            waitFishers.Remove(fishingIsSuccess.characterId);
+        }
+        else if (fishWaitActions.TryGetValue(fishingIsSuccess.characterId, out var @delegate))
+        {
+            GameTimerController.instance.RemoveWaiter(@delegate);
+            fishWaitActions.Remove(fishingIsSuccess.characterId);
+        }
+
         if (fishingIsSuccess.isSuccess)
         {
             var fishPondData = fishingIsSuccess.pondData;
@@ -70,7 +108,7 @@ public class FishingManager : Singleton<FishingManager>
                         ItemResultInfo itemResultInfo = new ItemResultInfo
                         {
                             icon = itemData.icon,
-                            info0 = $"获得了一条  <color=green>{item.value}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
+                            info0 = $"获得了一条  <color=green>{randomResult.y}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
                             info1 = newRecord ? $"<color=red> 新记录！ </color>" : ""
                         };
                       await  UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
@@ -154,6 +192,7 @@ public class FishingManager : Singleton<FishingManager>
 
     private void StopFishing(StopFishing stopFishing)
     {
+        UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         int characterId = stopFishing.characterId;
         if (waitFishers.TryGetValue(characterId, out var @delegate))
         {
@@ -174,6 +213,38 @@ public class FishingManager : Singleton<FishingManager>
         Character character = CharacterManager.instance.GetCharacter(characterId);
         int mapId = character.mapInstance;
         int2 key = new int2(mapId, mapItemId);
+        RemovePackageItem removePackageItem = new RemovePackageItem
+        {
+            itemCount = 1,
+            itemDataId = 12,
+            packageId = character.characterPackage
+        };
+        GameActionManager.instance.QueueAction(removePackageItem);
+         
+        UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
+        if(WorldMapManager.instance.GetRuntimeMapItem(startFishing.mapItemId,out var runtimeMapItem))
+        {
+            key = new int2(mapId, runtimeMapItem.editorInstanceId);
+
+            RemoveMapItemOperate removeOperateData = new RemoveMapItemOperate
+            {
+                mapItemId = startFishing.mapItemId,
+                removeOperateId = GameCommon.StartFish
+            };
+            GameActionManager.instance.QueueAction(removeOperateData);
+            AddMapItemOperate addOperateData = new AddMapItemOperate
+            {
+                mapItemId = startFishing.mapItemId,
+                addeOperateId = GameCommon.GetFish
+            };
+            GameActionManager.instance.QueueAction(addOperateData);
+            ShowMapObjTips showMapObjTips = new ShowMapObjTips
+            {
+                id = startFishing.mapItemId
+            };
+            GameActionManager.instance.QueueAction(showMapObjTips);
+        }
+
         if (fishPondDatas.TryGetValue(key, out var fishPondData))
         {
             SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
@@ -186,12 +257,15 @@ public class FishingManager : Singleton<FishingManager>
             GameActionManager.instance.QueueAction(setCharacterAnimator);
 
             int waitFishingTime = GameRandom.RandomInt(fishPondData.waitFishingCd.x, fishPondData.waitFishingCd.y);
-            GameTimerController.instance.DelayAction(waitFishingTime, FishingAction);
+
+            Action action = FishingAction;
+
+            GameTimerController.instance.DelayAction(waitFishingTime, action);
             if (waitFishers.TryGetValue(characterId, out var @delegate))
             {
                 GameTimerController.instance.RemoveWaiter(@delegate);
             }
-            AddWaitFisher(characterId, FishingAction);
+            AddWaitFisher(characterId, action);
 
             void FishingAction()
             {
@@ -211,11 +285,13 @@ public class FishingManager : Singleton<FishingManager>
                 AddFishingGame(characterId, WaitFishingGame);
                 void WaitFishingGame()
                 {
+
                     if (characterId == CharacterManager.instance.controllerCharacter.instanceId)
-                    {
+                    {  
                         FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
                         {
                             characterId = characterId,
+                            pondData=fishPondData,
                             isSuccess = false
                         };
                         GameActionManager.instance.QueueAction(fishingIsSuccess);
@@ -228,6 +304,7 @@ public class FishingManager : Singleton<FishingManager>
                             FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
                             {
                                 characterId = characterId,
+                                pondData = fishPondData,
                                 isSuccess = false
                             };
                             GameActionManager.instance.QueueAction(fishingIsSuccess);
@@ -259,6 +336,7 @@ public class FishingManager : Singleton<FishingManager>
             }
         }
     }
+
 
     private void AddWaitFisher(int characterId, Action action)
     {

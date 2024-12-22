@@ -301,8 +301,9 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
         if (NowTempCharacterCreatData.gameTimeKeyIntDic.TryGetValue(nowTimeKey, out var cdRange))
         {
-            nowCd = GameRandom.RandomInt(cdRange) * 1000;
+            nowCd = GameRandom.RandomInt(cdRange) * 1000; 
         }
+        nowCd += (int)(PlayerStoreManager.instance.GetCustomerCD()*1000);
         // Debug.Log($"creatCD:{nowCd}");
         creatTempDelegate = CreatTempCharacter;
         GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);

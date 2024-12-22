@@ -219,7 +219,7 @@ Shader "MySprite-Lit-Default"
                 return col.r;
             }
           #if WATER
-             float3 WaterFragment(float2 uv,float2 screenUV,float4 _MainTexColor)
+             float3 WaterFragment(float2 uv,float2 fixedScreenUV,float2 screenUV,float4 _MainTexColor)
             {
                 float2 mirrorUV=screenUV; 
 
@@ -247,14 +247,14 @@ Shader "MySprite-Lit-Default"
 
                 float2 _WaveT0=(_TimeParameters.x.xx)*waveValue0; 
   
-                float2 _TilingAndOffset0=screenUV*WaveScale0+_WaveT0;
+                float2 _TilingAndOffset0=fixedScreenUV*WaveScale0+_WaveT0;
                 float4 _WaveCol0 =   SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset0); 
                 _WaveCol0.rgb = UnpackNormal(_WaveCol0);	
                 //波纹2
                 float angle1=radians(_WaveAngle1);
                 float2 waveValue1=float2(cos(angle1),sin(angle1))*_WaveSpeed1;  
                 float2 _WaveT2=(_TimeParameters.x.xx)*waveValue1;				
-                float2 _TilingAndOffset1=screenUV*WaveScale1+_WaveT2; 
+                float2 _TilingAndOffset1=fixedScreenUV*WaveScale1+_WaveT2; 
                 float4 _WaveCol1=  SAMPLE_TEXTURE2D( _WaterNormalMap, sampler_WaterNormalMap,_TilingAndOffset1); 
                 _WaveCol1.rgb = UnpackNormal(_WaveCol1);
                
@@ -267,7 +267,7 @@ Shader "MySprite-Lit-Default"
                 waveBlendCol*=waterValue;
                 //噪声
                 float _waterNoise;
-                Unity_SimpleNoise_float(screenUV.xy, waterNoiseScale, _waterNoise);  
+                Unity_SimpleNoise_float(fixedScreenUV.xy, waterNoiseScale, _waterNoise);  
                 waveBlendCol*=_waterNoise;
                 
 
@@ -316,7 +316,7 @@ Shader "MySprite-Lit-Default"
  
                 float3 MirrorTexColor= SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;  
                 float MirrorValue=(MirrorTexColor.x+MirrorTexColor.y+MirrorTexColor.z)/3;
-                //return MirrorTexColor;
+                 //return MirrorTexColor;
 
                 outWater=outWater*(1-MirrorValue)+MirrorTexColor*MirrorValue;
                 outWater=stepMask*outWater+_MainTexColor.xyz*(1-stepMask);
@@ -718,7 +718,8 @@ Shader "MySprite-Lit-Default"
                 
                 main.xyz=waterColor.xyz;
                 #if WATER
-                 waterColor=WaterFragment(uv,i.fixScreenUV,main);
+                
+                 waterColor=WaterFragment(uv,i.fixScreenUV,i.lightingUV,main);
                 #endif
                
                return float4(waterColor.xyz,main.a);
@@ -881,8 +882,8 @@ Shader "MySprite-Lit-Default"
                 #endif 
 
                  main.xyz=waterColor.xyz;
-                #if WATER
-                 waterColor=WaterFragment(uv,i.fixScreenUV,main);
+                #if WATER 
+                 waterColor=WaterFragment(uv,i.fixScreenUV,i.lightingUV,main);
                 #endif
 
                 #if GRASSBLEND

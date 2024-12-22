@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerStoreManager : Singleton<PlayerStoreManager>
@@ -8,7 +10,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     private Dictionary<int, RuntimeObj> nowRuntimeStoreCounterObjs = new Dictionary<int, RuntimeObj>();
 
     private SellItem sellItem;
-
+    AnimationCurve timeCurve,weatherCurve;
     public bool playerStoreOpen { get; private set; }
     protected override void Clear()
     {
@@ -19,6 +21,10 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     {
         base.Init();
         var storeShow = StoreShow.instance;
+        var timeCurveData = await GameDataManager.instance.GetAsyncData<GrowModelData>(GameCommon.timeStoreCurveData);
+        timeCurve = timeCurveData.curve;
+        var weatherCurveData = await GameDataManager.instance.GetAsyncData<GrowModelData>(GameCommon.weatherStoreCurveData);
+        weatherCurve = weatherCurveData.curve;
 
         var playerStorePrefab = await GameSourceManager.instance.GetPrefab(DataPath.StoreCounterPrefab);
         sellItem = playerStorePrefab.GetComponent<SellItem>();
@@ -32,6 +38,91 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<BuyPlayerGood>(BuyPlayerGood);
         GameActionManager.instance.AddListener<TryBuyPlayerGood>(TryBuyPlayerGood);
         GameActionManager.instance.AddListener<SetPlayerStoreOpen>(SetPlayerStoreOpen);
+        GameActionManager.instance.AddListener<SwitchAutoStore>(SwitchAutoStore);
+    }
+    void SwitchAutoStore(SwitchAutoStore SwitchAutoStore)
+    {
+        if (nowAutoIEnumerator != null)
+        {
+            GameObjectCurveController.instance.StopIEnumerator(nowAutoIEnumerator);
+            nowAutoIEnumerator = null;
+        }
+        if (SwitchAutoStore.isAuto&& playerStoreOpen)
+        {
+            nowAutoIEnumerator = AutoCustomer();
+            GameObjectCurveController.instance.StartIEnumerator(nowAutoIEnumerator);
+        }
+    }
+
+    public float GetCustomerCD()
+    {
+        if (WorldMapObjManager.instance.displayMap == GameCommon.MyPlayerStore)
+        {
+            int storeCount = 0;
+            using (var e = RuntimeStoreCounters.Values.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    if (e.Current.count > 0)
+                    {
+                        storeCount++;
+                    }
+                }
+            }
+            float cdValue = storeCount / 5.0f;
+            cdValue = math.clamp(cdValue, 1, 3);
+
+            float nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
+            nowCd += timeCurve.Evaluate(GameTimeManager.instance.timeValue);
+            nowCd += weatherCurve.Evaluate(WeatherManager.instance.nowWaterFall);
+            nowCd = nowCd / cdValue;
+            return nowCd;
+        }
+        return 0;
+    }
+
+    IEnumerator nowAutoIEnumerator;
+    IEnumerator AutoCustomer()
+    {
+        float timeValue = 0;
+        float nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
+        List<RuntimeStoreCounter> nowRuntimeStoreCounters = new List<RuntimeStoreCounter>();
+        while (true)
+        {
+            timeValue += Time.deltaTime;
+            if (timeValue > nowCd)
+            {
+                nowRuntimeStoreCounters.Clear();
+                using (var e= RuntimeStoreCounters.Values.GetEnumerator())
+                {
+                    while (e.MoveNext())
+                    {
+                        if (e.Current.count > 0)
+                        {
+                            nowRuntimeStoreCounters.Add(e.Current);
+                        }
+                    }
+                }
+                if (nowRuntimeStoreCounters.Count > 0)
+                {
+                    int index = GameRandom.RandomInt(0, nowRuntimeStoreCounters.Count);
+                    RuntimeStoreCounter runtimeStoreCounter = nowRuntimeStoreCounters[index];
+                    TryBuyPlayerGood buyPlayerGood = new TryBuyPlayerGood
+                    {
+                        storeCounterId = runtimeStoreCounter.instanceId,
+                    };
+                    TryBuyPlayerGood(buyPlayerGood);
+                }
+                float cdValue = nowRuntimeStoreCounters.Count / 5.0f;
+                cdValue = math.clamp(cdValue, 1, 3);
+
+                nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
+                nowCd += timeCurve.Evaluate(GameTimeManager.instance.timeValue);
+                nowCd += weatherCurve.Evaluate(WeatherManager.instance.nowWaterFall);
+                nowCd = nowCd / cdValue;
+            }
+            yield return 0;
+        }
     }
     void SetPlayerStoreOpen(SetPlayerStoreOpen setPlayerStoreOpen)
     {
@@ -61,7 +152,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         {
             if (runtimeStoreCounter.count <= 0)
             {
-                buyPlayerGood.setResult(false);
+                if (buyPlayerGood.setResult != null)
+                    buyPlayerGood.setResult(false);
                 return;
             }
             if (nowRuntimeStoreCounterObjs.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeObj))
@@ -86,7 +178,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             }
 
             GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
-            buyPlayerGood.setResult(true);
+            if (buyPlayerGood.setResult != null)
+                buyPlayerGood.setResult(true);
         }
     }
 

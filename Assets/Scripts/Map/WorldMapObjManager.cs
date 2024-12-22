@@ -204,9 +204,22 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     public int displayMap 
     {
-        get; 
-        set;
+        get=>_displayMap;
+        set
+        {
+            if (_displayMap != value)
+            {
+                _displayMap = value;
+                SwitchAutoStore switchAutoStore = new SwitchAutoStore
+                {
+                    isAuto = value != GameCommon.MyPlayerStore
+                };
+                GameActionManager.instance.QueueAction(switchAutoStore);
+            } 
+        }
     }
+    int _displayMap;
+
     public bool IsOutSideMap => DisplayMapRoomData.weatherDisplayType != WeatherDisplayType.Inside;
     public MapRoomData DisplayMapRoomData
     {

@@ -16,6 +16,7 @@ public class FishController : Singleton<FishController>
         GameActionManager.instance.AddListener<RecycleFisher>(RecycleFisher);
         GameActionManager.instance.AddListener<TryGetFish>(TryGetFish);
         GameActionManager.instance.AddListener<NPCFishingResult>(NPCFishingResult);
+        GameActionManager.instance.AddListener<StartFishingGame>(StartFishingGame);
         fishTool = await GameSourceManager.instance.GetComponent<FishTool>(DataPath.fishToolPrefab);
     }
 
@@ -23,7 +24,12 @@ public class FishController : Singleton<FishController>
     {
         if(Fishers.TryGetValue(startFishingGame.characterId,out var fisherRuntime))
         {
-            fisherRuntime.fishTool.StartFishing();
+          
+            if (fisherRuntime != null && fisherRuntime.fishTool != null)
+            {
+                fisherRuntime.fishTool.StartFishing();
+            }
+
         }
     }
      
@@ -69,7 +75,18 @@ public class FishController : Singleton<FishController>
     }
     void TryGetFish(TryGetFish tryGetFish)
     {
-        if(Fishers.TryGetValue(tryGetFish.characterInstance,out var fisherRuntime))
+        List<int> Operates = new List<int>
+            {
+                GameCommon.StartFish
+            };
+        ResetOperateData resetOperateData = new ResetOperateData
+        {
+            mapItemInstanceId = tryGetFish.itemInstance,
+            operates = Operates
+        };
+        GameActionManager.instance.QueueAction(resetOperateData);
+
+        if (Fishers.TryGetValue(tryGetFish.characterInstance,out var fisherRuntime))
         {
             fisherRuntime.fishTool.StopFishing();
             FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
