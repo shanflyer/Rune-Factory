@@ -6,7 +6,7 @@ using static BehaviorDesigner.Runtime.Behavior;
 
 public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 {
-    public override void Init()
+    public override async void Init()
     {
         base.Init();
         obj = GameObject.Find("CharacterBehaviorManager");
@@ -14,12 +14,16 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         {
             obj = new GameObject("CharacterBehaviorManager");
         }
+        backHomeExternalBehavior = await GameSourceManager.instance.GetBehavior(GameCommon.backHomeBehaviorPath);
+
         GameActionManager.instance.AddListener<StopCharacterBehavior>(StopCharacterBehavior);
         GameActionManager.instance.AddListener<StartCharacterBehavior>(StartCharacterBehavior);
         GameActionManager.instance.AddListener<ReStartCharacterBehavior>(ReStartCharacterBehavior);
         GameActionManager.instance.AddListener<PauseCharacterBehavior>(PauseCharacterBehavior);
        // Object.DontDestroyOnLoad(obj);
     }
+
+    public ExternalBehavior backHomeExternalBehavior { get; private set; }
 
     private GameObject obj;
     private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
@@ -87,7 +91,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
     }
     
-    public void AddBehavior(int characterId, ExternalBehaviorTree externalBehavior, BehaviorHandler behaviorHandler=null,
+    public void AddBehavior(int characterId, ExternalBehavior externalBehavior, BehaviorHandler behaviorHandler=null,
         bool PauseWhenDisabled = false,string behaviorName="")
     {
        

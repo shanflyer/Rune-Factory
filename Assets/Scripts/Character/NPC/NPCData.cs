@@ -18,6 +18,10 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public string shopName;
     public int playerOperateEventId;
     public int nextTalkEventId;
+    public int teamFriendShip;
+    public int failTeamTalk;
+    public int failLoveTalk;
+
     private List<int3> talkForFriendShip;
 
     public Int2IntDictionary talkDatas=new Int2IntDictionary();

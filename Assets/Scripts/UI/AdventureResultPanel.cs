@@ -66,6 +66,38 @@ public class AdventureResultPanel: GamePanel<FightResult>
         await UIManager.instance.ShowGamePanel<MainPanel>();
         await UIManager.instance.ShowGamePanel<ShortcutPanel>();
         await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+
+
+        if (!data.victory)
+        {
+           var teamers=  TeamManager.instance.playerTeam.Teamers;
+            for(int i = 0; i < teamers.Count; i++)
+            {
+                var teamer = teamers[i];
+                if (NPCManager.instance.GetNPCFormInstance(teamer.character.instanceId, out var npc))
+                {
+                    npc.Rest();
+                    SimpleTalk simpleTalk = new SimpleTalk
+                    {
+                        characterId = teamer.character.instanceId,
+                        talkId = GameCommon.TeamLeave
+                    };
+                    GameActionManager.instance.QueueAction(simpleTalk);
+                    LeaveTeam leaveTeam = new LeaveTeam
+                    {
+                        teamCharacterId = teamer.character.instanceId,
+                        setResult = (bool value) =>
+                        {
+                            npc.BackHome();
+                        }
+                    };
+                    GameActionManager.instance.QueueAction(leaveTeam, true);
+                    
+                }
+
+
+            }
+        }
        // SceneManager.instance.UnloadNowScene();
         // UIManager.instance.
     }

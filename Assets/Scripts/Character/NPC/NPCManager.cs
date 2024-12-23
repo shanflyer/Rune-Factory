@@ -270,10 +270,32 @@ public class NPC : IReferenceData
     public int playerOperateEventId => npcData.playerOperateEventId;
     public int nextTalkEventId => npcData.nextTalkEventId;
 
-    public NPCState npcState;
-    private NPCData npcData;
+    public NPCState npcState { get; set; } 
+    public NPCData npcData { get; private set; }
     public bool isActive;
 
+    private int resetDay = 0;
+    public void Rest()
+    {
+        npcState = NPCState.修养中;
+        resetDay = 2;
+    }
+    public void NewDay()
+    {
+        if (resetDay > 0)
+        {
+            resetDay--;
+            if (resetDay <= 0)
+            {
+                npcState = NPCState.正常;
+            }
+        }
+       
+    }
+    public bool CheckTeamFriend()
+    {
+        return friendLevel >= npcData.teamFriendShip;
+    }
     public bool CheckNpcShop()
     {
         if (character.linkItem == 0)
@@ -576,8 +598,11 @@ public class NPC : IReferenceData
         }
         return false;
     }
-
-    public void AddNpcBehavior(ExternalBehaviorTree externalBehavior,bool PauseWhenDisabled = false)
+    public void BackHome()
+    {
+        AddNpcBehavior(CharacterBehaviorManager.instance.backHomeExternalBehavior);
+    }
+    public void AddNpcBehavior(ExternalBehavior externalBehavior,bool PauseWhenDisabled = false)
     {
         if (externalBehavior == null)
         {
@@ -585,6 +610,16 @@ public class NPC : IReferenceData
         }
         try
         {
+            if (character.linkItem != 0)
+            {
+                TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter = new TryRemoveLinkMapItemCharacter
+                {
+                    linkInstanceId = characterInstance,
+                    mapItemInstanceId = character.linkItem
+                };
+                GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter);
+            }
+          
             CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior,
           ResetBehaviorState, PauseWhenDisabled, Character.name);
             endBehavior = false;
@@ -883,12 +918,21 @@ public class NPCManager : Singleton<NPCManager>
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<TryContinueBehavior>(TryContinueBehavior);
         GameActionManager.instance.AddListener<CheckNpcShopLink>(CheckNpcShopLink);
+        GameActionManager.instance.AddListener<TryNPCJoinTeam>(TryNPCJoinTeam);
+        GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
 
     protected override void Clear()
     {
         base.Clear();
         npcs.Clear();
+    }
+    void NewDay(NewDay newDay)
+    {
+       for(int i = 0; i < npcs.length; i++)
+        {
+            npcs[i].NewDay();
+        }
     }
     public void InitNPCBehavior()
     {
@@ -902,7 +946,68 @@ public class NPCManager : Singleton<NPCManager>
             npcs[i].InitBehaviorData();
         }
     }
-  
+    void TryNPCJoinTeam(TryNPCJoinTeam tryNPCJoinTeam)
+    {
+        if(GetNPCFormInstance(tryNPCJoinTeam.characterId,out var npc))
+        {
+            if (npc.npcState == NPCState.修养中)
+            {
+                Talk talk = new Talk
+                {
+                    talkId = GameCommon.TeamHurt,
+                    characterId = tryNPCJoinTeam.characterId
+                };
+                GameActionManager.instance.QueueAction(talk);
+                return;
+            }
+
+            if (npc.CheckTeamFriend())
+            {
+                if (TeamManager.instance.playerTeam.TeamCharacters.Count >= 3)
+                {
+                    Talk talk = new Talk
+                    {
+                        talkId = GameCommon.TeamFull,
+                        characterId = tryNPCJoinTeam.characterId
+                    };
+                    GameActionManager.instance.QueueAction(talk);
+                }
+                else
+                {
+                    TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter = new TryRemoveLinkMapItemCharacter
+                    {
+                        linkInstanceId = tryNPCJoinTeam.characterId,
+                        mapItemInstanceId = npc.Character.linkItem
+                    };
+                    GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter);
+                    JoinTeam joinTeam = new JoinTeam
+                    {
+                        characterId = tryNPCJoinTeam.characterId,
+                        teamCharacterId = tryNPCJoinTeam.teamCharacterId
+                    };
+                    GameActionManager.instance.QueueAction(joinTeam);
+                }
+            }
+            else
+            {
+                Talk talk = new Talk
+                {
+                    talkId = npc.npcData.failTeamTalk,
+                    characterId = tryNPCJoinTeam.characterId
+                };
+                GameActionManager.instance.QueueAction(talk);
+            }
+        }
+        else
+        {
+            JoinTeam joinTeam = new JoinTeam
+            {
+                characterId = tryNPCJoinTeam.characterId,
+                teamCharacterId = tryNPCJoinTeam.teamCharacterId
+            };
+            GameActionManager.instance.QueueAction(joinTeam);
+        }
+    }
     public void CheckNpcShopLink(CheckNpcShopLink checkNpcShopLink)
     {
         if(GetNPCFormInstance(checkNpcShopLink.characterId,out var npc))

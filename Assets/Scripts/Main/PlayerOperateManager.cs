@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 
 public struct NPCTalkOperateData : IReferenceData
 {
@@ -113,6 +114,20 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
 
     private void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
     {
+        if (WorldMapManager.instance.GetRuntimeMapItem(closeMapObjTips.id, out var runtimMapItem))
+        {
+            //触发物体链接角色事件
+            if (runtimMapItem.linkCharacter != 0 && runtimMapItem.linkCharacter != CharacterManager.instance.controllerCharacter.instanceId)
+            {
+                RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                {
+                    characterId = runtimMapItem.linkCharacter,
+                    join = false
+                };
+                GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                // CharacterManager.instance.controllerCharacter.SetNeighborhood(runtimMapItem.linkCharacter);
+            } 
+        }
         UIManager.instance.CloseGamePanel<OperateButtonPanel>();
     }
 
@@ -123,9 +138,15 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
             if (WorldMapManager.instance.GetRuntimeMapItem(ShowMapObjTips.id, out var runtimMapItem))
             {
                 //触发物体链接角色事件
-                if (runtimMapItem.linkCharacter != 0)
+                if (runtimMapItem.linkCharacter != 0&&runtimMapItem.linkCharacter!=CharacterManager.instance.controllerCharacter.instanceId)
                 {
-                    CharacterManager.instance.controllerCharacter.SetNeighborhood(runtimMapItem.linkCharacter);
+                    RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                    {
+                        characterId = runtimMapItem.linkCharacter,
+                        join = true
+                    };
+                    GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                   // CharacterManager.instance.controllerCharacter.SetNeighborhood(runtimMapItem.linkCharacter);
                 }
 
                 runtimMapItem.RefreshItemOperate();

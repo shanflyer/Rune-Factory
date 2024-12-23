@@ -181,7 +181,12 @@ public class GameCommon
     {
         1001,2001
     };
+    //组队
+    public const int TeamFull = 5002;//人太多
+    public const int TeamHurt = 5003;//受伤
+    public const int TeamLeave = 5004;//离开
 
+    public const string backHomeBehaviorPath = "Behavior/NPC/New/家里闲逛";
     //钓鱼
     public const int GetFish = 41;//收竿
     public const int StartFish = 40;//钓鱼

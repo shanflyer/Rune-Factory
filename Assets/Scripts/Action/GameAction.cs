@@ -827,17 +827,26 @@ public struct Talk : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        displayFunction = false;
         if (parameters.Count >= 1)
-            talkId = int.Parse(parameters[0].value);
-        if (parameters.Count >= 2)
         {
-            characterId = int.Parse(parameters[1].value);
+            talkId = int.Parse(parameters[0].value);
+            if (parameters.Count >= 2)
+            {
+                characterId = int.Parse(parameters[1].value);
+            }
+            else
+            {
+                characterId = -1;
+            }
         }
         else
         {
             characterId = -1;
         }
-        displayFunction = false;
+
+
+       
         if (parameters.Count >= 3)
         {
             displayFunction = bool.Parse(parameters[2].value);
@@ -847,6 +856,16 @@ public struct Talk : GameAction
         {
             fixedFunctions = GameCommon.StringToListInt(parameters[3].value);
         }
+
+        if (source != 0 && source != int.MinValue)
+        {
+            characterId = source;
+        }
+        if(target!=0&& target != int.MinValue)
+        {
+            talkId = target;
+        }
+
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

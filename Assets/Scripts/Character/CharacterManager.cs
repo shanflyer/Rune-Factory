@@ -1042,7 +1042,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             return;
         }
-        if (character.linkItem != 0)
+        if (character==controllerCharacter&& character.linkItem != 0)
         {
             TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter = new TryRemoveLinkMapItemCharacter
             {
