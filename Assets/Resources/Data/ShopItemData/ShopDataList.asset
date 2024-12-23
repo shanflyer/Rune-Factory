@@ -466,13 +466,6 @@ MonoBehaviour:
         openFriendLevel: 3
         buyLimitOne: 1
         buyAction: 0
-      - item: 2106
-        type: 2
-        payType: 0
-        priceValue: 100
-        openFriendLevel: 3
-        buyLimitOne: 1
-        buyAction: 0
       - item: 2107
         type: 2
         payType: 0
@@ -1060,10 +1053,17 @@ MonoBehaviour:
     mapItem: 1019972
     bindCharacters: 1600000019000000
     shopDatas:
-    - shopName: "\u5377\u8F74"
+    - shopName: "\u6742\u7269"
       shopId: 1013
       shopItem:
       - item: 11
+        type: 0
+        payType: 0
+        priceValue: 100
+        openFriendLevel: 1
+        buyLimitOne: 0
+        buyAction: 0
+      - item: 201
         type: 0
         payType: 0
         priceValue: 100
@@ -1074,91 +1074,91 @@ MonoBehaviour:
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 24
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4000
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 2
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4001
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 2
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4002
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 3
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4003
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 3
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4004
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 3
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4005
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 3
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4006
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 3
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4007
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 4
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4008
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 4
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4009
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 4
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
       - item: 4010
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 100
         buyLimitOne: 0
         buyAction: 0
   - name: "\u9C7C\u5E97"

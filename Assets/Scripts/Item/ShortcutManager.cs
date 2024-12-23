@@ -9,6 +9,7 @@ using Unity.Collections;
 public class ShortcutManager : Singleton<ShortcutManager>
 {
     Dictionary<int,ShortcutPackage> shortcutPackages = new Dictionary<int, ShortcutPackage>();
+    public ShortcutPackage playerShortcutPackage => GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
     public ShortcutPackage GetShortcutPackage(int characterId)
     {
         if(!shortcutPackages.TryGetValue(characterId,out var shortcutPackage))

@@ -810,8 +810,32 @@ public class ManufacturePanel : GamePanel<Manufature>
     {
         Manufature manufature = ManufatureManager.instance.GetManufature(int.Parse(dataKey));
         if (manufature!=null)
-        {
+        { 
             InitData(manufature);
+            if (manufactureData.needItem != null && manufactureData.needItem.Count > 0)
+            {
+                var shortcutPackage = ShortcutManager.instance.playerShortcutPackage;
+                bool result = false;
+                for(int i = 0; i < manufactureData.needItem.Count; i++)
+                {
+                    if (shortcutPackage.CheckItem(manufactureData.needItem[i],out int itemInstance))
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+                if (!result)
+                {
+                    SimpleTalk simpleTalk = new SimpleTalk
+                    {
+                        characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                        talkId = manufactureData.noItemTalk
+                    };
+                    GameActionManager.instance.QueueAction(simpleTalk);
+                    Close();
+                    return null;
+                }
+            }
             // ClearFormulaItemBoxReferences();
         }
         if (SelectItemBoxRefrence != null)
