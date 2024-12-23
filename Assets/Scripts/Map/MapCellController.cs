@@ -165,8 +165,8 @@ public class MapCellController : Singleton<MapCellController>
                 result = results.AsParallelWriter(),
                 range = Range
             };
-            findCharacterRangeInCell.Run(mapCharacterGrid.characters.Length);
-           //findCharacterRangeInCell.ScheduleParallel(mapCharacterGrid.characters.Length, 8, new JobHandle()).Complete();
+            //findCharacterRangeInCell.Run(mapCharacterGrid.characters.Length);
+           findCharacterRangeInCell.ScheduleParallel(mapCharacterGrid.characters.Length, 8, new JobHandle()).Complete();
             if (results.Length > 0)
             { 
                 HashSet<int> result = new HashSet<int>();
