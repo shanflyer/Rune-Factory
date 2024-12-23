@@ -70,9 +70,19 @@ public class WorldPanel : GamePanel<MyInt>
     }
 
     private int selectFightChapterId;
-
+    private FightChapter chapterData;
     private void ExploreMap()
     {
+        if (chapterData.fightMapData.checkBeforeChapter != 0)
+        {
+            var beforeChapter = ExploreManager.instance.GetFightChapter(chapterData.fightMapData.checkBeforeChapter);
+            if (beforeChapter != null && !beforeChapter.open)
+            {
+                InformationController.instance.AddInformation($"需要先探索完成{beforeChapter.fightMapData.mapName},才能解锁！", true, true);
+                return;
+            }
+        }
+
         if (CharacterManager.instance.controllerCharacter.CharacterProperty.Power < GameCommon.exploreCostPower)
         {
             InformationController.instance.AddInformation("体力不足，无法进行探索！", true, true);
@@ -92,7 +102,7 @@ public class WorldPanel : GamePanel<MyInt>
         if (selected)
         {
             selectFightChapterId = uIFightChapterData.fightChapterId;
-            var chapterData = ExploreManager.instance.GetFightChapter(uIFightChapterData.fightChapterId);
+            chapterData = ExploreManager.instance.GetFightChapter(uIFightChapterData.fightChapterId);
 
             exploreValue.text = $"探索度:{chapterData.completeValue}%";
 

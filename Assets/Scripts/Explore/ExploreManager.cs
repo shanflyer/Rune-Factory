@@ -13,7 +13,7 @@ public class FightChapter : IReferenceData
     public int failureEventId;
     public int successEventId; 
     public bool open;
-     
+    public FightMapData fightMapData;
     public int Key => mapId;
 }
 
@@ -51,7 +51,8 @@ public class ExploreManager : Singleton<ExploreManager>
                 mapName = chapterData.mapName,
                 open = chapterData.isOpen,
                 failureEventId = chapterData.failureEventId,
-                successEventId = chapterData.successEventId
+                successEventId = chapterData.successEventId,
+                fightMapData=chapterData,
             };
            
 

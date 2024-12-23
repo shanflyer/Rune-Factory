@@ -54,6 +54,7 @@ public struct FightMapData : IGameData
     public bool skyDisplay;
     public bool displaySunlight;
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
+    public int checkBeforeChapter;
     public bool isOpen;
     public bool isZeroTeam;
     public int endActionId;

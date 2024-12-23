@@ -60,14 +60,16 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
         {
             activeObj.localScale = Vector3.one;
             unActiveObj.localScale = Vector3.zero;
+            selected.interactable = true;
             if (
 #if UNITY_EDITOR
                 !GameController.instance.test &&
 #endif
                 !fightChapter.open)
             {
-                activeObj.localScale = Vector3.zero;
-                unActiveObj.localScale = Vector3.one;
+                selected.interactable = false;
+                //activeObj.localScale = Vector3.zero;
+                //unActiveObj.localScale = Vector3.one;
             }
         }
         else
