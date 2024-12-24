@@ -145,7 +145,8 @@ MonoBehaviour:
   myLightBase:
   - {fileID: 2314287924255278289}
   - {fileID: 6195767389652146045}
-  spriteRenderers: []
+  spriteRenderers:
+  - {fileID: 5527966524189929849}
   autoLerpValue: 1
   lerpCurve:
     serializedVersion: 2
@@ -482,7 +483,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 0.5
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 6364843910954834320}
   fixedColor: 0
   polygonCollider: {fileID: 1635032199647855260}
   meshFilter: {fileID: 1949396538766591693}
@@ -548,7 +549,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -602,7 +603,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   myLightBase: []
-  spriteRenderers: []
+  spriteRenderers:
+  - {fileID: 5527966524189929849}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
@@ -798,7 +800,7 @@ MonoBehaviour:
   color: {r: 0.36802402, g: 0.7936405, b: 0.9064934, a: 1}
   intensity: 1.3
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 6666610904716489484}
   fixedColor: 0
   polygonCollider: {fileID: 6489326664855970645}
   meshFilter: {fileID: 4665616682280936878}

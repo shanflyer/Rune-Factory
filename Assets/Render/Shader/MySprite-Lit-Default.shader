@@ -838,8 +838,7 @@ Shader "MySprite-Lit-Default"
             half4 DefaultFragment(Varyings i) : SV_Target
             {
                float2 uv=i.uv; 
-               half4 main =_MainTex.Sample(sampler_MainTex,uv);  
- 
+              
                
                 float s_w=0;
                 #if SNOWBLEND 
@@ -857,6 +856,9 @@ Shader "MySprite-Lit-Default"
                 float2 offset;
                 uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
                 #endif
+
+                 half4 main =_MainTex.Sample(sampler_MainTex,uv);  
+ 
                
                 //return half4(uv.xxx,1);
                 
@@ -1005,7 +1007,8 @@ Shader "MySprite-Lit-Default"
            
             half4 DefaultFrag(Varyings i) : SV_Target
             { 
-                float2 uv=i.uv; 
+                float2 uv=i.uv;  
+               
                 float s_w=0;
                 #if SNOWBLEND 
                 Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
@@ -1020,7 +1023,7 @@ Shader "MySprite-Lit-Default"
                
                 #if MOVE
                 float2 offset;
-                uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
+                 uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
                 #endif
 
                 half4 mainTex =_MainTex.Sample(sampler_MainTex,uv); 

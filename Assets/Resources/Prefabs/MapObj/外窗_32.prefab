@@ -593,7 +593,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  - {fileID: 2100000, guid: afb201105d1916d4fbcfce3f0ec173ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -647,7 +647,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   myLightBase: []
-  spriteRenderers: []
+  spriteRenderers:
+  - {fileID: 466394506852346397}
   autoLerpValue: 0
   lerpCurve:
     serializedVersion: 2
