@@ -55,7 +55,7 @@ public class MapAreaEditor : MonoBehaviour
             }
             tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
-        gameObject.name = text.text = SpecialNpcBehaviorArea.Name.ToString();
+        gameObject.name = text.SetSWText(SpecialNpcBehaviorArea.Name);
         transform.position = GameCommon.GetZeroMapPos(SpecialNpcBehaviorArea.pos);
         this.behaviorAreaType = BehaviorAreaType.Ãÿ ‚;
         direction = SpecialNpcBehaviorArea.fixedDirection;
@@ -84,7 +84,7 @@ public class MapAreaEditor : MonoBehaviour
             }
             tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
-        gameObject.name = text.text = areaData.Name.ToString(); 
+        gameObject.name = text.SetSWText(areaData.Name); 
         transform.position = GameCommon.GetZeroMapPos(areaData.pos);
         this.behaviorAreaType = npcBehaviorArea.behaviorAreaType;
       

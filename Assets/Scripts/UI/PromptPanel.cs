@@ -13,7 +13,7 @@ public class PromptPanel : GamePanel<IReferenceData>
     }
     public override Task InitData(string dataKey)
     {
-        info.text = dataKey;
+        info.SetSWText(dataKey);
         return base.InitData(dataKey); 
     }
 }

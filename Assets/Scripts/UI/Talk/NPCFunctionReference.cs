@@ -31,6 +31,6 @@ public class NPCFunctionReference : UIObjReference<NPCFunctionData>
     {
        await  base.InitData(t, SelectAction, toggleGroup);
         icon.sprite = data.icon;
-        Name.text = data.npcFunctionName;
+        Name.SetSWText(data.npcFunctionName);
     }
 }

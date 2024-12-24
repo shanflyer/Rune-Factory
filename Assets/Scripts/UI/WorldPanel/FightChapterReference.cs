@@ -77,7 +77,8 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
             activeObj.localScale = Vector3.zero;
             unActiveObj.localScale = Vector3.one;
         }
-        chapterNameText0.text = chapterNameText1.text = fightChapter.mapName.ToString();
+        chapterNameText0.SetSWText(fightChapter.mapName);
+        chapterNameText1.SetSWText(fightChapter.mapName);
     }
 }
 

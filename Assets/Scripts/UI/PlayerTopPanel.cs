@@ -169,8 +169,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     private void NewDay(NewDay newDay)
     {
         day.text = GameTimeManager.instance.Day.ToString();
-        season.text = GameTimeManager.instance.Season.ToString();
-        week.text = GameTimeManager.instance.Week.ToString();
+        season.SetSWText(GameTimeManager.instance.Season);
+        week.SetSWText(GameTimeManager.instance.Week);
         time.text = $"{GameTimeManager.instance.Hour.ToString("00")}:{GameTimeManager.instance.Minute.ToString("00")}";
     }
 

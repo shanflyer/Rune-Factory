@@ -160,7 +160,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         else
         {
             close.localScale = talkData.DisplayClose ? Vector3.one : Vector3.zero;
-            talkValue.text = talkData.text;
+            talkValue.SetSWText(talkData.text);
             talkId = talkData.id;
             var talkerName = talkData.talkerName;
             var talkerIcon = talkData.talkerIcon;
@@ -191,7 +191,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             switch (talkData.talkerDir)
             {
                 case TalkerDir.左:
-                    leftNameValue.text = talkerName;
+                    leftNameValue.SetSWText(talkerName);
                     leftNameBg.gameObject.SetActive(true);
                     rightNameBg.gameObject.SetActive(false);
                     leftHead.color = Color.white;
@@ -205,7 +205,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                     break;
 
                 case TalkerDir.右:
-                    rightNameValue.text = talkerName;
+                    rightNameValue.SetSWText(talkerName);
                     leftNameBg.gameObject.SetActive(false);
                     rightNameBg.gameObject.SetActive(true);
                     rightHead.color = Color.white;

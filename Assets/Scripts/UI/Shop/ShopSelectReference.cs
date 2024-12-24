@@ -43,8 +43,8 @@ public class ShopSelectReference : UIObjReference<Shop>
         await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
-        shopName0.text = data.shopName;
-        shopName1.text = data.shopName;
+        shopName0.SetSWText(data.shopName);
+        shopName1.SetSWText(data.shopName);
 
         shopName0.enabled = !toggle.isOn;
         shopName1.enabled = toggle.isOn;

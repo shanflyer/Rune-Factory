@@ -179,7 +179,15 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
             CharacterInformationData characterInformationData = character.GetInformation();
             CharacterProperty characterProperty = fightPlayer.characterProperty;
-            NameText.text = characterInformationData.name;
+            if (character == CharacterManager.instance.controllerCharacter)
+            {
+                NameText.text=(characterInformationData.name);
+            }
+            else
+            {
+                NameText.SetSWText(characterInformationData.name);
+            }
+           
             LevelText.text = $"Lv.{characterInformationData.level}";
             HPText.text = $"HP,{characterProperty.HP}/{characterProperty.MaxHP}";
             MPText.text = $"MP,{characterProperty.MP}/{characterProperty.MaxMP}";
@@ -201,7 +209,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
                 skillPanel.localScale = Vector3.one;
                 SkillData skillData = playerSkillRuntime.skillData;
                 skillIcon.sprite = skillData.icon;
-                skillName.text = skillData.skillName;
+                skillName.SetSWText( skillData.skillName);
                 skillValue.fillAmount =playerSkillRuntime.GetTimeValue();
             }
             else

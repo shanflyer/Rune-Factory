@@ -48,7 +48,7 @@ public class NPCReference : UIObjReference<NPC>
     {
         if (refreshFriendShip.characterId == data.characterInstance)
         {
-            FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.dataId).ToString();
+            FriendValue.SetSWText(FriendManager.instance.GetFriendShipLevel(data.dataId).ToString());
         }
     }
 
@@ -70,10 +70,10 @@ public class NPCReference : UIObjReference<NPC>
         CharacterData characterData = await data.GetCharacterData();
         characterData.head.SetImageSprite(Icon,new Vector2(512,512));
          
-        NPCName.text = $"+ {characterData.characterName} +";
+        NPCName.SetADDText("+ ", characterData.characterName," +");
 
-        FriendValue.text = FriendManager.instance.GetFriendShipLevel(data.characterInstance).ToString();
-        StateValue.text = data.npcState.ToString();
+        FriendValue.SetSWText(FriendManager.instance.GetFriendShipLevel(data.characterInstance));
+        StateValue.SetSWText(data.npcState.ToString());
         if (data.npcState == NPCState.修养中)
         {
             StateValue.color = new Color(1, 0, 0);

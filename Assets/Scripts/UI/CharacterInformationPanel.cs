@@ -284,24 +284,27 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         v.head.SetImageSprite(characterHead, headSize,Vector2.zero);
         HideBackGround(UIManager.instance.GamePanelIsShow<TeamPanel>());
         characterId = v.characterId;
-        CharacterName.text = v.name;
+        
+        
         if (v.isNpc)
         {
-            State.text = v.NPCState.ToString();
+            State.SetSWText(v.NPCState);
             State.color = NPC.GetStateColor(v.NPCState);
         }
         if (v.isAnimal)
         {
-            State.text = v.animalState.ToString();
+            State.SetSWText(v.animalState);
             State.color = Animal.GetStateColor(v.animalState);
         }
 
         if (characterId == CharacterManager.instance.controllerCharacter.instanceId)
         {
+            CharacterName.text=v.name;
             Friendship.localScale = Vector3.zero;
         }
         else
         {
+            CharacterName.SetSWText(v.name);
             Friendship.localScale = Vector3.one;
             FriendshipValue.text= FriendManager.instance.GetFriendShipLevel(characterId).ToString();
         }

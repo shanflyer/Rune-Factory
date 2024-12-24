@@ -203,12 +203,12 @@ public class ShopPanel : GamePanel<ShopList>
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemData.item);
         if (itemData != null)
         {
-            selectItemName.text = $"+ {itemData.itemName} +";
-            selectItemInfo.text = itemData.info;
-            selectItemProperty.text = itemData.GetProperty();
+            selectItemName.SetADDText("+ ",itemData.itemName," +");
+            selectItemInfo.SetSWText(itemData.info);
+            selectItemProperty.SetSWText(itemData.GetProperty());
             selectItemIcon.sprite = itemData.icon;
             selectItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(itemData.icon, new Vector2(32, 32));
-            selectMoneyValue.text = (itemData.shopPrice * shopItemData.priceValue *0.01f).ToString("0");
+            selectMoneyValue.SetSWText((itemData.shopPrice * shopItemData.priceValue * 0.01f).ToString("0"));
             selectMoneyIcon.sprite = PayManager.instance.GetPayMoneySprite(shopItemData.payType);
         }
         buyCountValue.interactable = addButton.interactable = reduceButton.interactable = !shopItemData.buyLimitOne;
@@ -229,7 +229,7 @@ public class ShopPanel : GamePanel<ShopList>
     public override void InitReferenceData(ShopList v)
     {
         base.InitReferenceData(v);
-        Title.text = v.groupName;
+        Title.SetSWText(v.groupName);
         ShopGroup.enabled = true;
         ItemGroup.enabled = true;
         shops.InitListData(v.shops.GetValueList(), SelecShopData, ShopGroup);

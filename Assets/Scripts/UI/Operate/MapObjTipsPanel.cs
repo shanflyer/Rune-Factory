@@ -17,7 +17,7 @@ public class MapObjTipsPanel : GamePanel<IReferenceData>
     }
     public override Task InitData(string dataKey)
     {
-        infoText.text = dataKey;
+        infoText.SetSWText(dataKey);
         return base.InitData(dataKey);
     }  
 

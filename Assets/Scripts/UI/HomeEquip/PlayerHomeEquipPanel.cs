@@ -67,7 +67,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 waiteSetHomeEquip = !waiteSetHomeEquip;
                 if (waiteSetHomeEquip)
                 {
-                    ActionName.text = "取消";
+                    ActionName.SetSWText("取消");
                     var renference = EquipBoxs.GetReference(SelectHomeEquip);
                     if (renference)
                     {
@@ -76,7 +76,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 }
                 else
                 {
-                    ActionName.text = "布置";
+                    ActionName.SetSWText("布置");
                    var renference= EquipBoxs.GetReference(SelectHomeEquip);
                     if (renference)
                     {
@@ -147,7 +147,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             SelectHomeEquip.mapInstance = -1;
             EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
             selectMapItemRuntimeObj = null;
-            ActionName.text = "布置";
+            ActionName.SetSWText("布置");
             ActionImage.sprite = setSprite;
             var homeEquipmentData =SelectHomeEquip.homeEquipmentData;
             ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
@@ -260,7 +260,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         cameraValueIndex++;
         if (cameraValueIndex > 3)
             cameraValueIndex = 1;
-        cameraValue.text = $"x{(1.0f + (cameraValueIndex - 1) )}";
+        cameraValue.SetSWText($"x{(1.0f + (cameraValueIndex - 1))}");
         SetCameraPixelValue setCameraPixelValue = new SetCameraPixelValue
         {
             pixelValue = 400 - (cameraValueIndex - 1) * 100,
@@ -274,7 +274,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         EquipBoxs.ClearSelect();
         hidePanels.hide = true;
         InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
-        ItemName.text = "";
+        ItemName.SetSWText("");
         GameActionManager.instance.QueueAction(hidePanels, true);
         waiteSetHomeEquip = false;
 
@@ -292,7 +292,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             }
         }
 
-        cameraValue.text = "x1"; 
+        cameraValue.SetSWText("x1"); 
         mapData = WorldMapObjManager.instance.DisplayMapRoomData;
         if (mapData.fixedCamera)
         {
@@ -308,7 +308,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         else
         {
             cameraValueIndex = 2;
-            cameraValue.text = "x2";
+            cameraValue.SetSWText("x2");
             CameraChange.localScale=Vector3.one;
             SetFixedCamera setFixedCamera = new SetFixedCamera
             {
@@ -444,7 +444,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                 EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
 
                                 waiteSetHomeEquip = false;
-                                ActionName.text ="收回";
+                                ActionName.SetSWText("收回");
                                 ActionImage.sprite = unSetSprite;
                             }
                         },
@@ -544,8 +544,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 waiteSetHomeEquip = false;
                 SelectHomeEquip = HomeEquip;
                 HomeEquipmentData homeEquipmentData = HomeEquip.homeEquipmentData;
-                ItemName.text = $"{homeEquipmentData.equipmentName}"; 
-                ActionName.text = HomeEquip.mapInstance <= 0 ? "布置" : "收回";
+                ItemName.SetSWText(homeEquipmentData.equipmentName); 
+                ActionName.SetSWText(HomeEquip.mapInstance <= 0 ? "布置" : "收回");
                 ActionImage.sprite = HomeEquip.mapInstance <= 0 ? setSprite : unSetSprite;
                 InfoButton.transform.localScale =  Vector3.one;
 
@@ -569,7 +569,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         else if (HomeEquip.instanceId == SelectHomeEquip.instanceId)
         {
             InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
-            ItemName.text = "";
+            ItemName.SetSWText("");
             UIManager.instance.CloseGamePanel<ItemInfoPanel>();
 
             if (HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)

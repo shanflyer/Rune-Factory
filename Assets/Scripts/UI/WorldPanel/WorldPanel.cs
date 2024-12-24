@@ -104,7 +104,7 @@ public class WorldPanel : GamePanel<MyInt>
             selectFightChapterId = uIFightChapterData.fightChapterId;
             chapterData = ExploreManager.instance.GetFightChapter(uIFightChapterData.fightChapterId);
 
-            exploreValue.text = $"探索度:{chapterData.completeValue}%";
+            exploreValue.SetSWText("探索度:{0}%", chapterData.completeValue);
 
             List<MapItemReferenceData> list = new List<MapItemReferenceData>();
             for (int i = 0; i < chapterData.haveItems.Count; i++)
@@ -132,7 +132,7 @@ public class WorldPanel : GamePanel<MyInt>
                 selectFightChapterId = -1;
             }
             fightMapItems.ClearAll();
-            exploreValue.text = $"探索度:--%";
+            exploreValue.SetSWText("探索度:{0}%","--");
             exploreButton.interactable = false;
         }
     }

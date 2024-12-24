@@ -27,7 +27,7 @@ public class TipsPanel : GamePanel<IReferenceData>
 
     public void InitTipsData(string title, string Notice)
     {
-        TitleText.text = title;
-        NoticeText.text = Notice;
+        TitleText.SetSWText(title);
+        NoticeText.SetSWText(Notice);
     }
 }

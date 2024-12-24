@@ -28,6 +28,6 @@ public class InformationShowPanel : GamePanel<IReferenceData>
     }
     public void SetInfo(string str)
     {
-        info.text = str;
+        info.SetSWText(str);
     }
 }

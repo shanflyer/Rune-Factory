@@ -197,19 +197,22 @@ public class FishPanel : GamePanel<IReferenceData>
             if (fishReferenceData.record != 0)
             {
                 FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(fishReferenceData.dataId);
-                fishName.text = fishData.fishName;
-                desc.text = fishData.info;
+                fishName.SetSWText(fishData.fishName);
+                desc.SetSWText(fishData.info);
                 record.text = $"{fishReferenceData.record}cm";
-                string seasonStr = "";
+
+                List<string>  seasonStr = new List<string>();
+                seasonStr.Add("");
                 for(int i = 0; i < fishReferenceData.seasons.Count; i++)
                 {
                     if (i > 0)
                     {
-                        seasonStr = $"{seasonStr}、";
+                        seasonStr.Add("、");
                     }
-                    seasonStr = $"{seasonStr}{(Season)(fishReferenceData.seasons[i])}";
+                    seasonStr.Add(((Season)(fishReferenceData.seasons[i])).ToString());
                 }
-                string placeStr = "";
+                List<string> placeStr = new List<string>();
+                  placeStr.Add("");
                 for(int i = 0; i < fishData.places.Count; i++)
                 {
                     int place = fishData.places[i];
@@ -217,12 +220,12 @@ public class FishPanel : GamePanel<IReferenceData>
                     var roomName = find?WorldMapManager.instance.GetWorldMap(place).mapRoomData.name :"???";
                     if (i > 0)
                     {
-                        placeStr = $"{placeStr}、";
+                        placeStr.Add("、"); 
                     }
-                    placeStr = $"{placeStr}{roomName}";
+                    placeStr.Add(roomName); 
                 }
-                season.text = seasonStr;
-                place.text = placeStr;
+                season.SetADDText("",seasonStr);
+                place.SetADDText("", placeStr);
             }
             else
             {

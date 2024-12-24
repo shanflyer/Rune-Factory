@@ -148,10 +148,10 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 ItemIcon.sprite = itemData.icon;
                 ItemIcon.enabled = true;
                 ItemIcon.SetNativeSize();
-                ItemName.text = $"+ {itemData.itemName} +";
-                Type.text = itemData.type.ToString();
-                Info.text = itemData.info;
-                Property.text = itemData.GetProperty();
+                ItemName.SetADDText($"+ ",itemData.itemName," +");
+                Type.SetSWText(itemData.type.ToString());
+                Info.SetSWText(itemData.info);
+                Property.SetSWText(itemData.GetProperty());
                 
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
                 InfoItemValue.fillAmount = item.value;

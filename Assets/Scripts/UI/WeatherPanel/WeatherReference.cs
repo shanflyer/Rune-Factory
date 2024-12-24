@@ -24,7 +24,7 @@ public class WeatherReference : UIObjReference<WeatherReferenceData>
     public override async Task InitData(WeatherReferenceData t, SelectAction<WeatherReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         await base.InitData(t, SelectAction, toggleGroup);
-        timeText.text = data.time;
+        timeText.SetSWText( data.time);
         
         weatherIcon.sprite = WeatherManager.instance.GetWeatherIcon(data.weather,true,data.night); 
     }

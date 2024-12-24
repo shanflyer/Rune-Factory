@@ -50,7 +50,7 @@ public class CharacterResponsePanel : GamePanel<CharacterResponseData>
     {
         base.InitReferenceData(v);
         characterResponseData = v;
-        TalkValue.text = characterResponseData.talkValue;
+        TalkValue.SetSWText(characterResponseData.talkValue);
         Icon.sprite = characterResponseData.icon;
         Icon.SetNativeSize();
         var clipPlayable = AnimationClipPlayable.Create(graph, characterResponseData.clip);

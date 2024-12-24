@@ -60,7 +60,7 @@ public class OperateButtonReference : UIObjReference<OperateDataReferenceData>
     public override async Task InitData(OperateDataReferenceData t, SelectAction<OperateDataReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
        await  base.InitData(t, SelectAction, toggleGroup);
-        nameText.text = t.operateData.operateName;
+        nameText.SetSWText(t.operateData.operateName);
         if (t.operateData.linkItem == 0)
         {
             Icon.enabled = false;

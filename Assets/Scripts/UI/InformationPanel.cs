@@ -30,7 +30,7 @@ public class InformationPanel : GamePanel<IReferenceData>
             if (infoParent.childCount > index)
             {
                 Transform child=infoParent.GetChild(index);
-                child.GetComponent<TextMeshProUGUI>().text = strs[i];
+                child.GetComponent<TextMeshProUGUI>().SetSWText(strs[i]);
                 child.localScale = Vector3.one;
             }
             else
@@ -38,7 +38,7 @@ public class InformationPanel : GamePanel<IReferenceData>
                 var async = InstantiateAsync(info, infoParent);
                 await async;
                 TextMeshProUGUI infoObj = async.Result[0];
-                infoObj.text = strs[i];
+                infoObj.SetSWText(strs[i]);
                 infoObj.transform.localScale = Vector3.one;
             }
             index++;
@@ -50,7 +50,7 @@ public class InformationPanel : GamePanel<IReferenceData>
                 if (infoParent.childCount > index)
                 {
                     Transform child = infoParent.GetChild(index);
-                    child.GetComponent<TextMeshProUGUI>().text = strs[i];
+                    child.GetComponent<TextMeshProUGUI>().SetSWText(strs[i]);
                     child.localScale = Vector3.one;
                 }
                 else
@@ -58,7 +58,7 @@ public class InformationPanel : GamePanel<IReferenceData>
                     var async = InstantiateAsync(info, infoParent);
                     await async;
                     TextMeshProUGUI infoObj = async.Result[0];
-                    infoObj.text = strs[i];
+                    infoObj.SetSWText(strs[i]);
                     infoObj.transform.localScale = Vector3.one;
                 }
                 index++;
@@ -78,7 +78,7 @@ public class InformationPanel : GamePanel<IReferenceData>
         if (cycle&&infoParent.childCount>0)
         {
             Transform child = infoParent.GetChild(0);
-            child.GetComponent<TextMeshProUGUI>().text = information;
+            child.GetComponent<TextMeshProUGUI>().SetSWText(information);
             child.SetAsLastSibling();
         }
         else
@@ -86,7 +86,7 @@ public class InformationPanel : GamePanel<IReferenceData>
             var async = InstantiateAsync(info, infoParent);
             await async;
             TextMeshProUGUI infoObj = async.Result[0];
-            infoObj.text = information;
+            infoObj.SetSWText(information);
             infoObj.transform.localScale = Vector3.one;
         }
     }

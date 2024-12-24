@@ -207,7 +207,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
             items.Add(default(Item));
         }
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
-        Title.text = packageSetData.packageName;
+        Title.SetSWText(packageSetData.packageName);
 
         itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
         itemBoxs.ClearSelect();

@@ -45,7 +45,7 @@ public class FishUIReference:UIObjReference<FishReferenceData>
         else
         {
             FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(data.dataId);
-            FishName.text = fishData.fishName;
+            FishName.SetSWText(fishData.fishName);
             Icon.sprite = fishData.iconSprite;
             record.text = $"{data.record}cm";
         }

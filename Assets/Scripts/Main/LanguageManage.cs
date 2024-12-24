@@ -69,8 +69,9 @@ public class LanguageManage : Singleton<LanguageManage>
     }
    
 
-    public static string SwitchStr(string s)
+    public static string SwitchStr(object obj)
     {
+        string s = obj.ToString();
         var data = GameDataManager.instance.GetData<LangLanguageSwitch>(s);
         if (data.GetKey() == s)
         {

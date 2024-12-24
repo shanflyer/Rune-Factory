@@ -47,11 +47,11 @@ public class EquipBoxReference:UIObjReference<Equipment>
     public override async Task InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
     {
        await base.InitData(t, SelectAction, toggleGroup);
-        typeText.text = data.ItemType.ToString();
+        typeText.SetSWText(data.ItemType.ToString());
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(data.dataId);
         if(itemData!=null)
         {
-            NameText.text = itemData.itemName;
+            NameText.SetSWText(itemData.itemName);
             equipMentIcon.sprite = itemData.icon;
 
             NameText.enabled = true;

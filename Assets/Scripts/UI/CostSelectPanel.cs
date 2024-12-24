@@ -61,8 +61,8 @@ public class CostSelectPanel : GamePanel<CostEventData>
 
     private void Display()
     {
-        TitleText.text = CostEventData.title;
-        noticeText.text = CostEventData.notice;
+        TitleText.SetSWText(CostEventData.title);
+        noticeText.SetSWText(CostEventData.notice);
         CostValueText.text = CostEventData.costValue.ToString();
         switch (CostEventData.payType)
         {

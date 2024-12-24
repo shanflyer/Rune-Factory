@@ -46,9 +46,8 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
         MealIcon.enabled = characterSaveData.gender == Gender.male;
         FemaleIcon.enabled = characterSaveData.gender == Gender.female;
 
-        PlayerText.text = characterSaveData.name;
-        string month = characterSaveData.brithDay.season.ToString() + "之月"; 
-        BrothText.text = LanguageManage.SwitchStr(month) + characterSaveData.brithDay.day + LanguageManage.SwitchStr("日");
+        PlayerText.text = characterSaveData.name; 
+        BrothText.SetADDText(characterSaveData.brithDay.season, "之月", characterSaveData.brithDay.day , "日");
 
         return base.InitData(dataKay);
     }

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEditor;
@@ -136,6 +137,10 @@ public class CommonToolEditor : MyEditor
         {
             UpdateObjTestRender();
         }
+        if (GUILayout.Button("输出UI内容"))
+        {
+            OutUIText();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -155,6 +160,22 @@ public class CommonToolEditor : MyEditor
         }*/
 
     }
+    private void OutUIText()
+    {
+        string uiPath = "Prefabs/UI";
+        var objs = Resources.LoadAll<GameObject>(uiPath);
+        string outStr = " ";
+        foreach ( var obj in objs )
+        {
+            var texts = obj.GetComponentsInChildren<TMP_Text>();
+            foreach(var t in texts)
+            {
+                outStr = $"{outStr}\n{t.text}";
+            }
+        }
+        File.WriteAllText("OutText", outStr);
+    }
+
     private void UpdateObjTestRender()
     {
         try

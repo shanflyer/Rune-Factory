@@ -11,7 +11,7 @@ public enum Week
     SunDay = 0,
     Monday = 1,
     TuesDay = 2,
-    WednesDay = 3,
+    WendsDay = 3,
     ThursDay = 4,
     FriDay = 5
 }

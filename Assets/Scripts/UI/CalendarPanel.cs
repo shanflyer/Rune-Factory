@@ -72,7 +72,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
     void AfterDisplay()
     {
         date = GameTimeManager.instance.Day;
-        DataTimeText.text = year + LanguageManage.SwitchStr("年") + " " + LanguageManage.SwitchStr(season + "之月");
+        DataTimeText.SetADDText(year, "年", season, "之月"); 
         /* DatesParent.transform.GetChild(date - 1).GetComponentInChildren<Toggle>().isOn =
            true;*/
         dateReferences.SelectIndex(date - 1);
@@ -147,25 +147,30 @@ public class CalendarPanel : GamePanel<IReferenceData>
         if (value)
         {
             date = _gameDate.date;
-            DataTimeText.text = year + LanguageManage.SwitchStr("年") + "  " + LanguageManage.SwitchStr(_gameDate.season + "之月");
-            string festivalStr = "";
+            DataTimeText.SetADDText( year , "年", _gameDate.season , "之月"); 
             List<FestivalData> festivalDatas = FestivalManager.instance.FestivalDatas;
             List<FestivalData> customFestivalDatas = FestivalManager.instance.customFestivalDatas;
+
+            List<string> festivalStr = new List<string>();
             foreach (var festivalId in _gameDate.FestivaList)
             {
                 FestivalData festivalData = festivalDatas.Find(f => f.id == festivalId);
-                festivalStr += "·" + festivalData.name + "\n";
+                festivalStr.Add("·");
+                festivalStr.Add(festivalData.name);
+                festivalStr.Add("\n"); 
             }
             if (year == GameTimeManager.instance.Year)
             {
                 foreach (var festivalId in _gameDate.CustomFestival)
                 {
                     FestivalData festivalData = customFestivalDatas.Find(f => f.id == festivalId);
-                    festivalStr += "·" + festivalData.name + "\n";
+                    festivalStr.Add("·");
+                    festivalStr.Add(festivalData.name);
+                    festivalStr.Add("\n");
                 }
             }
 
-            festivaltext.text = festivalStr;
+            festivaltext.SetADDText("",festivalStr);
         } 
     }
 	

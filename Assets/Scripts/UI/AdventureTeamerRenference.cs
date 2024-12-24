@@ -39,7 +39,15 @@ public class AdventureTeamerRenference : UIObjReference<FighterResult>
         this.SkillUp.localScale = data.skillUp ? Vector3.one : Vector3.zero;
         data.Character.characterData.head.SetImageSprite(Icon);
         //Icon.sprite = data.Character.characterData.icon.sprite;
-        Name.text = data.Character.name;
+        if (data.Character != CharacterManager.instance.controllerCharacter)
+        {
+            Name.SetSWText(data.Character.name);
+        }
+        else
+        {
+            Name.text=(data.Character.name);
+        }
+       
         Level.text = $"Lv.{data.Character.Level}";
     }
 }

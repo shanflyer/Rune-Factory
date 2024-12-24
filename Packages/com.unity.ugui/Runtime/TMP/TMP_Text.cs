@@ -105,11 +105,105 @@ namespace TMPro
     public enum FontStyles { Normal = 0x0, Bold = 0x1, Italic = 0x2, Underline = 0x4, LowerCase = 0x8, UpperCase = 0x10, SmallCaps = 0x20, Strikethrough = 0x40, Superscript = 0x80, Subscript = 0x100, Highlight = 0x200 };
     public enum FontWeight { Thin = 100, ExtraLight = 200, Light = 300, Regular = 400, Medium = 500, SemiBold = 600, Bold = 700, Heavy = 800, Black = 900 };
 
+    public delegate string SwitchString(string inputString);
     /// <summary>
     /// Base class which contains common properties and functions shared between the TextMeshPro and TextMeshProUGUI component.
     /// </summary>
     public abstract class TMP_Text : MaskableGraphic
     {
+        public static SwitchString SwitchString;
+        public static string AddString(string s0, string s1)
+        { 
+            var span = s1.AsSpan(); 
+            var builder = new StringBuilder(s0);
+            builder.Append(span);
+            return builder.ToString();
+        }
+        public virtual void SetSWText(string source, string args = null)
+        {
+            if (SwitchString != null)
+            {
+                source = SwitchString(source);
+                if (args != null)
+                {
+                    args = SwitchString(args);
+                }
+
+            }
+            if (args != null)
+            {
+                text = string.Format(source, args);
+            }
+            else
+            {
+                text = source;
+            }
+
+        }
+        public virtual void SetADDText(object source, params object[] args)
+        {
+          
+            if (SwitchString != null)
+            {
+                source = SwitchString(source.ToString());
+
+                if (args != null)
+                {
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        args[i] = SwitchString(args[i].ToString());
+                    }
+                }
+
+            }
+            if (args != null)
+            {
+                var builder = new StringBuilder(source.ToString());
+                for(int i = 0; i < args.Length; i++)
+                {
+                    var span = args[i].ToString().AsSpan();
+                    builder.Append(span);
+                }
+                text = builder.ToString();
+            }
+            else
+            {
+                text = source.ToString();
+            }
+
+        }
+        public virtual string SetSWText(object source, params object[] args)
+        {
+            if (SwitchString != null)
+            {
+                source = SwitchString(source.ToString());
+                if (args != null)
+                {
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        args[i] = SwitchString(args[i].ToString());
+                    }
+                }
+                
+            }
+            if (args != null)
+            {
+                text = string.Format(source.ToString(), args);
+            }
+            else
+            {
+                text = source.ToString();
+            }
+            return text;
+        } 
+        protected override void Awake()
+        {
+            base.Awake();
+            if (SwitchString != null)
+            {
+                text = SwitchString(text);
+            }
+        } 
         /// <summary>
         /// A string containing the text to be displayed.
         /// </summary>

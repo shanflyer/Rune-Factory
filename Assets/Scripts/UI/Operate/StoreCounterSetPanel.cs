@@ -199,7 +199,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(storeCunterSetData.itemId);
         if (itemData != null)
         {
-            sellItemName.text = itemData.itemName;
+            sellItemName.SetSWText(itemData.itemName);
             priceValue.text = itemData.sellPrice.ToString();
             sellCount.text = storeCunterSetData.count.ToString();
         }

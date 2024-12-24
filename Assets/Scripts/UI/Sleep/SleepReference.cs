@@ -25,13 +25,13 @@ public class SleepReference : UIObjReference<SleepSetData>
     private void Awake()
     {
         sleepButton.onClick.AddListener(() => { SelectAction(data, true); });
-        sleepText.text = data.text;
+        sleepText.SetSWText(data.text);
     }
 
     public override async Task InitData(SleepSetData t, SelectAction<SleepSetData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
       await  base.InitData(t, SelectAction, toggleGroup);
-        sleepText.text = data.text;
+        sleepText.SetSWText(data.text);
         Icon.sprite = t.icon;
     }
 }

@@ -128,7 +128,7 @@ public class FishingManager : Singleton<FishingManager>
                         {
                             icon = null,
                             info0 = "",
-                            info1 = "$背包空间不足，鱼已放生"
+                            info1 = "背包空间不足，鱼已放生"
                         };
                       await  UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
                     }

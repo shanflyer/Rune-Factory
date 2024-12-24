@@ -52,8 +52,8 @@ public class ItemResultPanel :GamePanel<ItemResultInfo>
             icon.sprite = v.icon;
             effect.SetActive(true);
         }
-        info0.text = v.info0;
-        info1.text = v.info1;
+        info0.SetSWText(v.info0);
+        info1.SetSWText(v.info1);
     }
 }
 public struct ItemResultInfo : IReferenceData

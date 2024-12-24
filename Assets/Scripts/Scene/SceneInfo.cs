@@ -14,7 +14,7 @@ public class SceneInfo : MonoBehaviour
     public void SetTextValue(string str)
     {
         info.enabled = true;
-        info.text = str;
+        info.SetSWText(str);
         animation.Play();
     }
     

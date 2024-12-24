@@ -56,7 +56,7 @@ public class TwoSelectPanel : GamePanel<TwoSelectData>
     {
         base.InitReferenceData(v);
         yesAction = v.yesAction; noAction = v.noAction;
-        TitleText.text = v.title;
-        infoText.text = v.notice;
+        TitleText.SetSWText( v.title);
+        infoText.SetSWText(v.notice);
     }
 }

@@ -105,7 +105,7 @@ public class PasturePanel : GamePanel<MyListInt>
             selectPasture = pasture;
             if (pasture!=null)
             {
-                pastureNameText.text = pasture.name.ToString();
+                pastureNameText.SetSWText(pasture.name);
 
                 int foodCase = PackageManager.instance.GetPackageCaseCount(pasture.foodPackage);
                 int foodCount = PackageManager.instance.GetPackageItems(pasture.foodPackage).Count;
@@ -124,7 +124,7 @@ public class PasturePanel : GamePanel<MyListInt>
             }
             else
             {
-                pastureNameText.text = "毁坏的牧场";
+                pastureNameText.SetSWText("毁坏的牧场");
                 foodCaseText.text = "--/--";
                 waterCaseText.text= "--/--";
                 productCaseText.text = "--/--";
@@ -155,7 +155,7 @@ public class PasturePanel : GamePanel<MyListInt>
                 Character character = CharacterManager.instance.GetCharacter(animalId);
                 character.characterData.head.SetImageSprite(animalIcon, animalIconSize,Vector2.zero);
                 //animalIcon.sprite = character.characterData.icon.sprite;
-                animalNameText.text = character.name;
+                animalNameText.SetSWText(character.name);
                 SetButton.transform.localScale = Vector3.one;
                 animalIcon.enabled = false;
                 animalNameText.enabled = true;

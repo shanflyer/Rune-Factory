@@ -122,8 +122,8 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
     {
         base.InitReferenceData(v);
         itemCostEventData = v;
-        TitleText.text = v.title;
-        noticeText.text = v.notice;
+        TitleText.SetSWText(v.title);
+        noticeText.SetSWText(v.notice);
         RefreshMonneyDisplay();
         costItems.InitListData(v.items);
     }

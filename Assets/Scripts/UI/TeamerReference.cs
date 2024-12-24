@@ -48,7 +48,15 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
         data.head.SetImageSprite(NPCImage,new Vector2(48,48),Vector2.zero);
        // NPCImage.sprite = data.icon;
         // data.head.SetImageSprite(NPCImage);
-        NPCName.text = data.name;
+        if(data.characterId==CharacterManager.instance.controllerCharacter.instanceId)
+        {
+            NPCName.text=(data.name);
+        }
+        else
+        {
+            NPCName.SetSWText(data.name);
+        }
+      
         toggle.group = toggleGroup;
     }
 }

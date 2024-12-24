@@ -31,7 +31,7 @@ public class StartEventPanel : GamePanel<IReferenceData>
 
         for(int i=0;i<texts.Length;i++)
         {
-            texts[i].text = string.Format(texts[i].text, GameDataSaveManager.instance.UserGameSaveData.playerData.name);
+            texts[i].SetSWText(texts[i].text, GameDataSaveManager.instance.UserGameSaveData.playerData.name);
         }
 
         LetterButton.onClick.AddListener(ClickXinStart);

@@ -241,7 +241,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         set
         {
             _produceCount = value;
-            ItemCountValue.text = produceCount.ToString();
+            ItemCountValue.SetSWText(produceCount.ToString());
             ReduceButton.transform.localScale = produceCount > 1 ? Vector3.one : Vector3.zero;
             RefreshCost();
         }
@@ -268,7 +268,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 FormulaDropdown.interactable = true;
                 FormulaDropdown.value = 0;
                 formulaTypeParent.transform.localScale = Vector3.one;
-                creatButtonName.text = "制作";
+                creatButtonName.SetSWText("制作");
                 InformationObj.transform.localScale = Vector3.zero;
             }, null);
             return;
@@ -410,7 +410,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     ReduceButton.interactable = false;
                     FormulaDropdown.interactable = false;
                     formulaTypeParent.transform.localScale = Vector3.zero;
-                    creatButtonName.text = "中止";
+                    creatButtonName.SetSWText("中止");
                 }
                 GameManager.instance.ShowTwoSelectAction("", noticeStr, CreatAction, null);
             }
@@ -596,18 +596,18 @@ public class ManufacturePanel : GamePanel<Manufature>
        await OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
         OutItemBoxReference.SelectUIAction = DisplayItem;
         RefreshCost();
-        creatButtonName.text = "制作";
+        creatButtonName.SetSWText("制作");
 
         if (manufature.product.x != 0)
         {
             CreatButton.interactable = true;
             if (manufature.waitTime <= GameTimeManager.instance.totalMinute)
             {
-                creatButtonName.text = "取出";
+                creatButtonName.SetSWText("取出");
             }
             else
             {
-                creatButtonName.text = "中止";
+                creatButtonName.SetSWText("中止");
             }
         }
         else
@@ -649,11 +649,11 @@ public class ManufacturePanel : GamePanel<Manufature>
         int totalCost = formulaCost * produceCount;
         if (totalCost >= nowPower)
         {
-            RPCost.text = $"<color=green>{totalCost}</color>/({nowPower})";
+            RPCost.SetSWText($"<color=green>{totalCost}</color>/({nowPower})");
         }
         else
         {
-            RPCost.text = $"<color=red>{totalCost}</color>/({nowPower})";
+            RPCost.SetSWText($"<color=red>{totalCost}</color>/({nowPower})");
         }
     }
 
@@ -856,7 +856,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
             if (manufature.product.x != 0)
             {
-                this.timeValue.text = "制作完成！";
+                this.timeValue.SetSWText("制作完成！");
                 if (manufature.waitTime > 0)
                 {
                     CreatProduct();
@@ -864,7 +864,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             }
             else
             {
-                this.timeValue.text = "等待制作";
+                this.timeValue.SetSWText("等待制作");
             }
         }
         else
@@ -891,7 +891,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             manufature = manufature
         };
         GameActionManager.instance.QueueAction(setManufature, true);
-        creatButtonName.text = "取出";
+        creatButtonName.SetSWText("取出");
         CreatButton.interactable = true;
     }
 
@@ -917,7 +917,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         outEffect.Stop();
         manufature = v;
         manufactureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(v.dataId);
-        title.text = manufactureData.manufactureName;
+        title.SetSWText(manufactureData.manufactureName);
         CreatButton.interactable = false;
         AutoSelect.interactable = false;
 
@@ -1025,7 +1025,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             FormulaDropdown.interactable = true;
             FormulaDropdown.value = 0;
             formulaTypeParent.transform.localScale = Vector3.one;
-            creatButtonName.text = "制作";
+            creatButtonName.SetSWText("制作");
 
             if (SelectItemBoxRefrence != null)
             {
@@ -1041,7 +1041,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     {
         item.count = 0;
         await SelectItemBoxRefrence.InitData(item, null, FormulaItemBoxGroup);
-        selectActionButtonName.text = "移除";
+        selectActionButtonName.SetSWText("移除");
         selectActionButton.onClick.RemoveAllListeners();
         selectActionButton.onClick.AddListener(ClearFormulaItem);
         UIManager.instance.CloseGamePanel<WarehousePanel>();
@@ -1051,7 +1051,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
     async void ClearFormulaItem()
     {
-        selectActionButtonName.text = "放入";
+        selectActionButtonName.SetSWText("放入");
         selectActionButton.onClick.RemoveAllListeners();
         selectActionButton.onClick.AddListener(() =>
         {
@@ -1082,7 +1082,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 ItemIcon.enabled = false;
                 InfoItemValueImage.transform.parent.gameObject.SetActive(false);
 
-                selectActionButtonName.text = "放入";
+                selectActionButtonName.SetSWText("放入");
                 selectActionButton.onClick.RemoveAllListeners();
                 selectActionButton.onClick.AddListener(() =>
                 {
@@ -1095,11 +1095,11 @@ public class ManufacturePanel : GamePanel<Manufature>
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 if (itemData != null)
                 {
-                    selectItemName.text = itemData.itemName;
-                    ItemType.text = itemData.type.ToString();
-                    itemInfo.text = itemData.info;
-                    itemProperty.text = itemData.GetProperty();
-                    moneyValue.text = itemData.sellPrice.ToString();
+                    selectItemName.SetSWText(itemData.itemName);
+                    ItemType.SetSWText(itemData.type.ToString());
+                    itemInfo.SetSWText(itemData.info);
+                    itemProperty.SetSWText(itemData.GetProperty());
+                    moneyValue.SetSWText(itemData.sellPrice.ToString());
                     ItemIcon.sprite = itemData.icon;
 
                     selectItemName.enabled = true;
@@ -1132,7 +1132,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     if (manufature.product.x != 0)
                     {
                         selectActionButton.transform.localScale = Vector3.one;
-                        selectActionButtonName.text = "取出";
+                        selectActionButtonName.SetSWText("取出");
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(GetOutProduct);
                     }
@@ -1145,7 +1145,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     selectActionButton.transform.localScale = manufature.product.x == 0 ? Vector3.one : Vector3.zero;
                     if (item.instanceId == -1)
                     {
-                        selectActionButtonName.text = "放入";
+                        selectActionButtonName.SetSWText("放入");
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(() =>
                         {
@@ -1154,7 +1154,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     }
                     else
                     {
-                        selectActionButtonName.text = "移除";
+                        selectActionButtonName.SetSWText("移除");
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(ClearFormulaItem);
                     }

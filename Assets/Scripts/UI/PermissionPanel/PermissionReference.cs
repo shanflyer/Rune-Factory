@@ -29,9 +29,9 @@ public class PermissionReference : UIObjReference<Permission>
     public override async Task InitData(Permission t, SelectAction<Permission> SelectAction = null, ToggleGroup toggleGroup = null)
     {
        await  base.InitData(t, SelectAction, toggleGroup);
-        Name.text = data.permissionData.permissionName;
-        ConditionValue.text = data.permissionData.conditionStr;
-        RewardValue.text = data.permissionData.reward.ToString();
+        Name.SetSWText(data.permissionData.permissionName);
+        ConditionValue.SetSWText(data.permissionData.conditionStr);
+        RewardValue.SetSWText(data.permissionData.reward);
         GetTips.localScale = data.isGet ? Vector3.one : Vector3.zero;
     }
 }

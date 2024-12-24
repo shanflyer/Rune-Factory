@@ -27,18 +27,18 @@ public struct CharacterProperty
         if (HP != 0)
         {
             string operatorStr = HP > 0 ? "+" : "-";
-            result = $"{result}{CharacterPropertyType.生命}{operatorStr}{HP} ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.生命)}{operatorStr}{HP} ";
         }
        
         if (MP != 0)
         {
             string operatorStr = MP > 0 ? "+" : "-";
-            result = $"{result}{CharacterPropertyType.法力}{operatorStr}{MP}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.法力)}{operatorStr}{MP}  ";
         } 
         if (Power != 0)
         {
             string operatorStr = Power > 0 ? "+" : "-";
-            result = $"{result}{CharacterPropertyType.体力}{operatorStr}{Power}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.体力)}{operatorStr}{Power}  ";
         }
         if (Other != 0)
         {
@@ -48,34 +48,34 @@ public struct CharacterProperty
             {
                 if (string.IsNullOrEmpty(result))
                 {
-                    result = $"战斗时 ";
+                    result = $"{LanguageManage.SwitchStr("战斗时")} ";
                 }
                 else
                 {
-                    result = $"{result}\n战斗时 ";
+                    result = $"{result}\n{LanguageManage.SwitchStr("战斗时")} ";
                 }
 
                 if (AT != 0)
                 {
                     string operatorStr = AT > 0 ? "+" : "";
-                    result = $"{result}{CharacterPropertyType.攻击}{operatorStr}{AT} ";
+                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.攻击)}{operatorStr}{AT} ";
                 }
                 if (DF != 0)
                 {
                     string operatorStr = DF > 0 ? "+" : "";
-                    result = $"{result}{CharacterPropertyType.防御}{operatorStr}{DF} ";
+                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.防御)}{operatorStr}{DF} ";
                 }
                 if (Lucky != 0)
                 {
                     string operatorStr = Lucky > 0 ? "+" : "";
-                    result = $"{result}{CharacterPropertyType.幸运}{operatorStr}{Lucky} ";
+                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.幸运)}{operatorStr}{Lucky} ";
                 }
                 if (Speed != 0)
                 {
                     string operatorStr = Speed > 0 ? "+" : "";
-                    result = $"{result}{CharacterPropertyType.敏捷}{operatorStr}{Speed} ";
+                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.敏捷)}{operatorStr}{Speed} ";
                 }
-                result = $"{result}{Other}回合";
+                result = $"{result}{Other}{LanguageManage.SwitchStr("回合")}";
             } 
         } 
         return result;
@@ -86,52 +86,52 @@ public struct CharacterProperty
         if (MaxHP != 0)
         {
             string operatorStr = MaxHP > 0 ? "+" : "";
-            result = $"{CharacterPropertyType.最大生命}{operatorStr}{MaxHP}  ";
+            result = $"{LanguageManage.SwitchStr(CharacterPropertyType.最大生命)}{operatorStr}{MaxHP}  ";
         }
         if (HP != 0)
         {
             string operatorStr = HP > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.生命}{operatorStr}{HP} ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.生命)}{operatorStr}{HP} ";
         }
         if (MaxMP != 0)
         {
             string operatorStr = MaxMP > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.最大法力}{operatorStr}{MaxMP} ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.最大法力)}{operatorStr}{MaxMP} ";
         }
         if (MP != 0)
         {
             string operatorStr = MP > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.法力}{operatorStr}{MP}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.法力)}{operatorStr}{MP}  ";
         }
         if (MaxPower != 0)
         {
             string operatorStr = MaxPower > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.最大体力}{operatorStr}{MaxPower}";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.最大体力)}{operatorStr}{MaxPower}";
         }
         if (Power != 0)
         {
             string operatorStr = Power > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.体力}{operatorStr}{Power}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.体力)}{operatorStr}{Power}  ";
         }
         if (AT != 0)
         {
             string operatorStr = AT > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.攻击}{operatorStr}{AT}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.攻击)}{operatorStr}{AT}  ";
         }
         if (DF != 0)
         {
             string operatorStr = DF > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.防御}{operatorStr}{DF}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.防御)}{operatorStr}{DF}  ";
         }
         if (Lucky != 0)
         {
             string operatorStr = Lucky > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.幸运}{operatorStr}{Lucky}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.幸运)}{operatorStr}{Lucky}  ";
         }
         if (Speed != 0)
         {
             string operatorStr = Speed > 0 ? "+" : "";
-            result = $"{result}{CharacterPropertyType.敏捷}{operatorStr}{Speed}  ";
+            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.敏捷)}{operatorStr}{Speed}  ";
         }
         return result;
     }

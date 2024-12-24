@@ -132,7 +132,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 items0.Add(defaultItem);
             }
 
-            Title0.text = packageSetData0.packageName;
+            Title0.SetSWText(packageSetData0.packageName);
             itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
             caseCount0.text = $"{packageData.items.Count}/{packageData.caseCount}";
             bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
@@ -168,7 +168,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
             {
                 items1.Add(defaultItem);
             }
-            Title1.text = packageSetData1.packageName;
+            Title1.SetSWText(packageSetData1.packageName);
             itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
             caseCount1.text = $"{packageData.items.Count}/{packageData.caseCount}";
             bool canLevelUp = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel - 1 :false;
@@ -281,9 +281,9 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 ItemIcon.sprite = itemData.icon;
                 ItemIcon.enabled = true;
                 ItemIcon.SetNativeSize();
-                ItemName.text = $"+ {itemData.itemName} +";
-                Type.text = itemData.type.ToString();
-                Info.text = itemData.info;
+                ItemName.SetADDText("+ ",itemData.itemName," +");
+                Type.SetSWText(itemData.type);
+                Info.SetSWText(itemData.info);
                 Property.text = itemData.GetProperty();
                 Price.text = itemData.sellPrice.ToString();
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
@@ -452,7 +452,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
             items0.Add(defaultItem);
         }
 
-        Title0.text = packageSetData0.packageName;
+        Title0.SetSWText(packageSetData0.packageName);
         itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
         caseCount0.text = $"{itemCaseCount0}/{packageData0.caseCount}";
         bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
@@ -486,7 +486,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
             items1.Add(defaultItem);
         }
 
-        Title1.text = packageSetData1.packageName;
+        Title1.SetSWText(packageSetData1.packageName);
         itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
         caseCount1.text = $"{itemCaseCount1}/{packageData1.caseCount}";
         bool canLevelUp1 = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel-1 : false;
