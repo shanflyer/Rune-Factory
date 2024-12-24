@@ -76,7 +76,7 @@ public class WorldPanel : GamePanel<MyInt>
         if (chapterData.fightMapData.checkBeforeChapter != 0)
         {
             var beforeChapter = ExploreManager.instance.GetFightChapter(chapterData.fightMapData.checkBeforeChapter);
-            if (beforeChapter != null && !beforeChapter.open)
+            if (beforeChapter != null && !beforeChapter.completed)
             {
                 InformationController.instance.AddInformation($"需要先探索完成{beforeChapter.fightMapData.mapName},才能解锁！", true, true);
                 return;

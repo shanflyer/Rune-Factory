@@ -13,6 +13,7 @@ public class FightChapter : IReferenceData
     public int failureEventId;
     public int successEventId; 
     public bool open;
+    public bool completed;
     public FightMapData fightMapData;
     public int Key => mapId;
 }
@@ -76,7 +77,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 if (fightChapters.TryGetValue(chapter.Value.mapId, out fightChapter))
                 { 
                     fightChapter.open = chapter.Value.open;
-
+                    fightChapter.completed = chapter.Value.completed;
                     for (int j = 0; j < chapter.Value.findItems.Count; j++)
                     {
                         fightChapter.findItems.Add(chapter.Value.findItems[j]);
@@ -358,7 +359,7 @@ public class ExploreManager : Singleton<ExploreManager>
     {
         EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
         GameActionManager.instance.QueueAction(endNowRoundFight, true);
-
+        fightChapter.completed = true;
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.successEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = true;

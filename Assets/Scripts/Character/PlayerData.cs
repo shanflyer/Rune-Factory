@@ -742,11 +742,13 @@ public class ChapterSave
     public int mapId;
     public List<int> findItems;
     public bool open;
+    public bool completed;
     public ChapterSave() { }
     public ChapterSave(ChapterSave chapterSave)
     {
         mapId = chapterSave.mapId;
         open = chapterSave.open;
+        completed = chapterSave.completed;
         findItems = new List<int>();
         findItems.CopyTo(chapterSave.findItems.ToArray());
     }
@@ -760,6 +762,7 @@ public class ChapterSave
         mapId = fightChapter.mapId;
         findItems = fightChapter.findItems.ToList();
         open = fightChapter.open;
+        completed = fightChapter.completed;
     }
 }
 

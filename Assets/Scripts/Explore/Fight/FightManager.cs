@@ -52,7 +52,7 @@ public class FightManager : Singleton<FightManager>
         base.Init();
 
         maxRoundCount = Enum.GetValues(typeof(FightRoundType)).Length;
-
+        GameActionManager.instance.AddListener<CreatFightPlayerInstance>(CreatFightPlayerInstance);
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreateFightPlayer);
         GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
         GameActionManager.instance.AddListener<NextActionSkillEstimate>(NextActionSkillEstimate); 
@@ -338,7 +338,32 @@ public class FightManager : Singleton<FightManager>
 
         return results;
     }
+    private void CreatFightPlayerInstance(CreatFightPlayerInstance creatFightPlayerInstance)
+    {
+        playerDic.Clear();
+        for (int i = 0; i < creatFightPlayerInstance.players.Count; i++)
+        {
+            Character character = CharacterManager.instance.GetCharacter(creatFightPlayerInstance.players[i]);
 
+            FightPlayer fightPlayer = new FightPlayer(character);
+            fightPlayer.fightPos = i;
+
+            fightPlayer.CreatSkillRuntime();
+            fightCharacters.Add(fightPlayer.instanceId, fightPlayer);
+            fightPlayers.Add(fightPlayer.instanceId);
+            //FightController.instance.CreatFightPlayer(character.dataId, character.instanceId, i);
+
+            FighterResult fighterResult = new FighterResult
+            {
+                Character = character,
+            };
+            fightResult.fighterResults.Add(fighterResult);
+
+            playerDic.Add(i, fightPlayer.instanceId);
+        }
+        CreatUseItemSkill();
+
+    }
     private void CreateFightPlayer(CreatFightPlayer creatFightPlayer)
     { 
         playerDic.Clear();
@@ -407,16 +432,37 @@ public class FightManager : Singleton<FightManager>
         if (playerTeam != null)
         {
             List<int> players = new List<int>();
+            List<int> playerInstances = new List<int>();
+
+            HashSet<int> dataIdSet = new HashSet<int>();
             for (int i = 0; i < playerTeam.Teamers.Count; i++)
             {
                 var character = playerTeam.Teamers[i].character;
-                players.Add(character.dataId);
+                if (players.Count <3)
+                {
+                    dataIdSet.Add(character.dataId);
+                    players.Add(character.dataId);
+                    playerInstances.Add(character.instanceId);
+                }               
+
             }
-            CreatFightPlayer CreatFightPlayer = new CreatFightPlayer
+            if (dataIdSet.Count == players.Count)
             {
-                players = players
-            };
-            GameActionManager.instance.QueueAction(CreatFightPlayer, true);
+                CreatFightPlayer CreatFightPlayer = new CreatFightPlayer
+                {
+                    players = players
+                };
+                GameActionManager.instance.QueueAction(CreatFightPlayer, true);
+            }
+            else
+            {
+                CreatFightPlayerInstance CreatFightPlayer = new CreatFightPlayerInstance
+                {
+                    players = playerInstances
+                };
+                GameActionManager.instance.QueueAction(CreatFightPlayer, true);
+            }
+         
         }
         RefreshFightPlayerInfo();
         isFight = false;

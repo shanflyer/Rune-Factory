@@ -973,7 +973,22 @@ public struct CreatTeamPlayer : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct CreatFightPlayerInstance : GameAction
+{
+    public SetValue setValue { get; set; }
+    public List<int> players;
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        players = new List<int>();
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            players.Add(int.Parse(parameters[i].value));
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct CreatFightPlayer : GameAction
 {
     public SetValue setValue { get; set; }
