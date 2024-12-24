@@ -15,14 +15,16 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
     public void SetReferenceData()
     {
         var _professionDatas = new List<ProfessionData>();
-        ProfessionData professionData=default(ProfessionData);
+        ProfessionData professionData=null;
         for (int i = 0; i < professionEditorDatas.Length; i++)
         {
             var data = professionEditorDatas[i];
-            if (professionData.id != data.id)
+            if (professionData==null||professionData.id != data.id)
             {
-                if (professionData.id != 0)
-                    _professionDatas.Add(professionData);
+                professionData = new ProfessionData();
+                _professionDatas.Add(professionData);
+               // if (professionData.id != 0)
+                  
                 professionData.skills = new List<int>();
                 professionData.exp = new List<int>();
                 professionData.propertys = new List<CharacterProperty>();
