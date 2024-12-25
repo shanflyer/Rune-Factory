@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
-# if UNITY_EDITOR
+using System;
+#if UNITY_EDITOR
 using UnityEditor;
 #endif
 
@@ -34,9 +35,20 @@ public class LanguageSwitchDataList : ScriptableObject, IGameData
 
     public StringLanguageSwitchDataDictionary languageDatas = new StringLanguageSwitchDataDictionary();
 
-  
+    public string GetValue(SystemLanguage systemLanguage, string str)
+    {
+        if (systemLanguage == SystemLanguage.Chinese)
+        {
+            return str;
+        }
+        if (languageDatas.TryGetValue(str, out var languageSwitchData))
+        {
+            return languageSwitchData.en;
+        }
+        return str;
+    }
 }
-[SerializeField]
+[Serializable]
 public struct LanguageSwitchData
 {
     public string en, jp, ko;

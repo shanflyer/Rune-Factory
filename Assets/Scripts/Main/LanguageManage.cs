@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI; 
 public class LanguageManage : Singleton<LanguageManage>
@@ -14,12 +15,18 @@ public class LanguageManage : Singleton<LanguageManage>
     }; 
 
     public static SystemLanguage nowLanguage;
-
-    public override void Init()
+    public LanguageSwitchDataList LanguageSwitchDataList { get; private set; }
+    public override async void Init()
     {
-        base.Init(); 
+        base.Init();
+        LanguageSwitchDataList =await  GameDataManager.instance.GetAsyncData<LanguageSwitchDataList>("LanguageSwitchDataList");
+        TMP_Text.SwitchString = SwitchStr;
     }
-     
+    protected override void Clear()
+    {
+        base.Clear();
+        TMP_Text.SwitchString = null;
+    }
     public static void TextFanyi(Text text)
     {
         text.text = SwitchStr(text.text);
@@ -68,15 +75,15 @@ public class LanguageManage : Singleton<LanguageManage>
         
     }
    
-
+    public static string SwitchStr(string s)
+    {
+        s = instance.LanguageSwitchDataList.GetValue(nowLanguage, s);
+        return s;
+    }
     public static string SwitchStr(object obj)
     {
         string s = obj.ToString();
-        var data = GameDataManager.instance.GetData<LangLanguageSwitch>(s);
-        if (data.GetKey() == s)
-        {
-            return data.GetValue(nowLanguage);
-        }
+        s = instance.LanguageSwitchDataList.GetValue(nowLanguage, s);
         return s;
     }  
     public string GameTimeToString(int year,Season season,int day)
