@@ -78,14 +78,14 @@ public class WorldPanel : GamePanel<MyInt>
             var beforeChapter = ExploreManager.instance.GetFightChapter(chapterData.fightMapData.checkBeforeChapter);
             if (beforeChapter != null && !beforeChapter.completed)
             {
-                InformationController.instance.AddInformation($"需要先探索完成{beforeChapter.fightMapData.mapName},才能解锁！", true, true);
+                InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr("需要先探索完成{0},才能解锁！"), LanguageManage.SwitchStr(beforeChapter.fightMapData.mapName)), true, true);
                 return;
             }
         }
 
         if (CharacterManager.instance.controllerCharacter.CharacterProperty.Power < GameCommon.exploreCostPower)
         {
-            InformationController.instance.AddInformation("体力不足，无法进行探索！", true, true);
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("体力不足，无法进行探索！"), true, true);
             return;
         } 
 

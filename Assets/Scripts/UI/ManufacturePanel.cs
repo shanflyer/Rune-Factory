@@ -100,47 +100,47 @@ public class ManufacturePanel : GamePanel<Manufature>
     {
         base.SetPanelUISerializeObj();
 
-        formulaTypeReference = FindChildGameObject<FormulaTypeReference>("FormulaTypeReference");
-        formulaTypeParent = FindChildGameObject("TypeList");
+        formulaTypeReference = FindChildGameObject<FormulaTypeReference>(LanguageManage.SwitchStr("FormulaTypeReference"));
+        formulaTypeParent = FindChildGameObject(LanguageManage.SwitchStr("TypeList"));
 
-        ReturnButton = FindChildGameObject<Button>("ReturnButton");
-        FormulaDropdown = FindChildGameObject<TMP_Dropdown>("FormulaDropdown");
+        ReturnButton = FindChildGameObject<Button>(LanguageManage.SwitchStr("ReturnButton"));
+        FormulaDropdown = FindChildGameObject<TMP_Dropdown>(LanguageManage.SwitchStr("FormulaDropdown"));
 
-        title = FindChildGameObject<TextMeshProUGUI>("Title");
+        title = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("Title"));
 
-        CostItemBoxReference = FindChildGameObject<ItemBoxReference>("CostItem");
-        OutItemBoxReference = FindChildGameObject<ItemBoxReference>("OutputItemBoxReference");
-        ReduceButton = FindChildGameObject<Button>("ReduceButton");
-        AddButton = FindChildGameObject<Button>("AddButton");
-        ItemCountValue = FindChildGameObject<TextMeshProUGUI>("ItemCountValue");
-        CreatButton = FindChildGameObject<Button>("CreatButton");
+        CostItemBoxReference = FindChildGameObject<ItemBoxReference>(LanguageManage.SwitchStr("CostItem"));
+        OutItemBoxReference = FindChildGameObject<ItemBoxReference>(LanguageManage.SwitchStr("OutputItemBoxReference"));
+        ReduceButton = FindChildGameObject<Button>(LanguageManage.SwitchStr("ReduceButton"));
+        AddButton = FindChildGameObject<Button>(LanguageManage.SwitchStr("AddButton"));
+        ItemCountValue = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("ItemCountValue"));
+        CreatButton = FindChildGameObject<Button>(LanguageManage.SwitchStr("CreatButton"));
         creatButtonName = CreatButton.gameObject.GetComponentInChildren<TextMeshProUGUI>(true);
-        AutoSelect = FindChildGameObject<Button>("AutoSelect");
-        RPCost = FindChildGameObject<TextMeshProUGUI>("RPCost");
+        AutoSelect = FindChildGameObject<Button>(LanguageManage.SwitchStr("AutoSelect"));
+        RPCost = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("RPCost"));
 
-        FormulaItemBoxGroup = FindChildGameObject<ToggleGroup>("Material");
+        FormulaItemBoxGroup = FindChildGameObject<ToggleGroup>(LanguageManage.SwitchStr("Material"));
         FormulaItemBoxReferences = new List<ItemBoxReference>
         {
-            FindChildGameObject<ItemBoxReference>("ItemBoxReference1"),
-            FindChildGameObject<ItemBoxReference>("ItemBoxReference2"),
-            FindChildGameObject<ItemBoxReference>("ItemBoxReference3"),
-            FindChildGameObject<ItemBoxReference>("ItemBoxReference4")
+            FindChildGameObject<ItemBoxReference>(LanguageManage.SwitchStr("ItemBoxReference1")),
+            FindChildGameObject<ItemBoxReference>(LanguageManage.SwitchStr("ItemBoxReference2")),
+            FindChildGameObject<ItemBoxReference>(LanguageManage.SwitchStr("ItemBoxReference3")),
+            FindChildGameObject<ItemBoxReference>(LanguageManage.SwitchStr("ItemBoxReference4"))
         };
 
-        ItemType = FindChildGameObject<TextMeshProUGUI>("ItemType");
-        selectItemName = FindChildGameObject<TextMeshProUGUI>("ItemName");
-        selectActionButton = FindChildGameObject<Button>("ActionButton");
-        itemInfo = FindChildGameObject<TextMeshProUGUI>("Info");
-        itemProperty = FindChildGameObject<TextMeshProUGUI>("Property");
-        moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
-        ItemIcon = FindChildGameObject<Image>("ItemIcon");
-        InformationObj = FindChildGameObject("InformationObj");
-        selectActionButtonName = FindChildGameObject<TextMeshProUGUI>("ActionName");
-        InfoItemValueImage = FindChildGameObject<Image>("InfoItemValue");
+        ItemType = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("ItemType"));
+        selectItemName = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("ItemName"));
+        selectActionButton = FindChildGameObject<Button>(LanguageManage.SwitchStr("ActionButton"));
+        itemInfo = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("Info"));
+        itemProperty = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("Property"));
+        moneyValue = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("MoneyValue"));
+        ItemIcon = FindChildGameObject<Image>(LanguageManage.SwitchStr("ItemIcon"));
+        InformationObj = FindChildGameObject(LanguageManage.SwitchStr("InformationObj"));
+        selectActionButtonName = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("ActionName"));
+        InfoItemValueImage = FindChildGameObject<Image>(LanguageManage.SwitchStr("InfoItemValue"));
 
-        timeSlider = FindChildGameObject<Image>("TimeSlider");
-        timeValue = FindChildGameObject<TextMeshProUGUI>("TimeValue");
-        outEffect = FindChildGameObject<ParticleSystem>("OutEffect");
+        timeSlider = FindChildGameObject<Image>(LanguageManage.SwitchStr("TimeSlider"));
+        timeValue = FindChildGameObject<TextMeshProUGUI>(LanguageManage.SwitchStr("TimeValue"));
+        outEffect = FindChildGameObject<ParticleSystem>(LanguageManage.SwitchStr("OutEffect"));
     }
 
     public override void OnEnable()
@@ -191,7 +191,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             }
             if (!canAdd)
             {
-                GameNotificationManager.instance.DisplayTips("生产", "材料不足");
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("生产"), LanguageManage.SwitchStr("材料不足"));
                 // InformationController.instance.AddInformation("材料不足",true,true);
                 produceCount--;
             }
@@ -254,7 +254,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         if (manufature.waitTime > 0)
         {
             string noticeStr = "是否确定中止生产,消耗的物体将消失？";
-            GameManager.instance.ShowTwoSelectAction("", noticeStr, () =>
+            GameManager.instance.ShowTwoSelectAction(LanguageManage.SwitchStr(""), noticeStr, () =>
             {
                 ClearManufature clearManufature = new ClearManufature
                 {
@@ -268,7 +268,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 FormulaDropdown.interactable = true;
                 FormulaDropdown.value = 0;
                 formulaTypeParent.transform.localScale = Vector3.one;
-                creatButtonName.SetSWText("制作");
+                creatButtonName.SetSWText(LanguageManage.SwitchStr("制作"));
                 InformationObj.transform.localScale = Vector3.zero;
             }, null);
             return;
@@ -410,9 +410,9 @@ public class ManufacturePanel : GamePanel<Manufature>
                     ReduceButton.interactable = false;
                     FormulaDropdown.interactable = false;
                     formulaTypeParent.transform.localScale = Vector3.zero;
-                    creatButtonName.SetSWText("中止");
+                    creatButtonName.SetSWText(LanguageManage.SwitchStr("中止"));
                 }
-                GameManager.instance.ShowTwoSelectAction("", noticeStr, CreatAction, null);
+                GameManager.instance.ShowTwoSelectAction(LanguageManage.SwitchStr(""), noticeStr, CreatAction, null);
             }
         } 
         
@@ -596,18 +596,18 @@ public class ManufacturePanel : GamePanel<Manufature>
        await OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
         OutItemBoxReference.SelectUIAction = DisplayItem;
         RefreshCost();
-        creatButtonName.SetSWText("制作");
+        creatButtonName.SetSWText(LanguageManage.SwitchStr("制作"));
 
         if (manufature.product.x != 0)
         {
             CreatButton.interactable = true;
             if (manufature.waitTime <= GameTimeManager.instance.totalMinute)
             {
-                creatButtonName.SetSWText("取出");
+                creatButtonName.SetSWText(LanguageManage.SwitchStr("取出"));
             }
             else
             {
-                creatButtonName.SetSWText("中止");
+                creatButtonName.SetSWText(LanguageManage.SwitchStr("中止"));
             }
         }
         else
@@ -722,7 +722,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             if (!successSelect)
             {
                 instanceId = -1;
-                InformationController.instance.AddInformation("原料不足!", true, true);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("原料不足!"), true, true);
             }
             outItem = new Item
             {
@@ -856,7 +856,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
             if (manufature.product.x != 0)
             {
-                this.timeValue.SetSWText("制作完成！");
+                this.timeValue.SetSWText(LanguageManage.SwitchStr("制作完成！"));
                 if (manufature.waitTime > 0)
                 {
                     CreatProduct();
@@ -864,7 +864,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             }
             else
             {
-                this.timeValue.SetSWText("等待制作");
+                this.timeValue.SetSWText(LanguageManage.SwitchStr("等待制作"));
             }
         }
         else
@@ -891,7 +891,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             manufature = manufature
         };
         GameActionManager.instance.QueueAction(setManufature, true);
-        creatButtonName.SetSWText("取出");
+        creatButtonName.SetSWText(LanguageManage.SwitchStr("取出"));
         CreatButton.interactable = true;
     }
 
@@ -1010,7 +1010,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             if (matchFormula != null && manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
             {
                 ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
-                GameNotificationManager.instance.DisplayTips("新配方获得!", $"发现了制作<color=blue>{matchFormula.formulaName}</color>的配方");
+                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("新配方获得!"),string.Format(LanguageManage.SwitchStr("发现了制作<color=blue>{0}</color>的配方"), LanguageManage.SwitchStr(matchFormula.formulaName)));
                 RefreshFormulaSelect();
             }
 
@@ -1025,7 +1025,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             FormulaDropdown.interactable = true;
             FormulaDropdown.value = 0;
             formulaTypeParent.transform.localScale = Vector3.one;
-            creatButtonName.SetSWText("制作");
+            creatButtonName.SetSWText(LanguageManage.SwitchStr("制作"));
 
             if (SelectItemBoxRefrence != null)
             {
@@ -1041,7 +1041,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     {
         item.count = 0;
         await SelectItemBoxRefrence.InitData(item, null, FormulaItemBoxGroup);
-        selectActionButtonName.SetSWText("移除");
+        selectActionButtonName.SetSWText(LanguageManage.SwitchStr("移除"));
         selectActionButton.onClick.RemoveAllListeners();
         selectActionButton.onClick.AddListener(ClearFormulaItem);
         UIManager.instance.CloseGamePanel<WarehousePanel>();
@@ -1051,11 +1051,11 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
     async void ClearFormulaItem()
     {
-        selectActionButtonName.SetSWText("放入");
+        selectActionButtonName.SetSWText(LanguageManage.SwitchStr("放入"));
         selectActionButton.onClick.RemoveAllListeners();
         selectActionButton.onClick.AddListener(() =>
         {
-            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, "选择");
+            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"));
         });
 
         Item defaultItem = default(Item);
@@ -1082,11 +1082,11 @@ public class ManufacturePanel : GamePanel<Manufature>
                 ItemIcon.enabled = false;
                 InfoItemValueImage.transform.parent.gameObject.SetActive(false);
 
-                selectActionButtonName.SetSWText("放入");
+                selectActionButtonName.SetSWText(LanguageManage.SwitchStr("放入"));
                 selectActionButton.onClick.RemoveAllListeners();
                 selectActionButton.onClick.AddListener(() =>
                 {
-                    PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, "选择");
+                    PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"));
                 });
             }
             else
@@ -1132,7 +1132,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     if (manufature.product.x != 0)
                     {
                         selectActionButton.transform.localScale = Vector3.one;
-                        selectActionButtonName.SetSWText("取出");
+                        selectActionButtonName.SetSWText(LanguageManage.SwitchStr("取出"));
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(GetOutProduct);
                     }
@@ -1145,16 +1145,16 @@ public class ManufacturePanel : GamePanel<Manufature>
                     selectActionButton.transform.localScale = manufature.product.x == 0 ? Vector3.one : Vector3.zero;
                     if (item.instanceId == -1)
                     {
-                        selectActionButtonName.SetSWText("放入");
+                        selectActionButtonName.SetSWText(LanguageManage.SwitchStr("放入"));
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(() =>
                         {
-                            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, "选择");
+                            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"));
                         });
                     }
                     else
                     {
-                        selectActionButtonName.SetSWText("移除");
+                        selectActionButtonName.SetSWText(LanguageManage.SwitchStr("移除"));
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(ClearFormulaItem);
                     }

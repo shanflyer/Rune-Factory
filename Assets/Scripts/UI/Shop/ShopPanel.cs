@@ -182,7 +182,7 @@ public class ShopPanel : GamePanel<ShopList>
                     GameActionManager.instance.QueueAction(joinTeam);
                 }
 
-                InformationController.instance.AddInformation($"成功购买{buyCount}个+ {itemData.itemName} +");
+                InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr("成功购买{0}个+ {1} +"),buyCount, LanguageManage.SwitchStr(itemData.itemName)));
                 if (selectShopItemData.buyAction != 0)
                 {
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);

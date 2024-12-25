@@ -543,9 +543,10 @@ namespace TMPro
 
         protected override void Awake()
         {
+            base.Awake();
             //Debug.Log("***** Awake() called on object ID " + GetInstanceID() + ". *****");
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             // Special handling for TMP Settings and importing Essential Resources
             if (TMP_Settings.instance == null)
             {

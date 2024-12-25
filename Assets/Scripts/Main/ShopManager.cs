@@ -161,7 +161,7 @@ public class Shop:IReferenceData
                 if (show)
                 {
                     ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item);
-                    InformationController.instance.AddInformation($"{itemData.itemName}已经开始售卖!");
+                    InformationController.instance.AddInformation($"{LanguageManage.SwitchStr(itemData.itemName)}{LanguageManage.SwitchStr("已经开始售卖!")}");
                 } 
             } 
         }

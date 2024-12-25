@@ -1368,7 +1368,7 @@ public class PackageManager : Singleton<PackageManager>
 
                             if (display)
                             {
-                                InformationController.instance.AddInformation($"获得[{itemData.name}] {item.count - inCount}个");
+                                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("获得")}[{LanguageManage.SwitchStr(itemData.name)}] {item.count - inCount}{LanguageManage.SwitchStr("个")}");
                             }
                             return inCount;
                         }
@@ -1441,14 +1441,14 @@ public class PackageManager : Singleton<PackageManager>
                     int outCount= item.count - addCount;
                     if (display)
                     {
-                        InformationController.instance.AddInformation($"获得[{itemData.name}] {outCount}个");
+                        InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("获得")}[{LanguageManage.SwitchStr(itemData.name)}] {outCount}{LanguageManage.SwitchStr("个")}");
                     }
                     return outCount;
                 }
             }
             if (display)
             {
-                InformationController.instance.AddInformation($"获得[{itemData.name}] {item.count}个");
+                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("获得")}[{LanguageManage.SwitchStr(itemData.name)}] {item.count}{LanguageManage.SwitchStr("个")}");
             }
             return 0;
         }

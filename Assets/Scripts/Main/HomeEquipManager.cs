@@ -398,7 +398,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 };
                 GameActionManager.instance.QueueAction(CreatHomeEquip); 
 
-                InformationController.instance.AddInformation($"成功购买1个+ {itemData.itemName} +");
+                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("成功购买1个")}+ {LanguageManage.SwitchStr(itemData.itemName)} +");
                 if (selectShopItemData.buyAction != 0)
                 {
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);

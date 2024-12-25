@@ -23,6 +23,10 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     {
         return id.ToString();
     }
+    public string GetName()
+    {
+        return npcFunctionName;
+    }
     public override string ToString()
     {
         return id.ToString();

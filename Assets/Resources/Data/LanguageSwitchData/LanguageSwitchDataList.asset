@@ -1797,32 +1797,95 @@ MonoBehaviour:
     - "\u57CE\u9547"
     - "\u5E73\u5E38"
     - "\u635F\u6BC1"
+    - "\u6253\u5F00\u7BB1\u5B50"
+    - "\u80CC\u5305"
+    - "\u6536\u56DE"
+    - "\u53EF\u5E03\u7F6E\u5730\u70B9:"
+    - "\u9504\u5730"
+    - "\u5F00\u59CB\u8425\u4E1A"
+    - "\u7ED3\u675F\u8425\u4E1A"
+    - "\u6253\u5F00"
+    - "\u5173\u95ED"
+    - "\u88C5\u6C34"
+    - "\u67E5\u770B\u690D\u7269\u5E97"
+    - "\u67E5\u770B\u5BB6\u5177\u5E97"
+    - "\u67E5\u770B\u52A8\u7269\u5E97"
+    - "\u64AD\u79CD"
+    - "\u6D47\u6C34"
+    - "\u6536\u83B7"
+    - "\u5F00\u59CB\u751F\u4EA7"
+    - "\u5EFA\u9020\u7267\u573A"
+    - "\u6269\u5EFA"
+    - "\u804A\u5929"
+    - "\u5782\u9493"
+    - "\u6536\u7AFF"
+    - "\u5750\u4E0B"
+    - "\u7AD9\u8D77"
+    - "\u7EC4\u961F"
+    - "\u7A7A\u95F4\u62D3\u5C55"
+    - "\u62D3\u5C55\u80CC\u5305\u7A7A\u95F4?"
+    - "\u540E\u5C71"
+    - "\u57CE\u95E8"
+    - "\u519C\u573A"
+    - "\u5546\u5E97\u8857"
+    - "\u4F4F\u5B85\u533A"
+    - "\u4E2D\u592E\u5E7F\u573A"
+    - "\u6E2F\u53E3"
+    - "\u5C71\u5761"
+    - "\u624B\u52A8"
+    - "\u63A2\u7D22\u5EA6:{0}%"
+    - "\u4F53\u529B\u4E0D\u8DB3\uFF0C\u65E0\u6CD5\u8FDB\u884C\u63A2\u7D22\uFF01"
+    - "\u9003\u79BB\u6210\u529F!"
+    - "\u9003\u79BB\u5931\u8D25!"
+    - "\u6210\u529F\u8D2D\u4E70"
+    - "\u4E2A+"
+    - "\u8FD9\u4EF6\u7269\u54C1\u4E0D\u80FD\u81EA\u7531\u4F7F\u7528"
+    - "\u4EC0\u4E48\u4E5F\u6CA1\u53D1\u751F"
+    - "\u4E2A"
+    - "\u53CB\u597D\u5EA6\u964D\u4F4E1\u7EA7"
+    - "\u53CB\u597D\u5EA6\u63D0\u53471\u7EA7"
+    - "\u4E0E{0}\u7684\u53CB\u8C0A\u503C\u63D0\u5347{1}"
+    - "\u4E0E{0}\u7684\u53CB\u8C0A\u503C\u964D\u4F4E{1}"
+    - "\u6210\u529F\u8D2D\u4E701\u4E2A"
+    - "\u5DF2\u7ECF\u5F00\u59CB\u552E\u5356!"
+    - "\u5DF2\u7ECF\u5206\u914D\u5230\u5BF9\u5E94\u7267\u573A"
+    - "\u5DF2\u7ECF\u56DE\u5F52\u5230\u5927\u81EA\u7136"
+    - "\u5DF2\u6B7B\u4EA1!"
+    - "\u5DF2\u8870\u8001!"
+    - "\u539F\u6599\u4E0D\u8DB3!"
+    - "\u80CC\u5305\u7A7A\u95F4\u4E0D\u8DB3!"
+    - "\u53D1\u73B0\u4E86\u5236\u4F5C<color=blue>{0}</color>\u7684\u914D\u65B9"
+    - "\u65B0\u914D\u65B9\u83B7\u5F97!"
+    - "\u4EA7\u7269\u5DF2\u7ECF\u653E\u5230\u80CC\u5305!"
+    - "\u6210\u529F\u8D2D\u4E70{0}\u4E2A+ {1} +"
+    - "\u52A8\u7269\u5DF2\u7ECF\u56DE\u5230\u7267\u573A"
+    - "\u9700\u8981\u5148\u63A2\u7D22\u5B8C\u6210{0},\u624D\u80FD\u89E3\u9501\uFF01"
     m_values:
     - en: Unknown Item
       jp: 
       ko: 
-    - en: Failed Barehanded Crafting
+    - en: Failed Unarmed
       jp: 
       ko: 
-    - en: Failed Stirring
+    - en: Failed Stir
       jp: 
       ko: 
-    - en: Failed Baking
+    - en: Failed Bake
       jp: 
       ko: 
-    - en: Failed Steaming
+    - en: Failed Steam
       jp: 
       ko: 
-    - en: Failed Brewing
+    - en: Failed Brew
       jp: 
       ko: 
-    - en: Failed Casting
+    - en: Failed Forge
       jp: 
       ko: 
-    - en: Failed Sewing
+    - en: Failed Sew
       jp: 
       ko: 
-    - en: Failed Writing
+    - en: Failed Write
       jp: 
       ko: 
     - en: Teleport Scroll
@@ -2500,7 +2563,7 @@ MonoBehaviour:
     - en: Hoe
       jp: 
       ko: 
-    - en: Iron Kettle
+    - en: Iron Pot
       jp: 
       ko: 
     - en: Axe
@@ -2515,49 +2578,49 @@ MonoBehaviour:
     - en: Sewing Machine
       jp: 
       ko: 
-    - en: Forging Furnace
+    - en: Forge
       jp: 
       ko: 
-    - en: Baking Oven
+    - en: Oven
       jp: 
       ko: 
-    - en: Stewing Pot
+    - en: Stew Pot
       jp: 
       ko: 
-    - en: Cold Food Table
+    - en: Buffet
       jp: 
       ko: 
-    - en: Brewing Barrel
+    - en: Brew Barrel
       jp: 
       ko: 
-    - en: Writing Table
+    - en: Writing Desk
       jp: 
       ko: 
-    - en: Refrigerator
+    - en: Fridge
       jp: 
       ko: 
-    - en: Storage Box (Wood)
+    - en: Wooden Chest
       jp: 
       ko: 
-    - en: Storage Box (Silver)
+    - en: Silver Chest
       jp: 
       ko: 
-    - en: Storage Box (Gold)
+    - en: Gold Chest
       jp: 
       ko: 
-    - en: Standard Counter
+    - en: Counter
       jp: 
       ko: 
     - en: Clothing Rack
       jp: 
       ko: 
-    - en: Stirring Machine
+    - en: Mixer
       jp: 
       ko: 
-    - en: Silver Kettle
+    - en: Silver Pot
       jp: 
       ko: 
-    - en: Golden Kettle
+    - en: Gold Pot
       jp: 
       ko: 
     - en: Double Bed
@@ -2569,37 +2632,37 @@ MonoBehaviour:
     - en: Blue Sofa
       jp: 
       ko: 
-    - en: Potted Plant 1
+    - en: Plant 1
       jp: 
       ko: 
-    - en: Potted Plant 2
+    - en: Plant 2
       jp: 
       ko: 
-    - en: Potted Plant 3
+    - en: Plant 3
       jp: 
       ko: 
-    - en: Potted Plant 4
+    - en: Plant 4
       jp: 
       ko: 
-    - en: Potted Plant 5
+    - en: Plant 5
       jp: 
       ko: 
-    - en: Potted Plant 6
+    - en: Plant 6
       jp: 
       ko: 
     - en: Fireplace
       jp: 
       ko: 
-    - en: Crucian Carp
+    - en: Carp
       jp: 
       ko: 
     - en: Crayfish
       jp: 
       ko: 
-    - en: Carp
+    - en: Koi
       jp: 
       ko: 
-    - en: Pineapple Fish
+    - en: Bream
       jp: 
       ko: 
     - en: River Crab
@@ -2608,19 +2671,19 @@ MonoBehaviour:
     - en: Catfish
       jp: 
       ko: 
-    - en: Goldfish
+    - en: Ding Fish
       jp: 
       ko: 
-    - en: Koi
+    - en: Koi Carp
       jp: 
       ko: 
-    - en: Gold Line Fish
+    - en: Goldline Fish
       jp: 
       ko: 
-    - en: Perch
+    - en: Barramundi
       jp: 
       ko: 
-    - en: Goldfish
+    - en: Ranchu Goldfish
       jp: 
       ko: 
     - en: Cherry Salmon
@@ -2635,10 +2698,10 @@ MonoBehaviour:
     - en: Golden Trout
       jp: 
       ko: 
-    - en: Neon Carp
+    - en: Neon Tetra
       jp: 
       ko: 
-    - en: Peach Blossom Fish
+    - en: Peachfish
       jp: 
       ko: 
     - en: Salmon
@@ -2650,16 +2713,16 @@ MonoBehaviour:
     - en: Silver Dragon Fish
       jp: 
       ko: 
-    - en: Cave Angel Fish
+    - en: Cave Angelfish
       jp: 
       ko: 
     - en: Sardine
       jp: 
       ko: 
-    - en: Barred Fish
+    - en: Betta Fish
       jp: 
       ko: 
-    - en: Sea Eel
+    - en: Moray Eel
       jp: 
       ko: 
     - en: Octopus
@@ -2674,7 +2737,7 @@ MonoBehaviour:
     - en: Jellyfish
       jp: 
       ko: 
-    - en: Rockfish
+    - en: Stonebass
       jp: 
       ko: 
     - en: Red Snapper
@@ -2683,7 +2746,7 @@ MonoBehaviour:
     - en: Blue Crab
       jp: 
       ko: 
-    - en: Goby Fish
+    - en: Mudfish
       jp: 
       ko: 
     - en: Lobster
@@ -4916,7 +4979,7 @@ MonoBehaviour:
     - en: Seeds
       jp: 
       ko: 
-    - en: Fruits and Vegetables
+    - en: Fruits & Veg
       jp: 
       ko: 
     - en: Facilities
@@ -6604,7 +6667,7 @@ MonoBehaviour:
     - en: Equip
       jp: 
       ko: 
-    - en: Move Forward
+    - en: Forward
       jp: 
       ko: 
     - en: Stop
@@ -6662,7 +6725,7 @@ MonoBehaviour:
     - en: Are you sure you want to withdraw from battle?
       jp: 
       ko: 
-    - en: Month
+    - en: 
       jp: 
       ko: 
     - en: My Trophy
@@ -6686,7 +6749,7 @@ MonoBehaviour:
     - en: Filter
       jp: 
       ko: 
-    - en: Obtain
+    - en: Gained
       jp: 
       ko: 
     - en: Book of Fish
@@ -6716,13 +6779,13 @@ MonoBehaviour:
     - en: Spring Month, 1991
       jp: 
       ko: 
-    - en: Attack
+    - en: Atk
       jp: 
       ko: 
-    - en: Defense
+    - en: Def
       jp: 
       ko: 
-    - en: Agility
+    - en: Agi
       jp: 
       ko: 
     - en: Luck
@@ -6772,7 +6835,7 @@ MonoBehaviour:
     - en: Consume?
       jp: 
       ko: 
-    - en: Currently Owned
+    - en: Owned
       jp: 
       ko: 
     - en: Build a Ranch?
@@ -6793,7 +6856,7 @@ MonoBehaviour:
     - en: Auto
       jp: 
       ko: 
-    - en: 'Exploration Level:'
+    - en: Explore
       jp: 
       ko: 
     - en: Fish
@@ -6802,19 +6865,19 @@ MonoBehaviour:
     - en: 'Record:'
       jp: 
       ko: 
-    - en: 'Max Record:'
+    - en: 'Max:'
       jp: 
       ko: 
     - en: 'Habitat:'
       jp: 
       ko: 
-    - en: 'Appearance Season:'
+    - en: 'Season:'
       jp: 
       ko: 
     - en: Alchemy
       jp: 
       ko: 
-    - en: "Can Obtain\uFF1A"
+    - en: "Obtain\uFF1A"
       jp: 
       ko: 
     - en: Refine
@@ -6856,7 +6919,7 @@ MonoBehaviour:
     - en: Desk
       jp: 
       ko: 
-    - en: Increase Capacity
+    - en: Cap Up
       jp: 
       ko: 
     - en: 'Status:'
@@ -6865,7 +6928,7 @@ MonoBehaviour:
     - en: 'Affection:'
       jp: 
       ko: 
-    - en: Details
+    - en: Info
       jp: 
       ko: 
     - en: Check Check
@@ -6901,22 +6964,22 @@ MonoBehaviour:
     - en: Reward
       jp: 
       ko: 
-    - en: Arranged
+    - en: Arr.
       jp: 
       ko: 
-    - en: Not Arranged
+    - en: Unarr.
       jp: 
       ko: 
     - en: New Double Bed
       jp: 
       ko: 
-    - en: Release
+    - en: Drop
       jp: 
       ko: 
     - en: My Furniture
       jp: 
       ko: 
-    - en: Spring
+    - en: Spr.
       jp: 
       ko: 
     - en: Monday
@@ -6931,7 +6994,7 @@ MonoBehaviour:
     - en: Birthday
       jp: 
       ko: 
-    - en: Day
+    - en: 
       jp: 
       ko: 
     - en: Name
@@ -6986,25 +7049,23 @@ MonoBehaviour:
     - en: Perfect
       jp: 
       ko: 
-    - en: Uninstall
+    - en: Uninst
       jp: 
       ko: 
-    - en: 'Dear {0}:'
+    - en: Dear {0},
       jp: 
       ko: 
-    - en: "Lately, I\u2019ve been feeling increasingly fatigued, and my time is running
-        out. I don\u2019t want to be just an old man dying in a sickbed. So, before
-        the Grim Reaper comes for me, I\u2019ve decided to embark on a journey around
-        the world."
+    - en: Lately, I've been feeling more and more tired, and I don't have much time
+        left. I don't want to be a frail old man dying in bed, so before death comes
+        for me, I've decided to embark on a journey around the world.
       jp: 
       ko: 
-    - en: "In this world, the only thing I truly care about is {0}. My home is in
-        this little town, and I don\u2019t want it to fall into neglect. I hope you\u2019ll
-        take over and care for it. The people in this town are very kind, and they
-        will help you if you ever face any difficulties."
+    - en: The only thing I care about in this world is {0}. My home is in the town,
+        and I don't want it to be left in ruin. I hope you'll inherit it. The people
+        in the town are kind, and they'll help you if you face any difficulties.
       jp: 
       ko: 
-    - en: "Well, it\u2019s about time for me to set off. Wish me luck."
+    - en: Well, it's time for me to go. Wish me luck.
       jp: 
       ko: 
     - en: Your Grandfather
@@ -7034,7 +7095,7 @@ MonoBehaviour:
     - en: Mystery Ruins
       jp: 
       ko: 
-    - en: Explore
+    - en: "Go\uFF01"
       jp: 
       ko: 
     - en: Local Specialty
@@ -7103,7 +7164,7 @@ MonoBehaviour:
     - en: Sleep
       jp: 
       ko: 
-    - en: Attribute Change
+    - en: Stat Change
       jp: 
       ko: 
     - en: Damage
@@ -7112,76 +7173,76 @@ MonoBehaviour:
     - en: Heal
       jp: 
       ko: 
-    - en: Contest
+    - en: Match
       jp: 
       ko: 
     - en: Sell
       jp: 
       ko: 
-    - en: Commemorate
+    - en: Memorial
       jp: 
       ko: 
-    - en: Carnival
+    - en: Fest
       jp: 
       ko: 
-    - en: Forging
+    - en: Forge
       jp: 
       ko: 
-    - en: Sewing
+    - en: Sew
       jp: 
       ko: 
-    - en: Writing
+    - en: Write
       jp: 
       ko: 
-    - en: Slash
+    - en: Chop
       jp: 
       ko: 
-    - en: Spinning
+    - en: Spin
       jp: 
       ko: 
-    - en: Weaving
+    - en: Weave
       jp: 
       ko: 
     - en: Tanning
       jp: 
       ko: 
-    - en: Grinding
+    - en: Grind
       jp: 
       ko: 
     - en: Unarmed
       jp: 
       ko: 
-    - en: Steaming
+    - en: Boil
       jp: 
       ko: 
-    - en: Baking
+    - en: Bake
       jp: 
       ko: 
-    - en: Brewing
+    - en: Brew
       jp: 
       ko: 
-    - en: Stirring
+    - en: Stir
       jp: 
       ko: 
-    - en: Living Facilities
+    - en: Life Facility
       jp: 
       ko: 
-    - en: Production Facilities
+    - en: Prod. Facility
       jp: 
       ko: 
-    - en: Decoration
+    - en: Decor
       jp: 
       ko: 
     - en: Bed
       jp: 
       ko: 
-    - en: Chest
+    - en: Box
       jp: 
       ko: 
     - en: Counter
       jp: 
       ko: 
-    - en: Production
+    - en: Produce
       jp: 
       ko: 
     - en: Drought
@@ -7193,7 +7254,7 @@ MonoBehaviour:
     - en: Death
       jp: 
       ko: 
-    - en: Ripe
+    - en: Mature
       jp: 
       ko: 
     - en: Collectible
@@ -7202,28 +7263,28 @@ MonoBehaviour:
     - en: Tools
       jp: 
       ko: 
-    - en: Gold Coins
+    - en: Coins
       jp: 
       ko: 
     - en: Red Crystals
       jp: 
       ko: 
-    - en: Dialogue
+    - en: Talk
       jp: 
       ko: 
     - en: Gift
       jp: 
       ko: 
-    - en: Summer
+    - en: Sum.
       jp: 
       ko: 
-    - en: Autumn
+    - en: Aut.
       jp: 
       ko: 
-    - en: Winter
+    - en: Win.
       jp: 
       ko: 
-    - en: Diamond
+    - en: Diamonds
       jp: 
       ko: 
     - en: Currency
@@ -7232,16 +7293,16 @@ MonoBehaviour:
     - en: Hunger
       jp: 
       ko: 
-    - en: Happiness
+    - en: Happy
       jp: 
       ko: 
-    - en: Sadness
+    - en: Sad
       jp: 
       ko: 
-    - en: Aging
+    - en: Aged
       jp: 
       ko: 
-    - en: Juvenile
+    - en: Childhood
       jp: 
       ko: 
     - en: Adult
@@ -7262,7 +7323,7 @@ MonoBehaviour:
     - en: Revive
       jp: 
       ko: 
-    - en: Standby
+    - en: Idle
       jp: 
       ko: 
     - en: Enemy
@@ -7277,16 +7338,16 @@ MonoBehaviour:
     - en: Ready
       jp: 
       ko: 
-    - en: Action
+    - en: Act
       jp: 
       ko: 
-    - en: Near Death
+    - en: Dying
       jp: 
       ko: 
-    - en: Awaiting Leveling
+    - en: Pending Flatten
       jp: 
       ko: 
-    - en: Leveled
+    - en: Flattened
       jp: 
       ko: 
     - en: Battle
@@ -7295,9 +7356,198 @@ MonoBehaviour:
     - en: Town
       jp: 
       ko: 
-    - en: Ordinary
+    - en: Normal
       jp: 
       ko: 
     - en: Damaged
+      jp: 
+      ko: 
+    - en: Open Box
+      jp: 
+      ko: 
+    - en: Bag
+      jp: 
+      ko: 
+    - en: Retr.
+      jp: 
+      ko: 
+    - en: "Plac. Area\uFF1A"
+      jp: 
+      ko: 
+    - en: Hoe
+      jp: 
+      ko: 
+    - en: Open
+      jp: 
+      ko: 
+    - en: Close
+      jp: 
+      ko: 
+    - en: Open
+      jp: 
+      ko: 
+    - en: Close
+      jp: 
+      ko: 
+    - en: Fill
+      jp: 
+      ko: 
+    - en: View Plant
+      jp: 
+      ko: 
+    - en: View Furn
+      jp: 
+      ko: 
+    - en: View Animal
+      jp: 
+      ko: 
+    - en: Sow
+      jp: 
+      ko: 
+    - en: Water
+      jp: 
+      ko: 
+    - en: Harvest
+      jp: 
+      ko: 
+    - en: Start Prod.
+      jp: 
+      ko: 
+    - en: Build Ranch
+      jp: 
+      ko: 
+    - en: Expand
+      jp: 
+      ko: 
+    - en: Chat
+      jp: 
+      ko: 
+    - en: Fish
+      jp: 
+      ko: 
+    - en: Reel
+      jp: 
+      ko: 
+    - en: Sit
+      jp: 
+      ko: 
+    - en: Stand
+      jp: 
+      ko: 
+    - en: Team
+      jp: 
+      ko: 
+    - en: Space Expansion
+      jp: 
+      ko: 
+    - en: Expand Bag Space?
+      jp: 
+      ko: 
+    - en: Backyard
+      jp: 
+      ko: 
+    - en: Gate
+      jp: 
+      ko: 
+    - en: Farm
+      jp: 
+      ko: 
+    - en: Shop Street
+      jp: 
+      ko: 
+    - en: Residential Area
+      jp: 
+      ko: 
+    - en: Central Plaza
+      jp: 
+      ko: 
+    - en: Harbor
+      jp: 
+      ko: 
+    - en: Hillside
+      jp: 
+      ko: 
+    - en: Manual
+      jp: 
+      ko: 
+    - en: Explore:{0}%
+      jp: 
+      ko: 
+    - en: Not enough stamina to explore!
+      jp: 
+      ko: 
+    - en: Escape successful!
+      jp: 
+      ko: 
+    - en: Escape failed!
+      jp: 
+      ko: 
+    - en: Purchase successful
+      jp: 
+      ko: 
+    - en: ' +'
+      jp: 
+      ko: 
+    - en: This item can't be used freely
+      jp: 
+      ko: 
+    - en: Nothing happened
+      jp: 
+      ko: 
+    - en: item
+      jp: 
+      ko: 
+    - en: Friendship decreased by 1
+      jp: 
+      ko: 
+    - en: Friendship increased by 1
+      jp: 
+      ko: 
+    - en: Friendship with {0} increased by {1}
+      jp: 
+      ko: 
+    - en: Friendship with {0} decreased by {1}
+      jp: 
+      ko: 
+    - en: Successfully purchased 1
+      jp: 
+      ko: 
+    - en: Selling started!
+      jp: 
+      ko: 
+    - en: Assigned to the correct ranch
+      jp: 
+      ko: 
+    - en: Returned to nature
+      jp: 
+      ko: 
+    - en: Dead!
+      jp: 
+      ko: 
+    - en: Aged!
+      jp: 
+      ko: 
+    - en: Not enough materials!
+      jp: 
+      ko: 
+    - en: Not enough bag space!
+      jp: 
+      ko: 
+    - en: Discovered the recipe for crafting <color=blue>{0}</color>
+      jp: 
+      ko: 
+    - en: New recipe acquired!
+      jp: 
+      ko: 
+    - en: Items added to the bag!
+      jp: 
+      ko: 
+    - en: Successfully purchased {0} + {1} +
+      jp: 
+      ko: 
+    - en: Animals returned to the ranch
+      jp: 
+      ko: 
+    - en: Need to complete {0} first to unlock!
       jp: 
       ko: 

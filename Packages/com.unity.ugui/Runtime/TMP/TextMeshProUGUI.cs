@@ -780,6 +780,7 @@ namespace TMPro
 
         protected override void Awake()
         {
+            base.Awake();
             //Debug.Log("***** Awake() called on object ID " + GetInstanceID() + ". *****");
 
             #if UNITY_EDITOR

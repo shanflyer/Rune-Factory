@@ -281,7 +281,7 @@ public class PastureManager : Singleton<PastureManager>
                 GameActionManager.instance.QueueAction(refreshPasture);
                 SetAnimalToPasture.setResult(true);
 
-                InformationController.instance.AddInformation($"+{animal.name}+已经分配到对应牧场~", PromptShow: true);
+                InformationController.instance.AddInformation($"+{LanguageManage.SwitchStr(animal.name)}+{LanguageManage.SwitchStr("已经分配到对应牧场")}", PromptShow: true);
             }
 
             GameDataSaveManager.instance.UserGameSaveData.SetPastureData(pasture);
@@ -704,7 +704,7 @@ public class PastureManager : Singleton<PastureManager>
                 GameActionManager.instance.QueueAction(refreshPasture);
             }
 
-            InformationController.instance.AddInformation($"+{animal.name}+已经回归到大自然", true, true);
+            InformationController.instance.AddInformation($"+{LanguageManage.SwitchStr(animal.name)}+{LanguageManage.SwitchStr("已经回归到大自然")}", true, true);
 
             DestoryCharacter destoryCharacter = new DestoryCharacter
             {
@@ -802,7 +802,7 @@ public class Animal
             if (animalState == AnimalState.饥饿)
             {
                 animalState = AnimalState.死亡;
-                InformationController.instance.AddInformation($"+{name}+已死亡!");
+                InformationController.instance.AddInformation($"+{LanguageManage.SwitchStr(name)}+{LanguageManage.SwitchStr("已死亡!")}");
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {
                     animalId = instanceId,
@@ -892,7 +892,7 @@ public class Animal
             else
             {
                 animalState = AnimalState.衰老;
-                InformationController.instance.AddInformation($"+{name}+已衰老!");
+                InformationController.instance.AddInformation($"+{LanguageManage.SwitchStr(name)}+{LanguageManage.SwitchStr("已衰老!")}");
                 /*
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {

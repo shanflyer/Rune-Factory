@@ -151,7 +151,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             }
             else
             {
-                InformationController.instance.AddInformation("背包空间不足!", PromptShow: true);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("背包空间不足!"), PromptShow: true);
             }
         }
         Close();

@@ -113,7 +113,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 teamCharacterId = SelectCharacterId, 
             };
             GameActionManager.instance.QueueAction(leaveTeam);
-            InformationController.instance.AddInformation("动物已经回到牧场", true, true);
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr("动物已经回到牧场"), true, true);
         } 
         
     }

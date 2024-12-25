@@ -21,7 +21,7 @@ public struct FriendShip
                 FriendShipData friendShipData = await GameDataManager.instance.GetAsyncData<FriendShipData>(friendLevel);
                 totalVaue += friendShipData.needValue;
 
-                InformationController.instance.AddInformation("友好度降低1级", true, true);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("友好度降低1级"), true, true);
             }
             nowValue = totalVaue;
         }
@@ -35,7 +35,7 @@ public struct FriendShip
                 {
                     friendLevel++;
                     nowValue = totalVaue;
-                    InformationController.instance.AddInformation("友好度提升1级", true, true);
+                    InformationController.instance.AddInformation(LanguageManage.SwitchStr("友好度提升1级"), true, true);
                 }
             }
         }
@@ -267,12 +267,12 @@ public class FriendManager : Singleton<FriendManager>
                 {
                     if (addFriendShipValue.value > 0)
                     {
-                        string outStr = string.Format("与{0}的友谊值提升{1}", npc.npcName, addFriendShipValue.value);
+                        string outStr = string.Format(LanguageManage.SwitchStr("与{0}的友谊值提升{1}"), LanguageManage.SwitchStr(npc.npcName), addFriendShipValue.value);
                         InformationController.instance.AddInformation(outStr, true, true); 
                     }
                     if (addFriendShipValue.value < 0)
                     {
-                        string outStr = string.Format("与{0}的友谊值降低{1}", npc.npcName, addFriendShipValue.value);
+                        string outStr = string.Format(LanguageManage.SwitchStr("与{0}的友谊值降低{1}"), LanguageManage.SwitchStr(npc.npcName), addFriendShipValue.value);
                         InformationController.instance.AddInformation(outStr, true, true);
                     }
                 }

@@ -60,7 +60,7 @@ public class TalkManager : Singleton<TalkManager>
             functionIds = animal.animalData.functionIds;
         }
 
-        bool[] functionCheckResult = new bool[functionIds.Count]; 
+        bool[] functionCheckResult = null; 
         if (fixedFunctions != null)
         {
             functionCheckResult = null;
@@ -72,6 +72,7 @@ public class TalkManager : Singleton<TalkManager>
         }else
         if (functionIds != null)
         {
+            functionCheckResult = new bool[functionIds.Count];
             for (int i = 0; i < functionIds.Count; i++)
             {
                 int functionId = functionIds[i]; 
