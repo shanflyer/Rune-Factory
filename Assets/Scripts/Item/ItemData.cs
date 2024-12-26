@@ -49,6 +49,7 @@ public class ItemData : ScriptableObject, IGameData
     public bool isFresh;
     public bool itemValue;
     public int equipLevel;
+    public List<int> tag;
     public List<int> dropEventId = new List<int>();
     public List<int> checkEventId = new List<int>();
     public int useEventId;

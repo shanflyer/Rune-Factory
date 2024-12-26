@@ -46,6 +46,8 @@ public class UserGameSaveData : IReferenceData
         nextWeathers.AddRange(userGameSaveData.nextWeathers);
         nowWeathers.AddRange(userGameSaveData.nowWeathers);
 
+        npcBirthDays.CopyData(userGameSaveData.npcBirthDays);
+
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
     }
 
@@ -64,6 +66,7 @@ public class UserGameSaveData : IReferenceData
     public List<Weather> nextWeathers = new List<Weather>();
 
     public FriendSaveData friendSaveData;
+    public IntInt2Dictionary npcBirthDays = new IntInt2Dictionary();
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
     public IntIntDictionary mapLineSaveData = new IntIntDictionary();
 
@@ -91,6 +94,14 @@ public class UserGameSaveData : IReferenceData
     private Dictionary<int, List<int>> removeMapItemOperatesDic = new Dictionary<int, List<int>>();
     private Dictionary<int, List<int>> addMapItemOperatesDic = new Dictionary<int, List<int>>();
 
+    public int2 GetNpcBirthDay(int npdId)
+    {
+        if(npcBirthDays.TryGetValue(npdId,out var int2))
+        {
+            return int2;
+        }
+        return new int2(-1, -1);
+    }
     public void InitMapItemSaveData(int id)
     {
         if(removeMapItemOperatesDic.TryGetValue(id,out var list))
@@ -306,6 +317,10 @@ public class UserGameSaveData : IReferenceData
             shopSaveData = new ShopSaveData(shop);
             shops.Add(shop.shopId, shopSaveData);
         }
+    }
+    public void SetNpcBirthDay(int  npcId,Season season,int day)
+    {
+        npcBirthDays[npcId] = new int2((int)season, day);
     }
     public void SetMapHomeEquipData(HomeEquip homeEquip)
     {

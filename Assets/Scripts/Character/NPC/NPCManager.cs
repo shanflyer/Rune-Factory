@@ -1,5 +1,6 @@
 ﻿using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine; 
@@ -204,15 +205,30 @@ public struct NPCList : IReferenceData
 
 public class NPC : IReferenceData
 {
-    public NPC(int instanceId, NPCData nPCData)
+    Season birthSeason;
+    int birthDay;
+    public NPC(int instanceId, NPCData nPCData, Season birthSeason, int birthDay)
     {
         characterInstance = instanceId;
         npcData = nPCData;
         npcState = NPCState.正常;
         endBehavior = true;
         behaviorCanBreak = false;
+        this.birthSeason = birthSeason; 
+        this.birthDay = birthDay;
     }
-
+    public FestivalData GetNpcBirthDay()
+    {
+        FestivalData festivalData = new FestivalData
+        {
+            date = birthDay,
+            season=birthSeason,
+            festivalType = FestivalType.纪念,
+            id = npcData.id,
+            name = npcData.npcName + LanguageManage.SwitchStr(" 的生日"),
+        };
+        return festivalData;
+    }
     public Character Character
     {
         get
@@ -260,7 +276,9 @@ public class NPC : IReferenceData
             return _functions;
         }
     }
-    public List<int> likeItems => NPCBehaviorData.likeItems;
+    public List<int> likeItems => likeItemSet.ToList();
+    private HashSet<int> likeItemSet = new HashSet<int>();
+    private HashSet<int> unLikeItemSet = new HashSet<int>();
     public string shopName => npcData.shopName;
 
     public List<int2> Beds => NPCBehaviorData.beds;
@@ -352,6 +370,11 @@ public class NPC : IReferenceData
     public async void InitBehaviorData()
     {
         NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
+        likeItemSet.Clear();
+        unLikeItemSet.Clear();
+        likeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.likeItem);
+        unLikeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.unLikeItem);
+
         SetNPCTaskScheduleTimeList(NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
         visitMaps.Clear();
         InitNowVisitMap();
@@ -756,11 +779,11 @@ public class NPC : IReferenceData
     public void GetGift(int giveCharacter, int giftId)
     {
         int likeState = 0;
-        if (NPCBehaviorData.likeItems.Contains(giftId))
+        if (likeItemSet.Contains(giftId))
         {
             likeState = 1;
         }
-        else if (NPCBehaviorData.unLikeItems.Contains(giftId))
+        else if (unLikeItemSet.Contains(giftId))
         {
             likeState = -1;
         }
@@ -769,6 +792,12 @@ public class NPC : IReferenceData
         int friendValue = 0;
         List<int2> talkRandomResults = new List<int2>();
         List<int2> emoteRandomResults = new List<int2>();
+
+        int mulValue = 1;
+        if (GameTimeManager.instance.Season == birthSeason && GameTimeManager.instance.Day == birthDay)
+        {
+            mulValue = 2;
+        }
         switch (likeState)
         {
             case 1:
@@ -810,7 +839,7 @@ public class NPC : IReferenceData
                 {
                     characterId = characterInstance,
                     friendAddType = FriendAddType.礼物,
-                    value = friendValue
+                    value = friendValue*mulValue
                 };
                 GameActionManager.instance.QueueAction(addFriendShipValue);
             }
@@ -933,6 +962,15 @@ public class NPCManager : Singleton<NPCManager>
         {
             npcs[i].NewDay();
         }
+    }
+    public List<FestivalData> GetNpcBirthFestivalDatas()
+    {
+        List<FestivalData> festivalDatas = new List<FestivalData>();
+        for(int i = 0; i < npcs.length; i++)
+        {
+            festivalDatas.Add(npcs[i].GetNpcBirthDay());
+        }
+        return festivalDatas;
     }
     public void InitNPCBehavior()
     {
@@ -1091,8 +1129,15 @@ public class NPCManager : Singleton<NPCManager>
             var NPCData = NPCDatas[i];
             if (NPCData.zeroCreate)
             {
+                var saveBirthDay=GameDataSaveManager.instance.UserGameSaveData.GetNpcBirthDay(NPCData.id);
+                if (saveBirthDay.x == -1)
+                {
+                    saveBirthDay.x = GameRandom.RandomInt(1, 5);
+                    saveBirthDay.y = GameRandom.RandomInt(1, 31);
+                    GameDataSaveManager.instance.UserGameSaveData.SetNpcBirthDay(NPCData.id, (Season)saveBirthDay.x, saveBirthDay.y);
+                }
                 int instanceId = MyInstance.instance.uid;
-                NPC npc = new NPC(instanceId, NPCData);
+                NPC npc = new NPC(instanceId, NPCData,(Season)saveBirthDay.x,saveBirthDay.y);
                 npcs.Add(npc.Key, npc);
                 instanceDatas[instanceId] = NPCData.id;
                 FriendManager.instance.ZeroFriendShip(NPCData.id, NPCData.zeroFriendShipLevel);

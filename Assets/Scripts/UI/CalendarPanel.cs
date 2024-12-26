@@ -72,7 +72,15 @@ public class CalendarPanel : GamePanel<IReferenceData>
     void AfterDisplay()
     {
         date = GameTimeManager.instance.Day;
-        DataTimeText.SetADDText(year, "年", season, "之月"); 
+        if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
+        {
+            DataTimeText.text = $"{year}年{season}之月";
+        }
+        else
+        {
+            DataTimeText.text = $"{LanguageManage.SwitchStr(season)} In {year}";
+        }
+         
         /* DatesParent.transform.GetChild(date - 1).GetComponentInChildren<Toggle>().isOn =
            true;*/
         dateReferences.SelectIndex(date - 1);
@@ -147,7 +155,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
         if (value)
         {
             date = _gameDate.date;
-            DataTimeText.SetADDText( year , "年", _gameDate.season , "之月"); 
+            DataTimeText.text=_gameDate.ToString(year); 
             List<FestivalData> festivalDatas = FestivalManager.instance.FestivalDatas;
             List<FestivalData> customFestivalDatas = FestivalManager.instance.customFestivalDatas;
 
@@ -169,8 +177,15 @@ public class CalendarPanel : GamePanel<IReferenceData>
                     festivalStr.Add("\n");
                 }
             }
-
-            festivaltext.SetADDText("",festivalStr);
+            if (festivalStr.Count > 0)
+            {
+                festivaltext.SetADDText("", festivalStr);
+            }
+            else
+            {
+                festivaltext.text="";
+            }
+            
         } 
     }
 	

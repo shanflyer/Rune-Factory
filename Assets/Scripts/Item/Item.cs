@@ -72,10 +72,29 @@ public struct Equipment : IReferenceData
 }
 
 public class ItemManager:Singleton<ItemManager>
-{  
-    public override void Init()
+{
+    MyDic<int, ItemData> allItemDatas = new MyDic<int, ItemData>();
+    public override async void Init()
     {
         base.Init(); 
+        allItemDatas.Clear();
+        var data = await GameDataManager.instance.GetAllAsyncData<ItemData>();
+        for(int i = 0; i < data.Count; i++)
+        {
+            allItemDatas.Add(data[i].id, data[i]);
+        }
+    }
+    public HashSet<int> GetItemsForTag(int tag)
+    {
+        HashSet<int> results = new HashSet<int>();
+        for(int i = 0; i < allItemDatas.length; i++)
+        {
+            if (allItemDatas[i].tag.Contains(tag))
+            {
+                results.Add(allItemDatas[i].id);
+            }
+        }
+        return results;
     }
     public Item CreatItem(ItemData data, int count)
     {
@@ -113,7 +132,7 @@ public class ItemManager:Singleton<ItemManager>
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;
-            PayManager.instance.PayAction("购买", $"购买{buyCount}个+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
+            PayManager.instance.PayAction("购买", $"{string.Format(LanguageManage.SwitchStr("购买{0}个"), buyCount)}+ {LanguageManage.SwitchStr(itemData.itemName)} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
                 if (!result)
                 {

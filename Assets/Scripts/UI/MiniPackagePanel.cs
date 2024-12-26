@@ -65,7 +65,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
         if (packageSetData && packageSetData.canLevelUp)
         {
             int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
-            string notice = $"拓展{packageSetData.packageName}空间?";
+            string notice = string.Format(LanguageManage.SwitchStr("拓展{0}空间?"), packageSetData.packageName);
             PayManager.instance.PayAction("空间拓展", notice, cost, PayType.金币, (bool result) =>
             {
                 if (result)

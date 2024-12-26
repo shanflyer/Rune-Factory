@@ -18,8 +18,8 @@ public class NPCBehaviorData : ScriptableObject, IGameData
     public int workMap;
     public List<int> workMapAreas = new List<int>();
     public List<int2> visitShops = new List<int2>();
-    public List<int> likeItems = new List<int>();
-    public List<int> unLikeItems = new List<int>();
+    public int likeItem;
+    public int unLikeItem;
     public int likeTalk, unlikeTalk, likeEmote, unlikeEmote, defaultTalk, defaultEmote;
     private string behaviorName;
 

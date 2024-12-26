@@ -155,7 +155,7 @@ public class ShopPanel : GamePanel<ShopList>
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;
-            PayManager.instance.PayAction("¹ºÂò", $"¹ºÂò{buyCount}¸ö+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
+            PayManager.instance.PayAction("¹ºÂò", $"{string.Format(LanguageManage.SwitchStr("¹ºÂò{0}¸ö"), buyCount)}+ {LanguageManage.SwitchStr(itemData.itemName)} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
                 if (!result)
                 {

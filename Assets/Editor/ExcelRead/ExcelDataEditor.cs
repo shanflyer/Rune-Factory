@@ -281,6 +281,10 @@ public class ExcelDataEditor : MyEditor
                     List<int> _value = new List<int>();
                     foreach (var str in strs)
                     {
+                        if (string.IsNullOrEmpty(str))
+                        {
+                            continue;
+                        }
                         _value.Add(int.Parse(str));
                     }
                     value = _value;
@@ -297,6 +301,10 @@ public class ExcelDataEditor : MyEditor
                     List<int> _value = new List<int>();
                     foreach (var str in strs)
                     {
+                        if (string.IsNullOrEmpty(str))
+                        {
+                            continue;
+                        }
                         _value.Add(int.Parse(str));
                     }
                     value = _value.ToArray();

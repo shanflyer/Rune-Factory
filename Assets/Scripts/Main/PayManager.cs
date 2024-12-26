@@ -40,7 +40,7 @@ public class PayManager : Singleton<PayManager>
 
     public void AddGold(MoneyCreatData MoneyCreatData)
     {
-        PayAction("炼金", $"提炼{MoneyCreatData.getValue}金币", MoneyCreatData.costValue, MoneyCreatData.costPayType,
+        PayAction("炼金", $"{string.Format(LanguageManage.SwitchStr("提炼{0}金币"), MoneyCreatData.getValue)}", MoneyCreatData.costValue, MoneyCreatData.costPayType,
                    (bool result) =>
                    {
                        if (result)

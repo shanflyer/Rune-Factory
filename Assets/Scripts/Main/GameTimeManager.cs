@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,7 +30,19 @@ public class GameDate : IReferenceData, INativeData
     public int date;
     public List<int> FestivaList;
     public List<int> CustomFestival;
-
+    public  string ToString(int year)
+    {
+        if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
+        {
+            string str = $"{year}年{season}之月{date}日";
+            return str;
+        }
+        else
+        {
+            string str = $"{date}th {LanguageManage.SwitchStr(season)} In {year}";
+            return str;
+        }
+    }
     public GameDate(Season _season, int _date, List<int> _festivals)
     {
         season = _season;

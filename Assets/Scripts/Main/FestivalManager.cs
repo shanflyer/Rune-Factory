@@ -22,10 +22,11 @@ public class FestivalManager : Singleton<FestivalManager>
    
     void LoadBrothDay()
     {
+        /*
         if (GameDataSaveManager.instance.IsZeroGameSave)
         {
             return;
-        }
+        }*/
         FestivalData festivalData0 =
             new FestivalData
             {
@@ -37,11 +38,12 @@ public class FestivalManager : Singleton<FestivalManager>
         FestivalDatas.Add(festivalData0);  
     }
     void CreatNPCBrothDay()
-    {
+    { 
+        /*
         if (GameDataSaveManager.instance.IsZeroGameSave)
         {
             return;
-        }
+        }*/
         CharacterSaveData characterSaveData = GameDataSaveManager.instance.UserGameSaveData.playerData;
 
         FestivalData festivalData0 =
@@ -53,6 +55,7 @@ public class FestivalManager : Singleton<FestivalManager>
                 id = 8
             };
         FestivalDatas.Add(festivalData0);
+        FestivalDatas.AddRange(NPCManager.instance.GetNpcBirthFestivalDatas());
     }
    
 }

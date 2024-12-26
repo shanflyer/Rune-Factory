@@ -384,7 +384,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         {
             //四舍五入取整
             int trueCost = (int)math.ceil(itemData.shopPrice * selectShopItemData.priceValue * 0.01f);
-            PayManager.instance.PayAction("购买", $"购买1个+ {itemData.itemName} +", trueCost, selectShopItemData.payType, async (bool result) =>
+            PayManager.instance.PayAction("购买", $"{string.Format(LanguageManage.SwitchStr("购买{0}个"), 1)}+ {LanguageManage.SwitchStr(itemData.itemName)} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
                 if (!result)
                 {
