@@ -628,7 +628,28 @@ public class PastureManager : Singleton<PastureManager>
                 instanceId = pasture.instanceId
             };
             GameActionManager.instance.QueueAction(refreshPasture);
-        } 
+        }
+        else
+        {
+            pasture.animals.Add(animal.instanceId);
+            Character character = CharacterManager.instance.controllerCharacter;
+            CreatCharacter creatCharacter = new CreatCharacter
+            {
+                characterId = animalData.linkCharacter,
+                mapInstance = character.mapInstance,
+                coordinateX = character.coordinate.x,
+                coordinateY = character.coordinate.y,
+                hideData = true
+            };
+            GameActionManager.instance.QueueAction(creatCharacter);
+
+            JoinTeam joinTeam = new JoinTeam
+            {
+                characterId = animalData.linkCharacter,
+                teamCharacterId = character.instanceId
+            };
+            GameActionManager.instance.QueueAction(joinTeam);
+        }
     }
     private async void TryCreatAnimal(TryCreatAnimal tryCreatAnimal)
     {

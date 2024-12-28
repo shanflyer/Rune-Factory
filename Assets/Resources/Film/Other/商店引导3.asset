@@ -19,6 +19,18 @@ MonoBehaviour:
     parameters:
     - value: "\u7B2C\u4E00\u665A"
       parameters: []
+  - value: SetCharacterStopCreate
+    parameters:
+    - value: false
+      parameters: []
+  - value: SetCharacterCoordinate
+    parameters:
+    - value: 0
+      parameters: []
+    - value: 547
+      parameters:
+      - value: 21,-19
+        parameters: []
   - value: DisplayOrHideCharacter
     parameters:
     - value: 0
@@ -32,10 +44,6 @@ MonoBehaviour:
   - value: OpenPanelAction
     parameters:
     - value: ScreenControllerPanel
-      parameters: []
-  - value: SetCharacterStopCreate
-    parameters:
-    - value: false
       parameters: []
   - value: InitMapLink
     parameters:

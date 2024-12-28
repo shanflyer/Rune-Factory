@@ -195,7 +195,15 @@ public class FilmController : Singleton<FilmController>
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
                 playableDirector.stopped += (PlayableDirector) => 
                 {
-                    if(UIManager.instance!=null)
+                    if (filmData.stopTimeRun)
+                    {
+                        TimeRun timeRun = new TimeRun
+                        {
+                            run = true,
+                        };
+                        GameActionManager.instance.QueueAction(timeRun);
+                    }
+                    if (UIManager.instance!=null)
                         UIManager.instance.CloseGamePanel<FilmPanel>();
                 };
                 BindFilm(filmData.GetTimeLineAsset(assetName), playableDirector);
@@ -207,6 +215,15 @@ public class FilmController : Singleton<FilmController>
                 playableDirector.transform.localScale = Vector3.one;
                 playableDirector.Play();
                 nowFilms.Add(filmName, film);
+
+                if (filmData.stopTimeRun)
+                {
+                    TimeRun timeRun = new TimeRun
+                    {
+                        run = false,
+                    };
+                    GameActionManager.instance.QueueAction(timeRun);
+                }
             }
         }
         else
@@ -219,7 +236,19 @@ public class FilmController : Singleton<FilmController>
                 await asyncInstantiateOperation;
                 var filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
-                playableDirector.stopped += (PlayableDirector) => { UIManager.instance.CloseGamePanel<FilmPanel>(); };
+                playableDirector.stopped += (PlayableDirector) => 
+                { 
+                    UIManager.instance.CloseGamePanel<FilmPanel>();
+                    if (filmData.displayCharacter)
+                    {
+                        SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
+                        {
+                            hide = false
+                        };
+                        GameActionManager.instance.QueueAction(setCharacterStopCreate);
+                    }
+                };
+                 
                 Film film = new Film
                 {
                     obj = filmObj,
@@ -228,6 +257,15 @@ public class FilmController : Singleton<FilmController>
                 playableDirector.transform.localScale = Vector3.one;
                 playableDirector.Play();
                 nowFilms.Add(filmName, film);
+
+                if (filmData.stopTimeRun)
+                {
+                    TimeRun timeRun = new TimeRun
+                    {
+                        run = false,
+                    };
+                    GameActionManager.instance.QueueAction(timeRun);
+                }
             }
         } 
     }

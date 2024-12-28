@@ -82,7 +82,8 @@ public class TempCharacter : Character
         nowArea = targetArea;
     }
 
-    public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : base(characterData, professionData, instanceId)
+    public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : 
+        base(characterData, professionData, instanceId,false)
     {
         this.tempCharacterData = tempCharacterData;
         //templevel = 1;
@@ -154,7 +155,8 @@ public class TempCharacter : Character
 
 public class Player : Character
 {
-    public Player(CharacterData characterData, int instanceId, ProfessionData professionData) : base(characterData, professionData, instanceId)
+    public Player(CharacterData characterData, int instanceId, ProfessionData professionData) : 
+        base(characterData, professionData, instanceId,true)
     {
     }
 
@@ -942,7 +944,7 @@ public class NPCManager : Singleton<NPCManager>
     public override void Init()
     {
         base.Init();
-        npcs.Clear(); CreateZeroNPC();
+        npcs.Clear(); 
         GameActionManager.instance.AddListener<GiveGift>(GiveGift);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<TryContinueBehavior>(TryContinueBehavior);
@@ -1121,7 +1123,7 @@ public class NPCManager : Singleton<NPCManager>
         return nPCList;
     }
 
-    async void CreateZeroNPC()
+    public async void CreateZeroNPC()
     {
         var NPCDatas = await GameDataManager.instance.GetAllAsyncData<NPCData>();
         for (int i = 0; i < NPCDatas.Count; i++)

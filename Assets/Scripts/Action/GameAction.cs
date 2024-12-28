@@ -541,7 +541,21 @@ public struct RefreshPackage : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct AddPlayerGold : GameAction
+{
+    public int value;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            this.value = int.Parse(parameters[0].value);
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct RefreshPlayerGold : GameAction
 {
     public SetValue setValue { get; set; }

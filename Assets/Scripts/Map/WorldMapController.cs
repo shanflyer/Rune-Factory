@@ -40,8 +40,11 @@ public class WorldMapController : MonoBehaviour
         Init();
     }
     IEnumerator InitIEnumerator()
-    { 
+    {
+        var loadGameSaveData= GameDataSaveManager.instance.loadGameSaveData;
         var teamManager = TeamManager.instance;
+        var shortcutManager = ShortcutManager.instance;
+        var environmentManger = EnvironmentManger.instance;
         yield return 0;
         var npcManager = NPCManager.instance;
         yield return 0;
@@ -84,38 +87,22 @@ public class WorldMapController : MonoBehaviour
         var weatherManager = WeatherManager.instance;
         yield return 0;
         AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
-        yield return 0;
-        GameActionManager.instance.QueueAction(new ChangeWorld
-        {
-            worldName = worldName,
-            displayMap = GameController.instance.MapInstance
-        }, true);
-
-        yield return 0;
+       
+         yield return 0;
         InputManager.instance.SwitchInputMap(false);
         GameActionManager.instance.QueueAction(new InitInputAction());
-        yield return 0;
-        var environmentManger = EnvironmentManger.instance;
         GameTimeManager.instance.ZeroGameTime();
+
+        yield return 0;
+        GameDataSaveManager.instance.InitSaveDate();
+
         yield return 0;
 
         //if (GameController.instance == null||GameController.instance.startPlay)
         {
             GameTimeManager.instance.StartTimeRun();
-            if (GameGuideManager.instance.endGuideFilmIndex <= 0)
-            {
-                SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
-                {
-                    characterId = characterId,
-                    coordinate = new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),
-                };
-                GameActionManager.instance.QueueAction(setCharacterCoordinate);
-            }
-            else
-            {
-                GameGuideManager.instance.SetGameGuidFilmDataAction(characterId);
-            } 
-            if (GameController.instance.startPlay)
+
+           // if (GameController.instance.startPlay)
             {
                 yield return 0;
                 UIManager.instance.ShowGamePanel<MainPanel>();
@@ -124,8 +111,31 @@ public class WorldMapController : MonoBehaviour
                 UIManager.instance.ShowGamePanel<PlayerTopPanel>();
                 UIManager.instance.ShowGamePanel<ShortcutPanel>();
             }
-          
+
         }
+        yield return 0;
+
+        if(GameGuideManager.instance.endGuideFilmIndex < 0)
+        {
+            GameActionManager.instance.QueueAction(new ChangeWorld
+            {
+                worldName = worldName,
+                displayMap = GameController.instance.ZeroMapInstance
+            }, true); 
+            SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+            {
+                characterId = characterId,
+                coordinate = new int3(GameController.instance.ZeroCoordinate.xy, GameController.instance.ZeroMapInstance),
+            };
+            GameActionManager.instance.QueueAction(setCharacterCoordinate);
+        }
+        else
+        {
+            GameGuideManager.instance.SetGameGuidFilmDataAction(characterId,worldName);
+        }
+       
+
+       
         yield return 0;
         if (GameController.instance.startPlay)
         {
@@ -133,8 +143,6 @@ public class WorldMapController : MonoBehaviour
         }
         yield return 0;
         GameDataSaveManager.instance.AfterInitMapLoadSaveData();
-        yield return 0;
-        GameDataSaveManager.instance.InitSaveDate();
         yield return 0;
         WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
        

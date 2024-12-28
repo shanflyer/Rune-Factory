@@ -71,12 +71,12 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         }
     }
 
-    public override void InitReferenceData(UserGameSaveDataList v)
+    public override async void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
         //selectGameSaveData = null;
-        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
-        //saveList.SelectDefault();
+       await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+       saveList.SelectDefault();
     }
 
     private void SaveAction()

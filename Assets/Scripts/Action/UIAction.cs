@@ -113,7 +113,10 @@ public struct HideAllPanel : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-       
+        if (parameters.Count > 0)
+        {
+            hide = bool.Parse(parameters[0].value);
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

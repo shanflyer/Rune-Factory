@@ -15,11 +15,15 @@ MonoBehaviour:
   id: 80
   typeName: ActionList
   _parameters:
+  - value: OpenPanelAction
+    parameters:
+    - value: FilmPanel
+      parameters: []
   - value: Talk
     parameters:
     - value: 1430
       parameters: []
-  - value: OpenPanelAction
+  - value: SetCharacterStopCreate
     parameters:
-    - value: FilmPanel
+    - value: false
       parameters: []

@@ -20,26 +20,50 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
         set
         {
-            GameDataSaveManager.instance.UserGameSaveData.endGuideFilmIndex = endGuideFilmIndex;
+            GameDataSaveManager.instance.UserGameSaveData.endGuideFilmIndex = value;
         }
     }
     public async Task<GameGuideFilmData> GetGameGuideFilmData()
     {
-        if (endGuideFilmIndex > 0)
+        if (endGuideFilmIndex >= 0)
         {
             return await GameDataManager.instance.GetAsyncData<GameGuideFilmData>(endGuideFilmIndex);
         }
         return null;
     }
-    public async void SetGameGuidFilmDataAction(int characterId)
+    public async void SetGameGuidFilmDataAction(int characterId,string worldName)
     {
         var data=await GetGameGuideFilmData();
-        SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+
+        GameActionManager.instance.QueueAction(new ChangeWorld
         {
-            characterId = characterId,
-            coordinate = data.fixedMap
+            worldName = worldName,
+            displayMap = data.fixedMap.z
+        }, true);
+
+        SetFixedTime setFixedTime = new SetFixedTime
+        {
+            date = data.fixedDate,
+            hour = data.fixedHour,
         };
-        GameActionManager.instance.QueueAction(setCharacterCoordinate);
+        GameActionManager.instance.QueueAction(setFixedTime);
+        if (!data.displayCharacter)
+        {
+            SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
+            {
+                hide = !data.displayCharacter
+            };
+           GameActionManager.instance.QueueAction(setCharacterStopCreate);
+        }
+        else
+        {
+            SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+            {
+                characterId = characterId,
+                coordinate = data.fixedMap
+            };
+            GameActionManager.instance.QueueAction(setCharacterCoordinate); 
+        }
         GameActionDataManager.instance.Action(data.beforeEventId);
     }
     public override void Init()

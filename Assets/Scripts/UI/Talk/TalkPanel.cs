@@ -85,6 +85,13 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, bool selected = true)
     {
+       /* HidePanel hidePanel = new HidePanel
+        {
+            hide = true,
+            type = typeof(TalkPanel)
+        };
+        GameActionManager.instance.QueueAction(hidePanel);*/
+
         List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
 
         EventReferenceData eventReferenceData = new EventReferenceData

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FilmName: "\u7B2C\u4E00\u665A"
   FilmObj: {fileID: 3291875467427073563, guid: c2aa0814562760446b410c7466ab0702, type: 3}
+  stopTimeRun: 1
+  displayCharacter: 0
   TimelineAssets:
   - asset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
     pathes:
@@ -21,6 +23,7 @@ MonoBehaviour:
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u8001\u7237\u7237"
+    - Camera/Mixing Camera
   - asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
     pathes:
     - Character
@@ -78,6 +81,7 @@ MonoBehaviour:
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u8001\u7237\u7237"
+      - Camera/Mixing Camera
     - asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
       pathes:
       - Character

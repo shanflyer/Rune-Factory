@@ -147,17 +147,26 @@ public class GameController : MonoBehaviour
     [SerializeField]
     int2 coordinate;
 
+    [SerializeField]
+    int zeroMapInstance;
+    [SerializeField]
+    int2 zeroCoordinate;
+
     public int MapInstance => mapInstance;
     public int2 Coordinate => coordinate;
-    
+
+    public int ZeroMapInstance => zeroMapInstance;
+    public int2 ZeroCoordinate => zeroCoordinate;
+
     private void OnApplicationQuit()
     {
+        GameDataSaveManager.instance.TryAutoSaveData();
         //Shader.SetGlobalInt("_backColor", 0);
         if (!SingletonType.Cleared&& SingletonType.instance!=null)
         {
             SingletonType.instance.ClearAll();
         }
-       
+        
         instance = null;
     }
 
@@ -181,6 +190,7 @@ public class GameController : MonoBehaviour
             }
         }
         environmentManger = EnvironmentManger.instance;
+        var payManager = PayManager.instance;
         var gameVolumeManager = GameVolumeManager.instance;
         var gameManager = GameManager.instance;
         var gameActionDataManager = GameActionDataManager.instance;

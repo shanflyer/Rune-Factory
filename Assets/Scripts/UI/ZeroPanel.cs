@@ -41,7 +41,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     {
         base.Awake();
         Shader.SetGlobalColor("_CloudColor", cloudColor);
-        await InitTitleIcon();
+       // await InitTitleIcon();
         start.onClick.AddListener(ClickStart);
         newButton.onClick.AddListener(StartGame);
         loadButton.onClick.AddListener(LoadDataPanel);
@@ -72,12 +72,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         base.Close();
     }
 
-    private async Task InitTitleIcon()
-    {
-        LanguageSpriteObj title = await GameSourceManager.instance.GetSingleScriptableObject<LanguageSpriteObj>(DataPath.titlePath);
-        var sprite = title.GetSprite(LanguageManage.nowLanguage);
-        titleIcon.sprite = sprite;
-    }
+    
 
     private void ClickStart()
     {

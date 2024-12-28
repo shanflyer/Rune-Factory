@@ -716,10 +716,15 @@ public class GameTimeManager : Singleton<GameTimeManager>
         GameActionManager.instance.AddListener<CheckGameTimeDate>(CheckGameTimeDate);
         GameActionManager.instance.AddListener<SetFixedSeason>(SetFixedSeason);
         GameActionManager.instance.AddListener<TimeRun>(TimeRun);
+        GameActionManager.instance.AddListener<SetFixedTime>(SetFixedTime);
         // CreatData();
     }
 
-   
+   void SetFixedTime(SetFixedTime setFixedTime)
+    {
+        nowGameTime.SetDate(setFixedTime.date);
+        nowGameTime.SetTime(setFixedTime.hour, 0);
+    }
     void TimeRun(TimeRun TimeRun)
     {
         runTime = TimeRun.run;

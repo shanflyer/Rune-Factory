@@ -377,7 +377,13 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         base.Clear();
     }
-
+    public void TryAutoSaveData()
+    {
+        if (GameGuideManager.instance.endGuideFilmIndex >= 0)
+        {
+            SaveData(-1);
+        }
+    }
     public bool SaveData(int selectSaveIndex)
     { 
         if (selectSaveIndex > 2)

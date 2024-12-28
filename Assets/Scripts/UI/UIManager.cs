@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,14 +74,31 @@ public class UIManager : Singleton<UIManager>
     {
         if (hideAllPanel.hide)
         {
-            canvasGroup.alpha = 0;
-            canvasGroup.interactable = false;
+            foreach (var panel in gamePanels.Values)
+            {
+                if (panel.show&&panel.GetType()!=typeof(TalkPanel))
+                {
+                    if(panel.canvas)
+                        panel.canvas.enabled = false;
+                    if (panel.raycaster)
+                        panel.raycaster.enabled = false;
+                }
+            }
         }
         else
         {
-            canvasGroup.alpha = 1;
-            canvasGroup.interactable = true;
+            foreach (var panel in gamePanels.Values)
+            {
+                if (panel.show)
+                {
+                    if (panel.canvas)
+                        panel.canvas.enabled = true;
+                    if (panel.raycaster)
+                        panel.raycaster.enabled = true;
+                }
+            }
         }
+          
     }
     public bool GamePanelIsShow<T>() where T : BaseReference
     {
@@ -178,6 +196,10 @@ public class UIManager : Singleton<UIManager>
 
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
+            if (gamePanel.canvas)
+                gamePanel.canvas.enabled = true;
+            if (gamePanel.raycaster)
+                gamePanel.raycaster.enabled = true;
             return gamePanel;
         }
         else
@@ -190,6 +212,10 @@ public class UIManager : Singleton<UIManager>
             var gamePanel = panel as GamePanel<V>;
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
+            if (gamePanel.canvas)
+                gamePanel.canvas.enabled = true;
+            if (gamePanel.raycaster)
+                gamePanel.raycaster.enabled = true;
             return gamePanel;
         }
     }
@@ -220,6 +246,7 @@ public class UIManager : Singleton<UIManager>
 
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
+            gamePanel.canvas.enabled = gamePanel.raycaster.enabled = true;
             return gamePanel;
         }
         else
@@ -232,6 +259,10 @@ public class UIManager : Singleton<UIManager>
             var gamePanel = panel as GamePanel<V>;
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
+            if (gamePanel.canvas)
+                gamePanel.canvas.enabled = true;
+            if (gamePanel.raycaster)
+                gamePanel.raycaster.enabled = true; 
             return gamePanel;
         }
     }
@@ -314,6 +345,10 @@ public class UIManager : Singleton<UIManager>
         }
         gamePanel.Show(layer);
         await gamePanel.InitData(dataKey);
+        if (gamePanel.canvas)
+            gamePanel.canvas.enabled = true;
+        if (gamePanel.raycaster)
+            gamePanel.raycaster.enabled = true;
         return gamePanel;
     }
 

@@ -118,6 +118,13 @@ public struct SetSeasonWeather : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct SetFixedTime : GameAction
+{
+    public int date;
+    public int hour;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+}
 public struct SetFixedSeason : GameAction
 {
     public float season;

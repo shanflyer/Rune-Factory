@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿ using UnityEngine;
 
 public class PayManager : Singleton<PayManager>
 {
@@ -9,6 +9,8 @@ public class PayManager : Singleton<PayManager>
         nowDiamond = GameDataSaveManager.instance.UserGameSaveData.otherSaveData.diamond;
         goldIcon = await GameSourceManager.instance.GetSprite(DataPath.goldSpritePath);
         diamondIcon = await GameSourceManager.instance.GetSprite(DataPath.diamondSpritePath);
+
+        GameActionManager.instance.AddListener<AddPlayerGold>(AddPlayerGold);
     }
 
     public int NowGold => nowGold;
@@ -37,7 +39,11 @@ public class PayManager : Singleton<PayManager>
         nowGold += count;
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
     }
-
+    void AddPlayerGold(AddPlayerGold addPlayerGold)
+    {
+        nowGold += addPlayerGold.value;
+        GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+    }
     public void AddGold(MoneyCreatData MoneyCreatData)
     {
         PayAction("炼金", $"{string.Format(LanguageManage.SwitchStr("提炼{0}金币"), MoneyCreatData.getValue)}", MoneyCreatData.costValue, MoneyCreatData.costPayType,

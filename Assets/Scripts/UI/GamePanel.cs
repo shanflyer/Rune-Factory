@@ -109,6 +109,13 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     }
     public override void Close()
     {
+        /*HidePanel hidePanel = new HidePanel
+        {
+            hide = false,
+            type = typeof(TalkPanel)
+        };
+        GameActionManager.instance.QueueAction(hidePanel,true);*/
+
         base.Close();
         if (SingletonType.Cleared)
         {
@@ -139,5 +146,6 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             objectDatas.Clear();
             enabled = false;
         } 
+         
     }
 } 

@@ -37,13 +37,9 @@ MonoBehaviour:
           parameters: []
         - value: 32
           parameters: []
-      - value: SetPlayerShaderPos
-        parameters:
-        - value: -0.28-0.2
-          parameters: []
   - value: WaitAction
     parameters:
-    - value: 600
+    - value: 0
       parameters:
       - value: StopFilm
         parameters:
@@ -53,3 +49,11 @@ MonoBehaviour:
     parameters:
     - value: false
       parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 1200
+      parameters:
+      - value: OpenPanelAction
+        parameters:
+        - value: FilmPanel
+          parameters: []

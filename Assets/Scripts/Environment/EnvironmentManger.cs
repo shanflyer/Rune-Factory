@@ -74,6 +74,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     }
     public void UpDataAudio2DPolygon()
     {
+        if (CharacterManager.instance.ControllerRuntimeObj == null)
+        {
+            return;
+        }
         for(int i = 0; i < audio2DPolygons.length; i++)
         {
             audio2DPolygons[i].RefreshAudio(CharacterManager.instance.ControllerRuntimeObj.collider);

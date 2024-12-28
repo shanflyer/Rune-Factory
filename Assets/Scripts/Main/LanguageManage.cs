@@ -77,6 +77,10 @@ public class LanguageManage : Singleton<LanguageManage>
    
     public static string SwitchStr(string s)
     {
+        if (instance == null|| instance.LanguageSwitchDataList==null)
+        {
+            return s;
+        }
         s = instance.LanguageSwitchDataList.GetValue(nowLanguage, s);
         return s;
     }

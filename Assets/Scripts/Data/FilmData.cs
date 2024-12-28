@@ -17,6 +17,8 @@ public class FilmData : ScriptableObject, IGameData, IReferenceData
 {
     public string FilmName;
     public GameObject FilmObj;
+    public bool stopTimeRun;
+    public bool displayCharacter;
     [SerializeField]
     public List<TimelineAssetData> TimelineAssets;
     public StringTimelineAssetDataDictionary timelineAssets =new StringTimelineAssetDataDictionary();
@@ -32,9 +34,20 @@ public class FilmData : ScriptableObject, IGameData, IReferenceData
     {
         if (string.IsNullOrEmpty(assetName))
         {
-            return default(TimelineAssetData);
+            if (TimelineAssets.Count != 0)
+            {
+                return TimelineAssets[0];
+            }
+            else
+            {
+                return default(TimelineAssetData);
+            }
+            
         }
-        timelineAssets.TryGetValue(assetName, out var timelineAsset);
+        if( timelineAssets.TryGetValue(assetName, out var timelineAsset))
+        {
+            FilmName = assetName;
+        }
         return timelineAsset;
     }
 

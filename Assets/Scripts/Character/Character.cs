@@ -597,7 +597,8 @@ public partial class Character
         oldOperateItem = -1;
     }
     public Character() { }
-    public Character(CharacterData characterData,ProfessionData professionData, int instanceId, int overridePackage = 0)
+    public Character(CharacterData characterData,ProfessionData professionData, int instanceId, 
+        bool needCreatPackage,int overridePackage = 0)
     {
         this.characterData = characterData;
         this.instanceId = instanceId;
@@ -627,8 +628,12 @@ public partial class Character
         }
         else
         {
-            SetLevel(1, true);
-            CreatCharacterPackage(overridePackage, packageInstancId);
+            SetLevel(1, true); 
+            if(needCreatPackage)
+            {
+                CreatCharacterPackage(overridePackage, packageInstancId);
+            }
+            
         }
 
         //behavior = characterData.behavior;

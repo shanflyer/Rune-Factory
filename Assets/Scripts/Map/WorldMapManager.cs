@@ -413,7 +413,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
 
     private async void ChangeWorld(ChangeWorld changeWorld)
-    {
+    { 
         await InitWorldData(changeWorld.worldName, changeWorld.displayMap);
     }
 

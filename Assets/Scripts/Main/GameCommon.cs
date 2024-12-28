@@ -1244,7 +1244,7 @@ public static class DataPath
         {typeof(MulitiBehaviorData),"Data/MulitiBehaviorData" },
         {typeof(FootstepDataList),"Data/FootstepDataList" },
         {typeof(GameGuideData),"Data/GameGuideData" },
-        {typeof(GameGuideFilmData),"Data/GameGuidFilmData" }
+        {typeof(GameGuideFilmData),"Data/GameGuideFilmData" }
     };
 
     public static string GetDataPath(Type type)

@@ -567,6 +567,11 @@ public class CharacterManager : Singleton<CharacterManager>
         player = new Player(playerData, instanceId, professionData);
         controllerCharacter = player;
         AddCharacter(player);
+        RefreshShortcut refreshShortcut = new RefreshShortcut
+        {
+            packageId = controllerCharacter.characterPackage
+        };
+        GameActionManager.instance.QueueAction(refreshShortcut); 
     }
 
     /// <summary>
@@ -668,7 +673,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
             var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-            character = new Character(characterData, professionData, instanceId);
+            character = new Character(characterData, professionData, instanceId,true);
             AddCharacter(character,creatCharacter.hideData);
         }
         if (creatCharacter.mapInstance != 0)
@@ -1301,7 +1306,7 @@ public class CharacterManager : Singleton<CharacterManager>
             { 
                 var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
                 var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-                character = new Character(characterData, professionData, npc.characterInstance);
+                character = new Character(characterData, professionData, npc.characterInstance, true);
                 characters.Add(npc.characterInstance, character); 
                 characterDataToInstances[character.dataId] = character.instanceId;
             }

@@ -89,8 +89,12 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         if (selectGameSaveData!=null)
         {
             GameDataSaveManager.instance.loadingIndex = selectGameSaveData.index;
-            SceneManager.instance.SwitchScene("World");
-           // UIManager.instance.ShowGamePanel<LoadingPanel>();
+
+            StartWorldInit startWorldInit = new StartWorldInit();
+            GameActionManager.instance.QueueAction(startWorldInit);
+            NPCManager.instance.CreateZeroNPC();
+            // SceneManager.instance.SwitchScene("World");
+            // UIManager.instance.ShowGamePanel<LoadingPanel>();
 
             Close();
         }

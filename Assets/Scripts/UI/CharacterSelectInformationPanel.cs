@@ -61,7 +61,7 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
     { 
         Close();
         var teamManager = TeamManager.instance;
-        var npcManager = NPCManager.instance;
+        NPCManager.instance.CreateZeroNPC();
         UIManager.instance.CloseGamePanel<SelectCharacterPanel>(); 
         GameActionManager.instance.QueueAction(new PlayFilm
         {

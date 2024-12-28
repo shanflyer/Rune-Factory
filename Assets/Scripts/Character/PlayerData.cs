@@ -54,7 +54,7 @@ public class UserGameSaveData : IReferenceData
     public string saveTime;
     public int index;
 
-    public int endGuideFilmIndex=-1;
+    public int endGuideFilmIndex;
 
     public CharacterSaveData playerData=new CharacterSaveData();
     public OtherSaveData otherSaveData=new OtherSaveData();
@@ -372,14 +372,16 @@ public class UserGameSaveData : IReferenceData
     {
         OtherSaveData otherSaveData = new OtherSaveData
         {
-            playerPackages = new List<int>()
+            playerPackages = new List<int>(),
+            
         };
 
         UserGameSaveData userGameSaveData = new UserGameSaveData
         {
             otherSaveData = otherSaveData, 
             packageSaveDatas = new List<PackageSaveData>(), 
-            index = index
+            index = index,
+            endGuideFilmIndex=-1
         };
 
         return userGameSaveData;
