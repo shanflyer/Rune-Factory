@@ -73,6 +73,8 @@ public class MainPanel : GamePanel<IReferenceData>
         {
             TeamButton.gameObject.SetActive(false);
         }
-        return base.InitData(dataKey); 
+        
+        return base.InitData(dataKey);
+       
     }
 }

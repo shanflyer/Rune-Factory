@@ -95,7 +95,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
 
         if (minCycleValue == 0)
         {
-            GameActionManager.instance.QueueAction(new HideAllPanel { hide = true }, true);
+            GameActionManager.instance.QueueAction(new HidePanelGroup { hide = true }, true);
         }
 
         while (timeValue <= lerpTime)
@@ -113,7 +113,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
 
         if (maxCycleValue == 0)
         {
-            GameActionManager.instance.QueueAction(new HideAllPanel { hide = false }, true);
+            GameActionManager.instance.QueueAction(new HidePanelGroup { hide = false }, true);
         }
     }
 

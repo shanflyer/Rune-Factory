@@ -18,8 +18,7 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
    
     public override void InitReferenceData(IReferenceData v)
     {
-        base.InitReferenceData(v);
-        
+        base.InitReferenceData(v); 
     }
     public override void SetPanelUISerializeObj()
     {

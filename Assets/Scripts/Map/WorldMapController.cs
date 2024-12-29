@@ -44,7 +44,7 @@ public class WorldMapController : MonoBehaviour
         var loadGameSaveData= GameDataSaveManager.instance.loadGameSaveData;
         var teamManager = TeamManager.instance;
         var shortcutManager = ShortcutManager.instance;
-        var environmentManger = EnvironmentManger.instance;
+        var environmentManger = EnvironmentManger.instance; 
         yield return 0;
         var npcManager = NPCManager.instance;
         yield return 0;
@@ -96,23 +96,7 @@ public class WorldMapController : MonoBehaviour
         yield return 0;
         GameDataSaveManager.instance.InitSaveDate();
 
-        yield return 0;
-
-        //if (GameController.instance == null||GameController.instance.startPlay)
-        {
-            GameTimeManager.instance.StartTimeRun();
-
-           // if (GameController.instance.startPlay)
-            {
-                yield return 0;
-                UIManager.instance.ShowGamePanel<MainPanel>();
-                yield return 0;
-                UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
-                UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-                UIManager.instance.ShowGamePanel<ShortcutPanel>();
-            }
-
-        }
+        
         yield return 0;
 
         if(GameGuideManager.instance.endGuideFilmIndex < 0)
@@ -145,7 +129,25 @@ public class WorldMapController : MonoBehaviour
         GameDataSaveManager.instance.AfterInitMapLoadSaveData();
         yield return 0;
         WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
-       
+
+        yield return 0;
+
+        //if (GameController.instance == null||GameController.instance.startPlay)
+        {
+            GameTimeManager.instance.StartTimeRun();
+
+            // if (GameController.instance.startPlay)
+            {
+                yield return 0;
+                UIManager.instance.ShowGamePanel<MainPanel>();
+                yield return 0;
+                UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+                UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+                UIManager.instance.ShowGamePanel<ShortcutPanel>();
+            }
+
+        }
+
     }
     public async void Init()
     {

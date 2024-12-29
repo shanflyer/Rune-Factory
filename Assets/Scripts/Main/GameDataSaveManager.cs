@@ -32,27 +32,22 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             if (loadingIndex >= -1)
             {
-                if (_loadGameSaveData == null)
+                if (loadingIndex == -1)
                 {
-                    if (loadingIndex == -1)
-                    {
-                        _loadGameSaveData=UserGameSaveDataList.nowSaveData;
-                    }else
-                    if (loadingIndex < 3)
-                    {
-                        _loadGameSaveData=userGameSaveDataList.userGameSaveDatas[loadingIndex];
-                    }
+                    return UserGameSaveDataList.nowSaveData; 
                 }
-                return _loadGameSaveData;
+                if (loadingIndex < 3)
+                {
+                    return   userGameSaveDataList.userGameSaveDatas[loadingIndex];
+                } 
             }
             return null;
         }
-    }
-    private UserGameSaveData _loadGameSaveData;
+    } 
 
     public async Task InitLoadSaveData()
     {
-        if (loadGameSaveData != null)
+        if (loadGameSaveData != null&&CharacterManager.instance.controllerCharacter==null)
         { 
             PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
             PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
@@ -170,7 +165,13 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return string.IsNullOrEmpty(UserGameSaveData.saveTime);
         }
     }
-
+    public void SaveSpecialItem(int2 key,int instanceId)
+    {
+        if (UserGameSaveData != null)
+        {
+            UserGameSaveData.SaveSpecialMapItem(key, instanceId);
+        }
+    }
     public int GetSaveMapInstance(int2 key)
     {
         if(loadGameSaveData!=null)
@@ -178,7 +179,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             if (loadGameSaveData.specialMapItem.TryGetValue(key, out var value))
             {
                 return value;
-            }
+            } 
         }
         return 0;
     }
@@ -407,10 +408,37 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
 
     public void DeletaSaveData(UserGameSaveData userGameSaveData)
-    { }
+    {
+        if (userGameSaveData == userGameSaveDataList.nowSaveData)
+        {
+
+        }
+        else
+        {
+            for (int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
+            {
+                var saveData = userGameSaveDataList.userGameSaveDatas[i];
+                if (saveData==userGameSaveData)
+                {
+                    userGameSaveDataList.userGameSaveDatas[i] = new UserGameSaveData();
+                    break;
+                }
+            }
+        }
+    }
 
     public bool CopySaveData(UserGameSaveData userGameSaveData)
     {
+        for(int i=0;i< userGameSaveDataList.userGameSaveDatas.Count; i++)
+        {
+            var saveData = userGameSaveDataList.userGameSaveDatas[i];
+            if (string.IsNullOrEmpty(saveData.saveTime))
+            {
+                userGameSaveDataList.userGameSaveDatas[i] = new UserGameSaveData(userGameSaveData);
+                return true;
+            }
+        }
+
         return false;
     }
 

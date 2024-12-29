@@ -77,8 +77,11 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
     public async void CreatHomeEquip(HomeEquipSaveData homeEquipSaveData)
     {
-        HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(homeEquipSaveData.equipDataId);
-        HomeEquip homeEquip = new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.mapEditorInstance,homeEquipSaveData.characterId, homeEquipmentData);
+        HomeEquipmentData homeEquipmentData = 
+            await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(homeEquipSaveData.equipDataId);
+        HomeEquip homeEquip = 
+            new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.mapEditorInstance,
+            homeEquipSaveData.characterId, homeEquipmentData);
 
         homeEquip.mapInstance = homeEquipSaveData.mapInstance;
         homeEquip.coordinate = homeEquipSaveData.coordinate;

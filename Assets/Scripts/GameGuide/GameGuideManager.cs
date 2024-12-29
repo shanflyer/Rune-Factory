@@ -64,7 +64,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
             };
             GameActionManager.instance.QueueAction(setCharacterCoordinate); 
         }
-        GameActionDataManager.instance.Action(data.beforeEventId);
+        GameActionDataManager.instance.Action(data.beforeEventId,immediately:true);
     }
     public override void Init()
     {

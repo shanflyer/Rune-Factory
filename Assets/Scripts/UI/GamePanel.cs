@@ -85,7 +85,10 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     public virtual void InitReferenceData(V v) 
     {
         data = v;
-    } 
+    }
+
+   
+
     public override void Show(int layer = -1)
     {
         UIManager.instance.UIAudioForTag(tag);
@@ -99,11 +102,14 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         {
             canvas.sortingOrder = layer;
         }
-       
         gameObject.layer = UILayer;
+
+
+        bool display = UIManager.instance.CheckPanelCanvas(this.GetType());
+        canvas.enabled = display; 
         if (graphicRaycaster)
         {
-            graphicRaycaster.enabled = true;
+            graphicRaycaster.enabled = display;
         }
         enabled = true;
     }

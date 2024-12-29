@@ -889,8 +889,8 @@ public class PackageManager : Singleton<PackageManager>
 
     public async Task<int> CreatGamePackage(int dataId, int level, int instanceId = 0)
     {
-        int packageInstaceId = instanceId == 0 ? MyInstance.instance.uid : instanceId;
-        if(gamePackages.ContainsKey(packageInstaceId))
+        int packageInstanceId = instanceId == 0 ? MyInstance.instance.uid : instanceId;
+        if(gamePackages.ContainsKey(packageInstanceId))
         {
             return -1;
         }
@@ -898,8 +898,8 @@ public class PackageManager : Singleton<PackageManager>
 
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId); 
         int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
-        GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstaceId, packageSetData,level);
-        gamePackages.Add(packageInstaceId, gamePackage);
+        GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstanceId, packageSetData,level);
+        gamePackages.Add(packageInstanceId, gamePackage);
 
         if (level <= 1)
         {
@@ -911,7 +911,7 @@ public class PackageManager : Singleton<PackageManager>
 
             RefreshShortcut refreshShortcut = new RefreshShortcut
             {
-                packageId = packageInstaceId, 
+                packageId = packageInstanceId, 
             };
             GameActionManager.instance.QueueAction(refreshShortcut);
         }
@@ -922,7 +922,7 @@ public class PackageManager : Singleton<PackageManager>
             keyY = level
         };
         GameActionManager.instance.QueueAction(setItemAnimation);
-        return packageInstaceId;
+        return packageInstanceId;
     } 
     public int GetPackageCaseCount(int packageId)
     {

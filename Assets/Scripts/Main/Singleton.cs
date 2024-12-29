@@ -131,7 +131,7 @@ public class SingletonType : Singleton<SingletonType>
         {
             Debug.Log(e.ToString());
         }
-       
+        TypeClears.Clear();
         Clear();
     }
 

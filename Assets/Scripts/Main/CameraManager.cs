@@ -144,11 +144,21 @@ public class CameraManager : Singleton<CameraManager>
 
     public void SetConfiner2DCollider(Collider2D collider2D)
     {
-        confiner2D.enabled = false;
-        confiner2D.BoundingShape2D = collider2D; 
-        confiner2D.enabled = true;
-        confiner2D.InvalidateBoundingShapeCache();
-        confiner2D.InvalidateLensCache();
+        if (confiner2D.enabled)
+        {
+            confiner2D.enabled = false;
+            confiner2D.BoundingShape2D = collider2D;
+            confiner2D.enabled = true;
+            confiner2D.InvalidateBoundingShapeCache();
+            confiner2D.InvalidateLensCache();
+        }
+        else
+        { 
+            confiner2D.BoundingShape2D = collider2D;
+            confiner2D.InvalidateBoundingShapeCache();
+            confiner2D.InvalidateLensCache();
+        }
+        
         /*
         GameTimerController.instance.DeleyActionMain(100, () =>
         {

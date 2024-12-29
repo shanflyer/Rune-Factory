@@ -35,10 +35,69 @@ public class UIManager : Singleton<UIManager>
         canvasGroup = parent.GetComponent<CanvasGroup>();
     }
 
+    private bool filmUI;
+    static HashSet<Type> filmHidePanel = new HashSet<Type>
+    {
+        typeof(MainPanel),typeof(PlayerTopPanel),typeof(ScreenControllerPanel)
+    };
+    public bool CheckPanelCanvas(Type type)
+    {
+        if(!filmUI)
+        {
+            return true;
+        }
+        if (filmHidePanel.Contains(type))
+        {
+            return false;
+        }
+        return true;
+    }
+    public void SetFilmUI(bool show)
+    {
+        filmUI = show;
+        if (show)
+        {
+            ShowGamePanel<FilmPanel>();
+            using (var e = filmHidePanel.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    if (gamePanels.TryGetValue(e.Current, out var baseReference) &&
+                        baseReference.show)
+                    {
+                        baseReference.canvas.enabled = false;
+                        if (baseReference.raycaster != null)
+                        {
+                            baseReference.raycaster.enabled = false;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            CloseGamePanel<FilmPanel>();
+            using(var e = filmHidePanel.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    if(gamePanels.TryGetValue(e.Current,out var baseReference)&&
+                        baseReference.show)
+                    {
+                        baseReference.canvas.enabled = true;
+                        if(baseReference.raycaster != null)
+                        {
+                            baseReference.raycaster.enabled = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
     public override async void Init()
     {
         base.Init();
-
+        filmUI = false;
         BaseReference.UILayer = LayerMask.NameToLayer("UI");
         BaseReference.HideLayer = LayerMask.NameToLayer("Hide");
 
@@ -48,6 +107,7 @@ public class UIManager : Singleton<UIManager>
         GameActionManager.instance.AddListener<HidePanel>(HidePanel);
         GameActionManager.instance.AddListener<HidePanels>(HidePanels);
         GameActionManager.instance.AddListener<HideAllPanel>(HideAllPanel);
+        GameActionManager.instance.AddListener<HidePanelGroup>(HidePanelGroup);
 
         Selectable.setStringAction = UIAudioForTag; 
 
@@ -70,19 +130,24 @@ public class UIManager : Singleton<UIManager>
             AudioController.instance.PlaySE(se,Group:SEGroup.UI.ToString());
         }
     }
+    public void HidePanelGroup(HidePanelGroup hidePanelGroup)
+    {
+        canvasGroup.alpha=hidePanelGroup.hide?0:1;
+        canvasGroup.blocksRaycasts = !hidePanelGroup.hide;
+    }
     public void HideAllPanel(HideAllPanel hideAllPanel)
     {
         if (hideAllPanel.hide)
         {
             foreach (var panel in gamePanels.Values)
             {
-                if (panel.show&&panel.GetType()!=typeof(TalkPanel))
+                if (panel.show&&panel.GetType()!=typeof(TalkPanel) && panel.GetType() != typeof(FilmPanel))
                 {
                     if(panel.canvas)
                         panel.canvas.enabled = false;
                     if (panel.raycaster)
                         panel.raycaster.enabled = false;
-                }
+                } 
             }
         }
         else
@@ -196,10 +261,6 @@ public class UIManager : Singleton<UIManager>
 
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
-            if (gamePanel.canvas)
-                gamePanel.canvas.enabled = true;
-            if (gamePanel.raycaster)
-                gamePanel.raycaster.enabled = true;
             return gamePanel;
         }
         else
@@ -212,10 +273,6 @@ public class UIManager : Singleton<UIManager>
             var gamePanel = panel as GamePanel<V>;
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
-            if (gamePanel.canvas)
-                gamePanel.canvas.enabled = true;
-            if (gamePanel.raycaster)
-                gamePanel.raycaster.enabled = true;
             return gamePanel;
         }
     }
@@ -246,7 +303,6 @@ public class UIManager : Singleton<UIManager>
 
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
-            gamePanel.canvas.enabled = gamePanel.raycaster.enabled = true;
             return gamePanel;
         }
         else
@@ -259,10 +315,7 @@ public class UIManager : Singleton<UIManager>
             var gamePanel = panel as GamePanel<V>;
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
-            if (gamePanel.canvas)
-                gamePanel.canvas.enabled = true;
-            if (gamePanel.raycaster)
-                gamePanel.raycaster.enabled = true; 
+           
             return gamePanel;
         }
     }
@@ -345,10 +398,7 @@ public class UIManager : Singleton<UIManager>
         }
         gamePanel.Show(layer);
         await gamePanel.InitData(dataKey);
-        if (gamePanel.canvas)
-            gamePanel.canvas.enabled = true;
-        if (gamePanel.raycaster)
-            gamePanel.raycaster.enabled = true;
+      
         return gamePanel;
     }
 

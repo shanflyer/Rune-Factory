@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,7 +52,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     protected override void Awake()
     {
         base.Awake();
-        Copy.onClick.AddListener(CopyData);
+        Copy.onClick.AddListener(CopyDataAsync);
         Delete.onClick.AddListener(DeleteData);
         Start.onClick.AddListener(StartAction);
         Return.onClick.AddListener(async () =>
@@ -81,7 +83,8 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         base.InitReferenceData(v);
         selectGameSaveData = v.nowSaveData;
         await SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
-        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+        await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+        SaveReference.SelectDefault();
     }
 
     private void StartAction()
@@ -100,24 +103,25 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         }
     }
 
-    private void CopyData()
+    private async void CopyDataAsync()
     {
         if (!string.IsNullOrEmpty(selectGameSaveData.saveTime))
         {
-            if (GameDataSaveManager.instance.CopySaveData(selectGameSaveData))
-            {
-            }
-            else
-            {
-            }
+            GameDataSaveManager.instance.CopySaveData(selectGameSaveData);
+            await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
+            await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
+            SaveReference.SelectDefault();
         }
         else
         {
         }
     }
 
-    private void DeleteData()
+    private async void DeleteData()
     {
         GameDataSaveManager.instance.DeletaSaveData(selectGameSaveData);
+        await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
+        await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
+        SaveReference.SelectDefault();
     }
 }

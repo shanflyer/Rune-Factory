@@ -90,10 +90,10 @@ public class GameActionManager : Singleton<GameActionManager>
 
     public void QueueAction<T>(T gameAction, bool immediately = false) where T : GameAction
     {
-        if (immediately)
+         if (immediately)
         {
             TriggerAction(gameAction);
-        }
+        } 
         else
         {
             Type type = typeof(T);
@@ -104,7 +104,7 @@ public class GameActionManager : Singleton<GameActionManager>
                     TriggerAction(gameAction);
                 });
             }
-        }
+        } 
     }
 
     protected override void UpData()

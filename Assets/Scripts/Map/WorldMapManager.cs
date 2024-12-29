@@ -559,14 +559,16 @@ public class WorldMapManager : Singleton<WorldMapManager>
         int instanceId = 0;
         if (fixedInstance == 0)
         {
+            int2 itemkey = new int2(mapId, mapItem.instanceId);
             if (mapItem.instanceId != 0)
             {
-                instanceId = GameDataSaveManager.instance.GetSaveMapInstance(new int2(mapId, mapItem.instanceId));
+                instanceId = GameDataSaveManager.instance.GetSaveMapInstance(itemkey);
             }
             if (instanceId == 0)
             {
                 isInSaveData = false;
                 instanceId = MyInstance.instance.uid;
+                GameDataSaveManager.instance.SaveSpecialItem(itemkey, instanceId);
             }
         }else
         {

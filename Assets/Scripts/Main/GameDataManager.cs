@@ -8,7 +8,11 @@ using UnityEngine;
 public class GameDataManager : Singleton<GameDataManager>
 {
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
-
+    protected override void Clear()
+    {
+        allGameStaticDatas.Clear();
+        base.Clear();
+    }
     public override async void Init()
     {
         base.Init();

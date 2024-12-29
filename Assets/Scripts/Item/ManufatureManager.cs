@@ -97,22 +97,25 @@ public class ManufatureManager : Singleton<ManufatureManager>
     private async void CreatManufature(CreatManufature creatManufature)
     {
         var manufatureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(creatManufature.manufatureId);
+        if (!Manufatures.ContainsKey(creatManufature.instanceId))
+        {
+            Manufature manufature = new Manufature
+            {
+                instanceId = creatManufature.instanceId,
+                dataId = creatManufature.manufatureId,
+                formulas = new Dictionary<int, Formula>(),
+                materials = new NativeArray<int2>(4, Allocator.Persistent),
+                open = false
+            };
+            Manufatures.Add(creatManufature.instanceId, manufature);
+            for (int i = 0; i < manufatureData.linkFormulas.Count; i++)
+            {
+                manufature.formulas.Add(manufatureData.linkFormulas[i].x, new Formula { id = manufatureData.linkFormulas[i].x, isOpen = manufatureData.linkFormulas[i].y == 1 });
+            }
 
-        Manufature manufature = new Manufature
-        {
-            instanceId = creatManufature.instanceId,
-            dataId = creatManufature.manufatureId,
-            formulas = new Dictionary<int, Formula>(),
-            materials=new NativeArray<int2>(4,Allocator.Persistent),
-            open = false
-        };
-        Manufatures.Add(creatManufature.instanceId, manufature);
-        for (int i = 0; i < manufatureData.linkFormulas.Count; i++)
-        {
-            manufature.formulas.Add(manufatureData.linkFormulas[i].x, new Formula { id = manufatureData.linkFormulas[i].x, isOpen = manufatureData.linkFormulas[i].y == 1 });
+            GameDataSaveManager.instance.UserGameSaveData.SetManufature(manufature);
         }
-
-        GameDataSaveManager.instance.UserGameSaveData.SetManufature(manufature);
+        
     }
 
     public List<Formula> GetManufatureAllFormulas(int id)

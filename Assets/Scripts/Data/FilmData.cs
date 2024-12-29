@@ -19,6 +19,7 @@ public class FilmData : ScriptableObject, IGameData, IReferenceData
     public GameObject FilmObj;
     public bool stopTimeRun;
     public bool displayCharacter;
+    public bool hideCameraLimit;
     [SerializeField]
     public List<TimelineAssetData> TimelineAssets;
     public StringTimelineAssetDataDictionary timelineAssets =new StringTimelineAssetDataDictionary();
@@ -46,7 +47,7 @@ public class FilmData : ScriptableObject, IGameData, IReferenceData
         }
         if( timelineAssets.TryGetValue(assetName, out var timelineAsset))
         {
-            FilmName = assetName;
+            //FilmName = assetName;
         }
         return timelineAsset;
     }

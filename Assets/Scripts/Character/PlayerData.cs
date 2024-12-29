@@ -231,7 +231,10 @@ public class UserGameSaveData : IReferenceData
         specialMapItem[id] = instanceId;
         RemoveMapItemColliderSet.Add(instanceId);
     }
-
+    public void SaveSpecialMapItem(int2 id,int instanceId)
+    {
+        specialMapItem[id] = instanceId;
+    }
     public void AddReSetMapItemColliderData(int2 id, int instanceId)
     {
         if (id.y == 0)

@@ -143,8 +143,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
 
         RefreshPlayerGold(default(RefreshPlayerGold));
-        NewDay(default(NewDay));
-       
+        NewDay(default(NewDay)); 
         return base.InitData(dataKay);
     }
 

@@ -113,6 +113,7 @@ public class FilmController : Singleton<FilmController>
         //playableDirector.Stop();
         playableDirector.time = 0;
         playableDirector.Play();
+        UIManager.instance.SetFilmUI(true);
     }
     void DisplayFilm(DisplayFilm DisplayFilm)
     {
@@ -195,16 +196,19 @@ public class FilmController : Singleton<FilmController>
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
                 playableDirector.stopped += (PlayableDirector) => 
                 {
-                    if (filmData.stopTimeRun)
+                    if (!SingletonType.Cleared)
                     {
-                        TimeRun timeRun = new TimeRun
+                        if (filmData.stopTimeRun)
                         {
-                            run = true,
-                        };
-                        GameActionManager.instance.QueueAction(timeRun);
-                    }
-                    if (UIManager.instance!=null)
-                        UIManager.instance.CloseGamePanel<FilmPanel>();
+                            TimeRun timeRun = new TimeRun
+                            {
+                                run = true,
+                            };
+                            GameActionManager.instance.QueueAction(timeRun);
+                        }
+                        if (UIManager.instance != null)
+                            UIManager.instance.SetFilmUI(false);
+                    } 
                 };
                 BindFilm(filmData.GetTimeLineAsset(assetName), playableDirector);
                 Film film = new Film
@@ -224,6 +228,14 @@ public class FilmController : Singleton<FilmController>
                     };
                     GameActionManager.instance.QueueAction(timeRun);
                 }
+                if (filmData.hideCameraLimit)
+                {
+                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+                    {
+                        enable = false,
+                    };
+                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
+                }
             }
         }
         else
@@ -237,8 +249,8 @@ public class FilmController : Singleton<FilmController>
                 var filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
                 playableDirector.stopped += (PlayableDirector) => 
-                { 
-                    UIManager.instance.CloseGamePanel<FilmPanel>();
+                {
+                    UIManager.instance.SetFilmUI(false);
                     if (filmData.displayCharacter)
                     {
                         SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
@@ -246,6 +258,14 @@ public class FilmController : Singleton<FilmController>
                             hide = false
                         };
                         GameActionManager.instance.QueueAction(setCharacterStopCreate);
+                    }
+                    if (filmData.hideCameraLimit)
+                    {
+                        SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+                        {
+                            enable = true,
+                        };
+                        GameActionManager.instance.QueueAction(setCameraConfiner2D);
                     }
                 };
                  
@@ -265,6 +285,14 @@ public class FilmController : Singleton<FilmController>
                         run = false,
                     };
                     GameActionManager.instance.QueueAction(timeRun);
+                    if (filmData.hideCameraLimit)
+                    {
+                        SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+                        {
+                            enable = false,
+                        };
+                        GameActionManager.instance.QueueAction(setCameraConfiner2D);
+                    }
                 }
             }
         } 
