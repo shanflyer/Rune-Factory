@@ -15,9 +15,11 @@ MonoBehaviour:
   FilmName: "\u690D\u7269\u5E97\u7535\u5F71"
   FilmObj: {fileID: 3291875467427073563, guid: f4e97fdeef7a66b4f9c8c0e41decfadf, type: 3}
   stopTimeRun: 1
-  displayCharacter: 0
   TimelineAssets:
-  - asset: {fileID: 11400000, guid: 1019308660f1d72429607127da870214, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 1019308660f1d72429607127da870214, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
@@ -29,7 +31,10 @@ MonoBehaviour:
     m_keys:
     - "\u8D2D\u4E70\u79CD\u5B50"
     m_values:
-    - asset: {fileID: 11400000, guid: 1019308660f1d72429607127da870214, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 1019308660f1d72429607127da870214, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"

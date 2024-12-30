@@ -291,7 +291,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         //包裹数据
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
         UserGameSaveData.packageSaveDatas = packageSaveDatas;
-
+        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.playerPackages;
         //npc数据
         var characters = CharacterManager.instance.GetAllCharacters();
         UserGameSaveData.characterSaveDatas.Clear();

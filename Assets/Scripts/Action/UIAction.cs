@@ -135,6 +135,22 @@ public struct HideAllPanel : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
+public struct SetFilmUI : GameAction
+{
+    public bool display; 
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 1)
+        {
+            display = bool.Parse(parameters[0].value);
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct HidePanel : GameAction
 {
     public bool hide;

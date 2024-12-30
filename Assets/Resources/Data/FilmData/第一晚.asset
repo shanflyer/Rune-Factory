@@ -15,50 +15,70 @@ MonoBehaviour:
   FilmName: "\u7B2C\u4E00\u665A"
   FilmObj: {fileID: 3291875467427073563, guid: c2aa0814562760446b410c7466ab0702, type: 3}
   stopTimeRun: 1
-  displayCharacter: 0
   TimelineAssets:
-  - asset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u8001\u7237\u7237"
     - Camera/Mixing Camera
-  - asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u8001\u7237\u7237"
-  - asset: {fileID: 11400000, guid: 50ce1453c91bd4f4380fbd01a5cdfda5, type: 2}
-    pathes:
-    - Character
-    - "Character/\u4E3B\u89D2\u7537"
-    - "Character/\u4E3B\u89D2\u5973"
-    - "Character/\u8001\u7237\u7237"
-    - Camera/Mixing Camera
-  - asset: {fileID: 11400000, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
-    pathes:
-    - Character
-    - "Character/\u4E3B\u89D2\u7537"
-    - "Character/\u4E3B\u89D2\u5973"
-    - "Character/\u8001\u7237\u7237"
-    - Camera/Mixing Camera
-  - asset: {fileID: 11400000, guid: 11ed40a69c4c85b4f9c4275162c02300, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 50ce1453c91bd4f4380fbd01a5cdfda5, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u8001\u7237\u7237"
     - Camera/Mixing Camera
-  - asset: {fileID: 11400000, guid: 29ecbfa22f19fa54d977b0595ccef191, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u8001\u7237\u7237"
     - Camera/Mixing Camera
-  - asset: {fileID: 11400000, guid: d741f01abcfca93408771ac20df26e11, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 11ed40a69c4c85b4f9c4275162c02300, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u5973"
+    - "Character/\u8001\u7237\u7237"
+    - Camera/Mixing Camera
+  - needFilmUI: 0
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 29ecbfa22f19fa54d977b0595ccef191, type: 2}
+    pathes:
+    - Character
+    - "Character/\u4E3B\u89D2\u7537"
+    - "Character/\u4E3B\u89D2\u5973"
+    - "Character/\u8001\u7237\u7237"
+    - Camera/Mixing Camera
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: d741f01abcfca93408771ac20df26e11, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
@@ -75,48 +95,69 @@ MonoBehaviour:
     - "\u63A2\u7D22\u5F15\u5BFC"
     - "\u56DE\u5BB6\u5F15\u5BFC"
     m_values:
-    - asset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u8001\u7237\u7237"
       - Camera/Mixing Camera
-    - asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 38b782bb869ed184b95e02b772bcf383, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u8001\u7237\u7237"
-    - asset: {fileID: 11400000, guid: 50ce1453c91bd4f4380fbd01a5cdfda5, type: 2}
-      pathes:
-      - Character
-      - "Character/\u4E3B\u89D2\u7537"
-      - "Character/\u4E3B\u89D2\u5973"
-      - "Character/\u8001\u7237\u7237"
-      - Camera/Mixing Camera
-    - asset: {fileID: 11400000, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
-      pathes:
-      - Character
-      - "Character/\u4E3B\u89D2\u7537"
-      - "Character/\u4E3B\u89D2\u5973"
-      - "Character/\u8001\u7237\u7237"
-      - Camera/Mixing Camera
-    - asset: {fileID: 11400000, guid: 11ed40a69c4c85b4f9c4275162c02300, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 50ce1453c91bd4f4380fbd01a5cdfda5, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u8001\u7237\u7237"
       - Camera/Mixing Camera
-    - asset: {fileID: 11400000, guid: 29ecbfa22f19fa54d977b0595ccef191, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u8001\u7237\u7237"
       - Camera/Mixing Camera
-    - asset: {fileID: 11400000, guid: d741f01abcfca93408771ac20df26e11, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 11ed40a69c4c85b4f9c4275162c02300, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u5973"
+      - "Character/\u8001\u7237\u7237"
+      - Camera/Mixing Camera
+    - needFilmUI: 0
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 29ecbfa22f19fa54d977b0595ccef191, type: 2}
+      pathes:
+      - Character
+      - "Character/\u4E3B\u89D2\u7537"
+      - "Character/\u4E3B\u89D2\u5973"
+      - "Character/\u8001\u7237\u7237"
+      - Camera/Mixing Camera
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: d741f01abcfca93408771ac20df26e11, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"

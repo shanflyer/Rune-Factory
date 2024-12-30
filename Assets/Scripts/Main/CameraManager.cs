@@ -64,6 +64,11 @@ public class CameraManager : Singleton<CameraManager>
     void SetCameraConfiner2D(SetCameraConfiner2D SetCameraConfiner2D)
     {
         confiner2D.enabled = SetCameraConfiner2D.enable;
+        if (confiner2D.enabled)
+        {
+            confiner2D.InvalidateBoundingShapeCache();
+            confiner2D.InvalidateLensCache();
+        }
     }
     public void SetCameraListener(bool enable)
     {
@@ -148,15 +153,21 @@ public class CameraManager : Singleton<CameraManager>
         {
             confiner2D.enabled = false;
             confiner2D.BoundingShape2D = collider2D;
-            confiner2D.enabled = true;
-            confiner2D.InvalidateBoundingShapeCache();
-            confiner2D.InvalidateLensCache();
+            if (!UIManager.instance.filmUI)
+            {
+                confiner2D.enabled = true;
+                confiner2D.InvalidateBoundingShapeCache();
+                confiner2D.InvalidateLensCache();
+            }  
         }
         else
         { 
             confiner2D.BoundingShape2D = collider2D;
-            confiner2D.InvalidateBoundingShapeCache();
-            confiner2D.InvalidateLensCache();
+            if (!UIManager.instance.filmUI)
+            {
+                confiner2D.InvalidateBoundingShapeCache();
+                confiner2D.InvalidateLensCache(); 
+            } 
         }
         
         /*

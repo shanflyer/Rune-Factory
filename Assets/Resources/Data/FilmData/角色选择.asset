@@ -15,23 +15,34 @@ MonoBehaviour:
   FilmName: "\u89D2\u8272\u9009\u62E9"
   FilmObj: {fileID: 6745193667350865828, guid: b4db9ab8657a21b4f87a1e586594417f, type: 3}
   stopTimeRun: 1
-  displayCharacter: 0
   TimelineAssets:
-  - asset: {fileID: 11400000, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
+  - needFilmUI: 0
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
-  - asset: {fileID: 11400000, guid: 6d79e24db132de842a050435864ee5e6, type: 2}
+  - needFilmUI: 0
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 6d79e24db132de842a050435864ee5e6, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u4E3B\u89D2\u7537"
-  - asset: {fileID: 11400000, guid: e3875045bdf54534ea0b4ddef5caa1b1, type: 2}
+  - needFilmUI: 0
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: e3875045bdf54534ea0b4ddef5caa1b1, type: 2}
     pathes:
     - Character
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
-  - asset: {fileID: 11400000, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
     pathes:
     - Character
     - "Character/\u9A6C\u8F66"
@@ -41,14 +52,20 @@ MonoBehaviour:
     - "Character/\u4E3B\u89D2\u5973"
     - "Character/\u4E3B\u89D2\u5973"
     - 
-  - asset: {fileID: 11400000, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
     pathes:
     - Character
     - "Character/\u9A6C\u8F66"
     - "Character/\u9A6C\u8F66/\u73ED\u5C3C\u8FEA\u514B"
     - "Character/\u4E3B\u89D2\u7537"
     - "Character/\u4E3B\u89D2\u5973"
-  - asset: {fileID: 11400000, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+  - needFilmUI: 1
+    displayCharacter: 0
+    hideCameraLimit: 0
+    asset: {fileID: 11400000, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
     pathes:
     - 
     - Character
@@ -68,21 +85,33 @@ MonoBehaviour:
     - EndFirstFight
     - ZeroTown
     m_values:
-    - asset: {fileID: 11400000, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
+    - needFilmUI: 0
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"
-    - asset: {fileID: 11400000, guid: 6d79e24db132de842a050435864ee5e6, type: 2}
+    - needFilmUI: 0
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 6d79e24db132de842a050435864ee5e6, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u4E3B\u89D2\u7537"
-    - asset: {fileID: 11400000, guid: e3875045bdf54534ea0b4ddef5caa1b1, type: 2}
+    - needFilmUI: 0
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: e3875045bdf54534ea0b4ddef5caa1b1, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
-    - asset: {fileID: 11400000, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
       pathes:
       - Character
       - "Character/\u9A6C\u8F66"
@@ -92,14 +121,20 @@ MonoBehaviour:
       - "Character/\u4E3B\u89D2\u5973"
       - "Character/\u4E3B\u89D2\u5973"
       - 
-    - asset: {fileID: 11400000, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
       pathes:
       - Character
       - "Character/\u9A6C\u8F66"
       - "Character/\u9A6C\u8F66/\u73ED\u5C3C\u8FEA\u514B"
       - "Character/\u4E3B\u89D2\u7537"
       - "Character/\u4E3B\u89D2\u5973"
-    - asset: {fileID: 11400000, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    - needFilmUI: 1
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
       pathes:
       - 
       - Character

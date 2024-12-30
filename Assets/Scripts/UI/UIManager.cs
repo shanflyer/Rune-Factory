@@ -35,7 +35,7 @@ public class UIManager : Singleton<UIManager>
         canvasGroup = parent.GetComponent<CanvasGroup>();
     }
 
-    private bool filmUI;
+    public bool filmUI { get; private set; }
     static HashSet<Type> filmHidePanel = new HashSet<Type>
     {
         typeof(MainPanel),typeof(PlayerTopPanel),typeof(ScreenControllerPanel)
@@ -108,6 +108,7 @@ public class UIManager : Singleton<UIManager>
         GameActionManager.instance.AddListener<HidePanels>(HidePanels);
         GameActionManager.instance.AddListener<HideAllPanel>(HideAllPanel);
         GameActionManager.instance.AddListener<HidePanelGroup>(HidePanelGroup);
+        GameActionManager.instance.AddListener<SetFilmUI>(SetFilmUI);
 
         Selectable.setStringAction = UIAudioForTag; 
 
@@ -117,12 +118,13 @@ public class UIManager : Singleton<UIManager>
         {
             tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audioClip;
         }
-    }
-
-     
-
-
+    } 
     Dictionary<string, AudioClip> tagUIAudioDic = new Dictionary<string, AudioClip>();
+
+     void SetFilmUI(SetFilmUI setFilmUI)
+    {
+        SetFilmUI(setFilmUI.display);
+    }
     public void UIAudioForTag(string tag)
     {
         if(tagUIAudioDic.TryGetValue(tag,out var se))

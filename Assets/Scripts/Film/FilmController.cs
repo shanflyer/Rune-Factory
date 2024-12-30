@@ -31,11 +31,27 @@ public class FilmController : Singleton<FilmController>
             if (filmData != null)
             {
                 var assetData = filmData.GetTimeLineAsset(playFilm.assetName);
+                if (string.IsNullOrEmpty(playFilm.assetName))
+                {
+                    if (film.playableDirector.playableAsset != null)
+                        assetData = filmData.GetTimeLineAsset(film.playableDirector.playableAsset.name);
+                 
+                }
+                UIManager.instance.SetFilmUI(assetData.needFilmUI);
+                if (assetData.hideCameraLimit)
+                {
+                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+                    {
+                        enable = false,
+                    };
+                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
+                }
+
 
                 if (film.playableDirector.playableAsset!=null&&!string.IsNullOrEmpty(playFilm.assetName)&&
                     playFilm.assetName != film.playableDirector.playableAsset.name)
                 {
-                    BindFilm(assetData, film.playableDirector);
+                    BindFilm(assetData, film.playableDirector); 
                 }
                 else
                 {
@@ -113,7 +129,7 @@ public class FilmController : Singleton<FilmController>
         //playableDirector.Stop();
         playableDirector.time = 0;
         playableDirector.Play();
-        UIManager.instance.SetFilmUI(true);
+        
     }
     void DisplayFilm(DisplayFilm DisplayFilm)
     {
@@ -140,6 +156,8 @@ public class FilmController : Singleton<FilmController>
         {
            if(film.playableDirector != null)
             {
+               // UIManager.instance.SetFilmUI(false);
+
                 if (string.IsNullOrEmpty(hideFilm.path))
                 {
                     film.playableDirector.transform.localScale = Vector3.zero;
@@ -210,7 +228,19 @@ public class FilmController : Singleton<FilmController>
                             UIManager.instance.SetFilmUI(false);
                     } 
                 };
-                BindFilm(filmData.GetTimeLineAsset(assetName), playableDirector);
+                var assetData = filmData.GetTimeLineAsset(assetName);
+               
+
+                if (assetData.hideCameraLimit)
+                {
+                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+                    {
+                        enable = false,
+                    };
+                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
+                }
+                BindFilm(assetData, playableDirector);
+                
                 Film film = new Film
                 {
                     obj = filmObj,
@@ -219,7 +249,7 @@ public class FilmController : Singleton<FilmController>
                 playableDirector.transform.localScale = Vector3.one;
                 playableDirector.Play();
                 nowFilms.Add(filmName, film);
-
+                UIManager.instance.SetFilmUI(assetData.needFilmUI);
                 if (filmData.stopTimeRun)
                 {
                     TimeRun timeRun = new TimeRun
@@ -228,14 +258,7 @@ public class FilmController : Singleton<FilmController>
                     };
                     GameActionManager.instance.QueueAction(timeRun);
                 }
-                if (filmData.hideCameraLimit)
-                {
-                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
-                    {
-                        enable = false,
-                    };
-                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
-                }
+                
             }
         }
         else
@@ -251,22 +274,16 @@ public class FilmController : Singleton<FilmController>
                 playableDirector.stopped += (PlayableDirector) => 
                 {
                     UIManager.instance.SetFilmUI(false);
-                    if (filmData.displayCharacter)
+                    SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
                     {
-                        SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
-                        {
-                            hide = false
-                        };
-                        GameActionManager.instance.QueueAction(setCharacterStopCreate);
-                    }
-                    if (filmData.hideCameraLimit)
+                        hide = false
+                    };
+                    GameActionManager.instance.QueueAction(setCharacterStopCreate);
+                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
                     {
-                        SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
-                        {
-                            enable = true,
-                        };
-                        GameActionManager.instance.QueueAction(setCameraConfiner2D);
-                    }
+                        enable = true,
+                    };
+                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
                 };
                  
                 Film film = new Film
@@ -285,14 +302,11 @@ public class FilmController : Singleton<FilmController>
                         run = false,
                     };
                     GameActionManager.instance.QueueAction(timeRun);
-                    if (filmData.hideCameraLimit)
+                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
                     {
-                        SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
-                        {
-                            enable = false,
-                        };
-                        GameActionManager.instance.QueueAction(setCameraConfiner2D);
-                    }
+                        enable = false,
+                    };
+                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
                 }
             }
         } 

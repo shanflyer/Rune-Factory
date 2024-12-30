@@ -15,33 +15,21 @@ MonoBehaviour:
   id: 30
   typeName: ActionList
   _parameters:
+  - value: LerpScreenCycleValue
+    parameters:
+    - value: 1
+      parameters: []
+    - value: 0
+      parameters: []
+    - value: 1
+      parameters: []
+    - value: -2.8
+      parameters: []
+    - value: 1.5
+      parameters: []
   - value: WaitAction
     parameters:
-    - value: 500
-      parameters:
-      - value: LerpScreenCycleValue
-        parameters:
-        - value: 1
-          parameters: []
-        - value: 0
-          parameters: []
-        - value: 0.6
-          parameters: []
-        - value: -2.8
-          parameters: []
-        - value: 1.5
-          parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 500
-      parameters:
-      - value: OpenPanelAction
-        parameters:
-        - value: FilmPanel
-          parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 500
+    - value: 1000
       parameters:
       - value: PlayFilm
         parameters:

@@ -155,12 +155,12 @@ public class TempCharacter : Character
 
 public class Player : Character
 {
-    public Player(CharacterData characterData, int instanceId, ProfessionData professionData) : 
-        base(characterData, professionData, instanceId,true)
+    public Player(CharacterData characterData, int instanceId, ProfessionData professionData, int overridePackage = 0) : 
+        base(characterData, professionData, instanceId,true, overridePackage)
     {
     }
 
-    protected override async Task CreatCharacterPackage(int overridePackageId = 0, int instancId = 0)
+    protected override async Task CreatCharacterPackage(int overridePackageId = 0, int instanceId = 0)
     {
         await base.CreatCharacterPackage();
         PackageManager.instance.AddPlayerPackage(overridePackageId == 0 ? characterPackage : overridePackageId);

@@ -40,6 +40,7 @@ public class UserGameSaveData : IReferenceData
         shops.CopyData(userGameSaveData.shops);
         shopLists.CopyData(userGameSaveData.shopLists);
         saveTime = userGameSaveData.saveTime;
+         
 
         nextWeathers.Clear();
         nowWeathers.Clear();
@@ -60,7 +61,7 @@ public class UserGameSaveData : IReferenceData
     public OtherSaveData otherSaveData=new OtherSaveData();
     public GameDateSaveData dateData;
     public IntCharacterSaveDataDictionary characterSaveDatas = new IntCharacterSaveDataDictionary();
-    public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
+    public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>(); 
 
     public List<Weather> nowWeathers = new List<Weather>();
     public List<Weather> nextWeathers = new List<Weather>();

@@ -8,6 +8,9 @@ using UnityEngine.Timeline;
 [Serializable]
 public struct TimelineAssetData
 {
+    public bool needFilmUI;
+    public bool displayCharacter;
+    public bool hideCameraLimit;
     public TimelineAsset asset;
     public List<string> pathes;
 }
@@ -18,8 +21,7 @@ public class FilmData : ScriptableObject, IGameData, IReferenceData
     public string FilmName;
     public GameObject FilmObj;
     public bool stopTimeRun;
-    public bool displayCharacter;
-    public bool hideCameraLimit;
+    
     [SerializeField]
     public List<TimelineAssetData> TimelineAssets;
     public StringTimelineAssetDataDictionary timelineAssets =new StringTimelineAssetDataDictionary();
