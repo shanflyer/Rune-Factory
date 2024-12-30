@@ -657,7 +657,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 WorldMapObjManager.instance.DisplayMapItem(runtimeMapItem);
             }
         }
-        
         if (!isInSaveData)
         {
             TryCreatField tryCreatField = new TryCreatField
@@ -668,6 +667,20 @@ public class WorldMapManager : Singleton<WorldMapManager>
             };
             GameActionManager.instance.QueueAction(tryCreatField, true);
         }
+        else
+        {
+            if (!GameDataSaveManager.instance.HaveSaveFileData(mapItem.instanceId))
+            {
+                TryCreatField tryCreatField = new TryCreatField
+                {
+                    roomId = mapId,
+                    itemInstanceId = mapItem.instanceId,
+                    coordinate = mapItem.coordinate
+                };
+                GameActionManager.instance.QueueAction(tryCreatField, true);
+            }
+        }
+       
         return runtimeMapItem.instanceId;
     }
 

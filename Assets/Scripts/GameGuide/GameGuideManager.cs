@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 public class GameGuideManager:Singleton<GameGuideManager>
 {
     Dictionary<int, Selectable> guidSelectableDic = new Dictionary<int, Selectable>();
-    HashSet<int> endGuide = new HashSet<int>();
+    HashSet<int> endGuide = new HashSet<int>(); 
     public int endGuideFilmIndex
     {
         get
@@ -104,9 +105,15 @@ public class GameGuideManager:Singleton<GameGuideManager>
            
         }
     }
-    void SetIntAction(int id,Selectable selectable)
+    async void SetIntAction(int id,Selectable selectable)
     {
         guidSelectableDic[id] = selectable;
+        GameGuidePanel gameGuidePanel=await UIManager.instance.GetGamePanel<GameGuidePanel>();
+        if (gameGuidePanel!=null&&gameGuidePanel.show)
+        {
+            RectTransform rectTransform = selectable.transform as RectTransform; 
+            gameGuidePanel.TryGuidStep(id, rectTransform.position, rectTransform.sizeDelta);
+        }
     }
     void RemoveIntAction(int id,Selectable selectable)
     {

@@ -264,9 +264,12 @@ public class CameraManager : Singleton<CameraManager>
                     mixingCamera.SetWeight(3, 0);
                 });
             }
-            confiner2D.enabled = true;
-            confiner2D.InvalidateBoundingShapeCache();
-            confiner2D.InvalidateLensCache();
+            if (!UIManager.instance.filmUI)
+            {
+                confiner2D.enabled = true;
+                confiner2D.InvalidateBoundingShapeCache();
+                confiner2D.InvalidateLensCache();
+            } 
         }
     }
     void SetFixedPlayerShaderPos(SetFixedPlayerShaderPos setFixedPlayerShaderPos)

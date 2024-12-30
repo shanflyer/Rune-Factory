@@ -259,8 +259,17 @@ public class UIManager : Singleton<UIManager>
             }
 
             if (!IsPluralUI(type))
+            {
+                if (gamePanels.TryGetValue(type, out var _panel))
+                {
+                    if (_panel != gamePanel)
+                    {
+                        _panel.Close();
+                    }
+                }
                 gamePanels[type] = gamePanel;
-
+            }
+                 
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
             return gamePanel;
@@ -301,7 +310,17 @@ public class UIManager : Singleton<UIManager>
             }
 
             if (!IsPluralUI(type))
+            {
+                if (gamePanels.TryGetValue(type, out var _panel))
+                {
+                    if (_panel != gamePanel)
+                    {
+                        _panel.Close();
+                    }
+                }
                 gamePanels[type] = gamePanel;
+            }
+                
 
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
@@ -390,6 +409,13 @@ public class UIManager : Singleton<UIManager>
             }
             if (!IsPluralUI(type))
             {
+                if(gamePanels.TryGetValue(type,out var _panel))
+                {
+                    if (_panel != gamePanel)
+                    {
+                        _panel.Close();
+                    }
+                }
                 gamePanels[type] = gamePanel;
             }
         }

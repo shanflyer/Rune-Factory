@@ -168,7 +168,7 @@ public class WeatherManager : Singleton<WeatherManager>
         return weathers;
     }
 
-    private int nowIndex = -1;
+    private int nowIndex = 0;
     public float nowWaterFall => nowDayWeathers[nowIndex].waterFall;
     public void RefreshWeather(int hour)
     {

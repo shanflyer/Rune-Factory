@@ -15,6 +15,14 @@ MonoBehaviour:
   id: 34
   typeName: ActionList
   _parameters:
+  - value: AddPackageItem
+    parameters:
+    - value: 0
+      parameters: []
+    - value: 1101
+      parameters: []
+    - value: 2
+      parameters: []
   - value: WaitAction
     parameters:
     - value: 200
@@ -40,8 +48,4 @@ MonoBehaviour:
         - value: "\u7B2C\u4E00\u665A"
           parameters: []
         - value: "\u7B2C\u4E00\u6B21\u5546\u5E97"
-          parameters: []
-      - value: OpenPanelAction
-        parameters:
-        - value: FilmPanel
           parameters: []

@@ -45,6 +45,10 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
     } 
 
+    public bool HaveSaveFileData(int id)
+    {
+        return UserGameSaveData.fields.ContainsKey(id);
+    }
     public async Task InitLoadSaveData()
     {
         if (loadGameSaveData != null&&CharacterManager.instance.controllerCharacter==null)

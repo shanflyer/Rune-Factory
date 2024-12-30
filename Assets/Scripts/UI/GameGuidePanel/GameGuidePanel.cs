@@ -22,6 +22,21 @@ public class GameGuidePanel : GamePanel<GuidStepData>
         ring = FindChildGameObject("Ring");
         icon = FindChildGameObject<Image>("Icon");
     }
+    [SerializeField]
+    private bool noLookupGuidStep = true;
+    public void TryGuidStep(int guid,Vector3 pos,Vector2 size)
+    {
+        if (noLookupGuidStep&& data.selectableId==guid)
+        {
+            RectTransform rectTransform = guideButton.transform as RectTransform;
+            rectTransform.position = pos;
+            rectTransform.sizeDelta = size;
+            float ringSize = (size.x > size.y ? size.x : size.y) * 0.5f;
+            ring.localScale = new Vector3(ringSize, ringSize, 100);
+            icon.enabled = true;
+            noLookupGuidStep = false;
+        }
+    }
     public override void InitReferenceData(GuidStepData v)
     {
         base.InitReferenceData(v);
@@ -39,7 +54,12 @@ public class GameGuidePanel : GamePanel<GuidStepData>
                 float ringSize = (size.x > size.y ? size.x : size.y)*0.5f;
                 ring.localScale = new Vector3(ringSize, ringSize, 100);
                 icon.enabled = true;
-               // Debug.Log($"guideButton:{guideButton.transform.position}");
+                noLookupGuidStep = false;
+                // Debug.Log($"guideButton:{guideButton.transform.position}");
+            }
+            else
+            {
+                noLookupGuidStep = true;
             }
         });
     }

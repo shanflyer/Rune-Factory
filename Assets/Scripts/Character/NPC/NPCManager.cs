@@ -164,6 +164,12 @@ public class Player : Character
     {
         await base.CreatCharacterPackage();
         PackageManager.instance.AddPlayerPackage(overridePackageId == 0 ? characterPackage : overridePackageId);
+
+        RefreshShortcut refreshShortcut = new RefreshShortcut
+        {
+            packageId = overridePackageId == 0 ? characterPackage : overridePackageId
+        };
+        GameActionManager.instance.QueueAction(refreshShortcut);
     }
 }
 

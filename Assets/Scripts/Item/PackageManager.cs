@@ -1132,6 +1132,10 @@ public class PackageManager : Singleton<PackageManager>
             this.items = new List<Item>();
             for(int i = 0; i < items.Count; i++)
             {
+                if (items[i].count == 0)
+                {
+                    continue;
+                }
                 if (packageItemCounts.TryGetValue(items[i].dataId,out var count))
                 {
                     count += items[i].count;

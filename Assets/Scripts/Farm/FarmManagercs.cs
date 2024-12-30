@@ -70,9 +70,9 @@ public class FarmManager : Singleton<FarmManager>
     public async void CreatField(FieldSaveData fieldSaveData)
     {
         int instanceId = fieldSaveData.instanceId;
-        if (!fields.ContainsKey(instanceId))
+        if (!fields.TryGetValue(instanceId,out var field))
         {
-            Field field = new Field
+            field = new Field
             {
                 instanceId = instanceId,
                 mapInstance = fieldSaveData.mapInstance,
@@ -80,6 +80,7 @@ public class FarmManager : Singleton<FarmManager>
                 fieldState = fieldSaveData.fieldState,
                 isSetWater = fieldSaveData.isSetWater,
                 coordinate = fieldSaveData.coordinate,
+                waterHour = fieldSaveData.waterHour
                
             };
             if (fieldSaveData.PlantinstaceId != 0)
@@ -103,8 +104,12 @@ public class FarmManager : Singleton<FarmManager>
                 };
                 GameActionManager.instance.QueueAction(addMapItem);
             } 
-            fields.Add(instanceId, field); 
+            fields.Add(instanceId, field);
             //GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+        }
+        else
+        {
+            field.SetData(fieldSaveData.fieldState, fieldSaveData.isSetWater, fieldSaveData.waterHour);
         }
     }
     private void TryCreatField(TryCreatField tryCreatField)
@@ -341,6 +346,15 @@ public class Field
     public bool isSetWater;
     public Plant plant;
     public int waterHour;
+
+    public void SetData(FieldState fieldState, bool isSetWater,int waterHour)
+    {
+        this.fieldState = fieldState;
+        this.isSetWater = isSetWater;
+        this.waterHour = waterHour;
+    }
+
+
     public async Task<bool> TrySicklePlant()
     {
         if (plant != null)
