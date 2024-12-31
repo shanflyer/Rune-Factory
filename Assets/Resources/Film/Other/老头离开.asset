@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: "\u8001\u5934\u79BB\u5F00"
   m_EditorClassIdentifier: 
   id: 0
-  typeName: Talk
+  typeName: ActionList
   _parameters:
-  - value: 1440
-    parameters: []
+  - value: Talk
+    parameters:
+    - value: 1440
+      parameters: []
+  - value: SaveGuideFilmIndexAction
+    parameters:
+    - value: 50
+      parameters: []

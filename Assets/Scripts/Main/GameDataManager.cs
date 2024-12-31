@@ -8,6 +8,8 @@ using UnityEngine;
 public class GameDataManager : Singleton<GameDataManager>
 {
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
+    
+    public GameGlobalData GlobalData { get; private set; }
     protected override void Clear()
     {
         allGameStaticDatas.Clear();
@@ -16,6 +18,7 @@ public class GameDataManager : Singleton<GameDataManager>
     public override async void Init()
     {
         base.Init();
+        GlobalData=await GetAsyncData<GameGlobalData>();
         var gameDataSaveManager = GameDataSaveManager.instance;
         //初始加载
         await LoadAllAsyncData<GameActionData>();

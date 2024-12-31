@@ -109,6 +109,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             loadGameSaveData.InitMapItemSaveData(instanceId);
         }
     }
+    private bool loadCompleted = false;
     public void AfterInitMapLoadSaveData()
     {
         if (loadGameSaveData != null)
@@ -150,6 +151,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             } 
             FriendManager.instance.InitFriendSaveData(loadGameSaveData.friendSaveData);
             WeatherManager.instance.InitSaveWeather(loadGameSaveData.nowWeathers, loadGameSaveData.nextWeathers);
+
+            loadCompleted = true;
+        }
+        else
+        {
+            loadCompleted = true;
         }
     }
 
@@ -225,8 +232,17 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             LoadDataSuccess = true;
             string dataStr =File.ReadAllText(saveDataPath);
-           //dataStr = DecryptDES(dataStr);
-            UserGameSaveDataList userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
+            UserGameSaveDataList userGameSaveDataList = null;
+            try
+            {
+                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
+            }
+            catch
+            {
+                dataStr = DecryptDES(dataStr);
+                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
+            }
+           //
             userGameSaveDataList.nowSaveData.Init();
             userGameSaveDataList.nowSaveData.index = -1;
             for (int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
@@ -383,8 +399,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         base.Clear();
     }
     public void TryAutoSaveData()
-    {
-        if (GameGuideManager.instance.endGuideFilmIndex >= 0)
+    { 
+        if (loadCompleted&&GameGuideManager.instance.endGuideFilmIndex >= 0)
         {
             SaveData(-1);
         }
@@ -405,7 +421,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
          
 
         string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
-        //strs = EncryptDES(strs);
+        if (GameDataManager.instance.GlobalData.Encrypt)
+        {
+            strs = EncryptDES(strs);
+        }
+        
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         File.WriteAllText(saveDataPath, strs); 
         return true;

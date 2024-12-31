@@ -63,12 +63,15 @@ public class CameraManager : Singleton<CameraManager>
     }
     void SetCameraConfiner2D(SetCameraConfiner2D SetCameraConfiner2D)
     {
-        confiner2D.enabled = SetCameraConfiner2D.enable;
-        if (confiner2D.enabled)
+        if (!fixedView)
         {
-            confiner2D.InvalidateBoundingShapeCache();
-            confiner2D.InvalidateLensCache();
-        }
+            confiner2D.enabled = SetCameraConfiner2D.enable;
+            if (confiner2D.enabled)
+            {
+                confiner2D.InvalidateBoundingShapeCache();
+                confiner2D.InvalidateLensCache();
+            }
+        } 
     }
     public void SetCameraListener(bool enable)
     {
@@ -149,39 +152,14 @@ public class CameraManager : Singleton<CameraManager>
 
     public void SetConfiner2DCollider(Collider2D collider2D)
     {
-        if (confiner2D.enabled)
-        {
-            confiner2D.enabled = false;
-            confiner2D.BoundingShape2D = collider2D;
-            if (!UIManager.instance.filmUI)
-            {
-                confiner2D.enabled = true;
-                confiner2D.InvalidateBoundingShapeCache();
-                confiner2D.InvalidateLensCache();
-            }  
-        }
-        else
-        { 
-            confiner2D.BoundingShape2D = collider2D;
-            if (!UIManager.instance.filmUI)
-            {
-                confiner2D.InvalidateBoundingShapeCache();
-                confiner2D.InvalidateLensCache(); 
-            } 
-        }
-        
-        /*
-        GameTimerController.instance.DeleyActionMain(100, () =>
+        confiner2D.enabled = false;
+        confiner2D.BoundingShape2D = collider2D;
+        if (!UIManager.instance.filmUI&&GameGuideManager.instance.endGuideFilmIndex>=GameDataManager.instance.GlobalData.endGuideIndex)
         {
             confiner2D.enabled = true;
             confiner2D.InvalidateBoundingShapeCache();
-            confiner2D.enabled = false;
-            confiner2D.enabled = true;
-        });
-        GameTimerController.instance.DeleyActionMain(200, () =>
-        {
-            confiner2D.InvalidateBoundingShapeCache();
-        });*/
+            confiner2D.InvalidateLensCache();
+        } 
     }
 
     public void SetCameraOffset(Vector2 offset)
@@ -199,9 +177,13 @@ public class CameraManager : Singleton<CameraManager>
             followCameras[i].Follow = target;
             followCameras[i].Lens.OrthographicSize = pixelPerfectCamera.orthographicSize;
         }
-        confiner2D.enabled = true;
-        confiner2D.InvalidateBoundingShapeCache();
-        confiner2D.InvalidateLensCache();
+        if(GameGuideManager.instance.endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex)
+        {
+            confiner2D.enabled = true;
+            confiner2D.InvalidateBoundingShapeCache();
+            confiner2D.InvalidateLensCache();
+        }
+       
     }
 
     private void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
@@ -264,7 +246,7 @@ public class CameraManager : Singleton<CameraManager>
                     mixingCamera.SetWeight(3, 0);
                 });
             }
-            if (!UIManager.instance.filmUI)
+            if (!UIManager.instance.filmUI&& GameGuideManager.instance.endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex)
             {
                 confiner2D.enabled = true;
                 confiner2D.InvalidateBoundingShapeCache();

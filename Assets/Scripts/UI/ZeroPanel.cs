@@ -37,7 +37,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         loadButton = FindChildGameObject<Button>("Load");
     }
 
-    protected override async void Awake()
+    protected override void Awake()
     {
         base.Awake();
         Shader.SetGlobalColor("_CloudColor", cloudColor);

@@ -640,18 +640,36 @@ public class PackageManager : Singleton<PackageManager>
     {
         for (int i = 0; i < packageSaveDatas.Count; i++)
         {
-            var saveData = packageSaveDatas[i];
-            var packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(saveData.dataId);
-
-            GamePackage gamePackage = new GamePackage(saveData.caseCount,
-                saveData.packageName, saveData.id, packageSetData, saveData.level)
+            if (gamePackages.TryGetValue(packageSaveDatas[i].id,out var gamePackage))
             {
-                itemPackage = saveData.itemPackage,
-                
-            };
-            gamePackage.InitSaveItemList(saveData.items);
-            MyInstance.instance.AddInstance(saveData.id);
-            gamePackages.Add(saveData.id, gamePackage);
+                gamePackage.caseCount = packageSaveDatas[i].caseCount;
+                gamePackage.level = packageSaveDatas[i].level;
+                gamePackage.name = packageSaveDatas[i].packageName;
+                for(int j = 0; j < packageSaveDatas[i].items.Count; j++)
+                {
+                   await gamePackage.SetItemInPackage(packageSaveDatas[i].items[j]);
+                }
+                GameActionManager.instance.QueueAction(new RefreshShortcut
+                {
+                    packageId=gamePackage.instanceId
+                });
+            }
+            else
+            {
+                var saveData = packageSaveDatas[i];
+                var packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(saveData.dataId);
+
+                 gamePackage = new GamePackage(saveData.caseCount,
+                    saveData.packageName, saveData.id, packageSetData, saveData.level)
+                {
+                    itemPackage = saveData.itemPackage,
+
+                };
+                gamePackage.InitSaveItemList(saveData.items);
+                MyInstance.instance.AddInstance(saveData.id);
+                gamePackages.Add(saveData.id, gamePackage);
+            }
+          
         }
     }
 

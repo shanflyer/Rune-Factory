@@ -810,16 +810,15 @@ public class AudioController : Singleton<AudioController>
                     {
                         startWeights.Add(childMixer.GetInputWeight(i));
                     }
-                    var enumerator = LerpAudio();
+                    var enumerator = LerpAudio(startWeights);
                     GameObjectCurveController.instance.StartIEnumerator(enumerator);
                     SetLerpAudioIEnumerator(playableGraph,enumerator);
-                    IEnumerator LerpAudio()
+                    IEnumerator LerpAudio(List<float> startWeights)
                     {
                         float timeValue = 0;
                         while (timeValue < 1)
-                        {
-                            timeValue += Time.deltaTime;
-                            for (int i = 0; i < count; i++)
+                        { 
+                            for (int i = 0; i < startWeights.Count; i++)
                             {
                                 childMixer.SetInputWeight(i, startWeights[i] * (1 - timeValue));
                             }
@@ -830,6 +829,7 @@ public class AudioController : Singleton<AudioController>
                                     childMixer.SetInputWeight(count + i, timeValue * audioClips[i].weight);
                                 }
                             }
+                            timeValue += Time.deltaTime;
                             yield return 0;
                         }
 

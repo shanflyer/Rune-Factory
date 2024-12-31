@@ -296,6 +296,11 @@ public class UIManager : Singleton<UIManager>
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
             var async=GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
             await async;
+            if (!Application.isPlaying || SingletonType.Cleared)
+            {
+                GameObject.Destroy(gamePanelObj);
+                return null;
+            }
             var _Panel = async.Result[0];
             var gamePanelComponent = _Panel.GetComponent(type);
             _Panel.transform.localPosition = Vector3.zero;
@@ -395,6 +400,13 @@ public class UIManager : Singleton<UIManager>
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path); 
             var async = GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
             await async;
+
+            if (!Application.isPlaying||SingletonType.Cleared)
+            {
+                GameObject.Destroy(gamePanelObj);
+                return null;
+            }
+
             var _Panel = async.Result[0]; 
             _Panel.transform.localPosition = Vector3.zero;
             var gamePanelComponent = _Panel.GetComponent(type);
