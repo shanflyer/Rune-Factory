@@ -11,6 +11,7 @@ public class GameGlobalData :ScriptableObject, IGameData
     public int endGuideIndex;
     public bool immediatelyAction;
     public bool Encrypt;
+    public bool debug;
     public string GetKey()
     {
         return "GameGlobalData";

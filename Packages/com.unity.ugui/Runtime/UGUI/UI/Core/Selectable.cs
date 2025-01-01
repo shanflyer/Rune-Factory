@@ -185,7 +185,7 @@ namespace UnityEngine.UI
         [SerializeField]
         private Graphic m_TargetGraphic;
 
-
+        public bool HideSelected;
         private bool m_GroupsAllowInteraction = true;
         protected int m_CurrentIndex = -1;
 

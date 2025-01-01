@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: "96\u524D\u8FDB\u6307\u5F15"
   m_EditorClassIdentifier: 
   id: 96
-  typeName: GameGuideAction
+  typeName: ActionList
   _parameters:
-  - value: 11
-    parameters: []
+  - value: GameGuideAction
+    parameters:
+    - value: 11
+      parameters: []
+  - value: ClosePanelAction
+    parameters:
+    - value: FilmPanel
+      parameters: []

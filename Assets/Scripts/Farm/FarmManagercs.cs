@@ -55,7 +55,7 @@ public class FarmManager : Singleton<FarmManager>
                 while (e.MoveNext())
                 {
                     e.Current.SetWaterField();
-                    GameDataSaveManager.instance.UserGameSaveData.SetFieldData(e.Current);
+                    
                 }
             }
         }
@@ -105,6 +105,7 @@ public class FarmManager : Singleton<FarmManager>
                 GameActionManager.instance.QueueAction(addMapItem);
             } 
             fields.Add(instanceId, field);
+            field.RefreshField();
             //GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
         }
         else
@@ -133,8 +134,7 @@ public class FarmManager : Singleton<FarmManager>
                             fieldState = FieldState.待平整
                         };
                         fields.Add(instanceId, field);
-
-                        GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+                        field.RefreshField();
                     }
                 }
             }
@@ -226,7 +226,6 @@ public class FarmManager : Singleton<FarmManager>
             //RefreshField refreshField = new RefreshField { fieldId = field.instanceId };
             // RefreshField(refreshField);
 
-            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
             field.RefreshField();
         }
         else
@@ -265,9 +264,7 @@ public class FarmManager : Singleton<FarmManager>
                 };
                 field.fieldState = FieldState.已平整;
                 field.plant = plant;
-                creatPlant.setResult(true);
-
-                GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+                creatPlant.setResult(true); 
                 field.RefreshField();
             }
 
@@ -284,8 +281,7 @@ public class FarmManager : Singleton<FarmManager>
         if (fields.TryGetValue(setWaterField.fieldId, out var field))
         {
             field.SetWaterField(true);
-
-            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
+             
             setWaterField.setResult(true);
         }
         else
@@ -344,14 +340,25 @@ public class Field
     public int2 coordinate;
     public FieldState fieldState;
     public bool isSetWater;
-    public Plant plant;
+    
+    public Plant plant
+    {
+        get => _plant;
+        set
+        {
+            _plant = value;
+            RefreshField();
+        }
+    }
     public int waterHour;
 
+    private Plant _plant;
     public void SetData(FieldState fieldState, bool isSetWater,int waterHour)
     {
         this.fieldState = fieldState;
         this.isSetWater = isSetWater;
         this.waterHour = waterHour;
+        RefreshField();
     }
 
 
@@ -369,9 +376,7 @@ public class Field
             });
             plant = null;
 
-            RefreshField();
-
-            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
+            RefreshField(); 
             return result;
         }
         return false;
@@ -422,9 +427,7 @@ public class Field
                 }
             }
             plant.RefreshPlant();
-            RefreshField();
-
-            GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
+            RefreshField(); 
             return result;
         }
         return false;
@@ -440,8 +443,8 @@ public class Field
                 Operates.Add(GameCommon.Watering);
                 break;
             case FieldState.已平整:
-               
-                
+                Operates.Add(GameCommon.SmoothField);
+                Operates.Add(GameCommon.Watering); 
                 if (plant == null)
                 {
                     Operates.Add(GameCommon.Seeding);
@@ -456,7 +459,6 @@ public class Field
                             break;
                         case PlantState.干旱:
                         case PlantState.正常:
-                            Operates.Add(GameCommon.Watering);
                             Operates.Add(GameCommon.Eradicate);
                             if (plant.growthStage >= 2)
                                 Operates.Add(GameCommon.Reaping);
@@ -489,6 +491,8 @@ public class Field
             id = instanceId,
         };
         GameActionManager.instance.QueueAction(setItemAnimation);
+
+        GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
     }
     public void NewHour()
     {
@@ -530,14 +534,22 @@ public class Field
                     plant.RefreshPlant();
                 }
             }
-            RefreshField();  
+            if (plant != null && plant.plantState == PlantState.正常 && plant.setWater)
+            {
+                plant.Grow();
+            }
+            RefreshField();
+        }
+        else
+        {
+            if (plant != null && plant.plantState == PlantState.正常 && plant.setWater)
+            {
+                plant.Grow();
+            }
+            RefreshField();
         }
        
-        if (plant != null&&plant.plantState==PlantState.正常&&plant.setWater)
-        {
-            plant.Grow();
-        }
-        GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
+         
     }
     public void NewDay()
     {
@@ -576,8 +588,7 @@ public class Field
             }
         }
         RefreshField();
-
-        GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
+         
     }
 
     public void SetWaterField(bool isNotify=false)

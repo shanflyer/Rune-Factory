@@ -99,7 +99,7 @@ public class WorldMapController : MonoBehaviour
         
         yield return 0;
 
-        if(GameGuideManager.instance.endGuideFilmIndex < 0)
+        if(GameGuideManager.instance.endGuideFilmIndex < 0||GameController.instance.startPlay)
         {
             GameActionManager.instance.QueueAction(new ChangeWorld
             {

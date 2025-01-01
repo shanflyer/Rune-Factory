@@ -55,7 +55,8 @@ public class GameTimerController : Singleton<GameTimerController>
     }
     public void DelayAction(int delay, Action action)
     {
-        if(waitIenumerators.TryGetValue(action,out var enumerator))
+        Debug.Log($"target:{action.Target}-Method:{action.Method}");
+        if (waitIenumerators.TryGetValue(action,out var enumerator))
         {
             GameController.instance.StopCoroutine(enumerator);
         }
@@ -95,7 +96,7 @@ public class GameTimerController : Singleton<GameTimerController>
             yield return 0;
         }
         action.Invoke();
-        Debug.Log($"target:{action.Target}-Method:{action.Method}");
+       
        
     }
 

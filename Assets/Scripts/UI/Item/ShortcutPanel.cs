@@ -250,5 +250,12 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                 shortcutItem = default(ShortcutItem);
             }
         }
+
+        ResetOperateData resetOperateData = new ResetOperateData
+        {
+            mapItemInstanceId = CharacterManager.instance.controllerCharacter.OperateItem,
+            operates = null
+        };
+        GameActionManager.instance.QueueAction(resetOperateData);
     }
 }

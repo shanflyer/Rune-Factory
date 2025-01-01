@@ -334,7 +334,10 @@ namespace UnityEngine.UI
 
             InternalToggle();
         }
-
+        public void OnPointerClick()
+        {
+            InternalToggle();
+        }
         public virtual void OnSubmit(BaseEventData eventData)
         {
             InternalToggle();

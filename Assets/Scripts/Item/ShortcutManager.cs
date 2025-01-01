@@ -15,6 +15,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
         if(!shortcutPackages.TryGetValue(characterId,out var shortcutPackage))
         {
             shortcutPackage =new ShortcutPackage(characterId); 
+            shortcutPackages.Add(characterId,shortcutPackage );
         }
         return shortcutPackage;
     }
@@ -108,38 +109,33 @@ public class ShortcutManager : Singleton<ShortcutManager>
     }
     void RefreshItemValue(RefreshItemValue refreshItemValue)
     {
-        if (shortcutPackages.TryGetValue(refreshItemValue.characterId, out var shortcutPackage))
-        {
-            shortcutPackage.SetItemValue(refreshItemValue.itemId, refreshItemValue.itemValue);
-        }
-        
+        var shortcutPackage= GetShortcutPackage(refreshItemValue.characterId);
+        shortcutPackage.SetItemValue(refreshItemValue.itemId, refreshItemValue.itemValue);
+
     }
     async void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
     {
-        if(shortcutPackages.TryGetValue(removeShortcutItem.characterId,out var shortcutPackage))
-        {
-            shortcutPackage.RemoveItemIndex(removeShortcutItem.index);
-            //shortcutPackages.SetData(shortcutPackage);
-           await RefreshDisplayShortcutPackageAsync(shortcutPackage);
-        }
+        var shortcutPackage = GetShortcutPackage(removeShortcutItem.characterId);
+
+        shortcutPackage.RemoveItemIndex(removeShortcutItem.index);
+        //shortcutPackages.SetData(shortcutPackage);
+        await RefreshDisplayShortcutPackageAsync(shortcutPackage);
     }
     async void SetShortcutItem(SetShortcutItem setShortcutItem)
     {
-        if (shortcutPackages.TryGetValue(setShortcutItem.characterId, out var shortcutPackage))
+        var shortcutPackage = GetShortcutPackage(setShortcutItem.characterId);
+        if (shortcutPackage.SetItem(setShortcutItem.Item))
         {
-            if (shortcutPackage.SetItem(setShortcutItem.Item))
+            SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
             {
-                SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
-                {
-                    packageId = shortcutPackage.packagerId,
-                    selectItem = setShortcutItem.Item.instanceId
-                };
-                GameActionManager.instance.QueueAction(setPackageSelectItem);
+                packageId = shortcutPackage.packagerId,
+                selectItem = setShortcutItem.Item.instanceId
+            };
+            GameActionManager.instance.QueueAction(setPackageSelectItem);
 
 
-                //shortcutPackages.SetData(shortcutPackage);
-               await RefreshDisplayShortcutPackageAsync(shortcutPackage);
-            } 
+            //shortcutPackages.SetData(shortcutPackage);
+            await RefreshDisplayShortcutPackageAsync(shortcutPackage);
         }
     }
    

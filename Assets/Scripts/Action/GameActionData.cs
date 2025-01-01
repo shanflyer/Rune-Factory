@@ -20,7 +20,24 @@ public class GameActionData : ScriptableObject, IGameData
 
     public void Action(int source = 0, int target = 0, int value = 0, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-        Debug.Log($"Action:{name}");
+        if (GameDataManager.instance.GlobalData.debug)
+        {
+            if (name != "440展示随机表情" && name != "ShowEmote"&&name!= "ShowRandomEmote")
+            {
+                if (name == "34新手进入商店")
+                {
+                    Debug.Log($"Match!!!");
+                }
+                string parameterStr = "";
+                for (int i = 0; i < _parameters.Count; i++)
+                {
+                    parameterStr = $"{parameterStr}--{_parameters[i]}";
+                }
+                Debug.Log($"Action:{name}--parameters:{parameterStr}");
+            }
+        }
+        
+      
         GameActionDataManager.instance.GameAction(typeName, _parameters, source, target, value, setResult, setValue,immediately);
     }
 
@@ -43,4 +60,14 @@ public class Parameter
 {
     public string value;
     public List<Parameter> parameters;
+    public override string ToString()
+    {
+        string outStr = value;
+        outStr = $"{outStr}-parameters：";
+        for(int i=0;i<parameters.Count;i++)
+        {
+            outStr = $"{outStr}；{parameters[i]}";
+        }
+        return outStr;
+    }
 }

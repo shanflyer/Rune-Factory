@@ -111,15 +111,28 @@ namespace UnityEngine.UI
         /// ]]>
         ///</code>
         /// </example>
-
+      
         public virtual void OnPointerClick(PointerEventData eventData)
         {
+            if (HideSelected)
+            {
+                return;
+            }
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
             Press(); 
         }
-        
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            HideSelected = false;
+        }
+        public void OnPointerClick()
+        {
+            Press();
+            HideSelected = true;
+        }
         /// <summary>
         /// Call all registered ISubmitHandler.
         /// </summary>

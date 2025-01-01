@@ -15,19 +15,67 @@ MonoBehaviour:
   id: 85
   typeName: ActionList
   _parameters:
-  - value: SetCharacterCoordinate
+  - value: LerpScreenCycleValue
     parameters:
     - value: 0
       parameters: []
-    - value: 547
+    - value: 1
+      parameters: []
+    - value: 0.6
+      parameters: []
+    - value: -1.404
+      parameters: []
+    - value: -0.57
+      parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 600
       parameters:
-      - value: 0
-        parameters: []
-      - value: 0
-        parameters: []
-  - value: DisplayMap
+      - value: DisplayMap
+        parameters:
+        - value: 874
+          parameters: []
+      - value: SetCharacterCoordinate
+        parameters:
+        - value: 0
+          parameters: []
+        - value: 874
+          parameters:
+          - value: 41,30
+            parameters: []
+      - value: DisplayOrHideCharacter
+        parameters:
+        - value: 0
+          parameters: []
+        - value: false
+          parameters: []
+  - value: WaitAction
     parameters:
-    - value: 547
-      parameters: []
-    - value: 0
-      parameters: []
+    - value: 900
+      parameters:
+      - value: LerpScreenCycleValue
+        parameters:
+        - value: 1
+          parameters: []
+        - value: 0
+          parameters: []
+        - value: 0.6
+          parameters: []
+        - value: 3.31
+          parameters: []
+        - value: 2.46
+          parameters: []
+  - value: WaitAction
+    parameters:
+    - value: 600
+      parameters:
+      - value: StopFilm
+        parameters:
+        - value: "\u7B2C\u4E00\u665A"
+          parameters: []
+      - value: PlayFilm
+        parameters:
+        - value: "\u7B2C\u4E00\u665A"
+          parameters: []
+        - value: "\u63A2\u7D22\u5F15\u5BFC"
+          parameters: []

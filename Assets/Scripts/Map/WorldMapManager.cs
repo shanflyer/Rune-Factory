@@ -680,7 +680,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 GameActionManager.instance.QueueAction(tryCreatField, true);
             }
         }
-       
+
+        RefreshField refreshField = new RefreshField
+        {
+            fieldId = runtimeMapItem.instanceId
+        };
+        GameActionManager.instance.QueueAction(refreshField);
         return runtimeMapItem.instanceId;
     }
 
@@ -769,8 +774,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         if (runtimeMapItems.TryGetValue(resetOperateData.mapItemInstanceId, out var runtimeMapItem))
         {
-            runtimeMapItem.ResetOperateData(resetOperateData.operates);
-            if(CharacterManager.instance.controllerCharacter.OperateItem== resetOperateData.mapItemInstanceId)
+            if(resetOperateData.operates!=null)
+                runtimeMapItem.ResetOperateData(resetOperateData.operates);
+            if (CharacterManager.instance.controllerCharacter.OperateItem== resetOperateData.mapItemInstanceId)
             {
                 runtimeMapItem.RefreshItemOperate();
             }
@@ -1128,8 +1134,8 @@ public class RuntimeMapItem : INativeData
         this.mapInstanceId = mapInstanceId;
         this.coordinate = coordinate;
         this.animationKey = animationKey;
-        operateDatas = new NativeHashSet<int>(8, Allocator.Persistent);
-        EventReferenceData = new NativeHashMap<FixedString128Bytes, int>(2, Allocator.Persistent);
+        operateDatas = new List<int>();
+        EventReferenceData = new Dictionary<string, int>();
 
         if (mapItemData.leftLinkPos == Vector2.zero)
         {
@@ -1161,8 +1167,8 @@ public class RuntimeMapItem : INativeData
         }
     }
 
-    public NativeHashSet<int> operateDatas;
-    public NativeHashMap<FixedString128Bytes, int> EventReferenceData;
+    public List<int> operateDatas;
+    public Dictionary<string, int> EventReferenceData;
 
     public async void RefreshItemOperate()
     {
@@ -1210,8 +1216,6 @@ public class RuntimeMapItem : INativeData
     public int Key => instanceId;
 
     public void Dispose()
-    {
-        operateDatas.Dispose();
-        EventReferenceData.Dispose();
+    { 
     }
 }
