@@ -1151,8 +1151,7 @@ public class CharacterManager : Singleton<CharacterManager>
             character.SetCoordinate(new int3(targetCoordinate, targetMap));
 
             GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
-            {
-                WorldMapObjManager.instance.RecycleMap();
+            { 
                 await SetPlayerPos(character,true);
                 await WorldMapObjManager.instance.DisplayMap(targetMap);
 

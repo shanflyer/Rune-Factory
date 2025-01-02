@@ -27,6 +27,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<RefreshMapItemDisplay>(RefreshMapItemDisplay);
         GameActionManager.instance.AddListener<ChangeMapItemObjLayer>(ChangeMapItemObjLayer);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
+        GameActionManager.instance.AddListener<RefreshMapCamera>(RefreshMapCamera);
     }
 
     protected override void Clear()
@@ -260,7 +261,16 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         bgmTag = DisplayMapRoomData.bgmTag;
         DisplayMapRoomData.SetBGM(GameTimeManager.instance.SeasonValue, GameTimeManager.instance.timeValue, weatherValue);
     }
- 
+    void RefreshMapCamera(RefreshMapCamera  refreshMapCamera)
+    {
+        SetFixedCamera setFixedCamera = new SetFixedCamera
+        {
+            fixedCamera = DisplayMapRoomData.fixedCamera,
+            fixedPos = DisplayMapRoomData.fixedCameraPos,
+            flowCameraType = DisplayMapRoomData.flowCameraType
+        };
+        GameActionManager.instance.QueueAction(setFixedCamera, true);
+    }
     
    
     private async Task<RuntimeObj> CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
@@ -352,8 +362,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     }
 
     private async void DisplayMap(DisplayMap displayMap)
-    {
-        RecycleMap();
+    { 
         await DisplayMap(displayMap.displayMap,displayMap.fixedDisplay);
         if (displayMap.actionId != 0)
         {
@@ -368,6 +377,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             return;
         }
+        RecycleMap();
         displayMap = mapId;
         DisplayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
         if (DisplayMapRoomData.autoCreatTempNpc)

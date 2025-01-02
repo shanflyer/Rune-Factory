@@ -87,7 +87,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
     {
         if (checkGuideFilmIndex.setResult != null)
         {
-            checkGuideFilmIndex.setResult(endGuideFilmIndex < checkGuideFilmIndex.id);
+            checkGuideFilmIndex.setResult(endGuideFilmIndex > checkGuideFilmIndex.id);
         }
     }
     void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction saveGuideFilmIndexAction)
