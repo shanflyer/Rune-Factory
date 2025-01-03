@@ -10,13 +10,15 @@ public class TestRenderGroup : MonoBehaviour
 
     private void OnEnable()
     {
+        /*
         for(int i = 0; i < renderers.Length; i++)
         {
             CameraManager.instance.AddTestRender(renderers[i]);
-        }
+        }*/
     }
     private void OnDisable()
     {
+        /*
         if (!SingletonType.Cleared)
         {
             for (int i = 0; i < renderers.Length; i++)
@@ -24,7 +26,7 @@ public class TestRenderGroup : MonoBehaviour
                 CameraManager.instance.RemoveTestRender(renderers[i]);
             }
 
-        }
+        }*/
     }
     public void GetRenders()
     {

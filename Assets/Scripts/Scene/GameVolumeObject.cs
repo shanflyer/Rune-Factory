@@ -25,51 +25,61 @@ public class GameVolumeObject : MonoBehaviour
         {
             return;
         }
+        nowLevel = level;
         switch(level)
         {
             case 0:
                 for(int i = 0; i < ObjList1.Count; i++)
                 {
-                    ObjList1[i].SetActive(false);
+                    if (ObjList1[i])
+                        ObjList1[i].SetActive(false);
                 }
                 for (int i = 0; i < ObjList2.Count; i++)
                 {
-                    ObjList2[i].SetActive(false);
+                    if (ObjList2[i])
+                        ObjList2[i].SetActive(false);
                 }
 
                 for (int i = 0; i < ObjList0.Count; i++)
                 {
-                    ObjList0[i].SetActive(true);
+                    if (ObjList0[i])
+                        ObjList0[i].SetActive(true);
                 }
                 break;
             case 1:
                 for (int i = 0; i < ObjList0.Count; i++)
                 {
-                    ObjList0[i].SetActive(false);
+                    if (ObjList0[i])
+                        ObjList0[i].SetActive(false);
                 }
                 for (int i = 0; i < ObjList2.Count; i++)
                 {
-                    ObjList2[i].SetActive(false);
+                    if (ObjList2[i])
+                        ObjList2[i].SetActive(false);
                 }
 
                 for (int i = 0; i < ObjList1.Count; i++)
                 {
-                    ObjList1[i].SetActive(true);
+                    if (ObjList1[i])
+                        ObjList1[i].SetActive(true);
                 }
                 break;
             case 2:
                 for (int i = 0; i < ObjList1.Count; i++)
                 {
-                    ObjList1[i].SetActive(false);
+                    if (ObjList1[i])
+                        ObjList1[i].SetActive(false);
                 }
                 for (int i = 0; i < ObjList1.Count; i++)
                 {
-                    ObjList1[i].SetActive(false);
+                    if (ObjList1[i])
+                        ObjList1[i].SetActive(false);
                 }
 
                 for (int i = 0; i < ObjList2.Count; i++)
                 {
-                    ObjList2[i].SetActive(true);
+                    if (ObjList2[i])
+                        ObjList2[i].SetActive(true);
                 }
                 break;
         }

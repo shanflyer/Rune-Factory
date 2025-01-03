@@ -27,11 +27,16 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
     }
     public void CreatParent<T>(Transform parent )where T:Enum
     {
+
         var runtimeObjParent = new GameObject("RuntimeObjParent").transform;
         runtimeObjParent.SetParent(parent);
         foreach (var type in typeof(T).GetEnumValues())
         {
-           string runtimeObjType = type.ToString(); 
+           string runtimeObjType = type.ToString();
+            if (objParents.ContainsKey(runtimeObjType))
+            {
+                continue;
+            }
             GameObject obj = new GameObject(runtimeObjType);
             obj.transform.SetParent(runtimeObjParent);
             objParents.Add(runtimeObjType, obj.transform);

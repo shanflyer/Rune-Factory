@@ -29,7 +29,7 @@ public class CameraManager : Singleton<CameraManager>
         base.Init();
         mainCamera = Camera.main;
         cameraAudioListener=mainCamera.GetComponent<AudioListener>();
-        uiCamera = mainCamera.transform.GetChild(0).GetComponent<Camera>();
+        uiCamera = mainCamera.transform.parent.GetChild(0).GetComponent<Camera>();
         universalAdditionalCameraData = uiCamera.GetComponent<UniversalAdditionalCameraData>();
         pixelPerfectCamera = mainCamera.GetComponent<PixelPerfectCamera>();
         UIPixelPerfectCamera= uiCamera.GetComponent<PixelPerfectCamera>();
@@ -154,7 +154,7 @@ public class CameraManager : Singleton<CameraManager>
     {
         confiner2D.enabled = false;
         confiner2D.BoundingShape2D = collider2D;
-        if (!UIManager.instance.filmUI&&GameGuideManager.instance.endGuideFilmIndex>=GameDataManager.instance.GlobalData.endGuideIndex)
+        if (!UIManager.instance.filmUI||GameGuideManager.instance.endGuideFilmIndex>=GameDataManager.instance.GlobalData.endGuideIndex)
         {
             confiner2D.enabled = true;
             confiner2D.InvalidateBoundingShapeCache();
