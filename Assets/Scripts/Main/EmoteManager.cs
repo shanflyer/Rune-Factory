@@ -18,6 +18,10 @@ public class EmoteRuntime
     PlayableGraph playableGraph;
     void Show()
     {
+        if (runtimeObj == null || runtimeObj.obj == null)
+        {
+            return;
+        }
         Animator animator = runtimeObj.obj as Animator;
         animator.transform.localPosition = new Vector3(emote.X * 0.01f, emote.Y * 0.01f, -emote.Y * 0.01f);
         if (!playableGraph.IsValid())

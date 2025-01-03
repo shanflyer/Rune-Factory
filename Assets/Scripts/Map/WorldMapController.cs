@@ -113,9 +113,23 @@ public class WorldMapController : MonoBehaviour
             };
             GameActionManager.instance.QueueAction(setCharacterCoordinate);
         }
+        else if (GameGuideManager.instance.endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex)
+        {
+            GameActionManager.instance.QueueAction(new ChangeWorld
+            {
+                worldName = worldName,
+                displayMap = GameController.instance.MapInstance
+            }, true);
+            SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
+            {
+                characterId = characterId,
+                coordinate = new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),
+            };
+            GameActionManager.instance.QueueAction(setCharacterCoordinate);
+        }
         else
         {
-            GameGuideManager.instance.SetGameGuidFilmDataAction(characterId,worldName);
+            GameGuideManager.instance.SetGameGuidFilmDataAction(characterId, worldName);
         }
        
 

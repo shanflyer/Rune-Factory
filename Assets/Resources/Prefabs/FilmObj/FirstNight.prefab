@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4983793734509080954}
   - component: {fileID: 3963054611755750556}
   - component: {fileID: 8147069775736449583}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 25938463059115111}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.023000002, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: -0.00999999, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 730143698719836008}
@@ -162,11 +162,11 @@ MonoBehaviour:
   polygonCollider: {fileID: 1948173614230085963}
   meshFilter: {fileID: 3963054611755750556}
   meshRenderer: {fileID: 4983793734509080954}
-  scale: 1.2
+  scale: 0.8
   shadowLength: 0.2
   shadow2Length: 0.2
-  shadowOffset: 0.1
-  color: {r: 0.8, g: 0, b: 0, a: 0}
+  shadowOffset: 0.05
+  color: {r: 0.6, g: 0, b: 0, a: 0}
 --- !u!1 &685588316012325210
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,7 +515,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.39, y: 0.46}
+  m_Size: {x: 0.275, y: 0.51666665}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -564,7 +564,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3291875467427073563}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 29ecbfa22f19fa54d977b0595ccef191, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -589,6 +589,40 @@ PlayableDirector:
   - key: {fileID: -2821632716749694034, guid: 29ecbfa22f19fa54d977b0595ccef191, type: 2}
     value: {fileID: 0}
   - key: {fileID: -2520315007573113267, guid: 29ecbfa22f19fa54d977b0595ccef191, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4725155921756124553, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 114558674675760245}
+  - key: {fileID: 6472457147294047292, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 5987172715796611697}
+  - key: {fileID: -2577774295134923448, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 2348320829672432709}
+  - key: {fileID: 5503692826987595817, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 3779076477473988561}
+  - key: {fileID: 7601897475924968567, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 5846148973799362313, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8947527585012281143, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -1767336891441574139, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2496565925205826669, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3228608739877560833, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 80075465972556929, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 160427160311827308, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6048905339155251571, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 1221411475798723618, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 2383067691093130072, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6646960449073649028, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6495008937549109116, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
     value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
@@ -685,7 +719,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.39, y: 0.46}
+  m_Size: {x: 0.275, y: 0.49166667}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -859,7 +893,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.39, y: 0.46}
+  m_Size: {x: 0.25, y: 0.41666666}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -993,7 +1027,7 @@ GameObject:
   - component: {fileID: 7577305670717948439}
   - component: {fileID: 4870234770322161471}
   - component: {fileID: 6788210145126514806}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1009,8 +1043,8 @@ Transform:
   m_GameObject: {fileID: 8180960531904242574}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.01, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: -0.00999999, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6599775230871233942}
@@ -1142,10 +1176,10 @@ MonoBehaviour:
   polygonCollider: {fileID: 2035610695889738634}
   meshFilter: {fileID: 4870234770322161471}
   meshRenderer: {fileID: 7577305670717948439}
-  scale: 1.2
+  scale: 0.8
   shadowLength: 0.2
   shadow2Length: 0.2
-  shadowOffset: 0.1
+  shadowOffset: 0.05
   color: {r: 0.6, g: 0, b: 0, a: 0}
 --- !u!1 &8417433401211447015
 GameObject:
@@ -1192,7 +1226,7 @@ GameObject:
   - component: {fileID: 598941760828869683}
   - component: {fileID: 1404422478126538898}
   - component: {fileID: 6894352252958130740}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1209,7 +1243,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.01, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732065839268904866}
@@ -1341,8 +1375,8 @@ MonoBehaviour:
   polygonCollider: {fileID: 1518117711338063368}
   meshFilter: {fileID: 1404422478126538898}
   meshRenderer: {fileID: 598941760828869683}
-  scale: 1.2
+  scale: 0.8
   shadowLength: 0.2
   shadow2Length: 0.2
-  shadowOffset: 0.1
+  shadowOffset: 0.05
   color: {r: 0.6, g: 0, b: 0, a: 0}

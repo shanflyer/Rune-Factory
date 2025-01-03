@@ -215,7 +215,7 @@ public class FilmController : Singleton<FilmController>
                 playableDirector.stopped += (PlayableDirector) => 
                 {
                     if (!SingletonType.Cleared)
-                    {
+                    { 
                         if (filmData.stopTimeRun)
                         {
                             TimeRun timeRun = new TimeRun
@@ -226,6 +226,8 @@ public class FilmController : Singleton<FilmController>
                         }
                         if (UIManager.instance != null)
                             UIManager.instance.SetFilmUI(false);
+                         
+                        GameActionManager.instance.QueueAction(default(RefreshMapCamera));
                     } 
                 };
                 var assetData = filmData.GetTimeLineAsset(assetName);

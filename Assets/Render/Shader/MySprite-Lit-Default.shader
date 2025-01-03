@@ -1287,7 +1287,7 @@ Shader "MySprite-Lit-Default"
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
-               // _objSortPos.y+=_objSortPos.z;
+                 _objSortPos.y+=_objSortPos.z;
  
 
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 

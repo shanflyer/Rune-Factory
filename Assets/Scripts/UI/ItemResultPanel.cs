@@ -31,12 +31,14 @@ public class ItemResultPanel :GamePanel<ItemResultInfo>
     public override void Close()
     {
         base.Close();
+        
+        icon.enabled=false;
+        effect.SetActive(false);
+
         if (data.actionId != 0)
         {
             GameActionDataManager.instance.Action(data.actionId);
         }
-        icon.enabled=false;
-        effect.SetActive(false);
     }
     public override void InitReferenceData(ItemResultInfo v)
     {

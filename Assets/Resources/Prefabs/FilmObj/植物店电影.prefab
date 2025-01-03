@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4983793734509080954}
   - component: {fileID: 3963054611755750556}
   - component: {fileID: 8147069775736449583}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.023000002, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 730143698719836008}
@@ -162,10 +162,10 @@ MonoBehaviour:
   polygonCollider: {fileID: 1948173614230085963}
   meshFilter: {fileID: 3963054611755750556}
   meshRenderer: {fileID: 4983793734509080954}
-  scale: 1.2
+  scale: 0.8
   shadowLength: 0.2
   shadow2Length: 0.2
-  shadowOffset: 0.1
+  shadowOffset: 0.05
   color: {r: 0.8, g: 0, b: 0, a: 0}
 --- !u!1 &685588316012325210
 GameObject:
@@ -535,7 +535,7 @@ GameObject:
   - component: {fileID: 6604496381579901970}
   - component: {fileID: 7580074813232129047}
   - component: {fileID: 5856610843057448478}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +552,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.01, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4889242964680163258}
@@ -684,10 +684,10 @@ MonoBehaviour:
   polygonCollider: {fileID: 3249792136291368791}
   meshFilter: {fileID: 7580074813232129047}
   meshRenderer: {fileID: 6604496381579901970}
-  scale: 1.2
+  scale: 0.8
   shadowLength: 0.2
   shadow2Length: 0.2
-  shadowOffset: 0.1
+  shadowOffset: 0.05
   color: {r: 0.6, g: 0, b: 0, a: 0}
 --- !u!1 &3291875467427073563
 GameObject:
@@ -1345,7 +1345,7 @@ GameObject:
   - component: {fileID: 7577305670717948439}
   - component: {fileID: 4870234770322161471}
   - component: {fileID: 6788210145126514806}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1362,7 +1362,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.01, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6599775230871233942}
@@ -1494,10 +1494,10 @@ MonoBehaviour:
   polygonCollider: {fileID: 2035610695889738634}
   meshFilter: {fileID: 4870234770322161471}
   meshRenderer: {fileID: 7577305670717948439}
-  scale: 1.2
+  scale: 0.8
   shadowLength: 0.2
   shadow2Length: 0.2
-  shadowOffset: 0.1
+  shadowOffset: 0.05
   color: {r: 0.6, g: 0, b: 0, a: 0}
 --- !u!1 &8417433401211447015
 GameObject:
@@ -1544,7 +1544,7 @@ GameObject:
   - component: {fileID: 598941760828869683}
   - component: {fileID: 1404422478126538898}
   - component: {fileID: 6894352252958130740}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1561,7 +1561,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.01, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5732065839268904866}
@@ -1693,8 +1693,8 @@ MonoBehaviour:
   polygonCollider: {fileID: 1518117711338063368}
   meshFilter: {fileID: 1404422478126538898}
   meshRenderer: {fileID: 598941760828869683}
-  scale: 1.2
+  scale: 0.8
   shadowLength: 0.2
   shadow2Length: 0.2
-  shadowOffset: 0.1
+  shadowOffset: 0.05
   color: {r: 0.6, g: 0, b: 0, a: 0}

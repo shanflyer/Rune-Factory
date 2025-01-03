@@ -246,7 +246,7 @@ public class CameraManager : Singleton<CameraManager>
                     mixingCamera.SetWeight(3, 0);
                 });
             }
-            if (!UIManager.instance.filmUI&& GameGuideManager.instance.endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex)
+            if (!UIManager.instance.filmUI|| GameGuideManager.instance.endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex)
             {
                 confiner2D.enabled = true;
                 confiner2D.InvalidateBoundingShapeCache();
