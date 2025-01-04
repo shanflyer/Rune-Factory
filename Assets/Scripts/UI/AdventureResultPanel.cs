@@ -71,21 +71,21 @@ public class AdventureResultPanel: GamePanel<FightResult>
         if (!data.victory)
         {
            var teamers=  TeamManager.instance.playerTeam.Teamers;
-            for(int i = 0; i < teamers.Count; i++)
+            for(int i = 0; i < characters.Count; i++)
             {
-                var teamer = teamers[i];
-                if (NPCManager.instance.GetNPCFormInstance(teamer.character.instanceId, out var npc))
+                var characterId = characters[i];
+                if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
                 {
                     npc.Rest();
                     SimpleTalk simpleTalk = new SimpleTalk
                     {
-                        characterId = teamer.character.instanceId,
+                        characterId = characterId,
                         talkId = GameCommon.TeamLeave
                     };
                     GameActionManager.instance.QueueAction(simpleTalk);
                     LeaveTeam leaveTeam = new LeaveTeam
                     {
-                        teamCharacterId = teamer.character.instanceId,
+                        teamCharacterId = characterId,
                         setResult = (bool value) =>
                         {
                             npc.BackHome();
@@ -101,7 +101,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
        // SceneManager.instance.UnloadNowScene();
         // UIManager.instance.
     }
- 
+    List<int> characters = new List<int>();
     public override async void InitReferenceData(FightResult fightResult)
     {
         base.InitReferenceData(fightResult);
@@ -112,6 +112,10 @@ public class AdventureResultPanel: GamePanel<FightResult>
         Debug.Log("fightResult.getItems");
         await itemList.InitListData(fightResult.getItems);
         Debug.Log("fightResult.fighterResults");
+        for(int i = 0; i < fightResult.fighterResults.Count; i++)
+        {
+            characters.Add(fightResult.fighterResults[i].Character.instanceId);
+        }
         await teamerList.InitListData(fightResult.fighterResults);
         UIManager.instance.CloseGamePanel<FightPanel>();
     }

@@ -822,6 +822,7 @@ public class CharacterSaveData : IReferenceData
     public int packageId;
     public int2 weapon, clothes, shoe,headgear;
     public bool isMarried;
+    public int hp, mp, power;
 
     public CharacterSaveData(CharacterSaveData characterSaveData)
     {
@@ -836,6 +837,9 @@ public class CharacterSaveData : IReferenceData
         clothes = characterSaveData.clothes;
         shoe = characterSaveData.shoe;
         isMarried = characterSaveData.isMarried;
+        hp = characterSaveData.hp;
+        mp = characterSaveData.mp;
+        power = characterSaveData.power;
     }
     public CharacterSaveData()
     { }
@@ -845,9 +849,17 @@ public class CharacterSaveData : IReferenceData
         SetCharacter(character);
     }
 
-    public void SetCharacter(Character character)
+    public void SetCharacter(Character character,string overrideName=null)
     {
-        name = character.name;
+        if (string.IsNullOrEmpty(overrideName))
+        {
+            name = character.name;
+        }
+        else
+        {
+            name = overrideName;
+        }
+        
         instanceId = character.instanceId;
         dataId = character.dataId;
         level = character.Level;
@@ -857,6 +869,9 @@ public class CharacterSaveData : IReferenceData
         clothes = character.Equip.clothes;
         shoe = character.Equip.shoes;
         gender = character.characterData.gender;
+        hp = character.CharacterProperty.HP;
+        mp = character.CharacterProperty.MP;
+        power = character.CharacterProperty.Power;
     }
 }
 

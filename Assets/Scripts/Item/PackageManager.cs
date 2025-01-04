@@ -473,7 +473,30 @@ public class PackageManager : Singleton<PackageManager>
         Character receiveCharacter = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter);
         if (receiveCharacter != null)
         {
-           await SetItemInPackage(new Item(giveGift.giftId, 1), receiveCharacter.characterPackage);
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(giveGift.giftId);
+            if (itemData.useEventId != 0)
+            {
+                List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
+                {
+                   new EventReferenceData
+                   {
+                       name="CharacterId",
+                       valueType=ReferenceValueType.Int,
+                       value=giveGift.receiveCharacter
+                   },
+                   new EventReferenceData
+                   {
+                       name="SelectItem",
+                       valueType=ReferenceValueType.Int,
+                       value=giveGift.giftId
+                   }, 
+                };
+                GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
+            }
+            else
+            {
+                await SetItemInPackage(new Item(giveGift.giftId, 1), receiveCharacter.characterPackage);
+            } 
         }
         Character giveCharacter = CharacterManager.instance.GetCharacter(giveGift.giveCharacter);
         if (giveCharacter != null)

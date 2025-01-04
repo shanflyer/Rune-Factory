@@ -769,7 +769,17 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         int characterId = playerSleep.characterId;
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == characterId;
-
+        if (isController)
+        {
+            UIManager.instance.ShowGamePanel<SleepMaskPanel>();
+        }
+        else
+        {
+           if( NPCManager.instance.GetNPC(characterId,out var npc))
+            {
+                npc.SetSleep(true);
+            }
+        }
         void WakeUp()
         {
            // Debug.Log($"characterId:{characterId}");
@@ -812,6 +822,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 changeValue = (int)(character.CharacterProperty.MaxPower * 0.1667f * sleepHour)//六小时睡满体力
             };
             GameActionManager.instance.QueueAction(changeCharacterProperty, true);
+
+            if (NPCManager.instance.GetNPC(characterId, out var npc))
+            {
+                npc.SetSleep(false);
+            }
 
             GameTimerController.instance.DelayAction(1200,
                 () =>

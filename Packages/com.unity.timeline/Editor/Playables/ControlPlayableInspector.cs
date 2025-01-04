@@ -17,6 +17,7 @@ namespace UnityEditor.Timeline
             public static readonly GUIContent prefabContent = L10n.TextContent("Prefab", "A prefab to instantiate as a child object of the source game object");
             public static readonly GUIContent targetParentContent = L10n.TextContent("targetParent", "测试用目标父节点");
             public static readonly GUIContent targets = L10n.TextContent("targets", "目标");
+            public static readonly GUIContent scale = L10n.TextContent("scale", "缩放");
             public static readonly GUIContent muliPlayable = L10n.TextContent("muliPlayable", "是否创建多个特效");
             public static readonly GUIContent matchDatas = L10n.TextContent("matchDatas", "匹配条件");
             public static readonly GUIContent advancedContent = L10n.TextContent("Advanced");
@@ -35,6 +36,7 @@ namespace UnityEditor.Timeline
         SerializedProperty m_TargetParent;
         SerializedProperty m_muliPlayable;
         SerializedProperty m_targets;
+        SerializedProperty m_scale;
         SerializedProperty m_UpdateParticle;
         SerializedProperty m_UpdateDirector;
         SerializedProperty m_UpdateITimeControl;
@@ -74,6 +76,7 @@ namespace UnityEditor.Timeline
             m_PrefabObject = serializedObject.FindProperty("prefabGameObject");
             m_TargetParent = serializedObject.FindProperty("targetParent");
             m_targets = serializedObject.FindProperty("targets");
+            m_scale = serializedObject.FindProperty("scale");
             m_muliPlayable = serializedObject.FindProperty("muliPlayable");
 
             m_UpdateParticle = serializedObject.FindProperty("updateParticle");
@@ -138,6 +141,7 @@ namespace UnityEditor.Timeline
 
             EditorGUILayout.PropertyField(m_TargetParent, Styles.targetParentContent);
             EditorGUILayout.PropertyField(m_targets, Styles.targets);
+            EditorGUILayout.PropertyField(m_scale, Styles.scale);
             using (new EditorGUI.DisabledScope(selfControlled))
             {
                 EditorGUILayout.PropertyField(m_UseActivation, selfControlled ? Styles.activationDisabledContent : Styles.activationContent);

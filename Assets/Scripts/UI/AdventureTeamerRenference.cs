@@ -31,13 +31,14 @@ public class AdventureTeamerRenference : UIObjReference<FighterResult>
         base.SetPanelUISerializeObj();
     }
 
+    static Vector2 iconSize = new Vector2(48, 48);
     public override async Task InitData(FighterResult t, SelectAction<FighterResult> SelectAction = null, ToggleGroup toggleGroup = null)
     {
        await base.InitData(t, SelectAction, toggleGroup);
 
         this.LevelUp.localScale = data.levelUp ? Vector3.one : Vector3.zero;
         this.SkillUp.localScale = data.skillUp ? Vector3.one : Vector3.zero;
-        data.Character.characterData.head.SetImageSprite(Icon);
+        data.Character.characterData.head.SetImageSprite(Icon, iconSize);
         //Icon.sprite = data.Character.characterData.icon.sprite;
         if (data.Character != CharacterManager.instance.controllerCharacter)
         {

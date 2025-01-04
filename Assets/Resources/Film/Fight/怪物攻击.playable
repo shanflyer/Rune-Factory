@@ -222,7 +222,8 @@ MonoBehaviour:
   directorOnClipEnd: 0
   rot: 0
   rotAngle: 0
-  initOffset: {x: 0, y: 0.3, z: 0}
+  initOffset: {x: 0, y: 0.3, z: -0.3}
+  scale: {x: 1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
@@ -828,6 +829,7 @@ MonoBehaviour:
   rot: 0
   rotAngle: 0
   initOffset: {x: 0, y: 0.3, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
@@ -932,7 +934,8 @@ MonoBehaviour:
   directorOnClipEnd: 0
   rot: 0
   rotAngle: 0
-  initOffset: {x: 0, y: 0.3, z: 0}
+  initOffset: {x: 0, y: 0.3, z: -0.3}
+  scale: {x: 1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
@@ -1099,7 +1102,7 @@ MonoBehaviour:
     m_Objects: []
   matchDatas:
   - key: AttackType
-    value: 4
+    value: 5
 --- !u!114 &-3027879469635745898
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1166,7 +1169,8 @@ MonoBehaviour:
   directorOnClipEnd: 0
   rot: 0
   rotAngle: 0
-  initOffset: {x: 0, y: 0.3, z: 0}
+  initOffset: {x: 0, y: 0.3, z: -0.3}
+  scale: {x: 1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
@@ -1305,7 +1309,8 @@ MonoBehaviour:
   directorOnClipEnd: 0
   rot: 0
   rotAngle: 0
-  initOffset: {x: 0, y: 0.3, z: 0}
+  initOffset: {x: 0, y: 0.3, z: -0.3}
+  scale: {x: -1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
@@ -1545,7 +1550,8 @@ MonoBehaviour:
   directorOnClipEnd: 0
   rot: 0
   rotAngle: 0
-  initOffset: {x: 0, y: 0.3, z: 0}
+  initOffset: {x: 0, y: 0.3, z: -0.3}
+  scale: {x: -1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
@@ -1602,18 +1608,18 @@ MonoBehaviour:
       value: 0
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 0
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1897,7 +1903,8 @@ MonoBehaviour:
   directorOnClipEnd: 0
   rot: 0
   rotAngle: 0
-  initOffset: {x: 0, y: 0.3, z: 0}
+  initOffset: {x: 0, y: 0.3, z: -0.3}
+  scale: {x: -1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
@@ -2490,7 +2497,7 @@ MonoBehaviour:
     m_Objects: []
   matchDatas:
   - key: AttackType
-    value: 4
+    value: 5
   m_TrackProperties:
     volume: 1
     stereoPan: 0

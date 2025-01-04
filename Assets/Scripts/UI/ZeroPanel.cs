@@ -71,8 +71,12 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
         base.Close();
     }
-
-    
+    [SerializeField]
+    private AudioClip startBGM;
+    public void PlayZeroBGM()
+    {
+        AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, Group: BGMGroup.Theme.ToString()); 
+    }
 
     private void ClickStart()
     {
@@ -120,6 +124,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     {
         selectPanel.localScale = Vector3.zero;
         start.transform.localScale = Vector3.one;
+        PlayZeroBGM();
         return base.InitData(dataKay);
     }
 }

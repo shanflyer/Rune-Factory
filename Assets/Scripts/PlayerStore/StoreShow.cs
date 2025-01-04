@@ -21,7 +21,7 @@ public class StoreShow:Singleton<StoreShow>
         Animation animation = coinRuntimeObj.obj as Animation;
         animation.transform.position = ShowCoin.pos;
         animation.Play();
-         
+        AudioController.instance.PlayAudio(SE.coinitem_acquired01);
         GameTimerController.instance.DelayAction(GameCommon.storeCoinTime, () =>
         {
             GameRuntimeObjManager.instance.RecycleRuntimeObj(coinRuntimeObj);

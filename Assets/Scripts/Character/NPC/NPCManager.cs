@@ -301,6 +301,12 @@ public class NPC : IReferenceData
     public bool isActive;
 
     private int resetDay = 0;
+
+    public bool isSleep { get; private set; }
+    public void SetSleep(bool isSleep)
+    {
+        this.isSleep = isSleep;
+    }
     public void Rest()
     {
         npcState = NPCState.修养中;
@@ -383,7 +389,11 @@ public class NPC : IReferenceData
         likeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.likeItem);
         unLikeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.unLikeItem);
 
-        SetNPCTaskScheduleTimeList(NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
+        if (NPCBehaviorData.externalBehavior != null)
+        {
+            SetNPCTaskScheduleTimeList(NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
+        }
+       
         visitMaps.Clear();
         InitNowVisitMap();
         visitFriends.Clear();
@@ -618,6 +628,10 @@ public class NPC : IReferenceData
 
     public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
     {
+        if (NPCBehaviorData==null||NPCBehaviorData.externalBehavior == null)
+        {
+            return false;
+        }
         if (endBehavior || behaviorCanBreak)
         { 
             var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out behaviorCanBreak, out var pauseWhenDisabled);
@@ -631,7 +645,11 @@ public class NPC : IReferenceData
     }
     public void BackHome()
     {
-        AddNpcBehavior(CharacterBehaviorManager.instance.backHomeExternalBehavior);
+        if (NPCBehaviorData != null && NPCBehaviorData.externalBehavior != null)
+        {
+            AddNpcBehavior(CharacterBehaviorManager.instance.backHomeExternalBehavior);
+        }
+            
     }
     public void AddNpcBehavior(ExternalBehavior externalBehavior,bool PauseWhenDisabled = false)
     {

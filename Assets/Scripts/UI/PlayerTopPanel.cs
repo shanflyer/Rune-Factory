@@ -132,7 +132,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         goldValue.text = PayManager.instance.NowGold.ToString();
         crystalValue.text = PayManager.instance.NowDiamond.ToString();
 
-        PlayerName.text = CharacterManager.instance.controllerCharacter.name;
+        PlayerName.text = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
         var headSprite = CharacterManager.instance.controllerCharacter.characterData.head;
         headSprite.SetImageSprite(PlayerHead);
         PlayerHead.SetNativeSize();

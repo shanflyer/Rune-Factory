@@ -778,6 +778,13 @@ public struct SetItemAnimation : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        if (parameters.Count >= 4)
+        {
+            mapId = int.Parse(parameters[0].value);
+            editorId = int.Parse(parameters[1].value);
+            keyX = int.Parse(parameters[2].value);
+            keyY = int.Parse(parameters[3].value);
+        }else
         if (parameters.Count >= 3)
         {
             id = int.Parse(parameters[0].value);

@@ -324,7 +324,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                UserGameSaveData.playerData = new CharacterSaveData(characters[i]);
+                UserGameSaveData.playerData.SetCharacter(characters[i], UserGameSaveData.playerData.name); 
             }
         }
         //玩家数据

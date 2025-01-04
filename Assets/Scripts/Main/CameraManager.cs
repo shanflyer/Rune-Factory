@@ -283,11 +283,20 @@ public class CameraManager : Singleton<CameraManager>
     MyDic<int,Renderer> TestRenderers = new MyDic<int, Renderer>();
     protected override void LateUpData()
     {
-        base.LateUpData(); 
-        if (!fixedPlayerShaderPos&&mixingCamera.Weight3 == 1)
+        base.LateUpData();
+        if (!fixedPlayerShaderPos)
         {
-            Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
+            if (mixingCamera.Weight3 == 1)
+            {
+                Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
+            }
+            else if (CharacterManager.instance.ControllerRuntimeObj != null)
+            {
+
+                Shader.SetGlobalVector("_PlayerPos", CharacterManager.instance.ControllerRuntimeObj.transform.position);
+            }
         }
+        
          
         var planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
         for(int i = 0; i < TestRenderers.length; i++)

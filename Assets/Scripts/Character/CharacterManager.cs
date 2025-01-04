@@ -78,8 +78,7 @@ public class CharacterManager : Singleton<CharacterManager>
             //transform.position = pos;
 
             if (controller || character == controllerCharacter)
-            {
-                SetShaderPlayerPos(characterRuntimeObj.transform.position);
+            { 
                 CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
                 ControllerRuntimeObj = characterRuntimeObj;
                 if (!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
@@ -871,10 +870,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     Vector2 pos = GameCommon.GetMapPos(character.coordinate); 
                     characterRuntimeObj.SetPosition(pos);
-                    if (character == controllerCharacter)
-                    {
-                        SetShaderPlayerPos(pos);
-                    }
+                    
                     if (refreshDirection)
                     {
                         characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
@@ -900,21 +896,10 @@ public class CharacterManager : Singleton<CharacterManager>
             SetCharacterAnimationSpeed(1, characterRuntimeObj);
             characterRuntimeObj.SetPosition(targetPos);
            // transform.position = pos;
-            if (character == controllerCharacter)
-            {
-                SetShaderPlayerPos(pos);
-            }
+           
         }
     }
-    public static void SetShaderPlayerPos(Vector3 pos)
-    {
-       // Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
-       // float ScreenWidth = Screen.width;
-     //  float ScreenHeight = Screen.height;
-        //Vector2 PlayerPos = new Vector4(screenPos.x / ScreenWidth, screenPos.y / ScreenHeight);
-       // Debug.Log($"PlayerPos:{PlayerPos}");
-        Shader.SetGlobalVector("_PlayerPos", pos);
-    }
+
 
     public void MoveCharacterObj(Character character, float2 moveValue, ref int2 coordinate)
     {
@@ -1073,11 +1058,7 @@ public class CharacterManager : Singleton<CharacterManager>
                          var transform = runtimeObj.transform;
                          if (transform)
                          {
-                             runtimeObj.SetPosition(pos); 
-                             if (character == controllerCharacter)
-                             {
-                                 SetShaderPlayerPos(pos);
-                             }
+                             runtimeObj.SetPosition(pos);  
                              //transform.Translate(Vector3.zero);
                          }
                      }
@@ -1188,8 +1169,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
                         {
                             Vector2 pos = characterRuntimeObj.transform.position;
-                            characterRuntimeObj.SetPosition(pos);
-                            SetShaderPlayerPos(pos);
+                            characterRuntimeObj.SetPosition(pos); 
                             characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
                         }
                         character.canMove = true;
@@ -1364,8 +1344,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 pos.z = oldPos.z;
                 characterRuntimeObj.SetPosition(pos);
                 if (controller)
-                {
-                    SetShaderPlayerPos(pos);
+                { 
                     CameraManager.instance.SetFollowTarget(transform);
                 }
                 RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
@@ -1647,9 +1626,8 @@ public class CharacterManager : Singleton<CharacterManager>
                         length = length
                     };
                     GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
-                    ControllerRuntimeObj.SetPosition(new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z));
-                    SetShaderPlayerPos(targetPos);
-
+                    ControllerRuntimeObj.SetPosition(new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z)); 
+                    Debug.Log("SetShaderPlayerPos7");
 
                     if (controllerCharacter.coordinate.x != targetCoordinate.x ||
                     controllerCharacter.coordinate.y != targetCoordinate.y)

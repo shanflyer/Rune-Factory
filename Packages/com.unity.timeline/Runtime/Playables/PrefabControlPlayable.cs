@@ -15,6 +15,7 @@ namespace UnityEngine.Timeline
         private bool m_IsActiveCached;
 #endif
         public Vector3 initOffset;
+        public Vector3 scale = Vector3.one;
         public AnimationCurve offsetXCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
         public AnimationCurve offsetYCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
         public AnimationCurve angleZCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
@@ -134,7 +135,7 @@ namespace UnityEngine.Timeline
 
             float angle = angleZCurve.Evaluate((float)timeValue);
             m_Instance.transform.localPosition = new Vector3(offestX, offestY) + initOffset;
-
+            m_Instance.transform.localScale = scale;
 
             if (rot)
             {

@@ -166,7 +166,7 @@ public class InputManager :Singleton<InputManager>
         playerInput.defaultActionMap =PlayerActionMap;
 
         //AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
-        AddInputActionDelegate(MyInputNameData.Other_Pointer, ShowPointerEffect);
+        //AddInputActionDelegate(MyInputNameData.Other_Pointer, ShowPointerEffect);
 
         
     }

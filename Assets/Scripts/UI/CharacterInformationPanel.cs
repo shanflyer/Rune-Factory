@@ -299,7 +299,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         if (characterId == CharacterManager.instance.controllerCharacter.instanceId)
         {
-            CharacterName.text=v.name;
+            CharacterName.text=GameDataSaveManager.instance.UserGameSaveData.playerData.name;
             Friendship.localScale = Vector3.zero;
         }
         else

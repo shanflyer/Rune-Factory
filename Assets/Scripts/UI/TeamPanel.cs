@@ -96,24 +96,35 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     {
         if(PastureManager.instance.GetAnimal(SelectCharacterId,out var animal))
         {
-            GameManager.instance.ShowTwoSelectAction("移除队伍", "该动物没有分配牧场，移除后将消失，是否确定移除？", () =>
-            { 
+            if (animal.pasture == 0)
+            {
+                GameManager.instance.ShowTwoSelectAction("移除队伍", "该动物没有分配牧场，移除后将消失，是否确定移除？", () =>
+                {
+                    LeaveTeam leaveTeam = new LeaveTeam
+                    {
+                        teamCharacterId = SelectCharacterId,
+                    };
+                    GameActionManager.instance.QueueAction(leaveTeam);
+                }, null);
+            }
+            else
+            {
                 LeaveTeam leaveTeam = new LeaveTeam
                 {
-                    teamCharacterId = SelectCharacterId, 
+                    teamCharacterId = SelectCharacterId,
                 };
-                GameActionManager.instance.QueueAction(leaveTeam); 
-            },null);
+                GameActionManager.instance.QueueAction(leaveTeam);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("动物已经回到牧场"), true, true);
+            } 
         }
         else
         {
-
             LeaveTeam leaveTeam = new LeaveTeam
             {
-                teamCharacterId = SelectCharacterId, 
+                teamCharacterId = SelectCharacterId,
             };
             GameActionManager.instance.QueueAction(leaveTeam);
-            InformationController.instance.AddInformation(LanguageManage.SwitchStr("动物已经回到牧场"), true, true);
+
         } 
         
     }

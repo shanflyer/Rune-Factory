@@ -114,10 +114,7 @@ namespace UnityEngine.UI
       
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            if (HideSelected)
-            {
-                return;
-            }
+           
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
@@ -125,13 +122,11 @@ namespace UnityEngine.UI
         }
         protected override void OnEnable()
         {
-            base.OnEnable();
-            HideSelected = false;
+            base.OnEnable(); 
         }
         public void OnPointerClick()
         {
-            Press();
-            HideSelected = true;
+            Press(); 
         }
         /// <summary>
         /// Call all registered ISubmitHandler.

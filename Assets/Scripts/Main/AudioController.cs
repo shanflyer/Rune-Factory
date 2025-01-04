@@ -91,7 +91,13 @@ public class AudioController : Singleton<AudioController>
         value = (value + 40) * 0.025f;
         PlayerPrefs.SetFloat("SEVolume", value);
     }
+    [SerializeField]
+    AudioSource bgmAudioSource, bgsAudioSource, meAudioSource, seAudioSource;
 
+    public void SetBgmAudioSourceVolume(float value)
+    {
+        bgmAudioSource.volume = value;
+    }
     public void SetAudioSource(GameObject audioObj)
     {
         var BGM = audioObj.transform.Find("BGM");
@@ -101,7 +107,7 @@ public class AudioController : Singleton<AudioController>
 
         if (BGM)
         {
-            var bgmAudioSource = BGM.GetComponent<AudioSource>();
+            bgmAudioSource = BGM.GetComponent<AudioSource>();
             bgmGraph = PlayableGraph.Create("BGM");
             bgmOut = AudioPlayableOutput.Create(bgmGraph, "BGM", bgmAudioSource);
             bgmMixer = AudioMixerPlayable.Create(bgmGraph);
@@ -109,7 +115,7 @@ public class AudioController : Singleton<AudioController>
         }
         if (BGS)
         {
-            var bgsAudioSource = BGS.GetComponent<AudioSource>();
+            bgsAudioSource = BGS.GetComponent<AudioSource>();
             bgsGraph = PlayableGraph.Create("BGS");
             bgsOut = AudioPlayableOutput.Create(bgsGraph, "BGS", bgsAudioSource);
             bgsMixer = AudioMixerPlayable.Create(bgsGraph);
@@ -118,7 +124,7 @@ public class AudioController : Singleton<AudioController>
 
         if (ME)
         {
-            var meAudioSource = ME.GetComponent<AudioSource>();
+             meAudioSource = ME.GetComponent<AudioSource>();
             meGraph = PlayableGraph.Create("ME");
             meOut = AudioPlayableOutput.Create(meGraph, "ME", meAudioSource);
             meMixer = AudioMixerPlayable.Create(meGraph);
@@ -126,7 +132,7 @@ public class AudioController : Singleton<AudioController>
         }
         if (SE)
         {
-            var seAudioSource = SE.GetComponent<AudioSource>();
+             seAudioSource = SE.GetComponent<AudioSource>();
             seGraph = PlayableGraph.Create("SE");
             seOut = AudioPlayableOutput.Create(seGraph, "SE", seAudioSource);
             seMixer = AudioMixerPlayable.Create(seGraph);
@@ -418,6 +424,8 @@ public class AudioController : Singleton<AudioController>
     }
 
     Dictionary<PlayableGraph, IEnumerator> lerpIEnumeratorDic = new Dictionary<PlayableGraph, IEnumerator>();
+
+   
     private void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, AudioClip audioClip, bool loop = false,
         AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
@@ -681,7 +689,7 @@ public class AudioController : Singleton<AudioController>
         {
             while (oldEnumerator.MoveNext()) { } 
         }
-        lerpAudioIEnumeratorDic.Add(playableGraph, enumerator);
+        lerpAudioIEnumeratorDic[playableGraph]= enumerator;
     }
     void TryEndLerpAudioIEnumerator(PlayableGraph playableGraph)
     {
@@ -1066,7 +1074,7 @@ public class AudioController : Singleton<AudioController>
     {
         bgsGraph.Stop();
     }
-
+    
     public void SetMasterVolume(float volume)    // 控制主音量的函数
     {
         audioMixer.SetFloat("MasterVolume", -40 + 40 * volume);

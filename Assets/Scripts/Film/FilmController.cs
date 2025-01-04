@@ -215,15 +215,12 @@ public class FilmController : Singleton<FilmController>
                 playableDirector.stopped += (PlayableDirector) => 
                 {
                     if (!SingletonType.Cleared)
-                    { 
-                        if (filmData.stopTimeRun)
+                    {
+                        TimeRun timeRun = new TimeRun
                         {
-                            TimeRun timeRun = new TimeRun
-                            {
-                                run = true,
-                            };
-                            GameActionManager.instance.QueueAction(timeRun);
-                        }
+                            run = true,
+                        };
+                        GameActionManager.instance.QueueAction(timeRun);
                         if (UIManager.instance != null)
                             UIManager.instance.SetFilmUI(false);
                          

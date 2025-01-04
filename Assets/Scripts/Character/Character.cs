@@ -619,7 +619,7 @@ public partial class Character
             SetEquip(ItemType.鞋子, saveData.shoe);
             SetEquip(ItemType.帽子, saveData.headgear);
             characterPackage = packageInstancId;
-
+            SetProperty(saveData.hp, saveData.mp, saveData.power);
             RefreshShortcut refreshShortcut = new RefreshShortcut
             {
                 packageId = packageInstancId,
@@ -1129,13 +1129,27 @@ public partial class Character
             {
                 if (absX <= range && absY <= range)
                 {
-                    RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                    if(NPCManager.instance.GetNPC(character.instanceId,out var npc)&&npc.isSleep)
                     {
-                        characterId = character.instanceId,
-                        join = true
-                    };
-                    GameActionManager.instance.QueueAction(refreshOperateCharacter);
-                    NeighborhoodCharacters.Add(character.instanceId);
+                        RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                        {
+                            characterId = character.instanceId,
+                            join = false
+                        };
+                        GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                        NeighborhoodCharacters.Remove(character.instanceId);
+                    }
+                    else
+                    {
+                        RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
+                        {
+                            characterId = character.instanceId,
+                            join = true
+                        };
+                        GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                        NeighborhoodCharacters.Add(character.instanceId);
+                    }
+                  
                 }
             }
         }
@@ -1148,6 +1162,18 @@ public partial class Character
         var NeighborhoodCharacters1 = MapCellController.instance.GetCharacters(objCoordinate);
         NeighborhoodCharacters1.Remove(instanceId);
         NeighborhoodCharacters1.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
+        HashSet<int> sleepCharacters = new HashSet<int>();
+        foreach(var id in NeighborhoodCharacters1)
+        {
+            if(NPCManager.instance.GetNPC(id,out var npc))
+            {
+                if (npc.isSleep)
+                {
+                    sleepCharacters.Remove(id);
+                }
+            }
+        }
+        NeighborhoodCharacters1.ExceptWith(sleepCharacters);
         if (NeighborhoodCharacters1 == null)
         {
             refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters;

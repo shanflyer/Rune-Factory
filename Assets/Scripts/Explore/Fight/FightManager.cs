@@ -116,6 +116,16 @@ public class FightManager : Singleton<FightManager>
     }
     private void ExploreEnd(ExploreEnd exploreEnd)
     { 
+        for(int i = 0; i < fightPlayers.Count; i++)
+        { 
+            ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
+            {
+                characterId = fightPlayers[i],
+                changeValue = 1,
+                propertyType = CharacterPropertyType.生命
+            };
+            GameActionManager.instance.QueueAction(changeCharacterProperty);
+        }
         ClearCharacter();
         GetItemIndexs.Clear();
         fightResult.fighterResults.Clear();
@@ -237,18 +247,39 @@ public class FightManager : Singleton<FightManager>
                       else
                       {
                           fightCharacters.Remove(characterDeath.characterId);
-                      }
-                       
-                      FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
-                      GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
+                      } 
                   }
                   else if (fightPlayers.Contains(characterDeath.characterId))
-                  {
+                  { 
                       var fightCharacter = fightCharacters[characterDeath.characterId];
                       fightCharacter.DeathAction();
-                      //fightPlayers.Remove(characterDeath.characterId);
-                      fightCharacter.fightCharacterStaues = FightCharacterStaues.濒死;
+                      fightPlayers.Remove(characterDeath.characterId);
+                      fightCharacters.Remove(characterDeath.characterId);
+                      if (PastureManager.instance.CheckAnimal(characterDeath.characterId))
+                      {
+                          
+                          FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
+
+                          LeaveTeam leaveTeam = new LeaveTeam
+                          {
+                              teamCharacterId = characterDeath.characterId
+                          };
+                          GameActionManager.instance.QueueAction(leaveTeam);
+
+                          TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
+                          {
+                              animalId = characterDeath.characterId
+                          };
+                          GameActionManager.instance.QueueAction(tryDeleteAnimal);
+                          
+                      }
+                      else
+                      {
+                          fightCharacter.fightCharacterStaues = FightCharacterStaues.濒死;
+                      } 
                   }
+                  FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
+                  GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
               });
 
         MonsterDeathDrop(characterDeath.characterId);

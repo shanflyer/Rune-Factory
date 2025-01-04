@@ -54,6 +54,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
                     assetName = "SelectMeal",
                 };
                 GameActionManager.instance.QueueAction(playFilm);
+                RefreshName();
             }
         });
         FemealSelect.onValueChanged.AddListener((bool value) =>
@@ -67,6 +68,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
                     assetName = "SelectFeMeal",
                 };
                 GameActionManager.instance.QueueAction(playFilm);
+                RefreshName();
             }
         });
 
@@ -96,7 +98,8 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         Return.onClick.AddListener(async () =>
         { 
             Close();
-           await UIManager.instance.ShowGamePanel<ZeroPanel>();
+           var zeroPanel= await UIManager.instance.ShowGamePanel<ZeroPanel>(); 
+            zeroPanel.PlayZeroBGM();
         });
 
         InitData();
@@ -104,6 +107,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     public override Task InitData(string dataKay)
     {
+        AudioController.instance.StopBgm();
         Shader.SetGlobalVector("_PlayerPos", Vector3.zero);
         return base.InitData(dataKay);
     }
@@ -123,14 +127,31 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
     {
         string nameStr = value;
         playerName = nameStr;
-        NameInputField.text = nameStr;
+        userChangeName = true;
     }
 
+    const string boyName = "亚历克斯";
+    const string girlName = "艾丽西亚";
+    void RefreshName()
+    {
+        if (!userChangeName)
+        {
+            if(gender != Gender.female)
+            {
+                playerName = LanguageManage.SwitchStr(boyName);
+            }
+            else
+            {
+                playerName = LanguageManage.SwitchStr(girlName);
+            }
+            NameInputField.SetTextWithoutNotify(playerName);
+        }
+    }
+    bool userChangeName = false;
     private void InitData()
     {
-        AudioController.instance.StopBgm();
-
-        NameInputField.text = LanguageManage.SwitchStr(NameInputField.text);
+      
+        userChangeName = false; 
         foreach (var optionData in SeasonDropdown.options)
         {
             optionData.text = LanguageManage.SwitchStr(optionData.text);
@@ -138,12 +159,11 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
         //DataSaveAndLoadTest.isJsonData = false; 
         gender = Gender.male;
-        playerName = LanguageManage.SwitchStr("亚历克斯");
+        RefreshName();
         brothSeason = Season.春;
         brothDate = 1;
         SeasonDropdown.value = 0;
         DateDropdown.value = 0;
-        NameInputField.text = playerName;
     }
 
     private async void OkButtonAction()

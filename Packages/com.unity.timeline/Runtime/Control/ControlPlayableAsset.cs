@@ -95,6 +95,7 @@ namespace UnityEngine.Timeline
         [SerializeField] public float rotAngle;
 
         [SerializeField] public Vector3 initOffset;
+        [SerializeField] public Vector3 scale = Vector3.one;
 
         [SerializeField] public AnimationCurve offsetXCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
         [SerializeField] public AnimationCurve offsetYCurve = AnimationCurve.Linear(0f, 0f, 1f, 0f);
@@ -194,6 +195,7 @@ namespace UnityEngine.Timeline
 
                     var controlBehaviour = controlPlayable.GetBehaviour();
                     controlBehaviour.initOffset = initOffset;
+                    controlBehaviour.scale = scale;
                     controlBehaviour.offsetXCurve = offsetXCurve;
                     controlBehaviour.offsetYCurve = offsetYCurve;
                     controlBehaviour.angleZCurve = angleZCurve;

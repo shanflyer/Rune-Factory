@@ -225,10 +225,10 @@ public class GameController : MonoBehaviour
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         await UIManager.instance.ShowGamePanel<ZeroPanel>();
-        GameTimerController.instance.DelayAction(500, () => 
+        /*GameTimerController.instance.DelayAction(500, () => 
         {
             AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, Group: BGMGroup.Theme.ToString());
-        });
+        });*/
        
         GameTimeManager.instance.SetTime(12, 0);
         SwitchInputMap switchInputMap = new SwitchInputMap

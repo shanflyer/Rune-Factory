@@ -15,10 +15,6 @@ MonoBehaviour:
   id: 0
   typeName: ActionList
   _parameters:
-  - value: SetCharacterStopCreate
-    parameters:
-    - value: true
-      parameters: []
   - value: LerpScreenCycleValue
     parameters:
     - value: 1
@@ -34,4 +30,30 @@ MonoBehaviour:
   - value: AddPlayerGold
     parameters:
     - value: 120
+      parameters: []
+  - value: DisplayOrHideCharacter
+    parameters:
+    - value: 5
+      parameters: []
+    - value: false
+      parameters: []
+  - value: DisplayOrHideCharacter
+    parameters:
+    - value: 6
+      parameters: []
+    - value: false
+      parameters: []
+  - value: InitMapLink
+    parameters:
+    - value: 759547
+      parameters: []
+  - value: SetItemAnimation
+    parameters:
+    - value: 547
+      parameters: []
+    - value: 1031331
+      parameters: []
+    - value: 1
+      parameters: []
+    - value: 0
       parameters: []

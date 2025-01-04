@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEditor.Rendering.LookDev;
+using System.Threading.Tasks; 
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,8 +61,7 @@ public class UIManager : Singleton<UIManager>
             {
                 while (e.MoveNext())
                 {
-                    if (gamePanels.TryGetValue(e.Current, out var baseReference) &&
-                        baseReference.show)
+                    if (gamePanels.TryGetValue(e.Current, out var baseReference))
                     {
                         baseReference.canvas.enabled = false;
                         if (baseReference.raycaster != null)
@@ -81,11 +79,11 @@ public class UIManager : Singleton<UIManager>
             {
                 while (e.MoveNext())
                 {
-                    if(gamePanels.TryGetValue(e.Current,out var baseReference)&&
-                        baseReference.show)
+                    if (gamePanels.TryGetValue(e.Current, out var baseReference) &&
+                      baseReference.show)
                     {
                         baseReference.canvas.enabled = true;
-                        if(baseReference.raycaster != null)
+                        if (baseReference.raycaster != null)
                         {
                             baseReference.raycaster.enabled = true;
                         }

@@ -115,6 +115,11 @@ public class ExploreManager : Singleton<ExploreManager>
         nowFightMapData=default(FightMapData);
         nowChapter = 0;
         nowStep = 0;
+        SetFixedPlayerShaderPos setFixedPlayerShaderPos = new SetFixedPlayerShaderPos
+        {
+            fixedPos = false
+        };
+        GameActionManager.instance.QueueAction(setFixedPlayerShaderPos);
     }
     private void EnterChapter(EnterChapter enterChapter)
     {
@@ -166,6 +171,7 @@ public class ExploreManager : Singleton<ExploreManager>
 
 
             FightController.instance.CreateFightMap(nowFightMapData);
+            AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All,isLerp:true);
              
             AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 0);
