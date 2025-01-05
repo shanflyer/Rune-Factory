@@ -15,14 +15,21 @@ public class MyList<T>
     public MyList(List<T> values)
     {
         list = new List<T>();
-        list.AddRange(values);
-        length = values.Count;
+        if (values != null)
+        {
+            list.AddRange(values);
+        }
+        
+        length = list.Count;
     }
     public void SetList(List<T> values)
     {
         list.Clear();
-        list.AddRange(values);
-        length = values.Count;
+        if (values != null)
+        {
+            list.AddRange(values);
+        } 
+        length = list.Count;
     }
     public MyList()
     {

@@ -4,7 +4,7 @@ public struct SaveGuideFilmIndexAction : GameAction
 {
     public int id;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -23,7 +23,7 @@ public struct CheckGuideFilmIndex : GameAction
 {
     public int id;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -44,7 +44,7 @@ public struct GameGuideAction : GameAction
 {
     public int guidKey;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -64,7 +64,7 @@ public struct CheckGameGuideAction : GameAction
     public int guidKey;
     public bool isEnd;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {

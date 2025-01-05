@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/GameActionData")]
@@ -22,23 +21,26 @@ public class GameActionData : ScriptableObject, IGameData
     {
         if (GameDataManager.instance.GlobalData.debug)
         {
-            if (name != "440展示随机表情" && name != "ShowEmote"&&name!= "ShowRandomEmote")
+            if (name != "440展示随机表情" && name != "ShowEmote" && name != "ShowRandomEmote")
             {
                 if (name == "34新手进入商店")
                 {
                     Debug.Log($"Match!!!");
                 }
                 string parameterStr = "";
-                for (int i = 0; i < _parameters.Count; i++)
+                if (_parameters != null)
                 {
-                    parameterStr = $"{parameterStr}--{_parameters[i]}";
+                    for (int i = 0; i < _parameters.Count; i++)
+                    {
+                        parameterStr = $"{parameterStr}--{_parameters[i]}";
+                    }
                 }
+               
                 Debug.Log($"Action:{name}--parameters:{parameterStr}");
             }
         }
-        
-      
-        GameActionDataManager.instance.GameAction(typeName, _parameters, source, target, value, setResult, setValue,immediately);
+
+        GameActionDataManager.instance.GameAction(typeName, _parameters, source, target, value, setResult, setValue, immediately);
     }
 
 #if UNITY_EDITOR
@@ -60,14 +62,19 @@ public class Parameter
 {
     public string value;
     public List<Parameter> parameters;
+
     public override string ToString()
     {
         string outStr = value;
         outStr = $"{outStr}-parameters：";
-        for(int i=0;i<parameters.Count;i++)
+        if(parameters != null)
         {
-            outStr = $"{outStr}；{parameters[i]}";
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                outStr = $"{outStr}；{parameters[i]}";
+            }
         }
+       
         return outStr;
     }
 }

@@ -7,7 +7,7 @@ public struct ShowItemResult : GameAction
     public string info;
     public int action;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
@@ -30,7 +30,7 @@ public struct OpenOrCloseInputMap : GameAction
 {
     public bool open;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -50,7 +50,7 @@ public struct SwitchInputMap : GameAction
 {
     public bool UI;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -66,7 +66,7 @@ public struct ClosePanelAction : GameAction
 {
     public Type type;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -81,7 +81,7 @@ public struct ClosePanelAction : GameAction
 public struct OpenPanelAction : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public Type type;
     public string dataId;
 
@@ -109,7 +109,7 @@ public struct HidePanelGroup : GameAction
 {
     public bool hide;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -124,7 +124,7 @@ public struct HideAllPanel : GameAction
 {
     public bool hide; 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -140,7 +140,7 @@ public struct SetFilmUI : GameAction
 {
     public bool display; 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -156,7 +156,7 @@ public struct HidePanel : GameAction
     public bool hide;
     public Type type;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -172,7 +172,7 @@ public struct HidePanels : GameAction
     public bool hide;
     public List<Type> type;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -185,7 +185,7 @@ public struct ShowMultiPackagePanel : GameAction
     public int packageId0, packageId1;
 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {

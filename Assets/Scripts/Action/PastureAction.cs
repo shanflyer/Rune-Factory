@@ -5,7 +5,7 @@ using Unity.Mathematics;
 public struct GetPastureLevel : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int pastureId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
@@ -17,7 +17,7 @@ public struct GetPastureLevel : GameAction
 public struct TryUpPastureLevel : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int pastureId;
     public int itemInstance;
     public int roomId;
@@ -57,7 +57,7 @@ public struct TryUpPastureLevel : GameAction
 public struct TryDeleteAnimal : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int animalId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
@@ -75,7 +75,7 @@ public struct GetAnimalOutFromPasture : GameAction
     public int pastureId;
     public int animalId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -88,7 +88,7 @@ public struct RefreshAnimalPos : GameAction
     public int animalId;
     public bool refreshPos;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -101,7 +101,7 @@ public struct SetAnimalToPasture : GameAction
     public int animalId;
     public bool refreshPos;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -112,7 +112,7 @@ public struct SetAnimalToPasture : GameAction
 public struct TryCreatAnimal : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int roomId;
     public int2 coordinate;
     public int dataId;
@@ -128,7 +128,7 @@ public struct AnimalCostFood : GameAction
     public int pastureId;
     public int animalDataId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -158,7 +158,7 @@ public struct TryGetAnimalFoodFromPasture : GameAction
     public int pastureId;
     public Item item;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public async void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -193,7 +193,7 @@ public struct TryGetAnimalFoodFromPasture : GameAction
 public struct TrySetAnimalFoodToPasture : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int pastureId;
     public Item item;
 
@@ -232,7 +232,7 @@ public struct TryGetItemFromPastureBox : GameAction
     public int pastureId;
     public Item item;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public async void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -270,7 +270,7 @@ public struct TrySetItemToPastureBox : GameAction
     public int itemId;
     public int itemCount;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -306,7 +306,7 @@ public struct SetPastureIndex : GameAction
     public int pastureId;
     public int index;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -339,7 +339,7 @@ public struct LinkPasturePackage : GameAction
     public int foodPackage, waterPackage, productPackage;
     
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -371,7 +371,7 @@ public struct TryCreatPasture : GameAction
     public int dataId;
     public string pastureName;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -409,7 +409,7 @@ public struct TryDeletePasture : GameAction
 {
     public int instanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -430,7 +430,7 @@ public struct RefreshPasture : GameAction
 {
     public int instanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {

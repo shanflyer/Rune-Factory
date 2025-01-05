@@ -201,6 +201,7 @@
     <Compile Include="Assets\Scripts\Behavior\CharacterGroup\GroupCharacterMoveToEachOther.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedMaterial.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetCenter.cs" />
+    <Compile Include="Assets\Scripts\UI\LoadingPanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetFisherToolCoordinateBehavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetIntegerParameter.cs" />
     <Compile Include="Assets\Scripts\Data\GameGuideFilmData.cs" />
@@ -1161,6 +1162,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\Effect\Hovl Studio\RPG VFX Bundle\Shaders\DissolveNoise.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\res\valus-zh\string.xml" />
     <None Include="Assets\Effect\ProFlares\Demos\Scenes\README.txt" />
     <None Include="Assets\Render\Shader\New\NewSampleBlur.shader" />
     <None Include="Assets\Render\Shader\Damp.shader" />
@@ -1226,6 +1228,7 @@
     <None Include="Assets\Effect\Hovl Studio\Archer skills pack\Shaders\Scroll.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster.txt" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\ToonCommonTree2D.shader" />
+    <None Include="Assets\res\values-en\string.xml" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\AlienSun.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\LastSunSet.txt" />
     <None Include="Assets\Effect\Hovl Studio\Black mage spells\Shaders\Fire.shader" />
@@ -2570,6 +2573,10 @@
       <Project>{7E039EEF-B9C4-D931-AC79-002772347D60}</Project>
       <Name>Unity.RenderPipelines.GPUDriven.Runtime</Name>
     </ProjectReference>
+    <ProjectReference Include="LocalizedAppTitle.Runtime.csproj">
+      <Project>{866A3CDD-3137-6964-7E17-D4F49D604685}</Project>
+      <Name>LocalizedAppTitle.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="PPv2URPConverters.csproj">
       <Project>{590CCBFC-B2F4-F8B4-3A13-3E215124C0BE}</Project>
       <Name>PPv2URPConverters</Name>
@@ -2609,6 +2616,10 @@
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{3436EF8F-FC2B-BB74-270B-604E90A574C8}</Project>
       <Name>UnityEditor.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="LocalizedAppTitle.Editor.csproj">
+      <Project>{81829616-6434-7B66-50C1-5365F7EC7B8F}</Project>
+      <Name>LocalizedAppTitle.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="SingularityGroup.HotReload.Runtime.Public.csproj">
       <Project>{741D16C0-49C9-30CB-58D6-88ABA0E9B8E1}</Project>

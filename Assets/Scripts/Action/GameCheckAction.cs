@@ -1,12 +1,37 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using System.Collections.Generic; 
+﻿using System.Collections.Generic;
+
+public struct CheckPlayFishingAction : GameAction
+{
+    public bool isFishing;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Clear()
+    { this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 0)
+        {
+            isFishing = bool.Parse(parameters[0].value);
+        }
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 
 public struct CheckMapEditorItemLinkCharacter : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public int mapId,itemEditorId;
+
+    public void Clear()
+    { this = default; }
+
+    public int mapId, itemEditorId;
     public int characterId;
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 1)
@@ -17,7 +42,7 @@ public struct CheckMapEditorItemLinkCharacter : GameAction
         {
             itemEditorId = int.Parse(parameters[0].value);
         }
-     
+
         if (source > 0)
             mapId = source;
         if (target > 0)
@@ -32,10 +57,15 @@ public struct CheckMapEditorItemLinkCharacter : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct CheckGameTimeDate : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+
+    public void Clear()
+    { this = default; }
+
     public int year, momth, day;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -70,11 +100,15 @@ public struct CheckGameTimeDate : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct CheckIsNotInTeam : GameAction
 {
     public int characterId;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+
+    public void Clear()
+    { this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -83,14 +117,19 @@ public struct CheckIsNotInTeam : GameAction
         if (source != 0)
             characterId = source;
 
-        this.setResult= setResult;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct CheckCharacterPackageFull : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+
+    public void Clear()
+    { this = default; }
+
     public int characterId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -112,6 +151,10 @@ public struct CheckCharacterItemValue : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+
+    public void Clear()
+    { this = default; }
+
     public int characterId;
     public int itemId;
     public int itemValue;
@@ -141,6 +184,10 @@ public struct CheckItemValue : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+
+    public void Clear()
+    { this = default; }
+
     public int packageId;
     public int itemDataId;
     public int itemValue;
@@ -171,6 +218,9 @@ public struct GameCheckAction : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
 
+    public void Clear()
+    { this = default; }
+
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         GameActionManager.instance.QueueAction(this, immediately);
@@ -182,6 +232,9 @@ public struct CheckCharacterTemp : GameAction
     public int characterId;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
+
+    public void Clear()
+    { this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {

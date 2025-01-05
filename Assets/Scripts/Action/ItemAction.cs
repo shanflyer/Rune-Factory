@@ -6,7 +6,7 @@ using UnityEngine.TextCore.Text;
 public struct AddItemValue : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId; 
     public int selectItem;
     public int value;
@@ -25,7 +25,7 @@ public struct AddItemValue : GameAction
 public struct SetItemValue : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId;
     public int selectItem;
     public int value;
@@ -44,7 +44,7 @@ public struct SetItemValue : GameAction
 public struct SetPackageSelectItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public int selectItem;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -55,7 +55,7 @@ public struct SetPackageSelectItem : GameAction
 public struct RefreshShortcut : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -65,7 +65,7 @@ public struct RefreshShortcut : GameAction
 public struct SortShortcutItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int itemId;
     public int index;
 
@@ -90,7 +90,7 @@ public struct SortShortcutItem : GameAction
 public struct RemoveShortcutItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId;
     public int index;
 
@@ -116,7 +116,7 @@ public struct RemoveShortcutItem : GameAction
 public struct SetShortcutItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId; 
     public Item Item;
 }
@@ -126,7 +126,7 @@ public struct SetShortcutItem : GameAction
 public struct RefreshItemValue : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId;
     public int itemId;
     public int itemValue;
@@ -139,7 +139,7 @@ public struct RefreshItemValue : GameAction
 public struct SortPackageItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public int itemId;
     public int index;
@@ -158,7 +158,7 @@ public struct SortPackageItem : GameAction
 public struct OpenPackage : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public string selectActionName;
     public int selectActionId;
@@ -198,7 +198,7 @@ public struct OpenPackage : GameAction
 public struct RemovePlayerPackageItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId;
     public int itemDataId;
     public int itemCount;
@@ -223,7 +223,7 @@ public struct RemovePlayerPackageItem : GameAction
 public struct RemovePackageItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public int itemDataId;
     public int itemCount;
@@ -243,7 +243,7 @@ public struct RemovePackageItem : GameAction
 public struct RemovePackageItemInstance : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public int itemInstanceId; 
 
@@ -260,7 +260,7 @@ public struct RemovePackageItemInstance : GameAction
 public struct ChangePackageInnstance : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int oldInstanceId;
     public int newInstanceId;
 
@@ -286,14 +286,14 @@ public struct ChangePackageInnstance : GameAction
 public struct AddPackageItemList : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public List<int2> items; 
 }
 public struct AddPackageItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public int itemDataId;
     public int itemCount;
@@ -313,7 +313,7 @@ public struct AddPackageItem : GameAction
 public struct CreatPackage : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageDataId;
     public int level;
     public int instanceId;
@@ -355,7 +355,7 @@ public struct RemovePackage : GameAction
 {
     public int packageDataId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
@@ -366,7 +366,7 @@ public struct RemovePackage : GameAction
 public struct CreatRuntimePackage : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public string name;
     public Vector2Int key;
     public int instanceId;
@@ -422,7 +422,7 @@ public struct CreatRuntimePackage : GameAction
 public struct RemoveRuntimePackage : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public Vector2Int key;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
@@ -443,7 +443,7 @@ public struct RemoveRuntimePackage : GameAction
 public struct ItemUseAction : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public int itemInstance;
     public int itemId;

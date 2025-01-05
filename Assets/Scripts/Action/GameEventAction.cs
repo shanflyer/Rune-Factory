@@ -3,7 +3,7 @@
 public struct ResetGameEvent : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int eventId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -23,7 +23,7 @@ public struct ResetGameEvent : GameAction
 public struct RemoveGameEvent : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int eventId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -43,7 +43,7 @@ public struct RemoveGameEvent : GameAction
 public struct SampleGameEvent : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int eventId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)

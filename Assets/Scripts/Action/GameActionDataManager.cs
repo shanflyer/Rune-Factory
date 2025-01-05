@@ -14,6 +14,7 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
        //Debug.Log($"GameAction:{typeName}");
         if (gameActionDataDelegates.TryGetValue(typeName, out var actionInit))
         {
+             (actionInit.Target as GameAction).Clear(); 
             actionInit.Invoke(parameters, source, target, value, setResult, setValue);
         }
         else

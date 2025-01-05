@@ -22,6 +22,7 @@ public class FishingManager : Singleton<FishingManager>
         GameActionManager.instance.AddListener<StopFishing>(StopFishing);
         GameActionManager.instance.AddListener<StartFishing>(StartFishing);
         GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
+        GameActionManager.instance.AddListener<CheckPlayFishingAction>(CheckPlayFishingAction);
     }
 
     protected override void Clear()
@@ -33,6 +34,7 @@ public class FishingManager : Singleton<FishingManager>
             GameActionManager.instance.RemoveListener<StopFishing>(StopFishing);
             GameActionManager.instance.RemoveListener<StartFishing>(StartFishing);
             GameActionManager.instance.RemoveListener<DisplayMap>(DisplayMap);
+            GameActionManager.instance.RemoveListener<CheckPlayFishingAction>(CheckPlayFishingAction);
         }
     }
 
@@ -166,6 +168,14 @@ public class FishingManager : Singleton<FishingManager>
     private Dictionary<int, Action> fishWaitActions = new Dictionary<int, Action>();
     private HashSet<int> fishers = new HashSet<int>();
 
+    private void CheckPlayFishingAction(CheckPlayFishingAction checkPlayFishingAction)
+    {
+        bool playerIsFisher = waitFishers.ContainsKey(CharacterManager.instance.controllerCharacter.instanceId);
+        if (checkPlayFishingAction.setResult != null)
+        {
+            checkPlayFishingAction.setResult(playerIsFisher == checkPlayFishingAction.isFishing);
+        }
+    }
     private void DisplayMap(DisplayMap displayMap)
     {
         foreach (var fisher in fishers)
@@ -192,6 +202,15 @@ public class FishingManager : Singleton<FishingManager>
 
     private void StopFishing(StopFishing stopFishing)
     {
+        if (stopFishing.characterId == CharacterManager.instance.controllerCharacter.instanceId)
+        {
+            ShowMapObjTips showMapObjTips = new ShowMapObjTips
+            {
+                id = CharacterManager.instance.controllerCharacter.OperateItem
+            };
+            GameActionManager.instance.QueueAction(showMapObjTips);
+        }
+       
         UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         int characterId = stopFishing.characterId;
         if (waitFishers.TryGetValue(characterId, out var @delegate))
@@ -203,7 +222,7 @@ public class FishingManager : Singleton<FishingManager>
         {
             GameTimerController.instance.RemoveWaiter(@delegate);
             fishWaitActions.Remove(characterId);
-        }
+        } 
     }
 
     private void StartFishing(StartFishing startFishing)
@@ -225,7 +244,7 @@ public class FishingManager : Singleton<FishingManager>
         if(WorldMapManager.instance.GetRuntimeMapItem(startFishing.mapItemId,out var runtimeMapItem))
         {
             key = new int2(mapId, runtimeMapItem.editorInstanceId);
-
+            /*
             RemoveMapItemOperate removeOperateData = new RemoveMapItemOperate
             {
                 mapItemId = startFishing.mapItemId,
@@ -237,7 +256,7 @@ public class FishingManager : Singleton<FishingManager>
                 mapItemId = startFishing.mapItemId,
                 addeOperateId = GameCommon.GetFish
             };
-            GameActionManager.instance.QueueAction(addOperateData);
+            GameActionManager.instance.QueueAction(addOperateData);*/
             ShowMapObjTips showMapObjTips = new ShowMapObjTips
             {
                 id = startFishing.mapItemId
@@ -335,6 +354,7 @@ public class FishingManager : Singleton<FishingManager>
                 GameActionManager.instance.QueueAction(creatFisher);
             }
         }
+         
     }
 
 

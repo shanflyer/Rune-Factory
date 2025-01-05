@@ -80,16 +80,17 @@ public class MyLight : MonoBehaviour
             if (Application.isPlaying)
                 weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
             
+            float trueValue= blendWeatherLight ? value * weatherLight : value;
             if (myLightBase != null)
             {
                 for (int i = 0; i < myLightBase.Length; i++)
                 {
                     if (myLightBase[i])
                     {
-                        myLightBase[i].Value = blendWeatherLight ? value * weatherLight : value;
+                        myLightBase[i].Value = trueValue;
                     }
                 }
-            }
+            } 
         }
 
          
@@ -125,13 +126,16 @@ public class MyLight : MonoBehaviour
             if (spriteRenderers!=null)
             {
                 
-                Color color1 = _color;
-                float a = _color.a;
+                Color color1 = _color; 
                 color1*= weatherLight;
-                color1.a=a;
-                for(int i = 0; i < spriteRenderers.Length; i++)
+                color1= blendWeatherLight ? color1 : _color;
+                if (!blendWeatherLight)
                 {
-                    spriteRenderers[i].color= blendWeatherLight ? color1 : _color;
+                    color1.a = color1.a * 0.5f;
+                }
+                for (int i = 0; i < spriteRenderers.Length; i++)
+                {
+                    spriteRenderers[i].color= color1;
                 } 
             }
 

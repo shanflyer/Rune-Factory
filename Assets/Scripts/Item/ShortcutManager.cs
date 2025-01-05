@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
+using System.Threading.Tasks; 
 using Unity.Collections; 
 
 public class ShortcutManager : Singleton<ShortcutManager>

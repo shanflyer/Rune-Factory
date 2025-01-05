@@ -34,14 +34,25 @@ public class WorldMapController : MonoBehaviour
         }
         //Init();
         GameActionManager.instance.AddListener<StartWorldInit>(StartWorldInit);
+        GameActionManager.instance.AddListener<LoadMapCompleted>(LoadMapCompleted);
     }
     void StartWorldInit(StartWorldInit startWorldInit)
     {
         Init();
     }
+    void LoadMapCompleted(LoadMapCompleted loadMapCompleted)
+    {
+        GameDataSaveManager.instance.AfterInitMapLoadSaveData();
+        UIManager.instance.CloseGamePanel<LoadingPanel>(); 
+        WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
+    }
     IEnumerator InitIEnumerator()
     {
         var loadGameSaveData= GameDataSaveManager.instance.loadGameSaveData;
+        if (GameGuideManager.instance.endGuideFilmIndex > 0)
+        {
+            UIManager.instance.ShowGamePanel<LoadingPanel>();
+        }
         var teamManager = TeamManager.instance;
         var shortcutManager = ShortcutManager.instance;
         var environmentManger = EnvironmentManger.instance; 
@@ -98,6 +109,7 @@ public class WorldMapController : MonoBehaviour
 
         
         yield return 0;
+       
 
         if(GameGuideManager.instance.endGuideFilmIndex < 0||GameController.instance.startPlay)
         {
@@ -140,9 +152,7 @@ public class WorldMapController : MonoBehaviour
             GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
         }
         yield return 0;
-        GameDataSaveManager.instance.AfterInitMapLoadSaveData();
-        yield return 0;
-        WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
+        
 
         yield return 0;
 

@@ -1404,7 +1404,7 @@ public class MapCellController : Singleton<MapCellController>
             switch (saveValue)
             {
                 case -1:
-                    if (GameController.instance.startPlay&&(mapLine.map0==405||mapLine.map1==405))
+                    if (GameController.instance.startPlay)
                     {
                         isInit = true;
                     }
@@ -1423,7 +1423,7 @@ public class MapCellController : Singleton<MapCellController>
                     isInit = true;
                     break;
             }
-            if (!isInit)
+            if (!isInit&&!GameController.instance.startPlay)
             {
                 continue;
             }

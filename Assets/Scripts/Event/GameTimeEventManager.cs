@@ -6,12 +6,27 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
     private Dictionary<int,GameTimeEvent> newDayTimeEvents=new Dictionary<int, GameTimeEvent>();
 
     private Dictionary<int, GameTimeEvent> wakeUpTimeEvents=new Dictionary<int, GameTimeEvent>();
-    private int newDayActionIndex = 0;
-    private int newWakeUpActionIndex = 0;
+    private int newDayActionIndex
+    {
+        get => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.newDayActionIndex;
+        set
+        {
+            GameDataSaveManager.instance.UserGameSaveData.otherSaveData.newDayActionIndex = value;
+        }
+    }
+    private int newWakeUpActionIndex
+    {
+        get => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.newWakeUpActionIndex;
+        set
+        {
+            GameDataSaveManager.instance.UserGameSaveData.otherSaveData.newWakeUpActionIndex = value;
+        }
+    }
 
     public override async void Init()
     {
-        base.Init();
+        base.Init(); 
+
         newDayTimeEvents.Clear();
         wakeUpTimeEvents.Clear();
         var gameTimeEventDatas = await GameDataManager.instance.GetAllAsyncData<GameTimeEventData>();

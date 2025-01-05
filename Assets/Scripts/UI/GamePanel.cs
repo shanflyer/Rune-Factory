@@ -102,7 +102,15 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         {
             canvas.sortingOrder = layer;
         }
-        gameObject.layer = UILayer;
+        if (canvas.renderMode == RenderMode.WorldSpace)
+        {
+            gameObject.layer =DefaultLayer;
+        }
+        else
+        {
+            gameObject.layer = UILayer;
+        }
+       
 
 
         bool display = UIManager.instance.CheckPanelCanvas(this.GetType());

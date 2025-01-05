@@ -20,7 +20,7 @@ public struct PlayerWakeUp : GameAction
     }
 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 
 public struct PlayerSleep : GameAction
@@ -53,7 +53,7 @@ public struct PlayerSleep : GameAction
     }
 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 public struct TimeRun : GameAction
 {
@@ -65,7 +65,7 @@ public struct TimeRun : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 public struct LerpGameTime : GameAction
 {
@@ -84,13 +84,13 @@ public struct LerpGameTime : GameAction
     }
 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 
 public struct ClearOverrideEnvironment : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -101,7 +101,7 @@ public struct WeatherAction : GameAction
 {
     public int weatherDataId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -111,7 +111,7 @@ public struct WeatherAction : GameAction
 public struct SetSeasonWeather : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -123,14 +123,14 @@ public struct SetFixedTime : GameAction
     public int date;
     public int hour;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 public struct SetFixedSeason : GameAction
 {
     public float season;
     public WeatherDisplayType weatherDisplayType;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 public struct SetMapOverrideEnvironment : GameAction
 {
@@ -139,7 +139,7 @@ public struct SetMapOverrideEnvironment : GameAction
     public string dawnEnvironmentDataName;
     public string nightEnvironmentDataName;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -159,19 +159,19 @@ public struct CreatWeather : GameAction
 {
     public List<int> nowWeathers, nextWeather;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 public struct SetWeather : GameAction
 {
     public Weather weather;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 public struct SetEnvironmentLight : GameAction
 {
     public EnvironmentLightData environmentLightData;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 
 public struct OverrideEnvironmentLight : GameAction
@@ -179,11 +179,11 @@ public struct OverrideEnvironmentLight : GameAction
     public bool overSkyAndSun;
     public EnvironmentLightData environmentLightData;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }
 
 public struct ClearOverrideEnvironmentLight : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }

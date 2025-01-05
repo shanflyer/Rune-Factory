@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEngine.Playables;
 
 public class FarmManager : Singleton<FarmManager>
 {
@@ -110,6 +111,11 @@ public class FarmManager : Singleton<FarmManager>
         }
         else
         {
+            if (fieldSaveData.PlantinstaceId != 0)
+            {
+                field.CreatePlant(fieldSaveData.PlantinstaceId, fieldSaveData.PlantDataId, fieldSaveData.growthHour, fieldSaveData.growthStage,
+                    fieldSaveData.plantState, fieldSaveData.nowCycle, fieldSaveData.isSetWater);
+            }           
             field.SetData(fieldSaveData.fieldState, fieldSaveData.isSetWater, fieldSaveData.waterHour);
         }
     }
@@ -359,9 +365,36 @@ public class Field
         this.isSetWater = isSetWater;
         this.waterHour = waterHour;
         RefreshField();
+    } 
+    public async void CreatePlant(int instanceId,int dataId,int growthHour,int growthStage, PlantState plantState,int nowCycle,bool setWater)
+    {
+        
+        _plant = new Plant
+        {
+            instaceId = instanceId,
+            PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(dataId),
+            growthHour = growthHour,
+            growthStage = growthStage,
+            plantState = plantState,
+            nowCycle = nowCycle,
+            setWater=setWater,
+            field=this.instanceId
+        };
+         
+
+        AddMapItem addMapItem = new AddMapItem
+        {
+            dataId = dataId,
+            coordinate = coordinate,
+            mapId = mapInstance,
+            fixeInstanceId = _plant.instaceId,
+            setResult =(bool result) =>
+            {
+                plant.RefreshPlant();
+            }
+        };
+        GameActionManager.instance.QueueAction(addMapItem, true);
     }
-
-
     public async Task<bool> TrySicklePlant()
     {
         if (plant != null)
@@ -495,8 +528,11 @@ public class Field
         GameDataSaveManager.instance.UserGameSaveData.SetFieldData(this);
     }
     public void NewHour()
-    {
-        waterHour++;
+    { 
+        if (WeatherManager.instance.nowWaterFall <= 0)
+        {
+            waterHour=0;
+        }
         if (waterHour >= 24)
         {
             waterHour = 0;
@@ -594,7 +630,6 @@ public class Field
     public void SetWaterField(bool isNotify=false)
     { 
         waterHour = 0;
-        bool isRefresh = !isSetWater;
         isSetWater = true;
         if (plant != null)
         {
@@ -704,6 +739,7 @@ public class Plant
                 GameActionManager.instance.QueueAction(addMapItemOperate);
             }
         }
+        RefreshPlant();
     }
 
     public async Task<bool> GetPlantFruit()

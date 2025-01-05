@@ -1,6 +1,7 @@
 ﻿using ProFlares;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Android.Gradle.Manifest;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -686,6 +687,13 @@ public class WorldMapManager : Singleton<WorldMapManager>
             fieldId = runtimeMapItem.instanceId
         };
         GameActionManager.instance.QueueAction(refreshField);
+
+        if (mapItem.instanceId != 0)
+        {
+            LoadMapItemAsync(mapId, mapItem.instanceId);
+        }
+      
+       
         return runtimeMapItem.instanceId;
     }
 
@@ -1016,6 +1024,45 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return worldMapData.worldMapDic[id];
     }
 
+
+    Dictionary<int,HashSet<int>> waitMaps = new Dictionary<int, HashSet<int>>();
+    public async Task LoadMapItemAsync(int map,int instanceId)
+    {
+        if (waitMaps.Count == 0)
+        {
+            return;
+        }
+        if(waitMaps.TryGetValue(map,out var ints))
+        {
+            ints.Remove(instanceId);
+            if (ints.Count == 0)
+            {
+                waitMaps.Remove(map);
+            }
+        }
+        if (waitMaps.Count == 0)
+        {
+            var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
+            var datas = mapNpcDataList.datas;
+
+            for (int i = 0; i < datas.Count; i++)
+            {
+                for (int j = 0; j < datas[i].datas.Count; j++)
+                {
+                    if (datas[i].datas[j].initialBegin)
+                    {
+                        await CharacterManager.instance.CreateNpc(datas[i].datas[j]);
+                    }
+                }
+            }
+
+            NPCManager.instance.InitNPCBehavior();
+
+
+            GameActionManager.instance.QueueAction(new LoadMapCompleted());
+        }
+    }
+
     /// <summary>
     /// 初始化世界数据
     /// </summary>
@@ -1026,6 +1073,22 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>(worldName);
         //MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
+        waitMaps.Clear();
+
+
+        foreach (var room in worldMapData.worldMapDic.Values)
+        {
+            if (room.mapRoomData.mapItems.Count > 0)
+            {
+                waitMaps.Add(room.id, new HashSet<int>());
+                for (int i = 0; i < room.mapRoomData.mapItems.Count; i++)
+                {
+                    var item = room.mapRoomData.mapItems[i];
+                    waitMaps[room.id].Add(item.instanceId);
+                }
+            }
+           
+        }
 
         //roomMapDatas.Clear();
         if (displayMap == 0)
@@ -1037,7 +1100,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
          
         foreach (var room in worldMapData.worldMapDic.Values)
-        {
+        { 
             if (room.id != displayMap)
             {
                 await CreatRoomRuntime(room, false, displayMap);
@@ -1045,7 +1108,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         } 
         //生成地图链接
         MapCellController.instance.InitLinkMap(worldMapData.mapLines);
-
+        /*
         GameTimerController.instance.DelayAction(200, async () => {
             var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
             var datas = mapNpcDataList.datas;
@@ -1062,7 +1125,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             }
 
             NPCManager.instance.InitNPCBehavior();
-        }); 
+        }); */
         // return true;
 
         //WorldMapObjManager.instance.DefaultDisplayMap(displayMap);
@@ -1079,7 +1142,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         foreach (var data in MapRoomData.mapItems)
         {
             int itemInstanceId = await AddMapItem(data, room.id);
-            GameDataSaveManager.instance.InitMapItemSaveData(itemInstanceId);
+            GameDataSaveManager.instance.InitMapItemSaveData(itemInstanceId); 
         }
         if (display)
         {
@@ -1192,17 +1255,51 @@ public class RuntimeMapItem : INativeData
 
         if (operateDataLength > 0)
         {
+            HashSet<int> waitCheck=new HashSet<int>();
             foreach (var id in operateDatas)
             {
                 OperateData operateData = await GameDataManager.instance.GetAsyncData<OperateData>(id);
-                operateDataList.OperateDatas.Add(new OperateDataReferenceData
+                if (operateData.checkActionData != null)
                 {
-                    targetItem =instanceId,
-                    operateData = operateData,
-                });
+                    waitCheck.Add(id);
+                    operateData.checkActionData.Action(setResult: (bool value) =>
+                    {
+                        waitCheck.Remove(id);
+                        if (value)
+                        {
+                            operateDataList.OperateDatas.Add(new OperateDataReferenceData
+                            {
+                                targetItem = instanceId,
+                                operateData = operateData,
+                            });
+                        }
+                        if (waitCheck.Count == 0)
+                        {
+                            UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+                        }
+                    }, immediately: true);
+                }
+                else
+                {
+                    operateDataList.OperateDatas.Add(new OperateDataReferenceData
+                    {
+                        targetItem = instanceId,
+                        operateData = operateData,
+                    });
+                }
+               
             }
+            if (waitCheck.Count == 0)
+            {
+                UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+            }
+            
         }
-        UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+        else
+        {
+            UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+        }
+       
     }
     public void ResetOperateData(List<int> newOperates)
     {

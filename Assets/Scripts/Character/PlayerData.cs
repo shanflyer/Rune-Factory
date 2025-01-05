@@ -792,6 +792,8 @@ public class OtherSaveData
     public int gold, diamond;
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
+
+    public int newDayActionIndex, newWakeUpActionIndex;
     public OtherSaveData() { }
     public OtherSaveData(OtherSaveData otherSaveData)
     {
@@ -800,7 +802,9 @@ public class OtherSaveData
         playerPackages = new List<int>();
         playerPackages.AddRange(otherSaveData.playerPackages);
         isMarriedFood = otherSaveData.isMarriedFood;
-        isAnMo = otherSaveData.isAnMo;  
+        isAnMo = otherSaveData.isAnMo;
+        newDayActionIndex = otherSaveData.newDayActionIndex;
+        newWakeUpActionIndex = otherSaveData.newWakeUpActionIndex;
     }
 }
 

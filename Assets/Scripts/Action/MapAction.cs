@@ -7,8 +7,7 @@ public struct SetMapEditorItemLinkCharacter : GameAction
     public int mapItemEditorId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
-
+    public SetResult setResult { get; set; }  public void Clear(){this = default; } 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = int.MinValue,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -44,7 +43,7 @@ public struct SetMapItemLeftCharacter : GameAction
     public int mapItemInstanceId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -75,7 +74,7 @@ public struct SetMapItemRightCharacter : GameAction
     public int mapItemInstanceId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -106,7 +105,7 @@ public struct CheckMapItemLeftCharacter : GameAction
     public int mapItemInstanceId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -138,7 +137,7 @@ public struct CheckMapItemRightCharacter : GameAction
     public int mapItemInstanceId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -169,7 +168,7 @@ public struct RefreshMapTempCharacter : GameAction
 {
     public int characterId; 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -195,7 +194,7 @@ public struct TryLinkMapItemCharacter : GameAction
     public int mapItemInstanceId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -226,7 +225,7 @@ public struct TryRemoveLinkMapItemCharacter : GameAction
     public int mapItemInstanceId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -258,7 +257,7 @@ public struct SetMapItemLinkCharacter : GameAction
     public int mapItemInstanceId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -286,7 +285,7 @@ public struct ChangeMapRoom : GameAction
 {
     public int oldRoom,newRoom;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -315,7 +314,7 @@ public struct ChangeMapItemObjLayer : GameAction
     public int mapItemId;
     public int layerId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -328,7 +327,7 @@ public struct RefreshMapItemDisplay : GameAction
 {
     public RuntimeMapItem runtimeMapItem;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -341,7 +340,7 @@ public struct RefreshMapPackageItemRender : GameAction
 {
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -361,7 +360,7 @@ public struct DeleteMapLink : GameAction
 {
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -381,7 +380,7 @@ public struct InitMapLink : GameAction
 {
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -402,7 +401,7 @@ public struct RemoveMapItemCollider : GameAction
 {
     public int mapItemInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -416,7 +415,7 @@ public struct ReSetMapItemCollider : GameAction
 {
     public int mapItemInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -429,7 +428,7 @@ public struct ReSetMapItemCollider : GameAction
 public struct ZeroWorld : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -442,7 +441,7 @@ public struct TrySetTempMapItem : GameAction
 {
     public int instanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -463,7 +462,7 @@ public struct StopSetTempMapItem : GameAction
 {
     public int instanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -483,7 +482,7 @@ public struct StopSetTempMapItem : GameAction
 public struct CheckTempMapItemSet : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int instanceId;
 }
 public struct CreatControllerTempMapItem : GameAction
@@ -492,7 +491,7 @@ public struct CreatControllerTempMapItem : GameAction
     public int dataId; 
     public int2 coordinate;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
          
@@ -506,7 +505,7 @@ public struct CreatTempMapItem : GameAction
     public int instanceId;
     public int dataId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -538,13 +537,13 @@ public struct CreatTempMapItem : GameAction
 public struct DestoryTempMapItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int instanceId;
 }
 public struct SetTempMapItemCoordinate : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int instanceId;
     public int2 coordinate;
 }
@@ -552,7 +551,7 @@ public struct SetTempMapItemCoordinate : GameAction
 public struct RefreshTempMapItemCoordinate : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int instanceId;
     public int chatacterId;
 }
@@ -560,7 +559,7 @@ public struct RefreshTempMapItemCoordinate : GameAction
 public struct RefreshTempMapItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int instanceId;
 }
 
@@ -568,7 +567,7 @@ public struct TryDeleteRoom : GameAction
 {
     public int roomId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -587,7 +586,7 @@ public struct TryDeleteRoom : GameAction
 public struct TryCreatRoom : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int roomId;
     public string roomName;
     public int eventId;
@@ -611,7 +610,7 @@ public struct CloseMapObjTips : GameAction
 {
     public int id;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -626,7 +625,7 @@ public struct CloseMapObjTips : GameAction
 public struct AddMapItemOperate : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int mapItemId;
     public int addeOperateId;
     public bool needSave;
@@ -660,7 +659,7 @@ public struct AddMapItemOperate : GameAction
 public struct RemoveMapItemOperate : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int mapItemId;
     public int removeOperateId;
     public bool needSave;
@@ -695,7 +694,7 @@ public struct RemoveMapItemOperate : GameAction
 public struct ShowMapObjTips : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int id;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -718,7 +717,7 @@ public struct DisplayMap : GameAction
     public int actionId;
     public bool fixedDisplay;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -750,7 +749,7 @@ public struct ChangeWorld : GameAction
     public string worldName;
     public int displayMap;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -769,15 +768,14 @@ public struct ChangeWorld : GameAction
 public struct SetItemAnimation : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int mapId;
     public int editorId;
     public int id;
     public int keyX;
     public int keyY;
-
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
+    { 
         if (parameters.Count >= 4)
         {
             mapId = int.Parse(parameters[0].value);
@@ -807,7 +805,7 @@ public struct SetItemAnimation : GameAction
 public struct TriggerEnter : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int eventId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -818,12 +816,13 @@ public struct TriggerEnter : GameAction
         }
         GameActionManager.instance.QueueAction(this, immediately);
     }
+
 }
 
 public struct TriggerExit : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int eventId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -843,7 +842,7 @@ public struct DeleteMapItem : GameAction
 
     public bool triggerClear;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -862,7 +861,7 @@ public struct ChangeMapItem : GameAction
     public int newDataId;
     public int2 animationKey;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -890,7 +889,7 @@ public struct AddMapItem : GameAction
     public int instanceId;
     public int fixeInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -912,7 +911,7 @@ public struct AddMapItem : GameAction
 public struct TrySetMapItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int mapItemInstanceId;
     public int mapInstance;
     public int2 coordinate;
@@ -921,14 +920,14 @@ public struct TrySetMapItem : GameAction
 public struct ResetOperateData : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int mapItemInstanceId; 
     public List<int> operates;
 }
 public struct MoveMapItem : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int mapItemInstanceId;
     public int mapInstance;
     public int2 coordinate;
@@ -941,7 +940,7 @@ public struct AttachMapItemData : GameAction
     public int mapItemIntanceId;
 
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -957,7 +956,7 @@ public struct GetMapItemPos : GameAction
 {
     public int mapItemIntanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -984,7 +983,7 @@ public struct ShowEmote : GameAction
     public int emoteId;
     public int showTime;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -1024,7 +1023,7 @@ public struct ShowRandomEmote : GameAction
     public int randomId;
     public int showTime;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {

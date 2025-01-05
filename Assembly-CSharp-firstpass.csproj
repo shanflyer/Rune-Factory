@@ -82,11 +82,9 @@
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogRecycledListView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Plugins\Android\res\valus-zh\string.xml" />
     <None Include="Assets\Plugins\UnityChannel\UnityStore.dll" />
     <None Include="Assets\Plugins\UDP\UDP.dll" />
     <None Include="Assets\Plugins\UnityChannel\ChannelPurchase.dll" />
-    <None Include="Assets\Plugins\Android\res\values-en\string.xml" />
     <None Include="Assets\Plugins\UDP\UdpSupport\AppStoreSettings.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -1392,6 +1390,10 @@
       <Project>{7E039EEF-B9C4-D931-AC79-002772347D60}</Project>
       <Name>Unity.RenderPipelines.GPUDriven.Runtime</Name>
     </ProjectReference>
+    <ProjectReference Include="LocalizedAppTitle.Runtime.csproj">
+      <Project>{866A3CDD-3137-6964-7E17-D4F49D604685}</Project>
+      <Name>LocalizedAppTitle.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="PPv2URPConverters.csproj">
       <Project>{590CCBFC-B2F4-F8B4-3A13-3E215124C0BE}</Project>
       <Name>PPv2URPConverters</Name>
@@ -1431,6 +1433,10 @@
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{3436EF8F-FC2B-BB74-270B-604E90A574C8}</Project>
       <Name>UnityEditor.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="LocalizedAppTitle.Editor.csproj">
+      <Project>{81829616-6434-7B66-50C1-5365F7EC7B8F}</Project>
+      <Name>LocalizedAppTitle.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="SingularityGroup.HotReload.Runtime.Public.csproj">
       <Project>{741D16C0-49C9-30CB-58D6-88ABA0E9B8E1}</Project>

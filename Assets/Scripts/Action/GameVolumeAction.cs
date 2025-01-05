@@ -12,7 +12,7 @@ public struct DisplaySky : GameAction
     public bool displaySunlight;
     public int skyId;
     public Vector2 startPos, endPos;
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 1)
@@ -34,7 +34,7 @@ public struct LerpScreenCycleValue : GameAction
 {
     public float minCycleValue,maxCycleValue,lerpTime;
     public Vector2 cyclePos;
-     public SetValue setValue { get; set; } public SetResult setResult { get; set; }
+     public SetValue setValue { get; set; } public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {

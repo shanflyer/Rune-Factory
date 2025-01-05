@@ -619,8 +619,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
     }
     private GameTime nowGameTime;
     public int timeRunScale = 1;
-#if UNITY_EDITOR
+
     public bool runTime = true;
+#if UNITY_EDITOR
+
 #endif
     public bool night => nowGameTime.night;
     public float timeValue => nowGameTime.TimeValue;

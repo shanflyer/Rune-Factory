@@ -102,11 +102,30 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
                 operateDatas.Add(v.OperateDatas[i]);
             }
             OperateData defaultData = await GameDataManager.instance.GetAsyncData<OperateData>(GameCommon.defaultOperateId);
-            operateDatas.Add(new OperateDataReferenceData
+            if (defaultData.checkActionData != null)
             {
-                operateData = defaultData,
-                targetItem = 0
-            });
+                defaultData.checkActionData.Action(setResult: (bool result) =>
+                {
+                    if (result)
+                    {
+                        operateDatas.Add(new OperateDataReferenceData
+                        {
+                            operateData = defaultData,
+                            targetItem = 0
+                        });
+                    }
+                },immediately: true);
+            }
+            else
+            {
+                operateDatas.Add(new OperateDataReferenceData
+                {
+                    operateData = defaultData,
+                    targetItem = 0
+                });
+            }
+
+            
             OperateList0.InitListData(operateDatas, SelectAction);
         }
     }

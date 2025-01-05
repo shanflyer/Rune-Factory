@@ -7,7 +7,7 @@ public struct SetChapterFight : GameAction
 {
     public bool isInFight;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -17,7 +17,7 @@ public struct SetChapterFight : GameAction
 public struct ManualSkillAction : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; } 
+    public SetResult setResult { get; set; }  public void Clear(){this = default; } 
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     { 
@@ -27,7 +27,7 @@ public struct ManualSkillAction : GameAction
 public struct SkillAutoLock : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public bool autoLock;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -42,7 +42,7 @@ public struct SkillAutoLock : GameAction
 public struct SkillPauseAction : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public bool pause;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -57,7 +57,7 @@ public struct SkillPauseAction : GameAction
 public struct AddBuffAction : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId;
     public int buffDataId;
     public int overrideLifeTime;
@@ -73,7 +73,7 @@ public struct AddBuffAction : GameAction
 public struct NoSelectSkillAction: GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; } 
+    public SetResult setResult { get; set; }  public void Clear(){this = default; } 
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -84,7 +84,7 @@ public struct NoSelectSkillAction: GameAction
 public struct SelectSkillAction : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public SkillRuntime skillRuntime;
     public int ActionCharacter;
 
