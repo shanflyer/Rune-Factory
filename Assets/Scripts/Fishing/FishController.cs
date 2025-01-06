@@ -75,17 +75,6 @@ public class FishController : Singleton<FishController>
     }
     void TryGetFish(TryGetFish tryGetFish)
     {
-        List<int> Operates = new List<int>
-            {
-                GameCommon.StartFish
-            };
-        ResetOperateData resetOperateData = new ResetOperateData
-        {
-            mapItemInstanceId = tryGetFish.itemInstance,
-            operates = Operates
-        };
-        GameActionManager.instance.QueueAction(resetOperateData);
-
         if (Fishers.TryGetValue(tryGetFish.characterInstance,out var fisherRuntime))
         {
             fisherRuntime.fishTool.StopFishing();

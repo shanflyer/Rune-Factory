@@ -320,7 +320,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             if (characters[i].characterData.id != UserGameSaveData.playerData.dataId)
             {
                 CharacterSaveData characterSaveData = new CharacterSaveData(characters[i]);
-                UserGameSaveData.characterSaveDatas.Add(characterSaveData.dataId,characterSaveData);
+                UserGameSaveData.characterSaveDatas[characterSaveData.dataId]=characterSaveData;
             }
             else
             {
