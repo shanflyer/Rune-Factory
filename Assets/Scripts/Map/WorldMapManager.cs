@@ -1,11 +1,9 @@
 ﻿using ProFlares;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class WorldMapManager : Singleton<WorldMapManager>
 {

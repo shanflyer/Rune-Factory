@@ -159,6 +159,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2271658924469025894}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -606,6 +607,7 @@ GameObject:
   - component: {fileID: 8591021054421782068}
   - component: {fileID: 7300855801543700306}
   - component: {fileID: 2070328652233840138}
+  - component: {fileID: 730359591000174364}
   m_Layer: 5
   m_Name: StoreCounterSetPanel
   m_TagString: Untagged
@@ -747,6 +749,29 @@ MonoBehaviour:
   changeItemButton: {fileID: 431570966182199977}
   getItemDownButton: {fileID: 605971212301252230}
   CloseButton: {fileID: 3501366680025668621}
+--- !u!114 &730359591000174364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886739900872356202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 640, y: 1136}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0.5
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!1 &1131037107642019372
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,6 +893,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5356227747442208626}
+  HideSelected: 0
   m_TextViewport: {fileID: 2977825834431470218}
   m_TextComponent: {fileID: 3884460679341652699}
   m_Placeholder: {fileID: 3546140332915450692}
@@ -1739,6 +1765,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1600603274386931555}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -1865,6 +1892,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3984706680487781875}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -2204,6 +2232,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 232213812676202137}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 628806710173843801}
   m_Group: {fileID: 0}
@@ -2430,6 +2459,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 9124593099971466125}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -2711,6 +2741,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1919459985544749679}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3138,6 +3169,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3327763570234905510}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls:

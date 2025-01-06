@@ -19,6 +19,7 @@ Shader "MySprite-Lit-Default"
         _ZWrite("ZWrite", Float) = 0
 
         [Toggle]_Character("Character",int)=0
+        [Toggle]_HideNormal("HideNormal",int)=0
 
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {} 
         _NormalMap("Normal Map", 2D) = "bump" {}
@@ -172,7 +173,7 @@ Shader "MySprite-Lit-Default"
         CBUFFER_START(UnityPerMaterial) 
             int _Character;    
             int _Damp;
-            
+            int _HideNormal;
 
             half3 _PlantSpringColor1;
             half3 _PlantSpringColor;
@@ -546,6 +547,7 @@ Shader "MySprite-Lit-Default"
                 //return moveYStep.xxxx;
                 int moveStep=moveYStep+(1-moveAStep)+moveXStep+moveZStep;
                 moveStep=clamp(moveStep,0,1);
+                moveStep=(1-_HideNormal)*moveStep+_HideNormal;
                 shadow*=moveStep;
 
                 result.xyz=shadowColor*result.xyz*shadow.r+result.xyz*(1-shadow.r);  

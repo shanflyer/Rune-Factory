@@ -91,6 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -120,6 +122,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5750214126569178637}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -625,6 +628,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -654,6 +659,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4572190950769615825}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -691,9 +697,9 @@ RectTransform:
   - {fileID: 7936217206993523479}
   m_Father: {fileID: 2013490905349987333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -275.61, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 44.390015, y: 0}
   m_SizeDelta: {x: 88, y: 320}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3076843053600340271
@@ -802,7 +808,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 640, y: 1136}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1086,6 +1092,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -1115,6 +1123,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2574201859576001838}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
