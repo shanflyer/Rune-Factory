@@ -1142,7 +1142,8 @@ public class FightManager : Singleton<FightManager>
                         itemInstance=nowUsedItem.instanceId,
                         itemId = nowUsedItem.dataId,
                         itemCount = 1,
-                        packageId = nowUsedItem.packageId
+                        packageId = nowUsedItem.packageId,
+                        targetCharacter=target.instanceId,
                     };
                     GameActionManager.instance.QueueAction(itemUseAction, true);
                 }
@@ -1458,7 +1459,7 @@ public class FightManager : Singleton<FightManager>
         {
             if (fightCharacters.TryGetValue(fightPlayers[i], out var fightCharacter))
             {
-                if (fightCharacter.characterProperty.HP > 0)
+                //if (fightCharacter.characterProperty.HP > 0)
                 {
                     result.Add((FightPlayer)fightCharacter);
                 }

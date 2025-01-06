@@ -16,7 +16,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     }
     public virtual void OnDisable()
     {
-        Close();
+       // Close();
     }
     public T FindChildGameObject<T>(string childName) where T : Component
     {

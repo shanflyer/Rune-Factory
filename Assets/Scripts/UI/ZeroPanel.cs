@@ -12,9 +12,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Button start;
-
-    [SerializeField]
-    private Canvas[] canvaes;
+     
 
     [SerializeField]
     private ParticleSystemRenderer systemRenderer;
@@ -29,8 +27,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     {
         base.SetPanelUISerializeObj();
         titleIcon = FindChildGameObject<Image>("Icon");
-        start = FindChildGameObject<Button>("StartButton");
-        canvaes = GetComponentsInChildren<Canvas>();
+        start = FindChildGameObject<Button>("StartButton"); 
         systemRenderer = FindChildGameObject<ParticleSystemRenderer>("Cloud");
         selectPanel = FindChildGameObject("SelectPanel");
         newButton = FindChildGameObject<Button>("New");
@@ -49,24 +46,14 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     public override void Show(int layer = -1)
     {
-        var uiLayer = LayerMask.NameToLayer("UI");
-        for (int i = 0; i < canvaes.Length; i++)
-        {
-            canvaes[i].gameObject.layer = uiLayer;
-            canvaes[i].enabled = true;
-        }
+        var uiLayer = LayerMask.NameToLayer("UI"); 
         systemRenderer.gameObject.layer = uiLayer;
         base.Show(layer);
     }
 
     public override void Close()
     {
-        var hideLayer = LayerMask.NameToLayer("Hide");
-        for (int i = 0; i < canvaes.Length; i++)
-        {
-            canvaes[i].gameObject.layer = hideLayer;
-            canvaes[i].enabled = false;
-        }
+        var hideLayer = LayerMask.NameToLayer("Hide"); 
         systemRenderer.gameObject.layer = hideLayer;
 
         base.Close();

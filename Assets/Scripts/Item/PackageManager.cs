@@ -1029,7 +1029,7 @@ public class PackageManager : Singleton<PackageManager>
     {
         if (gamePackages.TryGetValue(itemUseEvent.packageId, out GamePackage gamePackage))
         {
-            if (await UsetItemAction(itemUseEvent.itemId,itemUseEvent.itemInstance))
+            if (await UsetItemAction(itemUseEvent.itemId,itemUseEvent.itemInstance,itemUseEvent.targetCharacter))
             {
                 gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
                 //gamePackages[itemUseEvent.packageId] = gamePackage;
@@ -1046,7 +1046,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private async Task<bool> UsetItemAction(int itemId,int itemInstance)
+    private async Task<bool> UsetItemAction(int itemId,int itemInstance,int targetCharacter=0)
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.ToString());
         if (itemData != null )
@@ -1074,7 +1074,7 @@ public class PackageManager : Singleton<PackageManager>
                    {
                        name="CharacterId",
                        valueType=ReferenceValueType.Int,
-                       value=CharacterManager.instance.controllerCharacter.instanceId
+                       value=targetCharacter==0?CharacterManager.instance.controllerCharacter.instanceId:targetCharacter
                    },
                    new EventReferenceData
                    {
@@ -1180,8 +1180,11 @@ public class PackageManager : Singleton<PackageManager>
                 if (packageItemCounts.TryGetValue(items[i].dataId,out var count))
                 {
                     count += items[i].count;
+                }else
+                {
+                    count = items[i].count;
                 }
-                count = items[i].count;
+               
                 packageItemCounts[items[i].dataId] = count;
                 if (packageItemIndexDatas.TryGetValue(items[i].dataId,out var indexs))
                 {

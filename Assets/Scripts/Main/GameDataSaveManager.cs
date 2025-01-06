@@ -78,7 +78,47 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 {
                     HomeEquipManager.instance.CreatHomeEquip(e.Current);
                 }
-            } 
+            }
+
+            if (loadGameSaveData.otherSaveData.shortcutItems != null)
+            {
+                for(int i = 0; i < loadGameSaveData.otherSaveData.shortcutItems.Count; i++)
+                {
+                    var saveData=loadGameSaveData.otherSaveData.shortcutItems[i];
+                    if (saveData.x == 0)
+                    {
+                        continue;
+                    }
+                    if (saveData.y != 0)
+                    {
+                        Item item = PackageManager.instance.GetItemFromInstanceId(CharacterManager.instance.controllerCharacter.instanceId, saveData.y);
+                        if (item.instanceId == saveData.y)
+                        {
+                            SetShortcutItem setShortcutItem = new SetShortcutItem
+                            {
+                                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                                Item = item
+                            };
+                            GameActionManager.instance.QueueAction(setShortcutItem);
+                        } 
+                    }
+                    else
+                    {
+                        Item newItem = new Item
+                        {
+                            dataId = saveData.x,
+                            count = PackageManager.instance.GetPackageItemCount(CharacterManager.instance.controllerCharacter.characterPackage, saveData.x)
+                        }; 
+                        SetShortcutItem setShortcutItem = new SetShortcutItem
+                        {
+                            characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                            Item = newItem
+                        };
+                        GameActionManager.instance.QueueAction(setShortcutItem);
+                    }
+                }
+            }
+
              
         }
     }
@@ -341,9 +381,16 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             week=GameTimeManager.instance.Week
         };
 
+        UserGameSaveData.otherSaveData.shortcutItems = new List<int2>();
+        var package= ShortcutManager.instance.playerShortcutPackage;
+         for(int i=0;i< package.items.Length; i++)
+        {
+            UserGameSaveData.otherSaveData.shortcutItems.Add(new int2(package.items[i].dataId, package.items[i].instanceId));
+        }
         //友情关系
         UserGameSaveData.friendSaveData = FriendManager.instance.GetFriendSaveData();
-
+        UserGameSaveData.otherSaveData.gold = PayManager.instance.NowGold;
+        UserGameSaveData.otherSaveData.diamond = PayManager.instance.NowDiamond;
         UserGameSaveData.SaveData();
     }
 

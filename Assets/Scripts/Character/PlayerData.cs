@@ -794,6 +794,7 @@ public class OtherSaveData
     public bool isMarriedFood, isAnMo;
 
     public int newDayActionIndex, newWakeUpActionIndex;
+    public List<int2> shortcutItems;
     public OtherSaveData() { }
     public OtherSaveData(OtherSaveData otherSaveData)
     {
@@ -805,6 +806,12 @@ public class OtherSaveData
         isAnMo = otherSaveData.isAnMo;
         newDayActionIndex = otherSaveData.newDayActionIndex;
         newWakeUpActionIndex = otherSaveData.newWakeUpActionIndex;
+        if (otherSaveData.shortcutItems != null)
+        {
+            shortcutItems = new List<int2>();
+            shortcutItems.AddRange(otherSaveData.shortcutItems);
+        }
+      
     }
 }
 

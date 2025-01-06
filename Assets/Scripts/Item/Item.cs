@@ -9,7 +9,7 @@ public struct Item : IReferenceData
     public int packageId;
     public int dataId;
     public int count;
-    public int value { get; private set; }
+    public int value;
     public bool isFresh;
     public ItemType itemType;
     public bool locked; 

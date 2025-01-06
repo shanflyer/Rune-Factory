@@ -13,7 +13,7 @@ public class CharacterMove : Action
     private SharedInt3 target;
     public SharedInt2 offset;
     public bool smartMove;
-
+    public float waitDuration=70;
     // Use this for initialization
     [SerializeField]
     private TaskStatus taskStatus;
@@ -46,10 +46,10 @@ public class CharacterMove : Action
     }
 
     private int2 offsetCoordinate = int2.zero;
-
+    private float startTime;
     public override void OnStart()
-    { 
-
+    {
+        startTime = Time.time;
         taskStatus = TaskStatus.Running;
         if (characterId == null || characterId.IsNull())
         {
@@ -110,6 +110,15 @@ public class CharacterMove : Action
 
     public override TaskStatus OnUpdate()
     {
+        if (waitDuration > 0)
+        {
+            if (startTime + waitDuration < Time.time)
+            {
+                return TaskStatus.Failure;
+            }
+
+        }
+       
         //return TaskStatus.Success;
         return taskStatus;
     }

@@ -448,7 +448,7 @@ public struct ItemUseAction : GameAction
     public int itemInstance;
     public int itemId;
     public int itemCount;
-
+    public int targetCharacter;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
     {
         if (parameters.Count >= 3)

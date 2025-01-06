@@ -44,20 +44,7 @@ public class FishingManager : Singleton<FishingManager>
         if (isController)
         {
            int itemInstance= WorldMapManager.instance.GetInstanceFromEditorId(fishingIsSuccess.pondData.linkMapItem);
-
-            RemoveMapItemOperate removeOperateData = new RemoveMapItemOperate
-            {
-                mapItemId = itemInstance,
-                removeOperateId = GameCommon.GetFish
-            };
-            GameActionManager.instance.QueueAction(removeOperateData);
-            AddMapItemOperate addOperateData = new AddMapItemOperate
-            {
-                mapItemId = itemInstance,
-                addeOperateId = GameCommon.StartFish
-            };
-            GameActionManager.instance.QueueAction(addOperateData);
-
+             
             ShowMapObjTips ShowMapObjTips = new ShowMapObjTips
             {
                 id = itemInstance,

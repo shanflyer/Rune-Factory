@@ -9,7 +9,7 @@ using Unity.Mathematics;
 using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
+
 
 public class GlobalShaderSetMono : MonoBehaviour
 {
@@ -254,10 +254,10 @@ public class GlobalShaderSetMono : MonoBehaviour
             }
         }
 
-        var MyLights = FindObjectsByType<MyLight>(FindObjectsSortMode.InstanceID);
+        var MyLights = FindObjectsByType<MyLight>(FindObjectsInactive.Include,FindObjectsSortMode.InstanceID);
         for(int i = 0; i < MyLights.Length; i++)
         {
-            MyLights[i].LerpTimeValue(dayValue);
+            MyLights[i].Display(dayValue);
         }
 
         
@@ -282,7 +282,8 @@ public class GlobalShaderSetMono : MonoBehaviour
         Debug.Log($"TestPlanesAABB:{result}");
 
     }
-} 
+}
+#endif
 public enum ShaderDataType
 {
     INT,FLOAT,VECTOR,COLOR

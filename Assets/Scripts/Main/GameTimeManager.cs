@@ -492,11 +492,12 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         public void TimeRun()
         {
-#if UNITY_EDITOR
             if (!GameTimeManager.instance.runTime)
             {
                 return;
             }
+#if UNITY_EDITOR
+
 #endif
             mySecond += 1;
             TimeInit();
@@ -730,6 +731,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
     void TimeRun(TimeRun TimeRun)
     {
         runTime = TimeRun.run;
+        if (runTime)
+        {
+            StartTimeRun();
+        }
     }
     void SetFixedSeason(SetFixedSeason SetFixedSeason)
     {

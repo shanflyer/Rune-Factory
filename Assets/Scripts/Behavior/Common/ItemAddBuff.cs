@@ -17,6 +17,7 @@ public class ItemAddBuff : Action
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.Value);
         AddBuffAction addBuffAction = default(AddBuffAction);
+        addBuffAction.characterId = characterId.Value;
         var property = itemData.Property;
         if (property.Other != 0)
         {

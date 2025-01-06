@@ -321,9 +321,9 @@ MonoBehaviour:
     m_Objects: []
   skill: 0
   skillEstimateData:
-    skillId: 474790582
-    source: -813341786
-    targets: 16c77c02
+    skillId: 0
+    source: -2080656576
+    targets: b520e1fd
     target: {fileID: 0}
     nextTargets: 
     nextTarget: {fileID: 0}
@@ -341,12 +341,13 @@ MonoBehaviour:
   m_Name: ControlPlayableAsset
   m_EditorClassIdentifier: 
   sourceGameObject:
-    exposedName: 1fbdb367ddb8b91429a3db91216e79af
+    exposedName: 
     defaultValue: {fileID: 0}
   targetParent:
     exposedName: 
     defaultValue: {fileID: 0}
-  targets: []
+  targets:
+  - {fileID: 0}
   muliPlayable: 0
   prefabGameObject: {fileID: 5499643047762445818, guid: bcbc04a3e1dd1c248a991b9feb8727cc,
     type: 3}
@@ -361,6 +362,7 @@ MonoBehaviour:
   rot: 0
   rotAngle: 0
   initOffset: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   offsetXCurve:
     serializedVersion: 2
     m_Curve:
