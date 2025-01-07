@@ -258,6 +258,7 @@ public class CameraManager : Singleton<CameraManager>
     {
         fixedPlayerShaderPos = setFixedPlayerShaderPos.fixedPos;
     }
+    [SerializeField]
     bool fixedPlayerShaderPos = false;
    // private bool fixedView = false;
     public Vector3 oldCameraPos { get; private set; }

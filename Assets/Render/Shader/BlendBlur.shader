@@ -134,18 +134,19 @@ Shader "BlendBlur"
                  
 
                 half centerY=IN.playerUV.y;
-                //return half4(IN.playerUV.yyy,1);
+                 //return half4(IN.playerUV.yyy,1);
 
                 half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, IN.uv);
                 half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, IN.uv);
                 int stepCharacter=step(objDepthColor.r+objDepthColor.g+objDepthColor.b,0);
-                half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor;
-                //return myDepthColor;
+                half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor; 
 
-                //return myDepthColor;
+                // return myDepthColor;
                 float x=myDepthColor.x;
                 Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
                 x=clamp(x,0,1)*step(centerY-_BlurOffsetPos,myDepthColor.x);
+
+                  // return half4(x.xxx,1) ;
 
                // return half4(BlurColor.xyz,1) ;
 
@@ -154,7 +155,8 @@ Shader "BlendBlur"
                 Unity_Remap_float(x1,float2(centerY-_BlurOffsetPos,0),_ReMapValue.xy,x1);
                 x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
                 x+=x1;
-                 
+                
+             
 
                  //
 
