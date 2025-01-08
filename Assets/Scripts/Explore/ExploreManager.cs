@@ -2,7 +2,7 @@
 using Unity.Collections; 
 using Unity.Mathematics;
 using UnityEngine;
-
+using MyGame;
 public class FightChapter : IReferenceData
 {
     public int mapId;

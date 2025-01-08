@@ -1,0 +1,406 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a07b5cd0b1b829245bc8c4b6978793e8, type: 3}
+  m_Name: Localization Settings
+  m_EditorClassIdentifier: 
+  m_StartupSelectors:
+  - rid: 5654744492598362401
+  - rid: 5654744492598362402
+  - rid: 5654744492598362403
+  m_AvailableLocales:
+    rid: 5654744492598362404
+  m_AssetDatabase:
+    rid: 5654744492598362405
+  m_StringDatabase:
+    rid: 5654744492598362406
+  m_Metadata:
+    m_Items:
+    - rid: 5654744492598362425
+    - rid: 5654744492598362427
+    - rid: 5654744492598362445
+  m_ProjectLocaleIdentifier:
+    m_Code: en
+  m_PreloadBehavior: 1
+  m_InitializeSynchronously: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 5654744492598362401
+      type: {class: CommandLineLocaleSelector, ns: UnityEngine.Localization.Settings,
+        asm: Unity.Localization}
+      data:
+        m_CommandLineArgument: -language=
+    - rid: 5654744492598362402
+      type: {class: SystemLocaleSelector, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
+      data: 
+    - rid: 5654744492598362403
+      type: {class: SpecificLocaleSelector, ns: UnityEngine.Localization.Settings,
+        asm: Unity.Localization}
+      data:
+        m_LocaleId:
+          m_Code: en
+    - rid: 5654744492598362404
+      type: {class: LocalesProvider, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
+      data: 
+    - rid: 5654744492598362405
+      type: {class: LocalizedAssetDatabase, ns: UnityEngine.Localization.Settings,
+        asm: Unity.Localization}
+      data:
+        m_DefaultTableReference:
+          m_TableCollectionName: 
+        m_CustomTableProvider:
+          rid: -2
+        m_CustomTablePostprocessor:
+          rid: -2
+        m_AsynchronousBehaviour: 0
+        m_UseFallback: 0
+    - rid: 5654744492598362406
+      type: {class: LocalizedStringDatabase, ns: UnityEngine.Localization.Settings,
+        asm: Unity.Localization}
+      data:
+        m_DefaultTableReference:
+          m_TableCollectionName: 
+        m_CustomTableProvider:
+          rid: -2
+        m_CustomTablePostprocessor:
+          rid: -2
+        m_AsynchronousBehaviour: 0
+        m_UseFallback: 0
+        m_MissingTranslationState: 1
+        m_NoTranslationFoundMessage: No translation found for '{key}' in {table.TableCollectionName}
+        m_SmartFormat:
+          rid: 5654744492598362407
+    - rid: 5654744492598362407
+      type: {class: SmartFormatter, ns: UnityEngine.Localization.SmartFormat, asm: Unity.Localization}
+      data:
+        m_Settings:
+          rid: 5654744492598362408
+        m_Parser:
+          rid: 5654744492598362409
+        m_Sources:
+        - rid: 5654744492598362410
+        - rid: 5654744492598362411
+        - rid: 5654744492598362412
+        - rid: 5654744492598362413
+        - rid: 5654744492598362414
+        - rid: 5654744492598362415
+        - rid: 5654744492598362416
+        m_Formatters:
+        - rid: 5654744492598362410
+        - rid: 5654744492598362417
+        - rid: 5654744492598362418
+        - rid: 5654744492598362419
+        - rid: 5654744492598362420
+        - rid: 5654744492598362421
+        - rid: 5654744492598362422
+        - rid: 5654744492598362423
+        - rid: 5654744492598362424
+    - rid: 5654744492598362408
+      type: {class: SmartSettings, ns: UnityEngine.Localization.SmartFormat.Core.Settings,
+        asm: Unity.Localization}
+      data:
+        m_FormatErrorAction: 0
+        m_ParseErrorAction: 0
+        m_CaseSensitivity: 0
+        m_ConvertCharacterStringLiterals: 1
+    - rid: 5654744492598362409
+      type: {class: Parser, ns: UnityEngine.Localization.SmartFormat.Core.Parsing,
+        asm: Unity.Localization}
+      data:
+        m_OpeningBrace: 123
+        m_ClosingBrace: 125
+        m_Settings:
+          rid: 5654744492598362408
+        m_AlphanumericSelectors: 1
+        m_AllowedSelectorChars: _-
+        m_Operators: '[]().,'
+        m_AlternativeEscaping: 0
+        m_AlternativeEscapeChar: 92
+    - rid: 5654744492598362410
+      type: {class: ListFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - list
+        - l
+        - 
+        m_SmartSettings:
+          rid: 5654744492598362408
+    - rid: 5654744492598362411
+      type: {class: PersistentVariablesSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Groups: []
+    - rid: 5654744492598362412
+      type: {class: DictionarySource, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data: 
+    - rid: 5654744492598362413
+      type: {class: ValueTupleSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data: 
+    - rid: 5654744492598362414
+      type: {class: XmlSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data: 
+    - rid: 5654744492598362415
+      type: {class: ReflectionSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data: 
+    - rid: 5654744492598362416
+      type: {class: DefaultSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data: 
+    - rid: 5654744492598362417
+      type: {class: PluralLocalizationFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - plural
+        - p
+        - 
+        m_DefaultTwoLetterISOLanguageName: en
+    - rid: 5654744492598362418
+      type: {class: ConditionalFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - conditional
+        - cond
+        - 
+    - rid: 5654744492598362419
+      type: {class: TimeFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - timespan
+        - time
+        - t
+        - 
+        m_DefaultFormatOptions: 4646
+    - rid: 5654744492598362420
+      type: {class: XElementFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - xelement
+        - xml
+        - x
+        - 
+    - rid: 5654744492598362421
+      type: {class: ChooseFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - choose
+        - c
+        m_SplitChar: 124
+    - rid: 5654744492598362422
+      type: {class: SubStringFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - substr
+        m_ParameterDelimiter: 44
+        m_NullDisplayString: (null)
+        m_OutOfRangeBehavior: 0
+    - rid: 5654744492598362423
+      type: {class: IsMatchFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - ismatch
+    - rid: 5654744492598362424
+      type: {class: DefaultFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
+        asm: Unity.Localization}
+      data:
+        m_Names:
+        - default
+        - d
+        - 
+    - rid: 5654744492598362425
+      type: {class: AppInfo, ns: UnityEngine.Localization.Platform.Android, asm: Unity.Localization}
+      data:
+        m_DisplayName:
+          m_TableReference:
+            m_TableCollectionName: GUID:64596d88a915fd84c903cc1619bfc548
+          m_TableEntryReference:
+            m_KeyId: 18663501824
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+    - rid: 5654744492598362427
+      type: {class: AppInfo, ns: UnityEngine.Localization.Platform.iOS, asm: Unity.Localization}
+      data:
+        m_ShortName:
+          m_TableReference:
+            m_TableCollectionName: GUID:64596d88a915fd84c903cc1619bfc548
+          m_TableEntryReference:
+            m_KeyId: 2302046793728
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_DisplayName:
+          m_TableReference:
+            m_TableCollectionName: GUID:64596d88a915fd84c903cc1619bfc548
+          m_TableEntryReference:
+            m_KeyId: 18663501824
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_CameraUsageDescription:
+          m_TableReference:
+            m_TableCollectionName: GUID:64596d88a915fd84c903cc1619bfc548
+          m_TableEntryReference:
+            m_KeyId: 18663501824
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_MicrophoneUsageDescription:
+          m_TableReference:
+            m_TableCollectionName: GUID:64596d88a915fd84c903cc1619bfc548
+          m_TableEntryReference:
+            m_KeyId: 18663501824
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_LocationUsageDescription:
+          m_TableReference:
+            m_TableCollectionName: GUID:64596d88a915fd84c903cc1619bfc548
+          m_TableEntryReference:
+            m_KeyId: 18663501824
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_UserTrackingUsageDescription:
+          m_TableReference:
+            m_TableCollectionName: GUID:64596d88a915fd84c903cc1619bfc548
+          m_TableEntryReference:
+            m_KeyId: 18663501824
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+    - rid: 5654744492598362445
+      type: {class: AdaptiveIconsInfo, ns: UnityEngine.Localization.Platform.Android,
+        asm: Unity.Localization}
+      data:
+        m_Adaptive_idpi:
+          m_Background:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+          m_Foreground:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+        m_Adaptive_mdpi:
+          m_Background:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+          m_Foreground:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+        m_Adaptive_hdpi:
+          m_Background:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+          m_Foreground:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+        m_Adaptive_xhdpi:
+          m_Background:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+          m_Foreground:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+        m_Adaptive_xxhdpi:
+          m_Background:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+          m_Foreground:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+        m_Adaptive_xxxhdpi:
+          m_Background:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0
+          m_Foreground:
+            m_TableReference:
+              m_TableCollectionName: GUID:f975c4a9c5e41b14498404b698312695
+            m_TableEntryReference:
+              m_KeyId: 88733544448
+              m_Key: 
+            m_FallbackState: 0
+            m_WaitForCompletion: 0

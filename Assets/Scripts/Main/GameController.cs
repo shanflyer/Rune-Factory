@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+ 
 using UnityEngine;
  
-using Unity.Mathematics; 
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.Collections;
-using System.Threading.Tasks;
-using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
+using Unity.Mathematics;   
+using UnityEngine.InputSystem; 
 using UnityEngine.UI;
+using MyGame;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -190,6 +186,7 @@ public class GameController : MonoBehaviour
             }
         }
         environmentManger = EnvironmentManger.instance;
+       // var appStoreManager= AppStoreManager.instance;
         var payManager = PayManager.instance;
         var gameVolumeManager = GameVolumeManager.instance;
         var gameManager = GameManager.instance;

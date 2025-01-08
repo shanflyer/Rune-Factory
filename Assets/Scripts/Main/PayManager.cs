@@ -1,4 +1,5 @@
 ﻿ using UnityEngine;
+using UnityEngine.Purchasing;
 
 public class PayManager : Singleton<PayManager>
 {
@@ -12,7 +13,7 @@ public class PayManager : Singleton<PayManager>
 
         GameActionManager.instance.AddListener<AddPlayerGold>(AddPlayerGold);
     }
-
+ 
     public int NowGold => nowGold;
     public int NowDiamond => nowDiamond;
 
@@ -109,11 +110,18 @@ public class PayManager : Singleton<PayManager>
        await UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
     }
 
+    public void AddDiamond(int value)
+    {
+        nowDiamond += value;
+        GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+    }
     public void TryCreatMoney()
     {
+        UIManager.instance.ShowGamePanel<StoreProductPanel>();
+
 #if UNITY_EDITOR
-        nowDiamond += 200;
-        GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+       // nowDiamond += 200;
+      //  GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
 #endif
     }
 }
