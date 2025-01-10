@@ -16,7 +16,7 @@ namespace Samples.Purchasing.GooglePlay.FraudDetection
 
         public User user;
 
-        public string goldProductId = "com.mycompany.mygame.gold1";
+        public string goldProductId = "com.shanflyer.FantasyTown_EveryDay.diamond200";
         public ProductType goldType = ProductType.Consumable;
 
         public Text goldCountText;

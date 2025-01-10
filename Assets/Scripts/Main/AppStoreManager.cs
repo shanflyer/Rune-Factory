@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
@@ -20,11 +21,12 @@ public class AppStoreManager : MonoBehaviour, IDetailedStoreListener
     {
 
     }
-    public  async void Awake()
+
+    private void OnEnable()
     {
         instance = this;
-        var allProductDatas = await GameDataManager.instance.GetAllAsyncData<AppStoreProductData>();
-        for (int i = 0; i < allProductDatas.Count; i++)
+        var allProductDatas = Resources.LoadAll<AppStoreProductData>(DataPath.dataPathDic[typeof(AppStoreProductData)]);
+        for (int i = 0; i < allProductDatas.Length; i++)
         {
             appStoreProductDatas.Add($"{projectName}.{allProductDatas[i].ProductName}", allProductDatas[i]);
         }
@@ -33,32 +35,42 @@ public class AppStoreManager : MonoBehaviour, IDetailedStoreListener
         UpdateWarningMessage();
     }
 
+    public void Awake()
+    {
+       
+    }
+
     private void InitializePurchasing()
     {
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
         builder.Configure<IGooglePlayConfiguration>().SetServiceDisconnectAtInitializeListener(() =>
         {
-            Debug.Log("Unable to connect to the Google Play Billing service. " +
-                "User may not have a Google account on their device.");
+            InformationController.instance.AddInformation( "Unable to connect to the Google Play Billing service. " +
+                "User may not have a Google account on their device.",false,true);
         });
         builder.Configure<IGooglePlayConfiguration>().SetQueryProductDetailsFailedListener((int retryCount) =>
         {
-            Debug.Log("Failed to query product details " + retryCount + " times.");
+            InformationController.instance.AddInformation("Failed to query product details " + retryCount + " times.", false, true);
         });
 
         builder.Configure<IGooglePlayConfiguration>().SetDeferredPurchaseListener(OnDeferredPurchase);
-        for (int i = 0; i < appStoreProductDatas.length; i++)
+
+      //  builder.AddProduct(goldProductId, ProductType.Consumable);
+       for (int i = 0; i < appStoreProductDatas.length; i++)
         {
-            var productData = appStoreProductDatas[i];
-            builder.AddProduct(productData.ProductName, ProductType.Consumable);
-        }
+            var ProductName = $"{projectName}.{appStoreProductDatas[i].ProductName}";
+            builder.AddProduct(ProductName, ProductType.Consumable);
+        } 
+        //var ProductName = $"{projectName}.{appStoreProductDatas[0]}" ;
+       // Debug.Log($"ProductName:{ProductName}---{projectName == goldProductId}");
+        builder.AddProduct(goldProductId, ProductType.Consumable);
 
         UnityPurchasing.Initialize(this, builder);
     }
-
+    public string goldProductId = "com.shanflyer.FantasyTown_EveryDay.diamond200";
     private void OnDeferredPurchase(Product product)
     {
-        Debug.Log($"Purchase of {product.definition.id} is deferred");
+        InformationController.instance.AddInformation($"Purchase of {product.definition.id} is deferred", false, true);
     }
 
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
@@ -103,6 +115,7 @@ public class AppStoreManager : MonoBehaviour, IDetailedStoreListener
         var goldProductId = $"{projectName}.{appStoreProductData.ProductName}";
         if (product.definition.id == goldProductId)
         {
+            InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr($"成功获得{0}钻石!"), appStoreProductData.getDiamond), false, true); 
             PayManager.instance.AddDiamond(appStoreProductData.getDiamond);
         }
     }
@@ -127,19 +140,19 @@ public class AppStoreManager : MonoBehaviour, IDetailedStoreListener
             errorMessage += $" More details: {message}";
         }
 
-        Debug.Log(errorMessage);
+        InformationController.instance.AddInformation(errorMessage, false, true);
     }
 
     public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
-        Debug.Log($"Purchase failed - Product: '{product.definition.id}', PurchaseFailureReason: {failureReason}");
+        InformationController.instance.AddInformation($"Purchase failed - Product: '{product.definition.id}', PurchaseFailureReason: {failureReason}", false, true);
     }
 
     public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
     {
-        Debug.Log($"Purchase failed - Product: '{product.definition.id}'," +
+        InformationController.instance.AddInformation($"Purchase failed - Product: '{product.definition.id}'," +
             $" Purchase failure reason: {failureDescription.reason}," +
-            $" Purchase failure details: {failureDescription.message}");
+            $" Purchase failure details: {failureDescription.message}", false, true);
     }
 
     private void UpdateWarningMessage()
