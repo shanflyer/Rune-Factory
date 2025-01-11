@@ -667,7 +667,6 @@
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\FightCharacterEndBehavior.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\StartRecording.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
-    <Compile Include="Assets\Samples\In App Purchasing\4.12.2\Google Play Store - 05 Fraud Detection\UserWarningGooglePlayStore.cs" />
     <Compile Include="Assets\Scripts\Pasture\AnimalData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedGameObject.cs" />
     <Compile Include="Assets\Scripts\Character\NPC\NPCBehaviorData.cs" />
@@ -736,7 +735,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetVelocity.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedCollision2D.cs" />
     <Compile Include="Assets\Scripts\Behavior\Round\RoundInit.cs" />
-    <Compile Include="Assets\Samples\In App Purchasing\4.12.2\Google Play Store - 05 Fraud Detection\User.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetSubstring.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetTime.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopPanel.cs" />
@@ -808,7 +806,6 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector4.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\GetCenter.cs" />
-    <Compile Include="Assets\Samples\In App Purchasing\4.12.2\Google Play Store - 05 Fraud Detection\FraudDetection.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetEulerAngles.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLayerWeight.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetSqrMagnitude.cs" />
@@ -1133,6 +1130,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Reflection\CompareFieldValue.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\AddressableAssetsData\link.xml" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\CoboltFlare.txt" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_ToonWater.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -1187,7 +1185,6 @@
     <None Include="Assets\Render\Shader\MySampleSprite.shader" />
     <None Include="Assets\Hovl Studio\Resources\Shaders\Distortion.shader" />
     <None Include="Assets\Hovl Studio\HSFiles\Shaders\Blend_TwoSides.shader" />
-    <None Include="Assets\AddressableAssetsData\link.xml" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\Hovl Studio\HSFiles\Shaders\Blend_CenterGlow.shader" />
     <None Include="Assets\Render\Shader\ObjectScreenUV.shader" />
@@ -1734,14 +1731,6 @@
       <HintPath>Library\PackageCache\com.unity.ext.nunit@60ef35ffd3cd\net40\unity-custom\nunit.framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityStore">
-      <HintPath>Assets\Plugins\UnityChannel\UnityStore.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UDP">
-      <HintPath>Assets\Plugins\UDP\UDP.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="EPPlus">
       <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
       <Private>False</Private>
@@ -1754,20 +1743,12 @@
       <HintPath>Assets\DLL\Excel\Excel.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ChannelPurchase">
-      <HintPath>Assets\Plugins\UnityChannel\ChannelPurchase.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@74deb55db2a0\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil@d6f9955a5d5f\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AppStoreSettings">
-      <HintPath>Assets\Plugins\UDP\UdpSupport\AppStoreSettings.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">

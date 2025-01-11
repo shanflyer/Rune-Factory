@@ -82,12 +82,6 @@
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogRecycledListView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Plugins\UnityChannel\UnityStore.dll" />
-    <None Include="Assets\Plugins\UDP\UDP.dll" />
-    <None Include="Assets\Plugins\UnityChannel\ChannelPurchase.dll" />
-    <None Include="Assets\Plugins\UDP\UdpSupport\AppStoreSettings.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="UnityEngine">
       <HintPath>D:\Unity\6000.0.22f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -548,14 +542,6 @@
       <HintPath>Library\PackageCache\com.unity.ext.nunit@60ef35ffd3cd\net40\unity-custom\nunit.framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityStore">
-      <HintPath>Assets\Plugins\UnityChannel\UnityStore.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UDP">
-      <HintPath>Assets\Plugins\UDP\UDP.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="EPPlus">
       <HintPath>Assets\DLL\Excel\EPPlus.dll</HintPath>
       <Private>False</Private>
@@ -568,20 +554,12 @@
       <HintPath>Assets\DLL\Excel\Excel.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="ChannelPurchase">
-      <HintPath>Assets\Plugins\UnityChannel\ChannelPurchase.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@74deb55db2a0\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil@d6f9955a5d5f\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AppStoreSettings">
-      <HintPath>Assets\Plugins\UDP\UdpSupport\AppStoreSettings.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
