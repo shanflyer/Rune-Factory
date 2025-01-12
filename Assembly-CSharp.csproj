@@ -142,6 +142,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedFloat.cs" />
     <Compile Include="Assets\Scripts\EditorTool\MapItemInstanceEditor.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedSharedInt3List.cs" />
+    <Compile Include="Assets\Scripts\UI\FunctionInfoPanel\FunctionInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\BuffActionBehavior.cs" />
     <Compile Include="Assets\Scripts\Character\Team.cs" />
     <Compile Include="Assets\Scripts\UI\InformationShowPanel.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Assets\Scripts\UI\ScreenControllerPanel\MyJoyStick.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\DeleteMapItemEvent.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetGravityWeight.cs" />
+    <Compile Include="Assets\Scripts\Data\FunctionInfoData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\StopRecording.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedTrigger.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\RandomEmoteBehavior.cs" />
@@ -753,6 +755,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetFloatParameter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedTransform.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\SetEnabled.cs" />
+    <Compile Include="Assets\Scripts\Main\CloudDataManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonDown.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetMass.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Pause.cs" />
@@ -815,6 +818,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetIgnoreListenerVolume.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetPlaybackSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\BoolOperator.cs" />
+    <Compile Include="Assets\Scripts\UI\FunctionInfoPanel\FunctionInfoReference.cs" />
     <Compile Include="Assets\Scripts\Main\SceneInfoManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Slerp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPitch.cs" />
@@ -1130,7 +1134,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Reflection\CompareFieldValue.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\AddressableAssetsData\link.xml" />
+    <None Include="Assets\GooglePlayGames\com.google.play.games\Proguard\games.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\CoboltFlare.txt" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_ToonWater.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -1753,6 +1757,18 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.Apple.Extensions.Common">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.Apple.Extensions.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
@@ -2553,6 +2569,10 @@
       <Project>{4296BED4-3854-BB24-C26B-FCBAE07B10CB}</Project>
       <Name>Unity.PlayableGraphVisualizer.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Google.Play.Games.Editor.csproj">
+      <Project>{BB1A9BA9-3809-017B-2C4B-10AC9DA27CC5}</Project>
+      <Name>Google.Play.Games.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="CFXRRuntime.csproj">
       <Project>{AC77FFC4-9D31-2F56-F614-A6BAEA3E624F}</Project>
       <Name>CFXRRuntime</Name>
@@ -2568,6 +2588,10 @@
     <ProjectReference Include="Unity.Timeline.csproj">
       <Project>{2EE3D433-DE38-745A-8EC9-EBB93BDF7D0D}</Project>
       <Name>Unity.Timeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="Google.Play.Games.csproj">
+      <Project>{1CA5A0F1-9818-B77D-124F-E2AC1427F342}</Project>
+      <Name>Google.Play.Games</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
       <Project>{55DFF3EC-414E-730C-FFDD-3C52FE7752B8}</Project>

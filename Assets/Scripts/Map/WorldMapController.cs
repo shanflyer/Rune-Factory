@@ -169,9 +169,16 @@ public class WorldMapController : MonoBehaviour
                 UIManager.instance.ShowGamePanel<PlayerTopPanel>();
                 UIManager.instance.ShowGamePanel<ShortcutPanel>();
             }
+            GameTimerController.instance.DelayAction(600000, AutoSave);
 
         }
 
+    }
+
+    void AutoSave()
+    {
+        GameDataSaveManager.instance.TryAutoSaveData();
+        GameTimerController.instance.DelayAction(600000, AutoSave);
     }
     public async void Init()
     {

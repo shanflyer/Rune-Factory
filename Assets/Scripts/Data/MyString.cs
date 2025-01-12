@@ -3,10 +3,11 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
+ 
 
 public struct MyString : IReferenceData
 {
-    
+    public string value;
 }
 [Serializable]
 public struct MyListInt : IReferenceData

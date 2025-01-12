@@ -209,6 +209,50 @@ public class ExcelDataEditor : MyEditor
                         AssetDatabase.CreateAsset((UnityEngine.Object)data, $"{outPath}{"/"}{data}{".asset"}");
                     }
                 }
+                 
+                MethodInfo methGroup = type.GetMethod("isSingleGroup");
+                if (methGroup!=null&&(bool)methGroup.Invoke(listData, null))
+                {
+                    var keyMeth= dataType.GetMethod("GetKey");
+                    Dictionary<string, List<object>> objGroups = new Dictionary<string, List<object>>(); 
+                    foreach (var a in array)
+                    {
+                        string key = (string)keyMeth.Invoke(a,null);
+                        if(!objGroups.TryGetValue(key,out var list))
+                        {
+                            list = new List<object>();
+                            objGroups.Add(key, list);
+                        }
+                        list.Add(a); 
+                    }
+                    foreach(var obj in objGroups)
+                    {
+                        listData = Activator.CreateInstance(type);
+                        MethodInfo methSetObjList = type.GetMethod("SetObjList");
+                        
+                        if (methSetObjList != null)
+                        {
+                            methSetObjList.Invoke(listData, new object[] { obj.Value }); 
+                        }
+                        var setkeyMeth = type.GetMethod("SetKey");
+                        setkeyMeth.Invoke(listData,new object[1] {obj.Key});
+
+                        UnityEngine.Object saveObj = (UnityEngine.Object)listData;
+                        string objPath = $"{outPath}{"/"}{listData}{".asset"}";
+
+                        if (AssetDatabase.Contains(saveObj))
+                        {
+                            EditorUtility.SetDirty(saveObj);
+                            AssetDatabase.SaveAssets();
+                        }
+                        else
+                        {
+                            AssetDatabase.CreateAsset(saveObj, objPath);
+                            AssetDatabase.Refresh();
+                        }
+                    }
+                }else
+
                 if (dataType != null)
                 {
                     var Listfields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
@@ -460,7 +504,7 @@ public class ExcelDataEditor : MyEditor
                 var valueStr = value.ToString();
                 if (!string.IsNullOrEmpty(valueStr))
                 {
-                    var strs = value.ToString().Split(',');
+                    var strs = value.ToString().Split('|');
 
                     List<string> _value = new List<string>();
                     foreach (var str in strs)

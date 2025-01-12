@@ -71,7 +71,6 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
     {
         return "ProfessionDataList";
     }
-   
 }
 [Serializable]
 public class ProfessionData:IGameData

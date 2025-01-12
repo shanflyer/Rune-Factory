@@ -121,8 +121,17 @@ public static class AttackType
     public static int whipAttack = 6;
 }
 
-public class GameCommon
+public static class GameCommon
 {
+    public static List<MyString> GetMyStrings(this List<string> strs)
+    {
+        List<MyString> myStrings = new List<MyString>();
+        for (int i = 0; i < strs.Count; i++)
+        {
+            myStrings.Add(new MyString { value = strs[i] });
+        }
+        return myStrings;
+    }
     public static Dictionary<Direction, Vector2> fishToolOffsets = new Dictionary<Direction, Vector2>
     {
         {Direction.LEFT,new Vector2(-0.556f,0.034f)},
@@ -1246,7 +1255,8 @@ public static class DataPath
         {typeof(FootstepDataList),"Data/FootstepDataList" },
         {typeof(GameGuideData),"Data/GameGuideData" },
         {typeof(GameGuideFilmData),"Data/GameGuideFilmData" },
-        {typeof(AppStoreProductData),"Data/AppStoreProductData" }
+        {typeof(AppStoreProductData),"Data/AppStoreProductData" },
+        {typeof(FunctionInfoData),"Data/FunctionInfoData" }
     };
 
     public static string GetDataPath(Type type)

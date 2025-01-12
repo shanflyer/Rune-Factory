@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
@@ -23,6 +24,6 @@ public class BaseReference : MonoBehaviour
     }
     public virtual void Show(int layer = -1) { show = true; }
     public virtual void Close() { show = false; } 
-    public virtual async Task InitData(string dataKey) { }
+    public virtual async Task InitData(string dataKey) { } 
    
 }

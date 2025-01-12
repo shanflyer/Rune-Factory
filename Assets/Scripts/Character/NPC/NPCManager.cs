@@ -262,7 +262,9 @@ public class NPC : IReferenceData
 
     public CharacterInformationData GetInformation()
     {
-        return Character.GetInformation();
+        var CharacterInformationData= Character.GetInformation();
+        CharacterInformationData.isNpc = true;
+        return CharacterInformationData;
     }
     public int friendLevel=>FriendManager.instance.GetFriendShipLevel(npcData.id);
     private NPCBehaviorData NPCBehaviorData;

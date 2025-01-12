@@ -260,16 +260,16 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         return -1;
     }
 
-    private void InitUserSaveData()
+    public void InitUserSaveData(string userName, string clundDataStr = null)
     {
-        userGameSaveDataList = LoadUserGameSaveData(userName);
+        userGameSaveDataList = LoadUserGameSaveData(userName,clundDataStr);
     }
     public bool LoadDataSuccess { get; private set; }
-    public UserGameSaveDataList LoadUserGameSaveData(string userName)
+    private UserGameSaveDataList LoadUserGameSaveData(string userName,string clundDataStr=null)
     {
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         if (File.Exists(saveDataPath))
-        {
+        { 
             LoadDataSuccess = true;
             string dataStr =File.ReadAllText(saveDataPath);
             UserGameSaveDataList userGameSaveDataList = null;
@@ -290,17 +290,77 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 userGameSaveDataList.userGameSaveDatas[i].Init();
                 userGameSaveDataList.userGameSaveDatas[i].index = i;
             }
-            return userGameSaveDataList;
+            if (string.IsNullOrEmpty(clundDataStr))
+            {
+                return userGameSaveDataList;
+            }
+            UserGameSaveDataList userGameSaveDataList2 = null;
+            try
+            {
+                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+            }
+            catch
+            {
+                clundDataStr = DecryptDES(clundDataStr);
+                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+            }
+            //
+            userGameSaveDataList2.nowSaveData.Init();
+            userGameSaveDataList2.nowSaveData.index = -1;
+            for (int i = 0; i < userGameSaveDataList2.userGameSaveDatas.Count; i++)
+            {
+                userGameSaveDataList2.userGameSaveDatas[i].Init();
+                userGameSaveDataList2.userGameSaveDatas[i].index = i;
+            }
+
+            DateTime t0 = Convert.ToDateTime(userGameSaveDataList.nowSaveData.saveTime);
+            DateTime t2= Convert.ToDateTime(userGameSaveDataList2.nowSaveData.saveTime);
+            if (t2 >= t0)
+            {
+                return userGameSaveDataList2;
+            }
+            else
+            {
+                return userGameSaveDataList;
+            }
+
+            
         }
         else
         {
-            UserGameSaveDataList userGameSaveDataList =new UserGameSaveDataList();
-            userGameSaveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
-            userGameSaveDataList.userGameSaveDatas = new List<UserGameSaveData>
+            if (string.IsNullOrEmpty(clundDataStr))
             {
+                UserGameSaveDataList userGameSaveDataList = new UserGameSaveDataList();
+                userGameSaveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
+                userGameSaveDataList.userGameSaveDatas = new List<UserGameSaveData>
+                {
                 UserGameSaveData.CreatSaveData(0),UserGameSaveData.CreatSaveData(1),UserGameSaveData.CreatSaveData(2)
-            };
-            return userGameSaveDataList;
+                 };
+                return userGameSaveDataList;
+            }
+            else 
+            {
+                UserGameSaveDataList userGameSaveDataList2 = null;
+                try
+                {
+                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+                }
+                catch
+                {
+                    clundDataStr = DecryptDES(clundDataStr);
+                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+                }
+                //
+                userGameSaveDataList2.nowSaveData.Init();
+                userGameSaveDataList2.nowSaveData.index = -1;
+                for (int i = 0; i < userGameSaveDataList2.userGameSaveDatas.Count; i++)
+                {
+                    userGameSaveDataList2.userGameSaveDatas[i].Init();
+                    userGameSaveDataList2.userGameSaveDatas[i].index = i;
+                }
+                return userGameSaveDataList2;
+            }
+           
         }
     }
     public CharacterSaveData GetCharacterSaveData(int dataId)
@@ -438,13 +498,14 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     public override void Init()
     {
         base.Init();
-        InitUserSaveData();
+        //InitUserSaveData();
     }
 
     protected override void Clear()
     {
         base.Clear();
     }
+
     public void TryAutoSaveData()
     { 
         if (loadCompleted&&GameGuideManager.instance.endGuideFilmIndex >= 0)
@@ -452,6 +513,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             SaveData(-1);
         }
     }
+
     public bool SaveData(int selectSaveIndex)
     { 
         if (selectSaveIndex > 2)
@@ -474,7 +536,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-        File.WriteAllText(saveDataPath, strs); 
+        File.WriteAllText(saveDataPath, strs);
+
+        if (!CloudDataManager.instance.OpenSavedGame(strs))
+        {
+
+        }
         return true;
     }
 

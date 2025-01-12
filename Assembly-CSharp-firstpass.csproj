@@ -566,6 +566,18 @@
       <HintPath>Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.Apple.Extensions.Common">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.Apple.Extensions.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Android.Types">
       <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
       <Private>False</Private>
@@ -1360,6 +1372,10 @@
       <Project>{4296BED4-3854-BB24-C26B-FCBAE07B10CB}</Project>
       <Name>Unity.PlayableGraphVisualizer.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Google.Play.Games.Editor.csproj">
+      <Project>{BB1A9BA9-3809-017B-2C4B-10AC9DA27CC5}</Project>
+      <Name>Google.Play.Games.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="CFXRRuntime.csproj">
       <Project>{AC77FFC4-9D31-2F56-F614-A6BAEA3E624F}</Project>
       <Name>CFXRRuntime</Name>
@@ -1375,6 +1391,10 @@
     <ProjectReference Include="Unity.Timeline.csproj">
       <Project>{2EE3D433-DE38-745A-8EC9-EBB93BDF7D0D}</Project>
       <Name>Unity.Timeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="Google.Play.Games.csproj">
+      <Project>{1CA5A0F1-9818-B77D-124F-E2AC1427F342}</Project>
+      <Name>Google.Play.Games</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
       <Project>{55DFF3EC-414E-730C-FFDD-3C52FE7752B8}</Project>

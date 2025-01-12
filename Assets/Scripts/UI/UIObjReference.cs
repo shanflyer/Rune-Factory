@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public interface IReferenceData
-{
+{ 
     public bool Equals(IReferenceData other)
     {
         return this == other;

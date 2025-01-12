@@ -5,6 +5,9 @@ using Unity.Mathematics;
 using UnityEngine.InputSystem; 
 using UnityEngine.UI;
 using MyGame;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -217,16 +220,35 @@ public class GameController : MonoBehaviour
     // Start is called beforee the first frame update
     async void Start()
     {
-       // GraphicsSettings.useScriptableRenderPipelineBatching = true;
-        //Shader.SetGlobalInt("_backColor", 1);
+        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication); 
+       
+    }
+    internal void ProcessAuthentication(SignInStatus status)
+    {
+        if (status == SignInStatus.Success)
+        {
+            var userId=  PlayGamesPlatform.Instance.GetUserId();
+            CloudDataManager.instance.ShowSelectUI(userId);
+            //StartGame();
+        }
+        else
+        {
+            GameManager.instance.ShowTwoSelectAction($"Google SingInStatus:{status}", "是否在未登录的Google Play的情况下游玩，您可能无法同步线上存档等", StartGame, () =>
+            {
+                Application.Quit();
+            });
+
+            // Disable your integration with Play Games Services or show a login button
+            // to ask users to sign-in. Clicking it should call
+           // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
+        }
+    }
+    void StartGame()
+    {
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
-        await UIManager.instance.ShowGamePanel<ZeroPanel>();
-        /*GameTimerController.instance.DelayAction(500, () => 
-        {
-            AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, Group: BGMGroup.Theme.ToString());
-        });*/
-       
+        UIManager.instance.ShowGamePanel<ZeroPanel>();
+
         GameTimeManager.instance.SetTime(12, 0);
         SwitchInputMap switchInputMap = new SwitchInputMap
         {
@@ -234,7 +256,6 @@ public class GameController : MonoBehaviour
         };
         GameActionManager.instance.QueueAction(switchInputMap, true);
         ZeroSetCloudGlobal();
-        // GameActionManager.instance.AddListener<ZeroWorld>(ZeroWorld);
     }
     void ZeroSetCloudGlobal()
     { 

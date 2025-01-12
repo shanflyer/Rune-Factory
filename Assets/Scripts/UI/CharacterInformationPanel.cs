@@ -34,7 +34,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     [SerializeField]
     private TextMeshProUGUI LevelValue;
     [SerializeField]
-    private TextMeshProUGUI FriendshipValue;
+    private TextMeshProUGUI FriendshipValue,FriendshipLevel;
+    [SerializeField]
+    private Button FriendshipInfo;
+    [SerializeField]
+    private Image FriendshipSlider;
     [SerializeField]
     Transform Friendship;
     [SerializeField]
@@ -183,6 +187,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             GameActionManager.instance.QueueAction(visitNPC);
             Close();
         });
+
+        FriendshipInfo.onClick.AddListener(async () =>
+        {
+            FunctionInfoData functionInfoData=await GameDataManager.instance.GetAsyncData<FunctionInfoData>(1);
+            UIManager.instance.ShowGamePanel<FunctionInfoPanel,FunctionInfoData>(functionInfoData);
+        });
     }
 
     public override void Close()
@@ -223,8 +233,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         visitButton = FindChildGameObject<Button>("VisitButton");
         closeButton = FindChildGameObject<Button>("Close");
 
+        FriendshipInfo= FindChildGameObject<Button>("FriendshipInfo");
         Friendship = FindChildGameObject("Friendship");
         FriendshipValue = FindChildGameObject<TextMeshProUGUI>("FriendshipValue");
+        FriendshipLevel = FindChildGameObject<TextMeshProUGUI>("FriendshipLevel");
+        FriendshipSlider = FindChildGameObject<Image>("FriendshipSlider") ;
         SpeedValue = FindChildGameObject<TextMeshProUGUI>("SpeedValue");
         LuckValue = FindChildGameObject<TextMeshProUGUI>("LuckValue");
         SpeedDown = FindChildGameObject<TextMeshProUGUI>("SpeedDown");
@@ -306,7 +319,19 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         {
             CharacterName.SetSWText(v.name);
             Friendship.localScale = Vector3.one;
-            FriendshipValue.text= FriendManager.instance.GetFriendShipLevel(characterId).ToString();
+            if(FriendManager.instance.GetFriendShip(characterId,out var friendShip))
+            {
+                FriendshipLevel.text =$"Lv.{friendShip.friendLevel}";
+                FriendshipValue.text = $"{friendShip.nowValue}/{friendShip.needValue}";
+                FriendshipSlider.fillAmount = friendShip.nowValue / friendShip.needValue;
+            }
+            else
+            {
+                var FriendShipData = await GameDataManager.instance.GetAsyncData<FriendShipData>(2);
+                FriendshipLevel.text = $"Lv.1";
+                FriendshipValue.text = $"{0}/{FriendShipData.needValue}";
+                FriendshipSlider.fillAmount = 0;
+            }
         }
 
         int maxHP = v.characterProperty.MaxHP;

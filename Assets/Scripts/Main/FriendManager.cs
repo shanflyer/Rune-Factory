@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 
-public struct FriendShip
+public class FriendShip
 {
     public int characterId;
     public int nowValue;
     public int friendLevel;
+    public int needValue;
 
     public async void AddValue(int value)
     {
@@ -19,6 +20,7 @@ public struct FriendShip
             {
                 friendLevel--;
                 FriendShipData friendShipData = await GameDataManager.instance.GetAsyncData<FriendShipData>(friendLevel);
+                needValue = friendShipData.needValue;
                 totalVaue += friendShipData.needValue;
 
                 InformationController.instance.AddInformation(LanguageManage.SwitchStr("友好度降低1级"), true, true);
@@ -30,6 +32,7 @@ public struct FriendShip
             while (totalVaue > 0)
             {
                 FriendShipData friendShipData = await GameDataManager.instance.GetAsyncData<FriendShipData>(friendLevel);
+                needValue = friendShipData.needValue;
                 totalVaue -= friendShipData.needValue;
                 if (totalVaue >= 0)
                 {
@@ -214,6 +217,18 @@ public class FriendManager : Singleton<FriendManager>
             return friendShip.friendLevel;
         }
         return 0;
+    }
+    public int GetFriendShipExp(int characterId)
+    {
+        if (NPCFriendShips.TryGetValue(characterId, out var friendShip))
+        {
+            return friendShip.nowValue;
+        }
+        return 0;
+    }
+    public bool GetFriendShip(int characterId,out FriendShip friendShip)
+    {
+        return NPCFriendShips.TryGetValue(characterId, out friendShip);
     }
 
     private void AddFriendShipValue(AddFriendShipValue addFriendShipValue)

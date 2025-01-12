@@ -197,7 +197,7 @@ public class UserGameSaveData : IReferenceData
         {
             addMapItemOperates.Add(id);
         }
-        saveTime = DateTime.Now.ToString();
+        saveTime = DateTime.Now.ToString("s");
     }
 
     public void SetMapLineData(int id,bool isInit)

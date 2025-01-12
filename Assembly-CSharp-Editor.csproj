@@ -111,13 +111,19 @@
     <Compile Include="Assets\Editor\Common\UnityEditorWindowController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.182\Google.PackageManagerResolver.dll" />
     <None Include="Assets\Editor\BlendTex.shader" />
     <None Include="Assets\Effect\FX Quest\Editor\FX Quest.dll" />
+    <None Include="Assets\ExternalDependencyManager\Editor\Google.VersionHandler.dll" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.IOSResolver.dll" />
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.182\Google.VersionHandlerImpl.dll" />
     <None Include="Assets\codeandweb.com\Editor\SettingsTexturePackerImporter.txt" />
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.182\Google.IOSResolver.dll" />
     <None Include="Assets\MobileDependencyResolver\Editor\mobile-dependency-resolver.txt" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.VersionHandlerImpl.dll" />
+    <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.182_manifest.txt" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.JarResolver.dll" />
+    <None Include="Assets\ExternalDependencyManager\Editor\1.2.182\Google.JarResolver.dll" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.VersionHandler.dll" />
     <None Include="Assets\Editor\MediationAdapterDependencies.xml" />
     <None Include="Assets\codeandweb.com\Editor\TexturePackerImporter.dll" />
@@ -610,6 +616,10 @@
       <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\AndroidPlayer\UnityEditor.Android.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="FX Quest">
       <HintPath>Assets\Effect\FX Quest\Editor\FX Quest.dll</HintPath>
       <Private>False</Private>
@@ -684,6 +694,18 @@
     </Reference>
     <Reference Include="BehaviorDesigner.Editor">
       <HintPath>Assets\Behavior Designer\Editor\BehaviorDesigner.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.Apple.Extensions.Common">
+      <HintPath>D:\Unity\6000.0.22f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.Apple.Extensions.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
@@ -1508,6 +1530,10 @@
       <Project>{4296BED4-3854-BB24-C26B-FCBAE07B10CB}</Project>
       <Name>Unity.PlayableGraphVisualizer.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Google.Play.Games.Editor.csproj">
+      <Project>{BB1A9BA9-3809-017B-2C4B-10AC9DA27CC5}</Project>
+      <Name>Google.Play.Games.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="CFXRRuntime.csproj">
       <Project>{AC77FFC4-9D31-2F56-F614-A6BAEA3E624F}</Project>
       <Name>CFXRRuntime</Name>
@@ -1523,6 +1549,10 @@
     <ProjectReference Include="Unity.Timeline.csproj">
       <Project>{2EE3D433-DE38-745A-8EC9-EBB93BDF7D0D}</Project>
       <Name>Unity.Timeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="Google.Play.Games.csproj">
+      <Project>{1CA5A0F1-9818-B77D-124F-E2AC1427F342}</Project>
+      <Name>Google.Play.Games</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
       <Project>{55DFF3EC-414E-730C-FFDD-3C52FE7752B8}</Project>

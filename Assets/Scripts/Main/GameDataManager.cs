@@ -306,12 +306,14 @@ public class GameDataManager : Singleton<GameDataManager>
 public interface IGameData
 {
     public string GetKey();
+    public void SetKey(string key) { }
     public string ToString()
     {
        return GetKey();
     }
-  
+    public void SetObjList(List<object> list) { }
     public string GetName() { return ToString(); }
+    public bool isSingleGroup() { return false; }
 
 #if UNITY_EDITOR
     public StringStringDictionary GetDataDic()

@@ -59,6 +59,7 @@ public class GameTimerController : Singleton<GameTimerController>
         if (waitIenumerators.TryGetValue(action,out var enumerator))
         {
             GameController.instance.StopCoroutine(enumerator);
+            waitIenumerators.Remove(action);
         }
         enumerator = WaitAction(delay, action);
         GameController.instance.StartCoroutine(enumerator);
@@ -96,8 +97,7 @@ public class GameTimerController : Singleton<GameTimerController>
             yield return 0;
         }
         action.Invoke();
-       
-       
+        waitIenumerators.Remove(action); 
     }
 
     protected override void UpData()
