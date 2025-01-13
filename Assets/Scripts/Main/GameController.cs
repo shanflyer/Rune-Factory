@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using MyGame;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using Unity.Transforms;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -188,29 +189,9 @@ public class GameController : MonoBehaviour
               //  GameObject.DontDestroyOnLoad(cameraObj);
             }
         }
-        environmentManger = EnvironmentManger.instance;
-       // var appStoreManager= AppStoreManager.instance;
-        var payManager = PayManager.instance;
-        var gameVolumeManager = GameVolumeManager.instance;
-        var gameManager = GameManager.instance;
-        var gameActionDataManager = GameActionDataManager.instance;
-        var gameRandom = GameRandom.instance;
-        var exploreManger = ExploreManager.instance;
-        var sceneManager = SceneManager.instance;
-        var fightManager = FightManager.instance;
-        var talkManager= TalkManager.instance;
-        var festivalManager = FestivalManager.instance;
-        var gameTimeEventManager = GameTimeEventManager.instance;
-        var teamManager = TeamManager.instance;
-        var gameGuideManager = GameGuideManager.instance;
-       GameTimeManager.instance.ZeroGameTime();
-         
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);
 
-        var audio = transform.Find("Audio");
-        AudioController.instance.SetAudioSource(audio.gameObject); 
-        
     }
   
     public void AddCrystal()
@@ -243,8 +224,29 @@ public class GameController : MonoBehaviour
            // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
         }
     }
-    void StartGame()
+    public  void StartGame()
     {
+        environmentManger = EnvironmentManger.instance;
+        // var appStoreManager= AppStoreManager.instance;
+        var payManager = PayManager.instance;
+        var gameVolumeManager = GameVolumeManager.instance;
+        var gameManager = GameManager.instance;
+        var gameActionDataManager = GameActionDataManager.instance;
+        var gameRandom = GameRandom.instance;
+        var exploreManger = ExploreManager.instance;
+        var sceneManager = SceneManager.instance;
+        var fightManager = FightManager.instance;
+        var talkManager = TalkManager.instance;
+        var festivalManager = FestivalManager.instance;
+        var gameTimeEventManager = GameTimeEventManager.instance;
+        var teamManager = TeamManager.instance;
+        var gameGuideManager = GameGuideManager.instance;
+        GameTimeManager.instance.ZeroGameTime();
+
+       
+
+        var audio = transform.Find("Audio");
+        AudioController.instance.SetAudioSource(audio.gameObject);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         UIManager.instance.ShowGamePanel<ZeroPanel>();

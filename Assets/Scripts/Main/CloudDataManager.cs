@@ -49,8 +49,7 @@ public class CloudDataManager:Singleton<CloudDataManager>
     public void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata game)
     {
         if (status == SelectUIStatus.SavedGameSelected)
-        {
-
+        { 
             OpenSavedGameLoad(game.Filename);
             // handle selected game save
         }
@@ -163,10 +162,12 @@ public class CloudDataManager:Singleton<CloudDataManager>
 
     public void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data)
     {
+        Debug.Log($"load游戏存档结果：{status}");
         if (status == SavedGameRequestStatus.Success)
         {
             string str = System.Text.Encoding.Default.GetString(data);
             GameDataSaveManager.instance.InitUserSaveData(userId, str);
+            GameController.instance.StartGame();
             // handle processing the byte array data
         }
         else

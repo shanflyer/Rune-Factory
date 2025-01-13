@@ -624,12 +624,20 @@
       <HintPath>Assets\Effect\FX Quest\Editor\FX Quest.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Google.VersionHandler">
+      <HintPath>Assets\ExternalDependencyManager\Editor\Google.VersionHandler.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections@eba9b2ae55c0\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@60ef35ffd3cd\net40\unity-custom\nunit.framework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.VersionHandlerImpl">
+      <HintPath>Assets\MobileDependencyResolver\Editor\Google.VersionHandlerImpl.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="unityplastic">
@@ -642,10 +650,6 @@
     </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@c810163b1645\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Google.VersionHandlerImpl">
-      <HintPath>Assets\MobileDependencyResolver\Editor\Google.VersionHandlerImpl.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="log4netPlastic">
@@ -666,10 +670,6 @@
     </Reference>
     <Reference Include="Excel">
       <HintPath>Assets\DLL\Excel\Excel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Google.VersionHandler">
-      <HintPath>Assets\MobileDependencyResolver\Editor\Google.VersionHandler.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -1526,13 +1526,13 @@
       <Project>{6417979B-91AB-D159-8994-09F3F427386E}</Project>
       <Name>Unity.PlayableGraphVisualizer</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.PlayableGraphVisualizer.Editor.csproj">
-      <Project>{4296BED4-3854-BB24-C26B-FCBAE07B10CB}</Project>
-      <Name>Unity.PlayableGraphVisualizer.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="Google.Play.Games.Editor.csproj">
       <Project>{BB1A9BA9-3809-017B-2C4B-10AC9DA27CC5}</Project>
       <Name>Google.Play.Games.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.PlayableGraphVisualizer.Editor.csproj">
+      <Project>{4296BED4-3854-BB24-C26B-FCBAE07B10CB}</Project>
+      <Name>Unity.PlayableGraphVisualizer.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="CFXRRuntime.csproj">
       <Project>{AC77FFC4-9D31-2F56-F614-A6BAEA3E624F}</Project>
@@ -1546,13 +1546,13 @@
       <Project>{3648A4EC-6900-D20C-6373-4E70CDD29F44}</Project>
       <Name>CFXRDemo</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Timeline.csproj">
-      <Project>{2EE3D433-DE38-745A-8EC9-EBB93BDF7D0D}</Project>
-      <Name>Unity.Timeline</Name>
-    </ProjectReference>
     <ProjectReference Include="Google.Play.Games.csproj">
       <Project>{1CA5A0F1-9818-B77D-124F-E2AC1427F342}</Project>
       <Name>Google.Play.Games</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Timeline.csproj">
+      <Project>{2EE3D433-DE38-745A-8EC9-EBB93BDF7D0D}</Project>
+      <Name>Unity.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
       <Project>{55DFF3EC-414E-730C-FFDD-3C52FE7752B8}</Project>
