@@ -214,7 +214,11 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            GameManager.instance.ShowTwoSelectAction($"Google SingInStatus:{status}", "是否在未登录的Google Play的情况下游玩，您可能无法同步线上存档等", StartGame, () =>
+            GameManager.instance.ShowTwoSelectAction($"Google SingInStatus:{status}", "是否在未登录的Google Play的情况下游玩，您可能无法同步线上存档等",()=>{
+
+                GameDataSaveManager.instance.InitUserSaveData("测试", null);
+                StartGame();
+            } , () =>
             {
                 Application.Quit();
             });
