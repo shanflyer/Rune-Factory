@@ -7,7 +7,7 @@ namespace UnityEngine.Rendering.Universal
         [SerializeField] float m_ShapeLightParametricRadius = 1.0f;
         [SerializeField] float m_ShapeLightFalloffSize = 0.50f;
         [SerializeField] Vector2 m_ShapeLightFalloffOffset = Vector2.zero;
-        [SerializeField] Vector3[] m_ShapePath = null; 
+        [SerializeField] Vector3[] m_ShapePath = null;
 
         float m_PreviousShapeLightFalloffSize = -1;
         int m_PreviousShapeLightParametricSides = -1;
@@ -15,8 +15,6 @@ namespace UnityEngine.Rendering.Universal
         float m_PreviousShapeLightParametricRadius = -1;
         int m_PreviousShapePathHash = -1;
         LightType m_PreviousLightType = LightType.Parametric;
-
-      
 
         /// <summary>
         /// The number of sides in the parametric shape.

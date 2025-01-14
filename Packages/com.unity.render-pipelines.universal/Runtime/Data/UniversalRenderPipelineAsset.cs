@@ -440,7 +440,7 @@ namespace UnityEngine.Rendering.Universal
 #if UNITY_EDITOR
     [ShaderKeywordFilter.ApplyRulesIfTagsEqual("RenderPipeline", "UniversalPipeline")]
 #endif
-    public partial class UniversalRenderPipelineAsset : RenderPipelineAsset<UniversalRenderPipeline>, ISerializationCallbackReceiver, IProbeVolumeEnabledRenderPipeline, IGPUResidentRenderPipeline, IRenderGraphEnabledRenderPipeline
+    public partial class UniversalRenderPipelineAsset : RenderPipelineAsset<UniversalRenderPipeline>, ISerializationCallbackReceiver, IProbeVolumeEnabledRenderPipeline, IGPUResidentRenderPipeline, IRenderGraphEnabledRenderPipeline, ISTPEnabledRenderPipeline
     {
         ScriptableRenderer[] m_Renderers = new ScriptableRenderer[1];
 
@@ -457,7 +457,6 @@ namespace UnityEngine.Rendering.Universal
         [Obsolete("Use m_RendererDataList instead.")]
         [SerializeField] internal ScriptableRendererData m_RendererData = null;
 
-        public ScriptableRendererData[] RendererDataList => m_RendererDataList;
         // Renderer settings
         [SerializeField] internal ScriptableRendererData[] m_RendererDataList = new ScriptableRendererData[1];
         [SerializeField] internal int m_DefaultRendererIndex = 0;
@@ -1958,5 +1957,13 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         [Obsolete("This property is no longer necessary.")]
         public ProbeVolumeSceneData probeVolumeSceneData => null;
+
+        /// <summary>
+        /// Returns true if the asset is configured to use STP as an upscaling filter
+        /// </summary>
+        public bool isStpUsed
+        {
+            get { return m_UpscalingFilter == UpscalingFilterSelection.STP; }
+        }
     }
 }

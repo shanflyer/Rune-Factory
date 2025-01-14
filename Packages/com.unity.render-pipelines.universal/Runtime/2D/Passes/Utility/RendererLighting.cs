@@ -65,7 +65,6 @@ namespace UnityEngine.Rendering.Universal
         private static readonly int k_L2DInvMatrix = Shader.PropertyToID("L2DInvMatrix");
         private static readonly int k_L2DColor = Shader.PropertyToID("L2DColor");
         private static readonly int k_L2DPosition = Shader.PropertyToID("L2DPosition");
-        private static readonly int k_L2DDirection = Shader.PropertyToID("L2DDirection");
         private static readonly int k_L2DFalloffIntensity = Shader.PropertyToID("L2DFalloffIntensity");
         private static readonly int k_L2DFalloffDistance = Shader.PropertyToID("L2DFalloffDistance");
         private static readonly int k_L2DOuterAngle = Shader.PropertyToID("L2DOuterAngle");
@@ -104,7 +103,7 @@ namespace UnityEngine.Rendering.Universal
             descriptor.graphicsFormat = GetRenderTextureFormat();
             descriptor.useMipMap = false;
             descriptor.autoGenerateMips = false;
-            descriptor.depthBufferBits = 0;
+            descriptor.depthStencilFormat = GraphicsFormat.None;
             descriptor.msaaSamples = renderingData.cameraData.cameraTargetDescriptor.msaaSamples;
             descriptor.dimension = TextureDimension.Tex2D;
 
@@ -122,7 +121,7 @@ namespace UnityEngine.Rendering.Universal
             descriptor.graphicsFormat = GetRenderTextureFormat();
             descriptor.useMipMap = false;
             descriptor.autoGenerateMips = false;
-            descriptor.depthBufferBits = 0;
+            descriptor.depthStencilFormat = GraphicsFormat.None;
             descriptor.msaaSamples = 1;
             descriptor.dimension = TextureDimension.Tex2D;
 
@@ -144,7 +143,7 @@ namespace UnityEngine.Rendering.Universal
             descriptor.graphicsFormat = renderingData.cameraData.cameraTargetDescriptor.graphicsFormat;
             descriptor.useMipMap = false;
             descriptor.autoGenerateMips = false;
-            descriptor.depthBufferBits = 0;
+            descriptor.depthStencilFormat = GraphicsFormat.None;
             descriptor.msaaSamples = 1;
 
             RenderingUtils.ReAllocateHandleIfNeeded(ref pass.rendererData.cameraSortingLayerRenderTarget, descriptor, FilterMode.Bilinear, TextureWrapMode.Clamp, name: "_CameraSortingLayerTexture");
@@ -476,7 +475,6 @@ namespace UnityEngine.Rendering.Universal
                 PerLight2D perLight = lightBatch.GetLight(slot);
                 perLight.Position = new float4(light.transform.position, light.normalMapDistance);
                 perLight.FalloffIntensity = light.falloffIntensity;
-                perLight.Direction = light.Direction;
                 perLight.FalloffDistance = light.shapeLightFalloffSize;
                 perLight.Color = new float4(color.r, color.g, color.b, color.a);
                 perLight.VolumeOpacity = volumeIntensity;
@@ -489,7 +487,6 @@ namespace UnityEngine.Rendering.Universal
             else
             {
                 cmd.SetGlobalVector(k_L2DPosition, new float4(light.transform.position, light.normalMapDistance));
-                cmd.SetGlobalVector(k_L2DDirection, light.Direction);
                 cmd.SetGlobalFloat(k_L2DFalloffIntensity, light.falloffIntensity);
                 cmd.SetGlobalFloat(k_L2DFalloffDistance, light.shapeLightFalloffSize);
                 cmd.SetGlobalColor(k_L2DColor, color);
@@ -677,10 +674,8 @@ namespace UnityEngine.Rendering.Universal
             var fastQualityBit = (light.normalMapQuality == Light2D.NormalMapQuality.Fast) ? 1u << bitIndex : 0u;
             bitIndex++;
             var useNormalMap = light.normalMapQuality != Light2D.NormalMapQuality.Disabled ? 1u << bitIndex : 0u;
-            bitIndex++;
-            var isView= light.IsView ? 1u << bitIndex : 0u;
 
-            return fastQualityBit | pointCookieBit | additiveBit | shapeBit | volumeBit | useNormalMap| isView;
+            return fastQualityBit | pointCookieBit | additiveBit | shapeBit | volumeBit | useNormalMap;
         }
 
         private static Material CreateLightMaterial(Renderer2DData rendererData, Light2D light, bool isVolume)
@@ -690,7 +685,7 @@ namespace UnityEngine.Rendering.Universal
 
             var isPoint = light.isPointLight;
 
-            Material material = CoreUtils.CreateEngineMaterial(light.IsView? resources.viewShader : resources.lightShader);
+            Material material = CoreUtils.CreateEngineMaterial(resources.lightShader);
 
             if (!isVolume)
             {

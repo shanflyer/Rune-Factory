@@ -16,8 +16,6 @@ public class FullScreenPassRendererFeatureEditor : Editor
     private SerializedProperty m_BindDepthStencilAttachmentProperty;
     private SerializedProperty m_PassMaterialProperty;
     private SerializedProperty m_PassIndexProperty;
-    private SerializedProperty m_ScalePrperty;
-    private SerializedProperty m_blitTextureNameProperty;
 
     private static readonly GUIContent k_InjectionPointGuiContent = new GUIContent("Injection Point", "Specifies where in the frame this pass will be injected.");
     private static readonly GUIContent k_RequirementsGuiContent = new GUIContent("Requirements", "A mask of URP internal textures that will need to be generated and bound for sampling.\n\nNote that 'Color' here corresponds to '_CameraOpaqueTexture' so most of the time you will want to use the 'Fetch Color Buffer' option instead.");
@@ -25,8 +23,6 @@ public class FullScreenPassRendererFeatureEditor : Editor
     private static readonly GUIContent k_BindDepthStencilAttachmentGuiContent = new GUIContent("Bind Depth-Stencil", "Enable this to bind the active camera's depth-stencil attachment to the framebuffer (only use this if depth-stencil ops are used by the assigned material as this could have a performance impact).");
     private static readonly GUIContent k_PassMaterialGuiContent = new GUIContent("Pass Material", "The material used to render the full screen pass.");
     private static readonly GUIContent k_PassGuiContent = new GUIContent("Pass", "The name of the shader pass to use from the assigned material.");
-    private static readonly GUIContent k_ScaleGuiContent = new GUIContent("Scale", "分辨率缩放");
-    private static readonly GUIContent k_m_blitTextureNameContent = new GUIContent("BlitTexture", "blit图片名字");
 
     private void OnEnable()
     {
@@ -36,8 +32,6 @@ public class FullScreenPassRendererFeatureEditor : Editor
         m_BindDepthStencilAttachmentProperty = serializedObject.FindProperty("bindDepthStencilAttachment");
         m_PassMaterialProperty = serializedObject.FindProperty("passMaterial");
         m_PassIndexProperty = serializedObject.FindProperty("passIndex");
-        m_ScalePrperty = serializedObject.FindProperty("scale");
-        m_blitTextureNameProperty = serializedObject.FindProperty("blitTextureName");
     }
 
     /// <summary>
@@ -55,8 +49,6 @@ public class FullScreenPassRendererFeatureEditor : Editor
         EditorGUILayout.PropertyField(m_FetchColorBufferProperty, k_FetchColorBufferGuiContent);
         EditorGUILayout.PropertyField(m_BindDepthStencilAttachmentProperty, k_BindDepthStencilAttachmentGuiContent);
         EditorGUILayout.PropertyField(m_PassMaterialProperty, k_PassMaterialGuiContent);
-       // EditorGUILayout.PropertyField(m_ScalePrperty, k_ScaleGuiContent);
-        //EditorGUILayout.PropertyField(m_blitTextureNameProperty, k_m_blitTextureNameContent);
 
         if (AdvancedProperties.BeginGroup())
         {

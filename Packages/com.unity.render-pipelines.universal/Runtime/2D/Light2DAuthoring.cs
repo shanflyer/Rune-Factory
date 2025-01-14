@@ -18,14 +18,7 @@ namespace UnityEngine.Rendering.Universal
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            if (m_LightType == LightType.Directional)
-            {
-                Gizmos.DrawIcon(transform.position, s_IconsPath + s_LightIconFileNames[1], true);
-            }
-            else
-            {
-                Gizmos.DrawIcon(transform.position, s_IconsPath + s_LightIconFileNames[(int)m_LightType], true);
-            }
+            Gizmos.DrawIcon(transform.position, s_IconsPath + s_LightIconFileNames[(int)m_LightType], true);
         }
 
         void Reset()

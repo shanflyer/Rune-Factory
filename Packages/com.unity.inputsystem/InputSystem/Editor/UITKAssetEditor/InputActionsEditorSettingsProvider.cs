@@ -5,8 +5,6 @@ using UnityEditor;
 using UnityEditor.ShortcutManagement;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using System;
-using System.IO;
 
 namespace UnityEngine.InputSystem.Editor
 {
@@ -194,35 +192,8 @@ namespace UnityEngine.InputSystem.Editor
         {
             ProjectWideActionsAsset.Verify(asset); // Ignore verification result for save
             EditorHelpers.SaveAsset(AssetDatabase.GetAssetPath(asset), asset.ToJson());
-            SaveNameDataData(asset);
         }
-        internal void SaveNameDataData(InputActionAsset importedAsset)
-        {
-            if (importedAsset == null)
-            {
-                return;
-            }
 
-            string property = "";
-
-            foreach (var actionMap in importedAsset.actionMaps)
-            {
-                foreach (var d in actionMap.actions)
-                {
-                    string title = $"{actionMap.m_Name}_{d.m_Name}";
-                    title = title.Replace(" ", "_");
-
-                    string value = $"\"{d.m_Name}\"";
-                    property = $"{property}{"public const string "}{title}{"= "}{value}{";"}\n";
-                }
-            }
-
-            string propertyStr = String.Format("{{{0}}}", property);
-            string dataStr = $"public class MyInputNameData\n{propertyStr}";
-            string path=AssetDatabase.GetAssetPath(importedAsset);
-            string dataPath = path.Replace(".inputactions", "NameData.cs");
-            File.WriteAllText(dataPath, dataStr);
-        }
         private void CreateUI()
         {
             var projectSettingsAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(

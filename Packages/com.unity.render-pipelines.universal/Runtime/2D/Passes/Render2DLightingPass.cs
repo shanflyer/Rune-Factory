@@ -39,7 +39,7 @@ namespace UnityEngine.Rendering.Universal
         private readonly Texture2D m_FallOffLookup;
         private bool m_NeedsDepth;
         private short m_CameraSortingLayerBoundsIndex;
-        LayerMask layerMask;
+
         public Render2DLightingPass(Renderer2DData rendererData, Material blitMaterial, Material samplingMaterial, Texture2D fallOffLookup)
         {
             m_Renderer2DData = rendererData;
@@ -54,10 +54,7 @@ namespace UnityEngine.Rendering.Universal
         {
             m_NeedsDepth = useDepth;
         }
-        private void GetFilterSettingMode(ref FilteringSettings FilterSetting)
-        {
-            FilterSetting.layerMask = m_Renderer2DData.renderLayerMask;
-        }
+
         private void CopyCameraSortingLayerRenderTexture(ScriptableRenderContext context, RenderingData renderingData, RenderBufferStoreAction mainTargetStoreAction)
         {
             var cmd = renderingData.commandBuffer;
@@ -252,7 +249,7 @@ namespace UnityEngine.Rendering.Universal
                         // This is a local copy of the array element (it's a struct). Remember to add a ref here if you need to modify the real thing.
                         var layerBatch = layerBatches[i];
 
-                        if (layerBatch.lightStats.useAnyLights)
+                        if (layerBatch.lightStats.useLights)
                         {
                             for (var blendStyleIndex = 0; blendStyleIndex < blendStylesCount; blendStyleIndex++)
                             {
@@ -306,6 +303,8 @@ namespace UnityEngine.Rendering.Universal
                                 CopyCameraSortingLayerRenderTexture(context, renderingData, copyStoreAction);
                         }
 
+                        RendererLighting.DisableAllKeywords(CommandBufferHelpers.GetRasterCommandBuffer(cmd));
+
                         // Draw light volumes
                         if (drawLights && (layerBatch.lightStats.totalVolumetricUsage > 0))
                         {
@@ -354,11 +353,18 @@ namespace UnityEngine.Rendering.Universal
             filterSettings.renderingLayerMask = 0xFFFFFFFF;
             filterSettings.sortingLayerRange = SortingLayerRange.all;
 
-            GetFilterSettingMode(ref filterSettings);
-
             LayerUtility.InitializeBudget(m_Renderer2DData.lightRenderTextureMemoryBudget);
             ShadowRendering.InitializeBudget(m_Renderer2DData.shadowRenderTextureMemoryBudget);
             RendererLighting.lightBatch.Reset();
+
+            // Set screenParams when pixel perfect camera is used with the reference resolution
+            camera.TryGetComponent(out PixelPerfectCamera pixelPerfectCamera);
+            if (pixelPerfectCamera != null && pixelPerfectCamera.enabled && pixelPerfectCamera.offscreenRTSize != Vector2Int.zero)
+            {
+                var cameraWidth = pixelPerfectCamera.offscreenRTSize.x;
+                var cameraHeight = pixelPerfectCamera.offscreenRTSize.y;
+                renderingData.commandBuffer.SetGlobalVector(ShaderPropertyId.screenParams, new Vector4(cameraWidth, cameraHeight, 1.0f + 1.0f / cameraWidth, 1.0f + 1.0f / cameraHeight));
+            }
 
             var isSceneLit = m_Renderer2DData.lightCullResult.IsSceneLit();
             if (isSceneLit && isLitView)

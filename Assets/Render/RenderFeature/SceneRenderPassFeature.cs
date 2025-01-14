@@ -131,7 +131,7 @@ public class SceneRenderPassFeature : ScriptableRendererFeature
         {
             return;
         }
-        if (InitCheckCamera(renderingData.cameraData.camera))
+        //if (InitCheckCamera(renderingData.cameraData.camera))
             renderer.EnqueuePass(m_ScriptablePass);
     }
 }

@@ -13,7 +13,6 @@ namespace UnityEditor.Rendering.Universal
             public static readonly GUIContent lightBlendStylesHeader = EditorGUIUtility.TrTextContent("Light Blend Styles", "A Light Blend Style is a collection of properties that describe a particular way of applying lighting.");
             public static readonly GUIContent postProcessHeader = EditorGUIUtility.TrTextContent("Post-processing");
 
-            public static readonly GUIContent layerMask = EditorGUIUtility.TrTextContent("RenderLayerMask", "‰÷»æLayerMask");
             public static readonly GUIContent transparencySortMode = EditorGUIUtility.TrTextContent("Transparency Sort Mode", "Default sorting mode used for transparent objects");
             public static readonly GUIContent transparencySortAxis = EditorGUIUtility.TrTextContent("Transparency Sort Axis", "Axis used for custom axis sorting mode");
             public static readonly GUIContent hdrEmulationScale = EditorGUIUtility.TrTextContent("HDR Emulation Scale", "Describes the scaling used by lighting to remap dynamic range between LDR and HDR");
@@ -44,7 +43,6 @@ namespace UnityEditor.Rendering.Universal
             public SerializedProperty blendFactorAdditive;
         }
 
-        SerializedProperty m_renderLayerMask;
         SerializedProperty m_TransparencySortMode;
         SerializedProperty m_TransparencySortAxis;
         SerializedProperty m_HDREmulationScale;
@@ -86,7 +84,6 @@ namespace UnityEditor.Rendering.Universal
             m_WasModified = false;
             m_Renderer2DData = (Renderer2DData)serializedObject.targetObject;
 
-            m_renderLayerMask = serializedObject.FindProperty("m_renderLayerMask");
             m_TransparencySortMode = serializedObject.FindProperty("m_TransparencySortMode");
             m_TransparencySortAxis = serializedObject.FindProperty("m_TransparencySortAxis");
             m_HDREmulationScale = serializedObject.FindProperty("m_HDREmulationScale");
@@ -194,7 +191,6 @@ namespace UnityEditor.Rendering.Universal
             if (!m_GeneralFoldout.value)
                 return;
 
-            EditorGUILayout.PropertyField(m_renderLayerMask, Styles.layerMask);
             EditorGUILayout.PropertyField(m_TransparencySortMode, Styles.transparencySortMode);
 
             using (new EditorGUI.DisabledGroupScope(m_TransparencySortMode.intValue != (int)TransparencySortMode.CustomAxis))

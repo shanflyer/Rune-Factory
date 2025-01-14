@@ -2,8 +2,6 @@ using System;
 using UnityEngine.Serialization;
 using UnityEngine.Scripting.APIUpdating;
 using UnityEngine.U2D;
-using Unity.Collections;
-using Unity.Mathematics;
 using UnityEngine.Rendering.RenderGraphModule;
 #if UNITY_EDITOR
 using System.Linq;
@@ -56,8 +54,7 @@ namespace UnityEngine.Rendering.Universal
             /// <summary>
             /// Shapeless light that affects the entire screen.
             /// </summary>
-            Global = 4,
-            Directional = 5
+            Global = 4
         }
 
         /// <summary>
@@ -114,7 +111,6 @@ namespace UnityEngine.Rendering.Universal
 
         [SerializeField] float m_FalloffIntensity = 0.5f;
 
-        [SerializeField] Vector3 m_Direction = new Vector3(0, 0, -0.02f);
         [ColorUsage(true)]
         [SerializeField] Color m_Color = Color.white;
         [SerializeField] float m_Intensity = 1;
@@ -164,8 +160,6 @@ namespace UnityEngine.Rendering.Universal
         [SerializeField] bool m_ShadowVolumeIntensityEnabled = false;
         [Range(0, 1)]
         [SerializeField] float m_ShadowVolumeIntensity = 0.75f;
-        [SerializeField] bool m_isView = false;
-        public bool IsView => m_isView;
 
         Mesh m_Mesh;
 
@@ -301,7 +295,6 @@ namespace UnityEngine.Rendering.Universal
         /// The Sprite that's used by the Sprite Light type to control the shape light
         /// </summary>
         public Sprite lightCookieSprite { get { return m_LightType != LightType.Point ? m_LightCookieSprite : m_DeprecatedPointLightCookieSprite; } set => m_LightCookieSprite = value; }
-        public Vector3 Direction { get => m_Direction; set => m_Direction = value; }
 
         /// <summary>
         /// Controls the brightness and distance of the fall off (edge) of the light
@@ -401,13 +394,7 @@ namespace UnityEngine.Rendering.Universal
             }
             return false;
         }
-        static Vector3[] DirectionalShapePath = new Vector3[4]
-       {
-            new Vector3(-9999999,-9999999,0),
-            new Vector3(-9999999,9999999,0),
-            new Vector3(9999999,9999999,0),
-            new Vector3(9999999,-9999999,0),
-       };
+        
         internal void UpdateCookieSpriteTexture()
         {
             m_CookieSpriteTexture?.Release();
@@ -437,7 +424,6 @@ namespace UnityEngine.Rendering.Universal
 
                 switch (m_LightType)
                 {
-                    case LightType.Directional:
                     case LightType.Freeform:
                         m_LocalBounds = LightUtility.GenerateShapeMesh(this, m_ShapePath, m_ShapeLightFalloffSize, batchChannelColor);
                         break;
@@ -527,37 +513,17 @@ namespace UnityEngine.Rendering.Universal
             SortingLayer.onLayerRemoved -= OnSortingLayerRemoved;
 #endif
         }
-        Color oldColor;
-        Vector3 lightDirection;
+
         private void LateUpdate()
         {
-            if (m_LightType == LightType.Directional)
-            {
-                if (lightDirection != Direction)
-                {
-                    lightDirection = Direction;
-                    Vector2 directionValue = new Vector2(-Direction.x / 90.0f * math.PI * 0.5f, 1 - Direction.y / 90.0f);
-                    Shader.SetGlobalVector("LightDirection", directionValue);
-                }
-            }
-
             if (m_LightType == LightType.Global)
-            {
-                if (color != oldColor)
-                {
-                    oldColor = color;
-                    Shader.SetGlobalColor("GlobalColor", color);
-                }
                 return;
-            }
-
 
             UpdateMesh(forceUpdate);
             UpdateBoundingSphere();
 
             forceUpdate = false;
         }
-
 
 #if UNITY_EDITOR
         private void OnSortingLayerAdded(SortingLayer layer)

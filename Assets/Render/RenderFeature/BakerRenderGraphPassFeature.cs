@@ -288,7 +288,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             {
                 return;
             }
-            if (InitCheckCamera(renderingData.cameraData.camera))
+           // if (InitCheckCamera(renderingData.cameraData.camera))
                 renderer.EnqueuePass(m_ScriptablePass);
         }
     }
