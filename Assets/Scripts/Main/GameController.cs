@@ -204,6 +204,8 @@ public class GameController : MonoBehaviour
         PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication); 
        
     }
+
+    private bool manuallyAuthenticate = false;
     internal void ProcessAuthentication(SignInStatus status)
     {
         if (status == SignInStatus.Success)
@@ -214,6 +216,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
+            /*
             GameManager.instance.ShowTwoSelectAction($"Google SingInStatus:{status}", "是否在未登录的Google Play的情况下游玩，您可能无法同步线上存档等",()=>{
 
                 GameDataSaveManager.instance.InitUserSaveData("测试", null);
@@ -221,11 +224,28 @@ public class GameController : MonoBehaviour
             } , () =>
             {
                 Application.Quit();
-            });
+            });*/
 
             // Disable your integration with Play Games Services or show a login button
             // to ask users to sign-in. Clicking it should call
-           // PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication).
+            if (manuallyAuthenticate == false)
+            {
+                PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
+                manuallyAuthenticate = true;
+
+            }
+            else
+            {
+                GameManager.instance.ShowTwoSelectAction($"Google SingInStatus:{status}", "是否在未登录的Google Play的情况下游玩，您可能无法同步线上存档等", () => {
+
+                    GameDataSaveManager.instance.InitUserSaveData("测试", null);
+                    StartGame();
+                }, () =>
+                {
+                    Application.Quit();
+                });
+            }
+               
         }
     }
     public  void StartGame()

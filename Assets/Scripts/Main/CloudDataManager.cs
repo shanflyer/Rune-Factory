@@ -19,10 +19,13 @@ public class CloudDataManager:Singleton<CloudDataManager>
         this.userId = userId;
 
         uint maxNumToDisplay = 5;
-        bool allowCreateNew = false;
+        bool allowCreateNew = true;
         bool allowDelete = true;
 
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+
+
+
         savedGameClient.ShowSelectSavedGameUI("Select saved game",
             maxNumToDisplay,
             allowCreateNew,
@@ -49,7 +52,7 @@ public class CloudDataManager:Singleton<CloudDataManager>
     public void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata game)
     {
         if (status == SelectUIStatus.SavedGameSelected)
-        { 
+        {  
             OpenSavedGameLoad(game.Filename);
             // handle selected game save
         }
@@ -78,7 +81,8 @@ public class CloudDataManager:Singleton<CloudDataManager>
     }
     void OpenSavedGameLoad(string filename)
     {
-        ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+        ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame; 
+
         savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork,
             ConflictResolutionStrategy.UseLongestPlaytime, OnSavedGameOpened);
     }
