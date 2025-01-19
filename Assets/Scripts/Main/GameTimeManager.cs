@@ -172,6 +172,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         public void SetTime(int hour, int minute)
         {
+            Debug.Log($"hour:{hour}--minute:{minute}");
             if (this.hour != hour)
             {
                 GameActionManager.instance.QueueAction(newHour);
@@ -918,7 +919,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             };
             nowGameTime.SetTime(6, 0);
             // StartTimeRun();
-        }
+        } 
     }
 
     public string GameTimeToString()

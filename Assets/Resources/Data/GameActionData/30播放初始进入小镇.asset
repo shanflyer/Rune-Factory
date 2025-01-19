@@ -15,31 +15,5 @@ MonoBehaviour:
   id: 30
   typeName: ActionList
   _parameters:
-  - value: LerpScreenCycleValue
-    parameters:
-    - value: 1
-      parameters: []
-    - value: 0
-      parameters: []
-    - value: 1
-      parameters: []
-    - value: -2.8
-      parameters: []
-    - value: 1.5
-      parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 1800
-      parameters:
-      - value: PlayFilm
-        parameters:
-        - value: "\u89D2\u8272\u9009\u62E9"
-          parameters: []
-        - value: ZeroTown
-          parameters: []
-  - value: SetCharacterStopCreate
-    parameters:
-    - value: true
-      parameters: []
   - value: DestroyTeam
     parameters: []

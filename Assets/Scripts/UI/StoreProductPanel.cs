@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using VoxelBusters.EssentialKit;
 
 public class StoreProductPanel : GamePanel<IReferenceData>
 {
@@ -20,8 +21,13 @@ public class StoreProductPanel : GamePanel<IReferenceData>
         base.Awake();
         storeProductList = new DisplayList<StoreProductReference, AppStoreProductData>(productReference, productParent);
         closeBtn.onClick.AddListener(Close);
+ 
     }
-
+    public override void Close()
+    {
+        base.Close();
+        storeProductList.ClearSelect();
+    }
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -44,5 +50,30 @@ public class StoreProductPanel : GamePanel<IReferenceData>
     public override void InitReferenceData(IReferenceData v)
     {
         base.InitReferenceData(v);
+    }
+
+    private void OnTransactionStateChange(BillingServicesTransactionStateChangeResult result)
+    {
+        var transactions = result.Transactions;
+        for (int iter = 0; iter < transactions.Length; iter++)
+        {
+            var transaction = transactions[iter];
+            switch (transaction.TransactionState)
+            {
+                case BillingTransactionState.Purchased:
+                    Debug.Log(string.Format("Buy product with id:{0} finished successfully.", transaction.Product.Id));
+                    /*
+                        if(transaction.Product.Id.Equals("REMOVE_ADS")) //Note we used Equals instead of "==" which is always safe!
+                        {
+                            Debug.Log("REMOVE_ADS product purchased. Proceed with removing ads");
+                        }
+                    */
+                    break;
+
+                case BillingTransactionState.Failed:
+                    Debug.Log(string.Format("Buy product with id:{0} failed with error. Error: {1}", transaction.Product.Id, transaction.Error));
+                    break;
+            }
+        }
     }
 }

@@ -101,6 +101,7 @@ public class MapRoomData : ScriptableObject, IGameData
     public int creatTempCharacterId;
     public float fixedSeason;
     public WeatherDisplayType weatherDisplayType;
+    public GameActionData completedAction;
 
     public List<MapBGSData> mapBGSDatas = new List<MapBGSData>();
     public string bgmTag;

@@ -278,6 +278,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         if (mapRoomData != null)
         {
             var mapRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), mapRoomData.roomName, mapRoomData.mapObj.transform, instanceId);
+            RemoveMapDisplayCompeted(0);
             return mapRuntimeObj;
         }
         return null;
@@ -371,6 +372,15 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
+    HashSet<int> mapDisplayCompleted = new HashSet<int>();
+    void RemoveMapDisplayCompeted(int id)
+    {
+        mapDisplayCompleted.Remove(id);
+        if (mapDisplayCompleted.Count <= 0&&DisplayMapRoomData.completedAction!=null)
+        {
+            DisplayMapRoomData.completedAction.Action();
+        }
+    }
     public async Task DisplayMap(int mapId,bool fixedDisplay=false)
     {
         if (!fixedDisplay &&displayMap == mapId)
@@ -378,6 +388,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             return;
         }
         RecycleMap();
+        mapDisplayCompleted.Clear();
         displayMap = mapId;
         DisplayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
         if (DisplayMapRoomData.autoCreatTempNpc)
@@ -412,7 +423,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
             //Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
-            nowMapRoomObj =await CreatMapRunTime(DisplayMapRoomData, mapId);
+            mapDisplayCompleted.Add(0); 
             // (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
             List<int> mapItems = WorldMapManager.instance.GetMapItems(mapId);
@@ -421,9 +432,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             {
                 if (WorldMapManager.instance.GetRuntimeMapItem(mapItems[i], out RuntimeMapItem mapItem))
                 {
+                   mapDisplayCompleted.Add(mapItem.instanceId); 
                    DisplayMapItem(mapItem);
                 }
             }
+            nowMapRoomObj = await CreatMapRunTime(DisplayMapRoomData, mapId);
+
 
             var tempItems = TempMapItemController.instance.GetTempMapItems(mapId);
             for (int i = 0; i < tempItems.Count; i++)
@@ -672,10 +686,9 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
             MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
-
-         
-
             await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
+
+            RemoveMapDisplayCompeted(runtimeMapItem.instanceId);
 
             var manufature = ManufatureManager.instance.GetManufature(runtimeMapItem.instanceId);
             if (manufature != null)

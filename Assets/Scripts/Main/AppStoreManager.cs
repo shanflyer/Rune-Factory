@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
-using UnityEngine.Purchasing;
-using UnityEngine.Purchasing.Extension;
+using VoxelBusters.CoreLibrary;
+using VoxelBusters.EssentialKit;
 
-public class AppStoreManager : MonoBehaviour, IDetailedStoreListener
+public class AppStoreManager : MonoBehaviour 
 {
     const string projectName = "com.shanflyer.FantasyTown_EveryDay";
-    public static AppStoreManager instance;
-    private IStoreController m_StoreController;
-    private IGooglePlayStoreExtensions m_GooglePlayStoreExtensions;
+    public static AppStoreManager instance; 
 
     private MyDic<string, AppStoreProductData> appStoreProductDatas = new MyDic<string, AppStoreProductData>();
 
@@ -19,6 +17,12 @@ public class AppStoreManager : MonoBehaviour, IDetailedStoreListener
     }
     void OnDisable()
     {
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+      
+        BillingServices.OnInitializeStoreComplete -= OnInitializeStoreComplete;
+        BillingServices.OnTransactionStateChange -= OnTransactionStateChange;
+        BillingServices.OnRestorePurchasesComplete -= OnRestorePurchasesComplete;
+#endif
 
     }
 
@@ -30,140 +34,108 @@ public class AppStoreManager : MonoBehaviour, IDetailedStoreListener
         {
             appStoreProductDatas.Add($"{projectName}.{allProductDatas[i].ProductName}", allProductDatas[i]);
         }
-        this.appStoreProductData = null;
-        InitializePurchasing();
-        UpdateWarningMessage();
+
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+      
+        BillingServices.IsAvailable();
+        BillingServices.OnInitializeStoreComplete += OnInitializeStoreComplete;
+        BillingServices.OnTransactionStateChange += OnTransactionStateChange;
+        BillingServices.OnRestorePurchasesComplete += OnRestorePurchasesComplete;
+#endif
+
     }
 
     public void Awake()
     {
        
     }
-
-    private void InitializePurchasing()
-    {
-        var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
-        builder.Configure<IGooglePlayConfiguration>().SetServiceDisconnectAtInitializeListener(() =>
-        {
-            InformationController.instance.AddInformation( "Unable to connect to the Google Play Billing service. " +
-                "User may not have a Google account on their device.",false,true);
-        });
-        builder.Configure<IGooglePlayConfiguration>().SetQueryProductDetailsFailedListener((int retryCount) =>
-        {
-            InformationController.instance.AddInformation("Failed to query product details " + retryCount + " times.", false, true);
-        });
-
-        builder.Configure<IGooglePlayConfiguration>().SetDeferredPurchaseListener(OnDeferredPurchase);
-
-      //  builder.AddProduct(goldProductId, ProductType.Consumable);
-       for (int i = 0; i < appStoreProductDatas.length; i++)
-        {
-            var ProductName = $"{projectName}.{appStoreProductDatas[i].ProductName}";
-            builder.AddProduct(ProductName, ProductType.Consumable);
-        } 
-        //var ProductName = $"{projectName}.{appStoreProductDatas[0]}" ;
-       // Debug.Log($"ProductName:{ProductName}---{projectName == goldProductId}");
-        builder.AddProduct(goldProductId, ProductType.Consumable);
-
-        UnityPurchasing.Initialize(this, builder);
-    }
-    public string goldProductId = "com.shanflyer.FantasyTown_EveryDay.diamond200";
-    private void OnDeferredPurchase(Product product)
-    {
-        InformationController.instance.AddInformation($"Purchase of {product.definition.id} is deferred", false, true);
-    }
-
-    public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
-    {
-        Debug.Log("In-App Purchasing successfully initialized");
-
-        m_StoreController = controller;
-        m_GooglePlayStoreExtensions = extensions.GetExtension<IGooglePlayStoreExtensions>();
-    }
-
-    private AppStoreProductData appStoreProductData;
+     
+    public string goldProductId = "com.shanflyer.FantasyTown_EveryDay.diamond200";  
+     
 
     public void BuyProduct(AppStoreProductData appStoreProductData)
-    {
-        this.appStoreProductData = appStoreProductData;
+    { 
         var goldProductId = $"{projectName}.{appStoreProductData.ProductName}";
-        m_StoreController.InitiatePurchase(goldProductId);
+        BillingServices.BuyProduct(goldProductId,options:null);
+    }
+    public void BuyProduct(string ProductName)
+    {
+        var goldProductId = $"{projectName}.{ProductName}";
+        BillingServices.BuyProduct(goldProductId, options: null);
+    }
+    private void OnTransactionStateChange(BillingServicesTransactionStateChangeResult result)
+    {
+        var transactions = result.Transactions;
+        for (int iter = 0; iter < transactions.Length; iter++)
+        {
+            var transaction = transactions[iter];
+            switch (transaction.TransactionState)
+            {
+                case BillingTransactionState.Purchased:
+                    Debug.Log(string.Format("Buy product with id:{0} finished successfully.", transaction.Product.Id));
+                    if (appStoreProductDatas.TryGetValue(transaction.Product.Id,out var appStoreProductData))
+                    {
+                        if (appStoreProductData.getDiamond > 0)
+                        {
+                            InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr($"成功获得{0}钻石!"), appStoreProductData.getDiamond), false, true);
+                            PayManager.instance.AddDiamond(appStoreProductData.getDiamond);
+                        }
+                        else
+                        {
+                            InformationController.instance.AddInformation(LanguageManage.SwitchStr($"感谢您的支持！"), false, true);
+                        }
+                    }
+
+                    /*
+                        if(transaction.Product.Id.Equals("REMOVE_ADS")) //Note we used Equals instead of "==" which is always safe!
+                        {
+                            Debug.Log("REMOVE_ADS product purchased. Proceed with removing ads");
+                        }
+                    */
+                    break;
+
+                case BillingTransactionState.Failed:
+                    string log= (string.Format("Buy product with id:{0} failed with error. Error: {1}", transaction.Product.Id, transaction.Error));
+                    InformationController.instance.AddInformation(log, false, true);
+                    break;
+            }
+        }
+    }
+    private void OnRestorePurchasesComplete(BillingServicesRestorePurchasesResult result, Error error)
+    {
     }
 
-    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
+    private void OnInitializeStoreComplete(BillingServicesInitializeStoreResult result, Error error)
     {
-        var product = args.purchasedProduct;
-
-        Debug.Log($"Processing Purchase: {product.definition.id}");
-
-        if (m_GooglePlayStoreExtensions.IsPurchasedProductDeferred(product))
+        if (error == null)
         {
-            //The purchase is Deferred.
-            //Therefore, we do not unlock the content or complete the transaction.
-            //ProcessPurchase will be called again once the purchase is Purchased.
-            return PurchaseProcessingResult.Pending;
+            // update UI
+            // show console messages
+            var products = result.Products;
+            Debug.Log("Store initialized successfully.");
+            Debug.Log("Total products fetched: " + products.Length);
+            Debug.Log("Below are the available products:");
+            for (int iter = 0; iter < products.Length; iter++)
+            {
+                var product = products[iter];
+                Debug.Log(string.Format("[{0}]: {1}", iter, product));
+            }
+        }
+        else
+        {
+            Debug.Log("Store initialization failed with error. Error: " + error);
         }
 
-        UnlockContent(product);
-
-        return PurchaseProcessingResult.Complete;
-    }
-
-    private void UnlockContent(Product product)
-    {
-        Debug.Log($"Unlock Content: {product.definition.id}");
-        var goldProductId = $"{projectName}.{appStoreProductData.ProductName}";
-        if (product.definition.id == goldProductId)
+        var invalidIds = result.InvalidProductIds;
+        Debug.Log("Total invalid products: " + invalidIds.Length);
+        if (invalidIds.Length > 0)
         {
-            InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr($"成功获得{0}钻石!"), appStoreProductData.getDiamond), false, true); 
-            PayManager.instance.AddDiamond(appStoreProductData.getDiamond);
+            Debug.Log("Here are the invalid product ids:");
+            for (int iter = 0; iter < invalidIds.Length; iter++)
+            {
+                Debug.Log(string.Format("[{0}]: {1}", iter, invalidIds[iter]));
+            }
         }
     }
 
-    private bool IsPurchasedProductDeferred(string productId)
-    {
-        var product = m_StoreController.products.WithID(productId);
-        return m_GooglePlayStoreExtensions.IsPurchasedProductDeferred(product);
-    }
-
-    public void OnInitializeFailed(InitializationFailureReason error)
-    {
-        OnInitializeFailed(error, null);
-    }
-
-    public void OnInitializeFailed(InitializationFailureReason error, string message)
-    {
-        var errorMessage = $"Purchasing failed to initialize. Reason: {error}.";
-
-        if (message != null)
-        {
-            errorMessage += $" More details: {message}";
-        }
-
-        InformationController.instance.AddInformation(errorMessage, false, true);
-    }
-
-    public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
-    {
-        InformationController.instance.AddInformation($"Purchase failed - Product: '{product.definition.id}', PurchaseFailureReason: {failureReason}", false, true);
-    }
-
-    public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
-    {
-        InformationController.instance.AddInformation($"Purchase failed - Product: '{product.definition.id}'," +
-            $" Purchase failure reason: {failureDescription.reason}," +
-            $" Purchase failure details: {failureDescription.message}", false, true);
-    }
-
-    private void UpdateWarningMessage()
-    {
-        var currentAppStore = StandardPurchasingModule.Instance().appStore;
-
-        var warningMessage = currentAppStore != AppStore.GooglePlay ?
-            "This sample is meant to be tested using the Google Play Store.\n" +
-            $"The currently selected store is: {currentAppStore}.\n" +
-            "Build the project for Android and use the Google Play Store.\n\n" +
-            "See README for more information and instructions on how to test this sample."
-            : "";
-    }
 }

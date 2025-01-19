@@ -1,19 +1,38 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics; 
-
+ 
 public class UserGameSaveDataList : IReferenceData
 {
+    public CommonSaveData commonSaveData;  
     public UserGameSaveData nowSaveData;
     public List<UserGameSaveData> userGameSaveDatas = new List<UserGameSaveData>();
+    public UserGameSaveDataList()
+    {
+        commonSaveData = new CommonSaveData();
+    }
 }
 
- 
+public class CommonSaveData
+{
+    public int diamond;
+}
+[Serializable]
 public class UserGameSaveData : IReferenceData
 {
 
-    public UserGameSaveData() { }
+    public UserGameSaveData() 
+    {
+        otherSaveData = new OtherSaveData
+        {
+            playerPackages = new List<int>(),
+
+        };
+        packageSaveDatas = new List<PackageSaveData>();
+        endGuideFilmIndex = -1;
+    }
     public UserGameSaveData(UserGameSaveData userGameSaveData)
     {
         playerData = new CharacterSaveData(userGameSaveData.playerData);
@@ -94,7 +113,7 @@ public class UserGameSaveData : IReferenceData
 
     private Dictionary<int, List<int>> removeMapItemOperatesDic = new Dictionary<int, List<int>>();
     private Dictionary<int, List<int>> addMapItemOperatesDic = new Dictionary<int, List<int>>();
-
+     
     public int2 GetNpcBirthDay(int npdId)
     {
         if(npcBirthDays.TryGetValue(npdId,out var int2))
@@ -789,7 +808,7 @@ public class ChapterSave
 
 public class OtherSaveData
 {
-    public int gold, diamond;
+    public int gold;
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
 
@@ -799,7 +818,6 @@ public class OtherSaveData
     public OtherSaveData(OtherSaveData otherSaveData)
     {
         gold = otherSaveData.gold;
-        diamond = otherSaveData.diamond;
         playerPackages = new List<int>();
         playerPackages.AddRange(otherSaveData.playerPackages);
         isMarriedFood = otherSaveData.isMarriedFood;
@@ -812,7 +830,7 @@ public class OtherSaveData
             shortcutItems.AddRange(otherSaveData.shortcutItems);
         }
       
-    }
+    } 
 }
 
 public struct FriendSaveData

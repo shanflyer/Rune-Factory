@@ -6,6 +6,8 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Newtonsoft.Json;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
@@ -36,6 +38,45 @@ public struct TestStruct
 }
 public class Test : MonoBehaviour
 {
+    [SerializeField]
+    private string jsonStr;
+    [SerializeField]
+    private  List<int> playerPackages;
+    [SerializeField]
+    UserGameSaveData UserGameSaveData;
+
+    public void TestUserGameSaveData()
+    {
+        Type type = typeof(UserGameSaveData);
+        var fields= type.GetFields();
+
+        for(int i = 0; i < fields.Length; i++)
+        {
+            var field = fields[i];
+            if (field.FieldType == typeof(string))
+            {
+                Debug.Log($"string--{field.Name}");
+            }else if (field.FieldType == typeof(int))
+            {
+                Debug.Log($"int--{field.Name}");
+            }
+            else
+            {
+                Debug.Log($"other--{field.Name}");
+            }
+
+        }
+    }
+
+    public void TestObjToJson()
+    {
+        jsonStr = JsonConvert.SerializeObject(playerPackages);
+    }
+    public void TestJsonToObj()
+    {
+        playerPackages=JsonConvert.DeserializeObject<List<int>>(jsonStr);
+    }
+
 
     public GameObject prefab;
     public GameObject obj;
@@ -219,6 +260,12 @@ public class TestEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+        if (GUILayout.Button("TestType"))
+        {
+            test.TestUserGameSaveData();
+        }
+       
+
         if (GUILayout.Button("testCreat"))
         {
             test.TestCreatObj();

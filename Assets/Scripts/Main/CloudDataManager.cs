@@ -1,11 +1,9 @@
-﻿using GooglePlayGames.BasicApi.SavedGame;
-using GooglePlayGames;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using GooglePlayGames.BasicApi;
+using System.Threading.Tasks; 
 using UnityEngine;
 using System.Collections;
 
@@ -18,75 +16,19 @@ public class CloudDataManager:Singleton<CloudDataManager>
     {
         this.userId = userId;
 
-        uint maxNumToDisplay = 5;
+        uint maxNumToDisplay = 1;
         bool allowCreateNew = true;
-        bool allowDelete = true;
-
-        ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+        bool allowDelete = true;  
 
 
-
-        savedGameClient.ShowSelectSavedGameUI("Select saved game",
-            maxNumToDisplay,
-            allowCreateNew,
-            allowDelete,
-            OnSavedGameSelected);
+ 
     }
 
     private string filename = "data1";
 
     string dataStr = null;
-    public bool OpenSavedGame(string dataStr)
-    {
-        this.dataStr = dataStr;
-        if (PlayGamesPlatform.Instance == null || PlayGamesPlatform.Instance.SavedGame == null)
-        {
-            return false;
-        }
-        ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
-        savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork,
-            ConflictResolutionStrategy.UseOriginal, OnSavedGameOpened);
-        return true;
-    }
-
-    public void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata game)
-    {
-        if (status == SelectUIStatus.SavedGameSelected)
-        {  
-            OpenSavedGameLoad(game.Filename);
-            // handle selected game save
-        }
-        else if(status==SelectUIStatus.UiBusy|| status == SelectUIStatus.UserClosedUI)
-        {
-
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("获取云存档失败--") + status + LanguageManage.SwitchStr("是否重试？"), () =>
-            {
-                ShowSelectUI(userId);
-            }, () =>
-            {
-                Application.Quit();
-            });
-        }
-        else
-        {
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("获取云存档失败--") + status + LanguageManage.SwitchStr("是否不使用用云存档？"), () =>
-            {
-                GameDataSaveManager.instance.InitUserSaveData(userId, null);
-            }, () =>
-            {
-                Application.Quit();
-            });
-        }
-         
-    }
-    void OpenSavedGameLoad(string filename)
-    {
-        ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame; 
-
-        savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork,
-            ConflictResolutionStrategy.UseLongestPlaytime, OnSavedGameOpened);
-    }
-
+ 
+    /*
     public void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata game)
     {
         if (status == SavedGameRequestStatus.Success)
@@ -143,7 +85,7 @@ public class CloudDataManager:Singleton<CloudDataManager>
         {
             // handle error
         }
-    }
+    }*/
 
     public Texture2D getScreenshot()
     {
@@ -157,6 +99,7 @@ public class CloudDataManager:Singleton<CloudDataManager>
             new Rect(0, 0, Screen.width, (Screen.width / 1024) * 700), 0, 0);
         return screenShot;
     }
+    /*
     void LoadGameData(ISavedGameMetadata game)
     {
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
@@ -193,7 +136,7 @@ public class CloudDataManager:Singleton<CloudDataManager>
 
         SavedGameMetadataUpdate updatedMetadata = builder.Build();
         savedGameClient.CommitUpdate(game, updatedMetadata, savedData, OnSavedGameWritten);
-    }
+    }*/
  
 
 }

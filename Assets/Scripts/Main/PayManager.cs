@@ -7,7 +7,7 @@ public class PayManager : Singleton<PayManager>
     {
         base.Init();
         nowGold = GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold;
-        nowDiamond = GameDataSaveManager.instance.UserGameSaveData.otherSaveData.diamond;
+        nowDiamond = GameDataSaveManager.instance.UserGameSaveDataList.commonSaveData.diamond;
         goldIcon = await GameSourceManager.instance.GetSprite(DataPath.goldSpritePath);
         diamondIcon = await GameSourceManager.instance.GetSprite(DataPath.diamondSpritePath);
 

@@ -14,6 +14,8 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
     TextMeshProUGUI count;
     [SerializeField]
     Button actionBtn;
+    [SerializeField]
+    Transform particle;
     private void Awake()
     {
         actionBtn.onClick.AddListener(() =>
@@ -24,12 +26,18 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
             }
         });
     }
+    public override void ClearSelect()
+    {
+        base.ClearSelect();
+        particle.localScale = Vector3.zero;
+    } 
     public override Task InitData(AppStoreProductData t, SelectAction<AppStoreProductData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         text.text = LanguageManage.SwitchStr(t.showName);
         count.text = t.getDiamond.ToString();
         image.sprite = t.icon;
         image.SetNativeSize();
+        particle.localScale = Vector3.one;
         return base.InitData(t, SelectAction, toggleGroup);
     }
     public override void InitChildObjData()
@@ -39,5 +47,6 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
         text = FindChildGameObject<TextMeshProUGUI>("Name");
         count = FindChildGameObject<TextMeshProUGUI>("Count");
         actionBtn = FindChildGameObject<Button>("Action");
+        particle = FindChildGameObject("Effect");
     }
 }

@@ -119,7 +119,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
 
     private async void DeleteData()
     {
-        GameDataSaveManager.instance.DeletaSaveData(selectGameSaveData);
+        GameDataSaveManager.instance.DeleteSaveData(selectGameSaveData);
         await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
         await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
         SaveReference.SelectDefault();

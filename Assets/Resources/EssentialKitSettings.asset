@@ -1,0 +1,261 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e0ea44ec561e4ff9a51024a414c5e02, type: 3}
+  m_Name: EssentialKitSettings
+  m_EditorClassIdentifier: 
+  m_applicationSettings:
+    m_logLevel: 3
+    m_appStoreIds:
+      m_ios: 
+      m_tvos: 
+      m_android: com.shanflyer.FantasyTown_EveryDay
+    m_usagePermissionSettings:
+      m_addressBookUsagePermission:
+        m_description: $productName uses contacts.
+        m_descriptionOverrides:
+          m_ios: 
+          m_tvos: 
+          m_android: 
+      m_cameraUsagePermission:
+        m_description: $productName uses camera.
+        m_descriptionOverrides:
+          m_ios: 
+          m_tvos: 
+          m_android: 
+      m_galleryUsagePermission:
+        m_description: $productName uses gallery.
+        m_descriptionOverrides:
+          m_ios: 
+          m_tvos: 
+          m_android: 
+      m_galleryWritePermission:
+        m_description: $productName wants to write to gallery.
+        m_descriptionOverrides:
+          m_ios: 
+          m_tvos: 
+          m_android: 
+      m_locationWhenInUsePermission:
+        m_description: $productName would like to user your location.
+        m_descriptionOverrides:
+          m_ios: 
+          m_tvos: 
+          m_android: 
+      m_accessFriendsPermission:
+        m_description: $productName wants to access friends.
+        m_descriptionOverrides:
+          m_ios: 
+          m_tvos: 
+          m_android: 
+  m_addressBookSettings:
+    m_isEnabled: 0
+    m_defaultImage: {fileID: 0}
+  m_appUpdaterSettings:
+    m_isEnabled: 0
+    m_defaultPromptTitle: 
+    m_defaultPromptMessage: 
+  m_nativeUISettings:
+    m_isEnabled: 0
+    m_customUICollection:
+      m_rendererPrefab: {fileID: 114882653979984282, guid: b8b2730da8ec14db686316d122a0939e,
+        type: 3}
+      m_alertDialogPrefab: {fileID: 114719650402599042, guid: 0bea496bdcd2d41ebb1104db0fd905dc,
+        type: 3}
+      m_datePickerPrefab: {fileID: 0}
+  m_sharingServicesSettings:
+    m_isEnabled: 1
+  m_cloudServicesSettings:
+    m_isEnabled: 1
+    m_androidProperties:
+      m_playServicesApplicationId: 5351616683
+  m_gameServicesSettings:
+    m_isEnabled: 1
+    m_leaderboards: []
+    m_achievements: []
+    m_showAchievementCompletionBanner: 1
+    m_allowFriendsAccess: 1
+    m_androidProperties:
+      m_playServicesApplicationId: 5351616683
+      m_serverClientId: 
+      m_forceRefreshToken: 1
+      m_showErrorDialogs: 1
+  m_billingServicesSettings:
+    m_isEnabled: 1
+    m_products:
+    - m_id: diamond200
+      m_productType: 0
+      m_title: diamond200
+      m_description: get 200 diamond
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: diamond200
+    - m_id: diamond500
+      m_productType: 0
+      m_title: diamond500
+      m_description: get 500 diamond
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: diamond500
+    - m_id: diamond1500
+      m_productType: 0
+      m_title: diamond1500
+      m_description: get 1500 diamond
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: diamond1500
+    - m_id: diamond4000
+      m_productType: 0
+      m_title: diamond4000
+      m_description: get 4000 diamond
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: diamond4000
+    - m_id: diamond10000
+      m_productType: 0
+      m_title: diamond10000
+      m_description: get 10000 diamond
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: diamond10000
+    - m_id: help0
+      m_productType: 0
+      m_title: help0
+      m_description: 'Give author support '
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: help0
+    - m_id: help1
+      m_productType: 0
+      m_title: help1
+      m_description: 'Sponsorship of authors '
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: help1
+    - m_id: help2
+      m_productType: 0
+      m_title: help2
+      m_description: 'Support for authors '
+      m_isInactive: 1
+      m_payouts: []
+      m_platformId: 
+      m_platformIdOverrides:
+        m_ios: 
+        m_tvos: 
+        m_android: help2
+    m_autoFinishTransactions: 1
+    m_androidProperties:
+      m_publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoAidIT7uCYCNYpEF1U2dt8h40hJgBv4zF667iq/a7FDb7W3rxy0d5vUoBwE13KOvSGE2dUFpZqsKbFdK8arpwb37t8QVKQjUTdvNp4twZKTzURNdSdyXUJEPLeQj2i2OIIoU/yW7k1RS36qWkqK6MEZGv6SpBPH+EfTInTRJ1CVxCN1zFO7VnCjnGi8109ZJqPejubuI4rBvogmLRzI5g1BjASfbKvJr+8t6wIjAw3oykc6f8IlOjRXXY0C59xwVeLdbraCtMIL0KSiK90EM4sFfOe4IGWBSM6diAkb4du+TxjPpsMqUEszdzzPbC+JAmiRpS5JKXif4DNxWohFbHwIDAQAB
+  m_networkServicesSettings:
+    m_isEnabled: 0
+    m_hostAddress:
+      m_ipv4: 8.8.8.8
+      m_ipv6: 0:0:0:0:0:FFFF:0808:0808
+    m_autoStartNotifier: 1
+    m_pingSettings:
+      m_maxRetryCount: 3
+      m_timeGapBetweenPolling: 2
+      m_timeOutPeriod: 60
+      m_port: 53
+  m_webViewSettings:
+    m_isEnabled: 0
+    m_androidProperties:
+      m_usesCamera: 0
+      m_usesMicrophone: 0
+      m_allowBackNavigationKey: 1
+  m_notificationServicesSettings:
+    m_isEnabled: 0
+    m_presentationOptions: 7
+    m_usesLocationBasedNotification: 0
+    m_pushNotificationServiceType: 1
+    m_androidProperties:
+      m_needsBigStyle: 0
+      m_allowVibration: 1
+      m_whiteSmallIcon: {fileID: 0}
+      m_colouredSmallIcon: {fileID: 0}
+      m_allowNotificationDisplayWhenForeground: 0
+      m_accentColor: '#FFFFFF'
+      m_payloadKeys:
+        m_contentTitle: content_title
+        m_contentText: content_text
+        m_tickerText: ticker_text
+        m_userInfo: user_info
+        m_tag: tag
+        m_badge: badge
+        m_priority: priority
+        m_sound: sound
+        m_bigPicture: big_picture
+        m_largeIcon: large_icon
+      m_allowExactTimeScheduling: 0
+      m_canIgnoreDozeMode: 0
+  m_mediaServicesSettings:
+    m_isEnabled: 0
+    m_usesCameraForImageCapture: 1
+    m_usesCameraForVideoCapture: 0
+    m_savesFilesToPhotoGallery: 1
+    m_savesFilesToCustomDirectories: 1
+  m_deepLinkServicesSettings:
+    m_isEnabled: 0
+    m_iosProperties:
+      m_customSchemeUrls: []
+      m_universalLinks: []
+    m_androidProperties:
+      m_customSchemeUrls: []
+      m_universalLinks: []
+  m_utilitySettings:
+    m_isEnabled: 0
+  m_rateMyAppSettings:
+    m_isEnabled: 1
+    m_autoShow: 0
+    m_allowReratingForNewVersion: 1
+    m_confirmationDialogSettings:
+      m_canShow: 1
+      m_promptTitle: "Rate My App(\u8BC4\u5206)"
+      m_promptDescription: "If you enjoy using this game\uFF0Cwould you mind taking
+        a moment to rate it? It wont take more than a minute. Thanks for your support.\n\u5982\u679C\u4F60\u559C\u6B22\u8FD9\u4E2A\u6E38\u620F\uFF0C\u4F60\u613F\u610F\u82B1\u4E00\u5206\u949F\u4E3A\u5B83\u8BC4\u5206\u5417\uFF1F\u8C22\u8C22\u60A8\u7684\u652F\u6301\u3002"
+      m_okButtonLabel: Ok
+      m_cancelButtonLabel: Cancel
+      m_remindLaterButtonLabel: Remind Me Later
+      m_canShowRemindMeLaterButton: 0
+    m_contraintsSettings:
+      m_initialPromptConstraints:
+        m_minHours: 2
+        m_minLaunches: 0
+      m_repeatPromptConstraints:
+        m_minHours: 6
+        m_minLaunches: 5

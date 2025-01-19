@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 1532694214}
   - component: {fileID: 1532694215}
   - component: {fileID: 1532694216}
+  - component: {fileID: 1532694217}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -387,7 +388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startBGM: {fileID: 8300000, guid: 7907b6536d50e9c4c9fffd49050d273d, type: 3}
-  startPlay: 0
+  startPlay: 1
   selectable: {fileID: 0}
   weather:
     cloud: 0
@@ -416,7 +417,7 @@ MonoBehaviour:
   zeroMapInstance: 302
   zeroCoordinate:
     x: -10
-    y: 30
+    y: 20
   testObj: {fileID: 0}
 --- !u!114 &1532694215
 MonoBehaviour:
@@ -438,7 +439,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532694209}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7aa611b10fc9407458d83198a6a29111, type: 3}
   m_Name: 
@@ -447,6 +448,82 @@ MonoBehaviour:
   showLog: 1
   showError: 1
   showWarning: 0
+--- !u!114 &1532694217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532694209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47daefa100fb5b349941cea40beb5f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jsonStr: '[0,1,4,76]'
+  playerPackages: 0000000001000000040000004c000000
+  UserGameSaveData:
+    saveTime: 
+    index: 0
+    endGuideFilmIndex: 0
+    characterSaveDatas:
+      m_keys: 
+    nowWeathers: []
+    nextWeathers: []
+    npcBirthDays:
+      m_keys: 
+      m_values: []
+    chapters:
+      m_keys: 
+    mapLineSaveData:
+      m_keys: 
+      m_values: 
+    fishSaveDatas:
+      m_keys: 
+    mapHomeEquips:
+      m_keys: 
+    animals:
+      m_keys: 
+    pastures:
+      m_keys: 
+    manufatures:
+      m_keys: 
+    storeCounters:
+      m_keys: 
+    fields:
+      m_keys: 
+    shops:
+      m_keys: 
+    shopLists:
+      m_keys: 
+    specialMapItem:
+      m_keys: []
+      m_values: 
+    changeMapItems:
+      m_keys: 
+      m_values: []
+    SetAnimationStateMapItems:
+      m_keys: 
+      m_values: []
+    removeMapItemOperates: []
+    addMapItemOperates: []
+    RemoveMapItemCollider: 
+  prefab: {fileID: 0}
+  obj: {fileID: 0}
+  testData: 
+  testInt2: []
+  gameTimeKeys: []
+  values: []
+  gameTimeKeyIntDic:
+    m_keys: []
+    m_values: []
+  testKey:
+    x: 0
+    y: 0
+  behaviorTree: {fileID: 0}
+  transform0: {fileID: 0}
+  transform1: {fileID: 0}
+  formulaDatas: []
 --- !u!1 &1660989405
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,11 +4,11 @@ using UnityEngine;
 using Unity.Mathematics;   
 using UnityEngine.InputSystem; 
 using UnityEngine.UI;
-using MyGame;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+using MyGame; 
 using Unity.Transforms;
-
+using VoxelBusters.CoreLibrary;
+using VoxelBusters.EssentialKit;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -170,9 +170,93 @@ public class GameController : MonoBehaviour
         instance = null;
     }
 
-    private async void OnEnable()
-    {  
-        Screen.SetResolution(Screen.width, Screen.height,true);
+    private void OnEnable()
+    {
+       
+#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
+         
+        CloudServices.OnUserChange += OnUserChange;
+        CloudServices.OnSavedDataChange += OnSavedDataChange;
+        CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
+#endif
+    }
+
+    
+    private void OnDisable()
+    {
+      
+#if !UNITY_EDITOR&&(UNITY_ANDROID || UNITY_IOS)
+      
+        CloudServices.OnUserChange -= OnUserChange;
+        CloudServices.OnSavedDataChange -= OnSavedDataChange;
+        CloudServices.OnSynchronizeComplete -= OnSynchronizeComplete;
+#endif
+        // unregister from events
+
+    }
+    private void OnSavedDataChange(CloudServicesSavedDataChangeResult arg)
+    {
+        switch (arg.ChangeReason)
+        {
+            case CloudSavedDataChangeReasonCode.ServerChange:
+                break;
+            case CloudSavedDataChangeReasonCode.InitialSyncChange:
+                break;
+            case CloudSavedDataChangeReasonCode.QuotaViolationChange:
+                break;
+            case CloudSavedDataChangeReasonCode.AccountChange:
+                break;
+        }
+        hideSave = true;
+        GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
+        //Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
+    }
+
+    string nowUserId;
+    public bool hideSave { get; private set; }
+    private void OnUserChange(CloudServicesUserChangeResult result, Error error)
+    {
+        if (string.IsNullOrEmpty(nowUserId))
+        {
+            nowUserId = result.User.UserId;
+        }
+        else
+        {
+            if (result.User.UserId != nowUserId)
+            {
+                hideSave = true;
+                GameManager.instance.ShowTwoSelectAction("用户改变", LanguageManage.SwitchStr("云存档用户发生变化，请退出游戏重新进入"), Application.Quit, Application.Quit);
+            } 
+        }
+       
+    }
+    private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
+    { 
+
+        if (result.Success)
+        {
+            GameDataSaveManager.instance.LoadCloudData();
+            StartGame();
+        }
+        else if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            hideSave = true;
+            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("没有网络连接无法同步存档，请退出重试"), Application.Quit, Application.Quit);
+        }
+        else
+        {
+            hideSave = true;
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("云存档加载错误"), Application.Quit, Application.Quit);
+        }
+    }
+    
+    public void AddCrystal()
+    {
+        
+    }
+    private void Awake()
+    {
+        Screen.SetResolution(Screen.width, Screen.height, true);
         instance = this;
         //GameObject.DontDestroyOnLoad(gameObject);
         var UIParent = transform.Find("UIController");
@@ -180,75 +264,30 @@ public class GameController : MonoBehaviour
         GameObjectCurveController.instance.SetUpDataComponent(this);
         if (Camera.main == null)
         {
-            var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
+            var cameraPrefab = Resources.Load<GameObject>(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)
             {
-                var asyncInstantiateOperation = InstantiateAsync(cameraPrefab);
-                await asyncInstantiateOperation;
-                var cameraObj = asyncInstantiateOperation.Result[0];
-              //  GameObject.DontDestroyOnLoad(cameraObj);
+                Instantiate(cameraPrefab);
             }
         }
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);
 
-    }
-  
-    public void AddCrystal()
-    {
         
+#if UNITY_EDITOR
+        GameDataSaveManager.instance.InitUserSaveData("Test");
+        StartGame();
+#elif UNITY_ANDROID || UNITY_IOS
+        CloudServices.Synchronize();
+        BillingServices.InitializeStore();
+#endif 
     }
     // Start is called beforee the first frame update
-    async void Start()
-    {
-        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication); 
-       
+    void Start()
+    { 
     }
-
-    private bool manuallyAuthenticate = false;
-    internal void ProcessAuthentication(SignInStatus status)
-    {
-        if (status == SignInStatus.Success)
-        {
-            var userId=  PlayGamesPlatform.Instance.GetUserId();
-            CloudDataManager.instance.ShowSelectUI(userId);
-            //StartGame();
-        }
-        else
-        {
-            /*
-            GameManager.instance.ShowTwoSelectAction($"Google SingInStatus:{status}", "是否在未登录的Google Play的情况下游玩，您可能无法同步线上存档等",()=>{
-
-                GameDataSaveManager.instance.InitUserSaveData("测试", null);
-                StartGame();
-            } , () =>
-            {
-                Application.Quit();
-            });*/
-
-            // Disable your integration with Play Games Services or show a login button
-            // to ask users to sign-in. Clicking it should call
-            if (manuallyAuthenticate == false)
-            {
-                PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
-                manuallyAuthenticate = true;
-
-            }
-            else
-            {
-                GameManager.instance.ShowTwoSelectAction($"Google SingInStatus:{status}", "是否在未登录的Google Play的情况下游玩，您可能无法同步线上存档等", () => {
-
-                    GameDataSaveManager.instance.InitUserSaveData("测试", null);
-                    StartGame();
-                }, () =>
-                {
-                    Application.Quit();
-                });
-            }
-               
-        }
-    }
-    public  void StartGame()
+   
+     void StartGame()
     {
         environmentManger = EnvironmentManger.instance;
         // var appStoreManager= AppStoreManager.instance;
@@ -267,15 +306,14 @@ public class GameController : MonoBehaviour
         var gameGuideManager = GameGuideManager.instance;
         GameTimeManager.instance.ZeroGameTime();
 
-       
+        GameTimerController.instance.DelayAction(100, () => { GameTimeManager.instance.SetTime(12, 0); });
 
         var audio = transform.Find("Audio");
         AudioController.instance.SetAudioSource(audio.gameObject);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
         LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
         UIManager.instance.ShowGamePanel<ZeroPanel>();
-
-        GameTimeManager.instance.SetTime(12, 0);
+         
         SwitchInputMap switchInputMap = new SwitchInputMap
         {
             UI = true

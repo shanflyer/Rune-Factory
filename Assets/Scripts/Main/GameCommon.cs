@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEngine.Rendering.GPUSort;
 
 public delegate void Int3Action(int3 value, int action = 0);
 
@@ -622,7 +623,16 @@ public static class GameCommon
         builder.Append(span);
         return builder.ToString();
     }
-
+    public static string BlendString(string s0, params string[] args)
+    {  
+        var builder = new StringBuilder(s0);
+        for (int i = 0; i < args.Length; i++)
+        {
+            var span = args[i].ToString().AsSpan();
+            builder.Append(span);
+        } 
+        return builder.ToString();
+    }
     public static void SetEnable(GameObject gameObject, bool enable, bool compontEnable)
     {
         gameObject.transform.localScale = enable ? Vector3.one : Vector3.zero;
