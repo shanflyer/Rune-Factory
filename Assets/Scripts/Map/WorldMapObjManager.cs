@@ -376,7 +376,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     void RemoveMapDisplayCompeted(int id)
     {
         mapDisplayCompleted.Remove(id);
-        if (mapDisplayCompleted.Count <= 0&&DisplayMapRoomData.completedAction!=null)
+        if (!GameController.instance.startPlay&& mapDisplayCompleted.Count <= 0&&DisplayMapRoomData.completedAction!=null)
         {
             DisplayMapRoomData.completedAction.Action();
         }

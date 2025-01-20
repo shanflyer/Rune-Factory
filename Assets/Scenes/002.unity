@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 1532694215}
   - component: {fileID: 1532694216}
   - component: {fileID: 1532694217}
+  - component: {fileID: 1532694218}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -388,7 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startBGM: {fileID: 8300000, guid: 7907b6536d50e9c4c9fffd49050d273d, type: 3}
-  startPlay: 1
+  startPlay: 0
   selectable: {fileID: 0}
   weather:
     cloud: 0
@@ -455,7 +456,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532694209}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47daefa100fb5b349941cea40beb5f5d, type: 3}
   m_Name: 
@@ -524,6 +525,18 @@ MonoBehaviour:
   transform0: {fileID: 0}
   transform1: {fileID: 0}
   formulaDatas: []
+--- !u!114 &1532694218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532694209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6735ef6dba254fd4b9ab04ca59d93baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1660989405
 GameObject:
   m_ObjectHideFlags: 0

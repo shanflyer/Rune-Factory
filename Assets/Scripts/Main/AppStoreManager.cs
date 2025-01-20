@@ -32,7 +32,7 @@ public class AppStoreManager : MonoBehaviour
         var allProductDatas = Resources.LoadAll<AppStoreProductData>(DataPath.dataPathDic[typeof(AppStoreProductData)]);
         for (int i = 0; i < allProductDatas.Length; i++)
         {
-            appStoreProductDatas.Add($"{projectName}.{allProductDatas[i].ProductName}", allProductDatas[i]);
+            appStoreProductDatas.Add($"{allProductDatas[i].ProductName}", allProductDatas[i]);
         }
 
 #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
@@ -41,6 +41,7 @@ public class AppStoreManager : MonoBehaviour
         BillingServices.OnInitializeStoreComplete += OnInitializeStoreComplete;
         BillingServices.OnTransactionStateChange += OnTransactionStateChange;
         BillingServices.OnRestorePurchasesComplete += OnRestorePurchasesComplete;
+        BillingServices.InitializeStore();
 #endif
 
     }
@@ -50,17 +51,17 @@ public class AppStoreManager : MonoBehaviour
        
     }
      
-    public string goldProductId = "com.shanflyer.FantasyTown_EveryDay.diamond200";  
-     
+   // public string goldProductId = "com.shanflyer.FantasyTown_EveryDay.diamond200";
+    public string goldProductId = "diamond200";
 
     public void BuyProduct(AppStoreProductData appStoreProductData)
     { 
-        var goldProductId = $"{projectName}.{appStoreProductData.ProductName}";
+        var goldProductId = $"{appStoreProductData.ProductName}";
         BillingServices.BuyProduct(goldProductId,options:null);
     }
     public void BuyProduct(string ProductName)
     {
-        var goldProductId = $"{projectName}.{ProductName}";
+        var goldProductId = $"{ProductName}";
         BillingServices.BuyProduct(goldProductId, options: null);
     }
     private void OnTransactionStateChange(BillingServicesTransactionStateChangeResult result)

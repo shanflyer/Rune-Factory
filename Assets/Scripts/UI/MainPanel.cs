@@ -65,7 +65,7 @@ public class MainPanel : GamePanel<IReferenceData>
         MyTalk.onClick.AddListener(() =>
         {
             UIManager.instance.ShowGamePanel<MyTalkPanel>();
-        })
+        });
     }
     public override Task InitData(string dataKey)
     {
