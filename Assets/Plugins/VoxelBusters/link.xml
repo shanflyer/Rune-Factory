@@ -1,27 +1,26 @@
 ﻿<linker>
   <assembly fullname="VoxelBusters.EssentialKit">
     <type fullname="VoxelBusters.EssentialKit.AddressBookCore.NullAddressBookInterface" preserve="all" />
-    <type fullname="VoxelBusters.EssentialKit.AppUpdaterCore.NullAppUpdaterInterface" preserve="all" />
     <type fullname="VoxelBusters.EssentialKit.MediaServicesCore.NullMediaServicesInterface" preserve="all" />
     <type fullname="VoxelBusters.EssentialKit.NetworkServicesCore.UnityNetworkServicesInterface" preserve="all" />
     <type fullname="VoxelBusters.EssentialKit.NotificationServicesCore.NullNotificationCenterInterface" preserve="all" />
     <type fullname="VoxelBusters.EssentialKit.WebViewCore.NullNativeWebView" preserve="all" />
     <type fullname="VoxelBusters.EssentialKit.DeepLinkServicesCore.NullDeepLinkServicesInterface" preserve="all" />
   </assembly>
-  <assembly fullname="VoxelBusters.EssentialKit.AndroidModule">
-    <namespace fullname="VoxelBusters.EssentialKit.BillingServicesCore.Android" preserve="all" />
-    <namespace fullname="VoxelBusters.EssentialKit.CloudServicesCore.Android" preserve="all" />
-    <namespace fullname="VoxelBusters.EssentialKit.GameServicesCore.Android" preserve="all" />
-    <namespace fullname="VoxelBusters.EssentialKit.NativeUICore.Android" preserve="all" />
-    <namespace fullname="VoxelBusters.EssentialKit.SharingServicesCore.Android" preserve="all" />
-    <namespace fullname="VoxelBusters.EssentialKit.ExtrasCore.Android" preserve="all" />
-    <namespace fullname="VoxelBusters.EssentialKit.RateMyAppCore.Android" preserve="all" />
-    <type fullname="VoxelBusters.EssentialKit.AddressBookCore.Android.AddressBookInterface" preserve="nothing" />
-    <type fullname="VoxelBusters.EssentialKit.AppUpdaterCore.Android.AppUpdaterInterface" preserve="nothing" />
-    <type fullname="VoxelBusters.EssentialKit.MediaServicesCore.Android.MediaServicesInterface" preserve="nothing" />
-    <type fullname="VoxelBusters.EssentialKit.NetworkServicesCore.Android.NetworkServicesInterface" preserve="nothing" />
-    <type fullname="VoxelBusters.EssentialKit.NotificationServicesCore.Android.NotificationCenterInterface" preserve="nothing" />
-    <type fullname="VoxelBusters.EssentialKit.WebViewCore.Android.WebView" preserve="nothing" />
-    <type fullname="VoxelBusters.EssentialKit.DeepLinkServicesCore.Android.DeepLinkServicesInterface" preserve="nothing" />
+  <assembly fullname="VoxelBusters.EssentialKit.iOSModule">
+    <namespace fullname="VoxelBusters.EssentialKit.AppUpdaterCore.iOS" preserve="all" />
+    <namespace fullname="VoxelBusters.EssentialKit.BillingServicesCore.iOS" preserve="all" />
+    <namespace fullname="VoxelBusters.EssentialKit.CloudServicesCore.iOS" preserve="all" />
+    <namespace fullname="VoxelBusters.EssentialKit.GameServicesCore.iOS" preserve="all" />
+    <namespace fullname="VoxelBusters.EssentialKit.NativeUICore.iOS" preserve="all" />
+    <namespace fullname="VoxelBusters.EssentialKit.SharingServicesCore.iOS" preserve="all" />
+    <namespace fullname="VoxelBusters.EssentialKit.ExtrasCore.iOS" preserve="all" />
+    <namespace fullname="VoxelBusters.EssentialKit.RateMyAppCore.iOS" preserve="all" />
+    <type fullname="VoxelBusters.EssentialKit.AddressBookCore.iOS.AddressBookInterface" preserve="nothing" />
+    <type fullname="VoxelBusters.EssentialKit.MediaServicesCore.iOS.MediaServicesInterface" preserve="nothing" />
+    <type fullname="VoxelBusters.EssentialKit.NetworkServicesCore.iOS.NetworkServicesInterface" preserve="nothing" />
+    <type fullname="VoxelBusters.EssentialKit.NotificationServicesCore.iOS.NotificationCenterInterface" preserve="nothing" />
+    <type fullname="VoxelBusters.EssentialKit.WebViewCore.iOS.NativeWebView" preserve="nothing" />
+    <type fullname="VoxelBusters.EssentialKit.DeepLinkServicesCore.iOS.DeepLinkServicesInterface" preserve="nothing" />
   </assembly>
 </linker>
