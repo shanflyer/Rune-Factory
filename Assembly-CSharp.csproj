@@ -274,8 +274,8 @@
     <Compile Include="Assets\Scripts\UI\MiniPackagePanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\Other\CharacterTalk.cs" />
     <Compile Include="Assets\Effect\ProFlares\Scripts\ProFlare.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForceAtPosition.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\SetRadius.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForceAtPosition.cs" />
     <Compile Include="Assets\Render\RenderFeature\FootStepPassFeature.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterInCommonMap.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterAddItem.cs" />
@@ -906,6 +906,7 @@
     <Compile Include="Assets\Scripts\UI\MainPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetAngularSpeed.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\FishMove.cs" />
+    <Compile Include="Assets\Scripts\Cloud\CloudRemoteConfig.cs" />
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventAdd.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedGameObjectsToGameObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Dot.cs" />
@@ -924,8 +925,8 @@
     <Compile Include="Assets\Scripts\Behavior\Map\OffsetCoordinateForItemLinkPos.cs" />
     <Compile Include="Assets\Scripts\Environment\EnvironmentDataList.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FilghtTilmeLineController.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
     <Compile Include="Assets\Scripts\UI\PermissionPanel\PermissionReference.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\SelectNPCLikeCounter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\Distance.cs" />
     <Compile Include="Assets\Scripts\UI\TeamPanel.cs" />
@@ -2305,8 +2306,16 @@
       <HintPath>Library\ScriptAssemblies\Unity.Services.Authentication.PlayerAccounts.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.RemoteConfig.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RemoteConfig.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Serialization">
       <HintPath>Library\ScriptAssemblies\Unity.Serialization.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Services.RemoteConfig">
+      <HintPath>Library\ScriptAssemblies\Unity.Services.RemoteConfig.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Services.Authentication.Editor.Shared">
@@ -2415,6 +2424,10 @@
     </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RemoteConfig.Editor.Core">
+      <HintPath>Library\ScriptAssemblies\Unity.RemoteConfig.Editor.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Entities.UI.Editor">
