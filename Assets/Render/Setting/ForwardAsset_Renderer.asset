@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: Shadow
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 0
   settings:
@@ -57,8 +55,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: NormalBaker
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 0
   settings:
@@ -102,8 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2f493322df713241b83e64239c68aab, type: 3}
   m_Name: SceneRenderPassFeature
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 1
   renderPassEvent: 500
@@ -122,8 +116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
   m_Name: SingleScreenCycle
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   renderPassEvent: 500
   material: {fileID: 2100000, guid: da1f5db2cc22d5c41b53fa52ab3bbe6c, type: 2}
@@ -145,8 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: Mirror
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 0
   settings:
@@ -189,8 +179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: GrassBaker
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 0
   settings:
@@ -234,8 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: RedMask
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   settings:
     passTag: RedMask
@@ -331,8 +317,8 @@ MonoBehaviour:
   m_RenderingMode: 0
   m_DepthPrimingMode: 0
   m_CopyDepthMode: 0
-  m_DepthAttachmentFormat: 151
-  m_DepthTextureFormat: 151
+  m_DepthAttachmentFormat: 0
+  m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
 --- !u!114 &456928630779868892
@@ -347,8 +333,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: LightBaker
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 0
   settings:
@@ -393,8 +377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: CharacterDepth
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 1
   settings:
@@ -438,8 +420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: ObjDepth
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 1
   settings:
@@ -483,8 +463,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: BackMask
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 0
   settings:
@@ -528,8 +506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: BlueMask
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   settings:
     passTag: BlueMask
@@ -572,8 +548,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: WaterBaker
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   VolumeLevel: 0
   settings:
@@ -617,8 +591,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: GreenMask
   m_EditorClassIdentifier: 
-  checkCameraTag: 0
-  cameraTag: 
   m_Active: 1
   settings:
     passTag: GreenMask

@@ -272,8 +272,8 @@ public class GameController : MonoBehaviour
         }
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent);
+        CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
 
-        
 #if UNITY_EDITOR
         GameDataSaveManager.instance.InitUserSaveData("Test");
         StartGame();

@@ -5,7 +5,9 @@ using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
 
 public class MyTalkPanel : GamePanel<IReferenceData>
-{ 
+{
+    [SerializeField]
+    Texture2D texture2D;
     [SerializeField]
     Button Rate, Share, Committer, Help0, Help1, Help2;
     [SerializeField]
@@ -36,11 +38,13 @@ public class MyTalkPanel : GamePanel<IReferenceData>
 
         CloseBtn.onClick.AddListener(Close);
     }
-    void ShareAction()
+    async void ShareAction()
     {
         ShareSheet shareSheet = ShareSheet.CreateInstance();
-        shareSheet.AddText("Text");
-        shareSheet.AddURL(URLString.URLWithPath("https://www.google.com"));
+        shareSheet.AddText(LanguageManage.SwitchStr("这是一个有趣的游戏，分享给大家"));
+        shareSheet.AddImage(texture2D);
+        string sharedURL =await CloudRemoteConfig.instance.GetConfig("SharedURL");
+        shareSheet.AddURL(URLString.URLWithPath(sharedURL));
         shareSheet.SetCompletionCallback((result, error) => {
             Debug.Log("Share Sheet was closed. Result code: " + result.ResultCode);
         });

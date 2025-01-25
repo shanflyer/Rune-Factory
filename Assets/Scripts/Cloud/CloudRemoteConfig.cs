@@ -1,21 +1,29 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.RemoteConfig;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
-public class CloudRemoteConfig : MonoBehaviour
+public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
 {
-    private async void Start()
+    Dictionary<string, object> defaultConfigs = new Dictionary<string, object>();
+    public override async void Init()
     {
-        if (Application.internetReachability!=NetworkReachability.NotReachable)
+        base.Init();
+        if (Application.internetReachability != NetworkReachability.NotReachable)
         {
             await InitializeRemoteConfigAsync();
         }
 
         RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
-        RemoteConfigService.Instance.FetchConfigs(new userAttributes(), new appAttributes());
+        RemoteConfigService.Instance.FetchConfigs(new userAttributes(), new appAttributes()); 
+       
     }
- 
+
+    protected override void Clear()
+    {
+        base.Clear();
+    }
     public struct userAttributes { }
     public struct appAttributes { }
 
@@ -31,10 +39,24 @@ public class CloudRemoteConfig : MonoBehaviour
         }
     }
 
- 
 
+    bool isGetConfig = false;
     void ApplyRemoteSettings(ConfigResponse configResponse)
     {
+        isGetConfig = true;
         Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
+    }
+    public async Task<string> GetConfig(string key)
+    {
+       var obj=  RemoteConfigService.Instance.appConfig.config.GetValue(key);
+        if (obj == null)
+        {
+            var data =await GameDataManager.instance.GetAsyncData<DefaultConfigData>(key);
+            if (data != null)
+            {
+                return data.value;
+            }
+        }
+        return (string)obj;
     }
 }
