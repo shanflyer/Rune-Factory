@@ -160,8 +160,8 @@ PlayerSettings:
   hdrBitDepth: 0
   m_ColorGamuts: 00000000
   targetPixelDensity: 30
-  resolutionScalingMode: 1
-  resetResolutionOnWindowResize: 1
+  resolutionScalingMode: 0
+  resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   androidMinAspectRatio: 1
@@ -192,7 +192,7 @@ PlayerSettings:
   strictShaderVariantMatching: 0
   VertexChannelCompressionMask: -1
   iPhoneSdkVersion: 988
-  iOSSimulatorArchitecture: 1
+  iOSSimulatorArchitecture: 0
   iOSTargetOSVersionString: 15.0
   tvOSSdkVersion: 0
   tvOSSimulatorArchitecture: 0
@@ -250,7 +250,7 @@ PlayerSettings:
   iOSManualSigningProvisioningProfileType: 0
   tvOSManualSigningProvisioningProfileType: 0
   VisionOSManualSigningProvisioningProfileType: 0
-  appleEnableAutomaticSigning: 0
+  appleEnableAutomaticSigning: 1
   iOSRequireARKit: 0
   iOSAutomaticallyDetectAndAddCapabilities: 1
   appleEnableProMotion: 0
@@ -590,9 +590,9 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 0
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
-  locationUsageDescription: 
-  microphoneUsageDescription: 
+  cameraUsageDescription: <CONTROLLED BY LOCALIZATION>
+  locationUsageDescription: <CONTROLLED BY LOCALIZATION>
+  microphoneUsageDescription: <CONTROLLED BY LOCALIZATION>
   bluetoothUsageDescription: 
   macOSTargetOSVersion: 11.0
   switchNMETAOverride: 
@@ -849,7 +849,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: URP;TextMeshPro;ENABLE_VOXELBUSTERS_ESSENTIAL_KIT
+    Android: URP;TextMeshPro;ENABLE_VOXELBUSTERS_ESSENTIAL_KIT;ANDROID
     EmbeddedLinux: TextMeshPro
     GameCoreXboxOne: TextMeshPro
     Nintendo Switch: TextMeshPro
@@ -861,7 +861,7 @@ PlayerSettings:
     VisionOS: TextMeshPro
     WebGL: TextMeshPro
     XboxOne: TextMeshPro
-    iPhone: TextMeshPro;ENABLE_VOXELBUSTERS_ESSENTIAL_KIT
+    iPhone: TextMeshPro;ENABLE_VOXELBUSTERS_ESSENTIAL_KIT;IOS
     tvOS: TextMeshPro
   additionalCompilerArguments: {}
   platformArchitecture: {}
@@ -893,7 +893,7 @@ PlayerSettings:
   gcIncremental: 1
   gcWBarrierValidation: 0
   apiCompatibilityLevelPerPlatform: {}
-  editorAssembliesCompatibilityLevel: 1
+  editorAssembliesCompatibilityLevel: 2
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: Rune Factory_hub
@@ -954,7 +954,7 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
-    Purchasing: 1
+    Purchasing: 0
     Unity Ads: 0
   luminIcon:
     m_Name: 

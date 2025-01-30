@@ -17,11 +17,10 @@ public class AppStoreManager : MonoBehaviour
     }
     void OnDisable()
     {
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-      
-        BillingServices.OnInitializeStoreComplete -= OnInitializeStoreComplete;
-        BillingServices.OnTransactionStateChange -= OnTransactionStateChange;
-        BillingServices.OnRestorePurchasesComplete -= OnRestorePurchasesComplete;
+#if !UNITY_EDITOR 
+            BillingServices.OnInitializeStoreComplete -= OnInitializeStoreComplete;
+            BillingServices.OnTransactionStateChange -= OnTransactionStateChange;
+            BillingServices.OnRestorePurchasesComplete -= OnRestorePurchasesComplete;
 #endif
 
     }
@@ -34,14 +33,12 @@ public class AppStoreManager : MonoBehaviour
         {
             appStoreProductDatas.Add($"{allProductDatas[i].ProductName}", allProductDatas[i]);
         }
-
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-      
-        BillingServices.IsAvailable();
-        BillingServices.OnInitializeStoreComplete += OnInitializeStoreComplete;
-        BillingServices.OnTransactionStateChange += OnTransactionStateChange;
-        BillingServices.OnRestorePurchasesComplete += OnRestorePurchasesComplete;
-        BillingServices.InitializeStore();
+#if !UNITY_EDITOR
+            BillingServices.IsAvailable();
+            BillingServices.OnInitializeStoreComplete += OnInitializeStoreComplete;
+            BillingServices.OnTransactionStateChange += OnTransactionStateChange;
+            BillingServices.OnRestorePurchasesComplete += OnRestorePurchasesComplete;
+            BillingServices.InitializeStore();
 #endif
 
     }
@@ -108,6 +105,7 @@ public class AppStoreManager : MonoBehaviour
 
     private void OnInitializeStoreComplete(BillingServicesInitializeStoreResult result, Error error)
     {
+        /*
         if (error == null)
         {
             // update UI
@@ -136,7 +134,7 @@ public class AppStoreManager : MonoBehaviour
             {
                 Debug.Log(string.Format("[{0}]: {1}", iter, invalidIds[iter]));
             }
-        }
+        }*/
     }
 
 }

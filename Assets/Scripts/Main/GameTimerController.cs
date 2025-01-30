@@ -55,7 +55,8 @@ public class GameTimerController : Singleton<GameTimerController>
     }
     public void DelayAction(int delay, Action action)
     {
-        Debug.Log($"target:{action.Target}-Method:{action.Method}");
+        if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log($"target:{action.Target}-Method:{action.Method}");
         if (waitIenumerators.TryGetValue(action,out var enumerator))
         {
             GameController.instance.StopCoroutine(enumerator);

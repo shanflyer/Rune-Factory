@@ -1019,11 +1019,13 @@ public class AudioController : Singleton<AudioController>
     {
         if (audioClip == null)
         {
-            Debug.Log($"PlayMe: null");
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log($"PlayMe: null");
         }
         else
         {
-            Debug.Log($"PlayMe:{audioClip.name}");
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log($"PlayMe:{audioClip.name}");
         }
         PlayAudio(meGraph, meMixer, meMixerDic, audioClip, loop, audioClearType, weight, isLerp, Group);
     }
@@ -1037,11 +1039,13 @@ public class AudioController : Singleton<AudioController>
     {
         if(audioClip == null)
         {
-            Debug.Log($"PlayBgm: null");
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log($"PlayBgm: null");
         }
         else 
         {
-            Debug.Log($"PlayBgm:{audioClip.name}");
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log($"PlayBgm:{audioClip.name}");
         }
         
         PlayAudio(bgmGraph, bgmMixer, bgmMixerDic, audioClip, loop, audioClearType, weight, isLerp, Group);
@@ -1056,7 +1060,8 @@ public class AudioController : Singleton<AudioController>
     {
         if (audioClip == null)
         {
-            Debug.Log($"PlayBGS: null");
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log($"PlayBGS: null");
         }
         else
         {

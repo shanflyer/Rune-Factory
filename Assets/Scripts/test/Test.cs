@@ -8,6 +8,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
@@ -30,8 +31,11 @@ public struct TestJob : IJobParallelFor
         result[index] = testData->datas[index];
     }
 }
-
-
+[Serializable]
+public class Int2Test
+{
+    public Int2IntDictionary dic;
+}
 public struct TestStruct
 {
     public List<int> list;
@@ -44,7 +48,37 @@ public class Test : MonoBehaviour
     private  List<int> playerPackages;
     [SerializeField]
     UserGameSaveData UserGameSaveData;
+ 
+    public  List<int3> datas = new List<int3>();
 
+    public void TestInt2Dictionary()
+    {
+        Int2IntDictionary int2Dic = new Int2IntDictionary();
+        for(int i = 0; i < datas.Count; i++)
+        {
+            int2Dic.Add(datas[i].xy, datas[i].z);
+        }
+        Int2Test int2Test = new Int2Test
+        {
+            dic = int2Dic
+        };
+
+        Type type = typeof(Int2Test);
+        var files = type.GetFields();
+
+        Int2Test int2Test1 = new Int2Test();
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            var file = files[i];
+            var value = file.GetValue(int2Test);
+            var str = JsonConvert.SerializeObject(value);
+            var obj = JsonConvert.DeserializeObject(str, file.FieldType);
+            file.SetValue(int2Test1, obj);
+        }
+         
+      
+    }
     public void TestUserGameSaveData()
     {
         Type type = typeof(UserGameSaveData);
@@ -264,7 +298,10 @@ public class TestEditor : Editor
         {
             test.TestUserGameSaveData();
         }
-       
+        if (GUILayout.Button("estInt2Dictionary"))
+        {
+            test.TestInt2Dictionary();
+        }
 
         if (GUILayout.Button("testCreat"))
         {

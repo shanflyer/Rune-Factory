@@ -172,7 +172,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         public void SetTime(int hour, int minute)
         {
-            Debug.Log($"hour:{hour}--minute:{minute}");
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log($"hour:{hour}--minute:{minute}");
             if (this.hour != hour)
             {
                 GameActionManager.instance.QueueAction(newHour);

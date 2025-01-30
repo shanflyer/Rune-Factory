@@ -213,7 +213,8 @@ public class UIManager : Singleton<UIManager>
     {
         var type = typeof(T);
         var gamePanel = await ShowGamePanel(type, dataKey, layer, parent);
-        Debug.Log($"ShowPanel:{type}");
+        if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log($"ShowPanel:{type}");
         return  gamePanel as T;
     }
 
@@ -221,14 +222,16 @@ public class UIManager : Singleton<UIManager>
     {
         var type = typeof(T);
         var gamePanel = await ShowGamePanel(type, data, layer, parent);
-        Debug.Log($"ShowPanel:{type}");
+        if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log($"ShowPanel:{type}");
         return (T)gamePanel;
     }
     public  T ShowGamePanelImmediately<T, V>(V data, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
     {
         var type = typeof(T);
         var gamePanel =  ShowGamePanelImmediately(type, data, layer, parent);
-        Debug.Log($"ShowPanelImmediately:{type}");
+        if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log($"ShowPanelImmediately:{type}");
         return (T)gamePanel;
     }
 

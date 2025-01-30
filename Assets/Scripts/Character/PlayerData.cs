@@ -55,11 +55,13 @@ public class UserGameSaveData : IReferenceData
         manufatures.CopyData(userGameSaveData.manufatures);
         storeCounters.CopyData(userGameSaveData.storeCounters);
         fields.CopyData(userGameSaveData.fields);
-        specialMapItem.CopyData(userGameSaveData.specialMapItem);
+       
         shops.CopyData(userGameSaveData.shops);
         shopLists.CopyData(userGameSaveData.shopLists);
         saveTime = userGameSaveData.saveTime;
-         
+
+        specialMapItemList.Clear();
+        specialMapItemList.AddRange(userGameSaveData.specialMapItemList);
 
         nextWeathers.Clear();
         nowWeathers.Clear();
@@ -100,20 +102,28 @@ public class UserGameSaveData : IReferenceData
     public IntShopSaveDataDictionary shops = new IntShopSaveDataDictionary();
     public StringShopListSaveDataDictionary shopLists = new StringShopListSaveDataDictionary();
 
-    public Int2IntDictionary specialMapItem = new Int2IntDictionary();
+    
     public IntInt3Dictionary changeMapItems = new IntInt3Dictionary();
     public IntInt2Dictionary SetAnimationStateMapItems = new IntInt2Dictionary();
     public List<int2> removeMapItemOperates = new List<int2>();
     public List<int2> addMapItemOperates = new List<int2>(); 
-    public List<int> RemoveMapItemCollider = new List<int>();  
-     
+    public List<int> RemoveMapItemCollider = new List<int>();
+
+    public List<int3> specialMapItemList = new List<int3>();
+
+
     private HashSet<int> RemoveMapItemColliderSet = new HashSet<int>();
     private HashSet<int2> removeMapItemOperatesSet = new HashSet<int2>();
     private HashSet<int2> addMapItemOperatesSet = new HashSet<int2>();
 
     private Dictionary<int, List<int>> removeMapItemOperatesDic = new Dictionary<int, List<int>>();
     private Dictionary<int, List<int>> addMapItemOperatesDic = new Dictionary<int, List<int>>();
-     
+    private Dictionary<int2,int> specialMapItem = new Dictionary<int2, int>();
+
+    public bool GetSpecialMapItem(int2 key,out int value)
+    {
+        return specialMapItem.TryGetValue(key, out value);
+    }
     public int2 GetNpcBirthDay(int npdId)
     {
         if(npcBirthDays.TryGetValue(npdId,out var int2))
@@ -197,6 +207,11 @@ public class UserGameSaveData : IReferenceData
                 addMapItemOperatesDic.Add(addMapItemOperates[i].x, new List<int> { addMapItemOperates[i].y });
             }
         }
+        specialMapItem.Clear();
+        for(int i = 0; i < specialMapItemList.Count; i++)
+        {
+            specialMapItem[specialMapItemList[i].xy] = specialMapItemList[i].z;
+        }
     }
 
     public void SaveData()
@@ -215,6 +230,11 @@ public class UserGameSaveData : IReferenceData
         foreach (var id in addMapItemOperatesSet)
         {
             addMapItemOperates.Add(id);
+        }
+        specialMapItemList.Clear();
+        foreach (var e in specialMapItem)
+        {
+            specialMapItemList.Add(new int3(e.Key.xy, e.Value));
         }
         saveTime = DateTime.Now.ToString("s");
     }

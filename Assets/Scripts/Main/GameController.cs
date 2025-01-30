@@ -172,25 +172,19 @@ public class GameController : MonoBehaviour
 
     private void OnEnable()
     {
-       
-#if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
-         
+
         CloudServices.OnUserChange += OnUserChange;
         CloudServices.OnSavedDataChange += OnSavedDataChange;
         CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
-#endif
     }
 
-    
+
     private void OnDisable()
     {
-      
-#if !UNITY_EDITOR&&(UNITY_ANDROID || UNITY_IOS)
-      
         CloudServices.OnUserChange -= OnUserChange;
         CloudServices.OnSavedDataChange -= OnSavedDataChange;
         CloudServices.OnSynchronizeComplete -= OnSynchronizeComplete;
-#endif
+
         // unregister from events
 
     }
@@ -209,13 +203,14 @@ public class GameController : MonoBehaviour
         }
         hideSave = true;
         GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
-        //Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
+        Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
     }
 
     string nowUserId;
     public bool hideSave { get; private set; }
     private void OnUserChange(CloudServicesUserChangeResult result, Error error)
     {
+        Debug.Log($"云存档OnUserChange！--result.User.UserId:{result.User.UserId}");
         if (string.IsNullOrEmpty(nowUserId))
         {
             nowUserId = result.User.UserId;
@@ -231,9 +226,14 @@ public class GameController : MonoBehaviour
        
     }
     private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
-    { 
-
-        if (result.Success)
+    {
+        Debug.Log($"云存档OnSynchronizeComplete:{result.Success}");
+        // var gameDataSaveManager= GameDataSaveManager.instance;
+#if UNITY_EDITOR
+        GameDataSaveManager.instance.LoadCloudData();
+        StartGame();
+#else
+if (result.Success)
         {
             GameDataSaveManager.instance.LoadCloudData();
             StartGame();
@@ -248,14 +248,18 @@ public class GameController : MonoBehaviour
             hideSave = true;
             GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("云存档加载错误"), Application.Quit, Application.Quit);
         }
+#endif
+
+
     }
-    
+
     public void AddCrystal()
     {
         
     }
     private void Awake()
     {
+        var gameDataManager = GameDataManager.instance;
         Screen.SetResolution(Screen.width, Screen.height, true);
         instance = this;
         //GameObject.DontDestroyOnLoad(gameObject);
@@ -271,23 +275,28 @@ public class GameController : MonoBehaviour
             }
         }
         FilmController.instance.SetParent(filmParent);
-        UIManager.instance.SetParent(UIParent);
-        CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
-
-#if UNITY_EDITOR
-        GameDataSaveManager.instance.InitUserSaveData("Test");
-        StartGame();
-#elif UNITY_ANDROID || UNITY_IOS
-        CloudServices.Synchronize();
-        BillingServices.InitializeStore();
-#endif 
+        UIManager.instance.SetParent(UIParent); 
     }
     // Start is called beforee the first frame update
     void Start()
-    { 
+    {
+        Debug.Log($"Application.platform:{Application.platform}");
+        CloudServices.Synchronize();
+        BillingServices.InitializeStore();
+ /*
+#if UNITY_EDITOR
+
+        GameDataSaveManager.instance.InitUserSaveData("Test");
+        StartGame();
+#else
+ Debug.Log($"云存档初始化11");
+            CloudServices.Synchronize();
+            BillingServices.InitializeStore();
+#endif*/
+        CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
     }
-   
-     void StartGame()
+
+    void StartGame()
     {
         environmentManger = EnvironmentManger.instance;
         // var appStoreManager= AppStoreManager.instance;
@@ -360,7 +369,7 @@ public class GameController : MonoBehaviour
         {
             UIManager.instance.ShowGamePanel<AllItemPanel>();
         }
-#endif 
+#endif
     }
 #if UNITY_EDITOR
     public Transform testObj;
@@ -391,7 +400,7 @@ public class GameController : MonoBehaviour
         };
         GameActionManager.instance.QueueAction(setWeather);
     }
-#endif 
+#endif
 
 }
  

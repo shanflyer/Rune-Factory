@@ -18,7 +18,7 @@ public class GameDataManager : Singleton<GameDataManager>
     public override async void Init()
     {
         base.Init();
-        GlobalData=await GetAsyncData<GameGlobalData>();
+        GlobalData=GetData<GameGlobalData>();
         var gameDataSaveManager = GameDataSaveManager.instance;
         //初始加载
         await LoadAllAsyncData<GameActionData>();
@@ -172,41 +172,45 @@ public class GameDataManager : Singleton<GameDataManager>
         return results;
     }
 
-    public T GetData<T>(string key) where T : IGameData
+    public T GetData<T>(string key = "") where T : IGameData
     {
         Type type = typeof(T);
+        string dataPath =string.IsNullOrEmpty(key)? DataPath.GetDataPath(type):$"{DataPath.GetDataPath(type)}/{key}";
         if (allGameStaticDatas.TryGetValue(type, out var dataDic))
         {
             if (dataDic.TryGetValue(key, out var data))
             {
                 return (T)data;
             }
-        }
-        else
-        {
-            var dataAsset = Resources.Load<TextAsset>(DataPath.GetDataPath(type));
-            if (dataAsset != null)
+            else
             {
-                dataDic = new Dictionary<string, IGameData>();
-
-                try
+                data = ExtensionsResources.LoadIGameData<T>(dataPath);
+                if (data != null)
                 {
-                    var datas = JsonConvert.DeserializeObject<List<T>>(dataAsset.text);
-                    for (int i = 0; i < datas.Count; i++)
-                    {
-                        var data = datas[i];
-                        data.Init();
-                        dataDic.Add(data.GetKey(), data);
-                    }
+                    data.Init();
+                    dataDic[data.GetKey()] = data;
+                    allGameStaticDatas[type] = dataDic;
+                    return (T)data;
                 }
-                catch (Exception e)
-                {
-                    Debug.LogWarning(e);
-                }
-                allGameStaticDatas[type] = dataDic;
             }
         }
-        return default(T);
+
+        var _data = ExtensionsResources.LoadIGameData<T>(dataPath);
+        if (_data != null && _data.GetKey() == key)
+        {
+            _data.Init();
+            if (!string.IsNullOrEmpty(_data.GetKey()))
+            {
+                dataDic = new Dictionary<string, IGameData>();
+                dataDic[_data.GetKey()] = _data;
+                allGameStaticDatas[type] = dataDic;
+            }
+
+            return _data;
+        }
+
+         
+        return default(T); ;
     }
 
     public async Task<T> GetAsyncData<T>(int key) where T : IGameData

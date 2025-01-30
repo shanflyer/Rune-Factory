@@ -1128,7 +1128,7 @@ public class FightManager : Singleton<FightManager>
                 break;
         }
     }
-    async void SkillAction(FightType fightType, SkillActionType skillActionType, int actionValue,FightCharacter source,FightCharacter target,bool isDisplayHurt)
+    void SkillAction(FightType fightType, SkillActionType skillActionType, int actionValue,FightCharacter source,FightCharacter target,bool isDisplayHurt)
     {
         switch (fightType)
         {
@@ -1164,6 +1164,7 @@ public class FightManager : Singleton<FightManager>
                     hurt = actionValue;
                     hurtResultType = GetHurtResultType(source.characterProperty.Lucky, target.characterProperty.Lucky);
                 }
+                Debug.Log($"攻击hurt：{hurt}");
                 if (hurt < 1)
                 {
                     hurt = 1;
@@ -1214,7 +1215,7 @@ public class FightManager : Singleton<FightManager>
             };
             GameActionManager.instance.QueueAction(displayHurt, true);
         }
-        //Debug.Log($"角色HP：{target.Name}--{hp}");
+        Debug.Log($"角色HP：{target.Name}--{hp}");
         if (hp <= 0)
         {
            // Debug.Log($"角色死亡：{target is FightMonster}");
@@ -1263,7 +1264,7 @@ public class FightManager : Singleton<FightManager>
         };
         GameActionManager.instance.QueueAction(changeCharacterProperty, true);
         SkillAction(skillData.fightType,skillData.skillActionType,skillData.actionValue, source, target, actionSkillEstimate.displayHurt);
-
+        Debug.Log("SkillAction");
     }
 
     private FightRoundType nowFightRound;

@@ -44,7 +44,8 @@ public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
     void ApplyRemoteSettings(ConfigResponse configResponse)
     {
         isGetConfig = true;
-        Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
+        if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
     }
     public async Task<string> GetConfig(string key)
     {

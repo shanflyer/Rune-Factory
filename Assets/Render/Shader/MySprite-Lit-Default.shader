@@ -430,6 +430,9 @@ Shader "MySprite-Lit-Default"
             float3 BlendSeasonColor(float3 main,float2 uv,float2 worldUV)
             {
                 const half4 grassTex=_MoveMask.Sample(sampler_MainTex,uv);
+                 half _BlendValue=1-step(grassTex.g,0);
+                //return _BlendValue.xxx;
+                
                 float mainValue=(main.y);
                
                 mainValue=clamp(mainValue,0,1);
@@ -490,8 +493,8 @@ Shader "MySprite-Lit-Default"
                 w_w=clamp(w_w,0,1); 
                 winterColor=winterColor*w_w+winterColor0*(1-w_w); 
                 
-
-                half _BlendValue=1-step(grassTex.g,0);
+                //return winterColor.xyz;
+           
 
                 int seasonStep=1-step(seasonColorBlend,0);
                 return main.xyz*(1-_BlendValue)*seasonStep+winterColor*_BlendValue*seasonStep; 

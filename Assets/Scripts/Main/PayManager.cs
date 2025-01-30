@@ -114,6 +114,7 @@ public class PayManager : Singleton<PayManager>
     {
         nowDiamond += value;
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+        GameDataSaveManager.instance.RefreshUserCommonSaveData(nowDiamond);
     }
     public void TryCreatMoney()
     {

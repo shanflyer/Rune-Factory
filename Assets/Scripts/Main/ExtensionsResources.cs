@@ -22,6 +22,11 @@ public  static class ExtensionsResources
     {
         return Resources.Load<T>(path); 
     }
+    public static T LoadIGameData<T>(string path) where T : IGameData
+    {
+        var asset = Resources.Load(path);
+        return (T)(IGameData)asset;
+    }
     public static async Task<T> LoadResourceIGameData<T>(string path) where T : IGameData
     {
         var gres = Resources.LoadAsync(path);

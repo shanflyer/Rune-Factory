@@ -230,7 +230,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if(loadGameSaveData!=null)
         {
-            if (loadGameSaveData.specialMapItem.TryGetValue(key, out var value))
+            if (loadGameSaveData.GetSpecialMapItem(key, out var value))
             {
                 return value;
             } 
@@ -241,12 +241,9 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadGameSaveData!=null)
         { 
-            using(var e = loadGameSaveData.specialMapItem.Values.GetEnumerator())
+            for(int i=0;i<loadGameSaveData.specialMapItemList.Count;i++)
             {
-                while (e.MoveNext())
-                {
-                   MyInstance.instance.AddInstance(e.Current);
-                }
+                MyInstance.instance.AddInstance(loadGameSaveData.specialMapItemList[i].z);
             } 
         }
     }
@@ -263,8 +260,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         return -1;
     }
     public bool LoadDataSuccess { get; private set; }
-
-#if UNITY_EDITOR
+     
     public void InitUserSaveData(string userName, string clundDataStr = null)
     {
         userGameSaveDataList = LoadUserGameSaveData(userName, clundDataStr);
@@ -367,8 +363,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
 
         }
-    }
-#endif
+    } 
      
     public CharacterSaveData GetCharacterSaveData(int dataId)
     {
@@ -470,7 +465,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         UserGameSaveDataList.commonSaveData.diamond = PayManager.instance.NowDiamond;
         UserGameSaveData.SaveData();
     }
-
+    public void RefreshUserCommonSaveData(int diamond)
+    {
+        UserGameSaveDataList.commonSaveData.diamond = diamond;
+        CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+    }
     public bool SetFishSaveData(int fish,int length,int place)
     {
         var saveData = UserGameSaveData;
@@ -552,7 +551,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     public void TryAutoSaveData()
     { 
-        if (loadCompleted&&GameGuideManager.instance.endGuideFilmIndex >= 0&&!GameController.instance.hideSave)
+       // if (loadCompleted&&GameGuideManager.instance.endGuideFilmIndex >= 0&&!GameController.instance.hideSave)
         {
             SaveData(-1);
         }
@@ -570,7 +569,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         { 
             userGameSaveDataList.userGameSaveDatas[selectSaveIndex] =new UserGameSaveData(UserGameSaveData);
             userGameSaveDataList.userGameSaveDatas[selectSaveIndex].index = selectSaveIndex;
-        } 
+        }
+        
+         SaveCloudData(selectSaveIndex);
+        CloudServices.Synchronize();
+        /*
+
 #if UNITY_EDITOR 
         string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
         if (GameDataManager.instance.GlobalData.Encrypt)
@@ -581,7 +585,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         File.WriteAllText(saveDataPath, strs);
 #elif UNITY_ANDROID || UNITY_IOS
       SaveCloudData(selectSaveIndex);
-#endif 
+#endif */
         return true;
     }
 
@@ -700,7 +704,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         else if(index<3)
         {
             SetCloudData(userGameSaveDataList.userGameSaveDatas[index], $"player_{index}");
-        } 
+        }
     }
     void SetCloudData(UserGameSaveData nowSaveData, string keyStr)
     {
@@ -726,10 +730,10 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             string key = GameCommon.BlendString(keyStr, field.Name);
             CloudServices.SetString(key, objStr);
         }
+        CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
     }
     public void LoadCloudData()
-    {
-
+    { 
         userGameSaveDataList = new UserGameSaveDataList();
         int diamond = CloudServices.GetInt("diamond");
         userGameSaveDataList.commonSaveData = new CommonSaveData
@@ -757,6 +761,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
         UserGameSaveData LoadUserData(string key)
         {
+            CloudServices.RemoveKey(GameCommon.BlendString(key, "specialMapItemList"));
             UserGameSaveData userData = new UserGameSaveData();
             for(int i = 0; i < UserGameSaveDataIntFields.Count; i++)
             {
@@ -779,8 +784,17 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 string value = CloudServices.GetString(fieldKey);
                 if (!string.IsNullOrEmpty(value))
                 {
-                    object obj = JsonConvert.DeserializeObject(value, field.FieldType);
-                    field.SetValue(userData, obj);
+                    try
+                    {
+                      
+                        object obj = JsonConvert.DeserializeObject(value, field.FieldType);
+                        field.SetValue(userData, obj);
+                    }
+                    catch
+                    {
+                        Debug.LogError($"DeserializeObject{field.Name}-type{field.FieldType}-value:{value}");
+                    }
+                   
                 }
                 else
                 {

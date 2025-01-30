@@ -122,7 +122,7 @@ Shader "MyLight/LightMul"
             half4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                half4 col =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,i.uv);  
+                //half4 col =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,i.uv);  
                 half distance=length(i.ObjectPosition.xy);
                 half value=1;
                 Unity_Remap_float(distance,float2(0.5,0),float2(_MinSize,_MaxSize),value);
@@ -138,7 +138,7 @@ Shader "MyLight/LightMul"
                 half4 lightColor = i.color*value;   
                 lightColor = lightColor * saturate(dot(dirToLight, normalUnpacked))*_NormalLight+(1-_NormalLight)*lightColor;
  
-                lightColor=(1-_BlendTex)*lightColor+_BlendTex*col*lightColor;
+                lightColor=(1-_BlendTex)*lightColor+_BlendTex*lightColor;
                 lightColor.xyz*=0.25;
 
                 return lightColor; 

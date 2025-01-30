@@ -18,7 +18,7 @@ public class GameGlobalData :ScriptableObject, IGameData
     public bool debug;
     public string GetKey()
     {
-        return "GameGlobalData";
+        return "";
     }
     public override string ToString()
     {

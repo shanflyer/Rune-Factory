@@ -57,14 +57,7 @@ public class SceneRenderPassFeature : ScriptableRendererFeature
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
 
-            if (GameVolumeManager.instance.volumeLevel > 0)
-            {
-
-            }
-            else
-            {
-
-            }
+          
 
             var targetDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
             targetDesc.name = "_BlurTex";
