@@ -210,7 +210,7 @@ public class GameController : MonoBehaviour
     public bool hideSave { get; private set; }
     private void OnUserChange(CloudServicesUserChangeResult result, Error error)
     {
-        Debug.Log($"ÔÆ´æµµOnUserChange£¡--result.User.UserId:{result.User.UserId}");
+       // Debug.Log($"ÔÆ´æµµOnUserChange£¡--result.User.UserId:{result.User.UserId}");
         if (string.IsNullOrEmpty(nowUserId))
         {
             nowUserId = result.User.UserId;
@@ -227,7 +227,7 @@ public class GameController : MonoBehaviour
     }
     private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
     {
-        Debug.Log($"ÔÆ´æµµOnSynchronizeComplete:{result.Success}");
+        //Debug.Log($"ÔÆ´æµµOnSynchronizeComplete:{result.Success}");
         // var gameDataSaveManager= GameDataSaveManager.instance;
 #if UNITY_EDITOR
         GameDataSaveManager.instance.LoadCloudData();
@@ -280,7 +280,7 @@ if (result.Success)
     // Start is called beforee the first frame update
     void Start()
     {
-        Debug.Log($"Application.platform:{Application.platform}");
+        //Debug.Log($"Application.platform:{Application.platform}");
         CloudServices.Synchronize();
         BillingServices.InitializeStore();
  /*

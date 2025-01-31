@@ -117,19 +117,19 @@ Shader "BlendBlur"
                 // uint2 pixelCoords = uint2(i.uv.xy * _ScreenSize.xy);
                 half4 color =   SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
               
-                half4 BlurColor=0.4*SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv);
+                half4 BlurColor=0.4*SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
                 
-                BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.xy); 
+                BlurColor += 0.15 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,IN.uv01.xy); 
                
-                BlurColor += 0.15 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv01.zw); 
+                BlurColor += 0.15 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,IN.uv01.zw); 
                 
-                BlurColor += 0.10 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv23.xy); 
+                BlurColor += 0.10 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv23.xy); 
                 
-                BlurColor += 0.10 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv23.zw); 
+                BlurColor += 0.10 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv23.zw); 
                  
-                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex,IN.uv45.xy); 
+                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,IN.uv45.xy); 
                
-                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_BlurTex,sampler_BlurTex, IN.uv45.zw);  
+                BlurColor += 0.05 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv45.zw);  
                // return BlurColor;
                  
 
@@ -156,7 +156,7 @@ Shader "BlendBlur"
                 x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
                 x+=x1;
                 
-             
+               // return BlurColor;
 
                  //
 

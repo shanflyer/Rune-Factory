@@ -25,7 +25,7 @@ public class FightEventBehavior : PlayableBehaviour
                 displayHurt = hurtDisplay
             };
             GameActionManager.instance.QueueAction(actionSkillEstimate, true);
-            Debug.Log($"战斗:{skillEstimateData.skillRuntime.instanceId}-SkillData:{skillEstimateData.skillRuntime.skillData.skillName}");
+            Debug.Log($"<color=green>战斗:{skillEstimateData.skillRuntime.instanceId}-SkillData:{skillEstimateData.skillRuntime.skillData.skillName}</color>");
         } 
         base.OnBehaviourPlay(playable, info);
     }

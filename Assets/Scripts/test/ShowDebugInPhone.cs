@@ -68,10 +68,18 @@ public class ShowDebugInPhone : MonoBehaviour
         //转换场景不删除  
         Application.DontDestroyOnLoad(gameObject);
     }
-    void OnEnable()
+    async void OnEnable()
     {
-        //注册log监听  
+#if UNITY_EDITOR
         Application.RegisterLogCallback(HangleLog);
+#else
+        if (await CloudRemoteConfig.instance.GetConfigBool("LogShow"))
+        {
+            Application.RegisterLogCallback(HangleLog);
+        }
+#endif 
+        //注册log监听  
+
     }
     void OnDisable()
     {
@@ -147,8 +155,9 @@ public class ShowDebugInPhone : MonoBehaviour
             sw.Close();
         }
     }
+    bool LogShow = false;
     void Update()
-    {
+    { 
         //因为写入文件的操作必须在主线程中完成,所以在Update中才给你写入文件。  
         
     }
