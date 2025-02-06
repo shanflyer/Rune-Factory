@@ -175,6 +175,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 881510066407353480, guid: 957f333c8545dc94080f5c9281725318,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1370943531173514582, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
       propertyPath: orthographic size
@@ -230,10 +235,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3820188560276549252, guid: 957f333c8545dc94080f5c9281725318,
+    - target: {fileID: 4492723052041442772, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
-      propertyPath: orthographic size
-      value: 2.4
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4880589962231242120, guid: 957f333c8545dc94080f5c9281725318,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6157351341638957001, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
@@ -465,7 +475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startBGM: {fileID: 8300000, guid: 7907b6536d50e9c4c9fffd49050d273d, type: 3}
-  startPlay: 1
+  startPlay: 0
   selectable: {fileID: 0}
   weather:
     cloud: 0
@@ -516,7 +526,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532694209}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7aa611b10fc9407458d83198a6a29111, type: 3}
   m_Name: 

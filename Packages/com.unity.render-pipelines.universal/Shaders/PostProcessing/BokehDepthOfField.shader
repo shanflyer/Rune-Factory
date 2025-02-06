@@ -17,7 +17,14 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
 
         TEXTURE2D_X(_DofTexture);
         TEXTURE2D_X(_FullCoCTexture);
+        TEXTURE2D(_CharacterDepthTex);
+            SAMPLER(sampler_CharacterDepthTex); 
 
+            TEXTURE2D(_ObjDepthTex);
+            SAMPLER(sampler_ObjDepthTex); 
+ 
+        float _BlurOffsetPos;
+        float2 _ReMapValue;
         half4 _SourceSize;
         half4 _DownSampleScaleFactor;
         half4 _CoCParams;
@@ -28,6 +35,11 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
         #define MaxCoC          _CoCParams.y
         #define MaxRadius       _CoCParams.z
         #define RcpAspect       _CoCParams.w
+
+        void Unity_Remap_float(float In, float2 InMinMax, float2 OutMinMax, out float Out)
+        {
+            Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
+        }
 
         half FragCoC(Varyings input) : SV_Target
         {
@@ -223,9 +235,46 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
             outColor.a = color.a;
         #endif
 
+        
+ 
+        half centerY=input.texcoord1.y;
+
+        half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, uv);
+        half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, uv);
+        int stepCharacter=step(objDepthColor.r+objDepthColor.g+objDepthColor.b,0);
+        half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor;
+
+       
+        //
+
+        float x=myDepthColor.x;
+        Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
+        x=clamp(x,0,1)*step(centerY-_BlurOffsetPos,myDepthColor.x);
+        float x1=myDepthColor.x;
+        Unity_Remap_float(x1,float2(centerY-_BlurOffsetPos,0),_ReMapValue.xy,x1);
+        x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
+        x+=x1; 
+
+        outColor=outColor*x+color*(1-x);
+
         #if defined(UNITY_COLORSPACE_GAMMA)
             outColor = GetLinearToSRGB(outColor);
         #endif
+
+        switch(testShowType){
+            case 0:
+            return outColor;
+            break;
+            case 1:
+            return half4(objDepthColor.xxx,1); 
+            break;
+            case 2:
+            return half4(myDepthColor.xxx,1); 
+            break;
+        }
+
+       
+
             return outColor;
         }
 
@@ -354,6 +403,8 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
                 #pragma fragment FragComposite
                 #pragma target 3.5
                 #pragma multi_compile_fragment _ _ENABLE_ALPHA_OUTPUT
+
+                
             ENDHLSL
         }
     }

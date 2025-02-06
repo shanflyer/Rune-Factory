@@ -7,18 +7,20 @@ public class TestRenderGroup : MonoBehaviour
 {
     [SerializeField]
    Renderer[] renderers;
+    Sprite sprite;
+    
 
     private void OnEnable()
-    {
-        /*
+    { 
+        //sprite.GetSecondaryTextures()
         for(int i = 0; i < renderers.Length; i++)
         {
             CameraManager.instance.AddTestRender(renderers[i]);
-        }*/
+        }
     }
     private void OnDisable()
     {
-        /*
+        
         if (!SingletonType.Cleared)
         {
             for (int i = 0; i < renderers.Length; i++)
@@ -26,7 +28,7 @@ public class TestRenderGroup : MonoBehaviour
                 CameraManager.instance.RemoveTestRender(renderers[i]);
             }
 
-        }*/
+        }
     }
     public void GetRenders()
     {

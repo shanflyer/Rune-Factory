@@ -701,6 +701,8 @@ namespace UnityEngine.Rendering.Universal
         private class DoFBokehPassData
         {
             // Setup
+            internal float BlurOffset;
+            internal Vector2 ReMapValue;
             internal Vector4[] bokehKernel;
             internal int downSample;
             internal float uvMargin;
@@ -762,6 +764,8 @@ namespace UnityEngine.Rendering.Universal
                 passData.uvMargin = uvMargin;
                 passData.cocParams = new Vector4(P, maxCoC, maxRadius, rcpAspect);
                 passData.useFastSRGBLinearConversion = m_UseFastSRGBLinearConversion;
+                passData.BlurOffset = m_DepthOfField.BlurOffsetPos.value;
+                passData.ReMapValue = new Vector2(m_DepthOfField.ReMapValueX.value, m_DepthOfField.ReMapValueY.value);
 
                 // Inputs
                 passData.sourceTexture = source;
@@ -803,6 +807,8 @@ namespace UnityEngine.Rendering.Universal
                             data.useFastSRGBLinearConversion);
 
                         dofMat.SetVector(ShaderConstants._CoCParams, data.cocParams);
+                        dofMat.SetFloat(ShaderConstants._BlurOffsetPos, data.BlurOffset);
+                        dofMat.SetVector(ShaderConstants._ReMapValue, data.ReMapValue);
                         dofMat.SetVectorArray(ShaderConstants._BokehKernel, data.bokehKernel);
                         dofMat.SetVector(ShaderConstants._DownSampleScaleFactor,
                             new Vector4(1.0f / data.downSample, 1.0f / data.downSample, data.downSample,
@@ -841,6 +847,8 @@ namespace UnityEngine.Rendering.Universal
                     // Composite
                     using (new ProfilingScope(ProfilingSampler.Get(URPProfileId.RG_DOFComposite)))
                     {
+
+
                         dofMat.SetTexture(ShaderConstants._DofTexture, data.pingTexture);
                         Blitter.BlitCameraTexture(cmd, sourceTextureHdl, dst, dofMat, k_BokehDoFPassComposite);
                     }

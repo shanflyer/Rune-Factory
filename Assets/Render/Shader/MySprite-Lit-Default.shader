@@ -12,6 +12,8 @@ Shader "MySprite-Lit-Default"
         [Toggle(SHADOWSTEP)]_shadowStep("ShadowStep",int)=0
         [Toggle(LIGHTMASK)]_LightMask("LightMask",int)=0
 
+        ObjPos("ObjPos",vector)=(0,0,0,0)
+
         _MainTex("Diffuse", 2D) = "white" {}
        // _MaskTex("Mask", 2D) = "white" {}
         _MoveMask("_MoveMask", 2D) = "black" {}
@@ -174,6 +176,8 @@ Shader "MySprite-Lit-Default"
             int _Character;    
             int _Damp;
             int _HideNormal;
+
+            half3 ObjPos;
 
             half3 _PlantSpringColor1;
             half3 _PlantSpringColor;
@@ -1179,7 +1183,7 @@ Shader "MySprite-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+               // float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
                 float stepPosZ=step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
@@ -1201,7 +1205,7 @@ Shader "MySprite-Lit-Default"
                 float4 DepthTex =_DepthTex.Sample(sampler_MainTex,i.uv); 
                 half4 _NormalColor = _NormalMap.Sample(sampler_MainTex,i.uv);
 
-                float4 ObjDepthTex=SAMPLE_TEXTURE2D(_ObjDepthTex, sampler_ObjDepthTex, i.color.yz);
+                 float4 ObjDepthTex=SAMPLE_TEXTURE2D(_ObjDepthTex, sampler_ObjDepthTex, i.color.yz);
                  
                 half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
                 half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
@@ -1241,7 +1245,7 @@ Shader "MySprite-Lit-Default"
             }
             ENDHLSL
         }
-
+        
         Pass
         {
             Tags { "LightMode" = "ObjDepth" "Queue"="Transparent" "RenderType"="Transparent"} 
@@ -1288,11 +1292,11 @@ Shader "MySprite-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+               // float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
-                 _objSortPos.y+=_objSortPos.z;
+                _objSortPos.y+=_objSortPos.z;
  
 
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 
@@ -1313,10 +1317,12 @@ Shader "MySprite-Lit-Default"
             }
 
             float4 UnlitFragment(Varyings i) : SV_Target
-            {
+            {   
+                //return float4(i.color.zzz,1);
+
                 float4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
                 float4 DepthTex =_DepthTex.Sample(sampler_MainTex,i.uv); 
-                float clipA=1-step(DepthTex.a,0);
+                float clipA=1-step(DepthTex.a,0.01);
                 DepthTex.xyz*=clipA;
                 half4 _NormalColor = _NormalMap.Sample(sampler_MainTex,i.uv);
                  
@@ -1338,11 +1344,9 @@ Shader "MySprite-Lit-Default"
                 half offset=depthValue*512*4/_ScreenParams.y;
                   
                 half depth=i.color.z  +offset*clearColor;
-                half setpHigh=depthStep_G; 
-                 //return float4(i.color.zzz,mainTex.a);
-               
+                half setpHigh=depthStep_G;   
 
-                //return float4(i.color.zzz,mainTex.a);
+                 //return float4(i.color.zzz,mainTex.a);
 
                 half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 
@@ -1355,12 +1359,13 @@ Shader "MySprite-Lit-Default"
                 
 
                 mainTex.a=(mainTex.a*(1-stepDepthOne)+DepthTex.a*stepDepthOne)*(1-stepMul);
+                mainTex.a=clamp(mainTex.a,0,1);
 
-                //return mainTex.aaaa;
+                 //return mainTex.aaaa;
                 //clip(mainTex.a);
 
                // mainTex.xyz=otherStep.xxx;
-                
+                clip(mainTex.a-0.01);
 
                 return mainTex;
                 

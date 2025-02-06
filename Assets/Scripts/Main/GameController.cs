@@ -229,6 +229,23 @@ public class GameController : MonoBehaviour
     {
         //Debug.Log($"云存档OnSynchronizeComplete:{result.Success}");
         // var gameDataSaveManager= GameDataSaveManager.instance;
+
+        if (result.Success)
+        {
+            GameDataSaveManager.instance.LoadCloudData();
+            StartGame();
+        }
+        else if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            hideSave = true;
+            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("没有网络连接无法同步存档，请退出重试"), Application.Quit, Application.Quit);
+        }
+        else
+        {
+            hideSave = true;
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("云存档加载错误"), Application.Quit, Application.Quit);
+        }
+        /*
 #if UNITY_EDITOR
         GameDataSaveManager.instance.LoadCloudData();
         StartGame();
@@ -249,7 +266,7 @@ if (result.Success)
             GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("云存档加载错误"), Application.Quit, Application.Quit);
         }
 #endif
-
+        */
 
     }
 

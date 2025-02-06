@@ -13,6 +13,8 @@ public class SetPanel : GamePanel<IReferenceData>
     private Button saveButton, returnButton;
     [SerializeField]
     private Toggle level0, level1, level2;
+    [SerializeField]
+    private TMP_Dropdown dropdown;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -69,6 +71,11 @@ public class SetPanel : GamePanel<IReferenceData>
             {
                 GameVolumeManager.instance.volumeLevel = 2;
             }
+        });
+
+        dropdown.onValueChanged.AddListener((int value) =>
+        {
+            Shader.SetGlobalInt("testShowType", value);
         });
     }
     public override async Task InitData(string dataKey)

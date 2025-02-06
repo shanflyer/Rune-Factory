@@ -819,6 +819,9 @@ namespace UnityEngine.Rendering.Universal
             float farStart = m_DepthOfField.gaussianStart.value;
             float farEnd = Mathf.Max(farStart, m_DepthOfField.gaussianEnd.value);
 
+            float BlurValue = m_DepthOfField.BlurOffsetPos.value;
+            float ValueX = m_DepthOfField.ReMapValueX.value;
+            float ValueY = m_DepthOfField.ReMapValueY.value;
             // Assumes a radius of 1 is 1 at 1080p
             // Past a certain radius our gaussian kernel will look very bad so we'll clamp it for
             // very high resolutions (4K+).
@@ -858,6 +861,9 @@ namespace UnityEngine.Rendering.Universal
             // Composite
             cmd.SetGlobalTexture(ShaderConstants._ColorTexture, m_PingTexture.nameID);
             cmd.SetGlobalTexture(ShaderConstants._FullCoCTexture, m_FullCoCTexture.nameID);
+
+            material.SetFloat(ShaderConstants._BlurOffsetPos, BlurValue);
+            material.SetVector(ShaderConstants._ReMapValue, new Vector2(ValueX, ValueY));
             Blitter.BlitCameraTexture(cmd, source, destination, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, material, k_GaussianDoFPassComposite);
         }
 
@@ -932,6 +938,12 @@ namespace UnityEngine.Rendering.Universal
             float maxCoC = (A * F) / (P - F);
             float maxRadius = GetMaxBokehRadiusInPixels(m_Descriptor.height);
             float rcpAspect = 1f / (wh / (float)hh);
+
+            float BlurValue = m_DepthOfField.BlurOffsetPos.value;
+            float ValueX = m_DepthOfField.ReMapValueX.value;
+            float ValueY = m_DepthOfField.ReMapValueY.value;
+            material.SetFloat(ShaderConstants._BlurOffsetPos, BlurValue);
+            material.SetVector(ShaderConstants._ReMapValue, new Vector2(ValueX, ValueY));
 
             CoreUtils.SetKeyword(material, ShaderKeywordStrings._ENABLE_ALPHA_OUTPUT, enableAlphaOutput);
             CoreUtils.SetKeyword(material, ShaderKeywordStrings.UseFastSRGBLinearConversion, m_UseFastSRGBLinearConversion);
@@ -1936,6 +1948,8 @@ namespace UnityEngine.Rendering.Universal
             public static readonly int _HalfCoCTexture = Shader.PropertyToID("_HalfCoCTexture");
             public static readonly int _DofTexture = Shader.PropertyToID("_DofTexture");
             public static readonly int _CoCParams = Shader.PropertyToID("_CoCParams");
+            public static readonly int _BlurOffsetPos = Shader.PropertyToID("_BlurOffsetPos");
+            public static readonly int _ReMapValue = Shader.PropertyToID("_ReMapValue");
             public static readonly int _BokehKernel = Shader.PropertyToID("_BokehKernel");
             public static readonly int _BokehConstants = Shader.PropertyToID("_BokehConstants");
             public static readonly int _PongTexture = Shader.PropertyToID("_PongTexture");

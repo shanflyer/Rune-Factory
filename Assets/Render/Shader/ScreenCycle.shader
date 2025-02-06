@@ -19,6 +19,7 @@ Shader "ScreenCycle"
         ZWrite Off
 
         HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Assets/Render/Shader/UnityAction.cginc"
  
@@ -71,8 +72,11 @@ Shader "ScreenCycle"
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
-                o.uv= half2(ComputeScreenPos(o.vertex / o.vertex.w).xy);
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
+
+                o.vertex = GetFullScreenTriangleVertexPosition(v.vertexID);
+                o.uv= GetFullScreenTriangleTexCoord(v.vertexID); 
 
                 _CycleSize*=1-_CycleValue;
 

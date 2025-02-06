@@ -27,6 +27,7 @@ public class CameraManager : Singleton<CameraManager>
     public override void Init()
     {
         base.Init();
+        hideLayer = LayerMask.NameToLayer("Hide");
         mainCamera = Camera.main;
         cameraAudioListener=mainCamera.GetComponent<AudioListener>();
         uiCamera = mainCamera.transform.parent.GetChild(0).GetComponent<Camera>();
@@ -274,14 +275,19 @@ public class CameraManager : Singleton<CameraManager>
     }
 
     public void AddTestRender(Renderer renderer)
-    {
-        TestRenderers.TrySetValue(renderer.GetInstanceID(),renderer);
+    { 
+        TestRenderers.TrySetValue(renderer,renderer.gameObject.layer);
     }
     public void RemoveTestRender(Renderer renderer)
     {
-        TestRenderers.Remove(renderer.GetInstanceID());
+        if(TestRenderers.TryGetValue(renderer,out var layer))
+        {
+            renderer.gameObject.layer = layer;
+        }
+        TestRenderers.Remove(renderer);
     }
-    MyDic<int,Renderer> TestRenderers = new MyDic<int, Renderer>();
+    MyDic<Renderer,int> TestRenderers = new MyDic<Renderer, int>();
+    LayerMask hideLayer;
     protected override void LateUpData()
     {
         base.LateUpData();
@@ -302,9 +308,21 @@ public class CameraManager : Singleton<CameraManager>
         var planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
         for(int i = 0; i < TestRenderers.length; i++)
         {
-            var renderer = TestRenderers[i];
-            renderer.enabled = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
-        }
+            var renderer = TestRenderers.GetKeyForIndex(i);
+            bool enable= GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+            renderer.enabled = enable;
+            /*
+            if (enable)
+            {
+                renderer.gameObject.layer = TestRenderers[i];
+            }
+            else
+            {
+                renderer.gameObject.layer = hideLayer;
+            }*/
+            //renderer.gameObject.layer = 1;
+            // renderer.enabled = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+        } 
     }
 
 }

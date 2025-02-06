@@ -208,9 +208,9 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetIntegerParameter.cs" />
     <Compile Include="Assets\Scripts\Data\GameGuideFilmData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\HasColliderHit.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Character\CharacterRemoveItem.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsAlive.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Quaternion\AngleAxis.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CharacterRemoveItem.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\Lerp.cs" />
     <Compile Include="Assets\Scripts\Film\CharacterGenderSelect.cs" />
     <Compile Include="Assets\Scripts\UI\SetPanel.cs" />
@@ -228,8 +228,8 @@
     <Compile Include="Assets\Scripts\EditorTool\WorldInstanceEditor.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetPosition.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\Save.cs" />
-    <Compile Include="Assets\Scripts\Main\GameTimerController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedQuaternion.cs" />
+    <Compile Include="Assets\Scripts\Main\GameTimerController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MovePosition.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterCheck.cs" />
     <Compile Include="Assets\Scripts\Environment\WeatherData.cs" />
@@ -274,8 +274,8 @@
     <Compile Include="Assets\Scripts\UI\MiniPackagePanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\Other\CharacterTalk.cs" />
     <Compile Include="Assets\Effect\ProFlares\Scripts\ProFlare.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\SetRadius.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddForceAtPosition.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\SetRadius.cs" />
     <Compile Include="Assets\Render\RenderFeature\FootStepPassFeature.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterInCommonMap.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterAddItem.cs" />
@@ -506,8 +506,8 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedTransform.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\WakeUp.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetForwardVector.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetForwardVector.cs" />
     <Compile Include="Assets\Scripts\Behavior\Farm\TryCreatPlantBeHavior.cs" />
     <Compile Include="Assets\Scripts\UI\WorldPanel\FightChapterReference.cs" />
     <Compile Include="Assets\Scripts\Main\EmoteManager.cs" />
@@ -544,6 +544,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\SendEvent.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsMouseDown.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetPosition.cs" />
+    <Compile Include="Assets\Scripts\Map\MapObjPosSet.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetSlopeLimit.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\SpinInput.cs" />
     <Compile Include="Assets\SerializableDictionary\SerializableDictionary.cs" />
@@ -783,10 +784,9 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSpeed.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\MatchTarget.cs" />
     <Compile Include="Assets\Scripts\Data\FunctionDataList.cs" />
-    <Compile Include="Assets\Scripts\Data\SkillData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPitch.cs" />
+    <Compile Include="Assets\Scripts\Data\SkillData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MovePosition.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\ParallelComplete.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetEulerAngles.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedQuaternion.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\TorqueStabilizer.cs" />
@@ -796,6 +796,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetParticleCount.cs" />
     <Compile Include="Assets\Scripts\Action\GameAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Sample.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\ParallelComplete.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\GetEnabled.cs" />
     <Compile Include="Assets\Scripts\Data\DataArray.cs" />
@@ -905,6 +906,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetCenter.cs" />
     <Compile Include="Assets\Scripts\UI\MainPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetAngularSpeed.cs" />
+    <Compile Include="Assets\Scripts\test\DebugTest.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\FishMove.cs" />
     <Compile Include="Assets\Scripts\Cloud\CloudRemoteConfig.cs" />
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventAdd.cs" />
@@ -1062,11 +1064,11 @@
     <Compile Include="Assets\MyLight\MyLightPolygon.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonUp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetLoop.cs" />
-    <Compile Include="Assets\Scripts\Data\FunctionButtonData.cs" />
     <Compile Include="Assets\Scripts\Data\SleepSetDataList.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterMoveNoWait.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\Play.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Time\GetDeltaTime.cs" />
+    <Compile Include="Assets\Scripts\Data\FunctionButtonData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\FloatClamp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsKinematic.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />
@@ -1218,6 +1220,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Render\Shader\Color.shader" />
     <None Include="Assets\Effect\Hovl Studio\Black mage spells\Shaders\Blend_LinePath.shader" />
+    <None Include="Assets\Render\Shader\Sample3D.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
     <None Include="Assets\Render\Shader\Cloud.shader" />
@@ -2308,6 +2311,14 @@
       <HintPath>Library\ScriptAssemblies\Unity.RemoteConfig.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Bindings.OpenImageIO.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Bindings.OpenImageIO.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Recorder.Base">
+      <HintPath>Library\ScriptAssemblies\Unity.Recorder.Base.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Serialization">
       <HintPath>Library\ScriptAssemblies\Unity.Serialization.dll</HintPath>
       <Private>False</Private>
@@ -2384,6 +2395,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Recorder.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Recorder.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Mathematics.Extensions.Hybrid">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Extensions.Hybrid.dll</HintPath>
       <Private>False</Private>
@@ -2414,6 +2429,10 @@
     </Reference>
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Recorder">
+      <HintPath>Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.Purchasing">
@@ -2516,10 +2535,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.Services.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing.Stores">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Entities.Hybrid.HybridComponents">
       <HintPath>Library\ScriptAssemblies\Unity.Entities.Hybrid.HybridComponents.dll</HintPath>
       <Private>False</Private>
@@ -2538,6 +2553,10 @@
     </Reference>
     <Reference Include="Unity.Entities.UI">
       <HintPath>Library\ScriptAssemblies\Unity.Entities.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Purchasing.Stores">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Entities">

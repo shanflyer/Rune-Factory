@@ -141,6 +141,21 @@ public class CommonToolEditor : MyEditor
         {
             OutUIText();
         }
+        objPath = EditorGUILayout.TextField("物体路径", objPath);
+        staticObj = EditorGUILayout.Toggle("静态物体", staticObj);
+        if (GUILayout.Button("AddObjPosData"))
+        {
+            try
+            {
+                AssetDatabase.StartAssetEditing();
+                AddObjPosData(objPath);
+            }
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
+            }
+           
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -160,6 +175,37 @@ public class CommonToolEditor : MyEditor
         }*/
 
     }
+    string objPath = "";
+    bool staticObj = true;
+    void AddObjPosData(string path)
+    {
+        LayerMask lightLayer = LayerMask.NameToLayer("Light");
+        DirectoryInfo directoryInfo = new DirectoryInfo(path);
+        var objs = directoryInfo.GetFiles("*.prefab");
+        for(int i = 0; i < objs.Length; i++)
+        {
+            var _obj = AssetDatabase.LoadAssetAtPath<GameObject>($"{path}/{objs[i].Name}");
+            var obj=(GameObject) PrefabUtility.InstantiatePrefab(_obj);
+             var spriteRenderers = obj.GetComponentsInChildren<SpriteRenderer>();
+            foreach(var spriteRenderer in spriteRenderers)
+            {
+                if(spriteRenderer.gameObject.layer!= lightLayer)
+                {
+                  var mapObjPosSet=  spriteRenderer.gameObject.AddComponent<MapObjPosSet>();
+                    mapObjPosSet.staticObj = staticObj;
+                }
+            }
+            PrefabUtility.SaveAsPrefabAsset(obj, $"{path}/{objs[i].Name}");
+            GameObject.DestroyImmediate(obj);
+            
+        }
+        var dirs = directoryInfo.GetDirectories();
+        foreach (var dir in dirs)
+        {
+            AddObjPosData($"{path}/{dir.Name}");
+        }
+    }
+
     private void OutUIText()
     {
         string uiPath = "Prefabs/UI";

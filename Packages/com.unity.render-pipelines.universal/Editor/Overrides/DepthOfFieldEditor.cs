@@ -8,6 +8,9 @@ namespace UnityEditor.Rendering.Universal
         SerializedDataParameter m_Mode;
 
         SerializedDataParameter m_GaussianStart;
+        SerializedDataParameter BlurOffsetPos;
+        SerializedDataParameter ReMapValueX;
+        SerializedDataParameter ReMapValueY;
         SerializedDataParameter m_GaussianEnd;
         SerializedDataParameter m_GaussianMaxRadius;
         SerializedDataParameter m_HighQualitySampling;
@@ -24,6 +27,10 @@ namespace UnityEditor.Rendering.Universal
             var o = new PropertyFetcher<DepthOfField>(serializedObject);
 
             m_Mode = Unpack(o.Find(x => x.mode));
+            BlurOffsetPos = Unpack(o.Find(x => x.BlurOffsetPos));
+            ReMapValueX = Unpack(o.Find(x => x.ReMapValueX));
+            ReMapValueY = Unpack(o.Find(x => x.ReMapValueY));
+
             m_GaussianStart = Unpack(o.Find(x => x.gaussianStart));
             m_GaussianEnd = Unpack(o.Find(x => x.gaussianEnd));
             m_GaussianMaxRadius = Unpack(o.Find(x => x.gaussianMaxRadius));
@@ -40,6 +47,9 @@ namespace UnityEditor.Rendering.Universal
         public override void OnInspectorGUI()
         {
             PropertyField(m_Mode);
+            PropertyField(BlurOffsetPos, EditorGUIUtility.TrTextContent("BlurOffsetPos"));
+            PropertyField(ReMapValueX, EditorGUIUtility.TrTextContent("ReMapValueX"));
+            PropertyField(ReMapValueY, EditorGUIUtility.TrTextContent("ReMapValueY"));
 
             if (m_Mode.value.intValue == (int)DepthOfFieldMode.Gaussian)
             {
