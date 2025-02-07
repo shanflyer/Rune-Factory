@@ -226,6 +226,7 @@ public struct TryVisitShop : GameAction
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public string ShopName;
     public int CharacterId;
+    public int ShopObjId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -234,11 +235,14 @@ public struct TryVisitShop : GameAction
         if (parameters.Count > 1)
             CharacterId = int.Parse(parameters[1].value);
 
-        if (source != 0)
+        if (source != 0&&source!=int.MinValue)
         {
             CharacterId = source;
         }
-
+        if (target != 0)
+        {
+            ShopObjId = target;
+        }
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

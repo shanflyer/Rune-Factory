@@ -128,7 +128,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
             SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
             {
                 packageId = shortcutPackage.packagerId,
-                selectItem = setShortcutItem.Item.instanceId
+                selectItem = setShortcutItem.Item.instanceId!=0?setShortcutItem.Item.instanceId: setShortcutItem.Item.dataId,
             };
             GameActionManager.instance.QueueAction(setPackageSelectItem);
 
@@ -301,13 +301,13 @@ public class ShortcutPackage : IReferenceData, INativeData
     }
     public bool SetItem(Item item)
     {
-        if (haveItems.Contains(item.instanceId))
+        if (item.instanceId!=0&&haveItems.Contains(item.instanceId))
         {
             return false;
         }
         for(int i=0;i< items.Length; i++)
         {
-            if (items[i].instanceId == 0)
+            if (items[i].instanceId == 0&& items[i].count<=0)
             {
                 items[i] = item;
                 haveItems.Add(item.instanceId);

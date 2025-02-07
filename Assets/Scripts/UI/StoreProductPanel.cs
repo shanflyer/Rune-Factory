@@ -44,7 +44,7 @@ public class StoreProductPanel : GamePanel<IReferenceData>
 
     private void SelectProduct(AppStoreProductData productData, bool selected)
     {
-        AppStoreManager.instance.BuyProduct(productData);
+        AppStoreManager.instance.BuyProduct(productData); 
     }
 
     public override void InitReferenceData(IReferenceData v)

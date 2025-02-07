@@ -1626,7 +1626,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     };
                     GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
                     ControllerRuntimeObj.SetPosition(new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z)); 
-                    Debug.Log("SetShaderPlayerPos7");
+                    //Debug.Log("SetShaderPlayerPos7");
 
                     if (controllerCharacter.coordinate.x != targetCoordinate.x ||
                     controllerCharacter.coordinate.y != targetCoordinate.y)

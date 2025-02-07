@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 public class ShopManager : Singleton<ShopManager>
 {
+    Dictionary<int2, ShopList> _shopListDic = new Dictionary<int2, ShopList>();
     Dictionary<string, ShopList> shopListDic = new Dictionary<string, ShopList>();
     Dictionary<int, Shop> shopDic = new Dictionary<int, Shop>();
     public override void Init()
@@ -64,6 +65,7 @@ public class ShopManager : Singleton<ShopManager>
     async void InitShop()
     {
         shopListDic.Clear();
+        _shopListDic.Clear();
         shopDic.Clear();
         var shopGroupDatas = await GameDataManager.instance.GetAllAsyncData<ShopGroup>();
         for(int i = 0; i < shopGroupDatas.Count; i++)
@@ -84,6 +86,7 @@ public class ShopManager : Singleton<ShopManager>
                 shopList.shops.Add(shop.shopId,shop);
                 shopDic.Add(shop.shopId, shop);
             }
+            _shopListDic.Add(new int2(shopGroupData.mapInstance, shopGroupData.mapItem), shopList);
             shopListDic.Add(shopGroupData.name, shopList);
         }
     }
@@ -92,14 +95,29 @@ public class ShopManager : Singleton<ShopManager>
         string shopName = tryVisitShop.ShopName;
         if (string.IsNullOrEmpty(shopName))
         {
-            if(NPCManager.instance.GetNPCFormInstance(tryVisitShop.CharacterId,out var NPC))
+            if (tryVisitShop.CharacterId == 0)
             {
-                shopName = NPC.shopName;
+                if(WorldMapManager.instance.GetRuntimeMapItem(tryVisitShop.ShopObjId, out var runtimeMapItem))
+                {
+                    if(_shopListDic.TryGetValue(runtimeMapItem.editorKey,out var shopList1))
+                    {
+                        await UIManager.instance.ShowGamePanel<ShopPanel, ShopList>(shopList1);
+                    }
+                }
+                
             }
-            else if (NPCManager.instance.GetNPC(tryVisitShop.CharacterId, out NPC))
-            { 
-                shopName = NPC.shopName;
+            else
+            {
+                if (NPCManager.instance.GetNPCFormInstance(tryVisitShop.CharacterId, out var NPC))
+                {
+                    shopName = NPC.shopName;
+                }
+                else if (NPCManager.instance.GetNPC(tryVisitShop.CharacterId, out NPC))
+                {
+                    shopName = NPC.shopName;
+                }
             }
+            
         } 
         if(shopListDic.TryGetValue(shopName, out var shopList))
         {

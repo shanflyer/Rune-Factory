@@ -1256,7 +1256,7 @@ public class RuntimeMapItem : INativeData
             HashSet<int> waitCheck=new HashSet<int>();
             foreach (var id in operateDatas)
             {
-                OperateData operateData = await GameDataManager.instance.GetAsyncData<OperateData>(id);
+                OperateData operateData = GameDataManager.instance.GetData<OperateData>(id.ToString());
                 if (operateData.checkActionData != null)
                 {
                     waitCheck.Add(id);

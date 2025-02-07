@@ -234,7 +234,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
             SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
             {
                 packageId = shortcutPackage.packagerId,
-                selectItem = selectPackageItem.instanceId
+                selectItem = selectPackageItem.instanceId!=0? selectPackageItem.instanceId: selectPackageItem.dataId
             };
             GameActionManager.instance.QueueAction(setPackageSelectItem);
         }

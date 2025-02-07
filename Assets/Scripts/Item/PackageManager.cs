@@ -1201,7 +1201,23 @@ public class PackageManager : Singleton<PackageManager>
         }
         public Item GetItemFromInstanceId(int itemInstanceId)
         {
-            return items.Find(item => item.instanceId == itemInstanceId);
+            int index= items.FindIndex(item => item.instanceId == itemInstanceId);
+            if (index >= 0)
+            {
+                return items[index];
+            }
+            else
+            {
+                if (packageItemIndexDatas.TryGetValue(itemInstanceId, out var ints))
+                { 
+                    if(ints.Count>0)
+                    {
+                       return items[ints[0]];
+                    }
+                    
+                }
+            }
+            return default(Item);
         }
 
         public PackageData OutGamePackageData()
@@ -1283,6 +1299,20 @@ public class PackageManager : Singleton<PackageManager>
                     {
                         isHavelSelectItem = true;
                         break;
+                    }
+                }
+            }
+            if (SelectItem != 0)
+            {
+                for (int i = 0; i < items.Count; i++)
+                {
+                    if (!nullItems.Contains(i))
+                    {
+                        if (items[i].dataId == SelectItem)
+                        {
+                            isHavelSelectItem = true;
+                            break;
+                        }
                     }
                 }
             }

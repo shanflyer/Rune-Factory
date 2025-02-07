@@ -52,9 +52,23 @@ public class AppStoreManager : MonoBehaviour
     public string goldProductId = "diamond200";
 
     public void BuyProduct(AppStoreProductData appStoreProductData)
-    { 
-        var goldProductId = $"{appStoreProductData.ProductName}";
+    {
+#if UNITY_EDITOR
+        if (appStoreProductData.getDiamond > 0)
+        {
+            InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr($"成功获得{0}钻石!"), appStoreProductData.getDiamond), false, true);
+            PayManager.instance.AddDiamond(appStoreProductData.getDiamond);
+        }
+        else
+        {
+            InformationController.instance.AddInformation(LanguageManage.SwitchStr($"感谢您的支持！"), false, true);
+        }
+#else
+      var goldProductId = $"{appStoreProductData.ProductName}";
         BillingServices.BuyProduct(goldProductId,options:null);
+    
+#endif
+
     }
     public void BuyProduct(string ProductName)
     {

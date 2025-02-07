@@ -24,27 +24,21 @@ public class CheckSelectItem : Action
     private Item item;
     public override async void OnStart()
     {
+        taskStatus = TaskStatus.Running;
         character = CharacterManager.instance.controllerCharacter;
         var package = character.characterPackage;
         if (!characterId.IsNull())
         {
-            character = CharacterManager.instance.GetCharacter(characterId.Value);
-            if (character != null)
-            {
-                package = character.characterPackage;
-                Item item = PackageManager.instance.GetPackageSelectItem(package);
-                itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
-                outSelectItem.SetValue(item.dataId);
-                outSelectItemInstance.SetValue(item.instanceId);
-            }
+            character = CharacterManager.instance.GetCharacter(characterId.Value); 
         }
-    }
-
-    public override TaskStatus OnUpdate()
-    {
         if (character != null)
         {
-            var package = character.characterPackage; 
+            package = character.characterPackage;
+            Item item = PackageManager.instance.GetPackageSelectItem(package);
+            itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+            outSelectItem.SetValue(item.dataId);
+            outSelectItemInstance.SetValue(item.instanceId);
+             
             if (itemData != null)
             {
                 switch (checkItemProperty)
@@ -53,17 +47,20 @@ public class CheckSelectItem : Action
                         if (itemData.id == checkValue.Value)
                         {
                             if (checkCount)
-                            { 
+                            {
                                 if (item.count >= checkValue.Value)
                                 {
-                                    return TaskStatus.Success;
+                                    taskStatus=TaskStatus.Success;
+                                    return;
                                 }
                                 else
                                 {
-                                    return TaskStatus.Failure;
+                                    taskStatus = TaskStatus.Failure;
+                                    return;
                                 }
                             }
-                            return TaskStatus.Success;
+                            taskStatus = TaskStatus.Success;
+                            return;
                         }
                         break;
 
@@ -71,17 +68,20 @@ public class CheckSelectItem : Action
                         if ((int)itemData.type == checkValue.Value)
                         {
                             if (checkCount)
-                            { 
+                            {
                                 if (item.count >= checkValue.Value)
                                 {
-                                    return TaskStatus.Success;
+                                    taskStatus = TaskStatus.Success;
+                                    return;
                                 }
                                 else
                                 {
-                                    return TaskStatus.Failure;
+                                    taskStatus = TaskStatus.Failure;
+                                    return;
                                 }
                             }
-                            return TaskStatus.Success;
+                            taskStatus = TaskStatus.Success;
+                            return;
                         }
                         break;
 
@@ -89,22 +89,35 @@ public class CheckSelectItem : Action
                         if (itemData.isFresh ? checkValue.Value == 1 : checkValue.Value == 0)
                         {
                             if (checkCount)
-                            { 
+                            {
                                 if (item.count >= checkValue.Value)
                                 {
-                                    return TaskStatus.Success;
+                                    taskStatus = TaskStatus.Success;
+                                    return;
                                 }
                                 else
                                 {
-                                    return TaskStatus.Failure;
+                                    taskStatus = TaskStatus.Failure;
+                                    return;
                                 }
                             }
-                            return TaskStatus.Success;
+                            taskStatus = TaskStatus.Success;
+                            return;
                         }
                         break;
                 }
             }
+            taskStatus = TaskStatus.Failure;
         }
-        return TaskStatus.Failure;
+        else
+        {
+            taskStatus = TaskStatus.Failure;
+        }
+         
+    }
+    TaskStatus taskStatus;
+    public override TaskStatus OnUpdate()
+    {
+        return taskStatus; 
     }
 }

@@ -317,6 +317,7 @@ if (result.Success)
     {
         environmentManger = EnvironmentManger.instance;
         // var appStoreManager= AppStoreManager.instance;
+        var shopManager = ShopManager.instance;
         var payManager = PayManager.instance;
         var gameVolumeManager = GameVolumeManager.instance;
         var gameManager = GameManager.instance;
