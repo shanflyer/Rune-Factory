@@ -224,7 +224,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.7
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8004054642592704882}
   fixedColor: 0
   polygonCollider: {fileID: 1282090198209837378}
   meshFilter: {fileID: 49553390922051958}
@@ -245,6 +245,7 @@ GameObject:
   - component: {fileID: 2138169120325300952}
   - component: {fileID: 1599158919164268446}
   - component: {fileID: 835254771674938450}
+  - component: {fileID: 2752197579427749841}
   m_Layer: 0
   m_Name: "\u95E8\u5149 (2)"
   m_TagString: Untagged
@@ -383,6 +384,19 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 6
+--- !u!114 &2752197579427749841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614504296441132003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &6003779158826399568
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,6 +459,7 @@ GameObject:
   m_Component:
   - component: {fileID: 821452900328215213}
   - component: {fileID: 156641631864125736}
+  - component: {fileID: 370947285292367302}
   m_Layer: 0
   m_Name: "\u5185\u95E8_7"
   m_TagString: Untagged
@@ -523,6 +538,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &370947285292367302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8624068409799723957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &9192010203792580517
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,7 +709,7 @@ MonoBehaviour:
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
   value: 1
-  renderer: {fileID: 0}
+  renderer: {fileID: 8230856871218312}
   fixedColor: 0
   polygonCollider: {fileID: 8208021484517148194}
   meshFilter: {fileID: 242871866556143282}

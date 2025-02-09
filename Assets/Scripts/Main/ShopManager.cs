@@ -154,7 +154,7 @@ public class Shop:IReferenceData
         }
         return false;
     }
-    int friendLevel = 0;
+    int friendLevel = 1;
     public async void RefreshOpenItem(bool show = false)
     {
         if (this.bindCharacters != null)

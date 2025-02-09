@@ -12,7 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - SKINNED_SPRITE
+  - BACKBLEND
+  - SNOWBLEND
   m_InvalidKeywords:
   - _BACKBLEND_ON
   - _DampBlend
@@ -70,7 +71,7 @@ Material:
     m_Ints: []
     m_Floats:
     - EdgeValue: 0.1
-    - _BackBlend: 0
+    - _BackBlend: 1
     - _BlendVertexColor: 0
     - _Character: 0
     - _Damp: 0
@@ -85,7 +86,7 @@ Material:
     - _Move: 0
     - _MoveSelfUV: 0
     - _PlantAutumnNoiseScale: 1
-    - _SnowBlend: 0
+    - _SnowBlend: 1
     - _Water: 0
     - _WaterBottom: 1
     - _WaterHigh: 0
@@ -108,7 +109,6 @@ Material:
     - ObjPos: {r: 0, g: 0, b: 0, a: 0}
     - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
     - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _PlantAutumnColor0: {r: 0, g: 0, b: 0, a: 1}
     - _PlantAutumnColor1: {r: 1, g: 1, b: 1, a: 1}
     - _PlantSpringColor: {r: 0, g: 0, b: 0, a: 1}

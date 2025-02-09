@@ -27,6 +27,7 @@ public class StoreProductPanel : GamePanel<IReferenceData>
     {
         base.Close();
         storeProductList.ClearSelect();
+        gameObject.SetActive(false);
     }
     public override void SetPanelUISerializeObj()
     {

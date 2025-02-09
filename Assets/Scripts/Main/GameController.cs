@@ -227,7 +227,8 @@ public class GameController : MonoBehaviour
     }
     private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
     {
-        //Debug.Log($"�ƴ浵OnSynchronizeComplete:{result.Success}");
+       // if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log($"�ƴ浵OnSynchronizeComplete:{result.Success}");
         // var gameDataSaveManager= GameDataSaveManager.instance;
 
         if (result.Success)
@@ -317,6 +318,7 @@ if (result.Success)
     {
         environmentManger = EnvironmentManger.instance;
         // var appStoreManager= AppStoreManager.instance;
+        var worldMapObjManager = WorldMapObjManager.instance;
         var shopManager = ShopManager.instance;
         var payManager = PayManager.instance;
         var gameVolumeManager = GameVolumeManager.instance;

@@ -161,6 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1674502522460069706}
   - component: {fileID: 1089720163368513277}
+  - component: {fileID: 6511773539753706566}
   m_Layer: 0
   m_Name: "house5_\u95E84"
   m_TagString: Untagged
@@ -238,6 +239,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!114 &6511773539753706566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117002094084190915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &2256891810621166557
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +263,7 @@ GameObject:
   - component: {fileID: 21667392559380}
   - component: {fileID: 6510058403073270221}
   - component: {fileID: 2733453215906386494}
+  - component: {fileID: 4603462507109447121}
   m_Layer: 0
   m_Name: "house5_\u95E83"
   m_TagString: Untagged
@@ -388,6 +403,19 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 6
+--- !u!114 &4603462507109447121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256891810621166557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &3196377646301807811
 GameObject:
   m_ObjectHideFlags: 0

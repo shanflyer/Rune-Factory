@@ -112,7 +112,6 @@ MonoBehaviour:
   m_LightType: 1
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 1
-  m_Direction: {x: 0, y: 0, z: -0.02}
   m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
@@ -132,10 +131,9 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
-  m_isView: 0
   m_LocalBounds:
-    m_Center: {x: 0, y: 0.17539999, z: 0}
-    m_Extent: {x: 0.7755, y: 0.72679996, z: 0}
+    m_Center: {x: 0.00084999204, y: 0.17989999, z: 0}
+    m_Extent: {x: 0.76825, y: 0.7256, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -211,6 +209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4111890305674344278}
   - component: {fileID: 1246041640221599571}
+  - component: {fileID: 3050590370692821090}
   m_Layer: 0
   m_Name: "\u5BBD\u95E80"
   m_TagString: Untagged
@@ -288,6 +287,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3050590370692821090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5511146793481006617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &6968667968908317658
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +380,6 @@ MonoBehaviour:
   m_LightType: 2
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Direction: {x: 0, y: 0, z: -0.02}
   m_Color: {r: 0.9716981, g: 0.9361599, b: 0.38042897, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
@@ -389,10 +400,9 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
-  m_isView: 0
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.26999998, y: 0.225, z: 0}
+    m_Extent: {x: 0.27, y: 0.225, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0

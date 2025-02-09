@@ -156,7 +156,7 @@ namespace GraphVisualizer
 
                 m_LegendForType[nodeType] = new NodeTypeLegend
                 {
-                    label = v.node.GetContentTypeShortName(),
+                    label = v.node.GetContentName(),
                     color = v.node.GetColor()
                 };
             }

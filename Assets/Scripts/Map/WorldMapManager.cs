@@ -720,9 +720,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
     }
 
-    private async void TrySetMapItem(TrySetMapItem TrySetMapItem)
+    private  void TrySetMapItem(TrySetMapItem TrySetMapItem)
     {
-        var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(TrySetMapItem.dataId);
+        var mapItemData = GameDataManager.instance.GetData<MapItemData>(TrySetMapItem.dataId.ToString());
+        //var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(TrySetMapItem.dataId);
         HashSet<int2> oldColliders = null;
         int2[] newTriggers = null;
         bool newItem = false;
@@ -822,7 +823,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 //设置新位置
                 runtimeMapItem.mapInstanceId = moveMapItem.mapInstance;
                 runtimeMapItem.coordinate = moveMapItem.coordinate;
-                if (moveMapItem.mapItemInstanceId > 0)
+                if (runtimeMapItem.mapInstanceId > 0)
                 {
                     if (mapItemData.triggerGrids.Count > 0)
                     {
@@ -876,7 +877,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             mapInstanceId = moveMapItem.mapInstance,
             coordinate = moveMapItem.coordinate
         };
-        GameActionManager.instance.QueueAction(setHomeEquipCoordinate);
+        GameActionManager.instance.QueueAction(setHomeEquipCoordinate,true);
     }
 
     public bool InitNewSmoothMove(ref float2 direction, int2 coordinate, int mapId, out int2 targetCoordinate)

@@ -123,6 +123,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     setResult = UnSetHomeEquipAsync
                 };
                 GameActionManager.instance.QueueAction(unSetHomeEquip, true);
+                moveHomeEquipItemSet.Remove(SelectHomeEquip.instanceId);
             }
         }
     }
@@ -195,7 +196,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             }
         });
         cameraChangeButton.onClick.AddListener(ChangeCameraValue);
-        cancleSelectButton.onClick.AddListener(CancleSelect);
+        cancleSelectButton.onClick.AddListener(CancelSelect);
     }
 
     public override void OnEnable()
@@ -245,7 +246,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         typeof(ScreenControllerPanel)
         }
     };
-    void CancleSelect()
+    void CancelSelect()
     {
         if (selectMapItemRuntimeObj != null)
         {
@@ -270,6 +271,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     public override void InitReferenceData(HomeEquipList v)
     {
         base.InitReferenceData(v);
+        moveHomeEquipItemSet.Clear();
+
         EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup);
         EquipBoxs.ClearSelect();
         hidePanels.hide = true;
@@ -377,6 +380,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     }
     MapItemRuntimeObj _selectMapItemRuntimeObj;
     TempMapItem TempMapItem;
+
+    Dictionary<int,int2> moveHomeEquipItemSet = new Dictionary<int, int2>();
     void MousePos(object obj)
     {
         if (obj != null)
@@ -450,6 +455,13 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                         },
                         setValue=(int instance) =>
                         {
+                            SetItemAnimation setItemAnimation = new SetItemAnimation
+                            {
+                                id = instance,
+                                keyX = 0,
+                                keyY = 0
+                            };
+                            GameActionManager.instance.QueueAction(setItemAnimation);
                             if (SelectHomeEquip.mapItemInstance == 0)
                             {
                                 SelectHomeEquip.mapItemInstance = instance;
@@ -474,7 +486,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                         }
                     }
                     else if (selectMapItemRuntimeObj != null)
-                    {
+                    { 
                         int2 coordinate = GameCommon.GetMapCoordinateInt(mouseWorldPos);
                         TrySetMapItem trySetMapItem = new TrySetMapItem
                         {
@@ -509,7 +521,9 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                         };
                         GameActionManager.instance.QueueAction(trySetMapItem, true);
 
+                        //moveHomeEquipItemSet[selectMapItemRuntimeObj.instanceId]=coordinate;
                         //selectMapItemRuntimeObj.SetCoordinate(coordinate);
+                       // selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
                     }
                     canMoveCamera = selectMapItemRuntimeObj == null;
                 }  

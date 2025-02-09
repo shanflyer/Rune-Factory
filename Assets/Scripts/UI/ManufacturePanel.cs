@@ -209,17 +209,22 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     async Task SelectFormulaAsync(int index)
     {
-        FormulaOptionData formulaOptionData = FormulaDropdown.options[index] as FormulaOptionData;
-        int seleciId = formulaOptionData.formulaId;
-        if (seleciId == 0)
+        int selectId = 0;
+        if (FormulaDropdown.options.Count > index)
+        {
+            FormulaOptionData formulaOptionData = FormulaDropdown.options[index] as FormulaOptionData;
+            selectId = formulaOptionData.formulaId;
+        }
+       
+        if (selectId == 0)
         {
             selectFormula = default(Formula);
             selectFormulaData = null;
         }
         else
         {
-            selectFormula = manufature.formulas[seleciId];
-            selectFormulaData = await GameDataManager.instance.GetAsyncData<FormulaData>(seleciId);
+            selectFormula = manufature.formulas[selectId];
+            selectFormulaData = await GameDataManager.instance.GetAsyncData<FormulaData>(selectId);
         }
 
         DisplayFormula();
@@ -914,6 +919,8 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private async void InitData(Manufature v)
     {
+        SelectItemBoxRefrence = null;
+        InformationObj.transform.localScale = Vector3.zero;
         outEffect.Stop();
         manufature = v;
         manufactureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(v.dataId);

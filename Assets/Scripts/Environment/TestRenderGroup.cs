@@ -13,20 +13,21 @@ public class TestRenderGroup : MonoBehaviour
     private void OnEnable()
     { 
         //sprite.GetSecondaryTextures()
-        for(int i = 0; i < renderers.Length; i++)
+        /*for(int i = 0; i < renderers.Length; i++)
         {
             CameraManager.instance.AddTestRender(renderers[i]);
-        }
+        }*/
     }
     private void OnDisable()
     {
         
         if (!SingletonType.Cleared)
         {
+            /*
             for (int i = 0; i < renderers.Length; i++)
             {
                 CameraManager.instance.RemoveTestRender(renderers[i]);
-            }
+            }*/
 
         }
     }

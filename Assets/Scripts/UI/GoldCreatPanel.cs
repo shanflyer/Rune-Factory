@@ -70,4 +70,9 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
         }
         createrList.InitListData(MoneyCreatDatas, SelectCreater,CreaterGroup);
     }
+    public override void Close()
+    {
+        base.Close();
+        gameObject.SetActive(false);
+    }
 }

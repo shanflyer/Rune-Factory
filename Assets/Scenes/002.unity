@@ -235,6 +235,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3820188560276549252, guid: 957f333c8545dc94080f5c9281725318,
+        type: 3}
+      propertyPath: orthographic size
+      value: 2.4
+      objectReference: {fileID: 0}
     - target: {fileID: 4492723052041442772, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
       propertyPath: m_Enabled
@@ -475,7 +480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startBGM: {fileID: 8300000, guid: 7907b6536d50e9c4c9fffd49050d273d, type: 3}
-  startPlay: 0
+  startPlay: 1
   selectable: {fileID: 0}
   weather:
     cloud: 0

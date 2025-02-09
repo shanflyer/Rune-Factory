@@ -266,6 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4999457630247291572}
   - component: {fileID: 9046889308965263764}
+  - component: {fileID: 8610888106262988548}
   m_Layer: 0
   m_Name: "\u5916\u7A97_14"
   m_TagString: Untagged
@@ -343,6 +344,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8610888106262988548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883618849076850590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &3930455705727568606
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,6 +718,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7243898954273030440}
   - component: {fileID: 5377153338409471351}
+  - component: {fileID: 7297309244461819986}
   m_Layer: 0
   m_Name: "\u7A97\u5E18\u7EA2_01"
   m_TagString: Untagged
@@ -781,6 +796,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!114 &7297309244461819986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863618739190526028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &8904347740651404598
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,6 +819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1338855397332119962}
   - component: {fileID: 300922998321801185}
+  - component: {fileID: 956388828155088068}
   m_Layer: 0
   m_Name: "\u7A971"
   m_TagString: Untagged
@@ -869,3 +898,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &956388828155088068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8904347740651404598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1

@@ -433,7 +433,7 @@ namespace UnityEngine.Rendering.Universal
             if (renderResolution.x % 2 != 0 || renderResolution.y % 2 != 0)
             {
                 string warning = string.Format("Rendering at an odd-numbered resolution ({0} * {1}). Pixel Perfect Camera may not work properly in this situation.", renderResolution.x, renderResolution.y);
-                GUILayout.Box(warning);
+               // GUILayout.Box(warning);
             }
 
             var targetTexture = m_Camera.targetTexture;
@@ -441,7 +441,7 @@ namespace UnityEngine.Rendering.Universal
 
             if (rtSize.x < refResolutionX || rtSize.y < refResolutionY)
             {
-                GUILayout.Box("Target resolution is smaller than the reference resolution. Image may appear stretched or cropped.");
+              //  GUILayout.Box("Target resolution is smaller than the reference resolution. Image may appear stretched or cropped.");
             }
 
             GUI.color = oldColor;

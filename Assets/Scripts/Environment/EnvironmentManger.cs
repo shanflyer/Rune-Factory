@@ -290,23 +290,30 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                     e.Current.SetWindValue(nowWeather.wind);
                 }
             }
-
-            if (oldDamp && !newDamp)
+            if (WorldMapObjManager.instance.IsOutSideMap)
             {
-                Shader.SetGlobalFloat("_DampValue", 1 - timeValue);
-            }
-            else if (!oldDamp && newDamp)
-            {
-                Shader.SetGlobalFloat("_DampValue", timeValue);
-            }
-            else if (newDamp)
-            {
-                Shader.SetGlobalFloat("_DampValue", 1);
+                if (oldDamp && !newDamp)
+                {
+                    Shader.SetGlobalFloat("_DampValue", 1 - timeValue);
+                }
+                else if (!oldDamp && newDamp)
+                {
+                    Shader.SetGlobalFloat("_DampValue", timeValue);
+                }
+                else if (newDamp)
+                {
+                    Shader.SetGlobalFloat("_DampValue", 1);
+                }
+                else
+                {
+                    Shader.SetGlobalFloat("_DampValue", 0);
+                }
             }
             else
             {
                 Shader.SetGlobalFloat("_DampValue", 0);
             }
+            
 
             float weatherLightValue= nowWeather.GetWeatherLight();
             float flareLight = nowWeather.GetFlareLight();

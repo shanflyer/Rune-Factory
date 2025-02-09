@@ -327,8 +327,8 @@ public class UIManager : Singleton<UIManager>
                 }
                 gamePanels[type] = gamePanel;
             }
-                
 
+            gamePanel.gameObject.SetActive(true);
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
             return gamePanel;
@@ -341,6 +341,7 @@ public class UIManager : Singleton<UIManager>
                 panel.transform.localPosition = Vector3.zero;
             }
             var gamePanel = panel as GamePanel<V>;
+            gamePanel.gameObject.SetActive(true);
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
            

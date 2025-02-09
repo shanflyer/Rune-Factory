@@ -95,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 168910464077735688}
   - component: {fileID: 2260651312238135923}
+  - component: {fileID: 7947229262691837121}
   m_Layer: 0
   m_Name: huo_03
   m_TagString: Untagged
@@ -172,6 +173,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7947229262691837121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2834266771037513780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &3757830172770051377
 GameObject:
   m_ObjectHideFlags: 0
@@ -10114,6 +10128,7 @@ GameObject:
   - component: {fileID: 3666556865839382626}
   - component: {fileID: 6385664943230305065}
   - component: {fileID: 3601793907405302939}
+  - component: {fileID: 8630922857280537068}
   m_Layer: 19
   m_Name: MyLight
   m_TagString: Untagged
@@ -10225,3 +10240,16 @@ MonoBehaviour:
   value: 1
   renderer: {fileID: 6385664943230305065}
   fixedColor: 0
+--- !u!114 &8630922857280537068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7110493536906693944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1

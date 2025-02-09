@@ -24413,6 +24413,7 @@ GameObject:
   - component: {fileID: 6470534949683684561}
   - component: {fileID: 6555445579392843676}
   - component: {fileID: 1631697539345784799}
+  - component: {fileID: 8334159870100260948}
   m_Layer: 19
   m_Name: MyLight
   m_TagString: Untagged
@@ -24558,6 +24559,19 @@ MonoBehaviour:
   value: 1
   renderer: {fileID: 6555445579392843676}
   fixedColor: 0
+--- !u!114 &8334159870100260948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988042765907354394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &2693463142144665394
 GameObject:
   m_ObjectHideFlags: 0
@@ -106644,6 +106658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3253100294812188024}
   - component: {fileID: 5189337330817304408}
+  - component: {fileID: 5491873084132104687}
   m_Layer: 0
   m_Name: "\u540A\u706F\u8721\u70DB"
   m_TagString: Untagged
@@ -106721,6 +106736,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5491873084132104687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8090539501768959403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticObj: 1
 --- !u!1 &8172936754814374460
 GameObject:
   m_ObjectHideFlags: 0

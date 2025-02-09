@@ -50,11 +50,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     {
         if (refreshMapItemDisplay.runtimeMapItem.mapInstanceId != displayMap)
         {
-            if (nowRuntimeMapItemObjs.TryGetValue(refreshMapItemDisplay.runtimeMapItem.instanceId, out var mapItemRuntimeObj))
-            {
-                mapItemRuntimeObj.Recycle();
-                nowRuntimeMapItemObjs.Remove(refreshMapItemDisplay.runtimeMapItem.instanceId);
-            }
+            RecycleMapItem(refreshMapItemDisplay.runtimeMapItem.instanceId);
         }
         else if (refreshMapItemDisplay.runtimeMapItem.mapInstanceId == displayMap)
         {
@@ -228,6 +224,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         set
         {
             _displayMapRoomData = value;
+            EnvironmentManger.instance.ChangeWeatherDisplayType(DisplayMapRoomData.weatherDisplayType);
            //RefreshMapAudio(true);
         }
     }
@@ -569,29 +566,32 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
         return false;
     }
-
-    public void DeleteMapItem(DeleteMapItem deleteMapItem)
+    void RecycleMapItem(int mapItemInstanceId)
     {
-        if (tempRuntimeMapItemObjs.TryGetValue(deleteMapItem.mapItemInstanceId, out var tempObj))
+        if (tempRuntimeMapItemObjs.TryGetValue(mapItemInstanceId, out var tempObj))
         {
             tempObj.Recycle();
-            tempRuntimeMapItemObjs.Remove(deleteMapItem.mapItemInstanceId);
+            tempRuntimeMapItemObjs.Remove(mapItemInstanceId);
         }
-        if (nowRuntimeMapItemObjs.TryGetValue(deleteMapItem.mapItemInstanceId, out var RuntimeObj))
+        if (nowRuntimeMapItemObjs.TryGetValue(mapItemInstanceId, out var RuntimeObj))
         {
             RuntimeObj.Recycle();
-            nowRuntimeMapItemObjs.Remove(deleteMapItem.mapItemInstanceId);
-            EmoteManager.instance.TryRecycleItemEmote(deleteMapItem.mapItemInstanceId);
-            manufatureObjs.Remove(deleteMapItem.mapItemInstanceId);
+            nowRuntimeMapItemObjs.Remove(mapItemInstanceId);
+            EmoteManager.instance.TryRecycleItemEmote(mapItemInstanceId);
+            manufatureObjs.Remove(mapItemInstanceId);
 
             RemoveRuntimePackage removeRuntimePackage = new RemoveRuntimePackage
             {
-                key = new Vector2Int(WorldMapObjManager.instance.displayMap, deleteMapItem.mapItemInstanceId)
+                key = new Vector2Int(WorldMapObjManager.instance.displayMap, mapItemInstanceId)
             };
             GameActionManager.instance.QueueAction(removeRuntimePackage);
-            DeleteMapPackageItemRender(deleteMapItem.mapItemInstanceId);
-            MyAnimationController.instance.RemoveItemAnimation(deleteMapItem.mapItemInstanceId);
+            DeleteMapPackageItemRender(mapItemInstanceId);
+            MyAnimationController.instance.RemoveItemAnimation(mapItemInstanceId);
         }
+    }
+    public void DeleteMapItem(DeleteMapItem deleteMapItem)
+    {
+        RecycleMapItem(deleteMapItem.mapItemInstanceId);
     }
 
     private void RefreshManufature(RefreshManufature refreshManufature)

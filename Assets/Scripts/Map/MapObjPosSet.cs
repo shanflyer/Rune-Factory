@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-//[DisallowMultipleComponent]
+[DisallowMultipleComponent]
 public class MapObjPosSet : MonoBehaviour
 {
     public bool staticObj = true;
@@ -14,7 +14,7 @@ public class MapObjPosSet : MonoBehaviour
             var spriteRenderer = GetComponent<SpriteRenderer>();
             mat = spriteRenderer.material;
         }
-        SetMatPos();
+        Invoke("SetMatPos", 0.2f); 
     }
     
     void SetMatPos()

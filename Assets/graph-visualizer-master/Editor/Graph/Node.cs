@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.Playables;
 
 namespace GraphVisualizer
 {
@@ -51,7 +53,10 @@ namespace GraphVisualizer
             Type type = GetContentType();
             return type == null ? "Null" : type.ToString();
         }
-
+        public virtual string GetContentName()
+        { 
+            return GetContentTypeName().Split('.').Last();
+        }
         public virtual string GetContentTypeShortName()
         {
             return GetContentTypeName().Split('.').Last();

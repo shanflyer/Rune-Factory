@@ -18,7 +18,7 @@ MonoBehaviour:
   TimelineAssets:
   - needFilmUI: 0
     displayCharacter: 0
-    hideCameraLimit: 0
+    hideCameraLimit: 1
     asset: {fileID: 11400000, guid: 1b6fcb78a3626544ab9d66555db2951e, type: 2}
     pathes:
     - Character
@@ -64,16 +64,54 @@ MonoBehaviour:
     - Effect
   timelineAssets:
     m_keys:
-    - "\u8D2D\u4E70\u79CD\u5B50"
+    - "\u6F2B\u6E38\u7535\u5F71"
+    - "\u6F2B\u6E38\u7535\u5F712"
+    - "\u6F2B\u6E38\u7535\u5F713"
+    - "\u6F2B\u6E38\u7535\u5F714"
     m_values:
-    - needFilmUI: 1
+    - needFilmUI: 0
+      displayCharacter: 0
+      hideCameraLimit: 1
+      asset: {fileID: 11400000, guid: 1b6fcb78a3626544ab9d66555db2951e, type: 2}
+      pathes:
+      - Character
+      - "Character/\u5C0F\u7537\u5B692"
+      - "Character/\u8001\u82F1\u96C4"
+      - Camera/Mixing Camera
+      - Effect
+    - needFilmUI: 0
       displayCharacter: 0
       hideCameraLimit: 0
-      asset: {fileID: 11400000, guid: 1019308660f1d72429607127da870214, type: 2}
+      asset: {fileID: 11400000, guid: 035ec4cbe581420488052be7d029c9dc, type: 2}
+      pathes:
+      - Character
+      - "Character/\u6885\u6797"
+      - "Character/\u827E\u7433\u5A1C"
+      - Camera/Mixing Camera
+      - Effect
+    - needFilmUI: 0
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 062b87380ece59045b0f6558b97263aa, type: 2}
+      pathes:
+      - Character
+      - "Character/\u83B1\u7279"
+      - "Character/\u73ED\u5C3C\u8FEA\u514B"
+      - "Character/\u6E38\u4FA0"
+      - "Character/\u7EF5\u7F8A"
+      - "Character/\u7EBA\u7EC7\u5A46\u5A46"
+      - Camera/Mixing Camera
+      - Effect
+    - needFilmUI: 0
+      displayCharacter: 0
+      hideCameraLimit: 0
+      asset: {fileID: 11400000, guid: 6263787ca688d4848af8240de1070877, type: 2}
       pathes:
       - Character
       - "Character/\u4E3B\u89D2\u7537"
-      - "Character/\u4E3B\u89D2\u5973"
-      - "Character/\u8001\u7237\u7237"
-      - "Character/\u739B\u5FB7\u7433"
+      - "Character/\u963F\u5C14\u6770\u519C"
+      - "Character/\u5E15\u7279\u91CC\u514B"
+      - "Character/\u5360\u535C\u5A46\u5A46"
+      - "Character/\u4FEE\u5973"
       - Camera/Mixing Camera
+      - Effect

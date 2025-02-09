@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using UnityEngine.Animations;
 using UnityEngine.Playables;
 
 namespace GraphVisualizer
@@ -26,6 +27,34 @@ namespace GraphVisualizer
             return p.IsValid() ? p.GetPlayableType() : null;
         }
 
+        public override string GetContentName()
+        {
+            Playable p = Playable.Null;
+            try
+            {
+                p = (Playable)content;
+            }
+            catch
+            {
+                // Ignore.
+            }
+            if (p.IsValid())
+            {
+                try
+                {
+                    AnimationClipPlayable animationClipPlayable = (AnimationClipPlayable)p;
+                    var animationClip = animationClipPlayable.GetAnimationClip();
+                    return animationClip?.name;
+                }
+                catch
+                {
+                    // Ignore.
+                }
+
+
+            }
+            return base.GetContentName();
+        }
         public override string GetContentTypeShortName()
         {
             // Remove the extra Playable at the end of the Playable types.

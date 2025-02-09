@@ -78,7 +78,7 @@ public class MyAnimationController : Singleton<MyAnimationController>
 
             if (!playableGraph.IsValid())
             {
-                playableGraph = PlayableGraph.Create();
+                playableGraph = PlayableGraph.Create(name);
             }  
             playableOutput = AnimationPlayableOutput.Create(playableGraph, name, animator);
         }
@@ -88,6 +88,7 @@ public class MyAnimationController : Singleton<MyAnimationController>
             if (animationClip != null)
             {
                 var clipPlayable = AnimationClipPlayable.Create(playableGraph, animationClip);
+             
                 playableOutput.SetSourcePlayable(clipPlayable);
             }
             playableGraph.Play();
