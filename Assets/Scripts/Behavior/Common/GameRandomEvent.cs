@@ -48,6 +48,10 @@ public class GameRandomEvent : Action
         {
             var results = GameRandom.instance.GetRandomValue(randomId.Value);
             randomResults.Value = results;
+            if (results.Count > 0)
+            {
+                result.SetValue(results[0].x);
+            }
         }
     }
 

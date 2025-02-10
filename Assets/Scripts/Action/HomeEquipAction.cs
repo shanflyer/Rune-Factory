@@ -126,7 +126,8 @@ public struct OpenFormula : GameAction
         {
             formulaId = int.Parse(parameters[0].value);
         }
-
+        if (source > 0)
+            formulaId = source;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

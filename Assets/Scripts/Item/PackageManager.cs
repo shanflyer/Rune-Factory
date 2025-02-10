@@ -1088,6 +1088,12 @@ public class PackageManager : Singleton<PackageManager>
                        valueType=ReferenceValueType.Int,
                        value=itemInstance
                    },
+                     new EventReferenceData
+                   {
+                       name="ItemTypeValue",
+                       valueType=ReferenceValueType.Int,
+                       value=itemData.typeValue
+                   },
                 };
                 GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
                 if (!string.IsNullOrEmpty(itemData.useInfo))
