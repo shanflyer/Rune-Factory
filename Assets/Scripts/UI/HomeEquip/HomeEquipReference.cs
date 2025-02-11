@@ -72,10 +72,11 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         AnimationIcon.enabled = false;
         if (homeEquipmentData != null)
         {
-            icon.sprite = homeEquipmentData.icon;
+            AnimationIcon.sprite = icon.sprite = homeEquipmentData.icon;
             icon.color = data.mapInstance == 0 ? Color.white : new Color(1, 1, 1, 0.5f);
             icon.enabled = true;
             icon.SetNativeSize();
+            AnimationIcon.SetNativeSize();
             toggle.enabled = true;
         }
         else
