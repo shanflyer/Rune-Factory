@@ -225,6 +225,7 @@ public class GameController : MonoBehaviour
         }
        
     }
+    bool startGameCompleted = false;
     private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
     {
        // if (GameDataManager.instance.GlobalData.debug)
@@ -233,8 +234,13 @@ public class GameController : MonoBehaviour
 
         if (result.Success)
         {
-            GameDataSaveManager.instance.LoadCloudData();
-            StartGame();
+            if (!startGameCompleted)
+            {
+                GameDataSaveManager.instance.LoadCloudData();
+                StartGame();
+                startGameCompleted = true;
+            }
+           
         }
         else if (Application.internetReachability == NetworkReachability.NotReachable)
         {
@@ -278,6 +284,7 @@ if (result.Success)
     private void Awake()
     {
         var gameDataManager = GameDataManager.instance;
+        startGameCompleted = false;
         Screen.SetResolution(Screen.width, Screen.height, true);
         instance = this;
         //GameObject.DontDestroyOnLoad(gameObject);

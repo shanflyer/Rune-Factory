@@ -197,9 +197,9 @@ public class ManufacturePanel : GamePanel<Manufature>
             }
         });
 
-        FormulaDropdown.onValueChanged.AddListener(async (int index) =>
+        FormulaDropdown.onValueChanged.AddListener((int index) =>
         {
-           await  SelectFormulaAsync(index);
+           SelectFormula(index);
         });
 
         AutoSelect.onClick.AddListener(AutoSelectMaterials);
@@ -207,7 +207,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         ReturnButton.onClick.AddListener(Close);
     }
 
-    async Task SelectFormulaAsync(int index)
+   void SelectFormula(int index)
     {
         int selectId = 0;
         if (FormulaDropdown.options.Count > index)
@@ -218,22 +218,19 @@ public class ManufacturePanel : GamePanel<Manufature>
        
         if (selectId == 0)
         {
-            selectFormula = default(Formula);
-            selectFormulaData = null;
+            selectFormula =null; 
         }
         else
         {
-            selectFormula = manufature.formulas[selectId];
-            selectFormulaData = await GameDataManager.instance.GetAsyncData<FormulaData>(selectId);
+            ManufactureManager.instance.GetFormula(selectId, out selectFormula);  
         }
 
         DisplayFormula();
     }
-    private Dictionary<FormulaType, List<FormulaData>> allFormulaDatas;
-    private Formula selectFormula;
-    private FormulaData selectFormulaData;
+    private Dictionary<FormulaType, List<Formula>> allFormulas;
+    private Formula selectFormula; 
     private ManufactureData manufactureData;
-    private FormulaData matchFormula;
+    private Formula matchFormula;
     private int formulaCost = 0;
     private Item outItem;
     private Item costItem;
@@ -316,7 +313,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 {
                     noticeStr = LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");
                 }
-                else if (selectFormulaData != null && outItem.dataId == selectFormulaData.Product)
+                else if (selectFormula != null && outItem.dataId == selectFormula.formulaData.Product)
                 {
                     noticeStr = LanguageManage.SwitchStr("是否确定按配方开始制作？");
                 }
@@ -333,11 +330,11 @@ public class ManufacturePanel : GamePanel<Manufature>
                     {
                         if (matchFormula != null)
                         {
-                            manufature.matchFormula = matchFormula.id;
-                            productId = matchFormula.Product;
-                            if (manufature.formulas.TryGetValue(matchFormula.id, out var formula))
+                            manufature.matchFormula = matchFormula;
+                            productId = matchFormula.formulaData.Product;
+                            if (ManufactureManager.instance.GetFormula(matchFormula.formulaData.id, out var formula))
                             {
-                                if (!formula.isOpen)
+                                if (!formula.opened)
                                 {
                                     manufature.product.z = GameCommon.defaultProduct;
                                 }
@@ -352,11 +349,11 @@ public class ManufacturePanel : GamePanel<Manufature>
                     }
                     else
                     {
-                        manufature.waitTime = GameTimeManager.instance.totalMinute + matchFormula.produceTime;
+                        manufature.waitTime = GameTimeManager.instance.totalMinute + matchFormula.formulaData.produceTime;
                     }
                     if (matchFormula != null)
                     {
-                        manufature.matchFormula = matchFormula.id;
+                        manufature.matchFormula = matchFormula;
                     }
                     manufature.product.x = productId;
                     manufature.product.y = produceCount;
@@ -436,21 +433,20 @@ public class ManufacturePanel : GamePanel<Manufature>
         } 
         if (this.formulaTypes.dataCount == 0)
         {
-            foreach (var formulaDatas in allFormulaDatas)
+            foreach (var formulaDatas in allFormulas)
             {
                 for (int i = 0; i < formulaDatas.Value.Count; i++)
-                {
-                    FormulaData formulaData = formulaDatas.Value[i];
-                    Formula formula = manufature.formulas[formulaData.id];
-                    if (!formula.isOpen)
+                { 
+                    Formula formula = formulaDatas.Value[i];
+                    if (!formula.opened)
                     {
                         continue;
                     }
                     FormulaOptionData formulaOptionData = new FormulaOptionData
                     {
                         formulaId = formula.id,
-                        open = formula.isOpen,
-                        text = formulaData.formulaName
+                        open = formula.opened,
+                        text = formula.formulaData.formulaName
                     };
                     formulaOptionDatas.Add(formulaOptionData);
                 }
@@ -460,21 +456,20 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             foreach (var type in nowSelectFormulaTypes)
             {
-                if (allFormulaDatas.TryGetValue(type, out var formulaDatas))
+                if (allFormulas.TryGetValue(type, out var formulaDatas))
                 {
                     for (int i = 0; i < formulaDatas.Count; i++)
                     {
-                        FormulaData formulaData = formulaDatas[i];
-                        Formula formula = manufature.formulas[formulaData.id];
-                        if (!formula.isOpen)
+                        Formula formula = formulaDatas[i];
+                        if (!formula.opened)
                         {
                             continue;
                         }
                         FormulaOptionData formulaOptionData = new FormulaOptionData
                         {
                             formulaId = formula.id,
-                            open = formula.isOpen,
-                            text = formulaData.formulaName
+                            open = formula.opened,
+                            text = formula.formulaData.formulaName
                         };
                         formulaOptionDatas.Add(formulaOptionData);
                     }
@@ -483,7 +478,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
 
         FormulaDropdown.options = formulaOptionDatas;
-        await SelectFormulaAsync(0);
+        SelectFormula(0);
     }
 
     private async void ClearFormulaItemBoxReferences(bool clearOutBox = true)
@@ -523,13 +518,13 @@ public class ManufacturePanel : GamePanel<Manufature>
         int instanceId = 1;
         if (matchFormula != null)
         {
-            if (manufature.formulas.TryGetValue(matchFormula.id, out var formula))
-            {
-                if (formula.isOpen)
+            if (manufature.formulas.Contains(matchFormula.formulaData.id))
+            { 
+                if (matchFormula.opened)
                 {
-                    instanceId = formulaCount >= matchFormula.Stuffs.Count ? 1 : -1;
-                    product = matchFormula.Product;
-                    formulaCost = matchFormula.PowerCost; 
+                    instanceId = formulaCount >= matchFormula.formulaData.Stuffs.Count ? 1 : -1;
+                    product = matchFormula.formulaData.Product;
+                    formulaCost = matchFormula.formulaData.PowerCost; 
                 }
 
                 outItem = new Item
@@ -542,15 +537,15 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         else
         {
-            if (selectFormula.id != 0 && selectFormula.isOpen)
+            if (selectFormula.id != 0 && selectFormula.opened)
             {
-                product = selectFormulaData.Product;
+                product = selectFormula.formulaData.Product;
             }
             if (product != GameCommon.defaultProduct)
             {
                 bool match = true;
                 bool isSetMatch = true;
-                foreach (var id in selectFormulaData.Stuffs)
+                foreach (var id in selectFormula.formulaData.Stuffs)
                 {
                     var reference = FormulaItemBoxReferences.Find(f => f.Item.dataId == id);
                     if (reference == null)
@@ -572,7 +567,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     instanceId = -1;
                 }
 
-                formulaCost = selectFormulaData.PowerCost;
+                formulaCost = selectFormula.formulaData.PowerCost;
             }
             else if (!FormulaItemBoxReferences.Exists(f => f.Item.instanceId != -1 && f.Item.instanceId != 0))
             {
@@ -667,14 +662,14 @@ public class ManufacturePanel : GamePanel<Manufature>
         ClearFormulaItemBoxReferences();
         produceCount = 1;
 
-        bool selectOpenFormula = selectFormula.id != 0 && selectFormula.isOpen;
+        bool selectOpenFormula = selectFormula.id != 0 && selectFormula.opened;
         AutoSelect.interactable = selectOpenFormula;
 
         if (selectFormula.id != 0)
         {
-            for (int i = 0; i < selectFormulaData.Stuffs.Count; i++)
+            for (int i = 0; i < selectFormula.formulaData.Stuffs.Count; i++)
             {
-                int itemDataId = selectFormulaData.Stuffs[i];
+                int itemDataId = selectFormula.formulaData.Stuffs[i];
                 Item item = new Item
                 {
                     instanceId = -1,
@@ -691,15 +686,15 @@ public class ManufacturePanel : GamePanel<Manufature>
     //自动选择材料
     private async void AutoSelectMaterials()
     {
-        if (selectFormulaData != null)
+        if (selectFormula != null)
         {
             ClearFormulaItemBoxReferences();
             bool successSelect = true;
             produceCount = 1;
 
-            for (int i = 0; i < selectFormulaData.Stuffs.Count; i++)
+            for (int i = 0; i < selectFormula.formulaData.Stuffs.Count; i++)
             {
-                int itemDataId = selectFormulaData.Stuffs[i];
+                int itemDataId = selectFormula.formulaData.Stuffs[i];
                 int itemCount = PackageManager.instance.GetPlayerItemCount(itemDataId);
                 if (itemCount > 0)
                 {
@@ -732,7 +727,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             outItem = new Item
             {
                 instanceId = instanceId,
-                dataId = selectFormulaData.Product,
+                dataId = selectFormula.formulaData.Product,
                 count = 1
             };
             await OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
@@ -740,7 +735,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
     }
 
-    private FormulaData CheckFormula()
+    private Formula CheckFormula()
     {
         List<int> items = new List<int>();
         for (int i = 0; i < FormulaItemBoxReferences.Count; i++)
@@ -751,19 +746,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 items.Add(reference.Item.dataId);
             }
         }
-
-        foreach (var formulaList in allFormulaDatas)
-        {
-            for (int i = 0; i < formulaList.Value.Count; i++)
-            {
-                var formulaData = formulaList.Value[i];
-                if (formulaData.Check(items))
-                {
-                    return formulaData;
-                }
-            }
-        }
-        return null;
+        return ManufactureManager.instance.CheckFormula(items); 
     }
 
     private async void InitDisplay()
@@ -813,7 +796,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     public override Task InitData(string dataKey)
     {
-        Manufature manufature = ManufatureManager.instance.GetManufature(int.Parse(dataKey));
+        Manufature manufature = ManufactureManager.instance.GetManufature(int.Parse(dataKey));
         if (manufature!=null)
         { 
             InitData(manufature);
@@ -913,7 +896,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         base.InitReferenceData(v);
         InitData(v);
 
-        bool selectOpenFormula = selectFormula.id != 0 && selectFormula.isOpen;
+        bool selectOpenFormula = selectFormula.id != 0 && selectFormula.opened;
         AutoSelect.transform.localScale = selectOpenFormula ? Vector3.one : Vector3.zero;
     }
 
@@ -931,21 +914,21 @@ public class ManufacturePanel : GamePanel<Manufature>
         List<FormulaTypeData> formulaTypeDatas = new List<FormulaTypeData>();
         HashSet<FormulaType> formulaTypes = new HashSet<FormulaType>();
 
-        allFormulaDatas = new Dictionary<FormulaType, List<FormulaData>>();
+        allFormulas = new Dictionary<FormulaType, List<Formula>>();
         List<int> typeFormulas = new List<int>();
-        var formulas = ManufatureManager.instance.GetManufatureAllFormulas(manufature.instanceId);
+        var formulas = ManufactureManager.instance.GetManufatureAllFormulas(manufature.instanceId);
         for (int i = 0; i < formulas.Count; i++)
         {
-            var formaula = formulas[i];
-            var formanulaData = await GameDataManager.instance.GetAsyncData<FormulaData>(formaula.id);
-            formulaTypes.Add(formanulaData.formulaType);
-            if (allFormulaDatas.TryGetValue(formanulaData.formulaType, out var ints))
+           var formula = formulas[i];
+             formulaTypes.Add(formula.formulaData.formulaType);
+
+            if (allFormulas.TryGetValue(formula.formulaData.formulaType, out var _formulas))
             {
-                ints.Add(formanulaData);
+                _formulas.Add(formula);
             }
             else
             {
-                allFormulaDatas.Add(formanulaData.formulaType, new List<FormulaData> { formanulaData });
+                allFormulas.Add(formula.formulaData.formulaType, new List<Formula> { formula });
             }
         }
         if (formulaTypes.Count > 1)
@@ -1014,10 +997,13 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         else
         {
-            if (matchFormula != null && manufature.formulas.TryGetValue(matchFormula.id, out var formula) && !formula.isOpen)
+            if (matchFormula != null && !matchFormula.opened)
             {
-                ManufatureManager.instance.OpenFormula(manufature.instanceId, formula.id);
-                GameNotificationManager.instance.DisplayTips(LanguageManage.SwitchStr("新配方获得!"),string.Format(LanguageManage.SwitchStr("发现了制作<color=blue>{0}</color>的配方"), LanguageManage.SwitchStr(matchFormula.formulaName)));
+                OpenFormula openFormula = new OpenFormula
+                {
+                    formulaId = matchFormula.id
+                };
+                GameActionManager.instance.QueueAction(openFormula);   
                 RefreshFormulaSelect();
             }
 

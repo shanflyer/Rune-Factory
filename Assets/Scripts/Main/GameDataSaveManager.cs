@@ -72,7 +72,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 while (e.MoveNext())
                 {
-                    ManufatureManager.instance.CreatManufature(e.Current);
+                    ManufactureManager.instance.CreatManufature(e.Current);
                 }
             }
             using(var e = loadGameSaveData.mapHomeEquips.Values.GetEnumerator())
@@ -121,7 +121,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     }
                 }
             }
-
+            ManufactureManager.instance.InitSaveOpenFormula(loadGameSaveData.openFormulas);
              
         }
     }

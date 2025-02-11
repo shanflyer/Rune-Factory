@@ -104,7 +104,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         }
         if (canvas.renderMode == RenderMode.WorldSpace)
         {
-            gameObject.layer =DefaultLayer;
+            gameObject.layer = WorldLayer;
         }
         else
         {

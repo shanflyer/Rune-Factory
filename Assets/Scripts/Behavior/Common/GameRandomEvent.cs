@@ -21,7 +21,7 @@ public class GameRandomEvent : Action
 
     public override void OnStart()
     {
-        if (randomSources != null && randomSources.Value != null)
+        if (randomSources != null && randomSources.Value != null&& randomSources.Value.Count>0)
         {
             List<int> sources = new List<int>();
             sources.AddRange(randomSources.Value);

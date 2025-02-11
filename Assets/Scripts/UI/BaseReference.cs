@@ -9,7 +9,7 @@ public class BaseReference : MonoBehaviour
 {
     public static LayerMask UILayer;
     public static LayerMask HideLayer;
-    public static LayerMask DefaultLayer;
+    public static LayerMask WorldLayer;
 
     [SerializeField]
     public Canvas canvas;

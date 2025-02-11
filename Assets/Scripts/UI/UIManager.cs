@@ -98,7 +98,7 @@ public class UIManager : Singleton<UIManager>
         filmUI = false;
         BaseReference.UILayer = LayerMask.NameToLayer("UI");
         BaseReference.HideLayer = LayerMask.NameToLayer("Hide");
-        BaseReference.DefaultLayer = LayerMask.NameToLayer("Default");
+        BaseReference.WorldLayer = LayerMask.NameToLayer("WorldUI");
 
         // canvas = UnityEngine.Object.FindAnyObjectByType<Canvas>();
         GameActionManager.instance.AddListener<ClosePanelAction>(ClosePanel);

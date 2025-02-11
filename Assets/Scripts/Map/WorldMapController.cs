@@ -87,7 +87,7 @@ public class WorldMapController : MonoBehaviour
         yield return 0;
         var homeEquipManager = HomeEquipManager.instance;
         yield return 0;
-        var manufatureManager = ManufatureManager.instance;
+        var manufatureManager = ManufactureManager.instance;
         yield return 0;
         var pastureManager = PastureManager.instance;
         yield return 0;

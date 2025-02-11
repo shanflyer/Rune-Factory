@@ -68,6 +68,8 @@ public class UserGameSaveData : IReferenceData
         nextWeathers.AddRange(userGameSaveData.nextWeathers);
         nowWeathers.AddRange(userGameSaveData.nowWeathers);
 
+        openFormulas.AddRange(userGameSaveData.openFormulas);
+
         npcBirthDays.CopyData(userGameSaveData.npcBirthDays);
 
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
@@ -102,7 +104,7 @@ public class UserGameSaveData : IReferenceData
     public IntShopSaveDataDictionary shops = new IntShopSaveDataDictionary();
     public StringShopListSaveDataDictionary shopLists = new StringShopListSaveDataDictionary();
 
-    
+    public List<int> openFormulas = new List<int>();
     public IntInt3Dictionary changeMapItems = new IntInt3Dictionary();
     public IntInt2Dictionary SetAnimationStateMapItems = new IntInt2Dictionary();
     public List<int2> removeMapItemOperates = new List<int2>();
@@ -379,7 +381,7 @@ public class UserGameSaveData : IReferenceData
             mapHomeEquips.Add(key, homeEquipSaveData);
         }
     }
-
+     
     public void SetManufature(Manufature manufature)
     {
         if (manufatures.TryGetValue(manufature.instanceId, out var manufatureSaveData))
@@ -694,8 +696,7 @@ public class ManufatureSaveData
     public int3 product;
     public int waitTime;
     public int startTime;
-    public int matchFormula;
-    public List<Formula> formulas = new List<Formula>();
+    public int matchFormula; 
 
     public ManufatureSaveData() { }
     public ManufatureSaveData(ManufatureSaveData manufatureSaveData)
@@ -706,8 +707,7 @@ public class ManufatureSaveData
         product = manufatureSaveData.product;
         waitTime = manufatureSaveData.waitTime;
         startTime = manufatureSaveData.startTime;
-        matchFormula = manufatureSaveData.matchFormula;
-        formulas = manufatureSaveData.formulas.ToList();
+        matchFormula = manufatureSaveData.matchFormula; 
     }
     public ManufatureSaveData(Manufature manufature)
     {
@@ -721,9 +721,7 @@ public class ManufatureSaveData
         materials = manufature.materials.ToArray();
         product = manufature.product;
         waitTime = manufature.waitTime;
-        startTime = manufature.startTime;
-        matchFormula = manufature.matchFormula;
-        formulas = manufature.formulas.Values.ToList();
+        startTime = manufature.startTime; 
     }
 }
 

@@ -1,11 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using Unity.Mathematics; 
 
-public class ManufatureManager : Singleton<ManufatureManager>
+public class Formula
 {
-    private Dictionary<int,Manufature> Manufatures = new Dictionary<int, Manufature> ();
+    public FormulaData formulaData;
+    public ItemData product { get; private set; }
+    public bool opened;
+    public int id => formulaData.id;
+    public Formula(FormulaData formulaData,bool opened)
+    {
+        this.formulaData = formulaData;
+        this.opened = opened;
+        product=GameDataManager.instance.GetData<ItemData>(formulaData.Product.ToString());
+    }
+}
+public class ManufactureManager : Singleton<ManufactureManager>
+{
+    private Dictionary<int,Manufature> Manufactures = new Dictionary<int, Manufature> ();
+    private MyDic<int, Formula> formulas = new MyDic<int, Formula>();
+    public bool GetFormula(int id,out Formula formula)
+    {
+       return  formulas.TryGetValue(id, out formula);
+    }
 
+    public Formula CheckFormula(List<int> items)
+    {
+        for(int i = 0; i < formulas.length; i++)
+        {
+            var formula = formulas[i]; 
+            if (formula.formulaData.Check(items))
+            {
+                return formula;
+            }
+        }
+        
+        return null;
+    }
     public override void Init()
     {
         base.Init();
@@ -13,22 +46,44 @@ public class ManufatureManager : Singleton<ManufatureManager>
         GameActionManager.instance.AddListener<ClearManufature>(ClearManufature);
         GameActionManager.instance.AddListener<OpenFormula>(OpenFormula);
         GameActionManager.instance.AddListener<SetManufature>(SetManufature);
-        Manufatures.Clear();
+        Manufactures.Clear();
+        InitData();
     }
 
+    async void InitData()
+    {
+        var datas =await GameDataManager.instance.GetAllAsyncData<FormulaData>();
+        HashSet<int> openFormulas = GameDataSaveManager.instance.UserGameSaveData.openFormulas.ToHashSet();
+
+        for(int i = 0; i < datas.Count; i++)
+        {
+            Formula formula = new Formula(datas[i], openFormulas.Contains(datas[i].id));
+            formulas.Add(datas[i].id, formula);
+        }
+    }
+    public void InitSaveOpenFormula(List<int> datas)
+    {
+        for (int i = 0; i < datas.Count; i++)
+        {
+            if (formulas.TryGetValue(datas[i],out var formula))
+            {
+                formula.opened=true;
+            }
+        }
+    }
     protected override void Clear()
     {
         base.Clear();
-        foreach(var manufature in Manufatures)
+        foreach(var manufature in Manufactures)
         {
             manufature.Value.Dispose();
         }
-        Manufatures.Clear();
+        Manufactures.Clear();
     }
 
     void SetManufature(SetManufature setManufature)
     { 
-        Manufatures[setManufature.manufature.instanceId] = setManufature.manufature;
+        Manufactures[setManufature.manufature.instanceId] = setManufature.manufature;
         RefreshManufature refreshManufature = new RefreshManufature
         {
             manufature = setManufature.manufature
@@ -39,27 +94,28 @@ public class ManufatureManager : Singleton<ManufatureManager>
     }
     public Manufature GetManufature(int instanceId)
     {
-        Manufatures.TryGetValue(instanceId, out Manufature manufature);
+        Manufactures.TryGetValue(instanceId, out Manufature manufature);
         return manufature;
     }
 
     void OpenFormula(OpenFormula openFormula)
     {
-        foreach(var item in Manufatures)
+        if (formulas.TryGetValue(openFormula.formulaId, out var formula) )
         {
-            Manufature manufature = item.Value;
-            if (manufature.formulas.TryGetValue(openFormula.formulaId,out var formula))
+            formula.opened = true;
+            GameDataSaveManager.instance.UserGameSaveData.openFormulas.Add(openFormula.formulaId);
+            ItemResultInfo itemResultInfo = new ItemResultInfo
             {
-                formula.isOpen = true;
-                manufature.formulas[openFormula.formulaId] = formula; 
-            }
-
-            GameDataSaveManager.instance.UserGameSaveData.SetManufature(manufature);
+                icon = formula.product.icon,
+                info0 = LanguageManage.SwitchStr("新配方获得!"),
+                info1 = string.Format(LanguageManage.SwitchStr("发现了制作<color=blue>{0}</color>的配方"), LanguageManage.SwitchStr(formula.formulaData.formulaName))
+            };
+            UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
         }
     }
     void ClearManufature(ClearManufature clearManufature)
     {
-        if(Manufatures.TryGetValue(clearManufature.manufatureId,out var manufature))
+        if(Manufactures.TryGetValue(clearManufature.manufatureId,out var manufature))
         {
             manufature.ClearProduct(); 
             RefreshManufature refreshManufature = new RefreshManufature
@@ -79,38 +135,35 @@ public class ManufatureManager : Singleton<ManufatureManager>
             instanceId = manufatureSaveData.instanceId,
             dataId = manufatureSaveData.dataId,
             waitTime = manufatureSaveData.waitTime,
-            startTime = manufatureSaveData.startTime,
-            matchFormula = manufatureSaveData.matchFormula,
+            startTime = manufatureSaveData.startTime, 
             product=manufatureSaveData.product,
 
-            formulas = new Dictionary<int, Formula>(),
+             
             materials = new NativeArray<int2>(4, Allocator.Persistent)
         };
+        GetFormula(manufatureSaveData.matchFormula, out manufature.matchFormula);
         manufature.materials.CopyFrom(manufatureSaveData.materials);
-        for (int i = 0; i < manufatureSaveData.formulas.Count; i++)
-        {
-            manufature.formulas.Add(manufatureSaveData.formulas[i].id, manufatureSaveData.formulas[i]);
-        }
-        Manufatures.Add(manufatureSaveData.instanceId, manufature);
+         
+        Manufactures.Add(manufatureSaveData.instanceId, manufature);
     }
 
     private async void CreatManufature(CreatManufature creatManufature)
     {
         var manufatureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(creatManufature.manufatureId);
-        if (!Manufatures.ContainsKey(creatManufature.instanceId))
+        if (!Manufactures.ContainsKey(creatManufature.instanceId))
         {
             Manufature manufature = new Manufature
             {
                 instanceId = creatManufature.instanceId,
-                dataId = creatManufature.manufatureId,
-                formulas = new Dictionary<int, Formula>(),
+                dataId = creatManufature.manufatureId, 
                 materials = new NativeArray<int2>(4, Allocator.Persistent),
                 open = false
             };
-            Manufatures.Add(creatManufature.instanceId, manufature);
+            Manufactures.Add(creatManufature.instanceId, manufature);
             for (int i = 0; i < manufatureData.linkFormulas.Count; i++)
             {
-                manufature.formulas.Add(manufatureData.linkFormulas[i].x, new Formula { id = manufatureData.linkFormulas[i].x, isOpen = manufatureData.linkFormulas[i].y == 1 });
+                
+                manufature.formulas.Add(manufatureData.linkFormulas[i].x);
             }
 
             GameDataSaveManager.instance.UserGameSaveData.SetManufature(manufature);
@@ -121,36 +174,22 @@ public class ManufatureManager : Singleton<ManufatureManager>
     public List<Formula> GetManufatureAllFormulas(int id)
     {
         List<Formula> formulas = new List<Formula>();
-        if (Manufatures.TryGetValue(id, out var manufature))
+        if (Manufactures.TryGetValue(id, out var manufature))
         {
             foreach (var f in manufature.formulas)
             {
-                formulas.Add(f.Value);
+                if(GetFormula(f,out var formula))
+                {
+                    formulas.Add(formula);
+                } 
             }
         }
         return formulas;
     }
-
-    public void OpenFormula(int manufatureId, int formulaId)
-    {
-        if (Manufatures.TryGetValue(manufatureId, out var manufature))
-        {
-            if (manufature.formulas.TryGetValue(formulaId, out var formula))
-            {
-                formula.isOpen = true;
-                manufature.formulas[formulaId] = formula;
-            } 
-        }
-    }
-   
+      
 }
 
-public struct Formula
-{
-    public int id;
-    public bool isOpen;
-}
-
+ 
 public class Manufature :  IReferenceData
 {
     public int instanceId;
@@ -160,12 +199,10 @@ public class Manufature :  IReferenceData
     public int3 product;
     public int waitTime;
     public int startTime;
-    public int matchFormula;
-    public Dictionary<int, Formula> formulas; 
+    public Formula matchFormula;
+    public List<int> formulas=new List<int>();
 
-
-
-
+     
     public override string ToString()
     {
         return instanceId.ToString();

@@ -690,7 +690,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
             RemoveMapDisplayCompeted(runtimeMapItem.instanceId);
 
-            var manufature = ManufatureManager.instance.GetManufature(runtimeMapItem.instanceId);
+            var manufature = ManufactureManager.instance.GetManufature(runtimeMapItem.instanceId);
             if (manufature != null)
             {
                 if (manufature.waitTime > GameTimeManager.instance.totalMinute)
