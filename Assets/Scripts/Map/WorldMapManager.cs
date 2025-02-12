@@ -1,5 +1,6 @@
 ﻿using ProFlares;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -724,36 +725,54 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         var mapItemData = GameDataManager.instance.GetData<MapItemData>(TrySetMapItem.dataId.ToString());
         //var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(TrySetMapItem.dataId);
-        HashSet<int2> oldColliders = null;
-        int2[] newTriggers = null;
+        HashSet<int2> newTriggers = new HashSet<int2>();
+        HashSet<int2> oldTriggers = new HashSet<int2>();
+
         bool newItem = false;
+        var triggerCells = GameCommon.GridToCells(mapItemData.triggerGrids);
         if (runtimeMapItems.TryGetValue(TrySetMapItem.mapItemInstanceId, out var runtimeMapItem))
         {
             if (runtimeMapItem.mapInstanceId == TrySetMapItem.mapItemInstanceId
                 && !runtimeMapItem.coordinate.Equals(TrySetMapItem.coordinate))
             {
-                oldColliders = new HashSet<int2>();
-                var cells = GameCommon.GridToCells(mapItemData.colliderGrids);
-                for (int i = 0; i < cells.Count; i++)
+                for (int i = 0; i < triggerCells.Count; i++)
                 {
-                    int2 oldCollider = cells[i] + runtimeMapItem.coordinate;
-                    oldColliders.Add(oldCollider);
+                    int2 newTrigger = triggerCells[i] + TrySetMapItem.coordinate;
+                    newTriggers.Add(newTrigger);
+                    int2 oldTrigger = triggerCells[i] + runtimeMapItem.coordinate;
+                    oldTriggers.Add(oldTrigger);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < triggerCells.Count; i++)
+                {
+                    int2 newTrigger = triggerCells[i] + TrySetMapItem.coordinate;
+                    newTriggers.Add(newTrigger); 
                 }
             }
         }
         else
         {
+            for (int i = 0; i < triggerCells.Count; i++)
+            {
+                int2 newTrigger = triggerCells[i] + TrySetMapItem.coordinate;
+                newTriggers.Add(newTrigger); 
+            }
             newItem = true;
         }
-        var triggerCells = GameCommon.GridToCells(mapItemData.triggerGrids);
-        newTriggers = new int2[triggerCells.Count];
-        for (int i = 0; i < triggerCells.Count; i++)
+        HashSet<int2> mapCharacterCells = MapCellController.instance.GetMapCharacterCells(TrySetMapItem.mapInstance);
+        newTriggers.ExceptWith(oldTriggers);
+        var _tempCell=newTriggers.Intersect(mapCharacterCells);
+        if (_tempCell.Count() > 0)
         {
-            int2 newTrigger = triggerCells[i] + TrySetMapItem.coordinate;
-            newTriggers[i] = newTrigger;
-        }
 
-        if (MapCellController.instance.CheckFutureIsWalk(newTriggers, TrySetMapItem.mapInstance, oldColliders))
+            if (TrySetMapItem.setResult != null)
+            {
+                TrySetMapItem.setResult(false);
+            }
+        }
+        else if (MapCellController.instance.CheckFutureIsWalk(newTriggers, TrySetMapItem.mapInstance))
         {
             MoveMapItem mapItem = new MoveMapItem
             {
@@ -762,12 +781,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 mapItemInstanceId = TrySetMapItem.mapItemInstanceId,
                 noneTryAdd = newItem,
                 dataId = TrySetMapItem.dataId,
-                setValue=TrySetMapItem.setValue,
-                setResult= TrySetMapItem.setResult
+                setValue = TrySetMapItem.setValue,
+                setResult = TrySetMapItem.setResult
             };
 
             MoveMapItem(mapItem);
-           
+
         }
         else
         {
@@ -775,7 +794,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 TrySetMapItem.setResult(false);
             }
-        }
+        }  
     }
     void ResetOperateData(ResetOperateData resetOperateData)
     {

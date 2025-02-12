@@ -498,17 +498,16 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                             {
                                 if (!value)
                                 {
-                                    GameTimerController.instance.DelayAction(500, () =>
+                                    int2 oldCoordinate = selectMapItemRuntimeObj.coordinate;
+                                    Vector3 pos = GameCommon.GetMapPos(coordinate);
+                                    selectMapItemRuntimeObj.transform.position = pos;
+                                   // selectMapItemRuntimeObj.SetCoordinate(coordinate);
+                                    selectMapItemRuntimeObj.SetLayer(GameCommon.RedObjLayer);
+                                    GameTimerController.instance.DelayAction(200, () =>
                                     {
-                                        int2 oldCoordinate = selectMapItemRuntimeObj.coordinate;
-                                        selectMapItemRuntimeObj.SetCoordinate(coordinate);
-                                        selectMapItemRuntimeObj.SetLayer(GameCommon.RedObjLayer);
-                                        GameTimerController.instance.DelayAction(500, () =>
-                                        {
-                                            selectMapItemRuntimeObj.SetCoordinate(oldCoordinate);
-                                            selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
-                                        });
-                                    }); 
+                                        selectMapItemRuntimeObj.SetCoordinate(oldCoordinate);
+                                        selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
+                                    });
                                 }
                             },
                             setValue = (int instance) =>

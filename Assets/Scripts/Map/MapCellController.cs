@@ -4,6 +4,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine; 
@@ -25,7 +26,7 @@ public class MapCharacterGrid
     public int mapInstance;
     public NativeList<int3> characters;
     public Dictionary<int, int> characterIndexs; 
-
+     
     public void RemoveCharacter(int characterInstance,bool isTemp)
     {
         if (isTemp)
@@ -107,6 +108,18 @@ public class MapCellController : Singleton<MapCellController>
 
     private Dictionary<int, MapCharacterGrid> MapCharacterGrids = new Dictionary<int, MapCharacterGrid>();
 
+    public HashSet<int2> GetMapCharacterCells(int mapInstance)
+    {
+        HashSet<int2> result = new HashSet<int2>();
+        if(MapCharacterGrids.TryGetValue(mapInstance,out var mapCharacterGrid))
+        {
+            for(int i = 0; i < mapCharacterGrid.characters.Length; i++)
+            {
+                result.Add(mapCharacterGrid.characters[i].xy);
+            }
+        }
+        return result;
+    }
     public void SetCharacterCoordinate(int3 oldCoordinate, int3 newCoordinate, int characterId,bool isTemp)
     {
         if (newCoordinate.z != oldCoordinate.z)
@@ -133,6 +146,31 @@ public class MapCellController : Singleton<MapCellController>
         {
             mapCharacterGrid.RemoveCharacter(characterId, isTemp);
         }
+    }
+    public int[] GetCharactersForCell(int2[] coordinates, int mapInstance)
+    {
+        if (MapCharacterGrids.TryGetValue(mapInstance, out var mapCharacterGrid))
+        {
+            NativeList<int> results = new NativeList<int>(mapCharacterGrid.characters.Length, Allocator.TempJob);
+            NativeHashSet<int2> coordinateSet=new NativeHashSet<int2>(coordinates.Length, Allocator.TempJob);
+            for(int i = 0; i < coordinates.Length; i++)
+            {
+                coordinateSet.Add(coordinates[i]);
+            }
+
+            FindCharacterInCell findCharacterInCell = new FindCharacterInCell
+            {
+                coordinateSet=coordinateSet,
+                girds = mapCharacterGrid.characters,
+                result = results.AsParallelWriter(), 
+            };
+            findCharacterInCell.ScheduleParallel(mapCharacterGrid.characters.Length, 8, new JobHandle()).Complete();
+            var data = results.ToArray();
+            results.Dispose();
+            coordinateSet.Dispose();
+            return data;
+        }
+        return null;
     }
     public int[] GetCharactersForRange(int3 coordinate, int Range)
     {
@@ -1583,31 +1621,22 @@ public class MapCellController : Singleton<MapCellController>
     {
         return roomCellDatas[roomCellDataIndex].CheckWalkable(coordinate.xy);
     }
-    public bool CheckFutureIsWalk(int2[] cells, int mapId, HashSet<int2> specialCells)
+    public bool CheckFutureIsWalk(HashSet<int2> cells, int mapId)
     {
         if (runtimeMapRooms.TryGetValue(mapId, out var runtimeMapRoom))
         {
-            for (int i = 0; i < cells.Length; i++)
+            using(var e = cells.GetEnumerator())
             {
-                if (!roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(cells[i]))
+                while (e.MoveNext())
                 {
-                    if (specialCells != null)
-                    {
-                        if (specialCells.Contains(cells[i]) && roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckBarrierCount(cells[i]) <= 1)
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
+                    var cell = e.Current;
+                    if (!roomCellDatas[runtimeMapRoom.roomCellDataIndex].CheckWalkable(cell))
                     {
                         return false;
                     }
                 }
             }
+             
             return true;
         }
         return false;
@@ -2018,7 +2047,26 @@ public class MapCellController : Singleton<MapCellController>
             nextDatas.Dispose();
         }
     }
+    [BurstCompile]
+    public struct FindCharacterInCell : IJobFor
+    {
+        [ReadOnly]
+        public NativeList<int3> girds; 
+        [ReadOnly]
+        public NativeHashSet<int2> coordinateSet;
 
+        [WriteOnly]
+        public NativeList<int>.ParallelWriter result;
+
+        public void Execute(int index)
+        {
+            int3 target = girds[index]; 
+            if (coordinateSet.Contains(target.xy))
+            {
+                result.AddNoResize(target.z);
+            }
+        }
+    }
     [BurstCompile]
     public struct FindCharacterRangeInCell : IJobFor
     {
