@@ -681,6 +681,13 @@ public class ManufacturePanel : GamePanel<Manufature>
             //SetOutItemBoxReference(outItem);
             RefreshRPCostAndOut();
         }
+        else
+        {
+            for(int i = 0; i < FormulaItemBoxReferences.Count; i++)
+            {
+                FormulaItemBoxReferences[i].ClearData();
+            }
+        }
     }
 
     //自动选择材料
@@ -753,6 +760,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     {
         Item defaultItem = default(Item);
         defaultItem.instanceId = -1;
+        
         for (int i = 0; i < manufature.materials.Length; i++)
         {
             if (manufature.materials[i].x == 0)
@@ -772,10 +780,13 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         if (manufature.product.x == 0)
         {
+            FormulaDropdown.captionText.text = "";
+            FormulaDropdown.interactable = true;
             OutItemBoxReference.ClearData();
         }
         else
         {
+            FormulaDropdown.interactable = false;
             Item item = new Item
             {
                 dataId = manufature.product.z == 0 ? manufature.product.x : GameCommon.defaultProduct,
@@ -1006,6 +1017,13 @@ public class ManufacturePanel : GamePanel<Manufature>
                 GameActionManager.instance.QueueAction(openFormula);   
                 RefreshFormulaSelect();
             }
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(manufature.product.x);
+            ItemResultInfo itemResultInfo = new ItemResultInfo
+            {
+                icon = itemData.icon,
+                info0 = $"{LanguageManage.SwitchStr("获得")}+ {LanguageManage.SwitchStr(itemData.itemName)} + x{manufature.product.y}"
+            };
+            UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
 
             await PackageManager.instance.SetItemInPackage(new Item { dataId = manufature.product.x, count = manufature.product.y }, CharacterManager.instance.controllerCharacter.characterPackage);
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("产物已经放到背包!"));
