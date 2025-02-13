@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ public class PastureManager : Singleton<PastureManager>
         GameActionManager.instance.AddListener<TrySetAnimalFoodToPasture>(TrySetAnimalFoodToPasture);
         GameActionManager.instance.AddListener<TryGetAnimalFoodFromPasture>(TryGetAnimalFoodFromPasture);
         GameActionManager.instance.AddListener<AnimalCostFood>(AnimalCostFood);
-
+        GameActionManager.instance.AddListener<SampleCreatAnimal>(SampleCreatAnimal);
         GameActionManager.instance.AddListener<GetPastureLevel>(GetPastureLevel);
         GameActionManager.instance.AddListener<TryUpPastureLevel>(TryUpPastureLevel);
         GameActionManager.instance.AddListener<SetAnimalToPasture>(SetAnimalToPasture);
@@ -650,6 +651,51 @@ public class PastureManager : Singleton<PastureManager>
             };
             GameActionManager.instance.QueueAction(joinTeam);
         }
+    }
+    private async void SampleCreatAnimal(SampleCreatAnimal sampleCreatAnimal)
+    {
+        AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(sampleCreatAnimal.dataId);
+        Animal animal = new Animal
+        {
+            name = animalData.animalName,
+            animalState = AnimalState.正常,
+            animalData = animalData,
+            linkCharacterData = animalData.linkCharacter,
+            instanceId = MyInstance.instance.uid
+        };
+
+   
+        animals.Add(animal.instanceId, animal);
+        CreatCharacter creatCharacter = new CreatCharacter
+        {
+            characterId = animalData.linkCharacter,
+            mapInstance = CharacterManager.instance.controllerCharacter.mapInstance,
+            coordinateX = CharacterManager.instance.controllerCharacter.coordinate.x,
+            coordinateY = CharacterManager.instance.controllerCharacter.coordinate.y,
+            instanceId = animal.instanceId,
+            setValue = SetAnimalInstanceId,
+            hideData = true
+        };
+        void SetAnimalInstanceId(int value)
+        {
+            if (value != 0)
+            { 
+
+                if (animalData.externalBehavior != null)
+                {
+                    CharacterBehaviorManager.instance.AddBehavior(animal.instanceId, animalData.externalBehavior);
+                }
+
+                GameDataSaveManager.instance.UserGameSaveData.SetAnimalData(animal);
+            }
+            JoinTeam joinTeam = new JoinTeam
+            {
+                teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId,
+                characterId = value
+            };
+            GameActionManager.instance.QueueAction(joinTeam);
+        }
+        GameActionManager.instance.QueueAction(creatCharacter);
     }
     private async void TryCreatAnimal(TryCreatAnimal tryCreatAnimal)
     {

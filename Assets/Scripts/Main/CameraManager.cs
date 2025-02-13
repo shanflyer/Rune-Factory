@@ -299,15 +299,23 @@ public class CameraManager : Singleton<CameraManager>
         base.LateUpData();
         if (!fixedPlayerShaderPos)
         {
-            if (mixingCamera.Weight3 == 1)
+            if (CharacterManager.instance.ControllerRuntimeObj != null)
+            {
+                if (mixingCamera.Weight3 == 1&&(!CharacterManager.instance.ControllerRuntimeObj.gameObject.activeSelf))
+                {
+                    Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
+                }
+                else if (CharacterManager.instance.ControllerRuntimeObj != null)
+                {
+
+                    Shader.SetGlobalVector("_PlayerPos", CharacterManager.instance.ControllerRuntimeObj.transform.position);
+                }
+            }
+            else
             {
                 Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
             }
-            else if (CharacterManager.instance.ControllerRuntimeObj != null)
-            {
-
-                Shader.SetGlobalVector("_PlayerPos", CharacterManager.instance.ControllerRuntimeObj.transform.position);
-            }
+            
         }
         
          

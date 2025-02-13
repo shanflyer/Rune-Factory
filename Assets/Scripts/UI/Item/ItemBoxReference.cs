@@ -77,8 +77,12 @@ public class ItemBoxReference : UIObjReference<Item>
     public override void SelectDefault()
     {
         base.SelectDefault();
-        toggle.isOn = true;
+        //toggle.isOn = true;
         toggle.SetIsOnWithoutNotify(true);
+        if(SelectAction != null)
+        {
+            SelectAction.Invoke(item);
+        }
     }
     public void SetCountColor(Color color)
     {

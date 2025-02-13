@@ -1347,7 +1347,7 @@ Shader "MySprite-Lit-Default"
                 half depth=i.color.z  +offset*clearColor;
                 half setpHigh=depthStep_G;   
 
-                 // return float4(i.color.zzz,mainTex.a);
+                //return float4(DepthTex.yyy,mainTex.a);
 
                 half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 

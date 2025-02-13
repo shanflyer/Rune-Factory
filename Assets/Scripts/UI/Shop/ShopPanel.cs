@@ -151,7 +151,19 @@ public class ShopPanel : GamePanel<ShopList>
 
     private async void BuyAnimal()
     {
-        ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectShopItemData.item);
+        if (TeamManager.instance.playerTeam.TeamCharacters.Count > 4)
+        {
+            TwoSelectData twoSelectData = new TwoSelectData
+            {
+                notice = "队伍人数超过4，不能购买动物"
+            };
+
+            UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
+            
+            return;
+        }
+
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectShopItemData.item);
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;

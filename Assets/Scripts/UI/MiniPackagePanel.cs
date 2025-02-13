@@ -125,6 +125,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
     {
         if (selected)
         {
+            SelectItem = item;
             if (item.dataId == 0)
             {
                 UIManager.instance.CloseGamePanel<ItemInfoPanel>();
@@ -149,6 +150,8 @@ public class MiniPackagePanel : GamePanel<PackageList>
         }
         else if (SelectItem.instanceId == item.instanceId)
         {
+            SelectItem = default(Item);
+            UIManager.instance.CloseGamePanel<ItemInfoPanel>(); 
         }
     }
 
@@ -177,6 +180,10 @@ public class MiniPackagePanel : GamePanel<PackageList>
         }
     }
 
+    public void DefaultSelect()
+    {
+        itemBoxs.SelectDefault();
+    }
     private async void RefreshPackage()
     {
         //selectPackageData = packageList.packageDatas[selectIndex];

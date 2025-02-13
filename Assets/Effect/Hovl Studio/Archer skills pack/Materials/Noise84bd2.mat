@@ -8,25 +8,17 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Noise84bd2
-  m_Shader: {fileID: -6465566751694194690, guid: 60d9a794523917043ab4a5a06a2f98c0,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 3c7b7e2c0ae93e84786a80132d3f8d5d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _SURFACE_TYPE_TRANSPARENT
-  m_InvalidKeywords:
-  - _SOFTEDGES_ON
-  - _USEDEPTH_ON
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Transparent
-  disabledShaderPasses:
-  - DepthOnly
-  - SHADOWCASTER
-  - MOTIONVECTORS
+  stringTagMap: {}
+  disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -48,6 +40,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OpacityTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -84,6 +80,13 @@ Material:
     - _Distortionpower: 0
     - _DstBlend: 10
     - _Emission: 6
+    - _Emissionpower: 1
+    - _Maskmultiplayer: 3
+    - _Maskpower: 1
+    - _Noiselerp: 1
+    - _Noisepower: 1
+    - _Noisescale: 1000
+    - _Numberofwaves: 1
     - _Opacity: 1
     - _Opacitysaturate: 0
     - _QueueControl: 0
@@ -92,9 +95,11 @@ Material:
     - _Softedges: 1
     - _SrcBlend: 5
     - _Surface: 1
+    - _Upopacity: 1
     - _UseNoiseRandomUV: 1
     - _Usecenterglow: 0
     - _Usedepth: 0
+    - _VertexScale: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
@@ -102,7 +107,9 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DistortionSpeedXYPowerZ: {r: 0, g: 0.15, b: -0.1, a: 0}
+    - _OpacityTexspeedXY: {r: 0, g: -0.5, b: 0, a: 0}
     - _SpeedMainTexUVNoiseZW: {r: 0, g: -0.1, b: 0, a: 0}
+    - _WavesspeedsizeXYTwistspeedsizeZW: {r: -1, g: 0.2, b: 4, a: 0.6}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5602486648694603847

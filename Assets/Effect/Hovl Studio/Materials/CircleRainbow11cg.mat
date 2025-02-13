@@ -8,20 +8,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CircleRainbow11cg
-  m_Shader: {fileID: -6465566751694194690, guid: 44a7fe6696310d34f8acd987b267fc17,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 45fc128c2ad6ea5418e0e2de5e6b8d80, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _SURFACE_TYPE_TRANSPARENT
+  m_ValidKeywords: []
   m_InvalidKeywords:
+  - _SURFACE_TYPE_TRANSPARENT
   - _USEDEPTH_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Transparent
+  stringTagMap: {}
   disabledShaderPasses:
   - DepthOnly
   - SHADOWCASTER
@@ -100,6 +98,8 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 2
     - _Blend2: 1
+    - _BlendDepth: 0
+    - _BlendLight: 0
     - _BlendMode: 1
     - _BumpScale: 1
     - _CastShadows: 0
@@ -135,7 +135,7 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 2, g: 2, b: 2, a: 1}
     - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}

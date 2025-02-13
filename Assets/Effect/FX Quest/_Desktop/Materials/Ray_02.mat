@@ -8,18 +8,17 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Ray_02
-  m_Shader: {fileID: -6465566751694194690, guid: 1a29b4d27eb8b04479ef89c00dea533d,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 45fc128c2ad6ea5418e0e2de5e6b8d80, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _CFXR_ADDITIVE
-  - _CFXR_DISSOLVE
-  - _CFXR_HDR_BOOST
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _
+  - _CFXR_ADDITIVE
+  - _CFXR_DISSOLVE
   - _CFXR_DITHERED_SHADOWS_OFF
   - _CFXR_GLOW_POW_P0
+  - _CFXR_HDR_BOOST
   - _CFXR_OVERLAYBLEND_RGBA
   - _CFXR_OVERLAYTEX_OFF
   - _SURFACE_TYPE_TRANSPARENT
@@ -94,6 +93,8 @@ Material:
     - _AlphaToMask: 0
     - _BacklightTransmittance: 1
     - _Blend: 2
+    - _BlendSnow: 0
+    - _BlendWater: 0
     - _BlendingType: 3
     - _BumpScale: 1
     - _CFXR_DITHERED_SHADOWS: 0
@@ -159,7 +160,7 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 128, g: 128, b: 128, a: 1}
     - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}
     - _DistortScrolling: {r: 0, g: 0, b: 1, a: 1}
     - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 0, a: 0}

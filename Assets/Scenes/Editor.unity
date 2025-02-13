@@ -320,7 +320,7 @@ Transform:
   m_GameObject: {fileID: 93301978}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -400}
+  m_LocalPosition: {x: 0, y: 0, z: -400}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -675,7 +675,7 @@ PrefabInstance:
     - target: {fileID: 1370943531173514582, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
       propertyPath: orthographic size
-      value: 2.4
+      value: 2.84
       objectReference: {fileID: 0}
     - target: {fileID: 1425806237230712353, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
@@ -750,7 +750,7 @@ PrefabInstance:
     - target: {fileID: 3820188560276549252, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
       propertyPath: orthographic size
-      value: 2.4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6157351341638957001, guid: 957f333c8545dc94080f5c9281725318,
         type: 3}
@@ -771,6 +771,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RendererIndex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9109413340524565931, guid: 957f333c8545dc94080f5c9281725318,
+        type: 3}
+      propertyPath: orthographic size
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
