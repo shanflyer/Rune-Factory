@@ -1336,7 +1336,7 @@ Shader "Shader Graphs/URP_BlendDistort"
             float _Branch_75fdbd9215eb49928aa34badcedb4440_Out_3_Float;
             Unity_Branch_float(_Property_880e9420bb9a4fa78f853222dc29b2b6_Out_0_Boolean, _Saturate_21d697289b7749c38c7e44e79d80c493_Out_1_Float, _Branch_8bb76d35c1b1158d8554230292e1c1bd_Out_3_Float, _Branch_75fdbd9215eb49928aa34badcedb4440_Out_3_Float);
             surface.BaseColor = _Branch_87eb6718c66a4f50911e61d7e341de65_Out_3_Vector3;
-            surface.BaseColor =0;
+            surface.BaseColor =0.25;
             surface.Alpha = _Branch_75fdbd9215eb49928aa34badcedb4440_Out_3_Float;
             surface.AlphaClipThreshold = float(0);
             return surface;

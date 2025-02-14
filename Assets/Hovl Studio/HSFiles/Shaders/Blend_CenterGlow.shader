@@ -272,7 +272,7 @@ Shader "Hovl/Particles/Blend_CenterGlow"
 					float4 appendResult87 = (float4(( lerp(temp_output_78_0,( temp_output_78_0 * (clampResult40).rgb ),_Usecenterglow) * _Emission ) , ( tex2DNode13.a * tex2DNode14.a * _Color.a * i.color.a * _Opacity )));
 					fixed4 col = appendResult87;
 					UNITY_APPLY_FOG(i.fogCoord, col);
-					col.xyz=0;
+					col.xyz=0.25;
 					return col;
 				}
 				ENDCG 

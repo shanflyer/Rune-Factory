@@ -110,6 +110,7 @@ Shader "SampleEffectAdd"
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.uv)*i.color;
                 float4 noiseCol=SAMPLE_TEXTURE2D(_Noise,sampler_Noise,i.noiseUv);
                 col=col*noiseCol;
+                col.xyz=0.25;
                 return col;
             }
              ENDHLSL

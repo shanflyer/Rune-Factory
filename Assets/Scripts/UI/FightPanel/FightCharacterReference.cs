@@ -42,7 +42,8 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
     [SerializeField]
     GameObject Mask;
-
+    [SerializeField]
+    Transform effect;
     public override void OnEnable()
     {
         base.OnEnable();
@@ -135,11 +136,12 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
         skillPanel = FindChildGameObject("SkillPanel");
         skillIcon = FindChildGameObject<Image>("SkillIcon");
-        skillButton = FindChildGameObject<Button>("SkillPanel/BG");
+        skillButton = FindChildGameObject<Button>("BG");
         skillName = FindChildGameObject<TextMeshProUGUI>("SkillName");
         skillValue = FindChildGameObject<Image>("SkillValue");
         ActiveObj = FindChildGameObject("Active").gameObject;
         Mask = FindChildGameObject("Mask").gameObject;
+        effect = FindChildGameObject("Effect");
     }
 
     public override async Task InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
@@ -156,9 +158,20 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         InitData();
         //Mask.gameObject.SetActive(false);
     }
+    bool isInFight;
     void SetChapterFight(SetChapterFight setChapterFight)
     {
+        isInFight = setChapterFight.isInFight;
         Mask.SetActive(!setChapterFight.isInFight);
+        RefreshEffect();
+    }
+    void RefreshEffect()
+    {
+        effect.transform.localScale = Vector3.zero;
+        if (isInFight && playerSkillRuntime != null)
+        {
+            effect.transform.localScale = playerSkillRuntime.GetTimeValue() >= 1 ? Vector3.one : Vector3.zero;
+        }
     }
     private void RefreshCharacter(RefreshCharacter refreshCharacter)
     {
@@ -240,10 +253,12 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
 
         if (value <= 0)
         {
+            effect.transform.localScale =Vector3.zero;
             ActiveObj.gameObject.SetActive(true);
         }
         else
         {
+            RefreshEffect();
             skillButton.interactable = true;
             ActiveObj.gameObject.SetActive(false);
         }

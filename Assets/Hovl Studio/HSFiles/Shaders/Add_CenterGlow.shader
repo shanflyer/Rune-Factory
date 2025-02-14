@@ -274,7 +274,7 @@ Shader "Hovl/Particles/Add_CenterGlow"
 
 					fixed4 col = ( lerp(temp_output_30_0,( temp_output_30_0 * clampResult40 ),_Usecenterglow) * _Emission );
 					UNITY_APPLY_FOG_COLOR(i.fogCoord, col, fixed4(0,0,0,1));
-					return float4(0,0,0,col.a);
+					return float4(0.25,0.25,0.25,col.a);
 				}
 				ENDCG 
 			}

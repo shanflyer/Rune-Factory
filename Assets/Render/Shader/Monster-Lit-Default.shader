@@ -300,6 +300,81 @@ Shader "MyGame/Monster-Lit-Default"
             }
             ENDHLSL
         }
+
+        Pass
+        {
+            Tags { "LightMode" = "ObjDepth" }
+
+            HLSLPROGRAM
+           // #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+            
+
+            #pragma vertex CombinedShapeLightVertex
+            #pragma fragment CombinedShapeLightFragment
+ 
+
+            struct Attributes
+            {
+                float3 positionOS   : POSITION;
+                float4 color        : COLOR;
+                float2 uv           : TEXCOORD0;
+                UNITY_SKINNED_VERTEX_INPUTS
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct Varyings
+            {
+                float4  positionCS  : SV_POSITION;
+                half4   color       : COLOR;
+                float2  uv          : TEXCOORD0;
+                half2   lightingUV  : TEXCOORD1;
+                #if defined(DEBUG_DISPLAY)
+                float3  positionWS  : TEXCOORD2;
+                #endif
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+ 
+
+            Varyings CombinedShapeLightVertex(Attributes v)
+            {
+                Varyings o = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o); 
+
+                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
+                o.positionCS = TransformObjectToHClip(v.positionOS);
+                #if defined(DEBUG_DISPLAY)
+                o.positionWS = TransformObjectToWorld(v.positionOS);
+                #endif
+                o.uv = v.uv;
+                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+
+                o.color = v.color * _Color * unity_SpriteColor;
+                return o;
+            }
+ 
+            half4 CombinedShapeLightFragment(Varyings i) : SV_Target
+            {
+                const half4 main = i.color * _MainTex.Sample(sampler_MainTex,i.uv); 
+                const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
+
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
+                lightCol.xyz*=4;
+                
+                half4 result=main;
+                result.xyz=main.xyz*lightCol.xyz;
+                result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*main.xyz; 
+ 
+                float noise=1;
+                Unity_SimpleNoise_float(i.lightingUV,_NoiseValue,noise);
+                result.a*=step(noise,_NoiseAlpha);
+                result.xyz=0.25;
+  
+                return result;
+            }
+            ENDHLSL
+        }
        
     }
 

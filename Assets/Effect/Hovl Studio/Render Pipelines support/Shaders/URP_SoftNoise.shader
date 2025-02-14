@@ -1223,7 +1223,7 @@ Shader "Shader Graphs/URP_SoftNoise"
             float _Branch_8bb76d35c1b1158d8554230292e1c1bd_Out_3_Float;
             Unity_Branch_float(_Property_ac02d6f9b2790e81a045c097fdd22bf5_Out_0_Boolean, _Multiply_08c8788f6e0a9d878ff9cf7cf7ca089e_Out_2_Float, _Multiply_e60dfa0b5fb780899db96e3fb34a9e82_Out_2_Float, _Branch_8bb76d35c1b1158d8554230292e1c1bd_Out_3_Float);
             surface.BaseColor = (_Multiply_d562aca368957f83b86107a4542c7189_Out_2_Vector4.xyz);
-            surface.BaseColor =0;
+            surface.BaseColor =0.25;
             surface.Alpha = _Branch_8bb76d35c1b1158d8554230292e1c1bd_Out_3_Float;
             return surface;
         }

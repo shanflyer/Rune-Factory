@@ -309,7 +309,7 @@ Shader "Hovl/Particles/Add_Fresnel"
 					float4 appendResult224 = (float4(( lerp(float4( (( tex2DNode203 * tex2DNode211 * _Color * i.color )).rgb , 0.0 ),_Color,_Useonlycolor) * _Emission ).rgb , ( opac215 * tex2DNode211.a * _Color.a * i.color.a * ( lerpResult227 + clampResult214 ) )));
 					fixed4 col = appendResult224;
 					UNITY_APPLY_FOG(i.fogCoord, col);
-					col.xyz=0;
+					col.xyz=25;
 					return col;
 				}
 				ENDCG 

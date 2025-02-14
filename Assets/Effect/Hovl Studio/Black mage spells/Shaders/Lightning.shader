@@ -281,7 +281,7 @@ Shader "Hovl/Particles/Lightning"
 
 					fixed4 col = appendResult43;
 					UNITY_APPLY_FOG(i.fogCoord, col);
-					col.xyz=0;
+					col.xyz=0.25;
 					return col;
 				}
 				ENDCG 
