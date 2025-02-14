@@ -24,11 +24,8 @@ public class NPCPauseBehavior : Action
         if (character != null)
         {
             character.StopMove();
-            if(NPCManager.instance.GetNPCFormInstance(character.instanceId,out var npc))
-            {
-                npc.SetOverrideHold(true);
-                npc.PauseCharacterBehavior();
-            }
+            NPCTaskScheduleManager.instance.SetOverrideHold(character.instanceId, true);
+            NPCTaskScheduleManager.instance.PauseCharacterBehavior(character.instanceId);
             taskStatus = TaskStatus.Success;
         }
         else

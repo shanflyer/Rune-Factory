@@ -1,5 +1,6 @@
 ﻿using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -74,10 +75,7 @@ public class MultiNPCGroup
             {
                 Character character = CharacterManager.instance.GetCharacter(npcs[i]);
                 character.mulitGroup = 0;
-                if (NPCManager.instance.GetNPCFormInstance(npcs[i], out var npc))
-                {
-                    npc.SetNowBehaviorTree();
-                }
+                NPCTaskScheduleManager.instance.SetNowBehaviorTree(npcs[i]); 
             }
         }
         npcBehaviorTempDatas.Clear();
@@ -169,10 +167,7 @@ public class MultiNPCGroup
             }
             else
             {
-                if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
-                {
-                    npc.SetNowBehaviorTree();
-                }
+                NPCTaskScheduleManager.instance.SetNowBehaviorTree(character.instanceId); 
             }
             npcBehaviorTempDatas.Remove(character.instanceId);
         }

@@ -98,10 +98,6 @@ public class PastureManager : Singleton<PastureManager>
                 characterId = instanceId,
                 talkId = animal.growthStage < 1 ? animal.animalData.talkId.x : animal.animalData.talkId.y,
                 displayFunction = true,
-                fixedFunctions = new List<int>
-                    {
-                        9,10,11,12
-                    },
 
             };
             GameActionManager.instance.QueueAction(talk);
@@ -825,6 +821,11 @@ public class Pasture : IReferenceData
     public int animalCase;
     public int linkRoom;
     public int Key => instanceId;
+
+    public int2[] GetPastureCells()
+    {
+      return  MapCellController.instance.GetItemTriggerCells(linkItem, linkRoom);
+    }
 }
 
 public class Animal

@@ -26,8 +26,7 @@ public class GroupCharacterMoveToEachOther : Action
         for(int i = 0; i < characters.length; i++)
         {
             var character = characters[i]; character.StopMove();
-            if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc)
-                  && npc.holdPos)
+            if (NPCTaskScheduleManager.instance.GetNPCHoldPos(character.instanceId))
             {
                
                
@@ -129,8 +128,7 @@ public class GroupCharacterMoveToEachOther : Action
             for(int i = 0; i < characters.length; i++)
             {
                 var character = characters[i];
-                if(NPCManager.instance.GetNPCFormInstance(character.instanceId,out var npc)
-                    &&npc.holdPos)
+                if(NPCTaskScheduleManager.instance.GetNPCHoldPos(character.instanceId))
                 {
                     character.RemoveMove(); 
                 }

@@ -13,7 +13,7 @@ Shader "MySprite-Lit-Default"
         [Toggle(LIGHTMASK)]_LightMask("LightMask",int)=0
 
         ObjPos("ObjPos",vector)=(0,0,0,0)
-
+        [Toggle]NativePos("NativePos",int)=1
         _MainTex("Diffuse", 2D) = "white" {}
        // _MaskTex("Mask", 2D) = "white" {}
         _MoveMask("_MoveMask", 2D) = "black" {}
@@ -178,6 +178,7 @@ Shader "MySprite-Lit-Default"
             int _HideNormal;
 
             half3 ObjPos;
+            int NativePos;
 
             half3 _PlantSpringColor1;
             half3 _PlantSpringColor;
@@ -1292,7 +1293,7 @@ Shader "MySprite-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-               // float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+                 ObjPos=UNITY_MATRIX_M._m03_m13_m23*NativePos+ObjPos*(1-NativePos);
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 

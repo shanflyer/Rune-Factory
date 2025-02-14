@@ -21,6 +21,7 @@ public class MapObjPosSet : MonoBehaviour
     {
         oldPos = transform.position;
         mat.SetVector("ObjPos", oldPos);
+        mat.SetInt("NativePos", 0);
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

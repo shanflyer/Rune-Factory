@@ -625,6 +625,7 @@ public class CharacterManager : Singleton<CharacterManager>
         CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
         characters.Remove(character.instanceId);
         MyInstance.instance.RemoveInstance(character.instanceId);
+        NPCTaskScheduleManager.instance.RemoveBehavior(character.instanceId);
     }
 
     /// <summary>

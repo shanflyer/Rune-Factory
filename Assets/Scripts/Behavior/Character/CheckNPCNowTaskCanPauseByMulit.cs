@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using UnityEngine.TextCore.Text;
 
 
 [TaskCategory("Game/Character")]
@@ -18,12 +19,9 @@ public class CheckNPCNowTaskCanPauseByMulit : Action
 
     public override TaskStatus OnUpdate()
     {
-        if (NPCManager.instance.GetNPCFormInstance(characterId.Value,out var npc))
+        if (NPCTaskScheduleManager.instance.GetNPCHoldPos(characterId.Value))
         {
-            if (npc.holdPos)
-            {
-                return TaskStatus.Success;
-            } 
+            return TaskStatus.Success;
         }
         return TaskStatus.Failure;
     }

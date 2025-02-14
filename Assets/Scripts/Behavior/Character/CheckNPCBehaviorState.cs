@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 
 [TaskCategory("Game/Character")]
@@ -23,19 +24,17 @@ public class CheckNPCBehaviorState : Action
 
     public override TaskStatus OnUpdate()
     {
-        if(NPCManager.instance.GetNPCFormInstance(characterId.Value,out var npc))
+        var state =NPCTaskScheduleManager.instance.GetNPCBehaviorState(characterId.Value);
+        if (state == NPCBehaviorState.NULL)
+            return TaskStatus.Failure;
+        if (isEqual)
         {
-            var state = npc.behaviorState;
-            if (isEqual)
-            {
-                return state==nPCBehaviorState? TaskStatus.Success : TaskStatus.Failure;
-            }
-            else
-            {
-                return state != nPCBehaviorState ? TaskStatus.Success : TaskStatus.Failure;
-            }
+            return state == nPCBehaviorState ? TaskStatus.Success : TaskStatus.Failure;
         }
-
-        return TaskStatus.Failure;
+        else
+        {
+            return state != nPCBehaviorState ? TaskStatus.Success : TaskStatus.Failure;
+        }
+         
     }
 }

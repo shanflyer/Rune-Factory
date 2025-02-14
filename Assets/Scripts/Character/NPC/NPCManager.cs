@@ -10,10 +10,6 @@ public enum NPCState
     修养中 = 0, 正常 = 1
 }
 
-public enum NPCBehaviorState
-{
-    闲置 = 0, 工作 = 1, 睡眠 = 2,
-}
 
 public struct CharacterInformationDataList : IReferenceData
 {
@@ -215,15 +211,17 @@ public class NPC : IReferenceData
 {
     Season birthSeason;
     int birthDay;
+    //NPCBehavior nPCBehavior;
     public NPC(int instanceId, NPCData nPCData, Season birthSeason, int birthDay)
     {
         characterInstance = instanceId;
         npcData = nPCData;
         npcState = NPCState.正常;
-        endBehavior = true;
-        behaviorCanBreak = false;
+        
         this.birthSeason = birthSeason; 
         this.birthDay = birthDay;
+        NPCTaskScheduleManager.instance.AddNPCBehavior(instanceId);
+       // nPCBehavior = new NPCBehavior(instanceId);
     }
     public FestivalData GetNpcBirthDay()
     {
@@ -267,7 +265,7 @@ public class NPC : IReferenceData
         return CharacterInformationData;
     }
     public int friendLevel=>FriendManager.instance.GetFriendShipLevel(npcData.id);
-    private NPCBehaviorData NPCBehaviorData;
+    
     public List<int> functions
     {
         get
@@ -336,9 +334,9 @@ public class NPC : IReferenceData
         {
             return false;
         }
-        else
+        else 
         {
-            if (nowScheduleData.taskName == "看守柜台")
+            if (NPCTaskScheduleManager.instance.NowTaskName(characterInstance) == "看守柜台")
             {
                 return true;
             }
@@ -348,7 +346,7 @@ public class NPC : IReferenceData
 
     public int GetHomeArea()
     {
-        if (NPCBehaviorData.homeAreas.Count>0)
+        if (NPCBehaviorData.homeAreas.Count > 0)
         {
             int index = GameRandom.RandomInt(0, NPCBehaviorData.homeAreas.Count);
             return NPCBehaviorData.homeAreas[index];
@@ -382,7 +380,7 @@ public class NPC : IReferenceData
         int friendShipLevel = FriendManager.instance.GetFriendShipLevel(dataId);
         return npcData.GetTalk(friendShipLevel,character.mapInstance);
     }
-
+    private NPCBehaviorData NPCBehaviorData;
     public async void InitBehaviorData()
     {
         NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
@@ -391,11 +389,7 @@ public class NPC : IReferenceData
         likeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.likeItem);
         unLikeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.unLikeItem);
 
-        if (NPCBehaviorData.externalBehavior != null)
-        {
-            SetNPCTaskScheduleTimeList(NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
-        }
-       
+      
         visitMaps.Clear();
         InitNowVisitMap();
         visitFriends.Clear();
@@ -414,7 +408,10 @@ public class NPC : IReferenceData
         {
             Debug.LogError($"{npcData.npcName}--error");
         }
-       
+        if (NPCBehaviorData!=null)
+        {
+            NPCTaskScheduleManager.instance.SetNPCTaskScheduleTimeList(characterInstance,NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
+        } 
     }
 
     public bool IsInHome()
@@ -585,21 +582,7 @@ public class NPC : IReferenceData
         return 0;
     }
 
-    private async void SetNPCTaskScheduleTimeList(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
-    {
-        List<TaskScheduleModelData> taskSheduleModelDatas = new List<TaskScheduleModelData>();
-        for (int i = 0; i < dailyTasks.Count; i++)
-        {
-            var taskSheduleModelData = await GameDataManager.instance.GetAsyncData<TaskScheduleModelData>(dailyTasks[i]);
-            taskSheduleModelDatas.Add(taskSheduleModelData);
-        }
-        nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(taskSheduleModelDatas);
-         //Debug.Log($"nPCTaskScheduleTimeList.ini{npcData.npcName}");
-        if (!SetNowBehaviorTree())
-        {
-            AddNpcBehavior(externalBehavior, true);
-        }
-    }
+    
 
     public async Task<CharacterData> GetCharacterData()
     {
@@ -607,196 +590,26 @@ public class NPC : IReferenceData
         return characterData;
     }
 
-    private NPCTaskScheduleTimeList nPCTaskScheduleTimeList;
-    private bool endBehavior = true;
-    private bool behaviorCanBreak = false;
 
-    private void ResetBehaviorState(Behavior behavior)
-    {
-        if (SingletonType.Cleared)
-        {
-            return;
-        }
-        endBehavior = true;
-        behaviorCanBreak = false;
-       // Debug.Log($"进入回调:{npcData.npcName}");
-        var externalBehavior = GetNowTaskScheduleBehavior(out behaviorCanBreak, out var pauseWhenDisabled);
-        if (externalBehavior != null)
-        {
-           // Debug.Log($"ResetBehaviorStat:{externalBehavior.name}--{npcData.npcName}");
-            AddNpcBehavior(externalBehavior, PauseWhenDisabled: pauseWhenDisabled);
-        }
-    }
-
-    public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
-    {
-        if (NPCBehaviorData==null||NPCBehaviorData.externalBehavior == null)
-        {
-            return false;
-        }
-        if (endBehavior || behaviorCanBreak)
-        { 
-            var externalBehavior = GetTimeTaskScheduleBehavior(UpdateGameTime, out behaviorCanBreak, out var pauseWhenDisabled);
-            if (externalBehavior != null)
-            {
-                AddNpcBehavior(externalBehavior, PauseWhenDisabled: pauseWhenDisabled);
-                return true;
-            }
-        }
-        return false;
-    }
     public void BackHome()
     {
         if (NPCBehaviorData != null && NPCBehaviorData.externalBehavior != null)
         {
-            AddNpcBehavior(CharacterBehaviorManager.instance.backHomeExternalBehavior);
-        }
-            
-    }
-    public void AddNpcBehavior(ExternalBehavior externalBehavior,bool PauseWhenDisabled = false)
-    {
-        if (externalBehavior == null)
-        {
-            return;
-        }
-        try
-        {
-            if (character.linkItem != 0)
-            {
-                TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter = new TryRemoveLinkMapItemCharacter
-                {
-                    linkInstanceId = characterInstance,
-                    mapItemInstanceId = character.linkItem
-                };
-                GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter);
-            }
-          
-            CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior,
-          ResetBehaviorState, PauseWhenDisabled, Character.name);
-            endBehavior = false;
-        }
-        catch
-        {
-          Debug.LogError($"NPCbehavior:{npcData.name}!!!!");
-        }
-    }
-
-    public bool SetNowBehaviorTree()
-    {
-        var externalBehavior = GetNowTaskScheduleBehavior(out behaviorCanBreak, out var pauseWhenDisabled);
-        if (externalBehavior != null)
-        {
-            AddNpcBehavior(externalBehavior, PauseWhenDisabled: pauseWhenDisabled);
-            return true;
-        }
-        return false;
-    }
-
-    public ExternalBehaviorTree GetTimeTaskScheduleBehavior(UpdateGameTime UpdateGameTime,  out bool behaviorCanBreak
-        , out bool pauseWhenDisabled)
-    {
-        if (nPCTaskScheduleTimeList == null)
-        {
-           // Debug.Log($"null nPCTaskScheduleTimeList{npcData.npcName}"); 
-            behaviorCanBreak = false;
-            pauseWhenDisabled = false;
-            return null;
-        }
-        if(nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(new int2(UpdateGameTime.hour, UpdateGameTime.minute),ref nowScheduleData))
-        {  
-            behaviorCanBreak = nowScheduleData.canBreak;
-            pauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
-            return nowScheduleData.externalBehavior;
-        } 
-        behaviorCanBreak = false;
-        pauseWhenDisabled = false;
-        return null;
+            NPCTaskScheduleManager.instance.AddNpcBehavior(characterInstance, CharacterBehaviorManager.instance.backHomeExternalBehavior);
+        }  
     }
 
 
-    private NPCTaskScheduleData nowScheduleData;
-    public NPCBehaviorState behaviorState => nowScheduleData.behaviorState;
-    public bool holdPos
+    public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
     {
-        get
+        if (NPCBehaviorData == null || NPCBehaviorData.externalBehavior == null)
         {
-            if (overrideHold)
-            {
-                return _holdPos;
-            }else
-            {
-                return nowScheduleData.holdPos;
-            }
+            return false;
         }
-    }
-
-    bool overrideHold;
-    bool _holdPos;
-    public void SetOverrideHold(bool hold)
-    {
-        overrideHold = true;
-        _holdPos = hold; 
-    }
-
-    public void RemoveOverrideHold()
-    {
-        overrideHold = false; 
+        return NPCTaskScheduleManager.instance.SetNowBehaviorTree(characterInstance, UpdateGameTime);
     }
 
 
-    bool behaviorIsPause;
-    float pauseTime;
-    public void PauseCharacterBehavior()
-    {
-        behaviorIsPause = true;
-        pauseTime = Time.time;
-    }
-    public void ResetCharacterBehavior()
-    {
-        if (behaviorIsPause)
-        {
-            behaviorIsPause = false;
-            if (Time.time - pauseTime > nowScheduleData.maxPauseTime)
-            {
-                SetNowBehaviorTree();
-            }
-            else
-            {
-                StartCharacterBehavior startCharacterBehavior = new StartCharacterBehavior
-                {
-                    characterId = characterInstance
-                };
-                GameActionManager.instance.QueueAction(startCharacterBehavior);
-            }
-        }
-    }
-
-    public ExternalBehaviorTree GetNowTaskScheduleBehavior(out bool behaviorCanBreak, out bool PauseWhenDisabled)
-    {
-        try
-        {
-            if (nPCTaskScheduleTimeList != null)
-            { 
-                if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(GameTimeManager.instance.nowHourMinute,ref nowScheduleData))
-                { 
-                    behaviorCanBreak = nowScheduleData.canBreak;
-                    PauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
-                    return nowScheduleData.externalBehavior;
-                }
-            }
-            else
-            {
-                Debug.Log($"{npcName}-无nPCTaskScheduleTimeList");
-            }
-        }
-        catch
-        {
-        }
-         
-        behaviorCanBreak = false;
-        PauseWhenDisabled = false;
-        return null;
-    }
 
     public void Dispose()
     {
@@ -882,85 +695,7 @@ public class NPC : IReferenceData
     }
 }
 
-public class NPCTaskScheduleTimeList
-{
-    private List<TaskScheduleModelData> taskScheduleModelDatas = new List<TaskScheduleModelData>();
 
-    public NPCTaskScheduleTimeList(List<TaskScheduleModelData> taskScheduleModelDatas)
-    {
-        this.taskScheduleModelDatas = taskScheduleModelDatas;
-        nowTimeKeyIndex = 0;
-    }
-
-    private int nowTimeKeyIndex;
-
-    public bool GetTaskScheduleDataOrder(int2 time, ref NPCTaskScheduleData nPCTaskScheduleData)
-    {
-        if (taskScheduleModelDatas[nowTimeKeyIndex].gameTimeKey != time)
-        {
-           for(int i = 0; i < taskScheduleModelDatas.Count; i++)
-            {
-                if (taskScheduleModelDatas[i].gameTimeKey == time)
-                {
-                    nowTimeKeyIndex = i;
-                    break;
-                }
-            }
-        } 
-        if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
-        {
-            nowTimeKeyIndex = 0;
-        }
-        nPCTaskScheduleData = GetTaskSheduleData(time);
-
-        return true;
-    }
-
-    private NPCTaskScheduleData GetTaskSheduleData(int2 time)
-    {
-        if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
-        {
-            return null;
-        }
-        TaskScheduleModelData taskScheduleModelData = taskScheduleModelDatas[nowTimeKeyIndex];
-        int startM = taskScheduleModelData.gameTimeKey.minHour * 60 + taskScheduleModelData.gameTimeKey.minMinute;
-        int endM = taskScheduleModelData.gameTimeKey.maxHour * 60 + taskScheduleModelData.gameTimeKey.maxMinute;
-        int nowM = time.x * 60 + time.y;
-
-        float e_value = (nowM - startM) / (float)(endM - startM);
-
-        GameRandomData gameRandomData = new GameRandomData
-        {
-            id = -1,
-            weightRandom = true,
-            barrels = new List<int3>(),
-            randomItems = new List<RandomItem>(),
-            text = "选择目标"
-        };
-        for (int i = 0; i < taskScheduleModelData.dailyTaskDataItems.Count; i++)
-        {
-            int2 dailyItem = taskScheduleModelData.dailyTaskDataItems[i].GetNowTaskRandomValue(e_value);
-            RandomItem randomItem = new RandomItem
-            {
-                itemValue = dailyItem.x,
-                randomValue = dailyItem.y,
-                maxCount = 1,
-                minCount = 1
-            };
-            gameRandomData.randomItems.Add(randomItem);
-        }
-        gameRandomData.Pretreatment();
-        var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, 1);
-        if (randomResults.Count > 0)
-        {
-            if (NPCTaskScheduleManager.instance.GetTaskScheduleData(randomResults[0].x, out var nPCTaskScheduleData))
-            {
-                return nPCTaskScheduleData;
-            }
-        }
-        return null;
-    }
-}
 
 public class NPCManager : Singleton<NPCManager>
 {
@@ -971,9 +706,8 @@ public class NPCManager : Singleton<NPCManager>
     {
         base.Init();
         npcs.Clear(); 
-        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
-        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
-        GameActionManager.instance.AddListener<TryContinueBehavior>(TryContinueBehavior);
+        GameActionManager.instance.AddListener<GiveGift>(GiveGift); 
+
         GameActionManager.instance.AddListener<CheckNpcShopLink>(CheckNpcShopLink);
         GameActionManager.instance.AddListener<TryNPCJoinTeam>(TryNPCJoinTeam);
         GameActionManager.instance.AddListener<NewDay>(NewDay);
@@ -1085,20 +819,7 @@ public class NPCManager : Singleton<NPCManager>
             }
         }
         checkNpcShopLink.setResult(false);
-    }
-    private void UpdateGameTime(UpdateGameTime updateGameTime)
-    {
-        int perNum = npcs.length / 10;
-        for (int i = 0; i < npcs.length; i++)
-        {
-            if (npcs[i].Character == null || npcs[i].Character.mapInstance <= 0)
-            {
-                continue;
-            }
-            npcs[i].SetTimeBehaviorTree(updateGameTime);
-        }
-    }
-
+    }  
     private void GiveGift(GiveGift giveGift)
     {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
@@ -1184,13 +905,5 @@ public class NPCManager : Singleton<NPCManager>
         }
         var shopManager = ShopManager.instance;
 
-    }
-    public void TryContinueBehavior(TryContinueBehavior tryContinueBehavior)
-    {
-        if(GetNPCFormInstance(tryContinueBehavior.characterId,out var npc))
-        {
-            npc.RemoveOverrideHold(); 
-            npc.ResetCharacterBehavior();
-        }
     }
 }
