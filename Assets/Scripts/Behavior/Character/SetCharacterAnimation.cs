@@ -8,6 +8,7 @@ using BehaviorDesigner.Runtime.Tasks;
 
 public class SetCharacterAnimation : Action
 {
+    [SerializeField]
     private SharedInt characterId;
     public AnimationParameter[] animationParameters;
     public override void OnStart()

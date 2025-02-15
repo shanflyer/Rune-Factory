@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: "\u68DA\u5B50"
   barrierGrids: f0fffffff8ffffff0f000000f9fffffff0fffffffafffffffcfffffffbfffffff0fffffffcfffffffafffffffcfffffff0fffffffdfffffff0ffffff0b000000f1ffffff0b0000000f0000000b000000feffffff020000000100000002000000ffffffff01000000000000000100000003000000faffffff0f000000fbffffff05000000fcffffff0f000000fcffffff0f000000fdffffff0f0000000a000000
-  groundIndexes: 04000000040000000400000004000000
-  groundGrids: f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000
+  groundIndexes: 040000000400000004000000040000000400000004000000
+  groundGrids: f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000
   defaultGround: 2
   mapItems:
   - id: 1094
@@ -667,5 +667,23 @@ MonoBehaviour:
       m_RotationOrder: 4
   autoCreatTempNpc: 0
   tempNpcPrewarm: 0
-  npcBehaviorAreas: []
+  npcBehaviorAreas:
+  - Name: 43802
+    pos:
+      x: -3
+      y: 4
+    grids: f4fffffffdffffff110000000600000000000000faffffff0a000000fcffffff0b000000fbffffff11000000fcffffff
+    behaviorAreaType: 1
+  - Name: 43801
+    pos:
+      x: -3
+      y: 4
+    grids: f4fffffffbfffffffffffffffcffffff
+    behaviorAreaType: 4
+  - Name: 48013
+    pos:
+      x: -3
+      y: 4
+    grids: f4ffffff000000001100000006000000
+    behaviorAreaType: 5
   specialNpcBehaviorAreas: []

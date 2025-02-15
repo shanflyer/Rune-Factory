@@ -4,7 +4,6 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class MapObjPosSet : MonoBehaviour
 {
-    public bool staticObj = true;
    
     private Material mat;
     private void OnEnable()
@@ -14,7 +13,7 @@ public class MapObjPosSet : MonoBehaviour
             var spriteRenderer = GetComponent<Renderer>();
             mat = spriteRenderer.material;
         }
-        Invoke("SetMatPos", 0.2f); 
+       
     }
     
     void SetMatPos()
@@ -31,7 +30,7 @@ public class MapObjPosSet : MonoBehaviour
     Vector3 oldPos;
     private void LateUpdate()
     {
-        if(!staticObj&&oldPos!=transform.position)
+        if(oldPos!=transform.position)
         {
             SetMatPos();
         }

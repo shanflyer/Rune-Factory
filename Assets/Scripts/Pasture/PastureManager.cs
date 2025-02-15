@@ -421,7 +421,7 @@ public class PastureManager : Singleton<PastureManager>
         {
             instanceId = pasture.instanceId
         };
-        GameActionManager.instance.QueueAction(refreshPasture);
+        GameActionManager.instance.QueueAction(refreshPasture,true);
         pastures.Add(pasture.instanceId, pasture);
 
         SetItemAnimation setItemAnimation = new SetItemAnimation
@@ -590,13 +590,10 @@ public class PastureManager : Singleton<PastureManager>
     public async void CreatAnimal(AnimalSaveData animalSaveData)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(animalSaveData.dataId);
-        Animal animal = new Animal
-        {
-            name = animalSaveData.name,
-            instanceId=animalSaveData.instaceId,
+        Animal animal = new Animal(animalData,animalSaveData.instaceId, animalSaveData.name,animalSaveData.linkCharacterData)
+        {  
             animalState = animalSaveData.animalState,
-            animalData = animalData,
-            linkCharacterData = animalSaveData.linkCharacterData,
+            animalData = animalData, 
             pasture= animalSaveData.pasture,
             growthStage = animalSaveData.growthStage,
             growthDay=animalSaveData.growthDay,
@@ -617,9 +614,10 @@ public class PastureManager : Singleton<PastureManager>
                 mapInstance = pasture.linkRoom,
                 coordinateX = nextCoordinate.x,
                 coordinateY = nextCoordinate.y,
-                hideData = true
+                hideData = true,
+                setResult= SetResult
             };
-            GameActionManager.instance.QueueAction(creatCharacter);
+            GameActionManager.instance.QueueAction(creatCharacter,true);
             RefreshPasture refreshPasture = new RefreshPasture
             {
                 instanceId = pasture.instanceId
@@ -636,9 +634,10 @@ public class PastureManager : Singleton<PastureManager>
                 mapInstance = character.mapInstance,
                 coordinateX = character.coordinate.x,
                 coordinateY = character.coordinate.y,
-                hideData = true
+                hideData = true,
+                setResult = SetResult
             };
-            GameActionManager.instance.QueueAction(creatCharacter);
+            GameActionManager.instance.QueueAction(creatCharacter, true);
 
             JoinTeam joinTeam = new JoinTeam
             {
@@ -647,18 +646,17 @@ public class PastureManager : Singleton<PastureManager>
             };
             GameActionManager.instance.QueueAction(joinTeam);
         }
+
+        void SetResult(bool result)
+        {
+            animal.InitBehavior();
+        }
+       
     }
     private async void SampleCreatAnimal(SampleCreatAnimal sampleCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(sampleCreatAnimal.dataId);
-        Animal animal = new Animal
-        {
-            name = animalData.animalName,
-            animalState = AnimalState.正常,
-            animalData = animalData,
-            linkCharacterData = animalData.linkCharacter,
-            instanceId = MyInstance.instance.uid
-        };
+        Animal animal = new Animal(animalData,MyInstance.instance.uid);
 
    
         animals.Add(animal.instanceId, animal);
@@ -675,13 +673,14 @@ public class PastureManager : Singleton<PastureManager>
         void SetAnimalInstanceId(int value)
         {
             if (value != 0)
-            { 
-
+            {
+                animal.InitBehavior();
+                /*
                 if (animalData.externalBehavior != null)
                 {
                     CharacterBehaviorManager.instance.AddBehavior(animal.instanceId, animalData.externalBehavior);
                 }
-
+                */
                 GameDataSaveManager.instance.UserGameSaveData.SetAnimalData(animal);
             }
             JoinTeam joinTeam = new JoinTeam
@@ -696,14 +695,7 @@ public class PastureManager : Singleton<PastureManager>
     private async void TryCreatAnimal(TryCreatAnimal tryCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(tryCreatAnimal.dataId);
-        Animal animal = new Animal
-        {
-            name = animalData.animalName,
-            animalState = AnimalState.正常,
-            animalData = animalData,
-            linkCharacterData = animalData.linkCharacter,
-            instanceId=MyInstance.instance.uid
-        };
+        Animal animal = new Animal(animalData, MyInstance.instance.uid);
 
         if (pastures.TryGetValue(tryCreatAnimal.roomId, out var pasture))
         {
@@ -735,12 +727,13 @@ public class PastureManager : Singleton<PastureManager>
                     };
                     GameActionManager.instance.QueueAction(refreshPasture);
                 }
-
+                animal.InitBehavior();
+                /*
                 if (animalData.externalBehavior != null)
                 {
                     CharacterBehaviorManager.instance.AddBehavior(animal.instanceId, animalData.externalBehavior);
                 }
-
+                */
                 GameDataSaveManager.instance.UserGameSaveData.SetAnimalData(animal);
             }
             tryCreatAnimal.setValue(value);
@@ -772,6 +765,7 @@ public class PastureManager : Singleton<PastureManager>
                 isTemp = false
             };
             GameActionManager.instance.QueueAction(destoryCharacter);
+            animal.Dispose();
             animals.Remove(animal.Key);
 
             GameDataSaveManager.instance.UserGameSaveData.DeleteAnimal(animal.Key);
@@ -831,7 +825,9 @@ public class Pasture : IReferenceData
 public class Animal
 {
     public int instanceId;
-    public string name;
+    public string name=>string.IsNullOrEmpty(animalName)?animalData.animalName:animalName;
+    private string animalName;
+
     public int pasture;
     public AnimalData animalData;
     public int growthStage;
@@ -839,12 +835,35 @@ public class Animal
     public bool setFood;
     public AnimalState animalState;
     public int nowCD;
-    public int linkCharacterData;
+    public int linkCharacterData { get; private set; }
     public int Key => instanceId;
 
-    public Animal()
+    public int GetPastureRoom()
     {
+        if(PastureManager.instance.GetPasture(instanceId,out var pasture))
+        {
+            return pasture.linkRoom;
+        }
+        return 0;
+    }
 
+    public Animal(AnimalData animalData,int instanceId,string animalName=null,int linkCharacterData=0)
+    {
+        this.animalName = animalName;
+        this.animalData = animalData;
+        this.instanceId = instanceId;
+        this.linkCharacterData = animalData.linkCharacter;
+        animalState = AnimalState.正常;
+        if (linkCharacterData != 0)
+        {
+            this.linkCharacterData = linkCharacterData;
+        }
+        NPCTaskScheduleManager.instance.AddNPCBehavior(instanceId);
+    }
+    
+    public void InitBehavior()
+    {
+        NPCTaskScheduleManager.instance.SetNPCTaskScheduleTimeList(instanceId, animalData.dailyTasks, animalData.externalBehavior);
     }
     public static Color GetStateColor(AnimalState animalState)
     {
@@ -995,5 +1014,6 @@ public class Animal
 
     public void Dispose()
     {
+        NPCTaskScheduleManager.instance.RemoveBehavior(instanceId);
     }
 }

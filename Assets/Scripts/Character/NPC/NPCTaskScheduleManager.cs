@@ -121,6 +121,7 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
         {
             nPCBehavior.SetNPCTaskScheduleTimeList(dailyTasks, externalBehavior);
         }
+       
     }
     internal class NPCBehavior
     {

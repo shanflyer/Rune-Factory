@@ -265,7 +265,7 @@ public class FarmManager : Singleton<FarmManager>
                     instaceId = instanceId, 
                     PlantData = plantData,
                     field = creatPlant.fieldId,
-                    plantState = PlantState.正常,
+                    plantState =  PlantState.正常,
                     setWater = field.isSetWater
                 };
                 field.fieldState = FieldState.已平整;
@@ -455,7 +455,7 @@ public class Field
                 }
                 else
                 {
-                    plant.plantState = PlantState.正常;
+                    plant.plantState =PlantState.正常;
                     plant.growthStage = plantData.cycleStage;
                 }
             }
@@ -570,7 +570,7 @@ public class Field
                     plant.RefreshPlant();
                 }
             }
-            if (plant != null && plant.plantState == PlantState.正常 && plant.setWater)
+            if (plant != null && plant.plantState == PlantState.正常)
             {
                 plant.Grow();
             }
@@ -578,6 +578,7 @@ public class Field
         }
         else
         {
+            waterHour++;
             if (plant != null && plant.plantState == PlantState.正常 && plant.setWater)
             {
                 plant.Grow();

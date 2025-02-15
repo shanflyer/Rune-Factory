@@ -1293,11 +1293,11 @@ Shader "MySprite-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-                 ObjPos=UNITY_MATRIX_M._m03_m13_m23*NativePos+ObjPos*(1-NativePos);
+                 ObjPos=UNITY_MATRIX_M._m03_m13_m23*NativePos+ObjPos*(1-NativePos); 
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
-                _objSortPos.y+=_objSortPos.z;
+                _objSortPos.y+=_objSortPos.z*(1-stepPosZ);
  
 
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 
@@ -1348,7 +1348,7 @@ Shader "MySprite-Lit-Default"
                 half depth=i.color.z  +offset*clearColor;
                 half setpHigh=depthStep_G;   
 
-                //return float4(DepthTex.yyy,mainTex.a);
+                return float4(i.color.zzz,mainTex.a);
 
                 half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 

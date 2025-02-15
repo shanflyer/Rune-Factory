@@ -23,6 +23,7 @@ public class AnimalData : ScriptableObject, IGameData
     public int hungerEmote;
     public int productEmote;
     public int2 talkId;
+    public List<int> dailyTasks = new List<int>();
     public string behavior;
     public ExternalBehaviorTree externalBehavior;
 

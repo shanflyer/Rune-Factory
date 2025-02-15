@@ -31,7 +31,7 @@ public enum FlowCameraType
 
 public enum BehaviorAreaType
 {
-    创建, 聚集, 消失,特殊
+    创建, 聚集, 消失,特殊,食物区,睡眠区
 }
 
 [Serializable]

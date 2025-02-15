@@ -259,11 +259,6 @@ public static class GameCommon
     public const float waterRandomMin = 0;
     public const float waterRandomMax = 1;
 
-    public static int[] animalTasks = new int[3]
-    {
-        20,21,22
-    };
-
     /// <summary>
     /// 生成水面的噪声时对结果的重映射
     /// </summary>

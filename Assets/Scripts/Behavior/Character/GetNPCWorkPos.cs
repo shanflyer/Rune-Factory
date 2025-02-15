@@ -42,6 +42,16 @@ public class GetNPCWorkPos : Action
                 return TaskStatus.Success;
             }
         }
+        else if(PastureManager.instance.GetAnimal(characterId.Value,out var animal))
+        {
+            int room = animal.GetPastureRoom();
+            if (room!=0&&!TeamManager.instance.IsInTeam(characterId.Value))
+            {
+                var cell = MapCellController.instance.GetRandomBehavioCell(room, BehaviorAreaType.聚集);
+                result.SetValue(new int3(cell.xy, room));
+                return TaskStatus.Success;
+            }
+        }
 
         return TaskStatus.Failure;
     }

@@ -192,7 +192,6 @@ public class CommonToolEditor : MyEditor
                 if(spriteRenderer.gameObject.layer!= lightLayer)
                 {
                   var mapObjPosSet=  spriteRenderer.gameObject.AddComponent<MapObjPosSet>();
-                    mapObjPosSet.staticObj = staticObj;
                 }
             }
             PrefabUtility.SaveAsPrefabAsset(obj, $"{path}/{objs[i].Name}");
