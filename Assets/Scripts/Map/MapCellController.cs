@@ -1249,6 +1249,36 @@ public class MapCellController : Singleton<MapCellController>
         }
     }
 
+
+ 
+    public List<int> GetPlayerTriggerItem(int room, NativeHashSet<int2> cells)
+    {
+        if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
+        {
+            NativeHashSet<int> outItems = new NativeHashSet<int>(cells.Count, Allocator.Persistent);
+
+            GetTriggerPlayerItemJob triggerJob = new GetTriggerPlayerItemJob
+            {
+                TriggerAreas = runtimeMapRoom.playerTriggerAreas.triggerAreas,
+                cells= cells,
+                outItems=outItems
+            };
+            //triggerJob.Run(triggerEvents.Length);
+            triggerJob.Schedule(runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, 8).Complete();
+
+            List<int> results = new List<int>();
+            foreach(var item in outItems)
+            {
+                results.Add(item);
+            } 
+           
+            cells.Dispose();
+            outItems.Dispose();
+            return results;
+        }
+        return null;
+    }
+
     public bool GetCoordinates(int mapInstance, int2 source, int minRange, int maxRange, bool isWalkable, out List<int2> result)
     {
         if (GetRuntimeMapRoom(mapInstance, out var runtimeMapRoom))
@@ -2459,7 +2489,26 @@ public class MapCellController : Singleton<MapCellController>
             }
         }
     }
-
+    [BurstCompile]
+    public struct GetTriggerPlayerItemJob : IJobParallelFor
+    {
+        // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
+        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+ 
+        [ReadOnly] public NativeHashSet<int2> cells;  
+        [NativeDisableParallelForRestriction]
+        [WriteOnly]
+        public NativeHashSet<int> outItems;
+        public void Execute(int index)
+        {
+            TriggerArea triggerArea = TriggerAreas[index];
+            var results= triggerArea.cells.Intersect(cells); 
+            if (results.Count()>0)
+            {
+                outItems.Add(triggerArea.referenceId);
+            }
+        }
+    }
     /*
     public struct CellsDistanceJob : IJobParallelFor
     {

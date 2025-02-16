@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -44,6 +45,7 @@ public class ItemData : ScriptableObject, IGameData
     public string info;
     public string useInfo;
     public ItemType type;
+    public int2 range;
     public int otherType;
     public int typeValue;
     public bool isFresh;

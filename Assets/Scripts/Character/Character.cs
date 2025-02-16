@@ -1498,6 +1498,7 @@ public partial class Character
     /// <param name="coordinate">x.y;z:地图id</param>
     public void SetCoordinate(int3 coordinate)
     {
+        //int2 forwordCoordinate = objCoordinate.xy + 2 * GameCommon.GetDirectionInt2(direction);
         int2 oldCoordinate = objCoordinate.xy;
         if (mapInstance != coordinate.z)
         {
@@ -1553,7 +1554,7 @@ public partial class Character
                     break;
             }
             int3 checkCoordinate = coordinate;
-            checkCoordinate.xy += offsetCoordinate;
+            checkCoordinate.xy += offsetCoordinate*3;
 
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
            TriggerEventAction, oldOperateItem);

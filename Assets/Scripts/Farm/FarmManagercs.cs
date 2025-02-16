@@ -476,7 +476,7 @@ public class Field
                 Operates.Add(GameCommon.Watering);
                 break;
             case FieldState.已平整:
-                Operates.Add(GameCommon.SmoothField);
+                //Operates.Add(GameCommon.SmoothField);
                 Operates.Add(GameCommon.Watering); 
                 if (plant == null)
                 {

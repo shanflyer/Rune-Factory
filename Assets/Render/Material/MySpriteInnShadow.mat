@@ -14,6 +14,7 @@ Material:
   m_ValidKeywords:
   - SHADOWSTEP
   m_InvalidKeywords:
+  - NATIVEPOS_ON
   - _DAMPBLEND_ON
   - _DampBlend
   - _EMISSION
@@ -72,6 +73,7 @@ Material:
     m_Ints: []
     m_Floats:
     - EdgeValue: 0.1
+    - NativePos: 1
     - _AlphaClip: 0
     - _BackBlend: 0
     - _BlendRmapMin: 0

@@ -16,8 +16,10 @@ Material:
   - DAMPBLEND
   - MOVE
   - SEASONCOLORBLEND
+  - SKINNED_SPRITE
   - SNOWBLEND
   m_InvalidKeywords:
+  - NATIVEPOS_ON
   - SEASONCOLORBLEND_ON
   - _BACKBLEND_ON
   - _DampBlend
@@ -137,6 +139,7 @@ Material:
     m_Ints: []
     m_Floats:
     - EdgeValue: 0.1
+    - NativePos: 1
     - _AlphaCutoff: 0.5
     - _BackBlend: 1
     - _BlendRmapMin: 0
