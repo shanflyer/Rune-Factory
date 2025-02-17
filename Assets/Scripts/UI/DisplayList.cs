@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayList<T, V> where T : UIObjReference<V> where V : IReferenceData
+public class DisplayList<T, V> where T : UIObjReference<V> 
 {
     private Transform parent;
     private T listPrefab;

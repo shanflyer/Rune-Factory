@@ -113,6 +113,15 @@ public class ManufactureManager : Singleton<ManufactureManager>
             UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
         }
     }
+    public bool IsFormulaOpened(int formulaId)
+    {
+        if (GameDataSaveManager.instance.UserGameSaveData.openFormulas.Contains(formulaId))
+        {
+            return true;
+        }
+
+        return false;
+    }
     void ClearManufature(ClearManufature clearManufature)
     {
         if(Manufactures.TryGetValue(clearManufature.manufatureId,out var manufature))

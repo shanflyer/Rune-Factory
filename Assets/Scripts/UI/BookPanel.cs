@@ -10,6 +10,8 @@ public class BookPanel : GamePanel<IReferenceData>
     [SerializeField]
     Button characterButton;
     [SerializeField]
+    Button formulaButton;
+    [SerializeField]
     Button closeButton;
     public override void SetPanelUISerializeObj()
     {
@@ -17,6 +19,7 @@ public class BookPanel : GamePanel<IReferenceData>
         fishButton = FindChildGameObject<Button>("Fish");
         characterButton = FindChildGameObject<Button>("Character");
         closeButton = FindChildGameObject<Button>("ReturnButton");
+        formulaButton = FindChildGameObject<Button>("Create");
     }
     protected override void Awake()
     {
@@ -31,6 +34,9 @@ public class BookPanel : GamePanel<IReferenceData>
         {
           await  UIManager.instance.ShowGamePanel<FishPanel>();
         });
-        
+        formulaButton.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<FormulaPanel>();
+        });
     }
 }
