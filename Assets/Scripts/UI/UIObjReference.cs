@@ -14,9 +14,9 @@ public interface IReferenceData
 
 public delegate void SelectUIAction<T>(T t, bool selected = true) where T : BaseReference;
 
-public delegate void SelectAction<T>(T t, bool selected = true) where T : IReferenceData;
+public delegate void SelectAction<T>(T t, bool selected = true);
 
-public class UIObjReference<T> : BaseReference where T : IReferenceData
+public class UIObjReference<T> : BaseReference 
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     public Selectable guideSelectable;

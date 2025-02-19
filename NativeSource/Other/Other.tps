@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.1.0</string>
+        <string>7.5.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -161,7 +161,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Polygon</enum>
+            <enum type="SpriteSettings::TrimMode">CropKeepPos</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -173,6 +173,64 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">传动轴0.png</key>
+            <key type="filename">传动轴0_normal.png</key>
+            <key type="filename">传动轴1.png</key>
+            <key type="filename">传动轴1_normal.png</key>
+            <key type="filename">传动轴2.png</key>
+            <key type="filename">传动轴2_normal.png</key>
+            <key type="filename">传动轴3.png</key>
+            <key type="filename">传动轴3_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,8,12,16</rect>
+                <key>scale9Paddings</key>
+                <rect>6,8,12,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">磨坊0.png</key>
+            <key type="filename">磨坊1.png</key>
+            <key type="filename">磨坊2.png</key>
+            <key type="filename">磨坊3.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.85</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>30,63,60,126</rect>
+                <key>scale9Paddings</key>
+                <rect>30,63,60,126</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">磨坊0_normal.png</key>
+            <key type="filename">磨坊1_normal.png</key>
+            <key type="filename">磨坊2_normal.png</key>
+            <key type="filename">磨坊3_normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>30,63,60,126</rect>
+                <key>scale9Paddings</key>
+                <rect>30,63,60,126</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">鱼漂0.png</key>
             <key type="filename">鱼漂0_normal.png</key>
             <key type="filename">鱼漂1.png</key>
