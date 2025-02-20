@@ -1297,7 +1297,7 @@ Shader "MySprite-Lit-Default"
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
-                _objSortPos.y+=_objSortPos.z*(1-stepPosZ);
+                _objSortPos.y+=_objSortPos.z*stepPosZ;
  
 
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 
@@ -1309,6 +1309,8 @@ Shader "MySprite-Lit-Default"
               
                 stepPosZ=clamp(stepPosZ,0,1);
                 worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
+               // worldClip.y
+
                 worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
                 o.screenUV.xy=half2(ComputeScreenPos(o.positionCS/o.positionCS.w).xy); 
                  o.color.x=clamp(high,0,1);    
@@ -1348,7 +1350,7 @@ Shader "MySprite-Lit-Default"
                 half depth=i.color.z  +offset*clearColor;
                 half setpHigh=depthStep_G;   
 
-                return float4(i.color.zzz,mainTex.a);
+                //return float4(i.color.zzz,mainTex.a);
 
                 half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 

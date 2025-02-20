@@ -438,15 +438,15 @@ public class ManufacturePanel : GamePanel<Manufature>
                 for (int i = 0; i < formulaDatas.Value.Count; i++)
                 { 
                     Formula formula = formulaDatas.Value[i];
-                    if (!formula.opened)
+                    /*if (!formula.opened)
                     {
                         continue;
-                    }
+                    }*/
                     FormulaOptionData formulaOptionData = new FormulaOptionData
                     {
                         formulaId = formula.id,
                         open = formula.opened,
-                        text = formula.formulaData.formulaName
+                        text = formula.opened ? formula.formulaData.formulaName : "????"
                     };
                     formulaOptionDatas.Add(formulaOptionData);
                 }
@@ -461,15 +461,16 @@ public class ManufacturePanel : GamePanel<Manufature>
                     for (int i = 0; i < formulaDatas.Count; i++)
                     {
                         Formula formula = formulaDatas[i];
+                        /*
                         if (!formula.opened)
                         {
                             continue;
-                        }
+                        }*/
                         FormulaOptionData formulaOptionData = new FormulaOptionData
                         {
                             formulaId = formula.id,
                             open = formula.opened,
-                            text = formula.formulaData.formulaName
+                            text = formula.opened? formula.formulaData.formulaName:"????"
                         };
                         formulaOptionDatas.Add(formulaOptionData);
                     }
@@ -537,7 +538,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         else
         {
-            if (selectFormula.id != 0 && selectFormula.opened)
+            if (selectFormula != null && selectFormula.opened)
             {
                 product = selectFormula.formulaData.Product;
             }
@@ -662,10 +663,10 @@ public class ManufacturePanel : GamePanel<Manufature>
         ClearFormulaItemBoxReferences();
         produceCount = 1;
 
-        bool selectOpenFormula = selectFormula.id != 0 && selectFormula.opened;
+        bool selectOpenFormula =  selectFormula != null && selectFormula.opened;
         AutoSelect.interactable = selectOpenFormula;
 
-        if (selectFormula.id != 0)
+        if (selectOpenFormula)
         {
             for (int i = 0; i < selectFormula.formulaData.Stuffs.Count; i++)
             {
@@ -907,7 +908,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         base.InitReferenceData(v);
         InitData(v);
 
-        bool selectOpenFormula = selectFormula.id != 0 && selectFormula.opened;
+        bool selectOpenFormula = selectFormula != null && selectFormula.opened;
         AutoSelect.transform.localScale = selectOpenFormula ? Vector3.one : Vector3.zero;
     }
 

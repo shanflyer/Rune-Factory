@@ -593,7 +593,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         items.Add(instanceId);
 
-        if (!isInSaveData && mapItem.blindHomeEquipment != 0)
+        //if (!isInSaveData && mapItem.blindHomeEquipment != 0)
+        if ( mapItem.blindHomeEquipment != 0)
         {
             CreatHomeEquip creatHomeEquip = new CreatHomeEquip
             {
