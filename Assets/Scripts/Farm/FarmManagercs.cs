@@ -84,17 +84,10 @@ public class FarmManager : Singleton<FarmManager>
                 waterHour = fieldSaveData.waterHour
                
             };
+            var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId);
             if (fieldSaveData.PlantinstaceId != 0)
             {
-                field.plant = new Plant
-                {
-                    instaceId = fieldSaveData.PlantinstaceId,
-                    PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId),
-                    growthHour = fieldSaveData.growthHour,
-                    growthStage = fieldSaveData.growthStage,
-                    plantState = fieldSaveData.plantState,
-                    nowCycle = fieldSaveData.nowCycle,
-                };
+                field.plant = new Plant(fieldSaveData.PlantinstaceId, PlantData, field.instanceId, field.isSetWater,fieldSaveData.plantState,fieldSaveData.nowCycle); 
                 
                 AddMapItem addMapItem = new AddMapItem
                 {
@@ -202,7 +195,7 @@ public class FarmManager : Singleton<FarmManager>
                             {
                                 GameActionManager.instance.QueueAction(new DeleteMapItem
                                 {
-                                    mapItemInstanceId = field.plant.instaceId,
+                                    mapItemInstanceId = field.plant.instanceId,
                                     triggerClear = true
                                 });
                                 field.plant = null;
@@ -214,7 +207,7 @@ public class FarmManager : Singleton<FarmManager>
                         {
                             GameActionManager.instance.QueueAction(new DeleteMapItem
                             {
-                                mapItemInstanceId = field.plant.instaceId,
+                                mapItemInstanceId = field.plant.instanceId,
                                 triggerClear = true
                             });
                             field.plant = null;
@@ -260,14 +253,7 @@ public class FarmManager : Singleton<FarmManager>
             };
             void SetPlantInstanceId(int instanceId)
             {
-                Plant plant = new Plant
-                {
-                    instaceId = instanceId, 
-                    PlantData = plantData,
-                    field = creatPlant.fieldId,
-                    plantState =  PlantState.正常,
-                    setWater = field.isSetWater
-                };
+                Plant plant = new Plant(instanceId, plantData, field.instanceId, field.isSetWater); 
                 field.fieldState = FieldState.已平整;
                 field.plant = plant;
                 creatPlant.setResult(true); 
@@ -366,28 +352,19 @@ public class Field
         this.waterHour = waterHour;
         RefreshField();
     } 
-    public async void CreatePlant(int instanceId,int dataId,int growthHour,int growthStage, PlantState plantState,int nowCycle,bool setWater)
+    public async void CreatePlant(int instanceId,int dataId,float growthHour,int growthStage, PlantState plantState,int nowCycle,bool setWater)
     {
-        
-        _plant = new Plant
-        {
-            instaceId = instanceId,
-            PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(dataId),
-            growthHour = growthHour,
-            growthStage = growthStage,
-            plantState = plantState,
-            nowCycle = nowCycle,
-            setWater=setWater,
-            field=this.instanceId
-        };
-         
+        var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(dataId);
+        _plant = new Plant(instanceId, PlantData, this.instanceId, setWater, plantState, nowCycle);
+        plant.growthHour = growthHour;
+        plant.growthStage = growthStage;
 
         AddMapItem addMapItem = new AddMapItem
         {
             dataId = dataId,
             coordinate = coordinate,
             mapId = mapInstance,
-            fixeInstanceId = _plant.instaceId,
+            fixeInstanceId = _plant.instanceId,
             setResult =(bool result) =>
             {
                 plant.RefreshPlant();
@@ -404,7 +381,7 @@ public class Field
             plant.RefreshPlant();
             GameActionManager.instance.QueueAction(new DeleteMapItem
             {
-                mapItemInstanceId = plant.instaceId,
+                mapItemInstanceId = plant.instanceId,
                 triggerClear = true
             });
             plant = null;
@@ -555,7 +532,7 @@ public class Field
                     case PlantState.死亡:
                         DeleteMapItem deleteMapItem = new DeleteMapItem
                         {
-                            mapItemInstanceId = plant.instaceId,
+                            mapItemInstanceId = plant.instanceId,
                             triggerClear = true
                         };
                         GameActionManager.instance.QueueAction(deleteMapItem);
@@ -609,7 +586,7 @@ public class Field
                 case PlantState.死亡:
                     DeleteMapItem deleteMapItem = new DeleteMapItem
                     {
-                        mapItemInstanceId = plant.instaceId,
+                        mapItemInstanceId = plant.instanceId,
                         triggerClear = true
                     };
                     GameActionManager.instance.QueueAction(deleteMapItem);
@@ -672,17 +649,37 @@ public enum PlantState
 
 public class Plant
 { 
-    public int instaceId;
+    public int instanceId;
     public int field;
     public PlantData PlantData;
+    public HashSet<Season> goodSeason=new HashSet<Season>();
+    public HashSet<Season> badSeason=new HashSet<Season>();
     public int growthStage;
     //public int growthDay;
-    public int growthHour;
+    public float growthHour;
     public bool setWater;
     public PlantState plantState;
     public int nowCycle;
 
-    public int Key => instaceId;
+    public Plant(int instanceId,PlantData PlantData,int field,bool setWater,PlantState plantState=PlantState.正常,int nowCycle=0)
+    {
+        this.instanceId = instanceId;
+        this.PlantData = PlantData;
+        this.field = field;
+        this.setWater = setWater;
+        this.plantState = plantState;
+        this.nowCycle = nowCycle;
+        for(int i = 0; i < PlantData.goodSeason.Count; i++)
+        {
+            goodSeason.Add((Season)PlantData.goodSeason[i]);
+        }
+        for (int i = 0; i < PlantData.badSeason.Count; i++)
+        {
+            badSeason.Add((Season)PlantData.badSeason[i]);
+        }
+    }
+
+    public int Key => instanceId;
 
     public void RefreshPlant(bool isWater=false)
     {
@@ -708,14 +705,25 @@ public class Plant
         {
             keyX = growthStage,
             keyY = keyY,
-            id = instaceId
+            id = instanceId
         };
         GameActionManager.instance.QueueAction(setItemAnimation);
     }
 
     public void Grow()
     {
-        growthHour++;
+        if (goodSeason.Contains(GameTimeManager.instance.Season))
+        {
+            growthHour = growthHour + 2;
+        }else if (badSeason.Contains(GameTimeManager.instance.Season))
+        {
+            growthHour = growthHour + 0.5f;
+        }
+        else
+        {
+            growthHour = growthHour + 1;
+        }
+        
         var growthStateData = PlantData.growthStages[growthStage];
         if (growthHour >= growthStateData.growthHour)
         {

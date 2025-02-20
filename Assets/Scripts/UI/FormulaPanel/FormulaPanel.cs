@@ -111,7 +111,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
             }
         }
         rightFormulaList.InitListData(rightFormulaReferenceDatas, SelectFormulaData, toggleGroup);
-
+        leftFormulaList.SelectDefault();
     }
 
     public override void SetPanelUISerializeObj()

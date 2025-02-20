@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics; 
 using UnityEngine;
+using UnityEngine.UIElements;
 using VoxelBusters.EssentialKit; 
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
@@ -470,6 +471,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         UserGameSaveDataList.commonSaveData.diamond = diamond;
         CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
     }
+    
     public bool SetFishSaveData(int fish,int length,int place)
     {
         var saveData = UserGameSaveData;
@@ -499,6 +501,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return true;
         } 
     }
+   
     public FishSaveData GetFishDataSave(int id)
     {
         FishSaveData fishSaveData=null;

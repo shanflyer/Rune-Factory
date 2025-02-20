@@ -47,6 +47,7 @@ public class UserGameSaveData : IReferenceData
         mapLineSaveData.CopyData(userGameSaveData.mapLineSaveData);
         chapters.CopyData(userGameSaveData.chapters);
         fishSaveDatas.CopyData(userGameSaveData.fishSaveDatas);
+       // plantSaveDatas.CopyData(userGameSaveData.plantSaveDatas);
         changeMapItems.CopyData(userGameSaveData.changeMapItems);
         SetAnimationStateMapItems.CopyData(userGameSaveData.SetAnimationStateMapItems);
         mapHomeEquips.CopyData(userGameSaveData.mapHomeEquips);
@@ -94,6 +95,7 @@ public class UserGameSaveData : IReferenceData
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
     public IntIntDictionary mapLineSaveData = new IntIntDictionary();
 
+    //public IntPlantSaveDataDictionary plantSaveDatas = new IntPlantSaveDataDictionary();
     public IntFishSaveDataDataDictionary fishSaveDatas = new IntFishSaveDataDataDictionary(); 
     public IntHomeEquipSaveDataDictionary mapHomeEquips = new IntHomeEquipSaveDataDictionary();
     public IntAnimalSaveDataDictionary animals = new IntAnimalSaveDataDictionary();
@@ -604,7 +606,7 @@ public class FieldSaveData
     public int PlantinstaceId;
     public int PlantDataId;
     public int growthStage;
-    public int growthHour;
+    public float growthHour;
     public PlantState plantState;
     public int nowCycle;
     public FieldSaveData() { }
@@ -646,7 +648,7 @@ public class FieldSaveData
         }
         else
         {
-            PlantinstaceId = field.plant.instaceId;
+            PlantinstaceId = field.plant.instanceId;
             PlantDataId = field.plant.PlantData.id;
             growthStage = field.plant.growthStage;
             growthHour = field.plant.growthHour;
@@ -758,6 +760,17 @@ public class HomeEquipSaveData
     }
 }
 
+public class PlantSaveData
+{
+    public int dataId;
+    public int weight;
+    public PlantSaveData() { }
+    public PlantSaveData(PlantSaveData plantSaveData)
+    {
+        this.dataId = plantSaveData.dataId;
+        this.weight = plantSaveData.weight;
+    }
+}
 public class FishSaveData
 {
     public int dataId;

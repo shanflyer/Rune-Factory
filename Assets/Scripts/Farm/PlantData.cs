@@ -14,6 +14,11 @@ public class PlantData : ScriptableObject, IGameData
     public int pickTimes;
     public int cycleStage;
     public int mapItem;
+    public int openLevel;
+    private string plantIcon;
+    public List<int> goodSeason=new List<int>();
+    public List<int> badSeason = new List<int>();
+    public Sprite icon;
 
 #if UNITY_EDITOR
     public string GrowthStageStr; 
@@ -29,8 +34,25 @@ public class PlantData : ScriptableObject, IGameData
         return id.ToString();
     }
 #if UNITY_EDITOR
+    static Dictionary<string, Sprite> plantIconDic;
     public void SetReferenceData()
     {
+        if (plantIconDic == null)
+        {
+            plantIconDic = new Dictionary<string, Sprite>();
+            var icons = AssetDatabase.LoadAllAssetsAtPath("Assets/Texture/Farm/Farm.png");
+            for (int i = 0; i < icons.Length; i++)
+            {
+                var icon = icons[i];
+                if (icon is Sprite sprite)
+                {
+                    plantIconDic[sprite.name] = sprite;
+                }
+            }
+
+        }
+        plantIconDic.TryGetValue(plantIcon, out icon);
+
         var strs = GrowthStageStr.Split('|');
         for(int i = 0; i < strs.Length; i++)
         {

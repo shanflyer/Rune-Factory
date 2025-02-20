@@ -187,6 +187,7 @@ public class FishPanel : GamePanel<IReferenceData>
             }
         }
         rightFishList.InitListData(rightFishReferenceDatas, SelectFishReference, toggleGroup);
+        leftFishList.SelectDefault();
     }
 
     int selectFishDataId;

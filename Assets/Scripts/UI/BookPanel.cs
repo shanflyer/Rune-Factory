@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BookPanel : GamePanel<IReferenceData> 
-{ 
+{
+    [SerializeField]
+    Button plantButton;
     [SerializeField]
     Button fishButton; 
     [SerializeField]
@@ -16,6 +18,7 @@ public class BookPanel : GamePanel<IReferenceData>
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
+        plantButton = FindChildGameObject<Button>("Plant");
         fishButton = FindChildGameObject<Button>("Fish");
         characterButton = FindChildGameObject<Button>("Character");
         closeButton = FindChildGameObject<Button>("ReturnButton");
@@ -37,6 +40,10 @@ public class BookPanel : GamePanel<IReferenceData>
         formulaButton.onClick.AddListener(() =>
         {
             UIManager.instance.ShowGamePanel<FormulaPanel>();
+        });
+        plantButton.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<PlantPanel>();
         });
     }
 }

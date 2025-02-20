@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Purchasing.MiniJSON;
 using UnityEngine.UI;
 
 public class FishUIReference:UIObjReference<FishReferenceData>
@@ -22,6 +23,15 @@ public class FishUIReference:UIObjReference<FishReferenceData>
                 SelectAction(data, isOn);
             }
         });
+    }
+    public override void SelectDefault()
+    {
+        base.SelectDefault();
+        toggle.SetIsOnWithoutNotify(true);
+        if (SelectAction != null)
+        {
+            SelectAction(data, true);
+        }
     }
     public override void SetPanelUISerializeObj()
     {

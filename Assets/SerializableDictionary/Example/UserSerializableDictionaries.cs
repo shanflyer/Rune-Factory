@@ -66,7 +66,18 @@ public class IntChapterSaveDictionary : SerializableDictionary<int, ChapterSave>
         }
     }
 }
-
+public class IntPlantSaveDataDictionary : SerializableDictionary<int, PlantSaveData>
+{
+    public IntPlantSaveDataDictionary() { }
+    public void CopyData(IntPlantSaveDataDictionary data)
+    {
+        Clear();
+        foreach (var kvp in data)
+        {
+            this[kvp.Key] = new PlantSaveData(kvp.Value);
+        }
+    }
+}
 [Serializable]
 public class IntFishSaveDataDataDictionary : SerializableDictionary<int, FishSaveData>
 {
