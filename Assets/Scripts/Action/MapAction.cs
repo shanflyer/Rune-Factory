@@ -1040,6 +1040,30 @@ public struct TryRecycleItemEmote : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct TryUpDataItemEmote : GameAction
+{
+    public int id;
+    public int emote;
+    public int showTime;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Clear() { this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+
+
+        if (setResult != null)
+        {
+            this.setResult = setResult;
+        }
+        if (setValue != null)
+        {
+            this.setValue = setValue;
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct TryUpDataCharacterEmote : GameAction
 {
     public int id;

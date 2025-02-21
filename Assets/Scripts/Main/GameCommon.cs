@@ -210,6 +210,12 @@ public static class GameCommon
     public const int Harvesting = 22;//收获
     public const int Reaping = 26;//收割
     public const int Eradicate = 27;//铲除
+    public const int dryPlantEmote = 11;
+    public const int fritEmote = 12;
+    public const int plantDeath = 40;
+
+    public const int animalNeedFood = 32;
+
 
     public static int defaultOperateId = 0;
     public static int defaultPlayerTalkTime = 2000;

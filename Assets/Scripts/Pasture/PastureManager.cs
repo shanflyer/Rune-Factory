@@ -993,6 +993,11 @@ public class Animal
         if (result)
         {
             animalState = AnimalState.正常;
+            TryRecycleCharacterEmote tryRecycleCharacterEmote = new TryRecycleCharacterEmote
+            {
+                id = linkCharacterData
+            };
+            GameActionManager.instance.QueueAction(tryRecycleCharacterEmote);
         }
         else
         {
@@ -1008,6 +1013,17 @@ public class Animal
             else
             {
                 animalState = AnimalState.饥饿;
+                var character = CharacterManager.instance.GetCharacter(linkCharacterData);
+                if (character.mapInstance == WorldMapObjManager.instance.displayMap)
+                {
+                    TryUpDataCharacterEmote tryUpDataCharacterEmote = new TryUpDataCharacterEmote
+                    {
+                        emote = GameCommon.animalNeedFood,
+                        id = linkCharacterData,
+                        showTime = -1
+                    };
+                    GameActionManager.instance.QueueAction(tryUpDataCharacterEmote);
+                }
             }
         }
     }

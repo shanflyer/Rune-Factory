@@ -46,7 +46,20 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
         GameActionManager.instance.AddListener<TrySicklePlant>(TrySicklePlant);
         GameActionManager.instance.AddListener<CheckPlant>(CheckPlant);
+        GameActionManager.instance.AddListener<ChangeMapRoom>(ChangeMapRoom);
     }
+    
+    void ChangeMapRoom(ChangeMapRoom changeMapRoom)
+    {
+        foreach(var field in fields.Values)
+        {
+            if (field.mapInstance == changeMapRoom.newRoom)
+            {
+                field.plant.RefreshPlant();
+            }
+        }
+    }
+
     void SetWeather(SetWeather setWeather)
     {
         if (setWeather.weather.waterFall > 0)
@@ -345,6 +358,7 @@ public class Field
     public int waterHour;
 
     private Plant _plant;
+  
     public void SetData(FieldState fieldState, bool isSetWater,int waterHour)
     {
         this.fieldState = fieldState;
@@ -383,7 +397,7 @@ public class Field
             {
                 mapItemInstanceId = plant.instanceId,
                 triggerClear = true
-            });
+            }); 
             plant = null;
 
             RefreshField(); 
@@ -681,26 +695,55 @@ public class Plant
 
     public int Key => instanceId;
 
-    public void RefreshPlant(bool isWater=false)
+    public void RefreshPlant()
     {
         int keyY = 0;
+       
+        bool needShowDryEmote=false;
         switch (plantState)
         {
             case PlantState.正常:
-            case PlantState.成熟: 
-                keyY =isWater?3: 0;
+                keyY = setWater ? 3 : 0;
+                needShowDryEmote = !setWater;
+                break;
+            case PlantState.成熟:
+                keyY = setWater ? 3 : 0;
+                TryUpDataItemEmote tryUpDataItemEmote = new TryUpDataItemEmote
+                {
+                    id = instanceId,
+                    showTime = -1,
+                    emote = GameCommon.fritEmote
+                };
+                GameActionManager.instance.QueueAction(tryUpDataItemEmote);
                 break;
 
             case PlantState.干旱:
+                needShowDryEmote = true;
                 keyY = 1;
                 break;
 
             case PlantState.枯死:
             case PlantState.死亡:
                 keyY = 2;
+                tryUpDataItemEmote = new TryUpDataItemEmote
+                {
+                    id = instanceId,
+                    showTime = -1,
+                    emote = GameCommon.plantDeath
+                };
+                GameActionManager.instance.QueueAction(tryUpDataItemEmote);
                 break;
         }
-
+        if (needShowDryEmote)
+        {
+            TryUpDataItemEmote tryUpDataItemEmote = new TryUpDataItemEmote
+            {
+                id = instanceId,
+                showTime = -1,
+                emote = GameCommon.dryPlantEmote
+            };
+            GameActionManager.instance.QueueAction(tryUpDataItemEmote);
+        }
         SetItemAnimation setItemAnimation = new SetItemAnimation
         {
             keyX = growthStage,

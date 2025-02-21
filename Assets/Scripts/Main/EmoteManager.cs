@@ -70,8 +70,19 @@ public class EmoteManager : Singleton<EmoteManager>
         GameActionManager.instance.AddListener<TryRecycleCharacterEmote>(TryRecycleCharacterEmote);
         GameActionManager.instance.AddListener<TryRecycleItemEmote>(TryRecycleItemEmote);
         GameActionManager.instance.AddListener<TryUpDataCharacterEmote>(TryUpDataCharacterEmote);
+        GameActionManager.instance.AddListener<TryUpDataItemEmote>(TryUpDataItemEmote);
     }
 
+    void TryUpDataItemEmote(TryUpDataItemEmote TryUpDataItemEmote)
+    {
+
+        if (itemEmoteRuntimes.TryGetValue(TryUpDataItemEmote.id, out var runtimeObj))
+        {
+            runtimeObj.Recycle();
+            itemEmoteRuntimes.Remove(TryUpDataItemEmote.id);
+        }
+        ShowEmote(TryUpDataItemEmote.emote, EntityType.地图道具, TryUpDataItemEmote.id, TryUpDataItemEmote.showTime);
+    }
     private void TryRecycleItemEmote(TryRecycleItemEmote TryRecycleItemEmote)
     {
         if(itemEmoteRuntimes.TryGetValue(TryRecycleItemEmote.id, out var runtimeObj))

@@ -206,6 +206,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             if (_displayMap != value)
             {
+                ChangeMapRoom changeMapRoom = new ChangeMapRoom
+                {
+                    oldRoom = _displayMap,
+                    newRoom = value
+                };
+                GameActionManager.instance.QueueAction(changeMapRoom);
                 _displayMap = value;
                 SwitchAutoStore switchAutoStore = new SwitchAutoStore
                 {
