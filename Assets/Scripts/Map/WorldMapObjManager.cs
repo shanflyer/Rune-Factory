@@ -509,9 +509,9 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             };
 
             DeleteMapPackageItemRender(runTimeMapItemData.Key);
-            GameActionManager.instance.QueueAction(displayStoreCounter, true);
+            GameActionManager.instance.QueueAction(displayStoreCounter, true); 
+            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = runTimeMapItemData.Key }, true);
             runTimeMapItemData.Value.Recycle();
-            EmoteManager.instance.TryRecycleItemEmote(runTimeMapItemData.Key);
             manufatureObjs.Remove(runTimeMapItemData.Key);
         }
         var temps = tempRuntimeMapItemObjs.Keys.ToArray();
@@ -577,12 +577,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             RuntimeObj.Recycle();
             nowRuntimeMapItemObjs.Remove(mapItemInstanceId);
-            EmoteManager.instance.TryRecycleItemEmote(mapItemInstanceId);
+            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = mapItemInstanceId },true); 
             manufatureObjs.Remove(mapItemInstanceId);
 
             RemoveRuntimePackage removeRuntimePackage = new RemoveRuntimePackage
             {
-                key = new Vector2Int(WorldMapObjManager.instance.displayMap, mapItemInstanceId)
+                key = new Vector2Int(displayMap, mapItemInstanceId)
             };
             GameActionManager.instance.QueueAction(removeRuntimePackage);
             DeleteMapPackageItemRender(mapItemInstanceId);
@@ -609,7 +609,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             if (refreshManufature.manufature.product.x == 0)
             {
-                EmoteManager.instance.TryRecycleItemEmote(refreshManufature.manufature.instanceId);
+                GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = refreshManufature.manufature.instanceId }, true); 
             }
             else if (refreshManufature.manufature.waitTime > GameTimeManager.instance.totalMinute)
             {

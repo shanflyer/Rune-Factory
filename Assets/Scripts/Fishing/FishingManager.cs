@@ -40,6 +40,11 @@ public class FishingManager : Singleton<FishingManager>
 
     private async void FishingIsSuccess(FishingIsSuccess fishingIsSuccess)
     {
+        TryRecycleCharacterEmote tryRecycleCharacterEmote = new TryRecycleCharacterEmote
+        {
+            id = fishingIsSuccess.characterId
+        };
+        GameActionManager.instance.QueueAction(tryRecycleCharacterEmote, true);
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == fishingIsSuccess.characterId;
         if (isController)
         {

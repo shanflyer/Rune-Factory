@@ -200,6 +200,8 @@ public static class GameCommon
     //钓鱼
     public const int GetFish = 41;//收竿
     public const int StartFish = 40;//钓鱼
+    public const int GetFishEmote = 0;
+    public const int NotGetFishEmote =24;
 
     //土地
     public const int SmoothField = 10;//锄地

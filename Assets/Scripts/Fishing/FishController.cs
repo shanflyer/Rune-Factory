@@ -153,7 +153,7 @@ public class FishController : Singleton<FishController>
 
 public class FisherRuntime
 {
-    public int intanceId; 
+    public int instanceId; 
     public int roomId;
 
     public RuntimeObj runtimeObj;
@@ -163,10 +163,26 @@ public class FisherRuntime
     {
         (runtimeObj.obj as FishTool).transform.position = pos;
     }
-     
+
+    private TryUpDataCharacterEmote characterEmote;
+    void FishGetChangeAction()
+    {
+        AudioController.instance.PlayAudio(SE.Fishing_FishingThrowingTrap);
+        characterEmote.id = instanceId;
+        characterEmote.emote = GameCommon.GetFishEmote;
+        characterEmote.showTime = 2;
+        GameActionManager.instance.QueueAction(characterEmote, true);
+    }
+    void FishNotGetChangeAction()
+    {
+        characterEmote.id = instanceId;
+        characterEmote.emote = GameCommon.NotGetFishEmote;
+        characterEmote.showTime = 2;
+        GameActionManager.instance.QueueAction(characterEmote, true);
+    }
     public FisherRuntime(RuntimeObj runtimeObj, int characterId, int roomId, FishPondData fishPondData)
     {
-        intanceId = characterId;
+        instanceId = characterId;
         this.runtimeObj = runtimeObj;
         this.roomId = roomId;
         if (runtimeObj == null || runtimeObj.obj == null)
@@ -176,6 +192,8 @@ public class FisherRuntime
         else
         {
             fishTool = runtimeObj.obj as FishTool;
+            fishTool.GetChangeAction = FishGetChangeAction;
+            fishTool.NotGetChangeAction = FishNotGetChangeAction;
         }
         this.fishPondData = fishPondData;
     }

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameTimerController : Singleton<GameTimerController>
-{
-    private ConcurrentDictionary<Action, CancellationTokenSource> waitTasks = new ConcurrentDictionary<Action, CancellationTokenSource>();
-    private Dictionary<Action,IEnumerator> waitIenumerators= new Dictionary<Action,IEnumerator>();
+{ 
+    private ConcurrentDictionary<Action,IEnumerator> waitEnumerators= new ConcurrentDictionary<Action,IEnumerator>();
 
 
     Queue<Action> activeActions = new Queue<Action>();
@@ -21,8 +20,7 @@ public class GameTimerController : Singleton<GameTimerController>
     }
     protected override void Clear()
     {
-        base.Clear();
-        waitTasks.Clear();
+        base.Clear(); 
         activeActions.Clear();
 
     }
@@ -32,24 +30,13 @@ public class GameTimerController : Singleton<GameTimerController>
         if (action == null)
         {
             return;
-        }
-        if (waitIenumerators.TryGetValue(action, out var enumerator))
+        } 
+        if (waitEnumerators.TryRemove(action, out var enumerator))
         {
             GameController.instance.StopCoroutine(enumerator);
-        }
+        } 
         return;
-
-        try
-        {
-            if (waitTasks.TryRemove(action, out var tokenSource))
-            {
-                tokenSource.Cancel();
-                tokenSource.Dispose();
-            }
-        }
-        catch
-        { 
-        }
+ 
       
         
     }
@@ -57,34 +44,16 @@ public class GameTimerController : Singleton<GameTimerController>
     {
         if (GameDataManager.instance.GlobalData.debug)
             Debug.Log($"target:{action.Target}-Method:{action.Method}");
-        if (waitIenumerators.TryGetValue(action,out var enumerator))
+        if (waitEnumerators.TryRemove(action,out var enumerator))
         {
-            GameController.instance.StopCoroutine(enumerator);
-            waitIenumerators.Remove(action);
+            GameController.instance.StopCoroutine(enumerator); 
         }
         enumerator = WaitAction(delay, action);
-        GameController.instance.StartCoroutine(enumerator);
-        waitIenumerators[action] = enumerator;
+        GameController.instance.StartCoroutine(enumerator); 
+        waitEnumerators[action] = enumerator;
         return;
 
-        if (waitTasks.TryRemove(action, out var tokenSource))
-        {
-            tokenSource.Cancel();
-            tokenSource.Dispose();
-        } 
-        var tokenSource2 = new CancellationTokenSource();
-        CancellationToken ct = tokenSource2.Token;
-        Task task = Task.Factory.StartNew(async () =>
-        {
-            await Task.Delay(delay);
-            activeActions.Enqueue(action);
-           // Debug.Log($"延时入队{action.Target}");
-            //action.Invoke();
-            waitTasks.TryRemove(action, out var tokenSource);
-           // waitTasks.Remove(action);
-            tokenSource2.Dispose();
-        }, tokenSource2.Token);
-        waitTasks.TryAdd(action, tokenSource2); 
+         
     }
 
     IEnumerator WaitAction(int delay, Action action)
@@ -98,7 +67,11 @@ public class GameTimerController : Singleton<GameTimerController>
             yield return 0;
         }
         action.Invoke();
-        waitIenumerators.Remove(action); 
+        if(waitEnumerators.TryRemove(action, out var enumerator))
+        {
+            GameController.instance.StopCoroutine(enumerator);
+        }
+        
     }
 
     protected override void UpData()

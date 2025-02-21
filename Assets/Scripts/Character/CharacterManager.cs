@@ -53,12 +53,13 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void RecycleCharacterObj(Character character)
     {
+        GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.Clear();
             characterRuntionObjs.Remove(character);
         }
-        EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
+        
         FishController.instance.RecycleFisherObj(character.instanceId);
     }
 
@@ -353,8 +354,8 @@ public class CharacterManager : Singleton<CharacterManager>
                 character.ChangeData(ChangeCharacter.newDataId);
                 if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
-                    GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
-                    EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
+                    GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj); 
                     characterRuntionObjs.Remove(character);
 
                    await CreateCharacterObjAsync(character);
@@ -617,8 +618,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
-            EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
+            GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj); 
             characterRuntionObjs.Remove(character);
         }
         MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId, this is TempCharacter);
@@ -861,7 +862,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance != WorldMapObjManager.instance.displayMap)
             {
-                EmoteManager.instance.TryRecycleCharacterEmote(character.instanceId);
+                GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
                 RecycleCharacterObj(character);
             }
             else

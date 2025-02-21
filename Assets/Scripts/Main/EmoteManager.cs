@@ -67,26 +67,38 @@ public class EmoteManager : Singleton<EmoteManager>
         emoteAnimator = _emotePrefab.GetComponent<Animator>();
         GameActionManager.instance.AddListener<ShowEmote>(ShowEmote);
         GameActionManager.instance.AddListener<ShowRandomEmote>(ShowRandomEmote);
+        GameActionManager.instance.AddListener<TryRecycleCharacterEmote>(TryRecycleCharacterEmote);
+        GameActionManager.instance.AddListener<TryRecycleItemEmote>(TryRecycleItemEmote);
+        GameActionManager.instance.AddListener<TryUpDataCharacterEmote>(TryUpDataCharacterEmote);
     }
-    
-    public void TryRecycleItemEmote(int id)
+
+    private void TryRecycleItemEmote(TryRecycleItemEmote TryRecycleItemEmote)
     {
-        if(itemEmoteRuntimes.TryGetValue(id,out var runtimeObj))
+        if(itemEmoteRuntimes.TryGetValue(TryRecycleItemEmote.id, out var runtimeObj))
         {
             runtimeObj.Recycle();
-            itemEmoteRuntimes.Remove(id);
+            itemEmoteRuntimes.Remove(TryRecycleItemEmote.id);
+        } 
+    }
+    private void TryUpDataCharacterEmote(TryUpDataCharacterEmote tryUpDataCharacterEmote)
+    {
+        if (characterEmoteRuntimes.TryGetValue(tryUpDataCharacterEmote.id, out var runtimeObj))
+        {
+            runtimeObj.Recycle();
+            characterEmoteRuntimes.Remove(tryUpDataCharacterEmote.id);
         }
+        ShowEmote(tryUpDataCharacterEmote.emote, EntityType.角色, tryUpDataCharacterEmote.id, tryUpDataCharacterEmote.showTime);
     }
-    public void TryRecycleCharacterEmote(int id)
+    private void TryRecycleCharacterEmote(TryRecycleCharacterEmote TryRecycleCharacterEmote)
     {
-        if (characterEmoteRuntimes.TryGetValue(id, out var runtimeObj))
+        if (characterEmoteRuntimes.TryGetValue(TryRecycleCharacterEmote.id, out var runtimeObj))
         {
             runtimeObj.Recycle();
-            characterEmoteRuntimes.Remove(id);
+            characterEmoteRuntimes.Remove(TryRecycleCharacterEmote.id);
         }
     }
 
-    public async Task<RuntimeObj> GetEmote(int id, Transform parent)
+    private async Task<RuntimeObj> GetEmote(int id, Transform parent)
     {
         RuntimeObj runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Animator>(RuntimeObjType.EMOTE.ToString(),
             "emote", emoteAnimator, id, parent);
