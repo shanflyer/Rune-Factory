@@ -7,7 +7,18 @@ using UnityEngine.Playables;
 
 public class EmoteRuntime
 {
-    public RuntimeObj runtimeObj;
+    public RuntimeObj runtimeObj
+    {
+        get=>_runtimeObj;
+        set
+        {
+            if (!isRecycle)
+            {
+                _runtimeObj = value;
+            }
+        }
+    }
+    private RuntimeObj _runtimeObj;
     public Action waitAction;
     public EmoteData emote;
     public void InitData(EmoteData emoteData)
@@ -34,6 +45,7 @@ public class EmoteRuntime
         playableOutput.SetSourcePlayable(clipPlayable);
         playableGraph.Play(); 
     }
+    bool isRecycle = false;
     public void Recycle()
     {
         if (runtimeObj!= null){
@@ -48,6 +60,7 @@ public class EmoteRuntime
         }
         runtimeObj = null;
         waitAction = null;
+        isRecycle = true;
 
     }
 }
@@ -75,7 +88,6 @@ public class EmoteManager : Singleton<EmoteManager>
 
     void TryUpDataItemEmote(TryUpDataItemEmote TryUpDataItemEmote)
     {
-
         if (itemEmoteRuntimes.TryGetValue(TryUpDataItemEmote.id, out var runtimeObj))
         {
             runtimeObj.Recycle();
@@ -129,12 +141,11 @@ public class EmoteManager : Singleton<EmoteManager>
             case EntityType.角色:
                 if (!characterEmoteRuntimes.TryGetValue(entityId, out emoteRuntime))
                 {
-
                     if (CharacterManager.instance.GetRuntimeCharacterObj(entityId, out var characterRuntimeObj))
                     {
                         emoteRuntime = new EmoteRuntime();
-                        emoteRuntime.runtimeObj = await GetEmote(emoteId, characterRuntimeObj.transform);
                         characterEmoteRuntimes[entityId] = emoteRuntime;
+                        emoteRuntime.runtimeObj = await GetEmote(emoteId, characterRuntimeObj.transform); 
                     }
                 }
                 break;
@@ -146,8 +157,8 @@ public class EmoteManager : Singleton<EmoteManager>
                     if (WorldMapObjManager.instance.GetRuntimeMapItemObj(entityId, out var itemRuntimeObj))
                     {
                         emoteRuntime = new EmoteRuntime();
-                        emoteRuntime.runtimeObj = await GetEmote(emoteId, itemRuntimeObj.transform);
                         itemEmoteRuntimes[entityId] = emoteRuntime;
+                        emoteRuntime.runtimeObj = await GetEmote(emoteId, itemRuntimeObj.transform); 
                     }
                 }
                 break;
@@ -156,11 +167,20 @@ public class EmoteManager : Singleton<EmoteManager>
         {
             if (entityType == EntityType.地图道具)
             {
-                itemEmoteRuntimes.Remove(entityId);
+                if (itemEmoteRuntimes.TryGetValue(entityId, out var runtimeObj))
+                {
+                    runtimeObj.Recycle();
+                    itemEmoteRuntimes.Remove(entityId);
+                } 
             }
             else
             {
-                characterEmoteRuntimes.Remove(entityId);
+                if (characterEmoteRuntimes.TryGetValue(entityId, out var runtimeObj))
+                {
+                    runtimeObj.Recycle();
+                    characterEmoteRuntimes.Remove(entityId);
+                }
+                    
             }
             emoteRuntime = null;
             return;

@@ -520,11 +520,11 @@ public class Field
     }
     public void NewHour()
     { 
-        if (WeatherManager.instance.nowWaterFall <= 0)
+        if (WeatherManager.instance.nowWaterFall > 0)
         {
             waterHour=0;
         }
-        if (waterHour >= 24)
+        if (waterHour >= (!isSetWater?12:24))
         {
             waterHour = 0;
             isSetWater = false;
@@ -700,6 +700,7 @@ public class Plant
         int keyY = 0;
        
         bool needShowDryEmote=false;
+        GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = instanceId });
         switch (plantState)
         {
             case PlantState.正常:

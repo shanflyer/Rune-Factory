@@ -175,10 +175,8 @@ public class FisherRuntime
     }
     void FishNotGetChangeAction()
     {
-        characterEmote.id = instanceId;
-        characterEmote.emote = GameCommon.NotGetFishEmote;
-        characterEmote.showTime = 2;
-        GameActionManager.instance.QueueAction(characterEmote, true);
+        TryRecycleCharacterEmote tryRecycleCharacterEmote = new TryRecycleCharacterEmote { id = instanceId}; 
+        GameActionManager.instance.QueueAction(tryRecycleCharacterEmote, true);
     }
     public FisherRuntime(RuntimeObj runtimeObj, int characterId, int roomId, FishPondData fishPondData)
     {

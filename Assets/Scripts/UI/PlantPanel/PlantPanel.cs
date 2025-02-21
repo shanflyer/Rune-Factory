@@ -10,7 +10,7 @@ public class PlantPanel : GamePanel<IReferenceData>
     private Button closeButton;
 
     [SerializeField]
-    private TextMeshProUGUI PlantName, desc;
+    private TextMeshProUGUI PlantName, desc,otherDesc;
     [SerializeField]
     TextMeshProUGUI GoodSeason, BadSeason;
     [SerializeField]
@@ -70,6 +70,7 @@ public class PlantPanel : GamePanel<IReferenceData>
         closeButton = FindChildGameObject<Button>("Close");
         PlantName = FindChildGameObject<TextMeshProUGUI>("PlantName");
         desc = FindChildGameObject<TextMeshProUGUI>("Info");
+        otherDesc = FindChildGameObject<TextMeshProUGUI>("OtherInfo");
         plantUIReference = FindChildGameObject<PlantReference>("PlantReference");
         toggleGroup = GetComponent<ToggleGroup>();
         leftParent = FindChildGameObject("List0");
@@ -183,7 +184,7 @@ public class PlantPanel : GamePanel<IReferenceData>
             PlantName.SetSWText(plantData.plantName);
             ItemData seedData = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.seed);
             desc.SetSWText(seedData.info);
-
+            otherDesc.SetSWText(seedData.GetProperty().Replace("\n"," "));
             string _seasonStr = "";
             for(int i=0;i<plantData.goodSeason.Count;i++)
             {

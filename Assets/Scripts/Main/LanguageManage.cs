@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI; 
@@ -74,7 +75,35 @@ public class LanguageManage : Singleton<LanguageManage>
         }
         
     }
-   
+    public static string SwitchStr(object source, params object[] args)
+    {
+
+        source = SwitchStr(source.ToString());
+
+        if (args != null)
+        {
+            for (int i = 0; i < args.Length; i++)
+            {
+                args[i] = SwitchStr(args[i].ToString());
+            }
+        }
+
+        if (args != null)
+        {
+            var builder = new StringBuilder(source.ToString());
+            for (int i = 0; i < args.Length; i++)
+            {
+                var span = args[i].ToString().AsSpan();
+                builder.Append(span);
+            }
+           return builder.ToString();
+        }
+        else
+        {
+            return source.ToString();
+        }
+
+    }
     public static string SwitchStr(string s)
     {
         if (instance == null|| instance.LanguageSwitchDataList==null)

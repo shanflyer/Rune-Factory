@@ -1549,7 +1549,7 @@ public partial class Character
            TriggerEventAction,false, oldOperateItem);
             oldCoordinate = OldOperaCoordinate = checkCoordinate.xy;
 
-            checkCoordinate.xy += offsetCoordinate * 3;
+            checkCoordinate.xy += offsetCoordinate * 2;
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z,forwardCoordinate, checkCoordinate.xy,
           TriggerEventAction, true, oldOperateItem);
             forwardCoordinate = checkCoordinate.xy;

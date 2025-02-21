@@ -69,17 +69,66 @@ public class ItemData : ScriptableObject, IGameData
     [SerializeField]
     private CharacterProperty property;
     public CharacterProperty Property => property;
-    public string GetProperty()
+    public  string GetProperty()
     {
-        if(showProperty)
+        switch (type)
         {
-            return property.ToString();
-        }
-        else
-        {
+            case ItemType.种子:
+                string outStr =LanguageManage.SwitchStr("生长时间:", growHour, "小时","  ","采摘次数:",pickTimes,  "\n","成熟时间:", fruitHour, "小时", "  ", "单次产量:", fruitCount);
+                return outStr;
+            case ItemType.动物:
+                outStr = LanguageManage.SwitchStr("生长时间:", growHour, "天", "  ", "寿命:", animalDay, "天", "\n", "生产间隔:", fruitHour, "天", "  ", "单次产量:", fruitCount);
+                return outStr;
+            default:
+                if (showProperty)
+                {
+                    return property.ToString();
+                }
+                else
+                {
 
-            return property.GetItemProperty() ;
+                    return property.GetItemProperty();
+                }
+               
         }
+       
+    }
+    int growHour = 0;
+    int fruitHour = 0;
+    int fruitCount = 0;
+    int pickTimes = 0;
+
+    int animalDay = 0;
+    
+    public async void Init()
+    {
+        switch (type)
+        {
+            case ItemType.种子:
+                PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(typeValue);
+                if (plantData != null)
+                {
+                    pickTimes = plantData.pickTimes;
+                    fruitCount = plantData.fruitCount;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        growHour += plantData.growthStages[i].growthHour;
+                    }
+                    fruitHour = plantData.growthStages[4].growthHour + plantData.growthStages[5].growthHour;
+                }
+                break;
+            case ItemType.动物:
+                AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(typeValue);
+                if(animalData != null)
+                {
+                    growHour = animalData.growthStages[0].growthHour;
+                    animalDay = animalData.growthStages[0].growthHour + animalData.growthStages[1].growthHour;
+                    fruitHour = animalData.productCD;
+                    fruitCount = animalData.productCount;
+                }
+                break;
+        }
+         
     }
     public override string ToString()
     {
