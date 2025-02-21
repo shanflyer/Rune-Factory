@@ -387,6 +387,7 @@ public class MapCellController : Singleton<MapCellController>
             neighbourMaps.Dispose();
             commonTriggerAreas.Dispose();
             playerTriggerAreas.Dispose();
+            playerForwardTriggerAreas.Dispose();
         }
 
         public int id;
@@ -407,13 +408,14 @@ public class MapCellController : Singleton<MapCellController>
 
         public MapTriggerAreas commonTriggerAreas;
         public MapTriggerAreas playerTriggerAreas;
-
+        public MapTriggerAreas playerForwardTriggerAreas;
         public int Key => id;
 
         public void InitTriggerData()
         {
             commonTriggerAreas.InitTriggerData();
             playerTriggerAreas.InitTriggerData();
+            playerForwardTriggerAreas.InitTriggerData();
         }
 
         public bool GetLinkMapInCoordinate(int linkMap, ref int2 inCoordinate)
@@ -1003,7 +1005,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="enterEventId"></param>
     /// <param name="linkId"></param>
     /// <param name="offset"></param>
-    public void AddPlayerTriggerCell(int2[] cells, int room, int enterEventId, int linkId, int2 offset)
+    public void AddPlayerTriggerCell(int2[] cells, int room, int enterEventId, int linkId, int2 offset,bool isForward)
     {
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
@@ -1018,7 +1020,15 @@ public class MapCellController : Singleton<MapCellController>
             {
                 triggerArea.cells.Add(cells[i] + offset);
             }
-            runtimeMapRoom.playerTriggerAreas.AddTriggerCell(triggerArea);
+            if (isForward)
+            {
+                runtimeMapRoom.playerForwardTriggerAreas.AddTriggerCell(triggerArea);
+            }
+            else
+            {
+                runtimeMapRoom.playerTriggerAreas.AddTriggerCell(triggerArea);
+            }
+            
             //runtimeMapRooms.SetData(runtimeMapRoom);
         }
     }
@@ -1034,6 +1044,7 @@ public class MapCellController : Singleton<MapCellController>
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             runtimeMapRoom.playerTriggerAreas.RemoveTriggerCell(linkId);
+            runtimeMapRoom.playerForwardTriggerAreas.RemoveTriggerCell(linkId);
             // runtimeMapRooms.SetData(runtimeMapRoom);
         }
     }
@@ -1069,16 +1080,16 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     public void CheckPlayerTriggerEvent(int room, int2 cell, bool exit,
-        TriggerEvent triggerEvent, int oldLink = 0, bool trueMove = true)
+        TriggerEvent triggerEvent,bool isForward, int oldLink = 0, bool trueMove = true)
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.Persistent);
+                (isForward?runtimeMapRoom.playerForwardTriggerAreas.triggerAreas.Length:runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.Persistent);
 
             SingleTriggerPlayerJob triggerJob = new SingleTriggerPlayerJob
             {
-                TriggerAreas = runtimeMapRoom.playerTriggerAreas.triggerAreas,
+                TriggerAreas = isForward?runtimeMapRoom.playerForwardTriggerAreas.triggerAreas: runtimeMapRoom.playerTriggerAreas.triggerAreas,
                 cell = cell,
                 exit = exit,
                 oldLinkId = oldLink,
@@ -1184,16 +1195,16 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="nowCell"></param>
     /// <param name="triggerEvent"></param>
     public void CheckPlayerTriggerEvent(int room, int2 oldCell, int2 nowCell,
-        TriggerEvent triggerEvent, int oldLink = 0, bool trueMove = true)
+        TriggerEvent triggerEvent,bool isFroward, int oldLink = 0, bool trueMove = true)
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+                (isFroward?runtimeMapRoom.playerForwardTriggerAreas.triggerAreas.Length: runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.TempJob);
 
             TriggerPlayerJob triggerJob = new TriggerPlayerJob
             {
-                TriggerAreas = runtimeMapRoom.playerTriggerAreas.triggerAreas,
+                TriggerAreas = isFroward ? runtimeMapRoom.playerForwardTriggerAreas.triggerAreas:runtimeMapRoom.playerTriggerAreas.triggerAreas,
                 oldCell = oldCell,
                 nowCell = nowCell,
                 oldLinkId = oldLink,

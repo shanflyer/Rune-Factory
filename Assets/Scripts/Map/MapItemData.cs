@@ -20,7 +20,7 @@ public class MapItemData : ScriptableObject, IGameData
     public GameObject itemObj;
 
     public List<int> colliderGrids, triggerGrids, playerTriggerGrids;
-
+    public bool isPlayerForwardTrigger;
 
     public int playerTriggerEvent;
     public List<int> operateIds = new List<int>();

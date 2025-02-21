@@ -1,4 +1,5 @@
-﻿using BehaviorDesigner.Runtime;
+﻿using UnityEngine;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
 
@@ -6,8 +7,10 @@ using System.Collections.Generic;
 [TaskName("检查快捷栏的道具")]
 public class CheckShortcutItem : Action
 {
+    [SerializeField]
     public SharedInt characterId; 
     public SharedIntList checkValue;
+    [SerializeField]
     private SharedInt resultItem;
     private Character character;
     private ShortcutPackage shortcutPackage;
@@ -34,7 +37,8 @@ public class CheckShortcutItem : Action
             {
                 if (shortcutPackage.CheckItem(checkValue.Value[i],out List<int> item))
                 {
-                    resultItem.Value = item[0];
+                    if (resultItem != null)
+                        resultItem.Value = item[0];
                     return TaskStatus.Success;
                 }
             }

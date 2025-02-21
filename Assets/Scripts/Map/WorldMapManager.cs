@@ -646,7 +646,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             if (runtimeMapItem.mapItemData.playerTriggerGrids != null && runtimeMapItem.mapItemData.playerTriggerGrids.Count > 0)
             {
                 MapCellController.instance.AddPlayerTriggerCell(GameCommon.GridToCells(runtimeMapItem.mapItemData.playerTriggerGrids).ToArray(), mapId, runtimeMapItem.mapItemData.playerTriggerEvent,
-                    instanceId, mapItem.coordinate);
+                    instanceId, mapItem.coordinate,runtimeMapItem.mapItemData.isPlayerForwardTrigger);
             }
             if (runtimeMapItem.mapItemData.colliderGrids.Count > 0)
             {
@@ -853,7 +853,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     if (mapItemData.playerTriggerGrids != null && mapItemData.playerTriggerGrids.Count > 0)
                     {
                         MapCellController.instance.AddPlayerTriggerCell(GameCommon.GridToCells(mapItemData.playerTriggerGrids).ToArray(), moveMapItem.mapInstance, mapItemData.playerTriggerEvent,
-                            runtimeMapItem.instanceId, moveMapItem.coordinate);
+                            runtimeMapItem.instanceId, moveMapItem.coordinate, runtimeMapItem.mapItemData.isPlayerForwardTrigger);
                     }
                     if (mapItemData.colliderGrids.Count > 0)
                     {

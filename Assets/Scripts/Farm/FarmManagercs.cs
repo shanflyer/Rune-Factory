@@ -53,7 +53,7 @@ public class FarmManager : Singleton<FarmManager>
     {
         foreach(var field in fields.Values)
         {
-            if (field.mapInstance == changeMapRoom.newRoom)
+            if (field.plant!=null&&field.mapInstance == changeMapRoom.newRoom)
             {
                 field.plant.RefreshPlant();
             }

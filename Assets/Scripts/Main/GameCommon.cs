@@ -190,7 +190,7 @@ public static class GameCommon
     public static List<int> zeroNPC = new List<int>
     {
         1001,2001
-    };
+    }; 
     //组队
     public const int TeamFull = 5002;//人太多
     public const int TeamHurt = 5003;//受伤

@@ -893,6 +893,7 @@ public partial class Character
 
     public string name;
     private int3 objCoordinate;
+    private int2 forwardCoordinate;
 
     private AttributeType attackAttributeType,defenceAttributeType;
     public AttributeType AttackAttributeType => attackAttributeType;
@@ -1390,18 +1391,6 @@ public partial class Character
         GameActionManager.instance.QueueAction(refreshCharacter, true);
     }
 
-    public void SetPlayerOperate(int2 targetCoordinate)
-    {
-        int2 oldCoordinate = objCoordinate.xy;
-        if (OldOperaCoordinate.x != int.MinValue)
-        {
-            oldCoordinate = OldOperaCoordinate;
-        }
-        MapCellController.instance.CheckPlayerTriggerEvent(objCoordinate.z,
-            oldCoordinate, targetCoordinate,
-          TriggerEventAction, oldOperateItem, false);
-        OldOperaCoordinate = targetCoordinate;
-    }
 
     /// <summary>
     /// 事件触发
@@ -1513,7 +1502,7 @@ public partial class Character
                     oldOperaCoordinate = OldOperaCoordinate;
                 }
                 MapCellController.instance.CheckPlayerTriggerEvent(
-                objCoordinate.z, oldCoordinate, true, TriggerEventAction, oldOperateItem);
+                objCoordinate.z, oldCoordinate, true, TriggerEventAction,false, oldOperateItem);
 
                 /* DisplayMap displayMap = new DisplayMap
                  {
@@ -1554,11 +1543,16 @@ public partial class Character
                     break;
             }
             int3 checkCoordinate = coordinate;
-            checkCoordinate.xy += offsetCoordinate*3;
+        
 
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
-           TriggerEventAction, oldOperateItem);
+           TriggerEventAction,false, oldOperateItem);
             oldCoordinate = OldOperaCoordinate = checkCoordinate.xy;
+
+            checkCoordinate.xy += offsetCoordinate * 3;
+            MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z,forwardCoordinate, checkCoordinate.xy,
+          TriggerEventAction, true, oldOperateItem);
+            forwardCoordinate = checkCoordinate.xy;
         }
         SetObjCoordinate(coordinate);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
