@@ -23,7 +23,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
     [SerializeField]
     Transform leftParent, rightParent;
     [SerializeField]
-    TextMeshProUGUI formulaNameText, formulaInfoText, formulaTypeText;
+    TextMeshProUGUI formulaNameText, formulaInfoText, formulaTypeText,formulaMaterialText;
 
     DisplayList<FormulaReference, FormulaReferenceData> leftFormulaList, rightFormulaList;
     DisplayList<FormulaTagReference, FormulaType> formulaTagList;
@@ -130,6 +130,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
         formulaNameText = FindChildGameObject<TextMeshProUGUI>("FormulaName");
         formulaInfoText = FindChildGameObject<TextMeshProUGUI>("Info");
         formulaTypeText = FindChildGameObject<TextMeshProUGUI>("TypeValue");
+        formulaMaterialText = FindChildGameObject<TextMeshProUGUI>("Material");
 
         nextButton = FindChildGameObject<Button>("Next");
         frontButton = FindChildGameObject<Button>("Front");
@@ -139,7 +140,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
     {
         base.InitReferenceData(v);
     }
-    async void SelectFormulaData(FormulaReferenceData formulaReferenceData,bool selected)
+    void SelectFormulaData(FormulaReferenceData formulaReferenceData,bool selected)
     {
         if (selected)
         {
@@ -147,20 +148,25 @@ public class FormulaPanel : GamePanel<IReferenceData>
             {
                 formulaNameText.SetSWText(formulaReferenceData.formulaData.formulaName);
                 formulaTypeText.SetSWText(formulaReferenceData.formulaData.formulaType.ToString());
-                string[] formulaMats = new string[formulaReferenceData.formulaData.Stuffs.Count];
-                for(int i = 0; i < formulaReferenceData.formulaData.Stuffs.Count; i++)
+                List<string> formulaMats = new List<string>();
+                for(int i = 0; i < formulaReferenceData.formulaData.StuffItems.Count; i++)
                 {
-                    var stuff = formulaReferenceData.formulaData.Stuffs[i];
-                    ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(stuff);
-                    formulaMats[i] = itemData.itemName;
+                    ItemData itemData = formulaReferenceData.formulaData.StuffItems[i]; 
+                    formulaMats.Add(itemData.itemName);
+                    if(i< formulaReferenceData.formulaData.StuffItems.Count - 1)
+                    {
+                        formulaMats.Add(",");
+                    }
                 }
-                formulaInfoText.SetSWText("需要材料:", formulaMats); 
+                formulaMaterialText.SetADDText("需要材料:", formulaMats); 
+                formulaInfoText.SetSWText(formulaReferenceData.formulaData.ProductItem.info);
             }
             else
             {
                 formulaNameText.text = "????";
                 formulaInfoText.text = "??????????????????";
                 formulaTypeText.text = "????";
+                formulaMaterialText.SetADDText("需要材料:", "??????");
             }
         }
     }

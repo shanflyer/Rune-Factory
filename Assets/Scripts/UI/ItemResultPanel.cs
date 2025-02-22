@@ -39,6 +39,7 @@ public class ItemResultPanel :GamePanel<ItemResultInfo>
         {
             GameActionDataManager.instance.Action(data.actionId);
         }
+        GameNotificationManager.instance.TryContinueItemResultInfoShow();
     }
     public override void InitReferenceData(ItemResultInfo v)
     {

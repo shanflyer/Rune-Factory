@@ -21,7 +21,8 @@ public enum ItemType
     鞋子=7,
     帽子=8,
     家具 = 10, 
-    动物=11
+    动物=11,
+    农作物=12
 }
 public enum ShopMoneyType
 {

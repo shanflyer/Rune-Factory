@@ -313,7 +313,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 {
                     noticeStr = LanguageManage.SwitchStr("无法确定产出物，是否开始制作？");
                 }
-                else if (selectFormula != null && outItem.dataId == selectFormula.formulaData.Product)
+                else if (selectFormula != null && outItem.dataId == selectFormula.formulaData.ProductItem.id)
                 {
                     noticeStr = LanguageManage.SwitchStr("是否确定按配方开始制作？");
                 }
@@ -331,7 +331,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                         if (matchFormula != null)
                         {
                             manufature.matchFormula = matchFormula;
-                            productId = matchFormula.formulaData.Product;
+                            productId = matchFormula.formulaData.ProductItem.id;
                             if (ManufactureManager.instance.GetFormula(matchFormula.formulaData.id, out var formula))
                             {
                                 if (!formula.opened)
@@ -523,8 +523,8 @@ public class ManufacturePanel : GamePanel<Manufature>
             { 
                 if (matchFormula.opened)
                 {
-                    instanceId = formulaCount >= matchFormula.formulaData.Stuffs.Count ? 1 : -1;
-                    product = matchFormula.formulaData.Product;
+                    instanceId = formulaCount >= matchFormula.formulaData.StuffItems.Count ? 1 : -1;
+                    product = matchFormula.formulaData.ProductItem.id;
                     formulaCost = matchFormula.formulaData.PowerCost; 
                 }
 
@@ -540,15 +540,15 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             if (selectFormula != null && selectFormula.opened)
             {
-                product = selectFormula.formulaData.Product;
+                product = selectFormula.formulaData.ProductItem.id;
             }
             if (product != GameCommon.defaultProduct)
             {
                 bool match = true;
                 bool isSetMatch = true;
-                foreach (var id in selectFormula.formulaData.Stuffs)
+                foreach (var item in selectFormula.formulaData.StuffItems)
                 {
-                    var reference = FormulaItemBoxReferences.Find(f => f.Item.dataId == id);
+                    var reference = FormulaItemBoxReferences.Find(f => f.Item.dataId == item.id);
                     if (reference == null)
                     {
                         match = false;
@@ -668,9 +668,9 @@ public class ManufacturePanel : GamePanel<Manufature>
 
         if (selectOpenFormula)
         {
-            for (int i = 0; i < selectFormula.formulaData.Stuffs.Count; i++)
+            for (int i = 0; i < selectFormula.formulaData.StuffItems.Count; i++)
             {
-                int itemDataId = selectFormula.formulaData.Stuffs[i];
+                int itemDataId = selectFormula.formulaData.StuffItems[i].id;
                 Item item = new Item
                 {
                     instanceId = -1,
@@ -700,9 +700,9 @@ public class ManufacturePanel : GamePanel<Manufature>
             bool successSelect = true;
             produceCount = 1;
 
-            for (int i = 0; i < selectFormula.formulaData.Stuffs.Count; i++)
+            for (int i = 0; i < selectFormula.formulaData.StuffItems.Count; i++)
             {
-                int itemDataId = selectFormula.formulaData.Stuffs[i];
+                int itemDataId = selectFormula.formulaData.StuffItems[i].id;
                 int itemCount = PackageManager.instance.GetPlayerItemCount(itemDataId);
                 if (itemCount > 0)
                 {
@@ -735,7 +735,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             outItem = new Item
             {
                 instanceId = instanceId,
-                dataId = selectFormula.formulaData.Product,
+                dataId = selectFormula.formulaData.ProductItem.id,
                 count = 1
             };
             await OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
@@ -1024,7 +1024,8 @@ public class ManufacturePanel : GamePanel<Manufature>
                 icon = itemData.icon,
                 info0 = $"{LanguageManage.SwitchStr("获得")}+ {LanguageManage.SwitchStr(itemData.itemName)} + x{manufature.product.y}"
             };
-            UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+            GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
+            //UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
 
             await PackageManager.instance.SetItemInPackage(new Item { dataId = manufature.product.x, count = manufature.product.y }, CharacterManager.instance.controllerCharacter.characterPackage);
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("产物已经放到背包!"));

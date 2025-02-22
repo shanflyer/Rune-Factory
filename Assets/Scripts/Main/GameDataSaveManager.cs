@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -512,7 +513,39 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         return fishSaveData;
     }
+    public bool GetPlantFruitCount(int id,out int count)
+    {
+        if(UserGameSaveData.plantSaveDatas.TryGetValue(id,out var plantSaveData))
+        {
+            count = plantSaveData.fruitCount;
+            return true;
+        }
+        count = 0;
+        return false;
+    }
+    public async void SetPlantFruitCount(int id,int count)
+    {
+        if (!UserGameSaveData.plantSaveDatas.TryGetValue(id, out var plantSaveData))
+        {
+            plantSaveData = new PlantSaveData
+            {
+                dataId = id,
+                fruitCount = count
+            };
+            UserGameSaveData.plantSaveDatas.Add(id, plantSaveData);
 
+            PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(id);
+
+            ItemResultInfo itemResultInfo = new ItemResultInfo
+            {
+                icon = plantData.icon,
+                info0 = plantData.plantName,
+                info1="发现了新农作物！"
+            };
+            GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
+        }
+        plantSaveData.fruitCount += count;
+    }
   
     List<FieldInfo> UserGameSaveDataIntFields;
     List<FieldInfo> UserGameSaveDataStringFields;

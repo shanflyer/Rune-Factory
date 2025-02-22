@@ -179,7 +179,17 @@ public class Shop:IReferenceData
                 if (show)
                 {
                     ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item);
-                    InformationController.instance.AddInformation($"{LanguageManage.SwitchStr(itemData.itemName)}{LanguageManage.SwitchStr("已经开始售卖!")}");
+                    if (itemData.type == ItemType.种子 || itemData.type == ItemType.农作物)
+                    {
+                        GameDataSaveManager.instance.SetPlantFruitCount(itemData.typeValue, 0);
+                    }
+                    ItemResultInfo itemResultInfo = new ItemResultInfo
+                    {
+                        icon = itemData.icon,
+                        info0 = itemData.itemName,
+                        info1 = $"{LanguageManage.SwitchStr(shopData.shopName)}{LanguageManage.SwitchStr("已经开始售卖!")}"
+                    };
+                    GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo); 
                 } 
             } 
         }

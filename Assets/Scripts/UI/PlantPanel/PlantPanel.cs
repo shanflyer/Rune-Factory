@@ -181,26 +181,39 @@ public class PlantPanel : GamePanel<IReferenceData>
     {
         if (selected)
         {
-            PlantName.SetSWText(plantData.plantName);
-            ItemData seedData = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.seed);
-            desc.SetSWText(seedData.info);
-            otherDesc.SetSWText(seedData.GetProperty().Replace("\n"," "));
-            string _seasonStr = "";
-            for(int i=0;i<plantData.goodSeason.Count;i++)
+            if(GameDataSaveManager.instance.GetPlantFruitCount(plantData.id,out var count))
             {
-                _seasonStr =$"{_seasonStr}  {LanguageManage.SwitchStr((Season)plantData.goodSeason[i])}"; 
-            }
-            string _seasonStr1 = "";
-            for (int i = 0; i < plantData.badSeason.Count; i++)
-            {
-                _seasonStr1 = $"{_seasonStr1}  {LanguageManage.SwitchStr((Season)plantData.badSeason[i])}";
-            }
-            GoodSeason.text=(_seasonStr);
-            BadSeason.text = (_seasonStr1);
-            sellValue.text = plantData.openLevel.ToString();
+                PlantName.SetSWText(plantData.plantName);
+                ItemData seedData = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.seed);
+                desc.SetSWText(seedData.info);
+                otherDesc.SetSWText(seedData.GetProperty().Replace("\n", " "));
+                string _seasonStr = "";
+                for (int i = 0; i < plantData.goodSeason.Count; i++)
+                {
+                    _seasonStr = $"{_seasonStr}  {LanguageManage.SwitchStr((Season)plantData.goodSeason[i])}";
+                }
+                string _seasonStr1 = "";
+                for (int i = 0; i < plantData.badSeason.Count; i++)
+                {
+                    _seasonStr1 = $"{_seasonStr1}  {LanguageManage.SwitchStr((Season)plantData.badSeason[i])}";
+                }
+                GoodSeason.text = (_seasonStr);
+                BadSeason.text = (_seasonStr1);
+                sellValue.text = plantData.openLevel.ToString();
 
-            ItemData product = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.fruit);
-            price.text = product.sellPrice.ToString();
+                ItemData product = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.fruit);
+                price.text = product.sellPrice.ToString();
+            }
+            else
+            {
+                PlantName.text="????";
+                desc.text = "??????????";
+                otherDesc.text = "???????????";
+                GoodSeason.text = "???????????";
+                BadSeason.text = "???????????";
+                sellValue.text = "?";
+                price.text = "??";
+            } 
         }
     }
 }

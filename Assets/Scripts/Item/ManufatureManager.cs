@@ -7,14 +7,14 @@ using Unity.Mathematics;
 public class Formula
 {
     public FormulaData formulaData;
-    public ItemData product { get; private set; }
+    public ItemData product => formulaData.ProductItem;
     public bool opened;
     public int id => formulaData.id;
     public Formula(FormulaData formulaData,bool opened)
     {
         this.formulaData = formulaData;
         this.opened = opened;
-        product=GameDataManager.instance.GetData<ItemData>(formulaData.Product.ToString());
+         
     }
 }
 public class ManufactureManager : Singleton<ManufactureManager>
@@ -110,7 +110,8 @@ public class ManufactureManager : Singleton<ManufactureManager>
                 info0 = LanguageManage.SwitchStr("新配方获得!"),
                 info1 = string.Format(LanguageManage.SwitchStr("发现了制作<color=blue>{0}</color>的配方"), LanguageManage.SwitchStr(formula.formulaData.formulaName))
             };
-            UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+            GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
+            //UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
         }
     }
     public bool IsFormulaOpened(int formulaId)

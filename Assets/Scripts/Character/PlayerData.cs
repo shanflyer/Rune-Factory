@@ -47,7 +47,7 @@ public class UserGameSaveData : IReferenceData
         mapLineSaveData.CopyData(userGameSaveData.mapLineSaveData);
         chapters.CopyData(userGameSaveData.chapters);
         fishSaveDatas.CopyData(userGameSaveData.fishSaveDatas);
-       // plantSaveDatas.CopyData(userGameSaveData.plantSaveDatas);
+        plantSaveDatas.CopyData(userGameSaveData.plantSaveDatas);
         changeMapItems.CopyData(userGameSaveData.changeMapItems);
         SetAnimationStateMapItems.CopyData(userGameSaveData.SetAnimationStateMapItems);
         mapHomeEquips.CopyData(userGameSaveData.mapHomeEquips);
@@ -95,7 +95,7 @@ public class UserGameSaveData : IReferenceData
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
     public IntIntDictionary mapLineSaveData = new IntIntDictionary();
 
-    //public IntPlantSaveDataDictionary plantSaveDatas = new IntPlantSaveDataDictionary();
+    public IntPlantSaveDataDictionary plantSaveDatas = new IntPlantSaveDataDictionary();
     public IntFishSaveDataDataDictionary fishSaveDatas = new IntFishSaveDataDataDictionary(); 
     public IntHomeEquipSaveDataDictionary mapHomeEquips = new IntHomeEquipSaveDataDictionary();
     public IntAnimalSaveDataDictionary animals = new IntAnimalSaveDataDictionary();
@@ -763,12 +763,12 @@ public class HomeEquipSaveData
 public class PlantSaveData
 {
     public int dataId;
-    public int weight;
+    public int fruitCount;
     public PlantSaveData() { }
     public PlantSaveData(PlantSaveData plantSaveData)
     {
         this.dataId = plantSaveData.dataId;
-        this.weight = plantSaveData.weight;
+        this.fruitCount = plantSaveData.fruitCount;
     }
 }
 public class FishSaveData

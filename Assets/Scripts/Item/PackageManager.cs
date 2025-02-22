@@ -1367,8 +1367,16 @@ public class PackageManager : Singleton<PackageManager>
             }
 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-            if (!string.IsNullOrEmpty(itemData.name))
+            if (itemData!=null)
             {
+                if(instanceId== CharacterManager.instance.controllerCharacter.characterPackage)
+                {
+                    if (itemData.type == ItemType.种子|| itemData.type ==ItemType.农作物)
+                    {
+                        GameDataSaveManager.instance.SetPlantFruitCount(itemData.typeValue, 0);
+                    }
+                }
+
                 if (packageType == PackageType.鲜活 && !itemData.isFresh)
                 {
                     return item.count;

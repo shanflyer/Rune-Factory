@@ -818,7 +818,7 @@ public class Plant
                     growthHour = 0;
                     nowCycle++;
                 }
-
+                GameDataSaveManager.instance.SetPlantFruitCount(PlantData.id, PlantData.fruitCount);
                 await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage,true);
                 return true;
             }

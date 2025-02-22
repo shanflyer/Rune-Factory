@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Purchasing.MiniJSON;
 using UnityEngine.UI;
 
 public class FormulaReference : UIObjReference<FormulaReferenceData>
 {
     [SerializeField]
-    TextMeshProUGUI FormulaName;
+    private TextMeshProUGUI FormulaName;
+
     [SerializeField]
-    Image Icon;
+    private Image Icon;
+
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
+
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool isOn) =>
@@ -24,6 +25,7 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
             }
         });
     }
+
     public override void SelectDefault()
     {
         base.SelectDefault();
@@ -34,24 +36,36 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
             SelectAction(data, true);
         }
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         toggle = transform.GetComponentInChildren<Toggle>();
         FormulaName = FindChildGameObject<TextMeshProUGUI>("Name");
-        Icon = FindChildGameObject<Image>("Icon"); 
+        Icon = FindChildGameObject<Image>("Icon");
     }
+
     public override async Task InitData(FormulaReferenceData t, SelectAction<FormulaReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
-         
-        FormulaName.SetSWText(data.formulaData.formulaName);
-        ItemData productData = await GameDataManager.instance.GetAsyncData<ItemData>(data.formulaData.Product);
-        Icon.sprite = productData.icon;
-    }
+        ItemData productData = data.formulaData.ProductItem;
 
+        if (data.open)
+        {
+            FormulaName.SetSWText(data.formulaData.formulaName);
+            Icon.sprite = productData.icon;
+        }
+        else
+        {
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(1); 
+            Icon.sprite = itemData.icon;
+            FormulaName.SetSWText("????"); 
+        }
+       
+    }
 }
+
 public struct FormulaReferenceData : IReferenceData
 {
     public FormulaData formulaData;

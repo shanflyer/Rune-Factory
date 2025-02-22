@@ -21,7 +21,8 @@ public class GameManager : Singleton<GameManager>
             info0 = showItemResult.info,
             info1 = ""
         };
-        UIManager.instance.ShowGamePanel<ItemResultPanel,ItemResultInfo>(itemResultInfo);
+        GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
+        //UIManager.instance.ShowGamePanel<ItemResultPanel,ItemResultInfo>(itemResultInfo);
     }
     public async void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
     {

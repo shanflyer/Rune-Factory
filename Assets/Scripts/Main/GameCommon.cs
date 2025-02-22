@@ -140,7 +140,7 @@ public static class GameCommon
         {Direction.UP,new Vector2(0,0.6531f)},
         {Direction.DOWN,new Vector2(0,-0.39f)},
     };
-
+  
     public const int AddATBuff = 11;
     public const int AddDFBuff = 12;
     public const int AddSpeedBuff = 13;

@@ -12,21 +12,33 @@ public class FormulaData : ScriptableObject, IGameData, IReferenceData
     public string formulaName;
     public int id;
     public FormulaType formulaType;
-    public List<int> Stuffs;
-    public int Product;
+    [SerializeField]
+    private List<int> Stuffs;
+    [SerializeField]
+    private int Product;
     public int PowerCost;
     public int produceTime;
 
+    public ItemData ProductItem { get; private set; }
+    public List<ItemData> StuffItems { get; private set; }
     public string GetKey()
     {
         return id.ToString();
     }
-
+    public async void Init()
+    {
+        ProductItem = await GameDataManager.instance.GetAsyncData<ItemData>(Product);
+        StuffItems = new List<ItemData>();
+        for(int i = 0; i < Stuffs.Count; i++)
+        {
+            StuffItems.Add(await GameDataManager.instance.GetAsyncData<ItemData>(Stuffs[i]));
+        }
+    }
     public override string ToString()
     {
         return id.ToString();
     }
-
+   
     public void SetReferenceData()
     {
     }
