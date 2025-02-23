@@ -216,7 +216,7 @@ public class ShopPanel : GamePanel<ShopList>
         if (itemData != null)
         {
             selectItemName.SetADDText("+ ",itemData.itemName," +");
-            selectItemInfo.SetSWText(itemData.info);
+            selectItemInfo.SetSWText(itemData.GetInfo());
             selectItemProperty.SetSWText(itemData.GetProperty());
             selectItemIcon.sprite = itemData.icon;
             selectItemIcon.rectTransform.sizeDelta = GameCommon.SetImageSize(itemData.icon, new Vector2(32, 32));

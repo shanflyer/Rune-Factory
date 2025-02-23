@@ -282,8 +282,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 ItemIcon.enabled = true;
                 ItemIcon.SetNativeSize();
                 ItemName.SetADDText("+ ",itemData.itemName," +");
-                Type.SetSWText(itemData.type);
-                Info.SetSWText(itemData.info);
+                Type.SetSWText(itemData.GetInfo());
+                Info.SetSWText(itemData.GetInfo());
                 Property.text = itemData.GetProperty();
                 Price.text = itemData.sellPrice.ToString();
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;

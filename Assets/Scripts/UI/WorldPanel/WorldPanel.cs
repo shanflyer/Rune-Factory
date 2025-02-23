@@ -22,7 +22,8 @@ public class WorldPanel : GamePanel<MyInt>
 
     [SerializeField]
     private TextMeshProUGUI exploreValue;
-
+    [SerializeField]
+    private TextMeshProUGUI infoText;
     [SerializeField]
     private Button exploreButton;
 
@@ -48,7 +49,7 @@ public class WorldPanel : GamePanel<MyInt>
         exploreValue = FindChildGameObject<TextMeshProUGUI>("ExplorerValue");
         exploreButton = FindChildGameObject<Button>("ExplorerButton");
         closeButton = FindChildGameObject<Button>("Close");
-
+        infoText = FindChildGameObject<TextMeshProUGUI>("Info");
         seasons = new List<Season>();
         seasonFightChapterList = new List<FightChapterReference>();
         foreach (var s in Enum.GetValues(typeof(Season)))
@@ -103,7 +104,7 @@ public class WorldPanel : GamePanel<MyInt>
         {
             selectFightChapterId = uIFightChapterData.fightChapterId;
             chapterData = ExploreManager.instance.GetFightChapter(uIFightChapterData.fightChapterId);
-
+            infoText.SetSWText(chapterData.fightMapData.info);
             exploreValue.SetSWText("探索度:{0}%", chapterData.completeValue);
 
             List<MapItemReferenceData> list = new List<MapItemReferenceData>();

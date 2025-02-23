@@ -52,7 +52,7 @@ PlayerSettings:
   m_ActiveColorSpace: 0
   unsupportedMSAAFallback: 0
   m_SpriteBatchMaxVertexCount: 65535
-  m_SpriteBatchVertexThreshold: 600
+  m_SpriteBatchVertexThreshold: 300
   m_MTRendering: 1
   mipStripping: 0
   numberOfMipsStripped: 0
@@ -577,6 +577,9 @@ PlayerSettings:
   - m_BuildTarget: Android
     m_TextureStreamingEnabled: 0
     m_TextureStreamingPriority: 0
+  - m_BuildTarget: iPhone
+    m_TextureStreamingEnabled: 0
+    m_TextureStreamingPriority: 0
   m_BuildTargetGroupLoadStoreDebugModeSettings: []
   m_BuildTargetNormalMapEncoding:
   - m_BuildTarget: Android
@@ -866,7 +869,7 @@ PlayerSettings:
     VisionOS: TextMeshPro
     WebGL: TextMeshPro
     XboxOne: TextMeshPro
-    iPhone: TextMeshPro;ENABLE_VOXELBUSTERS_ESSENTIAL_KIT;IOS
+    iPhone: URP;TextMeshPro;ENABLE_VOXELBUSTERS_ESSENTIAL_KIT
     tvOS: TextMeshPro
   additionalCompilerArguments: {}
   platformArchitecture: {}

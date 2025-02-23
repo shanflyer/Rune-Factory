@@ -185,7 +185,7 @@ public class PlantPanel : GamePanel<IReferenceData>
             {
                 PlantName.SetSWText(plantData.plantName);
                 ItemData seedData = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.seed);
-                desc.SetSWText(seedData.info);
+                desc.SetSWText(seedData.GetInfo());
                 otherDesc.SetSWText(seedData.GetProperty().Replace("\n", " "));
                 string _seasonStr = "";
                 for (int i = 0; i < plantData.goodSeason.Count; i++)

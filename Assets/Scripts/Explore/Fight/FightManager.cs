@@ -587,13 +587,13 @@ public class FightManager : Singleton<FightManager>
         }
         return randomValue;
     }
-    private float GetAttributeTypeValue(AttributeType attributeType0, AttributeType attributeType1)
+    private float GetAttributeTypeValue(AttributeType attackAttributeType, AttributeType targetAttributeType)
     {
-        if (attributeType0 == AttributeType.无 || attributeType1 == AttributeType.无)
+        if (attackAttributeType == AttributeType.无 || targetAttributeType == AttributeType.无)
         {
             return 1.0f;
         }
-        int value = (int)attributeType0 - (int)attributeType1;
+        int value = (int)attackAttributeType - (int)targetAttributeType;
         if (math.abs(value) == 1)
         {
             if (value < 0)

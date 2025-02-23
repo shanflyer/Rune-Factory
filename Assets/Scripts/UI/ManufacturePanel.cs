@@ -1108,9 +1108,9 @@ public class ManufacturePanel : GamePanel<Manufature>
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 if (itemData != null)
                 {
-                    selectItemName.SetSWText(itemData.itemName);
+                    selectItemName.SetSWText(itemData.GetInfo());
                     ItemType.SetSWText(itemData.type.ToString());
-                    itemInfo.SetSWText(itemData.info);
+                    itemInfo.SetSWText(itemData.GetInfo());
                     itemProperty.SetSWText(itemData.GetProperty());
                     moneyValue.SetSWText(itemData.sellPrice.ToString());
                     ItemIcon.sprite = itemData.icon;

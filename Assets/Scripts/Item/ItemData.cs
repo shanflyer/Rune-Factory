@@ -43,7 +43,8 @@ public class ItemData : ScriptableObject, IGameData
 #endif
     public AttributeType attributeType;
     public Sprite icon;
-    public string info;
+    [SerializeField]
+    private string info;
     public string useInfo;
     public ItemType type;
     public int2 range;
@@ -70,6 +71,35 @@ public class ItemData : ScriptableObject, IGameData
     [SerializeField]
     private CharacterProperty property;
     public CharacterProperty Property => property;
+    public string GetInfo()
+    {
+        switch (type)
+        {
+            case ItemType.武器:
+                if (attributeType != AttributeType.无)
+                {
+                    string str = LanguageManage.SwitchStr(info, "\n<color=red>", attributeType, " ", "属性攻击", "</color>");
+                    return str;
+                }
+                else
+                {
+                    return info;
+                } 
+            case ItemType.防具:
+                if (attributeType != AttributeType.无)
+                {
+                    string str = LanguageManage.SwitchStr(info, "\n<color=green>red", attributeType, " ", "属性防御", "</color>");
+                    return str;
+                }
+                else
+                {
+                    return info;
+                }
+            default:
+                return info;
+        }
+       
+    }
     public  string GetProperty()
     {
         switch (type)

@@ -579,7 +579,7 @@ MonoBehaviour:
     - "\u4F7F\u7528\u86C7\u76AE\u5236\u6210\u7684\u666E\u901A\u97AD\u5B50\u3002"
     - "\u4F7F\u7528\u8346\u68D8\u7F16\u7EC7\u7684\u575A\u97E7\u97AD\u5B50\u3002"
     - "\u5973\u738B\u5E38\u7528\u7684\u97AD\u5B50,\u53EF\u4EE5\u53D1\u52A8[\u5973\u738B\u4E4B\u6625]\u6280\u80FD"
-    - "\u88AB\u653B\u51FB\u8005\u5C31\u884C\u88AB\u86C7\u7259\u7684\u54AC\u8FC7\u4E00\u6837,\u53EF\u4EE5\u53D1\u52A8[\u523A\u9888\u97AD\u631E]\u6280\u80FD"
+    - "\u88AB\u653B\u51FB\u8005\u5C31\u50CF\u88AB\u86C7\u7259\u7684\u54AC\u8FC7\u4E00\u6837,\u53EF\u4EE5\u53D1\u52A8[\u523A\u9888\u97AD\u631E]\u6280\u80FD"
     - "\u6325\u821E\u8D77\u6765\u5A01\u529B\u5F3A\u5927,\u53EF\u4EE5\u53D1\u52A8[\u66B4\u98CE\u96EA]\u6280\u80FD"
     - "\u4F7F\u7528\u79D8\u94F6\u5236\u4F5C\u7684\u5B9D\u5251,\u53EF\u4EE5\u53D1\u52A8[\u5947\u8FF9\u65A9]\u6280\u80FD"
     - "\u53EF\u4EE5\u5FEB\u901F\u653B\u51FB\u7684\u957F\u67AA,\u53EF\u4EE5\u53D1\u52A8[\u5E7B\u5F71\u7A81\u523A]\u6280\u80FD"
@@ -1945,6 +1945,14 @@ MonoBehaviour:
     - "\u53D1\u73B0\u4E86\u65B0\u519C\u4F5C\u7269\uFF01"
     - "\u519C\u4F5C\u7269"
     - "\u603B\u6536\u83B7:"
+    - "\u5206\u5E03\u6709\u98CE\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u51B0\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u88C5\u5907"
+    - "\u5206\u5E03\u6709\u51B0\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u706B\u5C5E\u6027\u3001\u98CE\u5C5E\u6027\u88C5\u5907"
+    - "\u5206\u5E03\u6709\u98CE\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u51B0\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u88C5\u5907"
+    - "\u5206\u5E03\u6709\u571F\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u98CE\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u88C5\u5907"
+    - "\u5206\u5E03\u6709\u706B\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u6C34\u5C5E\u6027\u88C5\u5907"
+    - "\u5206\u5E03\u6709\u706B\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u6C34\u5C5E\u6027\u3001\u98CE\u5C5E\u6027\u88C5\u5907"
+    - "\u5206\u5E03\u6709\u51B0\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u706B\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u88C5\u5907"
+    - "\u5206\u5E03\u6709\u98CE\u5C5E\u6027\u3001\u51B0\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u51B0\u5C5E\u6027\u3001\u706B\u5C5E\u6027\u88C5\u5907"
     m_values:
     - en: Unknown Item
       jp: 
@@ -7882,5 +7890,37 @@ MonoBehaviour:
       jp: 
       ko: 
     - en: 'Total Harvest:'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Wind and Water attribute monsters. Recommended equipment:
+        Ice and Earth attribute gear.'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Ice and Earth attribute monsters. Recommended equipment:
+        Fire and Wind attribute gear.'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Wind and Water attribute monsters. Recommended equipment:
+        Ice and Water attribute gear.'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Earth and Water attribute monsters. Recommended equipment:
+        Wind and Earth attribute gear.'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Fire attribute monsters. Recommended equipment: Water
+        attribute gear.'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Fire and Earth attribute monsters. Recommended equipment:
+        Water and Wind attribute gear.'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Ice and Water attribute monsters. Recommended equipment:
+        Fire and Earth attribute gear.'
+      jp: 
+      ko: 
+    - en: 'Area inhabited by Wind and Ice attribute monsters. Recommended equipment:
+        Ice and Fire attribute gear.'
       jp: 
       ko: 

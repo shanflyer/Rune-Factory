@@ -150,7 +150,7 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 ItemIcon.SetNativeSize();
                 ItemName.SetADDText($"+ ",itemData.itemName," +");
                 Type.SetSWText(itemData.type.ToString());
-                Info.SetSWText(itemData.info);
+                Info.SetSWText(itemData.GetInfo());
                 Property.SetSWText(itemData.GetProperty());
                 
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;

@@ -39,7 +39,7 @@ public struct FightMapData : IGameData
 
     public string fightMapObjName;
     public string exploreBGMName, fightBGMName;
-
+    public string info;
     public Season season;
     public WeatherDisplayType weatherDisplayType;
     public float cycleSize;   

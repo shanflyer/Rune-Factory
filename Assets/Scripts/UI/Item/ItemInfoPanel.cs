@@ -136,12 +136,12 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
             default:
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(v.item.dataId);
                 Icon.sprite = itemData.icon;
-                Name.SetSWText(itemData.itemName);
-                type.SetSWText(itemData.type);
+                Name.SetSWText(itemData.GetInfo());
+                type.SetSWText(itemData.GetInfo());
                 MoneyIcon.enabled = true;
                 MoneyValue.text = $"{itemData.sellPrice}";
                 Property.text = itemData.GetProperty();
-                Info.SetSWText(itemData.info);
+                Info.SetSWText(itemData.GetInfo());
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
                 InfoItemValue.fillAmount = v.item.value;
                 break;

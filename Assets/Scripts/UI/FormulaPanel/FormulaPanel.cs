@@ -159,7 +159,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
                     }
                 }
                 formulaMaterialText.SetADDText("ÐèÒª²ÄÁÏ:", formulaMats); 
-                formulaInfoText.SetSWText(formulaReferenceData.formulaData.ProductItem.info);
+                formulaInfoText.SetSWText(formulaReferenceData.formulaData.ProductItem.GetInfo());
             }
             else
             {
