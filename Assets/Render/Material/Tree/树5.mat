@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\u9614\u53F6\u68115"
+  m_Name: "\u68115"
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -18,7 +18,10 @@ Material:
   - SEASONCOLORBLEND
   - SNOWBLEND
   m_InvalidKeywords:
+  - NATIVEPOS_ON
   - _BACKBLEND_ON
+  - _DampBlend
+  - _MOVESELFUV_ON
   - _PLANTAUTUMNBLEND_ON
   - _SNOWBLEND_ON
   - _TREE3D_ON
@@ -61,6 +64,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 03b2f753b394fcf48815df97b507c386, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -73,11 +80,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MoveMask:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 6efeb7ab9eead174f98b5564a478cf72, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 3c06d34524aea43439cdaa34aab6f384, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -89,7 +96,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SnowTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 77eb2d104cfa5ec45adad6ec563bb24e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureRamp:
@@ -131,11 +138,13 @@ Material:
     m_Ints: []
     m_Floats:
     - EdgeValue: 0.1
+    - NativePos: 1
     - _AlphaCutoff: 0.5
     - _BackBlend: 1
     - _BlendRmapMin: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
+    - _BlendingType: 0
     - _BumpScale: 1
     - _Character: 0
     - _ClipValue: 0.5
@@ -151,11 +160,13 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 1
     - _GrassBlend: 0
+    - _HideNormal: 0
     - _LightBlend: 1
+    - _LightMask: 0
     - _Metallic: 0
     - _Mode: 0
     - _Move: 1
-    - _MoveSelfUV: 0
+    - _MoveSelfUV: 1
     - _NormalTex: 0
     - _OcclusionStrength: 1
     - _OutlineWidth: 0.0065
@@ -182,9 +193,9 @@ Material:
     - _WaveSpeed0: 0
     - _WaveSpeed1: 0
     - _WetValue: 0
-    - _WindJitter: 0.1
-    - _WindNoiseValue: 0
-    - _WindScroll: 0.05
+    - _WindJitter: 0.12
+    - _WindNoiseValue: 0.08
+    - _WindScroll: 0.12
     - _WindValue: 0.5
     - _ZWrite: 1
     - __dirty: 0
@@ -194,6 +205,7 @@ Material:
     - waterValue: 0.2
     m_Colors:
     - EdgeColor: {r: 0.990566, g: 0.9765486, b: 0.9765486, a: 0}
+    - ObjPos: {r: 0, g: 0, b: 0, a: 0}
     - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
     - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
     - _BlendColor: {r: 0.0047169924, g: 1, b: 0.6170626, a: 1}

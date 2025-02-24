@@ -20,8 +20,6 @@ Material:
   m_InvalidKeywords:
   - NATIVEPOS_ON
   - _BACKBLEND_ON
-  - _DampBlend
-  - _MOVESELFUV_ON
   - _PLANTAUTUMNBLEND_ON
   - _SNOWBLEND_ON
   - _TREE3D_ON
@@ -64,11 +62,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Mask:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b53060f579551214b983497e6c95ee28, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -80,11 +74,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MoveMask:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: ec230804617eafd48a2dc7f632dc8873, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 362b168630cc7fb4788795eba2d16b03, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -96,7 +90,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SnowTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 451de6a3ce5a93b47a7189338c72801b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureRamp:
@@ -144,7 +138,6 @@ Material:
     - _BlendRmapMin: 0
     - _BlendValue: 1
     - _BlendVertexColor: 0
-    - _BlendingType: 0
     - _BumpScale: 1
     - _Character: 0
     - _ClipValue: 0.5
@@ -166,7 +159,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _Move: 1
-    - _MoveSelfUV: 1
+    - _MoveSelfUV: 0
     - _NormalTex: 0
     - _OcclusionStrength: 1
     - _OutlineWidth: 0.0065
@@ -193,9 +186,9 @@ Material:
     - _WaveSpeed0: 0
     - _WaveSpeed1: 0
     - _WetValue: 0
-    - _WindJitter: 0.12
-    - _WindNoiseValue: 0.08
-    - _WindScroll: 0.12
+    - _WindJitter: 0.1
+    - _WindNoiseValue: 0
+    - _WindScroll: 0.05
     - _WindValue: 0.5
     - _ZWrite: 1
     - __dirty: 0

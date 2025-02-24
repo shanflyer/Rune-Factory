@@ -573,179 +573,7 @@ Shader "MySprite-Lit-Default"
          
         ENDHLSL 
 
-         Pass
-        {
-          Tags { "LightMode" = "Universal2D" "Queue"="Transparent" "RenderType"="Transparent"}
-             
-            HLSLPROGRAM
-             
-            #pragma shader_feature_local _ WATER
-            #pragma shader_feature_local _ DAMPBLEND
-            #pragma shader_feature_local _ MOVE
-            #pragma shader_feature_local _ SEASONCOLORBLEND
-            #pragma shader_feature_local _ SNOWBLEND
-            #pragma shader_feature_local _ GRASSBLEND
-            #pragma shader_feature_local _ SHADOWSTEP
-            #pragma shader_feature_local _ BACKBLEND
-
-            #pragma vertex CombinedShapeLightVertex
-            #pragma fragment CombinedShapeLightFragment
-            
-            
- 
-             
-            struct Attributes
-            {
-                float3 positionOS   : POSITION;
-                float3 normalOS : NORMAL;
-                float4 color        : COLOR;
-                float2 uv           : TEXCOORD0; 
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            struct Varyings
-            {
-                float4  positionCS  : SV_POSITION;
-                half4   color       : COLOR;
-                float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
-                float4  worldPos : TEXCOORD4;
-                half2   fixScreenUV: TEXCOORD3;
-                float3 normal:NORMAL;
-                #if defined(DEBUG_DISPLAY)
-                    float3  positionWS  : TEXCOORD2;
-                #endif
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
- 
-            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
-             
-
-            // NOTE: Do not ifdef the properties here as SRP batcher can not handle different layouts.
-             
-            float3 BlendLightCol(float3 col,float2 screenUV)
-            {
-                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,screenUV);
-                 col*=lightCol.xyz;
-                 return col;
-            }
-
-             
-
-            Varyings DefaultVertex(Attributes v)
-            {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(v);
-
-                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
-              
-                o.worldPos.xyz=TransformObjectToWorld(v.positionOS);
-                //half3 worldPos=o.worldPos.xyz;
-               // worldPos.z+=worldPos.y;
-               // o.positionCS =TransformWorldToHClip(worldPos);
-
-                o.positionCS = TransformObjectToHClip(v.positionOS);
-                float3 worldCS=o.worldPos.xyz;
-                worldCS.y=UNITY_MATRIX_M._m13;
-                //o.worldPos.w=o.worldPos.z;
-                //
-                
-                half4 worldPosCs=TransformWorldToHClip(worldCS.xyz);
-                half2 worldScreen=half2(ComputeScreenPos(worldPosCs / worldPosCs.w).xy);
-                o.worldPos.zw=worldScreen;
-               // half4 grassColor=  SAMPLE_TEXTURE2D_LOD(_GrassTex, sampler_GrassTex, worldScreen,0); 
-               // float GrassColorValue=abs(grassColor.r-0.5)/0.5;
-               // o.worldPos.w=GrassColorValue;
-
-                
-                #if defined(DEBUG_DISPLAY)
-                    o.positionWS = TransformObjectToWorld(v.positionOS);
-                #endif
-                o.uv = v.uv;
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
-
-
-                half3 pos=TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
-                half4 carmeraPos=TransformWorldToHClip(pos); 
-
-                o.fixScreenUV=o.lightingUV-half2(ComputeScreenPos(carmeraPos / carmeraPos.w).xy);
-
-                o.color = v.color *   unity_SpriteColor;
-                return o;
-            }
-
-            Varyings CombinedShapeLightVertex(Attributes v)
-            { 
-                return DefaultVertex(v);
-            }
- 
-
-            half4 DefaultFragment(Varyings i) : SV_Target
-            {  
-                float2 uv=i.uv; 
-                float s_w=0;
-                #if SNOWBLEND 
-                Unity_Remap_float(_SeasonValue,float2(2.95,3.05),float2(0,1),s_w);
-                s_w=clamp(s_w,0,1);
-
-                float s_w1=0;
-                Unity_Remap_float(_SeasonValue,float2(0.1,0),float2(0,1),s_w1);
-                s_w1=clamp(s_w1,0,1);
-                s_w+=s_w1;
-                #endif
-
-               
-                #if MOVE
-                float2 offset;
-                uv=MoveUV(uv,i.lightingUV,1-s_w,offset);
-                #endif
-                
-                //return half4(uv.xxx,1);
-                half4 main =_MainTex.Sample(sampler_MainTex,uv); 
-              //  return float4(main.xyz,main.a);
-                #if SEASONCOLORBLEND
-                main.xyz=BlendSeasonColor(main.xyz,uv,i.worldPos.xy);
-                #endif
-                #if SNOWBLEND
-                main=SnowColor(main,uv,s_w);
-                #endif
-                
-                #if GRASSBLEND
-                main=GrassColor(main,uv,i.worldPos.zw);
-                #endif 
- 
-                half4 result=main;
-                
-                float singleValue=(main.x+main.y+main.z)/3;
-                float3 singleColor=main.xyz*(i.color.a)+singleValue.xxx*(1-i.color.a);
-                float3 waterColor=main.xyz*i.color.xyz;
-              
-                waterColor.xyz=waterColor.xyz*(1-_BlendVertexColor)+singleColor*_BlendVertexColor; 
-                 main.a=main.a*i.color.a*(1-_BlendVertexColor)+main.a*_BlendVertexColor;
-                
-                main.xyz=waterColor.xyz;
-                #if WATER
-                
-                 waterColor=WaterFragment(uv,i.fixScreenUV,i.lightingUV,main);
-                #endif
-               
-               return float4(waterColor.xyz,main.a);
- 
- 
-            }
-          
-
-            half4 CombinedShapeLightFragment(Varyings i) : SV_Target
-            {  
-                 return DefaultFragment(i); 
-            } 
-            ENDHLSL
-        }
-
-         
+  
 
         Pass
         {
@@ -764,8 +592,7 @@ Shader "MySprite-Lit-Default"
             #pragma shader_feature_local _ SNOWBLEND
             #pragma shader_feature_local _ GRASSBLEND
             #pragma shader_feature_local _ SHADOWSTEP
-            #pragma shader_feature_local _ BACKBLEND
-            #pragma shader_feature_local _ LIGHTMASK
+            #pragma shader_feature_local _ BACKBLEND 
              
             struct Attributes
             {
@@ -905,10 +732,7 @@ Shader "MySprite-Lit-Default"
                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
                 lightCol.xyz*=4;  
                 
-                #if LIGHTMASK 
-                half4 lightMakColor=SAMPLE_TEXTURE2D(_MaskTex,sampler_MaskTex,uv); 
-                lightCol.xyz=lightCol.xyz*(1-lightMakColor.a)+lightMakColor.xyz*lightMakColor.a;
-                #endif
+          
 
                 result.xyz=waterColor.xyz*lightCol.xyz; 
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*waterColor.xyz; 
@@ -946,7 +770,7 @@ Shader "MySprite-Lit-Default"
             #pragma vertex NormalsRenderingVertex
             #pragma fragment NormalsRenderingFragment
 
-            #pragma multi_compile _ SKINNED_SPRITE 
+            //#pragma multi_compile _ SKINNED_SPRITE 
             #pragma shader_feature_local _ MOVE 
             #pragma shader_feature_local _ SNOWBLEND
 
@@ -957,8 +781,8 @@ Shader "MySprite-Lit-Default"
                 float4 color        : COLOR;
                 float2 uv           : TEXCOORD0;
                 float4 tangent      : TANGENT;
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                //UNITY_SKINNED_VERTEX_INPUTS
+               // UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
@@ -971,7 +795,7 @@ Shader "MySprite-Lit-Default"
                 half3   bitangentWS     : TEXCOORD3;
                 half4   lightingUV  : TEXCOORD4; 
                 //half3   screenUV : TEXCOORD4;
-                UNITY_VERTEX_OUTPUT_STEREO
+                //UNITY_VERTEX_OUTPUT_STEREO
             };
              
             
@@ -1145,37 +969,26 @@ Shader "MySprite-Lit-Default"
             HLSLPROGRAM 
 
             #pragma vertex UnlitVertex
-            #pragma fragment UnlitFragment 
-            #pragma multi_compile _ SKINNED_SPRITE 
+            #pragma fragment UnlitFragment  
 
             struct Attributes
             {
                 float3 positionOS   : POSITION; 
-                float2 uv           : TEXCOORD0;
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                float2 uv           : TEXCOORD0; 
             };
 
             struct Varyings
             {
                 float4  positionCS      : SV_POSITION;
                 float3  color           : COLOR;
-                float2  uv              : TEXCOORD0; 
-                #if defined(DEBUG_DISPLAY)
-                    float3  positionWS  : TEXCOORD2;
-                #endif
-                UNITY_VERTEX_OUTPUT_STEREO
+                float2  uv              : TEXCOORD0;  
             };
             
             
 
             Varyings UnlitVertex(Attributes attributes)
             {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(attributes);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(attributes);
-
+                Varyings o = (Varyings)0; 
                 attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
                 float3 objWroldPos=TransformObjectToWorld(attributes.positionOS);
@@ -1184,7 +997,7 @@ Shader "MySprite-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-               // float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+               float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
                 float stepPosZ=step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
@@ -1281,19 +1094,21 @@ Shader "MySprite-Lit-Default"
             Varyings UnlitVertex(Attributes attributes)
             {
                 Varyings o = (Varyings)0;
+                 ObjPos=UNITY_MATRIX_M._m03_m13_m23; 
+                float3 objWroldPos=TransformObjectToWorld(attributes.positionOS);
                 UNITY_SETUP_INSTANCE_ID(attributes);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 UNITY_SKINNED_VERTEX_COMPUTE(attributes);
 
                 attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(attributes.positionOS);
-                float3 objWroldPos=TransformObjectToWorld(attributes.positionOS);
+                
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = objWroldPos;
                 #endif
                 o.uv = attributes.uv;
 
-                 ObjPos=UNITY_MATRIX_M._m03_m13_m23*NativePos+ObjPos*(1-NativePos); 
+                
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
