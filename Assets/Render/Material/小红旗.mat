@@ -7,14 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MySprite
+  m_Name: "\u5C0F\u7EA2\u65D7"
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - BACKBLEND
   - SKINNED_SPRITE
-  - SNOWBLEND
   m_InvalidKeywords:
   - NATIVEPOS_ON
   - _BACKBLEND_ON
@@ -39,7 +37,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: fb67c4beb276f8a4c9a1d6ca437fa557, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -51,7 +49,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 4972068303aa9fe4cadc685674ecea94, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SnowTex:
@@ -75,7 +73,7 @@ Material:
     - EdgeValue: 0.1
     - NativePos: 1
     - PixelSnap: 0
-    - _BackBlend: 1
+    - _BackBlend: 0
     - _BlendVertexColor: 0
     - _Character: 0
     - _Damp: 0
@@ -90,7 +88,7 @@ Material:
     - _Move: 0
     - _MoveSelfUV: 0
     - _PlantAutumnNoiseScale: 1
-    - _SnowBlend: 1
+    - _SnowBlend: 0
     - _Water: 0
     - _WaterBottom: 1
     - _WaterHigh: 0

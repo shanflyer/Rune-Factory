@@ -102,7 +102,7 @@ Shader "MySprite-Lit-Default"
     {
         Tags {  "Queue"="Transparent" "RenderType"="Transparent"}
 
-         Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+         Blend SrcAlpha OneMinusSrcAlpha
          Cull Off
          ZWrite Off
 

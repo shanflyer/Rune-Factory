@@ -17,11 +17,11 @@ Shader "MyLight/LightMul"
     {
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
 
-        Blend SrcAlpha One, One OneMinusSrcAlpha
+        Blend SrcAlpha OneMinusSrcAlpha
         //Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
         Cull Off
         ZWrite off
-		ZTest LEqual
+		//ZTest LEqual
 
         HLSLINCLUDE
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -57,18 +57,18 @@ Shader "MyLight/LightMul"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
-                half3 uv1 : TEXCOORD1;
+                float3 uv1 : TEXCOORD1;
                 float4 color        : COLOR;
             };
 
             struct v2f
             {
                 float2 uv : TEXCOORD0; 
-                half3 uv1 : TEXCOORD1;
+                float3 uv1 : TEXCOORD1;
                 float4 screenUV:TEXCOORD4; 
                 float4 vertex : SV_POSITION;
-                half2 ObjectPosition:TEXCOORD2;
-                half4 lightDirection:TEXCOORD3;
+                float2 ObjectPosition:TEXCOORD2;
+                float4 lightDirection:TEXCOORD3;
                 
                 float4 color        : COLOR;
             };
@@ -133,6 +133,8 @@ Shader "MyLight/LightMul"
                 screenUV=UnityStereoTransformScreenSpaceTex(screenUV);
 
                 half4 normal_col =SAMPLE_TEXTURE2D(_Normalmap, sampler_Normalmap,screenUV);
+              
+                //return normal_col;
                 half3 normalUnpacked = UnpackNormalRGBNoScale(normal_col);
                 half3 dirToLight = normalize(i.lightDirection.xyz); 
                

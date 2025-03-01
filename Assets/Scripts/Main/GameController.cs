@@ -342,7 +342,7 @@ if (result.Success)
         var gameGuideManager = GameGuideManager.instance;
         GameTimeManager.instance.ZeroGameTime();
 
-        GameTimerController.instance.DelayAction(100, () => { GameTimeManager.instance.SetTime(20, 0); });
+        GameTimerController.instance.DelayAction(100, () => { GameTimeManager.instance.SetTime(12, 0); });
 
         var audio = transform.Find("Audio");
         AudioController.instance.SetAudioSource(audio.gameObject);
