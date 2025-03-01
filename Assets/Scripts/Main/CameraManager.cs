@@ -325,7 +325,7 @@ public class CameraManager : Singleton<CameraManager>
             var renderer = TestRenderers.GetKeyForIndex(i);
             bool enable= GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
             renderer.enabled = enable;
-            /*
+            
             if (enable)
             {
                 renderer.gameObject.layer = TestRenderers[i];
@@ -333,9 +333,9 @@ public class CameraManager : Singleton<CameraManager>
             else
             {
                 renderer.gameObject.layer = hideLayer;
-            }*/
-            //renderer.gameObject.layer = 1;
-            // renderer.enabled = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+            }
+          //  renderer.gameObject.layer = 1;
+          // renderer.enabled = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
         } 
     }
 

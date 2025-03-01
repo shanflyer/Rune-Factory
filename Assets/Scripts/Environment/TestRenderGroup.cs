@@ -7,33 +7,41 @@ public class TestRenderGroup : MonoBehaviour
 {
     [SerializeField]
    Renderer[] renderers;
-    Sprite sprite;
+   // Sprite sprite;
     
 
     private void OnEnable()
     { 
         //sprite.GetSecondaryTextures()
-        /*for(int i = 0; i < renderers.Length; i++)
+        for(int i = 0; i < renderers.Length; i++)
         {
+            if (renderers[i] == null)
+            {
+                continue;
+            }
             CameraManager.instance.AddTestRender(renderers[i]);
-        }*/
+        }
     }
     private void OnDisable()
     {
         
         if (!SingletonType.Cleared)
         {
-            /*
+            
             for (int i = 0; i < renderers.Length; i++)
             {
+                if (renderers[i] == null)
+                {
+                    continue;
+                }
                 CameraManager.instance.RemoveTestRender(renderers[i]);
-            }*/
+            }
 
         }
     }
     public void GetRenders()
     {
-        renderers = GetComponentsInChildren<Renderer>();
+        renderers = GetComponentsInChildren<SpriteRenderer>();
     }
 }
 #if UNITY_EDITOR
