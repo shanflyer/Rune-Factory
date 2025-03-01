@@ -117,7 +117,7 @@ Shader "MyFish-Lit-Default"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1;  
+                float4   lightingUV  : TEXCOORD1;  
                 half2   fixScreenUV: TEXCOORD3;
                 float3 normal:NORMAL; 
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -143,7 +143,7 @@ Shader "MyFish-Lit-Default"
                 float4 clipPos = TransformObjectToHClip(v.positionOS.xyz);
 				o.uv=v.uv;    
 				o.positionCS =TransformObjectToHClip(v.positionOS.xyz); //TransformWorldToHClip(worldPos); 
-                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV   = ComputeScreenPos(o.positionCS);
 				return o;
             }
  
@@ -154,8 +154,10 @@ Shader "MyFish-Lit-Default"
             {   
 				float4 texColor = _MainTex.Sample(sampler_MainTex,IN.uv.xy);
                 //return texColor;
+                float2 lightingUV=IN.lightingUV.xy/IN.lightingUV.w;
+                lightingUV=UnityStereoTransformScreenSpaceTex(lightingUV);
 
-                half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,IN.lightingUV);
+                half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,lightingUV);
                 lightCol.xyz*=4;
                 texColor.xyz=_LightBlend*texColor.xyz*lightCol.xyz+(1-_LightBlend)*texColor.xyz;
 				float Alpha = texColor.a;  
@@ -271,10 +273,10 @@ Shader "MyFish-Lit-Default"
 
             struct Varyings
             {
-                float4  positionCS      : SV_POSITION;
-                float3  color           : COLOR;
+                float4  positionCS      : SV_POSITION; 
                 float2  uv              : TEXCOORD0;
-                float2  screenUV        : TEXCOORD1;
+                float4  screenUV        : TEXCOORD1;
+                float4  worldSUV        : TEXCOORD3;
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
                 #endif
@@ -298,7 +300,7 @@ Shader "MyFish-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+                float3 ObjPos=unity_ObjectToWorld._m03_m13_m23;
                 float stepPosZ=1-step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
@@ -316,13 +318,10 @@ Shader "MyFish-Lit-Default"
  
                 worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
                  
-
-                worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
+                o.worldSUV=ComputeScreenPos(worldClip); 
                 
-                o.screenUV.xy=half2(ComputeScreenPos(o.positionCS/o.positionCS.w).xy); 
-                
-                o.color.x=clamp(high,0,1);                 
-                o.color.yz= worldClip.xy;
+                o.screenUV=ComputeScreenPos(o.positionCS); 
+                o.screenUV.z=clamp(high,0,1);      
                 return o;
             }
 
@@ -333,6 +332,9 @@ Shader "MyFish-Lit-Default"
                 float clipA=1-step(DepthTex.a,0);
                 DepthTex.xyz*=clipA;
                 half4 _NormalColor = _NormalMap.Sample(sampler_MainTex,i.uv);
+
+                float2 worldSUV=i.worldSUV.xy/i.worldSUV.w;
+                worldSUV=UnityStereoTransformScreenSpaceTex(worldSUV);
                  
                 half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
                 half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
@@ -350,12 +352,12 @@ Shader "MyFish-Lit-Default"
                 half offset=depthValue*512*4/_ScreenParams.y;
 
                
-                half depth=i.color.z+offset*clearColor;
+                half depth=worldSUV.y+offset*clearColor;
                 half setpHigh=depthStep_G; 
 
                 //return float4(i.color.zzz,mainTex.a);
 
-                half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
+                half high=i.screenUV.z*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 
                 mainTex.xyz=half3(depth,high,_NormalColor.g*0.5+stepDepthOne);
                

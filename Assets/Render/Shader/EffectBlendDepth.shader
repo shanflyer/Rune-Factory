@@ -44,9 +44,9 @@ Shader "EffectBlendDepth"
             struct v2f
             {
                 float4 vertex   : SV_POSITION; 
-                float2 playerUV:Normal;
+                float4 playerUV:Normal;
                 float2 uv  : TEXCOORD0; 
-                float2 uv1  : TEXCOORD1;  
+                float4 uv1  : TEXCOORD1;  
                 float2 worldPos  : TEXCOORD2; 
                 float4 color:COLOR;
 
@@ -77,12 +77,12 @@ Shader "EffectBlendDepth"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
                 OUT.vertex =TransformObjectToHClip(v.positionOS); 
                 OUT.uv= v.uv;  
-                OUT.uv1=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy); 
+                OUT.uv1=ComputeScreenPos(OUT.vertex); 
                 OUT.color=v.color*_Color;  
                 OUT.worldPos=TransformObjectToWorld(v.positionOS);               
                 
                 float4 playerCS=TransformWorldToHClip(_PlayerPos);
-                OUT.playerUV=half2(ComputeScreenPos(playerCS/playerCS.w).xy); 
+                OUT.playerUV=ComputeScreenPos(playerCS); 
                // Unity_Remap_float2(OUT.playerUV,float2(-1,1),float2(0,1),OUT.playerUV);
 
                 return OUT;
@@ -91,8 +91,9 @@ Shader "EffectBlendDepth"
             half4 frag(v2f IN) : SV_Target
             {  
                 half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv)*IN.color; 
-
-                half centerY=IN.playerUV.y;  
+                half2 playerUV=IN.playerUV.xy/IN.playerUV.w;
+                playerUV=UnityStereoTransformScreenSpaceTex(playerUV); // 处理Y轴翻转和XR适配
+                half centerY=playerUV.y;  
 
                  half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, IN.uv);
                 half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, IN.uv);

@@ -55,7 +55,7 @@ Shader "MyLight/EyeMul"
             struct v2f
             {
                 float2 uv : TEXCOORD0;  
-                half2 screenUV:TEXCOORD4; 
+                float4 screenUV:TEXCOORD4; 
                 float4 vertex : SV_POSITION;
                 half2 ObjectPosition:TEXCOORD2; 
                 
@@ -80,7 +80,7 @@ Shader "MyLight/EyeMul"
                 v2f o;
                 o.vertex = TransformObjectToHClip(v.vertex);
                 o.uv = v.uv;
-                o.screenUV=half2(ComputeScreenPos(o.vertex / o.vertex.w).xy);
+                o.screenUV=ComputeScreenPos(o.vertex);  
                 o.ObjectPosition=v.vertex.xy;
  
                

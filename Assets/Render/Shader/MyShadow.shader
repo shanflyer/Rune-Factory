@@ -80,7 +80,7 @@ Shader "MyShadow"
                 float length=attributes.uv2.x*LightDirection.y;
                 length+=  length*abs(lightAngleValue)*0.5*LightDirection.y;
 
-                float scaleZ=UNITY_MATRIX_M._m22*LightDirection.y;
+                float scaleZ=unity_ObjectToWorld._m22*LightDirection.y;
                 scaleZ+=  scaleZ*abs(lightAngleValue)*0.5*LightDirection.y;
 
                 length=length*(1-_SpriteShadow)+scaleZ*_SpriteShadow;

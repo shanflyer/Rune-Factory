@@ -97,7 +97,7 @@ Shader "Sun"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.worldPos=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos=unity_ObjectToWorld._m03_m13_m23;
                 o.worldPos.z+=o.worldPos.y; 
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
@@ -216,7 +216,7 @@ Shader "Sun"
                 UNITY_SKINNED_VERTEX_COMPUTE(v);
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy); 
-                o.worldPos=UNITY_MATRIX_M._m03_m13_m23;
+                o.worldPos=unity_ObjectToWorld._m03_m13_m23;
                  
                 o.worldPos.z+=o.worldPos.y;
                 float3 worldPos=TransformObjectToWorld(v.positionOS);

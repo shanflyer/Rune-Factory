@@ -63,7 +63,7 @@ public class GameDataManager : Singleton<GameDataManager>
             }
             catch (Exception e)
             {
-                Debug.LogWarning(e);
+                Debug.LogWarning("errr:"+ DataPath.GetDataPath(type));
             }
         }
         if (dataAsset != null && dataAsset is TextAsset)

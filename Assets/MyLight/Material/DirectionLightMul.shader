@@ -66,7 +66,7 @@ Shader "MyLight/DirectionLightMul"
             {
                 v2f o;
                 o.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
-                o.uv = half2(ComputeScreenPos(o.vertex / o.vertex.w).xy);
+                o.uv = GetFullScreenTriangleTexCoord(v.vertexID);
 
                 o.lightDirection.xyz=normalize(_Direction.xyz); 
 

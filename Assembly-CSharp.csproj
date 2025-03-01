@@ -78,8 +78,10 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\String\GetRandomString.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\CheckItemValueBehavior.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\NPCPauseBehavior.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\IkSolver2D.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\Play.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\StartCreatTempCharacterBehavior.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\SkinnedMeshCombiner.cs" />
     <Compile Include="Assets\Scripts\Action\GameCheckAction.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetEmissionRate.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetLinearVelocity.cs" />
@@ -176,6 +178,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\CrossFade.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetLocalRotation.cs" />
     <Compile Include="Assets\Scripts\UI\PasturePanel\PastureInfo.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\MathUtils.cs" />
     <Compile Include="Assets\Scripts\Explore\ExploreManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\WakeUp.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetVector2.cs" />
@@ -218,6 +221,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedObjectList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ItemBoxReference.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\IkSolver2DLimb.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetEnableEmission.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindWithTag.cs" />
@@ -237,6 +241,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetIsKinematic.cs" />
     <Compile Include="Assets\Scripts\Film\FightEventTrack.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\SetSomeOneGift.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\Pose.cs" />
     <Compile Include="Assets\Scripts\Main\GameRuntimeObjManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindGameObjectsWithTag.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetUseGravity.cs" />
@@ -325,6 +330,7 @@
     <Compile Include="Assets\Scripts\Behavior\Farm\TrySetWaterFieldBeHavior.cs" />
     <Compile Include="Assets\Scripts\Main\AppStoreManager.cs" />
     <Compile Include="Assets\Scripts\UI\InformationPanel.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\IkLimb2D.cs" />
     <Compile Include="Assets\Scripts\Data\GameRandomDataList.cs" />
     <Compile Include="Assets\Scripts\UI\StoreProductPanel.cs" />
     <Compile Include="Assets\Scripts\UI\ZeroPanel.cs" />
@@ -332,6 +338,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Composites\PrioritySelector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Play.cs" />
     <Compile Include="Assets\Scripts\Item\ShortcutManager.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\SpriteMeshAnimation.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetUseGravity.cs" />
     <Compile Include="Assets\Scripts\Scene\DynamicResolutionTest.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetEnableEmission.cs" />
@@ -371,6 +378,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\GetForwardVector.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\RandomFloat.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\SpriteCycleParallax.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\Find.cs" />
     <Compile Include="Assets\Scripts\Data\FilmData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IsIntPositive.cs" />
@@ -382,6 +390,7 @@
     <Compile Include="Assets\Scripts\Character\CharacterGroupData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Collider\GetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\IsFloatPositive.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\EditorUpdaterProxy.cs" />
     <Compile Include="Assets\Scripts\Main\MyInstance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetKey.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ShortcutItemReference.cs" />
@@ -436,6 +445,7 @@
     <Compile Include="Assets\Scripts\Main\PayManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\PerformInterruption.cs" />
     <Compile Include="Assets\Scripts\Map\CellDebugDisplay.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\Follow.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\ClampMagnitude.cs" />
     <Compile Include="Assets\Scripts\test\TestImage.cs" />
     <Compile Include="Assets\Scripts\Character\ProfessionDataList.cs" />
@@ -616,8 +626,8 @@
     <Compile Include="Assets\Scripts\UI\CharacterResponsePanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\Round\RoundStartFight.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\TaskGuard.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Pause.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Decorators\TaskGuard.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetUpVector.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FightCharacter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetGravtyScale.cs" />
@@ -664,9 +674,10 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animation\CrossFadeQueued.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetNPCHomePos.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Variables\SharedRect.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\SpringCollider.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetSpotAngle.cs" />
-    <Compile Include="Assets\Scripts\Data\PermissionDataList.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaRotation.cs" />
+    <Compile Include="Assets\Scripts\Data\PermissionDataList.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Math\RandomInt.cs" />
     <Compile Include="Assets\Scripts\Behavior\Pasture\GetAnimalPastureLinkItemTrigger.cs" />
@@ -748,6 +759,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetTime.cs" />
     <Compile Include="Assets\Scripts\UI\Shop\ShopPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetFloat.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\IkCCD2D.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\Action\CharacterAction.cs" />
     <Compile Include="Assets\Scripts\PlayerStore\StoreShow.cs" />
@@ -761,9 +773,9 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddTorque.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\SetFloatParameter.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedTransform.cs" />
-    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\SetEnabled.cs" />
     <Compile Include="Assets\Scripts\Main\CloudDataManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonDown.cs" />
+    <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Behaviour\SetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetMass.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Pause.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\RunGameActions.cs" />
@@ -796,6 +808,7 @@
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\TorqueStabilizer.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\Translate.cs" />
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventAwake.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\PoseManager.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ItemInfoPanel.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetParticleCount.cs" />
     <Compile Include="Assets\Scripts\Action\GameAction.cs" />
@@ -811,8 +824,9 @@
     <Compile Include="Assets\Scripts\Main\TalkManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularDamping.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Round\CheckIsInFightScene.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\SpringBone.cs" />
     <Compile Include="Assets\Scripts\Explore\Fight\FightAIController.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Round\CheckIsInFightScene.cs" />
     <Compile Include="Assets\Scripts\Farm\FieldArea.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector4.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
@@ -868,6 +882,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Collider\SetEnabled.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularVelocity.cs" />
     <Compile Include="Assets\Scripts\Behavior\Event\GameEventEnd.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\SpriteCycle.cs" />
     <Compile Include="Assets\Effect\ProFlares\Scripts\ProFlareAtlas.cs" />
     <Compile Include="Assets\Scripts\Main\ShopManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\FightTypeSelect.cs" />
@@ -891,11 +906,13 @@
     <Compile Include="Assets\Scripts\IOSTest.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\GetTempCharacterExitPos.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetRadius.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\Ik2D.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\ProFlares_Demo_Space.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Log.cs" />
     <Compile Include="Assets\Scripts\Main\ExtensionsResources.cs" />
     <Compile Include="Assets\Scripts\Map\MapTexture.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\StackedConditional.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\SpringManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetVisitNPC.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector2\MoveTowards.cs" />
     <Compile Include="Assets\Scripts\Data\MyDataDIc.cs" />
@@ -944,8 +961,10 @@
     <Compile Include="Assets\Scripts\Behavior\Common\CompareValueBehavior.cs" />
     <Compile Include="Assets\Scripts\Character\NPC\NPCManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedGameObjectToTransform.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\SpriteMeshInstance.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetTime.cs" />
     <Compile Include="Assets\Scripts\Item\ItemData.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\Bone2D.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetRadius.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetForwardVector.cs" />
     <Compile Include="Assets\Scripts\Environment\TestRenderGroup.cs" />
@@ -955,8 +974,10 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Animator\GetBoolParameter.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\MultiCameraDemo.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\IkSolver2DCCD.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\Scripts\Event\GameTimeEventManager.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\SpriteMesh.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetColor.cs" />
     <Compile Include="Assets\Scripts\GameGuide\GameGuideData.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\CheckShortcutItemValue.cs" />
@@ -966,6 +987,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\GetRange.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetStepOffset.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\StartBehaviorTree.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\Control.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Transform\SetPosition.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterMove.cs" />
     <Compile Include="Assets\Scripts\UI\PackageSelectReference.cs" />
@@ -1044,6 +1066,7 @@
     <Compile Include="Assets\Scripts\Main\LanguageSwitchImage.cs" />
     <Compile Include="Assets\Scripts\Scene\WindEffect.cs" />
     <Compile Include="Assets\Scripts\test\NativeAppendOnlyList.cs" />
+    <Compile Include="Assets\Anima2D\Scripts\IkGroup.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetHeight.cs" />
     <Compile Include="Assets\Scripts\Pasture\PastureManager.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\GameObject\DestroyImmediate.cs" />
@@ -1113,6 +1136,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetLoop.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\ChangeShortcutItemValue.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\SetCharacterAnimation.cs" />
+    <Compile Include="Assets\Anima2D\Examples\Scripts\CharacterMotion.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetPosition.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\GetEntityCoordinate.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Input\GetMouseButton.cs" />
@@ -1188,6 +1212,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Effect\ProFlares\Demos\Scenes\README.txt" />
     <None Include="Assets\Render\Shader\New\NewSampleBlur.shader" />
+    <None Include="Assets\Anima2D\Readme.txt" />
     <None Include="Assets\Render\Shader\Damp.shader" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_Board_Cutout.shader" />
     <None Include="Assets\Render\Shader\MySprite-Lit-Default.shader" />
@@ -1204,6 +1229,7 @@
     <None Include="Assets\Render\Shader\MySampleSprite.shader" />
     <None Include="Assets\Hovl Studio\Resources\Shaders\Distortion.shader" />
     <None Include="Assets\Hovl Studio\HSFiles\Shaders\Blend_TwoSides.shader" />
+    <None Include="Assets\Anima2D\Examples\Shaders\VertexLitOneDirectional.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\Hovl Studio\HSFiles\Shaders\Blend_CenterGlow.shader" />
     <None Include="Assets\Render\Shader\ObjectScreenUV.shader" />
@@ -1237,6 +1263,7 @@
     <None Include="Assets\DLL\Excel\EPPlus.dll" />
     <None Include="Assets\DLL\Excel\System.Data.dll" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\DeadEyeGreen.txt" />
+    <None Include="Assets\Render\Shader\SampleNormal.shader" />
     <None Include="Assets\Toon Fantasy Nature\Shaders\TFF_CustomToonVegetation2D.shader" />
     <None Include="Assets\Render\Shader\Sun.shader" />
     <None Include="Assets\Render\Shader\Monster-Lit-Default.shader" />
@@ -1263,14 +1290,19 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\codeandweb.com\Readme.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Basic\Flares\BlueStarFlare.txt" />
+    <None Include="Assets\Anima2D\Examples\Shaders\VisibleOutsideMask.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SharpGlow.txt" />
     <None Include="Assets\Effect\ProFlares\ProFlares_WhatsNew.txt" />
     <None Include="Assets\Hovl Studio\HSFiles\Shaders\Add_CenterGlow.shader" />
+    <None Include="Assets\Anima2D\Examples\Shaders\VisibleInsideMask.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
     <None Include="Assets\Effect\JMO Assets\!JMO Assets Readme.txt" />
+    <None Include="Assets\Anima2D\Examples\Shaders\Unlit-Alpha-Cull-off.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\Anima2D\Licenses.txt" />
+    <None Include="Assets\Anima2D\Version.txt" />
     <None Include="Assets\Render\Shader\ScreenCycle.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster 3.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\Pinky.txt" />

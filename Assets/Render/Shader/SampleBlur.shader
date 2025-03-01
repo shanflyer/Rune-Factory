@@ -78,7 +78,7 @@ Shader "SampleBlur"
                    // UNITY_SETUP_INSTANCE_ID(v);
                     //UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
                     OUT.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
-                    OUT.uv=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy);
+                    OUT.uv=GetFullScreenTriangleTexCoord(v.vertexID);
                    // OUT.uv.y = 1 - OUT.uv.y;
                    // OUT.uv= OUT.uv*_ScreenSize.xy;
                     _BlurAmount.xyzw=_BlurAmount.xyzw/_ScreenParams.xyxy;

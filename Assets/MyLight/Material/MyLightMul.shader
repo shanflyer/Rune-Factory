@@ -65,7 +65,7 @@ Shader "MyLight/LightMul"
             {
                 float2 uv : TEXCOORD0; 
                 half3 uv1 : TEXCOORD1;
-                half2 screenUV:TEXCOORD4; 
+                float4 screenUV:TEXCOORD4; 
                 float4 vertex : SV_POSITION;
                 half2 ObjectPosition:TEXCOORD2;
                 half4 lightDirection:TEXCOORD3;
@@ -91,11 +91,11 @@ Shader "MyLight/LightMul"
                 v2f o;
                 o.vertex = TransformObjectToHClip(v.vertex);
                 o.uv = v.uv;
-                o.screenUV=half2(ComputeScreenPos(o.vertex / o.vertex.w).xy);
+                o.screenUV=ComputeScreenPos(o.vertex); 
                 o.ObjectPosition=v.vertex.xy;
 
                 float3 worldPos=TransformObjectToWorld(v.vertex);
-                float3 objPos=UNITY_MATRIX_M._m03_m13_m23; 
+                float3 objPos=unity_ObjectToWorld._m03_m13_m23; 
                 float3 pointPos=TransformObjectToWorld(v.uv1);
                 
                 int stepX=1-step(v.uv1.x,0);
@@ -129,8 +129,10 @@ Shader "MyLight/LightMul"
                 
 
                 value=clamp(value,0,1)*_PointLight+(1-_PointLight)*clamp(i.uv,0,1);
+                float2 screenUV=i.screenUV.xy/i.screenUV.w;
+                screenUV=UnityStereoTransformScreenSpaceTex(screenUV);
 
-                half4 normal_col =SAMPLE_TEXTURE2D(_Normalmap, sampler_Normalmap,i.screenUV);
+                half4 normal_col =SAMPLE_TEXTURE2D(_Normalmap, sampler_Normalmap,screenUV);
                 half3 normalUnpacked = UnpackNormalRGBNoScale(normal_col);
                 half3 dirToLight = normalize(i.lightDirection.xyz); 
                

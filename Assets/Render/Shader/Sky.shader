@@ -133,7 +133,7 @@ Shader "Sky"
             {
                 float4  positionCS  : SV_POSITION; 
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
+                float4   lightingUV  : TEXCOORD1; 
                 float3  worldPos : TEXCOORD4;
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
@@ -151,7 +151,7 @@ Shader "Sky"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV = ComputeScreenPos(o.positionCS);
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
@@ -272,7 +272,9 @@ Shader "Sky"
                 #endif 
                
                  #if WATER
-                 float3 waterColor=WaterFragment(i.uv,i.lightingUV,result);
+                 float2 lightingUV=i.lightingUV.xy/i.lightingUV.w;
+                 lightingUV=UnityStereoTransformScreenSpaceTex(lightingUV);
+                 float3 waterColor=WaterFragment(i.uv,lightingUV,result);
                  result.xyz=waterColor*stepMask+(1-stepMask)*result.xyz;
                  #endif
                  
@@ -298,10 +300,10 @@ Shader "Sky"
 
             struct Varyings
             {
-                float4  positionCS      : SV_POSITION;
-                float3  color           : COLOR;
+                float4  positionCS      : SV_POSITION; 
                 float2  uv              : TEXCOORD0;
-                float2  screenUV        : TEXCOORD1; 
+                float4  screenUV        : TEXCOORD1; 
+                float4  worldScreenPos  : TEXCOORD2;
             };
             
             
@@ -315,7 +317,7 @@ Shader "Sky"
                 float3 objWroldPos=TransformObjectToWorld(attributes.positionOS); 
                 o.uv = attributes.uv;
 
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+                float3 ObjPos=unity_ObjectToWorld._m03_m13_m23;
                 float stepPosZ=1-step(100,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
@@ -331,10 +333,9 @@ Shader "Sky"
               
                 stepPosZ=clamp(stepPosZ,0,1);
                 worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
-                worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
-                o.screenUV.xy=half2(ComputeScreenPos(o.positionCS/o.positionCS.w).xy); 
-                 o.color.x=clamp(high,0,1);    
-                 o.color.yz=worldClip.xy; 
+                o.worldScreenPos=ComputeScreenPos(worldClip); 
+                o.screenUV=ComputeScreenPos(o.positionCS); 
+                o.screenUV.z=clamp(high,0,1);    
                
                 return o;
             }
@@ -358,25 +359,29 @@ Shader "Sky"
                 half otherStep=depthStep_R*depthStep_G+depthStep_B; 
                 
                 otherStep=clamp(otherStep,0,1)*depthStep_ZeroB; 
-              
+                
+                float2 worldScreenPos=i.worldScreenPos.xy/i.worldScreenPos.w;
+                worldScreenPos=UnityStereoTransformScreenSpaceTex(worldScreenPos);
+                float2 screenUV=i.screenUV.xy/i.screenUV.w;
+                screenUV=UnityStereoTransformScreenSpaceTex(screenUV); 
 
                 half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*(1-stepDepthOne)*otherStep; 
                 half offset=depthValue*512*4/_ScreenParams.y;
                   
-                half depth=i.color.z  +offset*clearColor;
+                half depth=worldScreenPos.y +offset*clearColor;
                 half setpHigh=depthStep_G; 
                  //return float4(i.color.zzz,mainTex.a);
                
 
                 //return float4(i.color.zzz,mainTex.a);
 
-                half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
+                half high= i.screenUV.z*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 
                 mainTex.xyz=half3(depth,high,0.5+stepDepthOne);
                
                 // mainTex.xyz=depth.xxx;
 
-                half absUv=length(i.screenUV-i.color.yz); 
+                half absUv=length(screenUV-worldScreenPos); 
                 
 
                 mainTex.a=mainTex.a*(1-stepDepthOne)+DepthTex.a*stepDepthOne;

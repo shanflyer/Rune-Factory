@@ -182,7 +182,7 @@ Shader "MyTree-Lit-Default"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
+                float4   lightingUV  : TEXCOORD1; 
                 float4  worldPos : TEXCOORD4;
                 half2   fixScreenUV: TEXCOORD3;
                 float3 normal:NORMAL;
@@ -274,7 +274,7 @@ Shader "MyTree-Lit-Default"
                 v.positionOS.xz += vertexValue; 
                 v.positionOS.y+=abs(vertexValue);
 				o.positionCS =TransformObjectToHClip(v.positionOS.xyz); //TransformWorldToHClip(worldPos); 
-                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV   = ComputeScreenPos(o.positionCS);
 				return o;
             }
 
@@ -380,9 +380,10 @@ Shader "MyTree-Lit-Default"
                 s_w+=s_w1;
                 texColor=texColor*(1-s_w)+SnowColor*s_w*_SnowColor;
 
-               //texColor.xyz=BlendScreenCloudColor(texColor.xyz,IN.lightingUV);
+                float2 lightingUV=IN.lightingUV.xy/IN.lightingUV.w;
+                lightingUV=UnityStereoTransformScreenSpaceTex(lightingUV);
 
-                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,IN.lightingUV);
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,lightingUV);
                  lightCol.xyz*=4;
                 //texColor.xyz*=lightCol.xyz;
 				float Alpha = texColor.a;  
@@ -425,7 +426,7 @@ Shader "MyTree-Lit-Default"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
+                float4  lightingUV  : TEXCOORD1; 
                 float4  worldPos : TEXCOORD4;
                 half2   fixScreenUV: TEXCOORD3;
                 float3 normal:NORMAL;
@@ -517,7 +518,7 @@ Shader "MyTree-Lit-Default"
                 v.positionOS.xz += vertexValue; 
                 v.positionOS.y+=abs(vertexValue);
 				o.positionCS =TransformObjectToHClip(v.positionOS.xyz); //TransformWorldToHClip(worldPos); 
-                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV   = ComputeScreenPos(o.positionCS);
 				return o;
             }
 
@@ -530,8 +531,10 @@ Shader "MyTree-Lit-Default"
 
             
             half4 TreeFrag (Varyings IN) : SV_Target
-			{   
-				float2 ScreenUV = IN.lightingUV; 
+			{    
+                float2 lightingUV=IN.lightingUV.xy/IN.lightingUV.w;
+                lightingUV=UnityStereoTransformScreenSpaceTex(lightingUV);
+
 				float4 texColor = _MainTex.Sample(sampler_MainTex,IN.uv.xy);
   
 
@@ -624,8 +627,9 @@ Shader "MyTree-Lit-Default"
                 texColor=texColor*(1-s_w)+SnowColor*s_w*_SnowColor;
 
                //texColor.xyz=BlendScreenCloudColor(texColor.xyz,IN.lightingUV);
+              
 
-                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,IN.lightingUV);
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,lightingUV);
                  lightCol.xyz*=4;
                  texColor.xyz*=lightCol.xyz;
 				float Alpha = texColor.a;  
@@ -804,10 +808,10 @@ Shader "MyTree-Lit-Default"
 
             struct Varyings
             {
-                float4  positionCS      : SV_POSITION;
-                float3  color           : COLOR;
+                float4  positionCS      : SV_POSITION; 
                 float2  uv              : TEXCOORD0;
-                float2  screenUV        : TEXCOORD1;
+                float4  worldScreenPos  : TEXCOORD3;
+                float4  screenUV        : TEXCOORD1;
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
                 #endif
@@ -831,7 +835,7 @@ Shader "MyTree-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+                float3 ObjPos=unity_ObjectToWorld._m03_m13_m23;
                 float stepPosZ=1-step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
@@ -849,13 +853,9 @@ Shader "MyTree-Lit-Default"
  
                 worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
                  
-
-                worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
-                
-                o.screenUV.xy=half2(ComputeScreenPos(o.positionCS/o.positionCS.w).xy); 
-                
-                o.color.x=clamp(high,0,1);                 
-                o.color.yz= worldClip.xy;
+                o.worldScreenPos=ComputeScreenPos(worldClip); 
+                o.screenUV.xy=ComputeScreenPos(o.positionCS); 
+                o.screenUV.z=clamp(high,0,1);       
                 return o;
             }
 
@@ -882,13 +882,14 @@ Shader "MyTree-Lit-Default"
                 half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*(1-stepDepthOne)*otherStep; 
                 half offset=depthValue*512*4/_ScreenParams.y;
 
-               
-                half depth=i.color.z+offset*clearColor;
+                float2 worldScreenPos=i.worldScreenPos.xy/i.worldScreenPos.w;
+                worldScreenPos=UnityStereoTransformScreenSpaceTex(worldScreenPos);
+                half depth=worldScreenPos.y+offset*clearColor;
                 half setpHigh=depthStep_G; 
 
                 //return float4(i.color.zzz,mainTex.a);
 
-                half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
+                half high=i.screenUV.z*(1-setpHigh)+DepthTex.g*2*setpHigh;
                 
                 mainTex.xyz=half3(depth,high,_NormalColor.g*0.5+stepDepthOne);
                

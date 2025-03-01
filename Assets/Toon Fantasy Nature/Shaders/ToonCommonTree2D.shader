@@ -121,7 +121,7 @@ Shader "Toon/ToonCommonTree2d"
 				float4 positionCS : SV_POSITION; 
 		        half4   color       : COLOR;
                 float3 worldPos:TEXCOORD0;
-				half2   lightingUV  : TEXCOORD3;
+				float4  lightingUV  : TEXCOORD3;
 				float4 uv : TEXCOORD4;   
                 float3 normal:NORMAL;
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -183,7 +183,7 @@ Shader "Toon/ToonCommonTree2d"
                 o.worldPos=worldPos;
                 v.positionOS.xyz += vertexValue; 
 				o.positionCS =TransformObjectToHClip(v.positionOS.xyz); //TransformWorldToHClip(worldPos); 
-                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV   = ComputeScreenPos(o.positionCS);
 				return o;
             }
  
@@ -191,7 +191,8 @@ Shader "Toon/ToonCommonTree2d"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/CombinedShapeLightShared.hlsl"
             half4 frag ( VertexOutput IN ) : SV_Target
 			{   
-				float2 ScreenUV = IN.lightingUV; 
+				float2 ScreenUV = IN.lightingUV.xy/IN.lightingUV.w;
+                ScreenUV=UnityStereoTransformScreenSpaceTex(ScreenUV);
 				float4 texColor =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv.xy );
   
 

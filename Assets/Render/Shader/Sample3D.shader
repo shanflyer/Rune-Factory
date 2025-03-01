@@ -77,7 +77,7 @@ Shader "Sample3D"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
+                float4   lightingUV  : TEXCOORD1; 
                 float4  worldPos : TEXCOORD4;
                 half2   fixScreenUV: TEXCOORD3;
                 float3 normal:NORMAL;
@@ -110,17 +110,17 @@ Shader "Sample3D"
                 o.positionCS  = TransformObjectToHClip(v.positionOS.xyz);
 				 
          
-                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV   = ComputeScreenPos(o.positionCS);
 				return o;
             }
  
 
             
             half4 TreeFrag (Varyings IN) : SV_Target
-			{   
-				float2 ScreenUV = IN.lightingUV; 
+			{    
 				float4 texColor = _Color;
-
+                float2 lightingUV=IN.lightingUV.xy/IN.lightingUV.w;
+                lightingUV=UnityStereoTransformScreenSpaceTex(lightingUV);
                  half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,IN.lightingUV);
                  lightCol.xyz*=4;
                  texColor.xyz*=lightCol.xyz;
@@ -164,7 +164,7 @@ Shader "Sample3D"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
+                float4   lightingUV  : TEXCOORD1; 
                 float4  worldPos : TEXCOORD4;
                 half2   fixScreenUV: TEXCOORD3;
                 float3 normal:NORMAL;
@@ -197,18 +197,20 @@ Shader "Sample3D"
                 o.positionCS  = TransformObjectToHClip(v.positionOS.xyz);
 				 
          
-                o.lightingUV   = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV   = ComputeScreenPos(o.positionCS);
 				return o;
             }
  
 
             
             half4 TreeFrag (Varyings IN) : SV_Target
-			{   
-				float2 ScreenUV = IN.lightingUV; 
+			{    
 				float4 texColor = _Color;
 
-                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,IN.lightingUV);
+                float2 lightingUV=IN.lightingUV.xy/IN.lightingUV.w;
+                lightingUV=UnityStereoTransformScreenSpaceTex(lightingUV);
+
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,lightingUV);
                  lightCol.xyz*=4;
                  texColor.xyz*=lightCol.xyz;
 				float Alpha = texColor.a;   
@@ -322,10 +324,10 @@ Shader "Sample3D"
 
             struct Varyings
             {
-                float4  positionCS      : SV_POSITION;
-                float3  color           : COLOR;
+                float4  positionCS      : SV_POSITION; 
                 float2  uv              : TEXCOORD0;
-                float2  screenUV        : TEXCOORD1;
+                float4  screenUV        : TEXCOORD1;
+                float4  worldScreenPos  : TEXCOORD4;
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
                 #endif
@@ -349,7 +351,7 @@ Shader "Sample3D"
                 #endif
                 o.uv = attributes.uv;
 
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+                float3 ObjPos=unity_ObjectToWorld._m03_m13_m23;
                 float stepPosZ=1-step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
@@ -368,20 +370,20 @@ Shader "Sample3D"
                 worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
                  
 
-                worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
+                o.worldScreenPos=ComputeScreenPos(worldClip); 
                 
-                o.screenUV.xy=half2(ComputeScreenPos(o.positionCS/o.positionCS.w).xy); 
-                
-                o.color.x=clamp(high,0,1);                 
-                o.color.yz= worldClip.xy;
+                o.screenUV.xy=ComputeScreenPos(o.positionCS); 
+                o.screenUV.z=clamp(high,0,1);      
                 return o;
             }
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
                 float4 mainTex;  
+                float2 screenUV=i.screenUV.xy/i.screenUV.w;
+                screenUV=UnityStereoTransformScreenSpaceTex(screenUV);
                
-                half depth=i.color.z; 
+                half depth=screenUV.y; 
                 
                 mainTex=half4(depth,1,0,_Color.a); 
                 return mainTex;

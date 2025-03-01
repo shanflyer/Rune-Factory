@@ -81,7 +81,7 @@ Shader "MyGame/Monster-Lit-Default"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1;
+                float4   lightingUV  : TEXCOORD1;
                 #if defined(DEBUG_DISPLAY)
                 float3  positionWS  : TEXCOORD2;
                 #endif
@@ -101,7 +101,7 @@ Shader "MyGame/Monster-Lit-Default"
                 o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
                 o.uv = v.uv;
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV = ComputeScreenPos(o.positionCS);
 
                 o.color = v.color * _Color * unity_SpriteColor;
                 return o;
@@ -112,7 +112,10 @@ Shader "MyGame/Monster-Lit-Default"
                 const half4 main = i.color * _MainTex.Sample(sampler_MainTex,i.uv); 
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
 
-                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
+                float2 lightingUV=i.lightingUV.xy/i.lightingUV.w;
+                lightingUV=UnityStereoTransformScreenSpaceTex(lightingUV); // 处理Y轴翻转和XR适配
+
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,lightingUV);
                 lightCol.xyz*=4;
                 
                 half4 result=main;
@@ -120,7 +123,7 @@ Shader "MyGame/Monster-Lit-Default"
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*main.xyz; 
  
                 float noise=1;
-                Unity_SimpleNoise_float(i.lightingUV,_NoiseValue,noise);
+                Unity_SimpleNoise_float(lightingUV,_NoiseValue,noise);
                 result.a*=step(noise,_NoiseAlpha);
                 result.xyz=lerp(result.xyz,_ForceColor.xyz,_ForceColor.a);
   
@@ -213,8 +216,8 @@ Shader "MyGame/Monster-Lit-Default"
 
             struct Varyings
             {
-                float4  positionCS      : SV_POSITION;
-                float3  color           : COLOR;
+                float4  positionCS      : SV_POSITION; 
+                float4  screenUV        : TEXCOORD3;
                 float2  uv              : TEXCOORD0; 
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
@@ -238,7 +241,7 @@ Shader "MyGame/Monster-Lit-Default"
                 #endif
                 o.uv = attributes.uv;
 
-                float3 ObjPos=UNITY_MATRIX_M._m03_m13_m23;
+                float3 ObjPos=unity_ObjectToWorld._m03_m13_m23;
                 float stepPosZ=step(49,ObjPos.z);
 
                 float3 _objSortPos=ObjPos; 
@@ -246,11 +249,8 @@ Shader "MyGame/Monster-Lit-Default"
                 float high=(1-stepPosZ)*(objWroldPos.y-ObjPos.y)*0.5;
                 float positionCSY=o.positionCS.y;  
                 worldClip.y=stepPosZ*positionCSY+(1-stepPosZ)*worldClip.y;  
-                worldClip.xy=half2(ComputeScreenPos(worldClip/worldClip.w).xy); 
-
-                
-                o.color.x=clamp(high,0,1);                 
-                o.color.yz= worldClip.xy;
+                o.screenUV=ComputeScreenPos(worldClip);  
+                o.screenUV.z=clamp(high,0,1);      
                 return o;
             }
 
@@ -260,7 +260,10 @@ Shader "MyGame/Monster-Lit-Default"
                 float4 DepthTex =_DepthTex.Sample(sampler_MainTex,i.uv); 
                 half4 _NormalColor = _NormalMap.Sample(sampler_MainTex,i.uv);
 
-                float4 ObjDepthTex=SAMPLE_TEXTURE2D(_ObjDepthTex, sampler_ObjDepthTex, i.color.yz);
+                float2 screenUV=i.screenUV.xy/i.screenUV.w;
+                screenUV=UnityStereoTransformScreenSpaceTex(screenUV);
+
+                float4 ObjDepthTex=SAMPLE_TEXTURE2D(_ObjDepthTex, sampler_ObjDepthTex, screenUV);
                  
                 half depthStep_R=step(0.01,abs(DepthTex.r-0.5));
                 half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
@@ -276,10 +279,10 @@ Shader "MyGame/Monster-Lit-Default"
                 half offset=depthValue*512*4/_ScreenParams.y;
 
                
-                half depth=i.color.z+offset;
+                half depth=screenUV.y+offset;
                 half setpHigh=depthStep_G; 
 
-                half high=i.color.x*(1-setpHigh)+DepthTex.g*2*setpHigh;
+                half high=i.screenUV.z*(1-setpHigh)+DepthTex.g*2*setpHigh;
 
               
                 mainTex.xyz=half3(depth,high,_NormalColor.g*0.5+stepDepthOne);
@@ -328,7 +331,7 @@ Shader "MyGame/Monster-Lit-Default"
                 float4  positionCS  : SV_POSITION;
                 half4   color       : COLOR;
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1;
+                float4   lightingUV  : TEXCOORD1;
                 #if defined(DEBUG_DISPLAY)
                 float3  positionWS  : TEXCOORD2;
                 #endif
@@ -348,7 +351,7 @@ Shader "MyGame/Monster-Lit-Default"
                 o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
                 o.uv = v.uv;
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV = ComputeScreenPos(o.positionCS);
 
                 o.color = v.color * _Color * unity_SpriteColor;
                 return o;
@@ -358,8 +361,9 @@ Shader "MyGame/Monster-Lit-Default"
             {
                 const half4 main = i.color * _MainTex.Sample(sampler_MainTex,i.uv); 
                 const half4 mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, i.uv);
-
-                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,i.lightingUV);
+                float2 lightUV=i.lightingUV.xy/i.lightingUV.w;
+                lightUV=UnityStereoTransformScreenSpaceTex(lightUV);
+                 half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,lightUV);
                 lightCol.xyz*=4;
                 
                 half4 result=main;
@@ -367,7 +371,7 @@ Shader "MyGame/Monster-Lit-Default"
                 result.xyz=_LightBlend*result.xyz+(1-_LightBlend)*main.xyz; 
  
                 float noise=1;
-                Unity_SimpleNoise_float(i.lightingUV,_NoiseValue,noise);
+                Unity_SimpleNoise_float(lightUV,_NoiseValue,noise);
                 result.a*=step(noise,_NoiseAlpha);
                 result.xyz=0.25;
   

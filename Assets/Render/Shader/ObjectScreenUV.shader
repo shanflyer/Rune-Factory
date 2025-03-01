@@ -87,9 +87,9 @@ Shader "ObjectScreenUV"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                float3  worldPos=UNITY_MATRIX_M._m03_m13_m23; 
+                float3  worldPos=unity_ObjectToWorld._m03_m13_m23; 
                 half4 worldPosCs=TransformWorldToHClip(worldPos);
-                o.color.xy=half2(ComputeScreenPos(worldPosCs / worldPosCs.w).xy); 
+                o.color.xy=ComputeScreenPos(worldPosCs); 
                
                 o.uv = v.uv;
                 

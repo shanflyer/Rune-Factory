@@ -116,7 +116,7 @@ Shader "Sea"
             {
                 float4  positionCS  : SV_POSITION; 
                 float2  uv          : TEXCOORD0;
-                half2   lightingUV  : TEXCOORD1; 
+                float4   lightingUV  : TEXCOORD1; 
                 float3  worldPos : TEXCOORD4;
                 #if defined(DEBUG_DISPLAY)
                     float3  positionWS  : TEXCOORD2;
@@ -134,7 +134,7 @@ Shader "Sea"
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
+                o.lightingUV = ComputeScreenPos(o.positionCS);
                 #if defined(DEBUG_DISPLAY)
                     o.positionWS = TransformObjectToWorld(v.positionOS);
                 #endif
@@ -272,7 +272,10 @@ Shader "Sea"
                 float4 result=float4(1,1,1,1);
                 result.xyz=_SkyBottomColor.xyz+(_SkyTopColor.xyz-_SkyBottomColor.xyz)*value;
                 
-                float3 waterColor=WaterFragment(i.uv,i.lightingUV,result);
+                float2 screenUV=i.lightingUV.xy/i.lightingUV.w;
+                screenUV=UnityStereoTransformScreenSpaceTex(screenUV);
+
+                float3 waterColor=WaterFragment(i.uv,screenUV,result);
                 result.xyz=waterColor;
                 
 

@@ -77,7 +77,7 @@ Shader "BlendBlur"
             struct v2f
             {
                 float4 vertex   : SV_POSITION; 
-                float2 playerUV:Normal;
+                float4 playerUV:Normal;
                 float2 uv  : TEXCOORD0;  
                 float4 uv01 : TEXCOORD2;
                 float4 uv23 : TEXCOORD3;
@@ -96,7 +96,7 @@ Shader "BlendBlur"
                // UNITY_SETUP_INSTANCE_ID(v);
                // UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); 
                 OUT.vertex = GetDrawProceduralVertexPosition(v.vertexID); 
-                OUT.uv= half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy);
+                OUT.uv= GetFullScreenTriangleTexCoord(v.vertexID);
                // OUT.uv= OUT.uv*_ScreenSize.xy;
                 //OUT.uv1=half2(ComputeScreenPos(OUT.vertex / OUT.vertex.w).xy); 
 
@@ -105,7 +105,7 @@ Shader "BlendBlur"
                 OUT.uv45 =  OUT.uv.xyxy + _BlurAmount.xyxy * float4(1, 1, -1, -1) * 3.0;
 
                 float4 playerCS=TransformWorldToHClip(_PlayerPos);
-                OUT.playerUV=half2(ComputeScreenPos(playerCS/playerCS.w).xy); 
+                OUT.playerUV=ComputeScreenPos(playerCS); 
                // Unity_Remap_float2(OUT.playerUV,float2(-1,1),float2(0,1),OUT.playerUV);
 
                 return OUT;
@@ -132,8 +132,10 @@ Shader "BlendBlur"
                 BlurColor += 0.05 * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv45.zw);  
                // return BlurColor;
                  
-
-                half centerY=IN.playerUV.y;
+                float2 playerUV=IN.playerUV.xy/IN.playerUV.w;
+                playerUV= UnityStereoTransformScreenSpaceTex(playerUV); // 处理Y轴翻转和XR适配
+                half centerY=playerUV.y;
+                
                  //return half4(IN.playerUV.yyy,1);
 
                 half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, IN.uv);
