@@ -46,7 +46,7 @@ public class MySpriteMeshRender : MonoBehaviour
     void CreateMesh()
     {
         var outData = MySpriteMeshManager.instance.GetSpriteMesh(m_Sprite, m_Material);
-
+       
         this.mesh= meshFilter.sharedMesh = outData.mesh;
         meshRenderer.sharedMaterial = outData.material;
         nowSprite = m_Sprite;

@@ -820,6 +820,7 @@ Shader "MySprite-Lit-Default"
                 o.normalWS = -GetViewForwardDir();
                 //o.tangentWS = TransformObjectToWorldDir(attributes.tangent.xyz);
                 o.tangentWS = attributes.tangent.xyz; 
+                
                
                 o.bitangentWS = cross(o.normalWS, o.tangentWS) * attributes.tangent.w;
                
@@ -829,7 +830,7 @@ Shader "MySprite-Lit-Default"
                 // 归一化并计算与世界 X 轴的点积
                 float dotX = dot(normalize(xAxis), float3(1, 0, 0)); 
                 int stepX=step(0,dotX);
-                // o.tangentWS.x=o.tangentWS.x*stepX-(1-stepX)*o.tangentWS.x;
+                  o.tangentWS.x=o.tangentWS.x*stepX-(1-stepX)*o.tangentWS.x;
                
                 //o.flip=unity_ObjectToWorld._m30; 
                 return o;

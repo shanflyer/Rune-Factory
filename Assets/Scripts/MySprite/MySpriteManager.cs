@@ -63,7 +63,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
     {
         if (sprite == null || materialTemplate == null)
         {
-            Debug.LogError("Invalid input parameters");
+            //Debug.LogError("Invalid input parameters");
             return (null, null);
         }
 
@@ -158,6 +158,13 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
         mesh.SetUVs(0, finalUVs);
         mesh.SetTriangles(outputTriangles.ToArray(), 0);
         mesh.bounds = CalculatePivotCenteredBounds(finalVertices, sprite.pixelsPerUnit);
+        if (mesh.normals.Length == 0)
+        {
+            mesh.RecalculateNormals();
+        }
+
+        // 2. 生成切线
+        mesh.RecalculateTangents();
 
         // 清理Native内存
         inputVertices.Dispose();
