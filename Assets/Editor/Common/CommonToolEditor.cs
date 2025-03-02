@@ -156,6 +156,15 @@ public class CommonToolEditor : MyEditor
             }
            
         }
+
+        if (GUILayout.Button("替换SpriteRenderer"))
+        {
+            ReplaceSpriteRenderer();
+        }
+        if (GUILayout.Button("替换Sprite动画"))
+        {
+            ReplaceSpriteAnimation();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -177,6 +186,162 @@ public class CommonToolEditor : MyEditor
     }
     string objPath = "";
     bool staticObj = true;
+
+    public void ReplaceSpriteAnimation()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            var files = directoryInfo.GetFiles("*.anim");
+            for (int i = 0; i < files.Length; i++)
+            {
+                var file = files[i];
+                var prefabPath = objPath + file.Name;
+
+                AnimationClip animationClip= AssetDatabase.LoadAssetAtPath<AnimationClip>(prefabPath);
+                SetAnimation(animationClip);
+
+            }
+            var dirs = directoryInfo.GetDirectories();
+            foreach(var d in dirs)
+            {
+                var files1=d.GetFiles("*.anim");
+                for (int i = 0; i < files1.Length; i++)
+                {
+                    var file = files1[i];
+                    var prefabPath = objPath+d.Name+"/" + file.Name;
+
+                    AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(prefabPath);
+                    SetAnimation(animationClip);
+
+                }
+            }
+
+
+            void SetAnimation(AnimationClip animationClip)
+            {
+                var Bindings = AnimationUtility.GetObjectReferenceCurveBindings(animationClip);
+                for (int j = 0; j < Bindings.Length; j++)
+                {
+                    var binding = Bindings[j];
+                    if (binding.type == typeof(SpriteRenderer))
+                    {
+                        var keys = AnimationUtility.GetObjectReferenceCurve(animationClip, binding);
+
+
+
+                        EditorCurveBinding editorCurveBinding = new EditorCurveBinding
+                        {
+                            type = typeof(MySpriteMeshRender),
+                            path = binding.path,
+                            propertyName = binding.propertyName,
+                        };
+                        AnimationUtility.SetObjectReferenceCurve(animationClip, editorCurveBinding, keys);
+                        AnimationUtility.SetObjectReferenceCurve(animationClip, Bindings[j], null);
+                    }
+
+                    //var keyObjs= AnimationUtility.GetObjectReferenceCurve(animationClip, binding);
+                }
+                var curveBindings = AnimationUtility.GetCurveBindings(animationClip);
+                for (int j = 0; j < curveBindings.Length; j++)
+                {
+                    var binding = curveBindings[j];
+                    if (binding.type == typeof(SpriteRenderer))
+                    {
+                        var curve = AnimationUtility.GetEditorCurve(animationClip, binding);
+
+                        if (binding.propertyName == "m_FlipX")
+                        {
+                            EditorCurveBinding editorCurveBinding = new EditorCurveBinding
+                            {
+                                type = typeof(Transform),
+                                path = binding.path,
+                                propertyName = "m_LocalScale.x"
+                            };
+                            var keys = curve.keys;
+                            for(int  k = 0; k < keys.Length; k++)
+                            {
+                                if (keys[k].value == 0)
+                                {
+                                    keys[k].value = 1;
+                                }
+                                else
+                                if (keys[k].value == 1)
+                                {
+                                    keys[k].value = -1;
+                                }
+                            }
+                            curve.keys = keys;
+                            AnimationUtility.SetEditorCurve(animationClip, editorCurveBinding, curve);
+                            AnimationUtility.SetEditorCurve(animationClip, binding, null);
+                        }
+                        else
+                        {
+                            EditorCurveBinding editorCurveBinding = new EditorCurveBinding
+                            {
+                                type = typeof(MySpriteMeshRender),
+                                path = binding.path,
+                                propertyName = binding.propertyName
+                            };
+
+                            AnimationUtility.SetEditorCurve(animationClip, editorCurveBinding, curve);
+                            AnimationUtility.SetEditorCurve(animationClip, binding, null);
+                        }
+
+                    }
+                }
+                AssetDatabase.SaveAssets();
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+    }
+
+    public void ReplaceSpriteRenderer()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            var files = directoryInfo.GetFiles("*.Prefab");
+            for (int i = 0; i < files.Length; i++)
+            {
+                var file = files[i];
+                var prefabPath = objPath + file.Name;
+                GameObject gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+
+                GameObject _obj = (GameObject)PrefabUtility.InstantiatePrefab(gameObject);
+                var spriteRenders = _obj.GetComponentsInChildren<SpriteRenderer>(true);
+                for (int j = 0; j < spriteRenders.Length; j++)
+                {
+                    if (spriteRenders[j].TryGetComponent(out MyLightSprite myLightSprite))
+                    {
+                        continue;
+                    }
+                    GameObject s_obj = spriteRenders[j].gameObject;
+                    Sprite sprite = spriteRenders[j].sprite;
+                    Material material = spriteRenders[j].sharedMaterial;
+                    Color color = spriteRenders[j].color;
+                    DestroyImmediate(spriteRenders[j]);
+                    MySpriteMeshRender mySpriteMeshRender = s_obj.AddComponent<MySpriteMeshRender>();
+                    mySpriteMeshRender.m_Sprite = sprite;
+                    mySpriteMeshRender.m_Material = material;
+                    mySpriteMeshRender.m_Color = color;
+                }
+                PrefabUtility.SaveAsPrefabAssetAndConnect(_obj, prefabPath, InteractionMode.AutomatedAction);
+                DestroyImmediate(_obj);
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+       
+    }
+
     void AddObjPosData(string path)
     {
         LayerMask lightLayer = LayerMask.NameToLayer("Light");
@@ -265,6 +430,8 @@ public class CommonToolEditor : MyEditor
 
     string oldSourcePath = "";
     string newSourecePath = "";
+
+ 
 
     public void SetSprite()
     {

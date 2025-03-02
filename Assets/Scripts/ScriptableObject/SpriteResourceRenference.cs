@@ -41,4 +41,10 @@ public class SpriteResourceRenference : ScriptableObject
         spriteRenderer.drawMode = SpriteDrawMode.Sliced;
         spriteRenderer.size = sprite.rect.size*0.01f * scaleValue;
     }
+    public void SetSprite(MySpriteMeshRender spriteRenderer)
+    {
+        spriteRenderer.m_Sprite = sprite;
+         
+        spriteRenderer.transform.localScale = new Vector3(scaleValue,scaleValue,scaleValue);
+    }
 }

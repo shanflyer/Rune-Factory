@@ -795,7 +795,7 @@ Shader "MySprite-Lit-Default"
                 half3   tangentWS       : TEXCOORD2;
                 half3   bitangentWS     : TEXCOORD3;
                 float4   lightingUV      : TEXCOORD4;  
-                float4  worldScreenPos   : TEXCOORD5;  
+                //float  flip  : TEXCOORD5;  
                 UNITY_VERTEX_OUTPUT_STEREO
             };
              
@@ -819,14 +819,19 @@ Shader "MySprite-Lit-Default"
                 o.color = attributes.color;
                 o.normalWS = -GetViewForwardDir();
                 //o.tangentWS = TransformObjectToWorldDir(attributes.tangent.xyz);
-                o.tangentWS = attributes.tangent.xyz;
+                o.tangentWS = attributes.tangent.xyz; 
+               
                 o.bitangentWS = cross(o.normalWS, o.tangentWS) * attributes.tangent.w;
+               
                 o.lightingUV= ComputeScreenPos(o.positionCS);
-
-                half3 worldPos=TransformObjectToWorld(attributes.positionOS.xyz);
-                worldPos.y=unity_ObjectToWorld._m13;
-                half4 worldPosCs=TransformWorldToHClip(worldPos);
-                o.worldScreenPos=ComputeScreenPos(worldPosCs);
+                
+                float3 xAxis = unity_ObjectToWorld._m00_m10_m20;
+                // 归一化并计算与世界 X 轴的点积
+                float dotX = dot(normalize(xAxis), float3(1, 0, 0)); 
+                int stepX=step(0,dotX);
+                // o.tangentWS.x=o.tangentWS.x*stepX-(1-stepX)*o.tangentWS.x;
+               
+                //o.flip=unity_ObjectToWorld._m30; 
                 return o;
             }
  
@@ -872,6 +877,8 @@ Shader "MySprite-Lit-Default"
                 half3 normalTS=_NormalColor.xyz;
                 half4 result=half4(1,1,1,1);
                 normalTS = UnpackNormal(_NormalColor);
+                 
+                //return float4(i.tangentWS.xyz,1);
                 result=NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
                 result.x=unity_SpriteProps.x*result.x+(1-unity_SpriteProps.x)*(1-result.x);
                result.z=0;

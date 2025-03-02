@@ -12,7 +12,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     private Dictionary<int, MapItemRuntimeObj> tempRuntimeMapItemObjs = new Dictionary<int, MapItemRuntimeObj>();
 
     private RuntimeObj nowMapRoomObj;
-    private Dictionary<int, SpriteRenderer[]> mapPackageItemRenders = new Dictionary<int, SpriteRenderer[]>();
+    private Dictionary<int, MySpriteMeshRender[]> mapPackageItemRenders = new Dictionary<int, MySpriteMeshRender[]>();
 
     public override void Init()
     {
@@ -73,7 +73,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             var PackageItem = obj.GetChild(obj.childCount - 1);
             if (PackageItem.name == "PackageItem")
             {
-                spriteRenderers = PackageItem.gameObject.GetComponentsInChildren<SpriteRenderer>(true);
+                spriteRenderers = PackageItem.gameObject.GetComponentsInChildren<MySpriteMeshRender>(true);
                 mapPackageItemRenders[id] = spriteRenderers;
                 RefreshMapPackageItemRender(id);
             }
@@ -100,7 +100,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     for (int i = 0; i < items.Count; i++)
                     {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
-                        spriteRenderers[i].sprite = itemData.icon;
+                        spriteRenderers[i].m_Sprite = itemData.icon;
                         spriteRenderers[i].enabled = true;
                     }
                 }
@@ -109,7 +109,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     for (int i = 0; i < spriteRenderers.Length; i++)
                     {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
-                        spriteRenderers[i].sprite = itemData.icon;
+                        spriteRenderers[i].m_Sprite = itemData.icon;
                         spriteRenderers[i].enabled = true;
                     }
                 }
@@ -814,7 +814,7 @@ public class MapItemRuntimeObj
 {
     public int instanceId;
     public int dataId;
-    private SpriteRenderer[] spriteRenderers;
+    private MySpriteMeshRender[] spriteRenderers;
     private Color[] rendererColors;
     public Animator animator;
     public Transform transform;
@@ -831,11 +831,11 @@ public class MapItemRuntimeObj
         this.coordinate = coordinate;
         transform = (runtimeObj.obj as Transform);
         animator = transform.GetComponentInChildren<Animator>();
-        spriteRenderers = transform.GetChild(0).GetComponentsInChildren<SpriteRenderer>(true);
+        spriteRenderers = transform.GetChild(0).GetComponentsInChildren<MySpriteMeshRender>(true);
         rendererColors = new Color[spriteRenderers.Length];
         for (int i = 0; i < spriteRenderers.Length; i++)
         {
-            rendererColors[i] = spriteRenderers[i].color;
+            rendererColors[i] = spriteRenderers[i].m_Color;
         }
         transform.TryGetComponent(out polygonCollider2D);
     }
@@ -873,7 +873,7 @@ public class MapItemRuntimeObj
         }
         for (int i = 0; i < spriteRenderers.Length; i++)
         {
-            spriteRenderers[i].color = rendererColors[i];
+            spriteRenderers[i].m_Color = rendererColors[i];
         }
     }
 
@@ -883,7 +883,7 @@ public class MapItemRuntimeObj
         {
             for (int i = 0; i < spriteRenderers.Length; i++)
             {
-                spriteRenderers[i].color = color;
+                spriteRenderers[i].m_Color = color;
             }
         }
     }

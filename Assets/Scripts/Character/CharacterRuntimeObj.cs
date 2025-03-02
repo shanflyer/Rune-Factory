@@ -47,7 +47,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     private MyShadowPolygon myShadow;
 
     [SerializeField]
-    private SpriteRenderer equipRenderer;
+    private MySpriteMeshRender equipRenderer;
 
     [SerializeField]
     private BehaviorTree behaviorTree;
@@ -107,7 +107,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     public void SetEquipSprite(Sprite sprite)
     {
-        equipRenderer.sprite = sprite;
+        equipRenderer.m_Sprite = sprite;
         equipRenderer.enabled = sprite != null;
     }
 
@@ -314,7 +314,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         equip = transform.Find("Equip");
         shadow = transform.Find("Shadow");
         myShadow = shadow.GetComponent<MyShadowPolygon>();
-        equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<SpriteRenderer>();
+        equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<MySpriteMeshRender>();
         behaviorTree = transform.GetComponent<BehaviorTree>();
         DirOther = transform.Find("Other/Dir");
         if (DirOther)
