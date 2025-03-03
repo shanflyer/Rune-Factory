@@ -165,6 +165,10 @@ public class CommonToolEditor : MyEditor
         {
             ReplaceSpriteAnimation();
         }
+        if (GUILayout.Button("移除miss"))
+        {
+            RemoveMissComp();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -300,6 +304,35 @@ public class CommonToolEditor : MyEditor
         }
     }
 
+    public void RemoveMissComp()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            var files = directoryInfo.GetFiles("*.Prefab");
+            for (int i = 0; i < files.Length; i++)
+            {
+                var file = files[i];
+                var prefabPath = objPath + file.Name;
+                GameObject gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                var children = gameObject.GetComponentsInChildren<Transform>();
+                foreach(var child in children)
+                {
+                    GameObjectUtility.RemoveMonoBehavioursWithMissingScript(child.gameObject);
+                }
+                
+               // GameObject _obj = (GameObject)PrefabUtility.InstantiatePrefab(gameObject);
+                
+             //   PrefabUtility.SaveAsPrefabAssetAndConnect(_obj, prefabPath, InteractionMode.AutomatedAction);
+              //  DestroyImmediate(_obj);
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+    }
     public void ReplaceSpriteRenderer()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
@@ -346,28 +379,8 @@ public class CommonToolEditor : MyEditor
     {
         LayerMask lightLayer = LayerMask.NameToLayer("Light");
         DirectoryInfo directoryInfo = new DirectoryInfo(path);
-        var objs = directoryInfo.GetFiles("*.prefab");
-        for(int i = 0; i < objs.Length; i++)
-        {
-            var _obj = AssetDatabase.LoadAssetAtPath<GameObject>($"{path}/{objs[i].Name}");
-            var obj=(GameObject) PrefabUtility.InstantiatePrefab(_obj);
-             var spriteRenderers = obj.GetComponentsInChildren<SpriteRenderer>();
-            foreach(var spriteRenderer in spriteRenderers)
-            {
-                if(spriteRenderer.gameObject.layer!= lightLayer)
-                {
-                  var mapObjPosSet=  spriteRenderer.gameObject.AddComponent<MapObjPosSet>();
-                }
-            }
-            PrefabUtility.SaveAsPrefabAsset(obj, $"{path}/{objs[i].Name}");
-            GameObject.DestroyImmediate(obj);
-            
-        }
-        var dirs = directoryInfo.GetDirectories();
-        foreach (var dir in dirs)
-        {
-            AddObjPosData($"{path}/{dir.Name}");
-        }
+       
+      
     }
 
     private void OutUIText()

@@ -23,7 +23,7 @@ public class MyLight : MonoBehaviour
     MyLightBase[] myLightBase;
 
     [SerializeField]
-    private SpriteRenderer[] spriteRenderers;
+    private MySpriteMeshRender[] spriteRenderers;
 
     [SerializeField]
     private bool autoLerpValue;
@@ -135,7 +135,7 @@ public class MyLight : MonoBehaviour
                 }
                 for (int i = 0; i < spriteRenderers.Length; i++)
                 {
-                    spriteRenderers[i].color= color1;
+                    spriteRenderers[i].m_Color= color1;
                 } 
             }
 
@@ -175,7 +175,7 @@ public class MyLight : MonoBehaviour
             { 
                 for (int i = 0; i < spriteRenderers.Length; i++)
                 {
-                    spriteRenderers[i].color = lerpColor.Evaluate(value);
+                    spriteRenderers[i].m_Color = lerpColor.Evaluate(value);
                 }
             }
 

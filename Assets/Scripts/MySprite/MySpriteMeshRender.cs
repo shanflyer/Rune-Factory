@@ -7,6 +7,7 @@ using UnityEditor;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [ExecuteAlways]
+[DisallowMultipleComponent]
 public class MySpriteMeshRender : MonoBehaviour
 {
    
@@ -76,8 +77,15 @@ public class MySpriteMeshRender : MonoBehaviour
         {
             colors[i] = m_Color;
         }
-        
-        meshFilter.mesh.colors = colors;
+        if (Application.isPlaying)
+        {
+            meshFilter.mesh.colors = colors;
+        }
+        else
+        {
+            meshFilter.sharedMesh.colors = colors;
+        }
+      
         nowColor = m_Color;
     }
     private void LateUpdate()
