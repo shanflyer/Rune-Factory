@@ -316,16 +316,17 @@ public class CommonToolEditor : MyEditor
                 var file = files[i];
                 var prefabPath = objPath + file.Name;
                 GameObject gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-                var children = gameObject.GetComponentsInChildren<Transform>();
-                foreach(var child in children)
+               
+               
+                
+             GameObject _obj = (GameObject)PrefabUtility.InstantiatePrefab(gameObject);
+                var children = _obj.GetComponentsInChildren<Transform>();
+                foreach (var child in children)
                 {
                     GameObjectUtility.RemoveMonoBehavioursWithMissingScript(child.gameObject);
                 }
-                
-               // GameObject _obj = (GameObject)PrefabUtility.InstantiatePrefab(gameObject);
-                
-             //   PrefabUtility.SaveAsPrefabAssetAndConnect(_obj, prefabPath, InteractionMode.AutomatedAction);
-              //  DestroyImmediate(_obj);
+                PrefabUtility.SaveAsPrefabAssetAndConnect(_obj, prefabPath, InteractionMode.AutomatedAction);
+             DestroyImmediate(_obj);
             }
         }
         finally
@@ -346,10 +347,23 @@ public class CommonToolEditor : MyEditor
                 var prefabPath = objPath + file.Name;
                 GameObject gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
 
+                HashSet<SpriteRenderer> lightSpriteRenders = new HashSet<SpriteRenderer>();
                 GameObject _obj = (GameObject)PrefabUtility.InstantiatePrefab(gameObject);
+                var myLights = _obj.GetComponentsInChildren<MyLight>(true);
+                foreach(var myLight in myLights)
+                {
+                    foreach(var r in myLight.spriteRenderers)
+                    {
+                        lightSpriteRenders.Add(r);
+                    }
+                }
                 var spriteRenders = _obj.GetComponentsInChildren<SpriteRenderer>(true);
                 for (int j = 0; j < spriteRenders.Length; j++)
                 {
+                    if (lightSpriteRenders.Contains(spriteRenders[j]))
+                    {
+                        continue;
+                    }
                     if (spriteRenders[j].TryGetComponent(out MyLightSprite myLightSprite))
                     {
                         continue;

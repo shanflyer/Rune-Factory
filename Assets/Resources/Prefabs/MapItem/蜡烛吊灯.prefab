@@ -24375,7 +24375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderers:
-  - {fileID: 5189337330817304408}
+  - {fileID: 0}
   - {fileID: 8334551278788131138}
   - {fileID: 888781141799639676}
   - {fileID: 888844795738988536}
@@ -24413,7 +24413,6 @@ GameObject:
   - component: {fileID: 6470534949683684561}
   - component: {fileID: 6555445579392843676}
   - component: {fileID: 1631697539345784799}
-  - component: {fileID: 8334159870100260948}
   m_Layer: 19
   m_Name: MyLight
   m_TagString: Untagged
@@ -24559,19 +24558,6 @@ MonoBehaviour:
   value: 1
   renderer: {fileID: 6555445579392843676}
   fixedColor: 0
---- !u!114 &8334159870100260948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1988042765907354394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  staticObj: 1
 --- !u!1 &2693463142144665394
 GameObject:
   m_ObjectHideFlags: 0
@@ -106657,8 +106643,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3253100294812188024}
-  - component: {fileID: 5189337330817304408}
-  - component: {fileID: 5491873084132104687}
+  - component: {fileID: 803335207640847486}
+  - component: {fileID: 9150573642571032869}
+  - component: {fileID: 4308338294621119865}
   m_Layer: 0
   m_Name: "\u540A\u706F\u8721\u70DB"
   m_TagString: Untagged
@@ -106681,22 +106668,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7133542346418053183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5189337330817304408
-SpriteRenderer:
+--- !u!33 &803335207640847486
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8090539501768959403}
+  m_Mesh: {fileID: 0}
+--- !u!23 &9150573642571032869
+MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8090539501768959403}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
+  m_RayTracingMode: 2
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
@@ -106704,7 +106699,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106717,7 +106712,7 @@ SpriteRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -106725,18 +106720,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1480574557, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.52, y: 0.8}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!114 &5491873084132104687
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4308338294621119865
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106745,10 +106730,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8090539501768959403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staticObj: 1
+  meshRenderer: {fileID: 9150573642571032869}
+  meshFilter: {fileID: 803335207640847486}
+  m_Sprite: {fileID: -1480574557, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
 --- !u!1 &8172936754814374460
 GameObject:
   m_ObjectHideFlags: 0

@@ -4841,8 +4841,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1606036386640658584}
-  - component: {fileID: 2875756753490220789}
-  - component: {fileID: 783734360484939215}
+  - component: {fileID: 1225642397899299806}
+  - component: {fileID: 3789613720515844577}
+  - component: {fileID: 4328149696998075776}
   m_Layer: 0
   m_Name: "\u63D0\u706F"
   m_TagString: Untagged
@@ -4865,22 +4866,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1837792104790863859}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2875756753490220789
-SpriteRenderer:
+--- !u!33 &1225642397899299806
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2725826800833347376}
+  m_Mesh: {fileID: 0}
+--- !u!23 &3789613720515844577
+MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2725826800833347376}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
+  m_RayTracingMode: 2
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
@@ -4888,7 +4897,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4901,7 +4910,7 @@ SpriteRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -4909,18 +4918,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 117742503, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.11, y: 0.4}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!114 &783734360484939215
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4328149696998075776
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4929,10 +4928,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2725826800833347376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staticObj: 1
+  meshRenderer: {fileID: 3789613720515844577}
+  meshFilter: {fileID: 1225642397899299806}
+  m_Sprite: {fileID: 117742503, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
 --- !u!1 &3029222022761197473
 GameObject:
   m_ObjectHideFlags: 0
@@ -9777,7 +9780,6 @@ GameObject:
   - component: {fileID: 98959177461620031}
   - component: {fileID: 7136166885340171735}
   - component: {fileID: 5845504785456017256}
-  - component: {fileID: 7452787441631782539}
   m_Layer: 19
   m_Name: MyLight
   m_TagString: Untagged
@@ -9940,19 +9942,6 @@ MonoBehaviour:
   value: 1
   renderer: {fileID: 7136166885340171735}
   fixedColor: 0
---- !u!114 &7452787441631782539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5623917708545012626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  staticObj: 1
 --- !u!1 &6641134058164133938
 GameObject:
   m_ObjectHideFlags: 0
@@ -10185,7 +10174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderers:
-  - {fileID: 2875756753490220789}
+  - {fileID: 0}
   - {fileID: 1830685337963055169}
   - {fileID: 7348399401150533259}
   - {fileID: 7136166885340171735}

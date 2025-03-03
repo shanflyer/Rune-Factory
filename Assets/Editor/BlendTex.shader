@@ -7,6 +7,8 @@ Shader "Unlit/BlendTex"
       _Texture2("_Texture2", 2D) = "white" {}
       _Texture3("_Texture3", 2D) = "white" {}
       _Texture4("_Texture4", 2D) = "white" {}
+      _Texture5("_Texture5", 2D) = "white" {}
+      _Texture6("_Texture6", 2D) = "white" {}
       TextureCount("TextureCount",int)=0
       _TexelSize("_TexelSize",vector)=(0,0,0,0)
 
@@ -38,8 +40,12 @@ Shader "Unlit/BlendTex"
             SamplerState sampler_Texture3;  
             Texture2D _Texture4;
             SamplerState sampler_Texture4;  
+            Texture2D _Texture5;
+            SamplerState sampler_Texture5;  
+            Texture2D _Texture6;
+            SamplerState sampler_Texture6;  
  
-            float4 texoffset[4]; 
+            float4 texoffset[6]; 
             int TextureCount;
 
             struct Attributes
@@ -80,25 +86,35 @@ Shader "Unlit/BlendTex"
                  float4 offset2=texoffset[1];
                  float4 offset3=texoffset[2];
                  float4 offset4=texoffset[3];
+                 float4 offset5=texoffset[4];
+                 float4 offset6=texoffset[5];
 
                 float2 uv1=float2(Unity_Remap_float(i.uv.x,offset1.xz,float2(0,1)),Unity_Remap_float(i.uv.y,offset1.yw,float2(0,1)));
                 float2 uv2=float2(Unity_Remap_float(i.uv.x,offset2.xz,float2(0,1)),Unity_Remap_float(i.uv.y,offset2.yw,float2(0,1)));
                 float2 uv3=float2(Unity_Remap_float(i.uv.x,offset3.xz,float2(0,1)),Unity_Remap_float(i.uv.y,offset3.yw,float2(0,1)));
                 float2 uv4=float2(Unity_Remap_float(i.uv.x,offset4.xz,float2(0,1)),Unity_Remap_float(i.uv.y,offset4.yw,float2(0,1)));
+                float2 uv5=float2(Unity_Remap_float(i.uv.x,offset5.xz,float2(0,1)),Unity_Remap_float(i.uv.y,offset5.yw,float2(0,1)));
+                float2 uv6=float2(Unity_Remap_float(i.uv.x,offset6.xz,float2(0,1)),Unity_Remap_float(i.uv.y,offset6.yw,float2(0,1)));
 
                 half4 col1 = _Texture1.Sample(sampler_Texture1, uv1); 
                 half4 col2 = _Texture2.Sample(sampler_Texture2, uv2); 
                 half4 col3 = _Texture3.Sample(sampler_Texture3, uv3); 
                 half4 col4 = _Texture4.Sample(sampler_Texture4, uv4);  
+                half4 col5 = _Texture5.Sample(sampler_Texture5, uv4);  
+                half4 col6 = _Texture6.Sample(sampler_Texture6, uv4);  
 
                 int stepB1=step(offset1.x,i.uv.x)*(1-step(offset1.z,i.uv.x))*step(offset1.y,i.uv.y)*(1-step(offset1.w,i.uv.y));
                 int stepB2=step(offset2.x,i.uv.x)*(1-step(offset2.z,i.uv.x))*step(offset2.y,i.uv.y)*(1-step(offset2.w,i.uv.y));
                 int stepB3=step(offset3.x,i.uv.x)*(1-step(offset3.z,i.uv.x))*step(offset3.y,i.uv.y)*(1-step(offset3.w,i.uv.y));
                 int stepB4=step(offset4.x,i.uv.x)*(1-step(offset4.z,i.uv.x))*step(offset4.y,i.uv.y)*(1-step(offset4.w,i.uv.y));
+                int stepB5=step(offset5.x,i.uv.x)*(1-step(offset5.z,i.uv.x))*step(offset5.y,i.uv.y)*(1-step(offset5.w,i.uv.y));
+                int stepB6=step(offset6.x,i.uv.x)*(1-step(offset6.z,i.uv.x))*step(offset6.y,i.uv.y)*(1-step(offset6.w,i.uv.y));
                 stepB1*=step(1,TextureCount);
                 stepB2*=step(2,TextureCount);
                 stepB3*=step(3,TextureCount);
                 stepB4*=step(4,TextureCount);
+                stepB5*=step(5,TextureCount);
+                stepB6*=step(6,TextureCount);
 
                 col.xyz=(col.xyz*(1-col1.a)+col1.xyz*col1.a)*stepB1+(1-stepB1)*col.xyz;
                 col.a+=col1.a*stepB1;
@@ -114,6 +130,14 @@ Shader "Unlit/BlendTex"
 
                  col.xyz=(col.xyz*(1-col4.a)+col4.xyz*col4.a)*stepB4+(1-stepB4)*col.xyz;
                 col.a+=col4.a*stepB4;
+                col.a=clamp(col.a,0,1);
+
+                 col.xyz=(col.xyz*(1-col5.a)+col5.xyz*col5.a)*stepB5+(1-stepB5)*col.xyz;
+                col.a+=col5.a*stepB5;
+                col.a=clamp(col.a,0,1);
+
+                 col.xyz=(col.xyz*(1-col6.a)+col6.xyz*col6.a)*stepB6+(1-stepB6)*col.xyz;
+                col.a+=col6.a*stepB6;
                 col.a=clamp(col.a,0,1);
  
                 

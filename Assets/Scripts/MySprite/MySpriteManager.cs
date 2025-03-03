@@ -211,6 +211,11 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
             material = CreateMaterialInstance(template, sprite);
             _materialCache.Add(materialKey, material);
         }
+        else if(material==null)
+        {
+            material = CreateMaterialInstance(template, sprite);
+            _materialCache[materialKey]= material;
+        }
         return material;
     }
 

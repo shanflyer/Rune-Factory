@@ -665,6 +665,7 @@ GameObject:
   m_Component:
   - component: {fileID: 763608755}
   - component: {fileID: 763608756}
+  - component: {fileID: 763608757}
   m_Layer: 0
   m_Name: ItemParent
   m_TagString: Untagged
@@ -709,6 +710,27 @@ MonoBehaviour:
   dawnName: "\u9EC4\u660F"
   duskName: "\u9ECE\u660E"
   spriteRenderer: {fileID: 0}
+--- !u!114 &763608757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763608754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5d62dde5ba3e7c4cbbfeaa251bd4f98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemaps:
+  - {fileID: 0}
+  path: Assets/Texture/MapTexture
+  blendMat: {fileID: 2100000, guid: 3d3cfba895a4afe40a5b7cc6488f0f5b, type: 2}
+  isSingleMap: 1
+  secondaryNames:
+  - _NormalMap
+  - _MoveMask
+  - _SnowTex
 --- !u!1001 &988664529
 PrefabInstance:
   m_ObjectHideFlags: 0

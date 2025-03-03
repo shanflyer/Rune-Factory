@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 7949291186803764754}
   - component: {fileID: 1649204804010809979}
   - component: {fileID: 6204267731239453520}
-  - component: {fileID: 2040894969691526715}
   m_Layer: 0
   m_Name: "\u5927\u95E8_04 (1)"
   m_TagString: Untagged
@@ -184,19 +183,6 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 6
---- !u!114 &2040894969691526715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5280565733186843651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  staticObj: 1
 --- !u!1 &5344789658064510084
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,8 +343,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3030589514955956363}
-  - component: {fileID: 6827228835760334294}
-  - component: {fileID: 5498824556495537302}
+  - component: {fileID: 1033332565238941175}
+  - component: {fileID: 804424889345280587}
+  - component: {fileID: 8546430056431378755}
   m_Layer: 0
   m_Name: "\u5927\u95E8_04"
   m_TagString: Untagged
@@ -381,22 +368,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8915009773493011202}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &6827228835760334294
-SpriteRenderer:
+--- !u!33 &1033332565238941175
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6110284974716348469}
+  m_Mesh: {fileID: 0}
+--- !u!23 &804424889345280587
+MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6110284974716348469}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
+  m_RayTracingMode: 2
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
@@ -404,7 +399,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2dc112915dc3cb74c9cfcc6707cac796, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -417,7 +412,7 @@ SpriteRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -425,18 +420,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -648046813, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.65, y: 0.74}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 1
---- !u!114 &5498824556495537302
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8546430056431378755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -445,10 +430,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6110284974716348469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
+  m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staticObj: 1
+  meshRenderer: {fileID: 804424889345280587}
+  meshFilter: {fileID: 1033332565238941175}
+  m_Sprite: {fileID: -648046813, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 2dc112915dc3cb74c9cfcc6707cac796, type: 2}
 --- !u!1 &7995193877627448313
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,7 +486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderers:
-  - {fileID: 6827228835760334294}
+  - {fileID: 0}
   - {fileID: 1649204804010809979}
   - {fileID: 830878656924922514}
   - {fileID: 1030400505373967843}
